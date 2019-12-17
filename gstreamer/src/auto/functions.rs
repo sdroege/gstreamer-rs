@@ -72,9 +72,12 @@ pub fn debug_get_default_threshold() -> DebugLevel {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Option<GString> {
+pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<GString, glib::BoolError> {
     assert_initialized_main_thread!();
-    unsafe { from_glib_full(gst_sys::gst_debug_get_stack_trace(flags.to_glib())) }
+    unsafe {
+        Option::<_>::from_glib_full(gst_sys::gst_debug_get_stack_trace(flags.to_glib()))
+            .ok_or_else(|| glib_bool_error!("Failed to get stack trace"))
+    }
 }
 
 pub fn debug_is_active() -> bool {
@@ -153,9 +156,12 @@ pub fn debug_unset_threshold_for_name(name: &str) {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub fn get_main_executable_path() -> Option<GString> {
+pub fn get_main_executable_path() -> Result<GString, glib::BoolError> {
     assert_initialized_main_thread!();
-    unsafe { from_glib_none(gst_sys::gst_get_main_executable_path()) }
+    unsafe {
+        Option::<_>::from_glib_none(gst_sys::gst_get_main_executable_path())
+            .ok_or_else(|| glib_bool_error!("Failed to get main executable path"))
+    }
 }
 
 pub fn parse_bin_from_description(

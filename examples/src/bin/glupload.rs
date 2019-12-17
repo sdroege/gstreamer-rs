@@ -484,7 +484,7 @@ impl App {
         self.appsink.set_callbacks(
             gst_app::AppSinkCallbacks::new()
                 .new_sample(move |appsink| {
-                    let sample = appsink.pull_sample().ok_or(gst::FlowError::Eos)?;
+                    let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
 
                     {
                         let _buffer = sample.get_buffer().ok_or_else(|| {
@@ -539,15 +539,15 @@ impl App {
     fn create_pipeline() -> Result<(gst::Pipeline, gst_app::AppSink, gst::Element), Error> {
         let pipeline = gst::Pipeline::new(None);
         let src = gst::ElementFactory::make("videotestsrc", None)
-            .ok_or(MissingElement("videotestsrc"))?;
-        let sink =
-            gst::ElementFactory::make("glsinkbin", None).ok_or(MissingElement("glsinkbin"))?;
+            .map_err(|_| MissingElement("videotestsrc"))?;
+        let sink = gst::ElementFactory::make("glsinkbin", None)
+            .map_err(|_| MissingElement("glsinkbin"))?;
 
         pipeline.add_many(&[&src, &sink])?;
         src.link(&sink)?;
 
         let appsink = gst::ElementFactory::make("appsink", None)
-            .ok_or(MissingElement("appsink"))?
+            .map_err(|_| MissingElement("appsink"))?
             .dynamic_cast::<gst_app::AppSink>()
             .expect("Sink element is expected to be an appsink!");
 

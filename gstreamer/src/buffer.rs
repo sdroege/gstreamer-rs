@@ -23,7 +23,7 @@ use Memory;
 use MemoryRef;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib};
+use glib::translate::{from_glib, from_glib_full, FromGlib, FromGlibPtrFull, ToGlib};
 use glib_sys;
 use gst_sys;
 
@@ -57,15 +57,16 @@ impl Buffer {
         unsafe { from_glib_full(gst_sys::gst_buffer_new()) }
     }
 
-    pub fn with_size(size: usize) -> Option<Self> {
+    pub fn with_size(size: usize) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            from_glib_full(gst_sys::gst_buffer_new_allocate(
+            Option::<_>::from_glib_full(gst_sys::gst_buffer_new_allocate(
                 ptr::null_mut(),
                 size,
                 ptr::null_mut(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to allocate buffer"))
         }
     }
 
@@ -176,7 +177,7 @@ impl Default for Buffer {
 }
 
 impl BufferRef {
-    pub fn map_readable(&self) -> Option<BufferMap<Readable>> {
+    pub fn map_readable(&self) -> Result<BufferMap<Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
             let res = gst_sys::gst_buffer_map(
@@ -185,18 +186,18 @@ impl BufferRef {
                 gst_sys::GST_MAP_READ,
             );
             if res == glib_sys::GTRUE {
-                Some(BufferMap {
+                Ok(BufferMap {
                     buffer: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                None
+                Err(glib_bool_error!("Failed to map buffer readable"))
             }
         }
     }
 
-    pub fn map_writable(&mut self) -> Option<BufferMap<Writable>> {
+    pub fn map_writable(&mut self) -> Result<BufferMap<Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
             let res = gst_sys::gst_buffer_map(
@@ -205,13 +206,13 @@ impl BufferRef {
                 gst_sys::GST_MAP_READWRITE,
             );
             if res == glib_sys::GTRUE {
-                Some(BufferMap {
+                Ok(BufferMap {
                     buffer: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                None
+                Err(glib_bool_error!("Failed to map buffer writable"))
             }
         }
     }
@@ -221,15 +222,16 @@ impl BufferRef {
         flags: ::BufferCopyFlags,
         offset: usize,
         size: Option<usize>,
-    ) -> Option<Buffer> {
+    ) -> Result<Buffer, glib::BoolError> {
         let size_real = size.unwrap_or(usize::MAX);
         unsafe {
-            from_glib_full(gst_sys::gst_buffer_copy_region(
+            Option::<_>::from_glib_full(gst_sys::gst_buffer_copy_region(
                 self.as_mut_ptr(),
                 flags.to_glib(),
                 offset,
                 size_real,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to copy region of buffer"))
         }
     }
 
@@ -296,8 +298,11 @@ impl BufferRef {
         }
     }
 
-    pub fn copy_deep(&self) -> Option<Buffer> {
-        unsafe { from_glib_full(gst_sys::gst_buffer_copy_deep(self.as_ptr())) }
+    pub fn copy_deep(&self) -> Result<Buffer, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_buffer_copy_deep(self.as_ptr()))
+                .ok_or_else(|| glib_bool_error!("Failed to deep copy buffer"))
+        }
     }
 
     pub fn get_size(&self) -> usize {
@@ -695,7 +700,7 @@ impl PartialEq for BufferRef {
         let other_map = other.map_readable();
 
         match (self_map, other_map) {
-            (Some(self_map), Some(other_map)) => self_map.as_slice().eq(other_map.as_slice()),
+            (Ok(self_map), Ok(other_map)) => self_map.as_slice().eq(other_map.as_slice()),
             _ => false,
         }
     }

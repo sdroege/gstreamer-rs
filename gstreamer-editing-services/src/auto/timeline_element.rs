@@ -34,7 +34,7 @@ pub const NONE_TIMELINE_ELEMENT: Option<&TimelineElement> = None;
 pub trait TimelineElementExt: 'static {
     //fn add_child_property<P: IsA<glib::Object>>(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &P) -> bool;
 
-    fn copy(&self, deep: bool) -> Option<TimelineElement>;
+    fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError>;
 
     //fn get_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -71,7 +71,7 @@ pub trait TimelineElementExt: 'static {
 
     //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object>;
 
-    fn paste(&self, paste_position: gst::ClockTime) -> Option<TimelineElement>;
+    fn paste(&self, paste_position: gst::ClockTime) -> Result<TimelineElement, glib::BoolError>;
 
     //fn remove_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec) -> bool;
 
@@ -145,12 +145,13 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ges_sys:ges_timeline_element_add_child_property() }
     //}
 
-    fn copy(&self, deep: bool) -> Option<TimelineElement> {
+    fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError> {
         unsafe {
-            from_glib_none(ges_sys::ges_timeline_element_copy(
+            Option::<_>::from_glib_none(ges_sys::ges_timeline_element_copy(
                 self.as_ref().to_glib_none().0,
                 deep.to_glib(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to copy timeline element"))
         }
     }
 
@@ -259,12 +260,13 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ges_sys:ges_timeline_element_lookup_child() }
     //}
 
-    fn paste(&self, paste_position: gst::ClockTime) -> Option<TimelineElement> {
+    fn paste(&self, paste_position: gst::ClockTime) -> Result<TimelineElement, glib::BoolError> {
         unsafe {
-            from_glib_full(ges_sys::ges_timeline_element_paste(
+            Option::<_>::from_glib_full(ges_sys::ges_timeline_element_paste(
                 self.as_ref().to_glib_none().0,
                 paste_position.to_glib(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to paste timeline element"))
         }
     }
 
@@ -424,7 +426,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         unsafe {
             glib_result_from_gboolean!(
                 ges_sys::ges_timeline_element_trim(self.as_ref().to_glib_none().0, start.to_glib()),
-                "`Failed to trim"
+                "Failed to trim"
             )
         }
     }

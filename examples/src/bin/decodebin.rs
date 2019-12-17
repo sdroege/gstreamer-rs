@@ -93,9 +93,9 @@ fn example_main() -> Result<(), Error> {
     };
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("filesrc", None).ok_or(MissingElement("filesrc"))?;
+    let src = gst::ElementFactory::make("filesrc", None).map_err(|_| MissingElement("filesrc"))?;
     let decodebin =
-        gst::ElementFactory::make("decodebin", None).ok_or(MissingElement("decodebin"))?;
+        gst::ElementFactory::make("decodebin", None).map_err(|_| MissingElement("decodebin"))?;
 
     // Tell the filesrc what file to load
     src.set_property("location", &uri)?;
@@ -157,14 +157,14 @@ fn example_main() -> Result<(), Error> {
             if is_audio {
                 // decodebin found a raw audiostream, so we build the follow-up pipeline to
                 // play it on the default audio playback device (using autoaudiosink).
-                let queue =
-                    gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
+                let queue = gst::ElementFactory::make("queue", None)
+                    .map_err(|_| MissingElement("queue"))?;
                 let convert = gst::ElementFactory::make("audioconvert", None)
-                    .ok_or(MissingElement("audioconvert"))?;
+                    .map_err(|_| MissingElement("audioconvert"))?;
                 let resample = gst::ElementFactory::make("audioresample", None)
-                    .ok_or(MissingElement("audioresample"))?;
+                    .map_err(|_| MissingElement("audioresample"))?;
                 let sink = gst::ElementFactory::make("autoaudiosink", None)
-                    .ok_or(MissingElement("autoaudiosink"))?;
+                    .map_err(|_| MissingElement("autoaudiosink"))?;
 
                 let elements = &[&queue, &convert, &resample, &sink];
                 pipeline.add_many(elements)?;
@@ -185,14 +185,14 @@ fn example_main() -> Result<(), Error> {
             } else if is_video {
                 // decodebin found a raw videostream, so we build the follow-up pipeline to
                 // display it using the autovideosink.
-                let queue =
-                    gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
+                let queue = gst::ElementFactory::make("queue", None)
+                    .map_err(|_| MissingElement("queue"))?;
                 let convert = gst::ElementFactory::make("videoconvert", None)
-                    .ok_or(MissingElement("videoconvert"))?;
+                    .map_err(|_| MissingElement("videoconvert"))?;
                 let scale = gst::ElementFactory::make("videoscale", None)
-                    .ok_or(MissingElement("videoscale"))?;
+                    .map_err(|_| MissingElement("videoscale"))?;
                 let sink = gst::ElementFactory::make("autovideosink", None)
-                    .ok_or(MissingElement("autovideosink"))?;
+                    .map_err(|_| MissingElement("autovideosink"))?;
 
                 let elements = &[&queue, &convert, &scale, &sink];
                 pipeline.add_many(elements)?;

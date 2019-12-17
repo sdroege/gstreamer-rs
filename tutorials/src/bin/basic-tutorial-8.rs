@@ -231,7 +231,7 @@ fn main() {
             data.appsink.clone()
         };
 
-        if let Some(_sample) = appsink.pull_sample() {
+        if let Ok(_sample) = appsink.pull_sample() {
             use std::io::{self, Write};
             // The only thing we do in this example is print a * to indicate a received buffer
             print!("*");

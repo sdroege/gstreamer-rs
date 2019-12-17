@@ -37,13 +37,14 @@ impl Adapter {
         }
     }
 
-    pub fn copy_bytes(&self, offset: usize, size: usize) -> Option<glib::Bytes> {
+    pub fn copy_bytes(&self, offset: usize, size: usize) -> Result<glib::Bytes, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_adapter_copy_bytes(
+            Option::<_>::from_glib_full(gst_base_sys::gst_adapter_copy_bytes(
                 self.to_glib_none().0,
                 offset,
                 size,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to copy bytes"))
         }
     }
 
@@ -66,30 +67,33 @@ impl Adapter {
         }
     }
 
-    pub fn get_buffer(&self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn get_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_adapter_get_buffer(
+            Option::<_>::from_glib_full(gst_base_sys::gst_adapter_get_buffer(
                 self.to_glib_none().0,
                 nbytes,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to get buffer"))
         }
     }
 
-    pub fn get_buffer_fast(&self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn get_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_adapter_get_buffer_fast(
+            Option::<_>::from_glib_full(gst_base_sys::gst_adapter_get_buffer_fast(
                 self.to_glib_none().0,
                 nbytes,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to get buffer"))
         }
     }
 
-    pub fn get_buffer_list(&self, nbytes: usize) -> Option<gst::BufferList> {
+    pub fn get_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_adapter_get_buffer_list(
+            Option::<_>::from_glib_full(gst_base_sys::gst_adapter_get_buffer_list(
                 self.to_glib_none().0,
                 nbytes,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to get buffer list"))
         }
     }
 
@@ -211,30 +215,33 @@ impl Adapter {
         }
     }
 
-    pub fn take_buffer(&self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn take_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_adapter_take_buffer(
+            Option::<_>::from_glib_full(gst_base_sys::gst_adapter_take_buffer(
                 self.to_glib_none().0,
                 nbytes,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to take buffer"))
         }
     }
 
-    pub fn take_buffer_fast(&self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn take_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_adapter_take_buffer_fast(
+            Option::<_>::from_glib_full(gst_base_sys::gst_adapter_take_buffer_fast(
                 self.to_glib_none().0,
                 nbytes,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to take buffer"))
         }
     }
 
-    pub fn take_buffer_list(&self, nbytes: usize) -> Option<gst::BufferList> {
+    pub fn take_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_adapter_take_buffer_list(
+            Option::<_>::from_glib_full(gst_base_sys::gst_adapter_take_buffer_list(
                 self.to_glib_none().0,
                 nbytes,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to take buffer list"))
         }
     }
 

@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -64,7 +65,11 @@ pub trait RTSPSessionExt: 'static {
 
     fn is_expired_usec(&self, now: i64) -> bool;
 
-    fn manage_media<P: IsA<RTSPMedia>>(&self, path: &str, media: &P) -> Option<RTSPSessionMedia>;
+    fn manage_media<P: IsA<RTSPMedia>>(
+        &self,
+        path: &str,
+        media: &P,
+    ) -> Result<RTSPSessionMedia, glib::BoolError>;
 
     //fn next_timeout(&self, now: /*Ignored*/&mut glib::TimeVal) -> i32;
 
@@ -190,13 +195,18 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn manage_media<P: IsA<RTSPMedia>>(&self, path: &str, media: &P) -> Option<RTSPSessionMedia> {
+    fn manage_media<P: IsA<RTSPMedia>>(
+        &self,
+        path: &str,
+        media: &P,
+    ) -> Result<RTSPSessionMedia, glib::BoolError> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_manage_media(
+            Option::<_>::from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_manage_media(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
                 media.as_ref().to_glib_full(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to manage media"))
         }
     }
 

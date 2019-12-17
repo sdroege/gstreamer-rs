@@ -78,16 +78,16 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src =
-        gst::ElementFactory::make("videotestsrc", None).ok_or(MissingElement("videotestsrc"))?;
-    let overlay =
-        gst::ElementFactory::make("cairooverlay", None).ok_or(MissingElement("cairooverlay"))?;
+    let src = gst::ElementFactory::make("videotestsrc", None)
+        .map_err(|_| MissingElement("videotestsrc"))?;
+    let overlay = gst::ElementFactory::make("cairooverlay", None)
+        .map_err(|_| MissingElement("cairooverlay"))?;
     let capsfilter =
-        gst::ElementFactory::make("capsfilter", None).ok_or(MissingElement("capsfilter"))?;
-    let videoconvert =
-        gst::ElementFactory::make("videoconvert", None).ok_or(MissingElement("videoconvert"))?;
-    let sink =
-        gst::ElementFactory::make("autovideosink", None).ok_or(MissingElement("autovideosink"))?;
+        gst::ElementFactory::make("capsfilter", None).map_err(|_| MissingElement("capsfilter"))?;
+    let videoconvert = gst::ElementFactory::make("videoconvert", None)
+        .map_err(|_| MissingElement("videoconvert"))?;
+    let sink = gst::ElementFactory::make("autovideosink", None)
+        .map_err(|_| MissingElement("autovideosink"))?;
 
     pipeline.add_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;
     gst::Element::link_many(&[&src, &overlay, &capsfilter, &videoconvert, &sink])?;

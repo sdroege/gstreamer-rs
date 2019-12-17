@@ -1,4 +1,4 @@
-use glib::translate::{from_glib, from_glib_full};
+use glib::translate::{from_glib, FromGlibPtrFull};
 use std::marker::PhantomData;
 use std::mem;
 
@@ -94,17 +94,26 @@ impl<'a, T> Drop for RTPBuffer<'a, T> {
 }
 
 pub trait RTPBufferExt {
-    fn new_rtp_with_sizes(payload_len: u32, pad_len: u8, csrc_count: u8) -> Option<gst::Buffer>;
+    fn new_rtp_with_sizes(
+        payload_len: u32,
+        pad_len: u8,
+        csrc_count: u8,
+    ) -> Result<gst::Buffer, glib::BoolError>;
 }
 
 impl RTPBufferExt for gst::Buffer {
-    fn new_rtp_with_sizes(payload_len: u32, pad_len: u8, csrc_count: u8) -> Option<gst::Buffer> {
+    fn new_rtp_with_sizes(
+        payload_len: u32,
+        pad_len: u8,
+        csrc_count: u8,
+    ) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_rtp_sys::gst_rtp_buffer_new_allocate(
+            Option::<_>::from_glib_full(gst_rtp_sys::gst_rtp_buffer_new_allocate(
                 payload_len,
                 pad_len,
                 csrc_count,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to allocate new RTP buffer"))
         }
     }
 }

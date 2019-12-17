@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -24,7 +25,7 @@ pub const NONE_VIDEO_DECODER: Option<&VideoDecoder> = None;
 pub trait VideoDecoderExt: 'static {
     fn add_to_frame(&self, n_bytes: i32);
 
-    fn allocate_output_buffer(&self) -> Option<gst::Buffer>;
+    fn allocate_output_buffer(&self) -> Result<gst::Buffer, glib::BoolError>;
 
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
@@ -64,11 +65,12 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn allocate_output_buffer(&self) -> Option<gst::Buffer> {
+    fn allocate_output_buffer(&self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_decoder_allocate_output_buffer(
+            Option::<_>::from_glib_full(gst_video_sys::gst_video_decoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to allocate output buffer"))
         }
     }
 

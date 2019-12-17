@@ -96,13 +96,19 @@ impl Plugin {
         unsafe { from_glib(gst_sys::gst_plugin_is_loaded(self.to_glib_none().0)) }
     }
 
-    pub fn load(&self) -> Option<Plugin> {
-        unsafe { from_glib_full(gst_sys::gst_plugin_load(self.to_glib_none().0)) }
+    pub fn load(&self) -> Result<Plugin, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_plugin_load(self.to_glib_none().0))
+                .ok_or_else(|| glib_bool_error!("Failed to load plugin"))
+        }
     }
 
-    pub fn load_by_name(name: &str) -> Option<Plugin> {
+    pub fn load_by_name(name: &str) -> Result<Plugin, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_plugin_load_by_name(name.to_glib_none().0)) }
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_plugin_load_by_name(name.to_glib_none().0))
+                .ok_or_else(|| glib_bool_error!("Failed to load plugin"))
+        }
     }
 
     pub fn load_file<P: AsRef<std::path::Path>>(filename: P) -> Result<Plugin, glib::Error> {

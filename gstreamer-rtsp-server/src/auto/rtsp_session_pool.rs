@@ -44,7 +44,7 @@ pub const NONE_RTSP_SESSION_POOL: Option<&RTSPSessionPool> = None;
 pub trait RTSPSessionPoolExt: 'static {
     fn cleanup(&self) -> u32;
 
-    fn create(&self) -> Option<RTSPSession>;
+    fn create(&self) -> Result<RTSPSession, glib::BoolError>;
 
     fn filter(
         &self,
@@ -79,11 +79,12 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         }
     }
 
-    fn create(&self) -> Option<RTSPSession> {
+    fn create(&self) -> Result<RTSPSession, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_create(
+            Option::<_>::from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_create(
                 self.as_ref().to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create session pool"))
         }
     }
 

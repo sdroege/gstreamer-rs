@@ -186,6 +186,11 @@ status = "generate"
        [object.function.return]
        bool_return_is_error = "Failed to remove window"
 
+    [[object.function]]
+    name = "create_window"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create window"
+
 [[object]]
 name = "GstGL.GLDisplayEGL"
 status = "generate"
@@ -262,7 +267,6 @@ status = "generate"
 name = "GstGL.GLColorConvert"
 status = "generate"
 final_type = true
-
     [[object.function]]
     name = "set_caps"
         [object.function.return]

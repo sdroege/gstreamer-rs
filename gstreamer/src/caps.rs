@@ -106,13 +106,13 @@ impl Caps {
 }
 
 impl str::FromStr for Caps {
-    type Err = ();
+    type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<Caps>::from_glib_full(gst_sys::gst_caps_from_string(s.to_glib_none().0))
-                .ok_or(())
+            Option::<_>::from_glib_full(gst_sys::gst_caps_from_string(s.to_glib_none().0))
+                .ok_or_else(|| glib_bool_error!("Failed to parse caps from string"))
         }
     }
 }

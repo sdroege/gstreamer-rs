@@ -50,7 +50,7 @@ pub trait LayerExt: 'static {
         inpoint: gst::ClockTime,
         duration: gst::ClockTime,
         track_types: TrackType,
-    ) -> Option<Clip>;
+    ) -> Result<Clip, glib::BoolError>;
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
@@ -98,9 +98,9 @@ impl<O: IsA<Layer>> LayerExt for O {
         inpoint: gst::ClockTime,
         duration: gst::ClockTime,
         track_types: TrackType,
-    ) -> Option<Clip> {
+    ) -> Result<Clip, glib::BoolError> {
         unsafe {
-            from_glib_none(ges_sys::ges_layer_add_asset(
+            Option::<_>::from_glib_none(ges_sys::ges_layer_add_asset(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
                 start.to_glib(),
@@ -108,6 +108,7 @@ impl<O: IsA<Layer>> LayerExt for O {
                 duration.to_glib(),
                 track_types.to_glib(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to add asset"))
         }
     }
 

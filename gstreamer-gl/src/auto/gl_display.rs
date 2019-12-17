@@ -53,7 +53,7 @@ pub trait GLDisplayExt: 'static {
         other_context: &P,
     ) -> Result<GLContext, glib::Error>;
 
-    fn create_window(&self) -> Option<GLWindow>;
+    fn create_window(&self) -> Result<GLWindow, glib::BoolError>;
 
     fn filter_gl_api(&self, gl_api: GLAPI);
 
@@ -105,11 +105,12 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    fn create_window(&self) -> Option<GLWindow> {
+    fn create_window(&self) -> Result<GLWindow, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_display_create_window(
+            Option::<_>::from_glib_full(gst_gl_sys::gst_gl_display_create_window(
                 self.as_ref().to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create window"))
         }
     }
 

@@ -13,10 +13,10 @@ use DateTime;
 
 impl DateTime {
     /// Get the [`DateTime`](struct.DateTime.html) in UTC
-    pub fn to_utc(&self) -> Option<DateTime> {
+    pub fn to_utc(&self) -> Result<DateTime, glib::BoolError> {
         if !self.has_time() {
             // No time => no TZ offset
-            return Some(self.clone());
+            return Ok(self.clone());
         }
 
         assert!(self.has_year() && self.has_month() && self.has_day() && self.has_time());
@@ -29,7 +29,8 @@ impl DateTime {
                 .expect("DateTime::to_utc: to_g_date_time")
                 .to_utc()
                 .as_ref()
-                .and_then(DateTime::new_from_g_date_time)
+                .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
+                .map(DateTime::new_from_g_date_time)
         } else {
             // It would be cheaper to build a `glib::DateTime` direcly, unfortunetaly
             // this would require using `glib::TimeZone::new_offset` which is feature-gated
@@ -47,6 +48,7 @@ impl DateTime {
             .to_g_date_time()
             .expect("DateTime::to_utc: to_g_date_time")
             .to_utc()
+            .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
             .map(|g_date_time_utc| {
                 DateTime::new(
                     0f32, // UTC TZ offset
@@ -101,7 +103,7 @@ impl cmp::PartialOrd for DateTime {
 
         // Normalize to UTC only if both members have time (see note 2).
         let (self_norm, other_norm) = if self.has_time() && other.has_time() {
-            (self.to_utc()?, other.to_utc()?)
+            (self.to_utc().ok()?, other.to_utc().ok()?)
         } else {
             (self.clone(), other.clone())
         };
@@ -227,7 +229,7 @@ impl fmt::Display for DateTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(
             self.to_iso8601_string()
-                .unwrap_or_else(|| "None".into())
+                .unwrap_or_else(|_| "None".into())
                 .as_str(),
         )
     }

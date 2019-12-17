@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -29,7 +30,7 @@ unsafe impl Sync for AudioDecoder {}
 pub const NONE_AUDIO_DECODER: Option<&AudioDecoder> = None;
 
 pub trait AudioDecoderExt: 'static {
-    fn allocate_output_buffer(&self, size: usize) -> Option<gst::Buffer>;
+    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
     fn get_audio_info(&self) -> Option<AudioInfo>;
 
@@ -99,12 +100,13 @@ pub trait AudioDecoderExt: 'static {
 }
 
 impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
-    fn allocate_output_buffer(&self, size: usize) -> Option<gst::Buffer> {
+    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_audio_sys::gst_audio_decoder_allocate_output_buffer(
+            Option::<_>::from_glib_full(gst_audio_sys::gst_audio_decoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to allocate output buffer"))
         }
     }
 

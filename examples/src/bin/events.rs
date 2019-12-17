@@ -116,7 +116,8 @@ fn example_main() {
 
         // Tell the mainloop to continue executing this callback.
         glib::Continue(true)
-    });
+    })
+    .expect("Failed to add bus watch");
 
     // Operate GStreamer's bus, facilliating GLib's mainloop here.
     // This function call will block until you tell the mainloop to quit

@@ -14,7 +14,6 @@ use gobject_sys;
 use gst;
 use gst_base_sys;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -62,8 +61,6 @@ pub trait BaseSinkExt: 'static {
     fn is_last_sample_enabled(&self) -> bool;
 
     fn is_qos_enabled(&self) -> bool;
-
-    fn query_latency(&self) -> Option<(bool, bool, gst::ClockTime, gst::ClockTime)>;
 
     fn set_async_enabled(&self, enabled: bool);
 
@@ -261,36 +258,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             from_glib(gst_base_sys::gst_base_sink_is_qos_enabled(
                 self.as_ref().to_glib_none().0,
             ))
-        }
-    }
-
-    fn query_latency(&self) -> Option<(bool, bool, gst::ClockTime, gst::ClockTime)> {
-        unsafe {
-            let mut live = mem::MaybeUninit::uninit();
-            let mut upstream_live = mem::MaybeUninit::uninit();
-            let mut min_latency = mem::MaybeUninit::uninit();
-            let mut max_latency = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_base_sys::gst_base_sink_query_latency(
-                self.as_ref().to_glib_none().0,
-                live.as_mut_ptr(),
-                upstream_live.as_mut_ptr(),
-                min_latency.as_mut_ptr(),
-                max_latency.as_mut_ptr(),
-            ));
-            let live = live.assume_init();
-            let upstream_live = upstream_live.assume_init();
-            let min_latency = min_latency.assume_init();
-            let max_latency = max_latency.assume_init();
-            if ret {
-                Some((
-                    from_glib(live),
-                    from_glib(upstream_live),
-                    from_glib(min_latency),
-                    from_glib(max_latency),
-                ))
-            } else {
-                None
-            }
         }
     }
 

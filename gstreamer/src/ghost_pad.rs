@@ -17,7 +17,7 @@ use PadMode;
 use PadTemplate;
 
 impl GhostPad {
-    pub fn new<Q: IsA<Pad>>(name: Option<&str>, target: &Q) -> Option<GhostPad> {
+    pub fn new<Q: IsA<Pad>>(name: Option<&str>, target: &Q) -> Result<GhostPad, glib::BoolError> {
         skip_assert_initialized!();
         let name = name.to_glib_none();
         unsafe {
@@ -26,6 +26,7 @@ impl GhostPad {
                 target.as_ref().to_glib_none().0,
             ))
             .map(|o| Cast::unsafe_cast(o))
+            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
         }
     }
 
@@ -33,7 +34,7 @@ impl GhostPad {
         name: Option<&str>,
         target: &Q,
         templ: &PadTemplate,
-    ) -> Option<GhostPad> {
+    ) -> Result<GhostPad, glib::BoolError> {
         skip_assert_initialized!();
         let name = name.to_glib_none();
         unsafe {
@@ -43,6 +44,7 @@ impl GhostPad {
                 templ.to_glib_none().0,
             ))
             .map(|o| Cast::unsafe_cast(o))
+            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
         }
     }
 

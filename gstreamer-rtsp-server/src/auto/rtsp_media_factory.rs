@@ -53,9 +53,9 @@ pub const NONE_RTSP_MEDIA_FACTORY: Option<&RTSPMediaFactory> = None;
 pub trait RTSPMediaFactoryExt: 'static {
     //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    fn construct(&self, url: &gst_rtsp::RTSPUrl) -> Option<RTSPMedia>;
+    fn construct(&self, url: &gst_rtsp::RTSPUrl) -> Result<RTSPMedia, glib::BoolError>;
 
-    fn create_element(&self, url: &gst_rtsp::RTSPUrl) -> Option<gst::Element>;
+    fn create_element(&self, url: &gst_rtsp::RTSPUrl) -> Result<gst::Element, glib::BoolError>;
 
     fn get_address_pool(&self) -> Option<RTSPAddressPool>;
 
@@ -238,21 +238,23 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_factory_add_role() }
     //}
 
-    fn construct(&self, url: &gst_rtsp::RTSPUrl) -> Option<RTSPMedia> {
+    fn construct(&self, url: &gst_rtsp::RTSPUrl) -> Result<RTSPMedia, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_factory_construct(
+            Option::<_>::from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_factory_construct(
                 self.as_ref().to_glib_none().0,
                 url.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to construct media"))
         }
     }
 
-    fn create_element(&self, url: &gst_rtsp::RTSPUrl) -> Option<gst::Element> {
+    fn create_element(&self, url: &gst_rtsp::RTSPUrl) -> Result<gst::Element, glib::BoolError> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_media_factory_create_element(
+            Option::<_>::from_glib_none(gst_rtsp_server_sys::gst_rtsp_media_factory_create_element(
                 self.as_ref().to_glib_none().0,
                 url.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create media element"))
         }
     }
 

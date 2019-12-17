@@ -197,12 +197,13 @@ impl Harness {
         }
     }
 
-    pub fn create_buffer(&mut self, size: usize) -> Option<gst::Buffer> {
+    pub fn create_buffer(&mut self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_check_sys::gst_harness_create_buffer(
+            Option::<_>::from_glib_full(gst_check_sys::gst_harness_create_buffer(
                 self.0.as_ptr(),
                 size,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create new buffer"))
         }
     }
 
@@ -268,19 +269,26 @@ impl Harness {
         }
     }
 
-    pub fn pull(&mut self) -> Option<gst::Buffer> {
-        unsafe { from_glib_full(gst_check_sys::gst_harness_pull(self.0.as_ptr())) }
-    }
-
-    pub fn pull_event(&mut self) -> Option<gst::Event> {
-        unsafe { from_glib_full(gst_check_sys::gst_harness_pull_event(self.0.as_ptr())) }
-    }
-
-    pub fn pull_upstream_event(&mut self) -> Option<gst::Event> {
+    pub fn pull(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_check_sys::gst_harness_pull_upstream_event(
+            Option::<_>::from_glib_full(gst_check_sys::gst_harness_pull(self.0.as_ptr()))
+                .ok_or_else(|| glib_bool_error!("Failed to pull buffer"))
+        }
+    }
+
+    pub fn pull_event(&mut self) -> Result<gst::Event, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(gst_check_sys::gst_harness_pull_event(self.0.as_ptr()))
+                .ok_or_else(|| glib_bool_error!("Failed to pull event"))
+        }
+    }
+
+    pub fn pull_upstream_event(&mut self) -> Result<gst::Event, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(gst_check_sys::gst_harness_pull_upstream_event(
                 self.0.as_ptr(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to pull event"))
         }
     }
 
@@ -294,12 +302,13 @@ impl Harness {
         ret.into_result()
     }
 
-    pub fn push_and_pull(&mut self, buffer: gst::Buffer) -> Option<gst::Buffer> {
+    pub fn push_and_pull(&mut self, buffer: gst::Buffer) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_check_sys::gst_harness_push_and_pull(
+            Option::<_>::from_glib_full(gst_check_sys::gst_harness_push_and_pull(
                 self.0.as_ptr(),
                 buffer.into_ptr(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to push and pull buffer"))
         }
     }
 
@@ -488,20 +497,22 @@ impl Harness {
     //}
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn take_all_data_as_buffer(&mut self) -> Option<gst::Buffer> {
+    pub fn take_all_data_as_buffer(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_check_sys::gst_harness_take_all_data_as_buffer(
+            Option::<_>::from_glib_full(gst_check_sys::gst_harness_take_all_data_as_buffer(
                 self.0.as_ptr(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to take all data as buffer"))
         }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn take_all_data_as_bytes(&mut self) -> Option<glib::Bytes> {
+    pub fn take_all_data_as_bytes(&mut self) -> Result<glib::Bytes, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_check_sys::gst_harness_take_all_data_as_bytes(
+            Option::<_>::from_glib_full(gst_check_sys::gst_harness_take_all_data_as_bytes(
                 self.0.as_ptr(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to take all data as bytes"))
         }
     }
 
@@ -837,6 +848,6 @@ mod tests {
         h.set_src_caps_str("application/test");
         let buf = gst::Buffer::new();
         let buf = h.push_and_pull(buf);
-        assert!(buf.is_some());
+        assert!(buf.is_ok());
     }
 }

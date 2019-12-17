@@ -76,7 +76,8 @@ fn tutorial_main() -> Result<(), Error> {
             _ => (),
         }
         glib::Continue(true)
-    });
+    })
+    .expect("Failed to add bus watch");
 
     main_loop.run();
 

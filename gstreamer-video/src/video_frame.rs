@@ -139,9 +139,9 @@ impl<T> VideoFrame<T> {
         unsafe { gst::BufferRef::from_ptr(self.0.buffer) }
     }
 
-    pub fn plane_data(&self, plane: u32) -> Option<&[u8]> {
+    pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return None;
+            return Err(glib_bool_error!("Plane index higher than number of planes"));
         }
 
         let format_info = self.format_info();
@@ -149,7 +149,7 @@ impl<T> VideoFrame<T> {
         // Just get the palette
         if format_info.has_palette() && plane == 1 {
             unsafe {
-                return Some(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
+                return Ok(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
             }
         }
 
@@ -159,7 +159,7 @@ impl<T> VideoFrame<T> {
         let h = format_info.scale_height(plane as u8, self.height());
 
         unsafe {
-            Some(slice::from_raw_parts(
+            Ok(slice::from_raw_parts(
                 self.0.data[plane as usize] as *const u8,
                 (w * h) as usize,
             ))
@@ -306,9 +306,9 @@ impl VideoFrame<Writable> {
         unsafe { gst::BufferRef::from_mut_ptr(self.0.buffer) }
     }
 
-    pub fn plane_data_mut(&mut self, plane: u32) -> Option<&mut [u8]> {
+    pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return None;
+            return Err(glib_bool_error!("Plane index higher than number of planes"));
         }
 
         let format_info = self.format_info();
@@ -316,7 +316,7 @@ impl VideoFrame<Writable> {
         // Just get the palette
         if format_info.has_palette() && plane == 1 {
             unsafe {
-                return Some(slice::from_raw_parts_mut(
+                return Ok(slice::from_raw_parts_mut(
                     self.0.data[1] as *mut u8,
                     256 * 4,
                 ));
@@ -329,7 +329,7 @@ impl VideoFrame<Writable> {
         let h = format_info.scale_height(plane as u8, self.height());
 
         unsafe {
-            Some(slice::from_raw_parts_mut(
+            Ok(slice::from_raw_parts_mut(
                 self.0.data[plane as usize] as *mut u8,
                 (w * h) as usize,
             ))
@@ -367,7 +367,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
         info: &'b ::VideoInfo,
-    ) -> Option<VideoFrameRef<&'a gst::BufferRef>> {
+    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
         unsafe {
@@ -380,11 +380,11 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             ));
 
             if !res {
-                None
+                Err(glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Some(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef(frame, Some(buffer), info, false))
             }
         }
     }
@@ -393,7 +393,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         buffer: &'a gst::BufferRef,
         id: i32,
         info: &'b ::VideoInfo,
-    ) -> Option<VideoFrameRef<&'a gst::BufferRef>> {
+    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
         unsafe {
@@ -407,11 +407,11 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             ));
 
             if !res {
-                None
+                Err(glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Some(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef(frame, Some(buffer), info, false))
             }
         }
     }
@@ -519,9 +519,9 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         self.1.as_ref().unwrap()
     }
 
-    pub fn plane_data(&self, plane: u32) -> Option<&[u8]> {
+    pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return None;
+            return Err(glib_bool_error!("Plane index higher than number of planes"));
         }
 
         let format_info = self.format_info();
@@ -529,7 +529,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         // Just get the palette
         if format_info.has_palette() && plane == 1 {
             unsafe {
-                return Some(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
+                return Ok(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
             }
         }
 
@@ -539,7 +539,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         let h = format_info.scale_height(plane as u8, self.height());
 
         unsafe {
-            Some(slice::from_raw_parts(
+            Ok(slice::from_raw_parts(
                 self.0.data[plane as usize] as *const u8,
                 (w * h) as usize,
             ))
@@ -560,7 +560,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         info: &'b ::VideoInfo,
-    ) -> Option<VideoFrameRef<&'a mut gst::BufferRef>> {
+    ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
         unsafe {
@@ -575,11 +575,11 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             ));
 
             if !res {
-                None
+                Err(glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Some(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef(frame, Some(buffer), info, false))
             }
         }
     }
@@ -588,7 +588,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         buffer: &'a mut gst::BufferRef,
         id: i32,
         info: &'b ::VideoInfo,
-    ) -> Option<VideoFrameRef<&'a mut gst::BufferRef>> {
+    ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
         unsafe {
@@ -604,11 +604,11 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             ));
 
             if !res {
-                None
+                Err(glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Some(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef(frame, Some(buffer), info, false))
             }
         }
     }
@@ -617,9 +617,9 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         self.1.as_mut().unwrap()
     }
 
-    pub fn plane_data_mut(&mut self, plane: u32) -> Option<&mut [u8]> {
+    pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return None;
+            return Err(glib_bool_error!("Plane index higher than number of planes"));
         }
 
         let format_info = self.format_info();
@@ -627,7 +627,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         // Just get the palette
         if format_info.has_palette() && plane == 1 {
             unsafe {
-                return Some(slice::from_raw_parts_mut(
+                return Ok(slice::from_raw_parts_mut(
                     self.0.data[1] as *mut u8,
                     256 * 4,
                 ));
@@ -640,7 +640,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         let h = format_info.scale_height(plane as u8, self.height());
 
         unsafe {
-            Some(slice::from_raw_parts_mut(
+            Ok(slice::from_raw_parts_mut(
                 self.0.data[plane as usize] as *mut u8,
                 (w * h) as usize,
             ))
@@ -717,9 +717,9 @@ mod tests {
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
         let frame = VideoFrame::from_buffer_readable(buffer, &info).unwrap();
 
-        assert_ne!(frame.plane_data(0), None);
+        assert!(frame.plane_data(0).is_ok());
         assert_eq!(frame.plane_data(0).unwrap().len(), 320 * 240);
-        assert_eq!(frame.plane_data(1), None);
+        assert!(frame.plane_data(1).is_err());
         assert!(frame.info() == &info);
     }
 
@@ -733,9 +733,9 @@ mod tests {
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
         let mut frame = VideoFrame::from_buffer_writable(buffer, &info).unwrap();
 
-        assert_ne!(frame.plane_data_mut(0), None);
+        assert!(frame.plane_data_mut(0).is_ok());
         assert_eq!(frame.plane_data_mut(0).unwrap().len(), 320 * 240);
-        assert_eq!(frame.plane_data_mut(1), None);
+        assert!(frame.plane_data_mut(1).is_err());
         assert!(frame.info() == &info);
     }
 }

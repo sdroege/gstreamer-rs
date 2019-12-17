@@ -31,7 +31,7 @@ fn create_ui(app: &gtk::Application) {
     // in the pipeline, and the widget will be embedded in our gui.
     // Gstreamer then displays frames in the gtk widget.
     // First, we try to use the OpenGL version - and if that fails, we fall back to non-OpenGL.
-    let (sink, widget) = if let Some(gtkglsink) = gst::ElementFactory::make("gtkglsink", None) {
+    let (sink, widget) = if let Ok(gtkglsink) = gst::ElementFactory::make("gtkglsink", None) {
         // Using the OpenGL widget succeeded, so we are in for a nice playback experience with
         // low cpu usage. :)
         // The gtkglsink essentially allocates an OpenGL texture on the GPU, that it will display.
@@ -136,7 +136,8 @@ fn create_ui(app: &gtk::Application) {
         };
 
         glib::Continue(true)
-    });
+    })
+    .expect("Failed to add bus watch");
 
     // Pipeline reference is owned by the closure below, so will be
     // destroyed once the app is destroyed

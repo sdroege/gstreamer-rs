@@ -57,7 +57,8 @@ fn example_main() {
         };
 
         glib::Continue(true)
-    });
+    })
+    .expect("Failed to add bus watch");
 
     main_loop.run();
 

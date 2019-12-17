@@ -61,12 +61,13 @@ impl ElementFactory {
         }
     }
 
-    pub fn create(&self, name: Option<&str>) -> Option<Element> {
+    pub fn create(&self, name: Option<&str>) -> Result<Element, glib::BoolError> {
         unsafe {
-            from_glib_none(gst_sys::gst_element_factory_create(
+            Option::<_>::from_glib_none(gst_sys::gst_element_factory_create(
                 self.to_glib_none().0,
                 name.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create element from factory"))
         }
     }
 
@@ -173,13 +174,14 @@ impl ElementFactory {
         }
     }
 
-    pub fn make(factoryname: &str, name: Option<&str>) -> Option<Element> {
+    pub fn make(factoryname: &str, name: Option<&str>) -> Result<Element, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(gst_sys::gst_element_factory_make(
+            Option::<_>::from_glib_none(gst_sys::gst_element_factory_make(
                 factoryname.to_glib_none().0,
                 name.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create element from factory name"))
         }
     }
 }

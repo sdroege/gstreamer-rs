@@ -246,7 +246,7 @@ impl MemoryRef {
         }
     }
 
-    pub fn map_readable(&self) -> Option<MemoryMap<Readable>> {
+    pub fn map_readable(&self) -> Result<MemoryMap<Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
             let res = gst_sys::gst_memory_map(
@@ -255,18 +255,18 @@ impl MemoryRef {
                 gst_sys::GST_MAP_READ,
             );
             if res == glib_sys::GTRUE {
-                Some(MemoryMap {
+                Ok(MemoryMap {
                     memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                None
+                Err(glib_bool_error!("Failed to map memory readable"))
             }
         }
     }
 
-    pub fn map_writable(&mut self) -> Option<MemoryMap<Writable>> {
+    pub fn map_writable(&mut self) -> Result<MemoryMap<Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
             let res = gst_sys::gst_memory_map(
@@ -275,13 +275,13 @@ impl MemoryRef {
                 gst_sys::GST_MAP_READWRITE,
             );
             if res == glib_sys::GTRUE {
-                Some(MemoryMap {
+                Ok(MemoryMap {
                     memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                None
+                Err(glib_bool_error!("Failed to map memory readable"))
             }
         }
     }

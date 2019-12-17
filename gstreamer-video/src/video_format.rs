@@ -90,9 +90,9 @@ impl ::VideoFormat {
 }
 
 impl str::FromStr for ::VideoFormat {
-    type Err = ();
+    type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -101,7 +101,7 @@ impl str::FromStr for ::VideoFormat {
             ));
 
             if fmt == ::VideoFormat::Unknown {
-                Err(())
+                Err(glib_bool_error!("Failed to parse video format from string"))
             } else {
                 Ok(fmt)
             }

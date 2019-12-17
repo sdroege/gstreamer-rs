@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -32,7 +33,7 @@ unsafe impl Sync for VideoEncoder {}
 pub const NONE_VIDEO_ENCODER: Option<&VideoEncoder> = None;
 
 pub trait VideoEncoderExt: 'static {
-    fn allocate_output_buffer(&self, size: usize) -> Option<gst::Buffer>;
+    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
@@ -62,12 +63,13 @@ pub trait VideoEncoderExt: 'static {
 }
 
 impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
-    fn allocate_output_buffer(&self, size: usize) -> Option<gst::Buffer> {
+    fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_encoder_allocate_output_buffer(
+            Option::<_>::from_glib_full(gst_video_sys::gst_video_encoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to allocate output buffer"))
         }
     }
 

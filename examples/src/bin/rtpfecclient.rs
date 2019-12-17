@@ -50,8 +50,8 @@ fn make_element(
     element_name: Option<&str>,
 ) -> Result<gst::Element, Error> {
     match gst::ElementFactory::make(factory_name, element_name) {
-        Some(elem) => Ok(elem),
-        None => Err(Error::from(MissingElement(factory_name))),
+        Ok(elem) => Ok(elem),
+        Err(_) => Err(Error::from(MissingElement(factory_name))),
     }
 }
 

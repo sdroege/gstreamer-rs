@@ -227,7 +227,11 @@ impl Clock {
 }
 
 pub trait ClockExtManual: 'static {
-    fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> Option<ClockId>;
+    fn new_periodic_id(
+        &self,
+        start_time: ClockTime,
+        interval: ClockTime,
+    ) -> Result<ClockId, glib::BoolError>;
 
     fn periodic_id_reinit(
         &self,
@@ -236,7 +240,7 @@ pub trait ClockExtManual: 'static {
         interval: ClockTime,
     ) -> Result<(), glib::BoolError>;
 
-    fn new_single_shot_id(&self, time: ClockTime) -> Option<ClockId>;
+    fn new_single_shot_id(&self, time: ClockTime) -> Result<ClockId, glib::BoolError>;
 
     fn single_shot_id_reinit(&self, id: &ClockId, time: ClockTime) -> Result<(), glib::BoolError>;
 
@@ -248,13 +252,18 @@ pub trait ClockExtManual: 'static {
 }
 
 impl<O: IsA<Clock>> ClockExtManual for O {
-    fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> Option<ClockId> {
+    fn new_periodic_id(
+        &self,
+        start_time: ClockTime,
+        interval: ClockTime,
+    ) -> Result<ClockId, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_sys::gst_clock_new_periodic_id(
+            Option::<_>::from_glib_full(gst_sys::gst_clock_new_periodic_id(
                 self.as_ref().to_glib_none().0,
                 start_time.to_glib(),
                 interval.to_glib(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create new periodic clock id"))
         }
     }
 
@@ -280,12 +289,13 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 
-    fn new_single_shot_id(&self, time: ClockTime) -> Option<ClockId> {
+    fn new_single_shot_id(&self, time: ClockTime) -> Result<ClockId, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_sys::gst_clock_new_single_shot_id(
+            Option::<_>::from_glib_full(gst_sys::gst_clock_new_single_shot_id(
                 self.as_ref().to_glib_none().0,
                 time.to_glib(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create new single shot clock id"))
         }
     }
 

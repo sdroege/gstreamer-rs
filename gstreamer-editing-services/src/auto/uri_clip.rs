@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ges_sys;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -29,9 +30,12 @@ glib_wrapper! {
 }
 
 impl UriClip {
-    pub fn new(uri: &str) -> Option<UriClip> {
+    pub fn new(uri: &str) -> Result<UriClip, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ges_sys::ges_uri_clip_new(uri.to_glib_none().0)) }
+        unsafe {
+            Option::<_>::from_glib_none(ges_sys::ges_uri_clip_new(uri.to_glib_none().0))
+                .ok_or_else(|| glib_bool_error!("Failed to create Uri clip from Uri"))
+        }
     }
 }
 

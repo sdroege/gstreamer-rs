@@ -32,7 +32,7 @@ unsafe impl Sync for Device {}
 pub const NONE_DEVICE: Option<&Device> = None;
 
 pub trait DeviceExt: 'static {
-    fn create_element(&self, name: Option<&str>) -> Option<Element>;
+    fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError>;
 
     fn get_caps(&self) -> Option<Caps>;
 
@@ -55,12 +55,13 @@ pub trait DeviceExt: 'static {
 }
 
 impl<O: IsA<Device>> DeviceExt for O {
-    fn create_element(&self, name: Option<&str>) -> Option<Element> {
+    fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError> {
         unsafe {
-            from_glib_none(gst_sys::gst_device_create_element(
+            Option::<_>::from_glib_none(gst_sys::gst_device_create_element(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create element for device"))
         }
     }
 

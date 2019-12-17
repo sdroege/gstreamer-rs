@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ges_sys;
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::GString;
@@ -23,9 +24,12 @@ glib_wrapper! {
 }
 
 impl Effect {
-    pub fn new(bin_description: &str) -> Option<Effect> {
+    pub fn new(bin_description: &str) -> Result<Effect, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ges_sys::ges_effect_new(bin_description.to_glib_none().0)) }
+        unsafe {
+            Option::<_>::from_glib_none(ges_sys::ges_effect_new(bin_description.to_glib_none().0))
+                .ok_or_else(|| glib_bool_error!("Failed to create effect from description"))
+        }
     }
 }
 

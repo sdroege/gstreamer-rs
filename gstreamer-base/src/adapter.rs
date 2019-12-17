@@ -81,7 +81,7 @@ impl UniqueAdapter {
         self.0.clear();
     }
 
-    pub fn copy_bytes(&self, offset: usize, size: usize) -> Option<glib::Bytes> {
+    pub fn copy_bytes(&self, offset: usize, size: usize) -> Result<glib::Bytes, glib::BoolError> {
         self.0.copy_bytes(offset, size)
     }
 
@@ -98,15 +98,15 @@ impl UniqueAdapter {
         self.0.flush(flush);
     }
 
-    pub fn get_buffer(&self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn get_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         self.0.get_buffer(nbytes)
     }
 
-    pub fn get_buffer_fast(&self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn get_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         self.0.get_buffer_fast(nbytes)
     }
 
-    pub fn get_buffer_list(&self, nbytes: usize) -> Option<gst::BufferList> {
+    pub fn get_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         self.0.get_buffer_list(nbytes)
     }
 
@@ -159,15 +159,15 @@ impl UniqueAdapter {
         self.0.pts_at_discont()
     }
 
-    pub fn take_buffer(&mut self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn take_buffer(&mut self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         self.0.take_buffer(nbytes)
     }
 
-    pub fn take_buffer_fast(&mut self, nbytes: usize) -> Option<gst::Buffer> {
+    pub fn take_buffer_fast(&mut self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         self.0.take_buffer_fast(nbytes)
     }
 
-    pub fn take_buffer_list(&mut self, nbytes: usize) -> Option<gst::BufferList> {
+    pub fn take_buffer_list(&mut self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         self.0.take_buffer_list(nbytes)
     }
 

@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_base_sys;
+use std::mem;
 use BaseSink;
 
 pub trait BaseSinkExtManual: 'static {
@@ -28,6 +29,10 @@ pub trait BaseSinkExtManual: 'static {
         Result<gst::ClockSuccess, gst::ClockError>,
         gst::ClockTimeDiff,
     );
+
+    fn query_latency(
+        &self,
+    ) -> Result<(bool, bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
@@ -78,6 +83,38 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
                 &mut jitter,
             ));
             (ret.into_result(), jitter)
+        }
+    }
+
+    fn query_latency(
+        &self,
+    ) -> Result<(bool, bool, gst::ClockTime, gst::ClockTime), glib::BoolError> {
+        unsafe {
+            let mut live = mem::MaybeUninit::uninit();
+            let mut upstream_live = mem::MaybeUninit::uninit();
+            let mut min_latency = mem::MaybeUninit::uninit();
+            let mut max_latency = mem::MaybeUninit::uninit();
+            let ret = from_glib(gst_base_sys::gst_base_sink_query_latency(
+                self.as_ref().to_glib_none().0,
+                live.as_mut_ptr(),
+                upstream_live.as_mut_ptr(),
+                min_latency.as_mut_ptr(),
+                max_latency.as_mut_ptr(),
+            ));
+            let live = live.assume_init();
+            let upstream_live = upstream_live.assume_init();
+            let min_latency = min_latency.assume_init();
+            let max_latency = max_latency.assume_init();
+            if ret {
+                Ok((
+                    from_glib(live),
+                    from_glib(upstream_live),
+                    from_glib(min_latency),
+                    from_glib(max_latency),
+                ))
+            } else {
+                Err(glib_bool_error!("Failed to query latency"))
+            }
         }
     }
 }

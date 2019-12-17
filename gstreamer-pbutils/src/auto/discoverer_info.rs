@@ -160,21 +160,26 @@ impl DiscovererInfo {
         }
     }
 
-    pub fn to_variant(&self, flags: DiscovererSerializeFlags) -> Option<glib::Variant> {
+    pub fn to_variant(
+        &self,
+        flags: DiscovererSerializeFlags,
+    ) -> Result<glib::Variant, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_info_to_variant(
+            Option::<_>::from_glib_full(gst_pbutils_sys::gst_discoverer_info_to_variant(
                 self.to_glib_none().0,
                 flags.to_glib(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to serialize DiscovererInfo to Variant"))
         }
     }
 
-    pub fn from_variant(variant: &glib::Variant) -> Option<DiscovererInfo> {
+    pub fn from_variant(variant: &glib::Variant) -> Result<DiscovererInfo, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_info_from_variant(
+            Option::<_>::from_glib_full(gst_pbutils_sys::gst_discoverer_info_from_variant(
                 variant.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to deserialize DiscovererInfo from Variant"))
         }
     }
 }

@@ -55,9 +55,9 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src =
-        gst::ElementFactory::make("audiotestsrc", None).ok_or(MissingElement("audiotestsrc"))?;
-    let sink = gst::ElementFactory::make("appsink", None).ok_or(MissingElement("appsink"))?;
+    let src = gst::ElementFactory::make("audiotestsrc", None)
+        .map_err(|_| MissingElement("audiotestsrc"))?;
+    let sink = gst::ElementFactory::make("appsink", None).map_err(|_| MissingElement("appsink"))?;
 
     pipeline.add_many(&[&src, &sink])?;
     src.link(&sink)?;
@@ -87,7 +87,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             // Add a handler to the "new-sample" signal.
             .new_sample(|appsink| {
                 // Pull the sample in question out of the appsink's buffer.
-                let sample = appsink.pull_sample().ok_or(gst::FlowError::Eos)?;
+                let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
                 let buffer = sample.get_buffer().ok_or_else(|| {
                     gst_element_error!(
                         appsink,
@@ -105,7 +105,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // on the machine's main memory itself, but rather in the GPU's memory.
                 // So mapping the buffer makes the underlying memory region accessible to us.
                 // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
-                let map = buffer.map_readable().ok_or_else(|| {
+                let map = buffer.map_readable().map_err(|_| {
                     gst_element_error!(
                         appsink,
                         gst::ResourceError::Failed,

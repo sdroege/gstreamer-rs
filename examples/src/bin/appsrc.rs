@@ -52,11 +52,11 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("appsrc", None).ok_or(MissingElement("appsrc"))?;
-    let videoconvert =
-        gst::ElementFactory::make("videoconvert", None).ok_or(MissingElement("videoconvert"))?;
-    let sink =
-        gst::ElementFactory::make("autovideosink", None).ok_or(MissingElement("autovideosink"))?;
+    let src = gst::ElementFactory::make("appsrc", None).map_err(|_| MissingElement("appsrc"))?;
+    let videoconvert = gst::ElementFactory::make("videoconvert", None)
+        .map_err(|_| MissingElement("videoconvert"))?;
+    let sink = gst::ElementFactory::make("autovideosink", None)
+        .map_err(|_| MissingElement("autovideosink"))?;
 
     pipeline.add_many(&[&src, &videoconvert, &sink])?;
     gst::Element::link_many(&[&src, &videoconvert, &sink])?;

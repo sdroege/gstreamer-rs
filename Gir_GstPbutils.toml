@@ -99,6 +99,16 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "to_variant"
+        [object.function.return]
+        nullable_return_is_error = "Failed to serialize DiscovererInfo to Variant"
+
+    [[object.function]]
+    name = "from_variant"
+        [object.function.return]
+        nullable_return_is_error = "Failed to deserialize DiscovererInfo from Variant"
+
 [[object]]
 name = "GstPbutils.DiscovererStreamInfo"
 status = "generate"
@@ -179,6 +189,11 @@ status = "generate"
     name = "restriction-caps"
     # encodingprofile is immutable after constructed
     ignore = true
+
+    [[object.function]]
+    name = "from_discoverer"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create EncodingProfile from DiscovererInfo"
 
 [[object]]
 name = "GstPbutils.EncodingContainerProfile"
@@ -292,3 +307,23 @@ status = "generate"
     [[object.function]]
     name = "pb_utils_get_encoder_description"
     ignore = true
+
+    [[object.function]]
+    name = "pb_utils_get_element_description"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get element description"
+
+    [[object.function]]
+    name = "pb_utils_get_sink_description"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get sink description"
+
+    [[object.function]]
+    name = "pb_utils_get_source_description"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get source description"
+
+    [[object.function]]
+    name = "plugins_base_version_string"
+        [object.function.return]
+        nullable = false

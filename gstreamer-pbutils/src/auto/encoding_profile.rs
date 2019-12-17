@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::GString;
@@ -33,12 +34,13 @@ impl EncodingProfile {
         }
     }
 
-    pub fn from_discoverer(info: &DiscovererInfo) -> Option<EncodingProfile> {
+    pub fn from_discoverer(info: &DiscovererInfo) -> Result<EncodingProfile, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_profile_from_discoverer(
+            Option::<_>::from_glib_full(gst_pbutils_sys::gst_encoding_profile_from_discoverer(
                 info.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create EncodingProfile from DiscovererInfo"))
         }
     }
 }

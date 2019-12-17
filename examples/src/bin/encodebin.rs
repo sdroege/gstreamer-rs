@@ -117,11 +117,12 @@ fn example_main() -> Result<(), Error> {
     };
 
     let pipeline = gst::Pipeline::new(None);
-    let src =
-        gst::ElementFactory::make("uridecodebin", None).ok_or(MissingElement("uridecodebin"))?;
+    let src = gst::ElementFactory::make("uridecodebin", None)
+        .map_err(|_| MissingElement("uridecodebin"))?;
     let encodebin =
-        gst::ElementFactory::make("encodebin", None).ok_or(MissingElement("encodebin"))?;
-    let sink = gst::ElementFactory::make("filesink", None).ok_or(MissingElement("filesink"))?;
+        gst::ElementFactory::make("encodebin", None).map_err(|_| MissingElement("encodebin"))?;
+    let sink =
+        gst::ElementFactory::make("filesink", None).map_err(|_| MissingElement("filesink"))?;
 
     src.set_property("uri", &uri)
         .expect("setting URI Property failed");
@@ -188,12 +189,12 @@ fn example_main() -> Result<(), Error> {
 
         let link_to_encodebin = |is_audio, is_video| -> Result<(), Error> {
             if is_audio {
-                let queue =
-                    gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
+                let queue = gst::ElementFactory::make("queue", None)
+                    .map_err(|_| MissingElement("queue"))?;
                 let convert = gst::ElementFactory::make("audioconvert", None)
-                    .ok_or(MissingElement("audioconvert"))?;
+                    .map_err(|_| MissingElement("audioconvert"))?;
                 let resample = gst::ElementFactory::make("audioresample", None)
-                    .ok_or(MissingElement("audioresample"))?;
+                    .map_err(|_| MissingElement("audioresample"))?;
 
                 let elements = &[&queue, &convert, &resample];
                 pipeline
@@ -221,12 +222,12 @@ fn example_main() -> Result<(), Error> {
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
                 dbin_src_pad.link(&sink_pad)?;
             } else if is_video {
-                let queue =
-                    gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
+                let queue = gst::ElementFactory::make("queue", None)
+                    .map_err(|_| MissingElement("queue"))?;
                 let convert = gst::ElementFactory::make("videoconvert", None)
-                    .ok_or(MissingElement("videoconvert"))?;
+                    .map_err(|_| MissingElement("videoconvert"))?;
                 let scale = gst::ElementFactory::make("videoscale", None)
-                    .ok_or(MissingElement("videoscale"))?;
+                    .map_err(|_| MissingElement("videoscale"))?;
 
                 let elements = &[&queue, &convert, &scale];
                 pipeline

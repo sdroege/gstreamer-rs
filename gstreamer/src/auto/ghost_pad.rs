@@ -22,7 +22,10 @@ glib_wrapper! {
 }
 
 impl GhostPad {
-    pub fn new_no_target(name: Option<&str>, dir: PadDirection) -> Option<GhostPad> {
+    pub fn new_no_target(
+        name: Option<&str>,
+        dir: PadDirection,
+    ) -> Result<GhostPad, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_no_target(
@@ -30,13 +33,14 @@ impl GhostPad {
                 dir.to_glib(),
             ))
             .map(|o| o.unsafe_cast())
+            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
         }
     }
 
     pub fn new_no_target_from_template(
         name: Option<&str>,
         templ: &PadTemplate,
-    ) -> Option<GhostPad> {
+    ) -> Result<GhostPad, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
             Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_no_target_from_template(
@@ -44,6 +48,7 @@ impl GhostPad {
                 templ.to_glib_none().0,
             ))
             .map(|o| o.unsafe_cast())
+            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
         }
     }
 }

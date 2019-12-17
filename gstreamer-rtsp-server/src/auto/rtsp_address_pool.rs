@@ -36,7 +36,11 @@ unsafe impl Sync for RTSPAddressPool {}
 pub const NONE_RTSP_ADDRESS_POOL: Option<&RTSPAddressPool> = None;
 
 pub trait RTSPAddressPoolExt: 'static {
-    fn acquire_address(&self, flags: RTSPAddressFlags, n_ports: i32) -> Option<RTSPAddress>;
+    fn acquire_address(
+        &self,
+        flags: RTSPAddressFlags,
+        n_ports: i32,
+    ) -> Result<RTSPAddress, glib::BoolError>;
 
     fn add_range(
         &self,
@@ -55,13 +59,18 @@ pub trait RTSPAddressPoolExt: 'static {
 }
 
 impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExt for O {
-    fn acquire_address(&self, flags: RTSPAddressFlags, n_ports: i32) -> Option<RTSPAddress> {
+    fn acquire_address(
+        &self,
+        flags: RTSPAddressFlags,
+        n_ports: i32,
+    ) -> Result<RTSPAddress, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_address_pool_acquire_address(
+            Option::<_>::from_glib_full(gst_rtsp_server_sys::gst_rtsp_address_pool_acquire_address(
                 self.as_ref().to_glib_none().0,
                 flags.to_glib(),
                 n_ports,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to acquire address"))
         }
     }
 

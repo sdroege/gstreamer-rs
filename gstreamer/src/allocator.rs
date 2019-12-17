@@ -18,11 +18,19 @@ use Allocator;
 use Memory;
 
 pub trait AllocatorExtManual: 'static {
-    fn alloc(&self, size: usize, params: Option<&AllocationParams>) -> Option<Memory>;
+    fn alloc(
+        &self,
+        size: usize,
+        params: Option<&AllocationParams>,
+    ) -> Result<Memory, glib::BoolError>;
 }
 
 impl<O: IsA<Allocator>> AllocatorExtManual for O {
-    fn alloc(&self, size: usize, params: Option<&AllocationParams>) -> Option<Memory> {
+    fn alloc(
+        &self,
+        size: usize,
+        params: Option<&AllocationParams>,
+    ) -> Result<Memory, glib::BoolError> {
         unsafe {
             let ret = gst_sys::gst_allocator_alloc(
                 self.as_ptr() as *mut _,
@@ -33,9 +41,9 @@ impl<O: IsA<Allocator>> AllocatorExtManual for O {
                 },
             );
             if ret.is_null() {
-                None
+                Err(glib_bool_error!("Failed to allocate memory"))
             } else {
-                Some(from_glib_full(ret))
+                Ok(from_glib_full(ret))
             }
         }
     }

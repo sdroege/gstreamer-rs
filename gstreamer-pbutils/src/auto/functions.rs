@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::translate::*;
 use glib::GString;
 use gst_pbutils_sys;
@@ -26,30 +27,33 @@ pub fn encoding_list_available_categories() -> Vec<GString> {
     }
 }
 
-pub fn pb_utils_get_element_description(factory_name: &str) -> Option<GString> {
+pub fn pb_utils_get_element_description(factory_name: &str) -> Result<GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_element_description(
+        Option::<_>::from_glib_full(gst_pbutils_sys::gst_pb_utils_get_element_description(
             factory_name.to_glib_none().0,
         ))
+        .ok_or_else(|| glib_bool_error!("Failed to get element description"))
     }
 }
 
-pub fn pb_utils_get_sink_description(protocol: &str) -> Option<GString> {
+pub fn pb_utils_get_sink_description(protocol: &str) -> Result<GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_sink_description(
+        Option::<_>::from_glib_full(gst_pbutils_sys::gst_pb_utils_get_sink_description(
             protocol.to_glib_none().0,
         ))
+        .ok_or_else(|| glib_bool_error!("Failed to get sink description"))
     }
 }
 
-pub fn pb_utils_get_source_description(protocol: &str) -> Option<GString> {
+pub fn pb_utils_get_source_description(protocol: &str) -> Result<GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_source_description(
+        Option::<_>::from_glib_full(gst_pbutils_sys::gst_pb_utils_get_source_description(
             protocol.to_glib_none().0,
         ))
+        .ok_or_else(|| glib_bool_error!("Failed to get source description"))
     }
 }
 
@@ -74,7 +78,7 @@ pub fn plugins_base_version() -> (u32, u32, u32, u32) {
     }
 }
 
-pub fn plugins_base_version_string() -> Option<GString> {
+pub fn plugins_base_version_string() -> GString {
     assert_initialized_main_thread!();
     unsafe { from_glib_full(gst_pbutils_sys::gst_plugins_base_version_string()) }
 }

@@ -26,9 +26,7 @@ generate = [
     "GstRtspServer.RTSPAddressPoolResult",
     "GstRtspServer.RTSPMediaFactoryURI",
     "GstRtspServer.RTSPMediaStatus",
-    "GstRtspServer.RTSPMountPoints",
     "GstRtspServer.RTSPPublishClockMode",
-    "GstRtspServer.RTSPSession",
     "GstRtspServer.RTSPSuspendMode",
     "GstRtspServer.RTSPThreadPool",
     "GstRtspServer.RTSPThreadType",
@@ -226,6 +224,11 @@ status = "generate"
         bool_return_is_error = "Failed to add address range"
 
     [[object.function]]
+    name = "acquire_address"
+        [object.function.return]
+        nullable_return_is_error = "Failed to acquire address"
+
+    [[object.function]]
     name = "reserve_address"
     ignore = true
 
@@ -257,6 +260,16 @@ status = "generate"
     # Different structure mutability needed
     ignore = true
 
+    [[object.function]]
+    name = "construct"
+        [object.function.return]
+        nullable_return_is_error = "Failed to construct media"
+
+    [[object.function]]
+    name = "create_element"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create media element"
+
 [[object]]
 name = "GstRtspServer.RTSPSessionMedia"
 status = "generate"
@@ -280,10 +293,14 @@ status = "generate"
     # GSource return
     ignore = true
 
+    [[object.function]]
+    name = "create"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create session pool"
+
 [[object]]
 name="GstRtspServer.RTSPAuth"
 status="generate"
-
     [[object.function]]
     name = "check"
         [object.function.return]
@@ -297,9 +314,26 @@ status="generate"
     [[object.function]]
     name = "make_basic"
         [object.function.return]
-	nullable = false
+        nullable = false
 
     [[object.function]]
     name = "set_default_token"
     # gir forgets mut
     ignore = true
+
+[[object]]
+name="GstRtspServer.RTSPMountPoints"
+status="generate"
+    [[object.function]]
+    name = "make_path"
+        [object.function.return]
+        nullable_return_is_error = "Failed to make path"
+
+[[object]]
+name="GstRtspServer.RTSPSession"
+status="generate"
+    [[object.function]]
+    name = "manage_media"
+        [object.function.return]
+        nullable_return_is_error = "Failed to manage media"
+

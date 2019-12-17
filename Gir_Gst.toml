@@ -539,6 +539,15 @@ status = "generate"
 name = "Gst.ElementFactory"
 status = "generate"
 final_type = true
+    [[object.function]]
+    name = "create"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create element from factory"
+
+    [[object.function]]
+    name = "make"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create element from factory name"
 
 [[object]]
 name = "Gst.TypeFindFactory"
@@ -617,6 +626,11 @@ status = "generate"
     name = "reconfigure_element"
         [object.function.return]
         bool_return_is_error = "Failed to reconfigure the element to use this device"
+
+    [[object.function]]
+    name = "create_element"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create element for device"
 
 [[object]]
 name = "Gst.Object"
@@ -852,6 +866,16 @@ name = "Gst.PadTemplate"
 status = "generate"
 final_type = true
     [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create pad template"
+
+    [[object.function]]
+    name = "new_with_gtype"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create pad template"
+
+    [[object.function]]
     name = "new_from_static_pad_template_with_gtype"
     # static pad template manual
     ignore = true
@@ -871,6 +895,16 @@ status = "generate"
     [[object.function]]
     name = "new_from_template"
     ignore = true
+
+    [[object.function]]
+    name = "new_no_target"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create GhostPad"
+
+    [[object.function]]
+    name = "new_no_target_from_template"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create GhostPad"
 
     [[object.function]]
     name = "construct"
@@ -988,6 +1022,16 @@ final_type = true
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "load"
+        [object.function.return]
+        nullable_return_is_error = "Failed to load plugin"
+
+    [[object.function]]
+    name = "load_by_name"
+        [object.function.return]
+        nullable_return_is_error = "Failed to load plugin"
+
 [[object]]
 name = "Gst.PluginFeature"
 status = "generate"
@@ -1006,6 +1050,11 @@ status = "generate"
     [[object.function]]
     name = "set_rank"
     ignore = true
+
+    [[object.function]]
+    name = "load"
+        [object.function.return]
+        nullable_return_is_error = "Failed to load plugin feature"
 
 [[object]]
 name = "Gst.Registry"
@@ -1338,6 +1387,16 @@ status = "generate"
         # Already a Result
         nullable = false
 
+    [[object.function]]
+    name = "debug_get_stack_trace"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get stack trace"
+
+    [[object.function]]
+    name = "get_main_executable_path"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get main executable path"
+
 [[object]]
 name = "Gst.StateChangeReturn"
 status = "generate"
@@ -1364,3 +1423,23 @@ status = "generate"
     [[object.derive]]
     # Don't auto-implement traits
     name = ""
+
+    [[object.function]]
+    name = "new_from_g_date_time"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "to_g_date_time"
+        [object.function.return]
+        nullable_return_is_error = "Can't create glib::DateTime from DateTime"
+
+    [[object.function]]
+    name = "new_from_iso8601_string"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create DateTime from ISO-8601 string"
+
+    [[object.function]]
+    name = "to_iso8601_string"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create ISO-8601 string from DateTime"

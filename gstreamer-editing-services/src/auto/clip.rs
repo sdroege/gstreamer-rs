@@ -33,7 +33,7 @@ glib_wrapper! {
 pub const NONE_CLIP: Option<&Clip> = None;
 
 pub trait ClipExt: 'static {
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Option<TrackElement>;
+    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError>;
 
     fn find_track_element<P: IsA<Track>>(
         &self,
@@ -74,7 +74,7 @@ pub trait ClipExt: 'static {
         newpriority: u32,
     ) -> Result<(), glib::error::BoolError>;
 
-    fn split(&self, position: u64) -> Option<Clip>;
+    fn split(&self, position: u64) -> Result<Clip, glib::BoolError>;
 
     fn connect_property_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -85,12 +85,13 @@ pub trait ClipExt: 'static {
 }
 
 impl<O: IsA<Clip>> ClipExt for O {
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Option<TrackElement> {
+    fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError> {
         unsafe {
-            from_glib_none(ges_sys::ges_clip_add_asset(
+            Option::<_>::from_glib_none(ges_sys::ges_clip_add_asset(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to add asset"))
         }
     }
 
@@ -217,12 +218,13 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn split(&self, position: u64) -> Option<Clip> {
+    fn split(&self, position: u64) -> Result<Clip, glib::BoolError> {
         unsafe {
-            from_glib_none(ges_sys::ges_clip_split(
+            Option::<_>::from_glib_none(ges_sys::ges_clip_split(
                 self.as_ref().to_glib_none().0,
                 position,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to split clip"))
         }
     }
 

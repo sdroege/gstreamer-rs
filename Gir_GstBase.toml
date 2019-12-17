@@ -68,6 +68,41 @@ concurrency = "send-unique"
     # Useless copying of data
     ignore = true
 
+    [[object.function]]
+    name = "copy_bytes"
+        [object.function.return]
+        nullable_return_is_error = "Failed to copy bytes"
+
+    [[object.function]]
+    name = "get_buffer"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get buffer"
+
+    [[object.function]]
+    name = "get_buffer_fast"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get buffer"
+
+    [[object.function]]
+    name = "get_buffer_list"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get buffer list"
+
+    [[object.function]]
+    name = "take_buffer"
+        [object.function.return]
+        nullable_return_is_error = "Failed to take buffer"
+
+    [[object.function]]
+    name = "take_buffer_fast"
+        [object.function.return]
+        nullable_return_is_error = "Failed to take buffer"
+
+    [[object.function]]
+    name = "take_buffer_list"
+        [object.function.return]
+        nullable_return_is_error = "Failed to take buffer list"
+
 [[object]]
 name = "GstBase.FlowCombiner"
 # Manual because ref/unref functions were added much later
@@ -92,6 +127,11 @@ status = "generate"
     [[object.function]]
     name = "wait_clock"
     # Use Result<ClockSuccess, ClockError>
+    ignore = true
+
+    [[object.function]]
+    name = "query_latency"
+    # Use Result
     ignore = true
 
 [[object]]
@@ -121,6 +161,11 @@ status = "generate"
     [[object.function]]
     name = "wait_playing"
     # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
+    name = "query_latency"
+    # Use Result
     ignore = true
 
 [[object]]
@@ -184,6 +229,16 @@ status = "generate"
     name = "type_find_helper_for_buffer_with_extension"
     # broken return value
     ignore = true
+
+    [[object.function]]
+    name = "type_find_helper"
+        [object.function.return]
+        nullable_return_is_error = "Could not find type"
+
+    [[object.function]]
+    name = "type_find_helper_for_extension"
+        [object.function.return]
+        nullable_return_is_error = "Could not find type"
 
 [[object]]
 name = "Gst.Structure"

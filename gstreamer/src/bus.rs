@@ -108,7 +108,7 @@ impl Bus {
         }
     }
 
-    pub fn add_watch<F>(&self, func: F) -> Option<SourceId>
+    pub fn add_watch<F>(&self, func: F) -> Result<SourceId, glib::BoolError>
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
@@ -122,14 +122,14 @@ impl Bus {
             );
 
             if res == 0 {
-                None
+                Err(glib_bool_error!("Bus already has a watch"))
             } else {
-                Some(from_glib(res))
+                Ok(from_glib(res))
             }
         }
     }
 
-    pub fn add_watch_local<F>(&self, func: F) -> Option<SourceId>
+    pub fn add_watch_local<F>(&self, func: F) -> Result<SourceId, glib::BoolError>
     where
         F: FnMut(&Bus, &Message) -> Continue + 'static,
     {
@@ -145,9 +145,9 @@ impl Bus {
             );
 
             if res == 0 {
-                None
+                Err(glib_bool_error!("Bus already has a watch"))
             } else {
-                Some(from_glib(res))
+                Ok(from_glib(res))
             }
         }
     }

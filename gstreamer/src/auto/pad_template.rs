@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
 use glib;
 use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
@@ -37,15 +36,16 @@ impl PadTemplate {
         direction: PadDirection,
         presence: PadPresence,
         caps: &Caps,
-    ) -> Option<PadTemplate> {
+    ) -> Result<PadTemplate, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(gst_sys::gst_pad_template_new(
+            Option::<_>::from_glib_none(gst_sys::gst_pad_template_new(
                 name_template.to_glib_none().0,
                 direction.to_glib(),
                 presence.to_glib(),
                 caps.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create pad template"))
         }
     }
 
@@ -56,16 +56,17 @@ impl PadTemplate {
         presence: PadPresence,
         caps: &Caps,
         pad_type: glib::types::Type,
-    ) -> Option<PadTemplate> {
+    ) -> Result<PadTemplate, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(gst_sys::gst_pad_template_new_with_gtype(
+            Option::<_>::from_glib_none(gst_sys::gst_pad_template_new_with_gtype(
                 name_template.to_glib_none().0,
                 direction.to_glib(),
                 presence.to_glib(),
                 caps.to_glib_none().0,
                 pad_type.to_glib(),
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create pad template"))
         }
     }
 

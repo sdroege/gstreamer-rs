@@ -130,14 +130,16 @@ impl fmt::Display for CapsFeatures {
 }
 
 impl str::FromStr for CapsFeatures {
-    type Err = ();
+    type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             let ptr = gst_sys::gst_caps_features_from_string(s.to_glib_none().0);
             if ptr.is_null() {
-                return Err(());
+                return Err(glib_bool_error!(
+                    "Failed to parse caps features from string"
+                ));
             }
 
             Ok(CapsFeatures(

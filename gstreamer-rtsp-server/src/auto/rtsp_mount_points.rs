@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::GString;
@@ -39,7 +40,7 @@ pub const NONE_RTSP_MOUNT_POINTS: Option<&RTSPMountPoints> = None;
 pub trait RTSPMountPointsExt: 'static {
     fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P);
 
-    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<GString>;
+    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<GString, glib::BoolError>;
 
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32);
 
@@ -57,12 +58,13 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
         }
     }
 
-    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<GString> {
+    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<GString, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_mount_points_make_path(
+            Option::<_>::from_glib_full(gst_rtsp_server_sys::gst_rtsp_mount_points_make_path(
                 self.as_ref().to_glib_none().0,
                 url.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to make path"))
         }
     }
 

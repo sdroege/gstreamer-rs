@@ -145,7 +145,7 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
             return None;
         }
 
-        let mut data = self.plane_data(idx)?;
+        let mut data = self.plane_data(idx).ok()?;
         let id = &data.read_u32::<NativeEndian>().ok()?;
 
         Some(*id)

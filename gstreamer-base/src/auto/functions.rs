@@ -2,31 +2,37 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_base_sys;
 
-pub fn type_find_helper<P: IsA<gst::Pad>>(src: &P, size: u64) -> Option<gst::Caps> {
+pub fn type_find_helper<P: IsA<gst::Pad>>(
+    src: &P,
+    size: u64,
+) -> Result<gst::Caps, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_base_sys::gst_type_find_helper(
+        Option::<_>::from_glib_full(gst_base_sys::gst_type_find_helper(
             src.as_ref().to_glib_none().0,
             size,
         ))
+        .ok_or_else(|| glib_bool_error!("Could not find type"))
     }
 }
 
 pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(
     obj: Option<&P>,
     extension: &str,
-) -> Option<gst::Caps> {
+) -> Result<gst::Caps, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_base_sys::gst_type_find_helper_for_extension(
+        Option::<_>::from_glib_full(gst_base_sys::gst_type_find_helper_for_extension(
             obj.map(|p| p.as_ref()).to_glib_none().0,
             extension.to_glib_none().0,
         ))
+        .ok_or_else(|| glib_bool_error!("Could not find type"))
     }
 }
 

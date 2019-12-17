@@ -47,9 +47,9 @@ impl ::AudioFormat {
 }
 
 impl str::FromStr for ::AudioFormat {
-    type Err = ();
+    type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -57,7 +57,7 @@ impl str::FromStr for ::AudioFormat {
                 s.to_glib_none().0,
             ));
             if fmt == ::AudioFormat::Unknown {
-                Err(())
+                Err(glib_bool_error!("Failed to parse audio format from string"))
             } else {
                 Ok(fmt)
             }

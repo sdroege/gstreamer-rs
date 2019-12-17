@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
@@ -66,16 +67,22 @@ impl AppSink {
         unsafe { from_glib(gst_app_sys::gst_app_sink_is_eos(self.to_glib_none().0)) }
     }
 
-    pub fn pull_preroll(&self) -> Option<gst::Sample> {
+    pub fn pull_preroll(&self) -> Result<gst::Sample, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_app_sys::gst_app_sink_pull_preroll(
+            Option::<_>::from_glib_full(gst_app_sys::gst_app_sink_pull_preroll(
                 self.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to pull preroll sample"))
         }
     }
 
-    pub fn pull_sample(&self) -> Option<gst::Sample> {
-        unsafe { from_glib_full(gst_app_sys::gst_app_sink_pull_sample(self.to_glib_none().0)) }
+    pub fn pull_sample(&self) -> Result<gst::Sample, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(gst_app_sys::gst_app_sink_pull_sample(
+                self.to_glib_none().0,
+            ))
+            .ok_or_else(|| glib_bool_error!("Failed to pull sample"))
+        }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]

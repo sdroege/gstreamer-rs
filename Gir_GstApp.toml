@@ -74,8 +74,18 @@ final_type = true
     [[object.function]]
     name = "set_caps"
         [[object.function.parameter]]
-            name = "caps"
-            nullable = true
+        name = "caps"
+        nullable = true
+
+    [[object.function]]
+    name = "pull_preroll"
+        [object.function.return]
+        nullable_return_is_error = "Failed to pull preroll sample"
+
+    [[object.function]]
+    name = "pull_sample"
+        [object.function.return]
+        nullable_return_is_error = "Failed to pull sample"
 
 [[object]]
 name = "GstApp.AppSrc"

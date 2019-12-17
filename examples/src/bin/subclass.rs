@@ -209,7 +209,7 @@ mod fir_filter {
                 }
 
                 // Try mapping the input buffer as writable
-                let mut data = buf.map_writable().ok_or_else(|| {
+                let mut data = buf.map_writable().map_err(|_| {
                     gst_element_error!(
                         element,
                         gst::CoreError::Failed,
@@ -318,13 +318,13 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     // Create our pipeline with the custom element
     let pipeline = gst::Pipeline::new(None);
-    let src =
-        gst::ElementFactory::make("audiotestsrc", None).ok_or(MissingElement("audiotestsrc"))?;
+    let src = gst::ElementFactory::make("audiotestsrc", None)
+        .map_err(|_| MissingElement("audiotestsrc"))?;
     let filter = fir_filter::FirFilter::new(None);
-    let conv =
-        gst::ElementFactory::make("audioconvert", None).ok_or(MissingElement("audioconvert"))?;
-    let sink =
-        gst::ElementFactory::make("autoaudiosink", None).ok_or(MissingElement("autoaudiosink"))?;
+    let conv = gst::ElementFactory::make("audioconvert", None)
+        .map_err(|_| MissingElement("audioconvert"))?;
+    let sink = gst::ElementFactory::make("autoaudiosink", None)
+        .map_err(|_| MissingElement("autoaudiosink"))?;
 
     pipeline.add_many(&[&src, filter.upcast_ref(), &conv, &sink])?;
     src.link(&filter)?;

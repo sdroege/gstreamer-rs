@@ -240,9 +240,9 @@ impl fmt::Display for AudioFormatInfo {
 }
 
 impl str::FromStr for ::AudioFormatInfo {
-    type Err = ();
+    type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
         let format = s.parse()?;
         Ok(AudioFormatInfo::from_format(format))

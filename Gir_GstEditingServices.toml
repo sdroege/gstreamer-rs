@@ -40,11 +40,9 @@ generate = [
     "GES.EditMode",
     "GES.PipelineFlags",
     "GES.Edge",
-    "GES.Effect",
     "GES.TrackType",
     "GES.BaseEffect",
     "GES.Group",
-    "GES.UriClip",
     "GES.UriClipAsset",
     "GES.UriSourceAsset",
 ]
@@ -78,6 +76,22 @@ ref_mode = "ref"
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"
+
+[[object]]
+name = "GES.Effect"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create effect from description"
+
+[[object]]
+name = "GES.UriClip"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create Uri clip from Uri"
 
 [[object]]
 name = "GES.Timeline"
@@ -205,6 +219,16 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to the set top effect priority"
 
+    [[object.function]]
+    name = "add_asset"
+        [object.function.return]
+        nullable_return_is_error = "Failed to add asset"
+
+    [[object.function]]
+    name = "split"
+        [object.function.return]
+        nullable_return_is_error = "Failed to split clip"
+
 [[object]]
 name = "GES.Extractable"
 status = "generate"
@@ -226,6 +250,11 @@ status = "generate"
     name = "remove_clip"
         [object.function.return]
         bool_return_is_error = "Failed to remove clip"
+
+    [[object.function]]
+    name = "add_asset"
+        [object.function.return]
+        nullable_return_is_error = "Failed to add asset"
 
 [[object]]
 name = "GES.Project"
@@ -281,7 +310,17 @@ status = "generate"
     [[object.function]]
     name = "trim"
         [object.function.return]
-        bool_return_is_error = "`Failed to trim"
+        bool_return_is_error = "Failed to trim"
+
+    [[object.function]]
+    name = "copy"
+        [object.function.return]
+        nullable_return_is_error = "Failed to copy timeline element"
+
+    [[object.function]]
+    name = "paste"
+        [object.function.return]
+        nullable_return_is_error = "Failed to paste timeline element"
 
 [[object]]
 name = "GES.TrackElement"

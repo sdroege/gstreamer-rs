@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::GString;
@@ -29,7 +30,7 @@ pub trait PluginFeatureExt: 'static {
 
     fn get_plugin_name(&self) -> Option<GString>;
 
-    fn load(&self) -> Option<PluginFeature>;
+    fn load(&self) -> Result<PluginFeature, glib::BoolError>;
 }
 
 impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
@@ -60,11 +61,12 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 
-    fn load(&self) -> Option<PluginFeature> {
+    fn load(&self) -> Result<PluginFeature, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_sys::gst_plugin_feature_load(
+            Option::<_>::from_glib_full(gst_sys::gst_plugin_feature_load(
                 self.as_ref().to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to load plugin feature"))
         }
     }
 }

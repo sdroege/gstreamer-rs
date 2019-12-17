@@ -21,7 +21,11 @@ use LoggableError;
 use std::ptr;
 
 pub trait DeviceImpl: DeviceImplExt + ObjectImpl + Send + Sync + 'static {
-    fn create_element(&self, device: &Device, name: Option<&str>) -> Option<Element> {
+    fn create_element(
+        &self,
+        device: &Device,
+        name: Option<&str>,
+    ) -> Result<Element, LoggableError> {
         self.parent_create_element(device, name)
     }
 
@@ -31,7 +35,11 @@ pub trait DeviceImpl: DeviceImplExt + ObjectImpl + Send + Sync + 'static {
 }
 
 pub trait DeviceImplExt {
-    fn parent_create_element(&self, device: &Device, name: Option<&str>) -> Option<Element>;
+    fn parent_create_element(
+        &self,
+        device: &Device,
+        name: Option<&str>,
+    ) -> Result<Element, LoggableError>;
 
     fn parent_reconfigure_element(
         &self,
@@ -41,7 +49,11 @@ pub trait DeviceImplExt {
 }
 
 impl<T: DeviceImpl + ObjectImpl> DeviceImplExt for T {
-    fn parent_create_element(&self, device: &Device, name: Option<&str>) -> Option<Element> {
+    fn parent_create_element(
+        &self,
+        device: &Device,
+        name: Option<&str>,
+    ) -> Result<Element, LoggableError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceClass;
@@ -49,9 +61,17 @@ impl<T: DeviceImpl + ObjectImpl> DeviceImplExt for T {
                 let ptr = f(device.to_glib_none().0, name.to_glib_none().0);
 
                 // Don't steal floating reference here but pass it further to the caller
-                from_glib_full(ptr)
+                Option::<_>::from_glib_full(ptr).ok_or_else(|| {
+                    gst_loggable_error!(
+                        ::CAT_RUST,
+                        "Failed to create element using the parent function"
+                    )
+                })
             } else {
-                None
+                Err(gst_loggable_error!(
+                    ::CAT_RUST,
+                    "Parent function `create_element` is not defined"
+                ))
             }
         }
     }
@@ -107,7 +127,7 @@ where
             .as_ref()
             .map(|s| s.as_str()),
     ) {
-        Some(element) => {
+        Ok(element) => {
             // The reference we're going to return, the initial reference is going to
             // be dropped here now
             let element_ptr = element.to_glib_full();
@@ -116,7 +136,10 @@ where
             gobject_sys::g_object_force_floating(element_ptr as *mut gobject_sys::GObject);
             element_ptr
         }
-        None => ptr::null_mut(),
+        Err(err) => {
+            err.log_with_object(&wrap);
+            ptr::null_mut()
+        }
     }
 }
 

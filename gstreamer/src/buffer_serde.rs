@@ -31,7 +31,7 @@ impl<'a> Serialize for BufferRef {
         {
             let data = self
                 .map_readable()
-                .ok_or_else(|| ser::Error::custom("Couldn't map `buffer` as readable"))?;
+                .map_err(|_| ser::Error::custom("Couldn't map `buffer` as readable"))?;
             buffer.serialize_field("buffer", &Bytes::new(data.as_slice()))?;
         }
         buffer.end()

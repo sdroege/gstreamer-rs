@@ -248,7 +248,8 @@ fn create_ui(app: &gtk::Application) {
         };
 
         glib::Continue(true)
-    });
+    })
+    .expect("Failed to add bus watch");
 
     // Pipeline reference is owned by the closure below, so will be
     // destroyed once the app is destroyed

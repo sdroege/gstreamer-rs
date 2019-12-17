@@ -188,14 +188,14 @@ impl PartialEq<StructureRef> for Structure {
 impl Eq for Structure {}
 
 impl str::FromStr for Structure {
-    type Err = ();
+    type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             let structure = gst_sys::gst_structure_from_string(s.to_glib_none().0, ptr::null_mut());
             if structure.is_null() {
-                Err(())
+                Err(glib_bool_error!("Failed to parse structure from string"))
             } else {
                 Ok(Structure(
                     ptr::NonNull::new_unchecked(structure as *mut StructureRef),

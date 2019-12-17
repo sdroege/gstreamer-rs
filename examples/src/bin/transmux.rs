@@ -71,12 +71,13 @@ fn example_main() -> Result<(), Error> {
     let src = gst::Element::make_from_uri(gst::URIType::Src, uri, None)
         .expect("We do not seem to support this uri");
     let typefinder =
-        gst::ElementFactory::make("typefind", None).ok_or(MissingElement("typefind"))?;
+        gst::ElementFactory::make("typefind", None).map_err(|_| MissingElement("typefind"))?;
     let queue =
-        gst::ElementFactory::make("multiqueue", None).ok_or(MissingElement("multiqueue"))?;
-    let muxer =
-        gst::ElementFactory::make("matroskamux", None).ok_or(MissingElement("matroskamux"))?;
-    let sink = gst::ElementFactory::make("filesink", None).ok_or(MissingElement("filesink"))?;
+        gst::ElementFactory::make("multiqueue", None).map_err(|_| MissingElement("multiqueue"))?;
+    let muxer = gst::ElementFactory::make("matroskamux", None)
+        .map_err(|_| MissingElement("matroskamux"))?;
+    let sink =
+        gst::ElementFactory::make("filesink", None).map_err(|_| MissingElement("filesink"))?;
 
     sink.set_property("location", &output_file)
         .expect("setting location property failed");

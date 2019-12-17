@@ -168,6 +168,11 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "allocate_output_buffer"
+        [object.function.return]
+        nullable_return_is_error = "Failed to allocate output buffer"
+
 [[object]]
 name = "GstAudio.AudioEncoder"
 status = "generate"
@@ -196,3 +201,8 @@ status = "generate"
     name = "proxy_getcaps"
         [object.function.return]
         nullable = false
+
+    [[object.function]]
+    name = "allocate_output_buffer"
+        [object.function.return]
+        nullable_return_is_error = "Failed to allocate output buffer"

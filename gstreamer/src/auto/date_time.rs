@@ -36,7 +36,7 @@ impl DateTime {
         }
     }
 
-    pub fn new_from_g_date_time(dt: &glib::DateTime) -> Option<DateTime> {
+    pub fn new_from_g_date_time(dt: &glib::DateTime) -> DateTime {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gst_sys::gst_date_time_new_from_g_date_time(
@@ -45,12 +45,13 @@ impl DateTime {
         }
     }
 
-    pub fn new_from_iso8601_string(string: &str) -> Option<DateTime> {
+    pub fn new_from_iso8601_string(string: &str) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_date_time_new_from_iso8601_string(
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_new_from_iso8601_string(
                 string.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Failed to create DateTime from ISO-8601 string"))
         }
     }
 
@@ -157,15 +158,21 @@ impl DateTime {
         unsafe { from_glib(gst_sys::gst_date_time_has_year(self.to_glib_none().0)) }
     }
 
-    pub fn to_g_date_time(&self) -> Option<glib::DateTime> {
-        unsafe { from_glib_full(gst_sys::gst_date_time_to_g_date_time(self.to_glib_none().0)) }
-    }
-
-    pub fn to_iso8601_string(&self) -> Option<GString> {
+    pub fn to_g_date_time(&self) -> Result<glib::DateTime, glib::BoolError> {
         unsafe {
-            from_glib_full(gst_sys::gst_date_time_to_iso8601_string(
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_to_g_date_time(
                 self.to_glib_none().0,
             ))
+            .ok_or_else(|| glib_bool_error!("Can't create glib::DateTime from DateTime"))
+        }
+    }
+
+    pub fn to_iso8601_string(&self) -> Result<GString, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_to_iso8601_string(
+                self.to_glib_none().0,
+            ))
+            .ok_or_else(|| glib_bool_error!("Failed to create ISO-8601 string from DateTime"))
         }
     }
 }

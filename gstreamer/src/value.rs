@@ -14,7 +14,7 @@ use std::ops;
 use std::slice;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, ToGlibPtr, ToGlibPtrMut, Uninitialized};
+use glib::translate::{from_glib, FromGlibPtrFull, ToGlibPtr, ToGlibPtrMut, Uninitialized};
 use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
 
 use glib_sys;
@@ -743,8 +743,8 @@ pub trait GstValueExt: Sized {
     fn fixate(&self) -> Option<Self>;
     fn is_fixed(&self) -> bool;
     fn is_subset(&self, superset: &Self) -> bool;
-    fn serialize(&self) -> Option<String>;
-    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Option<glib::Value>;
+    fn serialize(&self) -> Result<glib::GString, glib::BoolError>;
+    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Result<glib::Value, glib::BoolError>;
 }
 
 impl GstValueExt for glib::Value {
@@ -877,11 +877,14 @@ impl GstValueExt for glib::Value {
         }
     }
 
-    fn serialize(&self) -> Option<String> {
-        unsafe { from_glib_full(gst_sys::gst_value_serialize(self.to_glib_none().0)) }
+    fn serialize(&self) -> Result<glib::GString, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_value_serialize(self.to_glib_none().0))
+                .ok_or_else(|| glib_bool_error!("Failed to serialize value"))
+        }
     }
 
-    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Option<glib::Value> {
+    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Result<glib::Value, glib::BoolError> {
         assert_initialized_main_thread!();
 
         let s = s.into();
@@ -893,9 +896,9 @@ impl GstValueExt for glib::Value {
                 s.to_glib_none().0,
             ));
             if ret {
-                Some(value)
+                Ok(value)
             } else {
-                None
+                Err(glib_bool_error!("Failed to deserialize value"))
             }
         }
     }
