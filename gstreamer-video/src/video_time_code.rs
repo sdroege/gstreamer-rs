@@ -77,7 +77,7 @@ impl VideoTimeCode {
         dt: &glib::DateTime,
         flags: VideoTimeCodeFlags,
         field_count: u32,
-    ) -> Option<VideoTimeCode> {
+    ) -> Result<VideoTimeCode, glib::error::BoolError> {
         assert_initialized_main_thread!();
         assert!(*fps.denom() > 0);
         unsafe {
@@ -92,9 +92,9 @@ impl VideoTimeCode {
             );
 
             if res == glib_sys::GFALSE {
-                None
+                Err(glib_bool_error!("Failed to init video time code"))
             } else {
-                Some(VideoTimeCode(v.assume_init()))
+                Ok(VideoTimeCode(v.assume_init()))
             }
         }
     }
@@ -163,7 +163,7 @@ impl ValidVideoTimeCode {
         seconds: u32,
         frames: u32,
         field_count: u32,
-    ) -> Option<Self> {
+    ) -> Result<Self, glib::error::BoolError> {
         let tc = VideoTimeCode::new(
             fps,
             latest_daily_jam,
@@ -174,7 +174,10 @@ impl ValidVideoTimeCode {
             frames,
             field_count,
         );
-        tc.try_into().ok()
+        match tc.try_into() {
+            Ok(v) => Ok(v),
+            Err(_) => Err(glib_bool_error!("Failed to create new ValidVideoTimeCode")),
+        }
     }
 
     //    #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -195,12 +198,18 @@ impl ValidVideoTimeCode {
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn add_interval(&self, tc_inter: &VideoTimeCodeInterval) -> Option<VideoTimeCode> {
+    pub fn add_interval(
+        &self,
+        tc_inter: &VideoTimeCodeInterval,
+    ) -> Result<VideoTimeCode, glib::error::BoolError> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_time_code_add_interval(
+            match from_glib_full(gst_video_sys::gst_video_time_code_add_interval(
                 self.to_glib_none().0,
                 tc_inter.to_glib_none().0,
-            ))
+            )) {
+                Some(i) => Ok(i),
+                None => Err(glib_bool_error!("Failed to add interval")),
+            }
         }
     }
 
@@ -224,11 +233,16 @@ impl ValidVideoTimeCode {
         unsafe { gst_video_sys::gst_video_time_code_nsec_since_daily_jam(self.to_glib_none().0) }
     }
 
-    pub fn to_date_time(&self) -> Option<glib::DateTime> {
+    pub fn to_date_time(&self) -> Result<glib::DateTime, glib::error::BoolError> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_time_code_to_date_time(
+            match from_glib_full(gst_video_sys::gst_video_time_code_to_date_time(
                 self.to_glib_none().0,
-            ))
+            )) {
+                Some(d) => Ok(d),
+                None => Err(glib_bool_error!(
+                    "Failed to convert VideoTimeCode to date time"
+                )),
+            }
         }
     }
 }
@@ -466,15 +480,15 @@ generic_impl!(ValidVideoTimeCode);
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl str::FromStr for VideoTimeCode {
-    type Err = ();
+    type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             Option::<VideoTimeCode>::from_glib_full(
                 gst_video_sys::gst_video_time_code_new_from_string(s.to_glib_none().0),
             )
-            .ok_or(())
+            .ok_or_else(|| glib_bool_error!("Failed to create VideoTimeCode from string"))
         }
     }
 }

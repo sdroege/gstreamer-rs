@@ -158,7 +158,7 @@ pub struct DownstreamForceKeyUnitEvent {
 
 pub fn parse_downstream_force_key_unit_event(
     event: &gst::EventRef,
-) -> Option<DownstreamForceKeyUnitEvent> {
+) -> Result<DownstreamForceKeyUnitEvent, glib::error::BoolError> {
     unsafe {
         let mut timestamp = mem::MaybeUninit::uninit();
         let mut stream_time = mem::MaybeUninit::uninit();
@@ -177,7 +177,7 @@ pub fn parse_downstream_force_key_unit_event(
             ),
         );
         if res {
-            Some(DownstreamForceKeyUnitEvent {
+            Ok(DownstreamForceKeyUnitEvent {
                 timestamp: from_glib(timestamp.assume_init()),
                 stream_time: from_glib(stream_time.assume_init()),
                 running_time: from_glib(running_time.assume_init()),
@@ -185,7 +185,7 @@ pub fn parse_downstream_force_key_unit_event(
                 count: count.assume_init(),
             })
         } else {
-            None
+            Err(glib_bool_error!("Failed to parse GstEvent"))
         }
     }
 }
@@ -252,7 +252,7 @@ pub struct UpstreamForceKeyUnitEvent {
 
 pub fn parse_upstream_force_key_unit_event(
     event: &gst::EventRef,
-) -> Option<UpstreamForceKeyUnitEvent> {
+) -> Result<UpstreamForceKeyUnitEvent, glib::error::BoolError> {
     unsafe {
         let mut running_time = mem::MaybeUninit::uninit();
         let mut all_headers = mem::MaybeUninit::uninit();
@@ -267,13 +267,13 @@ pub fn parse_upstream_force_key_unit_event(
             ),
         );
         if res {
-            Some(UpstreamForceKeyUnitEvent {
+            Ok(UpstreamForceKeyUnitEvent {
                 running_time: from_glib(running_time.assume_init()),
                 all_headers: from_glib(all_headers.assume_init()),
                 count: count.assume_init(),
             })
         } else {
-            None
+            Err(glib_bool_error!("Failed to parse GstEvent"))
         }
     }
 }
@@ -284,7 +284,9 @@ pub enum ForceKeyUnitEvent {
     Upstream(UpstreamForceKeyUnitEvent),
 }
 
-pub fn parse_force_key_unit_event(event: &gst::EventRef) -> Option<ForceKeyUnitEvent> {
+pub fn parse_force_key_unit_event(
+    event: &gst::EventRef,
+) -> Result<ForceKeyUnitEvent, glib::error::BoolError> {
     if event.is_upstream() {
         parse_upstream_force_key_unit_event(event).map(ForceKeyUnitEvent::Upstream)
     } else {
@@ -324,7 +326,9 @@ pub struct StillFrameEvent {
     pub in_still: bool,
 }
 
-pub fn parse_still_frame_event(event: &gst::EventRef) -> Option<StillFrameEvent> {
+pub fn parse_still_frame_event(
+    event: &gst::EventRef,
+) -> Result<StillFrameEvent, glib::error::BoolError> {
     unsafe {
         let mut in_still = mem::MaybeUninit::uninit();
 
@@ -333,11 +337,11 @@ pub fn parse_still_frame_event(event: &gst::EventRef) -> Option<StillFrameEvent>
             in_still.as_mut_ptr(),
         ));
         if res {
-            Some(StillFrameEvent {
+            Ok(StillFrameEvent {
                 in_still: from_glib(in_still.assume_init()),
             })
         } else {
-            None
+            Err(glib_bool_error!("Invalid still-frame event"))
         }
     }
 }

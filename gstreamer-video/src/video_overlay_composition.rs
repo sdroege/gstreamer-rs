@@ -198,12 +198,14 @@ impl fmt::Debug for VideoOverlayCompositionRef {
 }
 
 impl VideoOverlayComposition {
-    pub fn new<'a, T: IntoIterator<Item = &'a VideoOverlayRectangle>>(rects: T) -> Option<Self> {
+    pub fn new<'a, T: IntoIterator<Item = &'a VideoOverlayRectangle>>(
+        rects: T,
+    ) -> Result<Self, glib::error::BoolError> {
         unsafe {
             let mut iter = rects.into_iter();
 
             let first = match iter.next() {
-                None => return None,
+                None => return Err(glib_bool_error!("Failed to create VideoOverlayComposition")),
                 Some(first) => first,
             };
 
@@ -218,7 +220,7 @@ impl VideoOverlayComposition {
                 );
             }
 
-            Some(composition)
+            Ok(composition)
         }
     }
 }
@@ -228,16 +230,19 @@ impl VideoOverlayCompositionRef {
         unsafe { gst_video_sys::gst_video_overlay_composition_n_rectangles(self.as_mut_ptr()) }
     }
 
-    pub fn get_rectangle(&self, idx: u32) -> Option<VideoOverlayRectangle> {
+    pub fn get_rectangle(&self, idx: u32) -> Result<VideoOverlayRectangle, glib::error::BoolError> {
         if idx >= self.n_rectangles() {
-            return None;
+            return Err(glib_bool_error!("Invalid index"));
         }
 
         unsafe {
-            from_glib_none(gst_video_sys::gst_video_overlay_composition_get_rectangle(
+            match from_glib_none(gst_video_sys::gst_video_overlay_composition_get_rectangle(
                 self.as_mut_ptr(),
                 idx,
-            ))
+            )) {
+                Some(r) => Ok(r),
+                None => Err(glib_bool_error!("Failed to get rectangle")),
+            }
         }
     }
 

@@ -128,15 +128,15 @@ impl fmt::Display for VideoTimeCodeInterval {
 }
 
 impl str::FromStr for VideoTimeCodeInterval {
-    type Err = ();
+    type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             Option::<VideoTimeCodeInterval>::from_glib_full(
                 gst_video_sys::gst_video_time_code_interval_new_from_string(s.to_glib_none().0),
             )
-            .ok_or(())
+            .ok_or_else(|| glib_bool_error!("Failed to create VideoTimeCodeInterval from string"))
         }
     }
 }
