@@ -159,8 +159,8 @@ impl fmt::Debug for SDPMessageRef {
 impl fmt::Display for SDPMessageRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.as_text() {
-            Some(text) => f.write_str(text.as_str()),
-            None => Err(fmt::Error),
+            Ok(text) => f.write_str(text.as_str()),
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -217,8 +217,15 @@ impl SDPMessageRef {
         };
     }
 
-    pub fn as_text(&self) -> Option<String> {
-        unsafe { from_glib_full(gst_sdp_sys::gst_sdp_message_as_text(&self.0)) }
+    pub fn as_text(&self) -> Result<String, glib::error::BoolError> {
+        unsafe {
+            match from_glib_full(gst_sdp_sys::gst_sdp_message_as_text(&self.0)) {
+                Some(s) => Ok(s),
+                None => Err(glib_bool_error!(
+                    "Failed to convert the contents of message to a text string"
+                )),
+            }
+        }
     }
 
     pub fn attributes_len(&self) -> u32 {
@@ -851,13 +858,16 @@ impl SDPMessageRef {
         unsafe { gst_sdp_sys::gst_sdp_message_zones_len(&self.0) }
     }
 
-    pub fn as_uri(&self, scheme: &str) -> Option<String> {
+    pub fn as_uri(&self, scheme: &str) -> Result<String, glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sdp_sys::gst_sdp_message_as_uri(
+            match from_glib_full(gst_sdp_sys::gst_sdp_message_as_uri(
                 scheme.to_glib_none().0,
                 &self.0,
-            ))
+            )) {
+                Some(s) => Ok(s),
+                None => Err(glib_bool_error!("Failed to create an URI from message")),
+            }
         }
     }
 
@@ -1084,7 +1094,7 @@ define_iter!(
 define_iter_mut!(
     MediasIterMut,
     &'a mut SDPMediaRef,
-    |message: &'a mut SDPMessageRef, idx| { message.get_media_mut(idx) },
+    |message: &'a mut SDPMessageRef, idx| message.get_media_mut(idx),
     |message: &mut SDPMessageRef| message.medias_len()
 );
 define_iter!(

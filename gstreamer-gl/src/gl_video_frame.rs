@@ -29,7 +29,7 @@ pub trait VideoFrameGLExt {
     fn from_buffer_ref_readable_gl<'a, 'b>(
         buffer: &'a gst::BufferRef,
         info: &'b VideoInfo,
-    ) -> Option<VideoFrameRef<&'a gst::BufferRef>>;
+    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError>;
 
     fn get_texture_id(&self, idx: u32) -> Option<u32>;
 }
@@ -45,7 +45,7 @@ impl VideoFrameGLExt for VideoFrame<Readable> {
     fn from_buffer_ref_readable_gl<'a, 'b>(
         buffer: &'a gst::BufferRef,
         info: &'b VideoInfo,
-    ) -> Option<VideoFrameRef<&'a gst::BufferRef>> {
+    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError> {
         VideoFrameRef::<&gst::BufferRef>::from_buffer_ref_readable_gl(buffer, info)
     }
 
@@ -95,19 +95,21 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
     fn from_buffer_ref_readable_gl<'b, 'c>(
         buffer: &'b gst::BufferRef,
         info: &'c VideoInfo,
-    ) -> Option<VideoFrameRef<&'b gst::BufferRef>> {
+    ) -> Result<VideoFrameRef<&'b gst::BufferRef>, glib::error::BoolError> {
         skip_assert_initialized!();
 
         let n_mem = match buffer_n_gl_memory(buffer) {
             Some(n) => n,
-            None => return None,
+            None => return Err(glib_bool_error!("Memory is not a GstGLMemory")),
         };
 
         // FIXME: planes are not memories, in multiview use case,
         // number of memories = planes * views, but the raw memory is
         // not exposed in videoframe
         if n_mem != info.n_planes() {
-            return None;
+            return Err(glib_bool_error!(
+                "Number of planes and memories is not matching"
+            ));
         }
 
         unsafe {
@@ -122,9 +124,11 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
             ));
 
             if !res {
-                None
+                Err(glib_bool_error!(
+                    "Failed to fill in the values of GstVideoFrame"
+                ))
             } else {
-                Some(VideoFrameRef::from_glib_borrow(&frame.assume_init()))
+                Ok(VideoFrameRef::from_glib_borrow(&frame.assume_init()))
             }
         }
     }

@@ -56,29 +56,44 @@ pub fn pb_utils_add_codec_description_to_tag_list(
     }
 }
 
-pub fn pb_utils_get_encoder_description(caps: &gst::CapsRef) -> Option<String> {
+pub fn pb_utils_get_encoder_description(
+    caps: &gst::CapsRef,
+) -> Result<glib::GString, glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_encoder_description(
+        match from_glib_full(gst_pbutils_sys::gst_pb_utils_get_encoder_description(
             caps.as_ptr(),
-        ))
+        )) {
+            Some(s) => Ok(s),
+            None => Err(glib_bool_error!("Failed to get encoder description")),
+        }
     }
 }
 
-pub fn pb_utils_get_decoder_description(caps: &gst::CapsRef) -> Option<String> {
+pub fn pb_utils_get_decoder_description(
+    caps: &gst::CapsRef,
+) -> Result<glib::GString, glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_decoder_description(
+        match from_glib_full(gst_pbutils_sys::gst_pb_utils_get_decoder_description(
             caps.as_ptr(),
-        ))
+        )) {
+            Some(s) => Ok(s),
+            None => Err(glib_bool_error!("Failed to get decoder description")),
+        }
     }
 }
 
-pub fn pb_utils_get_codec_description(caps: &gst::CapsRef) -> Option<String> {
+pub fn pb_utils_get_codec_description(
+    caps: &gst::CapsRef,
+) -> Result<glib::GString, glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_codec_description(
+        match from_glib_full(gst_pbutils_sys::gst_pb_utils_get_codec_description(
             caps.as_ptr(),
-        ))
+        )) {
+            Some(s) => Ok(s),
+            None => Err(glib_bool_error!("Failed to get codec description")),
+        }
     }
 }

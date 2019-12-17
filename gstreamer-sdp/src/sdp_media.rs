@@ -120,8 +120,8 @@ impl fmt::Debug for SDPMediaRef {
 impl fmt::Display for SDPMediaRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.as_text() {
-            Some(text) => f.write_str(text.as_str()),
-            None => Err(fmt::Error),
+            Ok(text) => f.write_str(text.as_str()),
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -171,8 +171,15 @@ impl SDPMediaRef {
         unsafe { gst_sdp_sys::gst_sdp_media_add_format(&mut self.0, format.to_glib_none().0) };
     }
 
-    pub fn as_text(&self) -> Option<String> {
-        unsafe { from_glib_full(gst_sdp_sys::gst_sdp_media_as_text(&self.0)) }
+    pub fn as_text(&self) -> Result<String, glib::error::BoolError> {
+        unsafe {
+            match from_glib_full(gst_sdp_sys::gst_sdp_media_as_text(&self.0)) {
+                Some(s) => Ok(s),
+                None => Err(glib_bool_error!(
+                    "Failed to convert the contents of media to a text string"
+                )),
+            }
+        }
     }
 
     pub fn attributes(&self) -> AttributesIter {

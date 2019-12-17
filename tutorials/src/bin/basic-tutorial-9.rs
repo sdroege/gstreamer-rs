@@ -28,12 +28,12 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
     let caps_str = if let Some(caps) = info.get_caps() {
         if caps.is_fixed() {
             gst_pbutils::pb_utils_get_codec_description(&caps)
-                .unwrap_or_else(|| String::from("unknown codec"))
+                .unwrap_or_else(|_| glib::GString::from("unknown codec"))
         } else {
-            caps.to_string()
+            glib::GString::from(caps.to_string())
         }
     } else {
-        String::new()
+        glib::GString::from("")
     };
 
     let stream_nick = info.get_stream_type_nick();
