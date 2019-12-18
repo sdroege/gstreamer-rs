@@ -26,7 +26,9 @@ generate = [
     "GstAudio.StreamVolume",
     "GstAudio.StreamVolumeFormat",
     "GstAudio.AudioSink",
+    "GstAudio.AudioSrc",
     "GstAudio.AudioBaseSink",
+    "GstAudio.AudioBaseSrc",
     "GstAudio.AudioRingBufferFormatType",
 ]
 
@@ -39,6 +41,7 @@ manual = [
     "Gst.TagList",
     "Gst.TagMergeMode",
     "GstBase.BaseSink",
+    "GstBase.BaseSrc",
     "GstAudio.AudioInfo",
     "GstAudio.AudioFormatInfo",
 ]
