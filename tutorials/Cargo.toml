@@ -5,14 +5,14 @@ license = "MIT"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
-glib = { git = "https://github.com/gtk-rs/glib" }
-gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
-gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
-gstreamer = { path = "../gstreamer" }
-gstreamer-audio = { path = "../gstreamer-audio" }
-gstreamer-video = { path = "../gstreamer-video" }
-gstreamer-app = { path = "../gstreamer-app" }
-gstreamer-pbutils = { path = "../gstreamer-pbutils" }
+glib = { version = "0.9" }
+gdk = { version = "0.12", optional = true }
+gtk = { version = "0.8", optional = true }
+gstreamer = { version = "0.15", path = "../gstreamer" }
+gstreamer-audio = { version = "0.15", path = "../gstreamer-audio" }
+gstreamer-video = { version = "0.15", path = "../gstreamer-video" }
+gstreamer-app = { version = "0.15", path = "../gstreamer-app" }
+gstreamer-pbutils = { version = "0.15", path = "../gstreamer-pbutils" }
 byte-slice-cast = "0.3"
 failure = "0.1.0"
 

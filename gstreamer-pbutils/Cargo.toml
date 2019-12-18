@@ -15,12 +15,12 @@ build = "build.rs"
 [dependencies]
 bitflags = "1.0"
 libc = "0.2"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-gstreamer-pbutils-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer" }
+glib-sys = { version = "0.9" }
+gobject-sys = { version = "0.9" }
+gstreamer-sys = { version = "0.8", features = ["v1_8"] }
+gstreamer-pbutils-sys = { version = "0.8", features = ["v1_8"] }
+glib = { version = "0.9" }
+gstreamer = { version = "0.15", path = "../gstreamer" }
 
 [build-dependencies]
 rustdoc-stripper = { version = "0.1", optional = true }

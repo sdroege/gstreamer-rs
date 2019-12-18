@@ -13,13 +13,13 @@ keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "build.rs"
 
 [dependencies]
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-gstreamer-net-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer" }
-gio = { git = "https://github.com/gtk-rs/gio" }
+glib-sys = { version = "0.9" }
+gobject-sys = { version = "0.9" }
+gstreamer-sys = { version = "0.8", features = ["v1_8"] }
+gstreamer-net-sys = { version = "0.8", features = ["v1_8"] }
+glib = { version = "0.9" }
+gstreamer = { version = "0.15", path = "../gstreamer" }
+gio = { version = "0.8" }
 
 [build-dependencies]
 rustdoc-stripper = { version = "0.1", optional = true }
