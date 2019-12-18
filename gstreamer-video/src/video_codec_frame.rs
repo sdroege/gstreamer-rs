@@ -79,11 +79,11 @@ impl<'a> VideoCodecFrame<'a> {
         VideoCodecFrameFlags::from_bits_truncate(flags)
     }
 
-    pub fn set_flags(&self, flags: VideoCodecFrameFlags) {
+    pub fn set_flags(&mut self, flags: VideoCodecFrameFlags) {
         unsafe { (*self.to_glib_none().0).flags |= flags.bits() }
     }
 
-    pub fn unset_flags(&self, flags: VideoCodecFrameFlags) {
+    pub fn unset_flags(&mut self, flags: VideoCodecFrameFlags) {
         unsafe { (*self.to_glib_none().0).flags &= !flags.bits() }
     }
 
@@ -103,7 +103,7 @@ impl<'a> VideoCodecFrame<'a> {
         unsafe { from_glib((*self.to_glib_none().0).dts) }
     }
 
-    pub fn set_dts(&self, dts: gst::ClockTime) {
+    pub fn set_dts(&mut self, dts: gst::ClockTime) {
         unsafe {
             (*self.to_glib_none().0).dts = dts.to_glib();
         }
@@ -113,7 +113,7 @@ impl<'a> VideoCodecFrame<'a> {
         unsafe { from_glib((*self.to_glib_none().0).pts) }
     }
 
-    pub fn set_pts(&self, pts: gst::ClockTime) {
+    pub fn set_pts(&mut self, pts: gst::ClockTime) {
         unsafe {
             (*self.to_glib_none().0).pts = pts.to_glib();
         }
@@ -123,7 +123,7 @@ impl<'a> VideoCodecFrame<'a> {
         unsafe { from_glib((*self.to_glib_none().0).duration) }
     }
 
-    pub fn set_duration(&self, duration: gst::ClockTime) {
+    pub fn set_duration(&mut self, duration: gst::ClockTime) {
         unsafe {
             (*self.to_glib_none().0).duration = duration.to_glib();
         }
@@ -144,7 +144,18 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn get_output_buffer(&self) -> Option<&mut gst::BufferRef> {
+    pub fn get_output_buffer(&self) -> Option<&gst::BufferRef> {
+        unsafe {
+            let ptr = (*self.to_glib_none().0).output_buffer;
+            if ptr.is_null() {
+                None
+            } else {
+                Some(gst::BufferRef::from_ptr(ptr))
+            }
+        }
+    }
+
+    pub fn get_output_buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).output_buffer;
             if ptr.is_null() {
@@ -160,7 +171,7 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn set_output_buffer(&self, output_buffer: gst::Buffer) {
+    pub fn set_output_buffer(&mut self, output_buffer: gst::Buffer) {
         unsafe {
             let prev = (*self.to_glib_none().0).output_buffer;
 

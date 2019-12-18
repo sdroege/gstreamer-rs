@@ -23,7 +23,7 @@ pub trait VideoEncoderExtManual: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn allocate_output_frame(
         &self,
-        frame: &VideoCodecFrame,
+        frame: &mut VideoCodecFrame,
         size: usize,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
@@ -58,7 +58,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn allocate_output_frame(
         &self,
-        frame: &VideoCodecFrame,
+        frame: &mut VideoCodecFrame,
         size: usize,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
