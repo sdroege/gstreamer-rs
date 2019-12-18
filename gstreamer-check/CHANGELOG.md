@@ -5,6 +5,56 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.0] - 2019-12-18
+### Added
+- `StructureRef::get_optional()` for returning `None` if the field does not
+  exist instead of `Err`
+- Bindings for `gstreamer-rtp` library, mostly `RTPBuffer`
+- Support for writing `Preset`, `TagSetter`, `Clock`, `SystemClock` subclasses
+- Bindings for `Typefind::get_length()`
+- Bindings for `BaseSrcImpl::get_times()`
+- Bindings (incl. subclassing) for `AudioSink` and `AudioSrc`
+- Missing `Send`/`Sync` impl for various types
+
+### Fixed
+- Cleanup of cargo features/dependencies to improve build times
+- Serde serialization with optional values.
+  Attention: This changes the format of the serialization!
+- `VideoEncoder`/`VideoDecoder` `proxy_getcaps()` can't return `None`
+- Use non-panicking UTF8 conversion in log handler. We don't want to panic
+  just because some C code printed a non-UTF8 string
+- Re-rexport all traits from the crate level and also ensure that all traits
+  are actually included in the preludes
+- Actually export `is_video_overlay_prepare_window_handle_message()` function
+- Use `FnMut` for the `appsink` callbacks instead of `Fn`
+- `Promise` change function returns the actual reply to the promise now
+  instead of just passing the promise itself
+- Memory leak in `Iterator::filter()`
+- `BinImpl::add()` takes ownership of floating references
+- `DeviceImpl::create_element()` preserves floating flag
+- `BinImpl::remove()` takes a strong reference of the element now as the last
+  reference might be owned by the bin and otherwise we would potentially have
+  a use-after-free afterwards
+- `BaseParseFrame` and `VideoCodecFrame` take a `&mut self` now for various
+  functions that actually change the frame
+
+### Changed
+- Minimum supported Rust version is 1.39
+- Allow passing `None` to `VideoEncoder::finish_frame()`
+- Various `to_string()` methods were moved into the `Display` trait impl and
+  for some types `to_str()` was added to return a `&'static str`
+- .gir files were updated to 1.16.2 release
+- `Sample` constructor uses the builder pattern now
+- `VideoMeta::add_full()` is simplified and requires parameters
+- `BasetransformImpl::set_caps()` returns a `Result` instead of `bool`
+- SDP data type getters for strings return an `Option` now as these can be
+  `None` in practice although not allowed by the SDP spec
+- Various functions returning `Option`s were changed to return `Results` if
+  `None` actually signalled an error instead of just a missing value
+
+### Removed
+- "subclassing" and "futures" cargo features. These are enabled by default now
+
 ## [0.14.5] - 2019-09-17
 ### Added
 - Support subclassing of `gst::Device`, `gst::DeviceProvider`,
@@ -566,7 +616,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.0...HEAD
+[0.15.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.2...0.15.0
 [0.14.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.1...0.14.2
 [0.14.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.0...0.14.1
 [0.14.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.13.0...0.14.0
