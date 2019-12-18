@@ -35,7 +35,9 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl + Send + Sync + 'static {
         &self,
         element: &BaseSink,
         buffer: &gst::Buffer,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_render(element, buffer)
+    }
 
     fn prepare(
         &self,
