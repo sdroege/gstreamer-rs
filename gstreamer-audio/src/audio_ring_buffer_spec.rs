@@ -5,6 +5,8 @@ use gst_audio_sys::GstAudioRingBufferSpec;
 use AudioInfo;
 use AudioRingBufferFormatType;
 
+use std::fmt;
+
 #[repr(C)]
 pub struct AudioRingBufferSpec(pub(crate) GstAudioRingBufferSpec);
 
@@ -63,5 +65,39 @@ impl AudioRingBufferSpec {
 
     pub fn set_seglatency(&mut self, value: i32) {
         self.0.seglatency = value;
+    }
+}
+
+impl Clone for AudioRingBufferSpec {
+    fn clone(&self) -> Self {
+        unsafe {
+            let spec = self.0;
+            gst_sys::gst_mini_object_ref(spec.caps as *mut gst_sys::GstMiniObject);
+
+            AudioRingBufferSpec(spec)
+        }
+    }
+}
+
+impl Drop for AudioRingBufferSpec {
+    fn drop(&mut self) {
+        unsafe {
+            gst_sys::gst_mini_object_unref(self.0.caps as *mut gst_sys::GstMiniObject);
+        }
+    }
+}
+
+impl fmt::Debug for AudioRingBufferSpec {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.debug_struct("AudioRingBufferSpec")
+            .field("type", &self.get_type())
+            .field("caps", &self.get_caps())
+            .field("audio_info", &self.get_audio_info())
+            .field("latency_time", &self.get_latency_time())
+            .field("buffer_time", &self.get_buffer_time())
+            .field("segsize", &self.get_segsize())
+            .field("segtotal", &self.get_segtotal())
+            .field("seglatency", &self.get_seglatency())
+            .finish()
     }
 }
