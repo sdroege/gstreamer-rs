@@ -1318,13 +1318,13 @@ Blocks until at least `count` clock notifications have been requested from
 use `TestClock::wait_for_multiple_pending_ids` instead.
 ## `count`
 the number of pending clock notifications to wait for
-<!-- trait TestClockExt::fn get_property_start-time -->
+<!-- impl TestClock::fn get_property_start_time -->
 When a `TestClock` is constructed it will have a certain start time set.
 If the clock was created using `TestClock::new_with_start_time` then
 this property contains the value of the `start_time` argument. If
 `TestClock::new` was called the clock started at time zero, and thus
 this property contains the value 0.
-<!-- trait TestClockExt::fn set_property_start-time -->
+<!-- impl TestClock::fn set_property_start_time -->
 When a `TestClock` is constructed it will have a certain start time set.
 If the clock was created using `TestClock::new_with_start_time` then
 this property contains the value of the `start_time` argument. If

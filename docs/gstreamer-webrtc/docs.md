@@ -1,4 +1,14 @@
 <!-- file * -->
+<!-- enum WebRTCBundlePolicy -->
+GST_WEBRTC_BUNDLE_POLICY_NONE: none
+GST_WEBRTC_BUNDLE_POLICY_BALANCED: balanced
+GST_WEBRTC_BUNDLE_POLICY_MAX_COMPAT: max-compat
+GST_WEBRTC_BUNDLE_POLICY_MAX_BUNDLE: max-bundle
+See https://tools.ietf.org/html/draft-ietf-rtcweb-jsep-24`section`-4.1.1
+for more information.
+
+Feature: `v1_16`
+
 <!-- enum WebRTCDTLSSetup -->
 GST_WEBRTC_DTLS_SETUP_NONE: none
 GST_WEBRTC_DTLS_SETUP_ACTPASS: actpass
@@ -16,6 +26,24 @@ GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED: closed
 GST_WEBRTC_DTLS_TRANSPORT_STATE_FAILED: failed
 GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING: connecting
 GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED: connected
+<!-- enum WebRTCDataChannelState -->
+GST_WEBRTC_DATA_CHANNEL_STATE_NEW: new
+GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING: connection
+GST_WEBRTC_DATA_CHANNEL_STATE_OPEN: open
+GST_WEBRTC_DATA_CHANNEL_STATE_CLOSING: closing
+GST_WEBRTC_DATA_CHANNEL_STATE_CLOSED: closed
+See <ulink url="http://w3c.github.io/webrtc-pc/`dom`-rtcdatachannelstate">http://w3c.github.io/webrtc-pc/`dom`-rtcdatachannelstate`</ulink>`
+
+Feature: `v1_16`
+
+<!-- enum WebRTCFECType -->
+<!-- enum WebRTCFECType::variant None -->
+none
+<!-- enum WebRTCFECType::variant UlpRed -->
+ulpfec + red
+
+Feature: `v1_14_1`
+
 <!-- enum WebRTCICEComponent -->
 GST_WEBRTC_ICE_COMPONENT_RTP,
 GST_WEBRTC_ICE_COMPONENT_RTCP,
@@ -42,6 +70,14 @@ GST_WEBRTC_ICE_ROLE_CONTROLLING: controlling
 # Implements
 
 [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- enum WebRTCICETransportPolicy -->
+GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL: all
+GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY: relay
+See https://tools.ietf.org/html/draft-ietf-rtcweb-jsep-24`section`-4.1.1
+for more information.
+
+Feature: `v1_16`
+
 <!-- enum WebRTCPeerConnectionState -->
 GST_WEBRTC_PEER_CONNECTION_STATE_NEW: new
 GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING: connecting
@@ -50,6 +86,15 @@ GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED: disconnected
 GST_WEBRTC_PEER_CONNECTION_STATE_FAILED: failed
 GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED: closed
 See <ulink url="http://w3c.github.io/webrtc-pc/`dom`-rtcpeerconnectionstate">http://w3c.github.io/webrtc-pc/`dom`-rtcpeerconnectionstate`</ulink>`
+<!-- enum WebRTCPriorityType -->
+GST_WEBRTC_PRIORITY_TYPE_VERY_LOW: very-low
+GST_WEBRTC_PRIORITY_TYPE_LOW: low
+GST_WEBRTC_PRIORITY_TYPE_MEDIUM: medium
+GST_WEBRTC_PRIORITY_TYPE_HIGH: high
+See <ulink url="http://w3c.github.io/webrtc-pc/`dom`-rtcprioritytype">http://w3c.github.io/webrtc-pc/`dom`-rtcprioritytype`</ulink>`
+
+Feature: `v1_16`
+
 <!-- struct WebRTCRTPReceiver -->
 
 
@@ -69,6 +114,15 @@ See <ulink url="http://w3c.github.io/webrtc-pc/`dom`-rtcpeerconnectionstate">htt
 
 [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- enum WebRTCRTPTransceiverDirection -->
+<!-- enum WebRTCSCTPTransportState -->
+GST_WEBRTC_SCTP_TRANSPORT_STATE_NEW: new
+GST_WEBRTC_SCTP_TRANSPORT_STATE_CONNECTING: connecting
+GST_WEBRTC_SCTP_TRANSPORT_STATE_CONNECTED: connected
+GST_WEBRTC_SCTP_TRANSPORT_STATE_CLOSED: closed
+See <ulink url="http://w3c.github.io/webrtc-pc/`dom`-rtcsctptransportstate">http://w3c.github.io/webrtc-pc/`dom`-rtcsctptransportstate`</ulink>`
+
+Feature: `v1_16`
+
 <!-- enum WebRTCSDPType -->
 GST_WEBRTC_SDP_TYPE_OFFER: offer
 GST_WEBRTC_SDP_TYPE_PRANSWER: pranswer

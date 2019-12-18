@@ -442,15 +442,15 @@ the `Element` that was added to the bin
 Will be emitted after the element was removed from the bin.
 ## `element`
 the `Element` that was removed from the bin
-<!-- trait GstBinExt::fn get_property_async-handling -->
+<!-- trait GstBinExt::fn get_property_async_handling -->
 If set to `true`, the bin will handle asynchronous state changes.
 This should be used only if the bin subclass is modifying the state
 of its children on its own.
-<!-- trait GstBinExt::fn set_property_async-handling -->
+<!-- trait GstBinExt::fn set_property_async_handling -->
 If set to `true`, the bin will handle asynchronous state changes.
 This should be used only if the bin subclass is modifying the state
 of its children on its own.
-<!-- trait GstBinExt::fn get_property_message-forward -->
+<!-- trait GstBinExt::fn get_property_message_forward -->
 Forward all children messages, even those that would normally be filtered by
 the bin. This can be interesting when one wants to be notified of the EOS
 state of individual elements, for example.
@@ -459,7 +459,7 @@ The messages are converted to an ELEMENT message with the bin as the
 source. The structure of the message is named 'GstBinForwarded' and contains
 a field named 'message' of type GST_TYPE_MESSAGE that contains the original
 forwarded message.
-<!-- trait GstBinExt::fn set_property_message-forward -->
+<!-- trait GstBinExt::fn set_property_message_forward -->
 Forward all children messages, even those that would normally be filtered by
 the bin. This can be interesting when one wants to be notified of the EOS
 state of individual elements, for example.
@@ -2049,13 +2049,13 @@ a `Message` matching the
  usage.
 
 MT safe.
-<!-- trait BusExt::fn connect_message -->
+<!-- impl Bus::fn connect_message -->
 A message has been posted on the bus. This signal is emitted from a
 GSource added to the mainloop. this signal will only be emitted when
 there is a mainloop running.
 ## `message`
 the message that has been posted asynchronously
-<!-- trait BusExt::fn connect_sync_message -->
+<!-- impl Bus::fn connect_sync_message -->
 A message has been posted on the bus. This signal is emitted from the
 thread that posted the message so one has to be careful with locking.
 
@@ -3299,6 +3299,12 @@ This signal will be emitted from an arbitrary thread, most likely not
 the application's main thread.
 ## `synced`
 if the clock is synced now
+<!-- enum ClockEntryType -->
+The type of the clock entry
+<!-- enum ClockEntryType::variant Single -->
+a single shot timeout
+<!-- enum ClockEntryType::variant Periodic -->
+a periodic timeout request
 <!-- enum ClockReturn -->
 The return value of a clock operation.
 <!-- enum ClockReturn::variant Ok -->
@@ -9913,35 +9919,35 @@ Unref after usage.
 Emit the pad-created signal for this template when created by this pad.
 ## `pad`
 the `Pad` that created it
-<!-- trait PadTemplateExt::fn connect_pad_created -->
+<!-- impl PadTemplate::fn connect_pad_created -->
 This signal is fired when an element creates a pad from this template.
 ## `pad`
 the pad that was created.
-<!-- trait PadTemplateExt::fn get_property_caps -->
+<!-- impl PadTemplate::fn get_property_caps -->
 The capabilities of the pad described by the pad template.
-<!-- trait PadTemplateExt::fn set_property_caps -->
+<!-- impl PadTemplate::fn set_property_caps -->
 The capabilities of the pad described by the pad template.
-<!-- trait PadTemplateExt::fn get_property_direction -->
+<!-- impl PadTemplate::fn get_property_direction -->
 The direction of the pad described by the pad template.
-<!-- trait PadTemplateExt::fn set_property_direction -->
+<!-- impl PadTemplate::fn set_property_direction -->
 The direction of the pad described by the pad template.
-<!-- trait PadTemplateExt::fn get_property_gtype -->
+<!-- impl PadTemplate::fn get_property_gtype -->
 The type of the pad described by the pad template.
 
 Feature: `v1_14`
 
-<!-- trait PadTemplateExt::fn set_property_gtype -->
+<!-- impl PadTemplate::fn set_property_gtype -->
 The type of the pad described by the pad template.
 
 Feature: `v1_14`
 
-<!-- trait PadTemplateExt::fn get_property_name-template -->
+<!-- impl PadTemplate::fn get_property_name_template -->
 The name template of the pad template.
-<!-- trait PadTemplateExt::fn set_property_name-template -->
+<!-- impl PadTemplate::fn set_property_name_template -->
 The name template of the pad template.
-<!-- trait PadTemplateExt::fn get_property_presence -->
+<!-- impl PadTemplate::fn get_property_presence -->
 When the pad described by the pad template will become available.
-<!-- trait PadTemplateExt::fn set_property_presence -->
+<!-- impl PadTemplate::fn set_property_presence -->
 When the pad described by the pad template will become available.
 <!-- struct ParseContext -->
 Opaque structure.
@@ -10184,11 +10190,11 @@ the pipeline run as fast as possible.
 MT safe.
 ## `clock`
 the clock to use
-<!-- trait PipelineExt::fn get_property_auto-flush-bus -->
+<!-- trait PipelineExt::fn get_property_auto_flush_bus -->
 Whether or not to automatically flush all messages on the
 pipeline's bus when going from READY to NULL state. Please see
 `PipelineExt::set_auto_flush_bus` for more information on this option.
-<!-- trait PipelineExt::fn set_property_auto-flush-bus -->
+<!-- trait PipelineExt::fn set_property_auto_flush_bus -->
 Whether or not to automatically flush all messages on the
 pipeline's bus when going from READY to NULL state. Please see
 `PipelineExt::set_auto_flush_bus` for more information on this option.
@@ -12056,12 +12062,12 @@ the path to scan
 # Returns
 
 `true` if registry changed
-<!-- trait RegistryExt::fn connect_feature_added -->
+<!-- impl Registry::fn connect_feature_added -->
 Signals that a feature has been added to the registry (possibly
 replacing a previously-added one by the same name)
 ## `feature`
 the feature that has been added
-<!-- trait RegistryExt::fn connect_plugin_added -->
+<!-- impl Registry::fn connect_plugin_added -->
 Signals that a plugin has been added to the registry (possibly
 replacing a previously-added one by the same name)
 ## `plugin`
@@ -12832,23 +12838,23 @@ Feature: `v1_10`
 
 ## `tags`
 a `TagList`
-<!-- trait StreamExt::fn get_property_caps -->
+<!-- impl Stream::fn get_property_caps -->
 The `Caps` of the `Stream`.
-<!-- trait StreamExt::fn set_property_caps -->
+<!-- impl Stream::fn set_property_caps -->
 The `Caps` of the `Stream`.
-<!-- trait StreamExt::fn get_property_stream-id -->
+<!-- impl Stream::fn get_property_stream_id -->
 The unique identifier of the `Stream`. Can only be set at construction
 time.
-<!-- trait StreamExt::fn set_property_stream-id -->
+<!-- impl Stream::fn set_property_stream_id -->
 The unique identifier of the `Stream`. Can only be set at construction
 time.
-<!-- trait StreamExt::fn get_property_stream-type -->
+<!-- impl Stream::fn get_property_stream_type -->
 The `StreamType` of the `Stream`. Can only be set at construction time.
-<!-- trait StreamExt::fn set_property_stream-type -->
+<!-- impl Stream::fn set_property_stream_type -->
 The `StreamType` of the `Stream`. Can only be set at construction time.
-<!-- trait StreamExt::fn get_property_tags -->
+<!-- impl Stream::fn get_property_tags -->
 The `TagList` of the `Stream`.
-<!-- trait StreamExt::fn set_property_tags -->
+<!-- impl Stream::fn set_property_tags -->
 The `TagList` of the `Stream`.
 <!-- struct StreamCollection -->
 A collection of `Stream` that are available.

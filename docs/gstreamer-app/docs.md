@@ -239,10 +239,10 @@ the maximum amount of time to wait for a sample
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
 Call `gst_sample_unref` after usage.
-<!-- trait AppSinkExt::fn connect_eos -->
+<!-- impl AppSink::fn connect_eos -->
 Signal that the end-of-stream has been reached. This signal is emitted from
 the streaming thread.
-<!-- trait AppSinkExt::fn connect_new_preroll -->
+<!-- impl AppSink::fn connect_new_preroll -->
 Signal that a new preroll sample is available.
 
 This signal is emitted from the streaming thread and only when the
@@ -254,7 +254,7 @@ or from any other thread.
 
 Note that this signal is only emitted when the "emit-signals" property is
 set to `true`, which it is not by default for performance reasons.
-<!-- trait AppSinkExt::fn connect_new_sample -->
+<!-- impl AppSink::fn connect_new_sample -->
 Signal that a new sample is available.
 
 This signal is emitted from the streaming thread and only when the
@@ -266,7 +266,7 @@ or from any other thread.
 
 Note that this signal is only emitted when the "emit-signals" property is
 set to `true`, which it is not by default for performance reasons.
-<!-- trait AppSinkExt::fn connect_pull_preroll -->
+<!-- impl AppSink::fn connect_pull_preroll -->
 Get the last preroll sample in `appsink`. This was the sample that caused the
 appsink to preroll in the PAUSED state.
 
@@ -289,7 +289,7 @@ element is set to the READY/NULL state.
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
-<!-- trait AppSinkExt::fn connect_pull_sample -->
+<!-- impl AppSink::fn connect_pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state.
 
@@ -308,7 +308,7 @@ If an EOS event was received before any buffers, this function returns
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
-<!-- trait AppSinkExt::fn connect_try_pull_preroll -->
+<!-- impl AppSink::fn connect_try_pull_preroll -->
 Get the last preroll sample in `appsink`. This was the sample that caused the
 appsink to preroll in the PAUSED state.
 
@@ -337,7 +337,7 @@ the maximum amount of time to wait for the preroll sample
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
-<!-- trait AppSinkExt::fn connect_try_pull_sample -->
+<!-- impl AppSink::fn connect_try_pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state or the timeout expires.
 
@@ -606,13 +606,13 @@ be connected to.
 A stream_type stream
 ## `type_`
 the new state
-<!-- trait AppSrcExt::fn connect_end_of_stream -->
+<!-- impl AppSrc::fn connect_end_of_stream -->
 Notify `appsrc` that no more buffer are available.
-<!-- trait AppSrcExt::fn connect_enough_data -->
+<!-- impl AppSrc::fn connect_enough_data -->
 Signal that the source has enough data. It is recommended that the
 application stops calling push-buffer until the need-data signal is
 emitted again to avoid excessive buffer queueing.
-<!-- trait AppSrcExt::fn connect_need_data -->
+<!-- impl AppSrc::fn connect_need_data -->
 Signal that the source needs more data. In the callback or from another
 thread you should call push-buffer or end-of-stream.
 
@@ -623,7 +623,7 @@ You can call push-buffer multiple times until the enough-data signal is
 fired.
 ## `length`
 the amount of bytes needed.
-<!-- trait AppSrcExt::fn connect_push_buffer -->
+<!-- impl AppSrc::fn connect_push_buffer -->
 Adds a buffer to the queue of buffers that the appsrc element will
 push to its source pad. This function does not take ownership of the
 buffer so the buffer needs to be unreffed after calling this function.
@@ -632,7 +632,7 @@ When the block property is TRUE, this function can block until free space
 becomes available in the queue.
 ## `buffer`
 a buffer to push
-<!-- trait AppSrcExt::fn connect_push_buffer_list -->
+<!-- impl AppSrc::fn connect_push_buffer_list -->
 Adds a buffer list to the queue of buffers and buffer lists that the
 appsrc element will push to its source pad. This function does not take
 ownership of the buffer list so the buffer list needs to be unreffed
@@ -645,7 +645,7 @@ Feature: `v1_14`
 
 ## `buffer_list`
 a buffer list to push
-<!-- trait AppSrcExt::fn connect_push_sample -->
+<!-- impl AppSrc::fn connect_push_sample -->
 Extract a buffer from the provided sample and adds the extracted buffer
 to the queue of buffers that the appsrc element will
 push to its source pad. This function set the appsrc caps based on the caps
@@ -659,7 +659,7 @@ When the block property is TRUE, this function can block until free space
 becomes available in the queue.
 ## `sample`
 a sample from which extract buffer to push
-<!-- trait AppSrcExt::fn connect_seek_data -->
+<!-- impl AppSrc::fn connect_seek_data -->
 Seek to the given offset. The next push-buffer should produce buffers from
 the new `offset`.
 This callback is only called for seekable stream types.

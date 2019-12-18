@@ -65,7 +65,7 @@ asynchronous mode.
 <!-- impl Discoverer::fn stop -->
 Stop the discovery of any pending URIs and clears the list of
 pending URIS (if any).
-<!-- trait DiscovererExt::fn connect_discovered -->
+<!-- impl Discoverer::fn connect_discovered -->
 Will be emitted in async mode when all information on a URI could be
 discovered, or an error occurred.
 
@@ -79,9 +79,9 @@ the results `DiscovererInfo`
  discovery. You must not free
  this `glib::Error`, it will be freed by
  the discoverer.
-<!-- trait DiscovererExt::fn connect_finished -->
+<!-- impl Discoverer::fn connect_finished -->
 Will be emitted in async mode when all pending URIs have been processed.
-<!-- trait DiscovererExt::fn connect_source_setup -->
+<!-- impl Discoverer::fn connect_source_setup -->
 This signal is emitted after the source element has been created for, so
 the URI being discovered, so it can be configured by setting additional
 properties (e.g. set a proxy server for an http source, or set the device
@@ -91,15 +91,15 @@ This signal is usually emitted from the context of a GStreamer streaming
 thread.
 ## `source`
 source element
-<!-- trait DiscovererExt::fn connect_starting -->
+<!-- impl Discoverer::fn connect_starting -->
 Will be emitted when the discover starts analyzing the pending URIs
-<!-- trait DiscovererExt::fn get_property_timeout -->
+<!-- impl Discoverer::fn get_property_timeout -->
 The duration (in nanoseconds) after which the discovery of an individual
 URI will timeout.
 
 If the discovery of a URI times out, the `DiscovererResult::Timeout` will be
 set on the result flags.
-<!-- trait DiscovererExt::fn set_property_timeout -->
+<!-- impl Discoverer::fn set_property_timeout -->
 The duration (in nanoseconds) after which the discovery of an individual
 URI will timeout.
 

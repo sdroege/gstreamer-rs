@@ -386,9 +386,9 @@ from the splitting or `None` if the clip can't be split.
 The GESLayer where this clip is being used. If you want to connect to its
 notify signal you should connect to it with g_signal_connect_after as the
 signal emission can be stop in the first fase.
-<!-- trait ClipExt::fn get_property_supported-formats -->
+<!-- trait ClipExt::fn get_property_supported_formats -->
 The formats supported by the clip.
-<!-- trait ClipExt::fn set_property_supported-formats -->
+<!-- trait ClipExt::fn set_property_supported_formats -->
 The formats supported by the clip.
 <!-- struct Container -->
 The `Container` base class.
@@ -557,12 +557,12 @@ The gst-launch like bin description of the effect
 
 a newly created `Effect`, or `None` if something went
 wrong.
-<!-- trait EffectExt::fn get_property_bin-description -->
+<!-- trait EffectExt::fn get_property_bin_description -->
 The description of the effect bin with a gst-launch-style
 pipeline description.
 
 Example: "videobalance saturation=1.5 hue=+0.5"
-<!-- trait EffectExt::fn set_property_bin-description -->
+<!-- trait EffectExt::fn set_property_bin_description -->
 The description of the effect bin with a gst-launch-style
 pipeline description.
 
@@ -629,21 +629,21 @@ The new empty group.
 The duration (in nanoseconds) which will be used in the container
 <!-- trait GroupExt::fn set_property_duration -->
 The duration (in nanoseconds) which will be used in the container
-<!-- trait GroupExt::fn get_property_in-point -->
+<!-- trait GroupExt::fn get_property_in_point -->
 The in-point at which this `Group` will start outputting data
 from its contents (in nanoseconds).
 
 Ex : an in-point of 5 seconds means that the first outputted buffer will
 be the one located 5 seconds in the controlled resource.
-<!-- trait GroupExt::fn set_property_in-point -->
+<!-- trait GroupExt::fn set_property_in_point -->
 The in-point at which this `Group` will start outputting data
 from its contents (in nanoseconds).
 
 Ex : an in-point of 5 seconds means that the first outputted buffer will
 be the one located 5 seconds in the controlled resource.
-<!-- trait GroupExt::fn get_property_max-duration -->
+<!-- trait GroupExt::fn get_property_max_duration -->
 The maximum duration (in nanoseconds) of the `Group`.
-<!-- trait GroupExt::fn set_property_max-duration -->
+<!-- trait GroupExt::fn set_property_max_duration -->
 The maximum duration (in nanoseconds) of the `Group`.
 <!-- trait GroupExt::fn get_property_start -->
 The position of the object in its container (in nanoseconds).
@@ -795,9 +795,9 @@ the `Clip` that was added.
 Will be emitted after the clip was removed from the layer.
 ## `clip`
 the `Clip` that was removed
-<!-- trait LayerExt::fn get_property_auto-transition -->
+<!-- trait LayerExt::fn get_property_auto_transition -->
 Sets whether transitions are added automagically when clips overlap.
-<!-- trait LayerExt::fn set_property_auto-transition -->
+<!-- trait LayerExt::fn set_property_auto_transition -->
 Sets whether transitions are added automagically when clips overlap.
 <!-- trait LayerExt::fn get_property_priority -->
 The priority of the layer in the `Timeline`. 0 is the highest
@@ -967,9 +967,9 @@ the `Timeline` to set on the `self`.
 
 `true` if the `timeline` could be successfully set on the `self`,
 else `false`.
-<!-- trait GESPipelineExt::fn get_property_audio-sink -->
+<!-- trait GESPipelineExt::fn get_property_audio_sink -->
 Audio sink for the preview.
-<!-- trait GESPipelineExt::fn set_property_audio-sink -->
+<!-- trait GESPipelineExt::fn set_property_audio_sink -->
 Audio sink for the preview.
 <!-- trait GESPipelineExt::fn get_property_mode -->
 Pipeline mode. See `GESPipelineExt::set_mode` for more
@@ -983,9 +983,9 @@ Timeline to use in this pipeline. See also
 <!-- trait GESPipelineExt::fn set_property_timeline -->
 Timeline to use in this pipeline. See also
 `GESPipelineExt::set_timeline` for more info.
-<!-- trait GESPipelineExt::fn get_property_video-sink -->
+<!-- trait GESPipelineExt::fn get_property_video_sink -->
 Video sink for the preview.
-<!-- trait GESPipelineExt::fn set_property_video-sink -->
+<!-- trait GESPipelineExt::fn set_property_video_sink -->
 Video sink for the preview.
 <!-- struct Project -->
 The `Project` is used to control a set of `Asset` and is a
@@ -1427,6 +1427,9 @@ we land at that position in the stack of layers inside
 the timeline. If `new_layer_priority` is superior than the number
 of layers present in the time, it will move to the end of the
 stack of layers.
+
+Feature: `v1_16`
+
 ## `layer`
 The layer to move at `new_layer_priority`
 ## `new_layer_priority`
@@ -1547,16 +1550,16 @@ the `Track` that was added to the timeline
 Will be emitted after the track was removed from the timeline.
 ## `track`
 the `Track` that was removed from the timeline
-<!-- trait TimelineExt::fn get_property_auto-transition -->
+<!-- trait TimelineExt::fn get_property_auto_transition -->
 Sets whether transitions are added automagically when clips overlap.
-<!-- trait TimelineExt::fn set_property_auto-transition -->
+<!-- trait TimelineExt::fn set_property_auto_transition -->
 Sets whether transitions are added automagically when clips overlap.
 <!-- trait TimelineExt::fn get_property_duration -->
 Current duration (in nanoseconds) of the `Timeline`
-<!-- trait TimelineExt::fn get_property_snapping-distance -->
+<!-- trait TimelineExt::fn get_property_snapping_distance -->
 Distance (in nanoseconds) from which a moving object will snap
 with it neighboors. 0 means no snapping.
-<!-- trait TimelineExt::fn set_property_snapping-distance -->
+<!-- trait TimelineExt::fn set_property_snapping_distance -->
 Distance (in nanoseconds) from which a moving object will snap
 with it neighboors. 0 means no snapping.
 <!-- struct TimelineElement -->
@@ -1631,6 +1634,9 @@ The `duration` of `self`
 
 The `inpoint` of `self`
 <!-- trait TimelineElementExt::fn get_layer_priority -->
+
+Feature: `v1_16`
+
 
 # Returns
 
@@ -1725,7 +1731,8 @@ be copied to, meaning it will become the start of `self`
 
 # Returns
 
-Paste `self` copying the element
+New element resulting of pasting `self`
+or `None`
 <!-- trait TimelineElementExt::fn ripple -->
 Edits `self` in ripple mode. It allows you to modify the
 start of `self` and move the following neighbours accordingly.
@@ -1916,21 +1923,21 @@ the property that changed
 The duration (in nanoseconds) which will be used in the container
 <!-- trait TimelineElementExt::fn set_property_duration -->
 The duration (in nanoseconds) which will be used in the container
-<!-- trait TimelineElementExt::fn get_property_in-point -->
+<!-- trait TimelineElementExt::fn get_property_in_point -->
 The in-point at which this `TimelineElement` will start outputting data
 from its contents (in nanoseconds).
 
 Ex : an in-point of 5 seconds means that the first outputted buffer will
 be the one located 5 seconds in the controlled resource.
-<!-- trait TimelineElementExt::fn set_property_in-point -->
+<!-- trait TimelineElementExt::fn set_property_in_point -->
 The in-point at which this `TimelineElement` will start outputting data
 from its contents (in nanoseconds).
 
 Ex : an in-point of 5 seconds means that the first outputted buffer will
 be the one located 5 seconds in the controlled resource.
-<!-- trait TimelineElementExt::fn get_property_max-duration -->
+<!-- trait TimelineElementExt::fn get_property_max_duration -->
 The maximum duration (in nanoseconds) of the `TimelineElement`.
-<!-- trait TimelineElementExt::fn set_property_max-duration -->
+<!-- trait TimelineElementExt::fn set_property_max_duration -->
 The maximum duration (in nanoseconds) of the `TimelineElement`.
 <!-- trait TimelineElementExt::fn get_property_name -->
 The name of the object
@@ -2106,22 +2113,22 @@ Default value: O
 Whether layer mixing is activated or not on the track.
 <!-- trait GESTrackExt::fn set_property_mixing -->
 Whether layer mixing is activated or not on the track.
-<!-- trait GESTrackExt::fn get_property_restriction-caps -->
+<!-- trait GESTrackExt::fn get_property_restriction_caps -->
 Caps used to filter/choose the output stream.
 
 Default value: `GST_CAPS_ANY`.
-<!-- trait GESTrackExt::fn set_property_restriction-caps -->
+<!-- trait GESTrackExt::fn set_property_restriction_caps -->
 Caps used to filter/choose the output stream.
 
 Default value: `GST_CAPS_ANY`.
-<!-- trait GESTrackExt::fn get_property_track-type -->
+<!-- trait GESTrackExt::fn get_property_track_type -->
 Type of stream the track outputs. This is used when creating the `Track`
 to specify in generic terms what type of content will be outputted.
 
 It also serves as a 'fast' way to check what type of data will be outputted
 from the `Track` without having to actually check the `Track`'s caps
 property.
-<!-- trait GESTrackExt::fn set_property_track-type -->
+<!-- trait GESTrackExt::fn set_property_track_type -->
 Type of stream the track outputs. This is used when creating the `Track`
 to specify in generic terms what type of content will be outputted.
 
@@ -2481,10 +2488,10 @@ Sets whether the clip is a still image or not.
 Sets whether the audio track of this clip is muted or not.
 ## `mute`
 `true` to mute `self` audio track, `false` to unmute it
-<!-- trait UriClipExt::fn get_property_is-image -->
+<!-- trait UriClipExt::fn get_property_is_image -->
 Whether this uri clip represents a still image or not. This must be set
 before create_track_elements is called.
-<!-- trait UriClipExt::fn set_property_is-image -->
+<!-- trait UriClipExt::fn set_property_is_image -->
 Whether this uri clip represents a still image or not. This must be set
 before create_track_elements is called.
 <!-- trait UriClipExt::fn get_property_mute -->
@@ -2512,6 +2519,9 @@ Trait containing all `UriClipAsset` methods.
 [`UriClipAsset`](struct.UriClipAsset.html)
 <!-- impl UriClipAsset::fn finish -->
 Finalize the request of an async `UriClipAsset`
+
+Feature: `v1_16`
+
 ## `res`
 The `gio::AsyncResult` from which to get the newly created `UriClipAsset`
 
