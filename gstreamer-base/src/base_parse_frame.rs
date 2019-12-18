@@ -98,7 +98,18 @@ impl<'a> BaseParseFrame<'a> {
         BaseParseFrame(ptr::NonNull::new_unchecked(frame), PhantomData)
     }
 
-    pub fn get_buffer(&self) -> Option<&mut gst::BufferRef> {
+    pub fn get_buffer(&self) -> Option<&gst::BufferRef> {
+        unsafe {
+            let ptr = (*self.to_glib_none().0).buffer;
+            if ptr.is_null() {
+                None
+            } else {
+                Some(gst::BufferRef::from_ptr(ptr))
+            }
+        }
+    }
+
+    pub fn get_buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).buffer;
             if ptr.is_null() {
@@ -114,7 +125,18 @@ impl<'a> BaseParseFrame<'a> {
         }
     }
 
-    pub fn get_output_buffer(&self) -> Option<&mut gst::BufferRef> {
+    pub fn get_output_buffer(&self) -> Option<&gst::BufferRef> {
+        unsafe {
+            let ptr = (*self.to_glib_none().0).out_buffer;
+            if ptr.is_null() {
+                None
+            } else {
+                Some(gst::BufferRef::from_ptr(ptr))
+            }
+        }
+    }
+
+    pub fn get_output_buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).out_buffer;
             if ptr.is_null() {
@@ -130,7 +152,7 @@ impl<'a> BaseParseFrame<'a> {
         }
     }
 
-    pub fn set_output_buffer(&self, output_buffer: gst::Buffer) {
+    pub fn set_output_buffer(&mut self, output_buffer: gst::Buffer) {
         unsafe {
             let prev = (*self.to_glib_none().0).out_buffer;
 
@@ -153,11 +175,11 @@ impl<'a> BaseParseFrame<'a> {
         BaseParseFrameFlags::from_bits_truncate(flags)
     }
 
-    pub fn set_flags(&self, flags: BaseParseFrameFlags) {
+    pub fn set_flags(&mut self, flags: BaseParseFrameFlags) {
         unsafe { (*self.to_glib_none().0).flags |= flags.bits() }
     }
 
-    pub fn unset_flags(&self, flags: BaseParseFrameFlags) {
+    pub fn unset_flags(&mut self, flags: BaseParseFrameFlags) {
         unsafe { (*self.to_glib_none().0).flags &= !flags.bits() }
     }
 
@@ -169,7 +191,7 @@ impl<'a> BaseParseFrame<'a> {
         unsafe { from_glib((*self.to_glib_none().0).overhead) }
     }
 
-    pub fn set_overhead(&self, overhead: Overhead) {
+    pub fn set_overhead(&mut self, overhead: Overhead) {
         unsafe {
             (*self.to_glib_none().0).overhead = overhead.to_glib();
         }
