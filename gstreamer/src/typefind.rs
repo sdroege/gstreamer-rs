@@ -96,8 +96,6 @@ impl<'a> TypeFind<'a> {
     }
 }
 
-unsafe impl<'a> Send for TypeFind<'a> {}
-
 impl TypeFindFactory {
     pub fn call_function(&self, find: &mut dyn TypeFindImpl) {
         unsafe {

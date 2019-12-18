@@ -508,6 +508,7 @@ impl<T: FormattedValue> PartialEq for FormattedSegment<T> {
 impl<T: FormattedValue> Eq for FormattedSegment<T> {}
 
 unsafe impl<T: FormattedValue> Send for FormattedSegment<T> {}
+unsafe impl<T: FormattedValue> Sync for FormattedSegment<T> {}
 
 impl<T: FormattedValue> Clone for FormattedSegment<T> {
     fn clone(&self) -> Self {

@@ -14,6 +14,9 @@ use gst_sdp_sys;
 #[repr(C)]
 pub struct SDPKey(gst_sdp_sys::GstSDPKey);
 
+unsafe impl Send for SDPKey {}
+unsafe impl Sync for SDPKey {}
+
 impl SDPKey {
     pub fn type_(&self) -> Option<&str> {
         unsafe {

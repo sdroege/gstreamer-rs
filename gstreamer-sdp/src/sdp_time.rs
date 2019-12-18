@@ -18,6 +18,9 @@ use gst_sdp_sys;
 #[repr(C)]
 pub struct SDPTime(pub(crate) gst_sdp_sys::GstSDPTime);
 
+unsafe impl Send for SDPTime {}
+unsafe impl Sync for SDPTime {}
+
 impl SDPTime {
     pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Self {
         assert_initialized_main_thread!();

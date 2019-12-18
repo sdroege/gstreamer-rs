@@ -604,6 +604,9 @@ macro_rules! define_iter(
         items: PhantomData<$mtyp>,
     }
 
+    unsafe impl<'a, T: MetaAPI> Send for $name<'a, T> { }
+    unsafe impl<'a, T: MetaAPI> Sync for $name<'a, T> { }
+
     impl<'a, T: MetaAPI> $name<'a, T> {
         fn new(buffer: $typ) -> $name<'a, T> {
             skip_assert_initialized!();
@@ -778,6 +781,9 @@ impl<'a, T> Drop for BufferMap<'a, T> {
     }
 }
 
+unsafe impl<'a, T> Send for BufferMap<'a, T> {}
+unsafe impl<'a, T> Sync for BufferMap<'a, T> {}
+
 impl<T> MappedBuffer<T> {
     pub fn as_slice(&self) -> &[u8] {
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
@@ -860,6 +866,7 @@ impl<T> PartialEq for MappedBuffer<T> {
 impl<T> Eq for MappedBuffer<T> {}
 
 unsafe impl<T> Send for MappedBuffer<T> {}
+unsafe impl<T> Sync for MappedBuffer<T> {}
 
 lazy_static! {
     pub static ref BUFFER_COPY_METADATA: ::BufferCopyFlags =

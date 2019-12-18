@@ -15,6 +15,9 @@ use MemoryFlags;
 #[derive(Debug, Clone)]
 pub struct AllocationParams(gst_sys::GstAllocationParams);
 
+unsafe impl Send for AllocationParams {}
+unsafe impl Sync for AllocationParams {}
+
 impl AllocationParams {
     pub fn get_flags(&self) -> MemoryFlags {
         from_glib(self.0.flags)

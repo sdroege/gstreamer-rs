@@ -11,6 +11,9 @@ use GLContext;
 #[repr(C)]
 pub struct GLSyncMeta(gst_gl_sys::GstGLSyncMeta);
 
+unsafe impl Send for GLSyncMeta {}
+unsafe impl Sync for GLSyncMeta {}
+
 impl GLSyncMeta {
     pub fn add<'a, C: IsA<GLContext>>(
         buffer: &'a mut gst::BufferRef,

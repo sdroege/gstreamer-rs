@@ -23,6 +23,7 @@ macro_rules! gst_plugin_define(
 
             #[repr(C)]
             pub struct GstPluginDesc($crate::gst_sys::GstPluginDesc);
+            unsafe impl Send for GstPluginDesc {}
             unsafe impl Sync for GstPluginDesc {}
 
             static GST_PLUGIN_DESC: GstPluginDesc = GstPluginDesc($crate::gst_sys::GstPluginDesc {

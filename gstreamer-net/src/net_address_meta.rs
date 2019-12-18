@@ -10,6 +10,9 @@ use gst_net_sys;
 #[repr(C)]
 pub struct NetAddressMeta(gst_net_sys::GstNetAddressMeta);
 
+unsafe impl Send for NetAddressMeta {}
+unsafe impl Sync for NetAddressMeta {}
+
 impl NetAddressMeta {
     pub fn add<'a, A: IsA<gio::SocketAddress>>(
         buffer: &'a mut gst::BufferRef,

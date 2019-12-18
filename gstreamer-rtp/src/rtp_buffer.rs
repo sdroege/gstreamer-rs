@@ -11,6 +11,9 @@ pub enum Writable {}
 #[repr(C)]
 pub struct RTPBuffer<'a, T>(gst_rtp_sys::GstRTPBuffer, &'a gst::Buffer, PhantomData<T>);
 
+unsafe impl<'a, T> Send for RTPBuffer<'a, T> {}
+unsafe impl<'a, T> Sync for RTPBuffer<'a, T> {}
+
 impl<'a> RTPBuffer<'a, Readable> {
     pub fn from_buffer_readable(
         buffer: &gst::Buffer,

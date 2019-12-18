@@ -14,6 +14,9 @@ use gst_sdp_sys;
 #[repr(C)]
 pub struct SDPOrigin(pub(crate) gst_sdp_sys::GstSDPOrigin);
 
+unsafe impl Send for SDPOrigin {}
+unsafe impl Sync for SDPOrigin {}
+
 impl SDPOrigin {
     pub fn username(&self) -> Option<&str> {
         unsafe {

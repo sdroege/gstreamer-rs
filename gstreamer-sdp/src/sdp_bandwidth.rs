@@ -16,6 +16,9 @@ use gst_sdp_sys;
 #[repr(C)]
 pub struct SDPBandwidth(pub(crate) gst_sdp_sys::GstSDPBandwidth);
 
+unsafe impl Send for SDPBandwidth {}
+unsafe impl Sync for SDPBandwidth {}
+
 impl SDPBandwidth {
     pub fn new(bwtype: &str, bandwidth: u32) -> Self {
         assert_initialized_main_thread!();

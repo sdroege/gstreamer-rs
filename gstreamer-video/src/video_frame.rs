@@ -663,6 +663,9 @@ impl<'a> ops::Deref for VideoFrameRef<&'a mut gst::BufferRef> {
     }
 }
 
+unsafe impl<T> Send for VideoFrameRef<T> {}
+unsafe impl<T> Sync for VideoFrameRef<T> {}
+
 impl<T> Drop for VideoFrameRef<T> {
     fn drop(&mut self) {
         if !self.3 {

@@ -187,6 +187,9 @@ impl BufferPoolConfig {
 #[derive(Debug)]
 pub struct BufferPoolAcquireParams(gst_sys::GstBufferPoolAcquireParams);
 
+unsafe impl Send for BufferPoolAcquireParams {}
+unsafe impl Sync for BufferPoolAcquireParams {}
+
 impl BufferPoolAcquireParams {
     pub fn with_flags(flags: ::BufferPoolAcquireFlags) -> Self {
         BufferPoolAcquireParams(gst_sys::GstBufferPoolAcquireParams {

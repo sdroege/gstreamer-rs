@@ -380,6 +380,9 @@ impl<'a, T> Drop for MemoryMap<'a, T> {
     }
 }
 
+unsafe impl<'a, T> Send for MemoryMap<'a, T> {}
+unsafe impl<'a, T> Sync for MemoryMap<'a, T> {}
+
 impl<T> MappedMemory<T> {
     pub fn as_slice(&self) -> &[u8] {
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
@@ -462,3 +465,4 @@ impl<T> PartialEq for MappedMemory<T> {
 impl<T> Eq for MappedMemory<T> {}
 
 unsafe impl<T> Send for MappedMemory<T> {}
+unsafe impl<T> Sync for MappedMemory<T> {}

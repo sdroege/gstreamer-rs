@@ -87,6 +87,9 @@ impl Drop for AudioRingBufferSpec {
     }
 }
 
+unsafe impl Send for AudioRingBufferSpec {}
+unsafe impl Sync for AudioRingBufferSpec {}
+
 impl fmt::Debug for AudioRingBufferSpec {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.debug_struct("AudioRingBufferSpec")

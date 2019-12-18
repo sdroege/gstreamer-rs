@@ -18,6 +18,9 @@ use gst_video_sys;
 #[repr(C)]
 pub struct VideoMeta(gst_video_sys::GstVideoMeta);
 
+unsafe impl Send for VideoMeta {}
+unsafe impl Sync for VideoMeta {}
+
 impl VideoMeta {
     pub fn add(
         buffer: &mut gst::BufferRef,
@@ -134,6 +137,9 @@ impl fmt::Debug for VideoMeta {
 #[repr(C)]
 pub struct VideoOverlayCompositionMeta(gst_video_sys::GstVideoOverlayCompositionMeta);
 
+unsafe impl Send for VideoOverlayCompositionMeta {}
+unsafe impl Sync for VideoOverlayCompositionMeta {}
+
 impl VideoOverlayCompositionMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
@@ -185,6 +191,11 @@ impl fmt::Debug for VideoOverlayCompositionMeta {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[repr(C)]
 pub struct VideoCaptionMeta(gst_video_sys::GstVideoCaptionMeta);
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+unsafe impl Send for VideoCaptionMeta {}
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+unsafe impl Sync for VideoCaptionMeta {}
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 impl VideoCaptionMeta {

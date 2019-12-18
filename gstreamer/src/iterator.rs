@@ -326,6 +326,7 @@ where
 }
 
 unsafe impl<T> Send for Iterator<T> {}
+unsafe impl<T> Sync for Iterator<T> {}
 
 unsafe extern "C" fn filter_trampoline<T>(value: gconstpointer, func: gconstpointer) -> i32
 where

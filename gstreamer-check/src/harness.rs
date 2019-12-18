@@ -36,6 +36,7 @@ impl Drop for Harness {
 }
 
 unsafe impl Send for Harness {}
+unsafe impl Sync for Harness {}
 
 impl Harness {
     pub fn add_element_full<P: IsA<gst::Element>>(
@@ -792,7 +793,7 @@ impl Harness {
 }
 
 #[derive(Debug)]
-pub struct Ref<'a>(Option<Harness>, PhantomData<&'a gst_check_sys::GstHarness>);
+pub struct Ref<'a>(Option<Harness>, PhantomData<&'a Harness>);
 
 impl<'a> ops::Deref for Ref<'a> {
     type Target = Harness;
@@ -810,10 +811,7 @@ impl<'a> Drop for Ref<'a> {
 }
 
 #[derive(Debug)]
-pub struct RefMut<'a>(
-    Option<Harness>,
-    PhantomData<&'a mut gst_check_sys::GstHarness>,
-);
+pub struct RefMut<'a>(Option<Harness>, PhantomData<&'a mut Harness>);
 
 impl<'a> ops::Deref for RefMut<'a> {
     type Target = Harness;

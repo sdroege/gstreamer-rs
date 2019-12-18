@@ -16,6 +16,9 @@ use gst_sdp_sys;
 #[repr(C)]
 pub struct SDPAttribute(pub(crate) gst_sdp_sys::GstSDPAttribute);
 
+unsafe impl Send for SDPAttribute {}
+unsafe impl Sync for SDPAttribute {}
+
 impl SDPAttribute {
     pub fn new(key: &str, value: Option<&str>) -> Self {
         assert_initialized_main_thread!();

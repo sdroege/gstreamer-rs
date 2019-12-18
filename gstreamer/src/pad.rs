@@ -99,6 +99,9 @@ pub enum PadProbeData<'a> {
     __Unknown(*mut gst_sys::GstMiniObject),
 }
 
+unsafe impl<'a> Send for PadProbeData<'a> {}
+unsafe impl<'a> Sync for PadProbeData<'a> {}
+
 #[derive(Debug)]
 pub struct StreamLock(Pad);
 impl Drop for StreamLock {

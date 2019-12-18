@@ -525,6 +525,9 @@ impl From<ValidVideoTimeCode> for VideoTimeCode {
 #[repr(C)]
 pub struct VideoTimeCodeMeta(gst_video_sys::GstVideoTimeCodeMeta);
 
+unsafe impl Send for VideoTimeCodeMeta {}
+unsafe impl Sync for VideoTimeCodeMeta {}
+
 impl VideoTimeCodeMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,

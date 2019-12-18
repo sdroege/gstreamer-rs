@@ -16,6 +16,9 @@ use gst_sdp_sys;
 #[repr(C)]
 pub struct SDPZone(pub(crate) gst_sdp_sys::GstSDPZone);
 
+unsafe impl Send for SDPZone {}
+unsafe impl Sync for SDPZone {}
+
 impl SDPZone {
     pub fn new(time: &str, typed_time: &str) -> Self {
         assert_initialized_main_thread!();

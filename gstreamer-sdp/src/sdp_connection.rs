@@ -16,6 +16,9 @@ use gst_sdp_sys;
 #[repr(C)]
 pub struct SDPConnection(pub(crate) gst_sdp_sys::GstSDPConnection);
 
+unsafe impl Send for SDPConnection {}
+unsafe impl Sync for SDPConnection {}
+
 impl SDPConnection {
     pub fn new(nettype: &str, addrtype: &str, address: &str, ttl: u32, addr_number: u32) -> Self {
         assert_initialized_main_thread!();

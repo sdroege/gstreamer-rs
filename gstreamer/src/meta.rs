@@ -27,7 +27,7 @@ use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 use glib_sys;
 use gst_sys;
 
-pub unsafe trait MetaAPI: Sized {
+pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;
 
     fn get_meta_api() -> glib::Type;
@@ -210,6 +210,9 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
 #[repr(C)]
 pub struct Meta(gst_sys::GstMeta);
 
+unsafe impl Send for Meta {}
+unsafe impl Sync for Meta {}
+
 impl Meta {
     fn get_api(&self) -> glib::Type {
         unsafe { glib::Type::from_glib((*self.0.info).api) }
@@ -234,6 +237,9 @@ impl fmt::Debug for Meta {
 
 #[repr(C)]
 pub struct ParentBufferMeta(gst_sys::GstParentBufferMeta);
+
+unsafe impl Send for ParentBufferMeta {}
+unsafe impl Sync for ParentBufferMeta {}
 
 impl ParentBufferMeta {
     pub fn add<'a>(buffer: &'a mut BufferRef, parent: &Buffer) -> MetaRefMut<'a, Self, Standalone> {
@@ -275,6 +281,11 @@ impl fmt::Debug for ParentBufferMeta {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[repr(C)]
 pub struct ReferenceTimestampMeta(gst_sys::GstReferenceTimestampMeta);
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+unsafe impl Send for ReferenceTimestampMeta {}
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+unsafe impl Sync for ReferenceTimestampMeta {}
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 impl ReferenceTimestampMeta {

@@ -23,6 +23,9 @@ pub struct BaseParseFrame<'a>(
     PhantomData<&'a BaseParse>,
 );
 
+unsafe impl<'a> Send for BaseParseFrame<'a> {}
+unsafe impl<'a> Sync for BaseParseFrame<'a> {}
+
 #[derive(Debug)]
 pub enum Overhead {
     None,

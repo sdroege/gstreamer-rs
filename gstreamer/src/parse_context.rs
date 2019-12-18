@@ -25,6 +25,9 @@ glib_wrapper! {
     }
 }
 
+unsafe impl Send for ParseContext {}
+unsafe impl Sync for ParseContext {}
+
 impl ParseContext {
     pub fn new() -> Self {
         unsafe { from_glib_full(gst_sys::gst_parse_context_new()) }
