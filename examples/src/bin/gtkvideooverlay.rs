@@ -144,7 +144,6 @@ fn create_ui(app: &gtk::Application) {
     // simplifies the code within the callback. What this actually does, however, is creating
     // a memory leak.
     let video_overlay = sink
-        .clone()
         .dynamic_cast::<gst_video::VideoOverlay>()
         .unwrap()
         .downgrade();

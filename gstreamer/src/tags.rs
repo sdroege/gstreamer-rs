@@ -893,7 +893,7 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append);
+            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append);
         }
         assert_eq!(
             tags.to_string(),
@@ -910,7 +910,7 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append);
+            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append);
         }
 
         assert_eq!(tags.get::<Title>().unwrap().get(), Some("some title"));
@@ -939,6 +939,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::cognitive_complexity)]
     fn test_generic() {
         ::init().unwrap();
 

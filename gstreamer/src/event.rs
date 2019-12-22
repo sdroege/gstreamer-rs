@@ -68,13 +68,7 @@ impl cmp::Ord for Seqnum {
     fn cmp(&self, other: &Seqnum) -> cmp::Ordering {
         unsafe {
             let ret = gst_sys::gst_util_seqnum_compare(self.0, other.0);
-            if ret < 0 {
-                cmp::Ordering::Less
-            } else if ret > 0 {
-                cmp::Ordering::Greater
-            } else {
-                cmp::Ordering::Equal
-            }
+            ret.cmp(&0)
         }
     }
 }

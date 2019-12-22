@@ -102,11 +102,11 @@ mod tests {
     use crate::prelude::*;
     use glib;
     use glib::subclass;
-    use std::sync::Mutex;
+    use std::sync::atomic;
 
     struct TestPad {
-        linked: Mutex<bool>,
-        unlinked: Mutex<bool>,
+        linked: atomic::AtomicBool,
+        unlinked: atomic::AtomicBool,
     }
 
     impl ObjectSubclass for TestPad {
@@ -119,8 +119,8 @@ mod tests {
 
         fn new() -> Self {
             Self {
-                linked: Mutex::new(false),
-                unlinked: Mutex::new(false),
+                linked: atomic::AtomicBool::new(false),
+                unlinked: atomic::AtomicBool::new(false),
             }
         }
     }
@@ -131,12 +131,12 @@ mod tests {
 
     impl PadImpl for TestPad {
         fn linked(&self, pad: &Pad, peer: &Pad) {
-            *self.linked.lock().unwrap() = true;
+            self.linked.store(true, atomic::Ordering::SeqCst);
             self.parent_linked(pad, peer)
         }
 
         fn unlinked(&self, pad: &Pad, peer: &Pad) {
-            *self.unlinked.lock().unwrap() = true;
+            self.unlinked.store(true, atomic::Ordering::SeqCst);
             self.parent_unlinked(pad, peer)
         }
     }
@@ -160,7 +160,7 @@ mod tests {
         pad.unlink(&otherpad).unwrap();
 
         let imp = TestPad::from_instance(&pad);
-        assert!(*imp.linked.lock().unwrap());
-        assert!(*imp.unlinked.lock().unwrap());
+        assert!(imp.linked.load(atomic::Ordering::SeqCst));
+        assert!(imp.unlinked.load(atomic::Ordering::SeqCst));
     }
 }

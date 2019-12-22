@@ -87,13 +87,7 @@ impl cmp::PartialOrd for DateTime {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         #[inline]
         fn get_cmp(delta: i32) -> Option<cmp::Ordering> {
-            Some(if delta < 0 {
-                cmp::Ordering::Less
-            } else if delta == 0 {
-                cmp::Ordering::Equal
-            } else {
-                cmp::Ordering::Greater
-            })
+            Some(delta.cmp(&0))
         }
 
         if !(self.has_year() && other.has_year()) {
@@ -239,6 +233,7 @@ impl fmt::Display for DateTime {
 mod tests {
     use super::*;
 
+    #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_to_utc() {
         ::init().unwrap();

@@ -488,19 +488,19 @@ mod tests {
     use auto::EncodingVideoProfile;
     use gst;
 
-    const AUDIO_PROFILE_NAME: &'static str = "audio-profile";
-    const AUDIO_PROFILE_DESCRIPTION: &'static str = "audio-profile-description";
-    const PRESET: &'static str = "preset";
-    const PRESET_NAME: &'static str = "preset-name";
+    const AUDIO_PROFILE_NAME: &str = "audio-profile";
+    const AUDIO_PROFILE_DESCRIPTION: &str = "audio-profile-description";
+    const PRESET: &str = "preset";
+    const PRESET_NAME: &str = "preset-name";
     const PRESENCE: u32 = 5;
     const ALLOW_DYNAMIC_OUTPUT: bool = false;
     const ENABLED: bool = false;
 
-    const VIDEO_PROFILE_NAME: &'static str = "video-profile";
-    const VIDEO_PROFILE_DESCRIPTION: &'static str = "video-profile-description";
+    const VIDEO_PROFILE_NAME: &str = "video-profile";
+    const VIDEO_PROFILE_DESCRIPTION: &str = "video-profile-description";
 
-    const CONTAINER_PROFILE_NAME: &'static str = "container-profile";
-    const CONTAINER_PROFILE_DESCRIPTION: &'static str = "container-profile-description";
+    const CONTAINER_PROFILE_NAME: &str = "container-profile";
+    const CONTAINER_PROFILE_DESCRIPTION: &str = "container-profile-description";
 
     // Video profile exclusive attributes
     const PASS: u32 = 8;

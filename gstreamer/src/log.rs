@@ -474,7 +474,7 @@ mod tests {
         let log_fn = debug_add_log_function(handler);
         gst_info!(cat, obj: &obj, "meh");
 
-        let _ = receiver.recv().unwrap();
+        receiver.recv().unwrap();
 
         debug_remove_log_function(log_fn);
 

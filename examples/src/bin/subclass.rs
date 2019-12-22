@@ -385,7 +385,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
                         .map(|s| String::from(s.get_path_string()))
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
-                    debug: Some(err.get_debug().unwrap().to_string()),
+                    debug: err.get_debug(),
                     cause: err.get_error(),
                 }
                 .into());

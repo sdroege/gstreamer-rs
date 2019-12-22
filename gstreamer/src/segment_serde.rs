@@ -191,8 +191,8 @@ mod tests {
             segment.get_flags(),
             SegmentFlags::RESET | SegmentFlags::SEGMENT
         );
-        assert_eq!(segment.get_rate(), 1f64);
-        assert_eq!(segment.get_applied_rate(), 0.9f64);
+        assert!((segment.get_rate() - 1f64).abs() < std::f64::EPSILON);
+        assert!((segment.get_applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
         assert_eq!(segment.get_format(), Format::Time);
         assert_eq!(
             segment.get_base(),
@@ -254,8 +254,8 @@ mod tests {
             fmt_seg.get_flags(),
             SegmentFlags::RESET | SegmentFlags::SEGMENT
         );
-        assert_eq!(fmt_seg.get_rate(), 1f64);
-        assert_eq!(fmt_seg.get_applied_rate(), 0.9f64);
+        assert!((fmt_seg.get_rate() - 1f64).abs() < std::f64::EPSILON);
+        assert!((fmt_seg.get_applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
         assert_eq!(fmt_seg.get_format(), Format::Time);
         assert_eq!(fmt_seg.get_base(), ClockTime::from_nseconds(123));
         assert_eq!(fmt_seg.get_offset(), ClockTime::from_nseconds(42));
@@ -286,8 +286,10 @@ mod tests {
 
         let segment_de: Segment = ron::de::from_str(segment_se.as_str()).unwrap();
         assert_eq!(segment_de.get_flags(), segment.get_flags());
-        assert_eq!(segment_de.get_rate(), segment.get_rate());
-        assert_eq!(segment_de.get_applied_rate(), segment.get_applied_rate());
+        assert!((segment_de.get_rate() - segment.get_rate()).abs() < std::f64::EPSILON);
+        assert!(
+            (segment_de.get_applied_rate() - segment.get_applied_rate()).abs() < std::f64::EPSILON
+        );
         assert_eq!(segment_de.get_format(), segment.get_format());
         assert_eq!(segment_de.get_base(), segment.get_base());
         assert_eq!(segment_de.get_offset(), segment.get_offset());

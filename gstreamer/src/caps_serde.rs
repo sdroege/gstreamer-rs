@@ -247,7 +247,7 @@ mod tests {
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
 
-        let res = ron::ser::to_string_pretty(&caps, pretty_config.clone());
+        let res = ron::ser::to_string_pretty(&caps, pretty_config);
         assert_eq!(
             Ok(concat!(
                 "Some([",
@@ -279,7 +279,7 @@ mod tests {
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
 
-        let res = ron::ser::to_string_pretty(&caps, pretty_config.clone());
+        let res = ron::ser::to_string_pretty(&caps, pretty_config);
         assert_eq!(
             Ok(concat!(
                 "Some([",
@@ -339,7 +339,7 @@ mod tests {
         assert_eq!(Ok("Any".to_owned()), res);
 
         let caps_empty = Caps::new_empty();
-        let res = ron::ser::to_string_pretty(&caps_empty, pretty_config.clone());
+        let res = ron::ser::to_string_pretty(&caps_empty, pretty_config);
         assert_eq!(Ok("Empty".to_owned()), res);
     }
 

@@ -913,9 +913,9 @@ mod tests {
         let f1 = ::Fraction::new(1, 2);
         let f2 = ::Fraction::new(2, 3);
         let mut f3 = f1 * f2;
-        let f4 = f1 * &f2;
+        let f4 = f1 * f2;
         f3 *= f2;
-        f3 *= &f4;
+        f3 *= f4;
 
         assert_eq!(f3, ::Fraction::new(2, 27));
     }

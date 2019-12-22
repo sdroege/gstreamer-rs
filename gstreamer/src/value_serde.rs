@@ -348,7 +348,7 @@ mod tests {
         // Bitmask
         let bitmask = Bitmask::new(1024 + 128 + 32);
 
-        let res = ron::ser::to_string_pretty(&bitmask, pretty_config.clone());
+        let res = ron::ser::to_string_pretty(&bitmask, pretty_config);
         assert_eq!(Ok("(1184)".to_owned()), res);
 
         let res = serde_json::to_string(&bitmask).unwrap();
@@ -448,7 +448,7 @@ mod tests {
             &send_value_date_time_none,
         ]);
 
-        let res = ron::ser::to_string_pretty(&list, pretty_config.clone());
+        let res = ron::ser::to_string_pretty(&list, pretty_config);
         assert_eq!(
             Ok(concat!(
                 r#"["#,
@@ -555,6 +555,7 @@ mod tests {
         assert_eq!(bitmask_de, bitmask);
     }
 
+    #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_deserialize_collections() {
         ::init().unwrap();
