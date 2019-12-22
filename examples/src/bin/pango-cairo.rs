@@ -213,7 +213,6 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         })
         .unwrap();
 
-    let drawer_clone = drawer.clone();
     // Add a signal handler to the overlay's "caps-changed" signal. This could e.g.
     // be called when the sink that we render to does not support resizing the image
     // itself - but the user just changed the window-size. The element after the overlay
@@ -226,7 +225,6 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             let _overlay = args[0].get::<gst::Element>().unwrap().unwrap();
             let caps = args[1].get::<gst::Caps>().unwrap().unwrap();
 
-            let drawer = &drawer_clone;
             let mut drawer = drawer.lock().unwrap();
             drawer.info = Some(gst_video::VideoInfo::from_caps(&caps).unwrap());
 
@@ -257,7 +255,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
                         .map(|s| String::from(s.get_path_string()))
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
-                    debug: Some(err.get_debug().unwrap().to_string()),
+                    debug: err.get_debug(),
                     cause: err.get_error(),
                 }
                 .into());

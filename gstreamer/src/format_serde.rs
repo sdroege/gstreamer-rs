@@ -125,7 +125,7 @@ mod tests {
         assert_eq!("{\"Other\":[\"Percent\",42]}".to_owned(), res);
 
         let value = GenericFormattedValue::Other(Format::__Unknown(7), 42);
-        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        let res = ron::ser::to_string_pretty(&value, pretty_config);
         assert_eq!(Ok("Other(__Unknown(7), 42)".to_owned()), res);
         let res = serde_json::to_string(&value).unwrap();
         assert_eq!("{\"Other\":[{\"__Unknown\":7},42]}".to_owned(), res);

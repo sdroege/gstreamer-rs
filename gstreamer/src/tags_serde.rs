@@ -17,6 +17,7 @@ use serde::ser;
 use serde::ser::{Serialize, SerializeSeq, SerializeStruct, SerializeTuple, Serializer};
 
 use std::cell::RefCell;
+use std::cmp;
 use std::fmt;
 use std::rc::Rc;
 
@@ -123,18 +124,20 @@ struct TagListSer<'a>(&'a TagListRef);
 impl<'a> Serialize for TagListSer<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let tag_count = self.0.n_tags();
-        if tag_count > 0 {
-            let mut seq = serializer.serialize_seq(Some(tag_count as usize))?;
-            let tag_list_iter = self.0.iter_generic();
-            for (tag_name, tag_iter) in tag_list_iter {
-                seq.serialize_element(&TagsSer::new(tag_name, tag_iter))?;
+        match tag_count.cmp(&0) {
+            cmp::Ordering::Greater => {
+                let mut seq = serializer.serialize_seq(Some(tag_count as usize))?;
+                let tag_list_iter = self.0.iter_generic();
+                for (tag_name, tag_iter) in tag_list_iter {
+                    seq.serialize_element(&TagsSer::new(tag_name, tag_iter))?;
+                }
+                seq.end()
             }
-            seq.end()
-        } else if tag_count == 0 {
-            let seq = serializer.serialize_seq(None)?;
-            seq.end()
-        } else {
-            Err(ser::Error::custom("tag count < 0"))
+            cmp::Ordering::Equal => {
+                let seq = serializer.serialize_seq(None)?;
+                seq.end()
+            }
+            cmp::Ordering::Less => Err(ser::Error::custom("tag count < 0")),
         }
     }
 }
@@ -337,7 +340,7 @@ mod tests {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"a title", TagMergeMode::Append); // String
             tags.add::<Title>(&"another title", TagMergeMode::Append); // String
-            tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
+            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
@@ -485,7 +488,9 @@ mod tests {
             ::SECOND * 120
         );
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
-        assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get_some(), 1f64);
+        assert!(
+            (tags.get_index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON
+        );
         assert_eq!(
             tags.get_index::<Date>(0).unwrap().get().unwrap(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018)
@@ -524,7 +529,9 @@ mod tests {
             Some("another title")
         );
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
-        assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get_some(), 1f64);
+        assert!(
+            (tags.get_index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON
+        );
         assert_eq!(
             tags.get_index::<Date>(0).unwrap().get().unwrap(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018)
@@ -552,7 +559,7 @@ mod tests {
             tags.set_scope(TagScope::Global);
             tags.add::<Title>(&"a title", TagMergeMode::Append); // String
             tags.add::<Title>(&"another title", TagMergeMode::Append); // String
-            tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
+            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
@@ -593,9 +600,11 @@ mod tests {
             tags_de.get_index::<Bitrate>(0).unwrap().get_some(),
             tags.get_index::<Bitrate>(0).unwrap().get_some(),
         );
-        assert_eq!(
-            tags_de.get_index::<TrackGain>(0).unwrap().get_some(),
-            tags.get_index::<TrackGain>(0).unwrap().get_some(),
+        assert!(
+            (tags_de.get_index::<TrackGain>(0).unwrap().get_some()
+                - tags.get_index::<TrackGain>(0).unwrap().get_some())
+            .abs()
+                < std::f64::EPSILON
         );
         assert_eq!(
             tags_de.get_index::<Date>(0).unwrap().get(),

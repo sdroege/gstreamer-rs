@@ -197,7 +197,7 @@ mod tests {
         assert_eq!(Ok("YM(2018, 5)".to_owned()), res);
 
         let datetime = DateTime::new_y(2018);
-        let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
+        let res = ron::ser::to_string_pretty(&datetime, pretty_config);
         assert_eq!(Ok("Y(2018)".to_owned()), res);
     }
 

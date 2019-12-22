@@ -106,13 +106,7 @@ impl ClockId {
         unsafe {
             let res =
                 gst_sys::gst_clock_id_compare_func(self.to_glib_none().0, other.to_glib_none().0);
-            if res < 0 {
-                cmp::Ordering::Less
-            } else if res > 0 {
-                cmp::Ordering::Greater
-            } else {
-                cmp::Ordering::Equal
-            }
+            res.cmp(&0)
         }
     }
 

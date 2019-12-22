@@ -117,7 +117,7 @@ mod tests {
         let notify = Arc::new(Mutex::new(None));
         let notify_clone = notify.clone();
         bin.connect_deep_notify(None, move |_, id, prop| {
-            *notify_clone.lock().unwrap() = Some((id.clone(), String::from(prop.get_name())));
+            *notify_clone.lock().unwrap() = Some((id.clone(), prop.get_name()));
         });
 
         identity.set_property("silent", &false).unwrap();

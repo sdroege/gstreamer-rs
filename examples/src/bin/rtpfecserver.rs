@@ -146,9 +146,8 @@ fn example_main() -> Result<(), Error> {
     let sinkpad = get_static_pad(&sink, "sink")?;
     srcpad.link(&sinkpad)?;
 
-    let convclone = conv.clone();
-    src.connect_pad_added(move |decodebin, src_pad| {
-        match connect_decodebin_pad(&src_pad, &convclone) {
+    src.connect_pad_added(
+        move |decodebin, src_pad| match connect_decodebin_pad(&src_pad, &conv) {
             Ok(_) => (),
             Err(err) => {
                 gst_element_error!(
@@ -158,8 +157,8 @@ fn example_main() -> Result<(), Error> {
                     ["{}", err]
                 );
             }
-        }
-    });
+        },
+    );
 
     let video_caps = gst::Caps::new_simple("video/x-raw", &[]);
 
@@ -199,7 +198,7 @@ fn example_main() -> Result<(), Error> {
                         .map(|s| String::from(s.get_path_string()))
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
-                    debug: Some(err.get_debug().unwrap().to_string()),
+                    debug: err.get_debug(),
                     cause: err.get_error(),
                 }
                 .into());

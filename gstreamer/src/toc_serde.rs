@@ -283,6 +283,7 @@ mod tests {
         );
     }
 
+    #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_deserialize() {
         use tags::Title;
@@ -417,6 +418,7 @@ mod tests {
         assert_eq!(0, chapter2.get_sub_entries().len());
     }
 
+    #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_serde_roundtrip() {
         ::init().unwrap();

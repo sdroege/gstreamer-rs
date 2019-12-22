@@ -156,7 +156,6 @@ mod tests {
         l.run();
 
         let res = res_store.lock().unwrap().take().unwrap();
-        assert!(res.is_ok(), "Error {}", res.unwrap_err());
         let res = res.unwrap();
 
         let converted_out_caps = res.get_caps().unwrap();

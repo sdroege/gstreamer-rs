@@ -523,13 +523,13 @@ mod tests {
     use super::*;
     use glib;
     use glib::subclass;
-    use std::sync::Mutex;
+    use std::sync::atomic;
 
     struct TestElement {
         srcpad: ::Pad,
         sinkpad: ::Pad,
-        n_buffers: Mutex<u32>,
-        reached_playing: Mutex<bool>,
+        n_buffers: atomic::AtomicU32,
+        reached_playing: atomic::AtomicBool,
     }
 
     impl TestElement {
@@ -578,7 +578,7 @@ mod tests {
             _element: &::Element,
             buffer: ::Buffer,
         ) -> Result<::FlowSuccess, ::FlowError> {
-            *self.n_buffers.lock().unwrap() += 1;
+            self.n_buffers.fetch_add(1, atomic::Ordering::SeqCst);
             self.srcpad.push(buffer)
         }
 
@@ -616,8 +616,8 @@ mod tests {
             TestElement::set_pad_functions(&sinkpad, &srcpad);
 
             Self {
-                n_buffers: Mutex::new(0),
-                reached_playing: Mutex::new(false),
+                n_buffers: atomic::AtomicU32::new(0),
+                reached_playing: atomic::AtomicBool::new(false),
                 srcpad,
                 sinkpad,
             }
@@ -665,7 +665,7 @@ mod tests {
             let res = self.parent_change_state(element, transition)?;
 
             if transition == ::StateChange::PausedToPlaying {
-                *self.reached_playing.lock().unwrap() = true;
+                self.reached_playing.store(true, atomic::Ordering::SeqCst);
             }
 
             Ok(res)
@@ -706,7 +706,7 @@ mod tests {
         pipeline.set_state(::State::Null).unwrap();
 
         let imp = TestElement::from_instance(&element);
-        assert_eq!(*imp.n_buffers.lock().unwrap(), 100);
-        assert_eq!(*imp.reached_playing.lock().unwrap(), true);
+        assert_eq!(imp.n_buffers.load(atomic::Ordering::SeqCst), 100);
+        assert_eq!(imp.reached_playing.load(atomic::Ordering::SeqCst), true);
     }
 }

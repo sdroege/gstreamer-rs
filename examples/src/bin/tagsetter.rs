@@ -109,7 +109,7 @@ fn example_main() -> Result<(), Error> {
                         .unwrap_or_else(|| "None".into())
                         .to_string(),
                     error: err.get_error().description().into(),
-                    debug: Some(err.get_debug().unwrap().to_string()),
+                    debug: err.get_debug(),
                     cause: err.get_error(),
                 }
                 .into());

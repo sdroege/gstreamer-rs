@@ -973,13 +973,13 @@ mod tests {
             .expect("Failed to create VideoInfo");
 
         assert_eq!(info.stride(), [1920, 1920]);
-        assert_eq!(info.offset(), [0, 2073600]);
+        assert_eq!(info.offset(), [0, 2_073_600]);
 
         let mut align = ::VideoAlignment::new(0, 0, 0, 8, &[0; VIDEO_MAX_PLANES]);
         assert!(info.align(&mut align));
 
         assert_eq!(info.stride(), [1928, 1928]);
-        assert_eq!(info.offset(), [0, 2082240]);
+        assert_eq!(info.offset(), [0, 2_082_240]);
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
