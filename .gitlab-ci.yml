@@ -137,12 +137,12 @@ clippy:
           FEATURES=v1_16
         fi
 
-        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless
+        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
       done
     # And also run over all the examples/tutorials
     - |
-      cargo clippy --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless
-      cargo clippy --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless
+      cargo clippy --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
+      cargo clippy --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
 
 audit:
   extends: '.tarball_setup'
