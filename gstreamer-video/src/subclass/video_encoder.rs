@@ -53,6 +53,14 @@ pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl + Send + Sync + 's
         self.parent_set_format(element, state)
     }
 
+    fn set_format_static(
+        &self,
+        element: &VideoEncoder,
+        state: &VideoCodecState<'static, Readable>,
+    ) -> Result<(), gst::LoggableError> {
+        self.set_format(element, state)
+    }
+
     fn handle_frame(
         &self,
         element: &VideoEncoder,
@@ -588,7 +596,7 @@ where
     let wrap_state = VideoCodecState::<Readable>::new(state);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_format(&wrap, &wrap_state) {
+        match imp.set_format_static(&wrap, &wrap_state) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&wrap);

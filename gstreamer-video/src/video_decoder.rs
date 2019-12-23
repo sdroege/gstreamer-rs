@@ -57,7 +57,7 @@ pub trait VideoDecoderExtManual: 'static {
     fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime);
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
-    fn get_output_state(&self) -> Option<VideoCodecState<Readable>>;
+    fn get_output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
     fn set_output_state(
         &self,
         fmt: VideoFormat,
@@ -233,7 +233,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    fn get_output_state(&self) -> Option<VideoCodecState<Readable>> {
+    fn get_output_state(&self) -> Option<VideoCodecState<'static, Readable>> {
         let state = unsafe {
             gst_video_sys::gst_video_decoder_get_output_state(self.as_ref().to_glib_none().0)
         };
