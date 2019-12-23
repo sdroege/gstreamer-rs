@@ -53,7 +53,7 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl + Send + Sync + 's
     fn set_format(
         &self,
         element: &VideoDecoder,
-        state: &VideoCodecState<Readable>,
+        state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError> {
         self.parent_set_format(element, state)
     }
@@ -137,7 +137,7 @@ pub trait VideoDecoderImplExt {
     fn parent_set_format(
         &self,
         element: &VideoDecoder,
-        state: &VideoCodecState<Readable>,
+        state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError>;
 
     fn parent_parse(
@@ -295,7 +295,7 @@ impl<T: VideoDecoderImpl + ObjectImpl> VideoDecoderImplExt for T {
     fn parent_set_format(
         &self,
         element: &VideoDecoder,
-        state: &VideoCodecState<Readable>,
+        state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
