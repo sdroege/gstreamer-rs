@@ -308,6 +308,10 @@ impl MemoryRef {
         assert!(offset + (size as isize) < (self.get_maxsize() as isize));
         unsafe { gst_sys::gst_memory_resize(self.as_mut_ptr(), offset, size) }
     }
+
+    pub fn dump(&self, size: Option<usize>) -> Dump {
+        Dump { memory: self, size }
+    }
 }
 
 impl<'a, T> MemoryMap<'a, T> {
@@ -466,3 +470,54 @@ impl<T> Eq for MappedMemory<T> {}
 
 unsafe impl<T> Send for MappedMemory<T> {}
 unsafe impl<T> Sync for MappedMemory<T> {}
+
+pub struct Dump<'a> {
+    memory: &'a MemoryRef,
+    size: Option<usize>,
+}
+
+impl<'a> Dump<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter, debug: bool) -> fmt::Result {
+        use pretty_hex::*;
+
+        let map = self.memory.map_readable().expect("Failed to map memory");
+        let data = map.as_slice();
+        let size = self.size.unwrap_or_else(|| self.memory.get_size());
+        let data = &data[0..size];
+
+        if debug {
+            write!(f, "{:?}", data.hex_dump())
+        } else {
+            write!(f, "{}", data.hex_dump())
+        }
+    }
+}
+
+impl<'a> fmt::Display for Dump<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.fmt(f, false)
+    }
+}
+
+impl<'a> fmt::Debug for Dump<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.fmt(f, true)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_dump() {
+        ::init().unwrap();
+
+        let mem = ::Memory::from_slice(vec![1, 2, 3, 4]);
+        println!("{}", mem.dump(Some(mem.get_size())));
+
+        let mem = ::Memory::from_slice(vec![1, 2, 3, 4]);
+        println!("{:?}", mem.dump(Some(2)));
+
+        let mem = ::Memory::from_slice(vec![0; 64]);
+        dbg!(mem.dump(None));
+    }
+}

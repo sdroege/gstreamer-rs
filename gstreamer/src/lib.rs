@@ -36,6 +36,8 @@ extern crate futures_core;
 
 extern crate muldiv;
 
+extern crate pretty_hex;
+
 #[cfg(feature = "ser_de")]
 extern crate serde;
 #[cfg(feature = "ser_de")]
