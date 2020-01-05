@@ -15,6 +15,8 @@ use glib::translate::*;
 
 use gst_sys;
 
+use std::num::NonZeroU32;
+
 impl DeviceMonitor {
     pub fn new() -> DeviceMonitor {
         assert_initialized_main_thread!();
@@ -35,13 +37,13 @@ impl Default for DeviceMonitor {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-pub struct DeviceMonitorFilterId(libc::c_uint);
+pub struct DeviceMonitorFilterId(NonZeroU32);
 
 impl ToGlib for DeviceMonitorFilterId {
     type GlibType = libc::c_uint;
 
     fn to_glib(&self) -> libc::c_uint {
-        self.0
+        self.0.get()
     }
 }
 
@@ -49,7 +51,7 @@ impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
     fn from_glib(val: libc::c_uint) -> DeviceMonitorFilterId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
-        DeviceMonitorFilterId(val)
+        DeviceMonitorFilterId(unsafe { NonZeroU32::new_unchecked(val) })
     }
 }
 

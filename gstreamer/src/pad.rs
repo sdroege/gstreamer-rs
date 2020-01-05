@@ -32,6 +32,7 @@ use StaticPadTemplate;
 
 use std::cell::RefCell;
 use std::mem;
+use std::num::NonZeroU64;
 use std::ptr;
 
 use glib;
@@ -61,13 +62,13 @@ impl Pad {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-pub struct PadProbeId(libc::c_ulong);
+pub struct PadProbeId(NonZeroU64);
 
 impl ToGlib for PadProbeId {
     type GlibType = libc::c_ulong;
 
     fn to_glib(&self) -> libc::c_ulong {
-        self.0
+        self.0.get() as libc::c_ulong
     }
 }
 
@@ -75,7 +76,7 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
     fn from_glib(val: libc::c_ulong) -> PadProbeId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
-        PadProbeId(val)
+        PadProbeId(unsafe { NonZeroU64::new_unchecked(val as u64) })
     }
 }
 
@@ -1032,7 +1033,7 @@ where
 
     let mut probe_info = PadProbeInfo {
         mask: from_glib((*info).type_),
-        id: PadProbeId((*info).id),
+        id: PadProbeId(NonZeroU64::new_unchecked((*info).id)),
         offset: (*info).offset,
         size: (*info).size,
         data: if (*info).data.is_null() {

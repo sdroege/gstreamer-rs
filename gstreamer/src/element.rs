@@ -39,6 +39,7 @@ use StateChangeSuccess;
 
 use std::ffi::CStr;
 use std::mem;
+use std::num::NonZeroU64;
 
 use libc;
 
@@ -106,13 +107,13 @@ pub enum ElementMessageType {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-pub struct NotifyWatchId(libc::c_ulong);
+pub struct NotifyWatchId(NonZeroU64);
 
 impl ToGlib for NotifyWatchId {
     type GlibType = libc::c_ulong;
 
     fn to_glib(&self) -> libc::c_ulong {
-        self.0
+        self.0.get() as libc::c_ulong
     }
 }
 
@@ -120,7 +121,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
     fn from_glib(val: libc::c_ulong) -> NotifyWatchId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
-        NotifyWatchId(val)
+        NotifyWatchId(unsafe { NonZeroU64::new_unchecked(val as u64) })
     }
 }
 
@@ -569,7 +570,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             gst_sys::gst_element_remove_property_notify_watch(
                 self.as_ref().to_glib_none().0,
-                watch_id.0,
+                watch_id.to_glib(),
             );
         }
     }
