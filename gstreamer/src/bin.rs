@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use Bin;
+use BinFlags;
 use Element;
 use LoggableError;
 
@@ -48,6 +49,12 @@ pub trait GstBinExtManual: 'static {
         details: ::DebugGraphDetails,
         file_name: Q,
     );
+
+    fn set_bin_flags(&self, flags: BinFlags);
+
+    fn unset_bin_flags(&self, flags: BinFlags);
+
+    fn get_bin_flags(&self) -> BinFlags;
 }
 
 impl<O: IsA<Bin>> GstBinExtManual for O {
@@ -169,6 +176,30 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         file_name: Q,
     ) {
         ::debug_bin_to_dot_file_with_ts(self, details, file_name)
+    }
+
+    fn set_bin_flags(&self, flags: BinFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn unset_bin_flags(&self, flags: BinFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags &= !flags.to_glib();
+        }
+    }
+
+    fn get_bin_flags(&self) -> BinFlags {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            from_glib((*ptr).flags)
+        }
     }
 }
 

@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use miniobject::MiniObject;
-use BinFlags;
 use Buffer;
 use BufferList;
 use Event;
@@ -19,6 +18,7 @@ use FormattedValue;
 use GenericFormattedValue;
 use LoggableError;
 use Pad;
+use PadFlags;
 use PadLinkCheck;
 use PadLinkError;
 use PadLinkReturn;
@@ -260,11 +260,11 @@ pub trait PadExtManual: 'static {
 
     fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError>;
 
-    fn set_bin_flags(&self, flags: BinFlags);
+    fn set_pad_flags(&self, flags: PadFlags);
 
-    fn unset_bin_flags(&self, flags: BinFlags);
+    fn unset_pad_flags(&self, flags: PadFlags);
 
-    fn get_bin_flags(&self) -> BinFlags;
+    fn get_pad_flags(&self) -> PadFlags;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -991,7 +991,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         ret.into_result()
     }
 
-    fn set_bin_flags(&self, flags: BinFlags) {
+    fn set_pad_flags(&self, flags: PadFlags) {
         unsafe {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
@@ -999,7 +999,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn unset_bin_flags(&self, flags: BinFlags) {
+    fn unset_pad_flags(&self, flags: PadFlags) {
         unsafe {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
@@ -1007,7 +1007,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_bin_flags(&self) -> BinFlags {
+    fn get_pad_flags(&self) -> PadFlags {
         unsafe {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
