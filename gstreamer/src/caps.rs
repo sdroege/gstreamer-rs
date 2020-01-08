@@ -34,6 +34,21 @@ impl Caps {
         Builder::new(name)
     }
 
+    pub fn builder_full() -> BuilderFull {
+        assert_initialized_main_thread!();
+        BuilderFull::new()
+    }
+
+    pub fn builder_full_with_features(features: CapsFeatures) -> BuilderFull {
+        assert_initialized_main_thread!();
+        BuilderFull::new_with_features(features)
+    }
+
+    pub fn builder_full_with_any_features() -> BuilderFull {
+        assert_initialized_main_thread!();
+        BuilderFull::new_with_any_features()
+    }
+
     pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(gst_sys::gst_caps_new_empty()) }
@@ -563,6 +578,83 @@ impl<'a> Builder<'a> {
     }
 }
 
+#[derive(Debug)]
+pub struct BuilderFull {
+    caps: ::Caps,
+    features: Option<CapsFeatures>,
+    any_features: bool,
+}
+
+impl BuilderFull {
+    fn new() -> Self {
+        BuilderFull {
+            caps: Caps::new_empty(),
+            features: None,
+            any_features: false,
+        }
+    }
+
+    fn new_with_features(features: CapsFeatures) -> Self {
+        BuilderFull {
+            caps: Caps::new_empty(),
+            features: Some(features),
+            any_features: false,
+        }
+    }
+
+    fn new_with_any_features() -> Self {
+        BuilderFull {
+            caps: Caps::new_empty(),
+            features: None,
+            any_features: true,
+        }
+    }
+
+    fn append_structure(mut self, structure: Structure, features: Option<CapsFeatures>) -> Self {
+        let features = {
+            if self.any_features {
+                Some(CapsFeatures::new_any())
+            } else {
+                match self.features {
+                    None => features,
+                    Some(ref result) => {
+                        let mut result = result.clone();
+                        match features {
+                            None => Some(result),
+                            Some(features) => {
+                                features.iter().for_each(|feat| result.add(feat));
+                                Some(result)
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        self.caps
+            .get_mut()
+            .unwrap()
+            .append_structure_full(structure, features);
+        self
+    }
+
+    pub fn structure(self, structure: Structure) -> Self {
+        self.append_structure(structure, None)
+    }
+
+    pub fn structure_with_features(self, structure: Structure, features: CapsFeatures) -> Self {
+        self.append_structure(structure, Some(features))
+    }
+
+    pub fn structure_with_any_features(self, structure: Structure) -> Self {
+        self.append_structure(structure, Some(CapsFeatures::new_any()))
+    }
+
+    pub fn build(self) -> Caps {
+        self.caps
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -655,5 +747,78 @@ mod tests {
 
         let caps = Caps::new_simple("foo/bar", &[]);
         format!("{}", caps);
+    }
+
+    #[test]
+    fn test_builder_full() {
+        ::init().unwrap();
+
+        let caps = Caps::builder_full()
+            .structure(Structure::builder("audio/x-raw").build())
+            .structure(Structure::builder("video/x-raw").build())
+            .build();
+        assert_eq!(caps.to_string(), "audio/x-raw; video/x-raw");
+
+        let caps = Caps::builder_full()
+            .structure(
+                Structure::builder("audio/x-raw")
+                    .field("format", &"S16LE")
+                    .build(),
+            )
+            .structure(Structure::builder("video/x-raw").build())
+            .build();
+        assert_eq!(
+            caps.to_string(),
+            "audio/x-raw, format=(string)S16LE; video/x-raw"
+        );
+
+        let caps = Caps::builder_full()
+            .structure_with_any_features(Structure::builder("audio/x-raw").build())
+            .structure_with_features(
+                Structure::builder("video/x-raw").build(),
+                CapsFeatures::new(&["foo:bla", "foo:baz"]),
+            )
+            .build();
+        assert_eq!(
+            caps.to_string(),
+            "audio/x-raw(ANY); video/x-raw(foo:bla, foo:baz)"
+        );
+    }
+
+    #[test]
+    fn test_builder_full_with_features() {
+        ::init().unwrap();
+
+        let caps = Caps::builder_full_with_features(CapsFeatures::new(&["foo:bla"]))
+            .structure(Structure::builder("audio/x-raw").build())
+            .structure_with_features(
+                Structure::builder("video/x-raw").build(),
+                CapsFeatures::new(&["foo:baz"]),
+            )
+            .build();
+        assert_eq!(
+            caps.to_string(),
+            "audio/x-raw(foo:bla); video/x-raw(foo:bla, foo:baz)"
+        );
+    }
+
+    #[test]
+    fn test_builder_full_with_any_features() {
+        ::init().unwrap();
+
+        let caps = Caps::builder_full_with_any_features()
+            .structure(Structure::builder("audio/x-raw").build())
+            .structure(Structure::builder("video/x-raw").build())
+            .build();
+        assert_eq!(caps.to_string(), "audio/x-raw(ANY); video/x-raw(ANY)");
+
+        let caps = Caps::builder_full_with_any_features()
+            .structure(Structure::builder("audio/x-raw").build())
+            .structure_with_features(
+                Structure::builder("video/x-raw").build(),
+                CapsFeatures::new(&["foo:bla", "foo:baz"]),
+            )
+            .build();
+        assert_eq!(caps.to_string(), "audio/x-raw(ANY); video/x-raw(ANY)");
     }
 }
