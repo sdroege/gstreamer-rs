@@ -1033,7 +1033,7 @@ where
 
     let mut probe_info = PadProbeInfo {
         mask: from_glib((*info).type_),
-        id: PadProbeId(NonZeroU64::new_unchecked((*info).id)),
+        id: PadProbeId(NonZeroU64::new_unchecked((*info).id as u64)),
         offset: (*info).offset,
         size: (*info).size,
         data: if (*info).data.is_null() {
