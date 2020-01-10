@@ -9,6 +9,7 @@
 use caps_features::*;
 use miniobject::*;
 use std::fmt;
+use std::marker::PhantomData;
 use std::ptr;
 use std::str;
 use structure::*;
@@ -34,17 +35,17 @@ impl Caps {
         Builder::new(name)
     }
 
-    pub fn builder_full() -> BuilderFull {
+    pub fn builder_full() -> BuilderFull<SomeFeatures> {
         assert_initialized_main_thread!();
         BuilderFull::new()
     }
 
-    pub fn builder_full_with_features(features: CapsFeatures) -> BuilderFull {
+    pub fn builder_full_with_features(features: CapsFeatures) -> BuilderFull<SomeFeatures> {
         assert_initialized_main_thread!();
         BuilderFull::new_with_features(features)
     }
 
-    pub fn builder_full_with_any_features() -> BuilderFull {
+    pub fn builder_full_with_any_features() -> BuilderFull<AnyFeatures> {
         assert_initialized_main_thread!();
         BuilderFull::new_with_any_features()
     }
@@ -578,19 +579,22 @@ impl<'a> Builder<'a> {
     }
 }
 
+pub enum AnyFeatures {}
+pub enum SomeFeatures {}
+
 #[derive(Debug)]
-pub struct BuilderFull {
+pub struct BuilderFull<T> {
     caps: ::Caps,
     features: Option<CapsFeatures>,
-    any_features: bool,
+    phantom: PhantomData<T>,
 }
 
-impl BuilderFull {
+impl BuilderFull<SomeFeatures> {
     fn new() -> Self {
         BuilderFull {
             caps: Caps::new_empty(),
             features: None,
-            any_features: false,
+            phantom: PhantomData,
         }
     }
 
@@ -598,33 +602,41 @@ impl BuilderFull {
         BuilderFull {
             caps: Caps::new_empty(),
             features: Some(features),
-            any_features: false,
+            phantom: PhantomData,
         }
     }
 
+    pub fn structure_with_features(self, structure: Structure, features: CapsFeatures) -> Self {
+        self.append_structure(structure, Some(features))
+    }
+
+    pub fn structure_with_any_features(self, structure: Structure) -> Self {
+        self.append_structure(structure, Some(CapsFeatures::new_any()))
+    }
+}
+
+impl BuilderFull<AnyFeatures> {
     fn new_with_any_features() -> Self {
         BuilderFull {
             caps: Caps::new_empty(),
-            features: None,
-            any_features: true,
+            features: Some(CapsFeatures::new_any()),
+            phantom: PhantomData,
         }
     }
+}
 
+impl<T> BuilderFull<T> {
     fn append_structure(mut self, structure: Structure, features: Option<CapsFeatures>) -> Self {
         let features = {
-            if self.any_features {
-                Some(CapsFeatures::new_any())
-            } else {
-                match self.features {
-                    None => features,
-                    Some(ref result) => {
-                        let mut result = result.clone();
-                        match features {
-                            None => Some(result),
-                            Some(features) => {
-                                features.iter().for_each(|feat| result.add(feat));
-                                Some(result)
-                            }
+            match self.features {
+                None => features,
+                Some(ref result) => {
+                    let mut result = result.clone();
+                    match features {
+                        None => Some(result),
+                        Some(features) => {
+                            features.iter().for_each(|feat| result.add(feat));
+                            Some(result)
                         }
                     }
                 }
@@ -640,14 +652,6 @@ impl BuilderFull {
 
     pub fn structure(self, structure: Structure) -> Self {
         self.append_structure(structure, None)
-    }
-
-    pub fn structure_with_features(self, structure: Structure, features: CapsFeatures) -> Self {
-        self.append_structure(structure, Some(features))
-    }
-
-    pub fn structure_with_any_features(self, structure: Structure) -> Self {
-        self.append_structure(structure, Some(CapsFeatures::new_any()))
     }
 
     pub fn build(self) -> Caps {
@@ -814,11 +818,7 @@ mod tests {
 
         let caps = Caps::builder_full_with_any_features()
             .structure(Structure::builder("audio/x-raw").build())
-            .structure_with_features(
-                Structure::builder("video/x-raw").build(),
-                CapsFeatures::new(&["foo:bla", "foo:baz"]),
-            )
             .build();
-        assert_eq!(caps.to_string(), "audio/x-raw(ANY); video/x-raw(ANY)");
+        assert_eq!(caps.to_string(), "audio/x-raw(ANY)");
     }
 }
