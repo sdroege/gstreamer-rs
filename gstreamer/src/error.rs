@@ -197,3 +197,33 @@ impl Error for LoggableError {
         self.bool_error.message.as_ref()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn error_message() {
+        let e = ErrorMessage::new(
+            &::CoreError::Failed,
+            Some("message"),
+            Some("debug"),
+            "filename",
+            "function",
+            7,
+        );
+        assert_eq!(
+            format!("{}", e),
+            "Error Some(\"message\") (Some(\"debug\")) at filename:7"
+        );
+    }
+
+    #[test]
+    fn logabble_error() {
+        let e: LoggableError = glib::BoolError::new("msg", "filename", "function", 7).into();
+        assert_eq!(
+            format!("{}", e),
+            "Error \"GST_RUST\": \"msg\" at filename:7"
+        );
+    }
+}
