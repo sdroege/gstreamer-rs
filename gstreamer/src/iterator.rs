@@ -15,7 +15,6 @@ use glib_sys;
 use glib_sys::{gconstpointer, gpointer};
 use gobject_sys;
 use gst_sys;
-use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
 use std::iter;
@@ -23,29 +22,14 @@ use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
 use std::sync::Arc;
+use thiserror::Error;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 pub enum IteratorError {
+    #[error("Resync")]
     Resync,
+    #[error("Error")]
     Error,
-}
-
-impl fmt::Display for IteratorError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            IteratorError::Resync => write!(f, "Resync"),
-            IteratorError::Error => write!(f, "Error"),
-        }
-    }
-}
-
-impl Error for IteratorError {
-    fn description(&self) -> &str {
-        match *self {
-            IteratorError::Resync => "Resync",
-            IteratorError::Error => "Error",
-        }
-    }
 }
 
 // Implemented manually so that we can use generics for the item

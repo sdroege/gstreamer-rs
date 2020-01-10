@@ -6,9 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::error::Error;
-use std::fmt;
 use std::{cmp, ops};
+use thiserror::Error;
 use ClockReturn;
 use FlowReturn;
 use PadLinkReturn;
@@ -59,25 +58,14 @@ impl From<StateChangeSuccess> for StateChangeReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
+#[error("Element failed to change its state")]
 pub struct StateChangeError;
-
-impl fmt::Display for StateChangeError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "State-change error")
-    }
-}
 
 impl From<StateChangeError> for StateChangeReturn {
     fn from(value: StateChangeError) -> Self {
         StateChangeReturn::from_error(value)
-    }
-}
-
-impl Error for StateChangeError {
-    fn description(&self) -> &str {
-        "Element failed to change its state"
     }
 }
 
@@ -155,49 +143,32 @@ impl From<FlowSuccess> for FlowReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum FlowError {
+    #[error("Pad is not linked")]
     NotLinked,
+    #[error("Pad is flushing")]
     Flushing,
+    #[error("Pad is EOS")]
     Eos,
+    #[error("Pad is not negotiated")]
     NotNegotiated,
+    #[error("Some (fatal) error occurred. Element generating this error should post an error message with more details")]
     Error,
+    #[error("This operation is not supported")]
     NotSupported,
+    #[error("Elements can use values starting from this (and lower) to define custom error codes")]
     CustomError,
+    #[error("Pre-defined custom error code")]
     CustomError1,
+    #[error("Pre-defined custom error code")]
     CustomError2,
-}
-
-impl fmt::Display for FlowError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Flow error: {}", self.description())
-    }
 }
 
 impl From<FlowError> for FlowReturn {
     fn from(value: FlowError) -> Self {
         FlowReturn::from_error(value)
-    }
-}
-
-impl Error for FlowError {
-    fn description(&self) -> &str {
-        match *self {
-            FlowError::NotLinked => "Pad is not linked",
-            FlowError::Flushing => "Pad is flushing",
-            FlowError::Eos => "Pad is EOS",
-            FlowError::NotNegotiated => "Pad is not negotiated",
-            FlowError::Error => {
-                "Some (fatal) error occurred. Element generating this error should post an error message with more details"
-            }
-            FlowError::NotSupported => "This operation is not supported",
-            FlowError::CustomError => {
-                "Elements can use values starting from this (and lower) to define custom error codes"
-            }
-            FlowError::CustomError1 => "Pre-defined custom error code",
-            FlowError::CustomError2 => "Pre-defined custom error code",
-        }
     }
 }
 
@@ -249,39 +220,26 @@ impl From<PadLinkSuccess> for PadLinkReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum PadLinkError {
+    #[error("Pads have no common grandparent")]
     WrongHierarchy,
+    #[error("Pad was already linked")]
     WasLinked,
+    #[error("Pads have wrong direction")]
     WrongDirection,
+    #[error("Pads do not have common format")]
     Noformat,
+    #[error("Pads cannot cooperate in scheduling")]
     Nosched,
+    #[error("Refused for some other reason")]
     Refused,
-}
-
-impl fmt::Display for PadLinkError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Pad failed to link: {}", self.description())
-    }
 }
 
 impl From<PadLinkError> for PadLinkReturn {
     fn from(value: PadLinkError) -> Self {
         PadLinkReturn::from_error(value)
-    }
-}
-
-impl Error for PadLinkError {
-    fn description(&self) -> &str {
-        match *self {
-            PadLinkError::WrongHierarchy => "Pads have no common grandparent",
-            PadLinkError::WasLinked => "Pad was already linked",
-            PadLinkError::WrongDirection => "Pads have wrong direction",
-            PadLinkError::Noformat => "Pads do not have common format",
-            PadLinkError::Nosched => "Pads cannot cooperate in scheduling",
-            PadLinkError::Refused => "Refused for some other reason",
-        }
     }
 }
 
@@ -340,39 +298,26 @@ impl From<ClockSuccess> for ClockReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum ClockError {
+    #[error("The operation was scheduled too late")]
     Early,
+    #[error("The clockID was unscheduled")]
     Unscheduled,
+    #[error("The ClockID is busy")]
     Busy,
+    #[error("A bad time was provided to a function")]
     Badtime,
+    #[error("An error occurred")]
     Error,
+    #[error("Operation is not supported")]
     Unsupported,
-}
-
-impl fmt::Display for ClockError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Clock error: {}", self.description())
-    }
 }
 
 impl From<ClockError> for ClockReturn {
     fn from(value: ClockError) -> Self {
         ClockReturn::from_error(value)
-    }
-}
-
-impl Error for ClockError {
-    fn description(&self) -> &str {
-        match *self {
-            ClockError::Early => "The operation was scheduled too late",
-            ClockError::Unscheduled => "The clockID was unscheduled",
-            ClockError::Busy => "The ClockID is busy",
-            ClockError::Badtime => "A bad time was provided to a function",
-            ClockError::Error => "An error occurred",
-            ClockError::Unsupported => "Operation is not supported",
-        }
     }
 }
 
@@ -489,24 +434,11 @@ impl ops::SubAssign<u32> for ::Rank {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum TagError {
+    #[error("The value type doesn't match with the specified Tag")]
     TypeMismatch,
-}
-
-impl fmt::Display for TagError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Tag error: {}", self.description())
-    }
-}
-
-impl Error for TagError {
-    fn description(&self) -> &str {
-        match *self {
-            TagError::TypeMismatch => "The value type doesn't match with the specified Tag",
-        }
-    }
 }
 
 // This cannot be done automatically because in GStreamer it's exposed as a bitflag but works as an

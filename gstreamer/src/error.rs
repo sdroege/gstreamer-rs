@@ -6,8 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::error::Error;
-use std::fmt;
+use thiserror::Error;
 
 use glib;
 use glib::IsA;
@@ -50,7 +49,8 @@ macro_rules! gst_error_msg(
     }};
 );
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Error)]
+#[error("Error {:?} ({:?}) at {}:{}", .message, .debug, .filename, .line)]
 pub struct ErrorMessage {
     pub(crate) error_domain: glib::Quark,
     pub(crate) error_code: i32,
@@ -85,22 +85,6 @@ impl ErrorMessage {
     }
 }
 
-impl fmt::Display for ErrorMessage {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        write!(
-            f,
-            "Error {:?} ({:?}) at {}:{}",
-            self.message, self.debug, self.filename, self.line
-        )
-    }
-}
-
-impl Error for ErrorMessage {
-    fn description(&self) -> &str {
-        "ErrorMessage"
-    }
-}
-
 #[macro_export]
 macro_rules! gst_loggable_error(
 // Plain strings
@@ -129,7 +113,8 @@ macro_rules! gst_result_from_gboolean(
     }};
 );
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Error)]
+#[error("Error {:?}: {:?} at {}:{}", .category.get_name(), .bool_error.message, .bool_error.filename, .bool_error.line)]
 pub struct LoggableError {
     category: ::DebugCategory,
     bool_error: glib::BoolError,
@@ -176,25 +161,6 @@ impl From<glib::BoolError> for LoggableError {
             category: *::CAT_RUST,
             bool_error,
         }
-    }
-}
-
-impl fmt::Display for LoggableError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        write!(
-            f,
-            "Error {:?}: {:?} at {}:{}",
-            self.category.get_name(),
-            self.bool_error.message,
-            self.bool_error.filename,
-            self.bool_error.line
-        )
-    }
-}
-
-impl Error for LoggableError {
-    fn description(&self) -> &str {
-        self.bool_error.message.as_ref()
     }
 }
 

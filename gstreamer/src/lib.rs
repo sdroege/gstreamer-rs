@@ -15,6 +15,7 @@ extern crate cfg_if;
 #[macro_use]
 extern crate lazy_static;
 extern crate libc;
+extern crate thiserror;
 
 // Re-exported for the subclass gst_plugin_define! macro
 #[doc(hidden)]
