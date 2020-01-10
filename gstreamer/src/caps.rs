@@ -30,7 +30,7 @@ gst_define_mini_object_wrapper!(
 );
 
 impl Caps {
-    pub fn builder(name: &str) -> Builder {
+    pub fn builder(name: &str) -> Builder<NoFeature> {
         assert_initialized_main_thread!();
         Builder::new(name)
     }
@@ -533,48 +533,54 @@ impl PartialEq for CapsRef {
 
 impl Eq for CapsRef {}
 
+pub enum NoFeature {}
+pub enum HasFeatures {}
+
 #[derive(Debug)]
-pub struct Builder<'a> {
+pub struct Builder<T> {
     s: ::Structure,
-    features: Option<&'a [&'a str]>,
-    any_features: bool,
+    features: Option<CapsFeatures>,
+    phantom: PhantomData<T>,
 }
 
-impl<'a> Builder<'a> {
-    fn new<'b>(name: &'b str) -> Builder<'a> {
+impl Builder<NoFeature> {
+    fn new(name: &str) -> Builder<NoFeature> {
         Builder {
             s: ::Structure::new_empty(name),
             features: None,
-            any_features: false,
+            phantom: PhantomData,
         }
     }
 
+    pub fn features(self, features: &[&str]) -> Builder<HasFeatures> {
+        Builder {
+            s: self.s,
+            features: Some(CapsFeatures::new(features)),
+            phantom: PhantomData,
+        }
+    }
+
+    pub fn any_features(self) -> Builder<HasFeatures> {
+        Builder {
+            s: self.s,
+            features: Some(CapsFeatures::new_any()),
+            phantom: PhantomData,
+        }
+    }
+}
+
+impl<T> Builder<T> {
     pub fn field<'b, V: ToSendValue>(mut self, name: &'b str, value: &'b V) -> Self {
         self.s.set(name, value);
         self
     }
 
-    pub fn features(mut self, features: &'a [&'a str]) -> Self {
-        self.features = Some(features);
-        self
-    }
-
-    pub fn any_features(mut self) -> Self {
-        self.any_features = true;
-        self
-    }
-
     pub fn build(self) -> Caps {
         let mut caps = Caps::new_empty();
-        let features = if self.any_features {
-            Some(CapsFeatures::new_any())
-        } else {
-            self.features.map(|f| CapsFeatures::new(f))
-        };
 
         caps.get_mut()
             .unwrap()
-            .append_structure_full(self.s, features);
+            .append_structure_full(self.s, self.features);
         caps
     }
 }
