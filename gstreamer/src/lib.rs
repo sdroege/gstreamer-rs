@@ -32,7 +32,9 @@ pub extern crate glib;
 
 extern crate num_rational;
 
+extern crate futures_channel;
 extern crate futures_core;
+extern crate futures_util;
 
 extern crate muldiv;
 
