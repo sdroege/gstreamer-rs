@@ -38,8 +38,14 @@ use StateChangeReturn;
 use StateChangeSuccess;
 
 use std::ffi::CStr;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use std::future::Future;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use std::marker::Unpin;
 use std::mem;
 use std::num::NonZeroU64;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use std::pin::Pin;
 
 use libc;
 
@@ -248,6 +254,15 @@ pub trait ElementExtManual: 'static {
     fn call_async<F>(&self, func: F)
     where
         F: FnOnce(&Self) + Send + 'static;
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn call_async_future<F, T>(
+        &self,
+        func: F,
+    ) -> Pin<Box<dyn Future<Output = T> + Unpin + Send + 'static>>
+    where
+        F: FnOnce(&Self) -> T + Send + 'static,
+        T: Send + 'static;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -768,6 +783,27 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 Some(free_user_data::<Self, F>),
             );
         }
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn call_async_future<F, T>(
+        &self,
+        func: F,
+    ) -> Pin<Box<dyn Future<Output = T> + Unpin + Send + 'static>>
+    where
+        F: FnOnce(&Self) -> T + Send + 'static,
+        T: Send + 'static,
+    {
+        use futures_channel::oneshot;
+        use futures_util::future::FutureExt;
+
+        let (sender, receiver) = oneshot::channel();
+
+        self.call_async(move |element| {
+            let _ = sender.send(func(element));
+        });
+
+        Box::pin(receiver.map(|res| res.expect("sender dropped")))
     }
 }
 
