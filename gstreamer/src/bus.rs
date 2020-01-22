@@ -217,6 +217,23 @@ impl Bus {
             }
         }
     }
+
+    pub fn stream(&self) -> impl Stream<Item = Message> + Unpin + Send + 'static {
+        BusStream::new(self)
+    }
+
+    pub fn stream_filtered<'a>(
+        &self,
+        msg_types: &'a [MessageType],
+    ) -> impl Stream<Item = Message> + Unpin + Send + 'a {
+        use futures_util::future;
+        use futures_util::StreamExt;
+
+        BusStream::new(self).filter(move |msg| {
+            let type_ = msg.get_type();
+            future::ready(msg_types.contains(&type_))
+        })
+    }
 }
 
 #[derive(Debug)]
@@ -234,19 +251,17 @@ impl<'a> Iterator for Iter<'a> {
 }
 
 #[derive(Debug)]
-pub struct BusStream(Bus, Arc<Mutex<Option<Waker>>>);
+struct BusStream(Bus, Arc<Mutex<Option<Waker>>>);
 
 impl BusStream {
-    pub fn new(bus: &Bus) -> Self {
+    fn new(bus: &Bus) -> Self {
         skip_assert_initialized!();
-        let waker = Arc::new(Mutex::new(None));
+        let waker = Arc::new(Mutex::new(None::<Waker>));
         let waker_clone = Arc::clone(&waker);
 
         bus.set_sync_handler(move |_, _| {
             let mut waker = waker_clone.lock().unwrap();
             if let Some(waker) = waker.take() {
-                // FIXME: Force type...
-                let waker: Waker = waker;
                 waker.wake();
             }
 

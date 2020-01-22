@@ -16,8 +16,7 @@ use std::env;
 mod examples_common;
 
 async fn message_loop(bus: gst::Bus) {
-    // BusStream implements the Stream trait
-    let mut messages = gst::BusStream::new(&bus);
+    let mut messages = bus.stream();
 
     while let Some(msg) = messages.next().await {
         use gst::MessageView;

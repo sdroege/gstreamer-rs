@@ -225,7 +225,6 @@ cfg_if! {
 }
 
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
-pub use bus::BusStream;
 pub use child_proxy::ChildProxyExtManual;
 pub use clock_time::ClockTime;
 pub use device_monitor::{DeviceMonitorExtManual, DeviceMonitorFilterId};
