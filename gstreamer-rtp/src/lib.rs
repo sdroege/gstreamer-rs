@@ -8,8 +8,7 @@
 
 #[macro_use]
 extern crate bitflags;
-#[macro_use]
-extern crate lazy_static;
+extern crate once_cell;
 
 #[allow(unused_imports)]
 #[macro_use]
