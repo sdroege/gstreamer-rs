@@ -269,11 +269,11 @@ impl Stream for BusStream {
     fn poll_next(self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Option<Self::Item>> {
         let BusStream(ref bus, ref waker) = *self;
 
+        let mut waker = waker.lock().unwrap();
         let msg = bus.pop();
         if let Some(msg) = msg {
             Poll::Ready(Some(msg))
         } else {
-            let mut waker = waker.lock().unwrap();
             *waker = Some(ctx.waker().clone());
             Poll::Pending
         }
