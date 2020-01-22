@@ -596,7 +596,6 @@ impl BufferRef {
 
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
-    #[derive(Debug)]
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
         state: glib_sys::gpointer,
@@ -606,6 +605,17 @@ macro_rules! define_iter(
 
     unsafe impl<'a, T: MetaAPI> Send for $name<'a, T> { }
     unsafe impl<'a, T: MetaAPI> Sync for $name<'a, T> { }
+
+    impl<'a, T: MetaAPI> fmt::Debug for $name<'a, T> {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_struct(stringify!($name))
+                .field("buffer", &self.buffer)
+                .field("state", &self.state)
+                .field("meta_api", &self.meta_api)
+                .field("items", &self.items)
+                .finish()
+        }
+    }
 
     impl<'a, T: MetaAPI> $name<'a, T> {
         fn new(buffer: $typ) -> $name<'a, T> {

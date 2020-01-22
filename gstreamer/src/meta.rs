@@ -71,7 +71,6 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
     }
 }
 
-#[derive(Debug)]
 pub struct MetaRef<'a, T: MetaAPI + 'a> {
     meta: &'a T,
     buffer: &'a BufferRef,
@@ -80,11 +79,29 @@ pub struct MetaRef<'a, T: MetaAPI + 'a> {
 pub enum Standalone {}
 pub enum Iterated {}
 
-#[derive(Debug)]
 pub struct MetaRefMut<'a, T: MetaAPI + 'a, U> {
     meta: &'a mut T,
     buffer: &'a mut BufferRef,
     mode: PhantomData<U>,
+}
+
+impl<'a, T: MetaAPI + fmt::Debug + 'a> fmt::Debug for MetaRef<'a, T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("MetaRef")
+            .field("meta", &self.meta)
+            .field("buffer", &self.buffer)
+            .finish()
+    }
+}
+
+impl<'a, T: MetaAPI + fmt::Debug + 'a, U> fmt::Debug for MetaRefMut<'a, T, U> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("MetaRef")
+            .field("meta", &self.meta)
+            .field("buffer", &self.buffer)
+            .field("mode", &self.mode)
+            .finish()
+    }
 }
 
 impl<'a, T: MetaAPI> ops::Deref for MetaRef<'a, T> {
