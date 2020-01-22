@@ -40,8 +40,8 @@ pub trait ChildProxyImpl: super::element::ElementImpl + Send + Sync + 'static {
     fn get_child_by_index(&self, object: &ChildProxy, index: u32) -> Option<glib::Object>;
     fn get_children_count(&self, object: &ChildProxy) -> u32;
 
-    fn child_added(&self, object: &ChildProxy, child: &glib::Object, name: &str);
-    fn child_removed(&self, object: &ChildProxy, child: &glib::Object, name: &str);
+    fn child_added(&self, object: &ChildProxy, child: &glib::Object, name: &str) {}
+    fn child_removed(&self, object: &ChildProxy, child: &glib::Object, name: &str) {}
 }
 
 unsafe impl<T: ObjectSubclass + ChildProxyImpl> IsImplementable<T> for ChildProxy {
