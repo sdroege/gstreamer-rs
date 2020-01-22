@@ -1,4 +1,5 @@
 use glib::translate::{from_glib, FromGlibPtrFull};
+use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
 
@@ -8,11 +9,24 @@ use gst_rtp_sys;
 pub enum Readable {}
 pub enum Writable {}
 
-#[repr(C)]
-pub struct RTPBuffer<'a, T>(gst_rtp_sys::GstRTPBuffer, &'a gst::Buffer, PhantomData<T>);
+pub struct RTPBuffer<'a, T> {
+    rtp_buffer: gst_rtp_sys::GstRTPBuffer,
+    buffer: &'a gst::Buffer,
+    phantom: PhantomData<T>,
+}
 
 unsafe impl<'a, T> Send for RTPBuffer<'a, T> {}
 unsafe impl<'a, T> Sync for RTPBuffer<'a, T> {}
+
+impl<'a, T> fmt::Debug for RTPBuffer<'a, T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("RTPBuffer")
+            .field("rtp_buffer", &self.rtp_buffer)
+            .field("buffer", &self.buffer)
+            .field("phantom", &self.phantom)
+            .finish()
+    }
+}
 
 impl<'a> RTPBuffer<'a, Readable> {
     pub fn from_buffer_readable(
@@ -27,7 +41,11 @@ impl<'a> RTPBuffer<'a, Readable> {
             ));
 
             if res {
-                Ok(RTPBuffer(rtp_buffer.assume_init(), buffer, PhantomData))
+                Ok(RTPBuffer {
+                    rtp_buffer: rtp_buffer.assume_init(),
+                    buffer,
+                    phantom: PhantomData,
+                })
             } else {
                 Err(glib_bool_error!("Failed to map RTP buffer readable"))
             }
@@ -48,7 +66,11 @@ impl<'a> RTPBuffer<'a, Writable> {
             ));
 
             if res {
-                Ok(RTPBuffer(rtp_buffer.assume_init(), buffer, PhantomData))
+                Ok(RTPBuffer {
+                    rtp_buffer: rtp_buffer.assume_init(),
+                    buffer,
+                    phantom: PhantomData,
+                })
             } else {
                 Err(glib_bool_error!("Failed to map RTP buffer writable"))
             }
@@ -57,41 +79,41 @@ impl<'a> RTPBuffer<'a, Writable> {
 
     pub fn set_seq(&mut self, seq: u16) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_seq(&mut self.0, seq);
+            gst_rtp_sys::gst_rtp_buffer_set_seq(&mut self.rtp_buffer, seq);
         }
     }
 
     pub fn set_payload_type(&mut self, pt: u8) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_payload_type(&mut self.0, pt);
+            gst_rtp_sys::gst_rtp_buffer_set_payload_type(&mut self.rtp_buffer, pt);
         }
     }
 
     pub fn set_timestamp(&mut self, rtptime: u32) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_timestamp(&mut self.0, rtptime);
+            gst_rtp_sys::gst_rtp_buffer_set_timestamp(&mut self.rtp_buffer, rtptime);
         }
     }
 }
 
 impl<'a, T> RTPBuffer<'a, T> {
     pub fn get_seq(&mut self) -> u16 {
-        unsafe { gst_rtp_sys::gst_rtp_buffer_get_seq(&mut self.0) }
+        unsafe { gst_rtp_sys::gst_rtp_buffer_get_seq(&mut self.rtp_buffer) }
     }
 
     pub fn get_payload_type(&mut self) -> u8 {
-        unsafe { gst_rtp_sys::gst_rtp_buffer_get_payload_type(&mut self.0) }
+        unsafe { gst_rtp_sys::gst_rtp_buffer_get_payload_type(&mut self.rtp_buffer) }
     }
 
     pub fn get_timestamp(&mut self) -> u32 {
-        unsafe { gst_rtp_sys::gst_rtp_buffer_get_timestamp(&mut self.0) }
+        unsafe { gst_rtp_sys::gst_rtp_buffer_get_timestamp(&mut self.rtp_buffer) }
     }
 }
 
 impl<'a, T> Drop for RTPBuffer<'a, T> {
     fn drop(&mut self) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_unmap(&mut self.0);
+            gst_rtp_sys::gst_rtp_buffer_unmap(&mut self.rtp_buffer);
         }
     }
 }

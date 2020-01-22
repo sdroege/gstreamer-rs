@@ -14,6 +14,7 @@ use glib::translate::{from_glib, ToGlibPtr};
 use gst;
 use gst::miniobject::MiniObject;
 
+use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
 use std::ops;
@@ -23,37 +24,50 @@ use std::slice;
 pub enum Readable {}
 pub enum Writable {}
 
-#[derive(Debug)]
-pub struct VideoFrame<T>(
-    gst_video_sys::GstVideoFrame,
-    Option<gst::Buffer>,
-    ::VideoInfo,
-    PhantomData<T>,
-);
+pub struct VideoFrame<T> {
+    frame: gst_video_sys::GstVideoFrame,
+    buffer: Option<gst::Buffer>,
+    info: ::VideoInfo,
+    phantom: PhantomData<T>,
+}
 
 unsafe impl<T> Send for VideoFrame<T> {}
 unsafe impl<T> Sync for VideoFrame<T> {}
 
+impl<T> fmt::Debug for VideoFrame<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoFrame")
+            .field("frame", &self.frame)
+            .field("buffer", &self.buffer)
+            .field("info", &self.info)
+            .field("phantom", &self.phantom)
+            .finish()
+    }
+}
+
 impl<T> VideoFrame<T> {
     pub fn info(&self) -> &::VideoInfo {
-        &self.2
+        &self.info
     }
 
     pub fn flags(&self) -> ::VideoFrameFlags {
-        from_glib(self.0.flags)
+        from_glib(self.frame.flags)
     }
 
     pub fn id(&self) -> i32 {
-        self.0.id
+        self.frame.id
     }
 
     pub fn into_buffer(mut self) -> gst::Buffer {
-        self.1.take().unwrap()
+        self.buffer.take().unwrap()
     }
 
     pub fn copy(&self, dest: &mut VideoFrame<Writable>) -> Result<(), glib::BoolError> {
         unsafe {
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(&mut dest.0, &self.0));
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(
+                &mut dest.frame,
+                &self.frame,
+            ));
             if res {
                 Ok(())
             } else {
@@ -71,8 +85,8 @@ impl<T> VideoFrame<T> {
 
         unsafe {
             let res: bool = from_glib(gst_video_sys::gst_video_frame_copy_plane(
-                &mut dest.0,
-                &self.0,
+                &mut dest.frame,
+                &self.frame,
                 plane,
             ));
             if res {
@@ -136,7 +150,7 @@ impl<T> VideoFrame<T> {
     }
 
     pub fn buffer(&self) -> &gst::BufferRef {
-        unsafe { gst::BufferRef::from_ptr(self.0.buffer) }
+        unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
     }
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
@@ -149,7 +163,10 @@ impl<T> VideoFrame<T> {
         // Just get the palette
         if format_info.has_palette() && plane == 1 {
             unsafe {
-                return Ok(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
+                return Ok(slice::from_raw_parts(
+                    self.frame.data[1] as *const u8,
+                    256 * 4,
+                ));
             }
         }
 
@@ -160,7 +177,7 @@ impl<T> VideoFrame<T> {
 
         unsafe {
             Ok(slice::from_raw_parts(
-                self.0.data[plane as usize] as *const u8,
+                self.frame.data[plane as usize] as *const u8,
                 (w * h) as usize,
             ))
         }
@@ -169,14 +186,19 @@ impl<T> VideoFrame<T> {
     pub unsafe fn from_glib_full(frame: gst_video_sys::GstVideoFrame) -> Self {
         let info = ::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
-        VideoFrame(frame, Some(buffer), info, PhantomData)
+        VideoFrame {
+            frame,
+            buffer: Some(buffer),
+            info,
+            phantom: PhantomData,
+        }
     }
 }
 
 impl<T> Drop for VideoFrame<T> {
     fn drop(&mut self) {
         unsafe {
-            gst_video_sys::gst_video_frame_unmap(&mut self.0);
+            gst_video_sys::gst_video_frame_unmap(&mut self.frame);
         }
     }
 }
@@ -202,7 +224,12 @@ impl VideoFrame<Readable> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
+                Ok(VideoFrame {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    phantom: PhantomData,
+                })
             }
         }
     }
@@ -229,19 +256,29 @@ impl VideoFrame<Readable> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
+                Ok(VideoFrame {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    phantom: PhantomData,
+                })
             }
         }
     }
 
     pub fn as_video_frame_ref(&self) -> VideoFrameRef<&gst::BufferRef> {
-        let vframe = unsafe { ptr::read(&self.0) };
-        let info = self.2.clone();
-        VideoFrameRef(vframe, Some(self.buffer()), info, true)
+        let frame = unsafe { ptr::read(&self.frame) };
+        let info = self.info.clone();
+        VideoFrameRef {
+            frame,
+            buffer: Some(self.buffer()),
+            info,
+            borrowed: true,
+        }
     }
 
     pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
-        &self.0
+        &self.frame
     }
 }
 
@@ -268,7 +305,12 @@ impl VideoFrame<Writable> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
+                Ok(VideoFrame {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    phantom: PhantomData,
+                })
             }
         }
     }
@@ -297,13 +339,18 @@ impl VideoFrame<Writable> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
+                Ok(VideoFrame {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    phantom: PhantomData,
+                })
             }
         }
     }
 
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
-        unsafe { gst::BufferRef::from_mut_ptr(self.0.buffer) }
+        unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
     }
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
@@ -317,7 +364,7 @@ impl VideoFrame<Writable> {
         if format_info.has_palette() && plane == 1 {
             unsafe {
                 return Ok(slice::from_raw_parts_mut(
-                    self.0.data[1] as *mut u8,
+                    self.frame.data[1] as *mut u8,
                     256 * 4,
                 ));
             }
@@ -330,29 +377,39 @@ impl VideoFrame<Writable> {
 
         unsafe {
             Ok(slice::from_raw_parts_mut(
-                self.0.data[plane as usize] as *mut u8,
+                self.frame.data[plane as usize] as *mut u8,
                 (w * h) as usize,
             ))
         }
     }
 
     pub fn as_mut_video_frame_ref(&mut self) -> VideoFrameRef<&mut gst::BufferRef> {
-        let vframe = unsafe { ptr::read(&self.0) };
-        let info = self.2.clone();
-        VideoFrameRef(vframe, Some(self.buffer_mut()), info, true)
+        let frame = unsafe { ptr::read(&self.frame) };
+        let info = self.info.clone();
+        VideoFrameRef {
+            frame,
+            buffer: Some(self.buffer_mut()),
+            info,
+            borrowed: true,
+        }
     }
 
     pub fn as_mut_ptr(&mut self) -> *mut gst_video_sys::GstVideoFrame {
-        &mut self.0
+        &mut self.frame
     }
 }
 
 #[derive(Debug)]
-pub struct VideoFrameRef<T>(gst_video_sys::GstVideoFrame, Option<T>, ::VideoInfo, bool);
+pub struct VideoFrameRef<T> {
+    frame: gst_video_sys::GstVideoFrame,
+    buffer: Option<T>,
+    info: ::VideoInfo,
+    borrowed: bool,
+}
 
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
-        &self.0
+        &self.frame
     }
 
     pub unsafe fn from_glib_borrow(frame: *const gst_video_sys::GstVideoFrame) -> Self {
@@ -361,7 +418,12 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         let frame = ptr::read(frame);
         let info = ::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_ptr(frame.buffer);
-        VideoFrameRef(frame, Some(buffer), info, false)
+        VideoFrameRef {
+            frame,
+            buffer: Some(buffer),
+            info,
+            borrowed: false,
+        }
     }
 
     pub fn from_buffer_ref_readable<'b>(
@@ -384,7 +446,12 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    borrowed: false,
+                })
             }
         }
     }
@@ -411,21 +478,26 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    borrowed: false,
+                })
             }
         }
     }
 
     pub fn info(&self) -> &::VideoInfo {
-        &self.2
+        &self.info
     }
 
     pub fn flags(&self) -> ::VideoFrameFlags {
-        from_glib(self.0.flags)
+        from_glib(self.frame.flags)
     }
 
     pub fn id(&self) -> i32 {
-        self.0.id
+        self.frame.id
     }
 
     pub fn copy(
@@ -433,7 +505,10 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         dest: &mut VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(&mut dest.0, &self.0));
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(
+                &mut dest.frame,
+                &self.frame,
+            ));
             if res {
                 Ok(())
             } else {
@@ -451,8 +526,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             let res: bool = from_glib(gst_video_sys::gst_video_frame_copy_plane(
-                &mut dest.0,
-                &self.0,
+                &mut dest.frame,
+                &self.frame,
                 plane,
             ));
             if res {
@@ -516,7 +591,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     }
 
     pub fn buffer(&self) -> &gst::BufferRef {
-        self.1.as_ref().unwrap()
+        self.buffer.as_ref().unwrap()
     }
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
@@ -529,7 +604,10 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         // Just get the palette
         if format_info.has_palette() && plane == 1 {
             unsafe {
-                return Ok(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
+                return Ok(slice::from_raw_parts(
+                    self.frame.data[1] as *const u8,
+                    256 * 4,
+                ));
             }
         }
 
@@ -540,7 +618,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             Ok(slice::from_raw_parts(
-                self.0.data[plane as usize] as *const u8,
+                self.frame.data[plane as usize] as *const u8,
                 (w * h) as usize,
             ))
         }
@@ -554,7 +632,12 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         let frame = ptr::read(frame);
         let info = ::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
-        VideoFrameRef(frame, Some(buffer), info, false)
+        VideoFrameRef {
+            frame,
+            buffer: Some(buffer),
+            info,
+            borrowed: false,
+        }
     }
 
     pub fn from_buffer_ref_writable<'b>(
@@ -579,7 +662,12 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    borrowed: false,
+                })
             }
         }
     }
@@ -608,13 +696,18 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef(frame, Some(buffer), info, false))
+                Ok(VideoFrameRef {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    borrowed: false,
+                })
             }
         }
     }
 
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
-        self.1.as_mut().unwrap()
+        self.buffer.as_mut().unwrap()
     }
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
@@ -628,7 +721,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         if format_info.has_palette() && plane == 1 {
             unsafe {
                 return Ok(slice::from_raw_parts_mut(
-                    self.0.data[1] as *mut u8,
+                    self.frame.data[1] as *mut u8,
                     256 * 4,
                 ));
             }
@@ -641,14 +734,14 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
         unsafe {
             Ok(slice::from_raw_parts_mut(
-                self.0.data[plane as usize] as *mut u8,
+                self.frame.data[plane as usize] as *mut u8,
                 (w * h) as usize,
             ))
         }
     }
 
     pub fn as_mut_ptr(&mut self) -> *mut gst_video_sys::GstVideoFrame {
-        &mut self.0
+        &mut self.frame
     }
 }
 
@@ -668,9 +761,9 @@ unsafe impl<T> Sync for VideoFrameRef<T> {}
 
 impl<T> Drop for VideoFrameRef<T> {
     fn drop(&mut self) {
-        if !self.3 {
+        if !self.borrowed {
             unsafe {
-                gst_video_sys::gst_video_frame_unmap(&mut self.0);
+                gst_video_sys::gst_video_frame_unmap(&mut self.frame);
             }
         }
     }

@@ -582,11 +582,20 @@ impl<'a> Builder<'a> {
 pub enum AnyFeatures {}
 pub enum SomeFeatures {}
 
-#[derive(Debug)]
 pub struct BuilderFull<T> {
     caps: ::Caps,
     features: Option<CapsFeatures>,
     phantom: PhantomData<T>,
+}
+
+impl<T> fmt::Debug for BuilderFull<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Builder")
+            .field("caps", &self.caps)
+            .field("features", &self.features)
+            .field("phantom", &self.phantom)
+            .finish()
+    }
 }
 
 impl BuilderFull<SomeFeatures> {
