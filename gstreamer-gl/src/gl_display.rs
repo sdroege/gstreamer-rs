@@ -9,10 +9,10 @@
 use gst_gl_sys;
 use std::ffi::CStr;
 
-lazy_static! {
-    pub static ref GL_DISPLAY_CONTEXT_TYPE: &'static str = unsafe {
-        CStr::from_ptr(gst_gl_sys::GST_GL_DISPLAY_CONTEXT_TYPE)
-            .to_str()
-            .unwrap()
-    };
-}
+use once_cell::sync::Lazy;
+
+pub static GL_DISPLAY_CONTEXT_TYPE: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_gl_sys::GST_GL_DISPLAY_CONTEXT_TYPE)
+        .to_str()
+        .unwrap()
+});

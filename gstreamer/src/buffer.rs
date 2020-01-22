@@ -878,12 +878,10 @@ impl<T> Eq for MappedBuffer<T> {}
 unsafe impl<T> Send for MappedBuffer<T> {}
 unsafe impl<T> Sync for MappedBuffer<T> {}
 
-lazy_static! {
-    pub static ref BUFFER_COPY_METADATA: ::BufferCopyFlags =
-        ::BufferCopyFlags::FLAGS | ::BufferCopyFlags::TIMESTAMPS | ::BufferCopyFlags::META;
-    pub static ref BUFFER_COPY_ALL: ::BufferCopyFlags =
-        *BUFFER_COPY_METADATA | ::BufferCopyFlags::MEMORY;
-}
+pub const BUFFER_COPY_METADATA: ::BufferCopyFlags =
+    ::BufferCopyFlags::from_bits_truncate(gst_sys::GST_BUFFER_COPY_METADATA);
+pub const BUFFER_COPY_ALL: ::BufferCopyFlags =
+    ::BufferCopyFlags::from_bits_truncate(gst_sys::GST_BUFFER_COPY_ALL);
 
 #[cfg(test)]
 mod tests {

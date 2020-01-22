@@ -12,9 +12,8 @@ extern crate bitflags;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[macro_use]
 extern crate cfg_if;
-#[macro_use]
-extern crate lazy_static;
 extern crate libc;
+extern crate once_cell;
 extern crate thiserror;
 
 // Re-exported for the subclass gst_plugin_define! macro

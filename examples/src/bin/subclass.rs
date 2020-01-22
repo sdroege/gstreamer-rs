@@ -42,16 +42,16 @@ mod fir_filter {
     extern crate byte_slice_cast;
     use byte_slice_cast::*;
 
-    use lazy_static::lazy_static;
+    use once_cell::sync::Lazy;
 
     // The debug category we use below for our filter
-    lazy_static! {
-        pub static ref CAT: gst::DebugCategory = gst::DebugCategory::new(
+    pub static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
+        gst::DebugCategory::new(
             "rsfirfilter",
             gst::DebugColorFlags::empty(),
             Some("Rust FIR Filter"),
-        );
-    }
+        )
+    });
 
     // In the imp submodule we include the actual implementation
     mod imp {

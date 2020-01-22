@@ -15,6 +15,8 @@ use std::ops::{Deref, DerefMut};
 use std::ptr;
 use std::str;
 
+use once_cell::sync::Lazy;
+
 use glib;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault,
@@ -461,15 +463,13 @@ impl ToOwned for CapsFeaturesRef {
 unsafe impl Sync for CapsFeaturesRef {}
 unsafe impl Send for CapsFeaturesRef {}
 
-lazy_static! {
-    pub static ref CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: &'static str = unsafe {
-        CStr::from_ptr(gst_sys::GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: CapsFeatures =
-        CapsFeatures::new(&[*CAPS_FEATURE_MEMORY_SYSTEM_MEMORY]);
-}
+pub static CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_sys::GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY)
+        .to_str()
+        .unwrap()
+});
+pub static CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: Lazy<CapsFeatures> =
+    Lazy::new(|| CapsFeatures::new(&[*CAPS_FEATURE_MEMORY_SYSTEM_MEMORY]));
 
 #[cfg(test)]
 mod tests {

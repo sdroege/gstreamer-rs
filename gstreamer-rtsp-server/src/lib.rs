@@ -8,9 +8,8 @@
 
 #[macro_use]
 extern crate bitflags;
-#[macro_use]
-extern crate lazy_static;
 extern crate libc;
+extern crate once_cell;
 
 extern crate gio;
 extern crate gio_sys as gio_sys;
@@ -71,63 +70,63 @@ pub use rtsp_stream_transport::RTSPStreamTransportExtManual;
 pub use rtsp_context::*;
 pub use rtsp_token::*;
 
-lazy_static! {
-    pub static ref RTSP_ADDRESS_POOL_ANY_IPV4: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ANY_IPV4)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_ADDRESS_POOL_ANY_IPV6: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ANY_IPV6)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_AUTH_CHECK_CONNECT: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_CONNECT)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_AUTH_CHECK_URL: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_URL)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_PERM_MEDIA_FACTORY_ACCESS: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_PERM_MEDIA_FACTORY_ACCESS)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_PERM_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_TOKEN_MEDIA_FACTORY_ROLE: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe {
-        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS)
-            .to_str()
-            .unwrap()
-    };
-}
+use once_cell::sync::Lazy;
+
+pub static RTSP_ADDRESS_POOL_ANY_IPV4: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ANY_IPV4)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_ADDRESS_POOL_ANY_IPV6: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ANY_IPV6)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_AUTH_CHECK_CONNECT: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_CONNECT)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_AUTH_CHECK_URL: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_URL)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_PERM_MEDIA_FACTORY_ACCESS: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_PERM_MEDIA_FACTORY_ACCESS)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_PERM_MEDIA_FACTORY_CONSTRUCT: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_TOKEN_MEDIA_FACTORY_ROLE: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE)
+        .to_str()
+        .unwrap()
+});
+pub static RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS)
+        .to_str()
+        .unwrap()
+});
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

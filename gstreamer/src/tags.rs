@@ -11,6 +11,8 @@ use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
 
+use once_cell::sync::Lazy;
+
 use glib;
 use glib::translate::{
     from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr, ToGlibPtrMut,
@@ -42,10 +44,8 @@ macro_rules! impl_tag(
             }
         }
 
-        lazy_static! {
-            pub(crate) static ref $rust_tag: &'static str =
-                unsafe { CStr::from_ptr(gst_sys::$gst_tag).to_str().unwrap() };
-        }
+        pub(crate) static $rust_tag: Lazy<&'static str> = Lazy::new(||
+            unsafe { CStr::from_ptr(gst_sys::$gst_tag).to_str().unwrap() });
     };
 );
 

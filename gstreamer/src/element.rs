@@ -9,6 +9,8 @@
 use Element;
 use ElementClass;
 
+use once_cell::sync::Lazy;
+
 use glib;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::object::Cast;
@@ -845,38 +847,36 @@ impl ElementClass {
     }
 }
 
-lazy_static! {
-    pub static ref ELEMENT_METADATA_AUTHOR: &'static str = unsafe {
-        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_AUTHOR)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref ELEMENT_METADATA_DESCRIPTION: &'static str = unsafe {
-        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_DESCRIPTION)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref ELEMENT_METADATA_DOC_URI: &'static str = unsafe {
-        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_DOC_URI)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref ELEMENT_METADATA_ICON_NAME: &'static str = unsafe {
-        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_ICON_NAME)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref ELEMENT_METADATA_KLASS: &'static str = unsafe {
-        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_KLASS)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref ELEMENT_METADATA_LONGNAME: &'static str = unsafe {
-        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_LONGNAME)
-            .to_str()
-            .unwrap()
-    };
-}
+pub static ELEMENT_METADATA_AUTHOR: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_AUTHOR)
+        .to_str()
+        .unwrap()
+});
+pub static ELEMENT_METADATA_DESCRIPTION: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_DESCRIPTION)
+        .to_str()
+        .unwrap()
+});
+pub static ELEMENT_METADATA_DOC_URI: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_DOC_URI)
+        .to_str()
+        .unwrap()
+});
+pub static ELEMENT_METADATA_ICON_NAME: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_ICON_NAME)
+        .to_str()
+        .unwrap()
+});
+pub static ELEMENT_METADATA_KLASS: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_KLASS)
+        .to_str()
+        .unwrap()
+});
+pub static ELEMENT_METADATA_LONGNAME: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_LONGNAME)
+        .to_str()
+        .unwrap()
+});
 
 #[macro_export]
 macro_rules! gst_element_error(

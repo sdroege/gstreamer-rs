@@ -14,6 +14,8 @@ use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
 
+use once_cell::sync::Lazy;
+
 use gobject_sys;
 use gst_sys;
 
@@ -167,20 +169,18 @@ impl fmt::Debug for DebugCategory {
     }
 }
 
-lazy_static! {
-    pub static ref CAT_RUST: DebugCategory = DebugCategory::new(
+pub static CAT_RUST: Lazy<DebugCategory> = Lazy::new(|| {
+    DebugCategory::new(
         "GST_RUST",
         ::DebugColorFlags::UNDERLINE,
         Some("GStreamer's Rust binding core"),
-    );
-}
+    )
+});
 
 macro_rules! declare_debug_category_from_name(
     ($cat:ident, $cat_name:expr) => (
-        lazy_static! {
-            pub static ref $cat: DebugCategory = DebugCategory::get($cat_name)
-                .expect(&format!("Unable to find `DebugCategory` with name {}", $cat_name));
-        }
+        pub static $cat: Lazy<DebugCategory> = Lazy::new(|| DebugCategory::get($cat_name)
+            .expect(&format!("Unable to find `DebugCategory` with name {}", $cat_name)));
     );
 );
 

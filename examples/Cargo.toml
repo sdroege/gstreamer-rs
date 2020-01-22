@@ -30,7 +30,7 @@ pango = { git = "https://github.com/gtk-rs/pango", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
 glutin = { version = "0.21", optional = true }
 winit = { version = "0.19", optional = true }
-lazy_static = "1.0"
+once_cell = "1.0"
 
 [build-dependencies]
 gl_generator = { version = "0.14", optional = true }

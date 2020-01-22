@@ -18,6 +18,8 @@ use serde::ser::{Serialize, SerializeTuple, Serializer};
 
 use std::{fmt, mem};
 
+use once_cell::sync::Lazy;
+
 use Buffer;
 use DateTime;
 use Sample;
@@ -32,20 +34,20 @@ fn get_other_type_id<T: StaticType>() -> usize {
     }
 }
 
-lazy_static! {
-    pub(crate) static ref ARRAY_OTHER_TYPE_ID: usize = get_other_type_id::<Array>();
-    pub(crate) static ref BITMASK_OTHER_TYPE_ID: usize = get_other_type_id::<Bitmask>();
-    pub(crate) static ref DATE_OTHER_TYPE_ID: usize = get_other_type_id::<Date>();
-    pub(crate) static ref DATE_TIME_OTHER_TYPE_ID: usize = get_other_type_id::<DateTime>();
-    pub(crate) static ref FRACTION_OTHER_TYPE_ID: usize = get_other_type_id::<Fraction>();
-    pub(crate) static ref FRACTION_RANGE_OTHER_TYPE_ID: usize =
-        get_other_type_id::<FractionRange>();
-    pub(crate) static ref INT_RANGE_I32_OTHER_TYPE_ID: usize = get_other_type_id::<IntRange<i32>>();
-    pub(crate) static ref INT_RANGE_I64_OTHER_TYPE_ID: usize = get_other_type_id::<IntRange<i64>>();
-    pub(crate) static ref LIST_OTHER_TYPE_ID: usize = get_other_type_id::<List>();
-    pub(crate) static ref SAMPLE_OTHER_TYPE_ID: usize = get_other_type_id::<Sample>();
-    pub(crate) static ref BUFFER_OTHER_TYPE_ID: usize = get_other_type_id::<Buffer>();
-}
+pub(crate) static ARRAY_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Array>);
+pub(crate) static BITMASK_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Bitmask>);
+pub(crate) static DATE_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Date>);
+pub(crate) static DATE_TIME_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<DateTime>);
+pub(crate) static FRACTION_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Fraction>);
+pub(crate) static FRACTION_RANGE_OTHER_TYPE_ID: Lazy<usize> =
+    Lazy::new(get_other_type_id::<FractionRange>);
+pub(crate) static INT_RANGE_I32_OTHER_TYPE_ID: Lazy<usize> =
+    Lazy::new(get_other_type_id::<IntRange<i32>>);
+pub(crate) static INT_RANGE_I64_OTHER_TYPE_ID: Lazy<usize> =
+    Lazy::new(get_other_type_id::<IntRange<i64>>);
+pub(crate) static LIST_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<List>);
+pub(crate) static SAMPLE_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Sample>);
+pub(crate) static BUFFER_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Buffer>);
 
 impl<'a> Serialize for Fraction {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {

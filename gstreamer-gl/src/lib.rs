@@ -10,9 +10,8 @@
 #[macro_use]
 extern crate bitflags;
 extern crate byteorder;
-#[macro_use]
-extern crate lazy_static;
 extern crate libc;
+extern crate once_cell;
 #[macro_use]
 extern crate glib;
 extern crate glib_sys;

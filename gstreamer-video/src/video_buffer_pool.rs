@@ -12,28 +12,30 @@ use std::mem;
 
 use glib::translate::*;
 
-lazy_static! {
-    pub static ref BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: &'static str = unsafe {
+use once_cell::sync::Lazy;
+
+pub static BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: Lazy<&'static str> =
+    Lazy::new(|| unsafe {
         CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META)
             .to_str()
             .unwrap()
-    };
-    pub static ref BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: &'static str = unsafe {
-        CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT)
-            .to_str()
-            .unwrap()
-    };
-    pub static ref BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: &'static str = unsafe {
+    });
+pub static BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT)
+        .to_str()
+        .unwrap()
+});
+pub static BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: Lazy<&'static str> =
+    Lazy::new(|| unsafe {
         CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META)
             .to_str()
             .unwrap()
-    };
-    pub static ref BUFFER_POOL_OPTION_VIDEO_META: &'static str = unsafe {
-        CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_META)
-            .to_str()
-            .unwrap()
-    };
-}
+    });
+pub static BUFFER_POOL_OPTION_VIDEO_META: Lazy<&'static str> = Lazy::new(|| unsafe {
+    CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_META)
+        .to_str()
+        .unwrap()
+});
 
 #[derive(Debug, Clone)]
 pub struct VideoAlignment(pub(crate) gst_video_sys::GstVideoAlignment);
