@@ -5,6 +5,27 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.1] - 2020-01-23
+### Added
+- Use static inner lifetime for `VideoCodecState<Readable>` so that it can be
+  stored safely on the heap.
+- Getters/setters for `BinFlags` on `gst::Bin`.
+- `gst::Caps::builder_full()` for building caps with multiple structures
+  conveniently.
+- `gst::Element::call_async_future()` for asynchronously spawning a closure
+  and returning a `Future` for awaiting its return value.
+
+### Fixed
+- Various clippy warnings.
+- Getters/setters for `PadFlags` on `gst::Pad` now provide the correct
+  behaviour.
+- Take mutex before popping messages in the `gst::Bus` `Stream` to close a
+  small race condition that could cause it to not be woken up.
+- `gst::ChildProxy` implementers do not have to provide `child_added()` and
+  `child_removed()` functions anymore but these are optional now.
+- Manually implement `Debug` impls for various generic types where to `Debug`
+  impl should not depend on their type parameters also implementing `Debug`.
+
 ## [0.15.0] - 2019-12-18
 ### Added
 - `StructureRef::get_optional()` for returning `None` if the field does not
