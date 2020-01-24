@@ -15,11 +15,12 @@ use std::cmp;
 use std::ffi::CStr;
 use std::fmt;
 use std::mem;
+use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -27,34 +28,27 @@ use glib::translate::FromGlibPtrContainer;
 
 use EventType;
 
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-pub struct Seqnum(pub u32);
-pub const SEQNUM_INVALID: Seqnum = Seqnum(0);
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Seqnum(pub(crate) NonZeroU32);
+
+impl Seqnum {
+    pub fn next() -> Self {
+        unsafe {
+            let v = gst_sys::gst_util_seqnum_next();
+            if v == 0 {
+                Seqnum::next()
+            } else {
+                Seqnum(NonZeroU32::new_unchecked(v))
+            }
+        }
+    }
+}
 
 impl ToGlib for Seqnum {
     type GlibType = u32;
 
     fn to_glib(&self) -> u32 {
-        self.0
-    }
-}
-
-impl FromGlib<u32> for Seqnum {
-    fn from_glib(val: u32) -> Seqnum {
-        skip_assert_initialized!();
-        Seqnum(val)
-    }
-}
-
-impl Into<u32> for Seqnum {
-    fn into(self) -> u32 {
-        self.0
-    }
-}
-
-impl From<u32> for Seqnum {
-    fn from(v: u32) -> Seqnum {
-        Seqnum(v)
+        self.0.get()
     }
 }
 
@@ -67,40 +61,25 @@ impl cmp::PartialOrd for Seqnum {
 impl cmp::Ord for Seqnum {
     fn cmp(&self, other: &Seqnum) -> cmp::Ordering {
         unsafe {
-            let ret = gst_sys::gst_util_seqnum_compare(self.0, other.0);
+            let ret = gst_sys::gst_util_seqnum_compare(self.0.get(), other.0.get());
             ret.cmp(&0)
         }
     }
 }
 
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-pub struct GroupId(pub u32);
-pub const GROUP_ID_INVALID: GroupId = GroupId(0);
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct GroupId(pub(crate) NonZeroU32);
 
-impl ToGlib for GroupId {
-    type GlibType = u32;
-
-    fn to_glib(&self) -> u32 {
-        self.0
-    }
-}
-
-impl Into<u32> for GroupId {
-    fn into(self) -> u32 {
-        self.0
-    }
-}
-
-impl From<u32> for GroupId {
-    fn from(v: u32) -> GroupId {
-        GroupId(v)
-    }
-}
-
-impl FromGlib<u32> for GroupId {
-    fn from_glib(val: u32) -> GroupId {
-        skip_assert_initialized!();
-        GroupId(val)
+impl GroupId {
+    pub fn next() -> Self {
+        unsafe {
+            let v = gst_sys::gst_util_group_id_next();
+            if v == 0 {
+                GroupId::next()
+            } else {
+                GroupId(NonZeroU32::new_unchecked(v))
+            }
+        }
     }
 }
 
@@ -164,7 +143,11 @@ gst_define_mini_object_wrapper!(Event, EventRef, gst_sys::GstEvent, [Debug,], ||
 
 impl EventRef {
     pub fn get_seqnum(&self) -> Seqnum {
-        unsafe { from_glib(gst_sys::gst_event_get_seqnum(self.as_mut_ptr())) }
+        unsafe {
+            let seqnum = gst_sys::gst_event_get_seqnum(self.as_mut_ptr());
+            assert_ne!(seqnum, 0);
+            Seqnum(NonZeroU32::new_unchecked(seqnum))
+        }
     }
 
     pub fn get_running_time_offset(&self) -> i64 {
@@ -544,13 +527,18 @@ impl<'a> StreamStart<'a> {
         }
     }
 
-    pub fn get_group_id(&self) -> GroupId {
+    pub fn get_group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
             gst_sys::gst_event_parse_group_id(self.as_mut_ptr(), group_id.as_mut_ptr());
 
-            from_glib(group_id.assume_init())
+            let group_id = group_id.assume_init();
+            if group_id == 0 {
+                None
+            } else {
+                Some(GroupId(NonZeroU32::new_unchecked(group_id)))
+            }
         }
     }
 }
@@ -658,7 +646,9 @@ impl<'a> StreamGroupDone<'a> {
 
             gst_sys::gst_event_parse_stream_group_done(self.as_mut_ptr(), group_id.as_mut_ptr());
 
-            from_glib(group_id.assume_init())
+            let group_id = group_id.assume_init();
+            assert_ne!(group_id, 0);
+            GroupId(NonZeroU32::new_unchecked(group_id))
         }
     }
 }
@@ -1000,7 +990,7 @@ macro_rules! event_builder_generic_impl {
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.builder.seqnum {
-                    gst_sys::gst_event_set_seqnum(event, seqnum.to_glib());
+                    gst_sys::gst_event_set_seqnum(event, seqnum.0.get());
                 }
 
                 if let Some(running_time_offset) = self.builder.running_time_offset {
@@ -1092,7 +1082,7 @@ impl<'a> StreamStartBuilder<'a> {
             gst_sys::gst_event_set_stream_flags(ev, flags.to_glib());
         }
         if let Some(group_id) = s.group_id {
-            gst_sys::gst_event_set_group_id(ev, group_id.to_glib());
+            gst_sys::gst_event_set_group_id(ev, group_id.0.get());
         }
         ev
     });
@@ -1233,7 +1223,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_stream_group_done(
-        s.group_id.to_glib()
+        s.group_id.0.get()
     ));
 }
 

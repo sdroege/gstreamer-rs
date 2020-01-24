@@ -71,6 +71,10 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[derive(Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq)]
+pub struct MetaSeqnum(u64);
+
 pub struct MetaRef<'a, T: MetaAPI + 'a> {
     meta: &'a T,
     buffer: &'a BufferRef,
@@ -148,10 +152,10 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn get_seqnum(&self) -> u64 {
+    pub fn get_seqnum(&self) -> MetaSeqnum {
         unsafe {
             let meta = self.meta as *const _ as *const gst_sys::GstMeta;
-            gst_sys::gst_meta_get_seqnum(meta)
+            MetaSeqnum(gst_sys::gst_meta_get_seqnum(meta))
         }
     }
 

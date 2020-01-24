@@ -20,6 +20,7 @@ use TagList;
 use std::ffi::CStr;
 use std::fmt;
 use std::mem;
+use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
@@ -39,7 +40,11 @@ impl MessageRef {
     }
 
     pub fn get_seqnum(&self) -> Seqnum {
-        unsafe { from_glib(gst_sys::gst_message_get_seqnum(self.as_mut_ptr())) }
+        unsafe {
+            let seqnum = gst_sys::gst_message_get_seqnum(self.as_mut_ptr());
+            assert_ne!(seqnum, 0);
+            Seqnum(NonZeroU32::new_unchecked(seqnum))
+        }
     }
 
     pub fn get_structure(&self) -> Option<&StructureRef> {
@@ -1040,7 +1045,12 @@ impl<'a> StreamStart<'a> {
                 self.as_mut_ptr(),
                 group_id.as_mut_ptr(),
             )) {
-                Some(from_glib(group_id.assume_init()))
+                let group_id = group_id.assume_init();
+                if group_id == 0 {
+                    None
+                } else {
+                    Some(GroupId(NonZeroU32::new_unchecked(group_id)))
+                }
             } else {
                 None
             }
@@ -1308,7 +1318,7 @@ macro_rules! message_builder_generic_impl {
                 let src = self.builder.src.to_glib_none().0;
                 let msg = $new_fn(&mut self, src);
                 if let Some(seqnum) = self.builder.seqnum {
-                    gst_sys::gst_message_set_seqnum(msg, seqnum.to_glib());
+                    gst_sys::gst_message_set_seqnum(msg, seqnum.0.get());
                 }
 
                 #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -2179,7 +2189,7 @@ impl<'a> StreamStartBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = gst_sys::gst_message_new_stream_start(src);
         if let Some(group_id) = s.group_id {
-            gst_sys::gst_message_set_group_id(msg, group_id.to_glib());
+            gst_sys::gst_message_set_group_id(msg, group_id.0.get());
         }
         msg
     });
@@ -2473,10 +2483,11 @@ mod tests {
         ::init().unwrap();
 
         // Message without arguments
-        let eos_msg = Message::new_eos().seqnum(Seqnum(1)).build();
+        let seqnum = Seqnum::next();
+        let eos_msg = Message::new_eos().seqnum(seqnum).build();
         match eos_msg.view() {
             MessageView::Eos(eos_msg) => {
-                assert_eq!(eos_msg.get_seqnum(), Seqnum(1));
+                assert_eq!(eos_msg.get_seqnum(), seqnum);
                 assert!(eos_msg.get_structure().is_none());
             }
             _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
@@ -2497,13 +2508,14 @@ mod tests {
     fn test_other_fields() {
         ::init().unwrap();
 
+        let seqnum = Seqnum::next();
         let eos_msg = Message::new_eos()
             .other_fields(&[("extra-field", &true)])
-            .seqnum(Seqnum(1))
+            .seqnum(seqnum)
             .build();
         match eos_msg.view() {
             MessageView::Eos(eos_msg) => {
-                assert_eq!(eos_msg.get_seqnum(), Seqnum(1));
+                assert_eq!(eos_msg.get_seqnum(), seqnum);
                 if let Some(other_fields) = eos_msg.get_structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }

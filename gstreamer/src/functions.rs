@@ -83,28 +83,6 @@ pub fn parse_launchv_full(
     }
 }
 
-pub fn util_group_id_next() -> ::GroupId {
-    assert_initialized_main_thread!();
-    unsafe {
-        let v = from_glib(gst_sys::gst_util_group_id_next());
-        if v == ::GROUP_ID_INVALID {
-            return from_glib(gst_sys::gst_util_group_id_next());
-        }
-        v
-    }
-}
-
-pub fn util_seqnum_next() -> ::Seqnum {
-    assert_initialized_main_thread!();
-    unsafe {
-        let v = from_glib(gst_sys::gst_util_seqnum_next());
-        if v == ::SEQNUM_INVALID {
-            return from_glib(gst_sys::gst_util_seqnum_next());
-        }
-        v
-    }
-}
-
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 pub fn calculate_linear_regression(
     xy: &[(u64, u64)],

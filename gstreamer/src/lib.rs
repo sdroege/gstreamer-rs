@@ -116,6 +116,8 @@ pub use tags::{
 mod tags_serde;
 
 pub mod meta;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use meta::MetaSeqnum;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use meta::ReferenceTimestampMeta;
 pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta};
@@ -141,7 +143,7 @@ mod bufferlist_serde;
 pub mod query;
 pub use query::{Query, QueryRef, QueryView};
 pub mod event;
-pub use event::{Event, EventRef, EventView, GroupId, Seqnum, GROUP_ID_INVALID, SEQNUM_INVALID};
+pub use event::{Event, EventRef, EventView, GroupId, Seqnum};
 pub mod context;
 pub use context::{Context, ContextRef};
 mod static_caps;
