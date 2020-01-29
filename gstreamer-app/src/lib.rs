@@ -20,6 +20,12 @@ extern crate gstreamer_sys as gst_sys;
 #[macro_use]
 extern crate glib;
 
+#[cfg(test)]
+extern crate futures_util;
+
+#[cfg(test)]
+extern crate futures_executor;
+
 macro_rules! skip_assert_initialized {
     () => {};
 }

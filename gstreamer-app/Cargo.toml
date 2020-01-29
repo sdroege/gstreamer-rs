@@ -28,6 +28,10 @@ gstreamer-base = { path = "../gstreamer-base" }
 [build-dependencies]
 rustdoc-stripper = { version = "0.1", optional = true }
 
+[dev-dependencies]
+futures-util = { version = "0.3", features = ["sink"] }
+futures-executor = "0.3"
+
 [features]
 default = []
 v1_10 = ["gstreamer/v1_10", "gstreamer-base/v1_10", "gstreamer-app-sys/v1_10"]
