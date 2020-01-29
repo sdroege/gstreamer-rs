@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.2] - 2020-01-30
+### Fixed
+- Fix another race condition in the `gst::Bus` `Stream` that could cause it to
+  not wake up although a message is available.
+
 ## [0.15.1] - 2020-01-23
 ### Added
 - Use static inner lifetime for `VideoCodecState<Readable>` so that it can be
@@ -637,7 +642,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.2...HEAD
+[0.15.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.1...0.15.2
+[0.15.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.0...0.15.1
 [0.15.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.2...0.15.0
 [0.14.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.1...0.14.2
 [0.14.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.0...0.14.1
