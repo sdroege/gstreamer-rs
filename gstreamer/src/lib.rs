@@ -152,7 +152,7 @@ pub mod promise;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use promise::{Promise, PromiseError};
 
-mod bus;
+pub mod bus;
 mod element;
 
 mod bin;

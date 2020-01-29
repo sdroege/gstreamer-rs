@@ -6,13 +6,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use futures_sink::Sink;
 use glib::translate::*;
 use glib_sys::{gboolean, gpointer};
 use gst;
 use gst_app_sys;
 use std::cell::RefCell;
 use std::mem;
+use std::pin::Pin;
 use std::ptr;
+use std::task::{Context, Poll};
 use AppSrc;
 
 #[allow(clippy::type_complexity)]
@@ -226,5 +229,60 @@ impl AppSrc {
             );
             (from_glib(min.assume_init()), from_glib(max.assume_init()))
         }
+    }
+
+    pub fn sink(&self) -> AppSrcSink {
+        AppSrcSink::new(self)
+    }
+}
+
+#[derive(Debug)]
+pub struct AppSrcSink {
+    app_src: AppSrc,
+}
+
+impl AppSrcSink {
+    fn new(app_src: &AppSrc) -> Self {
+        skip_assert_initialized!();
+
+        let app_src = app_src.clone();
+
+        Self { app_src }
+    }
+}
+
+impl Sink<gst::Sample> for AppSrcSink {
+    type Error = gst::FlowError;
+
+    fn poll_ready(self: Pin<&mut Self>, _: &mut Context) -> Poll<Result<(), Self::Error>> {
+        Poll::Ready(Ok(()))
+    }
+
+    fn start_send(self: Pin<&mut Self>, sample: gst::Sample) -> Result<(), Self::Error> {
+        self.app_src.push_sample(&sample)?;
+
+        Ok(())
+    }
+
+    fn poll_flush(self: Pin<&mut Self>, _: &mut Context) -> Poll<Result<(), Self::Error>> {
+        Poll::Ready(Ok(()))
+    }
+
+    fn poll_close(self: Pin<&mut Self>, _: &mut Context) -> Poll<Result<(), Self::Error>> {
+        self.app_src.end_of_stream()?;
+
+        Poll::Ready(Ok(()))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_app_src_sink() {
+        gst::init().unwrap();
+
+        unimplemented!()
     }
 }
