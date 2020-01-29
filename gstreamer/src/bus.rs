@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use futures_channel::mpsc;
-use futures_core::stream::Stream;
-use futures_core::task::{Context, Poll};
+use futures_channel::mpsc::{self, UnboundedReceiver};
+use futures_core::Stream;
+use futures_util::{future, StreamExt};
 use glib;
 use glib::source::{Continue, Priority, SourceId};
 use glib::translate::*;
@@ -19,6 +19,7 @@ use std::cell::RefCell;
 use std::mem::transmute;
 use std::pin::Pin;
 use std::ptr;
+use std::task::{Context, Poll};
 
 use Bus;
 use BusSyncReply;
@@ -218,20 +219,18 @@ impl Bus {
         }
     }
 
-    pub fn stream(&self) -> impl Stream<Item = Message> + Unpin + Send + 'static {
+    pub fn stream(&self) -> BusStream {
         BusStream::new(self)
     }
 
     pub fn stream_filtered<'a>(
         &self,
-        msg_types: &'a [MessageType],
+        message_types: &'a [MessageType],
     ) -> impl Stream<Item = Message> + Unpin + Send + 'a {
-        use futures_util::future;
-        use futures_util::StreamExt;
+        self.stream().filter(move |message| {
+            let message_type = message.get_type();
 
-        BusStream::new(self).filter(move |msg| {
-            let type_ = msg.get_type();
-            future::ready(msg_types.contains(&type_))
+            future::ready(message_types.contains(&message_type))
         })
     }
 }
@@ -251,34 +250,39 @@ impl<'a> Iterator for Iter<'a> {
 }
 
 #[derive(Debug)]
-struct BusStream(Bus, mpsc::UnboundedReceiver<Message>);
+pub struct BusStream {
+    bus: Bus,
+    receiver: UnboundedReceiver<Message>,
+}
 
 impl BusStream {
     fn new(bus: &Bus) -> Self {
         skip_assert_initialized!();
 
+        let bus = bus.clone();
         let (sender, receiver) = mpsc::unbounded();
 
-        bus.set_sync_handler(move |_, msg| {
-            let _ = sender.unbounded_send(msg.to_owned());
+        bus.set_sync_handler(move |_, message| {
+            let _ = sender.unbounded_send(message.to_owned());
+
             BusSyncReply::Drop
         });
 
-        BusStream(bus.clone(), receiver)
+        Self { bus, receiver }
     }
 }
 
 impl Drop for BusStream {
     fn drop(&mut self) {
-        self.0.unset_sync_handler();
+        self.bus.unset_sync_handler();
     }
 }
 
 impl Stream for BusStream {
     type Item = Message;
 
-    fn poll_next(mut self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Option<Self::Item>> {
-        Pin::new(&mut self.1).poll_next(ctx)
+    fn poll_next(mut self: Pin<&mut Self>, context: &mut Context) -> Poll<Option<Self::Item>> {
+        self.receiver.poll_next_unpin(context)
     }
 }
 

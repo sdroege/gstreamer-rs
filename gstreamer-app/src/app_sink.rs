@@ -20,6 +20,16 @@ use std::mem::transmute;
 use std::ptr;
 use AppSink;
 
+#[cfg(any(feature = "v1_10"))]
+use {
+    futures_core::Stream,
+    std::{
+        pin::Pin,
+        sync::{Arc, Mutex},
+        task::{Context, Poll, Waker},
+    },
+};
+
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {
     eos: Option<RefCell<Box<dyn FnMut(&AppSink) + Send + 'static>>>,
@@ -217,6 +227,11 @@ impl AppSink {
             )
         }
     }
+
+    #[cfg(any(feature = "v1_10"))]
+    pub fn stream(&self) -> AppSinkStream {
+        AppSinkStream::new(self)
+    }
 }
 
 unsafe extern "C" fn new_sample_trampoline<
@@ -239,4 +254,86 @@ unsafe extern "C" fn new_preroll_trampoline<
     let f: &F = &*(f as *const F);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
     ret.to_glib()
+}
+
+#[cfg(any(feature = "v1_10"))]
+#[derive(Debug)]
+pub struct AppSinkStream {
+    app_sink: AppSink,
+    waker_reference: Arc<Mutex<Option<Waker>>>,
+}
+
+#[cfg(any(feature = "v1_10"))]
+impl AppSinkStream {
+    fn new(app_sink: &AppSink) -> Self {
+        skip_assert_initialized!();
+
+        let app_sink = app_sink.clone();
+        let waker_reference = Arc::new(Mutex::new(None as Option<Waker>));
+
+        app_sink.set_callbacks(
+            AppSinkCallbacks::new()
+                .new_sample({
+                    let waker_reference = Arc::clone(&waker_reference);
+
+                    move |_| {
+                        if let Some(waker) = waker_reference.lock().unwrap().take() {
+                            waker.wake();
+                        }
+
+                        Ok(gst::FlowSuccess::Ok)
+                    }
+                })
+                .eos({
+                    let waker_reference = Arc::clone(&waker_reference);
+
+                    move |_| {
+                        if let Some(waker) = waker_reference.lock().unwrap().take() {
+                            waker.wake();
+                        }
+                    }
+                })
+                .build(),
+        );
+
+        Self {
+            app_sink,
+            waker_reference,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_10"))]
+impl Stream for AppSinkStream {
+    type Item = gst::Sample;
+
+    fn poll_next(self: Pin<&mut Self>, context: &mut Context) -> Poll<Option<Self::Item>> {
+        self.app_sink
+            .try_pull_sample(gst::ClockTime::from_mseconds(0))
+            .map(|sample| Poll::Ready(Some(sample)))
+            .unwrap_or_else(|| {
+                if self.app_sink.is_eos() {
+                    return Poll::Ready(None);
+                }
+
+                self.waker_reference
+                    .lock()
+                    .unwrap()
+                    .replace(context.waker().to_owned());
+
+                Poll::Pending
+            })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_app_sink_stream() {
+        gst::init().unwrap();
+
+        unimplemented!()
+    }
 }

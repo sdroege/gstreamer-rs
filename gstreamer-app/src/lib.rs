@@ -8,6 +8,8 @@
 
 extern crate libc;
 
+extern crate futures_core;
+extern crate futures_sink;
 extern crate glib_sys;
 extern crate gobject_sys;
 extern crate gstreamer as gst;
@@ -28,10 +30,11 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use auto::*;
 
-mod app_sink;
-mod app_src;
-pub use app_sink::*;
-pub use app_src::*;
+pub mod app_sink;
+pub use app_sink::AppSinkCallbacks;
+
+pub mod app_src;
+pub use app_src::AppSrcCallbacks;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
