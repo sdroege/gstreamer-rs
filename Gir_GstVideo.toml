@@ -40,6 +40,13 @@ generate = [
     "GstVideo.VideoBufferPool",
     "GstVideo.VideoPackFlags",
     "GstVideo.VideoBufferFlags",
+    "GstVideo.VideoAlphaMode",
+    "GstVideo.VideoChromaMode",
+    "GstVideo.VideoMatrixMode",
+    "GstVideo.VideoGammaMode",
+    "GstVideo.VideoPrimariesMode",
+    "GstVideo.VideoResamplerMethod",
+    "GstVideo.VideoDitherMethod",
 ]
 
 manual = [

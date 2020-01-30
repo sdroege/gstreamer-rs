@@ -21,16 +21,23 @@ pub use self::video_overlay::VideoOverlayExt;
 pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
 
 mod enums;
+pub use self::enums::VideoAlphaMode;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 pub use self::enums::VideoCaptionType;
+pub use self::enums::VideoChromaMode;
 pub use self::enums::VideoColorMatrix;
 pub use self::enums::VideoColorPrimaries;
+pub use self::enums::VideoDitherMethod;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 pub use self::enums::VideoFieldOrder;
 pub use self::enums::VideoFormat;
+pub use self::enums::VideoGammaMode;
 pub use self::enums::VideoInterlaceMode;
+pub use self::enums::VideoMatrixMode;
 pub use self::enums::VideoMultiviewFramePacking;
 pub use self::enums::VideoMultiviewMode;
+pub use self::enums::VideoPrimariesMode;
+pub use self::enums::VideoResamplerMethod;
 pub use self::enums::VideoTileMode;
 pub use self::enums::VideoTransferFunction;
 

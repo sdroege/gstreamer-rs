@@ -12,6 +12,66 @@ use glib::Type;
 use gobject_sys;
 use gst_video_sys;
 
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoAlphaMode {
+    Copy,
+    Set,
+    Mult,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoAlphaMode {
+    type GlibType = gst_video_sys::GstVideoAlphaMode;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoAlphaMode {
+        match *self {
+            VideoAlphaMode::Copy => gst_video_sys::GST_VIDEO_ALPHA_MODE_COPY,
+            VideoAlphaMode::Set => gst_video_sys::GST_VIDEO_ALPHA_MODE_SET,
+            VideoAlphaMode::Mult => gst_video_sys::GST_VIDEO_ALPHA_MODE_MULT,
+            VideoAlphaMode::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoAlphaMode> for VideoAlphaMode {
+    fn from_glib(value: gst_video_sys::GstVideoAlphaMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoAlphaMode::Copy,
+            1 => VideoAlphaMode::Set,
+            2 => VideoAlphaMode::Mult,
+            value => VideoAlphaMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoAlphaMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_alpha_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoAlphaMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoAlphaMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoAlphaMode {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoCaptionType {
@@ -80,6 +140,69 @@ impl<'a> FromValue<'a> for VideoCaptionType {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 impl SetValue for VideoCaptionType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoChromaMode {
+    Full,
+    UpsampleOnly,
+    DownsampleOnly,
+    None,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoChromaMode {
+    type GlibType = gst_video_sys::GstVideoChromaMode;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoChromaMode {
+        match *self {
+            VideoChromaMode::Full => gst_video_sys::GST_VIDEO_CHROMA_MODE_FULL,
+            VideoChromaMode::UpsampleOnly => gst_video_sys::GST_VIDEO_CHROMA_MODE_UPSAMPLE_ONLY,
+            VideoChromaMode::DownsampleOnly => gst_video_sys::GST_VIDEO_CHROMA_MODE_DOWNSAMPLE_ONLY,
+            VideoChromaMode::None => gst_video_sys::GST_VIDEO_CHROMA_MODE_NONE,
+            VideoChromaMode::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoChromaMode> for VideoChromaMode {
+    fn from_glib(value: gst_video_sys::GstVideoChromaMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoChromaMode::Full,
+            1 => VideoChromaMode::UpsampleOnly,
+            2 => VideoChromaMode::DownsampleOnly,
+            3 => VideoChromaMode::None,
+            value => VideoChromaMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoChromaMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_chroma_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoChromaMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoChromaMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoChromaMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
@@ -242,6 +365,72 @@ impl<'a> FromValue<'a> for VideoColorPrimaries {
 }
 
 impl SetValue for VideoColorPrimaries {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoDitherMethod {
+    None,
+    Verterr,
+    FloydSteinberg,
+    SierraLite,
+    Bayer,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoDitherMethod {
+    type GlibType = gst_video_sys::GstVideoDitherMethod;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoDitherMethod {
+        match *self {
+            VideoDitherMethod::None => gst_video_sys::GST_VIDEO_DITHER_NONE,
+            VideoDitherMethod::Verterr => gst_video_sys::GST_VIDEO_DITHER_VERTERR,
+            VideoDitherMethod::FloydSteinberg => gst_video_sys::GST_VIDEO_DITHER_FLOYD_STEINBERG,
+            VideoDitherMethod::SierraLite => gst_video_sys::GST_VIDEO_DITHER_SIERRA_LITE,
+            VideoDitherMethod::Bayer => gst_video_sys::GST_VIDEO_DITHER_BAYER,
+            VideoDitherMethod::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoDitherMethod> for VideoDitherMethod {
+    fn from_glib(value: gst_video_sys::GstVideoDitherMethod) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoDitherMethod::None,
+            1 => VideoDitherMethod::Verterr,
+            2 => VideoDitherMethod::FloydSteinberg,
+            3 => VideoDitherMethod::SierraLite,
+            4 => VideoDitherMethod::Bayer,
+            value => VideoDitherMethod::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoDitherMethod {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_dither_method_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoDitherMethod {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoDitherMethod {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoDitherMethod {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
@@ -626,6 +815,63 @@ impl SetValue for VideoFormat {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoGammaMode {
+    None,
+    Remap,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoGammaMode {
+    type GlibType = gst_video_sys::GstVideoGammaMode;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoGammaMode {
+        match *self {
+            VideoGammaMode::None => gst_video_sys::GST_VIDEO_GAMMA_MODE_NONE,
+            VideoGammaMode::Remap => gst_video_sys::GST_VIDEO_GAMMA_MODE_REMAP,
+            VideoGammaMode::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoGammaMode> for VideoGammaMode {
+    fn from_glib(value: gst_video_sys::GstVideoGammaMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoGammaMode::None,
+            1 => VideoGammaMode::Remap,
+            value => VideoGammaMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoGammaMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_gamma_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoGammaMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoGammaMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoGammaMode {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoInterlaceMode {
     Progressive,
     Interleaved,
@@ -686,6 +932,69 @@ impl<'a> FromValue<'a> for VideoInterlaceMode {
 }
 
 impl SetValue for VideoInterlaceMode {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoMatrixMode {
+    Full,
+    InputOnly,
+    OutputOnly,
+    None,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoMatrixMode {
+    type GlibType = gst_video_sys::GstVideoMatrixMode;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoMatrixMode {
+        match *self {
+            VideoMatrixMode::Full => gst_video_sys::GST_VIDEO_MATRIX_MODE_FULL,
+            VideoMatrixMode::InputOnly => gst_video_sys::GST_VIDEO_MATRIX_MODE_INPUT_ONLY,
+            VideoMatrixMode::OutputOnly => gst_video_sys::GST_VIDEO_MATRIX_MODE_OUTPUT_ONLY,
+            VideoMatrixMode::None => gst_video_sys::GST_VIDEO_MATRIX_MODE_NONE,
+            VideoMatrixMode::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoMatrixMode> for VideoMatrixMode {
+    fn from_glib(value: gst_video_sys::GstVideoMatrixMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoMatrixMode::Full,
+            1 => VideoMatrixMode::InputOnly,
+            2 => VideoMatrixMode::OutputOnly,
+            3 => VideoMatrixMode::None,
+            value => VideoMatrixMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoMatrixMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_matrix_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoMatrixMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoMatrixMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoMatrixMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
@@ -889,6 +1198,132 @@ impl<'a> FromValue<'a> for VideoMultiviewMode {
 }
 
 impl SetValue for VideoMultiviewMode {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoPrimariesMode {
+    None,
+    MergeOnly,
+    Fast,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoPrimariesMode {
+    type GlibType = gst_video_sys::GstVideoPrimariesMode;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoPrimariesMode {
+        match *self {
+            VideoPrimariesMode::None => gst_video_sys::GST_VIDEO_PRIMARIES_MODE_NONE,
+            VideoPrimariesMode::MergeOnly => gst_video_sys::GST_VIDEO_PRIMARIES_MODE_MERGE_ONLY,
+            VideoPrimariesMode::Fast => gst_video_sys::GST_VIDEO_PRIMARIES_MODE_FAST,
+            VideoPrimariesMode::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoPrimariesMode> for VideoPrimariesMode {
+    fn from_glib(value: gst_video_sys::GstVideoPrimariesMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoPrimariesMode::None,
+            1 => VideoPrimariesMode::MergeOnly,
+            2 => VideoPrimariesMode::Fast,
+            value => VideoPrimariesMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoPrimariesMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_primaries_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoPrimariesMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoPrimariesMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoPrimariesMode {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoResamplerMethod {
+    Nearest,
+    Linear,
+    Cubic,
+    Sinc,
+    Lanczos,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoResamplerMethod {
+    type GlibType = gst_video_sys::GstVideoResamplerMethod;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoResamplerMethod {
+        match *self {
+            VideoResamplerMethod::Nearest => gst_video_sys::GST_VIDEO_RESAMPLER_METHOD_NEAREST,
+            VideoResamplerMethod::Linear => gst_video_sys::GST_VIDEO_RESAMPLER_METHOD_LINEAR,
+            VideoResamplerMethod::Cubic => gst_video_sys::GST_VIDEO_RESAMPLER_METHOD_CUBIC,
+            VideoResamplerMethod::Sinc => gst_video_sys::GST_VIDEO_RESAMPLER_METHOD_SINC,
+            VideoResamplerMethod::Lanczos => gst_video_sys::GST_VIDEO_RESAMPLER_METHOD_LANCZOS,
+            VideoResamplerMethod::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoResamplerMethod> for VideoResamplerMethod {
+    fn from_glib(value: gst_video_sys::GstVideoResamplerMethod) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoResamplerMethod::Nearest,
+            1 => VideoResamplerMethod::Linear,
+            2 => VideoResamplerMethod::Cubic,
+            3 => VideoResamplerMethod::Sinc,
+            4 => VideoResamplerMethod::Lanczos,
+            value => VideoResamplerMethod::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoResamplerMethod {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_resampler_method_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoResamplerMethod {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoResamplerMethod {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoResamplerMethod {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
