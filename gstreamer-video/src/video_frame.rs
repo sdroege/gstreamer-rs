@@ -193,6 +193,21 @@ impl<T> VideoFrame<T> {
             phantom: PhantomData,
         }
     }
+
+    pub fn as_video_frame_ref(&self) -> VideoFrameRef<&gst::BufferRef> {
+        let frame = unsafe { ptr::read(&self.frame) };
+        let info = self.info.clone();
+        VideoFrameRef {
+            frame,
+            buffer: Some(self.buffer()),
+            info,
+            borrowed: true,
+        }
+    }
+
+    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
+        &self.frame
+    }
 }
 
 impl<T> Drop for VideoFrame<T> {
@@ -264,21 +279,6 @@ impl VideoFrame<Readable> {
                 })
             }
         }
-    }
-
-    pub fn as_video_frame_ref(&self) -> VideoFrameRef<&gst::BufferRef> {
-        let frame = unsafe { ptr::read(&self.frame) };
-        let info = self.info.clone();
-        VideoFrameRef {
-            frame,
-            buffer: Some(self.buffer()),
-            info,
-            borrowed: true,
-        }
-    }
-
-    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
-        &self.frame
     }
 }
 
@@ -407,87 +407,7 @@ pub struct VideoFrameRef<T> {
     borrowed: bool,
 }
 
-impl<'a> VideoFrameRef<&'a gst::BufferRef> {
-    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
-        &self.frame
-    }
-
-    pub unsafe fn from_glib_borrow(frame: *const gst_video_sys::GstVideoFrame) -> Self {
-        assert!(!frame.is_null());
-
-        let frame = ptr::read(frame);
-        let info = ::VideoInfo(ptr::read(&frame.info));
-        let buffer = gst::BufferRef::from_ptr(frame.buffer);
-        VideoFrameRef {
-            frame,
-            buffer: Some(buffer),
-            info,
-            borrowed: false,
-        }
-    }
-
-    pub fn from_buffer_ref_readable<'b>(
-        buffer: &'a gst::BufferRef,
-        info: &'b ::VideoInfo,
-    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
-        skip_assert_initialized!();
-
-        unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
-                frame.as_mut_ptr(),
-                info.to_glib_none().0 as *mut _,
-                buffer.as_mut_ptr(),
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
-            ));
-
-            if !res {
-                Err(glib_bool_error!("Failed to map VideoFrame"))
-            } else {
-                let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef {
-                    frame,
-                    buffer: Some(buffer),
-                    info,
-                    borrowed: false,
-                })
-            }
-        }
-    }
-
-    pub fn from_buffer_ref_id_readable<'b>(
-        buffer: &'a gst::BufferRef,
-        id: i32,
-        info: &'b ::VideoInfo,
-    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
-        skip_assert_initialized!();
-
-        unsafe {
-            let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
-                frame.as_mut_ptr(),
-                info.to_glib_none().0 as *mut _,
-                buffer.as_mut_ptr(),
-                id,
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
-            ));
-
-            if !res {
-                Err(glib_bool_error!("Failed to map VideoFrame"))
-            } else {
-                let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef {
-                    frame,
-                    buffer: Some(buffer),
-                    info,
-                    borrowed: false,
-                })
-            }
-        }
-    }
-
+impl<T> VideoFrameRef<T> {
     pub fn info(&self) -> &::VideoInfo {
         &self.info
     }
@@ -590,10 +510,6 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         self.info().offset()
     }
 
-    pub fn buffer(&self) -> &gst::BufferRef {
-        self.buffer.as_ref().unwrap()
-    }
-
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
             return Err(glib_bool_error!("Plane index higher than number of planes"));
@@ -622,6 +538,92 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                 (w * h) as usize,
             ))
         }
+    }
+
+    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
+        &self.frame
+    }
+}
+
+impl<'a> VideoFrameRef<&'a gst::BufferRef> {
+    pub unsafe fn from_glib_borrow(frame: *const gst_video_sys::GstVideoFrame) -> Self {
+        assert!(!frame.is_null());
+
+        let frame = ptr::read(frame);
+        let info = ::VideoInfo(ptr::read(&frame.info));
+        let buffer = gst::BufferRef::from_ptr(frame.buffer);
+        VideoFrameRef {
+            frame,
+            buffer: Some(buffer),
+            info,
+            borrowed: false,
+        }
+    }
+
+    pub fn from_buffer_ref_readable<'b>(
+        buffer: &'a gst::BufferRef,
+        info: &'b ::VideoInfo,
+    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
+        skip_assert_initialized!();
+
+        unsafe {
+            let mut frame = mem::MaybeUninit::zeroed();
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
+                frame.as_mut_ptr(),
+                info.to_glib_none().0 as *mut _,
+                buffer.as_mut_ptr(),
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
+            ));
+
+            if !res {
+                Err(glib_bool_error!("Failed to map VideoFrame"))
+            } else {
+                let frame = frame.assume_init();
+                let info = ::VideoInfo(ptr::read(&frame.info));
+                Ok(VideoFrameRef {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    borrowed: false,
+                })
+            }
+        }
+    }
+
+    pub fn from_buffer_ref_id_readable<'b>(
+        buffer: &'a gst::BufferRef,
+        id: i32,
+        info: &'b ::VideoInfo,
+    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
+        skip_assert_initialized!();
+
+        unsafe {
+            let mut frame = mem::MaybeUninit::zeroed();
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
+                frame.as_mut_ptr(),
+                info.to_glib_none().0 as *mut _,
+                buffer.as_mut_ptr(),
+                id,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
+            ));
+
+            if !res {
+                Err(glib_bool_error!("Failed to map VideoFrame"))
+            } else {
+                let frame = frame.assume_init();
+                let info = ::VideoInfo(ptr::read(&frame.info));
+                Ok(VideoFrameRef {
+                    frame,
+                    buffer: Some(buffer),
+                    info,
+                    borrowed: false,
+                })
+            }
+        }
+    }
+
+    pub fn buffer(&self) -> &gst::BufferRef {
+        self.buffer.as_ref().unwrap()
     }
 }
 
