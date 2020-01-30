@@ -75,6 +75,8 @@ pub use video_buffer_pool::{
     BUFFER_POOL_OPTION_VIDEO_ALIGNMENT, BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META,
     BUFFER_POOL_OPTION_VIDEO_META,
 };
+pub mod video_converter;
+pub use video_converter::{VideoConverter, VideoConverterConfig};
 
 mod video_codec_frame;
 mod video_decoder;
