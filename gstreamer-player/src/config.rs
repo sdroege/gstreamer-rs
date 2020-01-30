@@ -14,7 +14,7 @@ use gst_sys;
 use std::mem;
 use std::ops;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PlayerConfig(gst::Structure);
 
 impl ops::Deref for PlayerConfig {
