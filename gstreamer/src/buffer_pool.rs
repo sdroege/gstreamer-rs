@@ -21,7 +21,7 @@ use std::mem;
 use std::ops;
 use std::ptr;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BufferPoolConfig(Structure);
 
 impl ops::Deref for BufferPoolConfig {
