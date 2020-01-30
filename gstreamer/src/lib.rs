@@ -46,6 +46,9 @@ extern crate serde_bytes;
 #[macro_use]
 extern crate serde_derive;
 
+#[cfg(test)]
+extern crate futures_executor;
+
 use glib::translate::{from_glib, from_glib_full};
 
 macro_rules! assert_initialized_main_thread {

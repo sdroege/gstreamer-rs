@@ -312,4 +312,23 @@ mod tests {
             _ => unreachable!(),
         }
     }
+
+    #[test]
+    fn test_bus_stream() {
+        ::init().unwrap();
+
+        let bus = Bus::new();
+        let bus_stream = bus.stream();
+
+        let eos_message = ::Message::new_eos().build();
+        bus.post(&eos_message).unwrap();
+
+        let bus_future = bus_stream.into_future();
+        let (message, _) = futures_executor::block_on(bus_future);
+
+        match message.unwrap().view() {
+            ::MessageView::Eos(_) => (),
+            _ => unreachable!(),
+        }
+    }
 }
