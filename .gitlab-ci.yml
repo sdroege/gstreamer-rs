@@ -35,7 +35,7 @@ stages:
 .debian:10:
   variables:
     FDO_DISTRIBUTION_VERSION: 10
-    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-16.1'
+    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-16.2'
     # Only stuff inside the repo directory can be cached
     # Override the CARGO_HOME variable to force its location
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
@@ -205,13 +205,13 @@ clippy:
       cargo clippy --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
       cargo clippy --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
 
-audit:
+deny:
   extends: .img-stable
   stage: 'extras'
   only:
     - schedules
   script:
-    - cargo audit --deny-warnings
+    - cargo deny check
 
 gir-checks:
   extends: .img-stable

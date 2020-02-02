@@ -1,0 +1,44 @@
+[advisories]
+db-path = "~/.cargo/advisory-db"
+db-url = "https://github.com/rustsec/advisory-db"
+vulnerability = "deny"
+unmaintained = "warn"
+notice = "warn"
+ignore = []
+
+[licenses]
+unlicensed = "deny"
+allow = [
+  "Apache-2.0",
+]
+deny = [
+  "GPL-1.0",
+  "GPL-2.0",
+  "GPL-3.0",
+  "AGPL-1.0",
+  "AGPL-3.0",
+]
+copyleft = "deny"
+allow-osi-fsf-free = "either"
+confidence-threshold = 0.8
+
+[bans]
+multiple-versions = "warn"
+highlight = "all"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-git = [
+  "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys",
+  "https://github.com/gtk-rs/sys",
+  "https://github.com/gtk-rs/glib",
+  "https://github.com/gtk-rs/gio",
+  "https://github.com/gtk-rs/cairo",
+  "https://github.com/gtk-rs/pango",
+  "https://github.com/gtk-rs/pangocairo",
+  "https://github.com/gtk-rs/atk",
+  "https://github.com/gtk-rs/gdk-pixbuf",
+  "https://github.com/gtk-rs/gdk",
+  "https://github.com/gtk-rs/gtk",
+]

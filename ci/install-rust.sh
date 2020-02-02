@@ -19,6 +19,6 @@ rustc --version
 if [ "$RUST_VERSION" = "stable" ]; then
   rustup component add clippy-preview
   rustup component add rustfmt
-  cargo install --force cargo-audit
+  cargo install --force cargo-deny
   cargo install --force --git https://github.com/kbknapp/cargo-outdated
 fi
