@@ -71,15 +71,10 @@ provided by the GStreamer project.
 
 #### Homebrew
 
-Homebrew only installs various plugins if explicitly enabled, so some extra
-`--with-*` flags may be required.
-
 ```
 $ brew install gstreamer gst-plugins-base gst-plugins-good \
       gst-plugins-bad gst-plugins-ugly gst-libav gst-rtsp-server \
-      gst-editing-services --with-orc --with-libogg --with-opus \
-      --with-pango --with-theora --with-libvorbis --with-libvpx \
-      --enable-gtk3
+      gst-editing-services
 ```
 
 If you wish to install the gstreamer-player sub-crate, make sure the
