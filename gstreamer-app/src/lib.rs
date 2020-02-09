@@ -17,6 +17,8 @@ extern crate gstreamer_app_sys as gst_app_sys;
 extern crate gstreamer_base as gst_base;
 extern crate gstreamer_sys as gst_sys;
 
+extern crate once_cell;
+
 #[macro_use]
 extern crate glib;
 
