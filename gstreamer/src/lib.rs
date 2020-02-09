@@ -148,9 +148,9 @@ mod static_pad_template;
 pub use static_pad_template::*;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-mod promise;
+pub mod promise;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub use promise::*;
+pub use promise::{Promise, PromiseError};
 
 mod bus;
 mod element;
