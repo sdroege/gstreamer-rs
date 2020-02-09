@@ -18,6 +18,8 @@ extern crate glib_sys;
 extern crate gobject_sys;
 #[macro_use]
 extern crate gstreamer as gst;
+extern crate futures_channel;
+extern crate futures_util;
 extern crate gstreamer_base as gst_base;
 extern crate gstreamer_base_sys as gst_base_sys;
 extern crate gstreamer_sys as gst_sys;
