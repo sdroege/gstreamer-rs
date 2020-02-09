@@ -680,9 +680,9 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
             let data = self.get_type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
-            (*parent_class)
-                .before_transform
-                .map(|f| f(element.to_glib_none().0, inbuf.as_ptr() as *mut _));
+            if let Some(ref f) = (*parent_class).before_transform {
+                f(element.to_glib_none().0, inbuf.as_ptr() as *mut _);
+            }
         }
     }
 
