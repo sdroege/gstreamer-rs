@@ -111,7 +111,7 @@ impl UniqueFlowCombiner {
         self.0.add_pad(pad);
     }
 
-    pub fn clear(&self) {
+    pub fn clear(&mut self) {
         self.0.clear();
     }
 
