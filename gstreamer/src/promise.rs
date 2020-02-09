@@ -13,6 +13,9 @@ use PromiseResult;
 use Structure;
 use StructureRef;
 
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct Promise(Shared<gst_sys::GstPromise>);
@@ -86,6 +89,18 @@ impl Promise {
         }
     }
 
+    pub fn new_future() -> (Self, PromiseFuture) {
+        use futures_channel::oneshot;
+
+        let (sender, receiver) = oneshot::channel();
+
+        let promise = Self::new_with_change_func(move |res| {
+            let _ = sender.send(res.map(|s| s.to_owned()));
+        });
+
+        (promise, PromiseFuture(receiver))
+    }
+
     pub fn expire(&self) {
         unsafe {
             gst_sys::gst_promise_expire(self.to_glib_none().0);
@@ -128,6 +143,21 @@ impl Default for Promise {
 
 unsafe impl Send for Promise {}
 unsafe impl Sync for Promise {}
+
+#[derive(Debug)]
+pub struct PromiseFuture(futures_channel::oneshot::Receiver<Result<Structure, PromiseError>>);
+
+impl std::future::Future for PromiseFuture {
+    type Output = Result<Structure, PromiseError>;
+
+    fn poll(mut self: Pin<&mut Self>, context: &mut Context) -> Poll<Self::Output> {
+        match Pin::new(&mut self.0).poll(context) {
+            Poll::Ready(Err(_)) => panic!("Sender dropped before callback was called"),
+            Poll::Ready(Ok(res)) => Poll::Ready(res),
+            Poll::Pending => Poll::Pending,
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
