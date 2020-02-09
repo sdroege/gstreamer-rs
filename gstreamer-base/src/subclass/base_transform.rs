@@ -18,6 +18,7 @@ use gst;
 use gst::subclass::prelude::*;
 
 use std::mem;
+use std::ptr;
 
 use BaseTransform;
 use BaseTransformClass;
@@ -125,6 +126,19 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_transform_ip_passthrough(element, buf)
     }
+
+    fn submit_input_buffer(
+        &self,
+        element: &BaseTransform,
+        is_discont: bool,
+        inbuf: gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_submit_input_buffer(element, is_discont, inbuf)
+    }
+
+    fn generate_output(&self, element: &BaseTransform) -> Result<GeneratedOutput, gst::FlowError> {
+        self.parent_generate_output(element)
+    }
 }
 
 pub trait BaseTransformImplExt {
@@ -202,6 +216,28 @@ pub trait BaseTransformImplExt {
         element: &BaseTransform,
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_submit_input_buffer(
+        &self,
+        element: &BaseTransform,
+        is_discont: bool,
+        inbuf: gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_generate_output(
+        &self,
+        element: &BaseTransform,
+    ) -> Result<GeneratedOutput, gst::FlowError>;
+
+    fn take_queued_buffer(&self) -> Option<gst::Buffer>
+    where
+        Self: ObjectSubclass,
+        <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>;
+
+    fn get_queued_buffer(&self) -> Option<gst::Buffer>
+    where
+        Self: ObjectSubclass,
+        <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>;
 }
 
 impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
@@ -547,6 +583,87 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
             gst::FlowReturn::from_glib(f(element.to_glib_none().0, buf as *mut _)).into_result()
         }
     }
+
+    fn parent_submit_input_buffer(
+        &self,
+        element: &BaseTransform,
+        is_discont: bool,
+        inbuf: gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
+            let f = (*parent_class)
+                .submit_input_buffer
+                .expect("Missing parent function `submit_input_buffer`");
+
+            gst::FlowReturn::from_glib(f(
+                element.to_glib_none().0,
+                is_discont.to_glib(),
+                inbuf.into_ptr(),
+            ))
+            .into_result()
+        }
+    }
+
+    fn parent_generate_output(
+        &self,
+        element: &BaseTransform,
+    ) -> Result<GeneratedOutput, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
+            let f = (*parent_class)
+                .generate_output
+                .expect("Missing parent function `generate_output`");
+
+            let mut outbuf = ptr::null_mut();
+            gst::FlowReturn::from_glib(f(element.to_glib_none().0, &mut outbuf))
+                .into_result()
+                .map(|res| {
+                    if res == ::BASE_TRANSFORM_FLOW_DROPPED {
+                        GeneratedOutput::Dropped
+                    } else if res != gst::FlowSuccess::Ok || outbuf.is_null() {
+                        GeneratedOutput::NoOutput
+                    } else {
+                        GeneratedOutput::Buffer(from_glib_full(outbuf))
+                    }
+                })
+        }
+    }
+
+    fn take_queued_buffer(&self) -> Option<gst::Buffer>
+    where
+        Self: ObjectSubclass,
+        <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>,
+    {
+        unsafe {
+            let element = self.get_instance();
+            let ptr: *mut gst_base_sys::GstBaseTransform = element.to_glib_none().0 as *mut _;
+            let sinkpad: gst::Pad = from_glib_borrow((*ptr).sinkpad);
+            let _stream_lock = sinkpad.stream_lock();
+            let buffer = (*ptr).queued_buf;
+            (*ptr).queued_buf = ptr::null_mut();
+            from_glib_full(buffer)
+        }
+    }
+
+    fn get_queued_buffer(&self) -> Option<gst::Buffer>
+    where
+        Self: ObjectSubclass,
+        <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>,
+    {
+        unsafe {
+            let element = self.get_instance();
+            let ptr: *mut gst_base_sys::GstBaseTransform = element.to_glib_none().0 as *mut _;
+            let sinkpad: gst::Pad = from_glib_borrow((*ptr).sinkpad);
+            let _stream_lock = sinkpad.stream_lock();
+            let buffer = (*ptr).queued_buf;
+            from_glib_none(buffer)
+        }
+    }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -575,6 +692,8 @@ where
             klass.get_unit_size = Some(base_transform_get_unit_size::<T>);
             klass.sink_event = Some(base_transform_sink_event::<T>);
             klass.src_event = Some(base_transform_src_event::<T>);
+            klass.submit_input_buffer = Some(base_transform_submit_input_buffer::<T>);
+            klass.generate_output = Some(base_transform_generate_output::<T>);
         }
     }
 }
@@ -616,6 +735,13 @@ where
     T::Type: ObjectSubclass + BaseTransformImpl,
     <T::Type as ObjectSubclass>::Instance: PanicPoison,
 {
+}
+
+#[derive(Debug)]
+pub enum GeneratedOutput {
+    Buffer(gst::Buffer),
+    NoOutput,
+    Dropped,
 }
 
 unsafe extern "C" fn base_transform_start<T: ObjectSubclass>(
@@ -930,6 +1056,54 @@ where
         } else {
             imp.transform_ip(&wrap, gst::BufferRef::from_mut_ptr(buf))
                 .into()
+        }
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn base_transform_submit_input_buffer<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseTransform,
+    is_discont: glib_sys::gboolean,
+    buf: *mut gst_sys::GstBuffer,
+) -> gst_sys::GstFlowReturn
+where
+    T: BaseTransformImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseTransform = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+        imp.submit_input_buffer(&wrap, from_glib(is_discont), from_glib_full(buf))
+            .into()
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn base_transform_generate_output<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseTransform,
+    buf: *mut *mut gst_sys::GstBuffer,
+) -> gst_sys::GstFlowReturn
+where
+    T: BaseTransformImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseTransform = from_glib_borrow(ptr);
+
+    *buf = ptr::null_mut();
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+        match imp.generate_output(&wrap) {
+            Ok(GeneratedOutput::Dropped) => ::BASE_TRANSFORM_FLOW_DROPPED.into(),
+            Ok(GeneratedOutput::NoOutput) => gst::FlowReturn::Ok,
+            Ok(GeneratedOutput::Buffer(outbuf)) => {
+                *buf = outbuf.into_ptr();
+                gst::FlowReturn::Ok
+            }
+            Err(err) => err.into(),
         }
     })
     .to_glib()
