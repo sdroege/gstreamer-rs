@@ -107,6 +107,35 @@ unsafe fn convert_sample_async_unsafe<F>(
     );
 }
 
+pub fn convert_sample_future(
+    sample: &gst::Sample,
+    caps: &gst::Caps,
+    timeout: gst::ClockTime,
+) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<gst::Sample, glib::Error>> + 'static>>
+{
+    use futures_channel::oneshot;
+    use futures_util::future::lazy;
+    use futures_util::future::FutureExt;
+
+    let (sender, receiver) = oneshot::channel();
+
+    let sample = sample.clone();
+    let caps = caps.clone();
+    let future = lazy(move |_| {
+        assert!(
+            glib::MainContext::ref_thread_default().is_owner(),
+            "Spawning futures only allowed if the thread is owning the MainContext"
+        );
+
+        convert_sample_async(&sample, &caps, timeout, move |res| {
+            let _ = sender.send(res);
+        });
+    })
+    .then(|_| receiver.map(|res| res.expect("Sender dropped before callback was called")));
+
+    Box::pin(future)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
