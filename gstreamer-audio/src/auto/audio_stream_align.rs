@@ -37,46 +37,48 @@ impl AudioStreamAlign {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn get_alignment_threshold(&mut self) -> gst::ClockTime {
+    pub fn get_alignment_threshold(&self) -> gst::ClockTime {
         unsafe {
             from_glib(
-                gst_audio_sys::gst_audio_stream_align_get_alignment_threshold(
-                    self.to_glib_none_mut().0,
-                ),
+                gst_audio_sys::gst_audio_stream_align_get_alignment_threshold(mut_override(
+                    self.to_glib_none().0,
+                )),
             )
         }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn get_discont_wait(&mut self) -> gst::ClockTime {
+    pub fn get_discont_wait(&self) -> gst::ClockTime {
         unsafe {
             from_glib(gst_audio_sys::gst_audio_stream_align_get_discont_wait(
-                self.to_glib_none_mut().0,
+                mut_override(self.to_glib_none().0),
             ))
         }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn get_rate(&mut self) -> i32 {
-        unsafe { gst_audio_sys::gst_audio_stream_align_get_rate(self.to_glib_none_mut().0) }
-    }
-
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn get_samples_since_discont(&mut self) -> u64 {
+    pub fn get_rate(&self) -> i32 {
         unsafe {
-            gst_audio_sys::gst_audio_stream_align_get_samples_since_discont(
-                self.to_glib_none_mut().0,
-            )
+            gst_audio_sys::gst_audio_stream_align_get_rate(mut_override(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn get_timestamp_at_discont(&mut self) -> gst::ClockTime {
+    pub fn get_samples_since_discont(&self) -> u64 {
+        unsafe {
+            gst_audio_sys::gst_audio_stream_align_get_samples_since_discont(mut_override(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    pub fn get_timestamp_at_discont(&self) -> gst::ClockTime {
         unsafe {
             from_glib(
-                gst_audio_sys::gst_audio_stream_align_get_timestamp_at_discont(
-                    self.to_glib_none_mut().0,
-                ),
+                gst_audio_sys::gst_audio_stream_align_get_timestamp_at_discont(mut_override(
+                    self.to_glib_none().0,
+                )),
             )
         }
     }
