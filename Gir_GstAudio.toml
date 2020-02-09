@@ -144,6 +144,12 @@ status = "generate"
     # bool does not signal error
     ignore = true
 
+    [[object.function]]
+    pattern = "get_.*"
+        [[object.function.parameter]]
+        name = "align"
+        const = true
+
 [[object]]
 name = "GstAudio.AudioDecoder"
 status = "generate"
