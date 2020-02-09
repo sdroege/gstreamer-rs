@@ -18,6 +18,9 @@ extern crate gstreamer_base as gst_base;
 extern crate gstreamer_sys as gst_sys;
 
 #[macro_use]
+extern crate lazy_static;
+
+#[macro_use]
 extern crate glib;
 
 #[cfg(test)]

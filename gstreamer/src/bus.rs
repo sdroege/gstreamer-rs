@@ -18,13 +18,16 @@ use gst_sys;
 use std::cell::RefCell;
 use std::mem::transmute;
 use std::pin::Pin;
-use std::ptr;
 use std::task::{Context, Poll};
 
 use Bus;
 use BusSyncReply;
 use Message;
 use MessageType;
+
+lazy_static! {
+    static ref SET_ONCE_QUARK: glib::Quark = glib::Quark::from_string("gstreamer-rs-sync-handler");
+}
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
     bus: *mut gst_sys::GstBus,
@@ -158,18 +161,19 @@ impl Bus {
         F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
     {
         unsafe {
+            let bus = self.to_glib_none().0;
+            if !gobject_sys::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib()).is_null() {
+                panic!("Bus sync handler can only be set once");
+            }
+
+            gobject_sys::g_object_set_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib(), 1 as *mut _);
+
             gst_sys::gst_bus_set_sync_handler(
-                self.to_glib_none().0,
+                bus,
                 Some(trampoline_sync::<F>),
                 into_raw_sync(func),
                 Some(destroy_closure_sync::<F>),
             )
-        }
-    }
-
-    pub fn unset_sync_handler(&self) {
-        unsafe {
-            gst_sys::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None)
         }
     }
 
@@ -269,12 +273,6 @@ impl BusStream {
         });
 
         Self { bus, receiver }
-    }
-}
-
-impl Drop for BusStream {
-    fn drop(&mut self) {
-        self.bus.unset_sync_handler();
     }
 }
 

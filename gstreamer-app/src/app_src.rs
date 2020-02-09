@@ -19,6 +19,11 @@ use std::sync::{Arc, Mutex};
 use std::task::{Context, Poll, Waker};
 use AppSrc;
 
+lazy_static! {
+    static ref SET_ONCE_QUARK: glib::Quark =
+        glib::Quark::from_string("gstreamer-rs-app-src-callbacks");
+}
+
 #[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacks {
     need_data: Option<RefCell<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>>,
@@ -200,8 +205,15 @@ impl AppSrc {
 
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         unsafe {
+            let src = self.to_glib_none().0;
+            if !gobject_sys::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.to_glib()).is_null() {
+                panic!("AppSrc callbacks can only be set once");
+            }
+
+            gobject_sys::g_object_set_qdata(src as *mut _, SET_ONCE_QUARK.to_glib(), 1 as *mut _);
+
             gst_app_sys::gst_app_src_set_callbacks(
-                self.to_glib_none().0,
+                src,
                 mut_override(&callbacks.callbacks),
                 Box::into_raw(Box::new(callbacks)) as *mut _,
                 Some(destroy_callbacks),
@@ -268,12 +280,6 @@ impl AppSrcSink {
             app_src,
             waker_reference,
         }
-    }
-}
-
-impl Drop for AppSrcSink {
-    fn drop(&mut self) {
-        self.app_src.set_callbacks(AppSrcCallbacks::new().build());
     }
 }
 

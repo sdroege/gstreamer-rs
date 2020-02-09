@@ -30,6 +30,11 @@ use {
     },
 };
 
+lazy_static! {
+    static ref SET_ONCE_QUARK: glib::Quark =
+        glib::Quark::from_string("gstreamer-rs-app-sink-callbacks");
+}
+
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {
     eos: Option<RefCell<Box<dyn FnMut(&AppSink) + Send + 'static>>>,
@@ -185,8 +190,16 @@ unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
 impl AppSink {
     pub fn set_callbacks(&self, callbacks: AppSinkCallbacks) {
         unsafe {
+            let sink = self.to_glib_none().0;
+            if !gobject_sys::g_object_get_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib()).is_null()
+            {
+                panic!("AppSink callbacks can only be set once");
+            }
+
+            gobject_sys::g_object_set_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib(), 1 as *mut _);
+
             gst_app_sys::gst_app_sink_set_callbacks(
-                self.to_glib_none().0,
+                sink,
                 mut_override(&callbacks.callbacks),
                 Box::into_raw(Box::new(callbacks)) as *mut _,
                 Some(destroy_callbacks),
@@ -300,13 +313,6 @@ impl AppSinkStream {
             app_sink,
             waker_reference,
         }
-    }
-}
-
-#[cfg(any(feature = "v1_10"))]
-impl Drop for AppSinkStream {
-    fn drop(&mut self) {
-        self.app_sink.set_callbacks(AppSinkCallbacks::new().build());
     }
 }
 

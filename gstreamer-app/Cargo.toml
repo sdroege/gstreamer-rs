@@ -24,6 +24,7 @@ gstreamer-app-sys = { version = "0.8", features = ["v1_8"] }
 glib = { version = "0.9" }
 gstreamer = { version = "0.15", path = "../gstreamer" }
 gstreamer-base = { version = "0.15", path = "../gstreamer-base" }
+lazy_static = "1.0"
 
 [build-dependencies]
 rustdoc-stripper = { version = "0.1", optional = true }
