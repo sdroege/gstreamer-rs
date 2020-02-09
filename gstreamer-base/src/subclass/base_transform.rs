@@ -127,6 +127,29 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 
         self.parent_transform_ip_passthrough(element, buf)
     }
 
+    fn copy_metadata(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::BufferRef,
+        outbuf: &mut gst::BufferRef,
+    ) -> Result<(), gst::LoggableError> {
+        self.parent_copy_metadata(element, inbuf, outbuf)
+    }
+
+    fn transform_meta<'a>(
+        &self,
+        element: &BaseTransform,
+        outbuf: &mut gst::BufferRef,
+        meta: gst::MetaRef<'a, gst::Meta>,
+        inbuf: &'a gst::BufferRef,
+    ) -> bool {
+        self.parent_transform_meta(element, outbuf, meta, inbuf)
+    }
+
+    fn before_transform(&self, element: &BaseTransform, inbuf: &gst::BufferRef) {
+        self.parent_before_transform(element, inbuf);
+    }
+
     fn submit_input_buffer(
         &self,
         element: &BaseTransform,
@@ -216,6 +239,23 @@ pub trait BaseTransformImplExt {
         element: &BaseTransform,
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_copy_metadata(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::BufferRef,
+        outbuf: &mut gst::BufferRef,
+    ) -> Result<(), gst::LoggableError>;
+
+    fn parent_transform_meta<'a>(
+        &self,
+        element: &BaseTransform,
+        outbuf: &mut gst::BufferRef,
+        meta: gst::MetaRef<'a, gst::Meta>,
+        inbuf: &'a gst::BufferRef,
+    ) -> bool;
+
+    fn parent_before_transform(&self, element: &BaseTransform, inbuf: &gst::BufferRef);
 
     fn parent_submit_input_buffer(
         &self,
@@ -584,6 +624,68 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         }
     }
 
+    fn parent_copy_metadata(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::BufferRef,
+        outbuf: &mut gst::BufferRef,
+    ) -> Result<(), gst::LoggableError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
+            if let Some(ref f) = (*parent_class).copy_metadata {
+                gst_result_from_gboolean!(
+                    f(
+                        element.to_glib_none().0,
+                        inbuf.as_ptr() as *mut _,
+                        outbuf.as_mut_ptr()
+                    ),
+                    gst::CAT_RUST,
+                    "Parent function `copy_metadata` failed"
+                )
+            } else {
+                Ok(())
+            }
+        }
+    }
+
+    fn parent_transform_meta<'a>(
+        &self,
+        element: &BaseTransform,
+        outbuf: &mut gst::BufferRef,
+        meta: gst::MetaRef<'a, gst::Meta>,
+        inbuf: &'a gst::BufferRef,
+    ) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
+            (*parent_class)
+                .transform_meta
+                .map(|f| {
+                    from_glib(f(
+                        element.to_glib_none().0,
+                        outbuf.as_mut_ptr(),
+                        meta.as_ptr() as *mut _,
+                        inbuf.as_ptr() as *mut _,
+                    ))
+                })
+                .unwrap_or(false)
+        }
+    }
+
+    fn parent_before_transform(&self, element: &BaseTransform, inbuf: &gst::BufferRef) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
+            (*parent_class)
+                .before_transform
+                .map(|f| f(element.to_glib_none().0, inbuf.as_ptr() as *mut _));
+        }
+    }
+
     fn parent_submit_input_buffer(
         &self,
         element: &BaseTransform,
@@ -692,6 +794,9 @@ where
             klass.get_unit_size = Some(base_transform_get_unit_size::<T>);
             klass.sink_event = Some(base_transform_sink_event::<T>);
             klass.src_event = Some(base_transform_src_event::<T>);
+            klass.transform_meta = Some(base_transform_transform_meta::<T>);
+            klass.copy_metadata = Some(base_transform_copy_metadata::<T>);
+            klass.before_transform = Some(base_transform_before_transform::<T>);
             klass.submit_input_buffer = Some(base_transform_submit_input_buffer::<T>);
             klass.generate_output = Some(base_transform_generate_output::<T>);
         }
@@ -1059,6 +1164,88 @@ where
         }
     })
     .to_glib()
+}
+
+unsafe extern "C" fn base_transform_transform_meta<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseTransform,
+    outbuf: *mut gst_sys::GstBuffer,
+    meta: *mut gst_sys::GstMeta,
+    inbuf: *mut gst_sys::GstBuffer,
+) -> glib_sys::gboolean
+where
+    T: BaseTransformImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseTransform = from_glib_borrow(ptr);
+
+    let inbuf = gst::BufferRef::from_ptr(inbuf);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        imp.transform_meta(
+            &wrap,
+            gst::BufferRef::from_mut_ptr(outbuf),
+            gst::Meta::from_ptr(inbuf, meta),
+            inbuf,
+        )
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn base_transform_copy_metadata<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseTransform,
+    inbuf: *mut gst_sys::GstBuffer,
+    outbuf: *mut gst_sys::GstBuffer,
+) -> glib_sys::gboolean
+where
+    T: BaseTransformImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseTransform = from_glib_borrow(ptr);
+
+    if gst_sys::gst_mini_object_is_writable(outbuf as *mut _) == glib_sys::GFALSE {
+        gst_warning!(
+            gst::CAT_RUST,
+            obj: &wrap,
+            "buffer {:?} not writable",
+            outbuf
+        );
+        return glib_sys::GFALSE;
+    }
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), true, {
+        match imp.copy_metadata(
+            &wrap,
+            gst::BufferRef::from_ptr(inbuf),
+            gst::BufferRef::from_mut_ptr(outbuf),
+        ) {
+            Ok(_) => true,
+            Err(err) => {
+                err.log_with_object(&wrap);
+                false
+            }
+        }
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn base_transform_before_transform<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseTransform,
+    inbuf: *mut gst_sys::GstBuffer,
+) where
+    T: BaseTransformImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseTransform = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+        imp.before_transform(&wrap, gst::BufferRef::from_ptr(inbuf));
+    })
 }
 
 unsafe extern "C" fn base_transform_submit_input_buffer<T: ObjectSubclass>(
