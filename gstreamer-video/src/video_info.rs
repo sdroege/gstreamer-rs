@@ -267,7 +267,38 @@ impl<'a> VideoInfoBuilder<'a> {
         unsafe {
             let mut info = mem::MaybeUninit::uninit();
 
-            #[cfg(not(feature = "v1_16"))]
+            #[cfg(not(feature = "v1_12"))]
+            let res: bool = {
+                // The bool return value is new with 1.11.1, see
+                // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
+                let res = if gst::version() < (1, 11, 1, 0) {
+                    gst_video_sys::gst_video_info_set_format(
+                        info.as_mut_ptr(),
+                        self.format.to_glib(),
+                        self.width,
+                        self.height,
+                    );
+
+                    true
+                } else {
+                    from_glib(gst_video_sys::gst_video_info_set_format(
+                        info.as_mut_ptr(),
+                        self.format.to_glib(),
+                        self.width,
+                        self.height,
+                    ))
+                };
+
+                if res {
+                    if let Some(interlace_mode) = self.interlace_mode {
+                        let info = info.as_mut_ptr();
+                        (*info).interlace_mode = interlace_mode.to_glib();
+                    }
+                }
+
+                res
+            };
+            #[cfg(all(feature = "v1_12", not(feature = "v1_16")))]
             let res: bool = {
                 let res = from_glib(gst_video_sys::gst_video_info_set_format(
                     info.as_mut_ptr(),
@@ -710,8 +741,23 @@ impl VideoInfo {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn align(&mut self, align: &mut ::VideoAlignment) -> bool {
+        #[cfg(not(feature = "v1_12"))]
+        unsafe {
+            // The bool return value is new with 1.11.1, see
+            // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
+            if gst::version() < (1, 11, 1, 0) {
+                gst_video_sys::gst_video_info_align(&mut self.0, &mut align.0);
+
+                true
+            } else {
+                from_glib(gst_video_sys::gst_video_info_align(
+                    &mut self.0,
+                    &mut align.0,
+                ))
+            }
+        }
+        #[cfg(feature = "v1_12")]
         unsafe {
             from_glib(gst_video_sys::gst_video_info_align(
                 &mut self.0,
