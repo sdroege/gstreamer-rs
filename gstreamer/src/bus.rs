@@ -162,11 +162,22 @@ impl Bus {
     {
         unsafe {
             let bus = self.to_glib_none().0;
-            if !gobject_sys::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib()).is_null() {
-                panic!("Bus sync handler can only be set once");
-            }
 
-            gobject_sys::g_object_set_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib(), 1 as *mut _);
+            // This is not thread-safe before 1.16.3, see
+            // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
+            if ::version() < (1, 16, 3, 0) {
+                if !gobject_sys::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib())
+                    .is_null()
+                {
+                    panic!("Bus sync handler can only be set once");
+                }
+
+                gobject_sys::g_object_set_qdata(
+                    bus as *mut _,
+                    SET_ONCE_QUARK.to_glib(),
+                    1 as *mut _,
+                );
+            }
 
             gst_sys::gst_bus_set_sync_handler(
                 bus,
@@ -174,6 +185,20 @@ impl Bus {
                 into_raw_sync(func),
                 Some(destroy_closure_sync::<F>),
             )
+        }
+    }
+
+    pub fn unset_sync_handler(&self) {
+        // This is not thread-safe before 1.16.3, see
+        // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
+        if ::version() < (1, 16, 3, 0) {
+            return;
+        }
+
+        unsafe {
+            use std::ptr;
+
+            gst_sys::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None)
         }
     }
 
@@ -273,6 +298,12 @@ impl BusStream {
         });
 
         Self { bus, receiver }
+    }
+}
+
+impl Drop for BusStream {
+    fn drop(&mut self) {
+        self.bus.unset_sync_handler();
     }
 }
 

@@ -206,11 +206,21 @@ impl AppSrc {
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         unsafe {
             let src = self.to_glib_none().0;
-            if !gobject_sys::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.to_glib()).is_null() {
-                panic!("AppSrc callbacks can only be set once");
-            }
+            // This is not thread-safe before 1.16.3, see
+            // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
+            if gst::version() < (1, 16, 3, 0) {
+                if !gobject_sys::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.to_glib())
+                    .is_null()
+                {
+                    panic!("AppSrc callbacks can only be set once");
+                }
 
-            gobject_sys::g_object_set_qdata(src as *mut _, SET_ONCE_QUARK.to_glib(), 1 as *mut _);
+                gobject_sys::g_object_set_qdata(
+                    src as *mut _,
+                    SET_ONCE_QUARK.to_glib(),
+                    1 as *mut _,
+                );
+            }
 
             gst_app_sys::gst_app_src_set_callbacks(
                 src,
@@ -279,6 +289,16 @@ impl AppSrcSink {
         Self {
             app_src,
             waker_reference,
+        }
+    }
+}
+
+impl Drop for AppSrcSink {
+    fn drop(&mut self) {
+        // This is not thread-safe before 1.16.3, see
+        // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
+        if gst::version() >= (1, 16, 3, 0) {
+            self.app_src.set_callbacks(AppSrcCallbacks::new().build());
         }
     }
 }
