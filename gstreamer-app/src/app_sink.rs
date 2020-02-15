@@ -190,12 +190,22 @@ impl AppSink {
 
         unsafe {
             let sink = self.to_glib_none().0;
-            if !gobject_sys::g_object_get_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib()).is_null()
-            {
-                panic!("AppSink callbacks can only be set once");
-            }
 
-            gobject_sys::g_object_set_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib(), 1 as *mut _);
+            // This is not thread-safe before 1.16.3, see
+            // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
+            if gst::version() < (1, 16, 3, 0) {
+                if !gobject_sys::g_object_get_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib())
+                    .is_null()
+                {
+                    panic!("AppSink callbacks can only be set once");
+                }
+
+                gobject_sys::g_object_set_qdata(
+                    sink as *mut _,
+                    SET_ONCE_QUARK.to_glib(),
+                    1 as *mut _,
+                );
+            }
 
             gst_app_sys::gst_app_sink_set_callbacks(
                 sink,
@@ -311,6 +321,17 @@ impl AppSinkStream {
         Self {
             app_sink,
             waker_reference,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_10"))]
+impl Drop for AppSinkStream {
+    fn drop(&mut self) {
+        // This is not thread-safe before 1.16.3, see
+        // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
+        if gst::version() >= (1, 16, 3, 0) {
+            self.app_sink.set_callbacks(AppSinkCallbacks::new().build());
         }
     }
 }
