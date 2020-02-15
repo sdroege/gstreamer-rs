@@ -5,6 +5,34 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.3] - 2020-02-15
+### Fixed
+- `UniqueFlowCombiner::clear()` should take a mutable reference.
+- `AudioStreamAlign` doesn't require mutable references for getters anymore.
+- Don't use bool return value of `gst_video_info_set_format()` and
+  `gst_video_info_align()` with GStreamer < 1.11.1 as it returned void back
+  then. We'd otherwise use some random value.
+- Make `VideoInfo::align()` is available since 1.8.
+- Fix changing/clearing of `AppSrc`, `AppSink` callbacks and `Bus` sync
+  handler. Before 1.16.3 this was not thread-safe and caused crashes. When
+  running with older versions changing them causes a panic now and unsetting
+  the bus sync handler has not effect. With newer versions it works correctly.
+
+### Added
+- Add `Clone` impls for `BufferPoolConfig` and `PlayerConfig`.
+- Add `VideoConverter` bindings.
+- Add `Future`s variant for `gst::Promise` constructor.
+- Add `Future`s variant for `gst_video::convert_sample_async()`.
+- Add `submit_input_buffer()`, `generate_output()`, `before_transform()`,
+  `copy_metadata()` and `transform_meta()` virtual method support for
+  `BaseTransform`.
+- Add `AppSink` `Stream` adapter and `AppSrc` `Sink` adapter for integrating
+  both into Rust async contexts.
+
+### Changed
+- More generic implementations of `VideoFrame` / `VideoFrameRef` functions to
+  allow usage in more generic contexts.
+
 ## [0.15.2] - 2020-01-30
 ### Fixed
 - Fix another race condition in the `gst::Bus` `Stream` that could cause it to
