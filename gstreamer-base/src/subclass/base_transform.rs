@@ -102,6 +102,14 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 
         self.parent_src_event(element, event)
     }
 
+    fn prepare_output_buffer(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::BufferRef,
+    ) -> Result<PreparedOutputBuffer, gst::FlowError> {
+        self.parent_prepare_output_buffer(element, inbuf)
+    }
+
     fn transform(
         &self,
         element: &BaseTransform,
@@ -220,6 +228,12 @@ pub trait BaseTransformImplExt {
     fn parent_sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool;
 
     fn parent_src_event(&self, element: &BaseTransform, event: gst::Event) -> bool;
+
+    fn parent_prepare_output_buffer(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::BufferRef,
+    ) -> Result<PreparedOutputBuffer, gst::FlowError>;
 
     fn parent_transform(
         &self,
@@ -534,6 +548,41 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         }
     }
 
+    fn parent_prepare_output_buffer(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::BufferRef,
+    ) -> Result<PreparedOutputBuffer, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
+            (*parent_class)
+                .prepare_output_buffer
+                .map(|f| {
+                    let mut outbuf: *mut gst_sys::GstBuffer = ptr::null_mut();
+                    // FIXME: Wrong signature in FFI
+                    let res = from_glib(f(
+                        element.to_glib_none().0,
+                        inbuf.as_ptr() as *mut gst_sys::GstBuffer,
+                        (&mut outbuf) as *mut *mut gst_sys::GstBuffer as *mut gst_sys::GstBuffer,
+                    ));
+
+                    match gst::FlowReturn::into_result(res) {
+                        Err(err) => Err(err),
+                        Ok(_) => {
+                            if outbuf == inbuf.as_ptr() as *mut _ {
+                                Ok(PreparedOutputBuffer::InputBuffer)
+                            } else {
+                                Ok(PreparedOutputBuffer::Buffer(from_glib_full(outbuf)))
+                            }
+                        }
+                    }
+                })
+                .unwrap_or(Err(gst::FlowError::NotSupported))
+        }
+    }
+
     fn parent_transform(
         &self,
         element: &BaseTransform,
@@ -792,6 +841,7 @@ where
             klass.query = Some(base_transform_query::<T>);
             klass.transform_size = Some(base_transform_transform_size::<T>);
             klass.get_unit_size = Some(base_transform_get_unit_size::<T>);
+            klass.prepare_output_buffer = Some(base_transform_prepare_output_buffer::<T>);
             klass.sink_event = Some(base_transform_sink_event::<T>);
             klass.src_event = Some(base_transform_src_event::<T>);
             klass.transform_meta = Some(base_transform_transform_meta::<T>);
@@ -847,6 +897,12 @@ pub enum GeneratedOutput {
     Buffer(gst::Buffer),
     NoOutput,
     Dropped,
+}
+
+#[derive(Debug)]
+pub enum PreparedOutputBuffer {
+    Buffer(gst::Buffer),
+    InputBuffer,
 }
 
 unsafe extern "C" fn base_transform_start<T: ObjectSubclass>(
@@ -1074,6 +1130,38 @@ where
                 true
             }
             None => false,
+        }
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn base_transform_prepare_output_buffer<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseTransform,
+    inbuf: *mut gst_sys::GstBuffer,
+    outbuf: *mut gst_sys::GstBuffer,
+) -> gst_sys::GstFlowReturn
+where
+    T: BaseTransformImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseTransform = from_glib_borrow(ptr);
+
+    // FIXME: Wrong signature in FFI
+    let outbuf = outbuf as *mut *mut gst_sys::GstBuffer;
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+        match imp.prepare_output_buffer(&wrap, gst::BufferRef::from_ptr(inbuf)) {
+            Ok(PreparedOutputBuffer::InputBuffer) => {
+                *outbuf = inbuf;
+                gst::FlowReturn::Ok
+            }
+            Ok(PreparedOutputBuffer::Buffer(buf)) => {
+                *outbuf = buf.into_ptr();
+                gst::FlowReturn::Ok
+            }
+            Err(err) => err.into(),
         }
     })
     .to_glib()
