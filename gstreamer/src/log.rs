@@ -124,7 +124,7 @@ impl DebugCategory {
     }
 
     #[inline]
-    pub fn log<O: IsA<::Object>>(
+    pub fn log<O: IsA<glib::Object>>(
         self,
         obj: Option<&O>,
         level: ::DebugLevel,
@@ -304,7 +304,7 @@ macro_rules! gst_log_with_level(
             module_path!(), line!(), format_args!($($args)*))
     }};
     ($cat:expr, level: $level:expr, $($args:tt)*) => { {
-        $crate::DebugCategory::log($cat.clone(), None as Option<&$crate::Object>, $level, file!(),
+        $crate::DebugCategory::log($cat.clone(), None as Option<&$crate::glib::Object>, $level, file!(),
             module_path!(), line!(), format_args!($($args)*))
     }};
 );
