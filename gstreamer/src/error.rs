@@ -145,7 +145,7 @@ impl LoggableError {
 
     pub fn log(&self) {
         self.category.log(
-            None as Option<&::Object>,
+            None as Option<&glib::Object>,
             ::DebugLevel::Error,
             self.bool_error.filename,
             self.bool_error.function,
@@ -154,7 +154,7 @@ impl LoggableError {
         );
     }
 
-    pub fn log_with_object<O: IsA<::Object>>(&self, obj: &O) {
+    pub fn log_with_object<O: IsA<glib::Object>>(&self, obj: &O) {
         self.category.log(
             Some(obj),
             ::DebugLevel::Error,
