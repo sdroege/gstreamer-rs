@@ -15,6 +15,7 @@ gstreamer-video = { version = "0.15", path = "../gstreamer-video" }
 gstreamer-pbutils = { version = "0.15", path = "../gstreamer-pbutils" }
 gstreamer-player = { version = "0.15", path = "../gstreamer-player", optional = true }
 gstreamer-editing-services = { version = "0.15", path = "../gstreamer-editing-services", optional = true }
+gstreamer-sdp = { version = "0.15", path = "../gstreamer-sdp", optional = true }
 gstreamer-rtsp = { version = "0.15", path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { version = "0.15", path = "../gstreamer-rtsp-server", optional = true }
 gstreamer-rtsp-server-sys = { version = "0.8", features = ["v1_8"], optional = true }
@@ -43,7 +44,7 @@ gtksink = ["gtk", "gio"]
 gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
-gst-rtsp-server = ["gstreamer-rtsp-server"]
+gst-rtsp-server = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gstreamer-sdp"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
@@ -108,6 +109,10 @@ name = "rtpfecserver"
 
 [[bin]]
 name = "rtsp-server"
+required-features = ["gst-rtsp-server"]
+
+[[bin]]
+name = "rtsp-server-subclass"
 required-features = ["gst-rtsp-server"]
 
 [[bin]]
