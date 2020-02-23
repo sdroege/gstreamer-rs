@@ -261,6 +261,10 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to unsuspend media"
 
+    [[object.function]]
+    name = "take_pipeline"
+    ignore = true
+
 [[object]]
 name = "GstRtspServer.RTSPMediaFactory"
 status = "generate"
