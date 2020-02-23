@@ -24,6 +24,7 @@ use RTSPMediaStatus;
 use RTSPPublishClockMode;
 use RTSPStream;
 use RTSPSuspendMode;
+use RTSPThread;
 use RTSPTransportMode;
 
 glib_wrapper! {
@@ -123,7 +124,7 @@ pub trait RTSPMediaExt: 'static {
 
     fn n_streams(&self) -> u32;
 
-    //fn prepare(&self, thread: /*Ignored*/Option<&mut RTSPThread>) -> bool;
+    fn prepare(&self, thread: Option<&RTSPThread>) -> Result<(), glib::error::BoolError>;
 
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool;
 
@@ -542,9 +543,17 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe { gst_rtsp_server_sys::gst_rtsp_media_n_streams(self.as_ref().to_glib_none().0) }
     }
 
-    //fn prepare(&self, thread: /*Ignored*/Option<&mut RTSPThread>) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_prepare() }
-    //}
+    fn prepare(&self, thread: Option<&RTSPThread>) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_media_prepare(
+                    self.as_ref().to_glib_none().0,
+                    thread.to_glib_full()
+                ),
+                "Failed to prepare media"
+            )
+        }
+    }
 
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek() }
