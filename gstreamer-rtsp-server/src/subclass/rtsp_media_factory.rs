@@ -284,8 +284,7 @@ where
 
     let pipeline: *mut gst_sys::GstPipeline = imp
         .create_pipeline(&wrap, &from_glib_borrow(media))
-        .to_glib_none()
-        .0;
+        .to_glib_full();
 
     // FIXME We somehow need to ensure the pipeline actually stays alive...
     gobject_sys::g_object_set_qdata_full(
