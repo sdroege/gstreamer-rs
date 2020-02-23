@@ -183,8 +183,6 @@ pub trait RTSPMediaExt: 'static {
 
     fn suspend(&self) -> Result<(), glib::error::BoolError>;
 
-    fn take_pipeline<P: IsA<gst::Pipeline>>(&self, pipeline: &P);
-
     fn unprepare(&self) -> Result<(), glib::error::BoolError>;
 
     fn unsuspend(&self) -> Result<(), glib::error::BoolError>;
@@ -761,15 +759,6 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
                 gst_rtsp_server_sys::gst_rtsp_media_suspend(self.as_ref().to_glib_none().0),
                 "Failed to suspend media"
             )
-        }
-    }
-
-    fn take_pipeline<P: IsA<gst::Pipeline>>(&self, pipeline: &P) {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_take_pipeline(
-                self.as_ref().to_glib_none().0,
-                pipeline.as_ref().to_glib_full(),
-            );
         }
     }
 
