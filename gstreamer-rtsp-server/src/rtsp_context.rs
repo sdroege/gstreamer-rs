@@ -37,3 +37,18 @@ impl glib::translate::FromGlibPtrBorrow<*mut gst_rtsp_server_sys::GstRTSPContext
         RTSPContext(ptr::NonNull::new_unchecked(ptr))
     }
 }
+
+#[doc(hidden)]
+impl<'a> glib::translate::ToGlibPtr<'a, *mut gst_rtsp_server_sys::GstRTSPContext> for RTSPContext {
+    type Storage = &'a RTSPContext;
+
+    fn to_glib_none(
+        &'a self,
+    ) -> glib::translate::Stash<'a, *mut gst_rtsp_server_sys::GstRTSPContext, Self> {
+        glib::translate::Stash(self.0.as_ptr(), self)
+    }
+
+    fn to_glib_full(&self) -> *mut gst_rtsp_server_sys::GstRTSPContext {
+        unimplemented!()
+    }
+}

@@ -57,6 +57,7 @@ mod rtsp_server;
 mod rtsp_session_pool;
 mod rtsp_stream;
 mod rtsp_stream_transport;
+mod rtsp_thread;
 mod rtsp_token;
 
 pub use rtsp_address_pool::RTSPAddressPoolExtManual;
@@ -67,6 +68,7 @@ pub use rtsp_server::RTSPServerExtManual;
 pub use rtsp_session_pool::RTSPSessionPoolExtManual;
 pub use rtsp_stream::RTSPStreamExtManual;
 pub use rtsp_stream_transport::RTSPStreamTransportExtManual;
+pub use rtsp_thread::*;
 
 pub use rtsp_context::*;
 pub use rtsp_token::*;

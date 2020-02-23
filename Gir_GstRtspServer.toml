@@ -97,6 +97,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "GstRtspServer.RTSPThread"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"
@@ -245,6 +250,11 @@ status = "generate"
     name = "unprepare"
         [object.function.return]
         bool_return_is_error = "Failed to unprepare media"
+
+    [[object.function]]
+    name = "prepare"
+        [object.function.return]
+        bool_return_is_error = "Failed to prepare media"
 
     [[object.function]]
     name = "unsuspend"

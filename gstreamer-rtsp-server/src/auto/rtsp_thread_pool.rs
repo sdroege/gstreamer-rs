@@ -11,6 +11,9 @@ use glib_sys;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use RTSPContext;
+use RTSPThread;
+use RTSPThreadType;
 
 glib_wrapper! {
     pub struct RTSPThreadPool(Object<gst_rtsp_server_sys::GstRTSPThreadPool, gst_rtsp_server_sys::GstRTSPThreadPoolClass, RTSPThreadPoolClass>);
@@ -48,7 +51,7 @@ pub const NONE_RTSP_THREAD_POOL: Option<&RTSPThreadPool> = None;
 pub trait RTSPThreadPoolExt: 'static {
     fn get_max_threads(&self) -> i32;
 
-    //fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> /*Ignored*/Option<RTSPThread>;
+    fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread>;
 
     fn set_max_threads(&self, max_threads: i32);
 
@@ -67,9 +70,15 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
         }
     }
 
-    //fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> /*Ignored*/Option<RTSPThread> {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_thread_pool_get_thread() }
-    //}
+    fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread> {
+        unsafe {
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_thread_pool_get_thread(
+                self.as_ref().to_glib_none().0,
+                type_.to_glib(),
+                ctx.to_glib_none().0,
+            ))
+        }
+    }
 
     fn set_max_threads(&self, max_threads: i32) {
         unsafe {
