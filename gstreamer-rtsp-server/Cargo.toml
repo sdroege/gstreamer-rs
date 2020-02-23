@@ -20,12 +20,14 @@ glib-sys = { version = "0.9" }
 gio-sys = { version = "0.9" }
 gobject-sys = { version = "0.9" }
 gstreamer-sys = { version = "0.8", features = ["v1_8"] }
+gstreamer-sdp-sys = {  version = "0.8", features = ["v1_8"] }
 gstreamer-rtsp-sys = { version = "0.8", features = ["v1_8"] }
 gstreamer-rtsp-server-sys = { version = "0.8", features = ["v1_8"] }
 gstreamer-net-sys = { version = "0.8", features = ["v1_8"] }
 glib = { version = "0.9" }
 gio = { version = "0.8" }
 gstreamer = { version = "0.15", path = "../gstreamer" }
+gstreamer-sdp = { version = "0.15", path = "../gstreamer-sdp" }
 gstreamer-rtsp = { version = "0.15", path = "../gstreamer-rtsp" }
 gstreamer-net = { version = "0.15", path = "../gstreamer-net" }
 

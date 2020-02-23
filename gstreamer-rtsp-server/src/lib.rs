@@ -26,6 +26,8 @@ extern crate gstreamer_net_sys as gst_net_sys;
 extern crate gstreamer_rtsp as gst_rtsp;
 extern crate gstreamer_rtsp_server_sys as gst_rtsp_server_sys;
 extern crate gstreamer_rtsp_sys as gst_rtsp_sys;
+extern crate gstreamer_sdp as gst_sdp;
+extern crate gstreamer_sdp_sys as gst_sdp_sys;
 extern crate gstreamer_sys as gst_sys;
 
 macro_rules! assert_initialized_main_thread {
