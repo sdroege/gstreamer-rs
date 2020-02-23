@@ -20,12 +20,14 @@ glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gio-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
 gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
+gstreamer-sdp-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
 gstreamer-rtsp-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
 gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
 gstreamer-net-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/glib" }
 gio = { git = "https://github.com/gtk-rs/gio" }
 gstreamer = { path = "../gstreamer" }
+gstreamer-sdp = { path = "../gstreamer-sdp" }
 gstreamer-rtsp = { path = "../gstreamer-rtsp" }
 gstreamer-net = { path = "../gstreamer-net" }
 
