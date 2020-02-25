@@ -113,6 +113,7 @@ concurrency = "none"
 [[object]]
 name = "GstBase.BaseSink"
 status = "generate"
+manual_traits = ["BaseSinkExtManual"]
 
     [[object.function]]
     name = "wait"
@@ -137,6 +138,7 @@ status = "generate"
 [[object]]
 name = "GstBase.BaseSrc"
 status = "generate"
+manual_traits = ["BaseSrcExtManual"]
 
     [[object.function]]
     name = "set_caps"
@@ -171,6 +173,7 @@ status = "generate"
 [[object]]
 name = "GstBase.BaseTransform"
 status = "generate"
+manual_traits = ["BaseTransformExtManual"]
 
     [[object.function]]
     name = "update_src_caps"
@@ -182,6 +185,7 @@ status = "generate"
 name = "GstBase.Aggregator"
 status = "generate"
 version = "1.14"
+manual_traits = ["AggregatorExtManual"]
 
     [[object.function]]
     name = "finish_buffer"
@@ -201,6 +205,7 @@ version = "1.14"
 name = "GstBase.AggregatorPad"
 status = "generate"
 version = "1.14"
+manual_traits = ["AggregatorPadExtManual"]
 
 [[object]]
 name = "GstBase.*"
@@ -278,6 +283,7 @@ ref_mode = "ref"
 [[object]]
 name = "GstBase.BaseParse"
 status = "generate"
+manual_traits = ["BaseParseExtManual"]
     [[object.function]]
     name = "finish_frame"
     ignore = true

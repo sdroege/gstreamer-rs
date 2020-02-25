@@ -88,6 +88,7 @@ ref_mode = "ref"
 [[object]]
 name = "GstVideo.VideoOverlay"
 status = "generate"
+manual_traits = ["VideoOverlayExtManual"]
 
     [[object.function]]
     name = "set_render_rectangle"
@@ -97,6 +98,7 @@ status = "generate"
 [[object]]
 name = "GstVideo.VideoDecoder"
 status = "generate"
+manual_traits = ["VideoDecoderExtManual"]
 
     [[object.function]]
     name = "allocate_output_frame"
@@ -175,6 +177,7 @@ status = "generate"
 [[object]]
 name = "GstVideo.VideoEncoder"
 status = "generate"
+manual_traits = ["VideoEncoderExtManual"]
 
     [[object.function]]
     name = "allocate_output_frame"
