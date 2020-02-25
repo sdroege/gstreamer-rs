@@ -94,6 +94,7 @@ ref_mode = "ref"
 [[object]]
 name = "GstGL.GLContext"
 status = "generate"
+manual_traits = ["GLContextExtManual"]
 
     [[object.function]]
     name = "new_wrapped"

@@ -153,6 +153,8 @@ status = "generate"
 [[object]]
 name = "GstAudio.AudioDecoder"
 status = "generate"
+manual_traits = ["AudioDecoderExtManual"]
+
     [[object.function]]
     name = "finish_frame"
     ignore = true
@@ -190,6 +192,7 @@ status = "generate"
 [[object]]
 name = "GstAudio.AudioEncoder"
 status = "generate"
+manual_traits = ["AudioEncoderExtManual"]
 
     [[object.function]]
     name = "finish_frame"

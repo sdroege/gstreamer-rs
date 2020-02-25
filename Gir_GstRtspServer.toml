@@ -109,6 +109,7 @@ conversion_type = "scalar"
 [[object]]
 name = "GstRtspServer.RTSPServer"
 status = "generate"
+manual_traits = ["RTSPServerExtManual"]
 
     [[object.function]]
     name = "attach"
@@ -127,6 +128,7 @@ status = "generate"
 [[object]]
 name = "GstRtspServer.RTSPClient"
 status = "generate"
+manual_traits = ["RTSPClientExtManual"]
 
     [[object.function]]
     name = "attach"
@@ -135,6 +137,7 @@ status = "generate"
 [[object]]
 name = "GstRtspServer.RTSPStream"
 status = "generate"
+manual_traits = ["RTSPStreamExtManual"]
 
     [[object.function]]
     name = "recv_rtcp"
@@ -198,6 +201,7 @@ concurrency = "send"
 name = "GstRtspServer.RTSPStreamTransport"
 status = "generate"
 concurrency = "none"
+manual_traits = ["RTSPStreamTransportExtManual"]
 
     [[object.function]]
     name = "recv_data"
@@ -222,6 +226,7 @@ concurrency = "none"
 [[object]]
 name = "GstRtspServer.RTSPAddressPool"
 status = "generate"
+manual_traits = ["RTSPAddressPoolExtManual"]
 
     [[object.function]]
     name = "add_range"
@@ -240,6 +245,7 @@ status = "generate"
 [[object]]
 name = "GstRtspServer.RTSPMedia"
 status = "generate"
+manual_traits = ["RTSPMediaExtManual"]
 
     [[object.function]]
     name = "suspend"
@@ -268,6 +274,7 @@ status = "generate"
 [[object]]
 name = "GstRtspServer.RTSPMediaFactory"
 status = "generate"
+manual_traits = ["RTSPMediaFactoryExtManual"]
 
     [[object.function]]
     name = "add_role_from_structure"
@@ -296,6 +303,7 @@ status = "generate"
 [[object]]
 name = "GstRtspServer.RTSPSessionPool"
 status = "generate"
+manual_traits = ["RTSPSessionPoolExtManual"]
 
     [[object.function]]
     name = "remove"
@@ -315,6 +323,8 @@ status = "generate"
 [[object]]
 name="GstRtspServer.RTSPAuth"
 status="generate"
+manual_traits = ["RTSPAuthExtManual"]
+
     [[object.function]]
     name = "check"
         [object.function.return]

@@ -272,6 +272,7 @@ status = "generate"
 [[object]]
 name = "GES.TimelineElement"
 status = "generate"
+manual_traits = ["TimelineElementExtManual"]
     [[object.function]]
     name = "ripple"
         [object.function.return]
