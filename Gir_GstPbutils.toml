@@ -171,6 +171,10 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    pattern = "get_restriction"
+    ignore = true
+
+    [[object.function]]
     name = "copy"
         [object.function.return]
         nullable = false

@@ -66,7 +66,7 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
-    pub use encoding_profile::EncodingProfileBuilder;
+    pub use encoding_profile::{EncodingProfileBuilder, EncodingProfileHasRestrictionGetter};
 
     pub use functions::CodecTag;
 }

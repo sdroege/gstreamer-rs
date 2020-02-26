@@ -121,6 +121,10 @@ trait EncodingProfileHasRestrictionSetter {
     fn set_restriction(&self, restriction: Option<&gst::Caps>);
 }
 
+pub trait EncodingProfileHasRestrictionGetter {
+    fn get_restriction(&self) -> Option<gst::Caps>;
+}
+
 macro_rules! declare_encoding_profile_has_restriction(
     ($name:ident) => {
         impl EncodingProfileHasRestrictionSetter for $name {
@@ -138,6 +142,18 @@ macro_rules! declare_encoding_profile_has_restriction(
                         restriction,
                     );
                 }
+            }
+        }
+
+        impl EncodingProfileHasRestrictionGetter for $name {
+            fn get_restriction(&self) -> Option<gst::Caps> {
+                let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
+
+                unsafe {
+                   from_glib_full(gst_pbutils_sys::gst_encoding_profile_get_restriction(
+                       profile.to_glib_none().0,
+                   ))
+               }
             }
         }
     }
@@ -660,7 +676,6 @@ mod tests {
         assert_eq!(profile.get_format(), container_caps);
         assert_eq!(profile.get_preset().unwrap(), PRESET);
         assert_eq!(profile.get_preset_name().unwrap(), PRESET_NAME);
-        assert_eq!(profile.get_restriction(), None);
         assert_eq!(profile.get_presence(), PRESENCE);
         assert_eq!(profile.get_allow_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
         assert_eq!(profile.is_enabled(), ENABLED);

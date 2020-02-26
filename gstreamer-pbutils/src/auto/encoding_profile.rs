@@ -72,8 +72,6 @@ pub trait EncodingProfileExt: 'static {
 
     fn get_preset_name(&self) -> Option<GString>;
 
-    fn get_restriction(&self) -> Option<gst::Caps>;
-
     fn get_type_nick(&self) -> Option<GString>;
 
     fn is_enabled(&self) -> bool;
@@ -158,14 +156,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     fn get_preset_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_preset_name(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn get_restriction(&self) -> Option<gst::Caps> {
-        unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_profile_get_restriction(
                 self.as_ref().to_glib_none().0,
             ))
         }
