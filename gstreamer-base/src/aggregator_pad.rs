@@ -21,7 +21,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
             let ptr: &gst_base_sys::GstAggregatorPad = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&ptr.parent.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&ptr.parent.object.lock);
             from_glib_none(&ptr.segment as *const gst_sys::GstSegment)
         }
     }

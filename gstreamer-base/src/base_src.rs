@@ -29,7 +29,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
             let src: &gst_base_sys::GstBaseSrc = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&src.element.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&src.element.object.lock);
             from_glib_none(&src.segment as *const _)
         }
     }

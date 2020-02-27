@@ -157,7 +157,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn get_children(&self) -> Vec<Element> {
         unsafe {
             let bin: &gst_sys::GstBin = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&bin.element.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&bin.element.object.lock);
             FromGlibPtrContainer::from_glib_none(bin.children)
         }
     }

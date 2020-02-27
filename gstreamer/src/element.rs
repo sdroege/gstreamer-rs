@@ -502,7 +502,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn get_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.pads)
         }
     }
@@ -510,7 +510,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn get_sink_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.sinkpads)
         }
     }
@@ -518,7 +518,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn get_src_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.srcpads)
         }
     }
@@ -526,7 +526,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn num_pads(&self) -> u16 {
         unsafe {
             let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&elt.object.lock);
             elt.numpads
         }
     }
@@ -534,7 +534,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn num_sink_pads(&self) -> u16 {
         unsafe {
             let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&elt.object.lock);
             elt.numsinkpads
         }
     }
@@ -542,7 +542,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn num_src_pads(&self) -> u16 {
         unsafe {
             let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&elt.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&elt.object.lock);
             elt.numsrcpads
         }
     }
