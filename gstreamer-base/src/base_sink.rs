@@ -39,7 +39,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
             let sink: &gst_base_sys::GstBaseSink = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&sink.element.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&sink.element.object.lock);
             from_glib_none(&sink.segment as *const _)
         }
     }

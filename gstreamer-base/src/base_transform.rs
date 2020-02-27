@@ -20,7 +20,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
             let trans: &gst_base_sys::GstBaseTransform = &*(self.as_ptr() as *const _);
-            ::utils::MutexGuard::lock(&trans.element.object.lock);
+            let _guard = ::utils::MutexGuard::lock(&trans.element.object.lock);
             from_glib_none(&trans.segment as *const _)
         }
     }
