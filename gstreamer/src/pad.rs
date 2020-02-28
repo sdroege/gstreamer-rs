@@ -104,6 +104,7 @@ unsafe impl<'a> Send for PadProbeData<'a> {}
 unsafe impl<'a> Sync for PadProbeData<'a> {}
 
 #[derive(Debug)]
+#[must_use = "if unused the StreamLock will immediately unlock"]
 pub struct StreamLock(Pad);
 impl Drop for StreamLock {
     fn drop(&mut self) {

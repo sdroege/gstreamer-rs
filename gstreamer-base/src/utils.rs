@@ -9,6 +9,7 @@
 use glib::translate::mut_override;
 use glib_sys;
 
+#[must_use = "if unused the Mutex will immediately unlock"]
 pub struct MutexGuard<'a>(&'a glib_sys::GMutex);
 
 impl<'a> MutexGuard<'a> {
