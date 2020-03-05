@@ -12,12 +12,15 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_sys::gpointer;
 use gst;
+use gst::gst_element_error;
 use gst_app_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
 use std::cell::RefCell;
 use std::mem::transmute;
+use std::panic;
 use std::ptr;
+use std::sync::atomic::{AtomicBool, Ordering};
 use AppSink;
 
 #[cfg(any(feature = "v1_10"))]
@@ -48,6 +51,7 @@ pub struct AppSinkCallbacks {
             Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
         >,
     >,
+    panicked: AtomicBool,
     callbacks: gst_app_sys::GstAppSinkCallbacks,
 }
 
@@ -122,6 +126,7 @@ impl AppSinkCallbacksBuilder {
             eos: self.eos,
             new_preroll: self.new_preroll,
             new_sample: self.new_sample,
+            panicked: AtomicBool::new(false),
             callbacks: gst_app_sys::GstAppSinkCallbacks {
                 eos: if have_eos { Some(trampoline_eos) } else { None },
                 new_preroll: if have_new_preroll {
@@ -145,11 +150,37 @@ impl AppSinkCallbacksBuilder {
     }
 }
 
+fn post_panic_error_message(element: &AppSink, err: &dyn std::any::Any) {
+    if let Some(cause) = err.downcast_ref::<&str>() {
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+    } else if let Some(cause) = err.downcast_ref::<String>() {
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+    } else {
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+    }
+}
+
 unsafe extern "C" fn trampoline_eos(appsink: *mut gst_app_sys::GstAppSink, callbacks: gpointer) {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let element: AppSink = from_glib_borrow(appsink);
+
+    if callbacks.panicked.load(Ordering::Relaxed) {
+        let element: AppSink = from_glib_borrow(appsink);
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        return;
+    }
 
     if let Some(ref eos) = callbacks.eos {
-        (&mut *eos.borrow_mut())(&from_glib_borrow(appsink))
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+            (&mut *eos.borrow_mut())(&element)
+        }));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                callbacks.panicked.store(true, Ordering::Relaxed);
+                post_panic_error_message(&element, &err);
+            }
+        }
     }
 }
 
@@ -158,9 +189,27 @@ unsafe extern "C" fn trampoline_new_preroll(
     callbacks: gpointer,
 ) -> gst_sys::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let element: AppSink = from_glib_borrow(appsink);
+
+    if callbacks.panicked.load(Ordering::Relaxed) {
+        let element: AppSink = from_glib_borrow(appsink);
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        return gst::FlowReturn::Error.to_glib();
+    }
 
     let ret = if let Some(ref new_preroll) = callbacks.new_preroll {
-        (&mut *new_preroll.borrow_mut())(&from_glib_borrow(appsink)).into()
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+            (&mut *new_preroll.borrow_mut())(&element).into()
+        }));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                callbacks.panicked.store(true, Ordering::Relaxed);
+                post_panic_error_message(&element, &err);
+
+                gst::FlowReturn::Error
+            }
+        }
     } else {
         gst::FlowReturn::Error
     };
@@ -173,9 +222,27 @@ unsafe extern "C" fn trampoline_new_sample(
     callbacks: gpointer,
 ) -> gst_sys::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
+    let element: AppSink = from_glib_borrow(appsink);
+
+    if callbacks.panicked.load(Ordering::Relaxed) {
+        let element: AppSink = from_glib_borrow(appsink);
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        return gst::FlowReturn::Error.to_glib();
+    }
 
     let ret = if let Some(ref new_sample) = callbacks.new_sample {
-        (&mut *new_sample.borrow_mut())(&from_glib_borrow(appsink)).into()
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+            (&mut *new_sample.borrow_mut())(&element).into()
+        }));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                callbacks.panicked.store(true, Ordering::Relaxed);
+                post_panic_error_message(&element, &err);
+
+                gst::FlowReturn::Error
+            }
+        }
     } else {
         gst::FlowReturn::Error
     };

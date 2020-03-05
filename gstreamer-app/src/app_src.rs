@@ -10,11 +10,15 @@ use futures_sink::Sink;
 use glib::translate::*;
 use glib_sys::{gboolean, gpointer};
 use gst;
+use gst::gst_element_error;
+
 use gst_app_sys;
 use std::cell::RefCell;
 use std::mem;
+use std::panic;
 use std::pin::Pin;
 use std::ptr;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::task::{Context, Poll, Waker};
 use AppSrc;
@@ -29,6 +33,7 @@ pub struct AppSrcCallbacks {
     need_data: Option<RefCell<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<dyn Fn(&AppSrc) + Send + Sync + 'static>>,
     seek_data: Option<Box<dyn Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
+    panicked: AtomicBool,
     callbacks: gst_app_sys::GstAppSrcCallbacks,
 }
 
@@ -89,6 +94,7 @@ impl AppSrcCallbacksBuilder {
             need_data: self.need_data,
             enough_data: self.enough_data,
             seek_data: self.seek_data,
+            panicked: AtomicBool::new(false),
             callbacks: gst_app_sys::GstAppSrcCallbacks {
                 need_data: if have_need_data {
                     Some(trampoline_need_data)
@@ -116,15 +122,41 @@ impl AppSrcCallbacksBuilder {
     }
 }
 
+fn post_panic_error_message(element: &AppSrc, err: &dyn std::any::Any) {
+    if let Some(cause) = err.downcast_ref::<&str>() {
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+    } else if let Some(cause) = err.downcast_ref::<String>() {
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+    } else {
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+    }
+}
+
 unsafe extern "C" fn trampoline_need_data(
     appsrc: *mut gst_app_sys::GstAppSrc,
     length: u32,
     callbacks: gpointer,
 ) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
+    let element: AppSrc = from_glib_borrow(appsrc);
+
+    if callbacks.panicked.load(Ordering::Relaxed) {
+        let element: AppSrc = from_glib_borrow(appsrc);
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        return;
+    }
 
     if let Some(ref need_data) = callbacks.need_data {
-        (&mut *need_data.borrow_mut())(&from_glib_borrow(appsrc), length);
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+            (&mut *need_data.borrow_mut())(&element, length)
+        }));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                callbacks.panicked.store(true, Ordering::Relaxed);
+                post_panic_error_message(&element, &err);
+            }
+        }
     }
 }
 
@@ -133,9 +165,23 @@ unsafe extern "C" fn trampoline_enough_data(
     callbacks: gpointer,
 ) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
+    let element: AppSrc = from_glib_borrow(appsrc);
+
+    if callbacks.panicked.load(Ordering::Relaxed) {
+        let element: AppSrc = from_glib_borrow(appsrc);
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        return;
+    }
 
     if let Some(ref enough_data) = callbacks.enough_data {
-        (*enough_data)(&from_glib_borrow(appsrc));
+        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| (*enough_data)(&element)));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                callbacks.panicked.store(true, Ordering::Relaxed);
+                post_panic_error_message(&element, &err);
+            }
+        }
     }
 }
 
@@ -145,9 +191,26 @@ unsafe extern "C" fn trampoline_seek_data(
     callbacks: gpointer,
 ) -> gboolean {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
+    let element: AppSrc = from_glib_borrow(appsrc);
+
+    if callbacks.panicked.load(Ordering::Relaxed) {
+        let element: AppSrc = from_glib_borrow(appsrc);
+        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        return false.to_glib();
+    }
 
     let ret = if let Some(ref seek_data) = callbacks.seek_data {
-        (*seek_data)(&from_glib_borrow(appsrc), offset)
+        let result =
+            panic::catch_unwind(panic::AssertUnwindSafe(|| (*seek_data)(&element, offset)));
+        match result {
+            Ok(result) => result,
+            Err(err) => {
+                callbacks.panicked.store(true, Ordering::Relaxed);
+                post_panic_error_message(&element, &err);
+
+                false
+            }
+        }
     } else {
         false
     };
