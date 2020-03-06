@@ -61,16 +61,21 @@ impl<T: MiniObject> GstRc<T> {
         }
     }
 
+    pub unsafe fn replace_ptr(&mut self, ptr: *mut T::GstType) {
+        assert!(!ptr.is_null());
+        self.obj = ptr::NonNull::new_unchecked(ptr as *mut T);
+    }
+
     pub fn make_mut(&mut self) -> &mut T {
         unsafe {
             if self.is_writable() {
                 return self.obj.as_mut();
             }
 
-            let ptr = T::from_mut_ptr(gst_sys::gst_mini_object_make_writable(
+            let ptr = gst_sys::gst_mini_object_make_writable(
                 self.as_mut_ptr() as *mut gst_sys::GstMiniObject
-            ) as *mut T::GstType);
-            self.obj = ptr::NonNull::new_unchecked(ptr);
+            );
+            self.replace_ptr(ptr as *mut T::GstType);
             assert!(self.is_writable());
 
             self.obj.as_mut()

@@ -159,13 +159,11 @@ impl Buffer {
         }
     }
 
-    pub fn append(buffer: Self, other: Self) -> Self {
+    pub fn append(&mut self, other: Self) {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_sys::gst_buffer_append(
-                buffer.into_ptr(),
-                other.into_ptr(),
-            ))
+            let ptr = gst_sys::gst_buffer_append(self.as_mut_ptr(), other.into_ptr());
+            self.replace_ptr(ptr);
         }
     }
 }

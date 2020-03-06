@@ -70,54 +70,64 @@ impl Caps {
         caps
     }
 
-    pub fn fixate(caps: Self) -> Self {
-        skip_assert_initialized!();
-        unsafe { from_glib_full(gst_sys::gst_caps_fixate(caps.into_ptr())) }
-    }
-
-    pub fn merge(caps: Self, other: Self) -> Self {
-        skip_assert_initialized!();
-        unsafe { from_glib_full(gst_sys::gst_caps_merge(caps.into_ptr(), other.into_ptr())) }
-    }
-
-    pub fn merge_structure(caps: Self, structure: Structure) -> Self {
+    pub fn fixate(&mut self) {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_sys::gst_caps_merge_structure(
-                caps.into_ptr(),
-                structure.into_ptr(),
-            ))
+            let ptr = gst_sys::gst_caps_fixate(self.as_mut_ptr());
+            self.replace_ptr(ptr);
         }
     }
 
-    pub fn merge_structure_full(
-        caps: Self,
-        structure: Structure,
-        features: Option<CapsFeatures>,
-    ) -> Self {
+    pub fn merge(&mut self, other: Self) {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_sys::gst_caps_merge_structure_full(
-                caps.into_ptr(),
+            let ptr = gst_sys::gst_caps_merge(self.as_mut_ptr(), other.into_ptr());
+            self.replace_ptr(ptr);
+        }
+    }
+
+    pub fn merge_structure(&mut self, structure: Structure) {
+        skip_assert_initialized!();
+        unsafe {
+            let ptr = gst_sys::gst_caps_merge_structure(self.as_mut_ptr(), structure.into_ptr());
+            self.replace_ptr(ptr);
+        }
+    }
+
+    pub fn merge_structure_full(&mut self, structure: Structure, features: Option<CapsFeatures>) {
+        skip_assert_initialized!();
+        unsafe {
+            let ptr = gst_sys::gst_caps_merge_structure_full(
+                self.as_mut_ptr(),
                 structure.into_ptr(),
                 features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
-            ))
+            );
+            self.replace_ptr(ptr);
         }
     }
 
-    pub fn normalize(caps: Self) -> Self {
+    pub fn normalize(&mut self) {
         skip_assert_initialized!();
-        unsafe { from_glib_full(gst_sys::gst_caps_normalize(caps.into_ptr())) }
+        unsafe {
+            let ptr = gst_sys::gst_caps_normalize(self.as_mut_ptr());
+            self.replace_ptr(ptr);
+        }
     }
 
-    pub fn simplify(caps: Self) -> Self {
+    pub fn simplify(&mut self) {
         skip_assert_initialized!();
-        unsafe { from_glib_full(gst_sys::gst_caps_simplify(caps.into_ptr())) }
+        unsafe {
+            let ptr = gst_sys::gst_caps_simplify(self.as_mut_ptr());
+            self.replace_ptr(ptr);
+        }
     }
 
-    pub fn truncate(caps: Self) -> Self {
+    pub fn truncate(&mut self) {
         skip_assert_initialized!();
-        unsafe { from_glib_full(gst_sys::gst_caps_truncate(caps.into_ptr())) }
+        unsafe {
+            let ptr = gst_sys::gst_caps_truncate(self.as_mut_ptr());
+            self.replace_ptr(ptr);
+        }
     }
 }
 
