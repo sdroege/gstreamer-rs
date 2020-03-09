@@ -1445,11 +1445,8 @@ impl<'a> NavigationBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let structure = s.structure.take();
-        let ev = gst_sys::gst_event_new_navigation(structure.to_glib_none().0);
-        mem::forget(structure);
-
-        ev
+        let structure = s.structure.take().unwrap();
+        gst_sys::gst_event_new_navigation(structure.into_ptr())
     });
 }
 
@@ -1563,14 +1560,8 @@ impl<'a> CustomUpstreamBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let structure = s.structure.take();
-        let ev = gst_sys::gst_event_new_custom(
-            gst_sys::GST_EVENT_CUSTOM_UPSTREAM,
-            structure.to_glib_none().0,
-        );
-        mem::forget(structure);
-
-        ev
+        let structure = s.structure.take().unwrap();
+        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_UPSTREAM, structure.into_ptr())
     });
 }
 
@@ -1588,14 +1579,8 @@ impl<'a> CustomDownstreamBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let structure = s.structure.take();
-        let ev = gst_sys::gst_event_new_custom(
-            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM,
-            structure.to_glib_none().0,
-        );
-        mem::forget(structure);
-
-        ev
+        let structure = s.structure.take().unwrap();
+        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM, structure.into_ptr())
     });
 }
 
@@ -1613,14 +1598,11 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let structure = s.structure.take();
-        let ev = gst_sys::gst_event_new_custom(
+        let structure = s.structure.take().unwrap();
+        gst_sys::gst_event_new_custom(
             gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
-            structure.to_glib_none().0,
-        );
-        mem::forget(structure);
-
-        ev
+            structure.into_ptr(),
+        )
     });
 }
 
@@ -1638,14 +1620,11 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let structure = s.structure.take();
-        let ev = gst_sys::gst_event_new_custom(
+        let structure = s.structure.take().unwrap();
+        gst_sys::gst_event_new_custom(
             gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
-            structure.to_glib_none().0,
-        );
-        mem::forget(structure);
-
-        ev
+            structure.into_ptr(),
+        )
     });
 }
 
@@ -1663,14 +1642,8 @@ impl<'a> CustomBothBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let structure = s.structure.take();
-        let ev = gst_sys::gst_event_new_custom(
-            gst_sys::GST_EVENT_CUSTOM_BOTH,
-            structure.to_glib_none().0,
-        );
-        mem::forget(structure);
-
-        ev
+        let structure = s.structure.take().unwrap();
+        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_BOTH, structure.into_ptr())
     });
 }
 
@@ -1688,14 +1661,8 @@ impl<'a> CustomBothOobBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let structure = s.structure.take();
-        let ev = gst_sys::gst_event_new_custom(
-            gst_sys::GST_EVENT_CUSTOM_BOTH_OOB,
-            structure.to_glib_none().0,
-        );
-        mem::forget(structure);
-
-        ev
+        let structure = s.structure.take().unwrap();
+        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_BOTH_OOB, structure.into_ptr())
     });
 }
 

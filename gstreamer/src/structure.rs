@@ -420,14 +420,10 @@ impl StructureRef {
         self.set_value(name, value);
     }
 
-    pub fn set_value(&mut self, name: &str, mut value: SendValue) {
+    pub fn set_value(&mut self, name: &str, value: SendValue) {
         unsafe {
-            gst_sys::gst_structure_take_value(
-                &mut self.0,
-                name.to_glib_none().0,
-                value.to_glib_none_mut().0,
-            );
-            mem::forget(value);
+            let mut value = value.into_raw();
+            gst_sys::gst_structure_take_value(&mut self.0, name.to_glib_none().0, &mut value);
         }
     }
 

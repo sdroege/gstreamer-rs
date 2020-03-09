@@ -59,6 +59,12 @@ impl<T> Iterator<T>
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
+    pub unsafe fn into_ptr(self) -> *mut gst_sys::GstIterator {
+        let it = self.to_glib_none().0;
+        mem::forget(self);
+        it as *mut _
+    }
+
     #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> Result<Option<T>, IteratorError> {
         unsafe {
@@ -88,9 +94,6 @@ where
         F: Fn(T) -> bool + Send + Sync + 'static,
     {
         unsafe {
-            let it = self.to_glib_none().0;
-            mem::forget(self);
-
             let func_box: Box<dyn Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
             let mut closure_value = glib::Value::from_type(from_glib(filter_boxed_get_type::<T>()));
             gobject_sys::g_value_take_boxed(
@@ -99,7 +102,7 @@ where
             );
 
             from_glib_full(gst_sys::gst_iterator_filter(
-                it as *mut _,
+                self.into_ptr(),
                 Some(filter_trampoline::<T>),
                 closure_value.to_glib_none().0,
             ))
@@ -205,7 +208,7 @@ where
 
             {
                 let it = it as *mut RsIterator<T, I>;
-                (*it).imp = Some(imp);
+                ptr::write(&mut (*it).imp, imp);
             }
 
             from_glib_full(it)
@@ -228,7 +231,7 @@ where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
     iter: gst_sys::GstIterator,
-    imp: Option<I>,
+    imp: I,
     phantom: PhantomData<T>,
 }
 
@@ -257,7 +260,7 @@ where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
     let it = it as *mut RsIterator<T, I>;
-    let _ = (*it).imp.take();
+    ptr::drop_in_place(&mut (*it).imp);
 }
 
 unsafe extern "C" fn rs_iterator_next<T, I: IteratorImpl<T>>(
@@ -268,11 +271,10 @@ where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
     let it = it as *mut RsIterator<T, I>;
-    match (*it).imp.as_mut().map(|imp| imp.next()).unwrap() {
+    match (*it).imp.next() {
         Some(Ok(value)) => {
             let value = value.to_value();
-            ptr::write(result, ptr::read(value.to_glib_none().0));
-            mem::forget(value);
+            ptr::write(result, value.into_raw());
             gst_sys::GST_ITERATOR_OK
         }
         None => gst_sys::GST_ITERATOR_DONE,
@@ -288,7 +290,7 @@ where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
     let it = it as *mut RsIterator<T, I>;
-    (*it).imp.as_mut().map(|imp| imp.resync()).unwrap();
+    (*it).imp.resync();
 }
 
 #[derive(Clone)]
