@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.4] - 2020-03-09
+### Fixed
+- Allow logging any `glib::Object` and not just `gst::Object`
+- Fix floating reference handling in `RTSPMedia::take_pipeline()`
+- Hold `GMutex` guards for the remainder of the function and warn if they're
+  directly dropped
+- Work around empty/any caps handling bugs in `Caps::fixate()`
+
+### Added
+- Add `BaseTransform::prepare_output_buffer()` subclassing support
+- `RTSPServer`, `RTSPClient`, `RTSPMedia` and `RTSPMediaFactory` subclassing
+  support
+- Handle panicking in `appsrc`/`appsink` callbacks by posting an error message
+  instead of killing the process
+
 ## [0.15.3] - 2020-02-15
 ### Fixed
 - `UniqueFlowCombiner::clear()` should take a mutable reference.
@@ -670,7 +685,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.4...HEAD
+[0.15.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.3...0.15.4
+[0.15.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.2...0.15.3
 [0.15.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.1...0.15.2
 [0.15.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.0...0.15.1
 [0.15.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.2...0.15.0
