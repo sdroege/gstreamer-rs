@@ -72,7 +72,16 @@ impl Caps {
 
     pub fn fixate(caps: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(gst_sys::gst_caps_fixate(caps.into_ptr())) }
+        unsafe {
+            // See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/388
+            assert!(!caps.is_any());
+            let ptr = if caps.is_empty() {
+                gst_sys::gst_caps_new_empty()
+            } else {
+                gst_sys::gst_caps_fixate(caps.into_ptr())
+            };
+            from_glib_full(ptr)
+        }
     }
 
     pub fn merge(caps: Self, other: Self) -> Self {
