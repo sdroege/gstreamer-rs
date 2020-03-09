@@ -730,7 +730,7 @@ impl Harness {
                 None
             } else {
                 Some(Ref(
-                    Some(Harness(
+                    mem::ManuallyDrop::new(Harness(
                         ptr::NonNull::new_unchecked(sink_harness),
                         PhantomData,
                     )),
@@ -747,7 +747,7 @@ impl Harness {
                 None
             } else {
                 Some(Ref(
-                    Some(Harness(
+                    mem::ManuallyDrop::new(Harness(
                         ptr::NonNull::new_unchecked(src_harness),
                         PhantomData,
                     )),
@@ -764,7 +764,7 @@ impl Harness {
                 None
             } else {
                 Some(RefMut(
-                    Some(Harness(
+                    mem::ManuallyDrop::new(Harness(
                         ptr::NonNull::new_unchecked(sink_harness),
                         PhantomData,
                     )),
@@ -781,7 +781,7 @@ impl Harness {
                 None
             } else {
                 Some(RefMut(
-                    Some(Harness(
+                    mem::ManuallyDrop::new(Harness(
                         ptr::NonNull::new_unchecked(src_harness),
                         PhantomData,
                     )),
@@ -793,44 +793,30 @@ impl Harness {
 }
 
 #[derive(Debug)]
-pub struct Ref<'a>(Option<Harness>, PhantomData<&'a Harness>);
+pub struct Ref<'a>(mem::ManuallyDrop<Harness>, PhantomData<&'a Harness>);
 
 impl<'a> ops::Deref for Ref<'a> {
     type Target = Harness;
 
     fn deref(&self) -> &Harness {
-        self.0.as_ref().unwrap()
-    }
-}
-
-impl<'a> Drop for Ref<'a> {
-    fn drop(&mut self) {
-        // We only really borrow
-        mem::forget(self.0.take())
+        &*self.0
     }
 }
 
 #[derive(Debug)]
-pub struct RefMut<'a>(Option<Harness>, PhantomData<&'a mut Harness>);
+pub struct RefMut<'a>(mem::ManuallyDrop<Harness>, PhantomData<&'a mut Harness>);
 
 impl<'a> ops::Deref for RefMut<'a> {
     type Target = Harness;
 
     fn deref(&self) -> &Harness {
-        self.0.as_ref().unwrap()
+        &*self.0
     }
 }
 
 impl<'a> ops::DerefMut for RefMut<'a> {
     fn deref_mut(&mut self) -> &mut Harness {
-        self.0.as_mut().unwrap()
-    }
-}
-
-impl<'a> Drop for RefMut<'a> {
-    fn drop(&mut self) {
-        // We only really borrow
-        mem::forget(self.0.take())
+        &mut *self.0
     }
 }
 

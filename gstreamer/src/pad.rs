@@ -1316,10 +1316,8 @@ where
         &Pad::from_glib_borrow(pad).unsafe_cast(),
         Option::<::Object>::from_glib_borrow(parent).as_ref(),
     );
-    let ptr = ret.to_glib_none().0;
-    mem::forget(ret);
 
-    ptr as *mut _
+    ret.into_ptr()
 }
 
 unsafe extern "C" fn trampoline_link_function<
