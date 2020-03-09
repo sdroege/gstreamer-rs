@@ -73,7 +73,13 @@ impl Caps {
     pub fn fixate(&mut self) {
         skip_assert_initialized!();
         unsafe {
-            let ptr = gst_sys::gst_caps_fixate(self.as_mut_ptr());
+            // See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/388
+            assert!(!self.is_any());
+            let ptr = if self.is_empty() {
+                gst_sys::gst_caps_new_empty()
+            } else {
+                gst_sys::gst_caps_fixate(self.as_mut_ptr())
+            };
             self.replace_ptr(ptr);
         }
     }
