@@ -427,7 +427,7 @@ impl StructureRef {
         }
     }
 
-    pub fn get_name(&self) -> &str {
+    pub fn get_name(&self) -> &'static str {
         unsafe {
             CStr::from_ptr(gst_sys::gst_structure_get_name(&self.0))
                 .to_str()
@@ -484,7 +484,7 @@ impl StructureRef {
         Iter::new(self)
     }
 
-    pub fn get_nth_field_name(&self, idx: u32) -> Option<&str> {
+    pub fn get_nth_field_name(&self, idx: u32) -> Option<&'static str> {
         unsafe {
             let field_name = gst_sys::gst_structure_nth_field_name(&self.0, idx);
             if field_name.is_null() {
@@ -625,9 +625,9 @@ impl<'a> FieldIterator<'a> {
 }
 
 impl<'a> Iterator for FieldIterator<'a> {
-    type Item = &'a str;
+    type Item = &'static str;
 
-    fn next(&mut self) -> Option<&'a str> {
+    fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.n_fields {
             return None;
         }
@@ -683,9 +683,9 @@ impl<'a> Iter<'a> {
 }
 
 impl<'a> Iterator for Iter<'a> {
-    type Item = (&'a str, &'a SendValue);
+    type Item = (&'static str, &'a SendValue);
 
-    fn next(&mut self) -> Option<(&'a str, &'a SendValue)> {
+    fn next(&mut self) -> Option<Self::Item> {
         if let Some(f) = self.iter.next() {
             let v = self.iter.structure.get_value(f);
             Some((f, v.unwrap()))

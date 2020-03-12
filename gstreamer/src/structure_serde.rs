@@ -27,7 +27,7 @@ use value_serde::*;
 use Structure;
 use StructureRef;
 
-struct FieldSe<'a>(&'a str, &'a glib::SendValue);
+struct FieldSe<'a>(&'static str, &'a glib::SendValue);
 impl<'a> Serialize for FieldSe<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         ser_value!(self.1, |type_, value| {
