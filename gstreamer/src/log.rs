@@ -152,7 +152,7 @@ impl DebugCategory {
                 module.to_glib_none().0,
                 line as i32,
                 obj_ptr,
-                fmt::format(args).to_glib_none().0,
+                fmt::format(args).replace("%", "%%").to_glib_none().0,
             );
         }
     }
