@@ -35,6 +35,8 @@ use gst::prelude::*;
 
 #[cfg_attr(feature = "v1_10", macro_use)]
 extern crate glib;
+#[cfg(feature = "v1_10")]
+use glib::subclass::prelude::*;
 
 use std::env;
 use std::error::Error as StdError;
@@ -68,18 +70,9 @@ struct ErrorMessage {
 }
 
 #[cfg(feature = "v1_10")]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, GBoxed)]
+#[gboxed(type_name = "ErrorValue")]
 struct ErrorValue(Arc<Mutex<Option<Error>>>);
-
-#[cfg(feature = "v1_10")]
-impl glib::subclass::boxed::BoxedType for ErrorValue {
-    const NAME: &'static str = "ErrorValue";
-
-    glib_boxed_type!();
-}
-
-#[cfg(feature = "v1_10")]
-glib_boxed_derive_traits!(ErrorValue);
 
 fn example_main() -> Result<(), Error> {
     gst::init()?;

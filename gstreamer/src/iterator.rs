@@ -55,6 +55,8 @@ where
             let mut value = Value::uninitialized();
             let res =
                 gst_sys::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0);
+
+            #[allow(clippy::wildcard_in_or_patterns)]
             match res {
                 gst_sys::GST_ITERATOR_OK => match value.get::<T>().expect("Iterator::next") {
                     Some(value) => Ok(Some(value)),
@@ -131,6 +133,7 @@ where
                 func_ptr,
             );
 
+            #[allow(clippy::wildcard_in_or_patterns)]
             match res {
                 gst_sys::GST_ITERATOR_OK | gst_sys::GST_ITERATOR_DONE => Ok(()),
                 gst_sys::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
@@ -161,6 +164,7 @@ where
                 func_ptr,
             );
 
+            #[allow(clippy::wildcard_in_or_patterns)]
             match res {
                 gst_sys::GST_ITERATOR_OK | gst_sys::GST_ITERATOR_DONE => Ok(accum.unwrap()),
                 gst_sys::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
