@@ -52,6 +52,7 @@ macro_rules! ser_opt_tag (
 struct TagValuesSer<'a>(Rc<RefCell<GenericTagIter<'a>>>);
 impl<'a> TagValuesSer<'a> {
     fn from(tags_ser: &TagsSer<'a>) -> Self {
+        skip_assert_initialized!();
         TagValuesSer(Rc::clone(&tags_ser.1))
     }
 }
@@ -107,6 +108,7 @@ impl<'a> Serialize for TagValuesSer<'a> {
 struct TagsSer<'a>(&'a str, Rc<RefCell<GenericTagIter<'a>>>);
 impl<'a> TagsSer<'a> {
     fn new(name: &'a str, tag_iter: GenericTagIter<'a>) -> Self {
+        skip_assert_initialized!();
         TagsSer(name, Rc::new(RefCell::new(tag_iter)))
     }
 }
@@ -238,6 +240,7 @@ impl<'de, 'a> DeserializeSeed<'de> for TagValues<'a> {
     type Value = ();
 
     fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_seq(TagValuesVisitor(self.0, self.1))
     }
 }
@@ -267,6 +270,7 @@ impl<'de, 'a> DeserializeSeed<'de> for TagValuesTuple<'a> {
     type Value = ();
 
     fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_tuple(2, TagValuesTupleVisitor(self.0))
     }
 }
@@ -295,6 +299,7 @@ impl<'de> Visitor<'de> for TagsVisitor {
 
 impl<'de> Deserialize<'de> for TagsDe {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_seq(TagsVisitor)
     }
 }
@@ -307,6 +312,7 @@ struct TagListDe {
 
 impl From<TagListDe> for TagList {
     fn from(tag_list_de: TagListDe) -> Self {
+        skip_assert_initialized!();
         let mut tag_list = tag_list_de.tags.0;
         tag_list.get_mut().unwrap().set_scope(tag_list_de.scope);
 
@@ -316,6 +322,7 @@ impl From<TagListDe> for TagList {
 
 impl<'de> Deserialize<'de> for TagList {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         TagListDe::deserialize(deserializer).map(|tag_list_de| tag_list_de.into())
     }
 }

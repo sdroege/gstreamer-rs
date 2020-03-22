@@ -88,6 +88,7 @@ pub fn calculate_linear_regression(
     xy: &[(u64, u64)],
     temp: Option<&mut [(u64, u64)]>,
 ) -> Option<(u64, u64, u64, u64, f64)> {
+    skip_assert_initialized!();
     use std::mem;
 
     unsafe {

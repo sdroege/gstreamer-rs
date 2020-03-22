@@ -31,6 +31,7 @@ impl GLContext {
     }
 
     pub fn get_current_gl_context(context_type: GLPlatform) -> uintptr_t {
+        skip_assert_initialized!();
         unsafe {
             gst_gl_sys::gst_gl_context_get_current_gl_context(context_type.to_glib()) as uintptr_t
         }
@@ -41,6 +42,7 @@ impl GLContext {
         gl_api: GLAPI,
         name: &str,
     ) -> uintptr_t {
+        skip_assert_initialized!();
         unsafe {
             gst_gl_sys::gst_gl_context_get_proc_address_with_platform(
                 context_type.to_glib(),

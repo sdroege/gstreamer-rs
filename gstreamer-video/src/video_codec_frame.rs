@@ -69,6 +69,7 @@ impl<'a> VideoCodecFrame<'a> {
         frame: *mut gst_video_sys::GstVideoCodecFrame,
         element: &'a T,
     ) -> Self {
+        skip_assert_initialized!();
         let stream_lock = element.get_stream_lock();
         glib_sys::g_rec_mutex_lock(stream_lock);
         Self { frame, element }

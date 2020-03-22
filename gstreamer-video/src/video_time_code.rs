@@ -144,6 +144,7 @@ impl TryFrom<VideoTimeCode> for ValidVideoTimeCode {
     type Error = VideoTimeCode;
 
     fn try_from(v: VideoTimeCode) -> Result<ValidVideoTimeCode, VideoTimeCode> {
+        skip_assert_initialized!();
         if v.is_valid() {
             Ok(ValidVideoTimeCode(v.0))
         } else {
@@ -164,6 +165,7 @@ impl ValidVideoTimeCode {
         frames: u32,
         field_count: u32,
     ) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
         let tc = VideoTimeCode::new(
             fps,
             latest_daily_jam,
@@ -192,6 +194,7 @@ impl ValidVideoTimeCode {
     //    }
 
     pub fn add_frames(&mut self, frames: i64) {
+        skip_assert_initialized!();
         unsafe {
             gst_video_sys::gst_video_time_code_add_frames(self.to_glib_none_mut().0, frames);
         }
@@ -517,6 +520,7 @@ impl Ord for ValidVideoTimeCode {
 
 impl From<ValidVideoTimeCode> for VideoTimeCode {
     fn from(v: ValidVideoTimeCode) -> VideoTimeCode {
+        skip_assert_initialized!();
         VideoTimeCode(v.0)
     }
 }
@@ -532,6 +536,7 @@ impl VideoTimeCodeMeta {
         buffer: &'a mut gst::BufferRef,
         tc: &ValidVideoTimeCode,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
         unsafe {
             let meta = gst_video_sys::gst_buffer_add_video_time_code_meta(
                 buffer.as_mut_ptr(),

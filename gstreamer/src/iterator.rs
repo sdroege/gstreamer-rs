@@ -178,6 +178,7 @@ where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
     pub fn new<I: IteratorImpl<T>>(imp: I) -> Self {
+        assert_initialized_main_thread!();
         static DUMMY_COOKIE: u32 = 0;
 
         unsafe {
@@ -208,6 +209,7 @@ where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Clone + Send + 'static,
 {
     pub fn from_vec(items: Vec<T>) -> Self {
+        skip_assert_initialized!();
         Self::new(VecIteratorImpl::new(items))
     }
 }
@@ -291,6 +293,7 @@ where
     for<'a> T: StaticType + ToValue + FromValueOptional<'a> + Clone + Send + 'static,
 {
     fn new(items: Vec<T>) -> Self {
+        skip_assert_initialized!();
         Self { pos: 0, items }
     }
 }
@@ -616,6 +619,7 @@ pub struct StdIterator<T> {
 
 impl<T> StdIterator<T> {
     fn new(inner: Iterator<T>) -> Self {
+        skip_assert_initialized!();
         Self { inner, error: None }
     }
 }

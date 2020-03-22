@@ -56,6 +56,7 @@ impl<T: FormattedValue> Serialize for FormattedSegment<T> {
 
 impl<'de> Deserialize<'de> for Segment {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         FormattedSegmentSerde::deserialize(deserializer).map(|fmt_seg_de| {
             let mut segment = Self::new();
             segment.set_flags(fmt_seg_de.flags);
@@ -98,6 +99,7 @@ impl<'de> Deserialize<'de> for Segment {
 
 impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for FormattedSegment<T> {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         Segment::deserialize(deserializer).and_then(|segment| {
             segment.downcast::<T>().map_err(|segment| {
                 de::Error::custom(format!(

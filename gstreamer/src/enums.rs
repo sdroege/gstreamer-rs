@@ -33,10 +33,12 @@ impl StateChangeReturn {
     }
 
     pub fn from_error(_: StateChangeError) -> Self {
+        skip_assert_initialized!();
         StateChangeReturn::Failure
     }
 
     pub fn from_ok(v: StateChangeSuccess) -> Self {
+        skip_assert_initialized!();
         match v {
             StateChangeSuccess::Success => StateChangeReturn::Success,
             StateChangeSuccess::Async => StateChangeReturn::Async,
@@ -54,6 +56,7 @@ pub enum StateChangeSuccess {
 
 impl From<StateChangeSuccess> for StateChangeReturn {
     fn from(value: StateChangeSuccess) -> Self {
+        skip_assert_initialized!();
         StateChangeReturn::from_ok(value)
     }
 }
@@ -65,12 +68,14 @@ pub struct StateChangeError;
 
 impl From<StateChangeError> for StateChangeReturn {
     fn from(value: StateChangeError) -> Self {
+        skip_assert_initialized!();
         StateChangeReturn::from_error(value)
     }
 }
 
 impl From<Result<StateChangeSuccess, StateChangeError>> for StateChangeReturn {
     fn from(res: Result<StateChangeSuccess, StateChangeError>) -> Self {
+        skip_assert_initialized!();
         match res {
             Ok(success) => StateChangeReturn::from_ok(success),
             Err(error) => StateChangeReturn::from_error(error),
@@ -106,6 +111,7 @@ impl FlowReturn {
     }
 
     pub fn from_error(v: FlowError) -> Self {
+        skip_assert_initialized!();
         match v {
             FlowError::NotLinked => FlowReturn::NotLinked,
             FlowError::Flushing => FlowReturn::Flushing,
@@ -120,6 +126,7 @@ impl FlowReturn {
     }
 
     pub fn from_ok(v: FlowSuccess) -> Self {
+        skip_assert_initialized!();
         match v {
             FlowSuccess::CustomSuccess2 => FlowReturn::CustomSuccess2,
             FlowSuccess::CustomSuccess1 => FlowReturn::CustomSuccess1,
@@ -139,6 +146,7 @@ pub enum FlowSuccess {
 
 impl From<FlowSuccess> for FlowReturn {
     fn from(value: FlowSuccess) -> Self {
+        skip_assert_initialized!();
         FlowReturn::from_ok(value)
     }
 }
@@ -168,12 +176,14 @@ pub enum FlowError {
 
 impl From<FlowError> for FlowReturn {
     fn from(value: FlowError) -> Self {
+        skip_assert_initialized!();
         FlowReturn::from_error(value)
     }
 }
 
 impl From<Result<FlowSuccess, FlowError>> for FlowReturn {
     fn from(res: Result<FlowSuccess, FlowError>) -> Self {
+        skip_assert_initialized!();
         match res {
             Ok(success) => FlowReturn::from_ok(success),
             Err(error) => FlowReturn::from_error(error),
@@ -196,6 +206,7 @@ impl PadLinkReturn {
     }
 
     pub fn from_error(v: PadLinkError) -> Self {
+        skip_assert_initialized!();
         match v {
             PadLinkError::WrongHierarchy => PadLinkReturn::WrongHierarchy,
             PadLinkError::WasLinked => PadLinkReturn::WasLinked,
@@ -207,6 +218,7 @@ impl PadLinkReturn {
     }
 
     pub fn from_ok(_: PadLinkSuccess) -> Self {
+        skip_assert_initialized!();
         PadLinkReturn::Ok
     }
 }
@@ -216,6 +228,7 @@ pub struct PadLinkSuccess;
 
 impl From<PadLinkSuccess> for PadLinkReturn {
     fn from(value: PadLinkSuccess) -> Self {
+        skip_assert_initialized!();
         PadLinkReturn::from_ok(value)
     }
 }
@@ -239,12 +252,14 @@ pub enum PadLinkError {
 
 impl From<PadLinkError> for PadLinkReturn {
     fn from(value: PadLinkError) -> Self {
+        skip_assert_initialized!();
         PadLinkReturn::from_error(value)
     }
 }
 
 impl From<Result<PadLinkSuccess, PadLinkError>> for PadLinkReturn {
     fn from(res: Result<PadLinkSuccess, PadLinkError>) -> Self {
+        skip_assert_initialized!();
         match res {
             Ok(success) => PadLinkReturn::from_ok(success),
             Err(error) => PadLinkReturn::from_error(error),
@@ -268,6 +283,7 @@ impl ClockReturn {
     }
 
     pub fn from_error(v: ClockError) -> Self {
+        skip_assert_initialized!();
         match v {
             ClockError::Early => ClockReturn::Early,
             ClockError::Unscheduled => ClockReturn::Unscheduled,
@@ -279,6 +295,7 @@ impl ClockReturn {
     }
 
     pub fn from_ok(v: ClockSuccess) -> Self {
+        skip_assert_initialized!();
         match v {
             ClockSuccess::Ok => ClockReturn::Ok,
             ClockSuccess::Done => ClockReturn::Done,
@@ -294,6 +311,7 @@ pub enum ClockSuccess {
 
 impl From<ClockSuccess> for ClockReturn {
     fn from(value: ClockSuccess) -> Self {
+        skip_assert_initialized!();
         ClockReturn::from_ok(value)
     }
 }
@@ -317,12 +335,14 @@ pub enum ClockError {
 
 impl From<ClockError> for ClockReturn {
     fn from(value: ClockError) -> Self {
+        skip_assert_initialized!();
         ClockReturn::from_error(value)
     }
 }
 
 impl From<Result<ClockSuccess, ClockError>> for ClockReturn {
     fn from(res: Result<ClockSuccess, ClockError>) -> Self {
+        skip_assert_initialized!();
         match res {
             Ok(success) => ClockReturn::from_ok(success),
             Err(error) => ClockReturn::from_error(error),

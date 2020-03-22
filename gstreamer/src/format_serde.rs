@@ -24,6 +24,7 @@ macro_rules! impl_ser_de(
 
         impl<'de> Deserialize<'de> for $t {
             fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+	        skip_assert_initialized!();
                 Option::<u64>::deserialize(deserializer).map($t)
             }
         }
@@ -42,6 +43,7 @@ impl Serialize for Undefined {
 
 impl<'de> Deserialize<'de> for Undefined {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         i64::deserialize(deserializer).map(Undefined)
     }
 }
@@ -54,6 +56,7 @@ impl Serialize for Percent {
 
 impl<'de> Deserialize<'de> for Percent {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         Option::<u32>::deserialize(deserializer).map(Percent)
     }
 }

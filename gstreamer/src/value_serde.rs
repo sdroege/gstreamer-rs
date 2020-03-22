@@ -57,6 +57,7 @@ impl<'a> Serialize for Fraction {
 
 impl<'de> Deserialize<'de> for Fraction {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         Rational32::deserialize(deserializer)
             .map(|rational| Fraction::new(*rational.numer(), *rational.denom()))
     }
@@ -143,12 +144,14 @@ macro_rules! ser_value (
 pub(crate) struct SendValue(glib::SendValue);
 impl SendValue {
     pub(crate) fn from(send_value: glib::SendValue) -> Self {
+        skip_assert_initialized!();
         SendValue(send_value)
     }
 }
 
 impl From<SendValue> for glib::SendValue {
     fn from(send_value: SendValue) -> Self {
+        skip_assert_initialized!();
         send_value.0
     }
 }
@@ -279,6 +282,7 @@ impl<'de> Visitor<'de> for SendValueVisitor {
 
 impl<'de> Deserialize<'de> for SendValue {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_tuple(2, SendValueVisitor {})
     }
 }
@@ -287,6 +291,7 @@ macro_rules! impl_de_send_value_collection (
     ($t:ident) => {
         impl<'a, 'de> Deserialize<'de> for $t<'a> {
             fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+                skip_assert_initialized!();
                 let send_value_vec = Vec::<SendValue>::deserialize(deserializer)?;
                 Ok($t::from_owned(unsafe{
                     mem::transmute::<Vec<SendValue>, Vec<glib::SendValue>>(send_value_vec)

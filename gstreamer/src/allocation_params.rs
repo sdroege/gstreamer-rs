@@ -58,6 +58,7 @@ impl AllocationParams {
 
 impl From<gst_sys::GstAllocationParams> for AllocationParams {
     fn from(params: gst_sys::GstAllocationParams) -> Self {
+        skip_assert_initialized!();
         AllocationParams(params)
     }
 }

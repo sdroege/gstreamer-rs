@@ -44,10 +44,12 @@ pub enum GetError<'name> {
 
 impl<'name> GetError<'name> {
     fn new_field_not_found(name: &'name str) -> GetError {
+        skip_assert_initialized!();
         GetError::FieldNotFound { name }
     }
 
     fn from_value_get_error(name: &'name str, value_get_error: glib::value::GetError) -> GetError {
+        skip_assert_initialized!();
         GetError::ValueGetError {
             name,
             value_get_error,
@@ -713,6 +715,7 @@ pub struct Builder {
 
 impl Builder {
     fn new(name: &str) -> Self {
+        skip_assert_initialized!();
         Builder {
             s: Structure::new_empty(name),
         }

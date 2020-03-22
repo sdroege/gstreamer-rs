@@ -51,6 +51,7 @@ pub struct DebugCategory(ptr::NonNull<gst_sys::GstDebugCategory>);
 
 impl DebugCategory {
     pub fn new(name: &str, color: ::DebugColorFlags, description: Option<&str>) -> DebugCategory {
+        assert_initialized_main_thread!();
         extern "C" {
             fn _gst_debug_category_new(
                 name: *const c_char,
@@ -72,6 +73,7 @@ impl DebugCategory {
     }
 
     pub fn get(name: &str) -> Option<DebugCategory> {
+        skip_assert_initialized!();
         unsafe {
             extern "C" {
                 fn _gst_debug_get_category(name: *const c_char) -> *mut gst_sys::GstDebugCategory;
@@ -364,6 +366,7 @@ where
         + Sync
         + 'static,
 {
+    skip_assert_initialized!();
     unsafe {
         let user_data = Box::new(function);
         let user_data_ptr = Box::into_raw(user_data) as gpointer;
@@ -377,12 +380,14 @@ where
 }
 
 pub fn debug_remove_default_log_function() {
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_remove_log_function(Some(gst_sys::gst_debug_log_default));
     }
 }
 
 pub fn debug_remove_log_function(log_fn: DebugLogFunction) {
+    skip_assert_initialized!();
     unsafe {
         let removed = gst_sys::gst_debug_remove_log_function_by_data(log_fn.0.as_ptr());
         assert_eq!(removed, 1);

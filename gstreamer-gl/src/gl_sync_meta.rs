@@ -19,6 +19,7 @@ impl GLSyncMeta {
         buffer: &'a mut gst::BufferRef,
         context: &C,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
         unsafe {
             let meta = gst_gl_sys::gst_buffer_add_gl_sync_meta(
                 context.as_ref().to_glib_none().0,

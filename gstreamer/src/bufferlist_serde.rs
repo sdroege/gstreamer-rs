@@ -60,6 +60,7 @@ impl<'de> Visitor<'de> for BufferListVisitor {
 
 impl<'de> Deserialize<'de> for BufferList {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_seq(BufferListVisitor)
     }
 }

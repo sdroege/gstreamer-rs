@@ -118,6 +118,7 @@ impl AppSrcCallbacksBuilder {
 }
 
 fn post_panic_error_message(element: &AppSrc, err: &dyn std::any::Any) {
+    skip_assert_initialized!();
     if let Some(cause) = err.downcast_ref::<&str>() {
         gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else if let Some(cause) = err.downcast_ref::<String>() {

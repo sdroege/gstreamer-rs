@@ -49,6 +49,7 @@ impl ToGlib for Overhead {
 impl FromGlib<i32> for Overhead {
     #[inline]
     fn from_glib(val: i32) -> Overhead {
+        skip_assert_initialized!();
         match val {
             0 => Overhead::None,
             1 => Overhead::Frame,
@@ -94,6 +95,7 @@ impl<'a> BaseParseFrame<'a> {
         frame: *mut gst_base_sys::GstBaseParseFrame,
         _parse: &'a BaseParse,
     ) -> BaseParseFrame<'a> {
+        skip_assert_initialized!();
         assert!(!frame.is_null());
         BaseParseFrame(ptr::NonNull::new_unchecked(frame), PhantomData)
     }

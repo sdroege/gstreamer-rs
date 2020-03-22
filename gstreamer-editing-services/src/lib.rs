@@ -75,6 +75,7 @@ pub use auto::*;
 #[macro_use]
 extern crate bitflags;
 
+mod asset;
 mod timeline_element;
 pub use timeline_element::TimelineElementExtManual;
 

@@ -31,6 +31,7 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExtManual for O {
 }
 
 pub fn is_video_overlay_prepare_window_handle_message(msg: &gst::MessageRef) -> bool {
+    skip_assert_initialized!();
     unsafe {
         from_glib(
             gst_video_sys::gst_is_video_overlay_prepare_window_handle_message(msg.as_mut_ptr()),

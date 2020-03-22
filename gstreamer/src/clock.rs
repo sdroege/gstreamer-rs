@@ -188,6 +188,7 @@ impl Clock {
         cnum: ClockTime,
         cdenom: ClockTime,
     ) -> ClockTime {
+        skip_assert_initialized!();
         unsafe {
             from_glib(gst_sys::gst_clock_adjust_with_calibration(
                 ptr::null_mut(),
@@ -207,6 +208,7 @@ impl Clock {
         cnum: ClockTime,
         cdenom: ClockTime,
     ) -> ClockTime {
+        skip_assert_initialized!();
         unsafe {
             from_glib(gst_sys::gst_clock_unadjust_with_calibration(
                 ptr::null_mut(),

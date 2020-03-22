@@ -57,6 +57,7 @@ struct BufferDe {
 
 impl From<BufferDe> for Buffer {
     fn from(buf_de: BufferDe) -> Self {
+        skip_assert_initialized!();
         let mut buffer = Buffer::from_mut_slice(buf_de.buffer.to_vec());
         {
             let buffer = buffer.get_mut().unwrap();
@@ -73,6 +74,7 @@ impl From<BufferDe> for Buffer {
 
 impl<'de> Deserialize<'de> for Buffer {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         BufferDe::deserialize(deserializer).map(|buffer_de| buffer_de.into())
     }
 }

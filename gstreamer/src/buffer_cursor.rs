@@ -286,6 +286,7 @@ impl<T> BufferCursor<T> {
 
 impl BufferCursor<Readable> {
     pub(crate) fn new_readable(buffer: Buffer) -> BufferCursor<Readable> {
+        skip_assert_initialized!();
         let size = buffer.get_size() as u64;
         let num_mem = buffer.n_memory();
 
@@ -304,6 +305,7 @@ impl BufferCursor<Readable> {
 
 impl BufferCursor<Writable> {
     pub(crate) fn new_writable(buffer: Buffer) -> Result<BufferCursor<Writable>, glib::BoolError> {
+        skip_assert_initialized!();
         if !buffer.is_writable() || !buffer.is_all_memory_writable() {
             return Err(glib_bool_error!("Not all memories are writable"));
         }
@@ -383,6 +385,7 @@ impl<'a> BufferRefCursor<&'a BufferRef> {
     }
 
     pub(crate) fn new_readable(buffer: &'a BufferRef) -> BufferRefCursor<&'a BufferRef> {
+        skip_assert_initialized!();
         let size = buffer.get_size() as u64;
         let num_mem = buffer.n_memory();
 
@@ -406,6 +409,7 @@ impl<'a> BufferRefCursor<&'a mut BufferRef> {
     pub(crate) fn new_writable(
         buffer: &'a mut BufferRef,
     ) -> Result<BufferRefCursor<&'a mut BufferRef>, glib::BoolError> {
+        skip_assert_initialized!();
         if !buffer.is_all_memory_writable() {
             return Err(glib_bool_error!("Not all memories are writable"));
         }

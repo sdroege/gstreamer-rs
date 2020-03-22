@@ -44,18 +44,22 @@ impl ClockTime {
     }
 
     pub fn from_seconds(seconds: u64) -> ClockTime {
+        skip_assert_initialized!();
         seconds * ::SECOND
     }
 
     pub fn from_mseconds(mseconds: u64) -> ClockTime {
+        skip_assert_initialized!();
         mseconds * ::MSECOND
     }
 
     pub fn from_useconds(useconds: u64) -> ClockTime {
+        skip_assert_initialized!();
         useconds * ::USECOND
     }
 
     pub fn from_nseconds(nseconds: u64) -> ClockTime {
+        skip_assert_initialized!();
         nseconds * ::NSECOND
     }
 

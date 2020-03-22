@@ -15,6 +15,7 @@ pub struct MutexGuard<'a>(&'a glib_sys::GMutex);
 impl<'a> MutexGuard<'a> {
     #[allow(clippy::trivially_copy_pass_by_ref)]
     pub fn lock(mutex: &'a glib_sys::GMutex) -> Self {
+        skip_assert_initialized!();
         unsafe {
             glib_sys::g_mutex_lock(mut_override(mutex));
         }

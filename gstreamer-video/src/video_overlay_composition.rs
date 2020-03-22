@@ -43,6 +43,7 @@ impl VideoOverlayRectangle {
         render_height: u32,
         flags: ::VideoOverlayFormatFlags,
     ) -> Self {
+        assert_initialized_main_thread!();
         assert!(buffer.get_meta::<::VideoMeta>().is_some());
         unsafe {
             from_glib_full(gst_video_sys::gst_video_overlay_rectangle_new_raw(
@@ -201,6 +202,7 @@ impl VideoOverlayComposition {
     pub fn new<'a, T: IntoIterator<Item = &'a VideoOverlayRectangle>>(
         rects: T,
     ) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
         unsafe {
             let mut iter = rects.into_iter();
 

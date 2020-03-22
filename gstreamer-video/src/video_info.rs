@@ -189,6 +189,7 @@ impl fmt::Display for ::VideoColorimetry {
 
 impl From<::VideoMultiviewFramePacking> for ::VideoMultiviewMode {
     fn from(v: ::VideoMultiviewFramePacking) -> Self {
+        skip_assert_initialized!();
         from_glib(v.to_glib())
     }
 }
@@ -199,6 +200,8 @@ impl std::convert::TryFrom<::VideoMultiviewMode> for ::VideoMultiviewFramePackin
     fn try_from(
         v: ::VideoMultiviewMode,
     ) -> Result<::VideoMultiviewFramePacking, ::VideoMultiviewMode> {
+        skip_assert_initialized!();
+
         let v2 = from_glib(v.to_glib());
 
         if let ::VideoMultiviewFramePacking::__Unknown(_) = v2 {

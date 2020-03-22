@@ -25,6 +25,7 @@ pub struct GstRc<T: MiniObject> {
 
 impl<T: MiniObject> GstRc<T> {
     pub unsafe fn from_glib_none(ptr: *const T::GstType) -> Self {
+        skip_assert_initialized!();
         assert!(!ptr.is_null());
 
         gst_sys::gst_mini_object_ref(ptr as *mut gst_sys::GstMiniObject);
@@ -538,6 +539,7 @@ macro_rules! gst_define_mini_object_wrapper(
 
         impl From<$crate::GstRc<$ref_name>> for $name {
             fn from(rc: $crate::GstRc<$ref_name>) -> $name {
+	        skip_assert_initialized!();
                 $name(rc)
             }
         }

@@ -192,6 +192,7 @@ unsafe impl Sync for BufferPoolAcquireParams {}
 
 impl BufferPoolAcquireParams {
     pub fn with_flags(flags: ::BufferPoolAcquireFlags) -> Self {
+        skip_assert_initialized!();
         BufferPoolAcquireParams(gst_sys::GstBufferPoolAcquireParams {
             format: gst_sys::GST_FORMAT_UNDEFINED,
             start: -1,
@@ -206,6 +207,7 @@ impl BufferPoolAcquireParams {
         stop: T,
         flags: ::BufferPoolAcquireFlags,
     ) -> Self {
+        skip_assert_initialized!();
         unsafe {
             BufferPoolAcquireParams(gst_sys::GstBufferPoolAcquireParams {
                 format: start.get_format().to_glib(),

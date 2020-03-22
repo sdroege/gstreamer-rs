@@ -16,6 +16,7 @@ use gst::MiniObject;
 use std::mem;
 
 pub fn is_force_key_unit_event(event: &gst::EventRef) -> bool {
+    skip_assert_initialized!();
     unsafe {
         from_glib(gst_video_sys::gst_video_event_is_force_key_unit(
             event.as_mut_ptr(),
@@ -159,6 +160,7 @@ pub struct DownstreamForceKeyUnitEvent {
 pub fn parse_downstream_force_key_unit_event(
     event: &gst::EventRef,
 ) -> Result<DownstreamForceKeyUnitEvent, glib::error::BoolError> {
+    skip_assert_initialized!();
     unsafe {
         let mut timestamp = mem::MaybeUninit::uninit();
         let mut stream_time = mem::MaybeUninit::uninit();
@@ -253,6 +255,7 @@ pub struct UpstreamForceKeyUnitEvent {
 pub fn parse_upstream_force_key_unit_event(
     event: &gst::EventRef,
 ) -> Result<UpstreamForceKeyUnitEvent, glib::error::BoolError> {
+    skip_assert_initialized!();
     unsafe {
         let mut running_time = mem::MaybeUninit::uninit();
         let mut all_headers = mem::MaybeUninit::uninit();
@@ -287,6 +290,7 @@ pub enum ForceKeyUnitEvent {
 pub fn parse_force_key_unit_event(
     event: &gst::EventRef,
 ) -> Result<ForceKeyUnitEvent, glib::error::BoolError> {
+    skip_assert_initialized!();
     if event.is_upstream() {
         parse_upstream_force_key_unit_event(event).map(ForceKeyUnitEvent::Upstream)
     } else {
@@ -295,6 +299,7 @@ pub fn parse_force_key_unit_event(
 }
 
 pub fn new_still_frame_event<'a>(in_still: bool) -> StillFrameEventBuilder<'a> {
+    assert_initialized_main_thread!();
     StillFrameEventBuilder::new(in_still)
 }
 
@@ -329,6 +334,7 @@ pub struct StillFrameEvent {
 pub fn parse_still_frame_event(
     event: &gst::EventRef,
 ) -> Result<StillFrameEvent, glib::error::BoolError> {
+    skip_assert_initialized!();
     unsafe {
         let mut in_still = mem::MaybeUninit::uninit();
 

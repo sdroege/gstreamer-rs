@@ -32,6 +32,7 @@ impl<'a> RTPBuffer<'a, Readable> {
     pub fn from_buffer_readable(
         buffer: &gst::Buffer,
     ) -> Result<RTPBuffer<Readable>, glib::BoolError> {
+        skip_assert_initialized!();
         unsafe {
             let mut rtp_buffer = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_rtp_sys::gst_rtp_buffer_map(
@@ -57,6 +58,7 @@ impl<'a> RTPBuffer<'a, Writable> {
     pub fn from_buffer_writable(
         buffer: &mut gst::Buffer,
     ) -> Result<RTPBuffer<Writable>, glib::BoolError> {
+        skip_assert_initialized!();
         unsafe {
             let mut rtp_buffer = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_rtp_sys::gst_rtp_buffer_map(
@@ -132,6 +134,7 @@ impl RTPBufferExt for gst::Buffer {
         pad_len: u8,
         csrc_count: u8,
     ) -> Result<gst::Buffer, glib::BoolError> {
+        assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(gst_rtp_sys::gst_rtp_buffer_new_allocate(
                 payload_len,
@@ -144,6 +147,7 @@ impl RTPBufferExt for gst::Buffer {
 }
 
 pub fn compare_seqnum(seqnum1: u16, seqnum2: u16) -> i32 {
+    skip_assert_initialized!();
     unsafe { gst_rtp_sys::gst_rtp_buffer_compare_seqnum(seqnum1, seqnum2) }
 }
 

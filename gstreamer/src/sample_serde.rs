@@ -46,6 +46,7 @@ struct SampleDe {
 
 impl From<SampleDe> for Sample {
     fn from(buf_de: SampleDe) -> Self {
+        skip_assert_initialized!();
         let mut builder = Sample::new();
 
         if let Some(buffer) = buf_de.buffer.as_ref() {
@@ -74,6 +75,7 @@ impl From<SampleDe> for Sample {
 
 impl<'de> Deserialize<'de> for Sample {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         SampleDe::deserialize(deserializer).map(|sample_de| sample_de.into())
     }
 }

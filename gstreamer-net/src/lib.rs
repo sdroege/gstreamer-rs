@@ -24,6 +24,10 @@ macro_rules! assert_initialized_main_thread {
     };
 }
 
+macro_rules! skip_assert_initialized {
+    () => {};
+}
+
 #[allow(clippy::unreadable_literal)]
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]

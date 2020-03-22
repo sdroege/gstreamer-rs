@@ -570,6 +570,7 @@ impl<T> fmt::Debug for Builder<T> {
 
 impl Builder<NoFeature> {
     fn new(name: &str) -> Builder<NoFeature> {
+        skip_assert_initialized!();
         Builder {
             s: ::Structure::new_empty(name),
             features: None,
@@ -639,6 +640,7 @@ impl BuilderFull<SomeFeatures> {
     }
 
     fn new_with_features(features: CapsFeatures) -> Self {
+        skip_assert_initialized!();
         BuilderFull {
             caps: Caps::new_empty(),
             features: Some(features),

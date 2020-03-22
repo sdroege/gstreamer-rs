@@ -40,6 +40,7 @@ impl GstParamSpecExt for glib::ParamSpec {
         element_spec: &glib::ParamSpec,
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gst_sys::gst_param_spec_array(
                 name.to_glib_none().0,
@@ -60,6 +61,7 @@ impl GstParamSpecExt for glib::ParamSpec {
         default: ::Fraction,
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gst_sys::gst_param_spec_fraction(
                 name.to_glib_none().0,

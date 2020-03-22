@@ -44,6 +44,7 @@ impl<'a> TypeFind<'a> {
     where
         F: Fn(&mut TypeFind) + Send + Sync + 'static,
     {
+        assert_initialized_main_thread!();
         unsafe {
             let func: Box<F> = Box::new(func);
             let func = Box::into_raw(func);
@@ -160,6 +161,7 @@ pub struct SliceTypeFind<T: AsRef<[u8]>> {
 
 impl<T: AsRef<[u8]>> SliceTypeFind<T> {
     pub fn new(data: T) -> SliceTypeFind<T> {
+        assert_initialized_main_thread!();
         SliceTypeFind {
             probability: None,
             caps: None,
@@ -181,6 +183,7 @@ impl<T: AsRef<[u8]>> SliceTypeFind<T> {
     }
 
     pub fn type_find(data: T) -> (TypeFindProbability, Option<Caps>) {
+        assert_initialized_main_thread!();
         let mut t = SliceTypeFind {
             probability: None,
             caps: None,

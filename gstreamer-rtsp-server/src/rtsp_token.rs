@@ -22,6 +22,7 @@ impl RTSPToken {
     }
 
     pub fn new(values: &[(&str, &dyn ToSendValue)]) -> Self {
+        assert_initialized_main_thread!();
         let mut token = RTSPToken::new_empty();
 
         {

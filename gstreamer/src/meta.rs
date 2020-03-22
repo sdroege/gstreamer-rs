@@ -264,6 +264,7 @@ unsafe impl Sync for ParentBufferMeta {}
 
 impl ParentBufferMeta {
     pub fn add<'a>(buffer: &'a mut BufferRef, parent: &Buffer) -> MetaRefMut<'a, Self, Standalone> {
+        skip_assert_initialized!();
         unsafe {
             let meta = gst_sys::gst_buffer_add_parent_buffer_meta(
                 buffer.as_mut_ptr(),
@@ -316,6 +317,7 @@ impl ReferenceTimestampMeta {
         timestamp: ClockTime,
         duration: ClockTime,
     ) -> MetaRefMut<'a, Self, Standalone> {
+        skip_assert_initialized!();
         unsafe {
             let meta = gst_sys::gst_buffer_add_reference_timestamp_meta(
                 buffer.as_mut_ptr(),

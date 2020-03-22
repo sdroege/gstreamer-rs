@@ -59,6 +59,7 @@ struct TocDe {
 
 impl From<TocDe> for Toc {
     fn from(mut toc_de: TocDe) -> Self {
+        skip_assert_initialized!();
         let mut toc = Toc::new(toc_de.scope);
         {
             let toc = toc.get_mut().unwrap();
@@ -76,6 +77,7 @@ impl From<TocDe> for Toc {
 
 impl<'de> Deserialize<'de> for Toc {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         TocDe::deserialize(deserializer).map(|toc_de| toc_de.into())
     }
 }
@@ -93,6 +95,7 @@ struct TocEntryDe {
 
 impl From<TocEntryDe> for TocEntry {
     fn from(mut toc_entry_de: TocEntryDe) -> Self {
+        skip_assert_initialized!();
         let mut toc_entry = TocEntry::new(toc_entry_de.entry_type, toc_entry_de.uid.as_str());
         {
             let toc_entry = toc_entry.get_mut().unwrap();
@@ -117,6 +120,7 @@ impl From<TocEntryDe> for TocEntry {
 
 impl<'de> Deserialize<'de> for TocEntry {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         TocEntryDe::deserialize(deserializer).map(|toc_entry_de| toc_entry_de.into())
     }
 }

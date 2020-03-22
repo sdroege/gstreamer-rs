@@ -76,6 +76,7 @@ impl Serialize for Structure {
 struct FieldDe(String, SendValue);
 impl From<FieldDe> for (String, glib::SendValue) {
     fn from(field_de: FieldDe) -> Self {
+        skip_assert_initialized!();
         (field_de.0, field_de.1.into())
     }
 }
@@ -105,6 +106,7 @@ impl<'de> Visitor<'de> for FieldVisitor {
 
 impl<'de> Deserialize<'de> for FieldDe {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_tuple(3, FieldVisitor)
     }
 }
@@ -133,6 +135,7 @@ impl<'de, 'a> DeserializeSeed<'de> for FieldsDe<'a> {
     type Value = ();
 
     fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_seq(FieldsVisitor(self.0))
     }
 }
@@ -159,6 +162,7 @@ impl<'de> Visitor<'de> for StructureVisitor {
 
 impl<'de> Deserialize<'de> for Structure {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_tuple(2, StructureVisitor)
     }
 }

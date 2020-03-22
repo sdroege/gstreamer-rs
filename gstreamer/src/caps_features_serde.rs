@@ -94,6 +94,7 @@ impl<'de> Visitor<'de> for CapsFeaturesSomeVisitor {
 
 impl<'de> Deserialize<'de> for CapsFeaturesSome {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<CapsFeaturesSome, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_seq(CapsFeaturesSomeVisitor)
     }
 }
@@ -131,6 +132,7 @@ impl<'de> Visitor<'de> for CapsFeaturesVariantKindsVisitor {
 
 impl<'de> Deserialize<'de> for CapsFeaturesVariantKinds {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_identifier(CapsFeaturesVariantKindsVisitor)
     }
 }
@@ -157,6 +159,7 @@ impl<'de> Visitor<'de> for CapsFeaturesVisitor {
 
 impl<'de> Deserialize<'de> for CapsFeatures {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_enum(
             stringify!(Caps),
             CAPS_FEATURES_VARIANT_NAMES,

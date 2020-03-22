@@ -45,6 +45,7 @@ impl<'de> Visitor<'de> for ClockTimeVisitor {
 
 impl<'de> Deserialize<'de> for ClockTime {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_option(ClockTimeVisitor)
     }
 }

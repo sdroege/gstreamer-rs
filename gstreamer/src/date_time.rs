@@ -89,6 +89,7 @@ impl cmp::PartialOrd for DateTime {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         #[inline]
         fn get_cmp(delta: i32) -> Option<cmp::Ordering> {
+            skip_assert_initialized!();
             Some(delta.cmp(&0))
         }
 
@@ -235,6 +236,7 @@ impl<'a> convert::TryFrom<&'a glib::DateTime> for DateTime {
     type Error = glib::BoolError;
 
     fn try_from(v: &'a glib::DateTime) -> Result<DateTime, glib::BoolError> {
+        skip_assert_initialized!();
         DateTime::new_from_g_date_time(v)
     }
 }
@@ -243,6 +245,7 @@ impl convert::TryFrom<glib::DateTime> for DateTime {
     type Error = glib::BoolError;
 
     fn try_from(v: glib::DateTime) -> Result<DateTime, glib::BoolError> {
+        skip_assert_initialized!();
         DateTime::new_from_g_date_time(&v)
     }
 }
@@ -251,6 +254,7 @@ impl<'a> convert::TryFrom<&'a DateTime> for glib::DateTime {
     type Error = glib::BoolError;
 
     fn try_from(v: &'a DateTime) -> Result<glib::DateTime, glib::BoolError> {
+        skip_assert_initialized!();
         v.to_g_date_time()
     }
 }
@@ -259,6 +263,7 @@ impl convert::TryFrom<DateTime> for glib::DateTime {
     type Error = glib::BoolError;
 
     fn try_from(v: DateTime) -> Result<glib::DateTime, glib::BoolError> {
+        skip_assert_initialized!();
         v.to_g_date_time()
     }
 }

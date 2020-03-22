@@ -70,6 +70,7 @@ impl ErrorMessage {
         function: &'static str,
         line: u32,
     ) -> ErrorMessage {
+        assert_initialized_main_thread!();
         let error_domain = T::domain();
         let error_code = error.code();
 
@@ -122,6 +123,7 @@ pub struct LoggableError {
 
 impl LoggableError {
     pub fn new(category: ::DebugCategory, bool_error: glib::BoolError) -> LoggableError {
+        assert_initialized_main_thread!();
         LoggableError {
             category,
             bool_error,
@@ -157,6 +159,7 @@ impl LoggableError {
 
 impl From<glib::BoolError> for LoggableError {
     fn from(bool_error: glib::BoolError) -> Self {
+        skip_assert_initialized!();
         LoggableError {
             category: *::CAT_RUST,
             bool_error,

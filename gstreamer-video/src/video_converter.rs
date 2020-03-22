@@ -35,6 +35,7 @@ impl VideoConverter {
         out_info: &::VideoInfo,
         config: Option<VideoConverterConfig>,
     ) -> Result<Self, glib::BoolError> {
+        assert_initialized_main_thread!();
         if in_info.fps() != out_info.fps() {
             return Err(glib_bool_error!("Can't do framerate conversion"));
         }

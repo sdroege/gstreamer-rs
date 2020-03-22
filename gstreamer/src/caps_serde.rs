@@ -128,6 +128,7 @@ impl<'de> Visitor<'de> for CapsItemVisitor {
 
 impl<'de> Deserialize<'de> for CapsItemDe {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<CapsItemDe, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_tuple(2, CapsItemVisitor)
     }
 }
@@ -156,6 +157,7 @@ impl<'de> Visitor<'de> for CapsSomeVisitor {
 
 impl<'de> Deserialize<'de> for CapsSome {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<CapsSome, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_seq(CapsSomeVisitor)
     }
 }
@@ -192,6 +194,7 @@ impl<'de> Visitor<'de> for CapsVariantKindsVisitor {
 
 impl<'de> Deserialize<'de> for CapsVariantKinds {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_identifier(CapsVariantKindsVisitor)
     }
 }
@@ -219,6 +222,7 @@ impl<'de> Visitor<'de> for CapsVisitor {
 
 impl<'de> Deserialize<'de> for Caps {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         deserializer.deserialize_enum(stringify!(Caps), CAPS_VARIANT_NAMES, CapsVisitor)
     }
 }

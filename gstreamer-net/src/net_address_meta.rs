@@ -18,6 +18,7 @@ impl NetAddressMeta {
         buffer: &'a mut gst::BufferRef,
         addr: &A,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
         unsafe {
             let meta = gst_net_sys::gst_buffer_add_net_address_meta(
                 buffer.as_mut_ptr(),

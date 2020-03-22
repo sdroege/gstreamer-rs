@@ -34,6 +34,7 @@ pub(crate) struct Date(glib::Date);
 
 impl From<glib::Date> for Date {
     fn from(glib_date: glib::Date) -> Self {
+        skip_assert_initialized!();
         Date(glib_date)
     }
 }
@@ -109,6 +110,7 @@ impl TryFrom<DateTimeVariants> for Date {
     type Error = &'static str;
 
     fn try_from(dt_variant: DateTimeVariants) -> Result<Self, Self::Error> {
+        skip_assert_initialized!();
         match dt_variant {
             DateTimeVariants::YMD(y, m, d) => {
                 let month = glib::DateMonth::from_glib(m);
@@ -129,6 +131,7 @@ impl TryFrom<DateTimeVariants> for Date {
 
 impl<'de> Deserialize<'de> for Date {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         DateTimeVariants::deserialize(deserializer)
             .and_then(|dt_variant| dt_variant.try_into().map_err(D::Error::custom))
     }
@@ -139,6 +142,7 @@ impl TryFrom<DateTimeVariants> for DateTime {
     type Error = glib::BoolError;
 
     fn try_from(dt_variant: DateTimeVariants) -> Result<Self, Self::Error> {
+        skip_assert_initialized!();
         match dt_variant {
             DateTimeVariants::Y(y) => DateTime::new_y(y),
             DateTimeVariants::YM(y, m) => DateTime::new_ym(y, m),
@@ -155,6 +159,7 @@ impl TryFrom<DateTimeVariants> for DateTime {
 
 impl<'de> Deserialize<'de> for DateTime {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        skip_assert_initialized!();
         DateTimeVariants::deserialize(deserializer)
             .and_then(|dt_variant| dt_variant.try_into().map_err(D::Error::custom))
     }

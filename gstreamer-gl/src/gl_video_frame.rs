@@ -39,6 +39,7 @@ impl VideoFrameGLExt for VideoFrame<Readable> {
         buffer: gst::Buffer,
         info: &VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
+        skip_assert_initialized!();
         VideoFrameRef::<&gst::BufferRef>::from_buffer_readable_gl(buffer, info)
     }
 
@@ -46,6 +47,7 @@ impl VideoFrameGLExt for VideoFrame<Readable> {
         buffer: &'a gst::BufferRef,
         info: &'b VideoInfo,
     ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError> {
+        skip_assert_initialized!();
         VideoFrameRef::<&gst::BufferRef>::from_buffer_ref_readable_gl(buffer, info)
     }
 
@@ -153,6 +155,7 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
 }
 
 fn buffer_n_gl_memory(buffer: &gst::BufferRef) -> Option<u32> {
+    skip_assert_initialized!();
     unsafe {
         let buf = buffer.as_mut_ptr();
         let num = gst_sys::gst_buffer_n_memory(buf);

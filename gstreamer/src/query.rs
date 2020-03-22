@@ -355,6 +355,7 @@ macro_rules! declare_concrete_query(
 
         impl From<$name<Query>> for Query {
             fn from(concrete: $name<Query>) -> Self {
+                skip_assert_initialized!();
                 unsafe { from_glib_none(concrete.0.as_mut_ptr()) }
             }
         }
@@ -1319,6 +1320,7 @@ mod tests {
         ::init().unwrap();
 
         fn check_mut(query: &mut QueryRef) {
+            skip_assert_initialized!();
             match query.view_mut() {
                 QueryView::Position(ref mut p) => {
                     let pos = p.get_result();
@@ -1332,6 +1334,7 @@ mod tests {
         }
 
         fn check_ref(query: &QueryRef) {
+            skip_assert_initialized!();
             match query.view() {
                 QueryView::Position(ref p) => {
                     let pos = p.get_result();

@@ -32,6 +32,7 @@ unsafe impl Sync for CapsFeatures {}
 
 impl CapsFeatures {
     pub fn new(features: &[&str]) -> Self {
+        assert_initialized_main_thread!();
         let mut f = Self::new_empty();
 
         for feature in features {

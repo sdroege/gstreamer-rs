@@ -65,6 +65,7 @@ impl Memory {
     }
 
     pub fn with_size(size: usize) -> Self {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gst_sys::gst_allocator_alloc(
                 ptr::null_mut(),
@@ -75,6 +76,7 @@ impl Memory {
     }
 
     pub fn with_size_and_params(size: usize, params: &AllocationParams) -> Self {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gst_sys::gst_allocator_alloc(
                 ptr::null_mut(),

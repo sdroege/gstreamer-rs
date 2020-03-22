@@ -73,6 +73,7 @@ impl<'a, T: VideoCodecStateContext<'a>> fmt::Debug for VideoCodecState<'a, T> {
 impl<'a> VideoCodecState<'a, Readable> {
     // Take ownership of @state
     pub(crate) unsafe fn new(state: *mut gst_video_sys::GstVideoCodecState) -> Self {
+        skip_assert_initialized!();
         Self {
             state,
             context: Readable {},
@@ -87,6 +88,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
         state: *mut gst_video_sys::GstVideoCodecState,
         element: &'a T,
     ) -> Self {
+        skip_assert_initialized!();
         let stream_lock = element.get_stream_lock();
         glib_sys::g_rec_mutex_lock(stream_lock);
         Self {

@@ -789,14 +789,17 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
 pub fn tag_exists(name: &str) -> bool {
+    skip_assert_initialized!();
     unsafe { from_glib(gst_sys::gst_tag_exists(name.to_glib_none().0)) }
 }
 
 pub fn tag_get_type(name: &str) -> glib::Type {
+    skip_assert_initialized!();
     unsafe { from_glib(gst_sys::gst_tag_get_type(name.to_glib_none().0)) }
 }
 
 pub fn tag_get_nick(name: &str) -> Option<&'static str> {
+    skip_assert_initialized!();
     unsafe {
         let ptr = gst_sys::gst_tag_get_nick(name.to_glib_none().0);
 
@@ -809,6 +812,7 @@ pub fn tag_get_nick(name: &str) -> Option<&'static str> {
 }
 
 pub fn tag_get_description(name: &str) -> Option<&'static str> {
+    skip_assert_initialized!();
     unsafe {
         let ptr = gst_sys::gst_tag_get_description(name.to_glib_none().0);
 
@@ -821,6 +825,7 @@ pub fn tag_get_description(name: &str) -> Option<&'static str> {
 }
 
 pub fn tag_get_flag(name: &str) -> ::TagFlag {
+    skip_assert_initialized!();
     unsafe { from_glib(gst_sys::gst_tag_get_flag(name.to_glib_none().0)) }
 }
 
@@ -830,6 +835,7 @@ pub trait CustomTag<'a>: Tag<'a> {
     const DESCRIPTION: &'static str;
 
     fn merge_func(src: &Value) -> Value {
+        skip_assert_initialized!();
         merge_use_first(src)
     }
 }
@@ -857,6 +863,7 @@ pub fn register<T: for<'a> CustomTag<'a>>() {
 }
 
 pub fn merge_use_first(src: &Value) -> Value {
+    skip_assert_initialized!();
     assert_eq!(src.type_(), ::List::static_type());
 
     unsafe {
@@ -869,6 +876,7 @@ pub fn merge_use_first(src: &Value) -> Value {
 }
 
 pub fn merge_strings_with_comma(src: &Value) -> Value {
+    skip_assert_initialized!();
     assert_eq!(src.type_(), ::List::static_type());
 
     unsafe {
@@ -1064,6 +1072,7 @@ mod tests {
             const DESCRIPTION: &'static str = "My own custom tag type for testing";
 
             fn merge_func(src: &Value) -> Value {
+                skip_assert_initialized!();
                 merge_strings_with_comma(src)
             }
         }

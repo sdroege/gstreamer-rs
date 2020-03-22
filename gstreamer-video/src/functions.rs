@@ -22,6 +22,7 @@ pub fn convert_sample(
     caps: &gst::Caps,
     timeout: gst::ClockTime,
 ) -> Result<gst::Sample, glib::Error> {
+    skip_assert_initialized!();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = gst_video_sys::gst_video_convert_sample(
@@ -47,6 +48,7 @@ pub fn convert_sample_async<F>(
 ) where
     F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
 {
+    skip_assert_initialized!();
     unsafe { convert_sample_async_unsafe(sample, caps, timeout, func) }
 }
 
@@ -58,6 +60,7 @@ pub fn convert_sample_async_local<F>(
 ) where
     F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
 {
+    skip_assert_initialized!();
     unsafe {
         assert!(glib::MainContext::ref_thread_default().is_owner());
         convert_sample_async_unsafe(sample, caps, timeout, func)
@@ -113,6 +116,8 @@ pub fn convert_sample_future(
     timeout: gst::ClockTime,
 ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<gst::Sample, glib::Error>> + 'static>>
 {
+    skip_assert_initialized!();
+
     use futures_channel::oneshot;
     use futures_util::future::lazy;
     use futures_util::future::FutureExt;

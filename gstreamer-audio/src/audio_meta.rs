@@ -27,6 +27,7 @@ impl AudioClippingMeta {
         start: V,
         end: V,
     ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
         let start = start.into();
         let end = end.into();
         assert_eq!(start.get_format(), end.get_format());

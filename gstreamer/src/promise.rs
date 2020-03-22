@@ -44,6 +44,7 @@ impl Promise {
     where
         F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
     {
+        assert_initialized_main_thread!();
         let user_data: Box<Option<F>> = Box::new(Some(func));
 
         unsafe extern "C" fn trampoline<

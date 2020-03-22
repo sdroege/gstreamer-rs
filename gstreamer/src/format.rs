@@ -77,6 +77,7 @@ impl FormattedValue for GenericFormattedValue {
 
 impl GenericFormattedValue {
     pub fn new(format: Format, value: i64) -> Self {
+        skip_assert_initialized!();
         match format {
             Format::Undefined => GenericFormattedValue::Undefined(Undefined(value)),
             Format::Default => GenericFormattedValue::Default(if value == -1 {
@@ -298,6 +299,7 @@ macro_rules! impl_format_value_traits(
 
         impl From<$name> for GenericFormattedValue {
             fn from(v: $name) -> GenericFormattedValue {
+	        skip_assert_initialized!();
                 GenericFormattedValue::$format_value(v)
             }
         }
@@ -306,6 +308,7 @@ macro_rules! impl_format_value_traits(
             type Error = TryFromGenericFormattedValueError;
 
             fn try_from(v: GenericFormattedValue) -> Result<$name, TryFromGenericFormattedValueError> {
+	        skip_assert_initialized!();
                 if let GenericFormattedValue::$format_value(v) = v {
                     Ok(v)
                 } else {
@@ -318,12 +321,14 @@ macro_rules! impl_format_value_traits(
 
         impl From<u64> for $name {
             fn from(v: u64) -> $name {
+	        skip_assert_initialized!();
                 $name(Some(v))
             }
         }
 
         impl From<Option<u64>> for $name {
             fn from(v: Option<u64>) -> $name {
+	        skip_assert_initialized!();
                 $name(v)
             }
         }
@@ -535,6 +540,7 @@ impl FormattedValue for Undefined {
 
 impl From<Undefined> for GenericFormattedValue {
     fn from(v: Undefined) -> GenericFormattedValue {
+        skip_assert_initialized!();
         GenericFormattedValue::Undefined(v)
     }
 }
@@ -543,6 +549,7 @@ impl TryFrom<GenericFormattedValue> for Undefined {
     type Error = TryFromGenericFormattedValueError;
 
     fn try_from(v: GenericFormattedValue) -> Result<Undefined, TryFromGenericFormattedValueError> {
+        skip_assert_initialized!();
         if let GenericFormattedValue::Undefined(v) = v {
             Ok(v)
         } else {
@@ -555,6 +562,7 @@ impl SpecificFormattedValue for Undefined {}
 
 impl From<i64> for Undefined {
     fn from(v: i64) -> Undefined {
+        skip_assert_initialized!();
         Undefined(v)
     }
 }
@@ -616,6 +624,7 @@ impl FormattedValue for Percent {
 
 impl From<Percent> for GenericFormattedValue {
     fn from(v: Percent) -> GenericFormattedValue {
+        skip_assert_initialized!();
         GenericFormattedValue::Percent(v)
     }
 }
@@ -624,6 +633,7 @@ impl TryFrom<GenericFormattedValue> for Percent {
     type Error = TryFromGenericFormattedValueError;
 
     fn try_from(v: GenericFormattedValue) -> Result<Percent, TryFromGenericFormattedValueError> {
+        skip_assert_initialized!();
         if let GenericFormattedValue::Percent(v) = v {
             Ok(v)
         } else {
@@ -675,6 +685,7 @@ impl TryFrom<f64> for Percent {
     type Error = TryPercentFromFloatError;
 
     fn try_from(v: f64) -> Result<Self, Self::Error> {
+        skip_assert_initialized!();
         if v < 0.0 || v > 1.0 {
             Err(TryPercentFromFloatError(()))
         } else {
@@ -689,6 +700,7 @@ impl TryFrom<f32> for Percent {
     type Error = TryPercentFromFloatError;
 
     fn try_from(v: f32) -> Result<Self, Self::Error> {
+        skip_assert_initialized!();
         if v < 0.0 || v > 1.0 {
             Err(TryPercentFromFloatError(()))
         } else {

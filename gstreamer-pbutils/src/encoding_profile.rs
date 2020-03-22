@@ -362,6 +362,7 @@ fn set_common_fields<T: EncodingProfileBuilderCommon>(
     profile: &T,
     base_data: &EncodingProfileBuilderCommonData,
 ) {
+    skip_assert_initialized!();
     profile.set_name(base_data.name);
     profile.set_description(base_data.description);
     profile.set_preset(base_data.preset);

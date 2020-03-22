@@ -29,6 +29,8 @@ impl VideoMeta {
         width: u32,
         height: u32,
     ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+
         let info = ::VideoInfo::new(format, width, height).build().unwrap();
         assert!(buffer.get_size() >= info.size());
 
@@ -54,6 +56,8 @@ impl VideoMeta {
         offset: &[usize],
         stride: &[i32],
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+
         let n_planes = offset.len() as u32;
         let info = ::VideoInfo::new(format, width, height)
             .offset(offset)
@@ -145,6 +149,7 @@ impl VideoOverlayCompositionMeta {
         buffer: &'a mut gst::BufferRef,
         overlay: &::VideoOverlayComposition,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
         unsafe {
             let meta = gst_video_sys::gst_buffer_add_video_overlay_composition_meta(
                 buffer.as_mut_ptr(),
@@ -204,6 +209,7 @@ impl VideoCaptionMeta {
         caption_type: ::VideoCaptionType,
         data: &[u8],
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
         unsafe {
             let meta = gst_video_sys::gst_buffer_add_video_caption_meta(
                 buffer.as_mut_ptr(),

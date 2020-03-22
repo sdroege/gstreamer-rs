@@ -19,6 +19,7 @@ pub struct VideoRectangle {
 
 impl VideoRectangle {
     pub fn new(x: i32, y: i32, w: i32, h: i32) -> Self {
+        skip_assert_initialized!();
         VideoRectangle { x, y, w, h }
     }
 }
@@ -28,6 +29,7 @@ pub fn center_video_rectangle(
     dst: &VideoRectangle,
     scale: bool,
 ) -> VideoRectangle {
+    skip_assert_initialized!();
     let mut result = gst_video_sys::GstVideoRectangle {
         x: 0,
         y: 0,
