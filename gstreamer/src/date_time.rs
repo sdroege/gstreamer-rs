@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use std::cmp;
+use std::convert;
 use std::fmt;
 
 use DateTime;
@@ -227,6 +228,38 @@ impl fmt::Display for DateTime {
                 .unwrap_or_else(|_| "None".into())
                 .as_str(),
         )
+    }
+}
+
+impl<'a> convert::TryFrom<&'a glib::DateTime> for DateTime {
+    type Error = glib::BoolError;
+
+    fn try_from(v: &'a glib::DateTime) -> Result<DateTime, glib::BoolError> {
+        DateTime::new_from_g_date_time(v)
+    }
+}
+
+impl convert::TryFrom<glib::DateTime> for DateTime {
+    type Error = glib::BoolError;
+
+    fn try_from(v: glib::DateTime) -> Result<DateTime, glib::BoolError> {
+        DateTime::new_from_g_date_time(&v)
+    }
+}
+
+impl<'a> convert::TryFrom<&'a DateTime> for glib::DateTime {
+    type Error = glib::BoolError;
+
+    fn try_from(v: &'a DateTime) -> Result<glib::DateTime, glib::BoolError> {
+        v.to_g_date_time()
+    }
+}
+
+impl convert::TryFrom<DateTime> for glib::DateTime {
+    type Error = glib::BoolError;
+
+    fn try_from(v: DateTime) -> Result<glib::DateTime, glib::BoolError> {
+        v.to_g_date_time()
     }
 }
 
