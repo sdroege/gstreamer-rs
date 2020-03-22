@@ -347,7 +347,10 @@ mod tests {
                 &glib::Date::new_dmy(28, glib::DateMonth::May, 2018),
                 TagMergeMode::Append,
             );
-            tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
+            tags.add::<DateTime>(
+                &::DateTime::new_ymd(2018, 5, 28).unwrap(),
+                TagMergeMode::Append,
+            );
 
             let sample = {
                 let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
@@ -497,7 +500,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
-            ::DateTime::new_ymd(2018, 5, 28)
+            ::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
@@ -538,7 +541,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
-            ::DateTime::new_ymd(2018, 5, 28)
+            ::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
@@ -566,7 +569,10 @@ mod tests {
                 &glib::Date::new_dmy(28, glib::DateMonth::May, 2018),
                 TagMergeMode::Append,
             );
-            tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
+            tags.add::<DateTime>(
+                &::DateTime::new_ymd(2018, 5, 28).unwrap(),
+                TagMergeMode::Append,
+            );
 
             let sample = {
                 let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
@@ -612,7 +618,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
-            ::DateTime::new_ymd(2018, 5, 28)
+            ::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();

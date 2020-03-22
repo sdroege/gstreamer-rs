@@ -1425,9 +1425,33 @@ status = "generate"
     name = ""
 
     [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable = true
+        nullable_return_is_error = "Can't create DateTime"
+
+    [[object.function]]
+    name = "new_y"
+        [object.function.return]
+        nullable = true
+        nullable_return_is_error = "Can't create DateTime"
+
+    [[object.function]]
+    name = "new_ym"
+        [object.function.return]
+        nullable = true
+        nullable_return_is_error = "Can't create DateTime"
+
+    [[object.function]]
+    name = "new_ymd"
+        [object.function.return]
+        nullable = true
+        nullable_return_is_error = "Can't create DateTime"
+
+    [[object.function]]
     name = "new_from_g_date_time"
         [object.function.return]
-        nullable = false
+        nullable_return_is_error = "Can't create DateTime from glib::DateTime"
 
     [[object.function]]
     name = "to_g_date_time"

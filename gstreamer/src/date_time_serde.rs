@@ -135,8 +135,10 @@ impl<'de> Deserialize<'de> for Date {
 }
 
 #[allow(clippy::many_single_char_names)]
-impl From<DateTimeVariants> for DateTime {
-    fn from(dt_variant: DateTimeVariants) -> Self {
+impl TryFrom<DateTimeVariants> for DateTime {
+    type Error = glib::BoolError;
+
+    fn try_from(dt_variant: DateTimeVariants) -> Result<Self, Self::Error> {
         match dt_variant {
             DateTimeVariants::Y(y) => DateTime::new_y(y),
             DateTimeVariants::YM(y, m) => DateTime::new_ym(y, m),
@@ -153,7 +155,8 @@ impl From<DateTimeVariants> for DateTime {
 
 impl<'de> Deserialize<'de> for DateTime {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        DateTimeVariants::deserialize(deserializer).map(|dt_variant| dt_variant.into())
+        DateTimeVariants::deserialize(deserializer)
+            .and_then(|dt_variant| dt_variant.try_into().map_err(D::Error::custom))
     }
 }
 
@@ -171,7 +174,7 @@ mod tests {
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
 
-        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64);
+        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
         assert_eq!(
             Ok("YMDhmsTz(2018, 5, 28, 16, 6, 42.123456, 2)".to_owned()),
@@ -184,19 +187,19 @@ mod tests {
             res
         );
 
-        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64);
+        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
         assert_eq!(Ok("YMDhmTz(2018, 5, 28, 16, 6, 2)".to_owned()), res,);
 
-        let datetime = DateTime::new_ymd(2018, 5, 28);
+        let datetime = DateTime::new_ymd(2018, 5, 28).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
         assert_eq!(Ok("YMD(2018, 5, 28)".to_owned()), res);
 
-        let datetime = DateTime::new_ym(2018, 5);
+        let datetime = DateTime::new_ym(2018, 5).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
         assert_eq!(Ok("YM(2018, 5)".to_owned()), res);
 
-        let datetime = DateTime::new_y(2018);
+        let datetime = DateTime::new_y(2018).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config);
         assert_eq!(Ok("Y(2018)".to_owned()), res);
     }
@@ -209,58 +212,61 @@ mod tests {
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
         assert_eq!(
             datetime_de,
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64)
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap()
         );
 
         let datetime_json = r#"{"YMDhmsTz":[2018,5,28,16,6,42.123456,2.0]}"#;
         let datetime_de: DateTime = serde_json::from_str(datetime_json).unwrap();
         assert_eq!(
             datetime_de,
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64)
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap()
         );
 
         let datetime_ron = "YMDhmTz(2018, 5, 28, 16, 6, 2)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert_eq!(datetime_de, DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64));
+        assert_eq!(
+            datetime_de,
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap()
+        );
 
         let datetime_ron = "YMD(2018, 5, 28)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert_eq!(datetime_de, DateTime::new_ymd(2018, 5, 28));
+        assert_eq!(datetime_de, DateTime::new_ymd(2018, 5, 28).unwrap());
 
         let datetime_ron = "YM(2018, 5)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert_eq!(datetime_de, DateTime::new_ym(2018, 5));
+        assert_eq!(datetime_de, DateTime::new_ym(2018, 5).unwrap());
 
         let datetime_ron = "Y(2018)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert_eq!(datetime_de, DateTime::new_y(2018));
+        assert_eq!(datetime_de, DateTime::new_y(2018).unwrap());
     }
 
     #[test]
     fn test_serde_roundtrip() {
         ::init().unwrap();
 
-        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64);
+        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap();
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
         assert_eq!(datetime_de, datetime);
 
-        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64);
+        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap();
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
         assert_eq!(datetime_de, datetime);
 
-        let datetime = DateTime::new_ymd(2018, 5, 28);
+        let datetime = DateTime::new_ymd(2018, 5, 28).unwrap();
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
         assert_eq!(datetime_de, datetime);
 
-        let datetime = DateTime::new_ym(2018, 5);
+        let datetime = DateTime::new_ym(2018, 5).unwrap();
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
         assert_eq!(datetime_de, datetime);
 
-        let datetime = DateTime::new_y(2018);
+        let datetime = DateTime::new_y(2018).unwrap();
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
         assert_eq!(datetime_de, datetime);

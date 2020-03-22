@@ -26,11 +26,11 @@ impl DateTime {
         // however, the resulting instance can't be translated to `glib::DateTime`
         if self.has_second() {
             self.to_g_date_time()
-                .expect("DateTime::to_utc: to_g_date_time")
-                .to_utc()
-                .as_ref()
-                .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
-                .map(DateTime::new_from_g_date_time)
+                .and_then(|d| {
+                    d.to_utc()
+                        .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
+                })
+                .and_then(|d| DateTime::new_from_g_date_time(&d))
         } else {
             // It would be cheaper to build a `glib::DateTime` direcly, unfortunetaly
             // this would require using `glib::TimeZone::new_offset` which is feature-gated
@@ -45,18 +45,19 @@ impl DateTime {
                 self.get_minute(),
                 0f64,
             )
-            .to_g_date_time()
-            .expect("DateTime::to_utc: to_g_date_time")
-            .to_utc()
-            .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
-            .map(|g_date_time_utc| {
+            .and_then(|d| d.to_g_date_time())
+            .and_then(|d| {
+                d.to_utc()
+                    .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
+            })
+            .and_then(|d| {
                 DateTime::new(
                     0f32, // UTC TZ offset
-                    g_date_time_utc.get_year(),
-                    g_date_time_utc.get_month(),
-                    g_date_time_utc.get_day_of_month(),
-                    g_date_time_utc.get_hour(),
-                    g_date_time_utc.get_minute(),
+                    d.get_year(),
+                    d.get_month(),
+                    d.get_day_of_month(),
+                    d.get_hour(),
+                    d.get_minute(),
                     -1f64, // No second
                 )
             })
@@ -240,6 +241,7 @@ mod tests {
 
         // Hour offset
         let utc_date_time = DateTime::new(2f32, 2019, 8, 20, 20, 9, 42.123_456f64)
+            .unwrap()
             .to_utc()
             .unwrap();
         assert_eq!(utc_date_time.get_year(), 2019);
@@ -252,6 +254,7 @@ mod tests {
 
         // Year, month, day and hour offset
         let utc_date_time = DateTime::new(2f32, 2019, 1, 1, 0, 0, 42.123_456f64)
+            .unwrap()
             .to_utc()
             .unwrap();
         assert_eq!(utc_date_time.get_year(), 2018);
@@ -263,7 +266,7 @@ mod tests {
         assert_eq!(utc_date_time.get_microsecond(), 123_456);
 
         // Date without an hour (which implies no TZ)
-        let utc_date_time = DateTime::new_ymd(2019, 1, 1).to_utc().unwrap();
+        let utc_date_time = DateTime::new_ymd(2019, 1, 1).unwrap().to_utc().unwrap();
         assert_eq!(utc_date_time.get_year(), 2019);
         assert_eq!(utc_date_time.get_month(), 1);
         assert_eq!(utc_date_time.get_day(), 1);
@@ -272,6 +275,7 @@ mod tests {
 
         // Date without seconds
         let utc_date_time = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64)
+            .unwrap()
             .to_utc()
             .unwrap();
         assert_eq!(utc_date_time.get_year(), 2018);
@@ -288,96 +292,102 @@ mod tests {
 
         // Different years
         assert!(
-            DateTime::new(2f32, 2020, 8, 20, 19, 43, 42.123_456f64)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
+            DateTime::new(2f32, 2020, 8, 20, 19, 43, 42.123_456f64).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
         );
 
         // Different months (order intentionally reversed)
         assert!(
-            DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
-                < DateTime::new(2f32, 2019, 9, 19, 19, 43, 42.123_456f64)
+            DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
+                < DateTime::new(2f32, 2019, 9, 19, 19, 43, 42.123_456f64).unwrap()
         );
 
         // Different days
         assert!(
-            DateTime::new(2f32, 2019, 8, 21, 19, 43, 42.123_456f64)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
+            DateTime::new(2f32, 2019, 8, 21, 19, 43, 42.123_456f64).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
         );
 
         // Different hours
         assert!(
-            DateTime::new(2f32, 2019, 8, 20, 19, 44, 42.123_456f64)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
+            DateTime::new(2f32, 2019, 8, 20, 19, 44, 42.123_456f64).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
         );
 
         // Different minutes
         assert!(
-            DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
+            DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
         );
 
         // Different seconds
         assert!(
-            DateTime::new(2f32, 2019, 8, 20, 19, 43, 43.123_456f64)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
+            DateTime::new(2f32, 2019, 8, 20, 19, 43, 43.123_456f64).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
         );
 
         // Different micro-seconds
         assert!(
-            DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_457f64)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
+            DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_457f64).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
         );
 
         // Different TZ offsets
         assert!(
-            DateTime::new(1f32, 2019, 8, 20, 19, 43, 42.123_456f64)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64)
+            DateTime::new(1f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 42.123_456f64).unwrap()
         );
 
         // TZ offset leading to year, month, day, hour offset
         assert!(
-            DateTime::new(2f32, 2019, 1, 1, 0, 0, 0f64)
-                < DateTime::new(1f32, 2018, 12, 31, 23, 59, 0f64)
+            DateTime::new(2f32, 2019, 1, 1, 0, 0, 0f64).unwrap()
+                < DateTime::new(1f32, 2018, 12, 31, 23, 59, 0f64).unwrap()
         );
 
         // Partially defined `DateTime`
-        assert!(DateTime::new_ymd(2020, 8, 20) > DateTime::new_ymd(2019, 8, 20));
-        assert!(DateTime::new_ymd(2019, 9, 20) > DateTime::new_ymd(2019, 8, 20));
-        assert!(DateTime::new_ymd(2019, 8, 21) > DateTime::new_ymd(2019, 8, 20));
+        assert!(DateTime::new_ymd(2020, 8, 20).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
+        assert!(DateTime::new_ymd(2019, 9, 20).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
+        assert!(DateTime::new_ymd(2019, 8, 21).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
 
-        assert!(DateTime::new_ym(2020, 8) > DateTime::new_ym(2019, 8));
-        assert!(DateTime::new_ym(2019, 9) > DateTime::new_ym(2019, 8));
-        assert!(DateTime::new_ym(2019, 9) > DateTime::new_ymd(2019, 8, 20));
+        assert!(DateTime::new_ym(2020, 8).unwrap() > DateTime::new_ym(2019, 8).unwrap());
+        assert!(DateTime::new_ym(2019, 9).unwrap() > DateTime::new_ym(2019, 8).unwrap());
+        assert!(DateTime::new_ym(2019, 9).unwrap() > DateTime::new_ymd(2019, 8, 20).unwrap());
 
-        assert!(DateTime::new_y(2020) > DateTime::new_y(2019));
-        assert!(DateTime::new_ym(2020, 1) > DateTime::new_y(2019));
+        assert!(DateTime::new_y(2020).unwrap() > DateTime::new_y(2019).unwrap());
+        assert!(DateTime::new_ym(2020, 1).unwrap() > DateTime::new_y(2019).unwrap());
 
         assert!(
-            DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64)
-                < DateTime::new_ymd(2020, 8, 20)
+            DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap()
+                < DateTime::new_ymd(2020, 8, 20).unwrap()
         );
 
         assert!(
-            DateTime::new_ymd(2020, 8, 20)
-                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64)
+            DateTime::new_ymd(2020, 8, 20).unwrap()
+                > DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap()
         );
 
         // Comparison occurs on the same TZ when the `DateTime` doesn't have time (note 2)
-        assert!(DateTime::new_ymd(2020, 1, 1) > DateTime::new(-2f32, 2019, 12, 31, 23, 59, 0f64));
+        assert!(
+            DateTime::new_ymd(2020, 1, 1).unwrap()
+                > DateTime::new(-2f32, 2019, 12, 31, 23, 59, 0f64).unwrap()
+        );
 
         // In the following cases, the partially defined `DateTime` is a range WRT
         // the fully defined `DateTime` and this range includes the fully defined `DateTime`,
         // but we can't tell if it's before or after and they are not equal (note 1)
         assert!(DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64)
-            .partial_cmp(&DateTime::new_ymd(2019, 8, 20))
+            .unwrap()
+            .partial_cmp(&DateTime::new_ymd(2019, 8, 20).unwrap())
             .is_none());
 
         assert!(DateTime::new_ymd(2019, 8, 20)
-            .partial_cmp(&DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64))
+            .unwrap()
+            .partial_cmp(&DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap())
             .is_none());
 
         assert!(DateTime::new_ym(2019, 1)
-            .partial_cmp(&DateTime::new_y(2019))
+            .unwrap()
+            .partial_cmp(&DateTime::new_y(2019).unwrap())
             .is_none());
     }
 
@@ -386,41 +396,41 @@ mod tests {
         ::init().unwrap();
 
         assert_eq!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64),
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64)
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap(),
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap()
         );
 
         assert_eq!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, 0f64),
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, 0f64)
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 0f64).unwrap(),
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 0f64).unwrap()
         );
 
         assert_eq!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64),
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64)
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap(),
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap()
         );
 
         assert_eq!(
-            DateTime::new_ymd(2018, 5, 28),
-            DateTime::new_ymd(2018, 5, 28)
+            DateTime::new_ymd(2018, 5, 28).unwrap(),
+            DateTime::new_ymd(2018, 5, 28).unwrap()
         );
 
         // In the following cases, the partially defined `DateTime` is a range WRT
         // the fully defined `DateTime` and this range includes the fully defined `DateTime`,
         // but they are not equal (note 1)
         assert_ne!(
-            DateTime::new_ymd(2018, 5, 28),
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64)
+            DateTime::new_ymd(2018, 5, 28).unwrap(),
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap()
         );
 
         assert_ne!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64),
-            DateTime::new_ym(2018, 5)
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap(),
+            DateTime::new_ym(2018, 5).unwrap()
         );
 
         assert_ne!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64),
-            DateTime::new_y(2018)
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap(),
+            DateTime::new_y(2018).unwrap()
         );
     }
 }

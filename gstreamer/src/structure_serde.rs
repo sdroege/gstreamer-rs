@@ -186,7 +186,7 @@ mod tests {
             .field("date", &Date::new_dmy(19, DateMonth::August, 2019))
             .field(
                 "date_time",
-                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64),
+                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
             )
             .field("array", &Array::new(&[&1, &2]))
             .build();
@@ -244,7 +244,7 @@ mod tests {
                     ("date", &Date::new_dmy(19, DateMonth::August, 2019)),
                     (
                         "date_time",
-                        &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64)
+                        &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap()
                     ),
                     ("fraction", &Fraction::new(1, 2)),
                     ("array", &Array::new(&[&1, &2])),
@@ -266,7 +266,7 @@ mod tests {
             .field("date", &Date::new_dmy(19, DateMonth::August, 2019))
             .field(
                 "date_time",
-                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64),
+                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
             )
             .field("array", &Array::new(&[&1, &2]))
             .build();

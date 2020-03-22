@@ -27,21 +27,23 @@ impl DateTime {
         hour: i32,
         minute: i32,
         seconds: f64,
-    ) -> DateTime {
+    ) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_date_time_new(
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_new(
                 tzoffset, year, month, day, hour, minute, seconds,
             ))
+            .ok_or_else(|| glib_bool_error!("Can't create DateTime"))
         }
     }
 
-    pub fn new_from_g_date_time(dt: &glib::DateTime) -> DateTime {
+    pub fn new_from_g_date_time(dt: &glib::DateTime) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_date_time_new_from_g_date_time(
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_new_from_g_date_time(
                 dt.to_glib_full(),
             ))
+            .ok_or_else(|| glib_bool_error!("Can't create DateTime from glib::DateTime"))
         }
     }
 
@@ -91,19 +93,28 @@ impl DateTime {
         unsafe { from_glib_full(gst_sys::gst_date_time_new_now_utc()) }
     }
 
-    pub fn new_y(year: i32) -> DateTime {
+    pub fn new_y(year: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_date_time_new_y(year)) }
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_new_y(year))
+                .ok_or_else(|| glib_bool_error!("Can't create DateTime"))
+        }
     }
 
-    pub fn new_ym(year: i32, month: i32) -> DateTime {
+    pub fn new_ym(year: i32, month: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_date_time_new_ym(year, month)) }
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_new_ym(year, month))
+                .ok_or_else(|| glib_bool_error!("Can't create DateTime"))
+        }
     }
 
-    pub fn new_ymd(year: i32, month: i32, day: i32) -> DateTime {
+    pub fn new_ymd(year: i32, month: i32, day: i32) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_date_time_new_ymd(year, month, day)) }
+        unsafe {
+            Option::<_>::from_glib_full(gst_sys::gst_date_time_new_ymd(year, month, day))
+                .ok_or_else(|| glib_bool_error!("Can't create DateTime"))
+        }
     }
 
     pub fn get_day(&self) -> i32 {

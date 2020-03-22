@@ -433,7 +433,9 @@ mod tests {
         let value_str_none = str_none.to_value();
         let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
 
-        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).to_value();
+        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64)
+            .unwrap()
+            .to_value();
         let send_value_date_time = value_date_time.try_into_send_value::<DateTime>().unwrap();
 
         let date_time_none: Option<DateTime> = None;
@@ -648,7 +650,7 @@ mod tests {
         assert!(slice[2].get::<String>().expect("slice[2]").is_none());
 
         assert_eq!(
-            DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64),
+            DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
             slice[3].get::<DateTime>().expect("slice[3]").unwrap()
         );
 
@@ -723,7 +725,9 @@ mod tests {
         let str_none: Option<&str> = None;
         let value_str_none = str_none.to_value();
         let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
-        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).to_value();
+        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64)
+            .unwrap()
+            .to_value();
         let send_value_date_time = value_date_time.try_into_send_value::<DateTime>().unwrap();
         let date_time_none: Option<DateTime> = None;
         let value_date_time_none = date_time_none.to_value();
