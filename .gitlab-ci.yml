@@ -181,6 +181,12 @@ gir-checks:
         --gir-file ../Gir_Gst.toml ../gstreamer/ \
         --gir-file ../Gir_GstVideo.toml ../gstreamer-video/ \
         --gir-file ../Gir_GstWebRTC.toml ../gstreamer-webrtc/
+    - cd ..
+    - |
+      for crate in gstreamer*; do
+        echo '-->' $crate
+        (cd $crate && ../checker/check_init_asserts)
+      done
 
 outdated:
   extends: '.tarball_setup'
