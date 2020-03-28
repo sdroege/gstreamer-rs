@@ -1613,6 +1613,63 @@ mod tests {
     }
 
     #[test]
+    fn test_getrange_function() {
+        ::init().unwrap();
+
+        let pad = ::Pad::new(Some("src"), ::PadDirection::Src);
+        pad.set_activate_function(|pad, _parent| {
+            pad.activate_mode(::PadMode::Pull, true)
+                .map_err(|err| err.into())
+        });
+        pad.set_getrange_function(|_pad, _parent, offset, _buffer, size| {
+            assert_eq!(offset, 0);
+            assert_eq!(size, 5);
+            let buffer = ::Buffer::from_slice(b"abcde");
+            Ok(PadGetRangeSuccess::NewBuffer(buffer))
+        });
+        pad.set_active(true).unwrap();
+
+        let buffer = pad.get_range(0, 5).unwrap();
+        let map = buffer.map_readable().unwrap();
+        assert_eq!(&*map, b"abcde");
+
+        let mut buffer = ::Buffer::with_size(5).unwrap();
+        pad.get_range_fill(0, buffer.get_mut().unwrap(), 5).unwrap();
+        let map = buffer.map_readable().unwrap();
+        assert_eq!(&*map, b"abcde");
+
+        pad.set_active(false).unwrap();
+        drop(pad);
+
+        let pad = ::Pad::new(Some("src"), ::PadDirection::Src);
+        pad.set_activate_function(|pad, _parent| {
+            pad.activate_mode(::PadMode::Pull, true)
+                .map_err(|err| err.into())
+        });
+        pad.set_getrange_function(|_pad, _parent, offset, buffer, size| {
+            assert_eq!(offset, 0);
+            assert_eq!(size, 5);
+            if let Some(buffer) = buffer {
+                buffer.copy_from_slice(0, b"fghij").unwrap();
+                Ok(PadGetRangeSuccess::FilledBuffer)
+            } else {
+                let buffer = ::Buffer::from_slice(b"abcde");
+                Ok(PadGetRangeSuccess::NewBuffer(buffer))
+            }
+        });
+        pad.set_active(true).unwrap();
+
+        let buffer = pad.get_range(0, 5).unwrap();
+        let map = buffer.map_readable().unwrap();
+        assert_eq!(&*map, b"abcde");
+
+        let mut buffer = ::Buffer::with_size(5).unwrap();
+        pad.get_range_fill(0, buffer.get_mut().unwrap(), 5).unwrap();
+        let map = buffer.map_readable().unwrap();
+        assert_eq!(&*map, b"fghij");
+    }
+
+    #[test]
     fn test_task() {
         ::init().unwrap();
 
