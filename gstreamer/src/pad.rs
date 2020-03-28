@@ -128,7 +128,19 @@ pub trait PadExtManual: 'static {
     fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
 
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
+    fn pull_range_fill(
+        &self,
+        offset: u64,
+        buffer: &mut ::BufferRef,
+        size: u32,
+    ) -> Result<(), FlowError>;
     fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
+    fn get_range_fill(
+        &self,
+        offset: u64,
+        buffer: &mut ::BufferRef,
+        size: u32,
+    ) -> Result<(), FlowError>;
 
     fn peer_query(&self, query: &mut QueryRef) -> bool;
     fn query(&self, query: &mut QueryRef) -> bool;
@@ -351,6 +363,36 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
+    fn get_range_fill(
+        &self,
+        offset: u64,
+        buffer: &mut ::BufferRef,
+        size: u32,
+    ) -> Result<(), FlowError> {
+        assert!(buffer.get_size() >= size as usize);
+
+        unsafe {
+            let mut buffer_ref = buffer.as_mut_ptr();
+            let ret: FlowReturn = from_glib(gst_sys::gst_pad_get_range(
+                self.as_ref().to_glib_none().0,
+                offset,
+                size,
+                &mut buffer_ref,
+            ));
+            match ret.into_result_value(|| ()) {
+                Ok(_) => {
+                    if buffer.as_mut_ptr() != buffer_ref {
+                        gst_sys::gst_mini_object_unref(buffer_ref as *mut _);
+                        Err(::FlowError::Error)
+                    } else {
+                        Ok(())
+                    }
+                }
+                Err(err) => Err(err),
+            }
+        }
+    }
+
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError> {
         unsafe {
             let mut buffer = ptr::null_mut();
@@ -361,6 +403,36 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut buffer,
             ));
             ret.into_result_value(|| from_glib_full(buffer))
+        }
+    }
+
+    fn pull_range_fill(
+        &self,
+        offset: u64,
+        buffer: &mut ::BufferRef,
+        size: u32,
+    ) -> Result<(), FlowError> {
+        assert!(buffer.get_size() >= size as usize);
+
+        unsafe {
+            let mut buffer_ref = buffer.as_mut_ptr();
+            let ret: FlowReturn = from_glib(gst_sys::gst_pad_pull_range(
+                self.as_ref().to_glib_none().0,
+                offset,
+                size,
+                &mut buffer_ref,
+            ));
+            match ret.into_result_value(|| ()) {
+                Ok(_) => {
+                    if buffer.as_mut_ptr() != buffer_ref {
+                        gst_sys::gst_mini_object_unref(buffer_ref as *mut _);
+                        Err(::FlowError::Error)
+                    } else {
+                        Ok(())
+                    }
+                }
+                Err(err) => Err(err),
+            }
         }
     }
 
