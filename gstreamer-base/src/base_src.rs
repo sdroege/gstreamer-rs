@@ -11,9 +11,13 @@ use glib::translate::*;
 use gst;
 use gst_base_sys;
 use std::mem;
+use std::ptr;
+
 use BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
+    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+
     fn get_segment(&self) -> gst::Segment;
 
     fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>);
@@ -26,6 +30,19 @@ pub trait BaseSrcExtManual: 'static {
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
+    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+        unsafe {
+            let mut allocator = ptr::null_mut();
+            let mut params = mem::zeroed();
+            gst_base_sys::gst_base_src_get_allocator(
+                self.as_ref().to_glib_none().0,
+                &mut allocator,
+                &mut params,
+            );
+            (from_glib_full(allocator), params.into())
+        }
+    }
+
     fn get_segment(&self) -> gst::Segment {
         unsafe {
             let src: &gst_base_sys::GstBaseSrc = &*(self.as_ptr() as *const _);
