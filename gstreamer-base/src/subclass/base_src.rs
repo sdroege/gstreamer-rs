@@ -64,6 +64,15 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl + Send + Sync + 'static {
         self.parent_fill(element, offset, length, buffer)
     }
 
+    fn alloc(
+        &self,
+        element: &BaseSrc,
+        offset: u64,
+        length: u32,
+    ) -> Result<gst::Buffer, gst::FlowError> {
+        self.parent_alloc(element, offset, length)
+    }
+
     fn create(
         &self,
         element: &BaseSrc,
@@ -133,6 +142,13 @@ pub trait BaseSrcImplExt {
         length: u32,
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_alloc(
+        &self,
+        element: &BaseSrc,
+        offset: u64,
+        length: u32,
+    ) -> Result<gst::Buffer, gst::FlowError>;
 
     fn parent_create(
         &self,
@@ -291,6 +307,37 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
                 })
                 .unwrap_or(gst::FlowReturn::NotSupported)
                 .into_result()
+        }
+    }
+
+    fn parent_alloc(
+        &self,
+        element: &BaseSrc,
+        offset: u64,
+        length: u32,
+    ) -> Result<gst::Buffer, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
+            (*parent_class)
+                .alloc
+                .map(|f| {
+                    let mut buffer_ptr: *mut gst_sys::GstBuffer = ptr::null_mut();
+
+                    // FIXME: Wrong signature in -sys bindings
+                    // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
+                    let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst_sys::GstBuffer;
+
+                    let res = gst::FlowReturn::from_glib(f(
+                        element.to_glib_none().0,
+                        offset,
+                        length,
+                        buffer_ref,
+                    ));
+                    res.into_result_value(|| from_glib_full(buffer_ref))
+                })
+                .unwrap_or(Err(gst::FlowError::NotSupported))
         }
     }
 
@@ -538,6 +585,7 @@ where
             klass.get_size = Some(base_src_get_size::<T>);
             klass.get_times = Some(base_src_get_times::<T>);
             klass.fill = Some(base_src_fill::<T>);
+            klass.alloc = Some(base_src_alloc::<T>);
             klass.create = Some(base_src_create::<T>);
             klass.do_seek = Some(base_src_do_seek::<T>);
             klass.query = Some(base_src_query::<T>);
@@ -680,6 +728,35 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.fill(&wrap, offset, length, buffer).into()
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn base_src_alloc<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    offset: u64,
+    length: u32,
+    buffer_ptr: *mut gst_sys::GstBuffer,
+) -> gst_sys::GstFlowReturn
+where
+    T: BaseSrcImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseSrc = from_glib_borrow(ptr);
+    // FIXME: Wrong signature in -sys bindings
+    // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
+    let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+        match imp.alloc(&wrap, offset, length) {
+            Ok(buffer) => {
+                *buffer_ptr = buffer.into_ptr();
+                gst::FlowReturn::Ok
+            }
+            Err(err) => gst::FlowReturn::from(err),
+        }
     })
     .to_glib()
 }
