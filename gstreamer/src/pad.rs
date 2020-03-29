@@ -115,6 +115,12 @@ impl Drop for StreamLock {
     }
 }
 
+#[derive(Debug)]
+pub enum PadGetRangeSuccess {
+    FilledBuffer,
+    NewBuffer(::Buffer),
+}
+
 pub trait PadExtManual: 'static {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where
@@ -207,7 +213,13 @@ pub trait PadExtManual: 'static {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Self, Option<&::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
+        F: Fn(
+                &Self,
+                Option<&::Object>,
+                u64,
+                Option<&mut ::BufferRef>,
+                u32,
+            ) -> Result<PadGetRangeSuccess, ::FlowError>
             + Send
             + Sync
             + 'static;
@@ -680,7 +692,13 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Self, Option<&::Object>, u64, u32) -> Result<::Buffer, FlowError>
+        F: Fn(
+                &Self,
+                Option<&::Object>,
+                u64,
+                Option<&mut ::BufferRef>,
+                u32,
+            ) -> Result<PadGetRangeSuccess, ::FlowError>
             + Send
             + Sync
             + 'static,
@@ -1344,7 +1362,16 @@ where
 
 unsafe extern "C" fn trampoline_getrange_function<
     T,
-    F: Fn(&T, Option<&::Object>, u64, u32) -> Result<::Buffer, FlowError> + Send + Sync + 'static,
+    F: Fn(
+            &T,
+            Option<&::Object>,
+            u64,
+            Option<&mut ::BufferRef>,
+            u32,
+        ) -> Result<PadGetRangeSuccess, ::FlowError>
+        + Send
+        + Sync
+        + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1355,16 +1382,72 @@ unsafe extern "C" fn trampoline_getrange_function<
 where
     T: IsA<Pad>,
 {
+    use std::ops::DerefMut;
+
     let func: &F = &*((*pad).getrangedata as *const F);
 
+    assert!(!buffer.is_null());
+
+    let pad = Pad::from_glib_borrow(pad).unsafe_cast();
+    let mut passed_buffer = if (*buffer).is_null() {
+        None
+    } else {
+        Some(::BufferRef::from_mut_ptr(*buffer))
+    };
+
     match func(
-        &Pad::from_glib_borrow(pad).unsafe_cast(),
+        &pad,
         Option::<::Object>::from_glib_borrow(parent).as_ref(),
         offset,
+        passed_buffer.as_mut().map(|b| b.deref_mut()),
         length,
     ) {
-        Ok(new_buffer) => {
-            *buffer = new_buffer.into_ptr();
+        Ok(PadGetRangeSuccess::NewBuffer(new_buffer)) => {
+            if let Some(passed_buffer) = passed_buffer {
+                gst_debug!(
+                    ::CAT_PERFORMANCE,
+                    obj: pad.unsafe_cast_ref::<glib::Object>(),
+                    "Returned new buffer from getrange function, copying into passed buffer"
+                );
+
+                let mut map = match passed_buffer.map_writable() {
+                    Ok(map) => map,
+                    Err(_) => {
+                        gst_error!(
+                            ::CAT_RUST,
+                            obj: pad.unsafe_cast_ref::<glib::Object>(),
+                            "Failed to map passed buffer writable"
+                        );
+                        return gst_sys::GST_FLOW_ERROR;
+                    }
+                };
+
+                let copied_size = new_buffer.copy_to_slice(0, &mut *map);
+                drop(map);
+
+                if let Err(copied_size) = copied_size {
+                    passed_buffer.set_size(copied_size);
+                }
+
+                match new_buffer.copy_into(passed_buffer, ::BUFFER_COPY_METADATA, 0, None) {
+                    Ok(_) => FlowReturn::Ok.to_glib(),
+                    Err(_) => {
+                        gst_error!(
+                            ::CAT_RUST,
+                            obj: pad.unsafe_cast_ref::<glib::Object>(),
+                            "Failed to copy buffer metadata"
+                        );
+
+                        FlowReturn::Error.to_glib()
+                    }
+                }
+            } else {
+                *buffer = new_buffer.into_ptr();
+                FlowReturn::Ok.to_glib()
+            }
+        }
+        Ok(PadGetRangeSuccess::FilledBuffer) => {
+            assert!(passed_buffer.is_some());
             FlowReturn::Ok.to_glib()
         }
         Err(ret) => FlowReturn::from_error(ret).to_glib(),

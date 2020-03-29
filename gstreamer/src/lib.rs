@@ -238,7 +238,7 @@ pub use enums::{
     StateChangeError, StateChangeSuccess, TagError,
 };
 pub use gobject::GObjectExtManualGst;
-pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
+pub use pad::{PadExtManual, PadGetRangeSuccess, PadProbeData, PadProbeId, PadProbeInfo};
 pub use parse_context::ParseContext;
 mod plugin_feature;
 pub use plugin_feature::PluginFeatureExtManual;
