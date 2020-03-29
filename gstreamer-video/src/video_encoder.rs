@@ -31,7 +31,7 @@ pub trait VideoEncoderExtManual: 'static {
     fn get_frames(&self) -> Vec<VideoCodecFrame>;
     fn get_oldest_frame(&self) -> Option<VideoCodecFrame>;
 
-    fn get_allocator(&self) -> (gst::Allocator, gst::AllocationParams);
+    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     fn finish_frame(
         &self,
@@ -71,7 +71,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         ret.into_result()
     }
 
-    fn get_allocator(&self) -> (gst::Allocator, gst::AllocationParams) {
+    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();

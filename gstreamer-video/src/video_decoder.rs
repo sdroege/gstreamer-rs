@@ -47,7 +47,7 @@ pub trait VideoDecoderExtManual: 'static {
     fn get_frames(&self) -> Vec<VideoCodecFrame>;
     fn get_oldest_frame(&self) -> Option<VideoCodecFrame>;
 
-    fn get_allocator(&self) -> (gst::Allocator, gst::AllocationParams);
+    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
@@ -113,7 +113,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         ret.into_result()
     }
 
-    fn get_allocator(&self) -> (gst::Allocator, gst::AllocationParams) {
+    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
