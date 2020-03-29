@@ -12,6 +12,7 @@ pub mod base_parse;
 pub mod base_sink;
 pub mod base_src;
 pub mod base_transform;
+pub mod push_src;
 
 pub use self::base_transform::BaseTransformMode;
 
@@ -31,4 +32,5 @@ pub mod prelude {
     pub use super::base_transform::{
         BaseTransformClassSubclassExt, BaseTransformImpl, BaseTransformImplExt,
     };
+    pub use super::push_src::{PushSrcImpl, PushSrcImplExt};
 }
