@@ -23,6 +23,12 @@ use std::ptr;
 use BaseSrc;
 use BaseSrcClass;
 
+#[derive(Debug)]
+pub enum CreateSuccess {
+    FilledBuffer,
+    NewBuffer(gst::Buffer),
+}
+
 pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl + Send + Sync + 'static {
     fn start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
@@ -62,9 +68,10 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl + Send + Sync + 'static {
         &self,
         element: &BaseSrc,
         offset: u64,
+        buffer: Option<&mut gst::BufferRef>,
         length: u32,
-    ) -> Result<gst::Buffer, gst::FlowError> {
-        self.parent_create(element, offset, length)
+    ) -> Result<CreateSuccess, gst::FlowError> {
+        self.parent_create(element, offset, buffer, length)
     }
 
     fn do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool {
@@ -131,8 +138,9 @@ pub trait BaseSrcImplExt {
         &self,
         element: &BaseSrc,
         offset: u64,
+        buffer: Option<&mut gst::BufferRef>,
         length: u32,
-    ) -> Result<gst::Buffer, gst::FlowError>;
+    ) -> Result<CreateSuccess, gst::FlowError>;
 
     fn parent_do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool;
 
@@ -290,8 +298,9 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
         &self,
         element: &BaseSrc,
         offset: u64,
+        mut buffer: Option<&mut gst::BufferRef>,
         length: u32,
-    ) -> Result<gst::Buffer, gst::FlowError> {
+    ) -> Result<CreateSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
@@ -299,14 +308,72 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .create
                 .map(|f| {
-                    let mut buffer: *mut gst_sys::GstBuffer = ptr::null_mut();
+                    let orig_buffer_ptr = buffer
+                        .as_mut()
+                        .map(|b| b.as_mut_ptr())
+                        .unwrap_or(ptr::null_mut());
+                    let mut buffer_ptr = orig_buffer_ptr;
+
                     // FIXME: Wrong signature in -sys bindings
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
-                    let buffer_ref = &mut buffer as *mut _ as *mut gst_sys::GstBuffer;
-                    let ret: gst::FlowReturn =
-                        from_glib(f(element.to_glib_none().0, offset, length, buffer_ref));
+                    let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst_sys::GstBuffer;
 
-                    ret.into_result_value(|| from_glib_full(buffer))
+                    gst::FlowReturn::from_glib(
+                        f(
+                            element.to_glib_none().0,
+                            offset,
+                            length,
+                            buffer_ref,
+                        )
+                    ).into_result()?;
+
+                    if let Some(passed_buffer) = buffer {
+                        if buffer_ptr != orig_buffer_ptr {
+                            let new_buffer = gst::BufferRef::from_ptr(buffer_ptr);
+
+                            gst_debug!(
+                                gst::CAT_PERFORMANCE,
+                                obj: element,
+                                "Returned new buffer from parent create function, copying into passed buffer"
+                            );
+
+                            let mut map = match passed_buffer.map_writable() {
+                                Ok(map) => map,
+                                Err(_) => {
+                                    gst_error!(
+                                        gst::CAT_RUST,
+                                        obj: element,
+                                        "Failed to map passed buffer writable"
+                                    );
+                                    return Err(gst::FlowError::Error);
+                                }
+                            };
+
+                            let copied_size = new_buffer.copy_to_slice(0, &mut *map);
+                            drop(map);
+
+                            if let Err(copied_size) = copied_size {
+                                passed_buffer.set_size(copied_size);
+                            }
+
+                            match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, 0, None) {
+                                Ok(_) => Ok(CreateSuccess::FilledBuffer),
+                                Err(_) => {
+                                    gst_error!(
+                                        gst::CAT_RUST,
+                                        obj: element,
+                                        "Failed to copy buffer metadata"
+                                    );
+
+                                    Err(gst::FlowError::Error)
+                                }
+                            }
+                        } else {
+                            Ok(CreateSuccess::FilledBuffer)
+                        }
+                    } else {
+                        Ok(CreateSuccess::NewBuffer(from_glib_full(buffer_ptr)))
+                    }
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }
@@ -627,6 +694,8 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
+    use std::ops::DerefMut;
+
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -634,12 +703,73 @@ where
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
 
+    let mut buffer = if (*buffer_ptr).is_null() {
+        None
+    } else {
+        Some(gst::BufferRef::from_mut_ptr(*buffer_ptr))
+    };
+
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match imp.create(&wrap, offset, length) {
-            Ok(buffer) => {
-                *buffer_ptr = buffer.into_ptr();
-                gst::FlowReturn::Ok
+        match imp.create(
+            &wrap,
+            offset,
+            buffer.as_mut().map(|b| b.deref_mut()),
+            length,
+        ) {
+            Ok(CreateSuccess::NewBuffer(new_buffer)) => {
+                if let Some(passed_buffer) = buffer {
+                    if passed_buffer.as_ptr() != new_buffer.as_ptr() {
+                        gst_debug!(
+                            gst::CAT_PERFORMANCE,
+                            obj: &wrap,
+                            "Returned new buffer from create function, copying into passed buffer"
+                        );
+
+                        let mut map = match passed_buffer.map_writable() {
+                            Ok(map) => map,
+                            Err(_) => {
+                                gst_error!(
+                                    gst::CAT_RUST,
+                                    obj: &wrap,
+                                    "Failed to map passed buffer writable"
+                                );
+                                return gst::FlowReturn::Error;
+                            }
+                        };
+
+                        let copied_size = new_buffer.copy_to_slice(0, &mut *map);
+                        drop(map);
+
+                        if let Err(copied_size) = copied_size {
+                            passed_buffer.set_size(copied_size);
+                        }
+
+                        match new_buffer.copy_into(
+                            passed_buffer,
+                            gst::BUFFER_COPY_METADATA,
+                            0,
+                            None,
+                        ) {
+                            Ok(_) => gst::FlowReturn::Ok,
+                            Err(_) => {
+                                gst_error!(
+                                    gst::CAT_RUST,
+                                    obj: &wrap,
+                                    "Failed to copy buffer metadata"
+                                );
+
+                                gst::FlowReturn::Error
+                            }
+                        }
+                    } else {
+                        gst::FlowReturn::Ok
+                    }
+                } else {
+                    *buffer_ptr = new_buffer.into_ptr();
+                    gst::FlowReturn::Ok
+                }
             }
+            Ok(CreateSuccess::FilledBuffer) => gst::FlowReturn::Ok,
             Err(err) => gst::FlowReturn::from(err),
         }
     })
