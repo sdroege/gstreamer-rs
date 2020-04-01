@@ -316,7 +316,7 @@ fn example_main() -> Result<(), Error> {
                             .get_src()
                             .map(|s| String::from(s.get_path_string()))
                             .unwrap_or_else(|| String::from("None")),
-                        error: err.get_error().description().into(),
+                        error: err.get_error().to_string(),
                         debug: err.get_debug(),
                         cause: err.get_error(),
                     }
