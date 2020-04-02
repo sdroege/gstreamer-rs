@@ -106,7 +106,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 
         &self,
         element: &BaseTransform,
         inbuf: &gst::BufferRef,
-    ) -> Result<PreparedOutputBuffer, gst::FlowError> {
+    ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         self.parent_prepare_output_buffer(element, inbuf)
     }
 
@@ -167,7 +167,10 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 
         self.parent_submit_input_buffer(element, is_discont, inbuf)
     }
 
-    fn generate_output(&self, element: &BaseTransform) -> Result<GeneratedOutput, gst::FlowError> {
+    fn generate_output(
+        &self,
+        element: &BaseTransform,
+    ) -> Result<GenerateOutputSuccess, gst::FlowError> {
         self.parent_generate_output(element)
     }
 }
@@ -233,7 +236,7 @@ pub trait BaseTransformImplExt {
         &self,
         element: &BaseTransform,
         inbuf: &gst::BufferRef,
-    ) -> Result<PreparedOutputBuffer, gst::FlowError>;
+    ) -> Result<PrepareOutputBufferSuccess, gst::FlowError>;
 
     fn parent_transform(
         &self,
@@ -281,7 +284,7 @@ pub trait BaseTransformImplExt {
     fn parent_generate_output(
         &self,
         element: &BaseTransform,
-    ) -> Result<GeneratedOutput, gst::FlowError>;
+    ) -> Result<GenerateOutputSuccess, gst::FlowError>;
 
     fn take_queued_buffer(&self) -> Option<gst::Buffer>
     where
@@ -552,7 +555,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         &self,
         element: &BaseTransform,
         inbuf: &gst::BufferRef,
-    ) -> Result<PreparedOutputBuffer, gst::FlowError> {
+    ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
@@ -572,9 +575,9 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
                         Err(err) => Err(err),
                         Ok(_) => {
                             if outbuf == inbuf.as_ptr() as *mut _ {
-                                Ok(PreparedOutputBuffer::InputBuffer)
+                                Ok(PrepareOutputBufferSuccess::InputBuffer)
                             } else {
-                                Ok(PreparedOutputBuffer::Buffer(from_glib_full(outbuf)))
+                                Ok(PrepareOutputBufferSuccess::Buffer(from_glib_full(outbuf)))
                             }
                         }
                     }
@@ -761,7 +764,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
     fn parent_generate_output(
         &self,
         element: &BaseTransform,
-    ) -> Result<GeneratedOutput, gst::FlowError> {
+    ) -> Result<GenerateOutputSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
@@ -775,11 +778,11 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
                 .into_result()
                 .map(|res| {
                     if res == ::BASE_TRANSFORM_FLOW_DROPPED {
-                        GeneratedOutput::Dropped
+                        GenerateOutputSuccess::Dropped
                     } else if res != gst::FlowSuccess::Ok || outbuf.is_null() {
-                        GeneratedOutput::NoOutput
+                        GenerateOutputSuccess::NoOutput
                     } else {
-                        GeneratedOutput::Buffer(from_glib_full(outbuf))
+                        GenerateOutputSuccess::Buffer(from_glib_full(outbuf))
                     }
                 })
         }
@@ -893,14 +896,14 @@ where
 }
 
 #[derive(Debug)]
-pub enum GeneratedOutput {
+pub enum GenerateOutputSuccess {
     Buffer(gst::Buffer),
     NoOutput,
     Dropped,
 }
 
 #[derive(Debug)]
-pub enum PreparedOutputBuffer {
+pub enum PrepareOutputBufferSuccess {
     Buffer(gst::Buffer),
     InputBuffer,
 }
@@ -1153,11 +1156,11 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.prepare_output_buffer(&wrap, gst::BufferRef::from_ptr(inbuf)) {
-            Ok(PreparedOutputBuffer::InputBuffer) => {
+            Ok(PrepareOutputBufferSuccess::InputBuffer) => {
                 *outbuf = inbuf;
                 gst::FlowReturn::Ok
             }
-            Ok(PreparedOutputBuffer::Buffer(buf)) => {
+            Ok(PrepareOutputBufferSuccess::Buffer(buf)) => {
                 *outbuf = buf.into_ptr();
                 gst::FlowReturn::Ok
             }
@@ -1372,9 +1375,9 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.generate_output(&wrap) {
-            Ok(GeneratedOutput::Dropped) => ::BASE_TRANSFORM_FLOW_DROPPED.into(),
-            Ok(GeneratedOutput::NoOutput) => gst::FlowReturn::Ok,
-            Ok(GeneratedOutput::Buffer(outbuf)) => {
+            Ok(GenerateOutputSuccess::Dropped) => ::BASE_TRANSFORM_FLOW_DROPPED.into(),
+            Ok(GenerateOutputSuccess::NoOutput) => gst::FlowReturn::Ok,
+            Ok(GenerateOutputSuccess::Buffer(outbuf)) => {
                 *buf = outbuf.into_ptr();
                 gst::FlowReturn::Ok
             }
