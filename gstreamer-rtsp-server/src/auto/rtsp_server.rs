@@ -396,7 +396,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPServer::from_glib_borrow(this).unsafe_cast(),
+                &RTSPServer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -423,7 +423,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -448,7 +448,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -473,7 +473,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -498,7 +498,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -525,7 +525,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -550,7 +550,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

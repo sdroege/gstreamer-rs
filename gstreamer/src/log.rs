@@ -19,7 +19,7 @@ use once_cell::sync::Lazy;
 use gobject_sys;
 use gst_sys;
 
-use glib::translate::{from_glib, from_glib_borrow, ToGlib, ToGlibPtr};
+use glib::translate::*;
 use glib::IsA;
 use glib_sys::gpointer;
 
@@ -329,7 +329,7 @@ unsafe extern "C" fn log_handler<T>(
     let file = CStr::from_ptr(file).to_string_lossy();
     let function = CStr::from_ptr(function).to_string_lossy();
     let line = line as u32;
-    let object: Option<glib::Object> = from_glib_borrow(object);
+    let object: Borrowed<Option<glib::Object>> = from_glib_borrow(object);
     let message = DebugMessage(ptr::NonNull::new_unchecked(message));
     let handler = &*(user_data as *mut T);
     (handler)(
@@ -338,7 +338,7 @@ unsafe extern "C" fn log_handler<T>(
         &file,
         &function,
         line,
-        object.as_ref(),
+        object.as_ref().as_ref(),
         &message,
     );
 }

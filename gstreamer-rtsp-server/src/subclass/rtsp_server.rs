@@ -73,7 +73,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPServer = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);
 
     imp.create_client(&wrap).to_glib_full()
 }
@@ -86,7 +86,7 @@ unsafe extern "C" fn server_client_connected<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPServer = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);
 
     imp.client_connected(&wrap, &from_glib_borrow(client));
 }

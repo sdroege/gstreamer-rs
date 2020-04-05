@@ -242,7 +242,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
             P: IsA<Track>,
         {
             let f: &F = &*(f as *const F);
-            f(&Track::from_glib_borrow(this).unsafe_cast())
+            f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -268,7 +268,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Track::from_glib_borrow(this).unsafe_cast(),
+                &Track::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(effect),
             )
         }
@@ -301,7 +301,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Track::from_glib_borrow(this).unsafe_cast(),
+                &Track::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(effect),
             )
         }
@@ -327,7 +327,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
             P: IsA<Track>,
         {
             let f: &F = &*(f as *const F);
-            f(&Track::from_glib_borrow(this).unsafe_cast())
+            f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -349,7 +349,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
             P: IsA<Track>,
         {
             let f: &F = &*(f as *const F);
-            f(&Track::from_glib_borrow(this).unsafe_cast())
+            f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -374,7 +374,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
             P: IsA<Track>,
         {
             let f: &F = &*(f as *const F);
-            f(&Track::from_glib_borrow(this).unsafe_cast())
+            f(&Track::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

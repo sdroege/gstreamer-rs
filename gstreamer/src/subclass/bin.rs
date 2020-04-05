@@ -112,13 +112,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Bin = from_glib_borrow(ptr);
+    let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.add_element(&wrap, &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -136,7 +136,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Bin = from_glib_borrow(ptr);
+    let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     // If we get a floating reference passed simply return FALSE here. It can't be
     // stored inside this bin, and if we continued to use it we would take ownership
@@ -149,7 +149,7 @@ where
         match imp.remove_element(&wrap, &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -166,7 +166,7 @@ unsafe extern "C" fn bin_handle_message<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Bin = from_glib_borrow(ptr);
+    let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.handle_message(&wrap, from_glib_full(message))

@@ -207,9 +207,11 @@ impl FromGlibPtrFull<*mut gst_video_sys::GstVideoTimeCodeInterval> for VideoTime
 #[doc(hidden)]
 impl FromGlibPtrBorrow<*mut gst_video_sys::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_video_sys::GstVideoTimeCodeInterval) -> Self {
+    unsafe fn from_glib_borrow(
+        ptr: *mut gst_video_sys::GstVideoTimeCodeInterval,
+    ) -> Borrowed<Self> {
         assert!(!ptr.is_null());
-        VideoTimeCodeInterval(ptr::read(ptr))
+        Borrowed::new(VideoTimeCodeInterval(ptr::read(ptr)))
     }
 }
 

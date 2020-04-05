@@ -662,8 +662,8 @@ impl glib::translate::FromGlibPtrNone<*mut gst_sys::GstSegment> for Segment {
 #[doc(hidden)]
 impl glib::translate::FromGlibPtrBorrow<*mut gst_sys::GstSegment> for Segment {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstSegment) -> Self {
-        FormattedSegment(ptr::read(ptr), PhantomData)
+    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstSegment) -> Borrowed<Self> {
+        Borrowed::new(FormattedSegment(ptr::read(ptr), PhantomData))
     }
 }
 

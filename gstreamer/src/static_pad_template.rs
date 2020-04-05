@@ -14,9 +14,7 @@ use gobject_sys;
 use gst_sys;
 
 use glib;
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut,
-};
+use glib::translate::*;
 use std::ffi::CStr;
 
 use std::fmt;
@@ -153,9 +151,9 @@ impl glib::translate::FromGlibPtrNone<*mut gst_sys::GstStaticPadTemplate> for St
 #[doc(hidden)]
 impl glib::translate::FromGlibPtrBorrow<*mut gst_sys::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstStaticPadTemplate) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstStaticPadTemplate) -> Borrowed<Self> {
         assert!(!ptr.is_null());
-        StaticPadTemplate(ptr::NonNull::new_unchecked(ptr))
+        Borrowed::new(StaticPadTemplate(ptr::NonNull::new_unchecked(ptr)))
     }
 }
 

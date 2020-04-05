@@ -119,11 +119,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Device = from_glib_borrow(ptr);
+    let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.create_element(
         &wrap,
         Option::<glib::GString>::from_glib_borrow(name)
+            .as_ref()
             .as_ref()
             .map(|s| s.as_str()),
     ) {
@@ -137,7 +138,7 @@ where
             element_ptr
         }
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             ptr::null_mut()
         }
     }
@@ -152,12 +153,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Device = from_glib_borrow(ptr);
+    let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.reconfigure_element(&wrap, &from_glib_borrow(element)) {
         Ok(()) => true,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             false
         }
     }

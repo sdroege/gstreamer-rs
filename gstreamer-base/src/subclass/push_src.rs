@@ -140,7 +140,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: PushSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
@@ -159,7 +159,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: PushSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
@@ -186,7 +186,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: PushSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;

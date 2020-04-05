@@ -23,6 +23,7 @@ use RTSPAddressPool;
 use RTSPMediaStatus;
 use RTSPPublishClockMode;
 use RTSPStream;
+use RTSPStreamTransport;
 use RTSPSuspendMode;
 use RTSPThread;
 use RTSPTransportMode;
@@ -55,7 +56,7 @@ pub trait RTSPMediaExt: 'static {
     fn collect_streams(&self);
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn complete_pipeline(&self, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 10, id: 31 }) -> bool;
+    //fn complete_pipeline(&self, transports: /*Ignored*/&[&gst_rtsp::RTSPTransport]) -> bool;
 
     fn create_stream<P: IsA<gst::Element>, Q: IsA<gst::Pad>>(
         &self,
@@ -171,7 +172,7 @@ pub trait RTSPMediaExt: 'static {
 
     fn set_shared(&self, shared: bool);
 
-    //fn set_state(&self, state: gst::State, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 27 }) -> bool;
+    fn set_state(&self, state: gst::State, transports: &[RTSPStreamTransport]) -> bool;
 
     fn set_stop_on_disconnect(&self, stop_on_disconnect: bool);
 
@@ -308,7 +309,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn complete_pipeline(&self, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 10, id: 31 }) -> bool {
+    //fn complete_pipeline(&self, transports: /*Ignored*/&[&gst_rtsp::RTSPTransport]) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_complete_pipeline() }
     //}
 
@@ -718,9 +719,15 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //fn set_state(&self, state: gst::State, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 27 }) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_set_state() }
-    //}
+    fn set_state(&self, state: gst::State, transports: &[RTSPStreamTransport]) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_media_set_state(
+                self.as_ref().to_glib_none().0,
+                state.to_glib(),
+                transports.to_glib_none().0,
+            ))
+        }
+    }
 
     fn set_stop_on_disconnect(&self, stop_on_disconnect: bool) {
         unsafe {
@@ -921,7 +928,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(), object)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -950,7 +957,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPMedia::from_glib_borrow(this).unsafe_cast(),
+                &RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -973,7 +980,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1002,7 +1009,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPMedia::from_glib_borrow(this).unsafe_cast(),
+                &RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -1029,7 +1036,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref(), object)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1050,7 +1057,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1078,7 +1085,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1105,7 +1112,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1130,7 +1137,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1155,7 +1162,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1182,7 +1189,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1207,7 +1214,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1234,7 +1241,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1259,7 +1266,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1284,7 +1291,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1309,7 +1316,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1337,7 +1344,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1364,7 +1371,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1391,7 +1398,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1421,7 +1428,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P: IsA<RTSPMedia>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

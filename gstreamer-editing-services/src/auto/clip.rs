@@ -237,7 +237,7 @@ impl<O: IsA<Clip>> ClipExt for O {
             P: IsA<Clip>,
         {
             let f: &F = &*(f as *const F);
-            f(&Clip::from_glib_borrow(this).unsafe_cast())
+            f(&Clip::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -262,7 +262,7 @@ impl<O: IsA<Clip>> ClipExt for O {
             P: IsA<Clip>,
         {
             let f: &F = &*(f as *const F);
-            f(&Clip::from_glib_borrow(this).unsafe_cast())
+            f(&Clip::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

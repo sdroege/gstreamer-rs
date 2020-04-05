@@ -12,11 +12,7 @@ use std::ptr;
 use std::{borrow, fmt, ops};
 
 use glib;
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibContainerAsVec,
-    FromGlibPtrArrayContainerAsVec, FromGlibPtrBorrow, FromGlibPtrFull, FromGlibPtrNone,
-    GlibPtrDefault, Stash, StashMut, ToGlibContainerFromSlice, ToGlibPtr, ToGlibPtrMut,
-};
+use glib::translate::*;
 use glib_sys;
 use glib_sys::gpointer;
 use gobject_sys;
@@ -24,7 +20,6 @@ use gst_sys;
 
 pub struct GstRc<T: MiniObject> {
     obj: ptr::NonNull<T>,
-    borrowed: bool,
     phantom: PhantomData<T>,
 }
 
@@ -36,7 +31,6 @@ impl<T: MiniObject> GstRc<T> {
 
         GstRc {
             obj: ptr::NonNull::new_unchecked(ptr as *mut T::GstType as *mut T),
-            borrowed: false,
             phantom: PhantomData,
         }
     }
@@ -46,19 +40,17 @@ impl<T: MiniObject> GstRc<T> {
 
         GstRc {
             obj: ptr::NonNull::new_unchecked(ptr as *mut T::GstType as *mut T),
-            borrowed: false,
             phantom: PhantomData,
         }
     }
 
-    pub unsafe fn from_glib_borrow(ptr: *const T::GstType) -> Self {
+    pub unsafe fn from_glib_borrow(ptr: *const T::GstType) -> Borrowed<Self> {
         assert!(!ptr.is_null());
 
-        GstRc {
+        Borrowed::new(GstRc {
             obj: ptr::NonNull::new_unchecked(ptr as *mut T::GstType as *mut T),
-            borrowed: true,
             phantom: PhantomData,
-        }
+        })
     }
 
     pub unsafe fn replace_ptr(&mut self, ptr: *mut T::GstType) {
@@ -153,10 +145,8 @@ impl<T: MiniObject> Clone for GstRc<T> {
 
 impl<T: MiniObject> Drop for GstRc<T> {
     fn drop(&mut self) {
-        if !self.borrowed {
-            unsafe {
-                gst_sys::gst_mini_object_unref(self.as_mut_ptr() as *mut gst_sys::GstMiniObject);
-            }
+        unsafe {
+            gst_sys::gst_mini_object_unref(self.as_mut_ptr() as *mut gst_sys::GstMiniObject);
         }
     }
 }
@@ -363,13 +353,13 @@ impl<T: MiniObject + 'static> FromGlibPtrFull<*mut T::GstType> for GstRc<T> {
 }
 
 impl<T: MiniObject + 'static> FromGlibPtrBorrow<*const T::GstType> for GstRc<T> {
-    unsafe fn from_glib_borrow(ptr: *const T::GstType) -> Self {
+    unsafe fn from_glib_borrow(ptr: *const T::GstType) -> Borrowed<Self> {
         Self::from_glib_borrow(ptr)
     }
 }
 
 impl<T: MiniObject + 'static> FromGlibPtrBorrow<*mut T::GstType> for GstRc<T> {
-    unsafe fn from_glib_borrow(ptr: *mut T::GstType) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut T::GstType) -> Borrowed<Self> {
         Self::from_glib_borrow(ptr)
     }
 }
@@ -524,8 +514,13 @@ macro_rules! gst_define_mini_object_wrapper(
                 $name($crate::glib::translate::from_glib_full(ptr))
             }
 
-            pub unsafe fn from_glib_borrow(ptr: *const $gst_sys_name) -> Self {
-                $name($crate::glib::translate::from_glib_borrow(ptr))
+            pub unsafe fn from_glib_borrow(ptr: *const $gst_sys_name) -> $crate::glib::translate::Borrowed<Self> {
+                $crate::glib::translate::Borrowed::new(
+                    $name(
+                        $crate::glib::translate::from_glib_borrow::<_, $crate::GstRc::<$ref_name>>(ptr)
+                        .into_inner()
+                        )
+                    )
             }
 
             pub unsafe fn into_ptr(self) -> *mut $gst_sys_name {
@@ -725,13 +720,13 @@ macro_rules! gst_define_mini_object_wrapper(
         }
 
         impl $crate::glib::translate::FromGlibPtrBorrow<*const $gst_sys_name> for $name {
-            unsafe fn from_glib_borrow(ptr: *const $gst_sys_name) -> Self {
+            unsafe fn from_glib_borrow(ptr: *const $gst_sys_name) -> $crate::glib::translate::Borrowed<Self> {
                 Self::from_glib_borrow(ptr)
             }
         }
 
         impl $crate::glib::translate::FromGlibPtrBorrow<*mut $gst_sys_name> for $name {
-            unsafe fn from_glib_borrow(ptr: *mut $gst_sys_name) -> Self {
+            unsafe fn from_glib_borrow(ptr: *mut $gst_sys_name) -> $crate::glib::translate::Borrowed<Self> {
                 Self::from_glib_borrow(ptr)
             }
         }

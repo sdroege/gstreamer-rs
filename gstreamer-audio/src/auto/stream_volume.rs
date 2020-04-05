@@ -104,7 +104,7 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
             P: IsA<StreamVolume>,
         {
             let f: &F = &*(f as *const F);
-            f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
+            f(&StreamVolume::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -129,7 +129,7 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
             P: IsA<StreamVolume>,
         {
             let f: &F = &*(f as *const F);
-            f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
+            f(&StreamVolume::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

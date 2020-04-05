@@ -157,10 +157,10 @@ fn post_panic_error_message(element: &AppSink, err: &dyn std::any::Any) {
 
 unsafe extern "C" fn trampoline_eos(appsink: *mut gst_app_sys::GstAppSink, callbacks: gpointer) {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
-    let element: AppSink = from_glib_borrow(appsink);
+    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
-        let element: AppSink = from_glib_borrow(appsink);
+        let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
@@ -184,10 +184,10 @@ unsafe extern "C" fn trampoline_new_preroll(
     callbacks: gpointer,
 ) -> gst_sys::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
-    let element: AppSink = from_glib_borrow(appsink);
+    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
-        let element: AppSink = from_glib_borrow(appsink);
+        let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.to_glib();
     }
@@ -217,10 +217,10 @@ unsafe extern "C" fn trampoline_new_sample(
     callbacks: gpointer,
 ) -> gst_sys::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
-    let element: AppSink = from_glib_borrow(appsink);
+    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
-        let element: AppSink = from_glib_borrow(appsink);
+        let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.to_glib();
     }

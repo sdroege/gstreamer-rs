@@ -35,7 +35,6 @@ pub enum IteratorError {
 // Implemented manually so that we can use generics for the item
 pub struct Iterator<T> {
     iter: ptr::NonNull<gst_sys::GstIterator>,
-    borrowed: bool,
     phantom: PhantomData<T>,
 }
 
@@ -463,17 +462,14 @@ impl<T> fmt::Debug for Iterator<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Iterator")
             .field("iter", &self.iter)
-            .field("borrowed", &self.borrowed)
             .finish()
     }
 }
 
 impl<T> Drop for Iterator<T> {
     fn drop(&mut self) {
-        if !self.borrowed {
-            unsafe {
-                gst_sys::gst_iterator_free(self.iter.as_ptr());
-            }
+        unsafe {
+            gst_sys::gst_iterator_free(self.iter.as_ptr());
         }
     }
 }
@@ -584,17 +580,16 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut gst_sys::GstIterator> 
 #[doc(hidden)]
 impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut gst_sys::GstIterator> for Iterator<T> {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstIterator) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstIterator) -> Borrowed<Self> {
         assert!(!ptr.is_null());
         assert_ne!(
             gobject_sys::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
             glib_sys::GFALSE
         );
-        Self {
+        Borrowed::new(Self {
             iter: ptr::NonNull::new_unchecked(ptr),
-            borrowed: true,
             phantom: PhantomData,
-        }
+        })
     }
 }
 
@@ -609,7 +604,6 @@ impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut gst_sys::GstIterator> 
         );
         Self {
             iter: ptr::NonNull::new_unchecked(ptr),
-            borrowed: false,
             phantom: PhantomData,
         }
     }

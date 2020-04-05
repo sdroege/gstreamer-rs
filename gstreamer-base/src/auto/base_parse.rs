@@ -214,7 +214,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
             P: IsA<BaseParse>,
         {
             let f: &F = &*(f as *const F);
-            f(&BaseParse::from_glib_borrow(this).unsafe_cast())
+            f(&BaseParse::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

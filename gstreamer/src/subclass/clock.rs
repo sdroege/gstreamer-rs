@@ -259,7 +259,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Clock = from_glib_borrow(ptr);
+    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     imp.change_resolution(&wrap, from_glib(old_resolution), from_glib(new_resolution))
         .to_glib()
@@ -273,7 +273,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Clock = from_glib_borrow(ptr);
+    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     imp.get_resolution(&wrap).to_glib()
 }
@@ -286,7 +286,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Clock = from_glib_borrow(ptr);
+    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     imp.get_internal_time(&wrap).to_glib()
 }
@@ -301,7 +301,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Clock = from_glib_borrow(ptr);
+    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     let (res, j) = imp.wait(&wrap, &from_glib_borrow(id as gst_sys::GstClockID));
     if !jitter.is_null() {
@@ -320,7 +320,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Clock = from_glib_borrow(ptr);
+    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     ClockReturn::from(imp.wait_async(&wrap, &from_glib_borrow(id as gst_sys::GstClockID))).to_glib()
 }
@@ -333,7 +333,7 @@ unsafe extern "C" fn clock_unschedule<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Clock = from_glib_borrow(ptr);
+    let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
     imp.unschedule(&wrap, &from_glib_borrow(id as gst_sys::GstClockID));
 }

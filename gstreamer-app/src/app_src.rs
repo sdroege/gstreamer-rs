@@ -133,10 +133,10 @@ unsafe extern "C" fn trampoline_need_data(
     callbacks: gpointer,
 ) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
-    let element: AppSrc = from_glib_borrow(appsrc);
+    let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
-        let element: AppSrc = from_glib_borrow(appsrc);
+        let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
         gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
@@ -160,10 +160,10 @@ unsafe extern "C" fn trampoline_enough_data(
     callbacks: gpointer,
 ) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
-    let element: AppSrc = from_glib_borrow(appsrc);
+    let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
-        let element: AppSrc = from_glib_borrow(appsrc);
+        let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
         gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
@@ -186,10 +186,10 @@ unsafe extern "C" fn trampoline_seek_data(
     callbacks: gpointer,
 ) -> gboolean {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
-    let element: AppSrc = from_glib_borrow(appsrc);
+    let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
-        let element: AppSrc = from_glib_borrow(appsrc);
+        let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
         gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return false.to_glib();
     }

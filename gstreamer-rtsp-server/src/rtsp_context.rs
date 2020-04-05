@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
+use glib::translate::*;
 use gst_rtsp_server_sys;
 use std::ptr;
 
@@ -30,22 +30,20 @@ impl RTSPContext {
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrBorrow<*mut gst_rtsp_server_sys::GstRTSPContext> for RTSPContext {
+impl FromGlibPtrBorrow<*mut gst_rtsp_server_sys::GstRTSPContext> for RTSPContext {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_rtsp_server_sys::GstRTSPContext) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut gst_rtsp_server_sys::GstRTSPContext) -> Borrowed<Self> {
         assert!(!ptr.is_null());
-        RTSPContext(ptr::NonNull::new_unchecked(ptr))
+        Borrowed::new(RTSPContext(ptr::NonNull::new_unchecked(ptr)))
     }
 }
 
 #[doc(hidden)]
-impl<'a> glib::translate::ToGlibPtr<'a, *mut gst_rtsp_server_sys::GstRTSPContext> for RTSPContext {
+impl<'a> ToGlibPtr<'a, *mut gst_rtsp_server_sys::GstRTSPContext> for RTSPContext {
     type Storage = &'a RTSPContext;
 
-    fn to_glib_none(
-        &'a self,
-    ) -> glib::translate::Stash<'a, *mut gst_rtsp_server_sys::GstRTSPContext, Self> {
-        glib::translate::Stash(self.0.as_ptr(), self)
+    fn to_glib_none(&'a self) -> Stash<'a, *mut gst_rtsp_server_sys::GstRTSPContext, Self> {
+        Stash(self.0.as_ptr(), self)
     }
 
     fn to_glib_full(&self) -> *mut gst_rtsp_server_sys::GstRTSPContext {

@@ -337,7 +337,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             P: IsA<AudioEncoder>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast())
+            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -362,7 +362,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             P: IsA<AudioEncoder>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast())
+            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -392,7 +392,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             P: IsA<AudioEncoder>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast())
+            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -419,7 +419,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             P: IsA<AudioEncoder>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast())
+            f(&AudioEncoder::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

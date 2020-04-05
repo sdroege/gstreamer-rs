@@ -118,5 +118,5 @@ unsafe extern "C" fn notify_min_upstream_latency_trampoline<P, F: Fn(&P) + Send 
     P: IsA<Aggregator>,
 {
     let f: &F = &*(f as *const F);
-    f(&Aggregator::from_glib_borrow(this).unsafe_cast())
+    f(&Aggregator::from_glib_borrow(this).unsafe_cast_ref())
 }

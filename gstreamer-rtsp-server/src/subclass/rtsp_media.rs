@@ -486,7 +486,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.handle_message(&wrap, gst::MessageRef::from_ptr(message))
         .to_glib()
@@ -501,12 +501,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.prepare(&wrap, &from_glib_borrow(thread)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }
@@ -520,12 +520,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.unprepare(&wrap) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }
@@ -539,12 +539,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.suspend(&wrap) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }
@@ -558,12 +558,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.unsuspend(&wrap) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }
@@ -578,7 +578,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.query_position(&wrap) {
         Some(pos) => {
@@ -598,7 +598,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.query_stop(&wrap) {
         Some(s) => {
@@ -617,7 +617,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     let res: *mut gst_sys::GstElement = imp.create_rtpbin(&wrap).to_glib_full();
 
@@ -637,7 +637,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     // If the rtpbin was floating before make sure it is not anymore for now so
     // we don't accidentally take ownership of it somewhere along the line
@@ -648,7 +648,7 @@ where
     let res = match imp.setup_rtpbin(&wrap, &from_glib_borrow(rtpbin)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     };
@@ -669,7 +669,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.setup_sdp(
         &wrap,
@@ -678,7 +678,7 @@ where
     ) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }
@@ -692,7 +692,7 @@ unsafe extern "C" fn media_new_stream<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.new_stream(&wrap, &from_glib_borrow(stream));
 }
@@ -705,7 +705,7 @@ unsafe extern "C" fn media_removed_stream<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.removed_stream(&wrap, &from_glib_borrow(stream));
 }
@@ -716,7 +716,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.prepared(&wrap);
 }
@@ -728,7 +728,7 @@ unsafe extern "C" fn media_unprepared<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.unprepared(&wrap);
 }
@@ -741,7 +741,7 @@ unsafe extern "C" fn media_target_state<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.target_state(&wrap, from_glib(state));
 }
@@ -754,7 +754,7 @@ unsafe extern "C" fn media_new_state<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.new_state(&wrap, from_glib(state));
 }
@@ -768,12 +768,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMedia = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.handle_sdp(&wrap, &*(sdp as *const gst_sdp::SDPMessageRef)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }

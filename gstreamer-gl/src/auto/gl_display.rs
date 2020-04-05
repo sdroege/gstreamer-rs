@@ -176,7 +176,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GLDisplay::from_glib_borrow(this).unsafe_cast(),
+                &GLDisplay::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(context),
             )
             .to_glib_full()

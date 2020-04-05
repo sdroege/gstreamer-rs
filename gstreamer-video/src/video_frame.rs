@@ -10,7 +10,7 @@ use gst_sys;
 use gst_video_sys;
 
 use glib;
-use glib::translate::{from_glib, ToGlibPtr};
+use glib::translate::{from_glib, Borrowed, ToGlibPtr};
 use gst;
 use gst::miniobject::MiniObject;
 
@@ -201,7 +201,6 @@ impl<T> VideoFrame<T> {
             frame,
             buffer: Some(self.buffer()),
             info,
-            borrowed: true,
         }
     }
 
@@ -390,7 +389,6 @@ impl VideoFrame<Writable> {
             frame,
             buffer: Some(self.buffer_mut()),
             info,
-            borrowed: true,
         }
     }
 
@@ -404,7 +402,6 @@ pub struct VideoFrameRef<T> {
     frame: gst_video_sys::GstVideoFrame,
     buffer: Option<T>,
     info: ::VideoInfo,
-    borrowed: bool,
 }
 
 impl<T> VideoFrameRef<T> {
@@ -546,17 +543,26 @@ impl<T> VideoFrameRef<T> {
 }
 
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {
-    pub unsafe fn from_glib_borrow(frame: *const gst_video_sys::GstVideoFrame) -> Self {
+    pub unsafe fn from_glib_borrow(frame: *const gst_video_sys::GstVideoFrame) -> Borrowed<Self> {
         assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
+        let info = ::VideoInfo(ptr::read(&frame.info));
+        let buffer = gst::BufferRef::from_ptr(frame.buffer);
+        Borrowed::new(VideoFrameRef {
+            frame,
+            buffer: Some(buffer),
+            info,
+        })
+    }
+
+    pub unsafe fn from_glib_full(frame: gst_video_sys::GstVideoFrame) -> Self {
         let info = ::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_ptr(frame.buffer);
         VideoFrameRef {
             frame,
             buffer: Some(buffer),
             info,
-            borrowed: false,
         }
     }
 
@@ -584,7 +590,6 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
-                    borrowed: false,
                 })
             }
         }
@@ -616,7 +621,6 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
-                    borrowed: false,
                 })
             }
         }
@@ -628,17 +632,26 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 }
 
 impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
-    pub unsafe fn from_glib_borrow_mut(frame: *mut gst_video_sys::GstVideoFrame) -> Self {
+    pub unsafe fn from_glib_borrow_mut(frame: *mut gst_video_sys::GstVideoFrame) -> Borrowed<Self> {
         assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
+        let info = ::VideoInfo(ptr::read(&frame.info));
+        let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
+        Borrowed::new(VideoFrameRef {
+            frame,
+            buffer: Some(buffer),
+            info,
+        })
+    }
+
+    pub unsafe fn from_glib_full_mut(frame: gst_video_sys::GstVideoFrame) -> Self {
         let info = ::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
         VideoFrameRef {
             frame,
             buffer: Some(buffer),
             info,
-            borrowed: false,
         }
     }
 
@@ -668,7 +681,6 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
-                    borrowed: false,
                 })
             }
         }
@@ -702,7 +714,6 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
-                    borrowed: false,
                 })
             }
         }
@@ -763,10 +774,8 @@ unsafe impl<T> Sync for VideoFrameRef<T> {}
 
 impl<T> Drop for VideoFrameRef<T> {
     fn drop(&mut self) {
-        if !self.borrowed {
-            unsafe {
-                gst_video_sys::gst_video_frame_unmap(&mut self.frame);
-            }
+        unsafe {
+            gst_video_sys::gst_video_frame_unmap(&mut self.frame);
         }
     }
 }

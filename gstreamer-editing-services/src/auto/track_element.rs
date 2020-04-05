@@ -256,7 +256,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             P: IsA<TrackElement>,
         {
             let f: &F = &*(f as *const F);
-            f(&TrackElement::from_glib_borrow(this).unsafe_cast())
+            f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -278,7 +278,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             P: IsA<TrackElement>,
         {
             let f: &F = &*(f as *const F);
-            f(&TrackElement::from_glib_borrow(this).unsafe_cast())
+            f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -300,7 +300,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             P: IsA<TrackElement>,
         {
             let f: &F = &*(f as *const F);
-            f(&TrackElement::from_glib_borrow(this).unsafe_cast())
+            f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

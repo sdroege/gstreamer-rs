@@ -129,7 +129,9 @@ impl Discoverer {
             f(
                 &from_glib_borrow(this),
                 &from_glib_borrow(info),
-                Option::<glib::Error>::from_glib_borrow(error).as_ref(),
+                Option::<glib::Error>::from_glib_borrow(error)
+                    .as_ref()
+                    .as_ref(),
             )
         }
         unsafe {

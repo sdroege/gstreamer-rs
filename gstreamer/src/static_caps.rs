@@ -13,7 +13,7 @@ use gobject_sys;
 use gst_sys;
 
 use glib;
-use glib::translate::{from_glib_full, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::*;
 
 use std::ffi::CStr;
 use std::fmt;
@@ -117,9 +117,9 @@ impl glib::translate::FromGlibPtrNone<*mut gst_sys::GstStaticCaps> for StaticCap
 #[doc(hidden)]
 impl glib::translate::FromGlibPtrBorrow<*mut gst_sys::GstStaticCaps> for StaticCaps {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstStaticCaps) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstStaticCaps) -> Borrowed<Self> {
         assert!(!ptr.is_null());
-        StaticCaps(ptr::NonNull::new_unchecked(ptr))
+        Borrowed::new(StaticCaps(ptr::NonNull::new_unchecked(ptr)))
     }
 }
 

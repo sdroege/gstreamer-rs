@@ -439,7 +439,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -466,7 +466,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P: IsA<RTSPClient>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPClient::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -495,7 +495,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -526,7 +526,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -559,7 +559,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -590,7 +590,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -621,7 +621,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -652,7 +652,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -683,7 +683,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -718,7 +718,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -756,7 +756,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -794,7 +794,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -832,7 +832,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -870,7 +870,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -906,7 +906,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -942,7 +942,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -978,7 +978,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -1016,7 +1016,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -1052,7 +1052,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
             .to_glib()
@@ -1086,7 +1086,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -1121,7 +1121,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -1154,7 +1154,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -1185,7 +1185,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &RTSPClient::from_glib_borrow(this).unsafe_cast(),
+                &RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(ctx),
             )
         }
@@ -1212,7 +1212,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P: IsA<RTSPClient>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPClient::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1239,7 +1239,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P: IsA<RTSPClient>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPClient::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1266,7 +1266,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P: IsA<RTSPClient>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPClient::from_glib_borrow(this).unsafe_cast())
+            f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

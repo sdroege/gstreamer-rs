@@ -539,7 +539,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.open(&wrap) {
@@ -562,7 +562,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.close(&wrap) {
@@ -585,7 +585,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(&wrap) {
@@ -608,7 +608,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(&wrap) {
@@ -631,7 +631,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.finish(&wrap).into()
@@ -648,7 +648,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.drain(&wrap).into()
@@ -666,7 +666,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
     gst_video_sys::gst_video_codec_state_ref(state);
     let wrap_state = VideoCodecState::<Readable>::new(state);
 
@@ -674,7 +674,7 @@ where
         match imp.set_format(&wrap, &wrap_state) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -694,10 +694,10 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
     gst_video_sys::gst_video_codec_frame_ref(frame);
-    let wrap_frame = VideoCodecFrame::new(frame, &wrap);
-    let wrap_adapter: gst_base::Adapter = from_glib_borrow(adapter);
+    let wrap_frame = VideoCodecFrame::new(frame, &*wrap);
+    let wrap_adapter: Borrowed<gst_base::Adapter> = from_glib_borrow(adapter);
     let at_eos: bool = from_glib(at_eos);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
@@ -716,8 +716,8 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
-    let wrap_frame = VideoCodecFrame::new(frame, &wrap);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
+    let wrap_frame = VideoCodecFrame::new(frame, &*wrap);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(&wrap, wrap_frame).into()
@@ -734,7 +734,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         VideoDecoderImpl::flush(imp, &wrap)
@@ -751,13 +751,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.negotiate(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -775,13 +775,15 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         VideoDecoderImpl::get_caps(
             imp,
             &wrap,
-            Option::<gst::Caps>::from_glib_borrow(filter).as_ref(),
+            Option::<gst::Caps>::from_glib_borrow(filter)
+                .as_ref()
+                .as_ref(),
         )
     })
     .to_glib_full()
@@ -797,7 +799,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_event(&wrap, from_glib_full(event))
@@ -815,7 +817,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_query(&wrap, gst::QueryRef::from_mut_ptr(query))
@@ -833,7 +835,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_event(&wrap, from_glib_full(event))
@@ -851,7 +853,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_query(&wrap, gst::QueryRef::from_mut_ptr(query))
@@ -869,7 +871,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
@@ -894,7 +896,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: VideoDecoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {

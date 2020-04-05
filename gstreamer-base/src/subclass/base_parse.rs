@@ -211,7 +211,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseParse = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(&wrap) {
@@ -235,8 +235,8 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseParse = from_glib_borrow(ptr);
-    let caps: gst::Caps = from_glib_none(caps);
+    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
+    let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_sink_caps(&wrap, &caps) {
@@ -261,7 +261,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseParse = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let wrap_frame = BaseParseFrame::new(frame, &wrap);
 
     let res = gst_panic_to_error!(&wrap, &instance.panicked(), Err(gst::FlowError::Error), {
@@ -291,7 +291,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseParse = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
     let res = gst_panic_to_error!(&wrap, &instance.panicked(), None, {

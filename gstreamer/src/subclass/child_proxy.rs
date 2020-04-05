@@ -71,7 +71,7 @@ where
 
     imp.get_child_by_name(
         &from_glib_borrow(child_proxy),
-        String::from_glib_none(name).as_str(),
+        &glib::GString::from_glib_borrow(name),
     )
     .to_glib_full()
 }
@@ -115,7 +115,7 @@ unsafe extern "C" fn child_proxy_child_added<T: ObjectSubclass>(
     imp.child_added(
         &from_glib_borrow(child_proxy),
         &from_glib_borrow(child),
-        String::from_glib_none(name).as_str(),
+        &glib::GString::from_glib_borrow(name),
     )
 }
 
@@ -132,6 +132,6 @@ unsafe extern "C" fn child_proxy_child_removed<T: ObjectSubclass>(
     imp.child_removed(
         &from_glib_borrow(child_proxy),
         &from_glib_borrow(child),
-        String::from_glib_none(name).as_str(),
+        &glib::GString::from_glib_borrow(name),
     )
 }

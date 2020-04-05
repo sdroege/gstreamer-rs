@@ -142,7 +142,7 @@ impl<O: IsA<UriClip>> UriClipExt for O {
             P: IsA<UriClip>,
         {
             let f: &F = &*(f as *const F);
-            f(&UriClip::from_glib_borrow(this).unsafe_cast())
+            f(&UriClip::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -164,7 +164,7 @@ impl<O: IsA<UriClip>> UriClipExt for O {
             P: IsA<UriClip>,
         {
             let f: &F = &*(f as *const F);
-            f(&UriClip::from_glib_borrow(this).unsafe_cast())
+            f(&UriClip::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -189,7 +189,7 @@ impl<O: IsA<UriClip>> UriClipExt for O {
             P: IsA<UriClip>,
         {
             let f: &F = &*(f as *const F);
-            f(&UriClip::from_glib_borrow(this).unsafe_cast())
+            f(&UriClip::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -165,7 +165,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Container::from_glib_borrow(this).unsafe_cast(),
+                &Container::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(element),
             )
         }
@@ -193,7 +193,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Container::from_glib_borrow(this).unsafe_cast(),
+                &Container::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(element),
             )
         }
@@ -217,7 +217,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
             P: IsA<Container>,
         {
             let f: &F = &*(f as *const F);
-            f(&Container::from_glib_borrow(this).unsafe_cast())
+            f(&Container::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

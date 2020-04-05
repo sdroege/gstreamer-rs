@@ -839,7 +839,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     let sdp = imp.create_sdp(&wrap, &from_glib_borrow(media));
     let ptr = sdp.to_glib_none().0;
@@ -859,7 +859,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     match imp.configure_client_media(
         &wrap,
@@ -869,7 +869,7 @@ where
     ) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }
@@ -884,7 +884,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.params_set(&wrap, &from_glib_borrow(ctx)).to_glib()
 }
@@ -898,7 +898,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.params_get(&wrap, &from_glib_borrow(ctx)).to_glib()
 }
@@ -912,7 +912,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.make_path_from_uri(&wrap, &from_glib_borrow(url))
         .to_glib_full()
@@ -924,7 +924,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.closed(&wrap);
 }
@@ -937,7 +937,7 @@ unsafe extern "C" fn client_new_session<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.new_session(&wrap, &from_glib_borrow(session));
 }
@@ -950,7 +950,7 @@ unsafe extern "C" fn client_options_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.options_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -963,7 +963,7 @@ unsafe extern "C" fn client_describe_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.describe_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -976,7 +976,7 @@ unsafe extern "C" fn client_setup_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.setup_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -989,7 +989,7 @@ unsafe extern "C" fn client_play_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.play_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -1002,7 +1002,7 @@ unsafe extern "C" fn client_pause_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pause_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -1015,7 +1015,7 @@ unsafe extern "C" fn client_teardown_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.teardown_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -1028,7 +1028,7 @@ unsafe extern "C" fn client_set_parameter_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.set_parameter_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -1041,7 +1041,7 @@ unsafe extern "C" fn client_get_parameter_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.get_parameter_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -1054,7 +1054,7 @@ unsafe extern "C" fn client_announce_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.announce_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -1067,7 +1067,7 @@ unsafe extern "C" fn client_record_request<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.record_request(&wrap, &from_glib_borrow(ctx));
 }
@@ -1080,7 +1080,7 @@ unsafe extern "C" fn client_handle_response<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.handle_response(&wrap, &from_glib_borrow(ctx));
 }
@@ -1096,7 +1096,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     match imp.handle_sdp(
         &wrap,
@@ -1106,7 +1106,7 @@ where
     ) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             glib_sys::GFALSE
         }
     }
@@ -1122,7 +1122,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.check_requirements(
         &wrap,
@@ -1141,7 +1141,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_options_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1156,7 +1156,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_describe_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1171,7 +1171,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_setup_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1186,7 +1186,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_play_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1201,7 +1201,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_pause_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1216,7 +1216,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_teardown_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1231,7 +1231,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_set_parameter_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1246,7 +1246,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_get_parameter_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1261,7 +1261,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_announce_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()
@@ -1276,7 +1276,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPClient = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_record_request(&wrap, &from_glib_borrow(ctx))
         .to_glib()

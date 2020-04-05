@@ -55,7 +55,7 @@ impl Promise {
             let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
-            let promise: Promise = from_glib_borrow(promise);
+            let promise: Borrowed<Promise> = from_glib_borrow(promise);
 
             let res = match promise.wait() {
                 PromiseResult::Replied => {

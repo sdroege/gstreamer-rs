@@ -238,7 +238,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GLWindow::from_glib_borrow(this).unsafe_cast(),
+                &GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(id),
                 &GString::from_glib_borrow(key),
             )
@@ -273,7 +273,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GLWindow::from_glib_borrow(this).unsafe_cast(),
+                &GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(id),
                 button,
                 x,

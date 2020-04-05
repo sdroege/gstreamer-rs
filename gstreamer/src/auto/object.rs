@@ -301,7 +301,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
             P: IsA<Object>,
         {
             let f: &F = &*(f as *const F);
-            f(&Object::from_glib_borrow(this).unsafe_cast())
+            f(&Object::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -326,7 +326,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
             P: IsA<Object>,
         {
             let f: &F = &*(f as *const F);
-            f(&Object::from_glib_borrow(this).unsafe_cast())
+            f(&Object::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

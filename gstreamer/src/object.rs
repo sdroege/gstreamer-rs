@@ -42,7 +42,7 @@ impl<O: IsA<::Object>> GstObjectExtManual for O {
             "deep-notify".into()
         };
 
-        let obj: glib::Object =
+        let obj: Borrowed<glib::Object> =
             unsafe { from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject) };
 
         obj.connect(signal_name.as_str(), false, move |values| {

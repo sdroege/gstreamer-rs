@@ -609,7 +609,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(&wrap) {
@@ -632,7 +632,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(&wrap) {
@@ -655,7 +655,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.is_seekable(&wrap)
@@ -673,7 +673,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.get_size(&wrap) {
@@ -698,7 +698,7 @@ unsafe extern "C" fn base_src_get_times<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_ptr(buffer);
 
     *start = gst_sys::GST_CLOCK_TIME_NONE;
@@ -723,7 +723,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
@@ -744,7 +744,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
@@ -775,7 +775,7 @@ where
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
@@ -798,7 +798,7 @@ where
                     if passed_buffer.as_ptr() != new_buffer.as_ptr() {
                         gst_debug!(
                             gst::CAT_PERFORMANCE,
-                            obj: &wrap,
+                            obj: &*wrap,
                             "Returned new buffer from create function, copying into passed buffer"
                         );
 
@@ -807,7 +807,7 @@ where
                             Err(_) => {
                                 gst_error!(
                                     gst::CAT_RUST,
-                                    obj: &wrap,
+                                    obj: &*wrap,
                                     "Failed to map passed buffer writable"
                                 );
                                 return gst::FlowReturn::Error;
@@ -831,7 +831,7 @@ where
                             Err(_) => {
                                 gst_error!(
                                     gst::CAT_RUST,
-                                    obj: &wrap,
+                                    obj: &*wrap,
                                     "Failed to copy buffer metadata"
                                 );
 
@@ -863,10 +863,14 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.do_seek(&wrap, &mut from_glib_borrow(segment))
+        let mut s = from_glib_none(segment);
+        let res = imp.do_seek(&wrap, &mut s);
+        ptr::write(segment, *(s.to_glib_none().0));
+
+        res
     })
     .to_glib()
 }
@@ -881,7 +885,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
@@ -900,7 +904,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.event(&wrap, &from_glib_borrow(event_ptr))
@@ -918,11 +922,11 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), None, {
-        imp.get_caps(&wrap, filter.as_ref())
+        imp.get_caps(&wrap, filter.as_ref().as_ref())
     })
     .map(|caps| caps.into_ptr())
     .unwrap_or(ptr::null_mut())
@@ -937,13 +941,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.negotiate(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -961,14 +965,14 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let caps = from_glib_borrow(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_caps(&wrap, &caps) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -986,7 +990,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let caps = from_glib_full(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
@@ -1004,7 +1008,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unlock(&wrap) {
@@ -1027,7 +1031,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unlock_stop(&wrap) {

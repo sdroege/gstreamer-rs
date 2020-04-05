@@ -497,7 +497,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.open(&wrap) {
@@ -520,7 +520,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.close(&wrap) {
@@ -543,7 +543,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(&wrap) {
@@ -566,7 +566,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(&wrap) {
@@ -590,13 +590,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_format(&wrap, &from_glib_none(info)) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -616,7 +616,7 @@ where
     let buffer = buffer as *mut gst_sys::GstBuffer;
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(
@@ -638,7 +638,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.pre_push(&wrap, from_glib_full(*buffer)) {
@@ -665,7 +665,7 @@ unsafe extern "C" fn audio_encoder_flush<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
         AudioEncoderImpl::flush(imp, &wrap)
@@ -681,13 +681,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.negotiate(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -705,13 +705,15 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         AudioEncoderImpl::get_caps(
             imp,
             &wrap,
-            Option::<gst::Caps>::from_glib_borrow(filter).as_ref(),
+            Option::<gst::Caps>::from_glib_borrow(filter)
+                .as_ref()
+                .as_ref(),
         )
     })
     .to_glib_full()
@@ -727,7 +729,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_event(&wrap, from_glib_full(event))
@@ -745,7 +747,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_query(&wrap, gst::QueryRef::from_mut_ptr(query))
@@ -763,7 +765,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_event(&wrap, from_glib_full(event))
@@ -781,7 +783,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_query(&wrap, gst::QueryRef::from_mut_ptr(query))
@@ -799,7 +801,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
@@ -824,7 +826,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioEncoder = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {

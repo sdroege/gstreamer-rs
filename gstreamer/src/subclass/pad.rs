@@ -78,7 +78,7 @@ unsafe extern "C" fn pad_linked<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Pad = from_glib_borrow(ptr);
+    let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
     imp.linked(&wrap, &from_glib_borrow(peer))
 }
@@ -91,7 +91,7 @@ unsafe extern "C" fn pad_unlinked<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Pad = from_glib_borrow(ptr);
+    let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
     imp.unlinked(&wrap, &from_glib_borrow(peer))
 }

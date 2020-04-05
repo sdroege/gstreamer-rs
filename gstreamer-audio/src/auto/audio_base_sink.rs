@@ -291,7 +291,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -318,7 +318,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -346,7 +346,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -373,7 +373,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -403,7 +403,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -430,7 +430,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -457,7 +457,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -484,7 +484,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             P: IsA<AudioBaseSink>,
         {
             let f: &F = &*(f as *const F);
-            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast())
+            f(&AudioBaseSink::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

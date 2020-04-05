@@ -152,7 +152,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
             P: IsA<DeviceMonitor>,
         {
             let f: &F = &*(f as *const F);
-            f(&DeviceMonitor::from_glib_borrow(this).unsafe_cast())
+            f(&DeviceMonitor::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

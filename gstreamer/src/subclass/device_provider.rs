@@ -134,7 +134,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: DeviceProvider = from_glib_borrow(ptr);
+    let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
     imp.probe(&wrap).to_glib_full()
 }
@@ -147,12 +147,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: DeviceProvider = from_glib_borrow(ptr);
+    let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
     match imp.start(&wrap) {
         Ok(()) => true,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log_with_object(&*wrap);
             false
         }
     }
@@ -165,7 +165,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: DeviceProvider = from_glib_borrow(ptr);
+    let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
     imp.stop(&wrap);
 }

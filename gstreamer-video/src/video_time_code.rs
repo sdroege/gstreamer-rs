@@ -425,14 +425,13 @@ macro_rules! generic_impl {
         #[doc(hidden)]
         impl FromGlibPtrBorrow<*mut gst_video_sys::GstVideoTimeCode> for $name {
             #[inline]
-            unsafe fn from_glib_borrow(ptr: *mut gst_video_sys::GstVideoTimeCode) -> Self {
+            unsafe fn from_glib_borrow(
+                ptr: *mut gst_video_sys::GstVideoTimeCode,
+            ) -> Borrowed<Self> {
                 assert!(!ptr.is_null());
                 let v = ptr::read(ptr);
-                if !v.config.latest_daily_jam.is_null() {
-                    glib_sys::g_date_time_ref(v.config.latest_daily_jam);
-                }
 
-                $name(v)
+                Borrowed::new($name(v))
             }
         }
 

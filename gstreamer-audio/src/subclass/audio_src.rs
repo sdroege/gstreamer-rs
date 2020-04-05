@@ -15,7 +15,7 @@ use AudioSrc;
 use AudioSrcClass;
 
 pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl + Send + Sync + 'static {
-    fn close(&self, src: &mut AudioSrc) -> Result<(), LoggableError> {
+    fn close(&self, src: &AudioSrc) -> Result<(), LoggableError> {
         self.parent_close(src)
     }
 
@@ -43,7 +43,7 @@ pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl + Send + Sync + 'static {
 }
 
 pub trait AudioSrcImplExt {
-    fn parent_close(&self, src: &mut AudioSrc) -> Result<(), LoggableError>;
+    fn parent_close(&self, src: &AudioSrc) -> Result<(), LoggableError>;
     fn parent_delay(&self, src: &AudioSrc) -> u32;
     fn parent_open(&self, src: &AudioSrc) -> Result<(), LoggableError>;
     fn parent_prepare(
@@ -60,7 +60,7 @@ pub trait AudioSrcImplExt {
 }
 
 impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
-    fn parent_close(&self, src: &mut AudioSrc) -> Result<(), LoggableError> {
+    fn parent_close(&self, src: &AudioSrc) -> Result<(), LoggableError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
@@ -210,13 +210,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let mut wrap: AudioSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.close(&mut wrap) {
+        match imp.close(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -231,7 +231,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), 0, { imp.delay(&wrap) })
 }
@@ -245,13 +245,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.open(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -269,7 +269,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
     let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
@@ -277,7 +277,7 @@ where
         match AudioSrcImpl::prepare(imp, &wrap, spec) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -294,13 +294,13 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unprepare(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_object(&wrap);
+                err.log_with_object(&*wrap);
                 false
             }
         }
@@ -320,7 +320,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: AudioSrc = from_glib_borrow(ptr);
+    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
     let data_slice = std::slice::from_raw_parts_mut(data as *mut u8, length as usize);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), 0, {

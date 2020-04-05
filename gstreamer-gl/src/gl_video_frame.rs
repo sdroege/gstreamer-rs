@@ -128,7 +128,7 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
                     "Failed to fill in the values of GstVideoFrame"
                 ))
             } else {
-                Ok(VideoFrameRef::from_glib_borrow(&frame.assume_init()))
+                Ok(VideoFrameRef::from_glib_full(frame.assume_init()))
             }
         }
     }

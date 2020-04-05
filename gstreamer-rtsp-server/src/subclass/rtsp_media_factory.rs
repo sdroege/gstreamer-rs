@@ -228,7 +228,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMediaFactory = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
     imp.gen_key(&wrap, &from_glib_borrow(url)).to_glib_full()
 }
@@ -242,7 +242,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMediaFactory = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
     let element = imp
         .create_element(&wrap, &from_glib_borrow(url))
@@ -260,7 +260,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMediaFactory = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
     imp.construct(&wrap, &from_glib_borrow(url)).to_glib_full()
 }
@@ -280,7 +280,7 @@ where
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMediaFactory = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
     let pipeline: *mut gst_sys::GstPipeline = imp
         .create_pipeline(&wrap, &from_glib_borrow(media))
@@ -305,7 +305,7 @@ unsafe extern "C" fn factory_configure<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMediaFactory = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
     imp.configure(&wrap, &from_glib_borrow(media));
 }
@@ -318,7 +318,7 @@ unsafe extern "C" fn factory_media_constructed<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMediaFactory = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
     imp.media_constructed(&wrap, &from_glib_borrow(media));
 }
@@ -331,7 +331,7 @@ unsafe extern "C" fn factory_media_configure<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: RTSPMediaFactory = from_glib_borrow(ptr);
+    let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
     imp.media_configure(&wrap, &from_glib_borrow(media));
 }

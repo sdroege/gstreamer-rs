@@ -350,7 +350,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // *Never* fail downwards state changes, this causes bugs in GStreamer
     // and leads to crashes and deadlocks.
@@ -380,7 +380,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     let caps = Option::<::Caps>::from_glib_borrow(caps);
 
@@ -391,15 +391,15 @@ where
             &wrap,
             &from_glib_borrow(templ),
             from_glib_none(name),
-            caps.as_ref(),
+            caps.as_ref().as_ref(),
         )
     });
 
     // Ensure that the pad is owned by the element now, if a pad was returned
     if let Some(ref pad) = pad {
         assert_eq!(
-            pad.get_parent(),
-            Some(::Object::from_glib_borrow(ptr as *mut gst_sys::GstObject))
+            pad.get_parent().as_ref(),
+            Some(&*::Object::from_glib_borrow(ptr as *mut gst_sys::GstObject))
         );
     }
 
@@ -415,7 +415,7 @@ unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     // If we get a floating reference passed simply return here. It can't be stored inside this
     // element, and if we continued to use it we would take ownership of this floating reference.
@@ -438,7 +438,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.send_event(&wrap, from_glib_full(event))
@@ -456,7 +456,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
     let query = QueryRef::from_mut_ptr(query);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
@@ -474,7 +474,7 @@ unsafe extern "C" fn element_set_context<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.set_context(&wrap, &from_glib_borrow(context))
@@ -491,12 +491,12 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     let clock = Option::<::Clock>::from_glib_borrow(clock);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.set_clock(&wrap, clock.as_ref())
+        imp.set_clock(&wrap, clock.as_ref().as_ref())
     })
     .to_glib()
 }
@@ -510,7 +510,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Element = from_glib_borrow(ptr);
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), None, {
         imp.provide_clock(&wrap)

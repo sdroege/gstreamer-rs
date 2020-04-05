@@ -188,7 +188,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &DeviceProvider::from_glib_borrow(this).unsafe_cast(),
+                &DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(object),
             )
         }
@@ -219,7 +219,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &DeviceProvider::from_glib_borrow(this).unsafe_cast(),
+                &DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(object),
             )
         }
