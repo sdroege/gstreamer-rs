@@ -1856,4 +1856,188 @@ mod tests {
 
         assert_eq!(last, 4);
     }
+
+    #[test]
+    fn test_buffer_cursor() {
+        use std::io::{self, Read, Seek, Write};
+
+        ::init().unwrap();
+
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 10]));
+        }
+
+        assert!(buffer.is_all_memory_writable());
+        assert_eq!(buffer.n_memory(), 5);
+        assert_eq!(buffer.get_size(), 30);
+
+        let mut cursor = buffer.into_buffer_cursor_writable().unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 0);
+        cursor.write_all(b"01234567").unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 8);
+        cursor.write_all(b"890123").unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 14);
+        cursor.write_all(b"456").unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 17);
+        cursor.write_all(b"78901234567").unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 28);
+        cursor.write_all(b"89").unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 30);
+        assert!(cursor.write_all(b"0").is_err());
+
+        assert_eq!(cursor.seek(io::SeekFrom::Start(5)).unwrap(), 5);
+        assert_eq!(cursor.stream_position().unwrap(), 5);
+        cursor.write_all(b"A").unwrap();
+
+        assert_eq!(cursor.seek(io::SeekFrom::End(5)).unwrap(), 25);
+        assert_eq!(cursor.stream_position().unwrap(), 25);
+        cursor.write_all(b"B").unwrap();
+
+        assert_eq!(cursor.seek(io::SeekFrom::Current(-1)).unwrap(), 25);
+        assert_eq!(cursor.stream_position().unwrap(), 25);
+        cursor.write_all(b"C").unwrap();
+
+        assert_eq!(cursor.seek(io::SeekFrom::Current(1)).unwrap(), 27);
+        assert_eq!(cursor.stream_position().unwrap(), 27);
+        cursor.write_all(b"D").unwrap();
+
+        let buffer = cursor.into_buffer();
+
+        let mut cursor = buffer.into_buffer_cursor_readable();
+        let mut data = [0; 30];
+
+        assert_eq!(cursor.stream_position().unwrap(), 0);
+        cursor.read_exact(&mut data[0..7]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 7);
+        assert_eq!(&data[0..7], b"01234A6");
+        cursor.read_exact(&mut data[0..5]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 12);
+        assert_eq!(&data[0..5], b"78901");
+        cursor.read_exact(&mut data[0..10]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 22);
+        assert_eq!(&data[0..10], b"2345678901");
+        cursor.read_exact(&mut data[0..8]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 30);
+        assert_eq!(&data[0..8], b"234C6D89");
+        assert!(cursor.read_exact(&mut data[0..1]).is_err());
+
+        assert_eq!(cursor.seek(io::SeekFrom::Start(5)).unwrap(), 5);
+        assert_eq!(cursor.stream_position().unwrap(), 5);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"A");
+
+        assert_eq!(cursor.seek(io::SeekFrom::End(5)).unwrap(), 25);
+        assert_eq!(cursor.stream_position().unwrap(), 25);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"C");
+
+        assert_eq!(cursor.seek(io::SeekFrom::Current(-1)).unwrap(), 25);
+        assert_eq!(cursor.stream_position().unwrap(), 25);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"C");
+
+        assert_eq!(cursor.seek(io::SeekFrom::Current(1)).unwrap(), 27);
+        assert_eq!(cursor.stream_position().unwrap(), 27);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"D");
+    }
+
+    #[test]
+    fn test_buffer_cursor_ref() {
+        use std::io::{self, Read, Seek, Write};
+
+        ::init().unwrap();
+
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 10]));
+        }
+
+        assert!(buffer.is_all_memory_writable());
+        assert_eq!(buffer.n_memory(), 5);
+        assert_eq!(buffer.get_size(), 30);
+
+        {
+            let buffer = buffer.get_mut().unwrap();
+
+            let mut cursor = buffer.as_buffer_cursor_ref_writable().unwrap();
+            assert_eq!(cursor.stream_position().unwrap(), 0);
+            cursor.write_all(b"01234567").unwrap();
+            assert_eq!(cursor.stream_position().unwrap(), 8);
+            cursor.write_all(b"890123").unwrap();
+            assert_eq!(cursor.stream_position().unwrap(), 14);
+            cursor.write_all(b"456").unwrap();
+            assert_eq!(cursor.stream_position().unwrap(), 17);
+            cursor.write_all(b"78901234567").unwrap();
+            assert_eq!(cursor.stream_position().unwrap(), 28);
+            cursor.write_all(b"89").unwrap();
+            assert_eq!(cursor.stream_position().unwrap(), 30);
+            assert!(cursor.write_all(b"0").is_err());
+
+            assert_eq!(cursor.seek(io::SeekFrom::Start(5)).unwrap(), 5);
+            assert_eq!(cursor.stream_position().unwrap(), 5);
+            cursor.write_all(b"A").unwrap();
+
+            assert_eq!(cursor.seek(io::SeekFrom::End(5)).unwrap(), 25);
+            assert_eq!(cursor.stream_position().unwrap(), 25);
+            cursor.write_all(b"B").unwrap();
+
+            assert_eq!(cursor.seek(io::SeekFrom::Current(-1)).unwrap(), 25);
+            assert_eq!(cursor.stream_position().unwrap(), 25);
+            cursor.write_all(b"C").unwrap();
+
+            assert_eq!(cursor.seek(io::SeekFrom::Current(1)).unwrap(), 27);
+            assert_eq!(cursor.stream_position().unwrap(), 27);
+            cursor.write_all(b"D").unwrap();
+        }
+
+        let mut cursor = buffer.as_buffer_cursor_ref_readable();
+        let mut data = [0; 30];
+
+        assert_eq!(cursor.stream_position().unwrap(), 0);
+        cursor.read_exact(&mut data[0..7]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 7);
+        assert_eq!(&data[0..7], b"01234A6");
+        cursor.read_exact(&mut data[0..5]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 12);
+        assert_eq!(&data[0..5], b"78901");
+        cursor.read_exact(&mut data[0..10]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 22);
+        assert_eq!(&data[0..10], b"2345678901");
+        cursor.read_exact(&mut data[0..8]).unwrap();
+        assert_eq!(cursor.stream_position().unwrap(), 30);
+        assert_eq!(&data[0..8], b"234C6D89");
+        assert!(cursor.read_exact(&mut data[0..1]).is_err());
+
+        assert_eq!(cursor.seek(io::SeekFrom::Start(5)).unwrap(), 5);
+        assert_eq!(cursor.stream_position().unwrap(), 5);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"A");
+
+        assert_eq!(cursor.seek(io::SeekFrom::End(5)).unwrap(), 25);
+        assert_eq!(cursor.stream_position().unwrap(), 25);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"C");
+
+        assert_eq!(cursor.seek(io::SeekFrom::Current(-1)).unwrap(), 25);
+        assert_eq!(cursor.stream_position().unwrap(), 25);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"C");
+
+        assert_eq!(cursor.seek(io::SeekFrom::Current(1)).unwrap(), 27);
+        assert_eq!(cursor.stream_position().unwrap(), 27);
+        cursor.read_exact(&mut data[0..1]).unwrap();
+        assert_eq!(&data[0..1], b"D");
+    }
 }
