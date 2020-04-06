@@ -542,6 +542,21 @@ impl BufferRef {
         unsafe { MemoryRef::from_ptr(gst_sys::gst_buffer_peek_memory(self.as_mut_ptr(), idx)) }
     }
 
+    pub fn peek_memory_mut(&mut self, idx: u32) -> Result<&mut MemoryRef, glib::BoolError> {
+        assert!(idx < self.n_memory());
+        unsafe {
+            let mem = gst_sys::gst_buffer_peek_memory(self.as_mut_ptr(), idx);
+            if gst_sys::gst_mini_object_is_writable(mem as *mut _) == glib_sys::GFALSE {
+                Err(glib_bool_error!("Memory not writable"))
+            } else {
+                Ok(MemoryRef::from_mut_ptr(gst_sys::gst_buffer_peek_memory(
+                    self.as_mut_ptr(),
+                    idx,
+                )))
+            }
+        }
+    }
+
     pub fn prepend_memory(&mut self, mem: Memory) {
         unsafe { gst_sys::gst_buffer_prepend_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
