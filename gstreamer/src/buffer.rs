@@ -605,9 +605,25 @@ impl BufferRef {
             )
         }
     }
+
+    pub fn iter_memories(&self) -> Iter {
+        Iter::new(self)
+    }
+
+    pub fn iter_memories_mut(&mut self) -> Result<IterMut, glib::BoolError> {
+        if !self.is_all_memory_writable() {
+            Err(glib_bool_error!("Not all memory are writable"))
+        } else {
+            Ok(IterMut::new(self))
+        }
+    }
+
+    pub fn iter_memories_owned(&self) -> IterOwned {
+        IterOwned::new(self)
+    }
 }
 
-macro_rules! define_iter(
+macro_rules! define_meta_iter(
     ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
@@ -668,19 +684,132 @@ macro_rules! define_iter(
     }
 );
 
-define_iter!(
+define_meta_iter!(
     MetaIter,
     &'a BufferRef,
     MetaRef<'a, T>,
     |buffer: *const gst_sys::GstBuffer| BufferRef::from_ptr(buffer),
     |buffer, meta| T::from_ptr(buffer, meta as *const <T as MetaAPI>::GstType)
 );
-define_iter!(
+define_meta_iter!(
     MetaIterMut,
     &'a mut BufferRef,
     MetaRefMut<'a, T, ::meta::Iterated>,
     |buffer: *mut gst_sys::GstBuffer| BufferRef::from_mut_ptr(buffer),
     |buffer: &'a mut BufferRef, meta| T::from_mut_ptr(buffer, meta as *mut <T as MetaAPI>::GstType)
+);
+
+macro_rules! define_iter(
+    ($name:ident, $typ:ty, $mtyp:ty, $get_item:expr) => {
+    pub struct $name<'a> {
+        buffer: $typ,
+        idx: u32,
+        n_memory: u32,
+    }
+
+    impl<'a> fmt::Debug for $name<'a> {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_struct(stringify!($name))
+                .field("buffer", &self.buffer)
+                .field("idx", &self.idx)
+                .field("n_memory", &self.n_memory)
+                .finish()
+        }
+    }
+
+    impl<'a> $name<'a> {
+        fn new(buffer: $typ) -> $name<'a> {
+            skip_assert_initialized!();
+
+            let n_memory = buffer.n_memory();
+
+            $name {
+                buffer,
+                idx: 0,
+                n_memory,
+            }
+        }
+    }
+
+    impl<'a> Iterator for $name<'a> {
+        type Item = $mtyp;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            if self.idx >= self.n_memory {
+                return None;
+            }
+
+            #[allow(unused_unsafe)]
+            unsafe {
+                let item = $get_item(self.buffer, self.idx)?;
+                self.idx += 1;
+                Some(item)
+            }
+        }
+
+        fn size_hint(&self) -> (usize, Option<usize>) {
+            if self.idx == self.n_memory {
+                return (0, Some(0));
+            }
+
+            let remaining = (self.n_memory - self.idx) as usize;
+
+            (remaining, Some(remaining))
+        }
+    }
+
+    impl<'a> DoubleEndedIterator for $name<'a> {
+        fn next_back(&mut self) -> Option<Self::Item> {
+            if self.idx == self.n_memory {
+                return None;
+            }
+
+            self.n_memory -= 1;
+
+            #[allow(unused_unsafe)]
+            unsafe {
+                $get_item(self.buffer, self.n_memory)
+            }
+        }
+    }
+
+    impl<'a> ExactSizeIterator for $name<'a> {}
+    }
+);
+
+define_iter!(
+    Iter,
+    &'a BufferRef,
+    &'a MemoryRef,
+    |buffer: &BufferRef, idx| {
+        let ptr = gst_sys::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
+        if ptr.is_null() {
+            None
+        } else {
+            Some(MemoryRef::from_ptr(ptr as *const gst_sys::GstMemory))
+        }
+    }
+);
+
+define_iter!(
+    IterMut,
+    &'a mut BufferRef,
+    &'a mut MemoryRef,
+    |buffer: &mut BufferRef, idx| {
+        let ptr = gst_sys::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
+        if ptr.is_null() {
+            None
+        } else {
+            Some(MemoryRef::from_mut_ptr(ptr as *mut gst_sys::GstMemory))
+        }
+    }
+);
+
+define_iter!(
+    IterOwned,
+    &'a BufferRef,
+    Memory,
+    |buffer: &BufferRef, idx| { buffer.get_memory(idx) }
 );
 
 impl fmt::Debug for BufferRef {
