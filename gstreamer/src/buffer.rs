@@ -1100,4 +1100,113 @@ mod tests {
             assert_eq!(data.as_slice(), vec![0, 2, 3, 4].as_slice());
         }
     }
+
+    #[test]
+    fn test_memories() {
+        ::init().unwrap();
+
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(::Memory::from_mut_slice(vec![0; 10]));
+        }
+
+        assert!(buffer.is_all_memory_writable());
+        assert_eq!(buffer.n_memory(), 5);
+        assert_eq!(buffer.get_size(), 30);
+
+        for i in 0..5 {
+            {
+                let mem = buffer.get_memory(i).unwrap();
+                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                let map = mem.map_readable().unwrap();
+                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+            }
+
+            {
+                let mem = buffer.peek_memory(i);
+                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                let map = mem.map_readable().unwrap();
+                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+            }
+
+            {
+                let buffer = buffer.get_mut().unwrap();
+                let mem = buffer.peek_memory_mut(i).unwrap();
+                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                let map = mem.map_writable().unwrap();
+                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+            }
+        }
+
+        {
+            let buffer = buffer.get_mut().unwrap();
+            let mut last = 0;
+            for (i, mem) in buffer.iter_memories_mut().unwrap().enumerate() {
+                {
+                    assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                    let map = mem.map_readable().unwrap();
+                    assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                }
+
+                {
+                    assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                    let map = mem.map_readable().unwrap();
+                    assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                }
+
+                {
+                    assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                    let map = mem.map_writable().unwrap();
+                    assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                }
+
+                last = i;
+            }
+
+            assert_eq!(last, 4);
+        }
+
+        let mut last = 0;
+        for (i, mem) in buffer.iter_memories().enumerate() {
+            {
+                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                let map = mem.map_readable().unwrap();
+                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+            }
+
+            {
+                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                let map = mem.map_readable().unwrap();
+                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+            }
+
+            last = i;
+        }
+
+        assert_eq!(last, 4);
+
+        let mut last = 0;
+        for (i, mem) in buffer.iter_memories_owned().enumerate() {
+            {
+                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                let map = mem.map_readable().unwrap();
+                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+            }
+
+            {
+                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                let map = mem.map_readable().unwrap();
+                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+            }
+
+            last = i;
+        }
+
+        assert_eq!(last, 4);
+    }
 }
