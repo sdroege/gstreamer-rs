@@ -126,7 +126,8 @@ pub use meta::ReferenceTimestampMeta;
 pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta};
 pub mod buffer;
 pub use buffer::{
-    Buffer, BufferCursor, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
+    Buffer, BufferCursor, BufferCursorRef, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL,
+    BUFFER_COPY_METADATA,
 };
 pub mod memory;
 pub use memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
