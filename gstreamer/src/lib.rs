@@ -126,9 +126,10 @@ pub use meta::ReferenceTimestampMeta;
 pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta};
 pub mod buffer;
 pub use buffer::{
-    Buffer, BufferCursor, BufferCursorRef, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL,
-    BUFFER_COPY_METADATA,
+    Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
 };
+mod buffer_cursor;
+pub use buffer_cursor::{BufferCursor, BufferRefCursor};
 pub mod memory;
 pub use memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
 #[cfg(feature = "ser_de")]
