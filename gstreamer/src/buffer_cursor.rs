@@ -218,6 +218,13 @@ macro_rules! define_write_impl(
         }
 
         fn flush(&mut self) -> Result<(), io::Error> {
+            if !self.map_info.memory.is_null() {
+                unsafe {
+                    gst_sys::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
+                    self.map_info.memory = ptr::null_mut();
+                }
+            }
+
             Ok(())
         }
     }
