@@ -48,13 +48,6 @@ pub struct BufferRefCursor<T> {
 macro_rules! define_seek_impl(
     ($get_buffer_ref:expr) => {
         fn seek(&mut self, pos: io::SeekFrom) -> Result<u64, io::Error> {
-            if !self.map_info.memory.is_null() {
-                unsafe {
-                    gst_sys::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
-                    self.map_info.memory = ptr::null_mut();
-                }
-            }
-
             match pos {
                 io::SeekFrom::Start(off) => {
                     self.cur_offset = std::cmp::min(self.size, off);
@@ -96,6 +89,14 @@ macro_rules! define_seek_impl(
             let (idx, _, skip) = get_buffer_ref(self)
                 .find_memory(self.cur_offset as usize, None)
                 .expect("Failed to find memory");
+
+            if idx != self.cur_mem_idx && !self.map_info.memory.is_null() {
+                unsafe {
+                    gst_sys::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
+                    self.map_info.memory = ptr::null_mut();
+                }
+            }
+
             self.cur_mem_idx = idx;
             self.cur_mem_offset = skip;
 
