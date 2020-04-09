@@ -508,7 +508,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_attribute(&mut self, idx: Option<u32>, mut attr: SDPAttribute) -> Result<(), ()> {
+    pub fn insert_attribute(&mut self, idx: Option<u32>, attr: SDPAttribute) -> Result<(), ()> {
         if let Some(idx) = idx {
             if idx >= self.attributes_len() {
                 return Err(());
@@ -516,16 +516,16 @@ impl SDPMessageRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
+        let mut attr = mem::ManuallyDrop::new(attr);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_message_insert_attribute(&mut self.0, idx, &mut attr.0) };
-        mem::forget(attr);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn insert_bandwidth(&mut self, idx: Option<u32>, mut bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn insert_bandwidth(&mut self, idx: Option<u32>, bw: SDPBandwidth) -> Result<(), ()> {
         if let Some(idx) = idx {
             if idx >= self.bandwidths_len() {
                 return Err(());
@@ -533,9 +533,9 @@ impl SDPMessageRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
+        let mut bw = mem::ManuallyDrop::new(bw);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_message_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
-        mem::forget(bw);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
@@ -576,7 +576,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_time(&mut self, idx: Option<u32>, mut time: SDPTime) -> Result<(), ()> {
+    pub fn insert_time(&mut self, idx: Option<u32>, time: SDPTime) -> Result<(), ()> {
         if let Some(idx) = idx {
             if idx >= self.times_len() {
                 return Err(());
@@ -584,16 +584,16 @@ impl SDPMessageRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
+        let mut time = mem::ManuallyDrop::new(time);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_message_insert_time(&mut self.0, idx, &mut time.0) };
-        mem::forget(time);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn insert_zone(&mut self, idx: Option<u32>, mut zone: SDPZone) -> Result<(), ()> {
+    pub fn insert_zone(&mut self, idx: Option<u32>, zone: SDPZone) -> Result<(), ()> {
         if let Some(idx) = idx {
             if idx >= self.zones_len() {
                 return Err(());
@@ -601,9 +601,9 @@ impl SDPMessageRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
+        let mut zone = mem::ManuallyDrop::new(zone);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_message_insert_zone(&mut self.0, idx, &mut zone.0) };
-        mem::forget(zone);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
@@ -690,29 +690,29 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn replace_attribute(&mut self, idx: u32, mut attr: SDPAttribute) -> Result<(), ()> {
+    pub fn replace_attribute(&mut self, idx: u32, attr: SDPAttribute) -> Result<(), ()> {
         if idx >= self.attributes_len() {
             return Err(());
         }
 
+        let mut attr = mem::ManuallyDrop::new(attr);
         let result = unsafe {
             gst_sdp_sys::gst_sdp_message_replace_attribute(&mut self.0, idx, &mut attr.0)
         };
-        mem::forget(attr);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn replace_bandwidth(&mut self, idx: u32, mut bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), ()> {
         if idx >= self.bandwidths_len() {
             return Err(());
         }
 
+        let mut bw = mem::ManuallyDrop::new(bw);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_message_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
-        mem::forget(bw);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
@@ -747,28 +747,28 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn replace_time(&mut self, idx: u32, mut time: SDPTime) -> Result<(), ()> {
+    pub fn replace_time(&mut self, idx: u32, time: SDPTime) -> Result<(), ()> {
         if idx >= self.times_len() {
             return Err(());
         }
 
+        let mut time = mem::ManuallyDrop::new(time);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_message_replace_time(&mut self.0, idx, &mut time.0) };
-        mem::forget(time);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn replace_zone(&mut self, idx: u32, mut zone: SDPZone) -> Result<(), ()> {
+    pub fn replace_zone(&mut self, idx: u32, zone: SDPZone) -> Result<(), ()> {
         if idx >= self.zones_len() {
             return Err(());
         }
 
+        let mut zone = mem::ManuallyDrop::new(zone);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_message_replace_zone(&mut self.0, idx, &mut zone.0) };
-        mem::forget(zone);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),

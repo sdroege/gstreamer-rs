@@ -94,8 +94,8 @@ impl<T: MiniObject> GstRc<T> {
     }
 
     pub unsafe fn into_ptr(self) -> *mut T::GstType {
-        let ptr = self.as_mut_ptr();
-        mem::forget(self);
+        let s = mem::ManuallyDrop::new(self);
+        let ptr = s.as_mut_ptr();
 
         ptr
     }

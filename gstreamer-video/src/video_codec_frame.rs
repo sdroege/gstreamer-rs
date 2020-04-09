@@ -198,8 +198,8 @@ impl<'a> VideoCodecFrame<'a> {
         let stream_lock = self.element.get_stream_lock();
         glib_sys::g_rec_mutex_unlock(stream_lock);
 
-        let ptr = self.to_glib_none().0;
-        mem::forget(self);
+        let s = mem::ManuallyDrop::new(self);
+        let ptr = s.to_glib_none().0;
 
         ptr
     }
