@@ -11,6 +11,8 @@ use gst_rtsp_server_sys;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
+use std::mem;
+
 use RTSPClient;
 use RTSPClientClass;
 
@@ -841,9 +843,8 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
-    let sdp = imp.create_sdp(&wrap, &from_glib_borrow(media));
+    let sdp = mem::ManuallyDrop::new(imp.create_sdp(&wrap, &from_glib_borrow(media)));
     let ptr = sdp.to_glib_none().0;
-    std::mem::forget(sdp);
 
     ptr as *mut _
 }

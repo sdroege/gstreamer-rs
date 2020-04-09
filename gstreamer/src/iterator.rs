@@ -43,8 +43,8 @@ where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
     pub unsafe fn into_ptr(self) -> *mut gst_sys::GstIterator {
-        let it = self.to_glib_none().0;
-        mem::forget(self);
+        let s = mem::ManuallyDrop::new(self);
+        let it = s.to_glib_none().0;
         it as *mut _
     }
 

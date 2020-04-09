@@ -386,7 +386,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn insert_attribute(&mut self, idx: Option<u32>, mut attr: SDPAttribute) -> Result<(), ()> {
+    pub fn insert_attribute(&mut self, idx: Option<u32>, attr: SDPAttribute) -> Result<(), ()> {
         if let Some(idx) = idx {
             if idx >= self.attributes_len() {
                 return Err(());
@@ -394,16 +394,16 @@ impl SDPMediaRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
+        let mut attr = mem::ManuallyDrop::new(attr);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_media_insert_attribute(&mut self.0, idx, &mut attr.0) };
-        mem::forget(attr);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn insert_bandwidth(&mut self, idx: Option<u32>, mut bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn insert_bandwidth(&mut self, idx: Option<u32>, bw: SDPBandwidth) -> Result<(), ()> {
         if let Some(idx) = idx {
             if idx >= self.bandwidths_len() {
                 return Err(());
@@ -411,20 +411,16 @@ impl SDPMediaRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
+        let mut bw = mem::ManuallyDrop::new(bw);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_media_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
-        mem::forget(bw);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn insert_connection(
-        &mut self,
-        idx: Option<u32>,
-        mut conn: SDPConnection,
-    ) -> Result<(), ()> {
+    pub fn insert_connection(&mut self, idx: Option<u32>, conn: SDPConnection) -> Result<(), ()> {
         if let Some(idx) = idx {
             if idx >= self.connections_len() {
                 return Err(());
@@ -432,9 +428,9 @@ impl SDPMediaRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
+        let mut conn = mem::ManuallyDrop::new(conn);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_media_insert_connection(&mut self.0, idx, &mut conn.0) };
-        mem::forget(conn);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
@@ -506,42 +502,42 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn replace_attribute(&mut self, idx: u32, mut attr: SDPAttribute) -> Result<(), ()> {
+    pub fn replace_attribute(&mut self, idx: u32, attr: SDPAttribute) -> Result<(), ()> {
         if idx >= self.attributes_len() {
             return Err(());
         }
 
+        let mut attr = mem::ManuallyDrop::new(attr);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_media_replace_attribute(&mut self.0, idx, &mut attr.0) };
-        mem::forget(attr);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn replace_bandwidth(&mut self, idx: u32, mut bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), ()> {
         if idx >= self.bandwidths_len() {
             return Err(());
         }
 
+        let mut bw = mem::ManuallyDrop::new(bw);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_media_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
-        mem::forget(bw);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
-    pub fn replace_connection(&mut self, idx: u32, mut conn: SDPConnection) -> Result<(), ()> {
+    pub fn replace_connection(&mut self, idx: u32, conn: SDPConnection) -> Result<(), ()> {
         if idx >= self.connections_len() {
             return Err(());
         }
 
+        let mut conn = mem::ManuallyDrop::new(conn);
         let result =
             unsafe { gst_sdp_sys::gst_sdp_media_replace_connection(&mut self.0, idx, &mut conn.0) };
-        mem::forget(conn);
         match result {
             gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),

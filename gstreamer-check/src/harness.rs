@@ -128,9 +128,8 @@ impl Harness {
 
     pub fn add_sink_harness(&mut self, sink_harness: Harness) {
         unsafe {
+            let sink_harness = mem::ManuallyDrop::new(sink_harness);
             gst_check_sys::gst_harness_add_sink_harness(self.0.as_ptr(), sink_harness.0.as_ptr());
-
-            mem::forget(sink_harness);
         }
     }
 
@@ -152,13 +151,12 @@ impl Harness {
 
     pub fn add_src_harness(&mut self, src_harness: Harness, has_clock_wait: bool) {
         unsafe {
+            let src_harness = mem::ManuallyDrop::new(src_harness);
             gst_check_sys::gst_harness_add_src_harness(
                 self.0.as_ptr(),
                 src_harness.0.as_ptr(),
                 has_clock_wait.to_glib(),
             );
-
-            mem::forget(src_harness);
         }
     }
 
