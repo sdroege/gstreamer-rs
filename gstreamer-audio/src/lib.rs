@@ -47,6 +47,8 @@ mod audio_ring_buffer_spec;
 pub use audio_ring_buffer_spec::*;
 mod audio_info;
 pub use audio_info::*;
+mod audio_meta;
+pub use audio_meta::*;
 mod audio_channel_position;
 pub use audio_channel_position::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
