@@ -153,3 +153,13 @@ audit:
   script:
     - cargo install --force cargo-audit
     - cargo audit --deny-warnings
+
+outdated:
+  extends: '.tarball_setup'
+  image: "rust:slim-buster"
+  stage: 'extras'
+  only:
+    - schedules
+  script:
+    - cargo install --force --git https://github.com/kbknapp/cargo-outdated
+    - cargo outdated --root-deps-only --exit-code 1 -v
