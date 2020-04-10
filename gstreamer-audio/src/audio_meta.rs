@@ -79,18 +79,31 @@ mod tests {
         let mut buffer = gst::Buffer::with_size(1024).unwrap();
 
         {
-            let cmeta =
-                AudioClippingMeta::add(buffer.get_mut().unwrap(), gst::Format::Default, 1, 2);
-            assert_eq!(cmeta.get_format(), gst::Format::Default);
-            assert_eq!(cmeta.get_start(), 1);
-            assert_eq!(cmeta.get_end(), 2);
+            let cmeta = AudioClippingMeta::add(
+                buffer.get_mut().unwrap(),
+                gst::format::Default(Some(1)),
+                gst::format::Default(Some(2)),
+            );
+            assert_eq!(
+                cmeta.get_start(),
+                gst::GenericFormattedValue::Default(gst::format::Default(Some(1)))
+            );
+            assert_eq!(
+                cmeta.get_end(),
+                gst::GenericFormattedValue::Default(gst::format::Default(Some(2)))
+            );
         }
 
         {
             let cmeta = buffer.get_meta::<AudioClippingMeta>().unwrap();
-            assert_eq!(cmeta.get_format(), gst::Format::Default);
-            assert_eq!(cmeta.get_start(), 1);
-            assert_eq!(cmeta.get_end(), 2);
+            assert_eq!(
+                cmeta.get_start(),
+                gst::GenericFormattedValue::Default(gst::format::Default(Some(1)))
+            );
+            assert_eq!(
+                cmeta.get_end(),
+                gst::GenericFormattedValue::Default(gst::format::Default(Some(2)))
+            );
         }
     }
 }
