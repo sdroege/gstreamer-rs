@@ -67,9 +67,7 @@ impl CapsFeatures {
 
     pub unsafe fn into_ptr(self) -> *mut gst_sys::GstCapsFeatures {
         let s = mem::ManuallyDrop::new(self);
-        let ptr = s.0.as_ptr() as *mut CapsFeaturesRef as *mut gst_sys::GstCapsFeatures;
-
-        ptr
+        s.0.as_ptr() as *mut CapsFeaturesRef as *mut gst_sys::GstCapsFeatures
     }
 }
 

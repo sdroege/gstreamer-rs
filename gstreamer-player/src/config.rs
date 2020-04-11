@@ -98,8 +98,7 @@ impl PlayerConfig {
 
     pub unsafe fn into_ptr(self) -> *mut gst_sys::GstStructure {
         let mut s = mem::ManuallyDrop::new(self);
-        let ptr = s.0.to_glib_none_mut().0;
-        ptr
+        s.0.to_glib_none_mut().0
     }
 }
 

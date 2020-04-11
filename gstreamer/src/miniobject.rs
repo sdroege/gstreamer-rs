@@ -92,9 +92,7 @@ impl<T: MiniObject> GstRc<T> {
 
     pub unsafe fn into_ptr(self) -> *mut T::GstType {
         let s = mem::ManuallyDrop::new(self);
-        let ptr = s.as_mut_ptr();
-
-        ptr
+        s.as_mut_ptr()
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]

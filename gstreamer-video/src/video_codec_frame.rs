@@ -199,9 +199,7 @@ impl<'a> VideoCodecFrame<'a> {
         glib_sys::g_rec_mutex_unlock(stream_lock);
 
         let s = mem::ManuallyDrop::new(self);
-        let ptr = s.to_glib_none().0;
-
-        ptr
+        s.to_glib_none().0
     }
 }
 

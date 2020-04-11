@@ -18,11 +18,10 @@ impl WebRTCSessionDescription {
         assert_initialized_main_thread!();
         unsafe {
             let mut sdp = mem::ManuallyDrop::new(sdp);
-            let desc = from_glib_full(gst_web_rtc_sys::gst_webrtc_session_description_new(
+            from_glib_full(gst_web_rtc_sys::gst_webrtc_session_description_new(
                 type_.to_glib(),
                 sdp.to_glib_none_mut().0,
-            ));
-            desc
+            ))
         }
     }
 

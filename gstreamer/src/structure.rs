@@ -107,9 +107,7 @@ impl Structure {
 
     pub unsafe fn into_ptr(self) -> *mut gst_sys::GstStructure {
         let s = mem::ManuallyDrop::new(self);
-        let ptr = s.0.as_ptr() as *mut StructureRef as *mut gst_sys::GstStructure;
-
-        ptr
+        s.0.as_ptr() as *mut StructureRef as *mut gst_sys::GstStructure
     }
 }
 
