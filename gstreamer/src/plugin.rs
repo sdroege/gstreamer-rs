@@ -36,6 +36,8 @@ impl Plugin {
 
 pub trait GstPluginExtManual: 'static {
     fn get_plugin_flags(&self) -> PluginFlags;
+
+    fn get_plugin_name(&self) -> glib::GString;
 }
 
 impl<O: IsA<::Plugin>> GstPluginExtManual for O {
@@ -45,5 +47,9 @@ impl<O: IsA<::Plugin>> GstPluginExtManual for O {
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
             from_glib((*ptr).flags)
         }
+    }
+
+    fn get_plugin_name(&self) -> glib::GString {
+        unsafe { from_glib_none(gst_sys::gst_plugin_get_name(self.as_ref().to_glib_none().0)) }
     }
 }
