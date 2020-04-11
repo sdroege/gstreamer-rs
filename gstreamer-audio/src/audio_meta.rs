@@ -74,6 +74,8 @@ mod tests {
 
     #[test]
     fn test_add_get_meta() {
+        use std::convert::TryInto;
+
         gst::init().unwrap();
 
         let mut buffer = gst::Buffer::with_size(1024).unwrap();
@@ -85,24 +87,24 @@ mod tests {
                 gst::format::Default(Some(2)),
             );
             assert_eq!(
-                cmeta.get_start(),
-                gst::GenericFormattedValue::Default(gst::format::Default(Some(1)))
+                cmeta.get_start().try_into(),
+                Ok(gst::format::Default(Some(1)))
             );
             assert_eq!(
-                cmeta.get_end(),
-                gst::GenericFormattedValue::Default(gst::format::Default(Some(2)))
+                cmeta.get_end().try_into(),
+                Ok(gst::format::Default(Some(2)))
             );
         }
 
         {
             let cmeta = buffer.get_meta::<AudioClippingMeta>().unwrap();
             assert_eq!(
-                cmeta.get_start(),
-                gst::GenericFormattedValue::Default(gst::format::Default(Some(1)))
+                cmeta.get_start().try_into(),
+                Ok(gst::format::Default(Some(1)))
             );
             assert_eq!(
-                cmeta.get_end(),
-                gst::GenericFormattedValue::Default(gst::format::Default(Some(2)))
+                cmeta.get_end().try_into(),
+                Ok(gst::format::Default(Some(2)))
             );
         }
     }
