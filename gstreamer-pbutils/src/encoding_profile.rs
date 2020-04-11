@@ -266,15 +266,7 @@ impl fmt::Display for EncodingProfileBuilderError {
     }
 }
 
-impl error::Error for EncodingProfileBuilderError {
-    fn description(&self) -> &str {
-        "invalid parameters to build encoding profile"
-    }
-
-    fn cause(&self) -> Option<&dyn error::Error> {
-        None
-    }
-}
+impl error::Error for EncodingProfileBuilderError {}
 
 #[derive(Debug)]
 struct EncodingProfileBuilderCommonData<'a> {

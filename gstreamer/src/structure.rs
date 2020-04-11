@@ -73,11 +73,7 @@ impl<'name> fmt::Display for GetError<'name> {
     }
 }
 
-impl<'name> error::Error for GetError<'name> {
-    fn description(&self) -> &str {
-        "GetError: Structure field value"
-    }
-}
+impl<'name> error::Error for GetError<'name> {}
 
 pub struct Structure(ptr::NonNull<StructureRef>, PhantomData<StructureRef>);
 unsafe impl Send for Structure {}

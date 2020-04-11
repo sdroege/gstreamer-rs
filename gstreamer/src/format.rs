@@ -39,11 +39,7 @@ pub struct Percent(pub Option<u32>);
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct TryFromGenericFormattedValueError(());
 
-impl std::error::Error for TryFromGenericFormattedValueError {
-    fn description(&self) -> &str {
-        "invalid generic value format"
-    }
-}
+impl std::error::Error for TryFromGenericFormattedValueError {}
 
 impl std::fmt::Display for TryFromGenericFormattedValueError {
     fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
@@ -667,11 +663,7 @@ impl AsMut<Option<u32>> for Percent {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct TryPercentFromFloatError(());
 
-impl std::error::Error for TryPercentFromFloatError {
-    fn description(&self) -> &str {
-        "value out of range"
-    }
-}
+impl std::error::Error for TryPercentFromFloatError {}
 
 impl std::fmt::Display for TryPercentFromFloatError {
     fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
