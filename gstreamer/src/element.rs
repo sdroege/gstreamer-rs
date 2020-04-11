@@ -265,6 +265,9 @@ pub trait ElementExtManual: 'static {
     where
         F: FnOnce(&Self) -> T + Send + 'static,
         T: Send + 'static;
+
+    fn get_current_running_time(&self) -> ::ClockTime;
+    fn get_current_clock_time(&self) -> ::ClockTime;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -806,6 +809,26 @@ impl<O: IsA<Element>> ElementExtManual for O {
         });
 
         Box::pin(receiver.map(|res| res.expect("sender dropped")))
+    }
+
+    fn get_current_running_time(&self) -> ::ClockTime {
+        use ElementExt;
+
+        let base_time = self.get_base_time();
+        let clock_time = self.get_current_clock_time();
+
+        clock_time - base_time
+    }
+
+    fn get_current_clock_time(&self) -> ::ClockTime {
+        use ClockExt;
+        use ElementExt;
+
+        if let Some(clock) = self.get_clock() {
+            clock.get_time()
+        } else {
+            ::CLOCK_TIME_NONE
+        }
     }
 }
 
