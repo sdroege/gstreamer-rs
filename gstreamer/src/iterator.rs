@@ -742,6 +742,8 @@ mod tests {
 
     #[test]
     fn test_std() {
+        ::init().unwrap();
+
         let mut it = Iterator::from_vec(vec![1i32, 2, 3]).into_iter();
         assert_eq!(it.next(), Some(Ok(1)));
         assert_eq!(it.next(), Some(Ok(2)));
@@ -751,6 +753,8 @@ mod tests {
 
     #[test]
     fn test_into_iter() {
+        ::init().unwrap();
+
         let mut v = vec![1i32, 2, 3].into_iter();
         for x in Iterator::from_vec(vec![1i32, 2, 3]) {
             assert_eq!(x.unwrap(), v.next().unwrap());

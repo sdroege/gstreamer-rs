@@ -173,6 +173,8 @@ mod tests {
 
     #[test]
     fn error_message() {
+        ::init().unwrap();
+
         let e = ErrorMessage::new(
             &::CoreError::Failed,
             Some("message"),
@@ -189,6 +191,8 @@ mod tests {
 
     #[test]
     fn logabble_error() {
+        ::init().unwrap();
+
         let e: LoggableError = glib::BoolError::new("msg", "filename", "function", 7).into();
         assert_eq!(
             format!("{}", e),
