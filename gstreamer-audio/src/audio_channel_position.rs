@@ -24,10 +24,8 @@ impl AudioChannelPosition {
         if pos < 0 {
             return 0;
         }
-        unsafe {
-            let val = mem::transmute::<gst_audio_sys::GstAudioChannelPosition, u32>(pos);
-            1 << val
-        }
+
+        1 << (pos as u32)
     }
 
     pub fn positions_to_mask(

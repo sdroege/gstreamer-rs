@@ -15,7 +15,6 @@ use glib_sys;
 use gst;
 use gst_player_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Player;
 use PlayerSignalDispatcher;
 use PlayerVideoRenderer;
@@ -72,7 +71,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"duration-changed\0".as_ptr() as *const _,
-                Some(transmute(duration_changed_trampoline::<F> as usize)),
+                Some(*(&duration_changed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -88,7 +87,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"position-updated\0".as_ptr() as *const _,
-                Some(transmute(position_updated_trampoline::<F> as usize)),
+                Some(*(&position_updated_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -104,7 +103,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"seek-done\0".as_ptr() as *const _,
-                Some(transmute(seek_done_trampoline::<F> as usize)),
+                Some(*(&seek_done_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

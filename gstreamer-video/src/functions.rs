@@ -14,7 +14,6 @@ use glib;
 use glib::translate::{from_glib_full, ToGlib, ToGlibPtr};
 use gst;
 
-use std::mem;
 use std::ptr;
 
 pub fn convert_sample(
@@ -106,7 +105,7 @@ unsafe fn convert_sample_async_unsafe<F>(
         timeout.to_glib(),
         Some(convert_sample_async_trampoline::<F>),
         Box::into_raw(user_data) as glib_sys::gpointer,
-        Some(mem::transmute(convert_sample_async_free::<F> as usize)),
+        Some(convert_sample_async_free::<F>),
     );
 }
 

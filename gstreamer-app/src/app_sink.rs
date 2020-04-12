@@ -17,7 +17,6 @@ use gst_app_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
 use std::cell::RefCell;
-use std::mem::transmute;
 use std::panic;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -295,7 +294,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-sample\0".as_ptr() as *const _,
-                Some(transmute(new_sample_trampoline::<F> as usize)),
+                Some(*(&new_sample_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -312,7 +311,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-preroll\0".as_ptr() as *const _,
-                Some(transmute(new_preroll_trampoline::<F> as usize)),
+                Some(*(&new_preroll_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -273,7 +273,6 @@ where
     T: RTSPMediaFactoryImpl,
 {
     use once_cell::sync::Lazy;
-    use std::mem;
 
     static PIPELINE_QUARK: Lazy<glib::Quark> =
         Lazy::new(|| glib::Quark::from_string("gstreamer-rs-rtsp-media-pipeline"));
@@ -291,7 +290,7 @@ where
         media as *mut _,
         PIPELINE_QUARK.to_glib(),
         pipeline as *mut _,
-        Some(mem::transmute(gobject_sys::g_object_unref as usize)),
+        Some(*(&gobject_sys::g_object_unref as *const _ as *const _)),
     );
 
     pipeline as *mut _

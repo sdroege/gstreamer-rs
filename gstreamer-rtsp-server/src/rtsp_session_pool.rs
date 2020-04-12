@@ -6,7 +6,6 @@ use glib_sys;
 use glib_sys::{gboolean, gpointer};
 use gst_rtsp_server_sys;
 use std::cell::RefCell;
-use std::mem::transmute;
 use RTSPSessionPool;
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(
@@ -49,7 +48,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
             );
             glib_sys::g_source_set_callback(
                 source,
-                Some(transmute(trampoline_watch::<F> as usize)),
+                Some(*(&trampoline_watch::<F> as *const _ as *const _)),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );

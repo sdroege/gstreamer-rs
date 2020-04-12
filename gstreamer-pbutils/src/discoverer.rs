@@ -23,7 +23,6 @@ use gobject_sys;
 use gst_pbutils_sys;
 
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 impl Discoverer {
     pub fn set_property_timeout(&self, timeout: gst::ClockTime) {
@@ -60,7 +59,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout\0".as_ptr() as *const _,
-                Some(transmute(notify_timeout_trampoline::<Self, F> as usize)),
+                Some(*(&notify_timeout_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

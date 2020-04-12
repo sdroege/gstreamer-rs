@@ -328,8 +328,7 @@ where
 
     let func = func as *const gobject_sys::GValue;
     let func = gobject_sys::g_value_get_boxed(func);
-    #[allow(clippy::transmute_ptr_to_ref)]
-    let func: &&(dyn Fn(T) -> bool + Send + Sync + 'static) = mem::transmute(func);
+    let func = &*(func as *const &(dyn Fn(T) -> bool + Send + Sync + 'static));
 
     let value = &*(value as *const glib::Value);
     let value = value
