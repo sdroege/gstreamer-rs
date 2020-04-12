@@ -22,8 +22,6 @@ use gst;
 use gst_gl_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use std::boxed::Box as Box_;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-use std::mem::transmute;
 use GLContext;
 
 glib_wrapper! {
@@ -112,7 +110,7 @@ impl GLOverlayCompositor {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::yinvert\0".as_ptr() as *const _,
-                Some(transmute(notify_yinvert_trampoline::<F> as usize)),
+                Some(*(&notify_yinvert_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -15,6 +15,7 @@ use gobject_sys;
 use gst_player_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PlayerColorBalanceType {
     Hue,
     Brightness,
@@ -82,6 +83,7 @@ impl SetValue for PlayerColorBalanceType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PlayerError {
     Failed,
     #[doc(hidden)]
@@ -155,6 +157,7 @@ impl SetValue for PlayerError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PlayerSnapshotFormat {
     RawNative,
     RawXrgb,
@@ -197,6 +200,7 @@ impl FromGlib<gst_player_sys::GstPlayerSnapshotFormat> for PlayerSnapshotFormat 
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PlayerState {
     Stopped,
     Buffering,

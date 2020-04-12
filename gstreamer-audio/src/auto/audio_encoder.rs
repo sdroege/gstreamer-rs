@@ -12,7 +12,6 @@ use glib_sys;
 use gst;
 use gst_audio_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use AudioInfo;
 
 glib_wrapper! {
@@ -344,7 +343,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hard-resync\0".as_ptr() as *const _,
-                Some(transmute(notify_hard_resync_trampoline::<Self, F> as usize)),
+                Some(*(&notify_hard_resync_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -369,9 +368,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mark-granule\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_mark_granule_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_mark_granule_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -399,9 +396,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::perfect-timestamp\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_perfect_timestamp_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_perfect_timestamp_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -426,7 +421,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tolerance\0".as_ptr() as *const _,
-                Some(transmute(notify_tolerance_trampoline::<Self, F> as usize)),
+                Some(*(&notify_tolerance_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -14,7 +14,6 @@ use gobject_sys;
 use gst;
 use gst_base_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct Aggregator(Object<gst_base_sys::GstAggregator, gst_base_sys::GstAggregatorClass, AggregatorClass>) @extends gst::Element, gst::Object;
@@ -163,7 +162,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latency\0".as_ptr() as *const _,
-                Some(transmute(notify_latency_trampoline::<Self, F> as usize)),
+                Some(*(&notify_latency_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -188,7 +187,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::start-time\0".as_ptr() as *const _,
-                Some(transmute(notify_start_time_trampoline::<Self, F> as usize)),
+                Some(*(&notify_start_time_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

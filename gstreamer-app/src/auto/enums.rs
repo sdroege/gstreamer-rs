@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_app_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum AppStreamType {
     Stream,
     Seekable,

@@ -14,7 +14,6 @@ use gobject_sys;
 use gst;
 use gst_check_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct TestClock(Object<gst_check_sys::GstTestClock, gst_check_sys::GstTestClockClass, TestClockClass>) @extends gst::Clock, gst::Object;
@@ -166,7 +165,7 @@ impl TestClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::clock-type\0".as_ptr() as *const _,
-                Some(transmute(notify_clock_type_trampoline::<F> as usize)),
+                Some(*(&notify_clock_type_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

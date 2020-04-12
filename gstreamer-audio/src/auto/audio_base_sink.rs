@@ -15,7 +15,6 @@ use gst;
 use gst_audio_sys;
 use gst_base;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct AudioBaseSink(Object<gst_audio_sys::GstAudioBaseSink, gst_audio_sys::GstAudioBaseSinkClass, AudioBaseSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object;
@@ -298,9 +297,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::alignment-threshold\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_alignment_threshold_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_alignment_threshold_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -325,7 +322,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-time\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_time_trampoline::<Self, F> as usize)),
+                Some(*(&notify_buffer_time_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -353,9 +350,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-activate-pull\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_can_activate_pull_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_can_activate_pull_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -380,9 +375,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::discont-wait\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_discont_wait_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_discont_wait_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -410,9 +403,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::drift-tolerance\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_drift_tolerance_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_drift_tolerance_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -437,9 +428,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latency-time\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_latency_time_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_latency_time_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -464,9 +453,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::provide-clock\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_provide_clock_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_provide_clock_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -491,9 +478,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::slave-method\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_slave_method_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_slave_method_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

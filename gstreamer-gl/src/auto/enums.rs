@@ -15,6 +15,7 @@ use gobject_sys;
 use gst_gl_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLContextError {
     Failed,
     WrongConfig,
@@ -110,6 +111,7 @@ impl SetValue for GLContextError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLFormat {
     Luminance,
     Alpha,
@@ -209,6 +211,7 @@ impl SetValue for GLFormat {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLQueryType {
     None,
     TimeElapsed,
@@ -269,6 +272,7 @@ impl SetValue for GLQueryType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLSLError {
     Compile,
     Link,
@@ -350,6 +354,7 @@ impl SetValue for GLSLError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLSLVersion {
     None,
     _100,
@@ -452,6 +457,7 @@ impl SetValue for GLSLVersion {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLStereoDownmix {
     GreenMagentaDubois,
     RedCyanDubois,
@@ -518,6 +524,7 @@ impl SetValue for GLStereoDownmix {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLTextureTarget {
     None,
     _2d,
@@ -581,6 +588,7 @@ impl SetValue for GLTextureTarget {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLUploadReturn {
     Done,
     Error,
@@ -647,6 +655,7 @@ impl SetValue for GLUploadReturn {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum GLWindowError {
     Failed,
     OldLibs,

@@ -17,7 +17,6 @@ use gst;
 use gst_rtsp;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use RTSPAddressPool;
 use RTSPMedia;
 use RTSPPublishClockMode;
@@ -733,7 +732,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"media-configure\0".as_ptr() as *const _,
-                Some(transmute(media_configure_trampoline::<Self, F> as usize)),
+                Some(*(&media_configure_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -764,7 +763,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"media-constructed\0".as_ptr() as *const _,
-                Some(transmute(media_constructed_trampoline::<Self, F> as usize)),
+                Some(*(&media_constructed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -792,9 +791,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bind-mcast-address\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_bind_mcast_address_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_bind_mcast_address_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -819,7 +816,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-size\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_buffer_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -844,7 +841,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::clock\0".as_ptr() as *const _,
-                Some(transmute(notify_clock_trampoline::<Self, F> as usize)),
+                Some(*(&notify_clock_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -869,9 +866,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::eos-shutdown\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_eos_shutdown_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_eos_shutdown_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -896,7 +891,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latency\0".as_ptr() as *const _,
-                Some(transmute(notify_latency_trampoline::<Self, F> as usize)),
+                Some(*(&notify_latency_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -921,7 +916,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::launch\0".as_ptr() as *const _,
-                Some(transmute(notify_launch_trampoline::<Self, F> as usize)),
+                Some(*(&notify_launch_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -946,9 +941,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-mcast-ttl\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_mcast_ttl_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_max_mcast_ttl_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -973,7 +966,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::profiles\0".as_ptr() as *const _,
-                Some(transmute(notify_profiles_trampoline::<Self, F> as usize)),
+                Some(*(&notify_profiles_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -998,7 +991,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::protocols\0".as_ptr() as *const _,
-                Some(transmute(notify_protocols_trampoline::<Self, F> as usize)),
+                Some(*(&notify_protocols_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1023,7 +1016,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::shared\0".as_ptr() as *const _,
-                Some(transmute(notify_shared_trampoline::<Self, F> as usize)),
+                Some(*(&notify_shared_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1051,9 +1044,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stop-on-disconnect\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_stop_on_disconnect_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_stop_on_disconnect_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1078,9 +1069,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::suspend-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_suspend_mode_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_suspend_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1108,9 +1097,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transport-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transport_mode_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_transport_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

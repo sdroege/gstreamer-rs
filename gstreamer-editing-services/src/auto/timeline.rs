@@ -12,7 +12,6 @@ use glib::translate::*;
 use glib_sys;
 use gst;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use std::ptr;
 use Asset;
 use Extractable;
@@ -433,7 +432,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"commited\0".as_ptr() as *const _,
-                Some(transmute(commited_trampoline::<Self, F> as usize)),
+                Some(*(&commited_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -458,7 +457,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"group-added\0".as_ptr() as *const _,
-                Some(transmute(group_added_trampoline::<Self, F> as usize)),
+                Some(*(&group_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -487,7 +486,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"layer-added\0".as_ptr() as *const _,
-                Some(transmute(layer_added_trampoline::<Self, F> as usize)),
+                Some(*(&layer_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -512,7 +511,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"layer-removed\0".as_ptr() as *const _,
-                Some(transmute(layer_removed_trampoline::<Self, F> as usize)),
+                Some(*(&layer_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -551,7 +550,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"snapping-ended\0".as_ptr() as *const _,
-                Some(transmute(snapping_ended_trampoline::<Self, F> as usize)),
+                Some(*(&snapping_ended_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -586,7 +585,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"snapping-started\0".as_ptr() as *const _,
-                Some(transmute(snapping_started_trampoline::<Self, F> as usize)),
+                Some(*(&snapping_started_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -611,7 +610,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-added\0".as_ptr() as *const _,
-                Some(transmute(track_added_trampoline::<Self, F> as usize)),
+                Some(*(&track_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -636,7 +635,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-removed\0".as_ptr() as *const _,
-                Some(transmute(track_removed_trampoline::<Self, F> as usize)),
+                Some(*(&track_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -661,9 +660,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_auto_transition_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_auto_transition_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -685,7 +682,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute(notify_duration_trampoline::<Self, F> as usize)),
+                Some(*(&notify_duration_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -710,9 +707,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::snapping-distance\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_snapping_distance_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_snapping_distance_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

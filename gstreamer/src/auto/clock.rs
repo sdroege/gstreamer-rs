@@ -15,7 +15,6 @@ use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem;
-use std::mem::transmute;
 use ClockTime;
 use Object;
 
@@ -439,7 +438,7 @@ impl<O: IsA<Clock>> ClockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"synced\0".as_ptr() as *const _,
-                Some(transmute(synced_trampoline::<Self, F> as usize)),
+                Some(*(&synced_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -464,7 +463,7 @@ impl<O: IsA<Clock>> ClockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout\0".as_ptr() as *const _,
-                Some(transmute(notify_timeout_trampoline::<Self, F> as usize)),
+                Some(*(&notify_timeout_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -489,7 +488,7 @@ impl<O: IsA<Clock>> ClockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-size\0".as_ptr() as *const _,
-                Some(transmute(notify_window_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_window_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -517,9 +516,7 @@ impl<O: IsA<Clock>> ClockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-threshold\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_window_threshold_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_window_threshold_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

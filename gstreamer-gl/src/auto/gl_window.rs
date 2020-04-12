@@ -15,7 +15,6 @@ use gst_gl_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem;
-use std::mem::transmute;
 use GLContext;
 use GLDisplay;
 
@@ -248,7 +247,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"key-event\0".as_ptr() as *const _,
-                Some(transmute(key_event_trampoline::<Self, F> as usize)),
+                Some(*(&key_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -285,7 +284,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mouse-event\0".as_ptr() as *const _,
-                Some(transmute(mouse_event_trampoline::<Self, F> as usize)),
+                Some(*(&mouse_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

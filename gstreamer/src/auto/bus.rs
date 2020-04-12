@@ -10,7 +10,6 @@ use glib::translate::*;
 use glib_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use ClockTime;
 use Message;
 use Object;
@@ -125,7 +124,7 @@ impl Bus {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"message\0".as_ptr() as *const _,
-                Some(transmute(message_trampoline::<F> as usize)),
+                Some(*(&message_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -150,7 +149,7 @@ impl Bus {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"sync-message\0".as_ptr() as *const _,
-                Some(transmute(sync_message_trampoline::<F> as usize)),
+                Some(*(&sync_message_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

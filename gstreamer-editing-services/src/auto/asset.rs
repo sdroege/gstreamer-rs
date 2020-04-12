@@ -3,8 +3,6 @@
 // DO NOT EDIT
 
 use ges_sys;
-use gio;
-use gio_sys;
 use glib;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -17,8 +15,6 @@ use glib::Value;
 use glib_sys;
 use gobject_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::pin::Pin;
 use std::ptr;
 use Extractable;
 
@@ -193,7 +189,7 @@ impl<O: IsA<Asset>> AssetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::proxy\0".as_ptr() as *const _,
-                Some(transmute(notify_proxy_trampoline::<Self, F> as usize)),
+                Some(*(&notify_proxy_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -218,9 +214,7 @@ impl<O: IsA<Asset>> AssetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::proxy-target\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_proxy_target_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_proxy_target_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

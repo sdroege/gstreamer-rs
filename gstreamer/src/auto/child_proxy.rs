@@ -14,7 +14,6 @@ use gobject_sys;
 use gst_sys;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct ChildProxy(Interface<gst_sys::GstChildProxy>);
@@ -163,7 +162,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-added\0".as_ptr() as *const _,
-                Some(transmute(child_added_trampoline::<Self, F> as usize)),
+                Some(*(&child_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -196,7 +195,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-removed\0".as_ptr() as *const _,
-                Some(transmute(child_removed_trampoline::<Self, F> as usize)),
+                Some(*(&child_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

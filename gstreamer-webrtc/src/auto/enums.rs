@@ -14,6 +14,7 @@ use gst_web_rtc_sys;
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCBundlePolicy {
     None,
     Balanced,
@@ -83,6 +84,7 @@ impl SetValue for WebRTCBundlePolicy {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCDTLSSetup {
     None,
     Actpass,
@@ -146,6 +148,7 @@ impl SetValue for WebRTCDTLSSetup {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCDTLSTransportState {
     New,
     Closed,
@@ -221,6 +224,7 @@ impl SetValue for WebRTCDTLSTransportState {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCDataChannelState {
     New,
     Connecting,
@@ -298,6 +302,7 @@ impl SetValue for WebRTCDataChannelState {
 
 #[cfg(any(feature = "v1_14_1", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCFECType {
     None,
     UlpRed,
@@ -361,6 +366,7 @@ impl SetValue for WebRTCFECType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCICEComponent {
     Rtp,
     Rtcp,
@@ -418,6 +424,7 @@ impl SetValue for WebRTCICEComponent {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCICEConnectionState {
     New,
     Checking,
@@ -502,6 +509,7 @@ impl SetValue for WebRTCICEConnectionState {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCICEGatheringState {
     New,
     Gathering,
@@ -566,6 +574,7 @@ impl SetValue for WebRTCICEGatheringState {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCICERole {
     Controlled,
     Controlling,
@@ -624,6 +633,7 @@ impl SetValue for WebRTCICERole {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCICETransportPolicy {
     All,
     Relay,
@@ -689,6 +699,7 @@ impl SetValue for WebRTCICETransportPolicy {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCPeerConnectionState {
     New,
     Connecting,
@@ -769,6 +780,7 @@ impl SetValue for WebRTCPeerConnectionState {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCPriorityType {
     VeryLow,
     Low,
@@ -838,6 +850,7 @@ impl SetValue for WebRTCPriorityType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCRTPTransceiverDirection {
     None,
     Inactive,
@@ -915,6 +928,7 @@ impl SetValue for WebRTCRTPTransceiverDirection {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCSCTPTransportState {
     New,
     Connecting,
@@ -990,6 +1004,7 @@ impl SetValue for WebRTCSCTPTransportState {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCSDPType {
     Offer,
     Pranswer,
@@ -1053,6 +1068,7 @@ impl SetValue for WebRTCSDPType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCSignalingState {
     Stable,
     Closed,
@@ -1130,6 +1146,7 @@ impl SetValue for WebRTCSignalingState {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WebRTCStatsType {
     Codec,
     InboundRtp,

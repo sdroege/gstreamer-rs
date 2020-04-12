@@ -12,7 +12,6 @@ use glib::translate::*;
 use glib_sys;
 use gst;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Asset;
 use Clip;
 use Extractable;
@@ -229,7 +228,7 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-added\0".as_ptr() as *const _,
-                Some(transmute(clip_added_trampoline::<Self, F> as usize)),
+                Some(*(&clip_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -254,7 +253,7 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-removed\0".as_ptr() as *const _,
-                Some(transmute(clip_removed_trampoline::<Self, F> as usize)),
+                Some(*(&clip_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -279,9 +278,7 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_auto_transition_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_auto_transition_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -303,7 +300,7 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::priority\0".as_ptr() as *const _,
-                Some(transmute(notify_priority_trampoline::<Self, F> as usize)),
+                Some(*(&notify_priority_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

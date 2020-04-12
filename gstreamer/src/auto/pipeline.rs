@@ -10,7 +10,6 @@ use glib::translate::*;
 use glib_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Bin;
 use ChildProxy;
 use Clock;
@@ -166,9 +165,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-flush-bus\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_auto_flush_bus_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_auto_flush_bus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -193,7 +190,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::delay\0".as_ptr() as *const _,
-                Some(transmute(notify_delay_trampoline::<Self, F> as usize)),
+                Some(*(&notify_delay_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -218,7 +215,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latency\0".as_ptr() as *const _,
-                Some(transmute(notify_latency_trampoline::<Self, F> as usize)),
+                Some(*(&notify_latency_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

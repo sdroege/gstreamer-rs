@@ -14,7 +14,6 @@ use gobject_sys;
 use gst_web_rtc_sys;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use WebRTCICEComponent;
 use WebRTCICEConnectionState;
 use WebRTCICEGatheringState;
@@ -129,7 +128,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-new-candidate\0".as_ptr() as *const _,
-                Some(transmute(on_new_candidate_trampoline::<F> as usize)),
+                Some(*(&on_new_candidate_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -155,9 +154,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-selected-candidate-pair-change\0".as_ptr() as *const _,
-                Some(transmute(
-                    on_selected_candidate_pair_change_trampoline::<F> as usize,
-                )),
+                Some(*(&on_selected_candidate_pair_change_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -184,7 +181,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::gathering-state\0".as_ptr() as *const _,
-                Some(transmute(notify_gathering_state_trampoline::<F> as usize)),
+                Some(*(&notify_gathering_state_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -209,7 +206,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::state\0".as_ptr() as *const _,
-                Some(transmute(notify_state_trampoline::<F> as usize)),
+                Some(*(&notify_state_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

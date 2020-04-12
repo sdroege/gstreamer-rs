@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_rtsp_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPAuthMethod {
     None,
     Basic,
@@ -73,6 +74,7 @@ impl SetValue for RTSPAuthMethod {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPFamily {
     None,
     Inet,
@@ -133,6 +135,7 @@ impl SetValue for RTSPFamily {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPHeaderField {
     Invalid,
     Accept,
@@ -462,6 +465,7 @@ impl SetValue for RTSPHeaderField {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPMsgType {
     Invalid,
     Request,
@@ -531,6 +535,7 @@ impl SetValue for RTSPMsgType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPRangeUnit {
     Smpte,
     Smpte30Drop,
@@ -597,6 +602,7 @@ impl SetValue for RTSPRangeUnit {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPResult {
     Ok,
     Error,
@@ -702,6 +708,7 @@ impl SetValue for RTSPResult {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPState {
     Invalid,
     Init,
@@ -771,6 +778,7 @@ impl SetValue for RTSPState {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPStatusCode {
     Invalid,
     Continue,
@@ -982,6 +990,7 @@ impl SetValue for RTSPStatusCode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPTimeType {
     Seconds,
     Now,

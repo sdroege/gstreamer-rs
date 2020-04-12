@@ -11,7 +11,6 @@ use glib::translate::*;
 use glib_sys;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use RTSPFilterResult;
 use RTSPSession;
 
@@ -203,7 +202,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"session-removed\0".as_ptr() as *const _,
-                Some(transmute(session_removed_trampoline::<Self, F> as usize)),
+                Some(*(&session_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -228,9 +227,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-sessions\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_sessions_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_max_sessions_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

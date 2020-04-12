@@ -12,7 +12,6 @@ use glib_sys;
 use gst;
 use gst_gl_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use std::ptr;
 use GLContext;
 use GLDisplayType;
@@ -186,7 +185,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-context\0".as_ptr() as *const _,
-                Some(transmute(create_context_trampoline::<Self, F> as usize)),
+                Some(*(&create_context_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

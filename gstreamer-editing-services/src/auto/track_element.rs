@@ -15,7 +15,6 @@ use glib_sys;
 use gobject_sys;
 use gst;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Edge;
 use EditMode;
 use Extractable;
@@ -263,7 +262,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(*(&notify_active_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -285,7 +284,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track\0".as_ptr() as *const _,
-                Some(transmute(notify_track_trampoline::<Self, F> as usize)),
+                Some(*(&notify_track_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -307,7 +306,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-type\0".as_ptr() as *const _,
-                Some(transmute(notify_track_type_trampoline::<Self, F> as usize)),
+                Some(*(&notify_track_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

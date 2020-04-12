@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_audio_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum AudioChannelPosition {
     None,
     Mono,
@@ -193,6 +194,7 @@ impl SetValue for AudioChannelPosition {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum AudioFormat {
     Unknown,
     Encoded,
@@ -340,6 +342,7 @@ impl SetValue for AudioFormat {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum AudioLayout {
     Interleaved,
     NonInterleaved,
@@ -397,6 +400,7 @@ impl SetValue for AudioLayout {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum AudioRingBufferFormatType {
     Raw,
     MuLaw,
@@ -515,6 +519,7 @@ impl SetValue for AudioRingBufferFormatType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum StreamVolumeFormat {
     Linear,
     Cubic,

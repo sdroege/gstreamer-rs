@@ -15,7 +15,6 @@ use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Bus;
 use Device;
 use Object;
@@ -159,7 +158,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-all\0".as_ptr() as *const _,
-                Some(transmute(notify_show_all_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -11,7 +11,6 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Asset;
 use BaseEffect;
 use Container;
@@ -244,7 +243,7 @@ impl<O: IsA<Clip>> ClipExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::layer\0".as_ptr() as *const _,
-                Some(transmute(notify_layer_trampoline::<Self, F> as usize)),
+                Some(*(&notify_layer_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -269,9 +268,7 @@ impl<O: IsA<Clip>> ClipExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::supported-formats\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_supported_formats_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_supported_formats_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

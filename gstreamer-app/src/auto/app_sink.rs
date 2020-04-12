@@ -15,7 +15,6 @@ use gst;
 use gst_app_sys;
 use gst_base;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct AppSink(Object<gst_app_sys::GstAppSink, gst_app_sys::GstAppSinkClass, AppSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object, @implements gst::URIHandler;
@@ -202,7 +201,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"eos\0".as_ptr() as *const _,
-                Some(transmute(eos_trampoline::<F> as usize)),
+                Some(*(&eos_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -227,7 +226,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-list\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_list_trampoline::<F> as usize)),
+                Some(*(&notify_buffer_list_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -250,7 +249,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::caps\0".as_ptr() as *const _,
-                Some(transmute(notify_caps_trampoline::<F> as usize)),
+                Some(*(&notify_caps_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -273,7 +272,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::drop\0".as_ptr() as *const _,
-                Some(transmute(notify_drop_trampoline::<F> as usize)),
+                Some(*(&notify_drop_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -298,7 +297,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::emit-signals\0".as_ptr() as *const _,
-                Some(transmute(notify_emit_signals_trampoline::<F> as usize)),
+                Some(*(&notify_emit_signals_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -321,7 +320,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::eos\0".as_ptr() as *const _,
-                Some(transmute(notify_eos_trampoline::<F> as usize)),
+                Some(*(&notify_eos_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -346,7 +345,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-buffers\0".as_ptr() as *const _,
-                Some(transmute(notify_max_buffers_trampoline::<F> as usize)),
+                Some(*(&notify_max_buffers_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -371,7 +370,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wait-on-eos\0".as_ptr() as *const _,
-                Some(transmute(notify_wait_on_eos_trampoline::<F> as usize)),
+                Some(*(&notify_wait_on_eos_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

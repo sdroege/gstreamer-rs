@@ -14,7 +14,6 @@ use glib::Value;
 use glib_sys;
 use gobject_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Edge;
 use EditMode;
 use Extractable;
@@ -174,7 +173,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-added\0".as_ptr() as *const _,
-                Some(transmute(child_added_trampoline::<Self, F> as usize)),
+                Some(*(&child_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -202,7 +201,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-removed\0".as_ptr() as *const _,
-                Some(transmute(child_removed_trampoline::<Self, F> as usize)),
+                Some(*(&child_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -224,7 +223,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::height\0".as_ptr() as *const _,
-                Some(transmute(notify_height_trampoline::<Self, F> as usize)),
+                Some(*(&notify_height_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

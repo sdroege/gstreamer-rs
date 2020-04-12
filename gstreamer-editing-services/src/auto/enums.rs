@@ -13,6 +13,7 @@ use glib::Type;
 use gobject_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum Edge {
     EdgeStart,
     EdgeEnd,
@@ -73,6 +74,7 @@ impl SetValue for Edge {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum EditMode {
     EditNormal,
     EditRipple,

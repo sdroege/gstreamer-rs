@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_pbutils_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum DiscovererResult {
     Ok,
     UriInvalid,

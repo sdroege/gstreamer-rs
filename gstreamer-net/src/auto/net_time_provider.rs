@@ -14,7 +14,6 @@ use gobject_sys;
 use gst;
 use gst_net_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct NetTimeProvider(Object<gst_net_sys::GstNetTimeProvider, gst_net_sys::GstNetTimeProviderClass, NetTimeProviderClass>) @extends gst::Object;
@@ -137,7 +136,7 @@ impl NetTimeProvider {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<F> as usize)),
+                Some(*(&notify_active_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -162,7 +161,7 @@ impl NetTimeProvider {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::qos-dscp\0".as_ptr() as *const _,
-                Some(transmute(notify_qos_dscp_trampoline::<F> as usize)),
+                Some(*(&notify_qos_dscp_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

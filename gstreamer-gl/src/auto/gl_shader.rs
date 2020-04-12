@@ -17,7 +17,6 @@ use gobject_sys;
 use gst;
 use gst_gl_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use std::ptr;
 use GLContext;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -457,7 +456,7 @@ impl GLShader {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::linked\0".as_ptr() as *const _,
-                Some(transmute(notify_linked_trampoline::<F> as usize)),
+                Some(*(&notify_linked_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -14,7 +14,6 @@ use glib_sys;
 use gst_pbutils;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use std::ptr;
 use Asset;
 use Timeline;
@@ -260,7 +259,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-added\0".as_ptr() as *const _,
-                Some(transmute(asset_added_trampoline::<Self, F> as usize)),
+                Some(*(&asset_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -285,7 +284,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-loading\0".as_ptr() as *const _,
-                Some(transmute(asset_loading_trampoline::<Self, F> as usize)),
+                Some(*(&asset_loading_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -310,7 +309,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-removed\0".as_ptr() as *const _,
-                Some(transmute(asset_removed_trampoline::<Self, F> as usize)),
+                Some(*(&asset_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -347,9 +346,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"error-loading-asset\0".as_ptr() as *const _,
-                Some(transmute(
-                    error_loading_asset_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&error_loading_asset_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -374,7 +371,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"loaded\0".as_ptr() as *const _,
-                Some(transmute(loaded_trampoline::<Self, F> as usize)),
+                Some(*(&loaded_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -409,7 +406,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"missing-uri\0".as_ptr() as *const _,
-                Some(transmute(missing_uri_trampoline::<Self, F> as usize)),
+                Some(*(&missing_uri_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

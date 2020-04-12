@@ -16,7 +16,6 @@ use glib_sys;
 use gobject_sys;
 use gst;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Extractable;
 use Timeline;
 use TrackType;
@@ -501,7 +500,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute(notify_duration_trampoline::<Self, F> as usize)),
+                Some(*(&notify_duration_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -523,7 +522,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::in-point\0".as_ptr() as *const _,
-                Some(transmute(notify_in_point_trampoline::<Self, F> as usize)),
+                Some(*(&notify_in_point_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -548,9 +547,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-duration\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_duration_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_max_duration_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -572,7 +569,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::name\0".as_ptr() as *const _,
-                Some(transmute(notify_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -594,7 +591,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(transmute(notify_parent_trampoline::<Self, F> as usize)),
+                Some(*(&notify_parent_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -616,7 +613,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::priority\0".as_ptr() as *const _,
-                Some(transmute(notify_priority_trampoline::<Self, F> as usize)),
+                Some(*(&notify_priority_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -638,7 +635,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::serialize\0".as_ptr() as *const _,
-                Some(transmute(notify_serialize_trampoline::<Self, F> as usize)),
+                Some(*(&notify_serialize_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -660,7 +657,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::start\0".as_ptr() as *const _,
-                Some(transmute(notify_start_trampoline::<Self, F> as usize)),
+                Some(*(&notify_start_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -682,7 +679,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeline\0".as_ptr() as *const _,
-                Some(transmute(notify_timeline_trampoline::<Self, F> as usize)),
+                Some(*(&notify_timeline_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

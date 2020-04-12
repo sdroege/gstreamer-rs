@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_rtp_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTCPFBType {
     FbTypeInvalid,
     RtpfbTypeNack,
@@ -91,6 +92,7 @@ impl SetValue for RTCPFBType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTCPSDESType {
     Invalid,
     End,
@@ -172,6 +174,7 @@ impl SetValue for RTCPSDESType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTCPType {
     Invalid,
     Sr,
@@ -251,6 +254,7 @@ impl SetValue for RTCPType {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTCPXRType {
     Invalid,
     Lrle,
@@ -332,6 +336,7 @@ impl SetValue for RTCPXRType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTPPayload {
     Pcmu,
     _1016,
@@ -461,6 +466,7 @@ impl SetValue for RTPPayload {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTPProfile {
     Unknown,
     Avp,

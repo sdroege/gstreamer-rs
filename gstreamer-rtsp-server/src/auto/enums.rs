@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_rtsp_server_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPAddressPoolResult {
     Ok,
     Einval,
@@ -57,6 +58,7 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPAddressPoolResult> for RTSPAddressPool
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPFilterResult {
     Remove,
     Keep,
@@ -93,6 +95,7 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPFilterResult> for RTSPFilterResult {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPMediaStatus {
     Unprepared,
     Unpreparing,
@@ -138,6 +141,7 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPMediaStatus> for RTSPMediaStatus {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPPublishClockMode {
     None,
     Clock,
@@ -200,6 +204,7 @@ impl SetValue for RTSPPublishClockMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPSuspendMode {
     None,
     Pause,
@@ -260,6 +265,7 @@ impl SetValue for RTSPSuspendMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RTSPThreadType {
     Client,
     Media,

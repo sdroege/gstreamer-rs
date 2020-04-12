@@ -13,7 +13,6 @@ use glib_sys;
 use gobject_sys;
 use gst_web_rtc_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use WebRTCDTLSTransportState;
 use WebRTCICETransport;
 
@@ -189,7 +188,7 @@ impl WebRTCDTLSTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::certificate\0".as_ptr() as *const _,
-                Some(transmute(notify_certificate_trampoline::<F> as usize)),
+                Some(*(&notify_certificate_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -214,7 +213,7 @@ impl WebRTCDTLSTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::client\0".as_ptr() as *const _,
-                Some(transmute(notify_client_trampoline::<F> as usize)),
+                Some(*(&notify_client_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -241,9 +240,7 @@ impl WebRTCDTLSTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::remote-certificate\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_remote_certificate_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_remote_certificate_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -268,7 +265,7 @@ impl WebRTCDTLSTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::state\0".as_ptr() as *const _,
-                Some(transmute(notify_state_trampoline::<F> as usize)),
+                Some(*(&notify_state_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -295,7 +292,7 @@ impl WebRTCDTLSTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transport\0".as_ptr() as *const _,
-                Some(transmute(notify_transport_trampoline::<F> as usize)),
+                Some(*(&notify_transport_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

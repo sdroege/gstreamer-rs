@@ -13,7 +13,6 @@ use glib::GString;
 use glib_sys;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use std::ptr;
 use RTSPAuth;
 use RTSPClient;
@@ -405,7 +404,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"client-connected\0".as_ptr() as *const _,
-                Some(transmute(client_connected_trampoline::<Self, F> as usize)),
+                Some(*(&client_connected_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -430,7 +429,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::address\0".as_ptr() as *const _,
-                Some(transmute(notify_address_trampoline::<Self, F> as usize)),
+                Some(*(&notify_address_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -455,7 +454,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::backlog\0".as_ptr() as *const _,
-                Some(transmute(notify_backlog_trampoline::<Self, F> as usize)),
+                Some(*(&notify_backlog_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -480,7 +479,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bound-port\0".as_ptr() as *const _,
-                Some(transmute(notify_bound_port_trampoline::<Self, F> as usize)),
+                Some(*(&notify_bound_port_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -505,9 +504,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mount-points\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_mount_points_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_mount_points_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -532,7 +529,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::service\0".as_ptr() as *const _,
-                Some(transmute(notify_service_trampoline::<Self, F> as usize)),
+                Some(*(&notify_service_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -557,9 +554,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::session-pool\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_session_pool_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_session_pool_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

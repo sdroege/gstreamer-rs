@@ -14,7 +14,6 @@ use gobject_sys;
 use gst;
 use gst_base_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct BaseSink(Object<gst_base_sys::GstBaseSink, gst_base_sys::GstBaseSinkClass, BaseSinkClass>) @extends gst::Element, gst::Object;
@@ -453,7 +452,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::async\0".as_ptr() as *const _,
-                Some(transmute(notify_async_trampoline::<Self, F> as usize)),
+                Some(*(&notify_async_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -478,7 +477,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::blocksize\0".as_ptr() as *const _,
-                Some(transmute(notify_blocksize_trampoline::<Self, F> as usize)),
+                Some(*(&notify_blocksize_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -506,9 +505,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-last-sample\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_last_sample_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_enable_last_sample_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -533,7 +530,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::last-sample\0".as_ptr() as *const _,
-                Some(transmute(notify_last_sample_trampoline::<Self, F> as usize)),
+                Some(*(&notify_last_sample_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -558,7 +555,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-bitrate\0".as_ptr() as *const _,
-                Some(transmute(notify_max_bitrate_trampoline::<Self, F> as usize)),
+                Some(*(&notify_max_bitrate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -583,9 +580,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-lateness\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_lateness_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_max_lateness_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -614,9 +609,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::processing-deadline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_processing_deadline_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_processing_deadline_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -641,7 +634,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::qos\0".as_ptr() as *const _,
-                Some(transmute(notify_qos_trampoline::<Self, F> as usize)),
+                Some(*(&notify_qos_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -666,9 +659,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::render-delay\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_render_delay_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_render_delay_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -693,7 +684,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sync\0".as_ptr() as *const _,
-                Some(transmute(notify_sync_trampoline::<Self, F> as usize)),
+                Some(*(&notify_sync_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -718,9 +709,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::throttle-time\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_throttle_time_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_throttle_time_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -745,7 +734,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ts-offset\0".as_ptr() as *const _,
-                Some(transmute(notify_ts_offset_trampoline::<Self, F> as usize)),
+                Some(*(&notify_ts_offset_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

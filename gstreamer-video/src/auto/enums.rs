@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_video_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoAlphaMode {
     Copy,
     Set,
@@ -74,6 +75,7 @@ impl SetValue for VideoAlphaMode {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoCaptionType {
     Unknown,
     Cea608Raw,
@@ -146,6 +148,7 @@ impl SetValue for VideoCaptionType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoChromaMode {
     Full,
     UpsampleOnly,
@@ -209,6 +212,7 @@ impl SetValue for VideoChromaMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoColorMatrix {
     Unknown,
     Rgb,
@@ -281,6 +285,7 @@ impl SetValue for VideoColorMatrix {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoColorPrimaries {
     Unknown,
     Bt709,
@@ -371,6 +376,7 @@ impl SetValue for VideoColorPrimaries {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoDitherMethod {
     None,
     Verterr,
@@ -438,6 +444,7 @@ impl SetValue for VideoDitherMethod {
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoFieldOrder {
     Unknown,
     TopFieldFirst,
@@ -506,6 +513,7 @@ impl SetValue for VideoFieldOrder {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoFormat {
     Unknown,
     Encoded,
@@ -815,6 +823,7 @@ impl SetValue for VideoFormat {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoGammaMode {
     None,
     Remap,
@@ -872,6 +881,7 @@ impl SetValue for VideoGammaMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoInterlaceMode {
     Progressive,
     Interleaved,
@@ -938,6 +948,7 @@ impl SetValue for VideoInterlaceMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoMatrixMode {
     Full,
     InputOnly,
@@ -1001,6 +1012,7 @@ impl SetValue for VideoMatrixMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoMultiviewFramePacking {
     None,
     Mono,
@@ -1102,6 +1114,7 @@ impl SetValue for VideoMultiviewFramePacking {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoMultiviewMode {
     None,
     Mono,
@@ -1204,6 +1217,7 @@ impl SetValue for VideoMultiviewMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoPrimariesMode {
     None,
     MergeOnly,
@@ -1264,6 +1278,7 @@ impl SetValue for VideoPrimariesMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoResamplerMethod {
     Nearest,
     Linear,
@@ -1330,6 +1345,7 @@ impl SetValue for VideoResamplerMethod {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoTileMode {
     Unknown,
     Zflipz2x2,
@@ -1387,6 +1403,7 @@ impl SetValue for VideoTileMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoTransferFunction {
     Unknown,
     Gamma10,

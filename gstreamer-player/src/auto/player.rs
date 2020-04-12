@@ -17,7 +17,6 @@ use gst_player_sys;
 use gst_video;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use PlayerAudioInfo;
 use PlayerColorBalanceType;
 use PlayerMediaInfo;
@@ -475,7 +474,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"buffering\0".as_ptr() as *const _,
-                Some(transmute(buffering_trampoline::<F> as usize)),
+                Some(*(&buffering_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -494,7 +493,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end-of-stream\0".as_ptr() as *const _,
-                Some(transmute(end_of_stream_trampoline::<F> as usize)),
+                Some(*(&end_of_stream_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -517,7 +516,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"error\0".as_ptr() as *const _,
-                Some(transmute(error_trampoline::<F> as usize)),
+                Some(*(&error_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -542,7 +541,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"media-info-updated\0".as_ptr() as *const _,
-                Some(transmute(media_info_updated_trampoline::<F> as usize)),
+                Some(*(&media_info_updated_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -561,7 +560,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mute-changed\0".as_ptr() as *const _,
-                Some(transmute(mute_changed_trampoline::<F> as usize)),
+                Some(*(&mute_changed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -586,7 +585,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"state-changed\0".as_ptr() as *const _,
-                Some(transmute(state_changed_trampoline::<F> as usize)),
+                Some(*(&state_changed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -609,7 +608,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"uri-loaded\0".as_ptr() as *const _,
-                Some(transmute(uri_loaded_trampoline::<F> as usize)),
+                Some(*(&uri_loaded_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -635,7 +634,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"video-dimensions-changed\0".as_ptr() as *const _,
-                Some(transmute(video_dimensions_changed_trampoline::<F> as usize)),
+                Some(*(&video_dimensions_changed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -654,7 +653,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"volume-changed\0".as_ptr() as *const _,
-                Some(transmute(volume_changed_trampoline::<F> as usize)),
+                Some(*(&volume_changed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -677,7 +676,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"warning\0".as_ptr() as *const _,
-                Some(transmute(warning_trampoline::<F> as usize)),
+                Some(*(&warning_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -702,9 +701,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::audio-video-offset\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_audio_video_offset_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_audio_video_offset_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -729,9 +726,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-audio-track\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_current_audio_track_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_current_audio_track_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -758,9 +753,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-subtitle-track\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_current_subtitle_track_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_current_subtitle_track_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -785,9 +778,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-video-track\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_current_video_track_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_current_video_track_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -810,7 +801,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute(notify_duration_trampoline::<F> as usize)),
+                Some(*(&notify_duration_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -835,7 +826,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::media-info\0".as_ptr() as *const _,
-                Some(transmute(notify_media_info_trampoline::<F> as usize)),
+                Some(*(&notify_media_info_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -858,7 +849,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mute\0".as_ptr() as *const _,
-                Some(transmute(notify_mute_trampoline::<F> as usize)),
+                Some(*(&notify_mute_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -881,7 +872,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pipeline\0".as_ptr() as *const _,
-                Some(transmute(notify_pipeline_trampoline::<F> as usize)),
+                Some(*(&notify_pipeline_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -904,7 +895,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position\0".as_ptr() as *const _,
-                Some(transmute(notify_position_trampoline::<F> as usize)),
+                Some(*(&notify_position_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -927,7 +918,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::rate\0".as_ptr() as *const _,
-                Some(transmute(notify_rate_trampoline::<F> as usize)),
+                Some(*(&notify_rate_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -953,9 +944,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle-video-offset\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_subtitle_video_offset_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_subtitle_video_offset_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -978,7 +967,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::suburi\0".as_ptr() as *const _,
-                Some(transmute(notify_suburi_trampoline::<F> as usize)),
+                Some(*(&notify_suburi_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1001,7 +990,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(transmute(notify_uri_trampoline::<F> as usize)),
+                Some(*(&notify_uri_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1026,9 +1015,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-multiview-flags\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_video_multiview_flags_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_video_multiview_flags_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1053,9 +1040,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-multiview-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_video_multiview_mode_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_video_multiview_mode_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1078,7 +1063,7 @@ impl Player {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::volume\0".as_ptr() as *const _,
-                Some(transmute(notify_volume_trampoline::<F> as usize)),
+                Some(*(&notify_volume_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

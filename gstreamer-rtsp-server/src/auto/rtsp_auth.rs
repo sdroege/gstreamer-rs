@@ -18,7 +18,6 @@ use gst_rtsp_server_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use std;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use RTSPToken;
 
 glib_wrapper! {
@@ -309,7 +308,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accept-certificate\0".as_ptr() as *const _,
-                Some(transmute(accept_certificate_trampoline::<Self, F> as usize)),
+                Some(*(&accept_certificate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

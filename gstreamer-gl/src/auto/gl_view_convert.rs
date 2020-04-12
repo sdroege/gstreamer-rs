@@ -16,7 +16,6 @@ use gst;
 use gst_gl_sys;
 use gst_video;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use GLContext;
 use GLStereoDownmix;
 
@@ -251,7 +250,7 @@ impl GLViewConvert {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::downmix-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_downmix_mode_trampoline::<F> as usize)),
+                Some(*(&notify_downmix_mode_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -278,9 +277,7 @@ impl GLViewConvert {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-flags-override\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_input_flags_override_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_input_flags_override_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -307,9 +304,7 @@ impl GLViewConvert {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-mode-override\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_input_mode_override_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_input_mode_override_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -336,9 +331,7 @@ impl GLViewConvert {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::output-flags-override\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_output_flags_override_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_output_flags_override_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -365,9 +358,7 @@ impl GLViewConvert {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::output-mode-override\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_output_mode_override_trampoline::<F> as usize,
-                )),
+                Some(*(&notify_output_mode_override_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

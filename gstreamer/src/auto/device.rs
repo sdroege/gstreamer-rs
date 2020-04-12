@@ -12,7 +12,6 @@ use glib::GString;
 use glib_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use Caps;
 use Element;
 use Object;
@@ -141,7 +140,7 @@ impl<O: IsA<Device>> DeviceExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"removed\0".as_ptr() as *const _,
-                Some(transmute(removed_trampoline::<Self, F> as usize)),
+                Some(*(&removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

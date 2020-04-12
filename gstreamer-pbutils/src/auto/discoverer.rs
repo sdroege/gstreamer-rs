@@ -18,7 +18,6 @@ use gst;
 use gst_pbutils_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 use std::ptr;
 use DiscovererInfo;
 
@@ -139,7 +138,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"discovered\0".as_ptr() as *const _,
-                Some(transmute(discovered_trampoline::<F> as usize)),
+                Some(*(&discovered_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -161,7 +160,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<F> as usize)),
+                Some(*(&finished_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -186,7 +185,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"source-setup\0".as_ptr() as *const _,
-                Some(transmute(source_setup_trampoline::<F> as usize)),
+                Some(*(&source_setup_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -208,7 +207,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"starting\0".as_ptr() as *const _,
-                Some(transmute(starting_trampoline::<F> as usize)),
+                Some(*(&starting_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -234,7 +233,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-cache\0".as_ptr() as *const _,
-                Some(transmute(notify_use_cache_trampoline::<F> as usize)),
+                Some(*(&notify_use_cache_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
