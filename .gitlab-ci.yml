@@ -76,10 +76,10 @@ stages:
         cargo build --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
 
-test 1.39:
-  # 1.39 img
+test 1.40:
+  # 1.40 img
   # https://hub.docker.com/_/rust/
-  image: "rust:1.39-slim-buster"
+  image: "rust:1.40-slim-buster"
   extends: '.cargo test'
 
 test stable:
