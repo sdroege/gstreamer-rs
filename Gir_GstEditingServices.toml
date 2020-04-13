@@ -201,10 +201,6 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to unproxy asset"
 
-    [[object.function]]
-    name = "request_async"
-    ignore = true # manual skip_assert_initialized
-
 [[object]]
 name = "GES.Clip"
 status = "generate"
