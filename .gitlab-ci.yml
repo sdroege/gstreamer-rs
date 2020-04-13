@@ -191,6 +191,7 @@ gir-checks:
 outdated:
   extends: '.tarball_setup'
   image: "rust:slim-buster"
+  allow_failure: true
   stage: 'extras'
   only:
     - schedules
