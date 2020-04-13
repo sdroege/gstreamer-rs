@@ -13,6 +13,7 @@ use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Clock;
 use ClockType;
 use Object;
@@ -100,7 +101,9 @@ impl<O: IsA<SystemClock>> SystemClockExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::clock-type\0".as_ptr() as *const _,
-                Some(*(&notify_clock_type_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_clock_type_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

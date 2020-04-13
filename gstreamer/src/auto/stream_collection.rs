@@ -13,6 +13,7 @@ use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Object;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use Stream;
@@ -97,7 +98,9 @@ impl StreamCollection {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::upstream-id\0".as_ptr() as *const _,
-                Some(*(&notify_upstream_id_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_upstream_id_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

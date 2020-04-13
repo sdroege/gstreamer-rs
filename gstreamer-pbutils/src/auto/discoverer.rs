@@ -18,6 +18,7 @@ use gst;
 use gst_pbutils_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use std::ptr;
 use DiscovererInfo;
 
@@ -138,7 +139,9 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"discovered\0".as_ptr() as *const _,
-                Some(*(&discovered_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    discovered_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -160,7 +163,9 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"finished\0".as_ptr() as *const _,
-                Some(*(&finished_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    finished_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -185,7 +190,9 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"source-setup\0".as_ptr() as *const _,
-                Some(*(&source_setup_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    source_setup_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -207,7 +214,9 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"starting\0".as_ptr() as *const _,
-                Some(*(&starting_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    starting_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -233,7 +242,9 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-cache\0".as_ptr() as *const _,
-                Some(*(&notify_use_cache_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_cache_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

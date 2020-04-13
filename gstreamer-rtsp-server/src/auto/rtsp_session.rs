@@ -16,6 +16,7 @@ use gobject_sys;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem;
+use std::mem::transmute;
 use RTSPFilterResult;
 use RTSPMedia;
 use RTSPSessionMedia;
@@ -296,7 +297,9 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout\0".as_ptr() as *const _,
-                Some(*(&notify_timeout_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_timeout_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -324,9 +327,9 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout-always-visible\0".as_ptr() as *const _,
-                Some(
-                    *(&notify_timeout_always_visible_trampoline::<Self, F> as *const _ as *const _),
-                ),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_timeout_always_visible_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

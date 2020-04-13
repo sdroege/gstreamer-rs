@@ -13,6 +13,7 @@ use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Caps;
 use Object;
 use StreamFlags;
@@ -210,7 +211,9 @@ impl Stream {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::caps\0".as_ptr() as *const _,
-                Some(*(&notify_caps_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_caps_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -235,7 +238,9 @@ impl Stream {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stream-flags\0".as_ptr() as *const _,
-                Some(*(&notify_stream_flags_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_stream_flags_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -260,7 +265,9 @@ impl Stream {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stream-type\0".as_ptr() as *const _,
-                Some(*(&notify_stream_type_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_stream_type_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -283,7 +290,9 @@ impl Stream {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tags\0".as_ptr() as *const _,
-                Some(*(&notify_tags_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_tags_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

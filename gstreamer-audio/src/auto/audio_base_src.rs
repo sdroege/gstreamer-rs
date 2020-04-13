@@ -15,6 +15,7 @@ use gst;
 use gst_audio_sys;
 use gst_base;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 glib_wrapper! {
     pub struct AudioBaseSrc(Object<gst_audio_sys::GstAudioBaseSrc, gst_audio_sys::GstAudioBaseSrcClass, AudioBaseSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object;
@@ -215,7 +216,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::actual-buffer-time\0".as_ptr() as *const _,
-                Some(*(&notify_actual_buffer_time_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_actual_buffer_time_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -243,7 +246,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::actual-latency-time\0".as_ptr() as *const _,
-                Some(*(&notify_actual_latency_time_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_actual_latency_time_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -268,7 +273,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-time\0".as_ptr() as *const _,
-                Some(*(&notify_buffer_time_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_buffer_time_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -293,7 +300,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latency-time\0".as_ptr() as *const _,
-                Some(*(&notify_latency_time_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_latency_time_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -318,7 +327,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::provide-clock\0".as_ptr() as *const _,
-                Some(*(&notify_provide_clock_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_provide_clock_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -343,7 +354,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::slave-method\0".as_ptr() as *const _,
-                Some(*(&notify_slave_method_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_slave_method_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -11,6 +11,7 @@ use glib::translate::*;
 use glib_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use std::ptr;
 use Bus;
 use Caps;
@@ -676,7 +677,9 @@ impl<O: IsA<Element>> ElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"no-more-pads\0".as_ptr() as *const _,
-                Some(*(&no_more_pads_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    no_more_pads_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -704,7 +707,9 @@ impl<O: IsA<Element>> ElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pad-added\0".as_ptr() as *const _,
-                Some(*(&pad_added_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pad_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -732,7 +737,9 @@ impl<O: IsA<Element>> ElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pad-removed\0".as_ptr() as *const _,
-                Some(*(&pad_removed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pad_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

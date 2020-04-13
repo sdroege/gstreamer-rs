@@ -17,6 +17,7 @@ use gst_rtsp_server_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem;
+use std::mem::transmute;
 use RTSPAddress;
 use RTSPAddressPool;
 use RTSPFilterResult;
@@ -1098,7 +1099,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-rtcp-encoder\0".as_ptr() as *const _,
-                Some(*(&new_rtcp_encoder_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    new_rtcp_encoder_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1129,7 +1132,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-rtp-encoder\0".as_ptr() as *const _,
-                Some(*(&new_rtp_encoder_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    new_rtp_encoder_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1160,7 +1165,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-rtp-rtcp-decoder\0".as_ptr() as *const _,
-                Some(*(&new_rtp_rtcp_decoder_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    new_rtp_rtcp_decoder_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1185,7 +1192,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::control\0".as_ptr() as *const _,
-                Some(*(&notify_control_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_control_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1210,7 +1219,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::profiles\0".as_ptr() as *const _,
-                Some(*(&notify_profiles_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_profiles_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1235,7 +1246,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::protocols\0".as_ptr() as *const _,
-                Some(*(&notify_protocols_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_protocols_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

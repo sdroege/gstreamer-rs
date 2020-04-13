@@ -14,6 +14,7 @@ use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use ChildProxy;
 use Element;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -329,7 +330,9 @@ impl<O: IsA<Bin>> GstBinExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"deep-element-added\0".as_ptr() as *const _,
-                Some(*(&deep_element_added_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    deep_element_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -363,7 +366,9 @@ impl<O: IsA<Bin>> GstBinExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"deep-element-removed\0".as_ptr() as *const _,
-                Some(*(&deep_element_removed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    deep_element_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -394,7 +399,9 @@ impl<O: IsA<Bin>> GstBinExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"element-added\0".as_ptr() as *const _,
-                Some(*(&element_added_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    element_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -425,7 +432,9 @@ impl<O: IsA<Bin>> GstBinExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"element-removed\0".as_ptr() as *const _,
-                Some(*(&element_removed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    element_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -453,7 +462,9 @@ impl<O: IsA<Bin>> GstBinExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::async-handling\0".as_ptr() as *const _,
-                Some(*(&notify_async_handling_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_async_handling_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -481,7 +492,9 @@ impl<O: IsA<Bin>> GstBinExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::message-forward\0".as_ptr() as *const _,
-                Some(*(&notify_message_forward_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_message_forward_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

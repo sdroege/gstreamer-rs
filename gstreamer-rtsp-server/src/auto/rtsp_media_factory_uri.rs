@@ -14,6 +14,7 @@ use glib_sys;
 use gobject_sys;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use RTSPMediaFactory;
 
 glib_wrapper! {
@@ -124,7 +125,9 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(*(&notify_uri_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_uri_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -149,7 +152,9 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-gstpay\0".as_ptr() as *const _,
-                Some(*(&notify_use_gstpay_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_gstpay_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

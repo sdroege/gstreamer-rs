@@ -15,6 +15,7 @@ use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Caps;
 use Object;
 use Pad;
@@ -161,7 +162,9 @@ impl PadTemplate {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pad-created\0".as_ptr() as *const _,
-                Some(*(&pad_created_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pad_created_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

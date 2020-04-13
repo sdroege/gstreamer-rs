@@ -13,6 +13,7 @@ use gobject_sys;
 use gst;
 use gst_net_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 glib_wrapper! {
     pub struct PtpClock(Object<gst_net_sys::GstPtpClock, gst_net_sys::GstPtpClockClass, PtpClockClass>) @extends gst::Clock, gst::Object;
@@ -103,7 +104,9 @@ impl PtpClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::grandmaster-clock-id\0".as_ptr() as *const _,
-                Some(*(&notify_grandmaster_clock_id_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_grandmaster_clock_id_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -128,7 +131,9 @@ impl PtpClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::internal-clock\0".as_ptr() as *const _,
-                Some(*(&notify_internal_clock_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_internal_clock_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -153,7 +158,9 @@ impl PtpClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::master-clock-id\0".as_ptr() as *const _,
-                Some(*(&notify_master_clock_id_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_master_clock_id_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

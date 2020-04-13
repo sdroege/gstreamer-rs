@@ -15,6 +15,7 @@ use gobject_sys;
 use gst;
 use gst_pbutils;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use std::ptr;
 use Asset;
 use UriSourceAsset;
@@ -126,7 +127,9 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(*(&notify_duration_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_duration_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

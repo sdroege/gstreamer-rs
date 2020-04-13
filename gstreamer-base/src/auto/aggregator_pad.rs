@@ -18,6 +18,7 @@ use gst;
 use gst_base_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 glib_wrapper! {
     pub struct AggregatorPad(Object<gst_base_sys::GstAggregatorPad, gst_base_sys::GstAggregatorPadClass, AggregatorPadClass>) @extends gst::Pad, gst::Object;
@@ -164,7 +165,9 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"buffer-consumed\0".as_ptr() as *const _,
-                Some(*(&buffer_consumed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    buffer_consumed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -190,7 +193,9 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::emit-signals\0".as_ptr() as *const _,
-                Some(*(&notify_emit_signals_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_emit_signals_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

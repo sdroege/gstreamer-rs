@@ -16,6 +16,7 @@ use glib_sys;
 use gobject_sys;
 use gst;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Extractable;
 use Timeline;
 use TrackType;
@@ -500,7 +501,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(*(&notify_duration_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_duration_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -522,7 +525,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::in-point\0".as_ptr() as *const _,
-                Some(*(&notify_in_point_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_in_point_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -547,7 +552,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-duration\0".as_ptr() as *const _,
-                Some(*(&notify_max_duration_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_duration_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -569,7 +576,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::name\0".as_ptr() as *const _,
-                Some(*(&notify_name_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -591,7 +600,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(*(&notify_parent_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_parent_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -613,7 +624,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::priority\0".as_ptr() as *const _,
-                Some(*(&notify_priority_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_priority_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -635,7 +648,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::serialize\0".as_ptr() as *const _,
-                Some(*(&notify_serialize_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_serialize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -657,7 +672,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::start\0".as_ptr() as *const _,
-                Some(*(&notify_start_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_start_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -679,7 +696,9 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeline\0".as_ptr() as *const _,
-                Some(*(&notify_timeline_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_timeline_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

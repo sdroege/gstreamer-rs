@@ -12,6 +12,7 @@ use glib_sys;
 use gst_sys;
 use std;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Object;
 use Plugin;
 use PluginFeature;
@@ -232,7 +233,9 @@ impl Registry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"feature-added\0".as_ptr() as *const _,
-                Some(*(&feature_added_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    feature_added_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -257,7 +260,9 @@ impl Registry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"plugin-added\0".as_ptr() as *const _,
-                Some(*(&plugin_added_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    plugin_added_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

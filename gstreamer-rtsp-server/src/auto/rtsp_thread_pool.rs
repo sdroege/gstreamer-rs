@@ -10,6 +10,7 @@ use glib::translate::*;
 use glib_sys;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use RTSPContext;
 use RTSPThread;
 use RTSPThreadType;
@@ -107,7 +108,9 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-threads\0".as_ptr() as *const _,
-                Some(*(&notify_max_threads_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_threads_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

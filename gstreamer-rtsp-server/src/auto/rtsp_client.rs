@@ -17,6 +17,7 @@ use gst_rtsp_server_sys;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use gst_rtsp_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use RTSPAuth;
 use RTSPContext;
 use RTSPFilterResult;
@@ -447,7 +448,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"announce-request\0".as_ptr() as *const _,
-                Some(*(&announce_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    announce_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -472,7 +475,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"closed\0".as_ptr() as *const _,
-                Some(*(&closed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    closed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -503,7 +508,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"describe-request\0".as_ptr() as *const _,
-                Some(*(&describe_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    describe_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -534,7 +541,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"get-parameter-request\0".as_ptr() as *const _,
-                Some(*(&get_parameter_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    get_parameter_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -565,7 +574,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"handle-response\0".as_ptr() as *const _,
-                Some(*(&handle_response_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    handle_response_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -596,7 +607,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-session\0".as_ptr() as *const _,
-                Some(*(&new_session_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    new_session_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -627,7 +640,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"options-request\0".as_ptr() as *const _,
-                Some(*(&options_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    options_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -658,7 +673,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pause-request\0".as_ptr() as *const _,
-                Some(*(&pause_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pause_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -689,7 +706,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"play-request\0".as_ptr() as *const _,
-                Some(*(&play_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    play_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -725,7 +744,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-announce-request\0".as_ptr() as *const _,
-                Some(*(&pre_announce_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_announce_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -761,7 +782,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-describe-request\0".as_ptr() as *const _,
-                Some(*(&pre_describe_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_describe_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -797,7 +820,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-get-parameter-request\0".as_ptr() as *const _,
-                Some(*(&pre_get_parameter_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_get_parameter_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -833,7 +858,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-options-request\0".as_ptr() as *const _,
-                Some(*(&pre_options_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_options_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -869,7 +896,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-pause-request\0".as_ptr() as *const _,
-                Some(*(&pre_pause_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_pause_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -905,7 +934,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-play-request\0".as_ptr() as *const _,
-                Some(*(&pre_play_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_play_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -941,7 +972,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-record-request\0".as_ptr() as *const _,
-                Some(*(&pre_record_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_record_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -977,7 +1010,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-set-parameter-request\0".as_ptr() as *const _,
-                Some(*(&pre_set_parameter_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_set_parameter_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1013,7 +1048,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-setup-request\0".as_ptr() as *const _,
-                Some(*(&pre_setup_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_setup_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1049,7 +1086,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pre-teardown-request\0".as_ptr() as *const _,
-                Some(*(&pre_teardown_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pre_teardown_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1080,7 +1119,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"record-request\0".as_ptr() as *const _,
-                Some(*(&record_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    record_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1115,7 +1156,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"set-parameter-request\0".as_ptr() as *const _,
-                Some(*(&set_parameter_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    set_parameter_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1146,7 +1189,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"setup-request\0".as_ptr() as *const _,
-                Some(*(&setup_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    setup_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1177,7 +1222,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"teardown-request\0".as_ptr() as *const _,
-                Some(*(&teardown_request_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    teardown_request_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1202,7 +1249,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::drop-backlog\0".as_ptr() as *const _,
-                Some(*(&notify_drop_backlog_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_drop_backlog_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1227,7 +1276,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mount-points\0".as_ptr() as *const _,
-                Some(*(&notify_mount_points_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mount_points_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1252,7 +1303,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::session-pool\0".as_ptr() as *const _,
-                Some(*(&notify_session_pool_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_session_pool_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

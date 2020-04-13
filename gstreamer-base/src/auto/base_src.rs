@@ -15,6 +15,7 @@ use gobject_sys;
 use gst;
 use gst_base_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 glib_wrapper! {
     pub struct BaseSrc(Object<gst_base_sys::GstBaseSrc, gst_base_sys::GstBaseSrcClass, BaseSrcClass>) @extends gst::Element, gst::Object;
@@ -273,7 +274,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::blocksize\0".as_ptr() as *const _,
-                Some(*(&notify_blocksize_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_blocksize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -298,7 +301,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::do-timestamp\0".as_ptr() as *const _,
-                Some(*(&notify_do_timestamp_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_do_timestamp_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -323,7 +328,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::num-buffers\0".as_ptr() as *const _,
-                Some(*(&notify_num_buffers_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_num_buffers_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -348,7 +355,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::typefind\0".as_ptr() as *const _,
-                Some(*(&notify_typefind_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_typefind_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

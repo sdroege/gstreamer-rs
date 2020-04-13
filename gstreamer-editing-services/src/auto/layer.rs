@@ -12,6 +12,7 @@ use glib::translate::*;
 use glib_sys;
 use gst;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Asset;
 use Clip;
 use Extractable;
@@ -228,7 +229,9 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-added\0".as_ptr() as *const _,
-                Some(*(&clip_added_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    clip_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -253,7 +256,9 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-removed\0".as_ptr() as *const _,
-                Some(*(&clip_removed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    clip_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -278,7 +283,9 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(*(&notify_auto_transition_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_auto_transition_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -300,7 +307,9 @@ impl<O: IsA<Layer>> LayerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::priority\0".as_ptr() as *const _,
-                Some(*(&notify_priority_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_priority_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

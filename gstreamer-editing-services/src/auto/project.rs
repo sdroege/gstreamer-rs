@@ -14,6 +14,7 @@ use glib_sys;
 use gst_pbutils;
 use libc;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use std::ptr;
 use Asset;
 use Timeline;
@@ -259,7 +260,9 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-added\0".as_ptr() as *const _,
-                Some(*(&asset_added_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    asset_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -284,7 +287,9 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-loading\0".as_ptr() as *const _,
-                Some(*(&asset_loading_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    asset_loading_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -309,7 +314,9 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-removed\0".as_ptr() as *const _,
-                Some(*(&asset_removed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    asset_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -346,7 +353,9 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"error-loading-asset\0".as_ptr() as *const _,
-                Some(*(&error_loading_asset_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    error_loading_asset_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -371,7 +380,9 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"loaded\0".as_ptr() as *const _,
-                Some(*(&loaded_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    loaded_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -406,7 +417,9 @@ impl<O: IsA<Project>> ProjectExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"missing-uri\0".as_ptr() as *const _,
-                Some(*(&missing_uri_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    missing_uri_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -14,6 +14,7 @@ use gobject_sys;
 use gst;
 use gst_gl_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use GLContext;
 
 glib_wrapper! {
@@ -84,7 +85,9 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::context\0".as_ptr() as *const _,
-                Some(*(&notify_context_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_context_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

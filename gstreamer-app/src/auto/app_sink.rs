@@ -15,6 +15,7 @@ use gst;
 use gst_app_sys;
 use gst_base;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 glib_wrapper! {
     pub struct AppSink(Object<gst_app_sys::GstAppSink, gst_app_sys::GstAppSinkClass, AppSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object, @implements gst::URIHandler;
@@ -201,7 +202,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"eos\0".as_ptr() as *const _,
-                Some(*(&eos_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    eos_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -226,7 +229,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-list\0".as_ptr() as *const _,
-                Some(*(&notify_buffer_list_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_buffer_list_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -249,7 +254,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::caps\0".as_ptr() as *const _,
-                Some(*(&notify_caps_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_caps_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -272,7 +279,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::drop\0".as_ptr() as *const _,
-                Some(*(&notify_drop_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_drop_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -297,7 +306,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::emit-signals\0".as_ptr() as *const _,
-                Some(*(&notify_emit_signals_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_emit_signals_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -320,7 +331,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::eos\0".as_ptr() as *const _,
-                Some(*(&notify_eos_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_eos_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -345,7 +358,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-buffers\0".as_ptr() as *const _,
-                Some(*(&notify_max_buffers_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_buffers_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -370,7 +385,9 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wait-on-eos\0".as_ptr() as *const _,
-                Some(*(&notify_wait_on_eos_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wait_on_eos_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
