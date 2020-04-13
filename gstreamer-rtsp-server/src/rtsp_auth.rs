@@ -6,6 +6,7 @@ use glib::translate::*;
 use gst_rtsp_server_sys;
 
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 use RTSPAuth;
 use RTSPToken;
@@ -58,7 +59,9 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExtManual for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accept-certificate\0".as_ptr() as *const _,
-                Some(*(&accept_certificate_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    accept_certificate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

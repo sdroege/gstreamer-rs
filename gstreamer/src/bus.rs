@@ -16,6 +16,7 @@ use glib_sys;
 use glib_sys::{gboolean, gpointer};
 use gst_sys;
 use std::cell::RefCell;
+use std::mem::transmute;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
@@ -93,7 +94,10 @@ impl Bus {
             let source = gst_sys::gst_bus_create_watch(self.to_glib_none().0);
             glib_sys::g_source_set_callback(
                 source,
-                Some(*(&trampoline_watch::<F> as *const _ as *const _)),
+                Some(transmute::<
+                    _,
+                    unsafe extern "C" fn(glib_sys::gpointer) -> i32,
+                >(trampoline_watch::<F> as *const ())),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );

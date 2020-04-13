@@ -22,6 +22,7 @@ use glib::GString;
 use gst_sys;
 
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use std::path;
 
 pub trait GstBinExtManual: 'static {
@@ -98,7 +99,9 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"do-latency\0".as_ptr() as *const _,
-                Some(*(&do_latency_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    do_latency_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

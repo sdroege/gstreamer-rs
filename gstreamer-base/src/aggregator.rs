@@ -19,6 +19,8 @@ use gst_base_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::mem;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use std::mem::transmute;
 use std::ptr;
 use Aggregator;
 
@@ -100,7 +102,9 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-upstream-latency\0".as_ptr() as *const _,
-                Some(*(&notify_min_upstream_latency_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_upstream_latency_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

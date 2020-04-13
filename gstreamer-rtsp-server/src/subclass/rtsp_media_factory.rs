@@ -16,6 +16,8 @@ use glib::subclass::prelude::*;
 use RTSPMediaFactory;
 use RTSPMediaFactoryClass;
 
+use std::mem::transmute;
+
 pub trait RTSPMediaFactoryImpl:
     RTSPMediaFactoryImplExt + ObjectImpl + Send + Sync + 'static
 {
@@ -290,7 +292,9 @@ where
         media as *mut _,
         PIPELINE_QUARK.to_glib(),
         pipeline as *mut _,
-        Some(*(&gobject_sys::g_object_unref as *const _ as *const _)),
+        Some(transmute::<_, unsafe extern "C" fn(glib_sys::gpointer)>(
+            gobject_sys::g_object_unref as *const (),
+        )),
     );
 
     pipeline as *mut _
