@@ -1,49 +1,117 @@
+# We use https://gitlab.freedesktop.org/freedesktop/ci-templates
+# to build the images used by the ci.
+#
+# Here is how to properly update thoses image:
+# - new Rust stable version: update FDO_DISTRIBUTION_TAG
+# - add dependencies: update FDO_DISTRIBUTION_PACKAGES and update FDO_DISTRIBUTION_TAG
+# - update GStreamer version: update the tag in ci/install-gst.sh and update FDO_DISTRIBUTION_TAG
+#
+# Updating FDO_DISTRIBUTION_TAG is done by either:
+# - setting it to the current date and the version suffix to 0
+# - incrementing the version suffix
+#
+# After each update commit your changes and push to your personnal repo.
+# After review and ci approval merge the branch as usual.
+#
+# Updating the nightly image should be done by simply running a scheduled ci
+# pipeline on the upstream repo with the $UPDATE_NIGHTLY variable defined.
+
+.templates_sha: &templates_sha acda94e139030dc2caa058118956225e55bbec5f
+
+include:
+  - project: 'freedesktop/ci-templates'
+    ref: *templates_sha
+    file: '/templates/debian.yml'
+
+variables:
+  FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
+
 stages:
+  - "prep"
   - "lint"
   - "test"
   - "extras"
 
-.tarball_setup:
+.debian:10:
   variables:
+    FDO_DISTRIBUTION_VERSION: 10
+    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-16.0'
     # Only stuff inside the repo directory can be cached
     # Override the CARGO_HOME variable to force its location
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
-    DEPENDENCIES: |
-      curl
-      liborc-0.4-dev
-      libglib2.0-dev
-      libxml2-dev
-      libgtk-3-dev
-      libegl1-mesa
-      libgles2-mesa
-      libgl1-mesa-dri
-      libgl1-mesa-glx
-      libwayland-egl1-mesa
-      xz-utils
-      libssl-dev
-      git
   before_script:
-    - apt-get update -yqq
-    - apt-get install -yqq --no-install-recommends $DEPENDENCIES
+    - source ./ci/env.sh
 
-    - mkdir -p precompiled-gst && cd precompiled-gst
+.debian:10-stable:
+  extends: .debian:10
+  variables:
+    RUST_VERSION: "stable"
 
-    - curl -L https://people.freedesktop.org/~slomo/gstreamer-1.16.1.tar.xz | tar xJ
-    - sed -i "s;prefix=/root/gstreamer;prefix=$PWD/gstreamer;g" $PWD/gstreamer/lib/x86_64-linux-gnu/pkgconfig/*.pc
-    - export PKG_CONFIG_PATH=$PWD/gstreamer/lib/x86_64-linux-gnu/pkgconfig
-    - export GST_PLUGIN_SYSTEM_PATH=$PWD/gstreamer/lib/x86_64-linux-gnu/gstreamer-1.0
-    - export GST_PLUGIN_SCANNER=$PWD/gstreamer/libexec/gstreamer-1.0/gst-plugin-scanner
-    - export PATH=$PATH:$PWD/gstreamer/bin
-    - export LD_LIBRARY_PATH=$PWD/gstreamer/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+.debian:10-1-40:
+  extends: .debian:10
+  variables:
+    RUST_VERSION: "1.40.0"
 
-    - cd "${CI_PROJECT_DIR}"
+.debian:10-nightly:
+  extends: .debian:10
+  variables:
+    RUST_VERSION: "nightly"
+
+.build-debian-container:
+  extends:
+  - .fdo.container-build@debian
+  stage: prep
+  variables:
+    FDO_DISTRIBUTION_PACKAGES: "build-essential curl liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates"
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && bash ci/install-rust.sh $RUST_VERSION'
+
+build-stable:
+  extends:
+    - .build-debian-container
+    - .debian:10-stable
+
+build-1-40:
+  extends:
+    - .build-debian-container
+    - .debian:10-1-40
+
+build-nightly:
+  extends:
+    - .build-debian-container
+    - .debian:10-nightly
+
+update-nightly:
+  extends: build-nightly
+  only:
+    variables:
+      - $UPDATE_NIGHTLY == "1"
+  variables:
+      FDO_FORCE_REBUILD: 1
+
+.dist-debian-container:
+  extends:
+  - .fdo.distribution-image@debian
   cache:
     key: "gst"
     paths:
       - "${CARGO_HOME}"
 
+.img-stable:
+  extends:
+    - .dist-debian-container
+    - .debian:10-stable
+
+.img-1-40:
+  extends:
+    - .dist-debian-container
+    - .debian:10-1-40
+
+.img-nightly:
+  extends:
+    - .dist-debian-container
+    - .debian:10-nightly
+
 .cargo test:
-  extends: '.tarball_setup'
   stage: "test"
   script:
     - rustc --version
@@ -77,55 +145,47 @@ stages:
       fi
 
 test 1.40:
-  # 1.40 img
-  # https://hub.docker.com/_/rust/
-  image: "rust:1.40-slim-buster"
-  extends: '.cargo test'
+  extends:
+    - '.cargo test'
+    - .img-1-40
 
 test stable:
-  # Stable img
-  # https://hub.docker.com/_/rust/
-  image: "rust:slim-buster"
-  extends: '.cargo test'
+  extends:
+    - '.cargo test'
+    - .img-stable
 
 test stable all-features:
-  # Stable img
-  # https://hub.docker.com/_/rust/
-  image: "rust:slim-buster"
   variables:
     ALL_FEATURES: 'yes'
-  extends: '.cargo test'
+  extends:
+    - '.cargo test'
+    - .img-stable
 
 test nightly:
-  # Nightly
-  # https://hub.docker.com/r/rustlang/rust/
-  image: "rustlang/rust:nightly-buster-slim"
   allow_failure: true
-  extends: '.cargo test'
+  extends:
+    - '.cargo test'
+    - .img-nightly
 
 test nightly all-features:
-  # Nightly
-  # https://hub.docker.com/r/rustlang/rust/
-  image: "rustlang/rust:nightly-buster-slim"
   allow_failure: true
   variables:
     ALL_FEATURES: 'yes'
-  extends: '.cargo test'
+  extends:
+    - '.cargo test'
+    - .img-nightly
 
 rustfmt:
-  image: "rust:slim-buster"
+  extends: .img-stable
   stage: "lint"
   script:
-    - rustup component add rustfmt
     - cargo fmt --version
     - cargo fmt -- --color=always --check
 
 clippy:
-  extends: '.tarball_setup'
-  image: "rust:slim-buster"
+  extends: .img-stable
   stage: 'extras'
   script:
-    - rustup component add clippy-preview
     - cargo clippy --version
       # Keep features in sync with above
     - |
@@ -146,18 +206,15 @@ clippy:
       cargo clippy --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
 
 audit:
-  extends: '.tarball_setup'
-  image: "rust:slim-buster"
+  extends: .img-stable
   stage: 'extras'
   only:
     - schedules
   script:
-    - cargo install --force cargo-audit
     - cargo audit --deny-warnings
 
 gir-checks:
-  extends: '.tarball_setup'
-  image: "rust:slim-buster"
+  extends: .img-stable
   stage: 'extras'
   script:
     - git clone https://github.com/gtk-rs/checker
@@ -189,12 +246,10 @@ gir-checks:
       done
 
 outdated:
-  extends: '.tarball_setup'
-  image: "rust:slim-buster"
+  extends: .img-stable
   allow_failure: true
   stage: 'extras'
   only:
     - schedules
   script:
-    - cargo install --force --git https://github.com/kbknapp/cargo-outdated
     - cargo outdated --root-deps-only --exit-code 1 -v
