@@ -6,7 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib::object::IsA;
 use glib::translate::*;
 use gst_sys;
 use Stream;
@@ -68,27 +67,52 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+#[derive(Debug, Clone)]
+pub struct StreamCollectionBuilder(StreamCollection);
+
+impl StreamCollectionBuilder {
+    pub fn stream(self, stream: &Stream) -> Self {
+        unsafe {
+            gst_sys::gst_stream_collection_add_stream(
+                (self.0).to_glib_none().0,
+                stream.to_glib_full(),
+            );
+        }
+
+        self
+    }
+
+    pub fn streams<S: AsRef<Stream>>(self, streams: &[S]) -> Self {
+        for stream in streams {
+            unsafe {
+                gst_sys::gst_stream_collection_add_stream(
+                    (self.0).to_glib_none().0,
+                    stream.as_ref().to_glib_full(),
+                );
+            }
+        }
+
+        self
+    }
+
+    pub fn build(self) -> StreamCollection {
+        self.0
+    }
+}
+
 impl StreamCollection {
-    pub fn new(upstream_id: Option<&str>) -> StreamCollection {
+    pub fn new(upstream_id: Option<&str>) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         let upstream_id = upstream_id.to_glib_none();
         let (major, minor, _, _) = ::version();
-        if (major, minor) > (1, 12) {
+        let collection = if (major, minor) > (1, 12) {
             unsafe { from_glib_full(gst_sys::gst_stream_collection_new(upstream_id.0)) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
             unsafe { from_glib_none(gst_sys::gst_stream_collection_new(upstream_id.0)) }
-        }
-    }
+        };
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn add_stream<P: IsA<Stream>>(&self, stream: &P) {
-        unsafe {
-            gst_sys::gst_stream_collection_add_stream(
-                self.to_glib_none().0,
-                stream.as_ref().to_glib_full(),
-            );
-        }
+        StreamCollectionBuilder(collection)
     }
 
     pub fn iter(&self) -> Iter {
