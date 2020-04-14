@@ -204,7 +204,7 @@ impl ValidVideoTimeCode {
     pub fn add_interval(
         &self,
         tc_inter: &VideoTimeCodeInterval,
-    ) -> Result<VideoTimeCode, glib::error::BoolError> {
+    ) -> Result<ValidVideoTimeCode, glib::error::BoolError> {
         unsafe {
             match from_glib_full(gst_video_sys::gst_video_time_code_add_interval(
                 self.to_glib_none().0,
