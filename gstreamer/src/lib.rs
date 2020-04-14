@@ -249,7 +249,7 @@ pub use tag_setter::TagSetterExtManual;
 mod plugin;
 pub use plugin::GstPluginExtManual;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-mod stream;
+pub mod stream;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub mod stream_collection;
 

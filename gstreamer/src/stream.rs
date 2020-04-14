@@ -8,13 +8,13 @@
 
 use glib::translate::*;
 use gst_sys;
+use std::fmt;
 use Caps;
 use Stream;
 use StreamFlags;
 use StreamType;
 
 impl Stream {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new(
         stream_id: Option<&str>,
         caps: Option<&Caps>,
@@ -46,5 +46,23 @@ impl Stream {
                 ))
             }
         }
+    }
+
+    pub fn debug(&self) -> Debug {
+        Debug(self)
+    }
+}
+
+pub struct Debug<'a>(&'a Stream);
+
+impl<'a> fmt::Debug for Debug<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Stream")
+            .field("stream_id", &self.0.get_stream_id())
+            .field("stream_type", &self.0.get_stream_type())
+            .field("stream_flags", &self.0.get_stream_flags())
+            .field("caps", &self.0.get_caps())
+            .field("tags", &self.0.get_tags())
+            .finish()
     }
 }

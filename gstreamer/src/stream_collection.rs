@@ -8,6 +8,7 @@
 
 use glib::translate::*;
 use gst_sys;
+use std::fmt;
 use Stream;
 use StreamCollection;
 
@@ -125,5 +126,35 @@ impl StreamCollection {
 
     pub fn is_empty(&self) -> bool {
         self.len() == 0
+    }
+
+    pub fn debug(&self) -> Debug {
+        Debug(self)
+    }
+}
+
+pub struct Debug<'a>(&'a StreamCollection);
+
+impl<'a> fmt::Debug for Debug<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        struct Streams<'a>(&'a StreamCollection);
+
+        impl<'a> fmt::Debug for Streams<'a> {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                let mut f = f.debug_list();
+
+                for stream in self.0.iter() {
+                    f.entry(&stream.debug());
+                }
+
+                f.finish()
+            }
+        }
+
+        let streams = Streams(self.0);
+
+        f.debug_struct("StreamCollection")
+            .field("streams", &streams)
+            .finish()
     }
 }
