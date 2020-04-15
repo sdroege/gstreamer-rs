@@ -35,7 +35,7 @@ stages:
 .debian:10:
   variables:
     FDO_DISTRIBUTION_VERSION: 10
-    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-16.0'
+    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-16.1'
     # Only stuff inside the repo directory can be cached
     # Override the CARGO_HOME variable to force its location
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
@@ -62,7 +62,7 @@ stages:
   - .fdo.container-build@debian
   stage: prep
   variables:
-    FDO_DISTRIBUTION_PACKAGES: "build-essential curl liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates"
+    FDO_DISTRIBUTION_PACKAGES: "build-essential curl liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev"
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && bash ci/install-rust.sh $RUST_VERSION'
 
 build-stable:
