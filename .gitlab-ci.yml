@@ -217,7 +217,7 @@ gir-checks:
   extends: .img-stable
   stage: 'extras'
   script:
-    - git clone https://github.com/gtk-rs/checker
+    - git clone --depth 1 https://github.com/gtk-rs/checker
     - cd checker && echo '[workspace]' >> Cargo.toml
     - cargo build --release
     - |
