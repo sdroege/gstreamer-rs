@@ -2,22 +2,30 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::object::ObjectType as ObjectType_;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::signal::connect_raw;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::GString;
-use glib::StaticType;
-use glib::Value;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib_sys;
-use gobject_sys;
 use gst_sys;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use std::boxed::Box as Box_;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use std::mem::transmute;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use Caps;
 use Object;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use StreamFlags;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use StreamType;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use TagList;
 
 glib_wrapper! {
@@ -82,118 +90,7 @@ impl Stream {
         }
     }
 
-    pub fn get_property_caps(&self) -> Option<Caps> {
-        unsafe {
-            let mut value = Value::from_type(<Caps as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"caps\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `caps` getter")
-        }
-    }
-
-    pub fn set_property_caps(&self, caps: Option<&Caps>) {
-        unsafe {
-            gobject_sys::g_object_set_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"caps\0".as_ptr() as *const _,
-                Value::from(caps).to_glib_none().0,
-            );
-        }
-    }
-
-    pub fn get_property_stream_flags(&self) -> StreamFlags {
-        unsafe {
-            let mut value = Value::from_type(<StreamFlags as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"stream-flags\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `stream-flags` getter")
-                .unwrap()
-        }
-    }
-
-    pub fn set_property_stream_flags(&self, stream_flags: StreamFlags) {
-        unsafe {
-            gobject_sys::g_object_set_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"stream-flags\0".as_ptr() as *const _,
-                Value::from(&stream_flags).to_glib_none().0,
-            );
-        }
-    }
-
-    pub fn get_property_stream_id(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"stream-id\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `stream-id` getter")
-        }
-    }
-
-    pub fn get_property_stream_type(&self) -> StreamType {
-        unsafe {
-            let mut value = Value::from_type(<StreamType as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"stream-type\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `stream-type` getter")
-                .unwrap()
-        }
-    }
-
-    pub fn set_property_stream_type(&self, stream_type: StreamType) {
-        unsafe {
-            gobject_sys::g_object_set_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"stream-type\0".as_ptr() as *const _,
-                Value::from(&stream_type).to_glib_none().0,
-            );
-        }
-    }
-
-    pub fn get_property_tags(&self) -> Option<TagList> {
-        unsafe {
-            let mut value = Value::from_type(<TagList as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"tags\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `tags` getter")
-        }
-    }
-
-    pub fn set_property_tags(&self, tags: Option<&TagList>) {
-        unsafe {
-            gobject_sys::g_object_set_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"tags\0".as_ptr() as *const _,
-                Value::from(tags).to_glib_none().0,
-            );
-        }
-    }
-
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn connect_property_caps_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -219,6 +116,7 @@ impl Stream {
         }
     }
 
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn connect_property_stream_flags_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -246,6 +144,7 @@ impl Stream {
         }
     }
 
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn connect_property_stream_type_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -273,6 +172,7 @@ impl Stream {
         }
     }
 
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn connect_property_tags_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,

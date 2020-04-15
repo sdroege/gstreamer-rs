@@ -966,6 +966,26 @@ final_type = true
     # Work-around for 1.14 switch from transfer-floating to transfer-full
     ignore = true
 
+    [[object.property]]
+    name = "caps"
+    version = "1.10"
+
+    [[object.property]]
+    name = "stream-flags"
+    version = "1.10"
+
+    [[object.property]]
+    name = "stream-id"
+    version = "1.10"
+
+    [[object.property]]
+    name = "stream-type"
+    version = "1.10"
+
+    [[object.property]]
+    name = "tags"
+    version = "1.10"
+
 [[object]]
 name = "Gst.StreamCollection"
 status = "generate"
@@ -979,6 +999,11 @@ final_type = true
     name = "add_stream"
     # Ignore return value which is always `true`
     ignore = true
+
+    [[object.property]]
+    name = "upstream-id"
+    version = "1.10"
+    generate = ["get"]
 
 [[object]]
 name = "Gst.Plugin"
