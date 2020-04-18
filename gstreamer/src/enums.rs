@@ -12,6 +12,8 @@ use std::{cmp, ops};
 use ClockReturn;
 use FlowReturn;
 use PadLinkReturn;
+use State;
+use StateChange;
 use StateChangeReturn;
 
 use glib::translate::*;
@@ -677,5 +679,57 @@ impl<'a> FromValue<'a> for MessageType {
 impl SetValue for MessageType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+impl State {
+    pub fn next(self, pending: Self) -> Self {
+        let current = self.to_glib();
+        let pending = pending.to_glib();
+
+        let sign = (pending - current).signum();
+
+        from_glib(current + sign)
+    }
+}
+
+impl StateChange {
+    pub fn new(current: State, next: State) -> Self {
+        skip_assert_initialized!();
+        let current = current.to_glib();
+        let next = next.to_glib();
+        from_glib((current << 3) | next)
+    }
+
+    pub fn current(self) -> State {
+        match self {
+            StateChange::NullToReady => State::Null,
+            StateChange::ReadyToPaused => State::Ready,
+            StateChange::PausedToPlaying => State::Paused,
+            StateChange::PlayingToPaused => State::Playing,
+            StateChange::PausedToReady => State::Paused,
+            StateChange::ReadyToNull => State::Ready,
+            StateChange::NullToNull => State::Null,
+            StateChange::ReadyToReady => State::Ready,
+            StateChange::PausedToPaused => State::Paused,
+            StateChange::PlayingToPlaying => State::Playing,
+            StateChange::__Unknown(value) => State::__Unknown(value >> 3),
+        }
+    }
+
+    pub fn next(self) -> State {
+        match self {
+            StateChange::NullToReady => State::Ready,
+            StateChange::ReadyToPaused => State::Paused,
+            StateChange::PausedToPlaying => State::Playing,
+            StateChange::PlayingToPaused => State::Paused,
+            StateChange::PausedToReady => State::Ready,
+            StateChange::ReadyToNull => State::Null,
+            StateChange::NullToNull => State::Null,
+            StateChange::ReadyToReady => State::Ready,
+            StateChange::PausedToPaused => State::Paused,
+            StateChange::PlayingToPlaying => State::Playing,
+            StateChange::__Unknown(value) => State::__Unknown(value & 0x7),
+        }
     }
 }
