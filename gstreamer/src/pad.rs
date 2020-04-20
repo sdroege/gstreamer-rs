@@ -1397,8 +1397,6 @@ unsafe extern "C" fn trampoline_getrange_function<
 where
     T: IsA<Pad>,
 {
-    use std::ops::DerefMut;
-
     let func: &F = &*((*pad).getrangedata as *const F);
 
     assert!(!buffer.is_null());
@@ -1417,7 +1415,7 @@ where
             .as_ref()
             .as_ref(),
         offset,
-        passed_buffer.as_mut().map(|b| b.deref_mut()),
+        passed_buffer.as_deref_mut(),
         length,
     ) {
         Ok(PadGetRangeSuccess::NewBuffer(new_buffer)) => {

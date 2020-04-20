@@ -771,8 +771,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    use std::ops::DerefMut;
-
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
@@ -787,12 +785,7 @@ where
     };
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match imp.create(
-            &wrap,
-            offset,
-            buffer.as_mut().map(|b| b.deref_mut()),
-            length,
-        ) {
+        match imp.create(&wrap, offset, buffer.as_deref_mut(), length) {
             Ok(CreateSuccess::NewBuffer(new_buffer)) => {
                 if let Some(passed_buffer) = buffer {
                     if passed_buffer.as_ptr() != new_buffer.as_ptr() {
