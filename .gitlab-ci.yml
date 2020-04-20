@@ -95,6 +95,8 @@ update-nightly:
     key: "gst"
     paths:
       - "${CARGO_HOME}"
+  after_script:
+    - rm -rf target
 
 .img-stable:
   extends:
