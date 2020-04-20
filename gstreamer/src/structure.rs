@@ -115,6 +115,26 @@ impl Structure {
 
         ptr
     }
+
+    #[allow(clippy::should_implement_trait)]
+    pub fn from_iter<'a, 'b, I>(name: &str, iter: I) -> Structure
+    where
+        I: IntoIterator<Item = (&'a str, &'b SendValue)>,
+    {
+        assert_initialized_main_thread!();
+        let mut structure = Structure::new_empty(name);
+
+        iter.into_iter().for_each(|(f, v)| unsafe {
+            let mut value = v.clone().into_raw();
+            gst_sys::gst_structure_take_value(
+                &mut structure.0.as_mut().0,
+                f.to_glib_none().0,
+                &mut value,
+            );
+        });
+
+        structure
+    }
 }
 
 impl Deref for Structure {
@@ -835,5 +855,23 @@ mod tests {
         assert!(a.get::<Structure>().unwrap().is_none());
         let b = glib::value::Value::from(&Structure::from_str(&"foo").unwrap());
         assert!(b.get::<Structure>().unwrap().is_some());
+    }
+
+    #[test]
+    fn test_new_from_iter() {
+        ::init().unwrap();
+
+        let s = Structure::builder("test")
+            .field("f1", &"abc")
+            .field("f2", &String::from("bcd"))
+            .field("f3", &123i32)
+            .build();
+
+        let s2 = Structure::from_iter(s.get_name(), s.iter().filter(|(f, _)| *f == "f1"));
+
+        assert_eq!(s2.get_name(), "test");
+        assert_eq!(s2.get::<&str>("f1"), Ok(Some("abc")));
+        assert!(s2.get::<&str>("f2").is_err());
+        assert!(s2.get::<&str>("f3").is_err());
     }
 }
