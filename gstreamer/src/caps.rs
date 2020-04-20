@@ -70,6 +70,36 @@ impl Caps {
         caps
     }
 
+    #[allow(clippy::should_implement_trait)]
+    pub fn from_iter<'a, I>(iter: I) -> Self
+    where
+        I: IntoIterator<Item = &'a StructureRef>,
+    {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        iter.into_iter()
+            .for_each(|s| caps.get_mut().unwrap().append_structure(s.to_owned()));
+
+        caps
+    }
+
+    pub fn from_iter_with_features<'a, 'b, I>(iter: I) -> Self
+    where
+        I: IntoIterator<Item = (&'a StructureRef, &'b CapsFeaturesRef)>,
+    {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
+
+        iter.into_iter().for_each(|(s, f)| {
+            caps.get_mut()
+                .unwrap()
+                .append_structure_full(s.to_owned(), Some(f.to_owned()))
+        });
+
+        caps
+    }
+
     pub fn fixate(&mut self) {
         skip_assert_initialized!();
         unsafe {
@@ -862,5 +892,24 @@ mod tests {
             .structure(Structure::builder("audio/x-raw").build())
             .build();
         assert_eq!(caps.to_string(), "audio/x-raw(ANY)");
+    }
+
+    #[test]
+    fn test_new_from_iter() {
+        ::init().unwrap();
+
+        let caps = Caps::builder_full_with_any_features()
+            .structure(Structure::builder("audio/x-raw").build())
+            .structure(Structure::builder("video/x-raw").build())
+            .build();
+
+        let audio = Caps::from_iter(caps.iter().filter(|s| s.get_name() == "audio/x-raw"));
+        assert_eq!(audio.to_string(), "audio/x-raw");
+
+        let audio = Caps::from_iter_with_features(
+            caps.iter_with_features()
+                .filter(|(s, _)| s.get_name() == "audio/x-raw"),
+        );
+        assert_eq!(audio.to_string(), "audio/x-raw(ANY)");
     }
 }
