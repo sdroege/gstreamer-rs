@@ -19,7 +19,12 @@ fn print_caps(caps: &gst::Caps, prefix: &str) {
     for structure in caps.iter() {
         println!("{}{}", prefix, structure.get_name());
         for (field, value) in structure.iter() {
-            println!("{}  {}:{:?}", prefix, field, value);
+            println!(
+                "{}  {}:{}",
+                prefix,
+                field,
+                value.serialize().unwrap().as_str()
+            );
         }
     }
 }
