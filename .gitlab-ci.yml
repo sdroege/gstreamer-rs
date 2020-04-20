@@ -41,6 +41,7 @@ stages:
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
   before_script:
     - source ./ci/env.sh
+    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
 
 .debian:10-stable:
   extends: .debian:10
