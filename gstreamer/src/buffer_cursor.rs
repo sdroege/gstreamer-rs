@@ -437,6 +437,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(clippy::cognitive_complexity)]
     fn test_buffer_cursor() {
         use std::io::{self, Read, Seek, Write};
 
@@ -528,6 +529,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::cognitive_complexity)]
     fn test_buffer_cursor_ref() {
         use std::io::{self, Read, Seek, Write};
 

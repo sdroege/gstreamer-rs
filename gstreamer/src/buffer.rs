@@ -1118,6 +1118,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::cognitive_complexity)]
     fn test_memories() {
         ::init().unwrap();
 
