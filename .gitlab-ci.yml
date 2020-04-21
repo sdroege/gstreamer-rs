@@ -35,7 +35,7 @@ stages:
 .debian:10:
   variables:
     FDO_DISTRIBUTION_VERSION: 10
-    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-16.2'
+    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-21.1'
     # Only stuff inside the repo directory can be cached
     # Override the CARGO_HOME variable to force its location
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"

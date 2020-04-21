@@ -1,4 +1,5 @@
 source ./ci/env.sh
+export CARGO_HOME='/usr/local/cargo'
 
 RUSTUP_VERSION=1.21.1
 RUST_VERSION=$1
