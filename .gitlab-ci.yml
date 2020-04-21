@@ -1,12 +1,13 @@
 # We use https://gitlab.freedesktop.org/freedesktop/ci-templates
 # to build the images used by the ci.
 #
-# Here is how to properly update thoses image:
-# - new Rust stable version: update FDO_DISTRIBUTION_TAG
-# - add dependencies: update FDO_DISTRIBUTION_PACKAGES and update FDO_DISTRIBUTION_TAG
-# - update GStreamer version: update the tag in ci/install-gst.sh and update FDO_DISTRIBUTION_TAG
+# Here is how to properly update thoses images:
+# - new Rust stable version: update GST_RS_IMG_TAG
+# - add dependencies: update FDO_DISTRIBUTION_PACKAGES and update GST_RS_IMG_TAG
+# - update GStreamer version: update the tag in ci/install-gst.sh and update GST_RS_IMG_TAG
 #
-# Updating FDO_DISTRIBUTION_TAG is done by either:
+# GST_RS_IMG_TAG is defined in ci/images_template.yml and should be updated
+# either by:
 # - setting it to the current date and the version suffix to 0
 # - incrementing the version suffix
 #
@@ -23,6 +24,8 @@ include:
     ref: *templates_sha
     file: '/templates/debian.yml'
 
+  - local: "ci/images_template.yml"
+
 variables:
   FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
 
@@ -35,7 +38,7 @@ stages:
 .debian:10:
   variables:
     FDO_DISTRIBUTION_VERSION: 10
-    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-2020-04-24.0'
+    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-$GST_RS_IMG_TAG'
     # Only stuff inside the repo directory can be cached
     # Override the CARGO_HOME variable to force its location
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
