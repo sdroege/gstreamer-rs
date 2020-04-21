@@ -201,12 +201,12 @@ clippy:
           FEATURES=v1_16
         fi
 
-        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
+        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
       done
     # And also run over all the examples/tutorials
     - |
-      cargo clippy --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
-      cargo clippy --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc
+      cargo clippy --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
+      cargo clippy --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
 
 deny:
   extends: .img-stable
