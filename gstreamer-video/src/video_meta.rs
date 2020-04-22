@@ -210,6 +210,7 @@ impl VideoCaptionMeta {
         data: &[u8],
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
+        assert!(!data.is_empty());
         unsafe {
             let meta = gst_video_sys::gst_buffer_add_video_caption_meta(
                 buffer.as_mut_ptr(),
