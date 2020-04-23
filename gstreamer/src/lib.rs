@@ -206,7 +206,6 @@ mod object;
 mod pad;
 mod parse_context;
 mod proxy_pad;
-pub use proxy_pad::ProxyPadExtManual;
 mod tag_setter;
 pub use bin::GstBinExtManual;
 pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
@@ -368,7 +367,6 @@ pub mod prelude {
     pub use pipeline::GstPipelineExtManual;
     pub use plugin::GstPluginExtManual;
     pub use plugin_feature::PluginFeatureExtManual;
-    pub use proxy_pad::ProxyPadExtManual;
     pub use tag_setter::TagSetterExtManual;
     pub use typefind::TypeFindImpl;
     pub use value::GstValueExt;

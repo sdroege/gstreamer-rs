@@ -21,42 +21,16 @@ use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
 
 use gst_sys;
 
-pub trait ProxyPadExtManual: 'static {
-    fn proxy_pad_chain_default<P: IsA<Object>>(
-        &self,
-        parent: Option<&P>,
-        buffer: Buffer,
-    ) -> Result<FlowSuccess, FlowError>;
-
-    fn proxy_pad_chain_list_default<P: IsA<Object>>(
-        &self,
-        parent: Option<&P>,
-        list: BufferList,
-    ) -> Result<FlowSuccess, FlowError>;
-
-    fn proxy_pad_getrange_default<P: IsA<Object>>(
-        &self,
-        parent: Option<&P>,
-        offset: u64,
-        size: u32,
-    ) -> Result<Buffer, FlowError>;
-
-    fn proxy_pad_iterate_internal_links_default<P: IsA<Object>>(
-        &self,
-        parent: Option<&P>,
-    ) -> Option<::Iterator<Pad>>;
-}
-
-impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
-    fn proxy_pad_chain_default<P: IsA<Object>>(
-        &self,
+impl ProxyPad {
+    pub fn chain_default<O: IsA<ProxyPad>, P: IsA<Object>>(
+        pad: &O,
         parent: Option<&P>,
         buffer: Buffer,
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
         let ret: FlowReturn = unsafe {
             from_glib(gst_sys::gst_proxy_pad_chain_default(
-                self.as_ptr() as *mut gst_sys::GstPad,
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -64,15 +38,15 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
         ret.into_result()
     }
 
-    fn proxy_pad_chain_list_default<P: IsA<Object>>(
-        &self,
+    pub fn chain_list_default<O: IsA<ProxyPad>, P: IsA<Object>>(
+        pad: &O,
         parent: Option<&P>,
         list: BufferList,
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
         let ret: FlowReturn = unsafe {
             from_glib(gst_sys::gst_proxy_pad_chain_list_default(
-                self.as_ptr() as *mut gst_sys::GstPad,
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 list.into_ptr(),
             ))
@@ -80,8 +54,8 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
         ret.into_result()
     }
 
-    fn proxy_pad_getrange_default<P: IsA<Object>>(
-        &self,
+    pub fn getrange_default<O: IsA<ProxyPad>, P: IsA<Object>>(
+        pad: &O,
         parent: Option<&P>,
         offset: u64,
         size: u32,
@@ -90,7 +64,7 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
         unsafe {
             let mut buffer = ptr::null_mut();
             let ret: FlowReturn = from_glib(gst_sys::gst_proxy_pad_getrange_default(
-                self.as_ptr() as *mut gst_sys::GstPad,
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 offset,
                 size,
@@ -100,14 +74,14 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
         }
     }
 
-    fn proxy_pad_iterate_internal_links_default<P: IsA<Object>>(
-        &self,
+    pub fn iterate_internal_links_default<O: IsA<ProxyPad>, P: IsA<Object>>(
+        pad: &O,
         parent: Option<&P>,
     ) -> Option<::Iterator<Pad>> {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(gst_sys::gst_proxy_pad_iterate_internal_links_default(
-                self.as_ptr() as *mut gst_sys::GstPad,
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
