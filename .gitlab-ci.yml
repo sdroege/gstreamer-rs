@@ -136,7 +136,7 @@ update-nightly:
     - |
       if [[ x"$IMAGE_PIPELINE_ID" == x"$CI_PIPELINE_ID" ]]; then
         echo "Image has been updated, notify gst-plugins-rs"
-        curl -X POST -F "token=$GST_PLUGINS_RS_TOKEN" -F "ref=fdo-template" -F "variables[UPDATE_IMG]=$UPDATE_IMG" https://gitlab.freedesktop.org/api/v4/projects/1400/trigger/pipeline
+        curl -X POST -F "token=$GST_PLUGINS_RS_TOKEN" -F "ref=master" -F "variables[UPDATE_IMG]=$UPDATE_IMG" https://gitlab.freedesktop.org/api/v4/projects/1400/trigger/pipeline
       else
         echo "Image has not been updated, ignore"
       fi
