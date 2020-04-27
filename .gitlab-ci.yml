@@ -4,6 +4,7 @@ include:
 stages:
   - "lint"
   - "test"
+  - "extras"
 
 .base:
   image: "registry.freedesktop.org/gstreamer/gstreamer-rs/debian/10:$RUST_VERSION-$GST_RS_IMG_TAG"
@@ -92,3 +93,12 @@ rustfmt:
   script:
     - cargo fmt --version
     - cargo fmt -- --color=always --check
+
+outdated:
+  extends: .img-stable
+  allow_failure: true
+  stage: 'extras'
+  only:
+    - schedules
+  script:
+    - cargo outdated --root-deps-only --exit-code 1 -v
