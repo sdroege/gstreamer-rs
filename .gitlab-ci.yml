@@ -102,3 +102,11 @@ outdated:
     - schedules
   script:
     - cargo outdated --root-deps-only --exit-code 1 -v
+
+deny:
+  extends: .img-stable
+  stage: 'extras'
+  only:
+    - schedules
+  script:
+    - cargo deny check
