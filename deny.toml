@@ -23,7 +23,7 @@ allow-osi-fsf-free = "either"
 confidence-threshold = 0.8
 
 [bans]
-multiple-versions = "warn"
+multiple-versions = "deny"
 highlight = "all"
 
 # ignore duplicated deps because of outdated glutin
