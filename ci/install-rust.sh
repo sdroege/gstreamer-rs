@@ -22,5 +22,4 @@ if [ "$RUST_VERSION" = "stable" ]; then
   rustup component add rustfmt
   cargo install --force cargo-deny
   cargo install --force --git https://github.com/kbknapp/cargo-outdated
-  cargo install --force cargo-audit
 fi
