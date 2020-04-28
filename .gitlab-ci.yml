@@ -30,7 +30,8 @@ variables:
   FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
 
 stages:
-  - "prep"
+  - "container-base"
+  - "container-final"
   - "lint"
   - "test"
   - "extras"
@@ -47,6 +48,11 @@ stages:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
 
+.debian:10-base:
+  extends: .debian:10
+  variables:
+    FDO_DISTRIBUTION_TAG: 'base-$GST_RS_IMG_TAG'
+
 .debian:10-stable:
   extends: .debian:10
   variables:
@@ -62,27 +68,40 @@ stages:
   variables:
     RUST_VERSION: "nightly"
 
-.build-debian-container:
+.build-base-image:
   extends:
   - .fdo.container-build@debian
-  stage: prep
+  stage: container-base
   variables:
     FDO_DISTRIBUTION_PACKAGES: "build-essential curl liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev"
-    FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && bash ci/install-rust.sh $RUST_VERSION'
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh'
+
+.build-final-image:
+  extends:
+  - .fdo.container-build@debian
+  stage: container-final
+  variables:
+    FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/10:base-$GST_RS_IMG_TAG'
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $RUST_VERSION'
+
+build-base:
+  extends:
+    - .build-base-image
+    - .debian:10-base
 
 build-stable:
   extends:
-    - .build-debian-container
+    - .build-final-image
     - .debian:10-stable
 
 build-1-40:
   extends:
-    - .build-debian-container
+    - .build-final-image
     - .debian:10-1-40
 
 build-nightly:
   extends:
-    - .build-debian-container
+    - .build-final-image
     - .debian:10-nightly
 
 update-nightly:
