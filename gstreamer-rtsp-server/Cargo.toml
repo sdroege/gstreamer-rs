@@ -8,7 +8,7 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 license = "MIT/Apache-2.0"
 readme = "README.md"
 homepage = "https://gstreamer.freedesktop.org"
-documentation = "https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_rtsp_server"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_rtsp_server/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "build.rs"
 
