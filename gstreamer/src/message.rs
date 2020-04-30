@@ -1281,7 +1281,7 @@ macro_rules! message_builder_generic_impl {
         pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
             Self {
                 builder: self.builder.src(src),
-                .. self
+                ..self
             }
         }
 
@@ -1289,7 +1289,7 @@ macro_rules! message_builder_generic_impl {
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
                 builder: self.builder.seqnum(seqnum),
-                .. self
+                ..self
             }
         }
 
@@ -1298,7 +1298,7 @@ macro_rules! message_builder_generic_impl {
         pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
-                .. self
+                ..self
             }
         }
 
@@ -1329,7 +1329,7 @@ macro_rules! message_builder_generic_impl {
                 from_glib_full(msg)
             }
         }
-    }
+    };
 }
 
 pub struct EosBuilder<'a> {

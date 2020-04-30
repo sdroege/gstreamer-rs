@@ -29,23 +29,26 @@ macro_rules! event_builder_generic_impl {
         pub fn seqnum(self, seqnum: gst::Seqnum) -> Self {
             Self {
                 seqnum: Some(seqnum),
-                .. self
+                ..self
             }
         }
 
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
             Self {
                 running_time_offset: Some(running_time_offset),
-                .. self
+                ..self
             }
         }
 
         pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
             Self {
-                other_fields: self.other_fields.iter().cloned()
+                other_fields: self
+                    .other_fields
+                    .iter()
+                    .cloned()
                     .chain(other_fields.iter().cloned())
                     .collect(),
-                .. self
+                ..self
             }
         }
 
@@ -63,7 +66,7 @@ macro_rules! event_builder_generic_impl {
 
                 {
                     let s = gst::StructureRef::from_glib_borrow_mut(
-                        gst_sys::gst_event_writable_structure(event)
+                        gst_sys::gst_event_writable_structure(event),
                     );
 
                     for (k, v) in self.other_fields {
@@ -74,7 +77,7 @@ macro_rules! event_builder_generic_impl {
                 from_glib_full(event)
             }
         }
-    }
+    };
 }
 
 pub fn new_downstream_force_key_unit_event<'a>() -> DownstreamForceKeyUnitEventBuilder<'a> {

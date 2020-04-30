@@ -975,7 +975,7 @@ macro_rules! event_builder_generic_impl {
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
                 builder: self.builder.seqnum(seqnum),
-                .. self
+                ..self
             }
         }
 
@@ -983,7 +983,7 @@ macro_rules! event_builder_generic_impl {
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
             Self {
                 builder: self.builder.running_time_offset(running_time_offset),
-                .. self
+                ..self
             }
         }
 
@@ -991,7 +991,7 @@ macro_rules! event_builder_generic_impl {
         pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
-                .. self
+                ..self
             }
         }
 
@@ -1009,7 +1009,7 @@ macro_rules! event_builder_generic_impl {
 
                 if !self.builder.other_fields.is_empty() {
                     let s = StructureRef::from_glib_borrow_mut(
-                        gst_sys::gst_event_writable_structure(event)
+                        gst_sys::gst_event_writable_structure(event),
                     );
 
                     for (k, v) in self.builder.other_fields {
@@ -1020,7 +1020,7 @@ macro_rules! event_builder_generic_impl {
                 from_glib_full(event)
             }
         }
-    }
+    };
 }
 
 pub struct FlushStartBuilder<'a> {
