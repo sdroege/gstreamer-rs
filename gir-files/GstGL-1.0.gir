@@ -3095,63 +3095,8 @@ through the provided API</doc>
         </array>
       </field>
     </record>
-    <class name="GLDisplayEGLDevice" c:symbol-prefix="gl_display_egl_device" c:type="GstGLDisplayEGLDevice" version="1.18" parent="GLDisplay" glib:type-name="GstGLDisplayEGLDevice" glib:get-type="gst_gl_display_egl_device_get_type" glib:type-struct="GLDisplayEGLDeviceClass">
-      <doc xml:space="preserve">the contents of a #GstGLDisplayEGLDevice are private and should only be accessed
-through the provided API</doc>
-      
-      <constructor name="new" c:identifier="gst_gl_display_egl_device_new" version="1.18">
-        <doc xml:space="preserve">Create a new #GstGLDisplayEGLDevice with an EGLDevice supported device</doc>
-        
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstGLDisplayEGLDevice or %NULL</doc>
-          <type name="GLDisplayEGLDevice" c:type="GstGLDisplayEGLDevice*"/>
-        </return-value>
-        <parameters>
-          <parameter name="device_index" transfer-ownership="none">
-            <doc xml:space="preserve">the index of device to use</doc>
-            <type name="guint" c:type="guint"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <constructor name="new_with_egl_device" c:identifier="gst_gl_display_egl_device_new_with_egl_device" version="1.18">
-        <doc xml:space="preserve">Creates a new #GstGLDisplayEGLDevice with EGLDeviceEXT .
-The @device must be created using EGLDevice enumeration.</doc>
-        
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstGLDisplayEGLDevice</doc>
-          <type name="GLDisplayEGLDevice" c:type="GstGLDisplayEGLDevice*"/>
-        </return-value>
-        <parameters>
-          <parameter name="device" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">an existing EGLDeviceEXT</doc>
-            <type name="gpointer" c:type="gpointer"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <field name="parent">
-        <type name="GLDisplay" c:type="GstGLDisplay"/>
-      </field>
-      <field name="device">
-        <type name="gpointer" c:type="gpointer"/>
-      </field>
-      <field name="_padding">
-        <array zero-terminated="0" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </class>
-    <record name="GLDisplayEGLDeviceClass" c:type="GstGLDisplayEGLDeviceClass" glib:is-gtype-struct-for="GLDisplayEGLDevice" version="1.18">
-      <doc xml:space="preserve">Opaque #GstGLDisplayEGLDeviceClass struct</doc>
-      
-      <field name="object_class">
-        <type name="GLDisplayClass" c:type="GstGLDisplayClass"/>
-      </field>
-      <field name="_padding">
-        <array zero-terminated="0" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </record>
+    
+    
     <record name="GLDisplayPrivate" c:type="GstGLDisplayPrivate" disguised="1">
       
     </record>

@@ -43,7 +43,9 @@ xmlstarlet ed --pf --inplace \
 	   --delete '//_:record[@name="GLMemoryEGLAllocator"]' \
 	   --delete '//_:record[@name="GLMemoryEGLAllocatorClass"]' \
 	   --delete '//_:record[@name="EGLImage"]' \
+	   --delete '//_:record[@name="GLDisplayEGLDeviceClass"]' \
 	   --delete '//_:class[@name="GLMemoryEGLAllocator"]' \
+	   --delete '//_:class[@name="GLDisplayEGLDevice"]' \
 	   --delete '//_:callback[@name="EGLImageDestroyNotify"]' \
 	   --delete '//_:constant[@name="GL_MEMORY_EGL_ALLOCATOR_NAME"]' \
 	   --delete '//_:function[starts-with(@name, "egl")]' \
