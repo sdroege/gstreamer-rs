@@ -9,6 +9,7 @@ work_mode = "sys"
 ignore = [
     "GstGL.GL_DISPLAY_EGL_NAME",
     "GstGL.GL_COLOR_CONVERT_VIDEO_CAPS",
+    "GstGL.GL_COLOR_CONVERT_FORMATS",
 ]
 
 external_libraries = [
