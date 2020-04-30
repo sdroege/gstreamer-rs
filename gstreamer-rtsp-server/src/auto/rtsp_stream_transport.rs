@@ -47,12 +47,12 @@ pub trait RTSPStreamTransportExt: 'static {
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool;
+    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool;
 
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool;
+    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool;
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
@@ -140,7 +140,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     }
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool {
+    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_send_rtcp_list() }
     //}
 
@@ -157,7 +157,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     }
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool {
+    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_send_rtp_list() }
     //}
 

@@ -55,6 +55,9 @@ pub trait GLWindowExt: 'static {
 
     fn handle_events(&self, handle_events: bool);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn has_output_surface(&self) -> bool;
+
     fn queue_resize(&self);
 
     fn quit(&self);
@@ -66,6 +69,8 @@ pub trait GLWindowExt: 'static {
     fn send_key_event(&self, event_type: &str, key_str: &str);
 
     fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64);
+
+    fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64);
 
     fn set_preferred_size(&self, width: i32, height: i32);
 
@@ -85,6 +90,12 @@ pub trait GLWindowExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -138,6 +149,15 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn has_output_surface(&self) -> bool {
+        unsafe {
+            from_glib(gst_gl_sys::gst_gl_window_has_output_surface(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn queue_resize(&self) {
         unsafe {
             gst_gl_sys::gst_gl_window_queue_resize(self.as_ref().to_glib_none().0);
@@ -180,6 +200,18 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
                 button,
                 posx,
                 posy,
+            );
+        }
+    }
+
+    fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64) {
+        unsafe {
+            gst_gl_sys::gst_gl_window_send_scroll_event(
+                self.as_ref().to_glib_none().0,
+                posx,
+                posy,
+                delta_x,
+                delta_y,
             );
         }
     }
@@ -289,6 +321,46 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
                 b"mouse-event\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     mouse_event_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn scroll_event_trampoline<
+            P,
+            F: Fn(&P, f64, f64, f64, f64) + Send + Sync + 'static,
+        >(
+            this: *mut gst_gl_sys::GstGLWindow,
+            x: libc::c_double,
+            y: libc::c_double,
+            delta_x: libc::c_double,
+            delta_y: libc::c_double,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<GLWindow>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
+                x,
+                y,
+                delta_x,
+                delta_y,
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"scroll-event\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    scroll_event_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

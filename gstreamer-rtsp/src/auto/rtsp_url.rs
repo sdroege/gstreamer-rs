@@ -36,6 +36,15 @@ impl RTSPUrl {
         }
     }
 
+    pub fn get_request_uri_with_control(&self, control_path: &str) -> Option<GString> {
+        unsafe {
+            from_glib_full(gst_rtsp_sys::gst_rtsp_url_get_request_uri_with_control(
+                self.to_glib_none().0,
+                control_path.to_glib_none().0,
+            ))
+        }
+    }
+
     pub fn set_port(&mut self, port: u16) -> RTSPResult {
         unsafe {
             from_glib(gst_rtsp_sys::gst_rtsp_url_set_port(

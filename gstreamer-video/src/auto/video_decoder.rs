@@ -3,10 +3,28 @@
 // DO NOT EDIT
 
 use glib;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib::object::Cast;
 use glib::object::IsA;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib::signal::connect_raw;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib::StaticType;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib::Value;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib_sys;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use gobject_sys;
 use gst;
 use gst_video_sys;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use std::boxed::Box as Box_;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use std::mem::transmute;
 use VideoCodecFrame;
 
 glib_wrapper! {
@@ -56,6 +74,18 @@ pub trait VideoDecoderExt: 'static {
     fn set_packetized(&self, packetized: bool);
 
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_property_qos(&self) -> bool;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_property_qos(&self, qos: bool);
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
@@ -188,6 +218,61 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
                 self.as_ref().to_glib_none().0,
                 use_.to_glib(),
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_property_qos(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"qos\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `qos` getter")
+                .unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_property_qos(&self, qos: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"qos\0".as_ptr() as *const _,
+                Value::from(&qos).to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_video_sys::GstVideoDecoder,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<VideoDecoder>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::qos\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_qos_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

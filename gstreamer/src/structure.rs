@@ -28,9 +28,6 @@ use glib_sys::gpointer;
 use gobject_sys;
 use gst_sys;
 
-/// An error returned from the [`get`](struct.StructureRef.html#method.get)
-/// or [`get_some`](struct.StructureRef.html#method.get_some) functions
-/// on a [`StructureRef`](struct.StructureRef.html)
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum GetError<'name> {
     FieldNotFound {

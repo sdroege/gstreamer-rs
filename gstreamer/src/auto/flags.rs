@@ -992,6 +992,8 @@ bitflags! {
         const SNAP_NEAREST = 96;
         const TRICKMODE_KEY_UNITS = 128;
         const TRICKMODE_NO_AUDIO = 256;
+        const TRICKMODE_FORWARD_PREDICTED = 512;
+        const INSTANT_RATE_CHANGE = 1024;
     }
 }
 
@@ -1045,6 +1047,7 @@ bitflags! {
         const SKIP = 16;
         const SEGMENT = 8;
         const TRICKMODE_KEY_UNITS = 128;
+        const TRICKMODE_FORWARD_PREDICTED = 512;
         const TRICKMODE_NO_AUDIO = 256;
     }
 }
@@ -1093,6 +1096,7 @@ impl SetValue for SegmentFlags {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 bitflags! {
     pub struct StackTraceFlags: u32 {
+        const NONE = 0;
         const FULL = 1;
     }
 }

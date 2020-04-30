@@ -110,6 +110,12 @@ pub trait RTSPStreamExt: 'static {
 
     fn get_publish_clock_mode(&self) -> RTSPPublishClockMode;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rate_control(&self) -> bool;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rates(&self) -> Option<(f64, f64)>;
+
     fn get_retransmission_pt(&self) -> u32;
 
     fn get_retransmission_time(&self) -> gst::ClockTime;
@@ -241,6 +247,9 @@ pub trait RTSPStreamExt: 'static {
     fn set_pt_map(&self, pt: u32, caps: &gst::Caps);
 
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode);
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_rate_control(&self, enabled: bool);
 
     fn set_retransmission_pt(&self, rtx_pt: u32);
 
@@ -463,6 +472,35 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_get_publish_clock_mode(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rate_control(&self) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_stream_get_rate_control(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rates(&self) -> Option<(f64, f64)> {
+        unsafe {
+            let mut rate = mem::MaybeUninit::uninit();
+            let mut applied_rate = mem::MaybeUninit::uninit();
+            let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_stream_get_rates(
+                self.as_ref().to_glib_none().0,
+                rate.as_mut_ptr(),
+                applied_rate.as_mut_ptr(),
+            ));
+            let rate = rate.assume_init();
+            let applied_rate = applied_rate.assume_init();
+            if ret {
+                Some((rate, applied_rate))
+            } else {
+                None
+            }
         }
     }
 
@@ -944,6 +982,16 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             gst_rtsp_server_sys::gst_rtsp_stream_set_publish_clock_mode(
                 self.as_ref().to_glib_none().0,
                 mode.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_rate_control(&self, enabled: bool) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_stream_set_rate_control(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
             );
         }
     }

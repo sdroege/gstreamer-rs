@@ -83,9 +83,18 @@ pub trait RTSPSessionExt: 'static {
 
     fn touch(&self);
 
+    fn get_property_extra_timeout(&self) -> u32;
+
+    fn set_property_extra_timeout(&self, extra_timeout: u32);
+
     fn get_property_timeout_always_visible(&self) -> bool;
 
     fn set_property_timeout_always_visible(&self, timeout_always_visible: bool);
+
+    fn connect_property_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -253,6 +262,31 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
+    fn get_property_extra_timeout(&self) -> u32 {
+        unsafe {
+            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"extra-timeout\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `extra-timeout` getter")
+                .unwrap()
+        }
+    }
+
+    fn set_property_extra_timeout(&self, extra_timeout: u32) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"extra-timeout\0".as_ptr() as *const _,
+                Value::from(&extra_timeout).to_glib_none().0,
+            );
+        }
+    }
+
     fn get_property_timeout_always_visible(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -275,6 +309,33 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
                 b"timeout-always-visible\0".as_ptr() as *const _,
                 Value::from(&timeout_always_visible).to_glib_none().0,
             );
+        }
+    }
+
+    fn connect_property_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_extra_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPSession,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPSession>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::extra-timeout\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_extra_timeout_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

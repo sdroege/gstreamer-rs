@@ -43,6 +43,9 @@ pub trait BaseSrcExt: 'static {
 
     fn is_live(&self) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn negotiate(&self) -> bool;
+
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
 
     fn set_async(&self, async: bool);
@@ -126,6 +129,15 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn is_live(&self) -> bool {
         unsafe {
             from_glib(gst_base_sys::gst_base_src_is_live(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn negotiate(&self) -> bool {
+        unsafe {
+            from_glib(gst_base_sys::gst_base_src_negotiate(
                 self.as_ref().to_glib_none().0,
             ))
         }

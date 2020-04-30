@@ -41,6 +41,9 @@ pub trait BaseTransformExt: 'static {
 
     fn is_qos_enabled(&self) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn reconfigure(&self) -> bool;
+
     fn reconfigure_sink(&self);
 
     fn reconfigure_src(&self);
@@ -101,6 +104,15 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
     fn is_qos_enabled(&self) -> bool {
         unsafe {
             from_glib(gst_base_sys::gst_base_transform_is_qos_enabled(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn reconfigure(&self) -> bool {
+        unsafe {
+            from_glib(gst_base_sys::gst_base_transform_reconfigure(
                 self.as_ref().to_glib_none().0,
             ))
         }

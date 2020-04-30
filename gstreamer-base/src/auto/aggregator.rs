@@ -39,6 +39,9 @@ pub trait AggregatorExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_latency(&self) -> gst::ClockTime;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn negotiate(&self) -> bool;
+
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
@@ -47,6 +50,9 @@ pub trait AggregatorExt: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn simple_get_next_time(&self) -> gst::ClockTime;
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn update_segment(&self, segment: /*Ignored*/&mut gst::Segment);
 
     fn get_property_start_time(&self) -> u64;
 
@@ -88,6 +94,15 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn negotiate(&self) -> bool {
+        unsafe {
+            from_glib(gst_base_sys::gst_aggregator_negotiate(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
         unsafe {
@@ -117,6 +132,11 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             ))
         }
     }
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn update_segment(&self, segment: /*Ignored*/&mut gst::Segment) {
+    //    unsafe { TODO: call gst_base_sys:gst_aggregator_update_segment() }
+    //}
 
     fn get_property_start_time(&self) -> u64 {
         unsafe {

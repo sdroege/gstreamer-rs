@@ -210,6 +210,15 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
     }
 }
 
+//#[cfg(any(feature = "v1_18", feature = "dox"))]
+//pub fn tracing_get_active_tracers() -> /*Ignored*/Vec<Tracer> {
+//    unsafe { TODO: call gst_sys:gst_tracing_get_active_tracers() }
+//}
+
+//pub fn tracing_register_hook<P: FnOnce() + Send + Sync + 'static>(tracer: /*Ignored*/&Tracer, detail: &str, func: P) {
+//    unsafe { TODO: call gst_sys:gst_tracing_register_hook() }
+//}
+
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {

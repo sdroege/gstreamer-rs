@@ -31,7 +31,6 @@ pub trait UnixBusExtManual: 'static {
 }
 
 impl UnixBusExtManual for Bus {
-    /// This is supported on **Unix** only.
     fn get_pollfd(&self) -> unix::io::RawFd {
         #[cfg(unix)]
         unsafe {

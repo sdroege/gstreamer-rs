@@ -338,6 +338,7 @@ pub enum ClockType {
     Realtime,
     Monotonic,
     Other,
+    Tai,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -351,6 +352,7 @@ impl ToGlib for ClockType {
             ClockType::Realtime => gst_sys::GST_CLOCK_TYPE_REALTIME,
             ClockType::Monotonic => gst_sys::GST_CLOCK_TYPE_MONOTONIC,
             ClockType::Other => gst_sys::GST_CLOCK_TYPE_OTHER,
+            ClockType::Tai => gst_sys::GST_CLOCK_TYPE_TAI,
             ClockType::__Unknown(value) => value,
         }
     }
@@ -364,6 +366,7 @@ impl FromGlib<gst_sys::GstClockType> for ClockType {
             0 => ClockType::Realtime,
             1 => ClockType::Monotonic,
             2 => ClockType::Other,
+            3 => ClockType::Tai,
             value => ClockType::__Unknown(value),
         }
     }
@@ -624,6 +627,7 @@ pub enum EventType {
     Protection,
     SegmentDone,
     Gap,
+    InstantRateChange,
     Qos,
     Seek,
     Navigation,
@@ -632,6 +636,7 @@ pub enum EventType {
     Reconfigure,
     TocSelect,
     SelectStreams,
+    InstantRateSyncTime,
     CustomUpstream,
     CustomDownstream,
     CustomDownstreamOob,
@@ -664,6 +669,7 @@ impl ToGlib for EventType {
             EventType::Protection => gst_sys::GST_EVENT_PROTECTION,
             EventType::SegmentDone => gst_sys::GST_EVENT_SEGMENT_DONE,
             EventType::Gap => gst_sys::GST_EVENT_GAP,
+            EventType::InstantRateChange => gst_sys::GST_EVENT_INSTANT_RATE_CHANGE,
             EventType::Qos => gst_sys::GST_EVENT_QOS,
             EventType::Seek => gst_sys::GST_EVENT_SEEK,
             EventType::Navigation => gst_sys::GST_EVENT_NAVIGATION,
@@ -672,6 +678,7 @@ impl ToGlib for EventType {
             EventType::Reconfigure => gst_sys::GST_EVENT_RECONFIGURE,
             EventType::TocSelect => gst_sys::GST_EVENT_TOC_SELECT,
             EventType::SelectStreams => gst_sys::GST_EVENT_SELECT_STREAMS,
+            EventType::InstantRateSyncTime => gst_sys::GST_EVENT_INSTANT_RATE_SYNC_TIME,
             EventType::CustomUpstream => gst_sys::GST_EVENT_CUSTOM_UPSTREAM,
             EventType::CustomDownstream => gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM,
             EventType::CustomDownstreamOob => gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
@@ -704,6 +711,7 @@ impl FromGlib<gst_sys::GstEventType> for EventType {
             33310 => EventType::Protection,
             38406 => EventType::SegmentDone,
             40966 => EventType::Gap,
+            46090 => EventType::InstantRateChange,
             48641 => EventType::Qos,
             51201 => EventType::Seek,
             53761 => EventType::Navigation,
@@ -712,6 +720,7 @@ impl FromGlib<gst_sys::GstEventType> for EventType {
             61441 => EventType::Reconfigure,
             64001 => EventType::TocSelect,
             66561 => EventType::SelectStreams,
+            66817 => EventType::InstantRateSyncTime,
             69121 => EventType::CustomUpstream,
             71686 => EventType::CustomDownstream,
             74242 => EventType::CustomDownstreamOob,

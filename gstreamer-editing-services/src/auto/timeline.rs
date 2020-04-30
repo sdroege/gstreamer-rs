@@ -16,6 +16,7 @@ use std::mem::transmute;
 use std::ptr;
 use Asset;
 use Extractable;
+use FrameNumber;
 use Group;
 use Layer;
 use TimelineElement;
@@ -64,6 +65,7 @@ impl Default for Timeline {
 pub const NONE_TIMELINE: Option<&Timeline> = None;
 
 pub trait TimelineExt: 'static {
+    #[cfg_attr(feature = "v1_18", deprecated)]
     fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
     fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
@@ -79,6 +81,10 @@ pub trait TimelineExt: 'static {
     fn get_duration(&self) -> gst::ClockTime;
 
     fn get_element(&self, name: &str) -> Option<TimelineElement>;
+
+    fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
+
+    fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
 
     fn get_groups(&self) -> Vec<Group>;
 
@@ -236,6 +242,21 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
+        unsafe {
+            ges_sys::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.to_glib())
+        }
+    }
+
+    fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime {
+        unsafe {
+            from_glib(ges_sys::ges_timeline_get_frame_time(
+                self.as_ref().to_glib_none().0,
+                frame_number,
+            ))
+        }
+    }
+
     fn get_groups(&self) -> Vec<Group> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ges_sys::ges_timeline_get_groups(
@@ -344,7 +365,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         layer_priority: i32,
     ) -> Option<TimelineElement> {
         unsafe {
-            from_glib_none(ges_sys::ges_timeline_paste_element(
+            from_glib_full(ges_sys::ges_timeline_paste_element(
                 self.as_ref().to_glib_none().0,
                 element.as_ref().to_glib_none().0,
                 position.to_glib(),
@@ -469,7 +490,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     }
 
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 51 }
+    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 52 }
     //}
 
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -527,7 +548,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     }
 
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 16 }
+    //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}
 
     fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(

@@ -129,6 +129,9 @@ pub enum GLFormat {
     Rgba16,
     DepthComponent16,
     Depth24Stencil8,
+    Rgb10A2,
+    R16,
+    Rg16,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -155,6 +158,9 @@ impl ToGlib for GLFormat {
             GLFormat::Rgba16 => gst_gl_sys::GST_GL_RGBA16,
             GLFormat::DepthComponent16 => gst_gl_sys::GST_GL_DEPTH_COMPONENT16,
             GLFormat::Depth24Stencil8 => gst_gl_sys::GST_GL_DEPTH24_STENCIL8,
+            GLFormat::Rgb10A2 => gst_gl_sys::GST_GL_RGB10_A2,
+            GLFormat::R16 => gst_gl_sys::GST_GL_R16,
+            GLFormat::Rg16 => gst_gl_sys::GST_GL_RG16,
             GLFormat::__Unknown(value) => value,
         }
     }
@@ -181,6 +187,9 @@ impl FromGlib<gst_gl_sys::GstGLFormat> for GLFormat {
             32859 => GLFormat::Rgba16,
             33189 => GLFormat::DepthComponent16,
             35056 => GLFormat::Depth24Stencil8,
+            32857 => GLFormat::Rgb10A2,
+            33322 => GLFormat::R16,
+            33324 => GLFormat::Rg16,
             value => GLFormat::__Unknown(value),
         }
     }

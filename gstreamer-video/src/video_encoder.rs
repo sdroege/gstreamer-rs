@@ -38,7 +38,6 @@ pub trait VideoEncoderExtManual: 'static {
         frame: Option<VideoCodecFrame>,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 

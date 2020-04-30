@@ -24,6 +24,8 @@ use RTSPFilterResult;
 use RTSPMountPoints;
 use RTSPSession;
 use RTSPSessionPool;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use RTSPStreamTransport;
 use RTSPThreadPool;
 
 glib_wrapper! {
@@ -59,9 +61,15 @@ pub trait RTSPClientExt: 'static {
 
     //fn get_connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_content_length_limit(&self) -> u32;
+
     fn get_mount_points(&self) -> Option<RTSPMountPoints>;
 
     fn get_session_pool(&self) -> Option<RTSPSessionPool>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport>;
 
     fn get_thread_pool(&self) -> Option<RTSPThreadPool>;
 
@@ -78,6 +86,9 @@ pub trait RTSPClientExt: 'static {
 
     //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_content_length_limit(&self, limit: u32);
+
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
 
     //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
@@ -92,6 +103,10 @@ pub trait RTSPClientExt: 'static {
     fn get_property_drop_backlog(&self) -> bool;
 
     fn set_property_drop_backlog(&self, drop_backlog: bool);
+
+    fn get_property_post_session_timeout(&self) -> i32;
+
+    fn set_property_post_session_timeout(&self, post_session_timeout: i32);
 
     fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
@@ -249,6 +264,11 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
+    fn connect_property_post_session_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
     fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -274,6 +294,15 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_get_connection() }
     //}
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_content_length_limit(&self) -> u32 {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_client_get_content_length_limit(
+                self.as_ref().to_glib_none().0,
+            )
+        }
+    }
+
     fn get_mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
             from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_mount_points(
@@ -286,6 +315,16 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         unsafe {
             from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_session_pool(
                 self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport> {
+        unsafe {
+            from_glib_none(gst_rtsp_server_sys::gst_rtsp_client_get_stream_transport(
+                self.as_ref().to_glib_none().0,
+                channel,
             ))
         }
     }
@@ -362,6 +401,16 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_set_connection() }
     //}
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_content_length_limit(&self, limit: u32) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_client_set_content_length_limit(
+                self.as_ref().to_glib_none().0,
+                limit,
+            );
+        }
+    }
+
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_client_set_mount_points(
@@ -419,6 +468,31 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"drop-backlog\0".as_ptr() as *const _,
                 Value::from(&drop_backlog).to_glib_none().0,
+            );
+        }
+    }
+
+    fn get_property_post_session_timeout(&self) -> i32 {
+        unsafe {
+            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"post-session-timeout\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `post-session-timeout` getter")
+                .unwrap()
+        }
+    }
+
+    fn set_property_post_session_timeout(&self, post_session_timeout: i32) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"post-session-timeout\0".as_ptr() as *const _,
+                Value::from(&post_session_timeout).to_glib_none().0,
             );
         }
     }
@@ -1278,6 +1352,36 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
                 b"notify::mount-points\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_mount_points_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_post_session_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_post_session_timeout_trampoline<
+            P,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut gst_rtsp_server_sys::GstRTSPClient,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPClient>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::post-session-timeout\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_post_session_timeout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

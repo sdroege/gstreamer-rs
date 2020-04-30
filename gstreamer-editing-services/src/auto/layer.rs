@@ -17,6 +17,7 @@ use Asset;
 use Clip;
 use Extractable;
 use Timeline;
+use Track;
 use TrackType;
 
 glib_wrapper! {
@@ -54,6 +55,8 @@ pub trait LayerExt: 'static {
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
+    fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
+
     fn get_auto_transition(&self) -> bool;
 
     fn get_clips(&self) -> Vec<Clip>;
@@ -70,12 +73,16 @@ pub trait LayerExt: 'static {
 
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
+    fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool;
+
     fn set_auto_transition(&self, auto_transition: bool);
 
     #[cfg_attr(feature = "v1_16", deprecated)]
     fn set_priority(&self, priority: u32);
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P);
+
+    //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -121,6 +128,15 @@ impl<O: IsA<Layer>> LayerExt for O {
                 ),
                 "Failed to add clip"
             )
+        }
+    }
+
+    fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool {
+        unsafe {
+            from_glib(ges_sys::ges_layer_get_active_for_track(
+                self.as_ref().to_glib_none().0,
+                track.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -186,6 +202,16 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
+    fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool {
+        unsafe {
+            from_glib(ges_sys::ges_layer_set_active_for_tracks(
+                self.as_ref().to_glib_none().0,
+                active.to_glib(),
+                tracks.to_glib_none().0,
+            ))
+        }
+    }
+
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
             ges_sys::ges_layer_set_auto_transition(
@@ -209,6 +235,10 @@ impl<O: IsA<Layer>> LayerExt for O {
             );
         }
     }
+
+    //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
+    //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 17 }
+    //}
 
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(

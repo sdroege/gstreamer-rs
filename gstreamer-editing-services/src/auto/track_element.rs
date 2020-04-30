@@ -43,6 +43,7 @@ pub trait TrackElementExt: 'static {
         whitelist: &[&str],
     );
 
+    #[cfg_attr(feature = "v1_18", deprecated)]
     fn edit(
         &self,
         layers: &[Layer],
@@ -65,6 +66,8 @@ pub trait TrackElementExt: 'static {
 
     fn get_track_type(&self) -> TrackType;
 
+    fn has_internal_source(&self) -> bool;
+
     fn is_active(&self) -> bool;
 
     //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<gst::Element>;
@@ -75,15 +78,24 @@ pub trait TrackElementExt: 'static {
 
     //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool;
 
+    fn set_has_internal_source(&self, has_internal_source: bool);
+
     fn set_track_type(&self, type_: TrackType);
 
     fn get_property_active(&self) -> bool;
+
+    fn get_property_has_internal_source(&self) -> bool;
 
     //fn connect_control_binding_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     //fn connect_control_binding_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn connect_property_has_internal_source_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -178,6 +190,14 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    fn has_internal_source(&self) -> bool {
+        unsafe {
+            from_glib(ges_sys::ges_track_element_has_internal_source(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn is_active(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_track_element_is_active(
@@ -215,6 +235,15 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     //    unsafe { TODO: call ges_sys:ges_track_element_set_control_source() }
     //}
 
+    fn set_has_internal_source(&self, has_internal_source: bool) {
+        unsafe {
+            ges_sys::ges_track_element_set_has_internal_source(
+                self.as_ref().to_glib_none().0,
+                has_internal_source.to_glib(),
+            );
+        }
+    }
+
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
             ges_sys::ges_track_element_set_track_type(
@@ -235,6 +264,21 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
             value
                 .get()
                 .expect("Return Value for property `active` getter")
+                .unwrap()
+        }
+    }
+
+    fn get_property_has_internal_source(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"has-internal-source\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `has-internal-source` getter")
                 .unwrap()
         }
     }
@@ -265,6 +309,33 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
                 b"notify::active\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_active_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_has_internal_source_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_has_internal_source_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESTrackElement,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<TrackElement>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&TrackElement::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::has-internal-source\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_internal_source_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

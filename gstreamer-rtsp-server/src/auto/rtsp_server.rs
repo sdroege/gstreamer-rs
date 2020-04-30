@@ -10,7 +10,10 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
+use glib::StaticType;
+use glib::Value;
 use glib_sys;
+use gobject_sys;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
@@ -90,6 +93,9 @@ pub trait RTSPServerExt: 'static {
 
     fn get_bound_port(&self) -> i32;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_content_length_limit(&self) -> u32;
+
     fn get_mount_points(&self) -> Option<RTSPMountPoints>;
 
     fn get_service(&self) -> Option<GString>;
@@ -103,6 +109,9 @@ pub trait RTSPServerExt: 'static {
     fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>);
 
     fn set_backlog(&self, backlog: i32);
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_content_length_limit(&self, limit: u32);
 
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
 
@@ -120,6 +129,10 @@ pub trait RTSPServerExt: 'static {
         initial_buffer: Option<&str>,
     ) -> Result<(), glib::error::BoolError>;
 
+    fn get_property_content_length_limit(&self) -> u32;
+
+    fn set_property_content_length_limit(&self, content_length_limit: u32);
+
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -136,6 +149,11 @@ pub trait RTSPServerExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    fn connect_property_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -264,6 +282,15 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_content_length_limit(&self) -> u32 {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_server_get_content_length_limit(
+                self.as_ref().to_glib_none().0,
+            )
+        }
+    }
+
     fn get_mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
             from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_mount_points(
@@ -323,6 +350,16 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_content_length_limit(&self, limit: u32) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_server_set_content_length_limit(
+                self.as_ref().to_glib_none().0,
+                limit,
+            );
+        }
+    }
+
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_server_set_mount_points(
@@ -377,6 +414,31 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
                 ),
                 "Failed to transfer to the connection"
             )
+        }
+    }
+
+    fn get_property_content_length_limit(&self) -> u32 {
+        unsafe {
+            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"content-length-limit\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `content-length-limit` getter")
+                .unwrap()
+        }
+    }
+
+    fn set_property_content_length_limit(&self, content_length_limit: u32) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"content-length-limit\0".as_ptr() as *const _,
+                Value::from(&content_length_limit).to_glib_none().0,
+            );
         }
     }
 
@@ -488,6 +550,36 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
                 b"notify::bound-port\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_bound_port_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_content_length_limit_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_content_length_limit_trampoline<
+            P,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::content-length-limit\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_content_length_limit_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -26,6 +26,8 @@ pub trait UriSourceAssetExt: 'static {
     fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo>;
 
     fn get_stream_uri(&self) -> Option<GString>;
+
+    fn is_image(&self) -> bool;
 }
 
 impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
@@ -48,6 +50,14 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
     fn get_stream_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ges_sys::ges_uri_source_asset_get_stream_uri(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn is_image(&self) -> bool {
+        unsafe {
+            from_glib(ges_sys::ges_uri_source_asset_is_image(
                 self.as_ref().to_glib_none().0,
             ))
         }

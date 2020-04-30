@@ -44,6 +44,9 @@ pub trait ProjectExt: 'static {
         profile: &P,
     ) -> Result<(), glib::error::BoolError>;
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn add_formatter(&self, formatter: /*Ignored*/&Formatter);
+
     fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool;
 
     fn create_asset_sync(
@@ -80,12 +83,21 @@ pub trait ProjectExt: 'static {
 
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
     fn connect_error_loading_asset<F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_missing_uri<F: Fn(&Self, &glib::Error, &Asset) -> Option<GString> + 'static>(
         &self,
@@ -117,6 +129,11 @@ impl<O: IsA<Project>> ProjectExt for O {
             )
         }
     }
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn add_formatter(&self, formatter: /*Ignored*/&Formatter) {
+    //    unsafe { TODO: call ges_sys:ges_project_add_formatter() }
+    //}
 
     fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool {
         unsafe {
@@ -322,6 +339,42 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn error_loading_trampoline<
+            P,
+            F: Fn(&P, &Timeline, &glib::Error) + 'static,
+        >(
+            this: *mut ges_sys::GESProject,
+            timeline: *mut ges_sys::GESTimeline,
+            error: *mut glib_sys::GError,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Project>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(timeline),
+                &from_glib_borrow(error),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"error-loading\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    error_loading_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     fn connect_error_loading_asset<
         F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static,
     >(
@@ -382,6 +435,34 @@ impl<O: IsA<Project>> ProjectExt for O {
                 b"loaded\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     loaded_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn loading_trampoline<P, F: Fn(&P, &Timeline) + 'static>(
+            this: *mut ges_sys::GESProject,
+            timeline: *mut ges_sys::GESTimeline,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Project>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Project::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(timeline),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"loading\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    loading_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

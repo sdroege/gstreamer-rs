@@ -11,9 +11,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::value::SetValueOptional;
 use glib::GString;
-use glib::Value;
 use glib_sys;
 use gobject_sys;
 use std::boxed::Box as Box_;
@@ -31,7 +29,7 @@ glib_wrapper! {
 }
 
 impl Asset {
-    pub fn needs_reload(extractable_type: glib::types::Type, id: &str) -> bool {
+    pub fn needs_reload(extractable_type: glib::types::Type, id: Option<&str>) -> bool {
         assert_initialized_main_thread!();
         unsafe {
             from_glib(ges_sys::ges_asset_needs_reload(
@@ -66,7 +64,7 @@ impl Asset {
         Q: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
     >(
         extractable_type: glib::types::Type,
-        id: &str,
+        id: Option<&str>,
         cancellable: Option<&P>,
         callback: Q,
     ) {
@@ -103,15 +101,20 @@ impl Asset {
 
     pub fn request_async_future(
         extractable_type: glib::types::Type,
-        id: &str,
+        id: Option<&str>,
     ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>> {
         skip_assert_initialized!();
-        let id = String::from(id);
+        let id = id.map(ToOwned::to_owned);
         Box_::pin(gio::GioFuture::new(&(), move |_obj, send| {
             let cancellable = gio::Cancellable::new();
-            Self::request_async(extractable_type, &id, Some(&cancellable), move |res| {
-                send.resolve(res);
-            });
+            Self::request_async(
+                extractable_type,
+                id.as_ref().map(::std::borrow::Borrow::borrow),
+                Some(&cancellable),
+                move |res| {
+                    send.resolve(res);
+                },
+            );
 
             cancellable
         }))
@@ -121,7 +124,7 @@ impl Asset {
 pub const NONE_ASSET: Option<&Asset> = None;
 
 pub trait AssetExt: 'static {
-    fn extract(&self) -> Result<Option<Extractable>, glib::Error>;
+    fn extract(&self) -> Result<Extractable, glib::Error>;
 
     fn get_error(&self) -> Option<glib::Error>;
 
@@ -139,8 +142,6 @@ pub trait AssetExt: 'static {
 
     fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError>;
 
-    fn set_property_proxy_target<P: IsA<Asset> + SetValueOptional>(&self, proxy_target: Option<&P>);
-
     fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F)
@@ -148,7 +149,7 @@ pub trait AssetExt: 'static {
 }
 
 impl<O: IsA<Asset>> AssetExt for O {
-    fn extract(&self) -> Result<Option<Extractable>, glib::Error> {
+    fn extract(&self) -> Result<Extractable, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ges_sys::ges_asset_extract(self.as_ref().to_glib_none().0, &mut error);
@@ -217,19 +218,6 @@ impl<O: IsA<Asset>> AssetExt for O {
                 ),
                 "Failed to unproxy asset"
             )
-        }
-    }
-
-    fn set_property_proxy_target<P: IsA<Asset> + SetValueOptional>(
-        &self,
-        proxy_target: Option<&P>,
-    ) {
-        unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
-                b"proxy-target\0".as_ptr() as *const _,
-                Value::from(proxy_target).to_glib_none().0,
-            );
         }
     }
 

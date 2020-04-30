@@ -13,7 +13,6 @@ use std::fmt;
 use DateTime;
 
 impl DateTime {
-    /// Get the [`DateTime`](struct.DateTime.html) in UTC
     pub fn to_utc(&self) -> Result<DateTime, glib::BoolError> {
         if !self.has_time() {
             // No time => no TZ offset
@@ -67,25 +66,25 @@ impl DateTime {
 }
 
 impl cmp::PartialOrd for DateTime {
-    /// *NOTE 1:* When comparing a partially defined [`DateTime`](struct.DateTime.html) `d1`
-    /// such as *"2019/8/20"* with a [`DateTime`](struct.DateTime.html) with a time part `d2`
-    /// such as *"2019/8/20 21:10"*:
-    ///
-    /// - `d1` includes `d2`,
-    /// - neither `d1` < `d2` nor `d1` > `d2`,
-    /// - and `d1` != `d2`,
-    ///
-    /// so we can only return `None`.
-    ///
-    /// This is the reason why [`DateTime`](struct.DateTime.html) neither implements
-    /// [`Ord`](https://doc.rust-lang.org/nightly/std/cmp/trait.Ord.html)
-    /// nor [`Eq`](https://doc.rust-lang.org/nightly/std/cmp/trait.Eq.html).
-    ///
-    /// *NOTE 2:* When comparing a [`DateTime`](struct.DateTime.html) `d1` without a TZ offset
-    /// such as *"2019/8/20"* with a [`DateTime`](struct.DateTime.html) `d2` with a TZ offset
-    /// such as *"2019/8/20 21:10 +02:00"*, we can't tell in which TZ `d1` is expressed and which
-    /// time should be considered for an offset, therefore the two [`DateTime`s](struct.DateTime.html)
-    /// are compared in the same TZ.
+    // *NOTE 1:* When comparing a partially defined [`DateTime`](struct.DateTime.html) `d1`
+    // such as *"2019/8/20"* with a [`DateTime`](struct.DateTime.html) with a time part `d2`
+    // such as *"2019/8/20 21:10"*:
+    //
+    // - `d1` includes `d2`,
+    // - neither `d1` < `d2` nor `d1` > `d2`,
+    // - and `d1` != `d2`,
+    //
+    // so we can only return `None`.
+    //
+    // This is the reason why [`DateTime`](struct.DateTime.html) neither implements
+    // [`Ord`](https://doc.rust-lang.org/nightly/std/cmp/trait.Ord.html)
+    // nor [`Eq`](https://doc.rust-lang.org/nightly/std/cmp/trait.Eq.html).
+    //
+    // *NOTE 2:* When comparing a [`DateTime`](struct.DateTime.html) `d1` without a TZ offset
+    // such as *"2019/8/20"* with a [`DateTime`](struct.DateTime.html) `d2` with a TZ offset
+    // such as *"2019/8/20 21:10 +02:00"*, we can't tell in which TZ `d1` is expressed and which
+    // time should be considered for an offset, therefore the two [`DateTime`s](struct.DateTime.html)
+    // are compared in the same TZ.
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         #[inline]
         fn get_cmp(delta: i32) -> Option<cmp::Ordering> {
@@ -187,7 +186,6 @@ impl cmp::PartialOrd for DateTime {
 }
 
 impl cmp::PartialEq for DateTime {
-    /// See the notes for the [`DateTime` `PartialOrd` trait](struct.DateTime.html#impl-PartialOrd%3CDateTime%3E)
     fn eq(&self, other: &Self) -> bool {
         self.partial_cmp(other)
             .map_or_else(|| false, |cmp| cmp == cmp::Ordering::Equal)

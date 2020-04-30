@@ -103,6 +103,9 @@ pub trait PadExt: 'static {
 
     fn get_peer(&self) -> Option<Pad>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_single_internal_link(&self) -> Option<Pad>;
+
     fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -323,6 +326,15 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn get_peer(&self) -> Option<Pad> {
         unsafe { from_glib_full(gst_sys::gst_pad_get_peer(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_single_internal_link(&self) -> Option<Pad> {
+        unsafe {
+            from_glib_full(gst_sys::gst_pad_get_single_internal_link(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event> {

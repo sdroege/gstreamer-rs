@@ -72,6 +72,9 @@ pub trait EncodingProfileExt: 'static {
 
     fn get_preset_name(&self) -> Option<GString>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_single_segment(&self) -> bool;
+
     fn get_type_nick(&self) -> Option<GString>;
 
     fn is_enabled(&self) -> bool;
@@ -156,6 +159,15 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     fn get_preset_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_preset_name(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_single_segment(&self) -> bool {
+        unsafe {
+            from_glib(gst_pbutils_sys::gst_encoding_profile_get_single_segment(
                 self.as_ref().to_glib_none().0,
             ))
         }

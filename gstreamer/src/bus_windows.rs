@@ -31,7 +31,6 @@ pub trait WindowsBusExtManual: 'static {
 }
 
 impl WindowsBusExtManual for Bus {
-    /// This is supported on **Windows** only.
     fn get_pollfd(&self) -> windows::io::RawHandle {
         #[cfg(windows)]
         unsafe {

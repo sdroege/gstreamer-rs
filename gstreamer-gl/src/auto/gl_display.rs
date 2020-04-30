@@ -57,13 +57,22 @@ pub trait GLDisplayExt: 'static {
 
     fn filter_gl_api(&self, gl_api: GLAPI);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_foreign_display(&self) -> bool;
+
     fn get_gl_api(&self) -> GLAPI;
 
     fn get_gl_api_unlocked(&self) -> GLAPI;
 
     fn get_handle_type(&self) -> GLDisplayType;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn remove_context<P: IsA<GLContext>>(&self, context: &P);
+
     fn remove_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError>;
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow>;
 
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
         &self,
@@ -123,6 +132,15 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_foreign_display(&self) -> bool {
+        unsafe {
+            from_glib(gst_gl_sys::gst_gl_display_get_foreign_display(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn get_gl_api(&self) -> GLAPI {
         unsafe {
             from_glib(gst_gl_sys::gst_gl_display_get_gl_api(
@@ -147,6 +165,16 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn remove_context<P: IsA<GLContext>>(&self, context: &P) {
+        unsafe {
+            gst_gl_sys::gst_gl_display_remove_context(
+                self.as_ref().to_glib_none().0,
+                context.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
     fn remove_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(
@@ -158,6 +186,11 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
             )
         }
     }
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow> {
+    //    unsafe { TODO: call gst_gl_sys:gst_gl_display_retrieve_window() }
+    //}
 
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
         &self,

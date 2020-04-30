@@ -61,6 +61,9 @@ pub trait GstBinExt: 'static {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn get_suppressed_flags(&self) -> ElementFlags;
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> /*Ignored*/Option<Iterator>;
+
     //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator>;
 
     //fn iterate_elements(&self) -> /*Ignored*/Option<Iterator>;
@@ -186,6 +189,11 @@ impl<O: IsA<Bin>> GstBinExt for O {
             ))
         }
     }
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call gst_sys:gst_bin_iterate_all_by_element_factory_name() }
+    //}
 
     //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call gst_sys:gst_bin_iterate_all_by_interface() }

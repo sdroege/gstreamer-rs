@@ -14,66 +14,6 @@ use gst_video_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
-pub enum VideoAlphaMode {
-    Copy,
-    Set,
-    Mult,
-    #[doc(hidden)]
-    __Unknown(i32),
-}
-
-#[doc(hidden)]
-impl ToGlib for VideoAlphaMode {
-    type GlibType = gst_video_sys::GstVideoAlphaMode;
-
-    fn to_glib(&self) -> gst_video_sys::GstVideoAlphaMode {
-        match *self {
-            VideoAlphaMode::Copy => gst_video_sys::GST_VIDEO_ALPHA_MODE_COPY,
-            VideoAlphaMode::Set => gst_video_sys::GST_VIDEO_ALPHA_MODE_SET,
-            VideoAlphaMode::Mult => gst_video_sys::GST_VIDEO_ALPHA_MODE_MULT,
-            VideoAlphaMode::__Unknown(value) => value,
-        }
-    }
-}
-
-#[doc(hidden)]
-impl FromGlib<gst_video_sys::GstVideoAlphaMode> for VideoAlphaMode {
-    fn from_glib(value: gst_video_sys::GstVideoAlphaMode) -> Self {
-        skip_assert_initialized!();
-        match value {
-            0 => VideoAlphaMode::Copy,
-            1 => VideoAlphaMode::Set,
-            2 => VideoAlphaMode::Mult,
-            value => VideoAlphaMode::__Unknown(value),
-        }
-    }
-}
-
-impl StaticType for VideoAlphaMode {
-    fn static_type() -> Type {
-        unsafe { from_glib(gst_video_sys::gst_video_alpha_mode_get_type()) }
-    }
-}
-
-impl<'a> FromValueOptional<'a> for VideoAlphaMode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
-}
-
-impl<'a> FromValue<'a> for VideoAlphaMode {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
-    }
-}
-
-impl SetValue for VideoAlphaMode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoAFDSpec {
     DvbEtsi,
     AtscA53,
@@ -135,6 +75,7 @@ impl SetValue for VideoAFDSpec {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum VideoAFDValue {
     Unavailable,
     _169TopAligned,
@@ -225,6 +166,67 @@ impl<'a> FromValue<'a> for VideoAFDValue {
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 impl SetValue for VideoAFDValue {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum VideoAlphaMode {
+    Copy,
+    Set,
+    Mult,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoAlphaMode {
+    type GlibType = gst_video_sys::GstVideoAlphaMode;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoAlphaMode {
+        match *self {
+            VideoAlphaMode::Copy => gst_video_sys::GST_VIDEO_ALPHA_MODE_COPY,
+            VideoAlphaMode::Set => gst_video_sys::GST_VIDEO_ALPHA_MODE_SET,
+            VideoAlphaMode::Mult => gst_video_sys::GST_VIDEO_ALPHA_MODE_MULT,
+            VideoAlphaMode::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoAlphaMode> for VideoAlphaMode {
+    fn from_glib(value: gst_video_sys::GstVideoAlphaMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoAlphaMode::Copy,
+            1 => VideoAlphaMode::Set,
+            2 => VideoAlphaMode::Mult,
+            value => VideoAlphaMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoAlphaMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_alpha_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoAlphaMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoAlphaMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoAlphaMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
@@ -758,6 +760,17 @@ pub enum VideoFormat {
     Y410,
     Vuya,
     Bgr10a2Le,
+    Rgb10a2Le,
+    Y44416be,
+    Y44416le,
+    P016Be,
+    P016Le,
+    P012Be,
+    P012Le,
+    Y212Be,
+    Y212Le,
+    Y412Be,
+    Y412Le,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -854,6 +867,17 @@ impl ToGlib for VideoFormat {
             VideoFormat::Y410 => gst_video_sys::GST_VIDEO_FORMAT_Y410,
             VideoFormat::Vuya => gst_video_sys::GST_VIDEO_FORMAT_VUYA,
             VideoFormat::Bgr10a2Le => gst_video_sys::GST_VIDEO_FORMAT_BGR10A2_LE,
+            VideoFormat::Rgb10a2Le => gst_video_sys::GST_VIDEO_FORMAT_RGB10A2_LE,
+            VideoFormat::Y44416be => gst_video_sys::GST_VIDEO_FORMAT_Y444_16BE,
+            VideoFormat::Y44416le => gst_video_sys::GST_VIDEO_FORMAT_Y444_16LE,
+            VideoFormat::P016Be => gst_video_sys::GST_VIDEO_FORMAT_P016_BE,
+            VideoFormat::P016Le => gst_video_sys::GST_VIDEO_FORMAT_P016_LE,
+            VideoFormat::P012Be => gst_video_sys::GST_VIDEO_FORMAT_P012_BE,
+            VideoFormat::P012Le => gst_video_sys::GST_VIDEO_FORMAT_P012_LE,
+            VideoFormat::Y212Be => gst_video_sys::GST_VIDEO_FORMAT_Y212_BE,
+            VideoFormat::Y212Le => gst_video_sys::GST_VIDEO_FORMAT_Y212_LE,
+            VideoFormat::Y412Be => gst_video_sys::GST_VIDEO_FORMAT_Y412_BE,
+            VideoFormat::Y412Le => gst_video_sys::GST_VIDEO_FORMAT_Y412_LE,
             VideoFormat::__Unknown(value) => value,
         }
     }
@@ -950,6 +974,17 @@ impl FromGlib<gst_video_sys::GstVideoFormat> for VideoFormat {
             83 => VideoFormat::Y410,
             84 => VideoFormat::Vuya,
             85 => VideoFormat::Bgr10a2Le,
+            86 => VideoFormat::Rgb10a2Le,
+            87 => VideoFormat::Y44416be,
+            88 => VideoFormat::Y44416le,
+            89 => VideoFormat::P016Be,
+            90 => VideoFormat::P016Le,
+            91 => VideoFormat::P012Be,
+            92 => VideoFormat::P012Le,
+            93 => VideoFormat::Y212Be,
+            94 => VideoFormat::Y212Le,
+            95 => VideoFormat::Y412Be,
+            96 => VideoFormat::Y412Le,
             value => VideoFormat::__Unknown(value),
         }
     }
@@ -1575,6 +1610,9 @@ pub enum VideoTransferFunction {
     Log316,
     Bt202012,
     Adobergb,
+    Bt202010,
+    Smpte2084,
+    AribStdB67,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1598,6 +1636,9 @@ impl ToGlib for VideoTransferFunction {
             VideoTransferFunction::Log316 => gst_video_sys::GST_VIDEO_TRANSFER_LOG316,
             VideoTransferFunction::Bt202012 => gst_video_sys::GST_VIDEO_TRANSFER_BT2020_12,
             VideoTransferFunction::Adobergb => gst_video_sys::GST_VIDEO_TRANSFER_ADOBERGB,
+            VideoTransferFunction::Bt202010 => gst_video_sys::GST_VIDEO_TRANSFER_BT2020_10,
+            VideoTransferFunction::Smpte2084 => gst_video_sys::GST_VIDEO_TRANSFER_SMPTE2084,
+            VideoTransferFunction::AribStdB67 => gst_video_sys::GST_VIDEO_TRANSFER_ARIB_STD_B67,
             VideoTransferFunction::__Unknown(value) => value,
         }
     }
@@ -1621,6 +1662,9 @@ impl FromGlib<gst_video_sys::GstVideoTransferFunction> for VideoTransferFunction
             10 => VideoTransferFunction::Log316,
             11 => VideoTransferFunction::Bt202012,
             12 => VideoTransferFunction::Adobergb,
+            13 => VideoTransferFunction::Bt202010,
+            14 => VideoTransferFunction::Smpte2084,
+            15 => VideoTransferFunction::AribStdB67,
             value => VideoTransferFunction::__Unknown(value),
         }
     }

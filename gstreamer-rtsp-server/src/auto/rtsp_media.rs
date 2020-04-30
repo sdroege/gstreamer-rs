@@ -18,6 +18,8 @@ use gst_rtsp;
 use gst_rtsp_server_sys;
 use libc;
 use std::boxed::Box as Box_;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use std::mem;
 use std::mem::transmute;
 use RTSPAddressPool;
 use RTSPMediaStatus;
@@ -96,6 +98,12 @@ pub trait RTSPMediaExt: 'static {
 
     fn get_range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<GString>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rate_control(&self) -> bool;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rates(&self) -> Option<(f64, f64)>;
+
     fn get_retransmission_time(&self) -> gst::ClockTime;
 
     fn get_status(&self) -> RTSPMediaStatus;
@@ -110,10 +118,16 @@ pub trait RTSPMediaExt: 'static {
 
     //fn handle_sdp(&self, sdp: /*Ignored*/&mut gst_sdp::SDPMessage) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn has_completed_sender(&self) -> bool;
+
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn is_bind_mcast_address(&self) -> bool;
 
     fn is_eos_shutdown(&self) -> bool;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn is_receive_only(&self) -> bool;
 
     fn is_reusable(&self) -> bool;
 
@@ -123,14 +137,20 @@ pub trait RTSPMediaExt: 'static {
 
     fn is_time_provider(&self) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn lock(&self);
+
     fn n_streams(&self) -> u32;
 
     fn prepare(&self, thread: Option<&RTSPThread>) -> Result<(), glib::error::BoolError>;
 
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool;
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn seek_full(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags) -> bool;
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: gst::ClockTime) -> bool;
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn seekable(&self) -> /*Ignored*/gst::ClockTimeDiff;
@@ -166,6 +186,9 @@ pub trait RTSPMediaExt: 'static {
 
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_rate_control(&self, enabled: bool);
+
     fn set_retransmission_time(&self, time: gst::ClockTime);
 
     fn set_reusable(&self, reusable: bool);
@@ -183,6 +206,9 @@ pub trait RTSPMediaExt: 'static {
     //fn setup_sdp(&self, sdp: /*Ignored*/&mut gst_sdp::SDPMessage, info: /*Ignored*/&mut SDPInfo) -> bool;
 
     fn suspend(&self) -> Result<(), glib::error::BoolError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn unlock(&self);
 
     fn unprepare(&self) -> Result<(), glib::error::BoolError>;
 
@@ -440,6 +466,35 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rate_control(&self) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_rate_control(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_rates(&self) -> Option<(f64, f64)> {
+        unsafe {
+            let mut rate = mem::MaybeUninit::uninit();
+            let mut applied_rate = mem::MaybeUninit::uninit();
+            let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_rates(
+                self.as_ref().to_glib_none().0,
+                rate.as_mut_ptr(),
+                applied_rate.as_mut_ptr(),
+            ));
+            let rate = rate.assume_init();
+            let applied_rate = applied_rate.assume_init();
+            if ret {
+                Some((rate, applied_rate))
+            } else {
+                None
+            }
+        }
+    }
+
     fn get_retransmission_time(&self) -> gst::ClockTime {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_retransmission_time(
@@ -489,6 +544,15 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_handle_sdp() }
     //}
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn has_completed_sender(&self) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_media_has_completed_sender(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn is_bind_mcast_address(&self) -> bool {
         unsafe {
@@ -501,6 +565,15 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn is_eos_shutdown(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_eos_shutdown(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn is_receive_only(&self) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_receive_only(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -538,6 +611,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn lock(&self) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_lock(self.as_ref().to_glib_none().0);
+        }
+    }
+
     fn n_streams(&self) -> u32 {
         unsafe { gst_rtsp_server_sys::gst_rtsp_media_n_streams(self.as_ref().to_glib_none().0) }
     }
@@ -558,9 +638,14 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek() }
     //}
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn seek_full(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek_full() }
+    //}
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: gst::ClockTime) -> bool {
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek_trickmode() }
     //}
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -692,6 +777,16 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_rate_control(&self, enabled: bool) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_set_rate_control(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
+        }
+    }
+
     fn set_retransmission_time(&self, time: gst::ClockTime) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_media_set_retransmission_time(
@@ -766,6 +861,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
                 gst_rtsp_server_sys::gst_rtsp_media_suspend(self.as_ref().to_glib_none().0),
                 "Failed to suspend media"
             )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn unlock(&self) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_unlock(self.as_ref().to_glib_none().0);
         }
     }
 

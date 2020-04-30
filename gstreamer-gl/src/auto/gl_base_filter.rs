@@ -34,6 +34,9 @@ pub trait GLBaseFilterExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn find_gl_context(&self) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_gl_context(&self) -> Option<GLContext>;
+
     fn get_property_context(&self) -> Option<GLContext>;
 
     fn connect_property_context_notify<F: Fn(&Self) + Send + Sync + 'static>(
@@ -47,6 +50,15 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     fn find_gl_context(&self) -> bool {
         unsafe {
             from_glib(gst_gl_sys::gst_gl_base_filter_find_gl_context(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_gl_context(&self) -> Option<GLContext> {
+        unsafe {
+            from_glib_full(gst_gl_sys::gst_gl_base_filter_get_gl_context(
                 self.as_ref().to_glib_none().0,
             ))
         }

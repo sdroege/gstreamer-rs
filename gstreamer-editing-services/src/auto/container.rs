@@ -41,6 +41,7 @@ pub const NONE_CONTAINER: Option<&Container> = None;
 pub trait GESContainerExt: 'static {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
 
+    #[cfg_attr(feature = "v1_18", deprecated)]
     fn edit(
         &self,
         layers: &[Layer],

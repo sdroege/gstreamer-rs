@@ -50,6 +50,9 @@ pub trait BaseSinkExt: 'static {
 
     fn get_render_delay(&self) -> gst::ClockTime;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_stats(&self) -> Option<gst::Structure>;
+
     fn get_sync(&self) -> bool;
 
     fn get_throttle_time(&self) -> u64;
@@ -146,6 +149,12 @@ pub trait BaseSinkExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
     fn connect_property_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -216,6 +225,15 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     fn get_render_delay(&self) -> gst::ClockTime {
         unsafe {
             from_glib(gst_base_sys::gst_base_sink_get_render_delay(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_stats(&self) -> Option<gst::Structure> {
+        unsafe {
+            from_glib_full(gst_base_sys::gst_base_sink_get_stats(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -678,6 +696,34 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 b"notify::render-delay\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_render_delay_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stats_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_base_sys::GstBaseSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<BaseSink>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&BaseSink::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::stats\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_stats_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

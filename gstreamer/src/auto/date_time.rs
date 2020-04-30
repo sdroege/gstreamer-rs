@@ -62,9 +62,25 @@ impl DateTime {
         unsafe { from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_local_time(secs)) }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn new_from_unix_epoch_local_time_usecs(usecs: i64) -> DateTime {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_local_time_usecs(
+                usecs,
+            ))
+        }
+    }
+
     pub fn new_from_unix_epoch_utc(secs: i64) -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_utc(secs)) }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn new_from_unix_epoch_utc_usecs(usecs: i64) -> DateTime {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_utc_usecs(usecs)) }
     }
 
     pub fn new_local_time(

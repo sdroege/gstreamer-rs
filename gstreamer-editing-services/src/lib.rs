@@ -41,12 +41,6 @@ pub fn init() -> Result<(), glib::BoolError> {
     }
 }
 
-/// Deinitialize GStreamer Editing Services
-///
-/// # Safety
-///
-/// This must only be called once during the lifetime of the process, once no GStreamer threads
-/// are running anymore and all GStreamer resources are released.
 pub unsafe fn deinit() {
     ges_sys::ges_deinit();
 }

@@ -75,6 +75,7 @@ bitflags! {
         const EGL = 32;
         const VIV_FB = 64;
         const GBM = 128;
+        const EGL_DEVICE = 256;
         const ANY = 4294967295;
     }
 }

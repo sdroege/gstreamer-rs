@@ -40,7 +40,7 @@ pub const NONE_ALLOCATOR: Option<&Allocator> = None;
 pub trait AllocatorExt: 'static {
     //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory>;
 
-    //fn free(&self, memory: /*Ignored*/&mut Memory);
+    //fn free(&self, memory: /*Ignored*/&Memory);
 
     fn set_default(&self);
 }
@@ -50,7 +50,7 @@ impl<O: IsA<Allocator>> AllocatorExt for O {
     //    unsafe { TODO: call gst_sys:gst_allocator_alloc() }
     //}
 
-    //fn free(&self, memory: /*Ignored*/&mut Memory) {
+    //fn free(&self, memory: /*Ignored*/&Memory) {
     //    unsafe { TODO: call gst_sys:gst_allocator_free() }
     //}
 

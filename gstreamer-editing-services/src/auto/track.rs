@@ -9,6 +9,8 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib_sys;
@@ -48,6 +50,9 @@ pub trait GESTrackExt: 'static {
 
     fn get_mixing(&self) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_restriction_caps(&self) -> Option<gst::Caps>;
+
     fn get_timeline(&self) -> Option<Timeline>;
 
     fn remove_element<P: IsA<TrackElement>>(
@@ -67,6 +72,12 @@ pub trait GESTrackExt: 'static {
 
     fn get_property_duration(&self) -> u64;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_property_id(&self) -> Option<GString>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_property_id(&self, id: Option<&str>);
+
     fn get_property_restriction_caps(&self) -> Option<gst::Caps>;
 
     fn get_property_track_type(&self) -> TrackType;
@@ -84,6 +95,9 @@ pub trait GESTrackExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -125,6 +139,15 @@ impl<O: IsA<Track>> GESTrackExt for O {
     fn get_mixing(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_track_get_mixing(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_restriction_caps(&self) -> Option<gst::Caps> {
+        unsafe {
+            from_glib_full(ges_sys::ges_track_get_restriction_caps(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -202,6 +225,30 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 .get()
                 .expect("Return Value for property `duration` getter")
                 .unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_property_id(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"id\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value.get().expect("Return Value for property `id` getter")
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_property_id(&self, id: Option<&str>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"id\0".as_ptr() as *const _,
+                Value::from(id).to_glib_none().0,
+            );
         }
     }
 
@@ -338,6 +385,31 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 b"notify::duration\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_id_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESTrack,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Track>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Track::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::id\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_id_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

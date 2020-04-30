@@ -16,8 +16,16 @@ use glib_sys;
 use gobject_sys;
 use gst;
 use std::boxed::Box as Box_;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use std::mem;
 use std::mem::transmute;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use Edge;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use EditMode;
 use Extractable;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use Layer;
 use Timeline;
 use TrackType;
 
@@ -35,6 +43,16 @@ pub trait TimelineElementExt: 'static {
     //fn add_child_property<P: IsA<glib::Object>>(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &P) -> bool;
 
     fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn edit(
+        &self,
+        layers: &[Layer],
+        new_layer_priority: i64,
+        mode: EditMode,
+        edge: Edge,
+        position: u64,
+    ) -> bool;
 
     //fn get_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -54,6 +72,9 @@ pub trait TimelineElementExt: 'static {
     fn get_max_duration(&self) -> gst::ClockTime;
 
     fn get_name(&self) -> Option<GString>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_natural_framerate(&self) -> Option<(i32, i32)>;
 
     fn get_parent(&self) -> Option<TimelineElement>;
 
@@ -102,6 +123,7 @@ pub trait TimelineElementExt: 'static {
     fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P)
         -> Result<(), glib::error::BoolError>;
 
+    #[cfg_attr(feature = "v1_10", deprecated)]
     fn set_priority(&self, priority: u32) -> bool;
 
     fn set_start(&self, start: gst::ClockTime) -> bool;
@@ -118,6 +140,10 @@ pub trait TimelineElementExt: 'static {
 
     fn set_property_serialize(&self, serialize: bool);
 
+    //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+
+    //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -131,6 +157,7 @@ pub trait TimelineElementExt: 'static {
 
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[cfg_attr(feature = "v1_10", deprecated)]
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -152,6 +179,27 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 deep.to_glib(),
             ))
             .ok_or_else(|| glib_bool_error!("Failed to copy timeline element"))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn edit(
+        &self,
+        layers: &[Layer],
+        new_layer_priority: i64,
+        mode: EditMode,
+        edge: Edge,
+        position: u64,
+    ) -> bool {
+        unsafe {
+            from_glib(ges_sys::ges_timeline_element_edit(
+                self.as_ref().to_glib_none().0,
+                layers.to_glib_none().0,
+                new_layer_priority,
+                mode.to_glib(),
+                edge.to_glib(),
+                position,
+            ))
         }
     }
 
@@ -205,6 +253,26 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             from_glib_full(ges_sys::ges_timeline_element_get_name(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_natural_framerate(&self) -> Option<(i32, i32)> {
+        unsafe {
+            let mut framerate_n = mem::MaybeUninit::uninit();
+            let mut framerate_d = mem::MaybeUninit::uninit();
+            let ret = from_glib(ges_sys::ges_timeline_element_get_natural_framerate(
+                self.as_ref().to_glib_none().0,
+                framerate_n.as_mut_ptr(),
+                framerate_d.as_mut_ptr(),
+            ));
+            let framerate_n = framerate_n.assume_init();
+            let framerate_d = framerate_d.assume_init();
+            if ret {
+                Some((framerate_n, framerate_d))
+            } else {
+                None
+            }
         }
     }
 
@@ -480,6 +548,14 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             );
         }
     }
+
+    //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
+    //    Ignored prop: GObject.ParamSpec
+    //}
+
+    //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
+    //    Ignored prop: GObject.ParamSpec
+    //}
 
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec

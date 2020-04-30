@@ -10,12 +10,15 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_sys;
+use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use std::ptr;
 use Asset;
 use BaseEffect;
 use Container;
 use Extractable;
+use FrameNumber;
 use Layer;
 use TimelineElement;
 use Track;
@@ -35,6 +38,12 @@ pub const NONE_CLIP: Option<&Clip> = None;
 pub trait ClipExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError>;
 
+    fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
+        &self,
+        child: &P,
+        track: &Q,
+    ) -> Result<TrackElement, glib::Error>;
+
     fn find_track_element<P: IsA<Track>>(
         &self,
         track: Option<&P>,
@@ -51,6 +60,11 @@ pub trait ClipExt: 'static {
     fn get_layer(&self) -> Option<Layer>;
 
     fn get_supported_formats(&self) -> TrackType;
+
+    fn get_timeline_time_from_source_frame(
+        &self,
+        frame_number: FrameNumber,
+    ) -> Result<gst::ClockTime, glib::Error>;
 
     fn get_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
 
@@ -95,6 +109,27 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
+        &self,
+        child: &P,
+        track: &Q,
+    ) -> Result<TrackElement, glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ges_sys::ges_clip_add_child_to_track(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                track.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_none(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
     fn find_track_element<P: IsA<Track>>(
         &self,
         track: Option<&P>,
@@ -134,6 +169,25 @@ impl<O: IsA<Clip>> ClipExt for O {
             from_glib(ges_sys::ges_clip_get_supported_formats(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    fn get_timeline_time_from_source_frame(
+        &self,
+        frame_number: FrameNumber,
+    ) -> Result<gst::ClockTime, glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ges_sys::ges_clip_get_timeline_time_from_source_frame(
+                self.as_ref().to_glib_none().0,
+                frame_number,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 

@@ -70,6 +70,11 @@ impl TestClock {
     //    unsafe { TODO: call gst_check_sys:gst_test_clock_peek_next_pending_id() }
     //}
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //pub fn process_id(&self, pending_id: /*Ignored*/gst::ClockID) -> bool {
+    //    unsafe { TODO: call gst_check_sys:gst_test_clock_process_id() }
+    //}
+
     //pub fn process_id_list(&self, pending_list: /*Ignored*/&[&gst::ClockID]) -> u32 {
     //    unsafe { TODO: call gst_check_sys:gst_test_clock_process_id_list() }
     //}

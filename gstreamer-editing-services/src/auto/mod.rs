@@ -77,6 +77,9 @@ mod flags;
 pub use self::flags::PipelineFlags;
 pub use self::flags::TrackType;
 
+mod alias;
+pub use self::alias::FrameNumber;
+
 #[doc(hidden)]
 pub mod traits {
     pub use super::AssetExt;
