@@ -40,6 +40,7 @@ generate = [
     "GES.EditMode",
     "GES.PipelineFlags",
     "GES.Edge",
+    "GES.FrameNumber",
     "GES.TrackType",
     "GES.BaseEffect",
     "GES.Group",
