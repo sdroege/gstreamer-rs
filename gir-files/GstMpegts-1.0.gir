@@ -152,6 +152,12 @@ Consult the relevant specifications for more details.</doc>
           <type name="Descriptor"/>
         </array>
       </field>
+      <constructor name="new" c:identifier="gst_mpegts_atsc_mgt_new">
+        
+        <return-value transfer-ownership="full">
+          <type name="AtscMGT" c:type="GstMpegtsAtscMGT*"/>
+        </return-value>
+      </constructor>
     </record>
     <record name="AtscMGTTable" c:type="GstMpegtsAtscMGTTable" glib:type-name="GstMpegtsAtscMGTTable" glib:get-type="gst_mpegts_atsc_mgt_table_get_type" c:symbol-prefix="atsc_mgt_table">
       <doc xml:space="preserve">Source from a @GstMpegtsAtscMGT</doc>
@@ -203,6 +209,88 @@ Consult the relevant specifications for more details.</doc>
         </array>
       </field>
     </record>
+    <record name="AtscRRT" c:type="GstMpegtsAtscRRT" version="1.18" glib:type-name="GstMpegtsAtscRRT" glib:get-type="gst_mpegts_atsc_rrt_get_type" c:symbol-prefix="atsc_rrt">
+      <doc xml:space="preserve">Region Rating Table (A65)</doc>
+      
+      <field name="protocol_version" writable="1">
+        <doc xml:space="preserve">The protocol version</doc>
+        <type name="guint8" c:type="guint8"/>
+      </field>
+      <field name="names" writable="1">
+        <doc xml:space="preserve">the names</doc>
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="AtscMultString"/>
+        </array>
+      </field>
+      <field name="dimensions_defined" writable="1">
+        <doc xml:space="preserve">the number of dimensions defined for this rating table</doc>
+        <type name="guint8" c:type="guint8"/>
+      </field>
+      <field name="dimensions" writable="1">
+        <doc xml:space="preserve">A set of dimensions</doc>
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="AtscRRTDimension"/>
+        </array>
+      </field>
+      <field name="descriptors" writable="1">
+        <doc xml:space="preserve">descriptors</doc>
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+      <constructor name="new" c:identifier="gst_mpegts_atsc_rrt_new">
+        
+        <return-value transfer-ownership="full">
+          <type name="AtscRRT" c:type="GstMpegtsAtscRRT*"/>
+        </return-value>
+      </constructor>
+    </record>
+    <record name="AtscRRTDimension" c:type="GstMpegtsAtscRRTDimension" glib:type-name="GstMpegtsAtscRRTDimension" glib:get-type="gst_mpegts_atsc_rrt_dimension_get_type" c:symbol-prefix="atsc_rrt_dimension">
+      
+      <field name="names" writable="1">
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+      <field name="graduated_scale" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="values_defined" writable="1">
+        <type name="guint8" c:type="guint8"/>
+      </field>
+      <field name="values" writable="1">
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+      <constructor name="new" c:identifier="gst_mpegts_atsc_rrt_dimension_new">
+        
+        <return-value transfer-ownership="full">
+          <type name="AtscRRTDimension" c:type="GstMpegtsAtscRRTDimension*"/>
+        </return-value>
+      </constructor>
+    </record>
+    <record name="AtscRRTDimensionValue" c:type="GstMpegtsAtscRRTDimensionValue" version="1.18" glib:type-name="GstMpegtsAtscRRTDimensionValue" glib:get-type="gst_mpegts_atsc_rrt_dimension_value_get_type" c:symbol-prefix="atsc_rrt_dimension_value">
+      
+      <field name="abbrev_ratings" writable="1">
+        <doc xml:space="preserve">the abbreviated ratings</doc>
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="AtscMultString"/>
+        </array>
+      </field>
+      <field name="ratings" writable="1">
+        <doc xml:space="preserve">the ratings</doc>
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="AtscMultString"/>
+        </array>
+      </field>
+      <constructor name="new" c:identifier="gst_mpegts_atsc_rrt_dimension_value_new">
+        
+        <return-value transfer-ownership="full">
+          <type name="AtscRRTDimensionValue" c:type="GstMpegtsAtscRRTDimensionValue*"/>
+        </return-value>
+      </constructor>
+    </record>
     <record name="AtscSTT" c:type="GstMpegtsAtscSTT" glib:type-name="GstMpegtsAtscSTT" glib:get-type="gst_mpegts_atsc_stt_get_type" c:symbol-prefix="atsc_stt">
       <doc xml:space="preserve">System Time Table (A65)</doc>
       
@@ -239,6 +327,12 @@ Consult the relevant specifications for more details.</doc>
         <doc xml:space="preserve">The UTC date and time</doc>
         <type name="Gst.DateTime" c:type="GstDateTime*"/>
       </field>
+      <constructor name="new" c:identifier="gst_mpegts_atsc_stt_new">
+        
+        <return-value transfer-ownership="full">
+          <type name="AtscSTT" c:type="GstMpegtsAtscSTT*"/>
+        </return-value>
+      </constructor>
       <method name="get_datetime_utc" c:identifier="gst_mpegts_atsc_stt_get_datetime_utc">
         
         <return-value transfer-ownership="full">
@@ -282,6 +376,26 @@ Consult the relevant specifications for more details.</doc>
           <instance-parameter name="seg" transfer-ownership="none">
             <type name="AtscStringSegment" c:type="GstMpegtsAtscStringSegment*"/>
           </instance-parameter>
+        </parameters>
+      </method>
+      <method name="set_string" c:identifier="gst_mpegts_atsc_string_segment_set_string">
+        
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="seg" transfer-ownership="none">
+            <type name="AtscStringSegment" c:type="GstMpegtsAtscStringSegment*"/>
+          </instance-parameter>
+          <parameter name="string" transfer-ownership="none">
+            <type name="utf8" c:type="gchar*"/>
+          </parameter>
+          <parameter name="compression_type" transfer-ownership="none">
+            <type name="guint8" c:type="guint8"/>
+          </parameter>
+          <parameter name="mode" transfer-ownership="none">
+            <type name="guint8" c:type="guint8"/>
+          </parameter>
         </parameters>
       </method>
     </record>
@@ -739,6 +853,8 @@ Consult the relevant specifications for more details.</doc>
       </member>
       <member name="uri_linkage" value="19" c:identifier="GST_MTS_DESC_EXT_DVB_URI_LINKAGE">
       </member>
+      <member name="ac4" value="21" c:identifier="GST_MTS_DESC_EXT_DVB_AC4">
+      </member>
     </enumeration>
     <record name="DVBLinkageDescriptor" c:type="GstMpegtsDVBLinkageDescriptor" glib:type-name="GstMpegtsDVBLinkageDescriptor" glib:get-type="gst_mpegts_dvb_linkage_descriptor_get_type" c:symbol-prefix="dvb_linkage_descriptor">
       
@@ -755,14 +871,14 @@ Consult the relevant specifications for more details.</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="linkage_type" writable="1">
-        <doc xml:space="preserve">the type which %linkage_data has</doc>
+        <doc xml:space="preserve">the type which @linkage_data has</doc>
         <type name="DVBLinkageType" c:type="GstMpegtsDVBLinkageType"/>
       </field>
       <field name="linkage_data" readable="0" private="1">
         <type name="gpointer" c:type="gpointer"/>
       </field>
       <field name="private_data_length" writable="1">
-        <doc xml:space="preserve">the length for %private_data_bytes</doc>
+        <doc xml:space="preserve">the length for @private_data_bytes</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="private_data_bytes" writable="1">
@@ -1090,7 +1206,7 @@ As specified in Table 100 of ETSI EN 300 468 v1.13.1</doc>
       <doc xml:space="preserve">These are the base descriptor types and methods.
 
 For more details, refer to the ITU H.222.0 or ISO/IEC 13818-1 specifications
-and other specifications mentionned in the documentation.</doc>
+and other specifications mentioned in the documentation.</doc>
       
       <field name="tag" writable="1">
         <doc xml:space="preserve">the type of descriptor</doc>
@@ -1295,7 +1411,7 @@ are found in http://www.dvbservices.com</doc>
             </array>
           </parameter>
           <parameter name="len" direction="out" caller-allocates="0" transfer-ownership="full">
-            <doc xml:space="preserve">the length of #id_selector_bytes</doc>
+            <doc xml:space="preserve">the length of @id_selector_bytes</doc>
             <type name="guint8" c:type="guint8*"/>
           </parameter>
         </parameters>
@@ -1336,7 +1452,7 @@ are found in http://www.dvbservices.com</doc>
           </parameter>
           <parameter name="list" direction="out" caller-allocates="0" transfer-ownership="full">
             <doc xml:space="preserve">a list of all frequencies in Hz/kHz
-depending on %offset</doc>
+depending on @offset</doc>
             <array name="GLib.Array" c:type="GArray**">
               <type name="guint32"/>
             </array>
@@ -1516,7 +1632,7 @@ registered by http://www.dvbservices.com/</doc>
             </array>
           </parameter>
           <parameter name="length" direction="out" caller-allocates="0" transfer-ownership="full" optional="1" allow-none="1">
-            <doc xml:space="preserve">length of %private_data</doc>
+            <doc xml:space="preserve">length of @private_data</doc>
             <type name="guint8" c:type="guint8*"/>
           </parameter>
         </parameters>
@@ -1620,7 +1736,7 @@ the list of services</doc>
         <doc xml:space="preserve">Extracts the component tag from @descriptor.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the parsing happended correctly, else %FALSE.</doc>
+          <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -2643,6 +2759,135 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       <member name="off_air" value="5" c:identifier="GST_MPEGTS_RUNNING_STATUS_OFF_AIR">
       </member>
     </enumeration>
+    <record name="SCTESIT" c:type="GstMpegtsSCTESIT" glib:type-name="GstMpegtsSCTESIT" glib:get-type="gst_mpegts_scte_sit_get_type" c:symbol-prefix="scte_sit">
+      
+      <field name="encrypted_packet" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="encryption_algorithm" writable="1">
+        <type name="guint8" c:type="guint8"/>
+      </field>
+      <field name="pts_adjustment" writable="1">
+        <type name="guint64" c:type="guint64"/>
+      </field>
+      <field name="cw_index" writable="1">
+        <type name="guint8" c:type="guint8"/>
+      </field>
+      <field name="tier" writable="1">
+        <type name="guint16" c:type="guint16"/>
+      </field>
+      <field name="splice_command_length" writable="1">
+        <type name="guint16" c:type="guint16"/>
+      </field>
+      <field name="splice_command_type" writable="1">
+        <type name="SCTESpliceCommandType" c:type="GstMpegtsSCTESpliceCommandType"/>
+      </field>
+      <field name="splice_time_specified" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="splice_time" writable="1">
+        <type name="guint64" c:type="guint64"/>
+      </field>
+      <field name="splices" writable="1">
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+      <field name="descriptors" writable="1">
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+      <constructor name="new" c:identifier="gst_mpegts_scte_sit_new">
+        <doc xml:space="preserve">Allocates and initializes a #GstMpegtsSCTESIT.</doc>
+        
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
+          <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
+        </return-value>
+      </constructor>
+    </record>
+    <enumeration name="SCTESpliceCommandType" c:type="GstMpegtsSCTESpliceCommandType">
+      
+      <member name="null" value="0" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_NULL">
+      </member>
+      <member name="schedule" value="4" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_SCHEDULE">
+      </member>
+      <member name="insert" value="5" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_INSERT">
+      </member>
+      <member name="time" value="6" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_TIME">
+      </member>
+      <member name="bandwidth" value="7" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_BANDWIDTH">
+      </member>
+      <member name="private" value="255" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_PRIVATE">
+      </member>
+    </enumeration>
+    <enumeration name="SCTESpliceDescriptor" c:type="GstMpegtsSCTESpliceDescriptor">
+      
+      <member name="avail" value="0" c:identifier="GST_MTS_SCTE_DESC_AVAIL">
+      </member>
+      <member name="dtmf" value="1" c:identifier="GST_MTS_SCTE_DESC_DTMF">
+      </member>
+      <member name="segmentation" value="2" c:identifier="GST_MTS_SCTE_DESC_SEGMENTATION">
+      </member>
+      <member name="time" value="3" c:identifier="GST_MTS_SCTE_DESC_TIME">
+      </member>
+      <member name="audio" value="4" c:identifier="GST_MTS_SCTE_DESC_AUDIO">
+      </member>
+    </enumeration>
+    <record name="SCTESpliceEvent" c:type="GstMpegtsSCTESpliceEvent" glib:type-name="GstMpegtsSCTESpliceEvent" glib:get-type="gst_mpegts_scte_splice_event_get_type" c:symbol-prefix="scte_splice_event">
+      
+      <field name="insert_event" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="splice_event_id" writable="1">
+        <type name="guint32" c:type="guint32"/>
+      </field>
+      <field name="splice_event_cancel_indicator" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="out_of_network_indicator" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="program_splice_flag" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="duration_flag" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="splice_immediate_flag" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="program_splice_time_specified" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="program_splice_time" writable="1">
+        <type name="guint64" c:type="guint64"/>
+      </field>
+      <field name="break_duration_auto_return" writable="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="break_duration" writable="1">
+        <type name="guint64" c:type="guint64"/>
+      </field>
+      <field name="unique_program_id" writable="1">
+        <type name="guint16" c:type="guint16"/>
+      </field>
+      <field name="avail_num" writable="1">
+        <type name="guint8" c:type="guint8"/>
+      </field>
+      <field name="avails_expected" writable="1">
+        <type name="guint8" c:type="guint8"/>
+      </field>
+      <constructor name="new" c:identifier="gst_mpegts_scte_splice_event_new">
+        <doc xml:space="preserve">Allocates and initializes a #GstMpegtsSCTESpliceEvent.</doc>
+        
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESpliceEvent</doc>
+          <type name="SCTESpliceEvent" c:type="GstMpegtsSCTESpliceEvent*"/>
+        </return-value>
+      </constructor>
+    </record>
     <record name="SDT" c:type="GstMpegtsSDT" glib:type-name="GstMpegtsSDT" glib:get-type="gst_mpegts_sdt_get_type" c:symbol-prefix="sdt">
       <doc xml:space="preserve">Service Description Table (EN 300 468)</doc>
       
@@ -2797,6 +3042,9 @@ else in the western part.</doc>
       </member>
       <member name="isoch_data" value="131" c:identifier="GST_MPEGTS_STREAM_TYPE_SCTE_ISOCH_DATA">
         <doc xml:space="preserve">SCTE-19 Isochronous data</doc>
+      </member>
+      <member name="sit" value="134" c:identifier="GST_MPEGTS_STREAM_TYPE_SCTE_SIT">
+        <doc xml:space="preserve">SCTE-35 Splice Information Table</doc>
       </member>
       <member name="dst_nrt" value="149" c:identifier="GST_MPEGTS_STREAM_TYPE_SCTE_DST_NRT">
         <doc xml:space="preserve">SCTE-07 Data Service or
@@ -2980,6 +3228,21 @@ happened.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_atsc_rrt" c:identifier="gst_mpegts_section_get_atsc_rrt" version="1.18">
+        <doc xml:space="preserve">Returns the #GstMpegtsAtscRRT contained in the @section.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The #GstMpegtsAtscRRT contained in the section, or %NULL if an error
+happened.</doc>
+          <type name="AtscRRT" c:type="const GstMpegtsAtscRRT*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="section" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstMpegtsSection of type %GST_MPEGTS_SECTION_ATSC_RRT</doc>
+            <type name="Section" c:type="GstMpegtsSection*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_atsc_stt" c:identifier="gst_mpegts_section_get_atsc_stt">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscSTT contained in the @section.</doc>
         
@@ -3126,6 +3389,21 @@ happened.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_scte_sit" c:identifier="gst_mpegts_section_get_scte_sit">
+        <doc xml:space="preserve">Returns the #GstMpegtsSCTESIT contained in the @section.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The #GstMpegtsSCTESIT contained in the section, or %NULL if an error
+happened.</doc>
+          <type name="SCTESIT" c:type="const GstMpegtsSCTESIT*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="section" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstMpegtsSection of type %GST_MPEGTS_SECTION_SCTE_SIT</doc>
+            <type name="Section" c:type="GstMpegtsSection*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_sdt" c:identifier="gst_mpegts_section_get_sdt">
         <doc xml:space="preserve">Returns the #GstMpegtsSDT contained in the @section.</doc>
         
@@ -3227,6 +3505,41 @@ The #GstEvent is sent to the @element #GstElement.</doc>
           </parameter>
         </parameters>
       </method>
+      <function name="from_atsc_mgt" c:identifier="gst_mpegts_section_from_atsc_mgt" version="1.18">
+        
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">the #GstMpegtsSection</doc>
+          <type name="Section" c:type="GstMpegtsSection*"/>
+        </return-value>
+        <parameters>
+          <parameter name="mgt" transfer-ownership="full">
+            <doc xml:space="preserve">a #GstMpegtsAtscMGT to create the #GstMpegtsSection from</doc>
+            <type name="AtscMGT" c:type="GstMpegtsAtscMGT*"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="from_atsc_rrt" c:identifier="gst_mpegts_section_from_atsc_rrt">
+        
+        <return-value transfer-ownership="full">
+          <type name="Section" c:type="GstMpegtsSection*"/>
+        </return-value>
+        <parameters>
+          <parameter name="rrt" transfer-ownership="none">
+            <type name="AtscRRT" c:type="GstMpegtsAtscRRT*"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="from_atsc_stt" c:identifier="gst_mpegts_section_from_atsc_stt">
+        
+        <return-value transfer-ownership="full">
+          <type name="Section" c:type="GstMpegtsSection*"/>
+        </return-value>
+        <parameters>
+          <parameter name="stt" transfer-ownership="none">
+            <type name="AtscSTT" c:type="GstMpegtsAtscSTT*"/>
+          </parameter>
+        </parameters>
+      </function>
       <function name="from_nit" c:identifier="gst_mpegts_section_from_nit">
         <doc xml:space="preserve">Ownership of @nit is taken. The data in @nit is managed by the #GstMpegtsSection</doc>
         
@@ -3275,6 +3588,23 @@ The #GstEvent is sent to the @element #GstElement.</doc>
           </parameter>
           <parameter name="pid" transfer-ownership="none">
             <doc xml:space="preserve">The PID that the #GstMpegtsPMT belongs to</doc>
+            <type name="guint16" c:type="guint16"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="from_scte_sit" c:identifier="gst_mpegts_section_from_scte_sit">
+        <doc xml:space="preserve">Ownership of @sit is taken. The data in @sit is managed by the #GstMpegtsSection</doc>
+        
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">the #GstMpegtsSection</doc>
+          <type name="Section" c:type="GstMpegtsSection*"/>
+        </return-value>
+        <parameters>
+          <parameter name="sit" transfer-ownership="full">
+            <doc xml:space="preserve">a #GstMpegtsSCTESIT to create the #GstMpegtsSection from</doc>
+            <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
+          </parameter>
+          <parameter name="pid" transfer-ownership="none">
             <type name="guint16" c:type="guint16"/>
           </parameter>
         </parameters>
@@ -3544,6 +3874,11 @@ see also #GstMpegtsSectionATSCTableID, #GstMpegtsSectionDVBTableID, and
       <member name="atsc_stt" value="16" c:identifier="GST_MPEGTS_SECTION_ATSC_STT">
         <doc xml:space="preserve">ATSC System Time Table (A65)</doc>
       </member>
+      <member name="atsc_rrt" value="17" c:identifier="GST_MPEGTS_SECTION_ATSC_RRT">
+      </member>
+      <member name="scte_sit" value="18" c:identifier="GST_MPEGTS_SECTION_SCTE_SIT">
+        <doc xml:space="preserve">SCTE Splice Information Table (SCTE-35)</doc>
+      </member>
     </enumeration>
     <enumeration name="StreamType" c:type="GstMpegtsStreamType">
       <doc xml:space="preserve">Type of mpeg-ts stream type.
@@ -3803,7 +4138,7 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
         <type name="gboolean" c:type="gboolean"/>
       </field>
       <field name="constellation" writable="1">
-        <doc xml:space="preserve">the constallation</doc>
+        <doc xml:space="preserve">the constellation</doc>
         <type name="ModulationType" c:type="GstMpegtsModulationType"/>
       </field>
       <field name="hierarchy" writable="1">
@@ -4073,7 +4408,7 @@ Note: To look for descriptors that can be present more than once in an
 array of descriptors, iterate the #GArray manually.</doc>
       
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the first descriptor matchin @tag, else %NULL.</doc>
+        <doc xml:space="preserve">the first descriptor matching @tag, else %NULL.</doc>
         <type name="Descriptor" c:type="const GstMpegtsDescriptor*"/>
       </return-value>
       <parameters>
@@ -4166,6 +4501,115 @@ Release with #g_array_unref when done with it.</doc>
         </array>
       </return-value>
     </function>
+    <function name="scte_cancel_new" c:identifier="gst_mpegts_scte_cancel_new">
+      <doc xml:space="preserve">Allocates and initializes a new INSERT command #GstMpegtsSCTESIT
+setup to cancel the specified @event_id.</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
+        <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
+      </return-value>
+      <parameters>
+        <parameter name="event_id" transfer-ownership="none">
+          <doc xml:space="preserve">The event ID to cancel.</doc>
+          <type name="guint32" c:type="guint32"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="scte_null_new" c:identifier="gst_mpegts_scte_null_new">
+      <doc xml:space="preserve">Allocates and initializes a NULL command #GstMpegtsSCTESIT.</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
+        <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
+      </return-value>
+    </function>
+    <function name="scte_splice_in_new" c:identifier="gst_mpegts_scte_splice_in_new">
+      <doc xml:space="preserve">Allocates and initializes a new "Splice In" INSERT command
+#GstMpegtsSCTESIT for the given @event_id and @splice_time.
+
+If the @splice_time is #G_MAXUINT64 then the event will be
+immediate as opposed to for the target @splice_time.</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
+        <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
+      </return-value>
+      <parameters>
+        <parameter name="event_id" transfer-ownership="none">
+          <doc xml:space="preserve">The event ID.</doc>
+          <type name="guint32" c:type="guint32"/>
+        </parameter>
+        <parameter name="splice_time" transfer-ownership="none">
+          <doc xml:space="preserve">The PCR time for the splice event</doc>
+          <type name="guint64" c:type="guint64"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="scte_splice_out_new" c:identifier="gst_mpegts_scte_splice_out_new">
+      <doc xml:space="preserve">Allocates and initializes a new "Splice Out" INSERT command
+#GstMpegtsSCTESIT for the given @event_id, @splice_time and
+duration.
+
+If the @splice_time is #G_MAXUINT64 then the event will be
+immediate as opposed to for the target @splice_time.
+
+If the @duration is 0 it won't be specified in the event.</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
+        <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
+      </return-value>
+      <parameters>
+        <parameter name="event_id" transfer-ownership="none">
+          <doc xml:space="preserve">The event ID.</doc>
+          <type name="guint32" c:type="guint32"/>
+        </parameter>
+        <parameter name="splice_time" transfer-ownership="none">
+          <doc xml:space="preserve">The PCR time for the splice event</doc>
+          <type name="guint64" c:type="guint64"/>
+        </parameter>
+        <parameter name="duration" transfer-ownership="none">
+          <doc xml:space="preserve">The optional duration.</doc>
+          <type name="guint64" c:type="guint64"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="section_from_atsc_mgt" c:identifier="gst_mpegts_section_from_atsc_mgt" moved-to="Section.from_atsc_mgt" version="1.18">
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">the #GstMpegtsSection</doc>
+        <type name="Section" c:type="GstMpegtsSection*"/>
+      </return-value>
+      <parameters>
+        <parameter name="mgt" transfer-ownership="full">
+          <doc xml:space="preserve">a #GstMpegtsAtscMGT to create the #GstMpegtsSection from</doc>
+          <type name="AtscMGT" c:type="GstMpegtsAtscMGT*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="section_from_atsc_rrt" c:identifier="gst_mpegts_section_from_atsc_rrt" moved-to="Section.from_atsc_rrt">
+      
+      <return-value transfer-ownership="full">
+        <type name="Section" c:type="GstMpegtsSection*"/>
+      </return-value>
+      <parameters>
+        <parameter name="rrt" transfer-ownership="none">
+          <type name="AtscRRT" c:type="GstMpegtsAtscRRT*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="section_from_atsc_stt" c:identifier="gst_mpegts_section_from_atsc_stt" moved-to="Section.from_atsc_stt">
+      
+      <return-value transfer-ownership="full">
+        <type name="Section" c:type="GstMpegtsSection*"/>
+      </return-value>
+      <parameters>
+        <parameter name="stt" transfer-ownership="none">
+          <type name="AtscSTT" c:type="GstMpegtsAtscSTT*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="section_from_nit" c:identifier="gst_mpegts_section_from_nit" moved-to="Section.from_nit">
       <doc xml:space="preserve">Ownership of @nit is taken. The data in @nit is managed by the #GstMpegtsSection</doc>
       
@@ -4214,6 +4658,23 @@ Release with #g_array_unref when done with it.</doc>
         </parameter>
         <parameter name="pid" transfer-ownership="none">
           <doc xml:space="preserve">The PID that the #GstMpegtsPMT belongs to</doc>
+          <type name="guint16" c:type="guint16"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="section_from_scte_sit" c:identifier="gst_mpegts_section_from_scte_sit" moved-to="Section.from_scte_sit">
+      <doc xml:space="preserve">Ownership of @sit is taken. The data in @sit is managed by the #GstMpegtsSection</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">the #GstMpegtsSection</doc>
+        <type name="Section" c:type="GstMpegtsSection*"/>
+      </return-value>
+      <parameters>
+        <parameter name="sit" transfer-ownership="full">
+          <doc xml:space="preserve">a #GstMpegtsSCTESIT to create the #GstMpegtsSection from</doc>
+          <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
+        </parameter>
+        <parameter name="pid" transfer-ownership="none">
           <type name="guint16" c:type="guint16"/>
         </parameter>
       </parameters>

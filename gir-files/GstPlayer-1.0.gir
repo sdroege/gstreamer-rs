@@ -1073,7 +1073,7 @@ value.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE or %FALSE
 
-Sets the subtitle strack @stream_index.</doc>
+Sets the subtitle stack @stream_index.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -1567,7 +1567,7 @@ gain.</doc>
       <implements name="PlayerSignalDispatcher"/>
       <function name="new" c:identifier="gst_player_g_main_context_signal_dispatcher_new">
         <doc xml:space="preserve">Creates a new GstPlayerSignalDispatcher that uses @application_context,
-or the thread default one if %NULL is used. See gst_player_new_full().</doc>
+or the thread default one if %NULL is used. See gst_player_new().</doc>
         
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the new GstPlayerSignalDispatcher</doc>
@@ -1634,7 +1634,7 @@ matching #GstPlayerAudioInfo.</doc>
       </method>
       <method name="get_image_sample" c:identifier="gst_player_media_info_get_image_sample">
         <doc xml:space="preserve">Function to get the image (or preview-image) stored in taglist.
-Application can use gst_sample_*_() API's to get caps, buffer etc.</doc>
+Application can use `gst_sample_*_()` API's to get caps, buffer etc.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">GstSample or NULL.</doc>
@@ -1927,7 +1927,7 @@ stream.</doc>
       </function>
     </enumeration>
     <class name="PlayerStreamInfo" c:symbol-prefix="player_stream_info" c:type="GstPlayerStreamInfo" parent="GObject.Object" abstract="1" glib:type-name="GstPlayerStreamInfo" glib:get-type="gst_player_stream_info_get_type" glib:type-struct="PlayerStreamInfoClass">
-      <doc xml:space="preserve">Base structure for information concering a media stream. Depending on
+      <doc xml:space="preserve">Base structure for information concerning a media stream. Depending on
 the stream type, one can find more media-specific information in
 #GstPlayerVideoInfo, #GstPlayerAudioInfo, #GstPlayerSubtitleInfo.</doc>
       

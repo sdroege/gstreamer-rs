@@ -294,7 +294,7 @@ filled.</doc>
         <doc xml:space="preserve">Check if appsink will emit the "new-preroll" and "new-sample" signals.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if @appsink is emiting the "new-preroll" and "new-sample"
+          <doc xml:space="preserve">%TRUE if @appsink is emitting the "new-preroll" and "new-sample"
 signals.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -1032,7 +1032,7 @@ mode when implementing various network protocols or hardware devices.
 
 The pull mode, in which the need-data signal triggers the next push-buffer call.
 This mode is typically used in the "random-access" stream-type. Use this
-mode for file access or other randomly accessable sources. In this mode, a
+mode for file access or other randomly accessible sources. In this mode, a
 buffer of exactly the amount of bytes given by the need-data signal should be
 pushed into appsrc.
 
@@ -1052,7 +1052,7 @@ occurs or the state of the appsrc has gone through READY.</doc>
 element is the last buffer of the stream.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
@@ -1096,9 +1096,9 @@ When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
         <parameters>
@@ -1121,9 +1121,9 @@ When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
         <parameters>
@@ -1150,9 +1150,9 @@ When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
         <parameters>
@@ -1186,7 +1186,7 @@ extracted</doc>
 element is the last buffer of the stream.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
@@ -1328,9 +1328,9 @@ When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
         <parameters>
@@ -1353,9 +1353,9 @@ When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
         <parameters>
@@ -1382,9 +1382,9 @@ When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfuly queued.
+          <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
         <parameters>
@@ -1843,9 +1843,9 @@ gst_app_src_set_callbacks().</doc>
         <callback name="push_buffer">
           
           <return-value transfer-ownership="none">
-            <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfuly queued.
+            <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
           <parameters>
@@ -1864,7 +1864,7 @@ gst_app_src_set_callbacks().</doc>
         <callback name="end_of_stream">
           
           <return-value transfer-ownership="none">
-            <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfuly queued.
+            <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.</doc>
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
@@ -1880,9 +1880,9 @@ gst_app_src_set_callbacks().</doc>
         <callback name="push_sample">
           
           <return-value transfer-ownership="none">
-            <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfuly queued.
+            <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
           <parameters>
@@ -1902,9 +1902,9 @@ extracted</doc>
         <callback name="push_buffer_list">
           
           <return-value transfer-ownership="none">
-            <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfuly queued.
+            <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
-#GST_FLOW_EOS when EOS occured.</doc>
+#GST_FLOW_EOS when EOS occurred.</doc>
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
           <parameters>

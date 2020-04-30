@@ -65,7 +65,7 @@ audio-rate to video-rate and handles renegotiation (downstream video size
 changes).
 
 It also provides several background shading effects. These effects are
-applied to a previous picture before the render() implementation can draw a
+applied to a previous picture before the `render()` implementation can draw a
 new frame.</doc>
       
       <virtual-method name="decide_allocation">
@@ -849,7 +849,7 @@ gst_discoverer_stream_info_list_free().</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">An array of strings
-containing informations about how to install the various missing elements
+containing information about how to install the various missing elements
 for @info to be usable. If you wish to use the strings after the life-time
 of @info, you will need to copy them.</doc>
           <array c:type="const gchar**">
@@ -1807,6 +1807,21 @@ Can be %NULL. Unref after usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_single_segment" c:identifier="gst_encoding_profile_get_single_segment" version="1.18">
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#TRUE if the stream represented by @profile should use a single
+segment before the encoder, #FALSE otherwise. This means that buffers will be retimestamped
+and segments will be eat so as to appear as one segment.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="profile" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstEncodingProfile</doc>
+            <type name="EncodingProfile" c:type="GstEncodingProfile*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_type_nick" c:identifier="gst_encoding_profile_get_type_nick">
         
         <return-value transfer-ownership="none">
@@ -1898,7 +1913,7 @@ during the encoding</doc>
             <type name="EncodingProfile" c:type="GstEncodingProfile*"/>
           </instance-parameter>
           <parameter name="enabled" transfer-ownership="none">
-            <doc xml:space="preserve">%FALSE to disable #profile, %TRUE to enable it</doc>
+            <doc xml:space="preserve">%FALSE to disable @profile, %TRUE to enable it</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
@@ -2011,6 +2026,25 @@ for more about restrictions. Does not apply to #GstEncodingContainerProfile.</do
           </parameter>
         </parameters>
       </method>
+      <method name="set_single_segment" c:identifier="gst_encoding_profile_set_single_segment" version="1.18">
+        <doc xml:space="preserve">If using a single segment, buffers will be retimestamped
+and segments will be eat so as to appear as one segment.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="profile" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstEncodingProfile</doc>
+            <type name="EncodingProfile" c:type="GstEncodingProfile*"/>
+          </instance-parameter>
+          <parameter name="single_segment" transfer-ownership="none">
+            <doc xml:space="preserve">#TRUE if the stream represented by @profile should use a single
+segment before the encoder #FALSE otherwise.</doc>
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </method>
       <property name="restriction-caps" writable="1" transfer-ownership="none">
         <type name="Gst.Caps"/>
       </property>
@@ -2030,9 +2064,9 @@ The name and category can only consist of lowercase ASCII letters for the
 first character, followed by either lowercase ASCII letters, digits or
 hyphens ('-').
 
-The @category &lt;emphasis&gt;should&lt;/emphasis&gt; be one of the existing
+The @category *should* be one of the existing
 well-defined categories, like #GST_ENCODING_CATEGORY_DEVICE, but it
-&lt;emphasis&gt;can&lt;/emphasis&gt; be a application or user specific category if
+*can* be a application or user specific category if
 needed.</doc>
         
         <return-value transfer-ownership="full">
@@ -2641,7 +2675,7 @@ program and to what extent the requested plugins could be installed.</doc>
     some (but not all) of the requested plugins could be installed.</doc>
       </member>
       <member name="error" value="2" c:identifier="GST_INSTALL_PLUGINS_ERROR" glib:nick="error">
-        <doc xml:space="preserve">an error occured during the installation. If
+        <doc xml:space="preserve">an error occurred during the installation. If
     this happens, the  user has already seen an error message and another
     one should not be displayed</doc>
       </member>
@@ -2666,7 +2700,7 @@ program and to what extent the requested plugins could be installed.</doc>
       </member>
       <member name="internal_failure" value="201" c:identifier="GST_INSTALL_PLUGINS_INTERNAL_FAILURE" glib:nick="internal-failure">
         <doc xml:space="preserve">some internal failure has
-    occured when trying to start the installer</doc>
+    occurred when trying to start the installer</doc>
       </member>
       <member name="helper_missing" value="202" c:identifier="GST_INSTALL_PLUGINS_HELPER_MISSING" glib:nick="helper-missing">
         <doc xml:space="preserve">the helper script to call the
@@ -2706,17 +2740,17 @@ in debugging.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="PLUGINS_BASE_VERSION_MICRO" value="2" c:type="GST_PLUGINS_BASE_VERSION_MICRO">
+    <constant name="PLUGINS_BASE_VERSION_MICRO" value="0" c:type="GST_PLUGINS_BASE_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="PLUGINS_BASE_VERSION_MINOR" value="16" c:type="GST_PLUGINS_BASE_VERSION_MINOR">
+    <constant name="PLUGINS_BASE_VERSION_MINOR" value="17" c:type="GST_PLUGINS_BASE_VERSION_MINOR">
       <doc xml:space="preserve">The minor version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="PLUGINS_BASE_VERSION_NANO" value="0" c:type="GST_PLUGINS_BASE_VERSION_NANO">
+    <constant name="PLUGINS_BASE_VERSION_NANO" value="1" c:type="GST_PLUGINS_BASE_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer's gst-plugins-base libraries at compile time.
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       
@@ -3063,7 +3097,7 @@ with bit 0 being the most significant bit of the first byte.
 * Bit 41    - general_interlaced_source_flag
 * Bit 42    - general_non_packed_constraint_flag
 * Bit 43    - general_frame_only_constraint_flag
-* Bit 44:87 - general_reserved_zero_44bits
+* Bit 44:87 - See below
 * Bit 88:95 - general_level_idc</doc>
       
       <return-value transfer-ownership="none">

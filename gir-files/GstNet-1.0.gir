@@ -159,7 +159,7 @@ send @GST_MESSAGE_ELEMENT messages with an attached #GstStructure containing
 statistics about clock accuracy and network traffic.</doc>
       
       <constructor name="new" c:identifier="gst_net_client_clock_new">
-        <doc xml:space="preserve">Create a new #GstNetClientInternalClock that will report the time
+        <doc xml:space="preserve">Create a new #GstNetClientClock that will report the time
 provided by the #GstNetTimeProvider on @remote_address and
 @remote_port.</doc>
         
@@ -796,6 +796,24 @@ calls, but otherwise returns NULL on error.</doc>
         <parameter name="src_address" direction="out" caller-allocates="0" transfer-ownership="full">
           <doc xml:space="preserve">address of variable to return sender address</doc>
           <type name="Gio.SocketAddress" c:type="GSocketAddress**"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="net_utils_set_socket_tos" c:identifier="gst_net_utils_set_socket_tos" version="1.18">
+      <doc xml:space="preserve">Configures IP_TOS value of socket, i.e. sets QoS DSCP.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">TRUE if successful, FALSE in case an error occurred.</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="socket" transfer-ownership="none">
+          <doc xml:space="preserve">Socket to configure</doc>
+          <type name="Gio.Socket" c:type="GSocket*"/>
+        </parameter>
+        <parameter name="qos_dscp" transfer-ownership="none">
+          <doc xml:space="preserve">QoS DSCP value</doc>
+          <type name="gint" c:type="gint"/>
         </parameter>
       </parameters>
     </function>
