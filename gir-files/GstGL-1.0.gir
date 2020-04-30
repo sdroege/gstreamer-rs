@@ -40,6 +40,10 @@ synchronization metadata on buffers from the pool.</doc>
       
       <type name="utf8" c:type="gchar*"/>
     </constant>
+    
+    
+    
+    
     <bitfield name="GLAPI" glib:type-name="GstGLAPI" glib:get-type="gst_gl_api_get_type" c:type="GstGLAPI">
       <member name="none" value="0" c:identifier="GST_GL_API_NONE" glib:nick="none">
         <doc xml:space="preserve">no API</doc>
@@ -9036,6 +9040,11 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
+    
+    
+    
+    
+    
     <function-macro name="GL_MEMORY_PBO_ALLOCATOR" c:identifier="GST_GL_MEMORY_PBO_ALLOCATOR" introspectable="0">
       
       <parameters>
@@ -9273,6 +9282,7 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
+    
     <function-macro name="IS_GLSL_STAGE" c:identifier="GST_IS_GLSL_STAGE" introspectable="0">
       
       <parameters>
@@ -9462,6 +9472,8 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
+    
+    
     <function-macro name="IS_GL_MEMORY_PBO_ALLOCATOR" c:identifier="GST_IS_GL_MEMORY_PBO_ALLOCATOR" introspectable="0">
       
       <parameters>
@@ -9678,6 +9690,10 @@ you are writing to OpenGL. Conversely, combining #GST_MAP_GL with
         </parameter>
       </parameters>
     </function>
+    
+    
+    
+    
     <function name="gl_api_from_string" c:identifier="gst_gl_api_from_string" moved-to="GLAPI.from_string">
       
       <return-value transfer-ownership="none">
@@ -10041,6 +10057,7 @@ debug category to be at least %GST_LEVEL_FIXME.</doc>
         </parameter>
       </parameters>
     </function>
+    
     <function name="gl_memory_init_once" c:identifier="gst_gl_memory_init_once" moved-to="GLMemory.init_once" version="1.4">
       <doc xml:space="preserve">Initializes the GL Base Texture allocator. It is safe to call this function
 multiple times.  This must be called before any other GstGLMemory operation.</doc>
@@ -10548,6 +10565,7 @@ or a valid GLSL version and/or profile.</doc>
         </parameter>
       </parameters>
     </function>
+    
     <function name="is_gl_memory_pbo" c:identifier="gst_is_gl_memory_pbo" version="1.8">
       
       <return-value transfer-ownership="none">

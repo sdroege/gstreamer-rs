@@ -3,6 +3,7 @@
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
 <repository xmlns="http://www.gtk.org/introspection/core/1.0" xmlns:c="http://www.gtk.org/introspection/c/1.0" xmlns:glib="http://www.gtk.org/introspection/glib/1.0" version="1.2">
+  <include name="GObject" version="2.0"/>
   <include name="Gio" version="2.0"/>
   <include name="Gst" version="1.0"/>
   <include name="GstPbutils" version="1.0"/>
@@ -13322,22 +13323,6 @@ by #GESUriClipAsset-s.</doc>
     <record name="UriSourceAssetPrivate" c:type="GESUriSourceAssetPrivate" disguised="1">
       
     </record>
-    <constant name="VERSION_MAJOR" value="1" c:type="GES_VERSION_MAJOR">
-      
-      <type name="gint" c:type="gint"/>
-    </constant>
-    <constant name="VERSION_MICRO" value="2" c:type="GES_VERSION_MICRO">
-      
-      <type name="gint" c:type="gint"/>
-    </constant>
-    <constant name="VERSION_MINOR" value="16" c:type="GES_VERSION_MINOR">
-      
-      <type name="gint" c:type="gint"/>
-    </constant>
-    <constant name="VERSION_NANO" value="0" c:type="GES_VERSION_NANO">
-      
-      <type name="gint" c:type="gint"/>
-    </constant>
     <function-macro name="VIDEO_SOURCE" c:identifier="GES_VIDEO_SOURCE" introspectable="0">
       
       <parameters>

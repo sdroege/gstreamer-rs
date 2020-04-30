@@ -3,9 +3,11 @@
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
 <repository xmlns="http://www.gtk.org/introspection/core/1.0" xmlns:c="http://www.gtk.org/introspection/c/1.0" xmlns:glib="http://www.gtk.org/introspection/glib/1.0" version="1.2">
+  <include name="GLib" version="2.0"/>
+  <include name="GModule" version="2.0"/>
+  <include name="GObject" version="2.0"/>
   <include name="Gst" version="1.0"/>
   <include name="GstBase" version="1.0"/>
-  <include name="GstTag" version="1.0"/>
   <package name="gstreamer-audio-1.0"/>
   <c:include name="gst/audio/audio.h"/>
   <namespace name="GstAudio" version="1.0" shared-library="libgstaudio-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
