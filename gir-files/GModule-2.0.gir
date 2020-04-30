@@ -2,18 +2,11 @@
 <!-- This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
-<repository version="1.2"
-            xmlns="http://www.gtk.org/introspection/core/1.0"
-            xmlns:c="http://www.gtk.org/introspection/c/1.0"
-            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+<repository xmlns="http://www.gtk.org/introspection/core/1.0" xmlns:c="http://www.gtk.org/introspection/c/1.0" xmlns:glib="http://www.gtk.org/introspection/glib/1.0" version="1.2">
   <include name="GLib" version="2.0"/>
   <package name="gmodule-2.0"/>
   <c:include name="gmodule.h"/>
-  <namespace name="GModule"
-             version="2.0"
-             shared-library="libgmodule-2.0.so.0"
-             c:identifier-prefixes="G"
-             c:symbol-prefixes="g">
+  <namespace name="GModule" version="2.0" shared-library="libgmodule-2.0.so.0" c:identifier-prefixes="G" c:symbol-prefixes="g">
     <record name="Module" c:type="GModule" disguised="1">
       <doc xml:space="preserve">The #GModule struct is an opaque data structure to represent a
 [dynamically-loaded module][glib-Dynamic-Loading-of-Modules].
@@ -75,11 +68,7 @@ by #G_MODULE_EXPORT. Note that a valid symbol can be %NULL.</doc>
             <doc xml:space="preserve">the name of the symbol to find</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
-          <parameter name="symbol"
-                     direction="out"
-                     caller-allocates="0"
-                     transfer-ownership="full"
-                     nullable="1">
+          <parameter name="symbol" direction="out" caller-allocates="0" transfer-ownership="full" nullable="1">
             <doc xml:space="preserve">returns the pointer to the symbol value</doc>
             <type name="gpointer" c:type="gpointer*"/>
           </parameter>
@@ -105,10 +94,7 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
-          <parameter name="directory"
-                     transfer-ownership="none"
-                     nullable="1"
-                     allow-none="1">
+          <parameter name="directory" transfer-ownership="none" nullable="1" allow-none="1">
             <doc xml:space="preserve">the directory where the module is. This can be
     %NULL or the empty string to indicate that the standard platform-specific
     directories will be used, though that is not recommended</doc>
@@ -145,10 +131,7 @@ returned.</doc>
           <type name="Module" c:type="GModule*"/>
         </return-value>
         <parameters>
-          <parameter name="file_name"
-                     transfer-ownership="none"
-                     nullable="1"
-                     allow-none="1">
+          <parameter name="file_name" transfer-ownership="none" nullable="1" allow-none="1">
             <doc xml:space="preserve">the name of the file containing the module, or %NULL
     to obtain a #GModule representing the main program itself</doc>
             <type name="utf8" c:type="const gchar*"/>
@@ -218,9 +201,7 @@ It is passed the #GModule structure.</doc>
         </parameter>
       </parameters>
     </callback>
-    <function name="module_build_path"
-              c:identifier="g_module_build_path"
-              moved-to="Module.build_path">
+    <function name="module_build_path" c:identifier="g_module_build_path" moved-to="Module.build_path">
       <doc xml:space="preserve">A portable way to build the filename of a module. The platform-specific
 prefix and suffix are added to the filename, if needed, and the result
 is added to the directory, using the correct separator character.
@@ -240,10 +221,7 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
         <type name="utf8" c:type="gchar*"/>
       </return-value>
       <parameters>
-        <parameter name="directory"
-                   transfer-ownership="none"
-                   nullable="1"
-                   allow-none="1">
+        <parameter name="directory" transfer-ownership="none" nullable="1" allow-none="1">
           <doc xml:space="preserve">the directory where the module is. This can be
     %NULL or the empty string to indicate that the standard platform-specific
     directories will be used, though that is not recommended</doc>
@@ -255,18 +233,14 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="module_error"
-              c:identifier="g_module_error"
-              moved-to="Module.error">
+    <function name="module_error" c:identifier="g_module_error" moved-to="Module.error">
       <doc xml:space="preserve">Gets a string describing the last module error.</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a string describing the last module error</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
     </function>
-    <function name="module_supported"
-              c:identifier="g_module_supported"
-              moved-to="Module.supported">
+    <function name="module_supported" c:identifier="g_module_supported" moved-to="Module.supported">
       <doc xml:space="preserve">Checks if modules are supported on the current platform.</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE if modules are supported</doc>
