@@ -386,6 +386,16 @@ manual_traits = ["ElementExtManual"]
     ignore = true
 
     [[object.function]]
+    name = "get_current_running_time"
+    # manual implementation also works for earlier versions
+    ignore = true
+
+    [[object.function]]
+    name = "get_current_clock_time"
+    # manual implementation also works for earlier versions
+    ignore = true
+
+    [[object.function]]
     name = "add_pad"
         [object.function.return]
         bool_return_is_error = "Failed to add pad"
