@@ -870,7 +870,7 @@ where
     ) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }
@@ -1107,7 +1107,7 @@ where
     ) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }

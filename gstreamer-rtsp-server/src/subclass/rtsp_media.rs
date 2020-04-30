@@ -506,7 +506,7 @@ where
     match imp.prepare(&wrap, &from_glib_borrow(thread)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }
@@ -525,7 +525,7 @@ where
     match imp.unprepare(&wrap) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }
@@ -544,7 +544,7 @@ where
     match imp.suspend(&wrap) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }
@@ -563,7 +563,7 @@ where
     match imp.unsuspend(&wrap) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }
@@ -648,7 +648,7 @@ where
     let res = match imp.setup_rtpbin(&wrap, &from_glib_borrow(rtpbin)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     };
@@ -678,7 +678,7 @@ where
     ) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }
@@ -773,7 +773,7 @@ where
     match imp.handle_sdp(&wrap, &*(sdp as *const gst_sdp::SDPMessageRef)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
-            err.log_with_object(&wrap);
+            err.log();
             glib_sys::GFALSE
         }
     }
