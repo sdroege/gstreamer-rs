@@ -443,7 +443,7 @@ impl StructureRef {
         }
     }
 
-    pub fn get_name(&self) -> &'static str {
+    pub fn get_name<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(gst_sys::gst_structure_get_name(&self.0))
                 .to_str()
@@ -500,7 +500,7 @@ impl StructureRef {
         Iter::new(self)
     }
 
-    pub fn get_nth_field_name(&self, idx: u32) -> Option<&'static str> {
+    pub fn get_nth_field_name<'a>(&self, idx: u32) -> Option<&'a str> {
         unsafe {
             let field_name = gst_sys::gst_structure_nth_field_name(&self.0, idx);
             if field_name.is_null() {

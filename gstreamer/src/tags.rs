@@ -798,7 +798,7 @@ pub fn tag_get_type(name: &str) -> glib::Type {
     unsafe { from_glib(gst_sys::gst_tag_get_type(name.to_glib_none().0)) }
 }
 
-pub fn tag_get_nick(name: &str) -> Option<&'static str> {
+pub fn tag_get_nick<'b>(name: &str) -> Option<&'b str> {
     skip_assert_initialized!();
     unsafe {
         let ptr = gst_sys::gst_tag_get_nick(name.to_glib_none().0);
@@ -811,7 +811,7 @@ pub fn tag_get_nick(name: &str) -> Option<&'static str> {
     }
 }
 
-pub fn tag_get_description(name: &str) -> Option<&'static str> {
+pub fn tag_get_description<'b>(name: &str) -> Option<&'b str> {
     skip_assert_initialized!();
     unsafe {
         let ptr = gst_sys::gst_tag_get_description(name.to_glib_none().0);
