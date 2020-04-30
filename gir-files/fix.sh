@@ -37,15 +37,28 @@ xmlstarlet ed --pf --inplace \
 	      --value gpointer \
 	    GstGL-1.0.gir
 
-# Remove GstMemoryEGL
+# Remove GstMemoryEGL and EGLImage
 xmlstarlet ed --pf --inplace \
 	   --delete '//_:record[@name="GLMemoryEGL"]' \
 	   --delete '//_:record[@name="GLMemoryEGLAllocator"]' \
 	   --delete '//_:record[@name="GLMemoryEGLAllocatorClass"]' \
+	   --delete '//_:record[@name="EGLImage"]' \
+	   --delete '//_:class[@name="GLMemoryEGLAllocator"]' \
+	   --delete '//_:callback[@name="EGLImageDestroyNotify"]' \
+	   --delete '//_:constant[@name="GL_MEMORY_EGL_ALLOCATOR_NAME"]' \
+	   --delete '//_:function[starts-with(@name, "egl")]' \
+	   --delete '//_:function[starts-with(@name, "gl_memory_egl")]' \
+	   --delete '//_:function[@name="is_gl_memory_egl"]' \
+	   --delete '//_:function-macro[starts-with(@name, "egl")]' \
+	   --delete '//_:function-macro[starts-with(@name, "EGL")]' \
+	   --delete '//_:function-macro[starts-with(@name, "GL_MEMORY_EGL")]' \
+	   --delete '//_:function-macro[starts-with(@name, "IS_EGL_IMAGE")]' \
+	   --delete '//_:function-macro[starts-with(@name, "IS_GL_MEMORY_EGL")]' \
 	   GstGL-1.0.gir
 
 xmlstarlet ed --pf --inplace \
 	   --delete '//_:method[@c:identifier="gst_gl_display_egl_from_gl_display"]' \
+	   --delete '//_:method[@c:identifier="egl_from_gl_display"]' \
 	   GstGL-1.0.gir
 
 # Remove all libcheck related API
@@ -55,11 +68,22 @@ xmlstarlet ed --pf --inplace \
 	   --delete '//_:callback[starts-with(@name, "Check")]' \
 	   --delete '//_:record[starts-with(@name, "Check")]' \
 	   GstCheck-1.0.gir
-
 # Change GstVideoAncillary.data to a fixed-size 256 byte array
 xmlstarlet ed --pf --inplace \
 	   --delete '//_:record[@name="VideoAncillary"]/_:field[@name="data"]/_:array/@length' \
+	   --delete '//_:record[@name="VideoAncillary"]/_:field[@name="data"]/_:array/@fixed-size' \
 	   --insert '//_:record[@name="VideoAncillary"]/_:field[@name="data"]/_:array' \
               --type attr --name 'fixed-size' --value '256' \
 	    GstVideo-1.0.gir
+xmlstarlet ed --pf --inplace \
+	   --delete '//_:record[@name="ISO639LanguageDescriptor"]/_:field[@name="language"]/_:array/@c:type' \
+	   --insert '//_:record[@name="ISO639LanguageDescriptor"]/_:field[@name="language"]/_:array' \
+              --type attr --name 'c:type' --value 'gchar' \
+	    GstMpegts-1.0.gir
+
+xmlstarlet ed --pf --inplace \
+	   --delete '//_:record[@name="MIKEYPayloadKeyData"]/_:field[@name="kv_data"]/_:array/@c:type' \
+	   --insert '//_:record[@name="MIKEYPayloadKeyData"]/_:field[@name="kv_data"]/_:array' \
+              --type attr --name 'c:type' --value 'guint8' \
+	    GstSdp-1.0.gir
 
