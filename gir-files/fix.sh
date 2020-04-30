@@ -1,6 +1,16 @@
 #!/bin/bash
 set -x -e
 
+# https://github.com/gtk-rs/gir-files/blob/master/reformat.sh
+# `///` used as `//` not works in Windows in this case
+for file in *.gir; do
+	xmlstarlet ed -P -L \
+		-d '//_:doc/@line' \
+		-d '//_:doc/@filename' \
+		-d '///_:source-position' \
+		"$file"
+done
+
 # replace wayland structures to gpointers
 xmlstarlet ed --pf --inplace \
             --update '//*[@c:type="wl_display*"]/@c:type' \
