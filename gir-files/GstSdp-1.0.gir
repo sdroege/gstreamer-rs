@@ -379,7 +379,7 @@ in NTP-UTC format.</doc>
         </parameters>
       </method>
       <method name="find_payload" c:identifier="gst_mikey_message_find_payload" version="1.4">
-        <doc xml:space="preserve">Find the @nth occurence of the payload with @type in @msg.</doc>
+        <doc xml:space="preserve">Find the @nth occurrence of the payload with @type in @msg.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the @nth #GstMIKEYPayload of @type.</doc>
@@ -1218,7 +1218,7 @@ specific security protocol</doc>
       </field>
     </record>
     <record name="MIKEYPayloadSPParam" c:type="GstMIKEYPayloadSPParam">
-      <doc xml:space="preserve">A Type/Length/Value field for security paramaters</doc>
+      <doc xml:space="preserve">A Type/Length/Value field for security parameters</doc>
       
       <field name="type" writable="1">
         <doc xml:space="preserve">specifies the type of the parameter</doc>
@@ -1280,7 +1280,7 @@ specific security protocol</doc>
         <doc xml:space="preserve">Cert hash payload</doc>
       </member>
       <member name="v" value="9" c:identifier="GST_MIKEY_PT_V">
-        <doc xml:space="preserve">Verfication message payload</doc>
+        <doc xml:space="preserve">Verification message payload</doc>
       </member>
       <member name="sp" value="10" c:identifier="GST_MIKEY_PT_SP">
         <doc xml:space="preserve">Security Policy payload</doc>
@@ -1935,7 +1935,9 @@ a=rtpmap:(payload) (encoding_name)/(clock_rate)[/(encoding_params)]
 
 a=framesize:(payload) (width)-(height)
 
-a=fmtp:(payload) (param)[=(value)];...</doc>
+a=fmtp:(payload) (param)[=(value)];...
+
+Note that the extmap attribute is set only by gst_sdp_media_attributes_to_caps().</doc>
         
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstCaps, or %NULL if an error happened</doc>
@@ -2499,7 +2501,9 @@ a=framesize:(payload) (width)-(height)
 
 a=fmtp:(payload) (param)[=(value)];...
 
-a=rtcp-fb:(payload) (param1) [param2]...</doc>
+a=rtcp-fb:(payload) (param1) [param2]...
+
+a=extmap:(id)[/direction] (extensionname) (extensionattributes)</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstSDPResult.</doc>
@@ -4158,7 +4162,9 @@ a=framesize:(payload) (width)-(height)
 
 a=fmtp:(payload) (param)[=(value)];...
 
-a=rtcp-fb:(payload) (param1) [param2]...</doc>
+a=rtcp-fb:(payload) (param1) [param2]...
+
+a=extmap:(id)[/direction] (extensionname) (extensionattributes)</doc>
       
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a #GstSDPResult.</doc>

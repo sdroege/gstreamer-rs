@@ -43,6 +43,16 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function-macro>
+    <constant name="TAG_ACOUSTID_FINGERPRINT" value="chromaprint-fingerprint" c:type="GST_TAG_ACOUSTID_FINGERPRINT" version="1.18">
+      <doc xml:space="preserve">AcoustID Fingerprint (Chromaprint)</doc>
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
+    <constant name="TAG_ACOUSTID_ID" value="acoustid-id" c:type="GST_TAG_ACOUSTID_ID" version="1.18">
+      <doc xml:space="preserve">AcoustID Identifier</doc>
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
     <constant name="TAG_CAPTURING_CONTRAST" value="capturing-contrast" c:type="GST_TAG_CAPTURING_CONTRAST">
       <doc xml:space="preserve">Direction of contrast processing applied when capturing an image. (string)
 
@@ -308,6 +318,16 @@ keys.</doc>
     </constant>
     <constant name="TAG_MUSICBRAINZ_ARTISTID" value="musicbrainz-artistid" c:type="GST_TAG_MUSICBRAINZ_ARTISTID">
       <doc xml:space="preserve">MusicBrainz artist ID</doc>
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
+    <constant name="TAG_MUSICBRAINZ_RELEASEGROUPID" value="musicbrainz-releasegroupid" c:type="GST_TAG_MUSICBRAINZ_RELEASEGROUPID" version="1.18">
+      <doc xml:space="preserve">MusicBrainz Release Group ID</doc>
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
+    <constant name="TAG_MUSICBRAINZ_RELEASETRACKID" value="musicbrainz-releasetrackid" c:type="GST_TAG_MUSICBRAINZ_RELEASETRACKID" version="1.18">
+      <doc xml:space="preserve">MusicBrainz Release Track ID</doc>
       
       <type name="utf8" c:type="gchar*"/>
     </constant>
@@ -1062,7 +1082,7 @@ code (both are accepted for convenience).
 
 The "bibliographic" code is derived from the English name of the language
 (e.g. "ger" for German instead of "de" or "deu"). In most scenarios, the
-"terminological" codes are prefered.
+"terminological" codes are preferred.
 
 Language codes are case-sensitive and expected to be lower case.</doc>
       
@@ -1086,7 +1106,7 @@ code (both are accepted for convenience).
 
 The "terminological" code is derived from the local name of the language
 (e.g. "deu" for German instead of "ger"). In most scenarios, the
-"terminological" codes are prefered over the "bibliographic" ones.
+"terminological" codes are preferred over the "bibliographic" ones.
 
 Language codes are case-sensitive and expected to be lower case.</doc>
       
@@ -1296,7 +1316,7 @@ rather than the image itself.
 In GStreamer, image tags are #GstSample&lt;!-- --&gt;s containing the raw image
 data, with the sample caps describing the content type of the image
 (e.g. image/jpeg, image/png, text/uri-list). The sample info may contain
-an additional 'image-type' field of #GST_TYPE_TAG_IMAGE_TYPE to describe
+an additional 'image-type' field of #GstTagImageType to describe
 the type of image (front cover, back cover etc.). #GST_TAG_PREVIEW_IMAGE
 tags should not carry an image type, their type is already indicated via
 the special tag name.

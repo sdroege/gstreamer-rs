@@ -324,14 +324,14 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </function-macro>
     <constant name="AUDIO_CONVERTER_OPT_DITHER_METHOD" value="GstAudioConverter.dither-method" c:type="GST_AUDIO_CONVERTER_OPT_DITHER_METHOD">
-      <doc xml:space="preserve">#GST_TYPE_AUDIO_DITHER_METHOD, The dither method to use when
+      <doc xml:space="preserve">#GstAudioDitherMethod, The dither method to use when
 changing bit depth.
 Default is #GST_AUDIO_DITHER_NONE.</doc>
       
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="AUDIO_CONVERTER_OPT_MIX_MATRIX" value="GstAudioConverter.mix-matrix" c:type="GST_AUDIO_CONVERTER_OPT_MIX_MATRIX">
-      <doc xml:space="preserve">#GST_TYPE_VALUE_LIST, The channel mapping matrix.
+      <doc xml:space="preserve">#GST_TYPE_LIST, The channel mapping matrix.
 
 The matrix coefficients must be between -1 and 1: the number of rows is equal
 to the number of output channels and the number of columns is equal to the
@@ -362,7 +362,7 @@ g_value_unset (&amp;v);
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="AUDIO_CONVERTER_OPT_NOISE_SHAPING_METHOD" value="GstAudioConverter.noise-shaping-method" c:type="GST_AUDIO_CONVERTER_OPT_NOISE_SHAPING_METHOD">
-      <doc xml:space="preserve">#GST_TYPE_AUDIO_NOISE_SHAPING_METHOD, The noise shaping method to use
+      <doc xml:space="preserve">#GstAudioNoiseShapingMethod, The noise shaping method to use
 to mask noise from quantization errors.
 Default is #GST_AUDIO_NOISE_SHAPING_NONE.</doc>
       
@@ -376,7 +376,7 @@ Default is 1</doc>
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="AUDIO_CONVERTER_OPT_RESAMPLER_METHOD" value="GstAudioConverter.resampler-method" c:type="GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD">
-      <doc xml:space="preserve">#GST_TYPE_AUDIO_RESAMPLER_METHOD, The resampler method to use when
+      <doc xml:space="preserve">#GstAudioResamplerMethod, The resampler method to use when
 changing sample rates.
 Default is #GST_AUDIO_RESAMPLER_METHOD_BLACKMAN_NUTTALL.</doc>
       
@@ -957,7 +957,7 @@ See #GST_AUDIO_RESAMPLER_OPT_CUBIC_B for some more common values</doc>
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="AUDIO_RESAMPLER_OPT_FILTER_INTERPOLATION" value="GstAudioResampler.filter-interpolation" c:type="GST_AUDIO_RESAMPLER_OPT_FILTER_INTERPOLATION">
-      <doc xml:space="preserve">GST_TYPE_AUDIO_RESAMPLER_INTERPOLATION: how the filter coeficients should be
+      <doc xml:space="preserve">GST_TYPE_AUDIO_RESAMPLER_INTERPOLATION: how the filter coefficients should be
    interpolated.
 GST_AUDIO_RESAMPLER_FILTER_INTERPOLATION_CUBIC is default.</doc>
       
@@ -1218,6 +1218,10 @@ downstream specifies a range or a set of acceptable rates).</doc>
       </property>
       <property name="output-buffer-duration" writable="1" transfer-ownership="none">
         <type name="guint64" c:type="guint64"/>
+      </property>
+      <property name="output-buffer-duration-fraction" version="1.18" writable="1" transfer-ownership="none">
+        <doc xml:space="preserve">Output block size in nanoseconds, expressed as a fraction.</doc>
+        <type name="Gst.Fraction"/>
       </property>
       <field name="parent">
         <type name="GstBase.Aggregator" c:type="GstAggregator"/>
@@ -2733,7 +2737,7 @@ This is expressed in caps by having a single channel and no channel mask.
 This is expressed in caps by having a channel mask with no bits set.
 
 As another special case it is allowed to have two channels without a channel mask.
-This implicitely means that this is a stereo stream with a front left and front right
+This implicitly means that this is a stereo stream with a front left and front right
 channel.</doc>
       <member name="none" value="-3" c:identifier="GST_AUDIO_CHANNEL_POSITION_NONE" glib:nick="none">
         <doc xml:space="preserve">used for position-less channels, e.g.
@@ -3043,7 +3047,7 @@ The object can perform conversion of:
         <doc xml:space="preserve">Create a new #GstAudioConverter that is able to convert between @in and @out
 audio formats.
 
-@config contains extra configuration options, see #GST_AUDIO_CONVERTER_OPT_*
+@config contains extra configuration options, see `GST_AUDIO_CONVERTER_OPT_*`
 parameters for details about the options and values.</doc>
         
         <return-value transfer-ownership="full">
@@ -3306,7 +3310,7 @@ If the parameters in @config can not be set exactly, this function returns
 %FALSE and will try to update as much state as possible. The new state can
 then be retrieved and refined with gst_audio_converter_get_config().
 
-Look at the #GST_AUDIO_CONVERTER_OPT_* fields to check valid configuration
+Look at the `GST_AUDIO_CONVERTER_OPT_*` fields to check valid configuration
 option and values.</doc>
         
         <return-value transfer-ownership="none">
@@ -3732,7 +3736,7 @@ invalidated by a call to this function.</doc>
             <doc xml:space="preserve">a #GstAudioDecoder</doc>
             <type name="AudioDecoder" c:type="GstAudioDecoder*"/>
           </instance-parameter>
-          <parameter name="buf" transfer-ownership="none">
+          <parameter name="buf" transfer-ownership="full" nullable="1" allow-none="1">
             <doc xml:space="preserve">decoded data</doc>
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
@@ -3766,7 +3770,7 @@ invalidated by a call to this function.</doc>
             <doc xml:space="preserve">a #GstAudioDecoder</doc>
             <type name="AudioDecoder" c:type="GstAudioDecoder*"/>
           </instance-parameter>
-          <parameter name="buf" transfer-ownership="none">
+          <parameter name="buf" transfer-ownership="full" nullable="1" allow-none="1">
             <doc xml:space="preserve">decoded data</doc>
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
@@ -5075,7 +5079,7 @@ may be invalidated by a call to this function.</doc>
             <doc xml:space="preserve">a #GstAudioEncoder</doc>
             <type name="AudioEncoder" c:type="GstAudioEncoder*"/>
           </instance-parameter>
-          <parameter name="buffer" transfer-ownership="none">
+          <parameter name="buffer" transfer-ownership="full" nullable="1" allow-none="1">
             <doc xml:space="preserve">encoded data</doc>
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
@@ -6724,7 +6728,7 @@ meta as well as extracting it.</doc>
       <member name="truncate_range" value="1" c:identifier="GST_AUDIO_PACK_FLAG_TRUNCATE_RANGE" glib:nick="truncate-range">
         <doc xml:space="preserve">When the source has a smaller depth
   than the target format, set the least significant bits of the target
-  to 0. This is likely sightly faster but less accurate. When this flag
+  to 0. This is likely slightly faster but less accurate. When this flag
   is not specified, the most significant bits of the source are duplicated
   in the least significant bits of the destination.</doc>
       </member>
@@ -6900,7 +6904,7 @@ frames.</doc>
 @in_frames are given to @resampler.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">The number of frames that would be availabe after giving
+          <doc xml:space="preserve">The number of frames that would be available after giving
 @in_frames as input to @resampler.</doc>
           <type name="gsize" c:type="gsize"/>
         </return-value>
@@ -7080,11 +7084,11 @@ for @quality in @options.</doc>
       </member>
       <member name="linear" value="1" c:identifier="GST_AUDIO_RESAMPLER_FILTER_INTERPOLATION_LINEAR" glib:nick="linear">
         <doc xml:space="preserve">linear interpolation of the
-  filter coeficients.</doc>
+  filter coefficients.</doc>
       </member>
       <member name="cubic" value="2" c:identifier="GST_AUDIO_RESAMPLER_FILTER_INTERPOLATION_CUBIC" glib:nick="cubic">
         <doc xml:space="preserve">cubic interpolation of the
-  filter coeficients.</doc>
+  filter coefficients.</doc>
       </member>
     </enumeration>
     <enumeration name="AudioResamplerFilterMode" glib:type-name="GstAudioResamplerFilterMode" glib:get-type="gst_audio_resampler_filter_mode_get_type" c:type="GstAudioResamplerFilterMode">
@@ -7242,7 +7246,7 @@ FALSE on error.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="clear_all" invoker="clear_all">
-        <doc xml:space="preserve">Fill the ringbuffer with silence.
+        <doc xml:space="preserve">Clear all samples from the ringbuffer.
 
 MT safe.</doc>
         
@@ -7335,11 +7339,11 @@ usually less than the segment size but can be bigger when the
 implementation uses another internal buffer between the audio
 device.
 
-For playback ringbuffers this is the amount of samples transfered from the
+For playback ringbuffers this is the amount of samples transferred from the
 ringbuffer to the device but still not played.
 
 For capture ringbuffers this is the amount of samples in the device that are
-not yet transfered to the ringbuffer.</doc>
+not yet transferred to the ringbuffer.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of samples queued in the audio device.
@@ -7531,7 +7535,7 @@ MT safe.</doc>
         </parameters>
       </method>
       <method name="clear_all" c:identifier="gst_audio_ring_buffer_clear_all">
-        <doc xml:space="preserve">Fill the ringbuffer with silence.
+        <doc xml:space="preserve">Clear all samples from the ringbuffer.
 
 MT safe.</doc>
         
@@ -7655,11 +7659,11 @@ usually less than the segment size but can be bigger when the
 implementation uses another internal buffer between the audio
 device.
 
-For playback ringbuffers this is the amount of samples transfered from the
+For playback ringbuffers this is the amount of samples transferred from the
 ringbuffer to the device but still not played.
 
 For capture ringbuffers this is the amount of samples in the device that are
-not yet transfered to the ringbuffer.</doc>
+not yet transferred to the ringbuffer.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of samples queued in the audio device.
@@ -8548,6 +8552,17 @@ All scheduling of samples and timestamps is done in this base class
 together with #GstAudioBaseSink using a default implementation of a
 #GstAudioRingBuffer that uses threads.</doc>
       
+      <virtual-method name="clear_all">
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="sink" transfer-ownership="none">
+            <type name="AudioSink" c:type="GstAudioSink*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
       <virtual-method name="close">
         
         <return-value transfer-ownership="none">
@@ -8581,6 +8596,17 @@ together with #GstAudioBaseSink using a default implementation of a
           </instance-parameter>
         </parameters>
       </virtual-method>
+      <virtual-method name="pause">
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="sink" transfer-ownership="none">
+            <type name="AudioSink" c:type="GstAudioSink*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
       <virtual-method name="prepare">
         
         <return-value transfer-ownership="none">
@@ -8596,6 +8622,28 @@ together with #GstAudioBaseSink using a default implementation of a
         </parameters>
       </virtual-method>
       <virtual-method name="reset">
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="sink" transfer-ownership="none">
+            <type name="AudioSink" c:type="GstAudioSink*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="resume">
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="sink" transfer-ownership="none">
+            <type name="AudioSink" c:type="GstAudioSink*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="stop">
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -8647,7 +8695,6 @@ together with #GstAudioBaseSink using a default implementation of a
       </field>
     </class>
     <record name="AudioSinkClass" c:type="GstAudioSinkClass" glib:is-gtype-struct-for="AudioSink">
-      <doc xml:space="preserve">#GstAudioSink class. Override the vmethods to implement functionality.</doc>
       
       <field name="parent_class">
         <doc xml:space="preserve">the parent class structure.</doc>
@@ -8753,8 +8800,60 @@ together with #GstAudioBaseSink using a default implementation of a
           </parameters>
         </callback>
       </field>
+      <field name="pause">
+        <callback name="pause">
+          
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="sink" transfer-ownership="none">
+              <type name="AudioSink" c:type="GstAudioSink*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="resume">
+        <callback name="resume">
+          
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="sink" transfer-ownership="none">
+              <type name="AudioSink" c:type="GstAudioSink*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="stop">
+        <callback name="stop">
+          
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="sink" transfer-ownership="none">
+              <type name="AudioSink" c:type="GstAudioSink*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="clear_all">
+        <callback name="clear_all">
+          
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="sink" transfer-ownership="none">
+              <type name="AudioSink" c:type="GstAudioSink*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="_gst_reserved" readable="0" private="1">
-        <array zero-terminated="0" fixed-size="4">
+        <array zero-terminated="0" fixed-size="0">
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
@@ -9235,7 +9334,7 @@ of the current one.</doc>
       </method>
       <method name="set_rate" c:identifier="gst_audio_stream_align_set_rate" version="1.14">
         <doc xml:space="preserve">Sets @rate as new sample rate for the following processing. If the sample
-rate differs this implicitely marks the next data as discontinuous.</doc>
+rate differs this implicitly marks the next data as discontinuous.</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -9458,13 +9557,6 @@ rate differs this implicitely marks the next data as discontinuous.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    <function-macro name="IS_STREAM_VOLUME" c:identifier="GST_IS_STREAM_VOLUME" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
     <constant name="META_TAG_AUDIO_CHANNELS_STR" value="channels" c:type="GST_META_TAG_AUDIO_CHANNELS_STR" version="1.2">
       <doc xml:space="preserve">This metadata stays relevant as long as channels are unchanged.</doc>
       
@@ -9480,17 +9572,10 @@ rate differs this implicitely marks the next data as discontinuous.</doc>
       
       <type name="utf8" c:type="gchar*"/>
     </constant>
-    <function-macro name="STREAM_VOLUME" c:identifier="GST_STREAM_VOLUME" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
     <function-macro name="STREAM_VOLUME_GET_INTERFACE" c:identifier="GST_STREAM_VOLUME_GET_INTERFACE" introspectable="0">
       
       <parameters>
-        <parameter name="inst">
+        <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>

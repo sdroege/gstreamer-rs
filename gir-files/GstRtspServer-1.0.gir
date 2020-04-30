@@ -1113,6 +1113,49 @@ no one else overrides it.</doc>
           <type name="RTSPClient" c:type="GstRTSPClient*"/>
         </return-value>
       </constructor>
+      <virtual-method name="adjust_play_mode">
+        
+        <return-value transfer-ownership="none">
+          <type name="GstRtsp.RTSPStatusCode" c:type="GstRTSPStatusCode"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="client" transfer-ownership="none">
+            <type name="RTSPClient" c:type="GstRTSPClient*"/>
+          </instance-parameter>
+          <parameter name="context" transfer-ownership="none">
+            <type name="RTSPContext" c:type="GstRTSPContext*"/>
+          </parameter>
+          <parameter name="range" transfer-ownership="none">
+            <type name="GstRtsp.RTSPTimeRange" c:type="GstRTSPTimeRange**"/>
+          </parameter>
+          <parameter name="flags" transfer-ownership="none">
+            <type name="Gst.SeekFlags" c:type="GstSeekFlags*"/>
+          </parameter>
+          <parameter name="rate" transfer-ownership="none">
+            <type name="gdouble" c:type="gdouble*"/>
+          </parameter>
+          <parameter name="trickmode_interval" transfer-ownership="none">
+            <type name="Gst.ClockTime" c:type="GstClockTime*"/>
+          </parameter>
+          <parameter name="enable_rate_control" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="adjust_play_response">
+        
+        <return-value transfer-ownership="none">
+          <type name="GstRtsp.RTSPStatusCode" c:type="GstRTSPStatusCode"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="client" transfer-ownership="none">
+            <type name="RTSPClient" c:type="GstRTSPClient*"/>
+          </instance-parameter>
+          <parameter name="context" transfer-ownership="none">
+            <type name="RTSPContext" c:type="GstRTSPContext*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
       <virtual-method name="announce_request">
         
         <return-value transfer-ownership="none">
@@ -1662,6 +1705,20 @@ The connection object returned remains valid until the client is freed.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_content_length_limit" c:identifier="gst_rtsp_client_get_content_length_limit" version="1.18">
+        <doc xml:space="preserve">Get the Content-Length limit of @client.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the Content-Length limit.</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="client" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPClient</doc>
+            <type name="RTSPClient" c:type="GstRTSPClient*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_mount_points" c:identifier="gst_rtsp_client_get_mount_points">
         <doc xml:space="preserve">Get the #GstRTSPMountPoints object that @client uses to manage its sessions.</doc>
         
@@ -1688,6 +1745,26 @@ The connection object returned remains valid until the client is freed.</doc>
             <doc xml:space="preserve">a #GstRTSPClient</doc>
             <type name="RTSPClient" c:type="GstRTSPClient*"/>
           </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_stream_transport" c:identifier="gst_rtsp_client_get_stream_transport" version="1.18">
+        <doc xml:space="preserve">This is useful when providing a send function through
+gst_rtsp_client_set_send_func() when doing RTSP over TCP:
+the send function must call gst_rtsp_stream_transport_message_sent ()
+on the appropriate transport when data has been received for streaming
+to continue.</doc>
+        
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">the #GstRTSPStreamTransport associated with @channel.</doc>
+          <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="client" transfer-ownership="none">
+            <type name="RTSPClient" c:type="GstRTSPClient*"/>
+          </instance-parameter>
+          <parameter name="channel" transfer-ownership="none">
+            <type name="guint8" c:type="guint8"/>
+          </parameter>
         </parameters>
       </method>
       <method name="get_thread_pool" c:identifier="gst_rtsp_client_get_thread_pool">
@@ -1821,6 +1898,26 @@ element in the #GList should be unreffed before the list is freed.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="set_content_length_limit" c:identifier="gst_rtsp_client_set_content_length_limit" version="1.18">
+        <doc xml:space="preserve">Configure @client to use the specified Content-Length limit.
+
+Define an appropriate request size limit and reject requests exceeding the
+limit with response status 413 Request Entity Too Large</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="client" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPClient</doc>
+            <type name="RTSPClient" c:type="GstRTSPClient*"/>
+          </instance-parameter>
+          <parameter name="limit" transfer-ownership="none">
+            <doc xml:space="preserve">Content-Length limit</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="set_mount_points" c:identifier="gst_rtsp_client_set_mount_points">
         <doc xml:space="preserve">Set @mounts as the mount points for @client which it will use to map urls
 to media streams. These mount points are usually inherited from the server that
@@ -1947,6 +2044,9 @@ that created the client but can be overridden later.</doc>
       </property>
       <property name="mount-points" writable="1" transfer-ownership="none">
         <type name="RTSPMountPoints"/>
+      </property>
+      <property name="post-session-timeout" writable="1" transfer-ownership="none">
+        <type name="gint" c:type="gint"/>
       </property>
       <property name="session-pool" writable="1" transfer-ownership="none">
         <type name="RTSPSessionPool"/>
@@ -2371,6 +2471,53 @@ that created the client but can be overridden later.</doc>
             </parameter>
             <parameter name="uri" transfer-ownership="none">
               <type name="GstRtsp.RTSPUrl" c:type="const GstRTSPUrl*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="adjust_play_mode">
+        <callback name="adjust_play_mode">
+          
+          <return-value transfer-ownership="none">
+            <type name="GstRtsp.RTSPStatusCode" c:type="GstRTSPStatusCode"/>
+          </return-value>
+          <parameters>
+            <parameter name="client" transfer-ownership="none">
+              <type name="RTSPClient" c:type="GstRTSPClient*"/>
+            </parameter>
+            <parameter name="context" transfer-ownership="none">
+              <type name="RTSPContext" c:type="GstRTSPContext*"/>
+            </parameter>
+            <parameter name="range" transfer-ownership="none">
+              <type name="GstRtsp.RTSPTimeRange" c:type="GstRTSPTimeRange**"/>
+            </parameter>
+            <parameter name="flags" transfer-ownership="none">
+              <type name="Gst.SeekFlags" c:type="GstSeekFlags*"/>
+            </parameter>
+            <parameter name="rate" transfer-ownership="none">
+              <type name="gdouble" c:type="gdouble*"/>
+            </parameter>
+            <parameter name="trickmode_interval" transfer-ownership="none">
+              <type name="Gst.ClockTime" c:type="GstClockTime*"/>
+            </parameter>
+            <parameter name="enable_rate_control" transfer-ownership="none">
+              <type name="gboolean" c:type="gboolean*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="adjust_play_response">
+        <callback name="adjust_play_response">
+          
+          <return-value transfer-ownership="none">
+            <type name="GstRtsp.RTSPStatusCode" c:type="GstRTSPStatusCode"/>
+          </return-value>
+          <parameters>
+            <parameter name="client" transfer-ownership="none">
+              <type name="RTSPClient" c:type="GstRTSPClient*"/>
+            </parameter>
+            <parameter name="context" transfer-ownership="none">
+              <type name="RTSPContext" c:type="GstRTSPContext*"/>
             </parameter>
           </parameters>
         </callback>
@@ -2820,7 +2967,7 @@ that created the client but can be overridden later.</doc>
         </callback>
       </field>
       <field name="_gst_reserved" readable="0" private="1">
-        <array zero-terminated="0" fixed-size="4">
+        <array zero-terminated="0" fixed-size="2">
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
@@ -3009,7 +3156,7 @@ context can then be received using gst_rtsp_context_get_current().</doc>
         </return-value>
         <parameters>
           <instance-parameter name="ctx" transfer-ownership="none">
-            <doc xml:space="preserve">a ##GstRTSPContext</doc>
+            <doc xml:space="preserve">a #GstRTSPContext</doc>
             <type name="RTSPContext" c:type="GstRTSPContext*"/>
           </instance-parameter>
         </parameters>
@@ -3646,6 +3793,43 @@ gst_rtsp_media_prepare ().</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="get_rate_control" c:identifier="gst_rtsp_media_get_rate_control" version="1.18">
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">whether @media will follow the Rate-Control=no behaviour as specified
+in the ONVIF replay spec.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_rates" c:identifier="gst_rtsp_media_get_rates" version="1.18">
+        <doc xml:space="preserve">Get the rate and applied_rate of the current segment.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%FALSE if looking up the rate and applied rate failed. Otherwise
+%TRUE is returned and @rate and @applied_rate are set to the rate and
+applied_rate of the current segment.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia
+@rate (allow-none): the rate of the current segment
+@applied_rate (allow-none): the applied_rate of the current segment</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+          <parameter name="rate" transfer-ownership="none">
+            <type name="gdouble" c:type="gdouble*"/>
+          </parameter>
+          <parameter name="applied_rate" transfer-ownership="none">
+            <type name="gdouble" c:type="gdouble*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="get_retransmission_time" c:identifier="gst_rtsp_media_get_retransmission_time">
         <doc xml:space="preserve">Get the amount of time to store retransmission data.</doc>
         
@@ -3763,6 +3947,19 @@ will listen on @address and @port for client time requests.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="has_completed_sender" c:identifier="gst_rtsp_media_has_completed_sender" version="1.18">
+        <doc xml:space="preserve">See gst_rtsp_stream_is_complete(), gst_rtsp_stream_is_sender().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">whether @media has at least one complete sender stream.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="is_bind_mcast_address" c:identifier="gst_rtsp_media_is_bind_mcast_address" version="1.16">
         <doc xml:space="preserve">Check if multicast sockets are configured to be bound to multicast addresses.</doc>
         
@@ -3788,6 +3985,18 @@ unpreparing.</doc>
         <parameters>
           <instance-parameter name="media" transfer-ownership="none">
             <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="is_receive_only" c:identifier="gst_rtsp_media_is_receive_only" version="1.18">
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @media is receive-only, %FALSE otherwise.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
         </parameters>
@@ -3844,6 +4053,27 @@ Use gst_rtsp_media_get_time_provider() to get the network clock.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @media can provide a #GstNetTimeProvider.</doc>
           <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="lock" c:identifier="gst_rtsp_media_lock" version="1.18">
+        <doc xml:space="preserve">Lock the entire media. This is needed by callers such as rtsp_client to
+protect the media when it is shared by many clients.
+The lock prevents that concurrent clients alters the shared media,
+while one client already is working with it.
+Typically the lock is taken in external RTSP API calls that uses shared media
+such as DESCRIBE, SETUP, ANNOUNCE, TEARDOWN, PLAY, PAUSE.
+
+As best practice take the lock as soon as the function get hold of a shared
+media object. Release the lock right before the function returns.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="media" transfer-ownership="none">
@@ -3909,10 +4139,9 @@ gst_rtsp_media_prepare().</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="seek_full" c:identifier="gst_rtsp_media_seek_full" version="1.14">
-        <doc xml:space="preserve">Seek the pipeline of @media to @range. @media must be prepared with
-gst_rtsp_media_prepare(). In order to perform the seek operation,
-the pipeline must contain all needed transport parts (transport sinks).</doc>
+      <method name="seek_full" c:identifier="gst_rtsp_media_seek_full" version="1.18">
+        <doc xml:space="preserve">Seek the pipeline of @media to @range with the given @flags.
+@media must be prepared with gst_rtsp_media_prepare().</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE on success.</doc>
@@ -3930,6 +4159,40 @@ the pipeline must contain all needed transport parts (transport sinks).</doc>
           <parameter name="flags" transfer-ownership="none">
             <doc xml:space="preserve">The minimal set of #GstSeekFlags to use</doc>
             <type name="Gst.SeekFlags" c:type="GstSeekFlags"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="seek_trickmode" c:identifier="gst_rtsp_media_seek_trickmode" version="1.18">
+        <doc xml:space="preserve">Seek the pipeline of @media to @range with the given @flags and @rate,
+and @trickmode_interval.
+@media must be prepared with gst_rtsp_media_prepare().
+In order to perform the seek operation, the pipeline must contain all
+needed transport parts (transport sinks).</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE on success.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+          <parameter name="range" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPTimeRange</doc>
+            <type name="GstRtsp.RTSPTimeRange" c:type="GstRTSPTimeRange*"/>
+          </parameter>
+          <parameter name="flags" transfer-ownership="none">
+            <doc xml:space="preserve">The minimal set of #GstSeekFlags to use</doc>
+            <type name="Gst.SeekFlags" c:type="GstSeekFlags"/>
+          </parameter>
+          <parameter name="rate" transfer-ownership="none">
+            <doc xml:space="preserve">the rate to use in the seek</doc>
+            <type name="gdouble" c:type="gdouble"/>
+          </parameter>
+          <parameter name="trickmode_interval" transfer-ownership="none">
+            <doc xml:space="preserve">The trickmode interval to use for KEY_UNITS trick mode</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
           </parameter>
         </parameters>
       </method>
@@ -4189,6 +4452,22 @@ it is unprepared.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="set_rate_control" c:identifier="gst_rtsp_media_set_rate_control" version="1.18">
+        <doc xml:space="preserve">Define whether @media will follow the Rate-Control=no behaviour as specified
+in the ONVIF replay spec.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+          <parameter name="enabled" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="set_retransmission_time" c:identifier="gst_rtsp_media_set_retransmission_time">
         <doc xml:space="preserve">Set the amount of time to store retransmission packets.</doc>
         
@@ -4378,10 +4657,23 @@ taken of @pipeline.</doc>
             <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
-          <parameter name="pipeline" transfer-ownership="full">
+          <parameter name="pipeline" transfer-ownership="none">
             <doc xml:space="preserve">a #GstPipeline</doc>
             <type name="Gst.Pipeline" c:type="GstPipeline*"/>
           </parameter>
+        </parameters>
+      </method>
+      <method name="unlock" c:identifier="gst_rtsp_media_unlock" version="1.18">
+        <doc xml:space="preserve">Unlock the media.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
         </parameters>
       </method>
       <method name="unprepare" c:identifier="gst_rtsp_media_unprepare">
@@ -5909,7 +6201,7 @@ when a client disconnects without sending TEARDOWN.</doc>
       
     </record>
     <class name="RTSPMediaFactoryURI" c:symbol-prefix="rtsp_media_factory_uri" c:type="GstRTSPMediaFactoryURI" parent="RTSPMediaFactory" glib:type-name="GstRTSPMediaFactoryURI" glib:get-type="gst_rtsp_media_factory_uri_get_type" glib:type-struct="RTSPMediaFactoryURIClass">
-      <doc xml:space="preserve">A media factory that creates a pipeline to play and uri.</doc>
+      <doc xml:space="preserve">A media factory that creates a pipeline to play any uri.</doc>
       
       <constructor name="new" c:identifier="gst_rtsp_media_factory_uri_new">
         <doc xml:space="preserve">Create a new #GstRTSPMediaFactoryURI instance.</doc>
@@ -6017,7 +6309,10 @@ and called when a message has been sent on the transport.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="user_data" transfer-ownership="none" nullable="1" allow-none="1" closure="0">
+        <parameter name="trans" transfer-ownership="none">
+          <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none" nullable="1" allow-none="1" closure="1">
           <doc xml:space="preserve">user data</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
@@ -6187,6 +6482,14 @@ g_object_unref() after usage.</doc>
     </record>
     <class name="RTSPOnvifClient" c:symbol-prefix="rtsp_onvif_client" c:type="GstRTSPOnvifClient" version="1.14" parent="RTSPClient" glib:type-name="GstRTSPOnvifClient" glib:get-type="gst_rtsp_onvif_client_get_type" glib:type-struct="RTSPOnvifClientClass">
       
+      <constructor name="new" c:identifier="gst_rtsp_onvif_client_new" version="1.18">
+        <doc xml:space="preserve">Create a new #GstRTSPOnvifClient instance.</doc>
+        
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">a new #GstRTSPOnvifClient</doc>
+          <type name="RTSPClient" c:type="GstRTSPClient*"/>
+        </return-value>
+      </constructor>
       <field name="parent">
         <type name="RTSPClient" c:type="GstRTSPClient"/>
       </field>
@@ -6370,6 +6673,18 @@ usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="has_replay_support" c:identifier="gst_rtsp_onvif_media_factory_has_replay_support" version="1.18">
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if ONVIF replay is supported by the media factory.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <type name="RTSPOnvifMediaFactory" c:type="GstRTSPOnvifMediaFactory*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="set_backchannel_bandwidth" c:identifier="gst_rtsp_onvif_media_factory_set_backchannel_bandwidth" version="1.14">
         <doc xml:space="preserve">Set the configured/supported bandwidth of the ONVIF backchannel pipeline in
 bits per second.</doc>
@@ -6417,6 +6732,21 @@ prepare.</doc>
           <parameter name="launch" transfer-ownership="none">
             <doc xml:space="preserve">the launch description</doc>
             <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_replay_support" c:identifier="gst_rtsp_onvif_media_factory_set_replay_support" version="1.18">
+        <doc xml:space="preserve">Set to %TRUE if ONVIF replay is supported by the media factory.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <type name="RTSPOnvifMediaFactory" c:type="GstRTSPOnvifMediaFactory*"/>
+          </instance-parameter>
+          <parameter name="has_replay_support" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
       </method>
@@ -6974,6 +7304,20 @@ usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_content_length_limit" c:identifier="gst_rtsp_server_get_content_length_limit" version="1.18">
+        <doc xml:space="preserve">Get the Content-Length limit of @server.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the Content-Length limit.</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="server" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPServer</doc>
+            <type name="RTSPServer" c:type="GstRTSPServer*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_mount_points" c:identifier="gst_rtsp_server_get_mount_points">
         <doc xml:space="preserve">Get the #GstRTSPMountPoints used as the mount points of @server.</doc>
         
@@ -7086,6 +7430,24 @@ This function must be called before the server is bound.</doc>
           <parameter name="backlog" transfer-ownership="none">
             <doc xml:space="preserve">the backlog</doc>
             <type name="gint" c:type="gint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_content_length_limit" c:identifier="gst_rtsp_server_set_content_length_limit" version="1.18">
+        <doc xml:space="preserve">Define an appropriate request size limit and reject requests exceeding the
+limit.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="server" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPServer
+Configure @server to use the specified Content-Length limit.</doc>
+            <type name="RTSPServer" c:type="GstRTSPServer*"/>
+          </instance-parameter>
+          <parameter name="limit" transfer-ownership="none">
+            <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
       </method>
@@ -7206,6 +7568,9 @@ that the HTTP server read from the socket while parsing the HTTP header.</doc>
       </property>
       <property name="bound-port" transfer-ownership="none">
         <type name="gint" c:type="gint"/>
+      </property>
+      <property name="content-length-limit" writable="1" transfer-ownership="none">
+        <type name="guint" c:type="guint"/>
       </property>
       <property name="mount-points" writable="1" transfer-ownership="none">
         <type name="RTSPMountPoints"/>
@@ -7614,6 +7979,9 @@ cleaned up when there is no activity for @timeout seconds.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <property name="extra-timeout" writable="1" transfer-ownership="none">
+        <type name="guint" c:type="guint"/>
+      </property>
       <property name="sessionid" writable="1" construct-only="1" transfer-ownership="none">
         <type name="utf8" c:type="gchar*"/>
       </property>
@@ -8024,8 +8392,7 @@ what happens to the session. @func will be called with the session pool
 locked so no further actions on @pool can be performed from @func.
 
 If @func returns #GST_RTSP_FILTER_REMOVE, the session will be set to the
-expired state with gst_rtsp_session_set_expired() and removed from
-@pool.
+expired state and removed from @pool.
 
 If @func returns #GST_RTSP_FILTER_KEEP, the session will remain in @pool.
 
@@ -8344,7 +8711,8 @@ allocated.</doc>
       </method>
       <method name="add_transport" c:identifier="gst_rtsp_stream_add_transport">
         <doc xml:space="preserve">Add the transport in @trans to @stream. The media of @stream will
-then also be send to the values configured in @trans.
+then also be send to the values configured in @trans. Adding the
+same transport twice will not add it a second time.
 
 @stream must be joined to a bin.
 
@@ -8654,6 +9022,41 @@ g_free() after usage.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_rate_control" c:identifier="gst_rtsp_stream_get_rate_control" version="1.18">
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">whether @stream will follow the Rate-Control=no behaviour as specified
+in the ONVIF replay spec.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_rates" c:identifier="gst_rtsp_stream_get_rates" version="1.18">
+        <doc xml:space="preserve">Retrieve the current rate and/or applied_rate.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if rate and/or applied_rate could be determined.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="rate" transfer-ownership="none" nullable="1" allow-none="1">
+            <doc xml:space="preserve">the configured rate</doc>
+            <type name="gdouble" c:type="gdouble*"/>
+          </parameter>
+          <parameter name="applied_rate" transfer-ownership="none" nullable="1" allow-none="1">
+            <doc xml:space="preserve">the configured applied_rate</doc>
+            <type name="gdouble" c:type="gdouble*"/>
+          </parameter>
         </parameters>
       </method>
       <method name="get_retransmission_pt" c:identifier="gst_rtsp_stream_get_retransmission_pt">
@@ -9588,6 +9991,22 @@ an RTSP connection.</doc>
           <parameter name="mode" transfer-ownership="none">
             <doc xml:space="preserve">the clock publish mode</doc>
             <type name="RTSPPublishClockMode" c:type="GstRTSPPublishClockMode"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_rate_control" c:identifier="gst_rtsp_stream_set_rate_control" version="1.18">
+        <doc xml:space="preserve">Define whether @stream will follow the Rate-Control=no behaviour as specified
+in the ONVIF replay spec.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="enabled" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
       </method>
@@ -11203,6 +11622,10 @@ port pair in multicast. No response is sent when the check returns
         </parameter>
       </parameters>
     </function-macro>
+    <constant name="RTSP_ONVIF_REPLAY_REQUIREMENT" value="onvif-replay" c:type="GST_RTSP_ONVIF_REPLAY_REQUIREMENT">
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
     <function-macro name="RTSP_ONVIF_SERVER" c:identifier="GST_RTSP_ONVIF_SERVER" introspectable="0">
       
       <parameters>

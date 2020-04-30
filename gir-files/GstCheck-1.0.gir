@@ -787,6 +787,27 @@ MT safe.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="pull_until_eos" c:identifier="gst_harness_pull_until_eos" version="1.18">
+        <doc xml:space="preserve">Pulls a #GstBuffer from the #GAsyncQueue on the #GstHarness sinkpad. The pull
+will block until an EOS event is received, or timeout in 60 seconds.
+MT safe.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE on success, %FALSE on timeout.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="h" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstHarness</doc>
+            <type name="Harness" c:type="GstHarness*"/>
+          </instance-parameter>
+          <parameter name="buf" direction="out" caller-allocates="0" transfer-ownership="full">
+            <doc xml:space="preserve">A #GstBuffer, or %NULL if EOS or timeout occures
+  first.</doc>
+            <type name="Gst.Buffer" c:type="GstBuffer**"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="pull_upstream_event" c:identifier="gst_harness_pull_upstream_event" version="1.6">
         <doc xml:space="preserve">Pulls an #GstEvent from the #GAsyncQueue on the #GstHarness srcpad.
 Timeouts after 60 seconds similar to gst_harness_pull.
@@ -2325,7 +2346,8 @@ MT safe.</doc>
       <method name="crank" c:identifier="gst_test_clock_crank" version="1.8">
         <doc xml:space="preserve">A "crank" consists of three steps:
 1: Wait for a #GstClockID to be registered with the #GstTestClock.
-2: Advance the #GstTestClock to the time the #GstClockID is waiting for.
+2: Advance the #GstTestClock to the time the #GstClockID is waiting, unless
+   the clock time is already passed the clock id (Since 1.18).
 3: Release the #GstClockID wait.
 A "crank" can be though of as the notion of
 manually driving the clock forward to its next logical step.</doc>
@@ -2420,6 +2442,25 @@ triggered, %FALSE otherwise.</doc>
             <doc xml:space="preserve">a #GstClockID clock
 notification to look for</doc>
             <type name="Gst.ClockID" c:type="GstClockID*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="process_id" c:identifier="gst_test_clock_process_id" version="1.18">
+        <doc xml:space="preserve">Processes and releases the pending ID.
+
+MT safe.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="test_clock" transfer-ownership="none">
+            <doc xml:space="preserve">#GstTestClock for which to process the pending IDs</doc>
+            <type name="TestClock" c:type="GstTestClock*"/>
+          </instance-parameter>
+          <parameter name="pending_id" transfer-ownership="full">
+            <doc xml:space="preserve">#GstClockID</doc>
+            <type name="Gst.ClockID" c:type="GstClockID"/>
           </parameter>
         </parameters>
       </method>

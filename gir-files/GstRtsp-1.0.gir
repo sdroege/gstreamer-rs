@@ -111,7 +111,7 @@ state as when it was first created.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="connect" c:identifier="gst_rtsp_connection_connect">
+      <method name="connect" c:identifier="gst_rtsp_connection_connect" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Attempt to connect to the url of @conn made with
 gst_rtsp_connection_create(). If @timeout is %NULL this function can block
 forever. If @timeout contains a valid timeout, this function will return
@@ -129,12 +129,35 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
             <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
           </instance-parameter>
           <parameter name="timeout" transfer-ownership="none">
-            <doc xml:space="preserve">a #GTimeVal timeout</doc>
+            <doc xml:space="preserve">a GTimeVal timeout</doc>
             <type name="GLib.TimeVal" c:type="GTimeVal*"/>
           </parameter>
         </parameters>
       </method>
-      <method name="connect_with_response" c:identifier="gst_rtsp_connection_connect_with_response" version="1.8">
+      <method name="connect_usec" c:identifier="gst_rtsp_connection_connect_usec" version="1.18">
+        <doc xml:space="preserve">Attempt to connect to the url of @conn made with
+gst_rtsp_connection_create(). If @timeout is 0 this function can block
+forever. If @timeout contains a valid timeout, this function will return
+#GST_RTSP_ETIMEOUT after the timeout expired.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK when a connection could be made.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout in microseconds</doc>
+            <type name="gint64" c:type="gint64"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="connect_with_response" c:identifier="gst_rtsp_connection_connect_with_response" version="1.8" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Attempt to connect to the url of @conn made with
 gst_rtsp_connection_create(). If @timeout is %NULL this function can block
 forever. If @timeout contains a valid timeout, this function will return
@@ -153,8 +176,36 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
             <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
           </instance-parameter>
           <parameter name="timeout" transfer-ownership="none">
-            <doc xml:space="preserve">a #GTimeVal timeout</doc>
+            <doc xml:space="preserve">a GTimeVal timeout</doc>
             <type name="GLib.TimeVal" c:type="GTimeVal*"/>
+          </parameter>
+          <parameter name="response" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMessage</doc>
+            <type name="RTSPMessage" c:type="GstRTSPMessage*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="connect_with_response_usec" c:identifier="gst_rtsp_connection_connect_with_response_usec" version="1.18">
+        <doc xml:space="preserve">Attempt to connect to the url of @conn made with
+gst_rtsp_connection_create(). If @timeout is 0 this function can block
+forever. If @timeout contains a valid timeout, this function will return
+#GST_RTSP_ETIMEOUT after the timeout expired.  If @conn is set to tunneled,
+@response will contain a response to the tunneling request messages.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK when a connection could be made.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout in microseconds</doc>
+            <type name="gint64" c:type="gint64"/>
           </parameter>
           <parameter name="response" transfer-ownership="none">
             <doc xml:space="preserve">a #GstRTSPMessage</doc>
@@ -395,7 +446,7 @@ error. The file descriptor remains valid until the connection is closed.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="next_timeout" c:identifier="gst_rtsp_connection_next_timeout">
+      <method name="next_timeout" c:identifier="gst_rtsp_connection_next_timeout" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Calculate the next timeout for @conn, storing the result in @timeout.</doc>
         
         <return-value transfer-ownership="none">
@@ -413,7 +464,21 @@ error. The file descriptor remains valid until the connection is closed.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="poll" c:identifier="gst_rtsp_connection_poll">
+      <method name="next_timeout_usec" c:identifier="gst_rtsp_connection_next_timeout_usec" version="1.18">
+        <doc xml:space="preserve">Calculate the next timeout for @conn</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#the next timeout in microseconds</doc>
+          <type name="gint64" c:type="gint64"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="poll" c:identifier="gst_rtsp_connection_poll" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Wait up to the specified @timeout for the connection to become available for
 at least one of the operations specified in @events. When the function returns
 with #GST_RTSP_OK, @revents will contain a bitmask of available operations on
@@ -446,7 +511,40 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="read" c:identifier="gst_rtsp_connection_read">
+      <method name="poll_usec" c:identifier="gst_rtsp_connection_poll_usec" version="1.18">
+        <doc xml:space="preserve">Wait up to the specified @timeout for the connection to become available for
+at least one of the operations specified in @events. When the function returns
+with #GST_RTSP_OK, @revents will contain a bitmask of available operations on
+@conn.
+
+@timeout can be 0, in which case this function might block forever.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK on success.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="events" transfer-ownership="none">
+            <doc xml:space="preserve">a bitmask of #GstRTSPEvent flags to check</doc>
+            <type name="RTSPEvent" c:type="GstRTSPEvent"/>
+          </parameter>
+          <parameter name="revents" transfer-ownership="none">
+            <doc xml:space="preserve">location for result flags</doc>
+            <type name="RTSPEvent" c:type="GstRTSPEvent*"/>
+          </parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout in microseconds</doc>
+            <type name="gint64" c:type="gint64"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="read" c:identifier="gst_rtsp_connection_read" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Attempt to read @size bytes into @data from the connected @conn, blocking up to
 the specified @timeout. @timeout can be %NULL, in which case this function
 might block forever.
@@ -476,7 +574,37 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="receive" c:identifier="gst_rtsp_connection_receive">
+      <method name="read_usec" c:identifier="gst_rtsp_connection_read_usec" version="1.18">
+        <doc xml:space="preserve">Attempt to read @size bytes into @data from the connected @conn, blocking up to
+the specified @timeout. @timeout can be 0, in which case this function
+might block forever.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK on success.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="data" transfer-ownership="none">
+            <doc xml:space="preserve">the data to read</doc>
+            <type name="guint8" c:type="guint8*"/>
+          </parameter>
+          <parameter name="size" transfer-ownership="none">
+            <doc xml:space="preserve">the size of @data</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout value in microseconds</doc>
+            <type name="gint64" c:type="gint64"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="receive" c:identifier="gst_rtsp_connection_receive" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Attempt to read into @message from the connected @conn, blocking up to
 the specified @timeout. @timeout can be %NULL, in which case this function
 might block forever.
@@ -502,6 +630,32 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="receive_usec" c:identifier="gst_rtsp_connection_receive_usec" version="1.18">
+        <doc xml:space="preserve">Attempt to read into @message from the connected @conn, blocking up to
+the specified @timeout. @timeout can be 0, in which case this function
+might block forever.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK on success.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="message" transfer-ownership="none">
+            <doc xml:space="preserve">the message to read</doc>
+            <type name="RTSPMessage" c:type="GstRTSPMessage*"/>
+          </parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout value or 0</doc>
+            <type name="gint64" c:type="gint64"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="reset_timeout" c:identifier="gst_rtsp_connection_reset_timeout">
         <doc xml:space="preserve">Reset the timeout of @conn.</doc>
         
@@ -516,7 +670,7 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="send" c:identifier="gst_rtsp_connection_send">
+      <method name="send" c:identifier="gst_rtsp_connection_send" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Attempt to send @message to the connected @conn, blocking up to
 the specified @timeout. @timeout can be %NULL, in which case this function
 might block forever.
@@ -542,7 +696,7 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="send_messages" c:identifier="gst_rtsp_connection_send_messages" version="1.16">
+      <method name="send_messages" c:identifier="gst_rtsp_connection_send_messages" version="1.16" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Attempt to send @messages to the connected @conn, blocking up to
 the specified @timeout. @timeout can be %NULL, in which case this function
 might block forever.
@@ -571,6 +725,64 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
           <parameter name="timeout" transfer-ownership="none">
             <doc xml:space="preserve">a timeout value or %NULL</doc>
             <type name="GLib.TimeVal" c:type="GTimeVal*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="send_messages_usec" c:identifier="gst_rtsp_connection_send_messages_usec" version="1.18">
+        <doc xml:space="preserve">Attempt to send @messages to the connected @conn, blocking up to
+the specified @timeout. @timeout can be 0, in which case this function
+might block forever.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK on Since.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="messages" transfer-ownership="none">
+            <doc xml:space="preserve">the messages to send</doc>
+            <array length="1" zero-terminated="0" c:type="GstRTSPMessage*">
+              <type name="RTSPMessage" c:type="GstRTSPMessage"/>
+            </array>
+          </parameter>
+          <parameter name="n_messages" transfer-ownership="none">
+            <doc xml:space="preserve">the number of messages to send</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout value in microseconds</doc>
+            <type name="gint64" c:type="gint64"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="send_usec" c:identifier="gst_rtsp_connection_send_usec" version="1.18">
+        <doc xml:space="preserve">Attempt to send @message to the connected @conn, blocking up to
+the specified @timeout. @timeout can be 0, in which case this function
+might block forever.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK on success.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="message" transfer-ownership="none">
+            <doc xml:space="preserve">the message to send</doc>
+            <type name="RTSPMessage" c:type="GstRTSPMessage*"/>
+          </parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout value in microseconds</doc>
+            <type name="gint64" c:type="gint64"/>
           </parameter>
         </parameters>
       </method>
@@ -632,7 +844,7 @@ user and password respectively.</doc>
         </parameters>
       </method>
       <method name="set_auth_param" c:identifier="gst_rtsp_connection_set_auth_param">
-        <doc xml:space="preserve">Setup @conn with authentication directives. This is not necesary for
+        <doc xml:space="preserve">Setup @conn with authentication directives. This is not necessary for
 methods #GST_RTSP_AUTH_NONE and #GST_RTSP_AUTH_BASIC. For
 #GST_RTSP_AUTH_DIGEST, directives should be taken from the digest challenge
 in the WWW-Authenticate response header and can include realm, domain,
@@ -653,6 +865,25 @@ nonce, opaque, stale, algorithm, qop as per RFC2617.</doc>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">value</doc>
             <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_content_length_limit" c:identifier="gst_rtsp_connection_set_content_length_limit" version="1.18">
+        <doc xml:space="preserve">Configure @conn to use the specified Content-Length limit.
+Both requests and responses are validated. If content-length is
+exceeded, ENOMEM error will be returned.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="limit" transfer-ownership="none">
+            <doc xml:space="preserve">Content-Length limit</doc>
+            <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
       </method>
@@ -828,7 +1059,7 @@ the @conn is connected.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="write" c:identifier="gst_rtsp_connection_write">
+      <method name="write" c:identifier="gst_rtsp_connection_write" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Attempt to write @size bytes of @data to the connected @conn, blocking up to
 the specified @timeout. @timeout can be %NULL, in which case this function
 might block forever.
@@ -855,6 +1086,36 @@ This function can be cancelled with gst_rtsp_connection_flush().</doc>
           <parameter name="timeout" transfer-ownership="none">
             <doc xml:space="preserve">a timeout value or %NULL</doc>
             <type name="GLib.TimeVal" c:type="GTimeVal*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="write_usec" c:identifier="gst_rtsp_connection_write_usec" version="1.18">
+        <doc xml:space="preserve">Attempt to write @size bytes of @data to the connected @conn, blocking up to
+the specified @timeout. @timeout can be 0, in which case this function
+might block forever.
+
+This function can be cancelled with gst_rtsp_connection_flush().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">#GST_RTSP_OK on success.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="conn" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPConnection</doc>
+            <type name="RTSPConnection" c:type="GstRTSPConnection*"/>
+          </instance-parameter>
+          <parameter name="data" transfer-ownership="none">
+            <doc xml:space="preserve">the data to write</doc>
+            <type name="guint8" c:type="const guint8*"/>
+          </parameter>
+          <parameter name="size" transfer-ownership="none">
+            <doc xml:space="preserve">the size of @data</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout value or 0</doc>
+            <type name="gint64" c:type="gint64"/>
           </parameter>
         </parameters>
       </method>
@@ -2654,7 +2915,7 @@ UTC times will be converted to nanoseconds since 1900.</doc>
         <doc xml:space="preserve">no error</doc>
       </member>
       <member name="error" value="-1" c:identifier="GST_RTSP_ERROR" glib:nick="error">
-        <doc xml:space="preserve">some unspecified error occured</doc>
+        <doc xml:space="preserve">some unspecified error occurred</doc>
       </member>
       <member name="einval" value="-2" c:identifier="GST_RTSP_EINVAL" glib:nick="einval">
         <doc xml:space="preserve">invalid arguments were provided to a function</doc>
@@ -2666,16 +2927,16 @@ UTC times will be converted to nanoseconds since 1900.</doc>
         <doc xml:space="preserve">no memory was available for the operation</doc>
       </member>
       <member name="eresolv" value="-5" c:identifier="GST_RTSP_ERESOLV" glib:nick="eresolv">
-        <doc xml:space="preserve">a host resolve error occured</doc>
+        <doc xml:space="preserve">a host resolve error occurred</doc>
       </member>
       <member name="enotimpl" value="-6" c:identifier="GST_RTSP_ENOTIMPL" glib:nick="enotimpl">
         <doc xml:space="preserve">function not implemented</doc>
       </member>
       <member name="esys" value="-7" c:identifier="GST_RTSP_ESYS" glib:nick="esys">
-        <doc xml:space="preserve">a system error occured, errno contains more details</doc>
+        <doc xml:space="preserve">a system error occurred, errno contains more details</doc>
       </member>
       <member name="eparse" value="-8" c:identifier="GST_RTSP_EPARSE" glib:nick="eparse">
-        <doc xml:space="preserve">a parsing error occured</doc>
+        <doc xml:space="preserve">a parsing error occurred</doc>
       </member>
       <member name="ewsastart" value="-9" c:identifier="GST_RTSP_EWSASTART" glib:nick="ewsastart">
         <doc xml:space="preserve">windows networking could not start</doc>
@@ -2687,13 +2948,13 @@ UTC times will be converted to nanoseconds since 1900.</doc>
         <doc xml:space="preserve">end-of-file was reached</doc>
       </member>
       <member name="enet" value="-12" c:identifier="GST_RTSP_ENET" glib:nick="enet">
-        <doc xml:space="preserve">a network problem occured, h_errno contains more details</doc>
+        <doc xml:space="preserve">a network problem occurred, h_errno contains more details</doc>
       </member>
       <member name="enotip" value="-13" c:identifier="GST_RTSP_ENOTIP" glib:nick="enotip">
         <doc xml:space="preserve">the host is not an IP host</doc>
       </member>
       <member name="etimeout" value="-14" c:identifier="GST_RTSP_ETIMEOUT" glib:nick="etimeout">
-        <doc xml:space="preserve">a timeout occured</doc>
+        <doc xml:space="preserve">a timeout occurred</doc>
       </member>
       <member name="etget" value="-15" c:identifier="GST_RTSP_ETGET" glib:nick="etget">
         <doc xml:space="preserve">the tunnel GET request has been performed</doc>
@@ -3249,6 +3510,28 @@ g_strfreev() when no longer needed.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_request_uri_with_control" c:identifier="gst_rtsp_url_get_request_uri_with_control">
+        <doc xml:space="preserve">Get a newly allocated string describing the request URI for @url
+combined with the control path for @control_path</doc>
+        
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">a string with the request URI combined with the control path.
+g_free() after usage.
+
+Since 1.18</doc>
+          <type name="utf8" c:type="gchar*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="url" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPUrl</doc>
+            <type name="RTSPUrl" c:type="const GstRTSPUrl*"/>
+          </instance-parameter>
+          <parameter name="control_path" transfer-ownership="none">
+            <doc xml:space="preserve">an RTSP aggregate control path</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="set_port" c:identifier="gst_rtsp_url_set_port">
         <doc xml:space="preserve">Set the port number in @url to @port.</doc>
         
@@ -3493,7 +3776,7 @@ count is zero the watch and associated memory will be destroyed.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="wait_backlog" c:identifier="gst_rtsp_watch_wait_backlog" version="1.4">
+      <method name="wait_backlog" c:identifier="gst_rtsp_watch_wait_backlog" version="1.4" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Wait until there is place in the backlog queue, @timeout is reached
 or @watch is set to flushing.
 
@@ -3518,8 +3801,38 @@ free space in the backlog queue and try again.</doc>
             <type name="RTSPWatch" c:type="GstRTSPWatch*"/>
           </instance-parameter>
           <parameter name="timeout" transfer-ownership="none">
-            <doc xml:space="preserve">a #GTimeVal timeout</doc>
+            <doc xml:space="preserve">a GTimeVal timeout</doc>
             <type name="GLib.TimeVal" c:type="GTimeVal*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="wait_backlog_usec" c:identifier="gst_rtsp_watch_wait_backlog_usec" version="1.18">
+        <doc xml:space="preserve">Wait until there is place in the backlog queue, @timeout is reached
+or @watch is set to flushing.
+
+If @timeout is 0 this function can block forever. If @timeout
+contains a valid timeout, this function will return %GST_RTSP_ETIMEOUT
+after the timeout expired.
+
+The typically use of this function is when gst_rtsp_watch_write_data
+returns %GST_RTSP_ENOMEM. The caller then calls this function to wait for
+free space in the backlog queue and try again.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%GST_RTSP_OK when if there is room in queue.
+         %GST_RTSP_ETIMEOUT when @timeout was reached.
+         %GST_RTSP_EINTR when @watch is flushing
+         %GST_RTSP_EINVAL when called with invalid parameters.</doc>
+          <type name="RTSPResult" c:type="GstRTSPResult"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="watch" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPWatch</doc>
+            <type name="RTSPWatch" c:type="GstRTSPWatch*"/>
+          </instance-parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <doc xml:space="preserve">a timeout in microseconds</doc>
+            <type name="gint64" c:type="gint64"/>
           </parameter>
         </parameters>
       </method>
