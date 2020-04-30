@@ -3,6 +3,9 @@
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
 <repository xmlns="http://www.gtk.org/introspection/core/1.0" xmlns:c="http://www.gtk.org/introspection/c/1.0" xmlns:glib="http://www.gtk.org/introspection/glib/1.0" version="1.2">
+  <include name="GLib" version="2.0"/>
+  <include name="GModule" version="2.0"/>
+  <include name="GObject" version="2.0"/>
   <include name="Gst" version="1.0"/>
   <package name="gstreamer-base-1.0"/>
   <c:include name="gst/base/base.h"/>
@@ -6709,7 +6712,7 @@ on in_place buffers.</doc>
 useful for filters that do not care about negotiation.
 
 Always %TRUE for filters which don't implement either a transform
-or transform_ip method.
+or transform_ip or generate_output method.
 
 MT safe.</doc>
         

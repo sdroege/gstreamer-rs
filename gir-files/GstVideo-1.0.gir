@@ -3911,7 +3911,7 @@ the parity check bits).</doc>
       <field name="data" writable="1">
         <doc xml:space="preserve">The user data content of the Ancillary packet.
    Does not contain the ADF, DID, SDID nor CS.</doc>
-        <array zero-terminated="0" fixed-size="256" fixed-size="256">
+        <array zero-terminated="0" fixed-size="256">
           <type name="guint8" c:type="guint8"/>
         </array>
       </field>
@@ -8878,7 +8878,7 @@ Use the provided macros to access the info in this structure.</doc>
         <type name="gint" c:type="gint"/>
       </field>
       <field name="par_d" writable="1">
-        <doc xml:space="preserve">the pixel-aspect-ratio demnominator</doc>
+        <doc xml:space="preserve">the pixel-aspect-ratio denominator</doc>
         <type name="gint" c:type="gint"/>
       </field>
       <field name="fps_n" writable="1">
@@ -8886,7 +8886,7 @@ Use the provided macros to access the info in this structure.</doc>
         <type name="gint" c:type="gint"/>
       </field>
       <field name="fps_d" writable="1">
-        <doc xml:space="preserve">the framerate demnominator</doc>
+        <doc xml:space="preserve">the framerate denominator</doc>
         <type name="gint" c:type="gint"/>
       </field>
       <field name="offset" writable="1">

@@ -1150,7 +1150,7 @@ payload to the KEMAC.</doc>
       </field>
       <field name="kv_data" writable="1">
         <doc xml:space="preserve">key validity data</doc>
-        <array zero-terminated="0" c:type="guint8" fixed-size="2">
+        <array zero-terminated="0" fixed-size="2" c:type="guint8">
           <type name="guint8" c:type="guint8*"/>
         </array>
       </field>

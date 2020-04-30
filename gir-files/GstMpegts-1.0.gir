@@ -2380,7 +2380,7 @@ Consult the relevant specifications for more details.</doc>
         <type name="guint" c:type="guint"/>
       </field>
       <field name="language" writable="1">
-        <array zero-terminated="0" c:type="gchar" fixed-size="64">
+        <array zero-terminated="0" fixed-size="64" c:type="gchar">
           <type name="utf8" c:type="gchar*"/>
         </array>
       </field>
