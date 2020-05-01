@@ -124,8 +124,7 @@ pub type GstRTSPClientSessionFilterFunc = Option<
     unsafe extern "C" fn(*mut GstRTSPClient, *mut GstRTSPSession, gpointer) -> GstRTSPFilterResult,
 >;
 pub type GstRTSPKeepAliveFunc = Option<unsafe extern "C" fn(gpointer)>;
-pub type GstRTSPMessageSentFunc =
-    Option<unsafe extern "C" fn(*mut GstRTSPStreamTransport, gpointer)>;
+pub type GstRTSPMessageSentFunc = Option<unsafe extern "C" fn(gpointer)>;
 pub type GstRTSPSendFunc =
     Option<unsafe extern "C" fn(*mut gst::GstBuffer, u8, gpointer) -> gboolean>;
 pub type GstRTSPSendListFunc =
