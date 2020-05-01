@@ -35,6 +35,7 @@ pub const GST_RTCP_RTPFB_TYPE_TWCC: GstRTCPFBType = 15;
 pub const GST_RTCP_PSFB_TYPE_SLI: GstRTCPFBType = 2;
 pub const GST_RTCP_PSFB_TYPE_TSTN: GstRTCPFBType = 6;
 pub const GST_RTCP_PSFB_TYPE_VBCN: GstRTCPFBType = 7;
+pub const GST_RTCP_PSFB_TYPE_AFB: GstRTCPFBType = 15;
 
 pub type GstRTCPSDESType = c_int;
 pub const GST_RTCP_SDES_INVALID: GstRTCPSDESType = -1;
