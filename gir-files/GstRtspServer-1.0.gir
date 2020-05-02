@@ -6309,10 +6309,7 @@ and called when a message has been sent on the transport.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="trans" transfer-ownership="none">
-          <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
-        </parameter>
-        <parameter name="user_data" transfer-ownership="none" nullable="1" allow-none="1" closure="1">
+        <parameter name="user_data" transfer-ownership="none" nullable="1" allow-none="1" closure="0">
           <doc xml:space="preserve">user data</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
