@@ -198,11 +198,11 @@ plugins-update-nightly:
       for crate in gstreamer*; do
         if [ -n "$ALL_FEATURES" ]; then
           if [ $crate = "gstreamer" ]; then
-            FEATURES=ser_de,v1_16
+            FEATURES=ser_de,v1_18
           elif [ $crate = "gstreamer-gl" ]; then
-            FEATURES=egl,x11,wayland,v1_16
+            FEATURES=egl,x11,wayland,v1_18
           else
-            FEATURES=v1_16
+            FEATURES=v1_18
           fi
 
           cargo build --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
@@ -268,11 +268,11 @@ clippy:
     - |
       for crate in gstreamer*; do
         if [ $crate = "gstreamer" ]; then
-          FEATURES=ser_de,v1_16
+          FEATURES=ser_de,v1_18
         elif [ $crate = "gstreamer-gl" ]; then
-          FEATURES=egl,x11,wayland,v1_16
+          FEATURES=egl,x11,wayland,v1_18
         else
-          FEATURES=v1_16
+          FEATURES=v1_18
         fi
 
         cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
