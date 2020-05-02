@@ -37,6 +37,16 @@ impl TestClock {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn process_id(&self, pending_id: &gst::ClockId) -> bool {
+        unsafe {
+            from_glib(gst_check_sys::gst_test_clock_process_id(
+                self.to_glib_none().0,
+                pending_id.to_glib_none().0,
+            ))
+        }
+    }
+
     pub fn process_id_list(&self, pending_list: &[&gst::ClockId]) -> u32 {
         unsafe {
             gst_check_sys::gst_test_clock_process_id_list(
