@@ -39,6 +39,9 @@ pub trait AggregatorExtManual: 'static {
         &self,
         f: F,
     ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>);
 }
 
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
@@ -106,6 +109,15 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
                     notify_min_upstream_latency_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
+            )
+        }
+    }
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>) {
+        unsafe {
+            gst_base_sys::gst_aggregator_update_segment(
+                self.as_ref().to_glib_none().0,
+                mut_override(segment.to_glib_none().0),
             )
         }
     }
