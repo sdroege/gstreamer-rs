@@ -56,6 +56,15 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
         self.parent_sink_event(aggregator, aggregator_pad, event)
     }
 
+    fn sink_event_pre_queue(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        event: gst::Event,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_sink_event_pre_queue(aggregator, aggregator_pad, event)
+    }
+
     fn sink_query(
         &self,
         aggregator: &Aggregator,
@@ -63,6 +72,15 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
         query: &mut gst::QueryRef,
     ) -> bool {
         self.parent_sink_query(aggregator, aggregator_pad, query)
+    }
+
+    fn sink_query_pre_queue(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        query: &mut gst::QueryRef,
+    ) -> bool {
+        self.parent_sink_query_pre_queue(aggregator, aggregator_pad, query)
     }
 
     fn src_event(&self, aggregator: &Aggregator, event: gst::Event) -> bool {
@@ -129,6 +147,10 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
     ) -> Result<(), gst::LoggableError> {
         self.parent_negotiated_src_caps(aggregator, caps)
     }
+
+    fn negotiate(&self, aggregator: &Aggregator) -> bool {
+        self.parent_negotiate(aggregator)
+    }
 }
 
 pub trait AggregatorImplExt {
@@ -154,7 +176,21 @@ pub trait AggregatorImplExt {
         event: gst::Event,
     ) -> bool;
 
+    fn parent_sink_event_pre_queue(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        event: gst::Event,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     fn parent_sink_query(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        query: &mut gst::QueryRef,
+    ) -> bool;
+
+    fn parent_sink_query_pre_queue(
         &self,
         aggregator: &Aggregator,
         aggregator_pad: &AggregatorPad,
@@ -205,6 +241,8 @@ pub trait AggregatorImplExt {
         aggregator: &Aggregator,
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError>;
+
+    fn parent_negotiate(&self, aggregator: &Aggregator) -> bool;
 }
 
 impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
@@ -280,6 +318,28 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
         }
     }
 
+    fn parent_sink_event_pre_queue(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        event: gst::Event,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorClass;
+            let f = (*parent_class)
+                .sink_event_pre_queue
+                .expect("Missing parent function `sink_event_pre_queue`");
+            gst::FlowReturn::from_glib(f(
+                aggregator.to_glib_none().0,
+                aggregator_pad.to_glib_none().0,
+                event.into_ptr(),
+            ))
+            .into_result()
+        }
+    }
+
     fn parent_sink_query(
         &self,
         aggregator: &Aggregator,
@@ -292,6 +352,27 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_query
+                .expect("Missing parent function `sink_query`");
+            from_glib(f(
+                aggregator.to_glib_none().0,
+                aggregator_pad.to_glib_none().0,
+                query.as_mut_ptr(),
+            ))
+        }
+    }
+
+    fn parent_sink_query_pre_queue(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        query: &mut gst::QueryRef,
+    ) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorClass;
+            let f = (*parent_class)
+                .sink_query_pre_queue
                 .expect("Missing parent function `sink_query`");
             from_glib(f(
                 aggregator.to_glib_none().0,
@@ -501,6 +582,18 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
                 .unwrap_or(Ok(()))
         }
     }
+
+    fn parent_negotiate(&self, aggregator: &Aggregator) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorClass;
+            (*parent_class)
+                .negotiate
+                .map(|f| from_glib(f(aggregator.to_glib_none().0)))
+                .unwrap_or(true)
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + AggregatorImpl> IsSubclassable<T> for AggregatorClass
@@ -515,7 +608,9 @@ where
             klass.clip = Some(aggregator_clip::<T>);
             klass.finish_buffer = Some(aggregator_finish_buffer::<T>);
             klass.sink_event = Some(aggregator_sink_event::<T>);
+            klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
             klass.sink_query = Some(aggregator_sink_query::<T>);
+            klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
             klass.src_event = Some(aggregator_src_event::<T>);
             klass.src_query = Some(aggregator_src_query::<T>);
             klass.src_activate = Some(aggregator_src_activate::<T>);
@@ -527,6 +622,7 @@ where
             klass.update_src_caps = Some(aggregator_update_src_caps::<T>);
             klass.fixate_src_caps = Some(aggregator_fixate_src_caps::<T>);
             klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
+            klass.negotiate = Some(aggregator_negotiate::<T>);
         }
     }
 }
@@ -613,6 +709,30 @@ where
     .to_glib()
 }
 
+unsafe extern "C" fn aggregator_sink_event_pre_queue<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstAggregator,
+    aggregator_pad: *mut gst_base_sys::GstAggregatorPad,
+    event: *mut gst_sys::GstEvent,
+) -> gst_sys::GstFlowReturn
+where
+    T: AggregatorImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+        imp.sink_event_pre_queue(
+            &wrap,
+            &from_glib_borrow(aggregator_pad),
+            from_glib_full(event),
+        )
+        .into()
+    })
+    .to_glib()
+}
+
 unsafe extern "C" fn aggregator_sink_query<T: ObjectSubclass>(
     ptr: *mut gst_base_sys::GstAggregator,
     aggregator_pad: *mut gst_base_sys::GstAggregatorPad,
@@ -628,6 +748,29 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_query(
+            &wrap,
+            &from_glib_borrow(aggregator_pad),
+            gst::QueryRef::from_mut_ptr(query),
+        )
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn aggregator_sink_query_pre_queue<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstAggregator,
+    aggregator_pad: *mut gst_base_sys::GstAggregatorPad,
+    query: *mut gst_sys::GstQuery,
+) -> glib_sys::gboolean
+where
+    T: AggregatorImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        imp.sink_query_pre_queue(
             &wrap,
             &from_glib_borrow(aggregator_pad),
             gst::QueryRef::from_mut_ptr(query),
@@ -874,4 +1017,18 @@ where
         }
     })
     .to_glib()
+}
+
+unsafe extern "C" fn aggregator_negotiate<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstAggregator,
+) -> glib_sys::gboolean
+where
+    T: AggregatorImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.negotiate(&wrap) }).to_glib()
 }
