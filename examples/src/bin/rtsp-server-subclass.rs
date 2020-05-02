@@ -8,20 +8,19 @@
 // the client machinery and printing some status.
 
 extern crate gstreamer as gst;
-
 extern crate gstreamer_rtsp as gst_rtsp;
 extern crate gstreamer_rtsp_server as gst_rtsp_server;
 extern crate gstreamer_sdp as gst_sdp;
+
 use gst_rtsp_server::prelude::*;
 
-#[macro_use]
-extern crate glib;
+use glib::glib_object_impl;
+use glib::glib_object_subclass;
+use glib::glib_object_wrapper;
+use glib::glib_wrapper;
 
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

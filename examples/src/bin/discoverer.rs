@@ -11,18 +11,13 @@
 extern crate gstreamer as gst;
 
 extern crate gstreamer_pbutils as pbutils;
-use pbutils::prelude::*;
+use crate::pbutils::prelude::*;
 
-use pbutils::DiscovererInfo;
-use pbutils::DiscovererStreamInfo;
+use crate::pbutils::DiscovererInfo;
+use crate::pbutils::DiscovererStreamInfo;
 
-extern crate glib;
-
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 use std::env;
 

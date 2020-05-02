@@ -11,7 +11,6 @@ extern crate gstreamer as gst;
 use gst::prelude::*;
 extern crate gstreamer_audio as gst_audio;
 
-extern crate byte_slice_cast;
 use byte_slice_cast::*;
 
 use std::i16;

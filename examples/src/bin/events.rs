@@ -22,8 +22,6 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate glib;
-
 #[path = "../examples-common.rs"]
 mod examples_common;
 

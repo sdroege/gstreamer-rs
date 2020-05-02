@@ -12,27 +12,25 @@
 // {uridecodebin} -|                                          {encodebin}-{filesink}
 //                  \-{queue}-{videoconvert}-{videoscale}----/
 
-#[macro_use]
 extern crate gstreamer as gst;
+use gst::gst_element_error;
+use gst::gst_element_warning;
 use gst::prelude::*;
 
 extern crate gstreamer_pbutils as gst_pbutils;
 use gst_pbutils::prelude::*;
 
-#[cfg_attr(feature = "v1_10", macro_use)]
-extern crate glib;
 #[cfg(feature = "v1_10")]
 use glib::subclass::prelude::*;
+#[cfg(feature = "v1_10")]
+use glib::GBoxed;
 
 use std::env;
 #[cfg(feature = "v1_10")]
 use std::sync::{Arc, Mutex};
 
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

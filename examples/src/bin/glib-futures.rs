@@ -1,9 +1,6 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate glib;
-
-extern crate futures;
 use futures::prelude::*;
 
 use std::env;

@@ -12,8 +12,6 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate glib;
-
 use std::env;
 
 #[path = "../examples-common.rs"]

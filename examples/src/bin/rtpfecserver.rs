@@ -1,19 +1,14 @@
-#[macro_use]
 extern crate gstreamer as gst;
+use gst::gst_element_error;
 use gst::prelude::*;
-
-extern crate glib;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 use std::env;
 
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[derive(Debug, Fail)]
 #[fail(display = "Missing element {}", _0)]

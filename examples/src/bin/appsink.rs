@@ -10,25 +10,19 @@
 // This is the format we request:
 // Audio / Signed 16bit / 1 channel / arbitrary sample rate
 
-#[macro_use]
 extern crate gstreamer as gst;
+use gst::gst_element_error;
 use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
 extern crate gstreamer_audio as gst_audio;
 
-extern crate glib;
-
-extern crate byte_slice_cast;
 use byte_slice_cast::*;
 
 use std::i16;
 use std::i32;
 
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

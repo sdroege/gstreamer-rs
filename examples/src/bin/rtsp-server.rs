@@ -10,13 +10,8 @@ extern crate gstreamer as gst;
 extern crate gstreamer_rtsp_server as gst_rtsp_server;
 use gst_rtsp_server::prelude::*;
 
-extern crate glib;
-
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

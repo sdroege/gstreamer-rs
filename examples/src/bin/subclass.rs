@@ -6,18 +6,19 @@
 // Our filter can only handle F32 mono and acts as a FIR filter. The filter impulse response /
 // coefficients are provided via Rust API on the filter as a Vec<f32>.
 
-#[macro_use]
-extern crate glib;
+use glib::glib_object_impl;
+use glib::glib_object_subclass;
+use glib::glib_object_wrapper;
+use glib::glib_wrapper;
 
-#[macro_use]
 extern crate gstreamer as gst;
+use gst::gst_element_error;
+use gst::gst_info;
+use gst::gst_trace;
 use gst::prelude::*;
 
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
@@ -37,7 +38,6 @@ mod fir_filter {
 
     extern crate gstreamer_audio as gst_audio;
 
-    extern crate byte_slice_cast;
     use byte_slice_cast::*;
 
     use once_cell::sync::Lazy;

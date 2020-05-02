@@ -11,25 +11,17 @@
 // The capsfilter element allows us to dictate the video resolution we want for the
 // videotestsrc and the cairooverlay element.
 
-extern crate glib;
-
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate cairo;
 extern crate gstreamer_video as gst_video;
-extern crate pango;
 use pango::prelude::*;
-extern crate pangocairo;
 
 use std::ops;
 use std::sync::{Arc, Mutex};
 
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

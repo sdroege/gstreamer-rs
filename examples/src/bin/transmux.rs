@@ -17,19 +17,14 @@
 // {src} - {typefind} - {demuxer} -|           {multiqueue} - {matroskamux} - {filesink}
 //                                  \-[video]-/
 
-#[macro_use]
 extern crate gstreamer as gst;
+use gst::gst_element_error;
 use gst::prelude::*;
-
-extern crate glib;
 
 use std::env;
 
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

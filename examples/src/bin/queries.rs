@@ -15,8 +15,6 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate glib;
-
 use std::convert::TryInto;
 use std::env;
 

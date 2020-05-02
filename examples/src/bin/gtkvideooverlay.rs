@@ -23,16 +23,12 @@ use gst::prelude::*;
 extern crate gstreamer_video as gst_video;
 use gst_video::prelude::*;
 
-extern crate glib;
 use glib::object::ObjectType;
 
-extern crate gio;
 use gio::prelude::*;
 
-extern crate gtk;
 use gtk::prelude::*;
 
-extern crate gdk;
 use gdk::prelude::*;
 
 use std::env;

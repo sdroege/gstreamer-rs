@@ -10,12 +10,8 @@ use gst::prelude::*;
 
 extern crate gstreamer_player as gst_player;
 
-extern crate glib;
-
 use std::env;
 use std::sync::{Arc, Mutex};
-
-extern crate failure;
 
 #[allow(unused_imports)]
 use failure::Error;

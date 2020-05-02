@@ -4,19 +4,13 @@
 // send to the server. For this, the launch syntax pipeline, that is passed
 // to this example's cli is spawned and the client's media is streamed into it.
 
-extern crate failure;
-extern crate gio;
-extern crate glib;
-
-#[macro_use]
-extern crate failure_derive;
-
 extern crate gstreamer as gst;
 extern crate gstreamer_rtsp as gst_rtsp;
 extern crate gstreamer_rtsp_server as gst_rtsp_server;
 extern crate gstreamer_rtsp_server_sys as gst_rtsp_server_sys;
 
 use failure::Error;
+use failure::Fail;
 use std::env;
 use std::ptr;
 

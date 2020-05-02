@@ -13,12 +13,8 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate glib;
-
-extern crate gio;
 use gio::prelude::*;
 
-extern crate gtk;
 use gtk::prelude::*;
 
 use std::cell::RefCell;

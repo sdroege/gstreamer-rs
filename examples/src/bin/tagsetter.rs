@@ -21,13 +21,8 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate glib;
-
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

@@ -15,13 +15,8 @@ use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
 extern crate gstreamer_video as gst_video;
 
-extern crate glib;
-
-extern crate failure;
 use failure::Error;
-
-#[macro_use]
-extern crate failure_derive;
+use failure::Fail;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

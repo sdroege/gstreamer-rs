@@ -47,11 +47,8 @@ use std::env;
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-extern crate failure;
 #[allow(unused_imports)]
 use failure::Error;
-
-extern crate glib;
 
 fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
     ges::init()?;

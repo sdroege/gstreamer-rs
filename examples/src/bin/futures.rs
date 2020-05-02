@@ -6,7 +6,6 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate futures;
 use futures::executor::LocalPool;
 use futures::prelude::*;
 
