@@ -21,27 +21,24 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-use failure::Error;
-use failure::Fail;
+use anyhow::anyhow;
+use anyhow::Error;
+use derive_more::{Display, Error};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-#[derive(Debug, Fail)]
-#[fail(display = "Missing element {}", _0)]
-struct MissingElement(String);
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Missing element {}", _0)]
+struct MissingElement(#[error(not(source))] String);
 
-#[derive(Debug, Fail)]
-#[fail(
-    display = "Received error from {}: {} (debug: {:?})",
-    src, error, debug
-)]
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
     error: String,
     debug: Option<String>,
-    #[cause]
-    cause: glib::Error,
+    source: glib::Error,
 }
 
 fn example_main() -> Result<(), Error> {
@@ -66,16 +63,16 @@ fn example_main() -> Result<(), Error> {
 
     let pipeline = pipeline
         .downcast::<gst::Pipeline>()
-        .map_err(|_| failure::err_msg("Generated pipeline is no pipeline"))?;
+        .map_err(|_| anyhow!("Generated pipeline is no pipeline"))?;
 
     // Query the pipeline for elements implementing the GstTagsetter interface.
     // In our case, this will return the flacenc element.
     let tagsetter = pipeline
         .get_by_interface(gst::TagSetter::static_type())
-        .ok_or_else(|| failure::err_msg("No TagSetter found"))?;
+        .ok_or_else(|| anyhow!("No TagSetter found"))?;
     let tagsetter = tagsetter
         .dynamic_cast::<gst::TagSetter>()
-        .map_err(|_| failure::err_msg("No TagSetter found"))?;
+        .map_err(|_| anyhow!("No TagSetter found"))?;
 
     // Tell the element implementing the GstTagsetter interface how to handle already existing
     // metadata.
@@ -103,7 +100,7 @@ fn example_main() -> Result<(), Error> {
                         .to_string(),
                     error: err.get_error().to_string(),
                     debug: err.get_debug(),
-                    cause: err.get_error(),
+                    source: err.get_error(),
                 }
                 .into());
             }

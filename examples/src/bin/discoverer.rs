@@ -16,17 +16,17 @@ use crate::pbutils::prelude::*;
 use crate::pbutils::DiscovererInfo;
 use crate::pbutils::DiscovererStreamInfo;
 
-use failure::Error;
-use failure::Fail;
+use anyhow::Error;
+use derive_more::{Display, Error};
 
 use std::env;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-#[derive(Debug, Fail)]
-#[fail(display = "Discoverer error {}", _0)]
-struct DiscovererError(&'static str);
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Discoverer error {}", _0)]
+struct DiscovererError(#[error(not(source))] &'static str);
 
 fn print_tags(info: &DiscovererInfo) {
     println!("Tags:");

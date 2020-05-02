@@ -18,27 +18,23 @@ use std::mem;
 use std::ptr;
 use std::sync::mpsc;
 
-use failure::Error;
-use failure::Fail;
+use anyhow::Error;
+use derive_more::{Display, Error};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-#[derive(Debug, Fail)]
-#[fail(display = "Missing element {}", _0)]
-struct MissingElement(&'static str);
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Missing element {}", _0)]
+struct MissingElement(#[error(not(source))] &'static str);
 
-#[derive(Debug, Fail)]
-#[fail(
-    display = "Received error from {}: {} (debug: {:?})",
-    src, error, debug
-)]
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
     error: String,
     debug: Option<String>,
-    #[cause]
-    cause: glib::Error,
+    source: glib::Error,
 }
 
 #[rustfmt::skip]
@@ -587,7 +583,7 @@ impl App {
                             .unwrap_or_else(|| String::from("None")),
                         error: err.get_error().to_string(),
                         debug: err.get_debug(),
-                        cause: err.get_error(),
+                        source: err.get_error(),
                     }
                     .into());
                 }
@@ -684,7 +680,7 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
 
 fn cleanup(
     _windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
-) -> Result<(), failure::Error> {
+) -> Result<(), Error> {
     // To ensure that the context stays alive longer than the pipeline or any reference
     // inside GStreamer to the GL context, its display or anything else. See
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/196

@@ -23,27 +23,23 @@ use gst::prelude::*;
 
 use std::env;
 
-use failure::Error;
-use failure::Fail;
+use anyhow::Error;
+use derive_more::{Display, Error};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-#[derive(Debug, Fail)]
-#[fail(display = "Missing element {}", _0)]
-struct MissingElement(&'static str);
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Missing element {}", _0)]
+struct MissingElement(#[error(not(source))] &'static str);
 
-#[derive(Debug, Fail)]
-#[fail(
-    display = "Received error from {}: {} (debug: {:?})",
-    src, error, debug
-)]
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: String,
     error: String,
     debug: Option<String>,
-    #[cause]
-    cause: glib::Error,
+    source: glib::Error,
 }
 
 fn example_main() -> Result<(), Error> {
@@ -170,7 +166,7 @@ fn example_main() -> Result<(), Error> {
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().to_string(),
                     debug: err.get_debug(),
-                    cause: err.get_error(),
+                    source: err.get_error(),
                 }
                 .into());
             }

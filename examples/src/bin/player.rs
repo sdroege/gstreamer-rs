@@ -13,8 +13,7 @@ extern crate gstreamer_player as gst_player;
 use std::env;
 use std::sync::{Arc, Mutex};
 
-#[allow(unused_imports)]
-use failure::Error;
+use anyhow::Error;
 
 #[allow(unused_imports)]
 #[path = "../examples-common.rs"]

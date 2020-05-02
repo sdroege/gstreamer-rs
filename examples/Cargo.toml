@@ -23,10 +23,10 @@ gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gs
 gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
+anyhow = "1.0"
+derive_more = "0.99.5"
 futures = "0.3"
 byte-slice-cast = "0.3"
-failure = "0.1"
-failure_derive = "0.1"
 cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
 pango = { git = "https://github.com/gtk-rs/pango", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }

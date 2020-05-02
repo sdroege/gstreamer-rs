@@ -10,19 +10,19 @@ extern crate gstreamer as gst;
 extern crate gstreamer_rtsp_server as gst_rtsp_server;
 use gst_rtsp_server::prelude::*;
 
-use failure::Error;
-use failure::Fail;
+use anyhow::Error;
+use derive_more::{Display, Error};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-#[derive(Debug, Fail)]
-#[fail(display = "Could not get mount points")]
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Could not get mount points")]
 struct NoMountPoints;
 
-#[derive(Debug, Fail)]
-#[fail(display = "Usage: {} LAUNCH_LINE", _0)]
-struct UsageError(String);
+#[derive(Debug, Display, Error)]
+#[display(fmt = "Usage: {} LAUNCH_LINE", _0)]
+struct UsageError(#[error(not(source))] String);
 
 fn main_loop() -> Result<(), Error> {
     let args: Vec<_> = env::args().collect();
