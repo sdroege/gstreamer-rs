@@ -38,6 +38,10 @@ pub trait VideoEncoderExtManual: 'static {
         frame: Option<VideoCodecFrame>,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime);
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
@@ -92,6 +96,17 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
             from_glib(gst_video_sys::gst_video_encoder_finish_frame(
                 self.as_ref().to_glib_none().0,
                 frame.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+            ))
+        };
+        ret.into_result()
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(gst_video_sys::gst_video_encoder_finish_subframe(
+                self.as_ref().to_glib_none().0,
+                frame.to_glib_none().0,
             ))
         };
         ret.into_result()

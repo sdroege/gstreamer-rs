@@ -194,6 +194,10 @@ manual_traits = ["VideoEncoderExtManual"]
     ignore = true
 
     [[object.function]]
+    name = "finish_subframe"
+    ignore = true
+
+    [[object.function]]
     name = "set_latency"
     ignore = true
 
