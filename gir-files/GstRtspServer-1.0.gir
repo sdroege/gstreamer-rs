@@ -3817,15 +3817,15 @@ applied_rate of the current segment.</doc>
         </return-value>
         <parameters>
           <instance-parameter name="media" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstRTSPMedia
-@rate (allow-none): the rate of the current segment
-@applied_rate (allow-none): the applied_rate of the current segment</doc>
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
-          <parameter name="rate" transfer-ownership="none">
+          <parameter name="rate" direction="out" caller-allocates="1" transfer-ownership="none" optional="1" allow-none="1">
+            <doc xml:space="preserve">the rate of the current segment</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
-          <parameter name="applied_rate" transfer-ownership="none">
+          <parameter name="applied_rate" direction="out" caller-allocates="1" transfer-ownership="none" optional="1" allow-none="1">
+            <doc xml:space="preserve">the applied_rate of the current segment</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
         </parameters>
@@ -9046,11 +9046,11 @@ in the ONVIF replay spec.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
-          <parameter name="rate" transfer-ownership="none" nullable="1" allow-none="1">
+          <parameter name="rate" direction="out" caller-allocates="1" transfer-ownership="none" optional="1" allow-none="1">
             <doc xml:space="preserve">the configured rate</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
-          <parameter name="applied_rate" transfer-ownership="none" nullable="1" allow-none="1">
+          <parameter name="applied_rate" direction="out" caller-allocates="1" transfer-ownership="none" optional="1" allow-none="1">
             <doc xml:space="preserve">the configured applied_rate</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
