@@ -5,6 +5,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.5] - 2020-05-03
+### Fixed
+- Revert: Allow logging any `glib::Object` and not just `gst::Object`. This
+  broke API in subtile ways and needs to wait until 0.16
+- Replace `%` in log output with `%%` to prevent accidental C formatting
+- Add missing manual traits to the documentation
+
+### Added
+- `BufferRef::peek_memory_mut()` to give a mutable reference to a given memory
+- Different iterators for iterating over the memories of a buffer
+- Support for `gst_audio::AudioClippingMeta`
+- `gst::Plugin::get_plugin_name()` was added
+- `gst::Element::get_current_clock_time()` and
+  `gst::Element::get_current_running_time() helper functions
+- `gst::State` and `StateChange` API for calculating next/previous state and
+  convert from/to the components of a state change
+
+### Changed
+- Use `mem::ManuallyDrop` instead of `mem::forget` everywhere
+
 ## [0.15.4] - 2020-03-09
 ### Fixed
 - Allow logging any `glib::Object` and not just `gst::Object`
@@ -685,7 +705,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.4...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.5...HEAD
+[0.15.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.4...0.15.5
 [0.15.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.3...0.15.4
 [0.15.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.2...0.15.3
 [0.15.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.1...0.15.2
