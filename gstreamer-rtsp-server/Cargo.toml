@@ -40,9 +40,10 @@ v1_10 = ["gstreamer/v1_10", "gstreamer-sdp/v1_10", "gstreamer-rtsp/v1_10", "gstr
 v1_12 = ["gstreamer/v1_12", "gstreamer-sdp/v1_12", "gstreamer-rtsp/v1_12", "gstreamer-net/v1_12", "gstreamer-rtsp-server-sys/v1_12", "v1_10"]
 v1_14 = ["gstreamer/v1_14", "gstreamer-sdp/v1_14", "gstreamer-rtsp/v1_14", "gstreamer-net/v1_14", "gstreamer-rtsp-server-sys/v1_14", "v1_12"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-sdp/v1_16", "gstreamer-rtsp/v1_16", "gstreamer-net/v1_16", "gstreamer-rtsp-server-sys/v1_16", "v1_14"]
+v1_18 = ["gstreamer/v1_18", "gstreamer-sdp/v1_18", "gstreamer-rtsp/v1_18", "gstreamer-net/v1_18", "gstreamer-rtsp-server-sys/v1_18", "v1_16"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
-dox = ["v1_16", "gstreamer-rtsp-server-sys/dox", "glib/dox", "gstreamer/dox"]
+dox = ["v1_18", "gstreamer-rtsp-server-sys/dox", "glib/dox", "gstreamer/dox"]
 
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]

@@ -33,13 +33,14 @@ rustdoc-stripper = { version = "0.1", optional = true }
 
 [features]
 default = []
-dox = ["v1_16", "gstreamer-gl-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-base/dox"]
+dox = ["v1_18", "gstreamer-gl-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-base/dox"]
 egl = ["gstreamer-gl-sys/egl"]
 x11 = ["gstreamer-gl-sys/x11"]
 wayland = ["gstreamer-gl-sys/wayland"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-base/v1_16", "gstreamer-video/v1_16", "gstreamer-gl-sys/v1_16"]
+v1_18 = ["gstreamer/v1_18", "gstreamer-base/v1_18", "gstreamer-video/v1_18", "gstreamer-gl-sys/v1_18", "v1_16"]
 
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]
