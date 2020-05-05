@@ -23,10 +23,10 @@ shell-words = "0.1.0"
 tempfile = "3"
 
 [features]
-v1_14 = ["gstreamer-sys/v1_14", "gstreamer-video-sys/v1_14"]
-v1_16 = ["v1_14", "gstreamer-sys/v1_16", "gstreamer-video-sys/v1_16"]
-v1_18 = ["v1_16", "gstreamer-sys/v1_18", "gstreamer-video-sys/v1_18"]
-dox = ["v1_18"]
+v1_14 = []
+v1_16 = ["v1_14"]
+v1_18 = ["v1_16"]
+dox = []
 
 [lib]
 name = "gstreamer_player_sys"

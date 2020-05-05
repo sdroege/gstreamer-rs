@@ -23,9 +23,10 @@ shell-words = "0.1.0"
 tempfile = "3"
 
 [features]
-dox = ["v1_18"]
-v1_16 = ["gstreamer-sys/v1_16", "gstreamer-sdp-sys/v1_16"]
-v1_18 = ["v1_16", "gstreamer-sys/v1_18", "gstreamer-sdp-sys/v1_18"]
+dox = []
+v1_16 = ["v1_14_1"]
+v1_18 = ["v1_16"]
+v1_14_1 = []
 
 [lib]
 name = "gstreamer_webrtc_sys"

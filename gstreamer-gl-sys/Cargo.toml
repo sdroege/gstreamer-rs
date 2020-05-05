@@ -27,12 +27,12 @@ shell-words = "0.1.0"
 tempfile = "3"
 
 [features]
-dox = ["v1_18"]
+dox = []
 egl = []
 x11 = []
 wayland = []
-v1_16 = ["gstreamer-sys/v1_16", "gstreamer-base-sys/v1_16", "gstreamer-video-sys/v1_16"]
-v1_18 = ["v1_16", "gstreamer-sys/v1_18", "gstreamer-base-sys/v1_18", "gstreamer-video-sys/v1_18"]
+v1_16 = []
+v1_18 = ["v1_16"]
 
 [lib]
 name = "gstreamer_gl_sys"
