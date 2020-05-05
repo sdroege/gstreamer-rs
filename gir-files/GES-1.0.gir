@@ -2536,22 +2536,15 @@ if no track elements are created or an error occurred.</doc>
     </function-macro>
     <enumeration name="Edge" glib:type-name="GESEdge" glib:get-type="ges_edge_get_type" c:type="GESEdge">
       <doc xml:space="preserve">The edges of an object contain in a #GESTimeline or #GESTrack</doc>
-      <member name="edge_start" value="0" c:identifier="GES_EDGE_START" glib:nick="edge_start">
-        <doc xml:space="preserve">Represents the start of an object.</doc>
-      </member>
+      
       <member name="start" value="0" c:identifier="GES_EDGE_START" glib:nick="start">
         <doc xml:space="preserve">Represents the start of an object.</doc>
       </member>
-      <member name="edge_end" value="1" c:identifier="GES_EDGE_END" glib:nick="edge_end">
-        <doc xml:space="preserve">Represents the end of an object.</doc>
-      </member>
+      
       <member name="end" value="1" c:identifier="GES_EDGE_END" glib:nick="end">
         <doc xml:space="preserve">Represents the end of an object.</doc>
       </member>
-      <member name="edge_none" value="2" c:identifier="GES_EDGE_NONE" glib:nick="edge_none">
-        <doc xml:space="preserve">Represent the fact we are not working with any edge of an
-  object.</doc>
-      </member>
+      
       <member name="none" value="2" c:identifier="GES_EDGE_NONE" glib:nick="none">
         <doc xml:space="preserve">Represent the fact we are not working with any edge of an
   object.</doc>
@@ -2593,13 +2586,7 @@ the "edit position" is the timeline time used as part of the edit.
 You can also find more explanation about the behaviour of those modes at:
 [trim, ripple and roll](http://pitivi.org/manual/trimming.html)
 and [clip management](http://pitivi.org/manual/usingclips.html).</doc>
-      <member name="edit_normal" value="0" c:identifier="GES_EDIT_MODE_NORMAL" glib:nick="edit_normal">
-        <doc xml:space="preserve">The element is edited the normal way (default).
- This only moves a single element. If acting on the start edge of the
- element, the element's start time is set to the edit position.
- If acting on end edge of the element, the element's duration time
- is set such that its end time matches the edit position.</doc>
-      </member>
+      
       <member name="normal" value="0" c:identifier="GES_EDIT_MODE_NORMAL" glib:nick="normal">
         <doc xml:space="preserve">The element is edited the normal way (default).
  This only moves a single element. If acting on the start edge of the
@@ -2607,17 +2594,7 @@ and [clip management](http://pitivi.org/manual/usingclips.html).</doc>
  If acting on end edge of the element, the element's duration time
  is set such that its end time matches the edit position.</doc>
       </member>
-      <member name="edit_ripple" value="1" c:identifier="GES_EDIT_MODE_RIPPLE" glib:nick="edit_ripple">
-        <doc xml:space="preserve">The element is edited in ripple mode. This
- shifts the element and all later elements (those with equal or later
- start times) in the timeline by the same amount. If acting on the
- element as a whole, the element's start time is shifted to the edit
- position, and later elements are also shifted by the same amount. If
- acting on the end edge of the element, the element's **duration time**
- is shifted so that the element's end time matches the edit position,
- and later elements have their **start time** shifted by the same
- amount.</doc>
-      </member>
+      
       <member name="ripple" value="1" c:identifier="GES_EDIT_MODE_RIPPLE" glib:nick="ripple">
         <doc xml:space="preserve">The element is edited in ripple mode. This
  shifts the element and all later elements (those with equal or later
@@ -2629,20 +2606,7 @@ and [clip management](http://pitivi.org/manual/usingclips.html).</doc>
  and later elements have their **start time** shifted by the same
  amount.</doc>
       </member>
-      <member name="edit_roll" value="2" c:identifier="GES_EDIT_MODE_ROLL" glib:nick="edit_roll">
-        <doc xml:space="preserve">The element is edited in roll mode. This trims
- the edge of an element and neighbouring edges (opposite edges of other
- elements in the timeline with the same corresponding time value), such
- that the edges remain in contact. If acting on the start edge of the
- element, the start edge is trimmed to the edit position (see
- #GES_EDIT_MODE_TRIM), and any other elements in the timeline whose end
- time matches the edited element's start time (evaluated before the
- edit) will have their **end** edge trimmed to the same edit position.
- Similarly, if acting on the end edge of the element, the end edge is
- trimmed to the edit position, and any other elements in the timeline
- whose start time matches the edited element's end time will have
- their start edge trimmed to the same edit position.</doc>
-      </member>
+      
       <member name="roll" value="2" c:identifier="GES_EDIT_MODE_ROLL" glib:nick="roll">
         <doc xml:space="preserve">The element is edited in roll mode. This trims
  the edge of an element and neighbouring edges (opposite edges of other
@@ -2657,19 +2621,7 @@ and [clip management](http://pitivi.org/manual/usingclips.html).</doc>
  whose start time matches the edited element's end time will have
  their start edge trimmed to the same edit position.</doc>
       </member>
-      <member name="edit_trim" value="3" c:identifier="GES_EDIT_MODE_TRIM" glib:nick="edit_trim">
-        <doc xml:space="preserve">The element is edited in trim mode. This shifts
- the edge of a single element while maintaining the timing of
- its internal content in the timeline, so the samples/frames/etc of a
- source would still appear at the same timeline time when it is played.
- If acting on the start edge of the element, the element's start time
- will be shifted to the edit position and the element's in-point time
- will be shifted by the same amount. Additionally, the element's
- duration time will be shifted the other way such that the element's
- end time remains the same. If acting on end edge of the element, the
- element's duration time is set such that its end time matches the edit
- position.</doc>
-      </member>
+      
       <member name="trim" value="3" c:identifier="GES_EDIT_MODE_TRIM" glib:nick="trim">
         <doc xml:space="preserve">The element is edited in trim mode. This shifts
  the edge of a single element while maintaining the timing of
@@ -2683,18 +2635,7 @@ and [clip management](http://pitivi.org/manual/usingclips.html).</doc>
  element's duration time is set such that its end time matches the edit
  position.</doc>
       </member>
-      <member name="edit_slide" value="4" c:identifier="GES_EDIT_MODE_SLIDE" glib:nick="edit_slide">
-        <doc xml:space="preserve">The element is edited in slide mode (not yet
- implemented). This shifts the element and will trim the edges of
- neighbouring edges on either side accordingly. If acting on the
- element as a whole, the element's start time is shifted to the edit
- position. Any other elements in the timeline whose end time matches
- the edited element's start time (evaluated before the edit) will have
- their end edge trimmed to the same edit position. Additionally, any
- other elements in the timeline whose start time matches the edited
- element's end time will have their start edge trimmed to match the
- edited element's **new** end time.</doc>
-      </member>
+      
       <member name="slide" value="4" c:identifier="GES_EDIT_MODE_SLIDE" glib:nick="slide">
         <doc xml:space="preserve">The element is edited in slide mode (not yet
  implemented). This shifts the element and will trim the edges of

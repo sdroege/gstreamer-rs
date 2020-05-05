@@ -89,3 +89,9 @@ xmlstarlet ed --pf --inplace \
               --type attr --name 'c:type' --value 'guint8' \
 	    GstSdp-1.0.gir
 
+# Remove duplicated enums
+xmlstarlet ed --pf --inplace \
+	   --delete '//_:enumeration[@name="EditMode"]/_:member[starts-with(@name, "edit_")]' \
+	   --delete '//_:enumeration[@name="Edge"]/_:member[starts-with(@name, "edge_")]' \
+	   GES-1.0.gir
+
