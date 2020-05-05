@@ -15,9 +15,9 @@ use gobject_sys;
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum Edge {
-    EdgeStart,
-    EdgeEnd,
-    EdgeNone,
+    Start,
+    End,
+    None,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -28,9 +28,9 @@ impl ToGlib for Edge {
 
     fn to_glib(&self) -> ges_sys::GESEdge {
         match *self {
-            Edge::EdgeStart => ges_sys::GES_EDGE_START,
-            Edge::EdgeEnd => ges_sys::GES_EDGE_END,
-            Edge::EdgeNone => ges_sys::GES_EDGE_NONE,
+            Edge::Start => ges_sys::GES_EDGE_START,
+            Edge::End => ges_sys::GES_EDGE_END,
+            Edge::None => ges_sys::GES_EDGE_NONE,
             Edge::__Unknown(value) => value,
         }
     }
@@ -41,9 +41,9 @@ impl FromGlib<ges_sys::GESEdge> for Edge {
     fn from_glib(value: ges_sys::GESEdge) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => Edge::EdgeStart,
-            1 => Edge::EdgeEnd,
-            2 => Edge::EdgeNone,
+            0 => Edge::Start,
+            1 => Edge::End,
+            2 => Edge::None,
             value => Edge::__Unknown(value),
         }
     }
@@ -76,11 +76,11 @@ impl SetValue for Edge {
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum EditMode {
-    EditNormal,
-    EditRipple,
-    EditRoll,
-    EditTrim,
-    EditSlide,
+    Normal,
+    Ripple,
+    Roll,
+    Trim,
+    Slide,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -91,11 +91,11 @@ impl ToGlib for EditMode {
 
     fn to_glib(&self) -> ges_sys::GESEditMode {
         match *self {
-            EditMode::EditNormal => ges_sys::GES_EDIT_MODE_NORMAL,
-            EditMode::EditRipple => ges_sys::GES_EDIT_MODE_RIPPLE,
-            EditMode::EditRoll => ges_sys::GES_EDIT_MODE_ROLL,
-            EditMode::EditTrim => ges_sys::GES_EDIT_MODE_TRIM,
-            EditMode::EditSlide => ges_sys::GES_EDIT_MODE_SLIDE,
+            EditMode::Normal => ges_sys::GES_EDIT_MODE_NORMAL,
+            EditMode::Ripple => ges_sys::GES_EDIT_MODE_RIPPLE,
+            EditMode::Roll => ges_sys::GES_EDIT_MODE_ROLL,
+            EditMode::Trim => ges_sys::GES_EDIT_MODE_TRIM,
+            EditMode::Slide => ges_sys::GES_EDIT_MODE_SLIDE,
             EditMode::__Unknown(value) => value,
         }
     }
@@ -106,11 +106,11 @@ impl FromGlib<ges_sys::GESEditMode> for EditMode {
     fn from_glib(value: ges_sys::GESEditMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => EditMode::EditNormal,
-            1 => EditMode::EditRipple,
-            2 => EditMode::EditRoll,
-            3 => EditMode::EditTrim,
-            4 => EditMode::EditSlide,
+            0 => EditMode::Normal,
+            1 => EditMode::Ripple,
+            2 => EditMode::Roll,
+            3 => EditMode::Trim,
+            4 => EditMode::Slide,
             value => EditMode::__Unknown(value),
         }
     }
