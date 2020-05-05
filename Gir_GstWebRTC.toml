@@ -6,10 +6,19 @@ min_cfg_version = "1.14"
 target_path = "gstreamer-webrtc-sys"
 work_mode = "sys"
 
+extra_versions = [
+    "1.18",
+    "1.16",
+]
+
 external_libraries = [
     "GLib",
     "GObject",
 ]
+
+[[lib_version_overrides]]
+version = "1.18"
+lib_version = "1.17"
 
 [external_libraries]
 gstreamer="Gst"

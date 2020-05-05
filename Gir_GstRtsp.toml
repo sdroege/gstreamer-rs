@@ -6,11 +6,27 @@ min_cfg_version = "1.0"
 target_path = "gstreamer-rtsp-sys"
 work_mode = "sys"
 
+extra_versions = [
+    "1.18",
+    "1.16",
+    "1.14",
+    "1.12",
+    "1.10",
+    "1.8",
+    "1.6",
+    "1.4",
+    "1.2",
+]
+
 external_libraries = [
     "GLib",
     "GObject",
     "Gio"
 ]
+
+[[lib_version_overrides]]
+version = "1.18"
+lib_version = "1.17"
 
 [external_libraries]
 gstreamer="Gst"
