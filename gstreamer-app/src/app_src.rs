@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use futures_sink::Sink;
+use glib::prelude::*;
 use glib::translate::*;
 use glib_sys::{gboolean, gpointer};
 use gst;
@@ -324,7 +325,7 @@ impl AppSrc {
 
 #[derive(Debug)]
 pub struct AppSrcSink {
-    app_src: AppSrc,
+    app_src: glib::WeakRef<AppSrc>,
     waker_reference: Arc<Mutex<Option<Waker>>>,
 }
 
@@ -332,7 +333,6 @@ impl AppSrcSink {
     fn new(app_src: &AppSrc) -> Self {
         skip_assert_initialized!();
 
-        let app_src = app_src.clone();
         let waker_reference = Arc::new(Mutex::new(None as Option<Waker>));
 
         app_src.set_callbacks(
@@ -350,7 +350,7 @@ impl AppSrcSink {
         );
 
         Self {
-            app_src,
+            app_src: app_src.downgrade(),
             waker_reference,
         }
     }
@@ -361,7 +361,9 @@ impl Drop for AppSrcSink {
         // This is not thread-safe before 1.16.3, see
         // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
         if gst::version() >= (1, 16, 3, 0) {
-            self.app_src.set_callbacks(AppSrcCallbacks::new().build());
+            if let Some(app_src) = self.app_src.upgrade() {
+                app_src.set_callbacks(AppSrcCallbacks::new().build());
+            }
         }
     }
 }
@@ -372,8 +374,13 @@ impl Sink<gst::Sample> for AppSrcSink {
     fn poll_ready(self: Pin<&mut Self>, context: &mut Context) -> Poll<Result<(), Self::Error>> {
         let mut waker = self.waker_reference.lock().unwrap();
 
-        let current_level_bytes = self.app_src.get_current_level_bytes();
-        let max_bytes = self.app_src.get_max_bytes();
+        let app_src = match self.app_src.upgrade() {
+            Some(app_src) => app_src,
+            None => return Poll::Ready(Err(gst::FlowError::Eos)),
+        };
+
+        let current_level_bytes = app_src.get_current_level_bytes();
+        let max_bytes = app_src.get_max_bytes();
 
         if current_level_bytes >= max_bytes && max_bytes != 0 {
             waker.replace(context.waker().to_owned());
@@ -385,7 +392,12 @@ impl Sink<gst::Sample> for AppSrcSink {
     }
 
     fn start_send(self: Pin<&mut Self>, sample: gst::Sample) -> Result<(), Self::Error> {
-        self.app_src.push_sample(&sample)?;
+        let app_src = match self.app_src.upgrade() {
+            Some(app_src) => app_src,
+            None => return Err(gst::FlowError::Eos),
+        };
+
+        app_src.push_sample(&sample)?;
 
         Ok(())
     }
@@ -395,7 +407,12 @@ impl Sink<gst::Sample> for AppSrcSink {
     }
 
     fn poll_close(self: Pin<&mut Self>, _: &mut Context) -> Poll<Result<(), Self::Error>> {
-        self.app_src.end_of_stream()?;
+        let app_src = match self.app_src.upgrade() {
+            Some(app_src) => app_src,
+            None => return Poll::Ready(Ok(())),
+        };
+
+        app_src.end_of_stream()?;
 
         Poll::Ready(Ok(()))
     }
