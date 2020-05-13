@@ -10,6 +10,7 @@ use futures_channel::mpsc::{self, UnboundedReceiver};
 use futures_core::Stream;
 use futures_util::{future, StreamExt};
 use glib;
+use glib::prelude::*;
 use glib::source::{Continue, Priority, SourceId};
 use glib::translate::*;
 use glib_sys;
@@ -280,7 +281,7 @@ impl<'a> Iterator for Iter<'a> {
 
 #[derive(Debug)]
 pub struct BusStream {
-    bus: Bus,
+    bus: glib::WeakRef<Bus>,
     receiver: UnboundedReceiver<Message>,
 }
 
@@ -288,7 +289,6 @@ impl BusStream {
     pub fn new(bus: &Bus) -> Self {
         skip_assert_initialized!();
 
-        let bus = bus.clone();
         let (sender, receiver) = mpsc::unbounded();
 
         bus.set_sync_handler(move |_, message| {
@@ -297,13 +297,18 @@ impl BusStream {
             BusSyncReply::Drop
         });
 
-        Self { bus, receiver }
+        Self {
+            bus: bus.downgrade(),
+            receiver,
+        }
     }
 }
 
 impl Drop for BusStream {
     fn drop(&mut self) {
-        self.bus.unset_sync_handler();
+        if let Some(bus) = self.bus.upgrade() {
+            bus.unset_sync_handler();
+        }
     }
 }
 

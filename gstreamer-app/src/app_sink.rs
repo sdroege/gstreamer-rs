@@ -26,6 +26,7 @@ use AppSink;
 #[cfg(any(feature = "v1_10"))]
 use {
     futures_core::Stream,
+    glib::prelude::*,
     std::{
         pin::Pin,
         sync::{Arc, Mutex},
@@ -349,7 +350,7 @@ unsafe extern "C" fn new_preroll_trampoline<
 #[cfg(any(feature = "v1_10"))]
 #[derive(Debug)]
 pub struct AppSinkStream {
-    app_sink: AppSink,
+    app_sink: glib::WeakRef<AppSink>,
     waker_reference: Arc<Mutex<Option<Waker>>>,
 }
 
@@ -358,7 +359,6 @@ impl AppSinkStream {
     fn new(app_sink: &AppSink) -> Self {
         skip_assert_initialized!();
 
-        let app_sink = app_sink.clone();
         let waker_reference = Arc::new(Mutex::new(None as Option<Waker>));
 
         app_sink.set_callbacks(
@@ -387,7 +387,7 @@ impl AppSinkStream {
         );
 
         Self {
-            app_sink,
+            app_sink: app_sink.downgrade(),
             waker_reference,
         }
     }
@@ -399,7 +399,9 @@ impl Drop for AppSinkStream {
         // This is not thread-safe before 1.16.3, see
         // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
         if gst::version() >= (1, 16, 3, 0) {
-            self.app_sink.set_callbacks(AppSinkCallbacks::new().build());
+            if let Some(app_sink) = self.app_sink.upgrade() {
+                app_sink.set_callbacks(AppSinkCallbacks::new().build());
+            }
         }
     }
 }
@@ -411,11 +413,16 @@ impl Stream for AppSinkStream {
     fn poll_next(self: Pin<&mut Self>, context: &mut Context) -> Poll<Option<Self::Item>> {
         let mut waker = self.waker_reference.lock().unwrap();
 
-        self.app_sink
+        let app_sink = match self.app_sink.upgrade() {
+            Some(app_sink) => app_sink,
+            None => return Poll::Ready(None),
+        };
+
+        app_sink
             .try_pull_sample(gst::ClockTime::from_mseconds(0))
             .map(|sample| Poll::Ready(Some(sample)))
             .unwrap_or_else(|| {
-                if self.app_sink.is_eos() {
+                if app_sink.is_eos() {
                     return Poll::Ready(None);
                 }
 
