@@ -553,6 +553,15 @@ impl<'a> StreamStart<'a> {
             from_glib(group_id.assume_init())
         }
     }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn get_stream(&self) -> Option<::Stream> {
+        unsafe {
+            let mut stream = ptr::null_mut();
+            gst_sys::gst_event_parse_stream(self.as_mut_ptr(), &mut stream);
+            from_glib_full(stream)
+        }
+    }
 }
 
 declare_concrete_event!(Caps);
@@ -1060,6 +1069,8 @@ pub struct StreamStartBuilder<'a> {
     stream_id: &'a str,
     flags: Option<::StreamFlags>,
     group_id: Option<GroupId>,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    stream: Option<::Stream>,
 }
 impl<'a> StreamStartBuilder<'a> {
     fn new(stream_id: &'a str) -> Self {
@@ -1069,6 +1080,8 @@ impl<'a> StreamStartBuilder<'a> {
             stream_id,
             flags: None,
             group_id: None,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
+            stream: None,
         }
     }
 
@@ -1086,6 +1099,14 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn stream(self, stream: ::Stream) -> Self {
+        Self {
+            stream: Some(stream),
+            ..self
+        }
+    }
+
     event_builder_generic_impl!(|s: &Self| {
         let ev = gst_sys::gst_event_new_stream_start(s.stream_id.to_glib_none().0);
         if let Some(flags) = s.flags {
@@ -1094,6 +1115,14 @@ impl<'a> StreamStartBuilder<'a> {
         if let Some(group_id) = s.group_id {
             gst_sys::gst_event_set_group_id(ev, group_id.to_glib());
         }
+
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
+        {
+            if let Some(ref stream) = s.stream {
+                gst_sys::gst_event_set_stream(ev, stream.to_glib_none().0);
+            }
+        }
+
         ev
     });
 }
