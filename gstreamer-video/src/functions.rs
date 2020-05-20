@@ -11,9 +11,10 @@ use gst_sys;
 use gst_video_sys;
 
 use glib;
-use glib::translate::{from_glib_full, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 use gst;
 
+use std::mem;
 use std::ptr;
 
 pub fn convert_sample(
@@ -138,6 +139,39 @@ pub fn convert_sample_future(
     .then(|_| receiver.map(|res| res.expect("Sender dropped before callback was called")));
 
     Box::pin(future)
+}
+
+pub fn calculate_display_ratio(
+    video_width: u32,
+    video_height: u32,
+    video_par: gst::Fraction,
+    display_par: gst::Fraction,
+) -> Option<gst::Fraction> {
+    skip_assert_initialized!();
+
+    unsafe {
+        let mut dar_n = mem::MaybeUninit::uninit();
+        let mut dar_d = mem::MaybeUninit::uninit();
+
+        let res: bool = from_glib(gst_video_sys::gst_video_calculate_display_ratio(
+            dar_n.as_mut_ptr(),
+            dar_d.as_mut_ptr(),
+            video_width,
+            video_height,
+            *video_par.numer() as u32,
+            *video_par.denom() as u32,
+            *display_par.numer() as u32,
+            *display_par.denom() as u32,
+        ));
+        if res {
+            Some(gst::Fraction::new(
+                dar_n.assume_init() as i32,
+                dar_d.assume_init() as i32,
+            ))
+        } else {
+            None
+        }
+    }
 }
 
 #[cfg(test)]
