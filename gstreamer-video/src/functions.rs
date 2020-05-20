@@ -174,6 +174,28 @@ pub fn calculate_display_ratio(
     }
 }
 
+pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
+    skip_assert_initialized!();
+
+    unsafe {
+        let mut dest_n = mem::MaybeUninit::uninit();
+        let mut dest_d = mem::MaybeUninit::uninit();
+        let res: bool = from_glib(gst_video_sys::gst_video_guess_framerate(
+            duration.to_glib(),
+            dest_n.as_mut_ptr(),
+            dest_d.as_mut_ptr(),
+        ));
+        if res {
+            Some(gst::Fraction::new(
+                dest_n.assume_init() as i32,
+                dest_d.assume_init() as i32,
+            ))
+        } else {
+            None
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
