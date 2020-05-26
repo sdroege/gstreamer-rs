@@ -195,17 +195,15 @@ impl From<::VideoMultiviewFramePacking> for ::VideoMultiviewMode {
 }
 
 impl std::convert::TryFrom<::VideoMultiviewMode> for ::VideoMultiviewFramePacking {
-    type Error = ::VideoMultiviewMode;
+    type Error = glib::BoolError;
 
-    fn try_from(
-        v: ::VideoMultiviewMode,
-    ) -> Result<::VideoMultiviewFramePacking, ::VideoMultiviewMode> {
+    fn try_from(v: ::VideoMultiviewMode) -> Result<::VideoMultiviewFramePacking, glib::BoolError> {
         skip_assert_initialized!();
 
         let v2 = from_glib(v.to_glib());
 
         if let ::VideoMultiviewFramePacking::__Unknown(_) = v2 {
-            Err(v)
+            Err(glib_bool_error!("Invalid frame packing mode"))
         } else {
             Ok(v2)
         }
