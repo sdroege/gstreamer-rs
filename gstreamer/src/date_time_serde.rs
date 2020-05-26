@@ -107,7 +107,7 @@ impl<'a> Serialize for DateTime {
 }
 
 impl TryFrom<DateTimeVariants> for Date {
-    type Error = &'static str;
+    type Error = glib::BoolError;
 
     fn try_from(dt_variant: DateTimeVariants) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
@@ -115,16 +115,20 @@ impl TryFrom<DateTimeVariants> for Date {
             DateTimeVariants::YMD(y, m, d) => {
                 let month = glib::DateMonth::from_glib(m);
                 if let glib::DateMonth::__Unknown(_) = month {
-                    return Err("Out of range `month` for `Date`");
+                    return Err(glib_bool_error!("Out of range `month` for `Date`"));
                 }
 
                 Ok(Date(glib::Date::new_dmy(
-                    d.try_into().map_err(|_| "Out of range `day` for `Date`")?,
+                    d.try_into()
+                        .map_err(|_| glib_bool_error!("Out of range `day` for `Date`"))?,
                     month,
-                    y.try_into().map_err(|_| "Out of range `year` for `Date`")?,
+                    y.try_into()
+                        .map_err(|_| glib_bool_error!("Out of range `year` for `Date`"))?,
                 )))
             }
-            _ => Err("Incompatible variant for `Date` (expecting \"YMD\")"),
+            _ => Err(glib_bool_error!(
+                "Incompatible variant for `Date` (expecting \"YMD\")"
+            )),
         }
     }
 }
