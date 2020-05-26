@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use std::borrow::{Borrow, BorrowMut, ToOwned};
-use std::error;
 use std::ffi::CStr;
 use std::fmt;
 use std::marker::PhantomData;
@@ -15,6 +14,8 @@ use std::mem;
 use std::ops::{Deref, DerefMut};
 use std::ptr;
 use std::str;
+
+use thiserror::Error;
 
 use Fraction;
 
@@ -28,13 +29,14 @@ use glib_sys::gpointer;
 use gobject_sys;
 use gst_sys;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Error)]
 pub enum GetError<'name> {
-    FieldNotFound {
-        name: &'name str,
-    },
+    #[error("GetError: Structure field with name {name} not found")]
+    FieldNotFound { name: &'name str },
+    #[error("GetError: Structure field with name {name} not retrieved")]
     ValueGetError {
         name: &'name str,
+        #[source]
         value_get_error: glib::value::GetError,
     },
 }
@@ -53,26 +55,6 @@ impl<'name> GetError<'name> {
         }
     }
 }
-
-impl<'name> fmt::Display for GetError<'name> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            GetError::FieldNotFound { name } => {
-                write!(f, "GetError: Structure field with name {} not found", name)
-            }
-            GetError::ValueGetError {
-                name,
-                value_get_error,
-            } => write!(
-                f,
-                "GetError: Structure field with name {} value: {}",
-                name, value_get_error,
-            ),
-        }
-    }
-}
-
-impl<'name> error::Error for GetError<'name> {}
 
 pub struct Structure(ptr::NonNull<StructureRef>, PhantomData<StructureRef>);
 unsafe impl Send for Structure {}

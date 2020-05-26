@@ -12,8 +12,7 @@ use gst;
 use gst_pbutils_sys;
 use gst_sys;
 
-use std::error;
-use std::fmt;
+use thiserror::Error;
 
 use glib::object::IsA;
 use glib::translate::*;
@@ -257,16 +256,9 @@ impl EncodingContainerProfile {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct EncodingProfileBuilderError;
-
-impl fmt::Display for EncodingProfileBuilderError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "failed to build encoding profile")
-    }
-}
-
-impl error::Error for EncodingProfileBuilderError {}
+#[derive(Debug, Clone, Error)]
+#[error("failed to build encoding profile")]
+pub struct EncodingProfileBuilderError(());
 
 #[derive(Debug)]
 struct EncodingProfileBuilderCommonData<'a> {
@@ -395,7 +387,7 @@ impl<'a> EncodingAudioProfileBuilder<'a> {
 
     pub fn build(self) -> Result<EncodingAudioProfile, EncodingProfileBuilderError> {
         if self.base.format.is_none() {
-            return Err(EncodingProfileBuilderError);
+            return Err(EncodingProfileBuilderError(()));
         }
 
         let profile = EncodingAudioProfile::new(
@@ -447,7 +439,7 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
 
     pub fn build(self) -> Result<EncodingVideoProfile, EncodingProfileBuilderError> {
         if self.base.format.is_none() {
-            return Err(EncodingProfileBuilderError);
+            return Err(EncodingProfileBuilderError(()));
         }
 
         let video_profile = EncodingVideoProfile::new(
@@ -483,7 +475,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
 
     pub fn build(self) -> Result<EncodingContainerProfile, EncodingProfileBuilderError> {
         if self.base.format.is_none() {
-            return Err(EncodingProfileBuilderError);
+            return Err(EncodingProfileBuilderError(()));
         }
 
         let container_profile = EncodingContainerProfile::new(
@@ -496,7 +488,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
         for profile in self.profiles {
             container_profile
                 .add_profile(&profile)
-                .or_else(|_error| Err(EncodingProfileBuilderError))?;
+                .or_else(|_error| Err(EncodingProfileBuilderError(())))?;
         }
 
         set_common_fields(&container_profile, &self.base);

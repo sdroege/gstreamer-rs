@@ -20,6 +20,8 @@ extern crate gstreamer as gst;
 extern crate gstreamer_pbutils_sys as gst_pbutils_sys;
 extern crate gstreamer_sys as gst_sys;
 
+extern crate thiserror;
+
 static PBUTILS_INIT: Once = Once::new();
 
 macro_rules! assert_initialized_main_thread {

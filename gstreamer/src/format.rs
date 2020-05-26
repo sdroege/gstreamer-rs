@@ -9,6 +9,7 @@
 use muldiv::MulDiv;
 use std::convert::TryFrom;
 use std::ops;
+use thiserror::Error;
 use ClockTime;
 use Format;
 
@@ -36,16 +37,9 @@ pub struct Buffers(pub Option<u64>);
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Percent(pub Option<u32>);
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Error)]
+#[error("invalid generic value format")]
 pub struct TryFromGenericFormattedValueError(());
-
-impl std::error::Error for TryFromGenericFormattedValueError {}
-
-impl std::fmt::Display for TryFromGenericFormattedValueError {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(fmt, "invalid generic value format")
-    }
-}
 
 pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + 'static {
     fn get_default_format() -> Format;
@@ -670,16 +664,9 @@ impl AsMut<Option<u32>> for Percent {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Error)]
+#[error("value out of range")]
 pub struct TryPercentFromFloatError(());
-
-impl std::error::Error for TryPercentFromFloatError {}
-
-impl std::fmt::Display for TryPercentFromFloatError {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(fmt, "value out of range")
-    }
-}
 
 impl TryFrom<f64> for Percent {
     type Error = TryPercentFromFloatError;
