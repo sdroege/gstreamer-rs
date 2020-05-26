@@ -12,6 +12,7 @@ use glib;
 use glib::translate::ToGlibPtr;
 use gst;
 
+use std::convert;
 use std::ops;
 use std::ptr;
 
@@ -135,6 +136,35 @@ impl AsMut<gst::StructureRef> for VideoConverterConfig {
 impl Default for VideoConverterConfig {
     fn default() -> Self {
         VideoConverterConfig::new()
+    }
+}
+
+impl convert::TryFrom<gst::Structure> for VideoConverterConfig {
+    type Error = glib::BoolError;
+
+    fn try_from(v: gst::Structure) -> Result<VideoConverterConfig, Self::Error> {
+        skip_assert_initialized!();
+        if v.get_name() == "GstVideoConverter" {
+            Ok(VideoConverterConfig(v))
+        } else {
+            Err(glib_bool_error!("Structure is no VideoConverterConfig"))
+        }
+    }
+}
+
+impl<'a> convert::TryFrom<&'a gst::StructureRef> for VideoConverterConfig {
+    type Error = glib::BoolError;
+
+    fn try_from(v: &'a gst::StructureRef) -> Result<VideoConverterConfig, Self::Error> {
+        skip_assert_initialized!();
+        VideoConverterConfig::try_from(v.to_owned())
+    }
+}
+
+impl From<VideoConverterConfig> for gst::Structure {
+    fn from(v: VideoConverterConfig) -> gst::Structure {
+        skip_assert_initialized!();
+        v.0
     }
 }
 
