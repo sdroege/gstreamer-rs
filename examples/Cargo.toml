@@ -61,6 +61,10 @@ name = "appsink"
 name = "appsrc"
 
 [[bin]]
+name = "custom_events"
+required-features = ["v1_10"]
+
+[[bin]]
 name = "decodebin"
 
 [[bin]]
