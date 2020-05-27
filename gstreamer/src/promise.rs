@@ -52,15 +52,19 @@ impl Promise {
             promise: *mut gst_sys::GstPromise,
             user_data: glib_sys::gpointer,
         ) {
+            lazy_static! {
+                static ref EMPTY: Structure = Structure::new_empty("EMPTY");
+            }
+
             let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
             let promise: Promise = from_glib_borrow(promise);
 
             let res = match promise.wait() {
-                PromiseResult::Replied => {
-                    Ok(promise.get_reply().expect("Promise resolved but no reply"))
-                }
+                // Return an empty structure if it's None as workaround for
+                // https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/issues/1300
+                PromiseResult::Replied => Ok(promise.get_reply().unwrap_or(&EMPTY)),
                 PromiseResult::Interrupted => Err(PromiseError::Interrupted),
                 PromiseResult::Expired => Err(PromiseError::Expired),
                 PromiseResult::Pending => {
