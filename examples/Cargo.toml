@@ -154,3 +154,6 @@ features = ["gl-egl", "gl-x11", "gl-wayland"]
 
 [[bin]]
 name = "subclass"
+
+[[bin]]
+name = "video_converter"
