@@ -13,8 +13,8 @@ use PromiseResult;
 use Structure;
 use StructureRef;
 
-use once_cell::sync::Lazy;
 use std::pin::Pin;
+use std::ptr;
 use std::task::{Context, Poll};
 
 glib_wrapper! {
@@ -43,28 +43,24 @@ impl Promise {
 
     pub fn new_with_change_func<F>(func: F) -> Promise
     where
-        F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
+        F: FnOnce(Result<Option<&StructureRef>, PromiseError>) + Send + 'static,
     {
         assert_initialized_main_thread!();
         let user_data: Box<Option<F>> = Box::new(Some(func));
 
         unsafe extern "C" fn trampoline<
-            F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
+            F: FnOnce(Result<Option<&StructureRef>, PromiseError>) + Send + 'static,
         >(
             promise: *mut gst_sys::GstPromise,
             user_data: glib_sys::gpointer,
         ) {
-            static EMPTY: Lazy<Structure> = Lazy::new(|| Structure::new_empty("EMPTY"));
-
             let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
             let promise: Borrowed<Promise> = from_glib_borrow(promise);
 
             let res = match promise.wait() {
-                // Return an empty structure if it's None as workaround for
-                // https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/issues/1300
-                PromiseResult::Replied => Ok(promise.get_reply().unwrap_or(&EMPTY)),
+                PromiseResult::Replied => Ok(promise.get_reply()),
                 PromiseResult::Interrupted => Err(PromiseError::Interrupted),
                 PromiseResult::Expired => Err(PromiseError::Expired),
                 PromiseResult::Pending => {
@@ -77,7 +73,7 @@ impl Promise {
         }
 
         unsafe extern "C" fn free_user_data<
-            F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
+            F: FnOnce(Result<Option<&StructureRef>, PromiseError>) + Send + 'static,
         >(
             user_data: glib_sys::gpointer,
         ) {
@@ -99,7 +95,7 @@ impl Promise {
         let (sender, receiver) = oneshot::channel();
 
         let promise = Self::new_with_change_func(move |res| {
-            let _ = sender.send(res.map(|s| s.to_owned()));
+            let _ = sender.send(res.map(|s| s.map(ToOwned::to_owned)));
         });
 
         (promise, PromiseFuture(receiver))
@@ -128,9 +124,12 @@ impl Promise {
         }
     }
 
-    pub fn reply(&self, s: Structure) {
+    pub fn reply(&self, s: Option<Structure>) {
         unsafe {
-            gst_sys::gst_promise_reply(self.to_glib_none().0, s.into_ptr());
+            gst_sys::gst_promise_reply(
+                self.to_glib_none().0,
+                s.map(|s| s.into_ptr()).unwrap_or(ptr::null_mut()),
+            );
         }
     }
 
@@ -149,10 +148,12 @@ unsafe impl Send for Promise {}
 unsafe impl Sync for Promise {}
 
 #[derive(Debug)]
-pub struct PromiseFuture(futures_channel::oneshot::Receiver<Result<Structure, PromiseError>>);
+pub struct PromiseFuture(
+    futures_channel::oneshot::Receiver<Result<Option<Structure>, PromiseError>>,
+);
 
 impl std::future::Future for PromiseFuture {
-    type Output = Result<Structure, PromiseError>;
+    type Output = Result<Option<Structure>, PromiseError>;
 
     fn poll(mut self: Pin<&mut Self>, context: &mut Context) -> Poll<Self::Output> {
         match Pin::new(&mut self.0).poll(context) {
@@ -175,15 +176,15 @@ mod tests {
 
         let (sender, receiver) = channel();
         let promise = Promise::new_with_change_func(move |res| {
-            sender.send(res.map(|s| s.to_owned())).unwrap();
+            sender.send(res.map(|s| s.map(ToOwned::to_owned))).unwrap();
         });
 
         thread::spawn(move || {
-            promise.reply(crate::Structure::new("foo/bar", &[]));
+            promise.reply(Some(crate::Structure::new("foo/bar", &[])));
         });
 
         let res = receiver.recv().unwrap();
-        let res = res.expect("promise failed");
+        let res = res.expect("promise failed").expect("promise returned None");
         assert_eq!(res.get_name(), "foo/bar");
     }
 }
