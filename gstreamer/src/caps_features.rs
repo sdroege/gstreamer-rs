@@ -17,8 +17,8 @@ use std::str;
 
 use glib;
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault,
-    Stash, StashMut, ToGlibPtr, ToGlibPtrMut,
+    from_glib, from_glib_full, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault, Stash, StashMut,
+    ToGlibPtr, ToGlibPtrMut,
 };
 use glib_sys::gpointer;
 use gobject_sys;
@@ -246,24 +246,23 @@ impl FromGlibPtrFull<*mut gst_sys::GstCapsFeatures> for CapsFeatures {
 
 impl<'a> glib::value::FromValueOptional<'a> for CapsFeatures {
     unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        let ptr = gobject_sys::g_value_get_boxed(v.to_glib_none().0);
-        from_glib_none(ptr as *const gst_sys::GstCapsFeatures)
+        <&'a CapsFeaturesRef as glib::value::FromValueOptional<'a>>::from_value_optional(v)
+            .map(ToOwned::to_owned)
     }
 }
 
 impl glib::value::SetValue for CapsFeatures {
     unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.0.as_ptr() as gpointer);
+        <CapsFeaturesRef as glib::value::SetValue>::set_value(v, s.as_ref())
     }
 }
 
 impl glib::value::SetValueOptional for CapsFeatures {
     unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-        if let Some(s) = s {
-            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
-        } else {
-            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
-        }
+        <CapsFeaturesRef as glib::value::SetValueOptional>::set_value_optional(
+            v,
+            s.map(|s| s.as_ref()),
+        )
     }
 }
 
@@ -354,6 +353,41 @@ impl CapsFeaturesRef {
                 self.as_ptr(),
                 other.as_ptr(),
             ))
+        }
+    }
+}
+
+impl glib::types::StaticType for CapsFeaturesRef {
+    fn static_type() -> glib::types::Type {
+        unsafe { from_glib(gst_sys::gst_structure_get_type()) }
+    }
+}
+
+impl<'a> glib::value::FromValueOptional<'a> for &'a CapsFeaturesRef {
+    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
+        let ptr = gobject_sys::g_value_get_boxed(v.to_glib_none().0);
+        if ptr.is_null() {
+            None
+        } else {
+            Some(CapsFeaturesRef::from_glib_borrow(
+                ptr as *const gst_sys::GstCapsFeatures,
+            ))
+        }
+    }
+}
+
+impl glib::value::SetValue for CapsFeaturesRef {
+    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
+        gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+    }
+}
+
+impl glib::value::SetValueOptional for CapsFeaturesRef {
+    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
+        if let Some(s) = s {
+            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+        } else {
+            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
         }
     }
 }
