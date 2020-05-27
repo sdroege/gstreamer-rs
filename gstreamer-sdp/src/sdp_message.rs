@@ -928,6 +928,45 @@ impl ToOwned for SDPMessageRef {
     }
 }
 
+impl glib::types::StaticType for SDPMessageRef {
+    fn static_type() -> glib::types::Type {
+        unsafe { from_glib(gst_sdp_sys::gst_sdp_message_get_type()) }
+    }
+}
+
+impl<'a> glib::value::FromValueOptional<'a> for &'a SDPMessageRef {
+    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
+        let ptr = gobject_sys::g_value_get_boxed(v.to_glib_none().0);
+        if ptr.is_null() {
+            None
+        } else {
+            Some(&*(ptr as *const SDPMessageRef))
+        }
+    }
+}
+
+impl glib::value::SetValue for SDPMessageRef {
+    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
+        gobject_sys::g_value_set_boxed(
+            v.to_glib_none_mut().0,
+            s as *const SDPMessageRef as glib_sys::gpointer,
+        );
+    }
+}
+
+impl glib::value::SetValueOptional for SDPMessageRef {
+    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
+        if let Some(s) = s {
+            gobject_sys::g_value_set_boxed(
+                v.to_glib_none_mut().0,
+                s as *const SDPMessageRef as glib_sys::gpointer,
+            );
+        } else {
+            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+        }
+    }
+}
+
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $get_item:expr, $get_len:expr) => {
     #[derive(Debug)]

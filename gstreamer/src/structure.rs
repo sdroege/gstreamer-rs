@@ -21,8 +21,8 @@ use Fraction;
 
 use glib;
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault,
-    Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut,
+    from_glib, from_glib_full, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault, Stash, StashMut,
+    ToGlib, ToGlibPtr, ToGlibPtrMut,
 };
 use glib::value::{FromValue, FromValueOptional, SendValue, ToSendValue};
 use glib_sys::gpointer;
@@ -309,24 +309,23 @@ impl FromGlibPtrFull<*mut gst_sys::GstStructure> for Structure {
 
 impl<'a> glib::value::FromValueOptional<'a> for Structure {
     unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        let ptr = gobject_sys::g_value_get_boxed(v.to_glib_none().0);
-        from_glib_none(ptr as *const gst_sys::GstStructure)
+        <&'a StructureRef as glib::value::FromValueOptional<'a>>::from_value_optional(v)
+            .map(ToOwned::to_owned)
     }
 }
 
 impl glib::value::SetValue for Structure {
     unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.0.as_ptr() as gpointer);
+        <StructureRef as glib::value::SetValue>::set_value(v, s.as_ref())
     }
 }
 
 impl glib::value::SetValueOptional for Structure {
     unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-        if let Some(s) = s {
-            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
-        } else {
-            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
-        }
+        <StructureRef as glib::value::SetValueOptional>::set_value_optional(
+            v,
+            s.map(|s| s.as_ref()),
+        )
     }
 }
 
@@ -598,6 +597,41 @@ impl PartialEq for StructureRef {
 }
 
 impl Eq for StructureRef {}
+
+impl glib::types::StaticType for StructureRef {
+    fn static_type() -> glib::types::Type {
+        unsafe { from_glib(gst_sys::gst_structure_get_type()) }
+    }
+}
+
+impl<'a> glib::value::FromValueOptional<'a> for &'a StructureRef {
+    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
+        let ptr = gobject_sys::g_value_get_boxed(v.to_glib_none().0);
+        if ptr.is_null() {
+            None
+        } else {
+            Some(StructureRef::from_glib_borrow(
+                ptr as *const gst_sys::GstStructure,
+            ))
+        }
+    }
+}
+
+impl glib::value::SetValue for StructureRef {
+    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
+        gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+    }
+}
+
+impl glib::value::SetValueOptional for StructureRef {
+    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
+        if let Some(s) = s {
+            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+        } else {
+            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct FieldIterator<'a> {

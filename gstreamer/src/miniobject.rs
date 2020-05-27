@@ -851,6 +851,22 @@ macro_rules! gst_define_mini_object_wrapper(
             }
         }
 
+        impl<'a> $crate::glib::value::FromValueOptional<'a>
+            for &'a $ref_name
+        {
+            unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
+                let ptr = gobject_sys::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(v).0);
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(&*(ptr as *const $ref_name))
+                }
+            }
+        }
+
+        // Can't have SetValue/SetValueOptional impls as otherwise one could use it to get
+        // immutable references from a mutable reference without borrowing via the value
+
         impl ToOwned for $ref_name {
             type Owned = $name;
 
