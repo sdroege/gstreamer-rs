@@ -53,6 +53,8 @@ mod audio_channel_position;
 pub use audio_channel_position::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod audio_stream_align;
+mod functions;
+pub use functions::*;
 
 mod audio_decoder;
 pub use audio_decoder::AudioDecoderExtManual;
