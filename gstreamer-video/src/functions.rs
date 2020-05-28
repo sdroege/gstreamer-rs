@@ -12,8 +12,10 @@ use gst_video_sys;
 
 use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
+use glib::ToSendValue;
 use gst;
 
+use std::i32;
 use std::mem;
 use std::ptr;
 
@@ -196,6 +198,28 @@ pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
     }
 }
 
+pub fn video_make_raw_caps(formats: &[::VideoFormat]) -> gst::caps::Builder<gst::caps::NoFeature> {
+    assert_initialized_main_thread!();
+
+    let formats: Vec<glib::SendValue> = formats
+        .iter()
+        .map(|f| match f {
+            ::VideoFormat::Encoded => panic!("Invalid encoded format"),
+            ::VideoFormat::Unknown => panic!("Invalid unknown format"),
+            _ => f.to_string().to_send_value(),
+        })
+        .collect();
+
+    gst::caps::Caps::builder("video/x-raw")
+        .field("format", &gst::List::from_owned(formats))
+        .field("width", &gst::IntRange::<i32>::new(1, i32::MAX))
+        .field("height", &gst::IntRange::<i32>::new(1, i32::MAX))
+        .field(
+            "framerate",
+            &gst::FractionRange::new(gst::Fraction::new(0, 1), gst::Fraction::new(i32::MAX, 1)),
+        )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -257,5 +281,50 @@ mod tests {
                 assert_eq!(p, &[255, 191, 127, 63]);
             }
         }
+    }
+
+    #[test]
+    fn video_caps() {
+        gst::init().unwrap();
+
+        let caps = video_make_raw_caps(&[::VideoFormat::Nv12, ::VideoFormat::Nv16]).build();
+        assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]");
+
+        #[cfg(feature = "v1_18")]
+        {
+            /* video_make_raw_caps() is a re-implementation so ensure it returns the same caps as the C API */
+            let c_caps = unsafe {
+                let formats: Vec<gst_video_sys::GstVideoFormat> =
+                    [::VideoFormat::Nv12, ::VideoFormat::Nv16]
+                        .iter()
+                        .map(|f| f.to_glib())
+                        .collect();
+                let caps =
+                    gst_video_sys::gst_video_make_raw_caps(formats.as_ptr(), formats.len() as u32);
+                from_glib_full(caps)
+            };
+            assert_eq!(caps, c_caps);
+        }
+
+        let caps = video_make_raw_caps(&[::VideoFormat::Nv12, ::VideoFormat::Nv16])
+            .field("width", &800)
+            .field("height", &600)
+            .field("framerate", &gst::Fraction::new(30, 1))
+            .build();
+        assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)800, height=(int)600, framerate=(fraction)30/1");
+    }
+
+    #[test]
+    #[should_panic(expected = "Invalid encoded format")]
+    fn video_caps_encoded() {
+        gst::init().unwrap();
+        video_make_raw_caps(&[::VideoFormat::Encoded]);
+    }
+
+    #[test]
+    #[should_panic(expected = "Invalid unknown format")]
+    fn video_caps_unknown() {
+        gst::init().unwrap();
+        video_make_raw_caps(&[::VideoFormat::Unknown]);
     }
 }
