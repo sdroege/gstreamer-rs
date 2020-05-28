@@ -28,6 +28,7 @@ derive_more = "0.99.5"
 futures = "0.3"
 byte-slice-cast = "0.3"
 cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
+cairo-sys-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
 pango = { git = "https://github.com/gtk-rs/pango", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
 glutin = { version = "0.21", optional = true }
@@ -49,6 +50,7 @@ gst-rtsp-server = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gstreamer-sdp"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
+overlay-composition = ["pango", "pangocairo", "cairo-rs", "cairo-sys-rs" ]
 gl = ["gstreamer-gl", "gl_generator", "glutin"]
 gl-egl = ["gstreamer-gl/egl"]
 gl-x11 = ["gstreamer-gl/x11"]
@@ -142,6 +144,10 @@ name = "discoverer"
 [[bin]]
 name = "pango-cairo"
 required-features = ["pango-cairo"]
+
+[[bin]]
+name = "overlay-composition"
+required-features = ["overlay-composition"]
 
 [[bin]]
 name = "ges"
