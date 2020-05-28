@@ -9,6 +9,7 @@
 extern crate array_init;
 #[macro_use]
 extern crate bitflags;
+extern crate once_cell;
 
 #[macro_use]
 extern crate glib;

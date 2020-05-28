@@ -13,6 +13,55 @@ use std::fmt;
 use std::str;
 
 use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
+use once_cell::sync::Lazy;
+
+#[cfg(feature = "v1_18")]
+pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| unsafe {
+    let mut len: u32 = 0;
+    let mut res = Vec::with_capacity(len as usize);
+    let formats = gst_audio_sys::gst_audio_formats_raw(&mut len);
+    for i in 0..len {
+        let format = formats.offset(i as isize);
+        res.push(from_glib(*format));
+    }
+    res.into_boxed_slice()
+});
+
+#[cfg(not(feature = "v1_18"))]
+pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| {
+    Box::new([
+        ::AudioFormat::S8,
+        ::AudioFormat::U8,
+        ::AudioFormat::S16le,
+        ::AudioFormat::S16be,
+        ::AudioFormat::U16le,
+        ::AudioFormat::U16be,
+        ::AudioFormat::S2432le,
+        ::AudioFormat::S2432be,
+        ::AudioFormat::U2432le,
+        ::AudioFormat::U2432be,
+        ::AudioFormat::S32le,
+        ::AudioFormat::S32be,
+        ::AudioFormat::U32le,
+        ::AudioFormat::U32be,
+        ::AudioFormat::S24le,
+        ::AudioFormat::S24be,
+        ::AudioFormat::U24le,
+        ::AudioFormat::U24be,
+        ::AudioFormat::S20le,
+        ::AudioFormat::S20be,
+        ::AudioFormat::U20le,
+        ::AudioFormat::U20be,
+        ::AudioFormat::S18le,
+        ::AudioFormat::S18be,
+        ::AudioFormat::U18le,
+        ::AudioFormat::U18be,
+        ::AudioFormat::F32le,
+        ::AudioFormat::F32be,
+        ::AudioFormat::F64le,
+        ::AudioFormat::F64be,
+    ])
+});
 
 impl ::AudioFormat {
     pub fn build_integer(
@@ -43,6 +92,10 @@ impl ::AudioFormat {
                 .to_str()
                 .unwrap()
         }
+    }
+
+    pub fn iter_raw() -> AudioFormatIterator {
+        AudioFormatIterator::default()
     }
 }
 
@@ -134,6 +187,99 @@ pub const AUDIO_FORMAT_F32: ::AudioFormat = ::AudioFormat::F32le;
 #[cfg(target_endian = "little")]
 pub const AUDIO_FORMAT_F64: ::AudioFormat = ::AudioFormat::F64le;
 
+pub struct AudioFormatIterator {
+    idx: usize,
+    len: usize,
+}
+
+impl Default for AudioFormatIterator {
+    fn default() -> Self {
+        Self {
+            idx: 0,
+            len: AUDIO_FORMATS_ALL.len(),
+        }
+    }
+}
+
+impl Iterator for AudioFormatIterator {
+    type Item = ::AudioFormat;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.idx >= self.len {
+            None
+        } else {
+            let fmt = AUDIO_FORMATS_ALL[self.idx];
+            self.idx += 1;
+            Some(fmt)
+        }
+    }
+}
+
+impl ExactSizeIterator for AudioFormatIterator {
+    fn len(&self) -> usize {
+        self.len
+    }
+}
+
+impl DoubleEndedIterator for AudioFormatIterator {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.idx >= self.len {
+            None
+        } else {
+            let fmt = AUDIO_FORMATS_ALL[self.len - 1];
+            self.len -= 1;
+            Some(fmt)
+        }
+    }
+}
+pub trait AudioFormatIteratorExt {
+    fn into_audio_caps(
+        self,
+        layout: ::AudioLayout,
+    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
+}
+
+impl<T> AudioFormatIteratorExt for T
+where
+    T: Iterator<Item = ::AudioFormat>,
+{
+    fn into_audio_caps(
+        self,
+        layout: ::AudioLayout,
+    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
+        let formats: Vec<::AudioFormat> = self.collect();
+        if !formats.is_empty() {
+            Some(::functions::audio_make_raw_caps(&formats, layout))
+        } else {
+            None
+        }
+    }
+}
+
+pub trait AudioFormatIteratorExtRef {
+    fn into_audio_caps(
+        self,
+        layout: ::AudioLayout,
+    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
+}
+
+impl<'a, T> AudioFormatIteratorExtRef for T
+where
+    T: Iterator<Item = &'a ::AudioFormat>,
+{
+    fn into_audio_caps(
+        self,
+        layout: ::AudioLayout,
+    ) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
+        let formats: Vec<::AudioFormat> = self.copied().collect();
+        if !formats.is_empty() {
+            Some(::functions::audio_make_raw_caps(&formats, layout))
+        } else {
+            None
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use gst;
@@ -143,5 +289,56 @@ mod tests {
         gst::init().unwrap();
 
         format!("{}", ::AudioFormat::S16be);
+    }
+
+    #[test]
+    fn iter() {
+        use super::*;
+        gst::init().unwrap();
+
+        assert!(::AudioFormat::iter_raw().count() > 0);
+        assert_eq!(
+            ::AudioFormat::iter_raw().count(),
+            ::AudioFormat::iter_raw().len()
+        );
+
+        let mut i = ::AudioFormat::iter_raw();
+        let mut count = 0;
+        loop {
+            if i.next().is_none() {
+                break;
+            }
+            count += 1;
+            if i.next_back().is_none() {
+                break;
+            }
+            count += 1;
+        }
+        assert_eq!(count, ::AudioFormat::iter_raw().len());
+
+        assert!(::AudioFormat::iter_raw().any(|f| f == ::AudioFormat::F64be));
+        assert!(::AudioFormat::iter_raw()
+            .find(|f| *f == ::AudioFormat::Encoded)
+            .is_none());
+
+        let caps = ::AudioFormat::iter_raw().into_audio_caps(::AudioLayout::Interleaved);
+        assert!(caps.is_some());
+
+        let caps = ::AudioFormat::iter_raw()
+            .filter(|f| ::AudioFormatInfo::from_format(*f).is_little_endian())
+            .into_audio_caps(::AudioLayout::Interleaved);
+        assert!(caps.is_some());
+
+        let caps = ::AudioFormat::iter_raw()
+            .skip(1000)
+            .into_audio_caps(::AudioLayout::Interleaved);
+        assert!(caps.is_none());
+
+        let caps = [::AudioFormat::S16le, ::AudioFormat::S16be]
+            .iter()
+            .into_audio_caps(::AudioLayout::Interleaved)
+            .unwrap()
+            .build();
+        assert_eq!(caps.to_string(), "audio/x-raw, format=(string){ S16LE, S16BE }, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved");
     }
 }
