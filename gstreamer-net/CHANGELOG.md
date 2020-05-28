@@ -5,6 +5,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.6] - 2020-05-28
+### Fixed
+- Assert that the data passed to `VideoCaptionMeta::add()` is not empty.
+- Don't store strong references to the object in the bus, appsink and appsrc
+  futures `Stream` / `Sink` adapters. This would keep them alive unnecessarily
+  and would prevent the `Stream` / `Sink` to ever "finish" on its own.
+- Handle receiving a `None` reply in the change function of `gst::Promise`.
+  This is apparently valid. For backwards compatibility reasons this is
+  currently replaced with an empty structure but in 0.16 the API will
+  explicitly handle `None`.
+
+### Added
+- `gst::Stream::debug()` and `gst::StreamCollection::debug()` for converting
+  into a structured string with the actual contents of each.
+- `gst::Structure::from_iter()` and `gst::Caps::from_iter()` to create
+  structures/caps from iterators.
+- `gst::Event` support for getting/setting the `gst::Stream` in the
+  `StreamStart` event.
+- `gst_video::calculate_display_ratio()` and `::guess_framerate()`.
+- Various video related `gst::CapsFeatures` in `gst_video`.
+- `TryFrom`/`From` impls for converting between `gst::Structure` and
+  `gst_video::VideoConverterConfig`.
+- Various `glib::Value` trait impls for `SDPMessage`, `StructureRef`,
+  `CapsFeatureRef` and all borrowed variants of miniobjects to be able to
+  work with the borrowed, non-owned variants when handling `glib::Value`s.
+
 ## [0.15.5] - 2020-05-03
 ### Fixed
 - Revert: Allow logging any `glib::Object` and not just `gst::Object`. This
@@ -705,7 +731,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.5...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.6...HEAD
+[0.15.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.5...0.15.6
 [0.15.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.4...0.15.5
 [0.15.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.3...0.15.4
 [0.15.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.2...0.15.3
