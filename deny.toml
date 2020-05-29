@@ -43,6 +43,9 @@ version = "0.4.30"
 [[bans.skip]]
 name = "gl_generator"
 version = "0.13.1"
+[[bans.skip]]
+name = "libloading"
+version = "0.5.2"
 
 [sources]
 unknown-registry = "deny"
