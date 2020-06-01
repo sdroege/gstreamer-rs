@@ -123,7 +123,7 @@ pub mod meta;
 pub use meta::MetaSeqnum;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use meta::ReferenceTimestampMeta;
-pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta};
+pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta};
 pub mod buffer;
 pub use buffer::{
     Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
