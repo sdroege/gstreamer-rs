@@ -20,7 +20,7 @@ use StackTraceFlags;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_add_ring_buffer_logger(max_size_per_thread, thread_timeout);
     }
@@ -67,13 +67,13 @@ pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
 }
 
 pub fn debug_get_default_threshold() -> DebugLevel {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe { from_glib(gst_sys::gst_debug_get_default_threshold()) }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<GString, glib::BoolError> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         Option::<_>::from_glib_full(gst_sys::gst_debug_get_stack_trace(flags.to_glib()))
             .ok_or_else(|| glib_bool_error!("Failed to get stack trace"))
@@ -81,17 +81,17 @@ pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<GString, glib::Bo
 }
 
 pub fn debug_is_active() -> bool {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe { from_glib(gst_sys::gst_debug_is_active()) }
 }
 
 pub fn debug_is_colored() -> bool {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe { from_glib(gst_sys::gst_debug_is_colored()) }
 }
 
 pub fn debug_print_stack_trace() {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_print_stack_trace();
     }
@@ -99,7 +99,7 @@ pub fn debug_print_stack_trace() {
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub fn debug_remove_ring_buffer_logger() {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_remove_ring_buffer_logger();
     }
@@ -107,49 +107,49 @@ pub fn debug_remove_ring_buffer_logger() {
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub fn debug_ring_buffer_logger_get_logs() -> Vec<GString> {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         FromGlibPtrContainer::from_glib_full(gst_sys::gst_debug_ring_buffer_logger_get_logs())
     }
 }
 
 pub fn debug_set_active(active: bool) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_set_active(active.to_glib());
     }
 }
 
 pub fn debug_set_colored(colored: bool) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_set_colored(colored.to_glib());
     }
 }
 
 pub fn debug_set_default_threshold(level: DebugLevel) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_set_default_threshold(level.to_glib());
     }
 }
 
 pub fn debug_set_threshold_for_name(name: &str, level: DebugLevel) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_set_threshold_for_name(name.to_glib_none().0, level.to_glib());
     }
 }
 
 pub fn debug_set_threshold_from_string(list: &str, reset: bool) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_set_threshold_from_string(list.to_glib_none().0, reset.to_glib());
     }
 }
 
 pub fn debug_unset_threshold_for_name(name: &str) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         gst_sys::gst_debug_unset_threshold_for_name(name.to_glib_none().0);
     }
@@ -230,12 +230,12 @@ pub fn update_registry() -> Result<(), glib::error::BoolError> {
 }
 
 pub fn util_get_timestamp() -> ClockTime {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe { from_glib(gst_sys::gst_util_get_timestamp()) }
 }
 
 pub fn version() -> (u32, u32, u32, u32) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         let mut major = mem::MaybeUninit::uninit();
         let mut minor = mem::MaybeUninit::uninit();
@@ -256,6 +256,6 @@ pub fn version() -> (u32, u32, u32, u32) {
 }
 
 pub fn version_string() -> GString {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe { from_glib_full(gst_sys::gst_version_string()) }
 }

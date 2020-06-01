@@ -1452,6 +1452,91 @@ status = "generate"
         [object.function.return]
         nullable_return_is_error = "Failed to get main executable path"
 
+    [[object.function]]
+    name = "debug_set_default_threshold"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_get_default_threshold"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_set_threshold_for_name"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_set_threshold_from_string"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_unset_threshold_for_name"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_get_stack_trace"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_print_stack_trace"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_is_active"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_is_colored"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_set_active"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_set_colored"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_add_ring_buffer_logger"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_remove_ring_buffer_logger"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "debug_ring_buffer_logger_get_logs"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "util_get_timestamp"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "version"
+    # can be called before gst_init()
+    assertion = "skip"
+
+    [[object.function]]
+    name = "version_string"
+    # can be called before gst_init()
+    assertion = "skip"
+
 [[object]]
 name = "Gst.StateChangeReturn"
 status = "generate"

@@ -58,7 +58,7 @@ pub fn pb_utils_get_source_description(protocol: &str) -> Result<GString, glib::
 }
 
 pub fn plugins_base_version() -> (u32, u32, u32, u32) {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe {
         let mut major = mem::MaybeUninit::uninit();
         let mut minor = mem::MaybeUninit::uninit();
@@ -79,6 +79,6 @@ pub fn plugins_base_version() -> (u32, u32, u32, u32) {
 }
 
 pub fn plugins_base_version_string() -> GString {
-    assert_initialized_main_thread!();
+    skip_assert_initialized!();
     unsafe { from_glib_full(gst_pbutils_sys::gst_plugins_base_version_string()) }
 }

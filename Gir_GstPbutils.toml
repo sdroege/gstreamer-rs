@@ -329,5 +329,10 @@ status = "generate"
 
     [[object.function]]
     name = "plugins_base_version_string"
+    assertion = "skip"
         [object.function.return]
         nullable = false
+
+    [[object.function]]
+    name = "plugins_base_version"
+    assertion = "skip"
