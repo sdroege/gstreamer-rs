@@ -295,6 +295,48 @@ impl fmt::Debug for ParentBufferMeta {
     }
 }
 
+#[repr(C)]
+pub struct ProtectionMeta(gst_sys::GstProtectionMeta);
+
+unsafe impl Send for ProtectionMeta {}
+unsafe impl Sync for ProtectionMeta {}
+
+impl ProtectionMeta {
+    pub fn add(buffer: &mut BufferRef, info: ::Structure) -> MetaRefMut<Self, Standalone> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta =
+                gst_sys::gst_buffer_add_protection_meta(buffer.as_mut_ptr(), info.into_ptr());
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_info(&self) -> &::StructureRef {
+        unsafe { ::StructureRef::from_glib_borrow(self.0.info) }
+    }
+
+    pub fn get_info_mut(&mut self) -> &mut ::StructureRef {
+        unsafe { ::StructureRef::from_glib_borrow_mut(self.0.info) }
+    }
+}
+
+unsafe impl MetaAPI for ProtectionMeta {
+    type GstType = gst_sys::GstProtectionMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_sys::gst_protection_meta_api_get_type()) }
+    }
+}
+
+impl fmt::Debug for ProtectionMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("ProtectionMeta")
+            .field("info", &self.get_info())
+            .finish()
+    }
+}
+
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[repr(C)]
 pub struct ReferenceTimestampMeta(gst_sys::GstReferenceTimestampMeta);
