@@ -1485,7 +1485,7 @@ gst_navigation_event_parse_command() to extract the details from the event.</doc
       <member name="mouse_scroll" value="7" c:identifier="GST_NAVIGATION_EVENT_MOUSE_SCROLL" glib:nick="mouse-scroll">
         <doc xml:space="preserve">A mouse scroll event. Use
 gst_navigation_event_parse_mouse_scroll_event() to extract the details from
-the event.</doc>
+the event. (Since: 1.18)</doc>
       </member>
     </enumeration>
     <record name="NavigationInterface" c:type="GstNavigationInterface" glib:is-gtype-struct-for="Navigation">
@@ -3457,7 +3457,7 @@ and SMPTE ST2016-1</doc>
         </return-value>
       </function>
     </record>
-    <enumeration name="VideoAFDSpec" glib:type-name="GstVideoAFDSpec" glib:get-type="gst_video_afd_spec_get_type" c:type="GstVideoAFDSpec">
+    <enumeration name="VideoAFDSpec" version="1.18" glib:type-name="GstVideoAFDSpec" glib:get-type="gst_video_afd_spec_get_type" c:type="GstVideoAFDSpec">
       <doc xml:space="preserve">Enumeration of the different standards that may apply to AFD data:
 
 0) ETSI/DVB:
@@ -3466,9 +3466,7 @@ https://www.etsi.org/deliver/etsi_ts/101100_101199/101154/02.01.01_60/ts_101154v
 1) ATSC A/53:
 https://www.atsc.org/wp-content/uploads/2015/03/a_53-Part-4-2009.pdf
 
-2) SMPTE ST2016-1:
-
-Since 1.18</doc>
+2) SMPTE ST2016-1:</doc>
       <member name="dvb_etsi" value="0" c:identifier="GST_VIDEO_AFD_SPEC_DVB_ETSI" glib:nick="dvb-etsi">
         <doc xml:space="preserve">AFD value is from DVB/ETSI standard</doc>
       </member>
@@ -15819,6 +15817,22 @@ the #GstVideoFormat if there is one, or NULL otherwise.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="video_formats_raw" c:identifier="gst_video_formats_raw" version="1.18">
+      <doc xml:space="preserve">Return all the raw video formats supported by GStreamer.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">an array of #GstVideoFormat</doc>
+        <array length="0" zero-terminated="0" c:type="const GstVideoFormat*">
+          <type name="VideoFormat" c:type="GstVideoFormat"/>
+        </array>
+      </return-value>
+      <parameters>
+        <parameter name="len" direction="out" caller-allocates="0" transfer-ownership="full">
+          <doc xml:space="preserve">the number of elements in the returned array</doc>
+          <type name="guint" c:type="guint*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="video_gl_texture_upload_meta_api_get_type" c:identifier="gst_video_gl_texture_upload_meta_api_get_type">
       
       <return-value transfer-ownership="none">
@@ -15888,6 +15902,55 @@ recognised, and %FALSE otherwise.</doc>
         <parameter name="mode" transfer-ownership="none">
           <doc xml:space="preserve">a #GstVideoInterlaceMode</doc>
           <type name="VideoInterlaceMode" c:type="GstVideoInterlaceMode"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="video_make_raw_caps" c:identifier="gst_video_make_raw_caps" version="1.18">
+      <doc xml:space="preserve">Return a generic raw video caps for formats defined in @formats.
+If @formats is %NULL returns a caps for all the supported raw video formats,
+see gst_video_formats_raw().</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">a video @GstCaps</doc>
+        <type name="Gst.Caps" c:type="GstCaps*"/>
+      </return-value>
+      <parameters>
+        <parameter name="formats" transfer-ownership="none" nullable="1" allow-none="1">
+          <doc xml:space="preserve">an array of raw #GstVideoFormat, or %NULL</doc>
+          <array length="1" zero-terminated="0" c:type="const GstVideoFormat*">
+            <type name="VideoFormat" c:type="GstVideoFormat"/>
+          </array>
+        </parameter>
+        <parameter name="len" transfer-ownership="none">
+          <doc xml:space="preserve">the size of @formats</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="video_make_raw_caps_with_features" c:identifier="gst_video_make_raw_caps_with_features" version="1.18">
+      <doc xml:space="preserve">Return a generic raw video caps for formats defined in @formats with features
+@features.
+If @formats is %NULL returns a caps for all the supported video formats,
+see gst_video_formats_raw().</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">a video @GstCaps</doc>
+        <type name="Gst.Caps" c:type="GstCaps*"/>
+      </return-value>
+      <parameters>
+        <parameter name="formats" transfer-ownership="none" nullable="1" allow-none="1">
+          <doc xml:space="preserve">an array of raw #GstVideoFormat, or %NULL</doc>
+          <array length="1" zero-terminated="0" c:type="const GstVideoFormat*">
+            <type name="VideoFormat" c:type="GstVideoFormat"/>
+          </array>
+        </parameter>
+        <parameter name="len" transfer-ownership="none">
+          <doc xml:space="preserve">the size of @formats</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="features" transfer-ownership="full" nullable="1" allow-none="1">
+          <doc xml:space="preserve">the #GstCapsFeatures to set on the caps</doc>
+          <type name="Gst.CapsFeatures" c:type="GstCapsFeatures*"/>
         </parameter>
       </parameters>
     </function>

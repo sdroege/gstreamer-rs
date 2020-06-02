@@ -1487,7 +1487,7 @@ downstream.</doc>
             <type name="Aggregator" c:type="GstAggregator*"/>
           </instance-parameter>
           <parameter name="segment" transfer-ownership="none">
-            <type name="Gst.Segment" c:type="GstSegment*"/>
+            <type name="Gst.Segment" c:type="const GstSegment*"/>
           </parameter>
         </parameters>
       </method>

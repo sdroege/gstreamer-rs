@@ -972,9 +972,155 @@ be created by clips.</doc-deprecated>
       
     </record>
     <class name="BaseEffect" c:symbol-prefix="base_effect" c:type="GESBaseEffect" parent="Operation" abstract="1" glib:type-name="GESBaseEffect" glib:get-type="ges_base_effect_get_type" glib:type-struct="BaseEffectClass">
+      <doc xml:space="preserve">A #GESBaseEffect is some operation that applies an effect to the data
+it receives.
+
+## Time Effects
+
+Some operations will change the timing of the stream data they receive
+in some way. In particular, the #GstElement that they wrap could alter
+the times of the segment they receive in a #GST_EVENT_SEGMENT event,
+or the times of a seek they receive in a #GST_EVENT_SEEK event. Such
+operations would be considered time effects since they translate the
+times they receive on their source to different times at their sink,
+and vis versa. This introduces two sets of time coordinates for the
+event: (internal) sink coordinates and (internal) source coordinates,
+where segment times are translated from the sink coordinates to the
+source coordinates, and seek times are translated from the source
+coordinates to the sink coordinates.
+
+If you use such an effect in GES, you will need to inform GES of the
+properties that control the timing with
+ges_base_effect_register_time_property(), and the effect's timing
+behaviour using ges_base_effect_set_time_translation_funcs().
+
+Note that a time effect should not have its
+#GESTrackElement:has-internal-source set to %TRUE.
+
+In addition, note that GES only *fully* supports time effects whose
+mapping from the source to sink coordinates (those applied to seeks)
+obeys:
+
++ Maps the time `0` to `0`. So initial time-shifting effects are
+  excluded.
++ Is monotonically increasing. So reversing effects, and effects that
+  jump backwards in the stream are excluded.
++ Can handle a reasonable #GstClockTime, relative to the project. So
+  this would exclude a time effect with an extremely large speed-up
+  that would cause the converted #GstClockTime seeks to overflow.
++ Is 'continuously reversible'. This essentially means that for every
+  time in the sink coordinates, we can, to 'good enough' accuracy,
+  calculate the corresponding time in the source coordinates. Moreover,
+  this should correspond to how segment times are translated from
+  sink to source.
++ Only depends on the registered time properties, rather than the
+  state of the #GstElement or the data it receives. This would exclude,
+  say, an effect that would speedup if there is more red in the image
+  it receives.
+
+Note that a constant-rate-change effect that is not extremely fast or
+slow would satisfy these conditions. For such effects, you may wish to
+use ges_effect_class_register_rate_property().</doc>
       
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
+      <method name="is_time_effect" c:identifier="ges_base_effect_is_time_effect" version="1.18">
+        <doc xml:space="preserve">Get whether the effect is considered a time effect or not. An effect
+with registered time properties or set translation functions is
+considered a time effect.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @effect is considered a time effect.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="effect" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESBaseEffect</doc>
+            <type name="BaseEffect" c:type="GESBaseEffect*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="register_time_property" c:identifier="ges_base_effect_register_time_property" version="1.18">
+        <doc xml:space="preserve">Register a child property of the effect as a property that, when set,
+can change the timing of its input data. The child property should be
+specified as in ges_timeline_element_lookup_child().
+
+You should also set the corresponding time translation using
+ges_base_effect_set_time_translation_funcs().
+
+Note that @effect must not be part of a clip, nor can it have
+#GESTrackElement:has-internal-source set to %TRUE.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the child property was found and newly registered.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="effect" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESBaseEffect</doc>
+            <type name="BaseEffect" c:type="GESBaseEffect*"/>
+          </instance-parameter>
+          <parameter name="child_property_name" transfer-ownership="none">
+            <doc xml:space="preserve">The name of the child property to register as
+a time property</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_time_translation_funcs" c:identifier="ges_base_effect_set_time_translation_funcs" version="1.18">
+        <doc xml:space="preserve">Set the time translation query functions for the time effect. If an
+effect is a time effect, it will have two sets of coordinates: one
+at its sink and one at its source. The given functions should be able
+to translate between these two sets of coordinates. More specifically,
+@source_to_sink_func should *emulate* how the corresponding #GstElement
+would translate the #GstSegment @time field, and @sink_to_source_func
+should emulate how the corresponding #GstElement would translate the
+seek query @start and @stop values, as used in gst_element_seek(). As
+such, @sink_to_source_func should act as an approximate reverse of
+@source_to_sink_func.
+
+Note, these functions will be passed a table of time properties, as
+registered in ges_base_effect_register_time_property(), and their
+values. The functions should emulate what the translation *would* be
+*if* the time properties were set to the given values. They should not
+use the currently set values.
+
+Note that @effect must not be part of a clip, nor can it have
+#GESTrackElement:has-internal-source set to %TRUE.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the translation functions were set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="effect" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESBaseEffect</doc>
+            <type name="BaseEffect" c:type="GESBaseEffect*"/>
+          </instance-parameter>
+          <parameter name="source_to_sink_func" transfer-ownership="none" nullable="1" allow-none="1" scope="notified">
+            <doc xml:space="preserve">The function to use
+for querying how a time is translated from the source coordinates to
+the sink coordinates of @effect</doc>
+            <type name="BaseEffectTimeTranslationFunc" c:type="GESBaseEffectTimeTranslationFunc"/>
+          </parameter>
+          <parameter name="sink_to_source_func" transfer-ownership="none" nullable="1" allow-none="1" scope="notified" closure="2" destroy="3">
+            <doc xml:space="preserve">The function to use
+for querying how a time is translated from the sink coordinates to the
+source coordinates of @effect</doc>
+            <type name="BaseEffectTimeTranslationFunc" c:type="GESBaseEffectTimeTranslationFunc"/>
+          </parameter>
+          <parameter name="user_data" transfer-ownership="none" nullable="1" allow-none="1" scope="notified">
+            <doc xml:space="preserve">Data to pass to both @source_to_sink_func and
+@sink_to_source_func</doc>
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+          <parameter name="destroy" transfer-ownership="none" nullable="1" allow-none="1" scope="async" destroy="2">
+            <doc xml:space="preserve">Method to call to destroy
+@user_data, or %NULL</doc>
+            <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+          </parameter>
+        </parameters>
+      </method>
       <field name="parent" readable="0" private="1">
         <type name="Operation" c:type="GESOperation"/>
       </field>
@@ -1008,7 +1154,10 @@ be created by clips.</doc-deprecated>
 #GESBaseEffectClip-s can have **additional** #GESBaseEffect-s added as
 non-core elements. These additional effects are applied to the output
 of the core effects of the clip that they share a #GESTrack with. See
-#GESClip for how to add and move these effects from the clip.</doc>
+#GESClip for how to add and move these effects from the clip.
+
+Note that you cannot add time effects to #GESBaseEffectClip, neither
+as core children, nor as additional effects.</doc>
       
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
@@ -1041,6 +1190,41 @@ of the core effects of the clip that they share a #GESTrack with. See
     <record name="BaseEffectPrivate" c:type="GESBaseEffectPrivate" disguised="1">
       
     </record>
+    <callback name="BaseEffectTimeTranslationFunc" c:type="GESBaseEffectTimeTranslationFunc" version="1.18">
+      <doc xml:space="preserve">A function for querying how an effect would translate a time if it had
+the given child property values set. The keys for @time_properties will
+be the same string that was passed to
+ges_base_effect_register_time_property(), the values will be #GValue*
+values of the corresponding child properties. You should always use the
+values given in @time_properties before using the currently set values.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">The translated time.</doc>
+        <type name="Gst.ClockTime" c:type="GstClockTime"/>
+      </return-value>
+      <parameters>
+        <parameter name="effect" transfer-ownership="none">
+          <doc xml:space="preserve">The #GESBaseEffect that is doing the time translation</doc>
+          <type name="BaseEffect" c:type="GESBaseEffect*"/>
+        </parameter>
+        <parameter name="time" transfer-ownership="none">
+          <doc xml:space="preserve">The #GstClockTime to translation</doc>
+          <type name="Gst.ClockTime" c:type="GstClockTime"/>
+        </parameter>
+        <parameter name="time_property_values" transfer-ownership="none">
+          <doc xml:space="preserve">A table of child
+property name/value pairs</doc>
+          <type name="GLib.HashTable" c:type="GHashTable*">
+            <type name="utf8"/>
+            <type name="GObject.Value"/>
+          </type>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none" nullable="1" allow-none="1" closure="3">
+          <doc xml:space="preserve">Data passed to ges_base_effect_set_time_translation_funcs()</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
     <class name="BaseTransitionClip" c:symbol-prefix="base_transition_clip" c:type="GESBaseTransitionClip" parent="OperationClip" abstract="1" glib:type-name="GESBaseTransitionClip" glib:get-type="ges_base_transition_clip_get_type" glib:type-struct="BaseTransitionClipClass">
       
       <implements name="Extractable"/>
@@ -1181,23 +1365,49 @@ For most uses of a #GESTimeline, it is often sufficient to only
 interact with #GESClip-s directly, which will take care of creating and
 organising the elements of the timeline's tracks.
 
-Most subclassed clips will be associated with some *core*
-#GESTrackElement-s. When such a clip is added to a layer in a timeline,
-it will create these children and they will be added to the timeline's
-tracks. You can connect to the #GESContainer::child-added signal to be
-notified of their creation. If a clip will produce several core
-elements of the same #GESTrackElement:track-type but they are destined
-for separate tracks, you should connect to the timeline's
+## Core Children
+
+In more detail, clips will usually have some *core* #GESTrackElement
+children, which are created by the clip when it is added to a layer in
+a timeline. The type and form of these core children will depend on the
+clip's subclass. You can use ges_track_element_is_core() to determine
+whether a track element is considered such a core track element. Note,
+if a core track element is part of a clip, it will always be treated as
+a core *child* of the clip. You can connect to the
+#GESContainer::child-added signal to be notified of their creation.
+
+When a child is added to a clip, the timeline will select its tracks
+using #GESTimeline::select-tracks-for-object. Note that it may be the
+case that the child will still have no set #GESTrackElement:track
+after this process. For example, if the timeline does not have a track
+of the corresponding #GESTrack:track-type. A clip can safely contain
+such children, which may have their track set later, although they will
+play no functioning role in the timeline in the meantime.
+
+If a clip may create track elements with various
+#GESTrackElement:track-type(s), such as a #GESUriClip, but you only
+want it to create a subset of these types, you should set the
+#GESClip:supported-formats of the clip to the subset of types. This
+should be done *before* adding the clip to a layer.
+
+If a clip will produce several core elements of the same
+#GESTrackElement:track-type, you should connect to the timeline's
 #GESTimeline::select-tracks-for-object signal to coordinate which
-tracks each element should land in.
+tracks each element should land in. Note, no two core children within a
+clip can share the same #GESTrack, so you should not select the same
+track for two separate core children. Provided you stick to this rule,
+it is still safe to select several tracks for the same core child, the
+core child will be copied into the additional tracks. You can manually
+add the child to more tracks later using ges_clip_add_child_to_track().
+If you do not wish to use a core child, you can always select no track.
 
 The #GESTimelineElement:in-point of the clip will control the
-#GESTimelineElement:in-point of these core elements to be the same
+#GESTimelineElement:in-point of its core children to be the same
 value if their #GESTrackElement:has-internal-source is set to %TRUE.
 
 The #GESTimelineElement:max-duration of the clip is the minimum
-#GESTimelineElement:max-duration of its children. If you set its value
-to anything other than its current value, this will also set the
+#GESTimelineElement:max-duration of its core children. If you set its
+value to anything other than its current value, this will also set the
 #GESTimelineElement:max-duration of all its core children to the same
 value if their #GESTrackElement:has-internal-source is set to %TRUE.
 As a special case, whilst a clip does not yet have any core children,
@@ -1206,16 +1416,117 @@ value will be once they are created.
 
 ## Effects
 
-Some subclasses (#GESSourceClip and #GESBaseEffect) may also allow
+Some subclasses (#GESSourceClip and #GESBaseEffectClip) may also allow
 their objects to have additional non-core #GESBaseEffect-s elements as
 children. These are additional effects that are applied to the output
 data of the core elements. They can be added to the clip using
-ges_container_add(), which will take care of adding the effect to the
-timeline's tracks. The new effect will be placed between the clip's
+ges_clip_add_top_effect(), which will take care of adding the effect to
+the timeline's tracks. The new effect will be placed between the clip's
 core track elements and its other effects. As such, the newly added
 effect will be applied to any source data **before** the other existing
 effects. You can change the ordering of effects using
-ges_clip_set_top_effect_index().</doc>
+ges_clip_set_top_effect_index().
+
+Tracks are selected for top effects in the same way as core children.
+If you add a top effect to a clip before it is part of a timeline, and
+later add the clip to a timeline, the track selection for the top
+effects will occur just after the track selection for the core
+children. If you add a top effect to a clip that is already part of a
+timeline, the track selection will occur immediately. Since a top
+effect must be applied on top of a core child, if you use
+#GESTimeline::select-tracks-for-object, you should ensure that the
+added effects are destined for a #GESTrack that already contains a core
+child.
+
+In addition, if the core child in the track is not
+#GESTrackElement:active, then neither can any of its effects be
+#GESTrackElement:active. Therefore, if a core child is made in-active,
+all of the additional effects in the same track will also become
+in-active. Similarly, if an effect is set to be active, then the core
+child will also become active, but other effects will be left alone.
+Finally, if an active effect is added to the track of an in-active core
+child, it will become in-active as well. Note, in contrast, setting a
+core child to be active, or an effect to be in-active will *not* change
+the other children in the same track.
+
+### Time Effects
+
+Some effects also change the timing of their data (see #GESBaseEffect
+for what counts as a time effect). Note that a #GESBaseEffectClip will
+refuse time effects, but a #GESSource will allow them.
+
+When added to a clip, time effects may adjust the timing of other
+children in the same track. Similarly, when changing the order of
+effects, making them (in)-active, setting their time property values
+or removing time effects. These can cause the #GESClip:duration-limit
+to change in value. However, if such an operation would ever cause the
+#GESTimelineElement:duration to shrink such that a clip's #GESSource is
+totally overlapped in the timeline, the operation would be prevented.
+Note that the same can happen when adding non-time effects with a
+finite #GESTimelineElement:max-duration.
+
+Therefore, when working with time effects, you should -- more so than
+usual -- not assume that setting the properties of the clip's children
+will succeed. In particular, you should use
+ges_timeline_element_set_child_property_full() when setting the time
+properties.
+
+If you wish to preserve the *internal* duration of a source in a clip
+during these time effect operations, you can do something like the
+following.
+
+```c
+void
+do_time_effect_change (GESClip * clip)
+{
+  GList *tmp, *children;
+  GESTrackElement *source;
+  GstClockTime source_outpoint;
+  GstClockTime new_end;
+  GError *error = NULL;
+
+  // choose some active source in a track to preserve the internal
+  // duration of
+  source = ges_clip_get_track_element (clip, NULL, GES_TYPE_SOURCE);
+
+  // note its current internal end time
+  source_outpoint = ges_clip_get_internal_time_from_timeline_time (
+        clip, source, GES_TIMELINE_ELEMENT_END (clip), NULL);
+
+  // handle invalid out-point
+
+  // stop the children's control sources from clamping when their
+  // out-point changes with a change in the time effects
+  children = ges_container_get_children (GES_CONTAINER (clip), FALSE);
+
+  for (tmp = children; tmp; tmp = tmp-&gt;next)
+    ges_track_element_set_auto_clamp_control_source (tmp-&gt;data, FALSE);
+
+  // add time effect, or set their children properties, or move them around
+  ...
+  // user can make sure that if a time effect changes one source, we should
+  // also change the time effect for another source. E.g. if
+  // "GstVideorate::rate" is set to 2.0, we also set "GstPitch::rate" to
+  // 2.0
+
+  // Note the duration of the clip may have already changed if the
+  // duration-limit of the clip dropped below its current value
+
+  new_end = ges_clip_get_timeline_time_from_internal_time (
+        clip, source, source_outpoint, &amp;error);
+  // handle error
+
+  if (!ges_timeline_elemnet_edit_full (GES_TIMELINE_ELEMENT (clip),
+        -1, GES_EDIT_MODE_TRIM, GES_EDGE_END, new_end, &amp;error))
+    // handle error
+
+  for (tmp = children; tmp; tmp = tmp-&gt;next)
+    ges_track_element_set_auto_clamp_control_source (tmp-&gt;data, TRUE);
+
+  g_list_free_full (children, gst_object_unref);
+  gst_object_unref (source);
+}
+```</doc>
       
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
@@ -1304,9 +1615,7 @@ that already contains one of the core children of the same clip.
 This method can also fail if the adding the track element to the track
 would break a configuration rule of the corresponding #GESTimeline,
 such as causing three sources to overlap at a single time, or causing
-a source to completely overlap another in the same track.
-
-Note that @err will not always be set upon failure.</doc>
+a source to completely overlap another in the same track.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The element that was added to @track, either
@@ -1325,6 +1634,39 @@ Note that @err will not always be set upon failure.</doc>
           <parameter name="track" transfer-ownership="none">
             <doc xml:space="preserve">The track to add @child to</doc>
             <type name="Track" c:type="GESTrack*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="add_top_effect" c:identifier="ges_clip_add_top_effect" version="1.18" throws="1">
+        <doc xml:space="preserve">Add a top effect to a clip at the given index.
+
+Unlike using ges_container_add(), this allows you to set the index
+in advance. It will also check that no error occurred during the track
+selection for the effect.
+
+Note, only subclasses of #GESClipClass that have
+#GES_CLIP_CLASS_CAN_ADD_EFFECTS set to %TRUE (such as #GESSourceClip
+and #GESBaseEffectClip) can have additional top effects added.
+
+Note, if the effect is a time effect, this may be refused if the clip
+would not be able to adapt itself once the effect is added.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @effect was successfully added to @clip at @index.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESClip</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+          <parameter name="effect" transfer-ownership="none">
+            <doc xml:space="preserve">A top effect to add</doc>
+            <type name="BaseEffect" c:type="GESBaseEffect*"/>
+          </parameter>
+          <parameter name="index" transfer-ownership="none">
+            <doc xml:space="preserve">The index to add @effect at, or -1 to add at the highest</doc>
+            <type name="gint" c:type="gint"/>
           </parameter>
         </parameters>
       </method>
@@ -1412,6 +1754,81 @@ match any type</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="get_duration_limit" c:identifier="ges_clip_get_duration_limit" version="1.18">
+        <doc xml:space="preserve">Gets the #GESClip:duration-limit of the clip.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The duration-limit of @clip.</doc>
+          <type name="Gst.ClockTime" c:type="GstClockTime"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESClip</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_internal_time_from_timeline_time" c:identifier="ges_clip_get_internal_time_from_timeline_time" version="1.18" throws="1">
+        <doc xml:space="preserve">Convert the timeline time to an internal source time of the child.
+This will take any time effects placed on the clip into account (see
+#GESBaseEffect for what time effects are supported, and how to
+declare them in GES).
+
+When @timeline_time is above the #GESTimelineElement:start of @clip,
+this will return the internal time at which the content that appears at
+@timeline_time in the output of the timeline is created in @child. For
+example, if @timeline_time corresponds to the current seek position,
+this would let you know which part of a media file is being read.
+
+This will be done assuming the clip has an indefinite end, so the
+internal time may be beyond the current out-point of the child, or even
+its #GESTimelineElement:max-duration.
+
+If, instead, @timeline_time is below the current
+#GESTimelineElement:start of @clip, this will return what you would
+need to set the #GESTimelineElement:in-point of @child to if you set
+the #GESTimelineElement:start of @clip to @timeline_time and wanted
+to keep the content of @child currently found at the current
+#GESTimelineElement:start of @clip at the same timeline position. If
+this would be negative, the conversion fails. This is useful for
+determining what #GESTimelineElement:in-point would result from a
+#GES_EDIT_MODE_TRIM to @timeline_time.
+
+Note that whilst a clip has no time effects, this second return is
+equivalent to finding the internal time at which the content that
+appears at @timeline_time in the timeline can be found in @child if it
+had indefinite extent in both directions. However, with non-linear time
+effects this second return will be more distinct.
+
+In either case, the returned time would be appropriate to use for the
+#GESTimelineElement:in-point or #GESTimelineElement:max-duration of the
+child.
+
+See ges_clip_get_timeline_time_from_internal_time(), which performs the
+reverse.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The time in the internal coordinates of @child corresponding
+to @timeline_time, or #GST_CLOCK_TIME_NONE if the conversion could not
+be performed.</doc>
+          <type name="Gst.ClockTime" c:type="GstClockTime"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESClip</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+          <parameter name="child" transfer-ownership="none">
+            <doc xml:space="preserve">An #GESTrackElement:active child of @clip with a
+#GESTrackElement:track</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </parameter>
+          <parameter name="timeline_time" transfer-ownership="none">
+            <doc xml:space="preserve">A time in the timeline time coordinates</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="get_layer" c:identifier="ges_clip_get_layer">
         <doc xml:space="preserve">Gets the #GESClip:layer of the clip.</doc>
         
@@ -1441,26 +1858,89 @@ match any type</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="get_timeline_time_from_source_frame" c:identifier="ges_clip_get_timeline_time_from_source_frame" throws="1">
-        <doc xml:space="preserve">This method allows you to convert a frame number into a #GstClockTime, this
-can be used to either seek to a particular frame in the timeline or to later
-on edit @self with that timestamp.
+      <method name="get_timeline_time_from_internal_time" c:identifier="ges_clip_get_timeline_time_from_internal_time" throws="1">
+        <doc xml:space="preserve">Convert the internal source time from the child to a timeline time.
+This will take any time effects placed on the clip into account (see
+#GESBaseEffect for what time effects are supported, and how to
+declare them in GES).
 
-This method should be use specifically in the case where you want to trim the
-clip to a particular frame.
+When @internal_time is above the #GESTimelineElement:in-point of
+@child, this will return the timeline time at which the internal
+content found at @internal_time appears in the output of the timeline's
+track. For example, this would let you know where in the timeline a
+particular scene in a media file would appear.
 
-The returned timestamp is in the global #GESTimeline time coordinates of @self, not
-in the internal time coordinates. In practice, this means that you can not use
-that time to set the clip #GESTimelineElement:in-point but it can be used in
-the timeline editing API, for example as the @position argument of the
-#ges_timeline_element_edit method.
+This will be done assuming the clip has an indefinite end, so the
+timeline time may be beyond the end of the clip, or even breaking its
+#GESClip:duration-limit.
 
-Note that you can get the frame timestamp of a particular clip asset with
-#ges_clip_asset_get_frame_time.</doc>
+If, instead, @internal_time is below the current
+#GESTimelineElement:in-point of @child, this will return what you would
+need to set the #GESTimelineElement:start of @clip to if you set the
+#GESTimelineElement:in-point of @child to @internal_time and wanted to
+keep the content of @child currently found at the current
+#GESTimelineElement:start of @clip at the same timeline position. If
+this would be negative, the conversion fails. This is useful for
+determining what position to use in a #GES_EDIT_MODE_TRIM if you wish
+to trim to a specific point in the internal content, such as a
+particular scene in a media file.
+
+Note that whilst a clip has no time effects, this second return is
+equivalent to finding the timeline time at which the content of @child
+at @internal_time would be found in the timeline if it had indefinite
+extent in both directions. However, with non-linear time effects this
+second return will be more distinct.
+
+In either case, the returned time would be appropriate to use in
+ges_timeline_element_edit() for #GES_EDIT_MODE_TRIM, and similar, if
+you wish to use a particular internal point as a reference. For
+example, you could choose to end a clip at a certain internal
+'out-point', similar to the #GESTimelineElement:in-point, by
+translating the desired end time into the timeline coordinates, and
+using this position to trim the end of a clip.
+
+See ges_clip_get_internal_time_from_timeline_time(), which performs the
+reverse, or ges_clip_get_timeline_time_from_source_frame() which does
+the same conversion, but using frame numbers.</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">The timestamp corresponding to @frame_number in the element source
-in the timeline coordinates.</doc>
+          <doc xml:space="preserve">The time in the timeline coordinates corresponding to
+@internal_time, or #GST_CLOCK_TIME_NONE if the conversion could not be
+performed.</doc>
+          <type name="Gst.ClockTime" c:type="GstClockTime"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESClip</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+          <parameter name="child" transfer-ownership="none">
+            <doc xml:space="preserve">An #GESTrackElement:active child of @clip with a
+#GESTrackElement:track</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </parameter>
+          <parameter name="internal_time" transfer-ownership="none">
+            <doc xml:space="preserve">A time in the internal time coordinates of @child</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="get_timeline_time_from_source_frame" c:identifier="ges_clip_get_timeline_time_from_source_frame" version="1.18" throws="1">
+        <doc xml:space="preserve">Convert the source frame number to a timeline time. This acts the same
+as ges_clip_get_timeline_time_from_internal_time() using the core
+children of the clip and using the frame number to specify the internal
+position, rather than a timestamp.
+
+The returned timeline time can be used to seek or edit to a specific
+frame.
+
+Note that you can get the frame timestamp of a particular clip asset
+with ges_clip_asset_get_frame_time().</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The timestamp corresponding to @frame_number in the core
+children of @clip, in the timeline coordinates, or #GST_CLOCK_TIME_NONE
+if the conversion could not be performed.</doc>
           <type name="Gst.ClockTime" c:type="GstClockTime"/>
         </return-value>
         <parameters>
@@ -1469,8 +1949,8 @@ in the timeline coordinates.</doc>
             <type name="Clip" c:type="GESClip*"/>
           </instance-parameter>
           <parameter name="frame_number" transfer-ownership="none">
-            <doc xml:space="preserve">The frame number to get the corresponding timestamp in the
-               timeline coordinates</doc>
+            <doc xml:space="preserve">The frame number to get the corresponding timestamp of
+in the timeline coordinates</doc>
             <type name="FrameNumber" c:type="GESFrameNumber"/>
           </parameter>
         </parameters>
@@ -1532,6 +2012,24 @@ ges_clip_get_top_effect_index().</doc>
         </parameters>
       </method>
       <method name="move_to_layer" c:identifier="ges_clip_move_to_layer">
+        <doc xml:space="preserve">See ges_clip_move_to_layer_full(), which also gives an error.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @clip was successfully moved to @layer.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESClip</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+          <parameter name="layer" transfer-ownership="none">
+            <doc xml:space="preserve">The new layer</doc>
+            <type name="Layer" c:type="GESLayer*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="move_to_layer_full" c:identifier="ges_clip_move_to_layer_full" version="1.18" throws="1">
         <doc xml:space="preserve">Moves a clip to a new layer. If the clip already exists in a layer, it
 is first removed from its current layer before being added to the new
 layer.</doc>
@@ -1548,6 +2046,27 @@ layer.</doc>
           <parameter name="layer" transfer-ownership="none">
             <doc xml:space="preserve">The new layer</doc>
             <type name="Layer" c:type="GESLayer*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="remove_top_effect" c:identifier="ges_clip_remove_top_effect" version="1.18" throws="1">
+        <doc xml:space="preserve">Remove a top effect from the clip.
+
+Note, if the effect is a time effect, this may be refused if the clip
+would not be able to adapt itself once the effect is removed.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @effect was successfully added to @clip at @index.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESClip</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+          <parameter name="effect" transfer-ownership="none">
+            <doc xml:space="preserve">The top effect to remove</doc>
+            <type name="BaseEffect" c:type="GESBaseEffect*"/>
           </parameter>
         </parameters>
       </method>
@@ -1571,6 +2090,28 @@ its value, rather than the user.</doc>
         </parameters>
       </method>
       <method name="set_top_effect_index" c:identifier="ges_clip_set_top_effect_index">
+        <doc xml:space="preserve">See ges_clip_set_top_effect_index_full(), which also gives an error.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @effect was successfully moved to @newindex.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESClip</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+          <parameter name="effect" transfer-ownership="none">
+            <doc xml:space="preserve">An effect within @clip to move</doc>
+            <type name="BaseEffect" c:type="GESBaseEffect*"/>
+          </parameter>
+          <parameter name="newindex" transfer-ownership="none">
+            <doc xml:space="preserve">The index for @effect in @clip</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_top_effect_index_full" c:identifier="ges_clip_set_top_effect_index_full" version="1.18" throws="1">
         <doc xml:space="preserve">Set the index of an effect within the clip. See
 ges_clip_get_top_effect_index(). The new index must be an existing
 index of the clip. The effect is moved to the new index, and the other
@@ -1614,6 +2155,25 @@ ordering.</doc>
         </parameters>
       </method>
       <method name="split" c:identifier="ges_clip_split">
+        <doc xml:space="preserve">See ges_clip_split_full(), which also gives an error.</doc>
+        
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">The newly created clip resulting
+from the splitting @clip, or %NULL if @clip can't be split.</doc>
+          <type name="Clip" c:type="GESClip*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESClip to split</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </instance-parameter>
+          <parameter name="position" transfer-ownership="none">
+            <doc xml:space="preserve">The timeline position at which to perform the split</doc>
+            <type name="guint64" c:type="guint64"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="split_full" c:identifier="ges_clip_split_full" version="1.18" throws="1">
         <doc xml:space="preserve">Splits a clip at the given timeline position into two clips. The clip
 must already have a #GESClip:layer.
 
@@ -1653,11 +2213,29 @@ from the splitting @clip, or %NULL if @clip can't be split.</doc>
             <type name="Clip" c:type="GESClip*"/>
           </instance-parameter>
           <parameter name="position" transfer-ownership="none">
-            <doc xml:space="preserve">The timeline position at which to perform the split</doc>
+            <doc xml:space="preserve">The timeline position at which to perform the split, between
+the start and end of the clip</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
         </parameters>
       </method>
+      <property name="duration-limit" transfer-ownership="none">
+        <doc xml:space="preserve">The maximum #GESTimelineElement:duration that can be *currently* set
+for the clip, taking into account the #GESTimelineElement:in-point,
+#GESTimelineElement:max-duration, #GESTrackElement:active, and
+#GESTrackElement:track properties of its children, as well as any
+time effects. If there is no limit, this will be set to
+#GST_CLOCK_TIME_NONE.
+
+Note that whilst a clip has no children in any tracks, the limit will
+be unknown, and similarly set to #GST_CLOCK_TIME_NONE.
+
+If the duration-limit would ever go below the current
+#GESTimelineElement:duration of the clip due to a change in the above
+variables, its #GESTimelineElement:duration will be set to the new
+limit.</doc>
+        <type name="guint64" c:type="guint64"/>
+      </property>
       <property name="layer" transfer-ownership="none">
         <doc xml:space="preserve">The layer this clip lies in.
 
@@ -2562,26 +3140,98 @@ if no track elements are created or an error occurred.</doc>
       </function>
     </enumeration>
     <enumeration name="EditMode" glib:type-name="GESEditMode" glib:get-type="ges_edit_mode_get_type" c:type="GESEditMode">
-      <doc xml:space="preserve">When a single timeline element is edited within its timeline, using
-ges_timeline_element_edit(), depending on the edit mode, its
-#GESTimelineElement:start, #GESTimelineElement:duration or
+      <doc xml:space="preserve">When a single timeline element is edited within its timeline at some
+position, using ges_timeline_element_edit(), depending on the edit
+mode, its #GESTimelineElement:start, #GESTimelineElement:duration or
 #GESTimelineElement:in-point will be adjusted accordingly. In addition,
-other elements in the timeline may also have their properties adjusted.
+any clips may change #GESClip:layer.
 
-In fact, the edit is actually performed on the toplevel of the edited
-element (usually a #GESClip), which is responsible for moving its
-children along with it. For simplicity, in the descriptions we will
-use "element" to exclusively refer to toplevel elements.
+Each edit can be broken down into a combination of three basic edits:
 
-In the edit mode descriptions, the "start edge", "end edge" and the
-"element as a whole" correspond to using #GES_EDGE_START, #GES_EDGE_END
-and #GES_EDGE_NONE as part of the edit, respectively. The "start time",
-"duration time" and "in-point time" correspond to the
-#GESTimelineElement:start, #GESTimelineElement:duration and
-#GESTimelineElement:in-point properties, respectively. Moreover, the
-"end time" refers to the final time of the element:
-#GESTimelineElement:start + #GESTimelineElement:duration. Finally,
-the "edit position" is the timeline time used as part of the edit.
++ MOVE: This moves the start of the element to the edit position.
++ START-TRIM: This cuts or grows the start of the element, whilst
+  maintaining the time at which its internal content appears in the
+  timeline data output. If the element is made shorter, the data that
+  appeared at the edit position will still appear in the timeline at
+  the same time. If the element is made longer, the data that appeared
+  at the previous start of the element will still appear in the
+  timeline at the same time.
++ END-TRIM: Similar to START-TRIM, but the end of the element is cut or
+  grown.
+
+In particular, when editing a #GESClip:
+
++ MOVE: This will set the #GESTimelineElement:start of the clip to the
+  edit position.
++ START-TRIM: This will set the #GESTimelineElement:start of the clip
+  to the edit position. To keep the end time the same, the
+  #GESTimelineElement:duration of the clip will be adjusted in the
+  opposite direction. In addition, the #GESTimelineElement:in-point of
+  the clip will be shifted such that the content that appeared at the
+  new or previous start time, whichever is latest, still appears at the
+  same timeline time. For example, if a frame appeared at the start of
+  the clip, and the start of the clip is reduced, the in-point of the
+  clip will also reduce such that the frame will appear later within
+  the clip, but at the same timeline position.
++ END-TRIM: This will set the #GESTimelineElement:duration of the clip
+  such that its end time will match the edit position.
+
+When editing a #GESGroup:
+
++ MOVE: This will set the #GESGroup:start of the clip to the edit
+  position by shifting all of its children by the same amount. So each
+  child will maintain their relative positions.
++ START-TRIM: If the group is made shorter, this will START-TRIM any
+  clips under the group that start after the edit position to the same
+  edit position. If the group is made longer, this will START-TRIM any
+  clip under the group whose start matches the start of the group to
+  the same edit position.
++ END-TRIM: If the group is made shorter, this will END-TRIM any clips
+  under the group that end after the edit position to the same edit
+  position. If the group is made longer, this will END-TRIM any clip
+  under the group whose end matches the end of the group to the same
+  edit position.
+
+When editing a #GESTrackElement, if it has a #GESClip parent, this
+will be edited instead. Otherwise it is edited in the same way as a
+#GESClip.
+
+The layer priority of a #GESGroup is the lowest layer priority of any
+#GESClip underneath it. When a group is edited to a new layer
+priority, it will shift all clips underneath it by the same amount,
+such that their relative layers stay the same.
+
+If the #GESTimeline has a #GESTimeline:snapping-distance, then snapping
+may occur for some of the edges of the **main** edited element:
+
++ MOVE: The start or end edge of *any* #GESSource under the element may
+  be snapped.
++ START-TRIM: The start edge of a #GESSource whose start edge touches
+  the start edge of the element may snap.
++ END-TRIM: The end edge of a #GESSource whose end edge touches the end
+  edge of the element may snap.
+
+These edges may snap with either the start or end edge of *any* other
+#GESSource in the timeline that is not also being moved by the element,
+including those in different layers, if they are within the
+#GESTimeline:snapping-distance. During an edit, only up to one snap can
+occur. This will shift the edit position such that the snapped edges
+will touch once the edit has completed.
+
+Note that snapping can cause an edit to fail where it would have
+otherwise succeeded because it may push the edit position such that the
+edit would result in an unsupported timeline configuration. Similarly,
+snapping can cause an edit to succeed where it would have otherwise
+failed.
+
+For example, in #GES_EDIT_MODE_RIPPLE acting on #GES_EDGE_NONE, the
+main element is the MOVED toplevel of the edited element. Any source
+under the main MOVED toplevel may have its start or end edge snapped.
+Note, these sources cannot snap with each other. The edit may also
+push other elements, but any sources under these elements cannot snap,
+nor can they be snapped with. If a snap does occur, the MOVE of the
+toplevel *and* all other elements pushed by the ripple will be shifted
+by the same amount such that the snapped edges will touch.
 
 You can also find more explanation about the behaviour of those modes at:
 [trim, ripple and roll](http://pitivi.org/manual/trimming.html)
@@ -2589,65 +3239,84 @@ and [clip management](http://pitivi.org/manual/usingclips.html).</doc>
       
       <member name="normal" value="0" c:identifier="GES_EDIT_MODE_NORMAL" glib:nick="normal">
         <doc xml:space="preserve">The element is edited the normal way (default).
- This only moves a single element. If acting on the start edge of the
- element, the element's start time is set to the edit position.
- If acting on end edge of the element, the element's duration time
- is set such that its end time matches the edit position.</doc>
+ If acting on the element as a whole (#GES_EDGE_NONE), this will MOVE
+ the element by MOVING its toplevel. When acting on the start of the
+ element (#GES_EDGE_START), this will only MOVE the element, but not
+ its toplevel parent. This can allow you to move a #GESClip or
+ #GESGroup to a new start time or layer within its container group,
+ without effecting other members of the group. When acting on the end
+ of the element (#GES_EDGE_END), this will END-TRIM the element,
+ leaving its toplevel unchanged.</doc>
       </member>
       
       <member name="ripple" value="1" c:identifier="GES_EDIT_MODE_RIPPLE" glib:nick="ripple">
-        <doc xml:space="preserve">The element is edited in ripple mode. This
- shifts the element and all later elements (those with equal or later
- start times) in the timeline by the same amount. If acting on the
- element as a whole, the element's start time is shifted to the edit
- position, and later elements are also shifted by the same amount. If
- acting on the end edge of the element, the element's **duration time**
- is shifted so that the element's end time matches the edit position,
- and later elements have their **start time** shifted by the same
- amount.</doc>
+        <doc xml:space="preserve">The element is edited in ripple mode: moving
+ itself as well as later elements, keeping their relative times. This
+ edits the element the same as #GES_EDIT_MODE_NORMAL. In addition, if
+ acting on the element as a whole, or the start of the element, any
+ toplevel element in the same timeline (including different layers)
+ whose start time is later than the *current* start time of the MOVED
+ element will also be MOVED by the same shift as the edited element.
+ If acting on the end of the element, any toplevel element whose start
+ time is later than the *current* end time of the edited element will
+ also be MOVED by the same shift as the change in the end of the
+ edited element. These additional elements will also be shifted by
+ the same shift in layers as the edited element.</doc>
       </member>
       
       <member name="roll" value="2" c:identifier="GES_EDIT_MODE_ROLL" glib:nick="roll">
-        <doc xml:space="preserve">The element is edited in roll mode. This trims
- the edge of an element and neighbouring edges (opposite edges of other
- elements in the timeline with the same corresponding time value), such
- that the edges remain in contact. If acting on the start edge of the
- element, the start edge is trimmed to the edit position (see
- #GES_EDIT_MODE_TRIM), and any other elements in the timeline whose end
- time matches the edited element's start time (evaluated before the
- edit) will have their **end** edge trimmed to the same edit position.
- Similarly, if acting on the end edge of the element, the end edge is
- trimmed to the edit position, and any other elements in the timeline
- whose start time matches the edited element's end time will have
- their start edge trimmed to the same edit position.</doc>
+        <doc xml:space="preserve">The element is edited in roll mode: swapping its
+ content for its neighbour's, or vis versa, in the timeline output.
+ This edits the element the same as #GES_EDIT_MODE_TRIM. In addition,
+ any neighbours are also TRIMMED at their opposite edge to the same
+ timeline position. When acting on the start of the element, a
+ neighbour is any earlier element in the timeline whose end time
+ matches the *current* start time of the edited element. When acting on
+ the end of the element, a neighbour is any later element in the
+ timeline whose start time matches the *current* start time of the
+ edited element. In addition, a neighbour have a #GESSource at its
+ end/start edge that shares a track with a #GESSource at the start/end
+ edge of the edited element. Basically, a neighbour is an element that
+ can be extended, or cut, to have its content replace, or be replaced
+ by, the content of the edited element. Acting on the element as a
+ whole (#GES_EDGE_NONE) is not defined. The element can not shift
+ layers under this mode.</doc>
       </member>
       
       <member name="trim" value="3" c:identifier="GES_EDIT_MODE_TRIM" glib:nick="trim">
-        <doc xml:space="preserve">The element is edited in trim mode. This shifts
- the edge of a single element while maintaining the timing of
- its internal content in the timeline, so the samples/frames/etc of a
- source would still appear at the same timeline time when it is played.
- If acting on the start edge of the element, the element's start time
- will be shifted to the edit position and the element's in-point time
- will be shifted by the same amount. Additionally, the element's
- duration time will be shifted the other way such that the element's
- end time remains the same. If acting on end edge of the element, the
- element's duration time is set such that its end time matches the edit
- position.</doc>
+        <doc xml:space="preserve">The element is edited in trim mode. When acting
+ on the start of the element, this will START-TRIM it. When acting on
+ the end of the element, this will END-TRIM it. Acting on the element
+ as a whole (#GES_EDGE_NONE) is not defined.</doc>
       </member>
       
       <member name="slide" value="4" c:identifier="GES_EDIT_MODE_SLIDE" glib:nick="slide">
         <doc xml:space="preserve">The element is edited in slide mode (not yet
- implemented). This shifts the element and will trim the edges of
- neighbouring edges on either side accordingly. If acting on the
- element as a whole, the element's start time is shifted to the edit
- position. Any other elements in the timeline whose end time matches
- the edited element's start time (evaluated before the edit) will have
- their end edge trimmed to the same edit position. Additionally, any
- other elements in the timeline whose start time matches the edited
- element's end time will have their start edge trimmed to match the
- edited element's **new** end time.</doc>
+ implemented): moving the element replacing or consuming content on
+ each end. When acting on the element as a whole, this will MOVE the
+ element, and TRIM any neighbours on either side. A neighbour is
+ defined in the same way as in #GES_EDIT_MODE_ROLL, but they may be on
+ either side of the edited elements. Elements at the end with be
+ START-TRIMMED to the new end position of the edited element. Elements
+ at the start will be END-TRIMMED to the new start position of the
+ edited element. Acting on the start or end of the element
+ (#GES_EDGE_START and #GES_EDGE_END) is not defined. The element can
+ not shift layers under this mode.</doc>
       </member>
+      <function name="name" c:identifier="ges_edit_mode_name" version="1.18">
+        <doc xml:space="preserve">Return a string representation of @mode.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">a string representation of @mode.</doc>
+          <type name="utf8" c:type="const gchar*"/>
+        </return-value>
+        <parameters>
+          <parameter name="mode" transfer-ownership="none">
+            <doc xml:space="preserve">a #GESEditMode</doc>
+            <type name="EditMode" c:type="GESEditMode"/>
+          </parameter>
+        </parameters>
+      </function>
     </enumeration>
     <class name="Effect" c:symbol-prefix="effect" c:type="GESEffect" parent="BaseEffect" glib:type-name="GESEffect" glib:get-type="ges_effect_get_type" glib:type-struct="EffectClass">
       <doc xml:space="preserve">Currently we only support effects with 1 sinkpad and 1 sourcepad
@@ -2745,20 +3414,35 @@ to what track type the effect should be used in.</doc>
         </array>
       </field>
       <method name="register_rate_property" c:identifier="ges_effect_class_register_rate_property">
-        <doc xml:space="preserve">Register an element that can change the rate at which media is playing. The
-property type must be float or double, and must be a factor of the rate,
-i.e. a value of 2.0 must mean that the media plays twice as fast. For
-example, this is true for the properties 'rate' and 'tempo' of the element
-'pitch', which is already registered by default. By registering the element,
-timeline duration can be correctly converted into media duration, allowing
-the right segment seeks to be sent to the sources.
+        <doc xml:space="preserve">Register an element that can change the rate at which media is playing.
+The property type must be float or double, and must be a factor of the
+rate, i.e. a value of 2.0 must mean that the media plays twice as fast.
+Several properties may be registered for a single element type,
+provided they all contribute to the rate as independent factors. For
+example, this is true for the "GstPitch::rate" and "GstPitch::tempo"
+properties. These are already registered by default in GES, along with
+#videorate:rate for #videorate and #scaletempo:rate for #scaletempo.
 
-A reference to the GESEffectClass can be obtained as follows:
-  GES_EFFECT_CLASS (g_type_class_ref (GES_TYPE_EFFECT));</doc>
+If such a rate property becomes a child property of a #GESEffect upon
+its creation (the element is part of its #GESEffect:bin-description),
+it will be automatically registered as a time property (see
+ges_base_effect_register_time_property()) and will have its time
+translation functions set (see
+ges_base_effect_set_time_translation_funcs()) to use the overall rate
+of the rate properties. Note that if an effect contains a rate
+property as well as a non-rate time property, you should ensure to set
+the time translation functions to some other methods using
+ges_base_effect_set_time_translation_funcs().
+
+Note, you can obtain a reference to the GESEffectClass using
+
+```
+  GES_EFFECT_CLASS (g_type_class_ref (GES_TYPE_EFFECT));
+```</doc>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">whether the rate property was succesfully registered. When this
-method returns false, a warning is emitted with more information.</doc>
+          <doc xml:space="preserve">%TRUE if the rate property was successfully registered. When
+this method returns %FALSE, a warning is emitted with more information.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -2767,11 +3451,12 @@ method returns false, a warning is emitted with more information.</doc>
             <type name="EffectClass" c:type="GESEffectClass*"/>
           </instance-parameter>
           <parameter name="element_name" transfer-ownership="none">
-            <doc xml:space="preserve">Name of the GstElement that changes the rate</doc>
+            <doc xml:space="preserve">The #GstElementFactory name of the element that changes
+the rate</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="property_name" transfer-ownership="none">
-            <doc xml:space="preserve">Name of the property that changes the rate</doc>
+            <doc xml:space="preserve">The name of the property that changes the rate</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
@@ -2863,6 +3548,25 @@ Example: "videobalance saturation=1.5 hue=+0.5"</doc>
         <doc xml:space="preserve">The formatted files was malformed</doc>
       </member>
       <member name="invalid_frame_number" value="3" c:identifier="GES_ERROR_INVALID_FRAME_NUMBER">
+        <doc xml:space="preserve">The frame number is invalid</doc>
+      </member>
+      <member name="negative_layer" value="4" c:identifier="GES_ERROR_NEGATIVE_LAYER">
+        <doc xml:space="preserve">The operation would lead to a negative
+#GES_TIMELINE_ELEMENT_LAYER_PRIORITY. (Since: 1.18)</doc>
+      </member>
+      <member name="negative_time" value="5" c:identifier="GES_ERROR_NEGATIVE_TIME">
+        <doc xml:space="preserve">The operation would lead to a negative time.
+E.g. for the #GESTimelineElement:start #GESTimelineElement:duration or
+#GESTimelineElement:in-point. (Since: 1.18)</doc>
+      </member>
+      <member name="not_enough_internal_content" value="6" c:identifier="GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT">
+        <doc xml:space="preserve">Some #GESTimelineElement does
+not have a large enough #GESTimelineElement:max-duration to cover the
+desired operation. (Since: 1.18)</doc>
+      </member>
+      <member name="invalid_overlap_in_track" value="7" c:identifier="GES_ERROR_INVALID_OVERLAP_IN_TRACK">
+        <doc xml:space="preserve">The operation would break one of
+the overlap conditions for the #GESTimeline. (Since: 1.18)</doc>
       </member>
     </enumeration>
     <interface name="Extractable" c:symbol-prefix="extractable" c:type="GESExtractable" glib:type-name="GESExtractable" glib:get-type="ges_extractable_get_type" glib:type-struct="ExtractableInterface">
@@ -3750,6 +4454,45 @@ layers will simply play in addition.</doc>
         </parameters>
       </virtual-method>
       <method name="add_asset" c:identifier="ges_layer_add_asset">
+        <doc xml:space="preserve">See ges_layer_add_asset_full(), which also gives an error.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The newly created clip.</doc>
+          <type name="Clip" c:type="GESClip*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="layer" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESLayer</doc>
+            <type name="Layer" c:type="GESLayer*"/>
+          </instance-parameter>
+          <parameter name="asset" transfer-ownership="none">
+            <doc xml:space="preserve">The asset to extract the new clip from</doc>
+            <type name="Asset" c:type="GESAsset*"/>
+          </parameter>
+          <parameter name="start" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESTimelineElement:start value to set on the new clip
+If `start == #GST_CLOCK_TIME_NONE`, it will be added to the end
+of @layer, i.e. it will be set to @layer's duration</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </parameter>
+          <parameter name="inpoint" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESTimelineElement:in-point value to set on the new
+clip</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </parameter>
+          <parameter name="duration" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESTimelineElement:duration value to set on the new
+clip</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </parameter>
+          <parameter name="track_types" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESClip:supported-formats to set on the the new
+clip, or #GES_TRACK_TYPE_UNKNOWN to use the default</doc>
+            <type name="TrackType" c:type="GESTrackType"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="add_asset_full" c:identifier="ges_layer_add_asset_full" version="1.18" throws="1">
         <doc xml:space="preserve">Extracts a new clip from an asset and adds it to the layer with
 the given properties.</doc>
         
@@ -3790,6 +4533,25 @@ clip, or #GES_TRACK_TYPE_UNKNOWN to use the default</doc>
         </parameters>
       </method>
       <method name="add_clip" c:identifier="ges_layer_add_clip">
+        <doc xml:space="preserve">See ges_layer_add_clip_full(), which also gives an error.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @clip was properly added to @layer, or %FALSE
+if @layer refused to add @clip.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="layer" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESLayer</doc>
+            <type name="Layer" c:type="GESLayer*"/>
+          </instance-parameter>
+          <parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">The clip to add</doc>
+            <type name="Clip" c:type="GESClip*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="add_clip_full" c:identifier="ges_layer_add_clip_full" version="1.18" throws="1">
         <doc xml:space="preserve">Adds the given clip to the layer. If the method succeeds, the layer
 will take ownership of the clip.
 
@@ -4064,24 +4826,8 @@ will make sure there is never 'gaps' between layer priorities.</doc-deprecated>
       </method>
       <property name="auto-transition" writable="1" transfer-ownership="none">
         <doc xml:space="preserve">Whether to automatically create a #GESTransitionClip whenever two
-#GESClip-s overlap in the layer. Specifically, if this is set to
-%TRUE, then wherever two #GESSource-s (that belong to some clip in
-the layer) share the same #GESTrackElement:track and the end time of
-one source exceeds the #GESTimelineElement:start time of the other,
-there will exist a corresponding #GESTransitionClip in the same
-layer. These automatic transitions will be created and removed
-accordingly. Their temporal extent will cover the overlap of the
-two sources (their #GESTimelineElement:start will be set to the
-#GESTimelineElement:start of the later source, and their
-#GESTimelineElement:duration will be the difference between the
-#GESTimelineElement:start of the later source, and the end time of
-the earlier source).
-
-It may be difficult to use this feature if your timeline has multiple
-tracks of the same #GESTrack:track-type and you use the
-#GESTimeline::select-tracks-for-object signal. You will have to
-ensure that any #GESTransition that belongs to a newly created
-transition clip is able to arrive in the correct track.
+#GESSource-s that both belong to a #GESClip in the layer overlap.
+See #GESTimeline for what counts as an overlap.
 
 When a layer is added to a #GESTimeline, if this property is left as
 %FALSE, but the timeline's #GESTimeline:auto-transition is %TRUE, it
@@ -6586,10 +7332,11 @@ is one of the timelines that have been extracted from @project
             <doc xml:space="preserve">The uri where to save @project and @timeline</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
-          <parameter name="formatter_asset" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">The formatter asset to use or %NULL. If %NULL,
-will try to save in the same format as the one from which the timeline as been loaded
-or default to the best formatter as defined in #ges_find_formatter_for_uri</doc>
+          <parameter name="formatter_asset" transfer-ownership="full" nullable="1" allow-none="1">
+            <doc xml:space="preserve">The formatter asset to
+use or %NULL. If %NULL, will try to save in the same format as the one
+from which the timeline as been loaded or default to the best formatter
+as defined in #ges_find_formatter_for_uri</doc>
             <type name="Asset" c:type="GESAsset*"/>
           </parameter>
           <parameter name="overwrite" transfer-ownership="none">
@@ -6915,6 +7662,15 @@ these effects from the clip.</doc>
       
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
+      <constructor name="new_time_overlay" c:identifier="ges_source_clip_new_time_overlay" version="1.18">
+        <doc xml:space="preserve">Creates a new #GESSourceClip that renders a time overlay on top</doc>
+        
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">The newly created #GESSourceClip,
+or %NULL if there was an error.</doc>
+          <type name="SourceClip" c:type="GESSourceClip*"/>
+        </return-value>
+      </constructor>
       <field name="parent">
         <type name="Clip" c:type="GESClip"/>
       </field>
@@ -7085,7 +7841,7 @@ for new elements from this class.</doc>
 ## Asset
 
 The default asset ID is GESTestClip, but the framerate and video
-size can be overriden using an ID of the form:
+size can be overridden using an ID of the form:
 
 ```
 framerate=60/1, width=1920, height=1080, max-duration=5.0
@@ -7895,19 +8651,73 @@ The layers are ordered, with higher priority layers having their
 content prioritised in the tracks. This ordering can be changed using
 ges_timeline_move_layer().
 
+## Editing
+
+See #GESTimelineElement for the various ways the elements of a timeline
+can be edited.
+
+If you change the timing or ordering of a timeline's
+#GESTimelineElement-s, then these changes will not actually be taken
+into account in the output of the timeline's tracks until the
+ges_timeline_commit() method is called. This allows you to move its
+elements around, say, in response to an end user's mouse dragging, with
+little expense before finalising their effect on the produced data.
+
+## Overlaps and Auto-Transitions
+
+There are certain restrictions placed on how #GESSource-s may overlap
+in a #GESTrack that belongs to a timeline. These will be enforced by
+GES, so the user will not need to keep track of them, but they should
+be aware that certain edits will be refused as a result if the overlap
+rules would be broken.
+
+Consider two #GESSource-s, `A` and `B`, with start times `startA` and
+`startB`, and end times `endA` and `endB`, respectively. The start
+time refers to their #GESTimelineElement:start, and the end time is
+their #GESTimelineElement:start + #GESTimelineElement:duration. These
+two sources *overlap* if:
+
++ they share the same #GESTrackElement:track (non %NULL), which belongs
+  to the timeline;
++ they share the same #GES_TIMELINE_ELEMENT_LAYER_PRIORITY; and
++ `startA &lt; endB` and `startB &lt; endA `.
+
+Note that when `startA = endB` or `startB = endA` then the two sources
+will *touch* at their edges, but are not considered overlapping.
+
+If, in addition, `startA &lt; startB &lt; endA`, then we can say that the
+end of `A` overlaps the start of `B`.
+
+If, instead, `startA &lt;= startB` and `endA &gt;= endB`, then we can say
+that `A` fully overlaps `B`.
+
+The overlap rules for a timeline are that:
+
+1. One source cannot fully overlap another source.
+2. A source can only overlap the end of up to one other source at its
+   start.
+3. A source can only overlap the start of up to one other source at its
+   end.
+
+The last two rules combined essentially mean that at any given timeline
+position, only up to two #GESSource-s may overlap at that position. So
+triple or more overlaps are not allowed.
+
+If you switch on #GESTimeline:auto-transition, then at any moment when
+the end of one source (the first source) overlaps the start of another
+(the second source), a #GESTransitionClip will be automatically created
+for the pair in the same layer and it will cover their overlap. If the
+two elements are edited in a way such that the end of the first source
+no longer overlaps the start of the second, the transition will be
+automatically removed from the timeline. However, if the two sources
+still overlap at the same edges after the edit, then the same
+transition object will be kept, but with its timing and layer adjusted
+accordingly.
+
 ## Saving
 
 To save/load a timeline, you can use the ges_timeline_load_from_uri()
 and ges_timeline_save_to_uri() methods that use the default format.
-
-## Editing
-
-If you change the timing or ordering of a timeline's
-#GESTimelineElement-s, then these changes will not actually be taken
-into account in the timeline until the ges_timeline_commit() method is
-called. This allows you to move its elements around, say, in
-response to an end user's mouse dragging, with little expense before
-finalising their effect.
 
 ## Playing
 
@@ -8590,8 +9400,10 @@ current element positions within the timeline.</doc>
         </parameters>
       </method>
       <property name="auto-transition" writable="1" transfer-ownership="none">
-        <doc xml:space="preserve">Whether to automatically create a transition whenever two clips
-overlap in the timeline. See #GESLayer:auto-transition.</doc>
+        <doc xml:space="preserve">Whether to automatically create a transition whenever two
+#GESSource-s overlap in a track of the timeline. See
+#GESLayer:auto-transition if you want this to only happen in some
+layers.</doc>
         <type name="gboolean" c:type="gboolean"/>
       </property>
       <property name="duration" transfer-ownership="none">
@@ -8602,9 +9414,9 @@ overlap in the timeline. See #GESLayer:auto-transition.</doc>
       </property>
       <property name="snapping-distance" writable="1" transfer-ownership="none">
         <doc xml:space="preserve">The distance (in nanoseconds) at which a #GESTimelineElement being
-moved within the timeline should snap to its neighbours. Note that
-such a neighbour includes any element in the timeline, including
-across separate layers. 0 means no snapping.</doc>
+moved within the timeline should snap one of its #GESSource-s with
+another #GESSource-s edge. See #GESEditMode for which edges can
+snap during an edit. 0 means no snapping.</doc>
         <type name="guint64" c:type="guint64"/>
       </property>
       <field name="parent">
@@ -8786,11 +9598,10 @@ not add the element to any track.</doc>
       </glib:signal>
       <glib:signal name="snapping-ended" when="last">
         <doc xml:space="preserve">Will be emitted whenever a snapping event ends. After a snap event
-has started (see #GESTimeline::snapping-started), it can end because
-the element whose movement created the snap event has since moved
-outside of the #GESTimeline:snapping-distance before its position was
-committed. It can also end because the element's movement was ended
-by a timeline being committed.</doc>
+has started (see #GESTimeline::snapping-started), it can later end
+because either another timeline edit has occurred (which may or may
+not have created a new snapping event), or because the timeline has
+been committed.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -8811,9 +9622,14 @@ by a timeline being committed.</doc>
       </glib:signal>
       <glib:signal name="snapping-started" when="last">
         <doc xml:space="preserve">Will be emitted whenever an element's movement invokes a snapping
-event (usually by its controlling #GESClip being moved) because its
+event during an edit (usually of one of its ancestors) because its
 start or end point lies within the #GESTimeline:snapping-distance of
-another element's start or end point.</doc>
+another element's start or end point.
+
+See #GESEditMode to see what can snap during an edit.
+
+Note that only up to one snapping-started signal will be emitted per
+element edit within a timeline.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -9002,16 +9818,47 @@ adjust these properties in a convenient way, as well as introduce
 similar changes in neighbouring or later elements in the timeline.
 
 However, a timeline may refuse a change in these properties if they
-would place the timeline in an unsupported configuration. For example,
-it is not possible for three #GESSourceClip-s in the same layer and
-with the same track types to overlap at any given position in the
-timeline (only two may overlap, which corresponds to a single
-#GESTransition). Similarly, a #GESSourceClip may not entirely cover
-another #GESSourceClip in the same layer and with the same track types.
+would place the timeline in an unsupported configuration. See
+#GESTimeline for its overlap rules.
+
 Additionally, an edit may be refused if it would place one of the
 timing properties out of bounds (such as a negative time value for
 #GESTimelineElement:start, or having insufficient internal
 content to last for the desired #GESTimelineElement:duration).
+
+## Time Coordinates
+
+There are three main sets of time coordinates to consider when using
+timeline elements:
+
++ Timeline coordinates: these are the time coordinates used in the
+  output of the timeline in its #GESTrack-s. Each track share the same
+  coordinates, so there is only one set of coordinates for the
+  timeline. These extend indefinitely from 0. The times used for
+  editing (including setting #GESTimelineElement:start and
+  #GESTimelineElement:duration) use these coordinates, since these
+  define when an element is present and for how long the element lasts
+  for in the timeline.
++ Internal source coordinates: these are the time coordinates used
+  internally at the element's output. This is only really defined for
+  #GESTrackElement-s, where it refers to time coordinates used at the
+  final source pad of the wrapped #GstElement-s. However, these
+  coordinates may also be used in a #GESClip in reference to its
+  children. In particular, these are the coordinates used for
+  #GESTimelineElement:in-point and #GESTimelineElement:max-duration.
++ Internal sink coordinates: these are the time coordinates used
+  internally at the element's input. A #GESSource has no input, so
+  these would be undefined. Otherwise, for most #GESTrackElement-s
+  these will be the same set of coordinates as the internal source
+  coordinates because the element does not change the timing
+  internally. Only #GESBaseEffect can support elements where these
+  are different. See #GESBaseEffect for more information.
+
+You can determine the timeline time for a given internal source time
+in a #GESTrack in a #GESClip using
+ges_clip_get_timeline_time_from_internal_time(), and vice versa using
+ges_clip_get_internal_time_from_timeline_time(), for the purposes of
+editing and setting timings properties.
 
 ## Children Properties
 
@@ -9182,13 +10029,8 @@ specification of the child property</doc>
       </virtual-method>
       <virtual-method name="ripple" invoker="ripple">
         <doc xml:space="preserve">Edits the start time of an element within its timeline in ripple mode.
-The element is shifted to @start, and later elements are also shifted
-by the same amount (see #GES_EDIT_MODE_RIPPLE). An edit may fail if it
-would place the timeline in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the start time may be set
-to the edge of some element in the neighbourhood of @start.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_RIPPLE and
+#GES_EDGE_NONE.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the ripple edit of @self completed, %FALSE on
@@ -9208,15 +10050,8 @@ failure.</doc>
       </virtual-method>
       <virtual-method name="ripple_end" invoker="ripple_end">
         <doc xml:space="preserve">Edits the end time of an element within its timeline in ripple mode.
-The element's duration time is shifted until its end time matches @end,
-and later elements have their start time shifted by the same amount
-(see #GES_EDIT_MODE_RIPPLE). An edit may fail if it would place the
-duration time out of bounds, or if it would place the timeline in an
-unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the end time may be set
-to the edge of some element in the neighbourhood of @end.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_RIPPLE and
+#GES_EDGE_END.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the ripple edit of @self completed, %FALSE on
@@ -9236,15 +10071,8 @@ failure.</doc>
       </virtual-method>
       <virtual-method name="roll_end" invoker="roll_end">
         <doc xml:space="preserve">Edits the end time of an element within its timeline in roll mode.
-The end of the element is trimmed to @end, and any other element whose
-start edge matched the end edge of the element is also trimmed to @end
-(see #GES_EDIT_MODE_ROLL). An edit may fail if it would place an
-in-point time or duration time out of bounds, or if it would place the
-timeline in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the end time may be set
-to the edge of some element in the neighbourhood of @end.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_ROLL and
+#GES_EDGE_END.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the roll edit of @self completed, %FALSE on failure.</doc>
@@ -9263,15 +10091,8 @@ to the edge of some element in the neighbourhood of @end.</doc>
       </virtual-method>
       <virtual-method name="roll_start" invoker="roll_start">
         <doc xml:space="preserve">Edits the start time of an element within its timeline in roll mode.
-The element is trimmed to @start, and any other element whose end edge
-matched the start edge of the element is also trimmed to @start (see
-#GES_EDIT_MODE_ROLL). An edit may fail if it would place an in-point
-time or duration time out of bounds, or if it would place the timeline
-in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the start time may be set
-to the edge of some element in the neighbourhood of @start.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_ROLL and
+#GES_EDGE_START.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the roll edit of @self completed, %FALSE on failure.</doc>
@@ -9308,18 +10129,37 @@ to the edge of some element in the neighbourhood of @start.</doc>
           </parameter>
         </parameters>
       </virtual-method>
+      <virtual-method name="set_child_property_full" throws="1">
+        
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="TimelineElement" c:type="GESTimelineElement*"/>
+          </instance-parameter>
+          <parameter name="child" transfer-ownership="none">
+            <type name="GObject.Object" c:type="GObject*"/>
+          </parameter>
+          <parameter name="pspec" transfer-ownership="none">
+            <type name="GObject.ParamSpec" c:type="GParamSpec*"/>
+          </parameter>
+          <parameter name="value" transfer-ownership="none">
+            <type name="GObject.Value" c:type="const GValue*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
       <virtual-method name="set_duration" invoker="set_duration">
-        <doc xml:space="preserve">Sets #GESTimelineElement:duration for the element. This may fail if it
-would place the timeline in an unsupported configuration, or if the
-element does not have enough internal content to last for the desired
-@duration.
+        <doc xml:space="preserve">Sets #GESTimelineElement:duration for the element.
 
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the element's
-#GESTimelineElement:duration may instead be adjusted around @duration
-such that the edge of @self matches the edge of some other element in
-the neighbourhood. In such a case, the return value will still be %TRUE
-on success.</doc>
+Whilst the element is part of a #GESTimeline, this is the same as
+editing the element with ges_timeline_element_edit() under
+#GES_EDIT_MODE_TRIM with #GES_EDGE_END. In particular, the
+#GESTimelineElement:duration of the element may be snapped to a
+different timeline time difference from the one given. In addition,
+setting may fail if it would place the timeline in an unsupported
+configuration, or the element does not have enough internal content to
+last the desired duration.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @duration could be set for @self.</doc>
@@ -9428,14 +10268,15 @@ be used.</doc-deprecated>
         </parameters>
       </virtual-method>
       <virtual-method name="set_start" invoker="set_start">
-        <doc xml:space="preserve">Sets #GESTimelineElement:start for the element. This may fail if it
-would place the timeline in an unsupported configuration.
+        <doc xml:space="preserve">Sets #GESTimelineElement:start for the element. If the element has a
+parent, this will also move its siblings with the same shift.
 
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the element's
-#GESTimelineElement:start may instead be set to the edge of some other
-element in the neighbourhood of @start. In such a case, the return
-value will still be %TRUE on success.</doc>
+Whilst the element is part of a #GESTimeline, this is the same as
+editing the element with ges_timeline_element_edit() under
+#GES_EDIT_MODE_NORMAL with #GES_EDGE_NONE. In particular, the
+#GESTimelineElement:start of the element may be snapped to a different
+timeline time from the one given. In addition, setting may fail if it
+would place the timeline in an unsupported configuration.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @start could be set for @self.</doc>
@@ -9454,15 +10295,8 @@ value will still be %TRUE on success.</doc>
       </virtual-method>
       <virtual-method name="trim" invoker="trim">
         <doc xml:space="preserve">Edits the start time of an element within its timeline in trim mode.
-The element is shifted to @start, and its in-point time is similarly
-shifted to ensure that its internal content will appear at the same
-timeline time when it is played (see #GES_EDIT_MODE_TRIM). An edit may
-fail if it would place the in-point time out of bounds, or if it would
-place the timeline in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the start time may be set
-to the edge of some element in the neighbourhood of @start.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_TRIM and
+#GES_EDGE_START.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the trim edit of @self completed, %FALSE on failure.</doc>
@@ -9539,28 +10373,10 @@ copied from @self.</doc>
         </parameters>
       </method>
       <method name="edit" c:identifier="ges_timeline_element_edit" version="1.18">
-        <doc xml:space="preserve">Edits the element within its timeline by adjusting its
-#GESTimelineElement:start, #GESTimelineElement:duration or
-#GESTimelineElement:in-point, and potentially doing the same for
-other elements in the timeline. See #GESEditMode for details about each
-edit mode. An edit may fail if it would place one of these properties
-out of bounds, or if it would place the timeline in an unsupported
-configuration.
+        <doc xml:space="preserve">See ges_timeline_element_edit_full(), which also gives an error.
 
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the edit position may be set
-to the edge of some element in the neighbourhood of @position.
-
-@new_layer_priority can be used to switch @self, and other elements
-moved by the edit, to a new layer. New layers may be be created if the
-the corresponding layer priority/index does not yet exist for the
-timeline.
-
-@layers can be used as a whitelist to limit changes to elements that
-exist in the corresponding layers. If you intend to also switch
-elements between layers, then you must ensure that all the involved
-layers are included for the switch to succeed (with the exception of
-layers may be newly created).</doc>
+Note that the @layers argument is currently ignored, so you should
+just pass %NULL.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the edit of @self completed, %FALSE on failure.</doc>
@@ -9574,7 +10390,7 @@ layers may be newly created).</doc>
           <parameter name="layers" transfer-ownership="none" nullable="1" allow-none="1">
             <doc xml:space="preserve">A whitelist of layers
 where the edit can be performed, %NULL allows all layers in the
-timeline</doc>
+timeline.</doc>
             <type name="GLib.List" c:type="GList*">
               <type name="Layer"/>
             </type>
@@ -9594,7 +10410,60 @@ moved to. -1 means no move</doc>
           </parameter>
           <parameter name="position" transfer-ownership="none">
             <doc xml:space="preserve">The edit position: a new location for the edge of @self
-(in nanoseconds)</doc>
+(in nanoseconds) in the timeline coordinates</doc>
+            <type name="guint64" c:type="guint64"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="edit_full" c:identifier="ges_timeline_element_edit_full" version="1.18" throws="1">
+        <doc xml:space="preserve">Edits the element within its timeline by adjusting its
+#GESTimelineElement:start, #GESTimelineElement:duration or
+#GESTimelineElement:in-point, and potentially doing the same for
+other elements in the timeline. See #GESEditMode for details about each
+edit mode. An edit may fail if it would place one of these properties
+out of bounds, or if it would place the timeline in an unsupported
+configuration.
+
+Note that if you act on a #GESTrackElement, this will edit its parent
+#GESClip instead. Moreover, for any #GESTimelineElement, if you select
+#GES_EDGE_NONE for #GES_EDIT_MODE_NORMAL or #GES_EDIT_MODE_RIPPLE, this
+will edit the toplevel instead, but still in such a way as to make the
+#GESTimelineElement:start of @self reach the edit @position.
+
+Note that if the element's timeline has a
+#GESTimeline:snapping-distance set, then the edit position may be
+snapped to the edge of some element under the edited element.
+
+@new_layer_priority can be used to switch @self, and other elements
+moved by the edit, to a new layer. New layers may be be created if the
+the corresponding layer priority/index does not yet exist for the
+timeline.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the edit of @self completed, %FALSE on failure.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESTimelineElement to edit</doc>
+            <type name="TimelineElement" c:type="GESTimelineElement*"/>
+          </instance-parameter>
+          <parameter name="new_layer_priority" transfer-ownership="none">
+            <doc xml:space="preserve">The priority/index of the layer @self should be
+moved to. -1 means no move</doc>
+            <type name="gint64" c:type="gint64"/>
+          </parameter>
+          <parameter name="mode" transfer-ownership="none">
+            <doc xml:space="preserve">The edit mode</doc>
+            <type name="EditMode" c:type="GESEditMode"/>
+          </parameter>
+          <parameter name="edge" transfer-ownership="none">
+            <doc xml:space="preserve">The edge of @self where the edit should occur</doc>
+            <type name="Edge" c:type="GESEdge"/>
+          </parameter>
+          <parameter name="position" transfer-ownership="none">
+            <doc xml:space="preserve">The edit position: a new location for the edge of @self
+(in nanoseconds) in the timeline coordinates</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
         </parameters>
@@ -10023,13 +10892,8 @@ will no longer be registered as a child property for the element.</doc>
       </method>
       <method name="ripple" c:identifier="ges_timeline_element_ripple">
         <doc xml:space="preserve">Edits the start time of an element within its timeline in ripple mode.
-The element is shifted to @start, and later elements are also shifted
-by the same amount (see #GES_EDIT_MODE_RIPPLE). An edit may fail if it
-would place the timeline in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the start time may be set
-to the edge of some element in the neighbourhood of @start.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_RIPPLE and
+#GES_EDGE_NONE.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the ripple edit of @self completed, %FALSE on
@@ -10049,15 +10913,8 @@ failure.</doc>
       </method>
       <method name="ripple_end" c:identifier="ges_timeline_element_ripple_end">
         <doc xml:space="preserve">Edits the end time of an element within its timeline in ripple mode.
-The element's duration time is shifted until its end time matches @end,
-and later elements have their start time shifted by the same amount
-(see #GES_EDIT_MODE_RIPPLE). An edit may fail if it would place the
-duration time out of bounds, or if it would place the timeline in an
-unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the end time may be set
-to the edge of some element in the neighbourhood of @end.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_RIPPLE and
+#GES_EDGE_END.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the ripple edit of @self completed, %FALSE on
@@ -10077,15 +10934,8 @@ failure.</doc>
       </method>
       <method name="roll_end" c:identifier="ges_timeline_element_roll_end">
         <doc xml:space="preserve">Edits the end time of an element within its timeline in roll mode.
-The end of the element is trimmed to @end, and any other element whose
-start edge matched the end edge of the element is also trimmed to @end
-(see #GES_EDIT_MODE_ROLL). An edit may fail if it would place an
-in-point time or duration time out of bounds, or if it would place the
-timeline in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the end time may be set
-to the edge of some element in the neighbourhood of @end.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_ROLL and
+#GES_EDGE_END.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the roll edit of @self completed, %FALSE on failure.</doc>
@@ -10104,15 +10954,8 @@ to the edge of some element in the neighbourhood of @end.</doc>
       </method>
       <method name="roll_start" c:identifier="ges_timeline_element_roll_start">
         <doc xml:space="preserve">Edits the start time of an element within its timeline in roll mode.
-The element is trimmed to @start, and any other element whose end edge
-matched the start edge of the element is also trimmed to @start (see
-#GES_EDIT_MODE_ROLL). An edit may fail if it would place an in-point
-time or duration time out of bounds, or if it would place the timeline
-in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the start time may be set
-to the edge of some element in the neighbourhood of @start.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_ROLL and
+#GES_EDGE_START.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the roll edit of @self completed, %FALSE on failure.</doc>
@@ -10153,20 +10996,8 @@ name/value pairs, followed by %NULL</doc>
         </parameters>
       </method>
       <method name="set_child_property" c:identifier="ges_timeline_element_set_child_property">
-        <doc xml:space="preserve">Sets the property of a child of the element.
-
-@property_name can either be in the format "prop-name" or
-"TypeName::prop-name", where "prop-name" is the name of the property
-to set (as used in g_object_set()), and "TypeName" is the type name of
-the child (as returned by G_OBJECT_TYPE_NAME()). The latter format is
-useful when two children of different types share the same property
-name.
-
-The first child found with the given "prop-name" property that was
-registered with ges_timeline_element_add_child_property() (and of the
-type "TypeName", if it was given) will have the corresponding
-property set to @value. Other children that may have also matched the
-property name (and type name) are left unchanged!
+        <doc xml:space="preserve">See ges_timeline_element_set_child_property_full(), which also gives an
+error.
 
 Note that ges_timeline_element_set_child_properties() may be more
 convenient for C programming.</doc>
@@ -10213,6 +11044,41 @@ ges_timeline_element_add_child_property() is set to @value.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="set_child_property_full" c:identifier="ges_timeline_element_set_child_property_full" version="1.18" throws="1">
+        <doc xml:space="preserve">Sets the property of a child of the element.
+
+@property_name can either be in the format "prop-name" or
+"TypeName::prop-name", where "prop-name" is the name of the property
+to set (as used in g_object_set()), and "TypeName" is the type name of
+the child (as returned by G_OBJECT_TYPE_NAME()). The latter format is
+useful when two children of different types share the same property
+name.
+
+The first child found with the given "prop-name" property that was
+registered with ges_timeline_element_add_child_property() (and of the
+type "TypeName", if it was given) will have the corresponding
+property set to @value. Other children that may have also matched the
+property name (and type name) are left unchanged!</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the property was found and set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTimelineElement</doc>
+            <type name="TimelineElement" c:type="GESTimelineElement*"/>
+          </instance-parameter>
+          <parameter name="property_name" transfer-ownership="none">
+            <doc xml:space="preserve">The name of the child property to set</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+          <parameter name="value" transfer-ownership="none">
+            <doc xml:space="preserve">The value to set the property to</doc>
+            <type name="GObject.Value" c:type="const GValue*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="set_child_property_valist" c:identifier="ges_timeline_element_set_child_property_valist" introspectable="0">
         <doc xml:space="preserve">Sets several of the children properties of the element. See
 ges_timeline_element_set_child_property().</doc>
@@ -10237,17 +11103,16 @@ name/value pairs, followed by %NULL</doc>
         </parameters>
       </method>
       <method name="set_duration" c:identifier="ges_timeline_element_set_duration">
-        <doc xml:space="preserve">Sets #GESTimelineElement:duration for the element. This may fail if it
-would place the timeline in an unsupported configuration, or if the
-element does not have enough internal content to last for the desired
-@duration.
+        <doc xml:space="preserve">Sets #GESTimelineElement:duration for the element.
 
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the element's
-#GESTimelineElement:duration may instead be adjusted around @duration
-such that the edge of @self matches the edge of some other element in
-the neighbourhood. In such a case, the return value will still be %TRUE
-on success.</doc>
+Whilst the element is part of a #GESTimeline, this is the same as
+editing the element with ges_timeline_element_edit() under
+#GES_EDIT_MODE_TRIM with #GES_EDGE_END. In particular, the
+#GESTimelineElement:duration of the element may be snapped to a
+different timeline time difference from the one given. In addition,
+setting may fail if it would place the timeline in an unsupported
+configuration, or the element does not have enough internal content to
+last the desired duration.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @duration could be set for @self.</doc>
@@ -10390,14 +11255,15 @@ be used.</doc-deprecated>
         </parameters>
       </method>
       <method name="set_start" c:identifier="ges_timeline_element_set_start">
-        <doc xml:space="preserve">Sets #GESTimelineElement:start for the element. This may fail if it
-would place the timeline in an unsupported configuration.
+        <doc xml:space="preserve">Sets #GESTimelineElement:start for the element. If the element has a
+parent, this will also move its siblings with the same shift.
 
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the element's
-#GESTimelineElement:start may instead be set to the edge of some other
-element in the neighbourhood of @start. In such a case, the return
-value will still be %TRUE on success.</doc>
+Whilst the element is part of a #GESTimeline, this is the same as
+editing the element with ges_timeline_element_edit() under
+#GES_EDIT_MODE_NORMAL with #GES_EDGE_NONE. In particular, the
+#GESTimelineElement:start of the element may be snapped to a different
+timeline time from the one given. In addition, setting may fail if it
+would place the timeline in an unsupported configuration.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @start could be set for @self.</doc>
@@ -10447,15 +11313,8 @@ will need to call this function twice: first to set the timeline to
       </method>
       <method name="trim" c:identifier="ges_timeline_element_trim">
         <doc xml:space="preserve">Edits the start time of an element within its timeline in trim mode.
-The element is shifted to @start, and its in-point time is similarly
-shifted to ensure that its internal content will appear at the same
-timeline time when it is played (see #GES_EDIT_MODE_TRIM). An edit may
-fail if it would place the in-point time out of bounds, or if it would
-place the timeline in an unsupported configuration.
-
-Note that if the element's timeline has a
-#GESTimeline:snapping-distance set, then the start time may be set
-to the edge of some element in the neighbourhood of @start.</doc>
+See ges_timeline_element_edit() with #GES_EDIT_MODE_TRIM and
+#GES_EDGE_START.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the trim edit of @self completed, %FALSE on failure.</doc>
@@ -11032,8 +11891,30 @@ not the case.</doc>
           </parameters>
         </callback>
       </field>
+      <field name="set_child_property_full">
+        <callback name="set_child_property_full" throws="1">
+          
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="TimelineElement" c:type="GESTimelineElement*"/>
+            </parameter>
+            <parameter name="child" transfer-ownership="none">
+              <type name="GObject.Object" c:type="GObject*"/>
+            </parameter>
+            <parameter name="pspec" transfer-ownership="none">
+              <type name="GObject.ParamSpec" c:type="GParamSpec*"/>
+            </parameter>
+            <parameter name="value" transfer-ownership="none">
+              <type name="GObject.Value" c:type="const GValue*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="_ges_reserved" readable="0" private="1">
-        <array zero-terminated="0" fixed-size="15">
+        <array zero-terminated="0" fixed-size="14">
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
@@ -11781,6 +12662,24 @@ ges_track_set_create_element_for_gap_func() on the returned track.</doc>
         </parameters>
       </virtual-method>
       <method name="add_element" c:identifier="ges_track_add_element">
+        <doc xml:space="preserve">See ges_track_add_element(), which also gives an error.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @object was successfully added to @track.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="track" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTrack</doc>
+            <type name="Track" c:type="GESTrack*"/>
+          </instance-parameter>
+          <parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">The element to add</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="add_element_full" c:identifier="ges_track_add_element_full" version="1.18" throws="1">
         <doc xml:space="preserve">Adds the given track element to the track, which takes ownership of the
 element.
 
@@ -11908,6 +12807,24 @@ it does not belong to a timeline.</doc>
         </parameters>
       </method>
       <method name="remove_element" c:identifier="ges_track_remove_element">
+        <doc xml:space="preserve">See ges_track_remove_element_full(), which also returns an error.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @object was successfully removed from @track.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="track" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTrack</doc>
+            <type name="Track" c:type="GESTrack*"/>
+          </instance-parameter>
+          <parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">The element to remove</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="remove_element_full" c:identifier="ges_track_remove_element_full" version="1.18" throws="1">
         <doc xml:space="preserve">Removes the given track element from the track, which revokes
 ownership of the element.</doc>
         
@@ -12188,7 +13105,17 @@ Most users will not have to work directly with track elements since a
 #GESClip will automatically create track elements for its timeline's
 tracks and take responsibility for updating them. The only track
 elements that are not automatically created by clips, but a user is
-likely to want to create, are #GESEffect-s.</doc>
+likely to want to create, are #GESEffect-s.
+
+## Control Bindings for Children Properties
+
+You can set up control bindings for a track element child property
+using ges_track_element_set_control_source(). A
+#GstTimedValueControlSource should specify the timed values using the
+internal source coordinates (see #GESTimelineElement). By default,
+these will be updated to lie between the #GESTimelineElement:in-point
+and out-point of the element. This can be switched off by setting
+#GESTrackElement:auto-clamp-control-sources to %FALSE.</doc>
       
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
@@ -12340,6 +13267,34 @@ writeable properties</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="clamp_control_source" c:identifier="ges_track_element_clamp_control_source" version="1.18">
+        <doc xml:space="preserve">Clamp the #GstTimedValueControlSource for the specified child property
+to lie between the #GESTimelineElement:in-point and out-point of the
+element. The out-point is the #GES_TIMELINE_ELEMENT_END of the element
+translated from the timeline coordinates to the internal source
+coordinates of the element.
+
+If the property does not have a #GstTimedValueControlSource set by
+ges_track_element_set_control_source(), nothing happens. Otherwise, if
+a timed value for the control source lies before the in-point of the
+element, or after its out-point, then it will be removed. At the
+in-point and out-point times, a new interpolated value will be placed.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTrackElement</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </instance-parameter>
+          <parameter name="property_name" transfer-ownership="none">
+            <doc xml:space="preserve">The name of the child property to clamp the control
+source of</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="edit" c:identifier="ges_track_element_edit" deprecated="1" deprecated-version="1.18">
         <doc xml:space="preserve">Edits the element within its track.</doc>
         <doc-deprecated xml:space="preserve">use #ges_timeline_element_edit instead.</doc-deprecated>
@@ -12395,6 +13350,21 @@ for @trackelement.</doc>
         </return-value>
         <parameters>
           <instance-parameter name="trackelement" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTrackElement</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_auto_clamp_control_sources" c:identifier="ges_track_element_get_auto_clamp_control_sources" version="1.18">
+        <doc xml:space="preserve">Gets #GESTrackElement:auto-clamp-control-sources.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">Whether the control sources for the child properties of
+@object are automatically clamped.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
             <doc xml:space="preserve">A #GESTrackElement</doc>
             <type name="TrackElement" c:type="GESTrackElement*"/>
           </instance-parameter>
@@ -12630,6 +13600,33 @@ or %NULL if it does not belong to a track.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="is_core" c:identifier="ges_track_element_is_core" version="1.18">
+        <doc xml:space="preserve">Get whether the given track element is a core track element. That is,
+it was created by the @create_track_elements #GESClipClass method for
+some #GESClip.
+
+Note that such a track element can only be added to a clip that shares
+the same #GESAsset as the clip that created it. For example, you are
+allowed to move core children between clips that resulted from
+ges_container_ungroup(), but you could not move the core child from a
+#GESUriClip to a #GESTitleClip or another #GESUriClip with a different
+#GESUriClip:uri.
+
+Moreover, if a core track element is added to a clip, it will always be
+added as a core child. Therefore, if this returns %TRUE, then @element
+will be a core child of its parent clip.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @element is a core track element.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTrackElement</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="list_children_properties" c:identifier="ges_track_element_list_children_properties" deprecated="1">
         <doc xml:space="preserve">Gets an array of #GParamSpec* for all configurable properties of the
 children of @object.</doc>
@@ -12728,6 +13725,25 @@ binding from</doc>
           </instance-parameter>
           <parameter name="active" transfer-ownership="none">
             <doc xml:space="preserve">Whether @object should be active in its track</doc>
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_auto_clamp_control_sources" c:identifier="ges_track_element_set_auto_clamp_control_sources" version="1.18">
+        <doc xml:space="preserve">Sets #GESTrackElement:auto-clamp-control-sources. If set to %TRUE, this
+will immediately clamp all the control sources.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTrackElement</doc>
+            <type name="TrackElement" c:type="GESTrackElement*"/>
+          </instance-parameter>
+          <parameter name="auto_clamp" transfer-ownership="none">
+            <doc xml:space="preserve">Whether to automatically clamp the control sources for the
+child properties of @object</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
@@ -12911,6 +13927,18 @@ set to %FALSE, this method will also set the
         <doc xml:space="preserve">Whether the effect of the element should be applied in its
 #GESTrackElement:track. If set to %FALSE, it will not be used in
 the output of the track.</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </property>
+      <property name="auto-clamp-control-sources" writable="1" transfer-ownership="none">
+        <doc xml:space="preserve">Whether the control sources on the element (see
+ges_track_element_set_control_source()) will be automatically
+updated whenever the #GESTimelineElement:in-point or out-point of the
+element change in value.
+
+See ges_track_element_clamp_control_source() for how this is done
+per control source.
+
+Default value: %TRUE</doc>
         <type name="gboolean" c:type="gboolean"/>
       </property>
       <property name="has-internal-source" writable="1" transfer-ownership="none">
@@ -14341,9 +15369,6 @@ account.</doc>
           </parameter>
         </parameters>
       </method>
-      <property name="use-time-overlay" writable="1" transfer-ownership="none">
-        <type name="gboolean" c:type="gboolean"/>
-      </property>
       <field name="parent" readable="0" private="1">
         <type name="VideoSource" c:type="GESVideoSource"/>
       </field>
@@ -14690,6 +15715,20 @@ After this call GES should not be used until another ges_init() call.</doc>
       <parameters>
         <parameter name="edge" transfer-ownership="none">
           <type name="Edge" c:type="GESEdge"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="edit_mode_name" c:identifier="ges_edit_mode_name" moved-to="EditMode.name" version="1.18">
+      <doc xml:space="preserve">Return a string representation of @mode.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">a string representation of @mode.</doc>
+        <type name="utf8" c:type="const gchar*"/>
+      </return-value>
+      <parameters>
+        <parameter name="mode" transfer-ownership="none">
+          <doc xml:space="preserve">a #GESEditMode</doc>
+          <type name="EditMode" c:type="GESEditMode"/>
         </parameter>
       </parameters>
     </function>

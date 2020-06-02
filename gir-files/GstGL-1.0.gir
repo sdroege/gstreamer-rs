@@ -1054,7 +1054,7 @@ function to allocate and OpenGL resources needed for your application</doc>
                                             to the texture</doc>
       </member>
     </bitfield>
-    <class name="GLBaseSrc" c:symbol-prefix="gl_base_src" c:type="GstGLBaseSrc" parent="GstBase.PushSrc" abstract="1" glib:type-name="GstGLBaseSrc" glib:get-type="gst_gl_base_src_get_type" glib:type-struct="GLBaseSrcClass">
+    <class name="GLBaseSrc" c:symbol-prefix="gl_base_src" c:type="GstGLBaseSrc" version="1.18" parent="GstBase.PushSrc" abstract="1" glib:type-name="GstGLBaseSrc" glib:get-type="gst_gl_base_src_get_type" glib:type-struct="GLBaseSrcClass">
       <doc xml:space="preserve">#GstGLBaseSrc handles the nitty gritty details of retrieving an OpenGL
 context. It also provided some wrappers around #GstBaseSrc's `start()` and
 `stop()` virtual methods that ensure an OpenGL context is available and
@@ -1131,7 +1131,7 @@ current in the calling thread.</doc>
         <type name="GLBaseSrcPrivate" c:type="GstGLBaseSrcPrivate*"/>
       </field>
     </class>
-    <record name="GLBaseSrcClass" c:type="GstGLBaseSrcClass" glib:is-gtype-struct-for="GLBaseSrc">
+    <record name="GLBaseSrcClass" c:type="GstGLBaseSrcClass" glib:is-gtype-struct-for="GLBaseSrc" version="1.18">
       <doc xml:space="preserve">The base class for GStreamer GL Video sources.</doc>
       
       <field name="parent_class">
@@ -3315,10 +3315,12 @@ single input and producing a single output with a #GstGLFramebuffer</doc>
             <doc xml:space="preserve">a #GstGLFilter</doc>
             <type name="GLFilter" c:type="GstGLFilter*"/>
           </instance-parameter>
-          <parameter name="in_tex" transfer-ownership="none">
+          <parameter name="input" transfer-ownership="none">
+            <doc xml:space="preserve">an input buffer</doc>
             <type name="GLMemory" c:type="GstGLMemory*"/>
           </parameter>
-          <parameter name="out_tex" transfer-ownership="none">
+          <parameter name="output" transfer-ownership="none">
+            <doc xml:space="preserve">an output buffer</doc>
             <type name="GLMemory" c:type="GstGLMemory*"/>
           </parameter>
         </parameters>
@@ -3399,11 +3401,11 @@ any shaders, viewport state, etc must be setup by the caller.</doc>
             <doc xml:space="preserve">a #GstGLFilter</doc>
             <type name="GLFilter" c:type="GstGLFilter*"/>
           </instance-parameter>
-          <parameter name="inbuf" transfer-ownership="none">
+          <parameter name="input" transfer-ownership="none">
             <doc xml:space="preserve">an input buffer</doc>
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
-          <parameter name="outbuf" transfer-ownership="none">
+          <parameter name="output" transfer-ownership="none">
             <doc xml:space="preserve">an output buffer</doc>
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
@@ -3584,10 +3586,12 @@ See also: gst_gl_filter_render_to_target()</doc>
               <doc xml:space="preserve">a #GstGLFilter</doc>
               <type name="GLFilter" c:type="GstGLFilter*"/>
             </parameter>
-            <parameter name="in_tex" transfer-ownership="none">
+            <parameter name="input" transfer-ownership="none">
+              <doc xml:space="preserve">an input buffer</doc>
               <type name="GLMemory" c:type="GstGLMemory*"/>
             </parameter>
-            <parameter name="out_tex" transfer-ownership="none">
+            <parameter name="output" transfer-ownership="none">
+              <doc xml:space="preserve">an output buffer</doc>
               <type name="GLMemory" c:type="GstGLMemory*"/>
             </parameter>
           </parameters>
@@ -7141,6 +7145,7 @@ gst_gl_upload_set_caps() creating a new #GstBuffer in @outbuf_ptr.</doc>
         <doc xml:space="preserve">This element requires a reconfiguration.</doc>
       </member>
       <member name="unshared_gl_context" value="-100" c:identifier="GST_GL_UPLOAD_UNSHARED_GL_CONTEXT" glib:nick="unshared-gl-context">
+        <doc xml:space="preserve">private return value.</doc>
       </member>
     </enumeration>
     <record name="GLVideoAllocationParams" c:type="GstGLVideoAllocationParams" glib:type-name="GstGLVideoAllocationParams" glib:get-type="gst_gl_video_allocation_params_get_type" c:symbol-prefix="gl_video_allocation_params">
@@ -8295,25 +8300,32 @@ have been executed when this function returns.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="send_scroll_event" c:identifier="gst_gl_window_send_scroll_event">
+      <method name="send_scroll_event" c:identifier="gst_gl_window_send_scroll_event" version="1.18">
+        <doc xml:space="preserve">Notify a @window about a scroll event. A scroll signal holding the event
+coordinates will be emitted.</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstGLWindow</doc>
             <type name="GLWindow" c:type="GstGLWindow*"/>
           </instance-parameter>
           <parameter name="posx" transfer-ownership="none">
+            <doc xml:space="preserve">x position of the mouse cursor</doc>
             <type name="gdouble" c:type="double"/>
           </parameter>
           <parameter name="posy" transfer-ownership="none">
+            <doc xml:space="preserve">y position of the mouse cursor</doc>
             <type name="gdouble" c:type="double"/>
           </parameter>
           <parameter name="delta_x" transfer-ownership="none">
+            <doc xml:space="preserve">the x offset of the scroll event</doc>
             <type name="gdouble" c:type="double"/>
           </parameter>
           <parameter name="delta_y" transfer-ownership="none">
+            <doc xml:space="preserve">the y offset of the scroll event</doc>
             <type name="gdouble" c:type="double"/>
           </parameter>
         </parameters>
@@ -9177,6 +9189,10 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
+    <constant name="GL_COLOR_CONVERT_EXT_FORMATS" value=", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE" c:type="GST_GL_COLOR_CONVERT_EXT_FORMATS" introspectable="0">
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
     <constant name="GL_COLOR_CONVERT_FORMATS" value="{ RGBA, RGB, RGBx, BGR, BGRx, BGRA, xRGB, xBGR, ARGB, ABGR, Y444, I420, YV12, Y42B, Y41B, NV12, NV21, NV16, NV61, YUY2, UYVY, Y210, AYUV, VUYA, Y410, GRAY8, GRAY16_LE, GRAY16_BE, RGB16, BGR16, ARGB64 " c:type="GST_GL_COLOR_CONVERT_FORMATS">
       <doc xml:space="preserve">The currently supported formats that can be converted</doc>
       
@@ -9466,6 +9482,10 @@ user-defined purposes.</doc>
     </function-macro>
     <constant name="GL_MEMORY_PBO_ALLOCATOR_NAME" value="GLMemoryPBO" c:type="GST_GL_MEMORY_PBO_ALLOCATOR_NAME">
       <doc xml:space="preserve">The name of the GL Memory PBO allocator</doc>
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
+    <constant name="GL_MEMORY_VIDEO_EXT_FORMATS" value=", BGR10A2_LE, RGB10A2_LE, P010_10LE, P012_LE, P016_LE, Y212_LE, Y412_LE" c:type="GST_GL_MEMORY_VIDEO_EXT_FORMATS" introspectable="0">
       
       <type name="utf8" c:type="gchar*"/>
     </constant>

@@ -3510,15 +3510,13 @@ g_strfreev() when no longer needed.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="get_request_uri_with_control" c:identifier="gst_rtsp_url_get_request_uri_with_control">
+      <method name="get_request_uri_with_control" c:identifier="gst_rtsp_url_get_request_uri_with_control" version="1.18">
         <doc xml:space="preserve">Get a newly allocated string describing the request URI for @url
 combined with the control path for @control_path</doc>
         
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a string with the request URI combined with the control path.
-g_free() after usage.
-
-Since 1.18</doc>
+g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
