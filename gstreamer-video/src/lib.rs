@@ -69,8 +69,15 @@ mod video_rectangle;
 pub use video_rectangle::*;
 mod video_overlay_composition;
 pub use video_overlay_composition::*;
-mod video_meta;
-pub use video_meta::*;
+pub mod video_meta;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use video_meta::VideoCaptionMeta;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub use video_meta::{VideoAFDMeta, VideoBarMeta};
+pub use video_meta::{
+    VideoAffineTransformationMeta, VideoCropMeta, VideoMeta, VideoOverlayCompositionMeta,
+    VideoRegionOfInterestMeta,
+};
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 mod video_time_code;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
