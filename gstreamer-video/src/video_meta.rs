@@ -7,9 +7,10 @@
 // except according to those terms.
 
 use std::fmt;
+use std::ptr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_none, ToGlib};
+use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
 use gst;
 use gst::prelude::*;
 use gst_sys;
@@ -130,6 +131,256 @@ impl fmt::Debug for VideoMeta {
             .field("n_planes", &self.get_n_planes())
             .field("offset", &self.get_offset())
             .field("stride", &self.get_stride())
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct VideoCropMeta(gst_video_sys::GstVideoCropMeta);
+
+unsafe impl Send for VideoCropMeta {}
+unsafe impl Sync for VideoCropMeta {}
+
+impl VideoCropMeta {
+    pub fn add(
+        buffer: &mut gst::BufferRef,
+        rect: (u32, u32, u32, u32),
+    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = gst_sys::gst_buffer_add_meta(
+                buffer.as_mut_ptr(),
+                gst_video_sys::gst_video_crop_meta_get_info(),
+                ptr::null_mut(),
+            ) as *mut gst_video_sys::GstVideoCropMeta;
+
+            {
+                let meta = &mut *meta;
+                meta.x = rect.0;
+                meta.y = rect.1;
+                meta.width = rect.2;
+                meta.height = rect.3;
+            }
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_rect(&self) -> (u32, u32, u32, u32) {
+        (self.0.x, self.0.y, self.0.width, self.0.height)
+    }
+
+    pub fn set_rect(&mut self, rect: (u32, u32, u32, u32)) {
+        self.0.x = rect.0;
+        self.0.y = rect.1;
+        self.0.width = rect.2;
+        self.0.height = rect.3;
+    }
+}
+
+unsafe impl MetaAPI for VideoCropMeta {
+    type GstType = gst_video_sys::GstVideoCropMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_video_sys::gst_video_crop_meta_api_get_type()) }
+    }
+}
+
+impl fmt::Debug for VideoCropMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoCropMeta")
+            .field("rect", &self.get_rect())
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct VideoRegionOfInterestMeta(gst_video_sys::GstVideoRegionOfInterestMeta);
+
+unsafe impl Send for VideoRegionOfInterestMeta {}
+unsafe impl Sync for VideoRegionOfInterestMeta {}
+
+impl VideoRegionOfInterestMeta {
+    pub fn add<'a>(
+        buffer: &'a mut gst::BufferRef,
+        roi_type: &str,
+        rect: (u32, u32, u32, u32),
+    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = gst_video_sys::gst_buffer_add_video_region_of_interest_meta(
+                buffer.as_mut_ptr(),
+                roi_type.to_glib_none().0,
+                rect.0,
+                rect.1,
+                rect.2,
+                rect.3,
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_rect(&self) -> (u32, u32, u32, u32) {
+        (self.0.x, self.0.y, self.0.w, self.0.h)
+    }
+
+    pub fn get_id(&self) -> i32 {
+        self.0.id
+    }
+
+    pub fn get_parent_id(&self) -> i32 {
+        self.0.parent_id
+    }
+
+    pub fn get_roi_type<'a>(&self) -> &'a str {
+        glib::Quark::from_glib(self.0.roi_type).to_string()
+    }
+
+    #[cfg(feature = "v1_14")]
+    pub fn get_params(&self) -> ParamsIter {
+        ParamsIter {
+            _meta: self,
+            list: self.0.params,
+        }
+    }
+
+    #[cfg(feature = "v1_14")]
+    pub fn get_param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
+        self.get_params().find(|s| s.get_name() == name)
+    }
+
+    pub fn set_rect(&mut self, rect: (u32, u32, u32, u32)) {
+        self.0.x = rect.0;
+        self.0.y = rect.1;
+        self.0.w = rect.2;
+        self.0.h = rect.3;
+    }
+
+    pub fn set_id(&mut self, id: i32) {
+        self.0.id = id
+    }
+
+    pub fn set_parent_id(&mut self, id: i32) {
+        self.0.parent_id = id
+    }
+
+    #[cfg(feature = "v1_14")]
+    pub fn add_param(&mut self, s: gst::Structure) {
+        unsafe {
+            gst_video_sys::gst_video_region_of_interest_meta_add_param(&mut self.0, s.into_ptr());
+        }
+    }
+}
+
+#[cfg(feature = "v1_14")]
+pub struct ParamsIter<'a> {
+    _meta: &'a VideoRegionOfInterestMeta,
+    list: *const glib_sys::GList,
+}
+
+#[cfg(feature = "v1_14")]
+impl<'a> Iterator for ParamsIter<'a> {
+    type Item = &'a gst::StructureRef;
+
+    fn next(&mut self) -> Option<&'a gst::StructureRef> {
+        if self.list.is_null() {
+            return None;
+        }
+
+        unsafe {
+            let data = (*self.list).data;
+            assert!(!data.is_null());
+            self.list = (*self.list).next;
+
+            let s = gst::StructureRef::from_glib_borrow(data as *const gst_sys::GstStructure);
+
+            Some(s)
+        }
+    }
+}
+
+unsafe impl MetaAPI for VideoRegionOfInterestMeta {
+    type GstType = gst_video_sys::GstVideoRegionOfInterestMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_video_sys::gst_video_region_of_interest_meta_api_get_type()) }
+    }
+}
+
+impl fmt::Debug for VideoRegionOfInterestMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut f = f.debug_struct("VideoRegionOfInterestMeta");
+
+        f.field("roi_type", &self.get_roi_type())
+            .field("rect", &self.get_rect())
+            .field("id", &self.get_id())
+            .field("parent_id", &self.get_parent_id());
+
+        #[cfg(feature = "v1_14")]
+        {
+            f.field("params", &self.get_params().collect::<Vec<_>>());
+        }
+
+        f.finish()
+    }
+}
+
+#[repr(C)]
+pub struct VideoAffineTransformationMeta(gst_video_sys::GstVideoAffineTransformationMeta);
+
+unsafe impl Send for VideoAffineTransformationMeta {}
+unsafe impl Sync for VideoAffineTransformationMeta {}
+
+impl VideoAffineTransformationMeta {
+    pub fn add<'a>(
+        buffer: &'a mut gst::BufferRef,
+        matrix: Option<&[f32; 16]>,
+    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = gst_sys::gst_buffer_add_meta(
+                buffer.as_mut_ptr(),
+                gst_video_sys::gst_video_affine_transformation_meta_get_info(),
+                ptr::null_mut(),
+            ) as *mut gst_video_sys::GstVideoAffineTransformationMeta;
+
+            if let Some(matrix) = matrix {
+                let meta = &mut *meta;
+                meta.matrix.copy_from_slice(matrix);
+            }
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_matrix(&self) -> &[f32; 16] {
+        &self.0.matrix
+    }
+
+    pub fn set_matrix(&mut self, matrix: &[f32; 16]) {
+        self.0.matrix.copy_from_slice(matrix);
+    }
+
+    pub fn apply_matrix(&mut self, matrix: &[f32; 16]) {
+        unsafe {
+            gst_video_sys::gst_video_affine_transformation_meta_apply_matrix(&mut self.0, matrix);
+        }
+    }
+}
+
+unsafe impl MetaAPI for VideoAffineTransformationMeta {
+    type GstType = gst_video_sys::GstVideoAffineTransformationMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_video_sys::gst_video_affine_transformation_meta_api_get_type()) }
+    }
+}
+
+impl fmt::Debug for VideoAffineTransformationMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoAffineTransformationMeta")
+            .field("matrix", &self.get_matrix())
             .finish()
     }
 }
