@@ -89,6 +89,7 @@ pub mod prelude {
 
     pub use super::audio_decoder::AudioDecoderExtManual;
     pub use super::audio_encoder::AudioEncoderExtManual;
+    pub use audio_format::AudioFormatIteratorExt;
     pub use auto::traits::*;
 }
 

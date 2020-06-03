@@ -118,6 +118,7 @@ pub mod prelude {
     pub use video_buffer_pool::VideoBufferPoolConfig;
     pub use video_decoder::VideoDecoderExtManual;
     pub use video_encoder::VideoEncoderExtManual;
+    pub use video_format::VideoFormatIteratorExt;
     pub use video_frame::VideoBufferExt;
     pub use video_overlay::VideoOverlayExtManual;
 }
