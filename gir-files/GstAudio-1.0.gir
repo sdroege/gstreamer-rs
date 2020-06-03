@@ -691,7 +691,7 @@ return to upstream/caller (indicating either GST_FLOW_ERROR or GST_FLOW_OK).</do
         </parameter>
       </parameters>
     </function-macro>
-    <constant name="AUDIO_FORMATS_ALL" value=" { S8, U8, S16LE, S16BE, U16LE, U16BE, S24_32LE, S24_32BE, U24_32LE, U24_32BE, S32LE, S32BE, U32LE, U32BE, S24LE, S24BE, U24LE, U24BE, S20LE, S20BE, U20LE, U20BE, S18LE, S18BE, U18LE, U18BE, F32LE, F32BE, F64LE, F64BE }" c:type="GST_AUDIO_FORMATS_ALL">
+    <constant name="AUDIO_FORMATS_ALL" value="{ S8, U8, S16LE, S16BE, U16LE, U16BE, S24_32LE, S24_32BE, U24_32LE, U24_32BE, S32LE, S32BE, U32LE, U32BE, S24LE, S24BE, U24LE, U24BE, S20LE, S20BE, U20LE, U20BE, S18LE, S18BE, U18LE, U18BE, F32LE, F32BE, F64LE, F64BE }" c:type="GST_AUDIO_FORMATS_ALL">
       <doc xml:space="preserve">List of all audio formats, for use in template caps strings.</doc>
       
       <type name="utf8" c:type="gchar*"/>
@@ -8552,17 +8552,6 @@ All scheduling of samples and timestamps is done in this base class
 together with #GstAudioBaseSink using a default implementation of a
 #GstAudioRingBuffer that uses threads.</doc>
       
-      <virtual-method name="clear_all">
-        
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="sink" transfer-ownership="none">
-            <type name="AudioSink" c:type="GstAudioSink*"/>
-          </instance-parameter>
-        </parameters>
-      </virtual-method>
       <virtual-method name="close">
         
         <return-value transfer-ownership="none">
@@ -8839,6 +8828,13 @@ together with #GstAudioBaseSink using a default implementation of a
           </parameters>
         </callback>
       </field>
+      <field name="extension">
+        <doc xml:space="preserve">class extension structure. Since: 1.18</doc>
+        <type name="AudioSinkClassExtension" c:type="GstAudioSinkClassExtension*"/>
+      </field>
+    </record>
+    <record name="AudioSinkClassExtension" c:type="GstAudioSinkClassExtension">
+      
       <field name="clear_all">
         <callback name="clear_all">
           
@@ -8851,11 +8847,6 @@ together with #GstAudioBaseSink using a default implementation of a
             </parameter>
           </parameters>
         </callback>
-      </field>
-      <field name="_gst_reserved" readable="0" private="1">
-        <array zero-terminated="0" fixed-size="0">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
       </field>
     </record>
     <class name="AudioSrc" c:symbol-prefix="audio_src" c:type="GstAudioSrc" parent="AudioBaseSrc" glib:type-name="GstAudioSrc" glib:get-type="gst_audio_src_get_type" glib:type-struct="AudioSrcClass">
@@ -10161,6 +10152,22 @@ string is not a known format.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="audio_formats_raw" c:identifier="gst_audio_formats_raw" version="1.18">
+      <doc xml:space="preserve">Return all the raw audio formats supported by GStreamer.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">an array of #GstAudioFormat</doc>
+        <array length="0" zero-terminated="0" c:type="const GstAudioFormat*">
+          <type name="AudioFormat" c:type="GstAudioFormat"/>
+        </array>
+      </return-value>
+      <parameters>
+        <parameter name="len" direction="out" caller-allocates="0" transfer-ownership="full">
+          <doc xml:space="preserve">the number of elements in the returned array</doc>
+          <type name="guint" c:type="guint*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="audio_get_channel_reorder_map" c:identifier="gst_audio_get_channel_reorder_map">
       <doc xml:space="preserve">Returns a reorder map for @from to @to that can be used in
 custom channel reordering code, e.g. to convert from or to the
@@ -10256,6 +10263,32 @@ otherwise.</doc>
         <parameter name="endianness" transfer-ownership="none">
           <doc xml:space="preserve">the expected byte order of the payloaded data</doc>
           <type name="gint" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="audio_make_raw_caps" c:identifier="gst_audio_make_raw_caps" version="1.18">
+      <doc xml:space="preserve">Return a generic raw audio caps for formats defined in @formats.
+If @formats is %NULL returns a caps for all the supported raw audio formats,
+see gst_audio_formats_raw().</doc>
+      
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">an audio @GstCaps</doc>
+        <type name="Gst.Caps" c:type="GstCaps*"/>
+      </return-value>
+      <parameters>
+        <parameter name="formats" transfer-ownership="none" nullable="1" allow-none="1">
+          <doc xml:space="preserve">an array of raw #GstAudioFormat, or %NULL</doc>
+          <array length="1" zero-terminated="0" c:type="const GstAudioFormat*">
+            <type name="AudioFormat" c:type="GstAudioFormat"/>
+          </array>
+        </parameter>
+        <parameter name="len" transfer-ownership="none">
+          <doc xml:space="preserve">the size of @formats</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="layout" transfer-ownership="none">
+          <doc xml:space="preserve">the layout of audio samples</doc>
+          <type name="AudioLayout" c:type="GstAudioLayout"/>
         </parameter>
       </parameters>
     </function>

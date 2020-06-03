@@ -898,12 +898,15 @@ of their segment.
 a SEGMENT_START have posted a SEGMENT_DONE.
 
 * GST_MESSAGE_DURATION_CHANGED: Is posted by an element that detected a change
-in the stream duration. The default bin behaviour is to clear any
-cached duration values so that the next duration query will perform
-a full duration recalculation. The duration change is posted to the
+in the stream duration. The duration change is posted to the
 application so that it can refetch the new duration with a duration
 query. Note that these messages can be posted before the bin is
-prerolled, in which case the duration query might fail.
+prerolled, in which case the duration query might fail. Note also that
+there might be a discrepancy (due to internal buffering/queueing) between the
+stream being currently displayed and the returned duration query.
+Applications might want to also query for duration (and changes) by
+listening to the GST_MESSAGE_STREAM_START message, signaling the active start
+of a (new) stream.
 
 * GST_MESSAGE_CLOCK_LOST: This message is posted by an element when it
 can no longer provide a clock. The default bin behaviour is to
@@ -928,11 +931,8 @@ the parent of the bin.
 A #GstBin implements the following default behaviour for answering to a
 #GstQuery:
 
-* GST_QUERY_DURATION:If the query has been asked before with the same format
-and the bin is a toplevel bin (ie. has no parent),
-use the cached previous value. If no previous value was cached, the
-query is sent to all sink elements in the bin and the MAXIMUM of all
-values is returned. If the bin is a toplevel bin the value is cached.
+* GST_QUERY_DURATION: The bin will forward the query to all sink
+elements contained within and will return the maximum value.
 If no sinks are available in the bin, the query fails.
 
 * GST_QUERY_POSITION:The query is sent to all sink elements in the bin and the
@@ -9408,7 +9408,7 @@ not be extended or allocated using a custom allocator.</doc>
       </member>
       <member name="tai" value="3" c:identifier="GST_CLOCK_TYPE_TAI" glib:nick="tai">
         <doc xml:space="preserve">time since Epoch, but using International Atomic Time
-                     as reference (Since 1.18)</doc>
+                     as reference (Since: 1.18)</doc>
       </member>
     </enumeration>
     <record name="Context" c:type="GstContext" version="1.2" glib:type-name="GstContext" glib:get-type="gst_context_get_type" c:symbol-prefix="context">
@@ -17814,6 +17814,25 @@ check the name of a custom event.</doc>
           <parameter name="name" transfer-ownership="none">
             <doc xml:space="preserve">name to check</doc>
             <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="has_name_id" c:identifier="gst_event_has_name_id" version="1.18">
+        <doc xml:space="preserve">Checks if @event has the given @name. This function is usually used to
+check the name of a custom event.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @name matches the name of the event structure.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="event" transfer-ownership="none">
+            <doc xml:space="preserve">The #GstEvent.</doc>
+            <type name="Event" c:type="GstEvent*"/>
+          </instance-parameter>
+          <parameter name="name" transfer-ownership="none">
+            <doc xml:space="preserve">name to check as a GQuark</doc>
+            <type name="GLib.Quark" c:type="GQuark"/>
           </parameter>
         </parameters>
       </method>
@@ -33473,7 +33492,9 @@ producer of the value and the consumer of the value.
 A #GstPromise is created with gst_promise_new() by the consumer and passed
 to the producer to avoid thread safety issues with the change callback.
 A #GstPromise can be replied to with a value (or an error) by the producer
-with gst_promise_reply(). gst_promise_interrupt() is for the consumer to
+with gst_promise_reply(). The exact value returned is defined by the API
+contract of the producer and %NULL may be a valid reply.
+gst_promise_interrupt() is for the consumer to
 indicate to the producer that the value is not needed anymore and producing
 that value can stop.  The @GST_PROMISE_RESULT_EXPIRED state set by a call
 to gst_promise_expire() indicates to the consumer that a value will never
@@ -33570,7 +33591,7 @@ message is handled and/or destroyed (possibly unanswered).</doc>
         <doc xml:space="preserve">Retrieve the reply set on @promise.  @promise must be in
 %GST_PROMISE_RESULT_REPLIED and the returned structure is owned by @promise</doc>
         
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">The reply set on @promise</doc>
           <type name="Structure" c:type="const GstStructure*"/>
         </return-value>
@@ -33612,7 +33633,7 @@ is not visible to the consumer.</doc>
             <doc xml:space="preserve">a #GstPromise</doc>
             <type name="Promise" c:type="GstPromise*"/>
           </instance-parameter>
-          <parameter name="s" transfer-ownership="full">
+          <parameter name="s" transfer-ownership="full" nullable="1" allow-none="1">
             <doc xml:space="preserve">a #GstStructure with the the reply contents</doc>
             <type name="Structure" c:type="GstStructure*"/>
           </parameter>
@@ -37662,45 +37683,90 @@ info to stream time (which is always between 0 and the duration of the stream).<
         <type name="SegmentFlags" c:type="GstSegmentFlags"/>
       </field>
       <field name="rate" writable="1">
-        <doc xml:space="preserve">the playback rate of the segment</doc>
+        <doc xml:space="preserve">the playback rate of the segment is set in response to a seek
+               event and, without any seek, the value should be `1.0`. This
+               value is used by elements that synchronize buffer [running
+               times](additional/design/synchronisation.md#running-time) on
+               the clock (usually the sink elements), leading to consuming
+               buffers faster (for a value `&gt; 1.0`) or slower (for `0.0 &lt;
+               value &lt; 1.0`) than normal playback speed. The rate also
+               defines the playback direction, meaning that when the value is
+               lower than `0.0`, the playback happens in reverse, and the
+               [stream-time](additional/design/synchronisation.md#stream-time)
+               is going backward. The `rate` value should never be `0.0`.</doc>
         <type name="gdouble" c:type="gdouble"/>
       </field>
       <field name="applied_rate" writable="1">
-        <doc xml:space="preserve">the already applied rate to the segment</doc>
+        <doc xml:space="preserve">The applied rate is the rate that has been applied to the stream.
+               The effective/resulting playback rate of a stream is
+               `rate * applied_rate`.
+               The applied rate can be set by source elements when a server is
+               sending the stream with an already modified playback speed
+               rate. Filter elements that modify the stream in a way that
+               modifies the playback speed should also modify the applied
+               rate. For example the #videorate element when its
+               #videorate:rate property is set will set the applied rate of
+               the segment it pushed downstream. Also #scaletempo applies the
+               input segment rate to the stream and outputs a segment with
+               rate=1.0 and applied_rate=&lt;inputsegment.rate&gt;.</doc>
         <type name="gdouble" c:type="gdouble"/>
       </field>
       <field name="format" writable="1">
-        <doc xml:space="preserve">the format of the segment values</doc>
+        <doc xml:space="preserve">the unit used for all of the segment's values.</doc>
         <type name="Format" c:type="GstFormat"/>
       </field>
       <field name="base" writable="1">
-        <doc xml:space="preserve">the running time (plus elapsed time, see offset) of the segment start</doc>
+        <doc xml:space="preserve">the running time (plus elapsed time, see offset) of the
+               segment [start](GstSegment.start) ([stop](GstSegment.stop) if
+               rate &lt; 0.0).</doc>
         <type name="guint64" c:type="guint64"/>
       </field>
       <field name="offset" writable="1">
-        <doc xml:space="preserve">the amount (in buffer timestamps) that has already been elapsed in
-    the segment</doc>
+        <doc xml:space="preserve">the offset expresses the elapsed time (in buffer timestamps)
+               before a seek with its start (stop if rate &lt; 0.0) seek type
+               set to #GST_SEEK_TYPE_NONE, the value is set to the position
+               of the segment at the time of the seek.</doc>
         <type name="guint64" c:type="guint64"/>
       </field>
       <field name="start" writable="1">
-        <doc xml:space="preserve">the start of the segment in buffer timestamp time (PTS)</doc>
+        <doc xml:space="preserve">the start time of the segment (in buffer timestamps)
+               [(PTS)](GstBuffer.pts), that is the timestamp of the first
+               buffer to output inside the segment (last one during
+               reverse playback). For example decoders will
+               [clip](gst_segment_clip) out the buffers before the start
+               time.</doc>
         <type name="guint64" c:type="guint64"/>
       </field>
       <field name="stop" writable="1">
-        <doc xml:space="preserve">the stop of the segment in buffer timestamp time (PTS)</doc>
+        <doc xml:space="preserve">the stop time of the segment (in buffer timestamps)
+               [(PTS)](GstBuffer.pts), that is the timestamp of the last
+               buffer to output inside the segment (first one during
+               reverse playback). For example decoders will
+               [clip](gst_segment_clip) out buffers after the stop time.</doc>
         <type name="guint64" c:type="guint64"/>
       </field>
       <field name="time" writable="1">
-        <doc xml:space="preserve">the stream time of the segment start</doc>
+        <doc xml:space="preserve">the stream time of the segment [start](GstSegment.start)
+               ([stop](GstSegment.stop) if rate &lt; 0.0).</doc>
         <type name="guint64" c:type="guint64"/>
       </field>
       <field name="position" writable="1">
-        <doc xml:space="preserve">the buffer timestamp position in the segment (used internally by
-    elements such as sources, demuxers or parsers to track progress)</doc>
+        <doc xml:space="preserve">the buffer timestamp position in the segment is supposed to be
+               updated by elements such as sources, demuxers or parsers to
+               track progress by setting it to the last pushed buffer' end time
+               ([timestamp](GstBuffer.pts) + #GstBuffer.duration) for that
+               specific segment. The position is used when reconfiguring the
+               segment with #gst_segment_do_seek when the seek is only
+               updating the segment (see [offset](GstSegment.offset)).</doc>
         <type name="guint64" c:type="guint64"/>
       </field>
       <field name="duration" writable="1">
-        <doc xml:space="preserve">the duration of the stream</doc>
+        <doc xml:space="preserve">the duration of the segment is the maximum absolute difference
+               between #GstSegment.start and #GstSegment.stop if stop is not
+               set, otherwise it should be the difference between those
+               two values. This should be set by elements that know the
+               overall stream duration (like demuxers) and will be used when
+               seeking with #GST_SEEK_TYPE_END.</doc>
         <type name="guint64" c:type="guint64"/>
       </field>
       <field name="_gst_reserved" readable="0" private="1">
