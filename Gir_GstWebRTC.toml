@@ -38,6 +38,8 @@ generate = [
 ]
 
 manual = [
+    "GLib.Bytes",
+    "GLib.Error",
     "GObject.Object",
     "Gst.Structure",
     "GstSdp.SDPMessage",
@@ -75,5 +77,15 @@ final_type = true
 
     [[object.function]]
     name = "new"
+    # takes ownership of SDP message
+    ignore = true
+
+[[object]]
+name = "GstWebRTC.WebRTCDataChannel"
+status = "generate"
+final_type = true
+
+    [[object.function]]
+    name = "on_error"
     # takes ownership of SDP message
     ignore = true

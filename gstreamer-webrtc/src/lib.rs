@@ -35,6 +35,8 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use auto::*;
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+mod web_rtc_data_channel;
 mod web_rtc_session_description;
 
 // Re-export all the traits in a prelude module, so that applications
