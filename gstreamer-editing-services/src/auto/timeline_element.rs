@@ -20,6 +20,8 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+use std::ptr;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use Edge;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 use EditMode;
@@ -53,6 +55,15 @@ pub trait TimelineElementExt: 'static {
         edge: Edge,
         position: u64,
     ) -> bool;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn edit_full(
+        &self,
+        new_layer_priority: i64,
+        mode: EditMode,
+        edge: Edge,
+        position: u64,
+    ) -> Result<(), glib::Error>;
 
     //fn get_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -109,6 +120,9 @@ pub trait TimelineElementExt: 'static {
     //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> bool;
 
     //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value);
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn set_child_property_full(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> Result<(), glib::Error>;
 
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -200,6 +214,32 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 edge.to_glib(),
                 position,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn edit_full(
+        &self,
+        new_layer_priority: i64,
+        mode: EditMode,
+        edge: Edge,
+        position: u64,
+    ) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_timeline_element_edit_full(
+                self.as_ref().to_glib_none().0,
+                new_layer_priority,
+                mode.to_glib(),
+                edge.to_glib(),
+                position,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
@@ -400,6 +440,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value) {
     //    unsafe { TODO: call ges_sys:ges_timeline_element_set_child_property_by_pspec() }
+    //}
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn set_child_property_full(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> Result<(), glib::Error> {
+    //    unsafe { TODO: call ges_sys:ges_timeline_element_set_child_property_full() }
     //}
 
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {

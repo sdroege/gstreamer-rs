@@ -490,7 +490,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     }
 
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 52 }
+    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 53 }
     //}
 
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {

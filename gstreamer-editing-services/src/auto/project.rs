@@ -246,7 +246,7 @@ impl<O: IsA<Project>> ProjectExt for O {
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
-                formatter_asset.map(|p| p.as_ref()).to_glib_none().0,
+                formatter_asset.map(|p| p.as_ref()).to_glib_full(),
                 overwrite.to_glib(),
                 &mut error,
             );

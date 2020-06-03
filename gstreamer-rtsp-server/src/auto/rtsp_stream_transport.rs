@@ -65,6 +65,9 @@ pub trait RTSPStreamTransportExt: 'static {
 
     fn set_message_sent<P: Fn() + 'static>(&self, message_sent: P);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_message_sent_full<P: Fn(&RTSPStreamTransport) + 'static>(&self, message_sent: P);
+
     fn set_timed_out(&self, timedout: bool);
 
     //fn set_transport(&self, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport);
@@ -218,6 +221,35 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         let super_callback0: Box_<P> = message_sent_data;
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_transport_set_message_sent(
+                self.as_ref().to_glib_none().0,
+                message_sent,
+                Box_::into_raw(super_callback0) as *mut _,
+                destroy_call3,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_message_sent_full<P: Fn(&RTSPStreamTransport) + 'static>(&self, message_sent: P) {
+        let message_sent_data: Box_<P> = Box_::new(message_sent);
+        unsafe extern "C" fn message_sent_func<P: Fn(&RTSPStreamTransport) + 'static>(
+            trans: *mut gst_rtsp_server_sys::GstRTSPStreamTransport,
+            user_data: glib_sys::gpointer,
+        ) {
+            let trans = from_glib_borrow(trans);
+            let callback: &P = &*(user_data as *mut _);
+            (*callback)(&trans);
+        }
+        let message_sent = Some(message_sent_func::<P> as _);
+        unsafe extern "C" fn notify_func<P: Fn(&RTSPStreamTransport) + 'static>(
+            data: glib_sys::gpointer,
+        ) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(notify_func::<P> as _);
+        let super_callback0: Box_<P> = message_sent_data;
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_message_sent_full(
                 self.as_ref().to_glib_none().0,
                 message_sent,
                 Box_::into_raw(super_callback0) as *mut _,

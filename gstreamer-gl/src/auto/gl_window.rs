@@ -70,6 +70,7 @@ pub trait GLWindowExt: 'static {
 
     fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64);
 
     fn set_preferred_size(&self, width: i32, height: i32);
@@ -204,6 +205,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64) {
         unsafe {
             gst_gl_sys::gst_gl_window_send_scroll_event(

@@ -52,7 +52,7 @@ pub trait AggregatorExt: 'static {
     fn simple_get_next_time(&self) -> gst::ClockTime;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //fn update_segment(&self, segment: /*Ignored*/&mut gst::Segment);
+    //fn update_segment(&self, segment: /*Ignored*/&gst::Segment);
 
     fn get_property_start_time(&self) -> u64;
 
@@ -134,7 +134,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     }
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //fn update_segment(&self, segment: /*Ignored*/&mut gst::Segment) {
+    //fn update_segment(&self, segment: /*Ignored*/&gst::Segment) {
     //    unsafe { TODO: call gst_base_sys:gst_aggregator_update_segment() }
     //}
 

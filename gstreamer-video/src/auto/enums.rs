@@ -12,6 +12,7 @@ use glib::Type;
 use gobject_sys;
 use gst_video_sys;
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum VideoAFDSpec {
@@ -22,6 +23,7 @@ pub enum VideoAFDSpec {
     __Unknown(i32),
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for VideoAFDSpec {
     type GlibType = gst_video_sys::GstVideoAFDSpec;
@@ -36,6 +38,7 @@ impl ToGlib for VideoAFDSpec {
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<gst_video_sys::GstVideoAFDSpec> for VideoAFDSpec {
     fn from_glib(value: gst_video_sys::GstVideoAFDSpec) -> Self {
@@ -49,24 +52,28 @@ impl FromGlib<gst_video_sys::GstVideoAFDSpec> for VideoAFDSpec {
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl StaticType for VideoAFDSpec {
     fn static_type() -> Type {
         unsafe { from_glib(gst_video_sys::gst_video_afd_spec_get_type()) }
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for VideoAFDSpec {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl<'a> FromValue<'a> for VideoAFDSpec {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl SetValue for VideoAFDSpec {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())

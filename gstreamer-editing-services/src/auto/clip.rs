@@ -9,7 +9,10 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::StaticType;
+use glib::Value;
 use glib_sys;
+use gobject_sys;
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
@@ -18,6 +21,7 @@ use Asset;
 use BaseEffect;
 use Container;
 use Extractable;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use FrameNumber;
 use Layer;
 use TimelineElement;
@@ -44,6 +48,10 @@ pub trait ClipExt: 'static {
         track: &Q,
     ) -> Result<TrackElement, glib::Error>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_top_effect<P: IsA<BaseEffect>>(&self, effect: &P, index: i32)
+        -> Result<(), glib::Error>;
+
     fn find_track_element<P: IsA<Track>>(
         &self,
         track: Option<&P>,
@@ -57,10 +65,27 @@ pub trait ClipExt: 'static {
         type_: glib::types::Type,
     ) -> Vec<TrackElement>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_duration_limit(&self) -> gst::ClockTime;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_internal_time_from_timeline_time<P: IsA<TrackElement>>(
+        &self,
+        child: &P,
+        timeline_time: gst::ClockTime,
+    ) -> Result<gst::ClockTime, glib::Error>;
+
     fn get_layer(&self) -> Option<Layer>;
 
     fn get_supported_formats(&self) -> TrackType;
 
+    fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
+        &self,
+        child: &P,
+        internal_time: gst::ClockTime,
+    ) -> Result<gst::ClockTime, glib::Error>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
@@ -74,6 +99,12 @@ pub trait ClipExt: 'static {
 
     fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn move_to_layer_full<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::Error>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn remove_top_effect<P: IsA<BaseEffect>>(&self, effect: &P) -> Result<(), glib::Error>;
+
     fn set_supported_formats(&self, supportedformats: TrackType);
 
     fn set_top_effect_index<P: IsA<BaseEffect>>(
@@ -82,6 +113,13 @@ pub trait ClipExt: 'static {
         newindex: u32,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_top_effect_index_full<P: IsA<BaseEffect>>(
+        &self,
+        effect: &P,
+        newindex: u32,
+    ) -> Result<(), glib::Error>;
+
     fn set_top_effect_priority<P: IsA<BaseEffect>>(
         &self,
         effect: &P,
@@ -89,6 +127,16 @@ pub trait ClipExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     fn split(&self, position: u64) -> Result<Clip, glib::BoolError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error>;
+
+    fn get_property_duration_limit(&self) -> u64;
+
+    fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -130,6 +178,28 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_top_effect<P: IsA<BaseEffect>>(
+        &self,
+        effect: &P,
+        index: i32,
+    ) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_clip_add_top_effect(
+                self.as_ref().to_glib_none().0,
+                effect.as_ref().to_glib_none().0,
+                index,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
     fn find_track_element<P: IsA<Track>>(
         &self,
         track: Option<&P>,
@@ -160,6 +230,37 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_duration_limit(&self) -> gst::ClockTime {
+        unsafe {
+            from_glib(ges_sys::ges_clip_get_duration_limit(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_internal_time_from_timeline_time<P: IsA<TrackElement>>(
+        &self,
+        child: &P,
+        timeline_time: gst::ClockTime,
+    ) -> Result<gst::ClockTime, glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ges_sys::ges_clip_get_internal_time_from_timeline_time(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                timeline_time.to_glib(),
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
     fn get_layer(&self) -> Option<Layer> {
         unsafe { from_glib_full(ges_sys::ges_clip_get_layer(self.as_ref().to_glib_none().0)) }
     }
@@ -172,6 +273,28 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
+        &self,
+        child: &P,
+        internal_time: gst::ClockTime,
+    ) -> Result<gst::ClockTime, glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ges_sys::ges_clip_get_timeline_time_from_internal_time(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                internal_time.to_glib(),
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
@@ -229,6 +352,40 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn move_to_layer_full<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_clip_move_to_layer_full(
+                self.as_ref().to_glib_none().0,
+                layer.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn remove_top_effect<P: IsA<BaseEffect>>(&self, effect: &P) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_clip_remove_top_effect(
+                self.as_ref().to_glib_none().0,
+                effect.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
     fn set_supported_formats(&self, supportedformats: TrackType) {
         unsafe {
             ges_sys::ges_clip_set_supported_formats(
@@ -252,6 +409,28 @@ impl<O: IsA<Clip>> ClipExt for O {
                 ),
                 "Failed to move effect"
             )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_top_effect_index_full<P: IsA<BaseEffect>>(
+        &self,
+        effect: &P,
+        newindex: u32,
+    ) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_clip_set_top_effect_index_full(
+                self.as_ref().to_glib_none().0,
+                effect.as_ref().to_glib_none().0,
+                newindex,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
@@ -279,6 +458,62 @@ impl<O: IsA<Clip>> ClipExt for O {
                 position,
             ))
             .ok_or_else(|| glib_bool_error!("Failed to split clip"))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret =
+                ges_sys::ges_clip_split_full(self.as_ref().to_glib_none().0, position, &mut error);
+            if error.is_null() {
+                Ok(from_glib_none(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
+    fn get_property_duration_limit(&self) -> u64 {
+        unsafe {
+            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"duration-limit\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `duration-limit` getter")
+                .unwrap()
+        }
+    }
+
+    fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_duration_limit_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESClip,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Clip>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Clip::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::duration-limit\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_duration_limit_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

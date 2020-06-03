@@ -5,6 +5,11 @@
 mod web_rtcdtls_transport;
 pub use self::web_rtcdtls_transport::{WebRTCDTLSTransport, WebRTCDTLSTransportClass};
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+mod web_rtc_data_channel;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub use self::web_rtc_data_channel::{WebRTCDataChannel, WebRTCDataChannelClass};
+
 mod web_rtcice_transport;
 pub use self::web_rtcice_transport::{WebRTCICETransport, WebRTCICETransportClass};
 

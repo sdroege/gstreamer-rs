@@ -66,6 +66,9 @@ pub trait RTSPMediaFactoryExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn get_do_retransmission(&self) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_dscp_qos(&self) -> i32;
+
     fn get_latency(&self) -> u32;
 
     fn get_launch(&self) -> Option<GString>;
@@ -112,6 +115,9 @@ pub trait RTSPMediaFactoryExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn set_do_retransmission(&self, do_retransmission: bool);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_dscp_qos(&self, dscp_qos: i32);
+
     fn set_eos_shutdown(&self, eos_shutdown: bool);
 
     fn set_latency(&self, latency: u32);
@@ -147,6 +153,10 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     fn set_property_bind_mcast_address(&self, bind_mcast_address: bool);
 
+    fn get_property_dscp_qos(&self) -> i32;
+
+    fn set_property_dscp_qos(&self, dscp_qos: i32);
+
     fn get_property_eos_shutdown(&self) -> bool;
 
     fn get_property_max_mcast_ttl(&self) -> u32;
@@ -178,6 +188,11 @@ pub trait RTSPMediaFactoryExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    fn connect_property_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -292,6 +307,13 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                     self.as_ref().to_glib_none().0,
                 ),
             )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_dscp_qos(&self) -> i32 {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_factory_get_dscp_qos(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -480,6 +502,16 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_dscp_qos(&self, dscp_qos: i32) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_factory_set_dscp_qos(
+                self.as_ref().to_glib_none().0,
+                dscp_qos,
+            );
+        }
+    }
+
     fn set_eos_shutdown(&self, eos_shutdown: bool) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_media_factory_set_eos_shutdown(
@@ -634,6 +666,31 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"bind-mcast-address\0".as_ptr() as *const _,
                 Value::from(&bind_mcast_address).to_glib_none().0,
+            );
+        }
+    }
+
+    fn get_property_dscp_qos(&self) -> i32 {
+        unsafe {
+            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"dscp-qos\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `dscp-qos` getter")
+                .unwrap()
+        }
+    }
+
+    fn set_property_dscp_qos(&self, dscp_qos: i32) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"dscp-qos\0".as_ptr() as *const _,
+                Value::from(&dscp_qos).to_glib_none().0,
             );
         }
     }
@@ -852,6 +909,33 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 b"notify::clock\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_clock_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_dscp_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPMediaFactory>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::dscp-qos\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_dscp_qos_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

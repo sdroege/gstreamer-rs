@@ -7,6 +7,7 @@ pub use self::asset::AssetExt;
 pub use self::asset::{Asset, AssetClass, NONE_ASSET};
 
 mod base_effect;
+pub use self::base_effect::BaseEffectExt;
 pub use self::base_effect::{BaseEffect, BaseEffectClass, NONE_BASE_EFFECT};
 
 mod clip;
@@ -83,6 +84,7 @@ pub use self::alias::FrameNumber;
 #[doc(hidden)]
 pub mod traits {
     pub use super::AssetExt;
+    pub use super::BaseEffectExt;
     pub use super::ClipExt;
     pub use super::EffectExt;
     pub use super::ExtractableExt;

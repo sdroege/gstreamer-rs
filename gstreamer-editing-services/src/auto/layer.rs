@@ -13,6 +13,8 @@ use glib_sys;
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use std::ptr;
 use Asset;
 use Clip;
 use Extractable;
@@ -53,7 +55,20 @@ pub trait LayerExt: 'static {
         track_types: TrackType,
     ) -> Result<Clip, glib::BoolError>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_asset_full<P: IsA<Asset>>(
+        &self,
+        asset: &P,
+        start: gst::ClockTime,
+        inpoint: gst::ClockTime,
+        duration: gst::ClockTime,
+        track_types: TrackType,
+    ) -> Result<Clip, glib::Error>;
+
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error>;
 
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
@@ -119,6 +134,34 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_asset_full<P: IsA<Asset>>(
+        &self,
+        asset: &P,
+        start: gst::ClockTime,
+        inpoint: gst::ClockTime,
+        duration: gst::ClockTime,
+        track_types: TrackType,
+    ) -> Result<Clip, glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ges_sys::ges_layer_add_asset_full(
+                self.as_ref().to_glib_none().0,
+                asset.as_ref().to_glib_none().0,
+                start.to_glib(),
+                inpoint.to_glib(),
+                duration.to_glib(),
+                track_types.to_glib(),
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_none(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(
@@ -128,6 +171,23 @@ impl<O: IsA<Layer>> LayerExt for O {
                 ),
                 "Failed to add clip"
             )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_layer_add_clip_full(
+                self.as_ref().to_glib_none().0,
+                clip.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 

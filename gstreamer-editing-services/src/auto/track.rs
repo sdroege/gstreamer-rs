@@ -18,6 +18,8 @@ use gobject_sys;
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use std::ptr;
 use Timeline;
 use TrackElement;
 use TrackType;
@@ -42,6 +44,9 @@ pub const NONE_TRACK: Option<&Track> = None;
 pub trait GESTrackExt: 'static {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
+
     fn commit(&self) -> bool;
 
     fn get_caps(&self) -> Option<gst::Caps>;
@@ -59,6 +64,9 @@ pub trait GESTrackExt: 'static {
         &self,
         object: &P,
     ) -> Result<(), glib::error::BoolError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn remove_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
 
     //fn set_create_element_for_gap_func<P: Fn(&Track) -> gst::Element + 'static>(&self, func: P);
 
@@ -120,6 +128,23 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn add_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_track_add_element_full(
+                self.as_ref().to_glib_none().0,
+                object.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
     fn commit(&self) -> bool {
         unsafe { from_glib(ges_sys::ges_track_commit(self.as_ref().to_glib_none().0)) }
     }
@@ -173,6 +198,23 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 ),
                 "Failed to remove element"
             )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn remove_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ges_sys::ges_track_remove_element_full(
+                self.as_ref().to_glib_none().0,
+                object.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
