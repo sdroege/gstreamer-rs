@@ -42,7 +42,6 @@ generate = [
     "GES.Edge",
     "GES.FrameNumber",
     "GES.TrackType",
-    "GES.BaseEffect",
     "GES.Group",
     "GES.UriClipAsset",
     "GES.UriSourceAsset",
@@ -77,6 +76,12 @@ ref_mode = "ref"
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"
+
+[[object]]
+name = "GES.BaseEffect"
+status = "generate"
+# Actually available since 1.2 even if all functions are new in 1.18
+version = "1.2"
 
 [[object]]
 name = "GES.Effect"
