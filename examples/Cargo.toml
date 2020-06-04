@@ -67,6 +67,9 @@ name = "custom_events"
 required-features = ["v1_10"]
 
 [[bin]]
+name = "custom_meta"
+
+[[bin]]
 name = "decodebin"
 
 [[bin]]
