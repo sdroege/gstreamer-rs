@@ -15,6 +15,7 @@ use glib_sys;
 use glib_sys::{gconstpointer, gpointer};
 use gobject_sys;
 use gst_sys;
+use std::collections::HashMap;
 use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
@@ -22,7 +23,7 @@ use std::iter;
 use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum IteratorError {
@@ -368,39 +369,49 @@ unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
     let _ = Arc::from_raw(boxed as *const Box<dyn Fn(T) -> bool + Send + Sync + 'static>);
 }
 
+lazy_static! {
+    static ref TYPES: Mutex<HashMap<String, glib_sys::GType>> = Mutex::new(HashMap::new());
+}
+
 unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_sys::GType {
-    use std::sync::Once;
+    let mut types = TYPES.lock().unwrap();
+    let type_name = T::static_type().name();
 
-    static mut TYPE: glib_sys::GType = gobject_sys::G_TYPE_INVALID;
-    static ONCE: Once = Once::new();
+    if let Some(type_) = types.get(&type_name) {
+        return *type_;
+    }
 
-    ONCE.call_once(|| {
-        let type_name = {
+    let type_ = {
+        let iter_type_name = {
             let mut idx = 0;
 
             loop {
-                let type_name = CString::new(format!(
-                    "GstRsIteratorFilterBoxed-{}-{}",
-                    T::static_type().name(),
-                    idx
-                ))
-                .unwrap();
-                if gobject_sys::g_type_from_name(type_name.as_ptr()) == gobject_sys::G_TYPE_INVALID
+                let iter_type_name =
+                    CString::new(format!("GstRsIteratorFilterBoxed-{}-{}", type_name, idx))
+                        .unwrap();
+                if gobject_sys::g_type_from_name(iter_type_name.as_ptr())
+                    == gobject_sys::G_TYPE_INVALID
                 {
-                    break type_name;
+                    break iter_type_name;
                 }
                 idx += 1;
             }
         };
 
-        TYPE = gobject_sys::g_boxed_type_register_static(
-            type_name.as_ptr(),
+        let type_ = gobject_sys::g_boxed_type_register_static(
+            iter_type_name.as_ptr(),
             Some(filter_boxed_ref::<T>),
             Some(filter_boxed_unref::<T>),
         );
-    });
 
-    TYPE
+        assert_ne!(type_, gobject_sys::G_TYPE_INVALID);
+
+        type_
+    };
+
+    types.insert(type_name, type_);
+
+    type_
 }
 
 unsafe extern "C" fn find_trampoline<T, F: FnMut(T) -> bool>(
