@@ -121,6 +121,11 @@ If you wish to install the gstreamer-player sub-crate, make sure the
 version of these libraries is >= 1.12. Otherwise, a version >= 1.8 is
 sufficient.
 
+Note that the version of `pkg-config` included in `MSYS2` is
+[known to have problems](https://github.com/rust-lang/pkg-config-rs/issues/51#issuecomment-346300858)
+compiling GStreamer, so you may need to install another version. One option
+would be [`pkg-config-lite`](https://sourceforge.net/projects/pkgconfiglite/).
+
 #### GStreamer Binaries
 
 You need to download the *two* `.msi` files for your platform from the
