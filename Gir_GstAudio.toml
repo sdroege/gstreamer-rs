@@ -65,6 +65,9 @@ conversion_type = "scalar"
 name = "GstAudio.AudioFormat"
 status = "generate"
 
+    [[object.derive]]
+    name = "Debug, Eq, PartialEq, Hash"
+
     [[object.member]]
     name = "s16"
     # Platform dependant

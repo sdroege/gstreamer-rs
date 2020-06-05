@@ -10,6 +10,7 @@ use glib_sys;
 use gobject_sys;
 use gst_audio_sys;
 
+use std::cmp::Ordering;
 use std::ffi::CStr;
 use std::fmt;
 use std::str;
@@ -217,6 +218,64 @@ impl PartialEq for AudioFormatInfo {
 }
 
 impl Eq for AudioFormatInfo {}
+
+impl PartialOrd for AudioFormatInfo {
+    fn partial_cmp(&self, other: &AudioFormatInfo) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for AudioFormatInfo {
+    // See GST_AUDIO_FORMATS_ALL for the sorting algorithm
+    fn cmp(&self, other: &AudioFormatInfo) -> Ordering {
+        self.depth()
+            .cmp(&other.depth())
+            .then_with(|| self.width().cmp(&other.width()))
+            .then_with(|| {
+                match (
+                    self.flags().contains(::AudioFormatFlags::FLOAT),
+                    other.flags().contains(::AudioFormatFlags::FLOAT),
+                ) {
+                    (true, false) => Ordering::Greater,
+                    (false, true) => Ordering::Less,
+                    _ => Ordering::Equal,
+                }
+            })
+            .then_with(|| {
+                match (
+                    self.flags().contains(::AudioFormatFlags::SIGNED),
+                    other.flags().contains(::AudioFormatFlags::SIGNED),
+                ) {
+                    (true, false) => Ordering::Greater,
+                    (false, true) => Ordering::Less,
+                    _ => Ordering::Equal,
+                }
+            })
+            .then_with(|| match (self.endianness(), other.endianness()) {
+                (::AudioEndianness::LittleEndian, ::AudioEndianness::BigEndian) => {
+                    #[cfg(target_endian = "little")]
+                    {
+                        Ordering::Greater
+                    }
+                    #[cfg(target_endian = "big")]
+                    {
+                        Ordering::Less
+                    }
+                }
+                (::AudioEndianness::BigEndian, ::AudioEndianness::LittleEndian) => {
+                    #[cfg(target_endian = "little")]
+                    {
+                        Ordering::Less
+                    }
+                    #[cfg(target_endian = "big")]
+                    {
+                        Ordering::Greater
+                    }
+                }
+                _ => Ordering::Equal,
+            })
+    }
+}
 
 impl fmt::Debug for AudioFormatInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {

@@ -193,7 +193,7 @@ impl SetValue for AudioChannelPosition {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum AudioFormat {
     Unknown,

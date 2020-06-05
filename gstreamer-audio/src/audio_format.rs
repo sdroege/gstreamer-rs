@@ -124,6 +124,18 @@ impl fmt::Display for ::AudioFormat {
     }
 }
 
+impl PartialOrd for ::AudioFormat {
+    fn partial_cmp(&self, other: &::AudioFormat) -> Option<std::cmp::Ordering> {
+        ::AudioFormatInfo::from_format(*self).partial_cmp(&::AudioFormatInfo::from_format(*other))
+    }
+}
+
+impl Ord for ::AudioFormat {
+    fn cmp(&self, other: &::AudioFormat) -> std::cmp::Ordering {
+        ::AudioFormatInfo::from_format(*self).cmp(&::AudioFormatInfo::from_format(*other))
+    }
+}
+
 pub const AUDIO_FORMAT_UNKNOWN: ::AudioFormat = ::AudioFormat::Unknown;
 pub const AUDIO_FORMAT_ENCODED: ::AudioFormat = ::AudioFormat::Encoded;
 pub const AUDIO_FORMAT_S8: ::AudioFormat = ::AudioFormat::S8;
@@ -340,5 +352,16 @@ mod tests {
             .unwrap()
             .build();
         assert_eq!(caps.to_string(), "audio/x-raw, format=(string){ S16LE, S16BE }, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved");
+    }
+
+    #[test]
+    fn sort() {
+        gst::init().unwrap();
+
+        assert!(
+            ::AudioFormatInfo::from_format(::AudioFormat::F64be)
+                > ::AudioFormatInfo::from_format(::AudioFormat::U8)
+        );
+        assert!(::AudioFormat::S20be > ::AudioFormat::S18be);
     }
 }
