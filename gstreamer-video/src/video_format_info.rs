@@ -8,6 +8,7 @@
 
 use gst_video_sys;
 
+use std::cmp::Ordering;
 use std::ffi::CStr;
 use std::fmt;
 use std::str;
@@ -310,6 +311,95 @@ impl PartialEq for VideoFormatInfo {
 }
 
 impl Eq for VideoFormatInfo {}
+
+impl PartialOrd for VideoFormatInfo {
+    fn partial_cmp(&self, other: &VideoFormatInfo) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for VideoFormatInfo {
+    // See GST_VIDEO_FORMATS_ALL for the sorting algorithm
+    fn cmp(&self, other: &VideoFormatInfo) -> Ordering {
+        self.n_components()
+            .cmp(&other.n_components())
+            .then_with(|| self.depth().cmp(&other.depth()))
+            .then_with(|| self.w_sub().cmp(&other.w_sub()).reverse())
+            .then_with(|| self.h_sub().cmp(&other.h_sub()).reverse())
+            .then_with(|| self.n_planes().cmp(&other.n_planes()))
+            .then_with(|| {
+                // Format using native endianess is considered as bigger
+                match (
+                    self.flags().contains(::VideoFormatFlags::LE),
+                    other.flags().contains(::VideoFormatFlags::LE),
+                ) {
+                    (true, false) => {
+                        // a LE, b BE
+                        #[cfg(target_endian = "little")]
+                        {
+                            Ordering::Greater
+                        }
+                        #[cfg(target_endian = "big")]
+                        {
+                            Ordering::Less
+                        }
+                    }
+                    (false, true) => {
+                        // a BE, b LE
+                        #[cfg(target_endian = "little")]
+                        {
+                            Ordering::Less
+                        }
+                        #[cfg(target_endian = "big")]
+                        {
+                            Ordering::Greater
+                        }
+                    }
+                    _ => Ordering::Equal,
+                }
+            })
+            .then_with(|| self.pixel_stride().cmp(&other.pixel_stride()))
+            .then_with(|| self.poffset().cmp(&other.poffset()))
+            .then_with(|| {
+                // Prefer non-complex formats
+                match (
+                    self.flags().contains(::VideoFormatFlags::COMPLEX),
+                    other.flags().contains(::VideoFormatFlags::COMPLEX),
+                ) {
+                    (true, false) => Ordering::Less,
+                    (false, true) => Ordering::Greater,
+                    _ => Ordering::Equal,
+                }
+            })
+            .then_with(|| {
+                // tiebreaker: YUV > RGB
+                if self.flags().contains(::VideoFormatFlags::RGB)
+                    && other.flags().contains(::VideoFormatFlags::YUV)
+                {
+                    Ordering::Less
+                } else if self.flags().contains(::VideoFormatFlags::YUV)
+                    && other.flags().contains(::VideoFormatFlags::RGB)
+                {
+                    Ordering::Greater
+                } else {
+                    Ordering::Equal
+                }
+            })
+            .then_with(|| {
+                // Manual tiebreaker
+                match (self.format(), other.format()) {
+                    // I420 is more commonly used in GStreamer
+                    (::VideoFormat::I420, ::VideoFormat::Yv12) => Ordering::Greater,
+                    (::VideoFormat::Yv12, ::VideoFormat::I420) => Ordering::Less,
+                    _ => Ordering::Equal,
+                }
+            })
+            .then_with(|| {
+                // tie, sort by name
+                self.name().cmp(&other.name())
+            })
+    }
+}
 
 impl fmt::Debug for VideoFormatInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {

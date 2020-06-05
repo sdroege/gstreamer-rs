@@ -19,7 +19,6 @@ external_libraries = [
 
 generate = [
     "GstVideo.VideoCodecFrameFlags",
-    "GstVideo.VideoFormat",
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoTileMode",
     "GstVideo.VideoInterlaceMode",
@@ -242,3 +241,10 @@ manual_traits = ["VideoEncoderExtManual"]
     name = "allocate_output_buffer"
         [object.function.return]
         nullable_return_is_error = "Failed to allocate output buffer"
+
+[[object]]
+name = "GstVideo.VideoFormat"
+status = "generate"
+
+    [[object.derive]]
+    name = "Debug, Eq, PartialEq, Hash"

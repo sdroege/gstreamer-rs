@@ -232,6 +232,19 @@ impl fmt::Display for ::VideoFormat {
         f.write_str((*self).to_str())
     }
 }
+
+impl PartialOrd for ::VideoFormat {
+    fn partial_cmp(&self, other: &::VideoFormat) -> Option<std::cmp::Ordering> {
+        ::VideoFormatInfo::from_format(*self).partial_cmp(&::VideoFormatInfo::from_format(*other))
+    }
+}
+
+impl Ord for ::VideoFormat {
+    fn cmp(&self, other: &::VideoFormat) -> std::cmp::Ordering {
+        ::VideoFormatInfo::from_format(*self).cmp(&::VideoFormatInfo::from_format(*other))
+    }
+}
+
 pub struct VideoFormatIterator {
     idx: usize,
     len: usize,
@@ -371,5 +384,16 @@ mod tests {
             .unwrap()
             .build();
         assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]");
+    }
+
+    #[test]
+    fn sort() {
+        gst::init().unwrap();
+
+        assert!(
+            ::VideoFormatInfo::from_format(::VideoFormat::Nv16)
+                > ::VideoFormatInfo::from_format(::VideoFormat::Nv12)
+        );
+        assert!(::VideoFormat::I420 > ::VideoFormat::Yv12);
     }
 }

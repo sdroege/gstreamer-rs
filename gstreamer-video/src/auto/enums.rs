@@ -678,7 +678,7 @@ impl SetValue for VideoFieldOrder {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum VideoFormat {
     Unknown,
