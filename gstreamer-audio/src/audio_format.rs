@@ -29,38 +29,76 @@ pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| unsafe {
 
 #[cfg(not(feature = "v1_18"))]
 pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| {
-    Box::new([
-        ::AudioFormat::S8,
-        ::AudioFormat::U8,
-        ::AudioFormat::S16le,
-        ::AudioFormat::S16be,
-        ::AudioFormat::U16le,
-        ::AudioFormat::U16be,
-        ::AudioFormat::S2432le,
-        ::AudioFormat::S2432be,
-        ::AudioFormat::U2432le,
-        ::AudioFormat::U2432be,
-        ::AudioFormat::S32le,
-        ::AudioFormat::S32be,
-        ::AudioFormat::U32le,
-        ::AudioFormat::U32be,
-        ::AudioFormat::S24le,
-        ::AudioFormat::S24be,
-        ::AudioFormat::U24le,
-        ::AudioFormat::U24be,
-        ::AudioFormat::S20le,
-        ::AudioFormat::S20be,
-        ::AudioFormat::U20le,
-        ::AudioFormat::U20be,
-        ::AudioFormat::S18le,
-        ::AudioFormat::S18be,
-        ::AudioFormat::U18le,
-        ::AudioFormat::U18be,
-        ::AudioFormat::F32le,
-        ::AudioFormat::F32be,
-        ::AudioFormat::F64le,
-        ::AudioFormat::F64be,
-    ])
+    #[cfg(target_endian = "little")]
+    {
+        Box::new([
+            ::AudioFormat::F64le,
+            ::AudioFormat::F64be,
+            ::AudioFormat::F32le,
+            ::AudioFormat::F32be,
+            ::AudioFormat::S32le,
+            ::AudioFormat::S32be,
+            ::AudioFormat::U32le,
+            ::AudioFormat::U32be,
+            ::AudioFormat::S2432le,
+            ::AudioFormat::S2432be,
+            ::AudioFormat::U2432le,
+            ::AudioFormat::U2432be,
+            ::AudioFormat::S24le,
+            ::AudioFormat::S24be,
+            ::AudioFormat::U24le,
+            ::AudioFormat::U24be,
+            ::AudioFormat::S20le,
+            ::AudioFormat::S20be,
+            ::AudioFormat::U20le,
+            ::AudioFormat::U20be,
+            ::AudioFormat::S18le,
+            ::AudioFormat::S18be,
+            ::AudioFormat::U18le,
+            ::AudioFormat::U18be,
+            ::AudioFormat::S16le,
+            ::AudioFormat::S16be,
+            ::AudioFormat::U16le,
+            ::AudioFormat::U16be,
+            ::AudioFormat::S8,
+            ::AudioFormat::U8,
+        ])
+    }
+    #[cfg(target_endian = "big")]
+    {
+        Box::new([
+            ::AudioFormat::F64be,
+            ::AudioFormat::F64le,
+            ::AudioFormat::F32be,
+            ::AudioFormat::F32le,
+            ::AudioFormat::S32be,
+            ::AudioFormat::S32le,
+            ::AudioFormat::U32be,
+            ::AudioFormat::U32le,
+            ::AudioFormat::S2432be,
+            ::AudioFormat::S2432le,
+            ::AudioFormat::U2432be,
+            ::AudioFormat::U2432le,
+            ::AudioFormat::S24be,
+            ::AudioFormat::S24le,
+            ::AudioFormat::U24be,
+            ::AudioFormat::U24le,
+            ::AudioFormat::S20be,
+            ::AudioFormat::S20le,
+            ::AudioFormat::U20be,
+            ::AudioFormat::U20le,
+            ::AudioFormat::S18be,
+            ::AudioFormat::S18le,
+            ::AudioFormat::U18be,
+            ::AudioFormat::U18le,
+            ::AudioFormat::S16be,
+            ::AudioFormat::S16le,
+            ::AudioFormat::U16be,
+            ::AudioFormat::U16le,
+            ::AudioFormat::S8,
+            ::AudioFormat::U8,
+        ])
+    }
 });
 
 impl ::AudioFormat {
@@ -295,6 +333,7 @@ where
 #[cfg(test)]
 mod tests {
     use gst;
+    use itertools::Itertools;
 
     #[test]
     fn test_display() {
@@ -363,5 +402,12 @@ mod tests {
                 > ::AudioFormatInfo::from_format(::AudioFormat::U8)
         );
         assert!(::AudioFormat::S20be > ::AudioFormat::S18be);
+
+        let sorted: Vec<::AudioFormat> = ::AudioFormat::iter_raw().sorted().rev().collect();
+        // FIXME: use is_sorted_by() once API is in stable
+        assert_eq!(
+            sorted,
+            ::AudioFormat::iter_raw().collect::<Vec<::AudioFormat>>()
+        );
     }
 }

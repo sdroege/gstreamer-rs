@@ -29,6 +29,9 @@ once_cell = "1.0"
 [build-dependencies]
 rustdoc-stripper = { version = "0.1", optional = true }
 
+[dev-dependencies]
+itertools = "0.9"
+
 [features]
 default = []
 v1_10 = ["gstreamer/v1_10", "gstreamer-base/v1_10", "gstreamer-audio-sys/v1_10"]

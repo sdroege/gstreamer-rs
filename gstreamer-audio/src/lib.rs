@@ -22,6 +22,9 @@ extern crate gstreamer_base as gst_base;
 extern crate gstreamer_base_sys as gst_base_sys;
 extern crate gstreamer_sys as gst_sys;
 
+#[cfg(test)]
+extern crate itertools;
+
 macro_rules! assert_initialized_main_thread {
     () => {
         if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
