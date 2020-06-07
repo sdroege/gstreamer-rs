@@ -8,9 +8,15 @@
 // except according to those terms.
 
 use std::fmt;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use std::ptr;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use std::slice;
 
 use glib;
 use glib::translate::{from_glib, ToGlib};
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use glib::translate::{from_glib_none, ToGlibPtr};
 use gst;
 use gst::prelude::*;
 use gst_audio_sys;
@@ -65,6 +71,140 @@ impl fmt::Debug for AudioClippingMeta {
         f.debug_struct("AudioClippingMeta")
             .field("start", &self.get_start())
             .field("end", &self.get_end())
+            .finish()
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[repr(C)]
+pub struct AudioMeta(gst_audio_sys::GstAudioMeta);
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+unsafe impl Send for AudioMeta {}
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+unsafe impl Sync for AudioMeta {}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl AudioMeta {
+    pub fn add<'a>(
+        buffer: &'a mut gst::BufferRef,
+        info: &::AudioInfo,
+        samples: usize,
+        offsets: &[usize],
+    ) -> Result<gst::MetaRefMut<'a, Self, gst::meta::Standalone>, glib::BoolError> {
+        skip_assert_initialized!();
+
+        if !info.is_valid() {
+            return Err(glib_bool_error!("Invalid audio info"));
+        }
+
+        if info.rate() == 0
+            || info.channels() == 0
+            || info.format() == ::AudioFormat::Unknown
+            || info.format() == ::AudioFormat::Encoded
+        {
+            return Err(glib_bool_error!("Unsupported audio format {:?}", info));
+        }
+
+        if !offsets.is_empty() && info.layout() != ::AudioLayout::NonInterleaved {
+            return Err(glib_bool_error!(
+                "Channel offsets only supported for non-interleaved audio"
+            ));
+        }
+
+        if !offsets.is_empty() && offsets.len() != info.channels() as usize {
+            return Err(glib_bool_error!(
+                "Number of channel offsets different than number of channels ({} != {})",
+                offsets.len(),
+                info.channels()
+            ));
+        }
+
+        if info.layout() == ::AudioLayout::NonInterleaved {
+            let plane_size = samples * (info.width() / 8) as usize;
+            let max_offset = if offsets.is_empty() {
+                plane_size * (info.channels() - 1) as usize
+            } else {
+                let mut max_offset = None;
+
+                for (i, offset) in offsets.iter().copied().enumerate() {
+                    if let Some(current_max_offset) = max_offset {
+                        max_offset = Some(std::cmp::max(current_max_offset, offset));
+                    } else {
+                        max_offset = Some(offset);
+                    }
+
+                    for (j, other_offset) in offsets.iter().copied().enumerate() {
+                        if i != j
+                            && !(other_offset + plane_size <= offset
+                                || offset + plane_size <= other_offset)
+                        {
+                            return Err(glib_bool_error!("Overlapping audio channel offsets: offset {} for channel {} and offset {} for channel {} with a plane size of {}", offset, i, other_offset, j, plane_size));
+                        }
+                    }
+                }
+
+                max_offset.unwrap()
+            };
+
+            if max_offset + plane_size > buffer.get_size() {
+                return Err(glib_bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.get_size()));
+            }
+        }
+
+        unsafe {
+            let meta = gst_audio_sys::gst_buffer_add_audio_meta(
+                buffer.as_mut_ptr(),
+                info.to_glib_none().0,
+                samples,
+                if offsets.is_empty() {
+                    ptr::null_mut()
+                } else {
+                    offsets.as_ptr() as *mut _
+                },
+            );
+
+            if meta.is_null() {
+                return Err(glib_bool_error!("Failed to add audio meta"));
+            }
+
+            Ok(Self::from_mut_ptr(buffer, meta))
+        }
+    }
+
+    pub fn get_info(&self) -> ::AudioInfo {
+        unsafe { from_glib_none(&self.0.info as *const _ as *mut gst_audio_sys::GstAudioInfo) }
+    }
+
+    pub fn get_samples(&self) -> usize {
+        self.0.samples
+    }
+
+    pub fn get_offsets(&self) -> &[usize] {
+        if self.0.offsets.is_null() || self.0.info.channels < 1 {
+            return &[];
+        }
+
+        unsafe { slice::from_raw_parts(self.0.offsets, self.0.info.channels as usize) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+unsafe impl MetaAPI for AudioMeta {
+    type GstType = gst_audio_sys::GstAudioMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_audio_sys::gst_audio_meta_api_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl fmt::Debug for AudioMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("AudioMeta")
+            .field("info", &self.get_info())
+            .field("samples", &self.get_samples())
+            .field("offsets", &self.get_offsets())
             .finish()
     }
 }
