@@ -225,6 +225,8 @@ impl VideoFrame<Readable> {
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
         skip_assert_initialized!();
 
+        assert!(info.is_valid());
+
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
@@ -255,6 +257,8 @@ impl VideoFrame<Readable> {
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
         skip_assert_initialized!();
+
+        assert!(info.is_valid());
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
@@ -289,6 +293,8 @@ impl VideoFrame<Writable> {
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
         skip_assert_initialized!();
 
+        assert!(info.is_valid());
+
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
@@ -321,6 +327,8 @@ impl VideoFrame<Writable> {
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
         skip_assert_initialized!();
+
+        assert!(info.is_valid());
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
@@ -566,6 +574,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
+        assert!(info.is_valid());
+
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
@@ -596,6 +606,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         info: &'b ::VideoInfo,
     ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
+
+        assert!(info.is_valid());
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
@@ -648,6 +660,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
     ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
+        assert!(info.is_valid());
+
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
@@ -680,6 +694,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         info: &'b ::VideoInfo,
     ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
+
+        assert!(info.is_valid());
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
