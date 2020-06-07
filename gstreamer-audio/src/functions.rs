@@ -9,7 +9,6 @@
 use glib::translate::{from_glib_full, ToGlibPtr};
 use gst;
 
-
 pub fn audio_buffer_clip(
     buffer: gst::Buffer,
     segment: &gst::Segment,
@@ -24,6 +23,25 @@ pub fn audio_buffer_clip(
             segment.to_glib_none().0,
             rate as i32,
             bpf as i32,
+        ))
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub fn audio_buffer_truncate(
+    buffer: gst::Buffer,
+    bpf: u32,
+    trim: usize,
+    samples: Option<usize>,
+) -> gst::Buffer {
+    skip_assert_initialized!();
+
+    unsafe {
+        from_glib_full(gst_audio_sys::gst_audio_buffer_truncate(
+            buffer.into_ptr(),
+            bpf as i32,
+            trim,
+            samples.unwrap_or(std::usize::MAX),
         ))
     }
 }
