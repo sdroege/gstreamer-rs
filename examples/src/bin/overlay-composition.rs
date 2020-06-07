@@ -169,7 +169,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 gst_video::VideoFormat::Bgra,
                 frame_width as u32,
                 frame_height as u32,
-            );
+            ).unwrap();
 
             let buffer = buffer.into_mapped_buffer_writable().unwrap();
             let buffer = {

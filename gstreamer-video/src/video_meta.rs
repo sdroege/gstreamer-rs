@@ -29,11 +29,26 @@ impl VideoMeta {
         format: ::VideoFormat,
         width: u32,
         height: u32,
-    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    ) -> Result<gst::MetaRefMut<Self, gst::meta::Standalone>, glib::BoolError> {
         skip_assert_initialized!();
 
-        let info = ::VideoInfo::new(format, width, height).build().unwrap();
-        assert!(buffer.get_size() >= info.size());
+        if format == ::VideoFormat::Unknown || format == ::VideoFormat::Encoded {
+            return Err(glib_bool_error!("Unsupported video format {}", format));
+        }
+
+        let info = ::VideoInfo::new(format, width, height).build()?;
+
+        if !info.is_valid() {
+            return Err(glib_bool_error!("Invalid video info"));
+        }
+
+        if buffer.get_size() < info.size() {
+            return Err(glib_bool_error!(
+                "Buffer smaller than required frame size ({} < {})",
+                buffer.get_size(),
+                info.size()
+            ));
+        }
 
         unsafe {
             let meta = gst_video_sys::gst_buffer_add_video_meta(
@@ -44,7 +59,11 @@ impl VideoMeta {
                 height,
             );
 
-            Self::from_mut_ptr(buffer, meta)
+            if meta.is_null() {
+                return Err(glib_bool_error!("Failed to add video meta"));
+            }
+
+            Ok(Self::from_mut_ptr(buffer, meta))
         }
     }
 
@@ -56,16 +75,30 @@ impl VideoMeta {
         height: u32,
         offset: &[usize],
         stride: &[i32],
-    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+    ) -> Result<gst::MetaRefMut<'a, Self, gst::meta::Standalone>, glib::BoolError> {
         skip_assert_initialized!();
+
+        if format == ::VideoFormat::Unknown || format == ::VideoFormat::Encoded {
+            return Err(glib_bool_error!("Unsupported video format {}", format));
+        }
 
         let n_planes = offset.len() as u32;
         let info = ::VideoInfo::new(format, width, height)
             .offset(offset)
             .stride(stride)
-            .build()
-            .expect("Unable to build VideoInfo for given format, offsets and strides");
-        assert!(buffer.get_size() >= info.size());
+            .build()?;
+
+        if !info.is_valid() {
+            return Err(glib_bool_error!("Invalid video info"));
+        }
+
+        if buffer.get_size() < info.size() {
+            return Err(glib_bool_error!(
+                "Buffer smaller than required frame size ({} < {})",
+                buffer.get_size(),
+                info.size()
+            ));
+        }
 
         unsafe {
             let meta = gst_video_sys::gst_buffer_add_video_meta_full(
@@ -79,7 +112,11 @@ impl VideoMeta {
                 stride.as_ptr() as *mut _,
             );
 
-            Self::from_mut_ptr(buffer, meta)
+            if meta.is_null() {
+                return Err(glib_bool_error!("Failed to add video meta"));
+            }
+
+            Ok(Self::from_mut_ptr(buffer, meta))
         }
     }
 
@@ -657,7 +694,8 @@ mod tests {
                 ::VideoFormat::Argb,
                 320,
                 240,
-            );
+            )
+            .unwrap();
             assert_eq!(meta.get_id(), 0);
             assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
             assert_eq!(meta.get_format(), ::VideoFormat::Argb);
@@ -695,7 +733,8 @@ mod tests {
                 240,
                 &[0],
                 &[320 * 4],
-            );
+            )
+            .unwrap();
             assert_eq!(meta.get_id(), 0);
             assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
             assert_eq!(meta.get_format(), ::VideoFormat::Argb);
