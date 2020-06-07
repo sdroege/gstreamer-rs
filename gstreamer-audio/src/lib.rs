@@ -59,25 +59,6 @@ pub use audio_decoder::AudioDecoderExtManual;
 mod audio_encoder;
 pub use audio_encoder::AudioEncoderExtManual;
 
-use glib::translate::{from_glib_full, ToGlibPtr};
-pub fn audio_buffer_clip(
-    buffer: gst::Buffer,
-    segment: &gst::Segment,
-    rate: u32,
-    bpf: u32,
-) -> Option<gst::Buffer> {
-    skip_assert_initialized!();
-
-    unsafe {
-        from_glib_full(gst_audio_sys::gst_audio_buffer_clip(
-            buffer.into_ptr(),
-            segment.to_glib_none().0,
-            rate as i32,
-            bpf as i32,
-        ))
-    }
-}
-
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
