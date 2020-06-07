@@ -151,6 +151,10 @@ impl AudioInfo {
         }
     }
 
+    pub fn is_valid(&self) -> bool {
+        !self.0.finfo.is_null() && self.0.channels > 0 && self.0.rate > 0 && self.0.bpf > 0
+    }
+
     pub fn from_caps(caps: &gst::CapsRef) -> Result<AudioInfo, glib::error::BoolError> {
         skip_assert_initialized!();
 
@@ -230,6 +234,10 @@ impl AudioInfo {
     }
 
     pub fn format(&self) -> ::AudioFormat {
+        if self.0.finfo.is_null() {
+            return ::AudioFormat::Unknown;
+        }
+
         unsafe { from_glib((*self.0.finfo).format) }
     }
 
