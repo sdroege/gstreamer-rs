@@ -32,6 +32,25 @@ pub fn audio_buffer_clip(
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub fn audio_buffer_truncate(
+    buffer: gst::Buffer,
+    bpf: u32,
+    trim: usize,
+    samples: Option<usize>,
+) -> gst::Buffer {
+    skip_assert_initialized!();
+
+    unsafe {
+        from_glib_full(gst_audio_sys::gst_audio_buffer_truncate(
+            buffer.into_ptr(),
+            bpf as i32,
+            trim,
+            samples.unwrap_or(std::usize::MAX),
+        ))
+    }
+}
+
 pub fn audio_make_raw_caps(
     formats: &[::AudioFormat],
     layout: ::AudioLayout,
