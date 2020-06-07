@@ -201,6 +201,7 @@ impl<T> VideoFrame<T> {
             frame,
             buffer: Some(self.buffer()),
             info,
+            unmap: false,
         }
     }
 
@@ -397,6 +398,7 @@ impl VideoFrame<Writable> {
             frame,
             buffer: Some(self.buffer_mut()),
             info,
+            unmap: false,
         }
     }
 
@@ -410,6 +412,7 @@ pub struct VideoFrameRef<T> {
     frame: gst_video_sys::GstVideoFrame,
     buffer: Option<T>,
     info: ::VideoInfo,
+    unmap: bool,
 }
 
 impl<T> VideoFrameRef<T> {
@@ -561,6 +564,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             frame,
             buffer: Some(buffer),
             info,
+            unmap: false,
         })
     }
 
@@ -571,6 +575,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             frame,
             buffer: Some(buffer),
             info,
+            unmap: true,
         }
     }
 
@@ -600,6 +605,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
+                    unmap: true,
                 })
             }
         }
@@ -633,6 +639,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
+                    unmap: true,
                 })
             }
         }
@@ -654,6 +661,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             frame,
             buffer: Some(buffer),
             info,
+            unmap: false,
         })
     }
 
@@ -664,6 +672,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             frame,
             buffer: Some(buffer),
             info,
+            unmap: true,
         }
     }
 
@@ -695,6 +704,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
+                    unmap: true,
                 })
             }
         }
@@ -730,6 +740,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                     frame,
                     buffer: Some(buffer),
                     info,
+                    unmap: true,
                 })
             }
         }
@@ -791,7 +802,9 @@ unsafe impl<T> Sync for VideoFrameRef<T> {}
 impl<T> Drop for VideoFrameRef<T> {
     fn drop(&mut self) {
         unsafe {
-            gst_video_sys::gst_video_frame_unmap(&mut self.frame);
+            if self.unmap {
+                gst_video_sys::gst_video_frame_unmap(&mut self.frame);
+            }
         }
     }
 }
@@ -844,6 +857,20 @@ mod tests {
         assert_eq!(frame.plane_data(0).unwrap().len(), 320 * 240);
         assert!(frame.plane_data(1).is_err());
         assert!(frame.info() == &info);
+
+        {
+            let frame = frame.as_video_frame_ref();
+
+            assert!(frame.plane_data(0).is_ok());
+            assert_eq!(frame.plane_data(0).unwrap().len(), 320 * 240);
+            assert!(frame.plane_data(1).is_err());
+            assert!(frame.info() == &info);
+        }
+
+        assert!(frame.plane_data(0).is_ok());
+        assert_eq!(frame.plane_data(0).unwrap().len(), 320 * 240);
+        assert!(frame.plane_data(1).is_err());
+        assert!(frame.info() == &info);
     }
 
     #[test]
@@ -860,5 +887,54 @@ mod tests {
         assert_eq!(frame.plane_data_mut(0).unwrap().len(), 320 * 240);
         assert!(frame.plane_data_mut(1).is_err());
         assert!(frame.info() == &info);
+
+        {
+            let mut frame = frame.as_mut_video_frame_ref();
+
+            assert!(frame.plane_data_mut(0).is_ok());
+            assert_eq!(frame.plane_data_mut(0).unwrap().len(), 320 * 240);
+            assert!(frame.plane_data_mut(1).is_err());
+            assert!(frame.info() == &info);
+        }
+
+        assert!(frame.plane_data_mut(0).is_ok());
+        assert_eq!(frame.plane_data_mut(0).unwrap().len(), 320 * 240);
+        assert!(frame.plane_data_mut(1).is_err());
+        assert!(frame.info() == &info);
+    }
+
+    #[test]
+    fn test_map_ref_read() {
+        gst::init().unwrap();
+
+        let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
+            .build()
+            .unwrap();
+        let buffer = gst::Buffer::with_size(info.size()).unwrap();
+        let frame = VideoFrameRef::from_buffer_ref_readable(&buffer, &info).unwrap();
+
+        assert!(frame.plane_data(0).is_ok());
+        assert_eq!(frame.plane_data(0).unwrap().len(), 320 * 240);
+        assert!(frame.plane_data(1).is_err());
+        assert!(frame.info() == &info);
+    }
+
+    #[test]
+    fn test_map_ref_write() {
+        gst::init().unwrap();
+
+        let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
+            .build()
+            .unwrap();
+        let mut buffer = gst::Buffer::with_size(info.size()).unwrap();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            let mut frame = VideoFrameRef::from_buffer_ref_writable(buffer, &info).unwrap();
+
+            assert!(frame.plane_data_mut(0).is_ok());
+            assert_eq!(frame.plane_data_mut(0).unwrap().len(), 320 * 240);
+            assert!(frame.plane_data_mut(1).is_err());
+            assert!(frame.info() == &info);
+        }
     }
 }
