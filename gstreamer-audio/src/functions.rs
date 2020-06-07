@@ -1,3 +1,4 @@
+// Copyright (C) 2017-2020 Sebastian Dröge <sebastian@centricular.com>
 // Copyright (C) 2020 Guillaume Desmottes <guillaume.desmottes@collabora.com>
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
@@ -7,10 +8,29 @@
 // except according to those terms.
 
 use glib;
+use glib::translate::{from_glib_full, ToGlibPtr};
 use glib::ToSendValue;
 use gst;
 
 use std::i32;
+
+pub fn audio_buffer_clip(
+    buffer: gst::Buffer,
+    segment: &gst::Segment,
+    rate: u32,
+    bpf: u32,
+) -> Option<gst::Buffer> {
+    skip_assert_initialized!();
+
+    unsafe {
+        from_glib_full(gst_audio_sys::gst_audio_buffer_clip(
+            buffer.into_ptr(),
+            segment.to_glib_none().0,
+            rate as i32,
+            bpf as i32,
+        ))
+    }
+}
 
 pub fn audio_make_raw_caps(
     formats: &[::AudioFormat],
