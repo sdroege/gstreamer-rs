@@ -558,6 +558,10 @@ impl VideoInfo {
         }
     }
 
+    pub fn is_valid(&self) -> bool {
+        !self.0.finfo.is_null() && self.0.width > 0 && self.0.height > 0 && self.0.size > 0
+    }
+
     pub fn from_caps(caps: &gst::CapsRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
 
@@ -587,6 +591,10 @@ impl VideoInfo {
     }
 
     pub fn format(&self) -> ::VideoFormat {
+        if self.0.finfo.is_null() {
+            return ::VideoFormat::Unknown;
+        }
+
         unsafe { from_glib((*self.0.finfo).format) }
     }
 
