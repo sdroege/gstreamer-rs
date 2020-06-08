@@ -19,4 +19,5 @@ members = [
   "gstreamer-editing-services-sys",
   "gstreamer-check-sys",
   "gstreamer-rtp-sys",
+  "gstreamer-controller-sys",
 ]

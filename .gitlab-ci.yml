@@ -73,7 +73,8 @@ stages:
                      gstreamer-sys \
                      gstreamer-tag-sys \
                      gstreamer-video-sys \
-                     gstreamer-webrtc-sys; \
+                     gstreamer-webrtc-sys \
+                     gstreamer-controller-sys; \
             do \
                 cargo test --locked -p $crate; \
             done
