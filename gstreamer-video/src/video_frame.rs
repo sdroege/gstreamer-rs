@@ -564,7 +564,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             frame,
             buffer: Some(buffer),
             info,
-            borrowed: false,
+            borrowed: true,
         }
     }
 
@@ -650,7 +650,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             frame,
             buffer: Some(buffer),
             info,
-            borrowed: false,
+            borrowed: true,
         }
     }
 
