@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.15.7] - 2020-06-08
+### Fixed
+- Allow multiple filter types per process with `gst::Iterator::filter()`.
+- Check that `VideoInfo` is valid when creating a `VideoFrame`.
+- Don't potentially dereference a `NULL` pointer when getting the format
+  from an invalid `VideoInfo` or `AudioInfo`.
+- Don't unmap borrowed `VideoFrameRef`s.
+
+### Added
+- `gst::ProtectionMeta`, `gst_video::VideoAffineTransformationMeta`,
+  `VideoCropMeta` and `VideoRegionOfInterestMeta` bindings.
+- Various new `gst_rtp::RTPBuffer` methods.
+- `gst_audio::audio_buffer_truncate()`, `AudioMeta` and `AudioBuffer`
+  bindings.
+
 ## [0.15.6] - 2020-05-28
 ### Fixed
 - Assert that the data passed to `VideoCaptionMeta::add()` is not empty.
@@ -731,7 +746,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.6...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.7...HEAD
+[0.15.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.6...0.15.7
 [0.15.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.5...0.15.6
 [0.15.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.4...0.15.5
 [0.15.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.3...0.15.4
