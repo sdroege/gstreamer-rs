@@ -8,18 +8,20 @@
 // except according to those terms.
 #![allow(clippy::cast_ptr_alignment)]
 
-pub mod base_parse;
-pub mod base_sink;
+mod base_parse;
+mod base_sink;
+// Public to namespace CreateSuccess
 pub mod base_src;
+// Public to namespace GenerateOutputSuccess and PrepareOutputBufferSuccess,
 pub mod base_transform;
-pub mod push_src;
+mod push_src;
 
 pub use self::base_transform::BaseTransformMode;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub mod aggregator;
+mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub mod aggregator_pad;
+mod aggregator_pad;
 
 pub mod prelude {
     #[cfg(any(feature = "v1_14", feature = "dox"))]

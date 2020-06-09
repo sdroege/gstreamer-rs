@@ -7,8 +7,8 @@
 // except according to those terms.
 #![allow(clippy::cast_ptr_alignment)]
 
-pub mod video_decoder;
-pub mod video_encoder;
+mod video_decoder;
+mod video_encoder;
 
 pub mod prelude {
     pub use super::video_decoder::{VideoDecoderImpl, VideoDecoderImplExt};

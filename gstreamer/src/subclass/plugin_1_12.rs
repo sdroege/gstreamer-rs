@@ -31,8 +31,8 @@ macro_rules! gst_plugin_define(
             #[no_mangle]
             #[allow(non_upper_case_globals)]
             pub static gst_plugin_desc: GstPluginDesc = GstPluginDesc($crate::gst_sys::GstPluginDesc {
-                major_version: $crate::subclass::plugin::MAJOR_VERSION,
-                minor_version: $crate::subclass::plugin::MINOR_VERSION,
+                major_version: $crate::subclass::MAJOR_VERSION,
+                minor_version: $crate::subclass::MINOR_VERSION,
                 name: concat!(stringify!($name), "\0") as *const str as *const _,
                 description: concat!($description, "\0") as *const str as *const _,
                 plugin_init: Some(plugin_init_trampoline),
@@ -49,8 +49,8 @@ macro_rules! gst_plugin_define(
                 unsafe {
                     $crate::glib::glib_result_from_gboolean!(
                         $crate::gst_sys::gst_plugin_register_static(
-                            $crate::subclass::plugin::MAJOR_VERSION,
-                            $crate::subclass::plugin::MINOR_VERSION,
+                            $crate::subclass::MAJOR_VERSION,
+                            $crate::subclass::MINOR_VERSION,
                             concat!(stringify!($name), "\0") as *const str as *const _,
                             concat!($description, "\0") as *const str as _,
                             Some(plugin_init_trampoline),

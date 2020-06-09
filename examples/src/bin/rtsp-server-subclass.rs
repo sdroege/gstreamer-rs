@@ -249,7 +249,7 @@ mod media {
                 &self,
                 media: &gst_rtsp_server::RTSPMedia,
                 sdp: &mut gst_sdp::SDPMessageRef,
-                info: &gst_rtsp_server::subclass::rtsp_media::SDPInfo,
+                info: &gst_rtsp_server::subclass::SDPInfo,
             ) -> Result<(), gst::LoggableError> {
                 self.parent_setup_sdp(media, sdp, info)?;
 

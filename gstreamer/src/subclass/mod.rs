@@ -9,34 +9,37 @@
 #![allow(clippy::cast_ptr_alignment)]
 
 #[macro_use]
-pub mod error;
+mod error;
 
 #[cfg(any(feature = "v1_14"))]
 #[macro_use]
 #[path = "plugin_1_14.rs"]
-pub mod plugin;
+mod plugin;
 
 #[cfg(not(any(feature = "v1_14")))]
 #[macro_use]
 #[path = "plugin_1_12.rs"]
-pub mod plugin;
+mod plugin;
 
-pub mod bin;
-pub mod child_proxy;
-pub mod element;
-pub mod ghost_pad;
-pub mod pad;
-pub mod pipeline;
+mod bin;
+mod child_proxy;
+mod element;
+mod ghost_pad;
+mod pad;
+mod pipeline;
 
-pub mod device;
-pub mod device_provider;
+mod device;
+mod device_provider;
 
-pub mod clock;
-pub mod system_clock;
+mod clock;
+mod system_clock;
 
-pub mod preset;
-pub mod tag_setter;
-pub mod uri_handler;
+mod preset;
+mod tag_setter;
+mod uri_handler;
+
+pub use self::error::FlowError;
+pub use self::plugin::{MAJOR_VERSION, MINOR_VERSION};
 
 pub mod prelude {
     pub use super::bin::{BinImpl, BinImplExt};

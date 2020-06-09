@@ -7,10 +7,10 @@
 // except according to those terms.
 #![allow(clippy::cast_ptr_alignment)]
 
-pub mod audio_decoder;
-pub mod audio_encoder;
-pub mod audio_sink;
-pub mod audio_src;
+mod audio_decoder;
+mod audio_encoder;
+mod audio_sink;
+mod audio_src;
 
 pub mod prelude {
     pub use super::audio_decoder::{AudioDecoderImpl, AudioDecoderImplExt};

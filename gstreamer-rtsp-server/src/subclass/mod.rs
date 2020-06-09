@@ -7,10 +7,12 @@
 // except according to those terms.
 #![allow(clippy::cast_ptr_alignment)]
 
-pub mod rtsp_client;
-pub mod rtsp_media;
-pub mod rtsp_media_factory;
-pub mod rtsp_server;
+mod rtsp_client;
+mod rtsp_media;
+mod rtsp_media_factory;
+mod rtsp_server;
+
+pub use self::rtsp_media::SDPInfo;
 
 pub mod prelude {
     pub use super::rtsp_client::{RTSPClientImpl, RTSPClientImplExt};
