@@ -204,6 +204,8 @@ mod iterator;
 mod object;
 mod pad;
 pub use pad::PadBuilder;
+mod control_binding;
+mod control_source;
 mod parse_context;
 mod proxy_pad;
 mod tag_setter;

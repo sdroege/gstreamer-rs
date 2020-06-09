@@ -25,6 +25,14 @@ mod clock;
 pub use self::clock::ClockExt;
 pub use self::clock::{Clock, ClockClass, NONE_CLOCK};
 
+mod control_binding;
+pub use self::control_binding::ControlBindingExt;
+pub use self::control_binding::{ControlBinding, ControlBindingClass, NONE_CONTROL_BINDING};
+
+mod control_source;
+pub use self::control_source::ControlSourceExt;
+pub use self::control_source::{ControlSource, ControlSourceClass, NONE_CONTROL_SOURCE};
+
 mod device;
 pub use self::device::DeviceExt;
 pub use self::device::{Device, DeviceClass, NONE_DEVICE};
@@ -201,6 +209,8 @@ pub mod traits {
     pub use super::BufferPoolExt;
     pub use super::ChildProxyExt;
     pub use super::ClockExt;
+    pub use super::ControlBindingExt;
+    pub use super::ControlSourceExt;
     pub use super::DeviceExt;
     pub use super::DeviceMonitorExt;
     pub use super::DeviceProviderExt;

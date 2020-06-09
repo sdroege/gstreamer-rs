@@ -5,6 +5,7 @@ members = [
   "gstreamer-app",
   "gstreamer-audio",
   "gstreamer-base",
+  "gstreamer-controller",
   "gstreamer-net",
   "gstreamer-player",
   "gstreamer-rtsp",

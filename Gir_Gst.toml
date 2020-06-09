@@ -64,6 +64,7 @@ manual = [
     "Gst.Segment",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
+    "GObject.Value",
 ]
 
 [[object]]
@@ -201,6 +202,12 @@ status = "generate"
 name = "Gst.ChildProxy"
 status = "generate"
 manual_traits = ["ChildProxyExtManual"]
+    [[object.function]]
+    name = "get_property"
+    ignore = true
+    [[object.function]]
+    name = "set_property"
+    ignore = true
 
 [[object]]
 name = "Gst.ClockTime"
@@ -267,6 +274,9 @@ status = "generate"
 name = "Gst.TagSetter"
 status = "generate"
 manual_traits = ["TagSetterExtManual"]
+    [[object.function]]
+    name = "add_tag_value"
+    ignore = true
 
 [[object]]
 name = "Gst.TocScope"
@@ -815,6 +825,15 @@ trait_name = "GstObjectExt"
     name = "sync_values"
         [object.function.return]
         bool_return_is_error = "Failed to sync values"
+
+    [[object.function]]
+    name = "get_g_value_array"
+    ignore = true
+    [[object.function]]
+    name = "add_control_binding"
+    [object.function.return]
+    bool_return_is_error = "Failed to add control binding"
+
 
 [[object]]
 name = "Gst.ObjectFlags"
@@ -1778,3 +1797,25 @@ status = "generate"
     name = "to_iso8601_string"
         [object.function.return]
         nullable_return_is_error = "Failed to create ISO-8601 string from DateTime"
+
+[[object]]
+name = "Gst.ControlSource"
+status = "generate"
+manual_traits = ["ControlSourceExtManual"]
+generate_builder = true
+    [[object.function]]
+    name = "control_source_get_value"
+    rename = "get_value"
+    [[object.function]]
+    name = "control_source_get_value_array"
+    ignore = true
+
+
+[[object]]
+name = "Gst.ControlBinding"
+status = "generate"
+manual_traits = ["ControlBindingExtManual"]
+generate_builder = true
+    [[object.function]]
+    name = "get_g_value_array"
+    ignore = true

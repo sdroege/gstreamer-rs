@@ -14,6 +14,7 @@ use glib::IsA;
 
 use gobject_sys;
 
+use ClockTime;
 use ObjectFlags;
 
 pub trait GstObjectExtManual: 'static {
@@ -28,6 +29,14 @@ pub trait GstObjectExtManual: 'static {
     fn unset_object_flags(&self, flags: ObjectFlags);
 
     fn get_object_flags(&self) -> ObjectFlags;
+
+    fn get_g_value_array(
+        &self,
+        property_name: &str,
+        timestamp: ClockTime,
+        interval: ClockTime,
+        values: &mut [glib::Value],
+    ) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<::Object>> GstObjectExtManual for O {
@@ -96,6 +105,29 @@ impl<O: IsA<::Object>> GstObjectExtManual for O {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
             from_glib((*ptr).flags)
+        }
+    }
+
+    fn get_g_value_array(
+        &self,
+        property_name: &str,
+        timestamp: ClockTime,
+        interval: ClockTime,
+        values: &mut [glib::Value],
+    ) -> Result<(), glib::error::BoolError> {
+        let n_values = values.len() as u32;
+        unsafe {
+            glib_result_from_gboolean!(
+                gst_sys::gst_object_get_g_value_array(
+                    self.as_ref().to_glib_none().0,
+                    property_name.to_glib_none().0,
+                    timestamp.to_glib(),
+                    interval.to_glib(),
+                    n_values,
+                    values.as_mut_ptr() as *mut gobject_sys::GValue,
+                ),
+                "Failed to get value array"
+            )
         }
     }
 }

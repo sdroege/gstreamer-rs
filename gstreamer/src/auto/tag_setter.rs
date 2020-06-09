@@ -28,8 +28,6 @@ pub trait TagSetterExt: 'static {
 
     //fn add_tag_valist_values(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
-    //fn add_tag_value(&self, mode: TagMergeMode, tag: &str, value: /*Ignored*/&glib::Value);
-
     //fn add_tag_values(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     //fn add_tags(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -52,10 +50,6 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
 
     //fn add_tag_valist_values(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call gst_sys:gst_tag_setter_add_tag_valist_values() }
-    //}
-
-    //fn add_tag_value(&self, mode: TagMergeMode, tag: &str, value: /*Ignored*/&glib::Value) {
-    //    unsafe { TODO: call gst_sys:gst_tag_setter_add_tag_value() }
     //}
 
     //fn add_tag_values(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {

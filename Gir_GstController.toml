@@ -1,0 +1,45 @@
+[options]
+girs_dir = "gir-files"
+library = "GstController"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-controller"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+doc_target_path = "docs/gstreamer-controller/docs.md"
+generate_display_trait = false
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstController.ARGBControlBinding",
+    "GstController.DirectControlBinding",
+    "GstController.InterpolationControlSource",
+    "GstController.LFOControlSource",
+    "GstController.ProxyControlBinding",
+    "GstController.TimedValueControlSource",
+    "GstController.TriggerControlSource",
+    "GstController.DirectControlBindingConvertValue",
+    "GstController.DirectControlBindingConvertGValue",
+    "GstController.LFOWaveform",
+    "GstController.InterpolationMode",
+]
+
+manual = [
+    "Gst.Object",
+    "Gst.ControlBinding",
+    "Gst.ControlSource",
+    "GstController.ControlPoint",
+]
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
