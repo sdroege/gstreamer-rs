@@ -1824,6 +1824,7 @@ Derived classes can use this as first value in a list of flags.</doc>
       
     </record>
     <class name="Bitmask" c:symbol-prefix="bitmask" glib:type-name="GstBitmask" glib:get-type="gst_bitmask_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a 64-bit bitmask</doc>
     </class>
     <record name="Buffer" c:type="GstBuffer" glib:type-name="GstBuffer" glib:get-type="gst_buffer_get_type" c:symbol-prefix="buffer">
       <doc xml:space="preserve">Buffers are the basic unit of data transfer in GStreamer. They contain the
@@ -12770,6 +12771,7 @@ metadata. Free with g_strfreev() when no longer needed.</doc>
       
     </record>
     <class name="DoubleRange" c:symbol-prefix="double_range" glib:type-name="GstDoubleRange" glib:get-type="gst_double_range_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a #gdouble range</doc>
     </class>
     <class name="DynamicTypeFactory" c:symbol-prefix="dynamic_type_factory" c:type="GstDynamicTypeFactory" parent="PluginFeature" glib:type-name="GstDynamicTypeFactory" glib:get-type="gst_dynamic_type_factory_get_type" glib:type-struct="DynamicTypeFactoryClass">
       <doc xml:space="preserve">#GstDynamicTypeFactory is used to represent a type that can be
@@ -18850,6 +18852,8 @@ printf ("fourcc: %" GST_FOURCC_FORMAT "\n", GST_FOURCC_ARGS (fcc));
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <class name="FlagSet" c:symbol-prefix="flagset" glib:type-name="GstFlagSet" glib:get-type="gst_flagset_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a 32-bit flag bitfield, with 32-bit
+mask indicating which of the bits in the field are explicitly set.</doc>
       <function name="register" c:identifier="gst_flagset_register" version="1.6">
         <doc xml:space="preserve">Create a new sub-class of #GST_TYPE_FLAG_SET
 which will pretty-print the human-readable flags
@@ -19060,8 +19064,11 @@ is unknown.</doc>
       </field>
     </record>
     <class name="Fraction" c:symbol-prefix="fraction" glib:type-name="GstFraction" glib:get-type="gst_fraction_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a fraction of an integer numerator
+over an integer denominator</doc>
     </class>
     <class name="FractionRange" c:symbol-prefix="fraction_range" glib:type-name="GstFractionRange" glib:get-type="gst_fraction_range_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a #GstFractionRange range</doc>
     </class>
     <function-macro name="GHOST_PAD" c:identifier="GST_GHOST_PAD" introspectable="0">
       
@@ -19962,8 +19969,10 @@ whenever the datastructure changes.</doc>
       </parameters>
     </function-macro>
     <class name="Int64Range" c:symbol-prefix="int64_range" glib:type-name="GstInt64Range" glib:get-type="gst_int64_range_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a #gint64 range</doc>
     </class>
     <class name="IntRange" c:symbol-prefix="int_range" glib:type-name="GstIntRange" glib:get-type="gst_int_range_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a #gint range</doc>
     </class>
     <record name="Iterator" c:type="GstIterator" glib:type-name="GstIterator" glib:get-type="gst_iterator_get_type" c:symbol-prefix="iterator">
       <doc xml:space="preserve">A GstIterator is used to retrieve multiple objects from another object in
@@ -27170,13 +27179,21 @@ functions instead.</doc>
         </parameter>
       </parameters>
     </function-macro>
+    <constant name="PARAM_CONDITIONALLY_AVAILABLE" value="16384" c:type="GST_PARAM_CONDITIONALLY_AVAILABLE" version="1.18">
+      <doc xml:space="preserve">Use this flag on GObject properties of GstObject to indicate that
+they might not be available depending on environment such as OS, device, etc,
+so such properties will be installed conditionally only if the GstObject is
+able to support it.</doc>
+      
+      <type name="gint" c:type="gint"/>
+    </constant>
     <constant name="PARAM_CONTROLLABLE" value="512" c:type="GST_PARAM_CONTROLLABLE">
       <doc xml:space="preserve">Use this flag on GObject properties to signal they can make sense to be.
 controlled over time. This hint is used by the GstController.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="PARAM_DOC_SHOW_DEFAULT" value="8192" c:type="GST_PARAM_DOC_SHOW_DEFAULT">
+    <constant name="PARAM_DOC_SHOW_DEFAULT" value="8192" c:type="GST_PARAM_DOC_SHOW_DEFAULT" version="1.18">
       <doc xml:space="preserve">Use this flag on GObject properties of GstObject to indicate that
 during `gst-inspect` and friends, the default value should be used
 as default instead of the current value.</doc>
@@ -30789,6 +30806,21 @@ Unref after usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_documentation_caps" c:identifier="gst_pad_template_get_documentation_caps" version="1.18">
+        <doc xml:space="preserve">See gst_pad_template_set_documentation_caps().</doc>
+        
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">The caps to document. For convenience, this will return
+  gst_pad_template_get_caps() when no documentation caps were set.</doc>
+          <type name="Caps" c:type="GstCaps*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="templ" transfer-ownership="none">
+            <doc xml:space="preserve">the pad template to get documented capabilities on</doc>
+            <type name="PadTemplate" c:type="GstPadTemplate*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="pad_created" c:identifier="gst_pad_template_pad_created">
         <doc xml:space="preserve">Emit the pad-created signal for this template when created by this pad.</doc>
         
@@ -30803,6 +30835,26 @@ Unref after usage.</doc>
           <parameter name="pad" transfer-ownership="none">
             <doc xml:space="preserve">the #GstPad that created it</doc>
             <type name="Pad" c:type="GstPad*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_documentation_caps" c:identifier="gst_pad_template_set_documentation_caps" version="1.18">
+        <doc xml:space="preserve">Certain elements will dynamically construct the caps of their
+pad templates. In order not to let environment-specific information
+into the documentation, element authors should use this method to
+expose "stable" caps to the reader.</doc>
+        
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="templ" transfer-ownership="none">
+            <doc xml:space="preserve">the pad template to set documented capabilities on</doc>
+            <type name="PadTemplate" c:type="GstPadTemplate*"/>
+          </instance-parameter>
+          <parameter name="caps" transfer-ownership="none">
+            <doc xml:space="preserve">the documented capabilities</doc>
+            <type name="Caps" c:type="GstCaps*"/>
           </parameter>
         </parameters>
       </method>
@@ -30852,6 +30904,9 @@ Unref after usage.</doc>
           
           <field name="gtype" writable="1">
             <type name="GType" c:type="GType"/>
+          </field>
+          <field name="documentation_caps" writable="1">
+            <type name="Caps" c:type="GstCaps*"/>
           </field>
         </record>
       </union>
@@ -30926,8 +30981,12 @@ pad functions cannot be called from within the callback.</doc>
       </parameters>
     </callback>
     <class name="ParamArray" c:symbol-prefix="param_spec_array" parent="GObject.ParamSpec" glib:type-name="GstParamArray" glib:get-type="gst_param_spec_array_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a #GParamSpec for arrays of
+values</doc>
     </class>
     <class name="ParamFraction" c:symbol-prefix="param_spec_fraction" parent="GObject.ParamSpec" glib:type-name="GstParamFraction" glib:get-type="gst_param_spec_fraction_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes a #GParamSpec for fractional
+properties</doc>
     </class>
     <record name="ParamSpecArray" c:type="GstParamSpecArray">
       <doc xml:space="preserve">A GParamSpec derived structure for arrays of values.</doc>
@@ -31998,6 +32057,13 @@ The cache is flushed every time the registry is rebuilt.</doc>
         </parameters>
       </method>
     </class>
+    <bitfield name="PluginAPIFlags" version="1.18" glib:type-name="GstPluginAPIFlags" glib:get-type="gst_plugin_api_flags_get_type" c:type="GstPluginAPIFlags">
+      <member name="members" value="1" c:identifier="GST_PLUGIN_API_FLAG_IGNORE_ENUM_MEMBERS" glib:nick="members">
+        <doc xml:space="preserve">Ignore enum members when generating
+  the plugins cache. This is useful if the members of the enum are generated
+  dynamically, in order not to expose incorrect documentation to the end user.</doc>
+      </member>
+    </bitfield>
     <record name="PluginClass" c:type="GstPluginClass" disguised="1" glib:is-gtype-struct-for="Plugin">
       
     </record>
@@ -39185,22 +39251,23 @@ whether a stream is of a certain type.</doc>
       </function>
     </bitfield>
     <record name="Structure" c:type="GstStructure" glib:type-name="GstStructure" glib:get-type="gst_structure_get_type" c:symbol-prefix="structure">
-      <doc xml:space="preserve">A #GstStructure is a collection of key/value pairs. The keys are expressed
-as GQuarks and the values can be of any GType.
+      <doc xml:space="preserve">A #GstStructure is a collection of key/value pairs. The keys are expressed as
+GQuarks and the values can be of any GType.
 
 In addition to the key/value pairs, a #GstStructure also has a name. The name
-starts with a letter and can be filled by letters, numbers and any of "/-_.:".
+starts with a letter and can be filled by letters, numbers and any of
+"/-_.:".
 
-#GstStructure is used by various GStreamer subsystems to store information
-in a flexible and extensible way. A #GstStructure does not have a refcount
+#GstStructure is used by various GStreamer subsystems to store information in
+a flexible and extensible way. A #GstStructure does not have a refcount
 because it usually is part of a higher level object such as #GstCaps,
 #GstMessage, #GstEvent, #GstQuery. It provides a means to enforce mutability
 using the refcount of the parent with the gst_structure_set_parent_refcount()
 method.
 
 A #GstStructure can be created with gst_structure_new_empty() or
-gst_structure_new(), which both take a name and an optional set of
-key/value pairs along with the types of the values.
+gst_structure_new(), which both take a name and an optional set of key/value
+pairs along with the types of the values.
 
 Field values can be changed with gst_structure_set_value() or
 gst_structure_set().
@@ -39211,14 +39278,78 @@ convenient gst_structure_get_*() functions.
 Fields can be removed with gst_structure_remove_field() or
 gst_structure_remove_fields().
 
-Strings in structures must be ASCII or UTF-8 encoded. Other encodings are
-not allowed. Strings may be %NULL however.
+Strings in structures must be ASCII or UTF-8 encoded. Other encodings are not
+allowed. Strings may be %NULL however.
 
-Be aware that the current #GstCaps / #GstStructure serialization into string
-has limited support for nested #GstCaps / #GstStructure fields. It can only
-support one level of nesting. Using more levels will lead to unexpected
-behavior when using serialization features, such as gst_caps_to_string() or
-gst_value_serialize() and their counterparts.</doc>
+## The serialization format
+
+GstStructure serialization format serialize the GstStructure name,
+keys/GType/values in a comma separated list with the structure name as first
+field without value followed by separated key/value pairs in the form
+`key=value`, for example:
+
+```
+a-structure, key=value
+````
+
+The values type will be inferred if not explicitly specified with the
+`(GTypeName)value` syntax, for example the following struct will have one
+field called 'is-string' which has the string 'true' as a value:
+
+```
+a-struct, field-is-string=(string)true, field-is-boolean=true
+```
+
+*Note*: without specifying `(string), `field-is-string` type would have been
+inferred as boolean.
+
+*Note*: we specified `(string)` as a type even if `gchararray` is the actual
+GType name as for convenience some well known types have been aliased or
+abbreviated.
+
+To avoid specifying the type, you can give some hints to the "type system".
+For example to specify a value as a double, you should add a decimal (ie. `1`
+is an `int` while `1.0` is a `double`).
+
+*Note*: when a structure is serialized with #gst_structure_to_string, all
+values are explicitly typed.
+
+Some types have special delimiters:
+
+- [GstValueArray](GST_TYPE_ARRAY) are inside curly brackets (`{` and `}`).
+  For example `a-structure, array={1, 2, 3}`
+- Ranges are inside brackets (`[` and `]`). For example `a-structure,
+  range=[1, 6, 2]` 1 being the min value, 6 the maximum and 2 the step. To
+  specify a #GST_TYPE_INT64_RANGE you need to explicitly specify it like:
+  `a-structure, a-int64-range=(gint64) [1, 5]`
+- [GstValueList](GST_TYPE_LIST) are inside "less and greater than" (`&lt;` and
+  `&gt;`). For example `a-structure, list=&lt;1, 2, 3&gt;
+
+Structures are delimited either by a null character `\0` or a semicolumn `;`
+the latter allowing to store multiple structures in the same string (see
+#GstCaps).
+
+Quotes are used as "default" delimiters and can be used around any types that
+don't use other delimiters (for example `a-struct, i=(int)"1"`). They are use
+to allow adding spaces or special characters (such as delimiters,
+semicolumns, etc..) inside strings and you can use backslashes `\` to escape
+characters inside them, for example:
+
+```
+a-struct, special="\"{[(;)]}\" can be used inside quotes"
+```
+
+They also allow for nested structure, such as:
+
+```
+a-struct, nested=(GstStructure)"nested-struct, nested=true"
+```
+
+&gt; *Note*: Be aware that the current #GstCaps / #GstStructure serialization
+&gt; into string has limited support for nested #GstCaps / #GstStructure fields.
+&gt; It can only support one level of nesting. Using more levels will lead to
+&gt; unexpected behavior when using serialization features, such as
+&gt; gst_caps_to_string() or gst_value_serialize() and their counterparts.</doc>
       
       <field name="type" writable="1">
         <doc xml:space="preserve">the GType of a structure</doc>
@@ -46875,6 +47006,7 @@ Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc
       <type name="gint" c:type="gint"/>
     </constant>
     <class name="ValueArray" c:symbol-prefix="value_array" c:type="GstValueArray" glib:type-name="GstValueArray" glib:get-type="gst_value_array_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes an ordered list of #GValue</doc>
       <function name="append_and_take_value" c:identifier="gst_value_array_append_and_take_value" version="1.2">
         <doc xml:space="preserve">Appends @append_value to the GstValueArray in @value.</doc>
         
@@ -47016,6 +47148,7 @@ or GST_VALUE_UNORDERED</doc>
       </parameters>
     </callback>
     <class name="ValueList" c:symbol-prefix="value_list" glib:type-name="GstValueList" glib:get-type="gst_value_list_get_type" glib:fundamental="1">
+      <doc xml:space="preserve">A fundamental type that describes an unordered list of #GValue</doc>
       <function name="append_and_take_value" c:identifier="gst_value_list_append_and_take_value" version="1.2">
         <doc xml:space="preserve">Appends @append_value to the GstValueList in @value.</doc>
         
@@ -50680,6 +50813,51 @@ This function is typically called during an element's plugin initialization.</do
           <doc xml:space="preserve">a #GDestroyNotify that will be called on @data when the plugin
        is unloaded.</doc>
           <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="type_is_plugin_api" c:identifier="gst_type_is_plugin_api" version="1.18">
+      <doc xml:space="preserve">Checks if @type is plugin API. See gst_type_mark_as_plugin_api() for
+details.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">%TRUE if @type is plugin API or %FALSE otherwise.</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="type" transfer-ownership="none">
+          <doc xml:space="preserve">a GType</doc>
+          <type name="GType" c:type="GType"/>
+        </parameter>
+        <parameter name="flags" direction="out" caller-allocates="0" transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">What #GstPluginAPIFlags the plugin was marked with</doc>
+          <type name="PluginAPIFlags" c:type="GstPluginAPIFlags*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="type_mark_as_plugin_api" c:identifier="gst_type_mark_as_plugin_api" version="1.18">
+      <doc xml:space="preserve">Marks @type as plugin API. This should be called in `class_init` of
+elements that expose new types (i.e. enums, flags or internal GObjects) via
+properties, signals or pad templates.
+
+Types exposed by plugins are not automatically added to the documentation
+as they might originate from another library and should in that case be
+documented via that library instead.
+
+By marking a type as plugin API it will be included in the documentation of
+the plugin that defines it.</doc>
+      
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="type" transfer-ownership="none">
+          <doc xml:space="preserve">a GType</doc>
+          <type name="GType" c:type="GType"/>
+        </parameter>
+        <parameter name="flags" transfer-ownership="none">
+          <doc xml:space="preserve">a set of #GstPluginAPIFlags to further inform cache generation.</doc>
+          <type name="PluginAPIFlags" c:type="GstPluginAPIFlags"/>
         </parameter>
       </parameters>
     </function>
