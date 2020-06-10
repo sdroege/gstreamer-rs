@@ -23,6 +23,10 @@ external_libraries = [
     "GObject",
 ]
 
+ignore = [
+    "GstVideo.VIDEO_FORMATS_ALL",
+]
+
 [[lib_version_overrides]]
 version = "1.18"
 lib_version = "1.17"
