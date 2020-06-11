@@ -73,8 +73,8 @@ stages:
   - .fdo.container-build@debian
   stage: container-base
   variables:
-    FDO_DISTRIBUTION_PACKAGES: "build-essential curl liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev"
-    FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh'
+    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev"
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates'
 
 .build-final-image:
   extends:
@@ -258,6 +258,12 @@ rustfmt:
   script:
     - cargo fmt --version
     - cargo fmt -- --color=always --check
+
+check commits:
+  extends: .img-stable
+  stage: "lint"
+  script:
+    - ci-fairy check-commits --textwidth 0 --no-signed-off-by
 
 clippy:
   extends: .img-stable
