@@ -25,7 +25,7 @@ impl GLDisplayWayland {
         }
     }
 
-    //pub fn new_with_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayWayland {
+    //pub fn with_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayWayland {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_display_wayland_new_with_display() }
     //}
 }

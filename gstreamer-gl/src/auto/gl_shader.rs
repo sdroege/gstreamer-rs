@@ -64,7 +64,7 @@ impl GLShader {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_shader_new_link_with_stages() }
     //}
 
-    //pub fn new_with_stages<P: IsA<GLContext>>(context: &P, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn with_stages<P: IsA<GLContext>>(context: &P, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_shader_new_with_stages() }
     //}
 

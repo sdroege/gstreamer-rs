@@ -30,7 +30,7 @@ impl DateTime {
                     d.to_utc()
                         .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
                 })
-                .and_then(|d| DateTime::new_from_g_date_time(&d))
+                .and_then(|d| DateTime::from_g_date_time(&d))
         } else {
             // It would be cheaper to build a `glib::DateTime` direcly, unfortunetaly
             // this would require using `glib::TimeZone::new_offset` which is feature-gated
@@ -235,7 +235,7 @@ impl<'a> convert::TryFrom<&'a glib::DateTime> for DateTime {
 
     fn try_from(v: &'a glib::DateTime) -> Result<DateTime, glib::BoolError> {
         skip_assert_initialized!();
-        DateTime::new_from_g_date_time(v)
+        DateTime::from_g_date_time(v)
     }
 }
 
@@ -244,7 +244,7 @@ impl convert::TryFrom<glib::DateTime> for DateTime {
 
     fn try_from(v: glib::DateTime) -> Result<DateTime, glib::BoolError> {
         skip_assert_initialized!();
-        DateTime::new_from_g_date_time(&v)
+        DateTime::from_g_date_time(&v)
     }
 }
 

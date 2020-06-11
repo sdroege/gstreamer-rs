@@ -49,7 +49,7 @@ impl GLSLStage {
         }
     }
 
-    pub fn new_with_string<P: IsA<GLContext>>(
+    pub fn with_string<P: IsA<GLContext>>(
         context: &P,
         type_: u32,
         version: GLSLVersion,
@@ -68,7 +68,7 @@ impl GLSLStage {
         }
     }
 
-    pub fn new_with_strings<P: IsA<GLContext>>(
+    pub fn with_strings<P: IsA<GLContext>>(
         context: &P,
         type_: u32,
         version: GLSLVersion,

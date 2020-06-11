@@ -21,7 +21,7 @@ impl GLDisplayX11 {
         unsafe { from_glib_full(gst_gl_sys::gst_gl_display_x11_new(name.to_glib_none().0)) }
     }
 
-    //pub fn new_with_display(display: /*Unimplemented*/Fundamental: Pointer) -> GLDisplayX11 {
+    //pub fn with_display(display: /*Unimplemented*/Fundamental: Pointer) -> GLDisplayX11 {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_display_x11_new_with_display() }
     //}
 }

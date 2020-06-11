@@ -50,7 +50,7 @@ impl Pad {
         }
     }
 
-    pub fn new_from_template(templ: &PadTemplate, name: Option<&str>) -> Pad {
+    pub fn from_template(templ: &PadTemplate, name: Option<&str>) -> Pad {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(gst_sys::gst_pad_new_from_template(

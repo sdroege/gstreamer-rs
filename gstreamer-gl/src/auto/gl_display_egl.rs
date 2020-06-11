@@ -21,7 +21,7 @@ impl GLDisplayEGL {
         unsafe { from_glib_full(gst_gl_sys::gst_gl_display_egl_new()) }
     }
 
-    //pub fn new_with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {
+    //pub fn with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_display_egl_new_with_egl_display() }
     //}
 

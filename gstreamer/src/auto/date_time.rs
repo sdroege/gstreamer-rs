@@ -37,7 +37,7 @@ impl DateTime {
         }
     }
 
-    pub fn new_from_g_date_time(dt: &glib::DateTime) -> Result<DateTime, glib::BoolError> {
+    pub fn from_g_date_time(dt: &glib::DateTime) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(gst_sys::gst_date_time_new_from_g_date_time(
@@ -47,7 +47,7 @@ impl DateTime {
         }
     }
 
-    pub fn new_from_iso8601_string(string: &str) -> Result<DateTime, glib::BoolError> {
+    pub fn from_iso8601_string(string: &str) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(gst_sys::gst_date_time_new_from_iso8601_string(
@@ -57,13 +57,13 @@ impl DateTime {
         }
     }
 
-    pub fn new_from_unix_epoch_local_time(secs: i64) -> DateTime {
+    pub fn from_unix_epoch_local_time(secs: i64) -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_local_time(secs)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
-    pub fn new_from_unix_epoch_local_time_usecs(usecs: i64) -> DateTime {
+    pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> DateTime {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_local_time_usecs(
@@ -72,13 +72,13 @@ impl DateTime {
         }
     }
 
-    pub fn new_from_unix_epoch_utc(secs: i64) -> DateTime {
+    pub fn from_unix_epoch_utc(secs: i64) -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_utc(secs)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
-    pub fn new_from_unix_epoch_utc_usecs(usecs: i64) -> DateTime {
+    pub fn from_unix_epoch_utc_usecs(usecs: i64) -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_utc_usecs(usecs)) }
     }

@@ -609,9 +609,9 @@ mod tests {
 
         fn new_with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
             let templ = klass.get_pad_template("sink").unwrap();
-            let sinkpad = ::Pad::new_from_template(&templ, Some("sink"));
+            let sinkpad = ::Pad::from_template(&templ, Some("sink"));
             let templ = klass.get_pad_template("src").unwrap();
-            let srcpad = ::Pad::new_from_template(&templ, Some("src"));
+            let srcpad = ::Pad::from_template(&templ, Some("src"));
 
             TestElement::set_pad_functions(&sinkpad, &srcpad);
 

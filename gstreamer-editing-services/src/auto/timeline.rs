@@ -42,7 +42,7 @@ impl Timeline {
         unsafe { from_glib_none(ges_sys::ges_timeline_new_audio_video()) }
     }
 
-    pub fn new_from_uri(uri: &str) -> Result<Option<Timeline>, glib::Error> {
+    pub fn from_uri(uri: &str) -> Result<Option<Timeline>, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();

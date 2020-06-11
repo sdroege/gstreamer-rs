@@ -30,7 +30,7 @@ impl TestClock {
         unsafe { gst::Clock::from_glib_full(gst_check_sys::gst_test_clock_new()).unsafe_cast() }
     }
 
-    pub fn new_with_start_time(start_time: gst::ClockTime) -> TestClock {
+    pub fn with_start_time(start_time: gst::ClockTime) -> TestClock {
         assert_initialized_main_thread!();
         unsafe {
             gst::Clock::from_glib_full(gst_check_sys::gst_test_clock_new_with_start_time(

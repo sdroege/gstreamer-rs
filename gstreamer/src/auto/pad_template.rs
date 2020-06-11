@@ -50,7 +50,7 @@ impl PadTemplate {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn new_with_gtype(
+    pub fn with_gtype(
         name_template: &str,
         direction: PadDirection,
         presence: PadPresence,

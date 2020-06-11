@@ -27,7 +27,7 @@ impl GLFramebuffer {
         }
     }
 
-    pub fn new_with_default_depth<P: IsA<GLContext>>(
+    pub fn with_default_depth<P: IsA<GLContext>>(
         context: &P,
         width: u32,
         height: u32,
