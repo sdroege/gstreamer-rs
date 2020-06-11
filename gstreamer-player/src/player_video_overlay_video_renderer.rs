@@ -25,7 +25,7 @@ impl PlayerVideoOverlayVideoRenderer {
         ) as *mut _)
     }
 
-    pub unsafe fn new_with_handle_and_sink<P: IsA<gst::Element>>(
+    pub unsafe fn with_handle_and_sink<P: IsA<gst::Element>>(
         window_handle: uintptr_t,
         video_sink: &P,
     ) -> PlayerVideoOverlayVideoRenderer {
@@ -39,7 +39,7 @@ impl PlayerVideoOverlayVideoRenderer {
         )
     }
 
-    pub fn new_with_sink<P: IsA<gst::Element>>(video_sink: &P) -> PlayerVideoOverlayVideoRenderer {
+    pub fn with_sink<P: IsA<gst::Element>>(video_sink: &P) -> PlayerVideoOverlayVideoRenderer {
         assert_initialized_main_thread!();
 
         unsafe {

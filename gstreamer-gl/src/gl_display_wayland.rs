@@ -13,7 +13,7 @@ use libc::uintptr_t;
 use GLDisplayWayland;
 
 impl GLDisplayWayland {
-    pub unsafe fn new_with_display(
+    pub unsafe fn with_display(
         display: uintptr_t,
     ) -> Result<GLDisplayWayland, glib::error::BoolError> {
         let result = from_glib_full(gst_gl_sys::gst_gl_display_wayland_new_with_display(

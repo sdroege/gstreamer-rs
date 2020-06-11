@@ -13,9 +13,7 @@ use libc::uintptr_t;
 use GLDisplayX11;
 
 impl GLDisplayX11 {
-    pub unsafe fn new_with_display(
-        display: uintptr_t,
-    ) -> Result<GLDisplayX11, glib::error::BoolError> {
+    pub unsafe fn with_display(display: uintptr_t) -> Result<GLDisplayX11, glib::error::BoolError> {
         let result = from_glib_full(gst_gl_sys::gst_gl_display_x11_new_with_display(
             display as gpointer,
         ));

@@ -14,7 +14,7 @@ use GLDisplayEGL;
 use GLDisplayType;
 
 impl GLDisplayEGL {
-    pub unsafe fn new_with_egl_display(
+    pub unsafe fn with_egl_display(
         display: uintptr_t,
     ) -> Result<GLDisplayEGL, glib::error::BoolError> {
         let result = from_glib_full(gst_gl_sys::gst_gl_display_egl_new_with_egl_display(

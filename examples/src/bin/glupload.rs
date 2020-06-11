@@ -360,18 +360,17 @@ impl App {
                 #[cfg(any(feature = "gl-egl", feature = "gl-wayland"))]
                 RawHandle::Egl(egl_context) => {
                     #[cfg(feature = "gl-egl")]
-                    let gl_display =
-                        if let Some(display) = unsafe { windowed_context.get_egl_display() } {
-                            unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(display as usize) }
-                                .unwrap()
-                        } else {
-                            panic!("EGL context without EGL display");
-                        };
+                    let gl_display = if let Some(display) =
+                        unsafe { windowed_context.get_egl_display() }
+                    {
+                        unsafe { gst_gl::GLDisplayEGL::with_egl_display(display as usize) }.unwrap()
+                    } else {
+                        panic!("EGL context without EGL display");
+                    };
 
                     #[cfg(not(feature = "gl-egl"))]
                     let gl_display = if let Some(display) = inner_window.get_wayland_display() {
-                        unsafe { gst_gl::GLDisplayWayland::new_with_display(display as usize) }
-                            .unwrap()
+                        unsafe { gst_gl::GLDisplayWayland::with_display(display as usize) }.unwrap()
                     } else {
                         panic!("Wayland window without Wayland display");
                     };
@@ -385,7 +384,7 @@ impl App {
                 #[cfg(feature = "gl-x11")]
                 RawHandle::Glx(glx_context) => {
                     let gl_display = if let Some(display) = inner_window.get_xlib_display() {
-                        unsafe { gst_gl::GLDisplayX11::new_with_display(display as usize) }.unwrap()
+                        unsafe { gst_gl::GLDisplayX11::with_display(display as usize) }.unwrap()
                     } else {
                         panic!("X11 window without X Display");
                     };

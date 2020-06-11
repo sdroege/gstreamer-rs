@@ -30,7 +30,7 @@ impl GhostPad {
         }
     }
 
-    pub fn new_from_template<Q: IsA<Pad>>(
+    pub fn from_template<Q: IsA<Pad>>(
         name: Option<&str>,
         target: &Q,
         templ: &PadTemplate,

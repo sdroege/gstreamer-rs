@@ -42,7 +42,7 @@ impl Promise {
         unsafe { from_glib_full(gst_sys::gst_promise_new()) }
     }
 
-    pub fn new_with_change_func<F>(func: F) -> Promise
+    pub fn with_change_func<F>(func: F) -> Promise
     where
         F: FnOnce(Result<Option<&StructureRef>, PromiseError>) + Send + 'static,
     {
@@ -95,7 +95,7 @@ impl Promise {
 
         // We only use the channel as a convenient waker
         let (sender, receiver) = oneshot::channel();
-        let promise = Self::new_with_change_func(move |_res| {
+        let promise = Self::with_change_func(move |_res| {
             let _ = sender.send(());
         });
 
@@ -199,7 +199,7 @@ mod tests {
         ::init().unwrap();
 
         let (sender, receiver) = channel();
-        let promise = Promise::new_with_change_func(move |res| {
+        let promise = Promise::with_change_func(move |res| {
             sender.send(res.map(|s| s.map(ToOwned::to_owned))).unwrap();
         });
 

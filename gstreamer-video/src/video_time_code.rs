@@ -72,7 +72,7 @@ impl VideoTimeCode {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn new_from_date_time(
+    pub fn from_date_time(
         fps: gst::Fraction,
         dt: &glib::DateTime,
         flags: VideoTimeCodeFlags,
@@ -183,13 +183,13 @@ impl ValidVideoTimeCode {
     }
 
     //    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    //    pub fn new_from_date_time(
+    //    pub fn from_date_time(
     //        fps: gst::Fraction,
     //        dt: &glib::DateTime,
     //        flags: VideoTimeCodeFlags,
     //        field_count: u32,
     //    ) -> Option<VideoTimeCode> {
-    //        let tc = VideoTimeCode::new_from_date_time(fps, dt, flags, field_count);
+    //        let tc = VideoTimeCode::from_date_time(fps, dt, flags, field_count);
     //        tc.and_then(|tc| tc.try_into().ok())
     //    }
 

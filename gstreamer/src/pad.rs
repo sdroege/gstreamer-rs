@@ -50,7 +50,7 @@ use libc;
 use gst_sys;
 
 impl Pad {
-    pub fn new_from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Pad {
+    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Pad {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(gst_sys::gst_pad_new_from_static_template(

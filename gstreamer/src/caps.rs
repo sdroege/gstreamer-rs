@@ -42,12 +42,12 @@ impl Caps {
 
     pub fn builder_full_with_features(features: CapsFeatures) -> BuilderFull<SomeFeatures> {
         assert_initialized_main_thread!();
-        BuilderFull::new_with_features(features)
+        BuilderFull::with_features(features)
     }
 
     pub fn builder_full_with_any_features() -> BuilderFull<AnyFeatures> {
         assert_initialized_main_thread!();
-        BuilderFull::new_with_any_features()
+        BuilderFull::with_any_features()
     }
 
     pub fn new_empty() -> Self {
@@ -669,7 +669,7 @@ impl BuilderFull<SomeFeatures> {
         }
     }
 
-    fn new_with_features(features: CapsFeatures) -> Self {
+    fn with_features(features: CapsFeatures) -> Self {
         skip_assert_initialized!();
         BuilderFull {
             caps: Caps::new_empty(),
@@ -688,7 +688,7 @@ impl BuilderFull<SomeFeatures> {
 }
 
 impl BuilderFull<AnyFeatures> {
-    fn new_with_any_features() -> Self {
+    fn with_any_features() -> Self {
         BuilderFull {
             caps: Caps::new_empty(),
             features: Some(CapsFeatures::new_any()),

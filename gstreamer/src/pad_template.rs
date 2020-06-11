@@ -19,7 +19,7 @@ use gst_sys;
 
 impl PadTemplate {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn new_from_static_pad_template_with_gtype(
+    pub fn from_static_pad_template_with_gtype(
         pad_template: &StaticPadTemplate,
         pad_type: glib::types::Type,
     ) -> Result<PadTemplate, glib::BoolError> {

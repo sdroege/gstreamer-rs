@@ -298,10 +298,10 @@ impl<T: Copy> IntRange<T> {
 impl IntRange<i32> {
     pub fn new(min: i32, max: i32) -> Self {
         skip_assert_initialized!();
-        Self::new_with_step(min, max, 1)
+        Self::with_step(min, max, 1)
     }
 
-    pub fn new_with_step(min: i32, max: i32, step: i32) -> Self {
+    pub fn with_step(min: i32, max: i32, step: i32) -> Self {
         assert_initialized_main_thread!();
 
         assert!(min <= max);
@@ -314,10 +314,10 @@ impl IntRange<i32> {
 impl IntRange<i64> {
     pub fn new(min: i64, max: i64) -> Self {
         skip_assert_initialized!();
-        Self::new_with_step(min, max, 1)
+        Self::with_step(min, max, 1)
     }
 
-    pub fn new_with_step(min: i64, max: i64, step: i64) -> Self {
+    pub fn with_step(min: i64, max: i64, step: i64) -> Self {
         assert_initialized_main_thread!();
 
         assert!(min <= max);
@@ -337,7 +337,7 @@ impl From<(i32, i32)> for IntRange<i32> {
 impl From<(i32, i32, i32)> for IntRange<i32> {
     fn from((min, max, step): (i32, i32, i32)) -> Self {
         skip_assert_initialized!();
-        Self::new_with_step(min, max, step)
+        Self::with_step(min, max, step)
     }
 }
 
@@ -351,7 +351,7 @@ impl From<(i64, i64)> for IntRange<i64> {
 impl From<(i64, i64, i64)> for IntRange<i64> {
     fn from((min, max, step): (i64, i64, i64)) -> Self {
         skip_assert_initialized!();
-        Self::new_with_step(min, max, step)
+        Self::with_step(min, max, step)
     }
 }
 
@@ -367,7 +367,7 @@ impl<'a> FromValue<'a> for IntRange<i32> {
         let max = gst_sys::gst_value_get_int_range_max(v.to_glib_none().0);
         let step = gst_sys::gst_value_get_int_range_step(v.to_glib_none().0);
 
-        Self::new_with_step(min, max, step)
+        Self::with_step(min, max, step)
     }
 }
 
@@ -395,7 +395,7 @@ impl<'a> FromValue<'a> for IntRange<i64> {
         let max = gst_sys::gst_value_get_int64_range_max(v.to_glib_none().0);
         let step = gst_sys::gst_value_get_int64_range_step(v.to_glib_none().0);
 
-        Self::new_with_step(min, max, step)
+        Self::with_step(min, max, step)
     }
 }
 

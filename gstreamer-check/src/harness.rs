@@ -614,7 +614,7 @@ impl Harness {
         }
     }
 
-    pub fn new_with_element<P: IsA<gst::Element>>(
+    pub fn with_element<P: IsA<gst::Element>>(
         element: &P,
         element_sinkpad_name: Option<&str>,
         element_srcpad_name: Option<&str>,
@@ -631,7 +631,7 @@ impl Harness {
         }
     }
 
-    pub fn new_with_padnames(
+    pub fn with_padnames(
         element_name: &str,
         element_sinkpad_name: Option<&str>,
         element_srcpad_name: Option<&str>,
@@ -648,7 +648,7 @@ impl Harness {
         }
     }
 
-    pub fn new_with_templates(
+    pub fn with_templates(
         element_name: &str,
         hsrc: Option<&gst::StaticPadTemplate>,
         hsink: Option<&gst::StaticPadTemplate>,
