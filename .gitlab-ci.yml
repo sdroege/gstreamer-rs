@@ -94,6 +94,12 @@ rustfmt:
     - cargo fmt --version
     - cargo fmt -- --color=always --check
 
+check commits:
+  extends: .img-stable
+  stage: "lint"
+  script:
+    - ci-fairy check-commits --textwidth 0 --no-signed-off-by
+
 outdated:
   extends: .img-stable
   allow_failure: true
