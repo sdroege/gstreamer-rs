@@ -64,6 +64,7 @@ manual = [
     "Gst.FlowReturn",
     "Gst.TagList",
     "Gst.TagMergeMode",
+    "GstBase.BaseSink",
     "GstBase.BaseTransform",
     "GstVideo.VideoCodecState",
     "GstVideo.VideoCodecFrame",
@@ -248,3 +249,12 @@ status = "generate"
 
     [[object.derive]]
     name = "Debug, Eq, PartialEq, Hash"
+
+[[object]]
+name = "GstVideo.VideoSink"
+status = "generate"
+
+    [[object.function]]
+    name = "center_rect"
+    # Implemented in video_rectangle
+    ignore = true

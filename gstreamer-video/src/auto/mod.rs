@@ -20,6 +20,10 @@ mod video_overlay;
 pub use self::video_overlay::VideoOverlayExt;
 pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
 
+mod video_sink;
+pub use self::video_sink::VideoSinkExt;
+pub use self::video_sink::{VideoSink, VideoSinkClass, NONE_VIDEO_SINK};
+
 mod enums;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 pub use self::enums::VideoAFDSpec;
@@ -63,4 +67,5 @@ pub mod traits {
     pub use super::VideoDecoderExt;
     pub use super::VideoEncoderExt;
     pub use super::VideoOverlayExt;
+    pub use super::VideoSinkExt;
 }
