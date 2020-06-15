@@ -2,7 +2,7 @@
 girs_dir = "gir-files"
 library = "Gst"
 version = "1.0"
-min_cfg_version = "1.0"
+min_cfg_version = "1.8"
 target_path = "gstreamer-sys"
 work_mode = "sys"
 
