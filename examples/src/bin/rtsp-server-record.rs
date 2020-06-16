@@ -58,7 +58,7 @@ fn main_loop() -> Result<(), Error> {
     let basic = RTSPAuth::make_basic("user", "password");
     // For propery authentication, we want to use encryption. And there's no
     // encryption without a certificate!
-    let cert = gio::TlsCertificate::new_from_pem(
+    let cert = gio::TlsCertificate::from_pem(
         "-----BEGIN CERTIFICATE-----\
          MIICJjCCAY+gAwIBAgIBBzANBgkqhkiG9w0BAQUFADCBhjETMBEGCgmSJomT8ixk\
          ARkWA0NPTTEXMBUGCgmSJomT8ixkARkWB0VYQU1QTEUxHjAcBgNVBAsTFUNlcnRp\
