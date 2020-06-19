@@ -33,8 +33,6 @@ generate = [
     "GstVideo.VideoFrameFlags",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
-    "GstVideo.VideoOverlayFormatFlags",
-    "GstVideo.VideoTimeCodeFlags",
     "GstVideo.VideoCaptionType",
     "GstVideo.VideoBufferPool",
     "GstVideo.VideoPackFlags",
@@ -258,3 +256,17 @@ status = "generate"
     name = "center_rect"
     # Implemented in video_rectangle
     ignore = true
+
+[[object]]
+name = "GstVideo.VideoOverlayFormatFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.16"
+
+[[object]]
+name = "GstVideo.VideoTimeCodeFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.18"

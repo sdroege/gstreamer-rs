@@ -103,6 +103,10 @@ concurrency = "send-unique"
         [object.function.return]
         nullable_return_is_error = "Failed to take buffer list"
 
+    [[object.function]]
+    name = "distance_from_discont"
+    version = "1.10"
+
 [[object]]
 name = "GstBase.FlowCombiner"
 # Manual because ref/unref functions were added much later
