@@ -16,6 +16,7 @@ use std::mem::transmute;
 use std::ptr;
 use Asset;
 use Extractable;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use FrameNumber;
 use Group;
 use Layer;
@@ -82,8 +83,10 @@ pub trait TimelineExt: 'static {
 
     fn get_element(&self, name: &str) -> Option<TimelineElement>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
 
     fn get_groups(&self) -> Vec<Group>;
@@ -242,12 +245,14 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
         unsafe {
             ges_sys::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.to_glib())
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime {
         unsafe {
             from_glib(ges_sys::ges_timeline_get_frame_time(

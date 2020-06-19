@@ -19,6 +19,7 @@ use Asset;
 use Clip;
 use Extractable;
 use Timeline;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use Track;
 use TrackType;
 
@@ -70,6 +71,7 @@ pub trait LayerExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
     fn get_auto_transition(&self) -> bool;
@@ -88,6 +90,7 @@ pub trait LayerExt: 'static {
 
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool;
 
     fn set_auto_transition(&self, auto_transition: bool);
@@ -191,6 +194,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool {
         unsafe {
             from_glib(ges_sys::ges_layer_get_active_for_track(
@@ -262,6 +266,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool {
         unsafe {
             from_glib(ges_sys::ges_layer_set_active_for_tracks(

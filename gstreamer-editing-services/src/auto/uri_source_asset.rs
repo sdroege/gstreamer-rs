@@ -27,6 +27,7 @@ pub trait UriSourceAssetExt: 'static {
 
     fn get_stream_uri(&self) -> Option<GString>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn is_image(&self) -> bool;
 }
 
@@ -55,6 +56,7 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn is_image(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_uri_source_asset_is_image(

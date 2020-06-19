@@ -48,6 +48,7 @@ impl Adapter {
         }
     }
 
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn distance_from_discont(&self) -> u64 {
         unsafe { gst_base_sys::gst_adapter_distance_from_discont(self.to_glib_none().0) }
     }

@@ -387,24 +387,28 @@ impl FromGlib<gst_video_sys::GstVideoOverlayFormatFlags> for VideoOverlayFormatF
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 impl StaticType for VideoOverlayFormatFlags {
     fn static_type() -> Type {
         unsafe { from_glib(gst_video_sys::gst_video_overlay_format_flags_get_type()) }
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for VideoOverlayFormatFlags {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 impl SetValue for VideoOverlayFormatFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
@@ -488,28 +492,28 @@ impl FromGlib<gst_video_sys::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl StaticType for VideoTimeCodeFlags {
     fn static_type() -> Type {
         unsafe { from_glib(gst_video_sys::gst_video_time_code_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for VideoTimeCodeFlags {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl<'a> FromValue<'a> for VideoTimeCodeFlags {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 impl SetValue for VideoTimeCodeFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())

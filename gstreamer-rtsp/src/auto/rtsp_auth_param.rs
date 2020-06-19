@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 use glib::translate::*;
 use gst_rtsp_sys;
 

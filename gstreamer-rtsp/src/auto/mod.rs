@@ -2,7 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 mod rtsp_auth_param;
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 pub use self::rtsp_auth_param::RTSPAuthParam;
 
 mod rtsp_url;

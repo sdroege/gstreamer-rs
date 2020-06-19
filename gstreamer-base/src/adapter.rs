@@ -85,6 +85,7 @@ impl UniqueAdapter {
         self.0.copy_bytes(offset, size)
     }
 
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn distance_from_discont(&self) -> u64 {
         self.0.distance_from_discont()
     }

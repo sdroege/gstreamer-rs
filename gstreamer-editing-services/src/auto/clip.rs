@@ -13,9 +13,11 @@ use glib::StaticType;
 use glib::Value;
 use glib_sys;
 use gobject_sys;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use std::ptr;
 use Asset;
 use BaseEffect;
@@ -42,6 +44,7 @@ pub const NONE_CLIP: Option<&Clip> = None;
 pub trait ClipExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
         &self,
         child: &P,
@@ -79,6 +82,7 @@ pub trait ClipExt: 'static {
 
     fn get_supported_formats(&self) -> TrackType;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
@@ -157,6 +161,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
         &self,
         child: &P,
@@ -273,6 +278,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,

@@ -72,6 +72,7 @@ pub trait TrackElementExt: 'static {
 
     fn get_track_type(&self) -> TrackType;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn has_internal_source(&self) -> bool;
 
     fn is_active(&self) -> bool;
@@ -90,6 +91,7 @@ pub trait TrackElementExt: 'static {
 
     //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn set_has_internal_source(&self, has_internal_source: bool);
 
     fn set_track_type(&self, type_: TrackType);
@@ -230,6 +232,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn has_internal_source(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_track_element_has_internal_source(
@@ -294,6 +297,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     //    unsafe { TODO: call ges_sys:ges_track_element_set_control_source() }
     //}
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn set_has_internal_source(&self, has_internal_source: bool) {
         unsafe {
             ges_sys::ges_track_element_set_has_internal_source(
