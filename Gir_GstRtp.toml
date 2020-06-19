@@ -30,3 +30,26 @@ lib_version = "1.17"
 [external_libraries]
 gstreamer="Gst"
 gstreamer_base="GstBase"
+
+[[object]]
+name = "GstRtp.*"
+status = "generate"
+    [[object.function]]
+    name = "rtp_source_meta_api_get_type"
+    version = "1.16"
+
+[[object]]
+name = "GstRtp.RTCPPacket"
+status = "generate"
+    [[object.function]]
+    name = "add_profile_specific_ext"
+    version = "1.10"
+    [[object.function]]
+    name = "copy_profile_specific_ext"
+    version = "1.10"
+    [[object.function]]
+    name = "get_profile_specific_ext"
+    version = "1.10"
+    [[object.function]]
+    name = "get_profile_specific_ext_length"
+    version = "1.10"

@@ -34,3 +34,33 @@ lib_version = "1.17"
 [external_libraries]
 gstreamer="Gst"
 gstreamer_base="GstBase"
+
+[[object]]
+name = "GstVideo.VideoOverlayFormatFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.16"
+
+[[object]]
+name = "GstVideo.VideoTimeCodeFlags"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.18"
+
+[[object]]
+name = "GstVideo.*"
+status = "generate"
+    [[object.function]]
+    name = "video_time_code_meta_api_get_type"
+    version = "1.16"
+    [[object.function]]
+    name = "video_caption_meta_api_get_type"
+    version = "1.16"
+    [[object.function]]
+    name = "video_afd_meta_api_get_type"
+    version = "1.18"
+    [[object.function]]
+    name = "video_bar_meta_api_get_type"
+    version = "1.18"

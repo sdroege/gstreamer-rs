@@ -31,3 +31,20 @@ lib_version = "1.17"
 [external_libraries]
 gstreamer="Gst"
 gstreamer_sdp="GstSdp"
+
+[[object]]
+name = "GstRtsp.RTSPAuthCredential"
+status = "generate"
+version = "1.12"
+
+[[object]]
+name = "GstRtsp.RTSPAuthParam"
+status = "generate"
+version = "1.12"
+
+[[object]]
+name = "GstRtsp.RTSPMessage"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.14"

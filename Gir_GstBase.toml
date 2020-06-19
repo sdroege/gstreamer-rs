@@ -29,3 +29,22 @@ lib_version = "1.17"
 
 [external_libraries]
 gstreamer="Gst"
+
+[[object]]
+name = "GstBase.AggregatorStartTimeSelection"
+status = "generate"
+version = "1.18"
+
+[[object]]
+name = "GstBase.Adapter"
+status = "generate"
+    [[object.function]]
+    name = "distance_from_discont"
+    version = "1.10"
+
+[[object]]
+name = "GstBase.BaseParseFrame"
+status = "generate"
+    [[object.function]]
+    name = "copy"
+    version = "1.12.1"
