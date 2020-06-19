@@ -54,7 +54,7 @@ name = "GstVideo.*"
 status = "generate"
     [[object.function]]
     name = "video_time_code_meta_api_get_type"
-    version = "1.16"
+    version = "1.10"
     [[object.function]]
     name = "video_caption_meta_api_get_type"
     version = "1.16"
