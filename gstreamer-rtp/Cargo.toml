@@ -22,9 +22,8 @@ gstreamer-rtp-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-
 glib = { git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
 
-[build-dependencies.rustdoc-stripper]
-version = "0.1"
-optional = true
+[build-dependencies]
+gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [features]
 default = []
@@ -33,8 +32,8 @@ v1_12 = ["gstreamer/v1_12", "gstreamer-rtp-sys/v1_12", "v1_10"]
 v1_14 = ["gstreamer/v1_14", "gstreamer-rtp-sys/v1_14", "v1_12"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-rtp-sys/v1_16", "v1_14"]
 v1_18 = ["gstreamer/v1_18", "gstreamer-rtp-sys/v1_18", "v1_16"]
-embed-lgpl-docs = ["rustdoc-stripper"]
-purge-lgpl-docs = ["rustdoc-stripper"]
+embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
+purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 dox = ["v1_18", "gstreamer-rtp-sys/dox", "glib/dox", "gstreamer/dox"]
 
 [package.metadata.docs.rs]

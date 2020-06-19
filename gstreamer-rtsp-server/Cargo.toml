@@ -32,7 +32,7 @@ gstreamer-rtsp = { path = "../gstreamer-rtsp" }
 gstreamer-net = { path = "../gstreamer-net" }
 
 [build-dependencies]
-rustdoc-stripper = { version = "0.1", optional = true }
+gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [features]
 default = []
@@ -41,8 +41,8 @@ v1_12 = ["gstreamer/v1_12", "gstreamer-sdp/v1_12", "gstreamer-rtsp/v1_12", "gstr
 v1_14 = ["gstreamer/v1_14", "gstreamer-sdp/v1_14", "gstreamer-rtsp/v1_14", "gstreamer-net/v1_14", "gstreamer-rtsp-server-sys/v1_14", "v1_12"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-sdp/v1_16", "gstreamer-rtsp/v1_16", "gstreamer-net/v1_16", "gstreamer-rtsp-server-sys/v1_16", "v1_14"]
 v1_18 = ["gstreamer/v1_18", "gstreamer-sdp/v1_18", "gstreamer-rtsp/v1_18", "gstreamer-net/v1_18", "gstreamer-rtsp-server-sys/v1_18", "v1_16"]
-embed-lgpl-docs = ["rustdoc-stripper"]
-purge-lgpl-docs = ["rustdoc-stripper"]
+embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
+purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 dox = ["v1_18", "gstreamer-rtsp-server-sys/dox", "glib/dox", "gstreamer/dox"]
 
 [package.metadata.docs.rs]

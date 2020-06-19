@@ -27,7 +27,7 @@ array-init = "0.1"
 once_cell = "1.0"
 
 [build-dependencies]
-rustdoc-stripper = { version = "0.1", optional = true }
+gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [dev-dependencies]
 itertools = "0.9"
@@ -39,8 +39,8 @@ v1_12 = ["gstreamer/v1_12", "gstreamer-base/v1_12", "gstreamer-audio-sys/v1_12",
 v1_14 = ["gstreamer/v1_14", "gstreamer-base/v1_14", "gstreamer-audio-sys/v1_14", "v1_12"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-base/v1_16", "gstreamer-audio-sys/v1_16", "v1_14"]
 v1_18 = ["gstreamer/v1_18", "gstreamer-base/v1_18", "gstreamer-audio-sys/v1_18", "v1_16"]
-embed-lgpl-docs = ["rustdoc-stripper"]
-purge-lgpl-docs = ["rustdoc-stripper"]
+embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
+purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 dox = ["v1_18", "gstreamer-audio-sys/dox", "glib/dox", "gstreamer/dox"]
 
 [package.metadata.docs.rs]

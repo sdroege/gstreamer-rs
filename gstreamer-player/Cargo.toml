@@ -24,15 +24,15 @@ gstreamer = { path = "../gstreamer", features = ["v1_12"] }
 gstreamer-video = { path = "../gstreamer-video", features = ["v1_12"] }
 
 [build-dependencies]
-rustdoc-stripper = { version = "0.1", optional = true }
+gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [features]
 default = []
 v1_14 = ["gstreamer/v1_14", "gstreamer-video/v1_14", "gstreamer-player-sys/v1_14"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-video/v1_16", "gstreamer-player-sys/v1_16", "v1_14"]
 v1_18 = ["gstreamer/v1_18", "gstreamer-video/v1_18", "gstreamer-player-sys/v1_18", "v1_16"]
-embed-lgpl-docs = ["rustdoc-stripper"]
-purge-lgpl-docs = ["rustdoc-stripper"]
+embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
+purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 dox = ["v1_18", "gstreamer-player-sys/dox", "glib/dox", "gstreamer/dox"]
 
 [package.metadata.docs.rs]
