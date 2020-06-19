@@ -19,6 +19,7 @@ members = [
   "gstreamer-rtp",
   "examples",
   "tutorials",
+  "docs",
 ]
 
 exclude = ["gir"]
