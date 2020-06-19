@@ -54,7 +54,7 @@ Get the configured caps on `self`.
 
 # Returns
 
-the `gst::Caps` accepted by the sink. `gst_caps_unref` after usage.
+the `gst::Caps` accepted by the sink. `gst::Caps::unref` after usage.
 <!-- impl AppSink::fn get_drop -->
 Check if `self` will drop old buffers when the maximum amount of queued
 buffers is reached.
@@ -68,7 +68,7 @@ Check if appsink will emit the "new-preroll" and "new-sample" signals.
 
 # Returns
 
-`true` if `self` is emiting the "new-preroll" and "new-sample"
+`true` if `self` is emitting the "new-preroll" and "new-sample"
 signals.
 <!-- impl AppSink::fn get_max_buffers -->
 Get the maximum amount of buffers that can be queued in `self`.
@@ -117,7 +117,7 @@ element is set to the READY/NULL state.
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
- Call `gst_sample_unref` after usage.
+ Call `gst::Sample::unref` after usage.
 <!-- impl AppSink::fn pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state.
@@ -134,7 +134,7 @@ If an EOS event was received before any buffers, this function returns
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
- Call `gst_sample_unref` after usage.
+ Call `gst::Sample::unref` after usage.
 <!-- impl AppSink::fn set_buffer_list_support -->
 Instruct `self` to enable or disable buffer list support.
 
@@ -152,6 +152,9 @@ less expensive, but also less flexible.
 
 If callbacks are installed, no signals will be emitted for performance
 reasons.
+
+Before 1.16.3 it was not possible to change the callbacks in a thread-safe
+way.
 ## `callbacks`
 the callbacks
 ## `user_data`
@@ -215,7 +218,7 @@ the maximum amount of time to wait for the preroll sample
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
- Call `gst_sample_unref` after usage.
+ Call `gst::Sample::unref` after usage.
 <!-- impl AppSink::fn try_pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state or the timeout expires.
@@ -238,7 +241,7 @@ the maximum amount of time to wait for a sample
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
-Call `gst_sample_unref` after usage.
+Call `gst::Sample::unref` after usage.
 <!-- impl AppSink::fn connect_eos -->
 Signal that the end-of-stream has been reached. This signal is emitted from
 the streaming thread.
@@ -414,7 +417,7 @@ mode when implementing various network protocols or hardware devices.
 
 The pull mode, in which the need-data signal triggers the next push-buffer call.
 This mode is typically used in the "random-access" stream-type. Use this
-mode for file access or other randomly accessable sources. In this mode, a
+mode for file access or other randomly accessible sources. In this mode, a
 buffer of exactly the amount of bytes given by the need-data signal should be
 pushed into appsrc.
 
@@ -437,14 +440,14 @@ element is the last buffer of the stream.
 
 # Returns
 
-`gst::FlowReturn::Ok` when the EOS was successfuly queued.
+`gst::FlowReturn::Ok` when the EOS was successfully queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
 <!-- impl AppSrc::fn get_caps -->
 Get the configured caps on `self`.
 
 # Returns
 
-the `gst::Caps` produced by the source. `gst_caps_unref` after usage.
+the `gst::Caps` produced by the source. `gst::Caps::unref` after usage.
 <!-- impl AppSrc::fn get_current_level_bytes -->
 Get the number of currently queued bytes inside `self`.
 
@@ -505,9 +508,9 @@ a `gst::Buffer` to push
 
 # Returns
 
-`gst::FlowReturn::Ok` when the buffer was successfuly queued.
+`gst::FlowReturn::Ok` when the buffer was successfully queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
-`gst::FlowReturn::Eos` when EOS occured.
+`gst::FlowReturn::Eos` when EOS occurred.
 <!-- impl AppSrc::fn push_buffer_list -->
 Adds a buffer list to the queue of buffers and buffer lists that the
 appsrc element will push to its source pad. This function takes ownership
@@ -523,9 +526,9 @@ a `gst::BufferList` to push
 
 # Returns
 
-`gst::FlowReturn::Ok` when the buffer list was successfuly queued.
+`gst::FlowReturn::Ok` when the buffer list was successfully queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
-`gst::FlowReturn::Eos` when EOS occured.
+`gst::FlowReturn::Eos` when EOS occurred.
 <!-- impl AppSrc::fn push_sample -->
 Extract a buffer from the provided sample and adds it to the queue of
 buffers that the appsrc element will push to its source pad. Any
@@ -543,9 +546,9 @@ extracted
 
 # Returns
 
-`gst::FlowReturn::Ok` when the buffer was successfuly queued.
+`gst::FlowReturn::Ok` when the buffer was successfully queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
-`gst::FlowReturn::Eos` when EOS occured.
+`gst::FlowReturn::Eos` when EOS occurred.
 <!-- impl AppSrc::fn set_callbacks -->
 Set callbacks which will be executed when data is needed, enough data has
 been collected or when a seek should be performed.
@@ -554,6 +557,9 @@ less expensive, but also less flexible.
 
 If callbacks are installed, no signals will be emitted for performance
 reasons.
+
+Before 1.16.3 it was not possible to change the callbacks in a thread-safe
+way.
 ## `callbacks`
 the callbacks
 ## `user_data`

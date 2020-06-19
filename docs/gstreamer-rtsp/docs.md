@@ -9,6 +9,8 @@ basic authentication
 digest authentication
 <!-- struct RTSPAuthParam -->
 RTSP Authentication parameter
+
+Feature: `v1_12`
 <!-- enum RTSPFamily -->
 The possible network families.
 <!-- enum RTSPFamily::variant None -->
@@ -50,7 +52,7 @@ Result codes from the RTSP functions.
 <!-- enum RTSPResult::variant Ok -->
 no error
 <!-- enum RTSPResult::variant Error -->
-some unspecified error occured
+some unspecified error occurred
 <!-- enum RTSPResult::variant Einval -->
 invalid arguments were provided to a function
 <!-- enum RTSPResult::variant Eintr -->
@@ -58,13 +60,13 @@ an operation was canceled
 <!-- enum RTSPResult::variant Enomem -->
 no memory was available for the operation
 <!-- enum RTSPResult::variant Eresolv -->
-a host resolve error occured
+a host resolve error occurred
 <!-- enum RTSPResult::variant Enotimpl -->
 function not implemented
 <!-- enum RTSPResult::variant Esys -->
-a system error occured, errno contains more details
+a system error occurred, errno contains more details
 <!-- enum RTSPResult::variant Eparse -->
-a parsing error occured
+a parsing error occurred
 <!-- enum RTSPResult::variant Ewsastart -->
 windows networking could not start
 <!-- enum RTSPResult::variant Ewsaversion -->
@@ -72,11 +74,11 @@ windows networking stack has wrong version
 <!-- enum RTSPResult::variant Eeof -->
 end-of-file was reached
 <!-- enum RTSPResult::variant Enet -->
-a network problem occured, h_errno contains more details
+a network problem occurred, h_errno contains more details
 <!-- enum RTSPResult::variant Enotip -->
 the host is not an IP host
 <!-- enum RTSPResult::variant Etimeout -->
-a timeout occured
+a timeout occurred
 <!-- enum RTSPResult::variant Etget -->
 the tunnel GET request has been performed
 <!-- enum RTSPResult::variant Etpost -->
@@ -152,6 +154,19 @@ Get a newly allocated string describing the request URI for `self`.
 # Returns
 
 a string with the request URI. `g_free` after usage.
+<!-- impl RTSPUrl::fn get_request_uri_with_control -->
+Get a newly allocated string describing the request URI for `self`
+combined with the control path for `control_path`
+
+Feature: `v1_18`
+
+## `control_path`
+an RTSP aggregate control path
+
+# Returns
+
+a string with the request URI combined with the control path.
+`g_free` after usage.
 <!-- impl RTSPUrl::fn set_port -->
 Set the port number in `self` to `port`.
 ## `port`

@@ -2,8 +2,8 @@
 <!-- struct GLBaseFilter -->
 `GLBaseFilter` handles the nitty gritty details of retrieving an OpenGL
 context. It also provided some wrappers around `gst_base::BaseTransform`'s
-`start`, `stop` and `set_caps` virtual methods that ensure an OpenGL context
-is available and current in the calling thread.
+`start()`, `stop()` and `set_caps()` virtual methods that ensure an OpenGL
+context is available and current in the calling thread.
 
 Feature: `v1_16`
 
@@ -26,14 +26,14 @@ Feature: `v1_16`
 # Returns
 
 Whether an OpenGL context could be retrieved or created successfully
-<!-- struct GLBuffer -->
-GstGLBuffer is a `gst::Memory` subclass providing support for the mapping of
-GL buffers.
+<!-- trait GLBaseFilterExt::fn get_gl_context -->
 
-Data is uploaded or downloaded from the GPU as is necessary.
-<!-- impl GLBuffer::fn init_once -->
-Initializes the GL Buffer allocator. It is safe to call this function
-multiple times. This must be called before any other `GLBuffer` operation.
+Feature: `v1_18`
+
+
+# Returns
+
+the `GLContext` found by `self`
 <!-- struct GLColorConvert -->
 `GLColorConvert` is an object that converts between color spaces and/or
 formats using OpenGL Shaders.
@@ -113,7 +113,7 @@ specified and must only be activated in a single thread.
 
 # Implements
 
-[`GLContextExt`](trait.GLContextExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLContextExt`](trait.GLContextExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`GLContextExtManual`](prelude/trait.GLContextExtManual.html)
 <!-- trait GLContextExt -->
 Trait containing all `GLContext` methods.
 
@@ -134,6 +134,10 @@ Wraps an existing OpenGL context into a `GLContext`.
 Note: The caller is responsible for ensuring that the OpenGL context
 represented by `handle` stays alive while the returned `GLContext` is
 active.
+
+`context_type` must not be `GLPlatform::None` or `GLPlatform::Any`
+
+`available_apis` must not be `GLAPI::None` or `GLAPI::Any`
 ## `display`
 a `GLDisplay`
 ## `handle`
@@ -188,7 +192,7 @@ a `GLPlatform` specifying the type of context to retrieve
 The OpenGL context handle current in the calling thread or `None`
 <!-- impl GLContext::fn get_proc_address_with_platform -->
 Attempts to use the `context_type` specific GetProcAddress implementations
-to retreive `name`.
+to retrieve `name`.
 
 See also `GLContext::get_proc_address`.
 ## `context_type`
@@ -318,7 +322,7 @@ return for the major version
 return for the minor version
 <!-- trait GLContextExt::fn get_gl_version -->
 Returns the OpenGL version implemented by `self`. See
-`GLContextExt::get_gl_api` for retreiving the OpenGL api implemented by
+`GLContextExt::get_gl_api` for retrieving the OpenGL api implemented by
 `self`.
 ## `maj`
 resulting major version
@@ -328,7 +332,7 @@ resulting minor version
 Get a function pointer to a specified opengl function, `name`. If the the
 specific function does not exist, NULL is returned instead.
 
-Platform specfic functions (names starting 'egl', 'glX', 'wgl', etc) can also
+Platform specific functions (names starting 'egl', 'glX', 'wgl', etc) can also
 be retrieved using this method.
 
 Note: This function may return valid function pointers that may not be valid
@@ -440,7 +444,7 @@ glXCreateContext (or similar) failed
 A resource is not available
 <!-- struct GLDisplay -->
 `GLDisplay` represents a connection to the underlying windowing system.
-Elements are required to make use of `gst::Context` to share and propogate
+Elements are required to make use of `gst::Context` to share and propagate
 a `GLDisplay`.
 
 There are a number of environment variables that influence the choice of
@@ -495,7 +499,6 @@ resulting `GLContext`
 
 whether a new context could be created.
 <!-- trait GLDisplayExt::fn create_window -->
-It requires the display's object lock to be held.
 
 # Returns
 
@@ -503,13 +506,15 @@ a new `GLWindow` for `self` or `None`.
 <!-- trait GLDisplayExt::fn filter_gl_api -->
 limit the use of OpenGL to the requested `gl_api`. This is intended to allow
 application and elements to request a specific set of OpenGL API's based on
-what they support. See `GLContextExt::get_gl_api` for the retreiving the
+what they support. See `GLContextExt::get_gl_api` for the retrieving the
 API supported by a `GLContext`.
 ## `gl_api`
 a `GLAPI` to filter with
 <!-- trait GLDisplayExt::fn find_window -->
+Deprecated for `GLDisplayExt::retrieve_window`.
+
 Execute `compare_func` over the list of windows stored by `self`. The
-first argment to `compare_func` is the `GLWindow` being checked and the
+first argument to `compare_func` is the `GLWindow` being checked and the
 second argument is `data`.
 ## `data`
 some data to pass to `compare_func`
@@ -520,6 +525,14 @@ a comparison function to run
 
 The first `GLWindow` that causes a match
  from `compare_func`
+<!-- trait GLDisplayExt::fn get_foreign_display -->
+
+Feature: `v1_18`
+
+
+# Returns
+
+whether the context belongs to a foreign display
 <!-- trait GLDisplayExt::fn get_gl_api -->
 see `GLDisplayExt::filter_gl_api` for what the returned value represents
 
@@ -545,6 +558,13 @@ the native handle for the display
 # Returns
 
 the `GLDisplayType` of `self`
+<!-- trait GLDisplayExt::fn remove_context -->
+Must be called with the object lock held.
+
+Feature: `v1_18`
+
+## `context`
+the `GLContext` to remove
 <!-- trait GLDisplayExt::fn remove_window -->
 ## `window`
 a `GLWindow` to remove
@@ -552,6 +572,22 @@ a `GLWindow` to remove
 # Returns
 
 if `window` could be removed from `self`
+<!-- trait GLDisplayExt::fn retrieve_window -->
+Execute `compare_func` over the list of windows stored by `self`. The
+first argument to `compare_func` is the `GLWindow` being checked and the
+second argument is `data`.
+
+Feature: `v1_18`
+
+## `data`
+some data to pass to `compare_func`
+## `compare_func`
+a comparison function to run
+
+# Returns
+
+The first `GLWindow` that causes a match
+ from `compare_func`
 <!-- trait GLDisplayExt::fn connect_create_context -->
 Overrides the `GLContext` creation mechanism.
 It can be called in any thread and it is emitted with
@@ -595,7 +631,7 @@ through the provided API
 
 [`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl GLDisplayWayland::fn new -->
-Create a new `GLDisplayWayland` from the wayland display name. See `wl_display_connect`
+Create a new `GLDisplayWayland` from the wayland display name. See `wl_display_connect`()
 for details on what is a valid name.
 ## `name`
 a display name
@@ -619,7 +655,7 @@ through the provided API
 
 [`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl GLDisplayX11::fn new -->
-Create a new `GLDisplayX11` from the x11 display name. See XOpenDisplay()
+Create a new `GLDisplayX11` from the x11 display name. See `XOpenDisplay`()
 for details on what is a valid name.
 ## `name`
 a display name
@@ -676,6 +712,10 @@ A single 16-bit component for depth information.
 <!-- enum GLFormat::variant Depth24Stencil8 -->
 A 24-bit component for depth information and
  a 8-bit component for stencil informat.
+<!-- enum GLFormat::variant R16 -->
+Single 16-bit component stored in the R texture component
+<!-- enum GLFormat::variant Rg16 -->
+Two 16-bit components stored in the R and G texture components
 <!-- struct GLFramebuffer -->
 A `GLFramebuffer` represents and holds an OpenGL framebuffer object with
 it's associated attachments.
@@ -737,7 +777,7 @@ data to pass to `func`
 
 the result of executing `func`
 <!-- trait GLFramebufferExt::fn get_effective_dimensions -->
-Retreive the effective dimensions from the current attachments attached to
+Retrieve the effective dimensions from the current attachments attached to
 `self`.
 ## `width`
 output width
@@ -754,54 +794,6 @@ Opaque `GLOverlayCompositor` object
 # Implements
 
 [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- struct GLQuery -->
-A `GLQuery` represents and holds an OpenGL query object. Various types of
-queries can be run or counters retrieved.
-<!-- impl GLQuery::fn counter -->
-Record the result of a counter
-<!-- impl GLQuery::fn end -->
-End counting the query
-<!-- impl GLQuery::fn free -->
-Frees a `GLQuery`
-<!-- impl GLQuery::fn init -->
-## `context`
-a `GLContext`
-## `query_type`
-the `GLQueryType`
-<!-- impl GLQuery::fn result -->
-
-# Returns
-
-the result of the query
-<!-- impl GLQuery::fn start -->
-Start counting the query
-<!-- impl GLQuery::fn unset -->
-Free any dynamically allocated resources
-<!-- impl GLQuery::fn local_gl_context -->
-Performs a GST_QUERY_CONTEXT query of type "gst.gl.local_context" on all
-`GstPads` in `element` of `direction` for the local OpenGL context used by
-GStreamer elements.
-## `element`
-a `gst::Element` to query from
-## `direction`
-the `gst::PadDirection` to query
-## `context_ptr`
-location containing the current and/or resulting
- `GLContext`
-
-# Returns
-
-whether `context_ptr` contains a `GLContext`
-<!-- impl GLQuery::fn new -->
-Free with `GLQuery::free`
-## `context`
-a `GLContext`
-## `query_type`
-the `GLQueryType` to create
-
-# Returns
-
-a new `GLQuery`
 <!-- enum GLQueryType -->
 <!-- enum GLQueryType::variant None -->
 no query
@@ -812,11 +804,11 @@ query the current time
 <!-- enum GLSLError -->
 Compilation stage that caused an error
 <!-- enum GLSLError::variant Compile -->
-Compilation error occured
+Compilation error occurred
 <!-- enum GLSLError::variant Link -->
-Link error occured
+Link error occurred
 <!-- enum GLSLError::variant Program -->
-General program error occured
+General program error occurred
 <!-- struct GLSLStage -->
 `GLSLStage` holds and represents a single OpenGL shader stage.
 
@@ -869,7 +861,7 @@ a new `GLSLStage` of the specified `type_`
 
 # Returns
 
-whether the compilation suceeded
+whether the compilation succeeded
 <!-- impl GLSLStage::fn get_handle -->
 
 # Returns
@@ -1061,14 +1053,14 @@ a `GLSLStage` to attach
 whether `stage` could be attached to `self`
 <!-- impl GLShader::fn bind_attribute_location -->
 Bind attribute `name` to the specified location `index` using
-glBindAttributeLocation().
+`glBindAttributeLocation()`.
 ## `index`
 attribute index to set
 ## `name`
 name of the attribute
 <!-- impl GLShader::fn bind_frag_data_location -->
 Bind attribute `name` to the specified location `index` using
-glBindFragDataLocation().
+`glBindFragDataLocation()`.
 ## `index`
 attribute index to set
 ## `name`
@@ -1132,13 +1124,13 @@ Releases the shader and stages.
 
 Note: must be called in the GL thread
 <!-- impl GLShader::fn set_uniform_1f -->
-Perform glUniform1f() for `name` on `self`
+Perform `glUniform1f()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `value`
 value to set
 <!-- impl GLShader::fn set_uniform_1fv -->
-Perform glUniform1fv() for `name` on `self`
+Perform `glUniform1fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1146,13 +1138,13 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_1i -->
-Perform glUniform1i() for `name` on `self`
+Perform `glUniform1i()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `value`
 value to set
 <!-- impl GLShader::fn set_uniform_1iv -->
-Perform glUniform1iv() for `name` on `self`
+Perform `glUniform1iv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1160,7 +1152,7 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_2f -->
-Perform glUniform2f() for `name` on `self`
+Perform `glUniform2f()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `v0`
@@ -1168,7 +1160,7 @@ first value to set
 ## `v1`
 second value to set
 <!-- impl GLShader::fn set_uniform_2fv -->
-Perform glUniform2fv() for `name` on `self`
+Perform `glUniform2fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1176,7 +1168,7 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_2i -->
-Perform glUniform2i() for `name` on `self`
+Perform `glUniform2i()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `v0`
@@ -1184,7 +1176,7 @@ first value to set
 ## `v1`
 second value to set
 <!-- impl GLShader::fn set_uniform_2iv -->
-Perform glUniform2iv() for `name` on `self`
+Perform `glUniform2iv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1192,7 +1184,7 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_3f -->
-Perform glUniform3f() for `name` on `self`
+Perform `glUniform3f()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `v0`
@@ -1202,7 +1194,7 @@ second value to set
 ## `v2`
 third value to set
 <!-- impl GLShader::fn set_uniform_3fv -->
-Perform glUniform3fv() for `name` on `self`
+Perform `glUniform3fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1210,7 +1202,7 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_3i -->
-Perform glUniform3i() for `name` on `self`
+Perform `glUniform3i()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `v0`
@@ -1220,7 +1212,7 @@ second value to set
 ## `v2`
 third value to set
 <!-- impl GLShader::fn set_uniform_3iv -->
-Perform glUniform3iv() for `name` on `self`
+Perform `glUniform3iv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1228,7 +1220,7 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_4f -->
-Perform glUniform4f() for `name` on `self`
+Perform `glUniform4f()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `v0`
@@ -1240,7 +1232,7 @@ third value to set
 ## `v3`
 fourth value to set
 <!-- impl GLShader::fn set_uniform_4fv -->
-Perform glUniform4fv() for `name` on `self`
+Perform `glUniform4fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1248,7 +1240,7 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_4i -->
-Perform glUniform4i() for `name` on `self`
+Perform `glUniform4i()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `v0`
@@ -1260,7 +1252,7 @@ third value to set
 ## `v3`
 fourth value to set
 <!-- impl GLShader::fn set_uniform_4iv -->
-Perform glUniform4iv() for `name` on `self`
+Perform `glUniform4iv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1268,7 +1260,7 @@ number of values to set
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_2fv -->
-Perform glUniformMatrix2fv() for `name` on `self`
+Perform `glUniformMatrix2fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1278,7 +1270,7 @@ transpose the matrix
 ## `value`
 matrix to set
 <!-- impl GLShader::fn set_uniform_matrix_2x3fv -->
-Perform glUniformMatrix2x3fv() for `name` on `self`
+Perform `glUniformMatrix2x3fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1288,7 +1280,7 @@ transpose the matrix
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_2x4fv -->
-Perform glUniformMatrix2x4fv() for `name` on `self`
+Perform `glUniformMatrix2x4fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1298,7 +1290,7 @@ transpose the matrix
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_3fv -->
-Perform glUniformMatrix3fv() for `name` on `self`
+Perform `glUniformMatrix3fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1308,7 +1300,7 @@ transpose the matrix
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_3x2fv -->
-Perform glUniformMatrix3x2fv() for `name` on `self`
+Perform `glUniformMatrix3x2fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1318,7 +1310,7 @@ transpose the matrix
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_3x4fv -->
-Perform glUniformMatrix3x4fv() for `name` on `self`
+Perform `glUniformMatrix3x4fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1328,7 +1320,7 @@ transpose the matrix
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_4fv -->
-Perform glUniformMatrix4fv() for `name` on `self`
+Perform `glUniformMatrix4fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1338,7 +1330,7 @@ transpose the matrix
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_4x2fv -->
-Perform glUniformMatrix4x2fv() for `name` on `self`
+Perform `glUniformMatrix4x2fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1348,7 +1340,7 @@ transpose the matrix
 ## `value`
 values to set
 <!-- impl GLShader::fn set_uniform_matrix_4x3fv -->
-Perform glUniformMatrix4x3fv() for `name` on `self`
+Perform `glUniformMatrix4x3fv()` for `name` on `self`
 ## `name`
 name of the uniform
 ## `count`
@@ -1429,11 +1421,13 @@ whether `in_caps` and `out_caps` could be set on `self`
 <!-- enum GLUploadReturn::variant Done -->
 No further processing required
 <!-- enum GLUploadReturn::variant Error -->
-An unspecified error occured
+An unspecified error occurred
 <!-- enum GLUploadReturn::variant Unsupported -->
 The configuration is unsupported.
 <!-- enum GLUploadReturn::variant Reconfigure -->
 This element requires a reconfiguration.
+<!-- enum GLUploadReturn::variant UnsharedGlContext -->
+private return value.
 <!-- struct GLViewConvert -->
 Convert stereoscopic/multiview video using fragment shaders.
 
@@ -1568,6 +1562,15 @@ for them. This method allows you to disable events handling completely
 from the `self`.
 ## `handle_events`
 a `gboolean` indicating if events should be handled or not.
+<!-- trait GLWindowExt::fn has_output_surface -->
+Query whether `self` has output surface or not
+
+Feature: `v1_18`
+
+
+# Returns
+
+`true` if `self` has useable output surface
 <!-- trait GLWindowExt::fn queue_resize -->
 Queue resizing of `self`.
 <!-- trait GLWindowExt::fn quit -->
@@ -1581,7 +1584,7 @@ new height
 <!-- trait GLWindowExt::fn run -->
 Start the execution of the runloop.
 <!-- trait GLWindowExt::fn send_message -->
-Invoke `callback` with data on the window thread. `callback` is guarenteed to
+Invoke `callback` with data on the window thread. `callback` is guaranteed to
 have executed when this function returns.
 ## `callback`
 function to invoke
@@ -1596,6 +1599,20 @@ function to invoke
 data to invoke `callback` with
 ## `destroy`
 called when `data` is not needed anymore
+<!-- trait GLWindowExt::fn send_scroll_event -->
+Notify a `self` about a scroll event. A scroll signal holding the event
+coordinates will be emitted.
+
+Feature: `v1_18`
+
+## `posx`
+x position of the mouse cursor
+## `posy`
+y position of the mouse cursor
+## `delta_x`
+the x offset of the scroll event
+## `delta_y`
+the y offset of the scroll event
 <!-- trait GLWindowExt::fn set_close_callback -->
 Sets the callback called when the window is about to close.
 ## `callback`
@@ -1605,7 +1622,7 @@ data to invoke `callback` with
 ## `destroy_notify`
 called when `data` is not needed any more
 <!-- trait GLWindowExt::fn set_draw_callback -->
-Sets the draw callback called everytime `GLWindowExt::draw` is called
+Sets the draw callback called every time `GLWindowExt::draw` is called
 ## `callback`
 function to invoke
 ## `data`
@@ -1635,7 +1652,7 @@ height
 
 whether the specified region could be set
 <!-- trait GLWindowExt::fn set_resize_callback -->
-Sets the resize callback called everytime a resize of the window occurs.
+Sets the resize callback called every time a resize of the window occurs.
 ## `callback`
 function to invoke
 ## `data`
@@ -1665,6 +1682,19 @@ the id of the button
 the x coordinate of the mouse event
 ## `y`
 the y coordinate of the mouse event
+<!-- trait GLWindowExt::fn connect_scroll_event -->
+Will be emitted when a mouse scroll event is received by the GstGLwindow.
+
+Feature: `v1_18`
+
+## `x`
+the x coordinate of the mouse event
+## `y`
+the y coordinate of the mouse event
+## `delta_x`
+the x offset of the scroll event
+## `delta_y`
+the y offset of the scroll event
 <!-- enum GLWindowError -->
 <!-- enum GLWindowError::variant Failed -->
 failed for a unspecified reason

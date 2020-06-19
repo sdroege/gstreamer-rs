@@ -84,8 +84,8 @@ at the last discontinuity, which can be retrieved with
 since then can be queried with `Adapter::distance_from_discont`.
 
 A last thing to note is that while `Adapter` is pretty optimized,
-merging buffers still might be an operation that requires a `malloc` and
-`memcpy` operation, and these operations are not the fastest. Because of
+merging buffers still might be an operation that requires a `malloc()` and
+`memcpy()` operation, and these operations are not the fastest. Because of
 this, some functions like `Adapter::available_fast` are provided to help
 speed up such cases should you want to. To avoid repeated memory allocations,
 `Adapter::copy` can be used to copy data into a (statically allocated)
@@ -97,7 +97,7 @@ of `Adapter` is inside one pad's chain function, in which case access is
 serialized via the pad's STREAM_LOCK.
 
 Note that `Adapter::push` takes ownership of the buffer passed. Use
-`gst_buffer_ref` before pushing it into the adapter if you still want to
+`gst::Buffer::ref` before pushing it into the adapter if you still want to
 access the buffer later. The adapter will never modify the data in the
 buffer pushed in it.
 
@@ -178,7 +178,7 @@ Returns a `gst::Buffer` containing the first `nbytes` of the `self`, but
 does not flush them from the adapter. See `Adapter::take_buffer`
 for details.
 
-Caller owns a reference to the returned buffer. `gst_buffer_unref` after
+Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -189,13 +189,13 @@ the number of bytes to get
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst_buffer_unref` when no longer needed.
+ `gst::Buffer::unref` when no longer needed.
 <!-- impl Adapter::fn get_buffer_fast -->
 Returns a `gst::Buffer` containing the first `nbytes` of the `self`, but
 does not flush them from the adapter. See `Adapter::take_buffer_fast`
 for details.
 
-Caller owns a reference to the returned buffer. `gst_buffer_unref` after
+Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -206,13 +206,13 @@ the number of bytes to get
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst_buffer_unref` when no longer needed.
+ `gst::Buffer::unref` when no longer needed.
 <!-- impl Adapter::fn get_buffer_list -->
 Returns a `gst::BufferList` of buffers containing the first `nbytes` bytes of
 the `self` but does not flush them from the adapter. See
 `Adapter::take_buffer_list` for details.
 
-Caller owns the returned list. Call `gst_buffer_list_unref` to free
+Caller owns the returned list. Call `gst::BufferList::unref` to free
 the list after usage.
 ## `nbytes`
 the number of bytes to get
@@ -227,7 +227,7 @@ Returns a `glib::List` of buffers containing the first `nbytes` bytes of the
 `self`, but does not flush them from the adapter. See
 `Adapter::take_list` for details.
 
-Caller owns returned list and contained buffers. `gst_buffer_unref` each
+Caller owns returned list and contained buffers. `gst::Buffer::unref` each
 buffer in the list before freeing the list after usage.
 ## `nbytes`
 the number of bytes to get
@@ -468,7 +468,7 @@ unset.
 Since 1.6 this will also copy over all GstMeta of the input buffers except
 for meta with the `gst::MetaFlags::Pooled` flag or with the "memory" tag.
 
-Caller owns a reference to the returned buffer. `gst_buffer_unref` after
+Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -479,7 +479,7 @@ the number of bytes to take
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst_buffer_unref` when no longer needed.
+ `gst::Buffer::unref` when no longer needed.
 <!-- impl Adapter::fn take_buffer_fast -->
 Returns a `gst::Buffer` containing the first `nbytes` of the `self`.
 The returned bytes will be flushed from the adapter. This function
@@ -500,7 +500,7 @@ for meta with the `gst::MetaFlags::Pooled` flag or with the "memory" tag.
 This function can return buffer up to the return value of
 `Adapter::available` without making copies if possible.
 
-Caller owns a reference to the returned buffer. `gst_buffer_unref` after
+Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -511,14 +511,14 @@ the number of bytes to take
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst_buffer_unref` when no longer needed.
+ `gst::Buffer::unref` when no longer needed.
 <!-- impl Adapter::fn take_buffer_list -->
 Returns a `gst::BufferList` of buffers containing the first `nbytes` bytes of
 the `self`. The returned bytes will be flushed from the adapter.
 When the caller can deal with individual buffers, this function is more
 performant because no memory should be copied.
 
-Caller owns the returned list. Call `gst_buffer_list_unref` to free
+Caller owns the returned list. Call `gst::BufferList::unref` to free
 the list after usage.
 ## `nbytes`
 the number of bytes to take
@@ -534,7 +534,7 @@ Returns a `glib::List` of buffers containing the first `nbytes` bytes of the
 When the caller can deal with individual buffers, this function is more
 performant because no memory should be copied.
 
-Caller owns returned list and contained buffers. `gst_buffer_unref` each
+Caller owns returned list and contained buffers. `gst::Buffer::unref` each
 buffer in the list before freeing the list after usage.
 ## `nbytes`
 the number of bytes to take
@@ -592,7 +592,7 @@ Feature: `v1_14`
 
 # Implements
 
-[`AggregatorExt`](trait.AggregatorExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AggregatorExt`](trait.AggregatorExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AggregatorExtManual`](prelude/trait.AggregatorExtManual.html)
 <!-- trait AggregatorExt -->
 Trait containing all `Aggregator` methods.
 
@@ -646,6 +646,17 @@ Feature: `v1_14`
 # Returns
 
 The latency or `GST_CLOCK_TIME_NONE` if the element does not sync
+<!-- trait AggregatorExt::fn negotiate -->
+Negotiates src pad caps with downstream elements.
+Unmarks GST_PAD_FLAG_NEED_RECONFIGURE in any case. But marks it again
+if `AggregatorClass.negotiate`() fails.
+
+Feature: `v1_18`
+
+
+# Returns
+
+`true` if the negotiation succeeded, else `false`.
 <!-- trait AggregatorExt::fn set_latency -->
 Lets `Aggregator` sub-classes tell the baseclass what their internal
 latency is. Will also post a LATENCY message on the bus so the pipeline
@@ -665,7 +676,7 @@ Feature: `v1_14`
 ## `caps`
 The `gst::Caps` to set on the src pad.
 <!-- trait AggregatorExt::fn simple_get_next_time -->
-This is a simple `Aggregator::get_next_time` implementation that
+This is a simple `AggregatorClass.get_next_time`() implementation that
 just looks at the `gst::Segment` on the srcpad of the aggregator and bases
 the next time on the running time there.
 
@@ -678,6 +689,13 @@ Feature: `v1_16`
 # Returns
 
 The running time based on the position
+<!-- trait AggregatorExt::fn update_segment -->
+Subclasses should use this to update the segment on their
+source pad, instead of directly pushing new segment events
+downstream.
+
+Feature: `v1_18`
+
 <!-- trait AggregatorExt::fn get_property_min_upstream_latency -->
 Force minimum upstream latency (in nanoseconds). When sources with a
 higher latency are expected to be plugged in dynamically after the
@@ -697,7 +715,7 @@ account when larger than the actually reported minimum latency.
 Feature: `v1_16`
 
 <!-- struct AggregatorPad -->
-Pads managed by a `GstAggregor` subclass.
+Pads managed by a `Aggregator` subclass.
 
 This class used to live in gst-plugins-bad and was moved to core.
 
@@ -705,7 +723,7 @@ Feature: `v1_14`
 
 # Implements
 
-[`AggregatorPadExt`](trait.AggregatorPadExt.html), [`gst::PadExt`](../gst/trait.PadExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AggregatorPadExt`](trait.AggregatorPadExt.html), [`gst::PadExt`](../gst/trait.PadExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AggregatorPadExtManual`](prelude/trait.AggregatorPadExtManual.html)
 <!-- trait AggregatorPadExt -->
 Trait containing all `AggregatorPad` methods.
 
@@ -857,7 +875,7 @@ a parser and share a lot of rather complex code.
 
  * During the parsing process `BaseParseClass` will handle both srcpad
  and sinkpad events. They will be passed to subclass if
- `BaseParseClass.event`() or `BaseParseClass.src_event`()
+ `BaseParseClass.sink_event`() or `BaseParseClass.src_event`()
  implementations have been provided.
 
 ## Shutdown phase
@@ -911,7 +929,7 @@ Things that subclass need to take care of:
 
 # Implements
 
-[`BaseParseExt`](trait.BaseParseExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`BaseParseExt`](trait.BaseParseExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseParseExtManual`](prelude/trait.BaseParseExtManual.html)
 <!-- trait BaseParseExt -->
 Trait containing all `BaseParse` methods.
 
@@ -1268,7 +1286,7 @@ with non-synchronized streams or sparse streams.
 
 # Implements
 
-[`BaseSinkExt`](trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`BaseSinkExt`](trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSinkExtManual`](prelude/trait.BaseSinkExtManual.html)
 <!-- trait BaseSinkExt -->
 Trait containing all `BaseSink` methods.
 
@@ -1317,7 +1335,7 @@ Free-function: gst_sample_unref
 
 # Returns
 
-a `gst::Sample`. `gst_sample_unref` after
+a `gst::Sample`. `gst::Sample::unref` after
  usage. This function returns `None` when no buffer has arrived in the
  sink yet or when the sink is not in PAUSED or PLAYING.
 <!-- trait BaseSinkExt::fn get_latency -->
@@ -1359,6 +1377,20 @@ information about the render delay.
 # Returns
 
 the render delay of `self`.
+<!-- trait BaseSinkExt::fn get_stats -->
+Return various `BaseSink` statistics. This function returns a `gst::Structure`
+with name `application/x-gst-base-sink-stats` with the following fields:
+
+- "average-rate" G_TYPE_DOUBLE average frame rate
+- "dropped" G_TYPE_UINT64 Number of dropped frames
+- "rendered" G_TYPE_UINT64 Number of rendered frames
+
+Feature: `v1_18`
+
+
+# Returns
+
+pointer to `gst::Structure`
 <!-- trait BaseSinkExt::fn get_sync -->
 Checks if `self` is currently configured to synchronize against the
 clock.
@@ -1633,6 +1665,16 @@ make other sinks compensate for the delay.
 The additional delay between synchronisation and actual rendering of the
 media. This property will add additional latency to the device in order to
 make other sinks compensate for the delay.
+<!-- trait BaseSinkExt::fn get_property_stats -->
+Various `BaseSink` statistics. This property returns a `gst::Structure`
+with name `application/x-gst-base-sink-stats` with the following fields:
+
+- "average-rate" G_TYPE_DOUBLE average frame rate
+- "dropped" G_TYPE_UINT64 Number of dropped frames
+- "rendered" G_TYPE_UINT64 Number of rendered frames
+
+Feature: `v1_18`
+
 <!-- trait BaseSinkExt::fn get_property_throttle_time -->
 The time to insert between buffers. This property can be used to control
 the maximum amount of buffers per second to render. Setting this property
@@ -1766,7 +1808,7 @@ received, it may safely shut down the entire pipeline.
 
 # Implements
 
-[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSrcExtManual`](prelude/trait.BaseSrcExtManual.html)
 <!-- trait BaseSrcExt -->
 Trait containing all `BaseSrc` methods.
 
@@ -1814,9 +1856,24 @@ Check if an element is in live mode.
 # Returns
 
 `true` if element is in live mode.
+<!-- trait BaseSrcExt::fn negotiate -->
+Negotiates src pad caps with downstream elements.
+Unmarks GST_PAD_FLAG_NEED_RECONFIGURE in any case. But marks it again
+if `BaseSrcClass.negotiate`() fails.
+
+Do not call this in the `BaseSrcClass.fill`() vmethod. Call this in
+`BaseSrcClass.create`() or in `BaseSrcClass.alloc`(), _before_ any
+buffer is allocated.
+
+Feature: `v1_18`
+
+
+# Returns
+
+`true` if the negotiation succeeded, else `false`.
 <!-- trait BaseSrcExt::fn new_seamless_segment -->
 Prepare a new seamless segment for emission downstream. This function must
-only be called by derived sub-classes, and only from the `create` function,
+only be called by derived sub-classes, and only from the `BaseSrcClass::create` function,
 as the stream-lock needs to be held.
 
 The format for the new segment will be the current format of the source, as
@@ -1864,7 +1921,7 @@ when trying to read more should set this to `false`.
 When `self` operates in `gst::Format::Time`, `BaseSrc` will send an EOS
 when a buffer outside of the currently configured segment is pushed if
 `automatic_eos` is `true`. Since 1.16, if `automatic_eos` is `false` an
-EOS will be pushed only when the `BaseSrc.create` implementation
+EOS will be pushed only when the `BaseSrcClass.create`() implementation
 returns `gst::FlowReturn::Eos`.
 ## `automatic_eos`
 automatic eos
@@ -2071,7 +2128,7 @@ It provides for:
 
 # Implements
 
-[`BaseTransformExt`](trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`BaseTransformExt`](trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseTransformExtManual`](prelude/trait.BaseTransformExtManual.html)
 <!-- trait BaseTransformExt -->
 Trait containing all `BaseTransform` methods.
 
@@ -2079,10 +2136,10 @@ Trait containing all `BaseTransform` methods.
 
 [`BaseTransform`](struct.BaseTransform.html)
 <!-- trait BaseTransformExt::fn get_allocator -->
-Lets `BaseTransform` sub-classes to know the memory `allocator`
+Lets `BaseTransform` sub-classes know the memory `allocator`
 used by the base class and its `params`.
 
-Unref the `allocator` after use it.
+Unref the `allocator` after use.
 ## `allocator`
 the `gst::Allocator`
 used
@@ -2094,13 +2151,13 @@ the
 # Returns
 
 the instance of the `gst::BufferPool` used
-by `self`; free it after use it
+by `self`; free it after use
 <!-- trait BaseTransformExt::fn is_in_place -->
 See if `self` is configured as a in_place transform.
 
 # Returns
 
-`true` is the transform is configured in in_place mode.
+`true` if the transform is configured in in_place mode.
 
 MT safe.
 <!-- trait BaseTransformExt::fn is_passthrough -->
@@ -2108,7 +2165,7 @@ See if `self` is configured as a passthrough transform.
 
 # Returns
 
-`true` is the transform is configured in passthrough mode.
+`true` if the transform is configured in passthrough mode.
 
 MT safe.
 <!-- trait BaseTransformExt::fn is_qos_enabled -->
@@ -2119,6 +2176,28 @@ Queries if the transform will handle QoS.
 `true` if QoS is enabled.
 
 MT safe.
+<!-- trait BaseTransformExt::fn reconfigure -->
+Negotiates src pad caps with downstream elements if the source pad is
+marked as needing reconfiguring. Unmarks GST_PAD_FLAG_NEED_RECONFIGURE in
+any case. But marks it again if negotiation fails.
+
+Do not call this in the `BaseTransformClass.transform`() or
+`BaseTransformClass.transform_ip`() vmethod. Call this in
+`BaseTransformClass.submit_input_buffer`(),
+`BaseTransformClass.prepare_output_buffer`() or in
+`BaseTransformClass.generate_output`() _before_ any output buffer is
+allocated.
+
+It will be default be called when handling an ALLOCATION query or at the
+very beginning of the default `BaseTransformClass.submit_input_buffer`()
+implementation.
+
+Feature: `v1_18`
+
+
+# Returns
+
+`true` if the negotiation succeeded, else `false`.
 <!-- trait BaseTransformExt::fn reconfigure_sink -->
 Instructs `self` to request renegotiation upstream. This function is
 typically called after properties on the transform were set that
@@ -2154,7 +2233,7 @@ Set passthrough mode for this filter by default. This is mostly
 useful for filters that do not care about negotiation.
 
 Always `true` for filters which don't implement either a transform
-or transform_ip method.
+or transform_ip or generate_output method.
 
 MT safe.
 ## `passthrough`
@@ -2193,7 +2272,7 @@ the diff against the clock
 the timestamp of the buffer generating the QoS expressed in
 running_time.
 <!-- trait BaseTransformExt::fn update_src_caps -->
-Updates the srcpad caps and send the caps downstream. This function
+Updates the srcpad caps and sends the caps downstream. This function
 can be used by subclasses when they have already negotiated their caps
 but found a change in them (or computed new information). This way,
 they can notify downstream about that change without losing any
@@ -2204,7 +2283,7 @@ downstream
 
 # Returns
 
-`true` if the caps could be send downstream `false` otherwise
+`true` if the caps could be sent downstream `false` otherwise
 <!-- struct FlowCombiner -->
 Utility struct to help handling `gst::FlowReturn` combination. Useful for
 `gst::Element`<!-- -->s that have multiple source pads and need to combine
@@ -2323,4 +2402,4 @@ base class.
 
 # Implements
 
-[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSrcExtManual`](prelude/trait.BaseSrcExtManual.html)

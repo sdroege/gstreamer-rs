@@ -27,7 +27,7 @@ statistics about clock accuracy and network traffic.
 
 [`gst::ClockExt`](../gst/trait.ClockExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl NetClientClock::fn new -->
-Create a new `GstNetClientInternalClock` that will report the time
+Create a new `NetClientClock` that will report the time
 provided by the `NetTimeProvider` on `remote_address` and
 `remote_port`.
 ## `name`

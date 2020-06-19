@@ -231,7 +231,7 @@ Get the installer details for missing elements
 # Returns
 
 An array of strings
-containing informations about how to install the various missing elements
+containing information about how to install the various missing elements
 for `self` to be usable. If you wish to use the strings after the life-time
 of `self`, you will need to copy them.
 <!-- impl DiscovererInfo::fn get_result -->
@@ -367,7 +367,7 @@ a `glib::List` of `DiscovererStreamInfo`
 # Returns
 
 the `gst::Caps` of the stream. Unref with
-`gst_caps_unref` after usage.
+`gst::Caps::unref` after usage.
 <!-- trait DiscovererStreamInfoExt::fn get_misc -->
 
 # Deprecated
@@ -509,7 +509,7 @@ the `gst::Caps`
 the preset(s) to use on the encoder, can be `None`
 ## `restriction`
 the `gst::Caps` used to restrict the input to the encoder, can be
-NULL. See `EncodingProfileExt::get_restriction` for more details.
+NULL. See `EncodingProfile::get_restriction` for more details.
 ## `presence`
 the number of time this stream must be used. 0 means any number of
  times (including never)
@@ -635,7 +635,7 @@ Computes the full output caps that this `self` will be able to consume.
 # Returns
 
 The full caps the given `self` can consume. Call
-`gst_caps_unref` when you are done with the caps.
+`gst::Caps::unref` when you are done with the caps.
 <!-- trait EncodingProfileExt::fn get_name -->
 
 # Returns
@@ -668,6 +668,16 @@ properties of the raw stream (that is before encoding), such as height and
 width for video and depth and sampling rate for audio. Does not apply to
 `EncodingContainerProfile` (since there is no corresponding raw stream).
 Can be `None`. Unref after usage.
+<!-- trait EncodingProfileExt::fn get_single_segment -->
+
+Feature: `v1_18`
+
+
+# Returns
+
+`true` if the stream represented by `self` should use a single
+segment before the encoder, `false` otherwise. This means that buffers will be retimestamped
+and segments will be eat so as to appear as one segment.
 <!-- trait EncodingProfileExt::fn get_type_nick -->
 
 # Returns
@@ -695,7 +705,7 @@ the description to set on the profile
 <!-- trait EncodingProfileExt::fn set_enabled -->
 Set whether the profile should be used or not.
 ## `enabled`
-`false` to disable `profile`, `true` to enable it
+`false` to disable `self`, `true` to enable it
 <!-- trait EncodingProfileExt::fn set_format -->
 Sets the media format used in the profile.
 ## `format`
@@ -722,10 +732,19 @@ Sets the name of the `gst::Preset`'s factory to be used in the profile.
 The name of the preset to use in this `self`.
 <!-- trait EncodingProfileExt::fn set_restriction -->
 Set the restriction `gst::Caps` to apply before the encoder
-that will be used in the profile. See `EncodingProfileExt::get_restriction`
+that will be used in the profile. See `EncodingProfile::get_restriction`
 for more about restrictions. Does not apply to `EncodingContainerProfile`.
 ## `restriction`
 the restriction to apply
+<!-- trait EncodingProfileExt::fn set_single_segment -->
+If using a single segment, buffers will be retimestamped
+and segments will be eat so as to appear as one segment.
+
+Feature: `v1_18`
+
+## `single_segment`
+`true` if the stream represented by `self` should use a single
+segment before the encoder `false` otherwise.
 <!-- struct EncodingTarget -->
 Collection of `EncodingProfile` for a specific target or use-case.
 
@@ -742,9 +761,9 @@ The name and category can only consist of lowercase ASCII letters for the
 first character, followed by either lowercase ASCII letters, digits or
 hyphens ('-').
 
-The `category` `<emphasis>`should`</emphasis>` be one of the existing
+The `category` *should* be one of the existing
 well-defined categories, like `GST_ENCODING_CATEGORY_DEVICE`, but it
-`<emphasis>`can`</emphasis>` be a application or user specific category if
+*can* be a application or user specific category if
 needed.
 ## `name`
 The name of the target.
@@ -867,7 +886,7 @@ the `gst::Caps`
 the preset(s) to use on the encoder, can be `None`
 ## `restriction`
 the `gst::Caps` used to restrict the input to the encoder, can be
-NULL. See `EncodingProfileExt::get_restriction` for more details.
+NULL. See `EncodingProfile::get_restriction` for more details.
 ## `presence`
 the number of time this stream must be used. 0 means any number of
  times (including never)

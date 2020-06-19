@@ -180,7 +180,7 @@ This is expressed in caps by having a single channel and no channel mask.
 This is expressed in caps by having a channel mask with no bits set.
 
 As another special case it is allowed to have two channels without a channel mask.
-This implicitely means that this is a stereo stream with a front left and front right
+This implicitly means that this is a stereo stream with a front left and front right
 channel.
 <!-- enum AudioChannelPosition::variant None -->
 used for position-less channels, e.g.
@@ -340,7 +340,7 @@ Things that subclass need to take care of:
 
 # Implements
 
-[`AudioDecoderExt`](trait.AudioDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AudioDecoderExt`](trait.AudioDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AudioDecoderExtManual`](prelude/trait.AudioDecoderExtManual.html)
 <!-- trait AudioDecoderExt -->
 Trait containing all `AudioDecoder` methods.
 
@@ -715,7 +715,7 @@ Things that subclass need to take care of:
 
 # Implements
 
-[`AudioEncoderExt`](trait.AudioEncoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AudioEncoderExt`](trait.AudioEncoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AudioEncoderExtManual`](prelude/trait.AudioEncoderExtManual.html)
 <!-- trait AudioEncoderExt -->
 Trait containing all `AudioEncoder` methods.
 
@@ -1063,8 +1063,6 @@ encoded audio format
 32-bit floating point samples, native endianness
 <!-- enum AudioFormat::variant F64 -->
 64-bit floating point samples, native endianness
-<!-- struct AudioFormatInfo -->
-Information for an audio format.
 <!-- struct AudioInfo -->
 Information describing audio properties. This information can be filled
 in from GstCaps with `AudioInfo::from_caps`.
@@ -1376,7 +1374,7 @@ Feature: `v1_14`
 a new discont wait
 <!-- impl AudioStreamAlign::fn set_rate -->
 Sets `rate` as new sample rate for the following processing. If the sample
-rate differs this implicitely marks the next data as discontinuous.
+rate differs this implicitly marks the next data as discontinuous.
 
 Feature: `v1_14`
 

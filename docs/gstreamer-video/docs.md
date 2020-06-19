@@ -1,4 +1,110 @@
 <!-- file * -->
+<!-- enum VideoAFDSpec -->
+Enumeration of the different standards that may apply to AFD data:
+
+0) ETSI/DVB:
+https://www.etsi.org/deliver/etsi_ts/101100_101199/101154/02.01.01_60/ts_101154v020101p.pdf
+
+1) ATSC A/53:
+https://www.atsc.org/wp-content/uploads/2015/03/a_53-Part-4-2009.pdf
+
+2) SMPTE ST2016-1:
+<!-- enum VideoAFDSpec::variant DvbEtsi -->
+AFD value is from DVB/ETSI standard
+<!-- enum VideoAFDSpec::variant AtscA53 -->
+AFD value is from ATSC A/53 standard
+
+Feature: `v1_18`
+
+<!-- enum VideoAFDValue -->
+Enumeration of the various values for Active Format Description (AFD)
+
+AFD should be included in video user data whenever the rectangular
+picture area containing useful information does not extend to the full height or width of the coded
+frame. AFD data may also be included in user data when the rectangular picture area containing
+useful information extends to the full height and width of the coded frame.
+
+For details, see Table 6.14 Active Format in:
+
+ATSC Digital Television Standard:
+Part 4 – MPEG-2 Video System Characteristics
+
+https://www.atsc.org/wp-content/uploads/2015/03/a_53-Part-4-2009.pdf
+
+and Active Format Description in Complete list of AFD codes
+
+https://en.wikipedia.org/wiki/Active_Format_Description`Complete_list_of_AFD_codes`
+
+and SMPTE ST2016-1
+
+Notes:
+
+1) AFD 0 is undefined for ATSC and SMPTE ST2016-1, indicating that AFD data is not available:
+If Bar Data is not present, AFD '0000' indicates that exact information
+is not available and the active image should be assumed to be the same as the coded frame. AFD '0000'.
+AFD '0000' accompanied by Bar Data signals that the active image’s aspect ratio is narrower than 16:9,
+but is not 4:3 or 14:9. As the exact aspect ratio cannot be conveyed by AFD alone, wherever possible,
+AFD ‘0000’ should be accompanied by Bar Data to define the exact vertical or horizontal extent
+of the active image.
+2) AFD 0 is reserved for DVB/ETSI
+3) values 1, 5, 6, 7, and 12 are reserved for both ATSC and DVB/ETSI
+4) values 2 and 3 are not recommended for ATSC, but are valid for DVB/ETSI
+<!-- enum VideoAFDValue::variant Unavailable -->
+Unavailable (see note 0 below).
+<!-- enum VideoAFDValue::variant 169TopAligned -->
+For 4:3 coded frame, letterbox 16:9 image,
+ at top of the coded frame. For 16:9 coded frame, full frame 16:9 image,
+ the same as the coded frame.
+<!-- enum VideoAFDValue::variant 149TopAligned -->
+For 4:3 coded frame, letterbox 14:9 image,
+ at top of the coded frame. For 16:9 coded frame, pillarbox 14:9 image,
+ horizontally centered in the coded frame.
+<!-- enum VideoAFDValue::variant GreaterThan169 -->
+For 4:3 coded frame, letterbox image with an aspect ratio
+ greater than 16:9, vertically centered in the coded frame. For 16:9 coded frame,
+ letterbox image with an aspect ratio greater than 16:9.
+<!-- enum VideoAFDValue::variant 43Full169Full -->
+For 4:3 coded frame, full frame 4:3 image,
+ the same as the coded frame. For 16:9 coded frame, full frame 16:9 image, the same as
+ the coded frame.
+<!-- enum VideoAFDValue::variant 43Full43Pillar -->
+For 4:3 coded frame, full frame 4:3 image, the same as
+ the coded frame. For 16:9 coded frame, pillarbox 4:3 image, horizontally centered in the
+ coded frame.
+<!-- enum VideoAFDValue::variant 169Letter169Full -->
+For 4:3 coded frame, letterbox 16:9 image, vertically centered in
+ the coded frame with all image areas protected. For 16:9 coded frame, full frame 16:9 image,
+ with all image areas protected.
+<!-- enum VideoAFDValue::variant 149Letter149Pillar -->
+For 4:3 coded frame, letterbox 14:9 image, vertically centered in
+ the coded frame. For 16:9 coded frame, pillarbox 14:9 image, horizontally centered in the
+ coded frame.
+<!-- enum VideoAFDValue::variant 43Full149Center -->
+For 4:3 coded frame, full frame 4:3 image, with alternative 14:9
+ center. For 16:9 coded frame, pillarbox 4:3 image, with alternative 14:9 center.
+<!-- enum VideoAFDValue::variant 169Letter149Center -->
+For 4:3 coded frame, letterbox 16:9 image, with alternative 14:9
+ center. For 16:9 coded frame, full frame 16:9 image, with alternative 14:9 center.
+<!-- enum VideoAFDValue::variant 169Letter43Center -->
+For 4:3 coded frame, letterbox 16:9 image, with alternative 4:3
+ center. For 16:9 coded frame, full frame 16:9 image, with alternative 4:3 center.
+
+Feature: `v1_18`
+
+<!-- enum VideoAlphaMode -->
+Different alpha modes.
+<!-- enum VideoAlphaMode::variant Copy -->
+When input and output have alpha, it will be copied.
+ When the input has no alpha, alpha will be set to
+ `GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE`
+<!-- enum VideoAlphaMode::variant Set -->
+set all alpha to
+ `GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE`
+<!-- enum VideoAlphaMode::variant Mult -->
+multiply all alpha with
+ `GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE`.
+ When the input format has no alpha but the output format has, the
+ alpha value will be set to `GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE`
 <!-- struct VideoBufferPool -->
 
 
@@ -44,6 +150,16 @@ CEA-708 (and optionally CEA-608) in
 
 Feature: `v1_16`
 
+<!-- enum VideoChromaMode -->
+Different chroma downsampling and upsampling modes
+<!-- enum VideoChromaMode::variant Full -->
+do full chroma up and down sampling
+<!-- enum VideoChromaMode::variant UpsampleOnly -->
+only perform chroma upsampling
+<!-- enum VideoChromaMode::variant DownsampleOnly -->
+only perform chroma downsampling
+<!-- enum VideoChromaMode::variant None -->
+disable chroma resampling
 <!-- struct VideoCodecFrame -->
 A `VideoCodecFrame` represents a video frame both in raw and
 encoded form.
@@ -148,41 +264,6 @@ unknown range
 <!-- enum VideoColorRange::variant 16235 -->
 [16..235] for 8 bit components. Chroma has
  [16..240] range.
-<!-- struct VideoColorimetry -->
-Structure describing the color info.
-<!-- impl VideoColorimetry::fn from_string -->
-Parse the colorimetry string and update `self` with the parsed
-values.
-## `color`
-a colorimetry string
-
-# Returns
-
-`true` if `color` points to valid colorimetry info.
-<!-- impl VideoColorimetry::fn is_equal -->
-Compare the 2 colorimetry sets for equality
-## `other`
-another `VideoColorimetry`
-
-# Returns
-
-`true` if `self` and `other` are equal.
-<!-- impl VideoColorimetry::fn matches -->
-Check if the colorimetry information in `info` matches that of the
-string `color`.
-## `color`
-a colorimetry string
-
-# Returns
-
-`true` if `color` conveys the same colorimetry info as the color
-information in `info`.
-<!-- impl VideoColorimetry::fn to_string -->
-Make a string representation of `self`.
-
-# Returns
-
-a string representation of `self`.
 <!-- struct VideoDecoder -->
 This base class is for video decoders turning encoded data into raw video
 frames.
@@ -247,7 +328,7 @@ follows:
 
 The subclass is responsible for providing pad template caps for
 source and sink pads. The pads need to be named "sink" and "src". It also
-needs to provide information about the ouptput caps, when they are known.
+needs to provide information about the output caps, when they are known.
 This may be when the base class calls the subclass' `set_format` function,
 though it might be during decoding, before calling
 `VideoDecoder::finish_frame`. This is done via
@@ -290,7 +371,7 @@ The bare minimum that a functional subclass needs to implement is:
 
 # Implements
 
-[`VideoDecoderExt`](trait.VideoDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`VideoDecoderExt`](trait.VideoDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`VideoDecoderExtManual`](prelude/trait.VideoDecoderExtManual.html)
 <!-- trait VideoDecoderExt -->
 Trait containing all `VideoDecoder` methods.
 
@@ -600,6 +681,34 @@ handler with `GST_PAD_SET_ACCEPT_INTERSECT` and
 `GST_PAD_SET_ACCEPT_TEMPLATE`
 ## `use_`
 if the default pad accept-caps query handling should be used
+<!-- trait VideoDecoderExt::fn get_property_qos -->
+If set to `true` the decoder will handle QoS events received
+from downstream elements.
+This includes dropping output frames which are detected as late
+using the metrics reported by those events.
+
+Feature: `v1_18`
+
+<!-- trait VideoDecoderExt::fn set_property_qos -->
+If set to `true` the decoder will handle QoS events received
+from downstream elements.
+This includes dropping output frames which are detected as late
+using the metrics reported by those events.
+
+Feature: `v1_18`
+
+<!-- enum VideoDitherMethod -->
+Different dithering methods to use.
+<!-- enum VideoDitherMethod::variant None -->
+no dithering
+<!-- enum VideoDitherMethod::variant Verterr -->
+propagate rounding errors downwards
+<!-- enum VideoDitherMethod::variant FloydSteinberg -->
+Dither with floyd-steinberg error diffusion
+<!-- enum VideoDitherMethod::variant SierraLite -->
+Dither with Sierra Lite error diffusion
+<!-- enum VideoDitherMethod::variant Bayer -->
+ordered dither using a bayer pattern
 <!-- struct VideoEncoder -->
 This base class is for video encoders turning raw video into
 encoded video data.
@@ -662,7 +771,7 @@ pipeline to catch up.
 
 # Implements
 
-[`VideoEncoderExt`](trait.VideoEncoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`VideoEncoderExt`](trait.VideoEncoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`VideoEncoderExtManual`](prelude/trait.VideoEncoderExtManual.html)
 <!-- trait VideoEncoderExt -->
 Trait containing all `VideoEncoder` methods.
 
@@ -709,6 +818,25 @@ an encoded `VideoCodecFrame`
 # Returns
 
 a `gst::FlowReturn` resulting from sending data downstream
+<!-- trait VideoEncoderExt::fn finish_subframe -->
+If multiple subframes are produced for one input frame then use this method
+for each subframe, except for the last one. Before calling this function,
+you need to fill frame->output_buffer with the encoded buffer to push.
+
+You must call `VideoEncoder::finish_frame`() for the last sub-frame
+to tell the encoder that the frame has been fully encoded.
+
+This function will change the metadata of `frame` and frame->output_buffer
+will be pushed downstream.
+
+Feature: `v1_18`
+
+## `frame`
+a `VideoCodecFrame` being encoded
+
+# Returns
+
+a `gst::FlowReturn` resulting from pushing the buffer downstream.
 <!-- trait VideoEncoderExt::fn get_allocator -->
 Lets `VideoEncoder` sub-classes to know the memory `allocator`
 used by the base class and its `params`.
@@ -830,7 +958,7 @@ maximum latency
 Request minimal value for PTS passed to handle_frame.
 
 For streams with reordered frames this can be used to ensure that there
-is enough time to accomodate first DTS, which may be less than first PTS
+is enough time to accommodate first DTS, which may be less than first PTS
 ## `min_pts`
 minimal PTS that will be passed to handle_frame
 <!-- trait VideoEncoderExt::fn set_output_state -->
@@ -894,7 +1022,7 @@ to implement frame dropping.
 <!-- enum VideoFormat -->
 Enum value describing the most common video formats.
 
-See the [GStreamer raw video format design document](https://gstreamer.freedesktop.org/documentation/design/mediatype-video-raw.html`formats`)
+See the [GStreamer raw video format design document](https://gstreamer.freedesktop.org/documentation/additional/design/mediatype-video-raw.html`formats`)
 for details about the layout and packing of these formats in memory.
 <!-- enum VideoFormat::variant Unknown -->
 Unknown or unset video format id
@@ -1071,106 +1199,34 @@ packed 4:4:4 YUV, 10 bits per channel(A-V-Y-U...) (Since: 1.16)
 packed 4:4:4 YUV with alpha channel (V0-U0-Y0-A0...) (Since: 1.16)
 <!-- enum VideoFormat::variant Bgr10a2Le -->
 packed 4:4:4 RGB with alpha channel(B-G-R-A), 10 bits for R/G/B channel and MSB 2 bits for alpha channel (Since: 1.16)
-<!-- struct VideoFormatInfo -->
-Information for a video format.
-<!-- struct VideoFrame -->
-A video frame obtained from `VideoFrame::map`
-<!-- impl VideoFrame::fn copy -->
-Copy the contents from `src` to `self`.
-## `src`
-a `VideoFrame`
-
-# Returns
-
-TRUE if the contents could be copied.
-<!-- impl VideoFrame::fn copy_plane -->
-Copy the plane with index `plane` from `src` to `self`.
-## `src`
-a `VideoFrame`
-## `plane`
-a plane
-
-# Returns
-
-TRUE if the contents could be copied.
-<!-- impl VideoFrame::fn map -->
-Use `info` and `buffer` to fill in the values of `self`. `self` is usually
-allocated on the stack, and you will pass the address to the `VideoFrame`
-structure allocated on the stack; `VideoFrame::map` will then fill in
-the structures with the various video-specific information you need to access
-the pixels of the video buffer. You can then use accessor macros such as
-GST_VIDEO_FRAME_COMP_DATA(), GST_VIDEO_FRAME_PLANE_DATA(),
-GST_VIDEO_FRAME_COMP_STRIDE(), GST_VIDEO_FRAME_PLANE_STRIDE() etc.
-to get to the pixels.
-
-
-```C
-  GstVideoFrame vframe;
-  ...
-  // set RGB pixels to black one at a time
-  if (gst_video_frame_map (&amp;vframe, video_info, video_buffer, GST_MAP_WRITE)) {
-    guint8 *pixels = GST_VIDEO_FRAME_PLANE_DATA (vframe, 0);
-    guint stride = GST_VIDEO_FRAME_PLANE_STRIDE (vframe, 0);
-    guint pixel_stride = GST_VIDEO_FRAME_COMP_PSTRIDE (vframe, 0);
-
-    for (h = 0; h < height; ++h) {
-      for (w = 0; w < width; ++w) {
-        guint8 *pixel = pixels + h * stride + w * pixel_stride;
-
-        memset (pixel, 0, pixel_stride);
-      }
-    }
-
-    gst_video_frame_unmap (&amp;vframe);
-  }
-  ...
-```
-
-All video planes of `buffer` will be mapped and the pointers will be set in
-`self`->data.
-
-The purpose of this function is to make it easy for you to get to the video
-pixels in a generic way, without you having to worry too much about details
-such as whether the video data is allocated in one contiguous memory chunk
-or multiple memory chunks (e.g. one for each plane); or if custom strides
-and custom plane offsets are used or not (as signalled by GstVideoMeta on
-each buffer). This function will just fill the `VideoFrame` structure
-with the right values and if you use the accessor macros everything will
-just work and you can access the data easily. It also maps the underlying
-memory chunks for you.
-## `info`
-a `VideoInfo`
-## `buffer`
-the buffer to map
-## `flags`
-`gst::MapFlags`
-
-# Returns
-
-`true` on success.
-<!-- impl VideoFrame::fn map_id -->
-Use `info` and `buffer` to fill in the values of `self` with the video frame
-information of frame `id`.
-
-When `id` is -1, the default frame is mapped. When `id` != -1, this function
-will return `false` when there is no GstVideoMeta with that id.
-
-All video planes of `buffer` will be mapped and the pointers will be set in
-`self`->data.
-## `info`
-a `VideoInfo`
-## `buffer`
-the buffer to map
-## `id`
-the frame id to map
-## `flags`
-`gst::MapFlags`
-
-# Returns
-
-`true` on success.
-<!-- impl VideoFrame::fn unmap -->
-Unmap the memory previously mapped with gst_video_frame_map.
+<!-- enum VideoFormat::variant Rgb10a2Le -->
+packed 4:4:4 RGB with alpha channel(R-G-B-A), 10 bits for R/G/B channel and MSB 2 bits for alpha channel (Since: 1.18)
+<!-- enum VideoFormat::variant Y44416be -->
+planar 4:4:4 YUV, 16 bits per channel (Since: 1.18)
+<!-- enum VideoFormat::variant Y44416le -->
+planar 4:4:4 YUV, 16 bits per channel (Since: 1.18)
+<!-- enum VideoFormat::variant P016Be -->
+planar 4:2:0 YUV with interleaved UV plane, 16 bits per channel (Since: 1.18)
+<!-- enum VideoFormat::variant P016Le -->
+planar 4:2:0 YUV with interleaved UV plane, 16 bits per channel (Since: 1.18)
+<!-- enum VideoFormat::variant P012Be -->
+planar 4:2:0 YUV with interleaved UV plane, 12 bits per channel (Since: 1.18)
+<!-- enum VideoFormat::variant P012Le -->
+planar 4:2:0 YUV with interleaved UV plane, 12 bits per channel (Since: 1.18)
+<!-- enum VideoFormat::variant Y212Be -->
+packed 4:2:2 YUV, 12 bits per channel (Y-U-Y-V) (Since: 1.18)
+<!-- enum VideoFormat::variant Y212Le -->
+packed 4:2:2 YUV, 12 bits per channel (Y-U-Y-V) (Since: 1.18)
+<!-- enum VideoFormat::variant Y412Be -->
+packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)
+<!-- enum VideoFormat::variant Y412Le -->
+packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)
+<!-- enum VideoGammaMode -->
+<!-- enum VideoGammaMode::variant None -->
+disable gamma handling
+<!-- enum VideoGammaMode::variant Remap -->
+convert between input and output gamma
+Different gamma conversion modes
 <!-- struct VideoInfo -->
 Information describing image properties. This information can be filled
 in from GstCaps with `VideoInfo::from_caps`. The information is also used
@@ -1198,6 +1254,25 @@ alignment parameters
 
 `false` if alignment could not be applied, e.g. because the
  size of a frame can't be represented as a 32 bit integer (Since: 1.12)
+<!-- impl VideoInfo::fn align_full -->
+This variant of `VideoInfo::align` provides the updated size, in bytes,
+of each video plane after the alignment, including all horizontal and vertical
+paddings.
+
+In case of GST_VIDEO_INTERLACE_MODE_ALTERNATE info, the returned sizes are the
+ones used to hold a single field, not the full frame.
+
+Feature: `v1_18`
+
+## `align`
+alignment parameters
+## `plane_size`
+array used to store the plane sizes
+
+# Returns
+
+`false` if alignment could not be applied, e.g. because the
+ size of a frame can't be represented as a 32 bit integer
 <!-- impl VideoInfo::fn convert -->
 Converts among various `gst::Format` types. This function handles
 GST_FORMAT_BYTES, GST_FORMAT_TIME, and GST_FORMAT_DEFAULT. For
@@ -1309,6 +1384,18 @@ frames contains both interlaced and
  the buffer is carrying the top or bottom field, respectively. The top and
  bottom buffers are expected to alternate in the pipeline, with this mode
  (Since: 1.16).
+<!-- enum VideoMatrixMode -->
+Different color matrix conversion modes
+<!-- enum VideoMatrixMode::variant Full -->
+do conversion between color matrices
+<!-- enum VideoMatrixMode::variant InputOnly -->
+use the input color matrix to convert
+ to and from R'G'B
+<!-- enum VideoMatrixMode::variant OutputOnly -->
+use the output color matrix to convert
+ to and from R'G'B
+<!-- enum VideoMatrixMode::variant None -->
+disable color matrix conversion.
 <!-- enum VideoMultiviewFramePacking -->
 `VideoMultiviewFramePacking` represents the subset of `VideoMultiviewMode`
 values that can be applied to any video frame without needing extra metadata.
@@ -1462,7 +1549,7 @@ main (int argc, char **argv)
 ## Two basic usage scenarios
 
 There are two basic usage scenarios: in the simplest case, the application
-uses `playbin` or `plasink` or knows exactly what particular element is used
+uses `playbin` or `playsink` or knows exactly what particular element is used
 for video output, which is usually the case when the application creates
 the videosink to use (e.g. `xvimagesink`, `ximagesink`, etc.) itself; in this
 case, the application can just create the videosink element, create and
@@ -1495,10 +1582,10 @@ prepare-window-handle message is handled, because most GUI toolkits and
 windowing systems are not thread-safe at all and a lot of care would be
 required to co-ordinate the toolkit and window system calls of the
 different threads (Gtk+ users please note: prior to Gtk+ 2.18
-GDK_WINDOW_XID() was just a simple structure access, so generally fine to do
+`GDK_WINDOW_XID` was just a simple structure access, so generally fine to do
 within the bus sync handler; this macro was changed to a function call in
 Gtk+ 2.18 and later, which is likely to cause problems when called from a
-sync handler; see below for a better approach without GDK_WINDOW_XID()
+sync handler; see below for a better approach without `GDK_WINDOW_XID`
 used in the callback).
 
 ## GstVideoOverlay and Gtk+
@@ -1664,7 +1751,7 @@ int main(int argc, char *argv[])
 
 # Implements
 
-[`VideoOverlayExt`](trait.VideoOverlayExt.html)
+[`VideoOverlayExt`](trait.VideoOverlayExt.html), [`VideoOverlayExtManual`](prelude/trait.VideoOverlayExtManual.html)
 <!-- trait VideoOverlayExt -->
 Trait containing all `VideoOverlay` methods.
 
@@ -1757,6 +1844,63 @@ specific window (e.g. an XWindow on X11). Passing 0 as the `handle` will
 tell the overlay to stop using that window and create an internal one.
 ## `handle`
 a handle referencing the window.
+<!-- enum VideoPrimariesMode -->
+Different primaries conversion modes
+<!-- enum VideoPrimariesMode::variant None -->
+disable conversion between primaries
+<!-- enum VideoPrimariesMode::variant MergeOnly -->
+do conversion between primaries only
+ when it can be merged with color matrix conversion.
+<!-- enum VideoPrimariesMode::variant Fast -->
+fast conversion between primaries
+<!-- enum VideoResamplerMethod -->
+Different subsampling and upsampling methods
+<!-- enum VideoResamplerMethod::variant Nearest -->
+Duplicates the samples when
+ upsampling and drops when downsampling
+<!-- enum VideoResamplerMethod::variant Linear -->
+Uses linear interpolation to reconstruct
+ missing samples and averaging to downsample
+<!-- enum VideoResamplerMethod::variant Cubic -->
+Uses cubic interpolation
+<!-- enum VideoResamplerMethod::variant Sinc -->
+Uses sinc interpolation
+<!-- enum VideoResamplerMethod::variant Lanczos -->
+Uses lanczos interpolation
+<!-- struct VideoSink -->
+Provides useful functions and a base class for video sinks.
+
+GstVideoSink will configure the default base sink to drop frames that
+arrive later than 20ms as this is considered the default threshold for
+observing out-of-sync frames.
+
+# Implements
+
+[`VideoSinkExt`](trait.VideoSinkExt.html), [`gst_base::BaseSinkExt`](../gst_base/trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait VideoSinkExt -->
+Trait containing all `VideoSink` methods.
+
+# Implementors
+
+[`VideoSink`](struct.VideoSink.html)
+<!-- impl VideoSink::fn center_rect -->
+Takes `src` rectangle and position it at the center of `dst` rectangle with or
+without `scaling`. It handles clipping if the `src` rectangle is bigger than
+the `dst` one and `scaling` is set to FALSE.
+## `src`
+the `VideoRectangle` describing the source area
+## `dst`
+the `VideoRectangle` describing the destination area
+## `result`
+a pointer to a `VideoRectangle` which will receive the result area
+## `scaling`
+a `gboolean` indicating if scaling should be applied or not
+<!-- trait VideoSinkExt::fn get_property_show_preroll_frame -->
+Whether to show video frames during preroll. If set to `false`, video
+frames will only be rendered in PLAYING state.
+<!-- trait VideoSinkExt::fn set_property_show_preroll_frame -->
+Whether to show video frames during preroll. If set to `false`, video
+frames will only be rendered in PLAYING state.
 <!-- enum VideoTileMode -->
 Enum value describing the available tiling modes.
 <!-- enum VideoTileMode::variant Unknown -->
@@ -2156,3 +2300,16 @@ Gamma 2.2 curve with a linear segment in the lower
  component. Since: 1.6
 <!-- enum VideoTransferFunction::variant Adobergb -->
 Gamma 2.19921875. Since: 1.8
+<!-- enum VideoTransferFunction::variant Bt202010 -->
+Rec. ITU-R BT.2020-2 with 10 bits per component.
+ (functionally the same as the values
+ GST_VIDEO_TRANSFER_BT709 and GST_VIDEO_TRANSFER_BT2020_12).
+ Since: 1.18
+<!-- enum VideoTransferFunction::variant Smpte2084 -->
+SMPTE ST 2084 for 10, 12, 14, and 16-bit systems.
+ Known as perceptual quantization (PQ)
+ Since: 1.18
+<!-- enum VideoTransferFunction::variant AribStdB67 -->
+Association of Radio Industries and Businesses (ARIB)
+ STD-B67 and Rec. ITU-R BT.2100-1 hybrid loggamma (HLG) system
+ Since: 1.18

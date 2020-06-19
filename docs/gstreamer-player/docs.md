@@ -337,7 +337,7 @@ stream index
 
 `true` or `false`
 
-Sets the subtitle strack `stream_index`.
+Sets the subtitle stack `stream_index`.
 <!-- impl Player::fn set_subtitle_track_enabled -->
 Enable or disable the current subtitle track.
 ## `enabled`
@@ -444,7 +444,7 @@ generic error.
 [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
 <!-- impl PlayerGMainContextSignalDispatcher::fn new -->
 Creates a new GstPlayerSignalDispatcher that uses `application_context`,
-or the thread default one if `None` is used. See `gst_player_new_full`.
+or the thread default one if `None` is used. See `Player::new`.
 ## `application_context`
 GMainContext to use or `None`
 
@@ -475,7 +475,7 @@ the container format.
 duration of the media.
 <!-- impl PlayerMediaInfo::fn get_image_sample -->
 Function to get the image (or preview-image) stored in taglist.
-Application can use gst_sample_*`_` API's to get caps, buffer etc.
+Application can use `gst_sample_*_()` API's to get caps, buffer etc.
 
 # Returns
 
@@ -567,7 +567,7 @@ the player is paused.
 the player is currently playing a
 stream.
 <!-- struct PlayerStreamInfo -->
-Base structure for information concering a media stream. Depending on
+Base structure for information concerning a media stream. Depending on
 the stream type, one can find more media-specific information in
 `PlayerVideoInfo`, `PlayerAudioInfo`, `PlayerSubtitleInfo`.
 
