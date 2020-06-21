@@ -441,9 +441,9 @@ macro_rules! define_iter(
             let n_structures = caps.get_size();
 
             $name {
-                caps: caps,
+                caps,
                 idx: 0,
-                n_structures: n_structures,
+                n_structures,
             }
         }
     }
