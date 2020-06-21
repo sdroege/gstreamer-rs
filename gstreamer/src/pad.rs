@@ -38,8 +38,8 @@ use std::ptr;
 use glib;
 use glib::object::{Cast, IsA};
 use glib::translate::{
-    from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override, FromGlib,
-    FromGlibPtrBorrow, ToGlib, ToGlibPtr,
+    from_glib, from_glib_borrow, from_glib_full, from_glib_none, FromGlib, FromGlibPtrBorrow,
+    ToGlib, ToGlibPtr,
 };
 use glib::StaticType;
 use glib_sys;
@@ -48,18 +48,6 @@ use glib_sys::gpointer;
 use libc;
 
 use gst_sys;
-
-impl Pad {
-    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Pad {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(gst_sys::gst_pad_new_from_static_template(
-                mut_override(templ.to_glib_none().0),
-                name.to_glib_none().0,
-            ))
-        }
-    }
-}
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct PadProbeId(NonZeroU64);
@@ -1557,6 +1545,330 @@ unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
     Box::<RefCell<F>>::from_raw(ptr as *mut _);
 }
 
+impl Pad {
+    pub fn new(name: Option<&str>, direction: ::PadDirection) -> Self {
+        skip_assert_initialized!();
+        Self::builder(name, direction).build()
+    }
+
+    pub fn builder(name: Option<&str>, direction: ::PadDirection) -> PadBuilder<Self> {
+        skip_assert_initialized!();
+        PadBuilder::new(name, direction)
+    }
+
+    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
+        skip_assert_initialized!();
+        Self::builder_from_static_template(templ, name).build()
+    }
+
+    pub fn builder_from_static_template(
+        templ: &StaticPadTemplate,
+        name: Option<&str>,
+    ) -> PadBuilder<Self> {
+        skip_assert_initialized!();
+        PadBuilder::from_static_template(templ, name)
+    }
+
+    pub fn from_template(templ: &::PadTemplate, name: Option<&str>) -> Self {
+        skip_assert_initialized!();
+        Self::builder_from_template(templ, name).build()
+    }
+
+    pub fn builder_from_template(templ: &::PadTemplate, name: Option<&str>) -> PadBuilder<Self> {
+        skip_assert_initialized!();
+        PadBuilder::from_template(templ, name)
+    }
+}
+
+impl ::GhostPad {
+    pub fn new(name: Option<&str>, direction: ::PadDirection) -> Self {
+        skip_assert_initialized!();
+        Self::builder(name, direction).build()
+    }
+
+    pub fn builder(name: Option<&str>, direction: ::PadDirection) -> PadBuilder<Self> {
+        skip_assert_initialized!();
+        PadBuilder::new(name, direction)
+    }
+
+    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
+        skip_assert_initialized!();
+        Self::builder_from_static_template(templ, name).build()
+    }
+
+    pub fn builder_from_static_template(
+        templ: &StaticPadTemplate,
+        name: Option<&str>,
+    ) -> PadBuilder<Self> {
+        skip_assert_initialized!();
+        PadBuilder::from_static_template(templ, name)
+    }
+
+    pub fn from_template(templ: &::PadTemplate, name: Option<&str>) -> Self {
+        skip_assert_initialized!();
+        Self::builder_from_template(templ, name).build()
+    }
+
+    pub fn builder_from_template(templ: &::PadTemplate, name: Option<&str>) -> PadBuilder<Self> {
+        skip_assert_initialized!();
+        PadBuilder::from_template(templ, name)
+    }
+}
+
+pub struct PadBuilder<T>(T);
+
+impl<T: IsA<Pad> + IsA<glib::Object>> PadBuilder<T> {
+    pub fn new(name: Option<&str>, direction: ::PadDirection) -> Self {
+        assert_initialized_main_thread!();
+
+        let pad = glib::Object::new(
+            T::static_type(),
+            &[("name", &name), ("direction", &direction)],
+        )
+        .expect("Failed to create pad")
+        .downcast::<T>()
+        .unwrap();
+
+        // Ghost pads are a bit special
+        if let Some(pad) = pad.dynamic_cast_ref::<::GhostPad>() {
+            unsafe {
+                let res = gst_sys::gst_ghost_pad_construct(pad.to_glib_none().0);
+                // This can't really fail...
+                assert_ne!(res, glib_sys::GFALSE, "Failed to construct ghost pad");
+            }
+        }
+
+        PadBuilder(pad)
+    }
+
+    pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
+        assert_initialized_main_thread!();
+
+        let templ = templ.get();
+        Self::from_template(&templ, name)
+    }
+
+    pub fn from_template(templ: &::PadTemplate, name: Option<&str>) -> Self {
+        assert_initialized_main_thread!();
+
+        use glib::ObjectExt;
+
+        let mut type_ = T::static_type();
+
+        // Since 1.14 templates can keep a pad GType with them, so we need to do some
+        // additional checks here now
+        if templ.has_property("gtype", Some(glib::Type::static_type())) {
+            let gtype = templ
+                .get_property("gtype")
+                .unwrap()
+                .get_some::<glib::Type>()
+                .unwrap();
+
+            if gtype == glib::Type::Unit {
+                // Nothing to be done, we can create any kind of pad
+            } else if gtype.is_a(&type_) {
+                // We were asked to create a parent type of the template type, e.g. a gst::Pad for
+                // a template that wants a gst_base::AggregatorPad. Not a problem: update the type
+                type_ = gtype;
+            } else {
+                // Otherwise the requested type must be a subclass of the template pad type
+                assert!(type_.is_a(&gtype));
+            }
+        }
+
+        let pad = glib::Object::new(
+            type_,
+            &[
+                ("name", &name),
+                ("direction", &templ.get_property_direction()),
+                ("template", templ),
+            ],
+        )
+        .expect("Failed to create pad")
+        .downcast::<T>()
+        .unwrap();
+
+        // Ghost pads are a bit special
+        if let Some(pad) = pad.dynamic_cast_ref::<::GhostPad>() {
+            unsafe {
+                let res = gst_sys::gst_ghost_pad_construct(pad.to_glib_none().0);
+                // This can't really fail...
+                assert_ne!(res, glib_sys::GFALSE, "Failed to construct ghost pad");
+            }
+        }
+
+        PadBuilder(pad)
+    }
+
+    pub fn activate_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
+    {
+        unsafe {
+            self.0.set_activate_function(func);
+        }
+
+        self
+    }
+
+    pub fn activatemode_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>, ::PadMode, bool) -> Result<(), LoggableError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        unsafe {
+            self.0.set_activatemode_function(func);
+        }
+
+        self
+    }
+
+    pub fn chain_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        unsafe {
+            self.0.set_chain_function(func);
+        }
+
+        self
+    }
+
+    pub fn chain_list_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        unsafe {
+            self.0.set_chain_list_function(func);
+        }
+
+        self
+    }
+
+    pub fn event_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>, ::Event) -> bool + Send + Sync + 'static,
+    {
+        unsafe {
+            self.0.set_event_function(func);
+        }
+
+        self
+    }
+
+    pub fn event_full_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        unsafe {
+            self.0.set_event_full_function(func);
+        }
+
+        self
+    }
+
+    pub fn getrange_function<F>(self, func: F) -> Self
+    where
+        F: Fn(
+                &T,
+                Option<&::Object>,
+                u64,
+                Option<&mut ::BufferRef>,
+                u32,
+            ) -> Result<PadGetRangeSuccess, ::FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        unsafe {
+            self.0.set_getrange_function(func);
+        }
+
+        self
+    }
+
+    pub fn iterate_internal_links_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
+    {
+        unsafe {
+            self.0.set_iterate_internal_links_function(func);
+        }
+
+        self
+    }
+
+    pub fn link_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        unsafe {
+            self.0.set_link_function(func);
+        }
+
+        self
+    }
+
+    pub fn query_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+    {
+        unsafe {
+            self.0.set_query_function(func);
+        }
+
+        self
+    }
+
+    pub fn unlink_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&T, Option<&::Object>) + Send + Sync + 'static,
+    {
+        unsafe {
+            self.0.set_unlink_function(func);
+        }
+
+        self
+    }
+
+    pub fn flags(self, flags: PadFlags) -> Self {
+        self.0.set_pad_flags(flags);
+
+        self
+    }
+
+    pub fn build(self) -> T {
+        self.0
+    }
+}
+
+impl<T: IsA<::GhostPad> + IsA<Pad>> PadBuilder<T> {
+    pub fn build_with_target<P: IsA<Pad>>(self, target: &P) -> Result<T, glib::BoolError> {
+        use GhostPadExt;
+        use PadExt;
+
+        assert_eq!(self.0.get_direction(), target.get_direction());
+
+        self.0.set_target(Some(target))?;
+
+        Ok(self.0)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1568,25 +1880,24 @@ mod tests {
     fn test_event_chain_functions() {
         ::init().unwrap();
 
-        let pad = ::Pad::new(Some("sink"), ::PadDirection::Sink);
-
         let events = Arc::new(Mutex::new(Vec::new()));
         let events_clone = events.clone();
-        pad.set_event_function(move |_, _, event| {
-            let mut events = events_clone.lock().unwrap();
-            events.push(event);
-
-            true
-        });
-
         let buffers = Arc::new(Mutex::new(Vec::new()));
         let buffers_clone = buffers.clone();
-        pad.set_chain_function(move |_, _, buffer| {
-            let mut buffers = buffers_clone.lock().unwrap();
-            buffers.push(buffer);
+        let pad = ::Pad::builder(Some("sink"), ::PadDirection::Sink)
+            .event_function(move |_, _, event| {
+                let mut events = events_clone.lock().unwrap();
+                events.push(event);
 
-            Ok(FlowSuccess::Ok)
-        });
+                true
+            })
+            .chain_function(move |_, _, buffer| {
+                let mut buffers = buffers_clone.lock().unwrap();
+                buffers.push(buffer);
+
+                Ok(FlowSuccess::Ok)
+            })
+            .build();
 
         pad.set_active(true).unwrap();
 
@@ -1616,17 +1927,18 @@ mod tests {
     fn test_getrange_function() {
         ::init().unwrap();
 
-        let pad = ::Pad::new(Some("src"), ::PadDirection::Src);
-        pad.set_activate_function(|pad, _parent| {
-            pad.activate_mode(::PadMode::Pull, true)
-                .map_err(|err| err.into())
-        });
-        pad.set_getrange_function(|_pad, _parent, offset, _buffer, size| {
-            assert_eq!(offset, 0);
-            assert_eq!(size, 5);
-            let buffer = ::Buffer::from_slice(b"abcde");
-            Ok(PadGetRangeSuccess::NewBuffer(buffer))
-        });
+        let pad = ::Pad::builder(Some("src"), ::PadDirection::Src)
+            .activate_function(|pad, _parent| {
+                pad.activate_mode(::PadMode::Pull, true)
+                    .map_err(|err| err.into())
+            })
+            .getrange_function(|_pad, _parent, offset, _buffer, size| {
+                assert_eq!(offset, 0);
+                assert_eq!(size, 5);
+                let buffer = ::Buffer::from_slice(b"abcde");
+                Ok(PadGetRangeSuccess::NewBuffer(buffer))
+            })
+            .build();
         pad.set_active(true).unwrap();
 
         let buffer = pad.get_range(0, 5).unwrap();
@@ -1641,22 +1953,23 @@ mod tests {
         pad.set_active(false).unwrap();
         drop(pad);
 
-        let pad = ::Pad::new(Some("src"), ::PadDirection::Src);
-        pad.set_activate_function(|pad, _parent| {
-            pad.activate_mode(::PadMode::Pull, true)
-                .map_err(|err| err.into())
-        });
-        pad.set_getrange_function(|_pad, _parent, offset, buffer, size| {
-            assert_eq!(offset, 0);
-            assert_eq!(size, 5);
-            if let Some(buffer) = buffer {
-                buffer.copy_from_slice(0, b"fghij").unwrap();
-                Ok(PadGetRangeSuccess::FilledBuffer)
-            } else {
-                let buffer = ::Buffer::from_slice(b"abcde");
-                Ok(PadGetRangeSuccess::NewBuffer(buffer))
-            }
-        });
+        let pad = ::Pad::builder(Some("src"), ::PadDirection::Src)
+            .activate_function(|pad, _parent| {
+                pad.activate_mode(::PadMode::Pull, true)
+                    .map_err(|err| err.into())
+            })
+            .getrange_function(|_pad, _parent, offset, buffer, size| {
+                assert_eq!(offset, 0);
+                assert_eq!(size, 5);
+                if let Some(buffer) = buffer {
+                    buffer.copy_from_slice(0, b"fghij").unwrap();
+                    Ok(PadGetRangeSuccess::FilledBuffer)
+                } else {
+                    let buffer = ::Buffer::from_slice(b"abcde");
+                    Ok(PadGetRangeSuccess::NewBuffer(buffer))
+                }
+            })
+            .build();
         pad.set_active(true).unwrap();
 
         let buffer = pad.get_range(0, 5).unwrap();

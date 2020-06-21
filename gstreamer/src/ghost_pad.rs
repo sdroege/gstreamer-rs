@@ -6,48 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_sys;
 use GhostPad;
 use Object;
-use Pad;
 use PadMode;
-use PadTemplate;
 
 impl GhostPad {
-    pub fn new<Q: IsA<Pad>>(name: Option<&str>, target: &Q) -> Result<GhostPad, glib::BoolError> {
-        skip_assert_initialized!();
-        let name = name.to_glib_none();
-        unsafe {
-            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new(
-                name.0,
-                target.as_ref().to_glib_none().0,
-            ))
-            .map(|o| Cast::unsafe_cast(o))
-            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
-        }
-    }
-
-    pub fn from_template<Q: IsA<Pad>>(
-        name: Option<&str>,
-        target: &Q,
-        templ: &PadTemplate,
-    ) -> Result<GhostPad, glib::BoolError> {
-        skip_assert_initialized!();
-        let name = name.to_glib_none();
-        unsafe {
-            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_from_template(
-                name.0,
-                target.as_ref().to_glib_none().0,
-                templ.to_glib_none().0,
-            ))
-            .map(|o| Cast::unsafe_cast(o))
-            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
-        }
-    }
-
     pub fn activate_mode_default<P: IsA<GhostPad>, Q: IsA<Object>>(
         pad: &P,
         parent: Option<&Q>,

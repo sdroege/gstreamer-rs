@@ -828,8 +828,18 @@ manual_traits = ["PadExtManual"]
     ignore = true
 
     [[object.function]]
+    name = "new"
+    # Builder
+    ignore = true
+
+    [[object.function]]
+    name = "new_from_template"
+    # Builder
+    ignore = true
+
+    [[object.function]]
     name = "new_from_static_template"
-    # Correct mutability
+    # Builder
     ignore = true
 
     [[object.function]]
@@ -929,13 +939,11 @@ status = "generate"
 
     [[object.function]]
     name = "new_no_target"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create GhostPad"
+    ignore = true
 
     [[object.function]]
     name = "new_no_target_from_template"
-        [object.function.return]
-        nullable_return_is_error = "Failed to create GhostPad"
+    ignore = true
 
     [[object.function]]
     name = "construct"

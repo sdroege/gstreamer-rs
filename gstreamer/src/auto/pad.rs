@@ -39,28 +39,6 @@ glib_wrapper! {
     }
 }
 
-impl Pad {
-    pub fn new(name: Option<&str>, direction: PadDirection) -> Pad {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(gst_sys::gst_pad_new(
-                name.to_glib_none().0,
-                direction.to_glib(),
-            ))
-        }
-    }
-
-    pub fn from_template(templ: &PadTemplate, name: Option<&str>) -> Pad {
-        skip_assert_initialized!();
-        unsafe {
-            from_glib_none(gst_sys::gst_pad_new_from_template(
-                templ.to_glib_none().0,
-                name.to_glib_none().0,
-            ))
-        }
-    }
-}
-
 unsafe impl Send for Pad {}
 unsafe impl Sync for Pad {}
 

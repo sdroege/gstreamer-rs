@@ -533,45 +533,6 @@ mod tests {
     }
 
     impl TestElement {
-        fn set_pad_functions(sinkpad: &::Pad, srcpad: &::Pad) {
-            sinkpad.set_chain_function(|pad, parent, buffer| {
-                TestElement::catch_panic_pad_function(
-                    parent,
-                    || Err(::FlowError::Error),
-                    |identity, element| identity.sink_chain(pad, element, buffer),
-                )
-            });
-            sinkpad.set_event_function(|pad, parent, event| {
-                TestElement::catch_panic_pad_function(
-                    parent,
-                    || false,
-                    |identity, element| identity.sink_event(pad, element, event),
-                )
-            });
-            sinkpad.set_query_function(|pad, parent, query| {
-                TestElement::catch_panic_pad_function(
-                    parent,
-                    || false,
-                    |identity, element| identity.sink_query(pad, element, query),
-                )
-            });
-
-            srcpad.set_event_function(|pad, parent, event| {
-                TestElement::catch_panic_pad_function(
-                    parent,
-                    || false,
-                    |identity, element| identity.src_event(pad, element, event),
-                )
-            });
-            srcpad.set_query_function(|pad, parent, query| {
-                TestElement::catch_panic_pad_function(
-                    parent,
-                    || false,
-                    |identity, element| identity.src_query(pad, element, query),
-                )
-            });
-        }
-
         fn sink_chain(
             &self,
             _pad: &::Pad,
@@ -609,11 +570,47 @@ mod tests {
 
         fn with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
             let templ = klass.get_pad_template("sink").unwrap();
-            let sinkpad = ::Pad::from_template(&templ, Some("sink"));
-            let templ = klass.get_pad_template("src").unwrap();
-            let srcpad = ::Pad::from_template(&templ, Some("src"));
+            let sinkpad = ::Pad::builder_from_template(&templ, Some("sink"))
+                .chain_function(|pad, parent, buffer| {
+                    TestElement::catch_panic_pad_function(
+                        parent,
+                        || Err(::FlowError::Error),
+                        |identity, element| identity.sink_chain(pad, element, buffer),
+                    )
+                })
+                .event_function(|pad, parent, event| {
+                    TestElement::catch_panic_pad_function(
+                        parent,
+                        || false,
+                        |identity, element| identity.sink_event(pad, element, event),
+                    )
+                })
+                .query_function(|pad, parent, query| {
+                    TestElement::catch_panic_pad_function(
+                        parent,
+                        || false,
+                        |identity, element| identity.sink_query(pad, element, query),
+                    )
+                })
+                .build();
 
-            TestElement::set_pad_functions(&sinkpad, &srcpad);
+            let templ = klass.get_pad_template("src").unwrap();
+            let srcpad = ::Pad::builder_from_template(&templ, Some("src"))
+                .event_function(|pad, parent, event| {
+                    TestElement::catch_panic_pad_function(
+                        parent,
+                        || false,
+                        |identity, element| identity.src_event(pad, element, event),
+                    )
+                })
+                .query_function(|pad, parent, query| {
+                    TestElement::catch_panic_pad_function(
+                        parent,
+                        || false,
+                        |identity, element| identity.src_query(pad, element, query),
+                    )
+                })
+                .build();
 
             Self {
                 n_buffers: atomic::AtomicU32::new(0),

@@ -3,14 +3,11 @@
 // DO NOT EDIT
 
 use glib;
-use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_sys;
 use Object;
 use Pad;
-use PadDirection;
-use PadTemplate;
 use ProxyPad;
 
 glib_wrapper! {
@@ -18,38 +15,6 @@ glib_wrapper! {
 
     match fn {
         get_type => || gst_sys::gst_ghost_pad_get_type(),
-    }
-}
-
-impl GhostPad {
-    pub fn new_no_target(
-        name: Option<&str>,
-        dir: PadDirection,
-    ) -> Result<GhostPad, glib::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_no_target(
-                name.to_glib_none().0,
-                dir.to_glib(),
-            ))
-            .map(|o| o.unsafe_cast())
-            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
-        }
-    }
-
-    pub fn new_no_target_from_template(
-        name: Option<&str>,
-        templ: &PadTemplate,
-    ) -> Result<GhostPad, glib::BoolError> {
-        skip_assert_initialized!();
-        unsafe {
-            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_no_target_from_template(
-                name.to_glib_none().0,
-                templ.to_glib_none().0,
-            ))
-            .map(|o| o.unsafe_cast())
-            .ok_or_else(|| glib_bool_error!("Failed to create GhostPad"))
-        }
     }
 }
 
