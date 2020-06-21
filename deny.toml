@@ -22,6 +22,10 @@ copyleft = "deny"
 allow-osi-fsf-free = "either"
 confidence-threshold = 0.8
 
+[[licenses.exceptions]]
+allow = ["LGPL-2.0"]
+name = "gstreamer-rs-lgpl-docs"
+
 [bans]
 multiple-versions = "deny"
 highlight = "all"
