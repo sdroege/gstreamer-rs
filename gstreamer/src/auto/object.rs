@@ -89,8 +89,6 @@ pub trait GstObjectExt: 'static {
 
     fn set_control_rate(&self, control_rate: ClockTime);
 
-    fn set_name(&self, name: &str) -> Result<(), glib::error::BoolError>;
-
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
 
     fn suggest_next_sync(&self) -> ClockTime;
@@ -100,11 +98,6 @@ pub trait GstObjectExt: 'static {
     fn unparent(&self);
 
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_name_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
 
     fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -238,15 +231,6 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn set_name(&self, name: &str) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_object_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0),
-                "Failed to set object name"
-            )
-        }
-    }
-
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(
@@ -288,33 +272,6 @@ impl<O: IsA<Object>> GstObjectExt for O {
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
-
-    fn connect_property_name_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstObject,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
-        ) where
-            P: IsA<Object>,
-        {
-            let f: &F = &*(f as *const F);
-            f(&Object::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::name\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_name_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
 
     fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

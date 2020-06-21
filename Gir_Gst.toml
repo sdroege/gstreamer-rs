@@ -665,18 +665,17 @@ status = "generate"
 trait_name = "GstObjectExt"
     [[object.function]]
     name = "set_name"
-        [object.function.return]
-        bool_return_is_error = "Failed to set object name"
+    # Don't allow changing the name at random times
+    ignore = true
+
+    [[object.property]]
+    name = "name"
+    # There are accessor functions for this
+    ignore = true
 
     [[object.function]]
     name = "get_name"
         [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "set_name"
-        [[object.function.parameter]]
-        name = "name"
         nullable = false
 
     [[object.function]]
