@@ -175,43 +175,43 @@ pub trait PadExtManual: 'static {
 
     fn stream_lock(&self) -> StreamLock;
 
-    fn set_activate_function<F>(&self, func: F)
+    unsafe fn set_activate_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>) -> Result<(), LoggableError> + Send + Sync + 'static;
 
-    fn set_activatemode_function<F>(&self, func: F)
+    unsafe fn set_activatemode_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::PadMode, bool) -> Result<(), LoggableError>
             + Send
             + Sync
             + 'static;
 
-    fn set_chain_function<F>(&self, func: F)
+    unsafe fn set_chain_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
-    fn set_chain_list_function<F>(&self, func: F)
+    unsafe fn set_chain_list_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
-    fn set_event_function<F>(&self, func: F)
+    unsafe fn set_event_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::Event) -> bool + Send + Sync + 'static;
 
-    fn set_event_full_function<F>(&self, func: F)
+    unsafe fn set_event_full_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::Event) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
-    fn set_getrange_function<F>(&self, func: F)
+    unsafe fn set_getrange_function<F>(&self, func: F)
     where
         F: Fn(
                 &Self,
@@ -224,22 +224,22 @@ pub trait PadExtManual: 'static {
             + Sync
             + 'static;
 
-    fn set_iterate_internal_links_function<F>(&self, func: F)
+    unsafe fn set_iterate_internal_links_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>) -> ::Iterator<Pad> + Send + Sync + 'static;
 
-    fn set_link_function<F>(&self, func: F)
+    unsafe fn set_link_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
             + Send
             + Sync
             + 'static;
 
-    fn set_query_function<F>(&self, func: F)
+    unsafe fn set_query_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static;
 
-    fn set_unlink_function<F>(&self, func: F)
+    unsafe fn set_unlink_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>) + Send + Sync + 'static;
 
@@ -586,111 +586,97 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn set_activate_function<F>(&self, func: F)
+    unsafe fn set_activate_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
     {
-        #[allow(clippy::type_complexity)]
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_activate_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_activate_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_activate_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_activate_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_activatemode_function<F>(&self, func: F)
+    unsafe fn set_activatemode_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::PadMode, bool) -> Result<(), LoggableError>
             + Send
             + Sync
             + 'static,
     {
-        #[allow(clippy::type_complexity)]
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_activatemode_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_activatemode_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_activatemode_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_activatemode_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_chain_function<F>(&self, func: F)
+    unsafe fn set_chain_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_chain_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_chain_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_chain_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_chain_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_chain_list_function<F>(&self, func: F)
+    unsafe fn set_chain_list_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_chain_list_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_chain_list_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_chain_list_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_chain_list_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_event_function<F>(&self, func: F)
+    unsafe fn set_event_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::Event) -> bool + Send + Sync + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_event_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_event_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_event_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_event_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_event_full_function<F>(&self, func: F)
+    unsafe fn set_event_full_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, ::Event) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_event_full_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_event_full_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_event_full_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_event_full_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_getrange_function<F>(&self, func: F)
+    unsafe fn set_getrange_function<F>(&self, func: F)
     where
         F: Fn(
                 &Self,
@@ -703,78 +689,68 @@ impl<O: IsA<Pad>> PadExtManual for O {
             + Sync
             + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_getrange_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_getrange_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_getrange_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_getrange_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_iterate_internal_links_function<F>(&self, func: F)
+    unsafe fn set_iterate_internal_links_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_iterate_internal_links_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_iterate_internal_links_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_iterate_internal_links_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_iterate_internal_links_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_link_function<F>(&self, func: F)
+    unsafe fn set_link_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
             + Send
             + Sync
             + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_link_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_link_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_link_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_link_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_query_function<F>(&self, func: F)
+    unsafe fn set_query_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_query_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_query_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_query_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_query_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
-    fn set_unlink_function<F>(&self, func: F)
+    unsafe fn set_unlink_function<F>(&self, func: F)
     where
         F: Fn(&Self, Option<&::Object>) + Send + Sync + 'static,
     {
-        unsafe {
-            let func_box: Box<F> = Box::new(func);
-            gst_sys::gst_pad_set_unlink_function_full(
-                self.as_ref().to_glib_none().0,
-                Some(trampoline_unlink_function::<Self, F>),
-                Box::into_raw(func_box) as gpointer,
-                Some(destroy_closure::<F>),
-            );
-        }
+        let func_box: Box<F> = Box::new(func);
+        gst_sys::gst_pad_set_unlink_function_full(
+            self.as_ref().to_glib_none().0,
+            Some(trampoline_unlink_function::<Self, F>),
+            Box::into_raw(func_box) as gpointer,
+            Some(destroy_closure::<F>),
+        );
     }
 
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError> {
