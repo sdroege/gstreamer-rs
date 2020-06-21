@@ -887,6 +887,11 @@ manual_traits = ["PadExtManual"]
     # Complex closure argument handling
     ignore = true
 
+    [[object.property]]
+    name = "template"
+    # Has a proper getter
+    ignore = true
+
 [[object]]
 name = "Gst.PadTemplate"
 status = "generate"

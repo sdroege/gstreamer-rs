@@ -168,10 +168,6 @@ pub trait PadExt: 'static {
 
     fn get_property_caps(&self) -> Option<Caps>;
 
-    fn get_property_template(&self) -> Option<PadTemplate>;
-
-    fn set_property_template(&self, template: Option<&PadTemplate>);
-
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F)
@@ -183,11 +179,6 @@ pub trait PadExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn connect_property_template_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -551,30 +542,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_property_template(&self) -> Option<PadTemplate> {
-        unsafe {
-            let mut value = Value::from_type(<PadTemplate as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
-                b"template\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `template` getter")
-        }
-    }
-
-    fn set_property_template(&self, template: Option<&PadTemplate>) {
-        unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
-                b"template\0".as_ptr() as *const _,
-                Value::from(template).to_glib_none().0,
-            );
-        }
-    }
-
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn linked_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
             this: *mut gst_sys::GstPad,
@@ -680,33 +647,6 @@ impl<O: IsA<Pad>> PadExt for O {
                 b"notify::offset\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_offset_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    fn connect_property_template_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_template_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstPad,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
-        ) where
-            P: IsA<Pad>,
-        {
-            let f: &F = &*(f as *const F);
-            f(&Pad::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::template\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    notify_template_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
