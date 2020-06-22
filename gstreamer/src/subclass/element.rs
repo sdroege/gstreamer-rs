@@ -570,7 +570,7 @@ mod tests {
 
         fn with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
             let templ = klass.get_pad_template("sink").unwrap();
-            let sinkpad = ::Pad::builder_from_template(&templ, Some("sink"))
+            let sinkpad = ::Pad::builder_with_template(&templ, Some("sink"))
                 .chain_function(|pad, parent, buffer| {
                     TestElement::catch_panic_pad_function(
                         parent,
@@ -595,7 +595,7 @@ mod tests {
                 .build();
 
             let templ = klass.get_pad_template("src").unwrap();
-            let srcpad = ::Pad::builder_from_template(&templ, Some("src"))
+            let srcpad = ::Pad::builder_with_template(&templ, Some("src"))
                 .event_function(|pad, parent, event| {
                     TestElement::catch_panic_pad_function(
                         parent,

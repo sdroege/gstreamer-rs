@@ -1558,10 +1558,10 @@ impl Pad {
 
     pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
-        Self::builder_from_static_template(templ, name).build()
+        Self::builder_with_static_template(templ, name).build()
     }
 
-    pub fn builder_from_static_template(
+    pub fn builder_with_static_template(
         templ: &StaticPadTemplate,
         name: Option<&str>,
     ) -> PadBuilder<Self> {
@@ -1571,10 +1571,10 @@ impl Pad {
 
     pub fn from_template(templ: &::PadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
-        Self::builder_from_template(templ, name).build()
+        Self::builder_with_template(templ, name).build()
     }
 
-    pub fn builder_from_template(templ: &::PadTemplate, name: Option<&str>) -> PadBuilder<Self> {
+    pub fn builder_with_template(templ: &::PadTemplate, name: Option<&str>) -> PadBuilder<Self> {
         skip_assert_initialized!();
         PadBuilder::from_template(templ, name)
     }
@@ -1593,10 +1593,10 @@ impl ::GhostPad {
 
     pub fn from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
-        Self::builder_from_static_template(templ, name).build()
+        Self::builder_with_static_template(templ, name).build()
     }
 
-    pub fn builder_from_static_template(
+    pub fn builder_with_static_template(
         templ: &StaticPadTemplate,
         name: Option<&str>,
     ) -> PadBuilder<Self> {
@@ -1606,10 +1606,10 @@ impl ::GhostPad {
 
     pub fn from_template(templ: &::PadTemplate, name: Option<&str>) -> Self {
         skip_assert_initialized!();
-        Self::builder_from_template(templ, name).build()
+        Self::builder_with_template(templ, name).build()
     }
 
-    pub fn builder_from_template(templ: &::PadTemplate, name: Option<&str>) -> PadBuilder<Self> {
+    pub fn builder_with_template(templ: &::PadTemplate, name: Option<&str>) -> PadBuilder<Self> {
         skip_assert_initialized!();
         PadBuilder::from_template(templ, name)
     }
