@@ -1856,6 +1856,243 @@ impl<T: IsA<Pad> + IsA<glib::Object>> PadBuilder<T> {
 }
 
 impl<T: IsA<::GhostPad> + IsA<Pad>> PadBuilder<T> {
+    pub fn proxy_pad_activate_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_activate_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_activatemode_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>, ::PadMode, bool) -> Result<(), LoggableError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_activatemode_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_chain_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_chain_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_chain_list_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_chain_list_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_event_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>, ::Event) -> bool + Send + Sync + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_event_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_event_full_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_event_full_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_getrange_function<F>(self, func: F) -> Self
+    where
+        F: Fn(
+                &::ProxyPad,
+                Option<&::Object>,
+                u64,
+                Option<&mut ::BufferRef>,
+                u32,
+            ) -> Result<PadGetRangeSuccess, ::FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_getrange_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_iterate_internal_links_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_iterate_internal_links_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_link_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_link_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_query_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_query_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_unlink_function<F>(self, func: F) -> Self
+    where
+        F: Fn(&::ProxyPad, Option<&::Object>) + Send + Sync + 'static,
+    {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_unlink_function(func);
+        }
+
+        self
+    }
+
+    pub fn proxy_pad_flags(self, flags: PadFlags) -> Self {
+        use ProxyPadExt;
+
+        unsafe {
+            let proxy = self
+                .0
+                .unsafe_cast_ref::<::ProxyPad>()
+                .get_internal()
+                .unwrap();
+            proxy.set_pad_flags(flags);
+        }
+
+        self
+    }
+
     pub fn build_with_target<P: IsA<Pad>>(self, target: &P) -> Result<T, glib::BoolError> {
         use GhostPadExt;
         use PadExt;
