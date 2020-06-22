@@ -38,8 +38,7 @@ use std::ptr;
 use glib;
 use glib::object::{Cast, IsA};
 use glib::translate::{
-    from_glib, from_glib_borrow, from_glib_full, from_glib_none, FromGlib, FromGlibPtrBorrow,
-    ToGlib, ToGlibPtr,
+    from_glib, from_glib_borrow, from_glib_full, FromGlib, FromGlibPtrBorrow, ToGlib, ToGlibPtr,
 };
 use glib::StaticType;
 use glib_sys;
@@ -93,8 +92,8 @@ unsafe impl<'a> Sync for PadProbeData<'a> {}
 
 #[derive(Debug)]
 #[must_use = "if unused the StreamLock will immediately unlock"]
-pub struct StreamLock(Pad);
-impl Drop for StreamLock {
+pub struct StreamLock<'a>(&'a Pad);
+impl<'a> Drop for StreamLock<'a> {
     fn drop(&mut self) {
         unsafe {
             let pad: *mut gst_sys::GstPad = self.0.to_glib_none().0;
@@ -570,7 +569,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let ptr: &mut gst_sys::GstPad = &mut *(self.as_ptr() as *mut _);
             glib_sys::g_rec_mutex_lock(&mut ptr.stream_rec_lock);
-            StreamLock(from_glib_none(ptr as *mut gst_sys::GstPad))
+            StreamLock(self.upcast_ref())
         }
     }
 
