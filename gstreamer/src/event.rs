@@ -242,32 +242,56 @@ impl EventRef {
 }
 
 impl Event {
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::FlushStart::new` or `event::FlushStart::builder` instead"
+    )]
     pub fn new_flush_start<'a>() -> FlushStartBuilder<'a> {
         assert_initialized_main_thread!();
         FlushStartBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::FlushStop::new` or `event::FlushStop::builder` instead"
+    )]
     pub fn new_flush_stop<'a>(reset_time: bool) -> FlushStopBuilder<'a> {
         assert_initialized_main_thread!();
         FlushStopBuilder::new(reset_time)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::StreamStart::new` or `event::StreamStart::builder` instead"
+    )]
     pub fn new_stream_start(stream_id: &str) -> StreamStartBuilder {
         assert_initialized_main_thread!();
         StreamStartBuilder::new(stream_id)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Caps::new` or `event::Caps::builder` instead"
+    )]
     pub fn new_caps(caps: &::Caps) -> CapsBuilder {
         assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Segment::new` or `event::Segment::builder` instead"
+    )]
     pub fn new_segment<F: ::FormattedValue>(segment: &::FormattedSegment<F>) -> SegmentBuilder {
         assert_initialized_main_thread!();
         SegmentBuilder::new(segment.as_ref())
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::StreamCollection::new` or `event::StreamCollection::builder` instead"
+    )]
     pub fn new_stream_collection(
         stream_collection: &::StreamCollection,
     ) -> StreamCollectionBuilder {
@@ -275,11 +299,19 @@ impl Event {
         StreamCollectionBuilder::new(stream_collection)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Tag::new` or `event::Tag::builder` instead"
+    )]
     pub fn new_tag<'a>(tags: ::TagList) -> TagBuilder<'a> {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::BufferSize::new` or `event::BufferSize::builder` instead"
+    )]
     pub fn new_buffer_size<'a, V: Into<GenericFormattedValue>>(
         minsize: V,
         maxsize: V,
@@ -293,32 +325,56 @@ impl Event {
         BufferSizeBuilder::new(minsize, maxsize, async)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::SinkMessage::new` or `event::SinkMessage::builder` instead"
+    )]
     pub fn new_sink_message<'a>(name: &'a str, msg: &'a ::Message) -> SinkMessageBuilder<'a> {
         assert_initialized_main_thread!();
         SinkMessageBuilder::new(name, msg)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::StreamGroupDone::new` or `event::StreamGroupDone::builder` instead"
+    )]
     pub fn new_stream_group_done<'a>(group_id: GroupId) -> StreamGroupDoneBuilder<'a> {
         assert_initialized_main_thread!();
         StreamGroupDoneBuilder::new(group_id)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Eos::new` or `event::Eos::builder` instead"
+    )]
     pub fn new_eos<'a>() -> EosBuilder<'a> {
         assert_initialized_main_thread!();
         EosBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Toc::new` or `event::Toc::builder` instead"
+    )]
     pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Protection::new` or `event::Protection::builder` instead"
+    )]
     pub fn new_protection<'a>(system_id: &'a str, data: &'a ::Buffer) -> ProtectionBuilder<'a> {
         assert_initialized_main_thread!();
         ProtectionBuilder::new(system_id, data)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::SegmentDone::new` or `event::SegmentDone::builder` instead"
+    )]
     pub fn new_segment_done<'a, V: Into<GenericFormattedValue>>(
         position: V,
     ) -> SegmentDoneBuilder<'a> {
@@ -327,11 +383,19 @@ impl Event {
         SegmentDoneBuilder::new(position)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Gap::new` or `event::Gap::builder` instead"
+    )]
     pub fn new_gap<'a>(timestamp: ::ClockTime, duration: ::ClockTime) -> GapBuilder<'a> {
         assert_initialized_main_thread!();
         GapBuilder::new(timestamp, duration)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Qos::new` or `event::Qos::builder` instead"
+    )]
     pub fn new_qos<'a>(
         type_: ::QOSType,
         proportion: f64,
@@ -342,6 +406,10 @@ impl Event {
         QosBuilder::new(type_, proportion, diff, timestamp)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Seek::new` or `event::Seek::builder` instead"
+    )]
     pub fn new_seek<'a, V: Into<GenericFormattedValue>>(
         rate: f64,
         flags: ::SeekFlags,
@@ -358,16 +426,28 @@ impl Event {
         SeekBuilder::new(rate, flags, start_type, start, stop_type, stop)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Navigation::new` or `event::Navigation::builder` instead"
+    )]
     pub fn new_navigation<'a>(structure: ::Structure) -> NavigationBuilder<'a> {
         assert_initialized_main_thread!();
         NavigationBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Latency::new` or `event::Latency::builder` instead"
+    )]
     pub fn new_latency<'a>(latency: ::ClockTime) -> LatencyBuilder<'a> {
         assert_initialized_main_thread!();
         LatencyBuilder::new(latency)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Step::new` or `event::Step::builder` instead"
+    )]
     pub fn new_step<'a, V: Into<GenericFormattedValue>>(
         amount: V,
         rate: f64,
@@ -378,37 +458,65 @@ impl Event {
         StepBuilder::new(amount.into(), rate, flush, intermediate)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::Reconfigure::new` or `event::Reconfigure::builder` instead"
+    )]
     pub fn new_reconfigure<'a>() -> ReconfigureBuilder<'a> {
         assert_initialized_main_thread!();
         ReconfigureBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::TocSelect::new` or `event::TocSelect::builder` instead"
+    )]
     pub fn new_toc_select(uid: &str) -> TocSelectBuilder {
         assert_initialized_main_thread!();
         TocSelectBuilder::new(uid)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::SelectStreams::new` or `event::SelectStreams::builder` instead"
+    )]
     pub fn new_select_streams<'a>(streams: &'a [&'a str]) -> SelectStreamsBuilder<'a> {
         assert_initialized_main_thread!();
         SelectStreamsBuilder::new(streams)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::CustomUpstream::new` or `event::CustomUpstream::builder` instead"
+    )]
     pub fn new_custom_upstream<'a>(structure: ::Structure) -> CustomUpstreamBuilder<'a> {
         assert_initialized_main_thread!();
         CustomUpstreamBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::CustomDownstream::new` or `event::CustomDownstream::builder` instead"
+    )]
     pub fn new_custom_downstream<'a>(structure: ::Structure) -> CustomDownstreamBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::CustomDownstreamOob::new` or `event::CustomDownstreamOob::builder` instead"
+    )]
     pub fn new_custom_downstream_oob<'a>(structure: ::Structure) -> CustomDownstreamOobBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamOobBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::CustomDownstreamSticky::new` or `event::CustomDownstreamSticky::builder` instead"
+    )]
     pub fn new_custom_downstream_sticky<'a>(
         structure: ::Structure,
     ) -> CustomDownstreamStickyBuilder<'a> {
@@ -416,11 +524,19 @@ impl Event {
         CustomDownstreamStickyBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::CustomBoth::new` or `event::CustomBoth::builder` instead"
+    )]
     pub fn new_custom_both<'a>(structure: ::Structure) -> CustomBothBuilder<'a> {
         assert_initialized_main_thread!();
         CustomBothBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `event::CustomBothOob::new` or `event::CustomBothOob::builder` instead"
+    )]
     pub fn new_custom_both_oob<'a>(structure: ::Structure) -> CustomBothOobBuilder<'a> {
         assert_initialized_main_thread!();
         CustomBothOobBuilder::new(structure)
@@ -492,9 +608,32 @@ macro_rules! declare_concrete_event(
 );
 
 declare_concrete_event!(FlushStart);
+impl<'a> FlushStart<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Event {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> FlushStartBuilder<'a> {
+        assert_initialized_main_thread!();
+        FlushStartBuilder::new()
+    }
+}
 
 declare_concrete_event!(FlushStop);
 impl<'a> FlushStop<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(reset_time: bool) -> Event {
+        skip_assert_initialized!();
+        Self::builder(reset_time).build()
+    }
+
+    pub fn builder(reset_time: bool) -> FlushStopBuilder<'a> {
+        assert_initialized_main_thread!();
+        FlushStopBuilder::new(reset_time)
+    }
+
     pub fn get_reset_time(&self) -> bool {
         unsafe {
             let mut reset_time = mem::MaybeUninit::uninit();
@@ -508,6 +647,17 @@ impl<'a> FlushStop<'a> {
 
 declare_concrete_event!(StreamStart);
 impl<'a> StreamStart<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(stream_id: &str) -> Event {
+        skip_assert_initialized!();
+        Self::builder(stream_id).build()
+    }
+
+    pub fn builder(stream_id: &str) -> StreamStartBuilder {
+        assert_initialized_main_thread!();
+        StreamStartBuilder::new(stream_id)
+    }
+
     pub fn get_stream_id(&self) -> &'a str {
         unsafe {
             let mut stream_id = ptr::null();
@@ -554,6 +704,17 @@ impl<'a> StreamStart<'a> {
 
 declare_concrete_event!(Caps);
 impl<'a> Caps<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(caps: &::Caps) -> Event {
+        skip_assert_initialized!();
+        Self::builder(caps).build()
+    }
+
+    pub fn builder(caps: &::Caps) -> CapsBuilder {
+        assert_initialized_main_thread!();
+        CapsBuilder::new(caps)
+    }
+
     pub fn get_caps(&self) -> &'a ::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -570,6 +731,17 @@ impl<'a> Caps<'a> {
 
 declare_concrete_event!(Segment);
 impl<'a> Segment<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<F: ::FormattedValue>(segment: &::FormattedSegment<F>) -> Event {
+        skip_assert_initialized!();
+        Self::builder(segment).build()
+    }
+
+    pub fn builder<F: ::FormattedValue>(segment: &::FormattedSegment<F>) -> SegmentBuilder {
+        assert_initialized_main_thread!();
+        SegmentBuilder::new(segment.as_ref())
+    }
+
     pub fn get_segment(&self) -> &'a ::Segment {
         unsafe {
             let mut segment = ptr::null();
@@ -583,6 +755,19 @@ impl<'a> Segment<'a> {
 declare_concrete_event!(StreamCollection);
 impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(stream_collection: &::StreamCollection) -> Event {
+        skip_assert_initialized!();
+        Self::builder(stream_collection).build()
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn builder(stream_collection: &::StreamCollection) -> StreamCollectionBuilder {
+        assert_initialized_main_thread!();
+        StreamCollectionBuilder::new(stream_collection)
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
@@ -595,6 +780,17 @@ impl<'a> StreamCollection<'a> {
 
 declare_concrete_event!(Tag);
 impl<'a> Tag<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(tags: ::TagList) -> Event {
+        skip_assert_initialized!();
+        Self::builder(tags).build()
+    }
+
+    pub fn builder(tags: ::TagList) -> TagBuilder<'a> {
+        assert_initialized_main_thread!();
+        TagBuilder::new(tags)
+    }
+
     pub fn get_tag(&self) -> &'a ::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
@@ -611,6 +807,25 @@ impl<'a> Tag<'a> {
 
 declare_concrete_event!(BufferSize);
 impl<'a> BufferSize<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(minsize: V, maxsize: V, async: bool) -> Event {
+        skip_assert_initialized!();
+        Self::builder(minsize, maxsize, async).build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(
+        minsize: V,
+        maxsize: V,
+        async: bool,
+    ) -> BufferSizeBuilder<'a> {
+        assert_initialized_main_thread!();
+        let minsize = minsize.into();
+        let maxsize = maxsize.into();
+        assert_eq!(minsize.get_format(), maxsize.get_format());
+
+        BufferSizeBuilder::new(minsize, maxsize, async)
+    }
+
     pub fn get(&self) -> (GenericFormattedValue, GenericFormattedValue, bool) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -636,6 +851,17 @@ impl<'a> BufferSize<'a> {
 
 declare_concrete_event!(SinkMessage);
 impl<'a> SinkMessage<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(name: &'a str, msg: &'a ::Message) -> Event {
+        skip_assert_initialized!();
+        Self::builder(name, msg).build()
+    }
+
+    pub fn builder(name: &'a str, msg: &'a ::Message) -> SinkMessageBuilder<'a> {
+        assert_initialized_main_thread!();
+        SinkMessageBuilder::new(name, msg)
+    }
+
     pub fn get_message(&self) -> ::Message {
         unsafe {
             let mut msg = ptr::null_mut();
@@ -648,6 +874,19 @@ impl<'a> SinkMessage<'a> {
 
 declare_concrete_event!(StreamGroupDone);
 impl<'a> StreamGroupDone<'a> {
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(group_id: GroupId) -> Event {
+        skip_assert_initialized!();
+        Self::builder(group_id).build()
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn builder(group_id: GroupId) -> StreamGroupDoneBuilder<'a> {
+        assert_initialized_main_thread!();
+        StreamGroupDoneBuilder::new(group_id)
+    }
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_group_id(&self) -> GroupId {
         unsafe {
@@ -663,9 +902,34 @@ impl<'a> StreamGroupDone<'a> {
 }
 
 declare_concrete_event!(Eos);
+impl<'a> Eos<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Event {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> EosBuilder<'a> {
+        assert_initialized_main_thread!();
+        EosBuilder::new()
+    }
+}
 
 declare_concrete_event!(Toc);
 impl<'a> Toc<'a> {
+    // FIXME could use false for updated as default
+    // Even better: use an enum for updated so that it is more explicit than true / false
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(toc: &::Toc, updated: bool) -> Event {
+        skip_assert_initialized!();
+        Self::builder(toc, updated).build()
+    }
+
+    pub fn builder(toc: &::Toc, updated: bool) -> TocBuilder {
+        assert_initialized_main_thread!();
+        TocBuilder::new(toc, updated)
+    }
+
     pub fn get_toc(&self) -> (&'a ::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
@@ -686,6 +950,17 @@ impl<'a> Toc<'a> {
 
 declare_concrete_event!(Protection);
 impl<'a> Protection<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(system_id: &'a str, data: &'a ::Buffer) -> Event {
+        skip_assert_initialized!();
+        Self::builder(system_id, data).build()
+    }
+
+    pub fn builder(system_id: &'a str, data: &'a ::Buffer) -> ProtectionBuilder<'a> {
+        assert_initialized_main_thread!();
+        ProtectionBuilder::new(system_id, data)
+    }
+
     pub fn get(&self) -> (&'a str, &'a ::BufferRef, Option<&'a str>) {
         unsafe {
             let mut system_id = ptr::null();
@@ -721,6 +996,18 @@ impl<'a> Protection<'a> {
 
 declare_concrete_event!(SegmentDone);
 impl<'a> SegmentDone<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Event {
+        skip_assert_initialized!();
+        Self::builder(position).build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
+        assert_initialized_main_thread!();
+        let position = position.into();
+        SegmentDoneBuilder::new(position)
+    }
+
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -739,6 +1026,17 @@ impl<'a> SegmentDone<'a> {
 
 declare_concrete_event!(Gap);
 impl<'a> Gap<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(timestamp: ::ClockTime, duration: ::ClockTime) -> Event {
+        skip_assert_initialized!();
+        Self::builder(timestamp, duration).build()
+    }
+
+    pub fn builder(timestamp: ::ClockTime, duration: ::ClockTime) -> GapBuilder<'a> {
+        assert_initialized_main_thread!();
+        GapBuilder::new(timestamp, duration)
+    }
+
     pub fn get(&self) -> (::ClockTime, ::ClockTime) {
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
@@ -760,6 +1058,22 @@ impl<'a> Gap<'a> {
 
 declare_concrete_event!(Qos);
 impl<'a> Qos<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: ::ClockTime) -> Event {
+        skip_assert_initialized!();
+        Self::builder(type_, proportion, diff, timestamp).build()
+    }
+
+    pub fn builder(
+        type_: ::QOSType,
+        proportion: f64,
+        diff: i64,
+        timestamp: ::ClockTime,
+    ) -> QosBuilder<'a> {
+        assert_initialized_main_thread!();
+        QosBuilder::new(type_, proportion, diff, timestamp)
+    }
+
     pub fn get(&self) -> (::QOSType, f64, i64, ::ClockTime) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -787,6 +1101,35 @@ impl<'a> Qos<'a> {
 
 declare_concrete_event!(Seek);
 impl<'a> Seek<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(
+        rate: f64,
+        flags: ::SeekFlags,
+        start_type: ::SeekType,
+        start: V,
+        stop_type: ::SeekType,
+        stop: V,
+    ) -> Event {
+        skip_assert_initialized!();
+        Self::builder(rate, flags, start_type, start, stop_type, stop).build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(
+        rate: f64,
+        flags: ::SeekFlags,
+        start_type: ::SeekType,
+        start: V,
+        stop_type: ::SeekType,
+        stop: V,
+    ) -> SeekBuilder<'a> {
+        assert_initialized_main_thread!();
+        let start = start.into();
+        let stop = stop.into();
+        assert_eq!(start.get_format(), stop.get_format());
+
+        SeekBuilder::new(rate, flags, start_type, start, stop_type, stop)
+    }
+
     pub fn get(
         &self,
     ) -> (
@@ -844,9 +1187,32 @@ impl<'a> Seek<'a> {
 }
 
 declare_concrete_event!(Navigation);
+impl<'a> Navigation<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Event {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> NavigationBuilder<'a> {
+        assert_initialized_main_thread!();
+        NavigationBuilder::new(structure)
+    }
+}
 
 declare_concrete_event!(Latency);
 impl<'a> Latency<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(latency: ::ClockTime) -> Event {
+        skip_assert_initialized!();
+        Self::builder(latency).build()
+    }
+
+    pub fn builder(latency: ::ClockTime) -> LatencyBuilder<'a> {
+        assert_initialized_main_thread!();
+        LatencyBuilder::new(latency)
+    }
+
     pub fn get_latency(&self) -> ::ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
@@ -860,6 +1226,27 @@ impl<'a> Latency<'a> {
 
 declare_concrete_event!(Step);
 impl<'a> Step<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(
+        amount: V,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+    ) -> Event {
+        skip_assert_initialized!();
+        Self::builder(amount.into(), rate, flush, intermediate).build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(
+        amount: V,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+    ) -> StepBuilder<'a> {
+        assert_initialized_main_thread!();
+        StepBuilder::new(amount.into(), rate, flush, intermediate)
+    }
+
     pub fn get(&self) -> (GenericFormattedValue, f64, bool, bool) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -891,9 +1278,32 @@ impl<'a> Step<'a> {
 }
 
 declare_concrete_event!(Reconfigure);
+impl<'a> Reconfigure<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Event {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> ReconfigureBuilder<'a> {
+        assert_initialized_main_thread!();
+        ReconfigureBuilder::new()
+    }
+}
 
 declare_concrete_event!(TocSelect);
 impl<'a> TocSelect<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(uid: &str) -> Event {
+        skip_assert_initialized!();
+        Self::builder(uid).build()
+    }
+
+    pub fn builder(uid: &str) -> TocSelectBuilder {
+        assert_initialized_main_thread!();
+        TocSelectBuilder::new(uid)
+    }
+
     pub fn get_uid(&self) -> &'a str {
         unsafe {
             let mut uid = ptr::null_mut();
@@ -908,6 +1318,19 @@ impl<'a> TocSelect<'a> {
 declare_concrete_event!(SelectStreams);
 impl<'a> SelectStreams<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(streams: &'a [&'a str]) -> Event {
+        skip_assert_initialized!();
+        Self::builder(streams).build()
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn builder(streams: &'a [&'a str]) -> SelectStreamsBuilder {
+        assert_initialized_main_thread!();
+        SelectStreamsBuilder::new(streams)
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_streams(&self) -> Vec<String> {
         unsafe {
             let mut streams = ptr::null_mut();
@@ -920,11 +1343,88 @@ impl<'a> SelectStreams<'a> {
 }
 
 declare_concrete_event!(CustomUpstream);
+impl<'a> CustomUpstream<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Event {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> CustomUpstreamBuilder<'a> {
+        assert_initialized_main_thread!();
+        CustomUpstreamBuilder::new(structure)
+    }
+}
+
 declare_concrete_event!(CustomDownstream);
+impl<'a> CustomDownstream<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Event {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> CustomDownstreamBuilder<'a> {
+        assert_initialized_main_thread!();
+        CustomDownstreamBuilder::new(structure)
+    }
+}
+
 declare_concrete_event!(CustomDownstreamOob);
+impl<'a> CustomDownstreamOob<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Event {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> CustomDownstreamOobBuilder<'a> {
+        assert_initialized_main_thread!();
+        CustomDownstreamOobBuilder::new(structure)
+    }
+}
+
 declare_concrete_event!(CustomDownstreamSticky);
+impl<'a> CustomDownstreamSticky<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Event {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> CustomDownstreamStickyBuilder<'a> {
+        assert_initialized_main_thread!();
+        CustomDownstreamStickyBuilder::new(structure)
+    }
+}
+
 declare_concrete_event!(CustomBoth);
+impl<'a> CustomBoth<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Event {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> CustomBothBuilder<'a> {
+        assert_initialized_main_thread!();
+        CustomBothBuilder::new(structure)
+    }
+}
+
 declare_concrete_event!(CustomBothOob);
+impl<'a> CustomBothOob<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Event {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> CustomBothOobBuilder<'a> {
+        assert_initialized_main_thread!();
+        CustomBothOobBuilder::new(structure)
+    }
+}
 
 struct EventBuilder<'a> {
     seqnum: Option<Seqnum>,
@@ -1025,6 +1525,7 @@ macro_rules! event_builder_generic_impl {
 pub struct FlushStartBuilder<'a> {
     builder: EventBuilder<'a>,
 }
+
 impl<'a> FlushStartBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1062,6 +1563,7 @@ pub struct StreamStartBuilder<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     stream: Option<::Stream>,
 }
+
 impl<'a> StreamStartBuilder<'a> {
     fn new(stream_id: &'a str) -> Self {
         skip_assert_initialized!();
@@ -1121,6 +1623,7 @@ pub struct CapsBuilder<'a> {
     builder: EventBuilder<'a>,
     caps: &'a ::Caps,
 }
+
 impl<'a> CapsBuilder<'a> {
     fn new(caps: &'a ::Caps) -> Self {
         skip_assert_initialized!();
@@ -1137,6 +1640,7 @@ pub struct SegmentBuilder<'a> {
     builder: EventBuilder<'a>,
     segment: &'a ::Segment,
 }
+
 impl<'a> SegmentBuilder<'a> {
     fn new(segment: &'a ::Segment) -> Self {
         skip_assert_initialized!();
@@ -1156,6 +1660,7 @@ pub struct StreamCollectionBuilder<'a> {
     builder: EventBuilder<'a>,
     stream_collection: &'a ::StreamCollection,
 }
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(stream_collection: &'a ::StreamCollection) -> Self {
@@ -1175,6 +1680,7 @@ pub struct TagBuilder<'a> {
     builder: EventBuilder<'a>,
     tags: Option<::TagList>,
 }
+
 impl<'a> TagBuilder<'a> {
     fn new(tags: ::TagList) -> Self {
         skip_assert_initialized!();
@@ -1196,6 +1702,7 @@ pub struct BufferSizeBuilder<'a> {
     maxsize: GenericFormattedValue,
     async: bool,
 }
+
 impl<'a> BufferSizeBuilder<'a> {
     fn new(minsize: GenericFormattedValue, maxsize: GenericFormattedValue, async: bool) -> Self {
         skip_assert_initialized!();
@@ -1220,6 +1727,7 @@ pub struct SinkMessageBuilder<'a> {
     name: &'a str,
     msg: &'a ::Message,
 }
+
 impl<'a> SinkMessageBuilder<'a> {
     fn new(name: &'a str, msg: &'a ::Message) -> Self {
         skip_assert_initialized!();
@@ -1241,6 +1749,7 @@ pub struct StreamGroupDoneBuilder<'a> {
     builder: EventBuilder<'a>,
     group_id: GroupId,
 }
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamGroupDoneBuilder<'a> {
     fn new(group_id: GroupId) -> Self {
@@ -1259,6 +1768,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
 pub struct EosBuilder<'a> {
     builder: EventBuilder<'a>,
 }
+
 impl<'a> EosBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1275,6 +1785,7 @@ pub struct TocBuilder<'a> {
     toc: &'a ::Toc,
     updated: bool,
 }
+
 impl<'a> TocBuilder<'a> {
     fn new(toc: &'a ::Toc, updated: bool) -> Self {
         skip_assert_initialized!();
@@ -1297,6 +1808,7 @@ pub struct ProtectionBuilder<'a> {
     data: &'a ::Buffer,
     origin: Option<&'a str>,
 }
+
 impl<'a> ProtectionBuilder<'a> {
     fn new(system_id: &'a str, data: &'a ::Buffer) -> Self {
         skip_assert_initialized!();
@@ -1326,6 +1838,7 @@ pub struct SegmentDoneBuilder<'a> {
     builder: EventBuilder<'a>,
     position: GenericFormattedValue,
 }
+
 impl<'a> SegmentDoneBuilder<'a> {
     fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
@@ -1346,6 +1859,7 @@ pub struct GapBuilder<'a> {
     timestamp: ::ClockTime,
     duration: ::ClockTime,
 }
+
 impl<'a> GapBuilder<'a> {
     fn new(timestamp: ::ClockTime, duration: ::ClockTime) -> Self {
         skip_assert_initialized!();
@@ -1369,6 +1883,7 @@ pub struct QosBuilder<'a> {
     diff: i64,
     timestamp: ::ClockTime,
 }
+
 impl<'a> QosBuilder<'a> {
     fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: ::ClockTime) -> Self {
         skip_assert_initialized!();
@@ -1400,6 +1915,7 @@ pub struct SeekBuilder<'a> {
     #[allow(unused)]
     trickmode_interval: Option<::ClockTime>,
 }
+
 impl<'a> SeekBuilder<'a> {
     fn new(
         rate: f64,
@@ -1454,6 +1970,7 @@ pub struct NavigationBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
+
 impl<'a> NavigationBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
@@ -1473,6 +1990,7 @@ pub struct LatencyBuilder<'a> {
     builder: EventBuilder<'a>,
     latency: ::ClockTime,
 }
+
 impl<'a> LatencyBuilder<'a> {
     fn new(latency: ::ClockTime) -> Self {
         skip_assert_initialized!();
@@ -1492,6 +2010,7 @@ pub struct StepBuilder<'a> {
     flush: bool,
     intermediate: bool,
 }
+
 impl<'a> StepBuilder<'a> {
     fn new(amount: GenericFormattedValue, rate: f64, flush: bool, intermediate: bool) -> Self {
         skip_assert_initialized!();
@@ -1516,6 +2035,7 @@ impl<'a> StepBuilder<'a> {
 pub struct ReconfigureBuilder<'a> {
     builder: EventBuilder<'a>,
 }
+
 impl<'a> ReconfigureBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1531,6 +2051,7 @@ pub struct TocSelectBuilder<'a> {
     builder: EventBuilder<'a>,
     uid: &'a str,
 }
+
 impl<'a> TocSelectBuilder<'a> {
     fn new(uid: &'a str) -> Self {
         skip_assert_initialized!();
@@ -1550,6 +2071,7 @@ pub struct SelectStreamsBuilder<'a> {
     builder: EventBuilder<'a>,
     streams: &'a [&'a str],
 }
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> SelectStreamsBuilder<'a> {
     fn new(streams: &'a [&'a str]) -> Self {
@@ -1569,6 +2091,7 @@ pub struct CustomUpstreamBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
+
 impl<'a> CustomUpstreamBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
@@ -1588,6 +2111,7 @@ pub struct CustomDownstreamBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
+
 impl<'a> CustomDownstreamBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
@@ -1607,6 +2131,7 @@ pub struct CustomDownstreamOobBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
+
 impl<'a> CustomDownstreamOobBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
@@ -1629,6 +2154,7 @@ pub struct CustomDownstreamStickyBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
+
 impl<'a> CustomDownstreamStickyBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
@@ -1651,6 +2177,7 @@ pub struct CustomBothBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
+
 impl<'a> CustomBothBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
@@ -1670,6 +2197,7 @@ pub struct CustomBothOobBuilder<'a> {
     builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
+
 impl<'a> CustomBothOobBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
@@ -1694,7 +2222,7 @@ mod tests {
         ::init().unwrap();
 
         // Event without arguments
-        let flush_start_evt = Event::new_flush_start().build();
+        let flush_start_evt = FlushStart::new();
         match flush_start_evt.view() {
             EventView::FlushStart(flush_start_evt) => {
                 assert!(!flush_start_evt.is_sticky());
@@ -1703,7 +2231,7 @@ mod tests {
             _ => panic!("flush_start_evt.view() is not an EventView::FlushStart(_)"),
         }
 
-        let flush_start_evt = Event::new_flush_start()
+        let flush_start_evt = FlushStart::builder()
             .other_fields(&[("extra-field", &true)])
             .build();
         match flush_start_evt.view() {
@@ -1717,7 +2245,7 @@ mod tests {
         }
 
         // Event with arguments
-        let flush_stop_evt = Event::new_flush_stop(true)
+        let flush_stop_evt = FlushStop::builder(true)
             .other_fields(&[("extra-field", &true)])
             .build();
         match flush_stop_evt.view() {

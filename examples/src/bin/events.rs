@@ -74,8 +74,7 @@ fn example_main() {
         // Once all sinks are done handling the EOS event (and all buffers that were before the
         // EOS event in the pipeline already), the pipeline would post an EOS message on the bus,
         // essentially telling the application that the pipeline is completely drained.
-        let ev = gst::Event::new_eos().build();
-        pipeline.send_event(ev);
+        pipeline.send_event(gst::event::Eos::new());
 
         // Remove this handler, the pipeline will shutdown anyway, now that we
         // sent the EOS event.

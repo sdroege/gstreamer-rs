@@ -23,7 +23,7 @@ impl ExampleCustomEvent {
         let s = gst::Structure::builder(Self::EVENT_NAME)
             .field("send_eos", &send_eos)
             .build();
-        gst::Event::new_custom_downstream(s).build()
+        gst::event::CustomDownstream::new(s)
     }
 
     pub fn from_event(ev: &gst::Event) -> Option<ExampleCustomEvent> {
@@ -85,7 +85,7 @@ fn example_main() {
                             /* Send EOS event to shut down the pipeline, but from an async callback, as we're
                              * in a pad probe blocking the stream thread here... */
                             println!("Got custom event with send_eos=true. Sending EOS");
-                            let ev = gst::Event::new_eos().build();
+                            let ev = gst::event::Eos::new();
                             let pipeline_weak = pipeline_weak.clone();
                             pipeline.call_async(move |_| {
                                 if let Some(pipeline) = pipeline_weak.upgrade() {

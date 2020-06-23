@@ -2137,9 +2137,9 @@ mod tests {
 
         pad.set_active(true).unwrap();
 
-        assert!(pad.send_event(::Event::new_stream_start("test").build()));
+        assert!(pad.send_event(::event::StreamStart::new("test")));
         let segment = ::FormattedSegment::<::ClockTime>::new();
-        assert!(pad.send_event(::Event::new_segment(segment.as_ref()).build()));
+        assert!(pad.send_event(::event::Segment::new(segment.as_ref())));
 
         assert_eq!(pad.chain(::Buffer::new()), Ok(FlowSuccess::Ok));
 
@@ -2290,9 +2290,9 @@ mod tests {
 
         pad.set_active(true).unwrap();
 
-        assert!(pad.push_event(::Event::new_stream_start("test").build()));
+        assert!(pad.push_event(::event::StreamStart::new("test")));
         let segment = ::FormattedSegment::<::ClockTime>::new();
-        assert!(pad.push_event(::Event::new_segment(segment.as_ref()).build()));
+        assert!(pad.push_event(::event::Segment::new(segment.as_ref())));
 
         assert_eq!(pad.push(::Buffer::new()), Ok(FlowSuccess::Ok));
         assert_eq!(pad.push(::Buffer::new()), flow_override.into_result());

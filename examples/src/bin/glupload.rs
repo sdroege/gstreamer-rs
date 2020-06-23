@@ -671,7 +671,7 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
         windowed_context.swap_buffers()?;
     }
 
-    app.pipeline.send_event(gst::Event::new_eos().build());
+    app.pipeline.send_event(gst::event::Eos::new());
     app.pipeline.set_state(gst::State::Null)?;
 
     Ok(app.into_context())
