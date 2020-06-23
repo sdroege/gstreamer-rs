@@ -63,7 +63,7 @@ fn example_main() {
             // Create a new position query and send it to the pipeline.
             // This will traverse all elements in the pipeline, until one feels
             // capable of answering the query.
-            let mut q = gst::Query::new_position(gst::Format::Time);
+            let mut q = gst::query::Position::new(gst::Format::Time);
             if pipeline.query(&mut q) {
                 Some(q.get_result())
             } else {
@@ -77,7 +77,7 @@ fn example_main() {
             // Create a new duration query and send it to the pipeline.
             // This will traverse all elements in the pipeline, until one feels
             // capable of answering the query.
-            let mut q = gst::Query::new_duration(gst::Format::Time);
+            let mut q = gst::query::Duration::new(gst::Format::Time);
             if pipeline.query(&mut q) {
                 Some(q.get_result())
             } else {

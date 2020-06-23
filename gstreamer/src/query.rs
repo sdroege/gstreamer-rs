@@ -26,6 +26,7 @@ gst_define_mini_object_wrapper!(Query, QueryRef, gst_sys::GstQuery, [Debug,], ||
 });
 
 impl Query {
+    #[deprecated(since = "0.16.0", note = "use `query::Position::new` instead")]
     pub fn new_position(fmt: ::Format) -> Position<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -35,6 +36,7 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Duration::new` instead")]
     pub fn new_duration(fmt: ::Format) -> Duration<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -44,11 +46,13 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Latency::new` instead")]
     pub fn new_latency() -> Latency<Self> {
         assert_initialized_main_thread!();
         unsafe { Latency::<Self>(from_glib_full(gst_sys::gst_query_new_latency())) }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Seeking::new` instead")]
     pub fn new_seeking(fmt: ::Format) -> Seeking<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -58,6 +62,7 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Segment::new` instead")]
     pub fn new_segment(fmt: ::Format) -> Segment<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -67,6 +72,7 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Convert::new` instead")]
     pub fn new_convert<V: Into<GenericFormattedValue>>(
         value: V,
         dest_fmt: ::Format,
@@ -82,11 +88,13 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Formats::new` instead")]
     pub fn new_formats() -> Formats<Self> {
         assert_initialized_main_thread!();
         unsafe { Formats::<Self>(from_glib_full(gst_sys::gst_query_new_formats())) }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Buffering::new` instead")]
     pub fn new_buffering(fmt: ::Format) -> Buffering<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -96,6 +104,7 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Custom::new` instead")]
     pub fn new_custom(structure: ::Structure) -> Custom<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -106,11 +115,13 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Uri::new` instead")]
     pub fn new_uri() -> Uri<Self> {
         assert_initialized_main_thread!();
         unsafe { Uri::<Self>(from_glib_full(gst_sys::gst_query_new_uri())) }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Allocation::new` instead")]
     pub fn new_allocation(caps: &::Caps, need_pool: bool) -> Allocation<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -121,11 +132,13 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Scheduling::new` instead")]
     pub fn new_scheduling() -> Scheduling<Self> {
         assert_initialized_main_thread!();
         unsafe { Scheduling::<Self>(from_glib_full(gst_sys::gst_query_new_scheduling())) }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::AcceptCaps::new` instead")]
     pub fn new_accept_caps(caps: &::Caps) -> AcceptCaps<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -135,6 +148,7 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Caps::new` instead")]
     pub fn new_caps(filter: Option<&::Caps>) -> Caps<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -144,11 +158,13 @@ impl Query {
         }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Drain::new` instead")]
     pub fn new_drain() -> Drain<Self> {
         assert_initialized_main_thread!();
         unsafe { Drain::<Self>(from_glib_full(gst_sys::gst_query_new_drain())) }
     }
 
+    #[deprecated(since = "0.16.0", note = "use `query::Context::new` instead")]
     pub fn new_context(context_type: &str) -> Context<Self> {
         assert_initialized_main_thread!();
         unsafe {
@@ -159,6 +175,7 @@ impl Query {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[deprecated(since = "0.16.0", note = "use `query::Bitrate::new` instead")]
     pub fn new_bitrate() -> Bitrate<Self> {
         assert_initialized_main_thread!();
         unsafe { Bitrate::<Self>(from_glib_full(gst_sys::gst_query_new_bitrate())) }
@@ -363,6 +380,17 @@ macro_rules! declare_concrete_query(
 );
 
 declare_concrete_query!(Position, T);
+impl Position<Query> {
+    pub fn new(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_position(
+                fmt.to_glib(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Position<T> {
     pub fn get_result(&self) -> GenericFormattedValue {
         unsafe {
@@ -401,6 +429,17 @@ impl<T: AsMutPtr> Position<T> {
 }
 
 declare_concrete_query!(Duration, T);
+impl Duration<Query> {
+    pub fn new(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_duration(
+                fmt.to_glib(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Duration<T> {
     pub fn get_result(&self) -> GenericFormattedValue {
         unsafe {
@@ -439,6 +478,19 @@ impl<T: AsMutPtr> Duration<T> {
 }
 
 declare_concrete_query!(Latency, T);
+impl Latency<Query> {
+    pub fn new() -> Self {
+        assert_initialized_main_thread!();
+        unsafe { Self(from_glib_full(gst_sys::gst_query_new_latency())) }
+    }
+}
+
+impl Default for Latency<Query> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: AsPtr> Latency<T> {
     pub fn get_result(&self) -> (bool, ::ClockTime, ::ClockTime) {
         unsafe {
@@ -476,9 +528,23 @@ impl<T: AsMutPtr> Latency<T> {
 }
 
 declare_concrete_query!(Jitter, T);
+// FIXME no gst_sys::gst_query_new_jitter
+
 declare_concrete_query!(Rate, T);
+// FIXME no gst_sys::gst_query_new_rate
 
 declare_concrete_query!(Seeking, T);
+impl Seeking<Query> {
+    pub fn new(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_seeking(
+                fmt.to_glib(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Seeking<T> {
     pub fn get_result(&self) -> (bool, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
@@ -539,6 +605,17 @@ impl<T: AsMutPtr> Seeking<T> {
 }
 
 declare_concrete_query!(Segment, T);
+impl Segment<Query> {
+    pub fn new(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_segment(
+                fmt.to_glib(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Segment<T> {
     pub fn get_result(&self) -> (f64, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
@@ -598,6 +675,20 @@ impl<T: AsMutPtr> Segment<T> {
 }
 
 declare_concrete_query!(Convert, T);
+impl Convert<Query> {
+    pub fn new<V: Into<GenericFormattedValue>>(value: V, dest_fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
+        let value = value.into();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_convert(
+                value.get_format().to_glib(),
+                value.get_value(),
+                dest_fmt.to_glib(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Convert<T> {
     pub fn get_result(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
@@ -659,6 +750,19 @@ impl<T: AsMutPtr> Convert<T> {
 }
 
 declare_concrete_query!(Formats, T);
+impl Formats<Query> {
+    pub fn new() -> Self {
+        assert_initialized_main_thread!();
+        unsafe { Self(from_glib_full(gst_sys::gst_query_new_formats())) }
+    }
+}
+
+impl Default for Formats<Query> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: AsPtr> Formats<T> {
     pub fn get_result(&self) -> Vec<::Format> {
         unsafe {
@@ -692,6 +796,17 @@ impl<T: AsMutPtr> Formats<T> {
 }
 
 declare_concrete_query!(Buffering, T);
+impl Buffering<Query> {
+    pub fn new(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_buffering(
+                fmt.to_glib(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Buffering<T> {
     pub fn get_format(&self) -> ::Format {
         unsafe {
@@ -878,8 +993,32 @@ impl<T: AsMutPtr> Buffering<T> {
 }
 
 declare_concrete_query!(Custom, T);
+impl Custom<Query> {
+    pub fn new(structure: ::Structure) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_custom(
+                gst_sys::GST_QUERY_CUSTOM,
+                structure.into_ptr(),
+            )))
+        }
+    }
+}
 
 declare_concrete_query!(Uri, T);
+impl Uri<Query> {
+    pub fn new() -> Self {
+        assert_initialized_main_thread!();
+        unsafe { Self(from_glib_full(gst_sys::gst_query_new_uri())) }
+    }
+}
+
+impl Default for Uri<Query> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: AsPtr> Uri<T> {
     pub fn get_uri(&self) -> Option<String> {
         unsafe {
@@ -925,6 +1064,18 @@ impl<T: AsMutPtr> Uri<T> {
 }
 
 declare_concrete_query!(Allocation, T);
+impl Allocation<Query> {
+    pub fn new(caps: &::Caps, need_pool: bool) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_allocation(
+                caps.as_mut_ptr(),
+                need_pool.to_glib(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Allocation<T> {
     pub fn get(&self) -> (&::CapsRef, bool) {
         unsafe {
@@ -1086,6 +1237,19 @@ impl<T: AsMutPtr> Allocation<T> {
 }
 
 declare_concrete_query!(Scheduling, T);
+impl Scheduling<Query> {
+    pub fn new() -> Self {
+        assert_initialized_main_thread!();
+        unsafe { Self(from_glib_full(gst_sys::gst_query_new_scheduling())) }
+    }
+}
+
+impl Default for Scheduling<Query> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: AsPtr> Scheduling<T> {
     pub fn has_scheduling_mode(&self, mode: ::PadMode) -> bool {
         unsafe {
@@ -1174,6 +1338,17 @@ impl<T: AsMutPtr> Scheduling<T> {
 }
 
 declare_concrete_query!(AcceptCaps, T);
+impl AcceptCaps<Query> {
+    pub fn new(caps: &::Caps) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_accept_caps(
+                caps.as_mut_ptr(),
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> AcceptCaps<T> {
     pub fn get_caps(&self) -> &::CapsRef {
         unsafe {
@@ -1205,6 +1380,17 @@ impl<T: AsMutPtr> AcceptCaps<T> {
 }
 
 declare_concrete_query!(Caps, T);
+impl Caps<Query> {
+    pub fn new(filter: Option<&::Caps>) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_caps(
+                filter.to_glib_none().0,
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Caps<T> {
     pub fn get_filter(&self) -> Option<&::CapsRef> {
         unsafe {
@@ -1248,8 +1434,31 @@ impl<T: AsMutPtr> Caps<T> {
 }
 
 declare_concrete_query!(Drain, T);
+impl Drain<Query> {
+    pub fn new() -> Self {
+        assert_initialized_main_thread!();
+        unsafe { Self(from_glib_full(gst_sys::gst_query_new_drain())) }
+    }
+}
+
+impl Default for Drain<Query> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 declare_concrete_query!(Context, T);
+impl Context<Query> {
+    pub fn new(context_type: &str) -> Self {
+        assert_initialized_main_thread!();
+        unsafe {
+            Self(from_glib_full(gst_sys::gst_query_new_context(
+                context_type.to_glib_none().0,
+            )))
+        }
+    }
+}
+
 impl<T: AsPtr> Context<T> {
     pub fn get_context(&self) -> Option<&::ContextRef> {
         unsafe {
@@ -1288,6 +1497,22 @@ impl<T: AsMutPtr> Context<T> {
 }
 
 declare_concrete_query!(Bitrate, T);
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl Bitrate<Query> {
+    pub fn new() -> Self {
+        assert_initialized_main_thread!();
+        unsafe { Self(from_glib_full(gst_sys::gst_query_new_bitrate())) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl Default for Bitrate<Query> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: AsPtr> Bitrate<T> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn get_bitrate(&self) -> u32 {
@@ -1347,7 +1572,7 @@ mod tests {
             }
         }
 
-        let mut p = Query::new_position(::Format::Time);
+        let mut p = Position::new(::Format::Time);
         let pos = p.get_result();
         assert_eq!(pos.try_into(), Ok(::CLOCK_TIME_NONE));
 
@@ -1372,7 +1597,7 @@ mod tests {
     #[test]
     fn test_into_query() {
         ::init().unwrap();
-        let d = Query::new_duration(::Format::Time);
+        let d = Duration::new(::Format::Time);
 
         let mut query: Query = d.into();
         assert!(query.is_writable());
@@ -1398,7 +1623,7 @@ mod tests {
     fn test_concrete_to_sys() {
         ::init().unwrap();
 
-        let p = Query::new_position(::Format::Time);
+        let p = Position::new(::Format::Time);
         unsafe {
             assert!(!p.as_mut_ptr().is_null());
         }

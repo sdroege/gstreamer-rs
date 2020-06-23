@@ -134,7 +134,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
 
                 custom_data.playing = new_state == gst::State::Playing;
                 if custom_data.playing {
-                    let mut seeking = gst::Query::new_seeking(gst::Format::Time);
+                    let mut seeking = gst::query::Seeking::new(gst::Format::Time);
                     if custom_data.playbin.query(&mut seeking) {
                         let (seekable, start, end) = seeking.get_result();
                         custom_data.seek_enabled = seekable;
