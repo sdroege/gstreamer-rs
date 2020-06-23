@@ -119,36 +119,64 @@ impl MessageRef {
 }
 
 impl Message {
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Eos::new` or `message::Eos::builder` instead"
+    )]
     pub fn new_eos<'a>() -> EosBuilder<'a> {
         assert_initialized_main_thread!();
         EosBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Error::new` or `message::Error::builder` instead"
+    )]
     pub fn new_error<T: MessageErrorDomain>(error: T, message: &str) -> ErrorBuilder<T> {
         assert_initialized_main_thread!();
         ErrorBuilder::new(error, message)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Warning::new` or `message::Warning::builder` instead"
+    )]
     pub fn new_warning<T: MessageErrorDomain>(error: T, message: &str) -> WarningBuilder<T> {
         assert_initialized_main_thread!();
         WarningBuilder::new(error, message)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Info::new` or `message::Info::builder` instead"
+    )]
     pub fn new_info<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder<T> {
         assert_initialized_main_thread!();
         InfoBuilder::new(error, message)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Tag::new` or `message::Tag::builder` instead"
+    )]
     pub fn new_tag(tags: &TagList) -> TagBuilder {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Buffering::new` or `message::Buffering::builder` instead"
+    )]
     pub fn new_buffering<'a>(percent: i32) -> BufferingBuilder<'a> {
         assert_initialized_main_thread!();
         BufferingBuilder::new(percent)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StateChanged::new` or `message::StateChanged::builder` instead"
+    )]
     pub fn new_state_changed<'a>(
         old: ::State,
         new: ::State,
@@ -158,11 +186,19 @@ impl Message {
         StateChangedBuilder::new(old, new, pending)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StateDirty::new` or `message::StateDirty::builder` instead"
+    )]
     pub fn new_state_dirty<'a>() -> StateDirtyBuilder<'a> {
         assert_initialized_main_thread!();
         StateDirtyBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StepDone::new` or `message::StepDone::builder` instead"
+    )]
     pub fn new_step_done<'a, V: Into<GenericFormattedValue>>(
         amount: V,
         rate: f64,
@@ -182,21 +218,37 @@ impl Message {
         )
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::ClockProvide::new` or `message::ClockProvide::builder` instead"
+    )]
     pub fn new_clock_provide(clock: &::Clock, ready: bool) -> ClockProvideBuilder {
         assert_initialized_main_thread!();
         ClockProvideBuilder::new(clock, ready)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::ClockLost::new` or `message::ClockLost::builder` instead"
+    )]
     pub fn new_clock_lost(clock: &::Clock) -> ClockLostBuilder {
         assert_initialized_main_thread!();
         ClockLostBuilder::new(clock)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::NewClock::new` or `message::NewClock::builder` instead"
+    )]
     pub fn new_new_clock(clock: &::Clock) -> NewClockBuilder {
         assert_initialized_main_thread!();
         NewClockBuilder::new(clock)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StructureChange::new` or `message::StructureChange::builder` instead"
+    )]
     pub fn new_structure_change(
         type_: ::StructureChangeType,
         owner: &::Element,
@@ -206,21 +258,37 @@ impl Message {
         StructureChangeBuilder::new(type_, owner, busy)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StreamStatus::new` or `message::StreamStatus::builder` instead"
+    )]
     pub fn new_stream_status(type_: ::StreamStatusType, owner: &::Element) -> StreamStatusBuilder {
         assert_initialized_main_thread!();
         StreamStatusBuilder::new(type_, owner)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Application::new` or `message::Application::builder` instead"
+    )]
     pub fn new_application<'a>(structure: ::Structure) -> ApplicationBuilder<'a> {
         assert_initialized_main_thread!();
         ApplicationBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Element::new` or `message::Element::builder` instead"
+    )]
     pub fn new_element<'a>(structure: ::Structure) -> ElementBuilder<'a> {
         assert_initialized_main_thread!();
         ElementBuilder::new(structure)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::SegmentStart::new` or `message::SegmentStart::builder` instead"
+    )]
     pub fn new_segment_start<'a, V: Into<GenericFormattedValue>>(
         position: V,
     ) -> SegmentStartBuilder<'a> {
@@ -229,6 +297,10 @@ impl Message {
         SegmentStartBuilder::new(position)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::SegmentDone::new` or `message::SegmentDone::builder` instead"
+    )]
     pub fn new_segment_done<'a, V: Into<GenericFormattedValue>>(
         position: V,
     ) -> SegmentDoneBuilder<'a> {
@@ -237,31 +309,55 @@ impl Message {
         SegmentDoneBuilder::new(position)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::DurationChanged::new` or `message::DurationChanged::builder` instead"
+    )]
     pub fn new_duration_changed<'a>() -> DurationChangedBuilder<'a> {
         assert_initialized_main_thread!();
         DurationChangedBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Latency::new` or `message::Latency::builder` instead"
+    )]
     pub fn new_latency<'a>() -> LatencyBuilder<'a> {
         assert_initialized_main_thread!();
         LatencyBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::AsyncStart::new` or `message::AsyncStart::builder` instead"
+    )]
     pub fn new_async_start<'a>() -> AsyncStartBuilder<'a> {
         assert_initialized_main_thread!();
         AsyncStartBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::AsyncDone::new` or `message::AsyncDone::builder` instead"
+    )]
     pub fn new_async_done<'a>(running_time: ::ClockTime) -> AsyncDoneBuilder<'a> {
         assert_initialized_main_thread!();
         AsyncDoneBuilder::new(running_time)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::RequestState::new` or `message::RequestState::builder` instead"
+    )]
     pub fn new_request_state<'a>(state: ::State) -> RequestStateBuilder<'a> {
         assert_initialized_main_thread!();
         RequestStateBuilder::new(state)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StepStart::new` or `message::StepStart::builder` instead"
+    )]
     pub fn new_step_start<'a, V: Into<GenericFormattedValue>>(
         active: bool,
         amount: V,
@@ -273,6 +369,10 @@ impl Message {
         StepStartBuilder::new(active, amount.into(), rate, flush, intermediate)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Qos::new` or `message::Qos::builder` instead"
+    )]
     pub fn new_qos_builder<'a>(
         live: bool,
         running_time: ::ClockTime,
@@ -284,6 +384,10 @@ impl Message {
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Progress::new` or `message::Progress::builder` instead"
+    )]
     pub fn new_progress<'a>(
         type_: ::ProgressType,
         code: &'a str,
@@ -293,66 +397,114 @@ impl Message {
         ProgressBuilder::new(type_, code, text)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Toc::new` or `message::Toc::builder` instead"
+    )]
     pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::ResetTime::new` or `message::ResetTime::builder` instead"
+    )]
     pub fn new_reset_time<'a>(running_time: ::ClockTime) -> ResetTimeBuilder<'a> {
         assert_initialized_main_thread!();
         ResetTimeBuilder::new(running_time)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StreamStart::new` or `message::StreamStart::builder` instead"
+    )]
     pub fn new_stream_start<'a>() -> StreamStartBuilder<'a> {
         assert_initialized_main_thread!();
         StreamStartBuilder::new()
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::NeedContext::new` or `message::NeedContext::builder` instead"
+    )]
     pub fn new_need_context(context_type: &str) -> NeedContextBuilder {
         assert_initialized_main_thread!();
         NeedContextBuilder::new(context_type)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::HaveContext::new` or `message::HaveContext::builder` instead"
+    )]
     pub fn new_have_context<'a>(context: ::Context) -> HaveContextBuilder<'a> {
         assert_initialized_main_thread!();
         HaveContextBuilder::new(context)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::DeviceAdded::new` or `message::DeviceAdded::builder` instead"
+    )]
     pub fn new_device_added(device: &::Device) -> DeviceAddedBuilder {
         assert_initialized_main_thread!();
         DeviceAddedBuilder::new(device)
     }
 
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::DeviceRemoved::new` or `message::DeviceRemoved::builder` instead"
+    )]
     pub fn new_device_removed(device: &::Device) -> DeviceRemovedBuilder {
         assert_initialized_main_thread!();
         DeviceRemovedBuilder::new(device)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::PropertyNotify::new` or `message::PropertyNotify::builder` instead"
+    )]
     pub fn new_property_notify(property_name: &str) -> PropertyNotifyBuilder {
         assert_initialized_main_thread!();
         PropertyNotifyBuilder::new(property_name)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StreamCollection::new` or `message::StreamCollection::builder` instead"
+    )]
     pub fn new_stream_collection(collection: &::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::StreamsSelected::new` or `message::StreamsSelected::builder` instead"
+    )]
     pub fn new_streams_selected(collection: &::StreamCollection) -> StreamsSelectedBuilder {
         assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::Redirect::new` or `message::Redirect::builder` instead"
+    )]
     pub fn new_redirect(location: &str) -> RedirectBuilder {
         assert_initialized_main_thread!();
         RedirectBuilder::new(location)
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[deprecated(
+        since = "0.16.0",
+        note = "use `message::DeviceChanged::new` or `message::DeviceChanged::builder` instead"
+    )]
     pub fn new_device_changed<'a>(
         device: &'a ::Device,
         changed_device: &'a ::Device,
@@ -437,9 +589,32 @@ macro_rules! declare_concrete_message(
 );
 
 declare_concrete_message!(Eos);
+impl<'a> Eos<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Message {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> EosBuilder<'a> {
+        assert_initialized_main_thread!();
+        EosBuilder::new()
+    }
+}
 
 declare_concrete_message!(Error);
 impl<'a> Error<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
+        skip_assert_initialized!();
+        Self::builder(error, message).build()
+    }
+
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> ErrorBuilder<T> {
+        assert_initialized_main_thread!();
+        ErrorBuilder::new(error, message)
+    }
+
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
@@ -478,6 +653,17 @@ impl<'a> Error<'a> {
 
 declare_concrete_message!(Warning);
 impl<'a> Warning<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
+        skip_assert_initialized!();
+        Self::builder(error, message).build()
+    }
+
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> WarningBuilder<T> {
+        assert_initialized_main_thread!();
+        WarningBuilder::new(error, message)
+    }
+
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
@@ -516,6 +702,17 @@ impl<'a> Warning<'a> {
 
 declare_concrete_message!(Info);
 impl<'a> Info<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<T: MessageErrorDomain>(error: T, message: &str) -> Message {
+        skip_assert_initialized!();
+        Self::builder(error, message).build()
+    }
+
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder<T> {
+        assert_initialized_main_thread!();
+        InfoBuilder::new(error, message)
+    }
+
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
@@ -554,6 +751,17 @@ impl<'a> Info<'a> {
 
 declare_concrete_message!(Tag);
 impl<'a> Tag<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(tags: &TagList) -> Message {
+        skip_assert_initialized!();
+        Self::builder(tags).build()
+    }
+
+    pub fn builder(tags: &TagList) -> TagBuilder {
+        assert_initialized_main_thread!();
+        TagBuilder::new(tags)
+    }
+
     pub fn get_tags(&self) -> TagList {
         unsafe {
             let mut tags = ptr::null_mut();
@@ -565,6 +773,17 @@ impl<'a> Tag<'a> {
 
 declare_concrete_message!(Buffering);
 impl<'a> Buffering<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(percent: i32) -> Message {
+        skip_assert_initialized!();
+        Self::builder(percent).build()
+    }
+
+    pub fn builder(percent: i32) -> BufferingBuilder<'a> {
+        assert_initialized_main_thread!();
+        BufferingBuilder::new(percent)
+    }
+
     pub fn get_percent(&self) -> i32 {
         unsafe {
             let mut p = mem::MaybeUninit::uninit();
@@ -600,6 +819,17 @@ impl<'a> Buffering<'a> {
 
 declare_concrete_message!(StateChanged);
 impl<'a> StateChanged<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(old: ::State, new: ::State, pending: ::State) -> Message {
+        skip_assert_initialized!();
+        Self::builder(old, new, pending).build()
+    }
+
+    pub fn builder(old: ::State, new: ::State, pending: ::State) -> StateChangedBuilder<'a> {
+        assert_initialized_main_thread!();
+        StateChangedBuilder::new(old, new, pending)
+    }
+
     pub fn get_old(&self) -> ::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -647,9 +877,61 @@ impl<'a> StateChanged<'a> {
 }
 
 declare_concrete_message!(StateDirty);
+impl<'a> StateDirty<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Message {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> StateDirtyBuilder<'a> {
+        assert_initialized_main_thread!();
+        StateDirtyBuilder::new()
+    }
+}
 
 declare_concrete_message!(StepDone);
 impl<'a> StepDone<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(
+        amount: V,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+        duration: V,
+        eos: bool,
+    ) -> Message {
+        skip_assert_initialized!();
+        Self::builder(
+            amount.into(),
+            rate,
+            flush,
+            intermediate,
+            duration.into(),
+            eos,
+        )
+        .build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(
+        amount: V,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+        duration: V,
+        eos: bool,
+    ) -> StepDoneBuilder<'a> {
+        assert_initialized_main_thread!();
+        StepDoneBuilder::new(
+            amount.into(),
+            rate,
+            flush,
+            intermediate,
+            duration.into(),
+            eos,
+        )
+    }
+
     pub fn get(
         &self,
     ) -> (
@@ -700,6 +982,17 @@ impl<'a> StepDone<'a> {
 
 declare_concrete_message!(ClockProvide);
 impl<'a> ClockProvide<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(clock: &::Clock, ready: bool) -> Message {
+        skip_assert_initialized!();
+        Self::builder(clock, ready).build()
+    }
+
+    pub fn builder(clock: &::Clock, ready: bool) -> ClockProvideBuilder {
+        assert_initialized_main_thread!();
+        ClockProvideBuilder::new(clock, ready)
+    }
+
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
@@ -731,6 +1024,17 @@ impl<'a> ClockProvide<'a> {
 
 declare_concrete_message!(ClockLost);
 impl<'a> ClockLost<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(clock: &::Clock) -> Message {
+        skip_assert_initialized!();
+        Self::builder(clock).build()
+    }
+
+    pub fn builder(clock: &::Clock) -> ClockLostBuilder {
+        assert_initialized_main_thread!();
+        ClockLostBuilder::new(clock)
+    }
+
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
@@ -744,6 +1048,17 @@ impl<'a> ClockLost<'a> {
 
 declare_concrete_message!(NewClock);
 impl<'a> NewClock<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(clock: &::Clock) -> Message {
+        skip_assert_initialized!();
+        Self::builder(clock).build()
+    }
+
+    pub fn builder(clock: &::Clock) -> NewClockBuilder {
+        assert_initialized_main_thread!();
+        NewClockBuilder::new(clock)
+    }
+
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
@@ -757,6 +1072,21 @@ impl<'a> NewClock<'a> {
 
 declare_concrete_message!(StructureChange);
 impl<'a> StructureChange<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(type_: ::StructureChangeType, owner: &::Element, busy: bool) -> Message {
+        skip_assert_initialized!();
+        Self::builder(type_, owner, busy).build()
+    }
+
+    pub fn builder(
+        type_: ::StructureChangeType,
+        owner: &::Element,
+        busy: bool,
+    ) -> StructureChangeBuilder {
+        assert_initialized_main_thread!();
+        StructureChangeBuilder::new(type_, owner, busy)
+    }
+
     pub fn get(&self) -> (::StructureChangeType, ::Element, bool) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -781,6 +1111,17 @@ impl<'a> StructureChange<'a> {
 
 declare_concrete_message!(StreamStatus);
 impl<'a> StreamStatus<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(type_: ::StreamStatusType, owner: &::Element) -> Message {
+        skip_assert_initialized!();
+        Self::builder(type_, owner).build()
+    }
+
+    pub fn builder(type_: ::StreamStatusType, owner: &::Element) -> StreamStatusBuilder {
+        assert_initialized_main_thread!();
+        StreamStatusBuilder::new(type_, owner)
+    }
+
     pub fn get(&self) -> (::StreamStatusType, ::Element) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -806,11 +1147,47 @@ impl<'a> StreamStatus<'a> {
 }
 
 declare_concrete_message!(Application);
+impl<'a> Application<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Message {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> ApplicationBuilder<'a> {
+        assert_initialized_main_thread!();
+        ApplicationBuilder::new(structure)
+    }
+}
 
 declare_concrete_message!(Element);
+impl<'a> Element<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(structure: ::Structure) -> Message {
+        skip_assert_initialized!();
+        Self::builder(structure).build()
+    }
+
+    pub fn builder(structure: ::Structure) -> ElementBuilder<'a> {
+        assert_initialized_main_thread!();
+        ElementBuilder::new(structure)
+    }
+}
 
 declare_concrete_message!(SegmentStart);
 impl<'a> SegmentStart<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
+        skip_assert_initialized!();
+        Self::builder(position).build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(position: V) -> SegmentStartBuilder<'a> {
+        assert_initialized_main_thread!();
+        let position = position.into();
+        SegmentStartBuilder::new(position)
+    }
+
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::MaybeUninit::uninit();
@@ -829,6 +1206,18 @@ impl<'a> SegmentStart<'a> {
 
 declare_concrete_message!(SegmentDone);
 impl<'a> SegmentDone<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(position: V) -> Message {
+        skip_assert_initialized!();
+        Self::builder(position).build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(position: V) -> SegmentDoneBuilder<'a> {
+        assert_initialized_main_thread!();
+        let position = position.into();
+        SegmentDoneBuilder::new(position)
+    }
+
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::MaybeUninit::uninit();
@@ -846,11 +1235,60 @@ impl<'a> SegmentDone<'a> {
 }
 
 declare_concrete_message!(DurationChanged);
+impl<'a> DurationChanged<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Message {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> DurationChangedBuilder<'a> {
+        assert_initialized_main_thread!();
+        DurationChangedBuilder::new()
+    }
+}
+
 declare_concrete_message!(Latency);
+impl<'a> Latency<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Message {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> LatencyBuilder<'a> {
+        assert_initialized_main_thread!();
+        LatencyBuilder::new()
+    }
+}
+
 declare_concrete_message!(AsyncStart);
+impl<'a> AsyncStart<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Message {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> AsyncStartBuilder<'a> {
+        assert_initialized_main_thread!();
+        AsyncStartBuilder::new()
+    }
+}
 
 declare_concrete_message!(AsyncDone);
 impl<'a> AsyncDone<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(running_time: ::ClockTime) -> Message {
+        skip_assert_initialized!();
+        Self::builder(running_time).build()
+    }
+
+    pub fn builder(running_time: ::ClockTime) -> AsyncDoneBuilder<'a> {
+        assert_initialized_main_thread!();
+        AsyncDoneBuilder::new(running_time)
+    }
+
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
@@ -864,6 +1302,17 @@ impl<'a> AsyncDone<'a> {
 
 declare_concrete_message!(RequestState);
 impl<'a> RequestState<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(state: ::State) -> Message {
+        skip_assert_initialized!();
+        Self::builder(state).build()
+    }
+
+    pub fn builder(state: ::State) -> RequestStateBuilder<'a> {
+        assert_initialized_main_thread!();
+        RequestStateBuilder::new(state)
+    }
+
     pub fn get_requested_state(&self) -> ::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -877,6 +1326,29 @@ impl<'a> RequestState<'a> {
 
 declare_concrete_message!(StepStart);
 impl<'a> StepStart<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new<V: Into<GenericFormattedValue>>(
+        active: bool,
+        amount: V,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+    ) -> Message {
+        skip_assert_initialized!();
+        Self::builder(active, amount.into(), rate, flush, intermediate).build()
+    }
+
+    pub fn builder<V: Into<GenericFormattedValue>>(
+        active: bool,
+        amount: V,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+    ) -> StepStartBuilder<'a> {
+        assert_initialized_main_thread!();
+        StepStartBuilder::new(active, amount.into(), rate, flush, intermediate)
+    }
+
     pub fn get(&self) -> (bool, GenericFormattedValue, f64, bool, bool) {
         unsafe {
             let mut active = mem::MaybeUninit::uninit();
@@ -912,6 +1384,29 @@ impl<'a> StepStart<'a> {
 
 declare_concrete_message!(Qos);
 impl<'a> Qos<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(
+        live: bool,
+        running_time: ::ClockTime,
+        stream_time: ::ClockTime,
+        timestamp: ::ClockTime,
+        duration: ::ClockTime,
+    ) -> Message {
+        skip_assert_initialized!();
+        Self::builder(live, running_time, stream_time, timestamp, duration).build()
+    }
+
+    pub fn builder(
+        live: bool,
+        running_time: ::ClockTime,
+        stream_time: ::ClockTime,
+        timestamp: ::ClockTime,
+        duration: ::ClockTime,
+    ) -> QosBuilder<'a> {
+        assert_initialized_main_thread!();
+        QosBuilder::new(live, running_time, stream_time, timestamp, duration)
+    }
+
     pub fn get(&self) -> (bool, ::ClockTime, ::ClockTime, ::ClockTime, ::ClockTime) {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
@@ -989,6 +1484,17 @@ impl<'a> Qos<'a> {
 
 declare_concrete_message!(Progress);
 impl<'a> Progress<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(type_: ::ProgressType, code: &'a str, text: &'a str) -> Message {
+        skip_assert_initialized!();
+        Self::builder(type_, code, text).build()
+    }
+
+    pub fn builder(type_: ::ProgressType, code: &'a str, text: &'a str) -> ProgressBuilder<'a> {
+        assert_initialized_main_thread!();
+        ProgressBuilder::new(type_, code, text)
+    }
+
     pub fn get(&self) -> (::ProgressType, &'a str, &'a str) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
@@ -1012,6 +1518,19 @@ impl<'a> Progress<'a> {
 
 declare_concrete_message!(Toc);
 impl<'a> Toc<'a> {
+    // FIXME could use false for updated as default
+    // Even better: use an enum for updated so that it is more explicit than true / false
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(toc: &::Toc, updated: bool) -> Message {
+        skip_assert_initialized!();
+        Self::builder(toc, updated).build()
+    }
+
+    pub fn builder(toc: &::Toc, updated: bool) -> TocBuilder {
+        assert_initialized_main_thread!();
+        TocBuilder::new(toc, updated)
+    }
+
     pub fn get_toc(&self) -> (::Toc, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
@@ -1024,6 +1543,17 @@ impl<'a> Toc<'a> {
 
 declare_concrete_message!(ResetTime);
 impl<'a> ResetTime<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(running_time: ::ClockTime) -> Message {
+        skip_assert_initialized!();
+        Self::builder(running_time).build()
+    }
+
+    pub fn builder(running_time: ::ClockTime) -> ResetTimeBuilder<'a> {
+        assert_initialized_main_thread!();
+        ResetTimeBuilder::new(running_time)
+    }
+
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
@@ -1037,6 +1567,17 @@ impl<'a> ResetTime<'a> {
 
 declare_concrete_message!(StreamStart);
 impl<'a> StreamStart<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new() -> Message {
+        skip_assert_initialized!();
+        Self::builder().build()
+    }
+
+    pub fn builder() -> StreamStartBuilder<'a> {
+        assert_initialized_main_thread!();
+        StreamStartBuilder::new()
+    }
+
     pub fn get_group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
@@ -1060,6 +1601,17 @@ impl<'a> StreamStart<'a> {
 
 declare_concrete_message!(NeedContext);
 impl<'a> NeedContext<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(context_type: &str) -> Message {
+        skip_assert_initialized!();
+        Self::builder(context_type).build()
+    }
+
+    pub fn builder(context_type: &str) -> NeedContextBuilder {
+        assert_initialized_main_thread!();
+        NeedContextBuilder::new(context_type)
+    }
+
     pub fn get_context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
@@ -1073,6 +1625,17 @@ impl<'a> NeedContext<'a> {
 
 declare_concrete_message!(HaveContext);
 impl<'a> HaveContext<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(context: ::Context) -> Message {
+        skip_assert_initialized!();
+        Self::builder(context).build()
+    }
+
+    pub fn builder(context: ::Context) -> HaveContextBuilder<'a> {
+        assert_initialized_main_thread!();
+        HaveContextBuilder::new(context)
+    }
+
     pub fn get_context(&self) -> ::Context {
         unsafe {
             let mut context = ptr::null_mut();
@@ -1084,6 +1647,17 @@ impl<'a> HaveContext<'a> {
 
 declare_concrete_message!(DeviceAdded);
 impl<'a> DeviceAdded<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(device: &::Device) -> Message {
+        skip_assert_initialized!();
+        Self::builder(device).build()
+    }
+
+    pub fn builder(device: &::Device) -> DeviceAddedBuilder {
+        assert_initialized_main_thread!();
+        DeviceAddedBuilder::new(device)
+    }
+
     pub fn get_device(&self) -> ::Device {
         unsafe {
             let mut device = ptr::null_mut();
@@ -1097,6 +1671,17 @@ impl<'a> DeviceAdded<'a> {
 
 declare_concrete_message!(DeviceRemoved);
 impl<'a> DeviceRemoved<'a> {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(device: &::Device) -> Message {
+        skip_assert_initialized!();
+        Self::builder(device).build()
+    }
+
+    pub fn builder(device: &::Device) -> DeviceRemovedBuilder {
+        assert_initialized_main_thread!();
+        DeviceRemovedBuilder::new(device)
+    }
+
     pub fn get_device(&self) -> ::Device {
         unsafe {
             let mut device = ptr::null_mut();
@@ -1110,6 +1695,19 @@ impl<'a> DeviceRemoved<'a> {
 
 declare_concrete_message!(PropertyNotify);
 impl<'a> PropertyNotify<'a> {
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(property_name: &str) -> Message {
+        skip_assert_initialized!();
+        Self::builder(property_name).build()
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn builder(property_name: &str) -> PropertyNotifyBuilder {
+        assert_initialized_main_thread!();
+        PropertyNotifyBuilder::new(property_name)
+    }
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get(&self) -> (Object, &str, Option<&'a glib::Value>) {
         unsafe {
@@ -1140,6 +1738,19 @@ impl<'a> PropertyNotify<'a> {
 declare_concrete_message!(StreamCollection);
 impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(collection: &::StreamCollection) -> Message {
+        skip_assert_initialized!();
+        Self::builder(collection).build()
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn builder(collection: &::StreamCollection) -> StreamCollectionBuilder {
+        assert_initialized_main_thread!();
+        StreamCollectionBuilder::new(collection)
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
@@ -1153,6 +1764,19 @@ impl<'a> StreamCollection<'a> {
 
 declare_concrete_message!(StreamsSelected);
 impl<'a> StreamsSelected<'a> {
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(collection: &::StreamCollection) -> Message {
+        skip_assert_initialized!();
+        Self::builder(collection).build()
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn builder(collection: &::StreamCollection) -> StreamsSelectedBuilder {
+        assert_initialized_main_thread!();
+        StreamsSelectedBuilder::new(collection)
+    }
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
@@ -1183,6 +1807,19 @@ impl<'a> StreamsSelected<'a> {
 
 declare_concrete_message!(Redirect);
 impl<'a> Redirect<'a> {
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(location: &str) -> Message {
+        skip_assert_initialized!();
+        Self::builder(location).build()
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn builder(location: &str) -> RedirectBuilder {
+        assert_initialized_main_thread!();
+        RedirectBuilder::new(location)
+    }
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
@@ -1222,6 +1859,19 @@ impl<'a> Redirect<'a> {
 declare_concrete_message!(DeviceChanged);
 impl<'a> DeviceChanged<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(device: &'a ::Device, changed_device: &'a ::Device) -> Message {
+        skip_assert_initialized!();
+        Self::builder(device, changed_device).build()
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn builder(device: &'a ::Device, changed_device: &'a ::Device) -> DeviceChangedBuilder<'a> {
+        assert_initialized_main_thread!();
+        DeviceChangedBuilder::new(device, changed_device)
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn get_device_changed(&self) -> (::Device, ::Device) {
         unsafe {
             let mut device = ptr::null_mut();
@@ -1254,12 +1904,9 @@ impl<'a> MessageBuilder<'a> {
         }
     }
 
-    pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
+    pub fn src<O: IsA<Object> + Cast + Clone>(self, src: &O) -> Self {
         Self {
-            src: src.map(|o| {
-                let o = (*o).clone();
-                o.upcast::<Object>()
-            }),
+            src: Some(src.clone().upcast::<Object>()),
             ..self
         }
     }
@@ -1288,7 +1935,7 @@ impl<'a> MessageBuilder<'a> {
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {
         #[allow(clippy::needless_update)]
-        pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
+        pub fn src<O: IsA<Object> + Cast + Clone>(self, src: &O) -> Self {
             Self {
                 builder: self.builder.src(src),
                 ..self
@@ -1345,6 +1992,7 @@ macro_rules! message_builder_generic_impl {
 pub struct EosBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
+
 impl<'a> EosBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1371,6 +2019,7 @@ pub struct ErrorBuilder<'a, T> {
     #[allow(unused)]
     details: Option<Structure>,
 }
+
 impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
@@ -1436,6 +2085,7 @@ pub struct WarningBuilder<'a, T> {
     #[allow(unused)]
     details: Option<Structure>,
 }
+
 impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
@@ -1501,6 +2151,7 @@ pub struct InfoBuilder<'a, T> {
     #[allow(unused)]
     details: Option<Structure>,
 }
+
 impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
@@ -1562,6 +2213,7 @@ pub struct TagBuilder<'a> {
     builder: MessageBuilder<'a>,
     tags: &'a TagList,
 }
+
 impl<'a> TagBuilder<'a> {
     fn new(tags: &'a TagList) -> Self {
         skip_assert_initialized!();
@@ -1582,6 +2234,7 @@ pub struct BufferingBuilder<'a> {
     percent: i32,
     stats: Option<(::BufferingMode, i32, i32, i64)>,
 }
+
 impl<'a> BufferingBuilder<'a> {
     fn new(percent: i32) -> Self {
         skip_assert_initialized!();
@@ -1629,6 +2282,7 @@ pub struct StateChangedBuilder<'a> {
     new: ::State,
     pending: ::State,
 }
+
 impl<'a> StateChangedBuilder<'a> {
     fn new(old: ::State, new: ::State, pending: ::State) -> Self {
         skip_assert_initialized!();
@@ -1651,6 +2305,7 @@ impl<'a> StateChangedBuilder<'a> {
 pub struct StateDirtyBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
+
 impl<'a> StateDirtyBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1671,6 +2326,7 @@ pub struct StepDoneBuilder<'a> {
     duration: GenericFormattedValue,
     eos: bool,
 }
+
 impl<'a> StepDoneBuilder<'a> {
     fn new(
         amount: GenericFormattedValue,
@@ -1710,6 +2366,7 @@ pub struct ClockProvideBuilder<'a> {
     clock: &'a ::Clock,
     ready: bool,
 }
+
 impl<'a> ClockProvideBuilder<'a> {
     fn new(clock: &'a ::Clock, ready: bool) -> Self {
         skip_assert_initialized!();
@@ -1731,6 +2388,7 @@ pub struct ClockLostBuilder<'a> {
     builder: MessageBuilder<'a>,
     clock: &'a ::Clock,
 }
+
 impl<'a> ClockLostBuilder<'a> {
     fn new(clock: &'a ::Clock) -> Self {
         skip_assert_initialized!();
@@ -1750,6 +2408,7 @@ pub struct NewClockBuilder<'a> {
     builder: MessageBuilder<'a>,
     clock: &'a ::Clock,
 }
+
 impl<'a> NewClockBuilder<'a> {
     fn new(clock: &'a ::Clock) -> Self {
         skip_assert_initialized!();
@@ -1771,6 +2430,7 @@ pub struct StructureChangeBuilder<'a> {
     owner: &'a ::Element,
     busy: bool,
 }
+
 impl<'a> StructureChangeBuilder<'a> {
     fn new(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> Self {
         skip_assert_initialized!();
@@ -1798,6 +2458,7 @@ pub struct StreamStatusBuilder<'a> {
     owner: &'a ::Element,
     status_object: Option<&'a dyn glib::ToSendValue>,
 }
+
 impl<'a> StreamStatusBuilder<'a> {
     fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
         skip_assert_initialized!();
@@ -1836,6 +2497,7 @@ pub struct ApplicationBuilder<'a> {
     builder: MessageBuilder<'a>,
     structure: Option<::Structure>,
 }
+
 impl<'a> ApplicationBuilder<'a> {
     fn new(structure: ::Structure) -> Self {
         skip_assert_initialized!();
@@ -1855,6 +2517,7 @@ pub struct ElementBuilder<'a> {
     builder: MessageBuilder<'a>,
     structure: Option<::Structure>,
 }
+
 impl<'a> ElementBuilder<'a> {
     fn new(structure: ::Structure) -> Self {
         skip_assert_initialized!();
@@ -1874,6 +2537,7 @@ pub struct SegmentStartBuilder<'a> {
     builder: MessageBuilder<'a>,
     position: GenericFormattedValue,
 }
+
 impl<'a> SegmentStartBuilder<'a> {
     fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
@@ -1894,6 +2558,7 @@ pub struct SegmentDoneBuilder<'a> {
     builder: MessageBuilder<'a>,
     position: GenericFormattedValue,
 }
+
 impl<'a> SegmentDoneBuilder<'a> {
     fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
@@ -1913,6 +2578,7 @@ impl<'a> SegmentDoneBuilder<'a> {
 pub struct DurationChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
+
 impl<'a> DurationChangedBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1927,6 +2593,7 @@ impl<'a> DurationChangedBuilder<'a> {
 pub struct LatencyBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
+
 impl<'a> LatencyBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1941,6 +2608,7 @@ impl<'a> LatencyBuilder<'a> {
 pub struct AsyncStartBuilder<'a> {
     builder: MessageBuilder<'a>,
 }
+
 impl<'a> AsyncStartBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -1956,6 +2624,7 @@ pub struct AsyncDoneBuilder<'a> {
     builder: MessageBuilder<'a>,
     running_time: ::ClockTime,
 }
+
 impl<'a> AsyncDoneBuilder<'a> {
     fn new(running_time: ::ClockTime) -> Self {
         skip_assert_initialized!();
@@ -1975,6 +2644,7 @@ pub struct RequestStateBuilder<'a> {
     builder: MessageBuilder<'a>,
     state: ::State,
 }
+
 impl<'a> RequestStateBuilder<'a> {
     fn new(state: ::State) -> Self {
         skip_assert_initialized!();
@@ -1998,6 +2668,7 @@ pub struct StepStartBuilder<'a> {
     flush: bool,
     intermediate: bool,
 }
+
 impl<'a> StepStartBuilder<'a> {
     fn new(
         active: bool,
@@ -2038,6 +2709,7 @@ pub struct QosBuilder<'a> {
     values: Option<(i64, f64, i32)>,
     stats: Option<(GenericFormattedValue, GenericFormattedValue)>,
 }
+
 impl<'a> QosBuilder<'a> {
     fn new(
         live: bool,
@@ -2106,6 +2778,7 @@ pub struct ProgressBuilder<'a> {
     code: &'a str,
     text: &'a str,
 }
+
 impl<'a> ProgressBuilder<'a> {
     fn new(type_: ::ProgressType, code: &'a str, text: &'a str) -> Self {
         skip_assert_initialized!();
@@ -2130,6 +2803,7 @@ pub struct TocBuilder<'a> {
     toc: &'a ::Toc,
     updated: bool,
 }
+
 impl<'a> TocBuilder<'a> {
     fn new(toc: &'a ::Toc, updated: bool) -> Self {
         skip_assert_initialized!();
@@ -2151,6 +2825,7 @@ pub struct ResetTimeBuilder<'a> {
     builder: MessageBuilder<'a>,
     running_time: ::ClockTime,
 }
+
 impl<'a> ResetTimeBuilder<'a> {
     fn new(running_time: ::ClockTime) -> Self {
         skip_assert_initialized!();
@@ -2170,6 +2845,7 @@ pub struct StreamStartBuilder<'a> {
     builder: MessageBuilder<'a>,
     group_id: Option<GroupId>,
 }
+
 impl<'a> StreamStartBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
@@ -2199,6 +2875,7 @@ pub struct NeedContextBuilder<'a> {
     builder: MessageBuilder<'a>,
     context_type: &'a str,
 }
+
 impl<'a> NeedContextBuilder<'a> {
     fn new(context_type: &'a str) -> Self {
         skip_assert_initialized!();
@@ -2218,6 +2895,7 @@ pub struct HaveContextBuilder<'a> {
     builder: MessageBuilder<'a>,
     context: Option<::Context>,
 }
+
 impl<'a> HaveContextBuilder<'a> {
     fn new(context: ::Context) -> Self {
         skip_assert_initialized!();
@@ -2237,6 +2915,7 @@ pub struct DeviceAddedBuilder<'a> {
     builder: MessageBuilder<'a>,
     device: &'a ::Device,
 }
+
 impl<'a> DeviceAddedBuilder<'a> {
     fn new(device: &'a ::Device) -> Self {
         skip_assert_initialized!();
@@ -2256,6 +2935,7 @@ pub struct DeviceRemovedBuilder<'a> {
     builder: MessageBuilder<'a>,
     device: &'a ::Device,
 }
+
 impl<'a> DeviceRemovedBuilder<'a> {
     fn new(device: &'a ::Device) -> Self {
         skip_assert_initialized!();
@@ -2277,6 +2957,7 @@ pub struct PropertyNotifyBuilder<'a> {
     property_name: &'a str,
     value: Option<&'a dyn glib::ToSendValue>,
 }
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> PropertyNotifyBuilder<'a> {
     fn new(property_name: &'a str) -> Self {
@@ -2314,6 +2995,7 @@ pub struct StreamCollectionBuilder<'a> {
     builder: MessageBuilder<'a>,
     collection: &'a ::StreamCollection,
 }
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
@@ -2340,6 +3022,7 @@ pub struct StreamsSelectedBuilder<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     streams: Option<&'a [&'a ::Stream]>,
 }
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamsSelectedBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
@@ -2378,6 +3061,7 @@ pub struct RedirectBuilder<'a> {
     #[allow(clippy::type_complexity)]
     entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
 }
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> RedirectBuilder<'a> {
     fn new(location: &'a str) -> Self {
@@ -2456,6 +3140,7 @@ pub struct DeviceChangedBuilder<'a> {
     device: &'a ::Device,
     changed_device: &'a ::Device,
 }
+
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 impl<'a> DeviceChangedBuilder<'a> {
     fn new(device: &'a ::Device, changed_device: &'a ::Device) -> Self {
@@ -2484,7 +3169,7 @@ mod tests {
 
         // Message without arguments
         let seqnum = Seqnum::next();
-        let eos_msg = Message::new_eos().seqnum(seqnum).build();
+        let eos_msg = Eos::builder().seqnum(seqnum).build();
         match eos_msg.view() {
             MessageView::Eos(eos_msg) => {
                 assert_eq!(eos_msg.get_seqnum(), seqnum);
@@ -2494,7 +3179,7 @@ mod tests {
         }
 
         // Message with arguments
-        let buffering_msg = Message::new_buffering(42).build();
+        let buffering_msg = Buffering::new(42);
         match buffering_msg.view() {
             MessageView::Buffering(buffering_msg) => {
                 assert_eq!(buffering_msg.get_percent(), 42);
@@ -2509,7 +3194,7 @@ mod tests {
         ::init().unwrap();
 
         let seqnum = Seqnum::next();
-        let eos_msg = Message::new_eos()
+        let eos_msg = Eos::builder()
             .other_fields(&[("extra-field", &true)])
             .seqnum(seqnum)
             .build();
@@ -2523,7 +3208,7 @@ mod tests {
             _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
         }
 
-        let buffering_msg = Message::new_buffering(42)
+        let buffering_msg = Buffering::builder(42)
             .other_fields(&[("extra-field", &true)])
             .build();
         match buffering_msg.view() {

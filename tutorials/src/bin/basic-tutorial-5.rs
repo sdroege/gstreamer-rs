@@ -303,8 +303,9 @@ mod tutorial5 {
     // We are possibly in a GStreamer working thread, so we notify the main
     // thread of this event through a message in the bus
     fn post_app_message(playbin: &gst::Element) {
-        let mbuilder = gst::Message::new_application(gst::Structure::new_empty("tags-changed"));
-        let _ = playbin.post_message(&mbuilder.build());
+        let _ = playbin.post_message(&gst::message::Application::new(gst::Structure::new_empty(
+            "tags-changed",
+        )));
     }
 
     pub fn run() {

@@ -340,7 +340,7 @@ mod tests {
             BusSyncReply::Pass
         });
 
-        bus.post(&::Message::new_eos().build()).unwrap();
+        bus.post(&::message::Eos::new()).unwrap();
 
         let msgs = msgs.lock().unwrap();
         assert_eq!(msgs.len(), 1);
@@ -357,7 +357,7 @@ mod tests {
         let bus = Bus::new();
         let bus_stream = bus.stream();
 
-        let eos_message = ::Message::new_eos().build();
+        let eos_message = ::message::Eos::new();
         bus.post(&eos_message).unwrap();
 
         let bus_future = bus_stream.into_future();
