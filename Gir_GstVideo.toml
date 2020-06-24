@@ -248,6 +248,150 @@ status = "generate"
     [[object.derive]]
     name = "Debug, Eq, PartialEq, Hash"
 
+    [[object.member]]
+    name = "p010_10be"
+    version = "1.10"
+
+    [[object.member]]
+    name = "p010_10le"
+    version = "1.10"
+
+    [[object.member]]
+    name = "iyu2"
+    version = "1.10"
+
+    [[object.member]]
+    name = "vyuy"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gbra"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gbra_10be"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gbra_10le"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gbr_12be"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gbr_12le"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gbra_12be"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gbra_12le"
+    version = "1.12"
+
+    [[object.member]]
+    name = "i420_12be"
+    version = "1.12"
+
+    [[object.member]]
+    name = "i420_12le"
+    version = "1.12"
+
+    [[object.member]]
+    name = "i422_12be"
+    version = "1.12"
+
+    [[object.member]]
+    name = "i422_12le"
+    version = "1.12"
+
+    [[object.member]]
+    name = "y444_12be"
+    version = "1.12"
+
+    [[object.member]]
+    name = "y444_12le"
+    version = "1.12"
+
+    [[object.member]]
+    name = "gray10_le32"
+    version = "1.14"
+
+    [[object.member]]
+    name = "nv12_10le32"
+    version = "1.14"
+
+    [[object.member]]
+    name = "nv16_10le32"
+    version = "1.14"
+
+    [[object.member]]
+    name = "nv12_10le40"
+    version = "1.16"
+
+    [[object.member]]
+    name = "y210"
+    version = "1.16"
+
+    [[object.member]]
+    name = "y410"
+    version = "1.16"
+
+    [[object.member]]
+    name = "vuya"
+    version = "1.16"
+
+    [[object.member]]
+    name = "bgr10a2_le"
+    version = "1.16"
+
+    [[object.member]]
+    name = "rgb10a2_le"
+    version = "1.18"
+
+    [[object.member]]
+    name = "y444_16be"
+    version = "1.18"
+
+    [[object.member]]
+    name = "y444_16le"
+    version = "1.18"
+
+    [[object.member]]
+    name = "p016_be"
+    version = "1.18"
+
+    [[object.member]]
+    name = "p016_le"
+    version = "1.18"
+
+    [[object.member]]
+    name = "p012_be"
+    version = "1.18"
+
+    [[object.member]]
+    name = "p012_le"
+    version = "1.18"
+
+    [[object.member]]
+    name = "y212_be"
+    version = "1.18"
+
+    [[object.member]]
+    name = "y212_le"
+    version = "1.18"
+
+    [[object.member]]
+    name = "y412_be"
+    version = "1.18"
+
+    [[object.member]]
+    name = "y412_le"
+    version = "1.18"
+
 [[object]]
 name = "GstVideo.VideoSink"
 status = "generate"

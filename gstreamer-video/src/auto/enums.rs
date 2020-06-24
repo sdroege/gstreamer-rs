@@ -742,41 +742,77 @@ pub enum VideoFormat {
     A44410be,
     A44410le,
     Nv61,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     P01010be,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     P01010le,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     Iyu2,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Vyuy,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Gbra,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Gbra10be,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Gbra10le,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Gbr12be,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Gbr12le,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Gbra12be,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Gbra12le,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     I42012be,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     I42012le,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     I42212be,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     I42212le,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Y44412be,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Y44412le,
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     Gray10Le32,
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     Nv1210le32,
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     Nv1610le32,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Nv1210le40,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Y210,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Y410,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Vuya,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Bgr10a2Le,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Rgb10a2Le,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Y44416be,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Y44416le,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     P016Be,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     P016Le,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     P012Be,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     P012Le,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Y212Be,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Y212Le,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Y412Be,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Y412Le,
     #[doc(hidden)]
     __Unknown(i32),
@@ -849,41 +885,77 @@ impl ToGlib for VideoFormat {
             VideoFormat::A44410be => gst_video_sys::GST_VIDEO_FORMAT_A444_10BE,
             VideoFormat::A44410le => gst_video_sys::GST_VIDEO_FORMAT_A444_10LE,
             VideoFormat::Nv61 => gst_video_sys::GST_VIDEO_FORMAT_NV61,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             VideoFormat::P01010be => gst_video_sys::GST_VIDEO_FORMAT_P010_10BE,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             VideoFormat::P01010le => gst_video_sys::GST_VIDEO_FORMAT_P010_10LE,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             VideoFormat::Iyu2 => gst_video_sys::GST_VIDEO_FORMAT_IYU2,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Vyuy => gst_video_sys::GST_VIDEO_FORMAT_VYUY,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Gbra => gst_video_sys::GST_VIDEO_FORMAT_GBRA,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Gbra10be => gst_video_sys::GST_VIDEO_FORMAT_GBRA_10BE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Gbra10le => gst_video_sys::GST_VIDEO_FORMAT_GBRA_10LE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Gbr12be => gst_video_sys::GST_VIDEO_FORMAT_GBR_12BE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Gbr12le => gst_video_sys::GST_VIDEO_FORMAT_GBR_12LE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Gbra12be => gst_video_sys::GST_VIDEO_FORMAT_GBRA_12BE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Gbra12le => gst_video_sys::GST_VIDEO_FORMAT_GBRA_12LE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::I42012be => gst_video_sys::GST_VIDEO_FORMAT_I420_12BE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::I42012le => gst_video_sys::GST_VIDEO_FORMAT_I420_12LE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::I42212be => gst_video_sys::GST_VIDEO_FORMAT_I422_12BE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::I42212le => gst_video_sys::GST_VIDEO_FORMAT_I422_12LE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Y44412be => gst_video_sys::GST_VIDEO_FORMAT_Y444_12BE,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             VideoFormat::Y44412le => gst_video_sys::GST_VIDEO_FORMAT_Y444_12LE,
+            #[cfg(any(feature = "v1_14", feature = "dox"))]
             VideoFormat::Gray10Le32 => gst_video_sys::GST_VIDEO_FORMAT_GRAY10_LE32,
+            #[cfg(any(feature = "v1_14", feature = "dox"))]
             VideoFormat::Nv1210le32 => gst_video_sys::GST_VIDEO_FORMAT_NV12_10LE32,
+            #[cfg(any(feature = "v1_14", feature = "dox"))]
             VideoFormat::Nv1610le32 => gst_video_sys::GST_VIDEO_FORMAT_NV16_10LE32,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoFormat::Nv1210le40 => gst_video_sys::GST_VIDEO_FORMAT_NV12_10LE40,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoFormat::Y210 => gst_video_sys::GST_VIDEO_FORMAT_Y210,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoFormat::Y410 => gst_video_sys::GST_VIDEO_FORMAT_Y410,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoFormat::Vuya => gst_video_sys::GST_VIDEO_FORMAT_VUYA,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoFormat::Bgr10a2Le => gst_video_sys::GST_VIDEO_FORMAT_BGR10A2_LE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Rgb10a2Le => gst_video_sys::GST_VIDEO_FORMAT_RGB10A2_LE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Y44416be => gst_video_sys::GST_VIDEO_FORMAT_Y444_16BE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Y44416le => gst_video_sys::GST_VIDEO_FORMAT_Y444_16LE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::P016Be => gst_video_sys::GST_VIDEO_FORMAT_P016_BE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::P016Le => gst_video_sys::GST_VIDEO_FORMAT_P016_LE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::P012Be => gst_video_sys::GST_VIDEO_FORMAT_P012_BE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::P012Le => gst_video_sys::GST_VIDEO_FORMAT_P012_LE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Y212Be => gst_video_sys::GST_VIDEO_FORMAT_Y212_BE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Y212Le => gst_video_sys::GST_VIDEO_FORMAT_Y212_LE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Y412Be => gst_video_sys::GST_VIDEO_FORMAT_Y412_BE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Y412Le => gst_video_sys::GST_VIDEO_FORMAT_Y412_LE,
             VideoFormat::__Unknown(value) => value,
         }
@@ -956,41 +1028,77 @@ impl FromGlib<gst_video_sys::GstVideoFormat> for VideoFormat {
             58 => VideoFormat::A44410be,
             59 => VideoFormat::A44410le,
             60 => VideoFormat::Nv61,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             61 => VideoFormat::P01010be,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             62 => VideoFormat::P01010le,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             63 => VideoFormat::Iyu2,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             64 => VideoFormat::Vyuy,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             65 => VideoFormat::Gbra,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             66 => VideoFormat::Gbra10be,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             67 => VideoFormat::Gbra10le,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             68 => VideoFormat::Gbr12be,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             69 => VideoFormat::Gbr12le,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             70 => VideoFormat::Gbra12be,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             71 => VideoFormat::Gbra12le,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             72 => VideoFormat::I42012be,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             73 => VideoFormat::I42012le,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             74 => VideoFormat::I42212be,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             75 => VideoFormat::I42212le,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             76 => VideoFormat::Y44412be,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             77 => VideoFormat::Y44412le,
+            #[cfg(any(feature = "v1_14", feature = "dox"))]
             78 => VideoFormat::Gray10Le32,
+            #[cfg(any(feature = "v1_14", feature = "dox"))]
             79 => VideoFormat::Nv1210le32,
+            #[cfg(any(feature = "v1_14", feature = "dox"))]
             80 => VideoFormat::Nv1610le32,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             81 => VideoFormat::Nv1210le40,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             82 => VideoFormat::Y210,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             83 => VideoFormat::Y410,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             84 => VideoFormat::Vuya,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             85 => VideoFormat::Bgr10a2Le,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             86 => VideoFormat::Rgb10a2Le,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             87 => VideoFormat::Y44416be,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             88 => VideoFormat::Y44416le,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             89 => VideoFormat::P016Be,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             90 => VideoFormat::P016Le,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             91 => VideoFormat::P012Be,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             92 => VideoFormat::P012Le,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             93 => VideoFormat::Y212Be,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             94 => VideoFormat::Y212Le,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             95 => VideoFormat::Y412Be,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             96 => VideoFormat::Y412Le,
             value => VideoFormat::__Unknown(value),
         }

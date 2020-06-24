@@ -34,20 +34,28 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
         Box::new([
             ::VideoFormat::Ayuv64,
             ::VideoFormat::Argb64,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra12le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra12be,
             ::VideoFormat::A44410le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra10le,
             ::VideoFormat::A44410be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra10be,
             ::VideoFormat::A42210le,
             ::VideoFormat::A42210be,
             ::VideoFormat::A42010le,
             ::VideoFormat::A42010be,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Bgr10a2Le,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Y410,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra,
             ::VideoFormat::Abgr,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Vuya,
             ::VideoFormat::Bgra,
             ::VideoFormat::Ayuv,
@@ -55,13 +63,21 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::Rgba,
             ::VideoFormat::A420,
             ::VideoFormat::V216,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Y44412le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbr12le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Y44412be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbr12be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42212le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42212be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42012le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42012be,
             ::VideoFormat::Y44410le,
             ::VideoFormat::Gbr10le,
@@ -70,15 +86,21 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::R210,
             ::VideoFormat::I42210le,
             ::VideoFormat::I42210be,
+            #[cfg(feature = "v1_14")]
             ::VideoFormat::Nv1610le32,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Y210,
             ::VideoFormat::V210,
             ::VideoFormat::Uyvp,
             ::VideoFormat::I42010le,
             ::VideoFormat::I42010be,
+            #[cfg(feature = "v1_10")]
             ::VideoFormat::P01010le,
+            #[cfg(feature = "v1_14")]
             ::VideoFormat::Nv1210le32,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Nv1210le40,
+            #[cfg(feature = "v1_10")]
             ::VideoFormat::P01010be,
             ::VideoFormat::Y444,
             ::VideoFormat::Gbr,
@@ -88,12 +110,14 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::Xrgb,
             ::VideoFormat::Rgbx,
             ::VideoFormat::Bgr,
+            #[cfg(feature = "v1_10")]
             ::VideoFormat::Iyu2,
             ::VideoFormat::V308,
             ::VideoFormat::Rgb,
             ::VideoFormat::Y42b,
             ::VideoFormat::Nv61,
             ::VideoFormat::Nv16,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Vyuy,
             ::VideoFormat::Uyvy,
             ::VideoFormat::Yvyu,
@@ -114,6 +138,7 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::Rgb8p,
             ::VideoFormat::Gray16Le,
             ::VideoFormat::Gray16Be,
+            #[cfg(feature = "v1_14")]
             ::VideoFormat::Gray10Le32,
             ::VideoFormat::Gray8,
         ])
@@ -123,20 +148,28 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
         Box::new([
             ::VideoFormat::Ayuv64,
             ::VideoFormat::Argb64,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra12be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra12le,
             ::VideoFormat::A44410be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra10be,
             ::VideoFormat::A44410le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra10le,
             ::VideoFormat::A42210be,
             ::VideoFormat::A42210le,
             ::VideoFormat::A42010be,
             ::VideoFormat::A42010le,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Y410,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Bgr10a2Le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbra,
             ::VideoFormat::Abgr,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Vuya,
             ::VideoFormat::Bgra,
             ::VideoFormat::Ayuv,
@@ -144,13 +177,21 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::Rgba,
             ::VideoFormat::A420,
             ::VideoFormat::V216,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Y44412be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbr12be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Y44412le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Gbr12le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42212be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42212le,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42012be,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::I42012le,
             ::VideoFormat::Y44410be,
             ::VideoFormat::Gbr10be,
@@ -159,15 +200,21 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::R210,
             ::VideoFormat::I42210be,
             ::VideoFormat::I42210le,
+            #[cfg(feature = "v1_14")]
             ::VideoFormat::Nv1610le32,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Y210,
             ::VideoFormat::V210,
             ::VideoFormat::Uyvp,
             ::VideoFormat::I42010be,
             ::VideoFormat::I42010le,
+            #[cfg(feature = "v1_10")]
             ::VideoFormat::P01010be,
+            #[cfg(feature = "v1_10")]
             ::VideoFormat::P01010le,
+            #[cfg(feature = "v1_14")]
             ::VideoFormat::Nv1210le32,
+            #[cfg(feature = "v1_16")]
             ::VideoFormat::Nv1210le40,
             ::VideoFormat::Y444,
             ::VideoFormat::Gbr,
@@ -177,12 +224,14 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::Xrgb,
             ::VideoFormat::Rgbx,
             ::VideoFormat::Bgr,
+            #[cfg(feature = "v1_10")]
             ::VideoFormat::Iyu2,
             ::VideoFormat::V308,
             ::VideoFormat::Rgb,
             ::VideoFormat::Y42b,
             ::VideoFormat::Nv61,
             ::VideoFormat::Nv16,
+            #[cfg(feature = "v1_12")]
             ::VideoFormat::Vyuy,
             ::VideoFormat::Uyvy,
             ::VideoFormat::Yvyu,
@@ -203,6 +252,7 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
             ::VideoFormat::Rgb8p,
             ::VideoFormat::Gray16Be,
             ::VideoFormat::Gray16Le,
+            #[cfg(feature = "v1_14")]
             ::VideoFormat::Gray10Le32,
             ::VideoFormat::Gray8,
         ])
