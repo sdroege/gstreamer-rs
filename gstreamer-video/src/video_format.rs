@@ -432,7 +432,6 @@ where
 #[cfg(test)]
 mod tests {
     use gst;
-    use itertools::Itertools;
 
     #[test]
     fn test_display() {
@@ -490,8 +489,11 @@ mod tests {
         assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]");
     }
 
+    #[cfg(feature = "v1_18")]
     #[test]
     fn sort() {
+        use itertools::Itertools;
+
         gst::init().unwrap();
 
         assert!(
