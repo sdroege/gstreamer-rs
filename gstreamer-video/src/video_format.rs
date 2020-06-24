@@ -465,7 +465,7 @@ mod tests {
         }
         assert_eq!(count, ::VideoFormat::iter_raw().len());
 
-        assert!(::VideoFormat::iter_raw().any(|f| f == ::VideoFormat::P016Be));
+        assert!(::VideoFormat::iter_raw().any(|f| f == ::VideoFormat::Nv12));
         assert!(::VideoFormat::iter_raw()
             .find(|f| *f == ::VideoFormat::Encoded)
             .is_none());
