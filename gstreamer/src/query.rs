@@ -220,8 +220,6 @@ impl QueryRef {
             gst_sys::GST_QUERY_POSITION => QueryView::Position(Position(self)),
             gst_sys::GST_QUERY_DURATION => QueryView::Duration(Duration(self)),
             gst_sys::GST_QUERY_LATENCY => QueryView::Latency(Latency(self)),
-            gst_sys::GST_QUERY_JITTER => QueryView::Jitter(Jitter(self)),
-            gst_sys::GST_QUERY_RATE => QueryView::Rate(Rate(self)),
             gst_sys::GST_QUERY_SEEKING => QueryView::Seeking(Seeking(self)),
             gst_sys::GST_QUERY_SEGMENT => QueryView::Segment(Segment(self)),
             gst_sys::GST_QUERY_CONVERT => QueryView::Convert(Convert(self)),
@@ -301,8 +299,6 @@ pub enum QueryView<T> {
     Position(Position<T>),
     Duration(Duration<T>),
     Latency(Latency<T>),
-    Jitter(Jitter<T>),
-    Rate(Rate<T>),
     Seeking(Seeking<T>),
     Segment(Segment<T>),
     Convert(Convert<T>),
@@ -526,12 +522,6 @@ impl<T: AsMutPtr> Latency<T> {
         }
     }
 }
-
-declare_concrete_query!(Jitter, T);
-// FIXME no gst_sys::gst_query_new_jitter
-
-declare_concrete_query!(Rate, T);
-// FIXME no gst_sys::gst_query_new_rate
 
 declare_concrete_query!(Seeking, T);
 impl Seeking<Query> {
