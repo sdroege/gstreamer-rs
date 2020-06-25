@@ -366,7 +366,7 @@ mod tests {
                     buffer.set_offset(0);
                     buffer.set_offset_end(0);
                 }
-                Sample::new().buffer(&buffer).build()
+                Sample::builder().buffer(&buffer).build()
             };
             tags.add::<Image>(&sample, TagMergeMode::Append); // Sample
         }
@@ -588,7 +588,7 @@ mod tests {
                     buffer.set_offset(0);
                     buffer.set_offset_end(0);
                 }
-                Sample::new().buffer(&buffer).build()
+                Sample::builder().buffer(&buffer).build()
             };
             tags.add::<Image>(&sample, TagMergeMode::Append); // Sample
         }

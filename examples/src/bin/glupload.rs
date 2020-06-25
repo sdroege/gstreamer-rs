@@ -469,7 +469,7 @@ impl App {
         let events_proxy = events_loop.create_proxy();
         let (sender, receiver) = mpsc::channel();
         self.appsink.set_callbacks(
-            gst_app::AppSinkCallbacks::new()
+            gst_app::AppSinkCallbacks::builder()
                 .new_sample(move |appsink| {
                     let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
 

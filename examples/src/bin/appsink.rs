@@ -72,7 +72,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // Getting data out of the appsink is done by setting callbacks on it.
     // The appsink will then call those handlers, as soon as data is available.
     appsink.set_callbacks(
-        gst_app::AppSinkCallbacks::new()
+        gst_app::AppSinkCallbacks::builder()
             // Add a handler to the "new-sample" signal.
             .new_sample(|appsink| {
                 // Pull the sample in question out of the appsink's buffer.

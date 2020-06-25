@@ -524,7 +524,7 @@ mod tests {
     fn test_map_read() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
@@ -554,7 +554,7 @@ mod tests {
     fn test_map_read_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .layout(::AudioLayout::NonInterleaved)
             .build()
             .unwrap();
@@ -593,7 +593,7 @@ mod tests {
     fn test_map_write() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
@@ -623,7 +623,7 @@ mod tests {
     fn test_map_write_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .layout(::AudioLayout::NonInterleaved)
             .build()
             .unwrap();
@@ -662,7 +662,7 @@ mod tests {
     fn test_map_ref_read() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
@@ -683,7 +683,7 @@ mod tests {
     fn test_map_ref_read_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .layout(::AudioLayout::NonInterleaved)
             .build()
             .unwrap();
@@ -712,7 +712,7 @@ mod tests {
     fn test_map_ref_write() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let mut buffer =
@@ -738,7 +738,7 @@ mod tests {
     fn test_map_ref_write_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::new(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
             .layout(::AudioLayout::NonInterleaved)
             .build()
             .unwrap();

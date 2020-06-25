@@ -847,7 +847,7 @@ mod tests {
     fn test_map_read() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
+        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
@@ -877,7 +877,7 @@ mod tests {
     fn test_map_write() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
+        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
@@ -907,7 +907,7 @@ mod tests {
     fn test_map_ref_read() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
+        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
@@ -923,7 +923,7 @@ mod tests {
     fn test_map_ref_write() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
+        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let mut buffer = gst::Buffer::with_size(info.size()).unwrap();

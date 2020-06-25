@@ -102,8 +102,7 @@ impl StreamCollectionBuilder {
 }
 
 impl StreamCollection {
-    #[allow(clippy::new_ret_no_self)]
-    pub fn new(upstream_id: Option<&str>) -> StreamCollectionBuilder {
+    pub fn builder(upstream_id: Option<&str>) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         let upstream_id = upstream_id.to_glib_none();
         let (major, minor, _, _) = ::version();

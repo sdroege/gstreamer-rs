@@ -123,7 +123,7 @@ fn main() {
     tee_app_pad.link(&queue_app_pad).unwrap();
 
     // configure appsrc
-    let info = AudioInfo::new(gst_audio::AudioFormat::S16le, SAMPLE_RATE, 1)
+    let info = AudioInfo::builder(gst_audio::AudioFormat::S16le, SAMPLE_RATE, 1)
         .build()
         .unwrap();
     let audio_caps = info.to_caps().unwrap();

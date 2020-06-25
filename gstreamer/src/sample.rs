@@ -104,8 +104,7 @@ impl<'a> SampleBuilder<'a> {
 }
 
 impl Sample {
-    #[allow(clippy::new_ret_no_self)]
-    pub fn new<'a>() -> SampleBuilder<'a> {
+    pub fn builder<'a>() -> SampleBuilder<'a> {
         SampleBuilder {
             buffer: None,
             buffer_list: None,
@@ -239,7 +238,7 @@ mod tests {
         let info = Structure::builder("sample.info")
             .field("f3", &123i32)
             .build();
-        let sample = Sample::new().info(info).build();
+        let sample = Sample::builder().info(info).build();
 
         assert!(sample.get_info().is_some());
     }

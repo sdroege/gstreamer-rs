@@ -36,7 +36,7 @@ impl VideoMeta {
             return Err(glib_bool_error!("Unsupported video format {}", format));
         }
 
-        let info = ::VideoInfo::new(format, width, height).build()?;
+        let info = ::VideoInfo::builder(format, width, height).build()?;
 
         if !info.is_valid() {
             return Err(glib_bool_error!("Invalid video info"));
@@ -83,7 +83,7 @@ impl VideoMeta {
         }
 
         let n_planes = offset.len() as u32;
-        let info = ::VideoInfo::new(format, width, height)
+        let info = ::VideoInfo::builder(format, width, height)
             .offset(offset)
             .stride(stride)
             .build()?;

@@ -57,7 +57,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // Specify the format we want to provide as application into the pipeline
     // by creating a video info with the given format and creating caps from it for the appsrc element.
     let video_info =
-        gst_video::VideoInfo::new(gst_video::VideoFormat::Bgrx, WIDTH as u32, HEIGHT as u32)
+        gst_video::VideoInfo::builder(gst_video::VideoFormat::Bgrx, WIDTH as u32, HEIGHT as u32)
             .fps(gst::Fraction::new(2, 1))
             .build()
             .expect("Failed to create video info");
@@ -80,7 +80,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         // buffers of all elements of the pipeline are still empty, this will be called
         // a couple of times until all of them are filled. After this initial period,
         // this handler will be called (on average) twice per second.
-        gst_app::AppSrcCallbacks::new()
+        gst_app::AppSrcCallbacks::builder()
             .need_data(move |appsrc, _| {
                 // We only produce 100 frames
                 if i == 100 {

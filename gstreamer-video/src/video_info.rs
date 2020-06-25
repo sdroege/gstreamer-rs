@@ -511,8 +511,7 @@ impl<'a> VideoInfoBuilder<'a> {
 }
 
 impl VideoInfo {
-    #[allow(clippy::new_ret_no_self)]
-    pub fn new<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
+    pub fn builder<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
         assert_initialized_main_thread!();
 
         #[cfg(not(any(feature = "v1_12", feature = "dox")))]
@@ -950,7 +949,7 @@ mod tests {
     fn test_new() {
         gst::init().unwrap();
 
-        let info = VideoInfo::new(::VideoFormat::I420, 320, 240)
+        let info = VideoInfo::builder(::VideoFormat::I420, 320, 240)
             .build()
             .unwrap();
         assert_eq!(info.format(), ::VideoFormat::I420);
@@ -963,7 +962,7 @@ mod tests {
 
         let offsets = [0, 640 * 240 + 16, 640 * 240 + 16 + 320 * 120 + 16];
         let strides = [640, 320, 320];
-        let info = VideoInfo::new(::VideoFormat::I420, 320, 240)
+        let info = VideoInfo::builder(::VideoFormat::I420, 320, 240)
             .offset(&offsets)
             .stride(&strides)
             .size(640 * 240 + 16 + 320 * 120 + 16 + 320 * 120 + 16)
@@ -1023,7 +1022,7 @@ mod tests {
     fn test_video_align() {
         gst::init().unwrap();
 
-        let mut info = ::VideoInfo::new(::VideoFormat::Nv16, 1920, 1080)
+        let mut info = ::VideoInfo::builder(::VideoFormat::Nv16, 1920, 1080)
             .build()
             .expect("Failed to create VideoInfo");
 

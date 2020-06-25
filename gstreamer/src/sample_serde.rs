@@ -47,7 +47,7 @@ struct SampleDe {
 impl From<SampleDe> for Sample {
     fn from(buf_de: SampleDe) -> Self {
         skip_assert_initialized!();
-        let mut builder = Sample::new();
+        let mut builder = Sample::builder();
 
         if let Some(buffer) = buf_de.buffer.as_ref() {
             builder = builder.buffer(buffer);
@@ -133,7 +133,7 @@ mod tests {
                 .field("f3", &123i32)
                 .build();
 
-            Sample::new()
+            Sample::builder()
                 .buffer(&buffer)
                 .caps(&caps)
                 .segment(&segment)
@@ -196,7 +196,7 @@ mod tests {
                 buffer.set_offset_end(4);
                 buffer.set_duration(4.into());
             }
-            Sample::new().buffer(&buffer).build()
+            Sample::builder().buffer(&buffer).build()
         };
 
         // `Sample`'s `Segment` is allocated in GStreamer 1.x, should be fixed in version 2.0
@@ -363,7 +363,7 @@ mod tests {
                 .field("f3", &123i32)
                 .build();
 
-            Sample::new()
+            Sample::builder()
                 .buffer(&buffer)
                 .caps(&caps)
                 .segment(&segment)

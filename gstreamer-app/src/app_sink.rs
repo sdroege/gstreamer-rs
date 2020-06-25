@@ -55,8 +55,7 @@ unsafe impl Send for AppSinkCallbacks {}
 unsafe impl Sync for AppSinkCallbacks {}
 
 impl AppSinkCallbacks {
-    #[allow(clippy::new_ret_no_self)]
-    pub fn new() -> AppSinkCallbacksBuilder {
+    pub fn builder() -> AppSinkCallbacksBuilder {
         skip_assert_initialized!();
         AppSinkCallbacksBuilder {
             eos: None,
@@ -366,7 +365,7 @@ impl AppSinkStream {
         let waker_reference = Arc::new(Mutex::new(None as Option<Waker>));
 
         app_sink.set_callbacks(
-            AppSinkCallbacks::new()
+            AppSinkCallbacks::builder()
                 .new_sample({
                     let waker_reference = Arc::clone(&waker_reference);
 
@@ -404,7 +403,7 @@ impl Drop for AppSinkStream {
         // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
         if gst::version() >= (1, 16, 3, 0) {
             if let Some(app_sink) = self.app_sink.upgrade() {
-                app_sink.set_callbacks(AppSinkCallbacks::new().build());
+                app_sink.set_callbacks(AppSinkCallbacks::builder().build());
             }
         }
     }

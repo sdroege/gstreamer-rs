@@ -200,7 +200,7 @@ fn example_main() {
     // of the closure of the need-data callback.
     let mut i = 0;
     appsrc.set_callbacks(
-        gst_app::AppSrcCallbacks::new()
+        gst_app::AppSrcCallbacks::builder()
             .need_data(move |appsrc, _| {
                 // We only produce 5 buffers.
                 if i == 5 {
@@ -228,7 +228,7 @@ fn example_main() {
     // Getting data out of the appsink is done by setting callbacks on it.
     // The appsink will then call those handlers, as soon as data is available.
     appsink.set_callbacks(
-        gst_app::AppSinkCallbacks::new()
+        gst_app::AppSinkCallbacks::builder()
             // Add a handler to the "new-sample" signal.
             .new_sample(|appsink| {
                 // Pull the sample in question out of the appsink's buffer.

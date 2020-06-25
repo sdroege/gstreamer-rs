@@ -15,15 +15,6 @@ use gst;
 use gst::MiniObject;
 use std::mem;
 
-pub fn is_force_key_unit_event(event: &gst::EventRef) -> bool {
-    skip_assert_initialized!();
-    unsafe {
-        from_glib(gst_video_sys::gst_video_event_is_force_key_unit(
-            event.as_mut_ptr(),
-        ))
-    }
-}
-
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
@@ -79,10 +70,6 @@ macro_rules! event_builder_generic_impl {
             }
         }
     };
-}
-
-pub fn new_downstream_force_key_unit_event<'a>() -> DownstreamForceKeyUnitEventBuilder<'a> {
-    DownstreamForceKeyUnitEventBuilder::new()
 }
 
 pub struct DownstreamForceKeyUnitEventBuilder<'a> {
@@ -160,43 +147,45 @@ pub struct DownstreamForceKeyUnitEvent {
     pub count: u32,
 }
 
-pub fn parse_downstream_force_key_unit_event(
-    event: &gst::EventRef,
-) -> Result<DownstreamForceKeyUnitEvent, glib::error::BoolError> {
-    skip_assert_initialized!();
-    unsafe {
-        let mut timestamp = mem::MaybeUninit::uninit();
-        let mut stream_time = mem::MaybeUninit::uninit();
-        let mut running_time = mem::MaybeUninit::uninit();
-        let mut all_headers = mem::MaybeUninit::uninit();
-        let mut count = mem::MaybeUninit::uninit();
+impl DownstreamForceKeyUnitEvent {
+    pub fn builder<'a>() -> DownstreamForceKeyUnitEventBuilder<'a> {
+        DownstreamForceKeyUnitEventBuilder::new()
+    }
 
-        let res: bool = from_glib(
-            gst_video_sys::gst_video_event_parse_downstream_force_key_unit(
-                event.as_mut_ptr(),
-                timestamp.as_mut_ptr(),
-                stream_time.as_mut_ptr(),
-                running_time.as_mut_ptr(),
-                all_headers.as_mut_ptr(),
-                count.as_mut_ptr(),
-            ),
-        );
-        if res {
-            Ok(DownstreamForceKeyUnitEvent {
-                timestamp: from_glib(timestamp.assume_init()),
-                stream_time: from_glib(stream_time.assume_init()),
-                running_time: from_glib(running_time.assume_init()),
-                all_headers: from_glib(all_headers.assume_init()),
-                count: count.assume_init(),
-            })
-        } else {
-            Err(glib_bool_error!("Failed to parse GstEvent"))
+    pub fn parse(
+        event: &gst::EventRef,
+    ) -> Result<DownstreamForceKeyUnitEvent, glib::error::BoolError> {
+        skip_assert_initialized!();
+        unsafe {
+            let mut timestamp = mem::MaybeUninit::uninit();
+            let mut stream_time = mem::MaybeUninit::uninit();
+            let mut running_time = mem::MaybeUninit::uninit();
+            let mut all_headers = mem::MaybeUninit::uninit();
+            let mut count = mem::MaybeUninit::uninit();
+
+            let res: bool = from_glib(
+                gst_video_sys::gst_video_event_parse_downstream_force_key_unit(
+                    event.as_mut_ptr(),
+                    timestamp.as_mut_ptr(),
+                    stream_time.as_mut_ptr(),
+                    running_time.as_mut_ptr(),
+                    all_headers.as_mut_ptr(),
+                    count.as_mut_ptr(),
+                ),
+            );
+            if res {
+                Ok(DownstreamForceKeyUnitEvent {
+                    timestamp: from_glib(timestamp.assume_init()),
+                    stream_time: from_glib(stream_time.assume_init()),
+                    running_time: from_glib(running_time.assume_init()),
+                    all_headers: from_glib(all_headers.assume_init()),
+                    count: count.assume_init(),
+                })
+            } else {
+                Err(glib_bool_error!("Failed to parse GstEvent"))
+            }
         }
     }
-}
-
-pub fn new_upstream_force_key_unit_event<'a>() -> UpstreamForceKeyUnitEventBuilder<'a> {
-    UpstreamForceKeyUnitEventBuilder::new()
 }
 
 pub struct UpstreamForceKeyUnitEventBuilder<'a> {
@@ -255,31 +244,37 @@ pub struct UpstreamForceKeyUnitEvent {
     pub count: u32,
 }
 
-pub fn parse_upstream_force_key_unit_event(
-    event: &gst::EventRef,
-) -> Result<UpstreamForceKeyUnitEvent, glib::error::BoolError> {
-    skip_assert_initialized!();
-    unsafe {
-        let mut running_time = mem::MaybeUninit::uninit();
-        let mut all_headers = mem::MaybeUninit::uninit();
-        let mut count = mem::MaybeUninit::uninit();
+impl UpstreamForceKeyUnitEvent {
+    pub fn builder<'a>() -> UpstreamForceKeyUnitEventBuilder<'a> {
+        UpstreamForceKeyUnitEventBuilder::new()
+    }
 
-        let res: bool = from_glib(
-            gst_video_sys::gst_video_event_parse_upstream_force_key_unit(
-                event.as_mut_ptr(),
-                running_time.as_mut_ptr(),
-                all_headers.as_mut_ptr(),
-                count.as_mut_ptr(),
-            ),
-        );
-        if res {
-            Ok(UpstreamForceKeyUnitEvent {
-                running_time: from_glib(running_time.assume_init()),
-                all_headers: from_glib(all_headers.assume_init()),
-                count: count.assume_init(),
-            })
-        } else {
-            Err(glib_bool_error!("Failed to parse GstEvent"))
+    pub fn parse(
+        event: &gst::EventRef,
+    ) -> Result<UpstreamForceKeyUnitEvent, glib::error::BoolError> {
+        skip_assert_initialized!();
+        unsafe {
+            let mut running_time = mem::MaybeUninit::uninit();
+            let mut all_headers = mem::MaybeUninit::uninit();
+            let mut count = mem::MaybeUninit::uninit();
+
+            let res: bool = from_glib(
+                gst_video_sys::gst_video_event_parse_upstream_force_key_unit(
+                    event.as_mut_ptr(),
+                    running_time.as_mut_ptr(),
+                    all_headers.as_mut_ptr(),
+                    count.as_mut_ptr(),
+                ),
+            );
+            if res {
+                Ok(UpstreamForceKeyUnitEvent {
+                    running_time: from_glib(running_time.assume_init()),
+                    all_headers: from_glib(all_headers.assume_init()),
+                    count: count.assume_init(),
+                })
+            } else {
+                Err(glib_bool_error!("Failed to parse GstEvent"))
+            }
         }
     }
 }
@@ -290,20 +285,24 @@ pub enum ForceKeyUnitEvent {
     Upstream(UpstreamForceKeyUnitEvent),
 }
 
-pub fn parse_force_key_unit_event(
-    event: &gst::EventRef,
-) -> Result<ForceKeyUnitEvent, glib::error::BoolError> {
-    skip_assert_initialized!();
-    if event.is_upstream() {
-        parse_upstream_force_key_unit_event(event).map(ForceKeyUnitEvent::Upstream)
-    } else {
-        parse_downstream_force_key_unit_event(event).map(ForceKeyUnitEvent::Downstream)
+impl ForceKeyUnitEvent {
+    pub fn is(event: &gst::EventRef) -> bool {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib(gst_video_sys::gst_video_event_is_force_key_unit(
+                event.as_mut_ptr(),
+            ))
+        }
     }
-}
 
-pub fn new_still_frame_event<'a>(in_still: bool) -> StillFrameEventBuilder<'a> {
-    assert_initialized_main_thread!();
-    StillFrameEventBuilder::new(in_still)
+    pub fn parse(event: &gst::EventRef) -> Result<ForceKeyUnitEvent, glib::error::BoolError> {
+        skip_assert_initialized!();
+        if event.is_upstream() {
+            UpstreamForceKeyUnitEvent::parse(event).map(ForceKeyUnitEvent::Upstream)
+        } else {
+            DownstreamForceKeyUnitEvent::parse(event).map(ForceKeyUnitEvent::Downstream)
+        }
+    }
 }
 
 pub struct StillFrameEventBuilder<'a> {
@@ -334,23 +333,28 @@ pub struct StillFrameEvent {
     pub in_still: bool,
 }
 
-pub fn parse_still_frame_event(
-    event: &gst::EventRef,
-) -> Result<StillFrameEvent, glib::error::BoolError> {
-    skip_assert_initialized!();
-    unsafe {
-        let mut in_still = mem::MaybeUninit::uninit();
+impl StillFrameEvent {
+    pub fn builder<'a>(in_still: bool) -> StillFrameEventBuilder<'a> {
+        assert_initialized_main_thread!();
+        StillFrameEventBuilder::new(in_still)
+    }
 
-        let res: bool = from_glib(gst_video_sys::gst_video_event_parse_still_frame(
-            event.as_mut_ptr(),
-            in_still.as_mut_ptr(),
-        ));
-        if res {
-            Ok(StillFrameEvent {
-                in_still: from_glib(in_still.assume_init()),
-            })
-        } else {
-            Err(glib_bool_error!("Invalid still-frame event"))
+    pub fn parse(event: &gst::EventRef) -> Result<StillFrameEvent, glib::error::BoolError> {
+        skip_assert_initialized!();
+        unsafe {
+            let mut in_still = mem::MaybeUninit::uninit();
+
+            let res: bool = from_glib(gst_video_sys::gst_video_event_parse_still_frame(
+                event.as_mut_ptr(),
+                in_still.as_mut_ptr(),
+            ));
+            if res {
+                Ok(StillFrameEvent {
+                    in_still: from_glib(in_still.assume_init()),
+                })
+            } else {
+                Err(glib_bool_error!("Invalid still-frame event"))
+            }
         }
     }
 }

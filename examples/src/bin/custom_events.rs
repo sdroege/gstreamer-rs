@@ -19,14 +19,15 @@ pub struct ExampleCustomEvent {
 impl ExampleCustomEvent {
     const EVENT_NAME: &'static str = "example-custom-event";
 
-    pub fn new_event(send_eos: bool) -> gst::Event {
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(send_eos: bool) -> gst::Event {
         let s = gst::Structure::builder(Self::EVENT_NAME)
             .field("send_eos", &send_eos)
             .build();
         gst::event::CustomDownstream::new(s)
     }
 
-    pub fn from_event(ev: &gst::Event) -> Option<ExampleCustomEvent> {
+    pub fn parse(ev: &gst::EventRef) -> Option<ExampleCustomEvent> {
         match ev.view() {
             gst::EventView::CustomDownstream(e) => {
                 let s = match e.get_structure() {
@@ -79,7 +80,7 @@ fn example_main() {
             Some(gst::PadProbeData::Event(ref ev))
                 if ev.get_type() == gst::EventType::CustomDownstream =>
             {
-                if let Some(custom_event) = ExampleCustomEvent::from_event(ev) {
+                if let Some(custom_event) = ExampleCustomEvent::parse(ev) {
                     if let Some(pipeline) = pipeline_weak.upgrade() {
                         if custom_event.send_eos {
                             /* Send EOS event to shut down the pipeline, but from an async callback, as we're
@@ -121,7 +122,7 @@ fn example_main() {
                 "Sending custom event to the pipeline with send_eos={}",
                 send_eos
             );
-            let ev = ExampleCustomEvent::new_event(*send_eos);
+            let ev = ExampleCustomEvent::new(*send_eos);
             if !pipeline.send_event(ev) {
                 println!("Warning: Failed to send custom event");
             }

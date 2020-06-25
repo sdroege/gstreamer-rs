@@ -37,8 +37,7 @@ unsafe impl Send for AppSrcCallbacks {}
 unsafe impl Sync for AppSrcCallbacks {}
 
 impl AppSrcCallbacks {
-    #[allow(clippy::new_ret_no_self)]
-    pub fn new() -> AppSrcCallbacksBuilder {
+    pub fn builder() -> AppSrcCallbacksBuilder {
         skip_assert_initialized!();
 
         AppSrcCallbacksBuilder {
@@ -336,7 +335,7 @@ impl AppSrcSink {
         let waker_reference = Arc::new(Mutex::new(None as Option<Waker>));
 
         app_src.set_callbacks(
-            AppSrcCallbacks::new()
+            AppSrcCallbacks::builder()
                 .need_data({
                     let waker_reference = Arc::clone(&waker_reference);
 
@@ -362,7 +361,7 @@ impl Drop for AppSrcSink {
         // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
         if gst::version() >= (1, 16, 3, 0) {
             if let Some(app_src) = self.app_src.upgrade() {
-                app_src.set_callbacks(AppSrcCallbacks::new().build());
+                app_src.set_callbacks(AppSrcCallbacks::builder().build());
             }
         }
     }
@@ -446,7 +445,7 @@ mod tests {
         let sample_quantity = 5;
 
         let samples = (0..sample_quantity)
-            .map(|_| gst::Sample::new().buffer(&gst::Buffer::new()).build())
+            .map(|_| gst::Sample::builder().buffer(&gst::Buffer::new()).build())
             .collect::<Vec<gst::Sample>>();
 
         let mut sample_stream = futures_util::stream::iter(samples).map(Ok);

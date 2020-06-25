@@ -137,8 +137,7 @@ impl<'a> AudioInfoBuilder<'a> {
 }
 
 impl AudioInfo {
-    #[allow(clippy::new_ret_no_self)]
-    pub fn new<'a>(format: ::AudioFormat, rate: u32, channels: u32) -> AudioInfoBuilder<'a> {
+    pub fn builder<'a>(format: ::AudioFormat, rate: u32, channels: u32) -> AudioInfoBuilder<'a> {
         assert_initialized_main_thread!();
 
         AudioInfoBuilder {
@@ -424,7 +423,7 @@ mod tests {
     fn test_new() {
         gst::init().unwrap();
 
-        let info = AudioInfo::new(::AudioFormat::S16le, 48000, 2)
+        let info = AudioInfo::builder(::AudioFormat::S16le, 48000, 2)
             .build()
             .unwrap();
         assert_eq!(info.format(), ::AudioFormat::S16le);
@@ -442,7 +441,7 @@ mod tests {
             ::AudioChannelPosition::RearLeft,
             ::AudioChannelPosition::RearRight,
         ];
-        let info = AudioInfo::new(::AudioFormat::S16le, 48000, 2)
+        let info = AudioInfo::builder(::AudioFormat::S16le, 48000, 2)
             .positions(&positions)
             .build()
             .unwrap();

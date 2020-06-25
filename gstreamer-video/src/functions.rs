@@ -245,14 +245,17 @@ mod tests {
                 p[3] = 255;
             }
         }
-        let in_caps = ::VideoInfo::new(::VideoFormat::Rgba, 320, 240)
+        let in_caps = ::VideoInfo::builder(::VideoFormat::Rgba, 320, 240)
             .build()
             .unwrap()
             .to_caps()
             .unwrap();
-        let sample = gst::Sample::new().buffer(&in_buffer).caps(&in_caps).build();
+        let sample = gst::Sample::builder()
+            .buffer(&in_buffer)
+            .caps(&in_caps)
+            .build();
 
-        let out_caps = ::VideoInfo::new(::VideoFormat::Abgr, 320, 240)
+        let out_caps = ::VideoInfo::builder(::VideoFormat::Abgr, 320, 240)
             .build()
             .unwrap()
             .to_caps()
