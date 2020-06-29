@@ -21,7 +21,6 @@ generate = [
     "GstVideo.VideoCodecFrameFlags",
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoTileMode",
-    "GstVideo.VideoInterlaceMode",
     "GstVideo.VideoFlags",
     "GstVideo.VideoChromaSite",
     "GstVideo.VideoColorMatrix",
@@ -30,13 +29,11 @@ generate = [
     "GstVideo.VideoMultiviewMode",
     "GstVideo.VideoMultiviewFlags",
     "GstVideo.VideoFieldOrder",
-    "GstVideo.VideoFrameFlags",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
     "GstVideo.VideoCaptionType",
     "GstVideo.VideoBufferPool",
     "GstVideo.VideoPackFlags",
-    "GstVideo.VideoBufferFlags",
     "GstVideo.VideoAlphaMode",
     "GstVideo.VideoChromaMode",
     "GstVideo.VideoMatrixMode",
@@ -414,3 +411,33 @@ status = "generate"
     [[object.function]]
     name = "get_type"
     version = "1.18"
+
+[[object]]
+name = "GstVideo.VideoFrameFlags"
+status = "generate"
+    [[object.member]]
+    name = "top_field"
+    version = "1.16"
+    [[object.member]]
+    name = "bottom_field"
+    version = "1.16"
+
+[[object]]
+name = "GstVideo.VideoBufferFlags"
+status = "generate"
+    [[object.member]]
+    name = "top_field"
+    version = "1.16"
+    [[object.member]]
+    name = "bottom_field"
+    version = "1.16"
+    [[object.member]]
+    name = "marker"
+    version = "1.18"
+
+[[object]]
+name = "GstVideo.VideoInterlaceMode"
+status = "generate"
+    [[object.member]]
+    name = "alternate"
+    version = "1.16"

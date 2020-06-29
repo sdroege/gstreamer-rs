@@ -20,8 +20,11 @@ bitflags! {
         const ONEFIELD = 8388608;
         const MULTIPLE_VIEW = 16777216;
         const FIRST_IN_BUNDLE = 33554432;
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
         const TOP_FIELD = 10485760;
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
         const BOTTOM_FIELD = 8388608;
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
         const MARKER = 512;
         const LAST = 268435456;
     }
@@ -262,7 +265,9 @@ bitflags! {
         const ONEFIELD = 8;
         const MULTIPLE_VIEW = 16;
         const FIRST_IN_BUNDLE = 32;
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
         const TOP_FIELD = 10;
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
         const BOTTOM_FIELD = 8;
     }
 }

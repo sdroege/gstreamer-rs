@@ -1194,6 +1194,7 @@ pub enum VideoInterlaceMode {
     Interleaved,
     Mixed,
     Fields,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Alternate,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1209,6 +1210,7 @@ impl ToGlib for VideoInterlaceMode {
             VideoInterlaceMode::Interleaved => gst_video_sys::GST_VIDEO_INTERLACE_MODE_INTERLEAVED,
             VideoInterlaceMode::Mixed => gst_video_sys::GST_VIDEO_INTERLACE_MODE_MIXED,
             VideoInterlaceMode::Fields => gst_video_sys::GST_VIDEO_INTERLACE_MODE_FIELDS,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoInterlaceMode::Alternate => gst_video_sys::GST_VIDEO_INTERLACE_MODE_ALTERNATE,
             VideoInterlaceMode::__Unknown(value) => value,
         }
@@ -1224,6 +1226,7 @@ impl FromGlib<gst_video_sys::GstVideoInterlaceMode> for VideoInterlaceMode {
             1 => VideoInterlaceMode::Interleaved,
             2 => VideoInterlaceMode::Mixed,
             3 => VideoInterlaceMode::Fields,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             4 => VideoInterlaceMode::Alternate,
             value => VideoInterlaceMode::__Unknown(value),
         }

@@ -21,7 +21,6 @@ external_libraries = [
 generate = [
     # BitFlags
     "GstGL.GLAPI",
-    "GstGL.GLDisplayType",
     "GstGL.GLPlatform",
     "GstGL.GLSLProfile",
     # Enums
@@ -426,3 +425,12 @@ final_type = true
     name = "submit_input_buffer"
     # Buffer ownership transfer
     ignore = true
+
+[[object]]
+name = "GstGL.GLDisplayType"
+status = "generate"
+
+    [[object.member]]
+    name = "egl_device"
+    version = "1.18"
+

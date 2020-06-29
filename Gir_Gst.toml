@@ -19,7 +19,6 @@ generate = [
     "Gst.ClockTimeDiff",
     "Gst.State",
     "Gst.StateChange",
-    "Gst.SeekFlags",
     "Gst.SeekType",
     "Gst.PadDirection",
     "Gst.PadPresence",
@@ -50,11 +49,8 @@ generate = [
     "Gst.SchedulingFlags",
     "Gst.QOSType",
     "Gst.TocSetter",
-    "Gst.ClockType",
     "Gst.ElementFlags",
-    "Gst.ObjectFlags",
     "Gst.PadFlags",
-    "Gst.BinFlags",
     "Gst.PipelineFlags",
     "Gst.PluginFlags",
     "Gst.MemoryFlags",
@@ -63,7 +59,6 @@ generate = [
     "Gst.DebugColorFlags",
     "Gst.StackTraceFlags",
     "Gst.DebugGraphDetails",
-    "Gst.ParseFlags",
     "Gst.TaskState",
     "Gst.PluginDependencyFlags",
     "Gst.BufferPoolAcquireFlags",
@@ -115,6 +110,14 @@ trait_name = "GstBinExt"
     name = "sync_children_states"
         [object.function.return]
         bool_return_is_error = "Failed to sync children states"
+
+[[object]]
+name = "Gst.BinFlags"
+status = "generate"
+
+    [[object.member]]
+    name = "streams_aware"
+    version = "1.10"
 
 [[object]]
 name = "Gst.Bus"
@@ -179,6 +182,10 @@ status = "generate"
     name = "Serialize, Deserialize"
     cfg_condition = "feature = \"ser_de\""
 
+    [[object.member]]
+    name = "non_droppable"
+    version = "1.14"
+
 [[object]]
 name = "Gst.ChildProxy"
 status = "generate"
@@ -199,11 +206,24 @@ status = "generate"
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
 [[object]]
+name = "Gst.SeekFlags"
+status = "generate"
+    [[object.member]]
+    name = "trickmode_forward_predicted"
+    version = "1.18"
+    [[object.member]]
+    name = "instant_rate_change"
+    version = "1.18"
+
+[[object]]
 name = "Gst.SegmentFlags"
 status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"
     cfg_condition = "feature = \"ser_de\""
+    [[object.member]]
+    name = "trickmode_forward_predicted"
+    version = "1.18"
 
 [[object]]
 name = "Gst.TagSetter"
@@ -254,6 +274,21 @@ name = "Gst.EventType"
 status = "generate"
     [[object.derive]]
     name = "Debug, PartialEq, Eq, Hash"
+    [[object.member]]
+    name = "select_streams"
+    version = "1.10"
+    [[object.member]]
+    name = "stream_selection"
+    version = "1.10"
+    [[object.member]]
+    name = "stream_group_done"
+    version = "1.10"
+    [[object.member]]
+    name = "instant_rate_change"
+    version = "1.18"
+    [[object.member]]
+    name = "instant_rate_sync_time"
+    version = "1.18"
 
 [[object]]
 name = "Gst.Structure"
@@ -264,6 +299,13 @@ ref_mode = "ref-mut"
 name = "Gst.ParseContext"
 status = "manual"
 ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.ParseFlags"
+status = "generate"
+    [[object.member]]
+    name = "place_in_bin"
+    version = "1.10"
 
 [[object]]
 name = "Gst.Caps"
@@ -361,6 +403,13 @@ manual_traits = ["ClockExtManual"]
     name = "unadjust_with_calibration"
     # Useless clock parameter
     ignore = true
+
+[[object]]
+name = "Gst.ClockType"
+status = "generate"
+    [[object.member]]
+    name = "tai"
+    version = "1.18"
 
 [[object]]
 name = "Gst.SystemClock"
@@ -692,6 +741,13 @@ trait_name = "GstObjectExt"
     name = "sync_values"
         [object.function.return]
         bool_return_is_error = "Failed to sync values"
+
+[[object]]
+name = "Gst.ObjectFlags"
+status = "generate"
+    [[object.member]]
+    name = "may_be_leaked"
+    version = "1.10"
 
 [[object]]
 name = "Gst.Pad"

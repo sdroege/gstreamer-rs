@@ -15,6 +15,7 @@ use gst_sys;
 bitflags! {
     pub struct BinFlags: u32 {
         const NO_RESYNC = 16384;
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
         const STREAMS_AWARE = 32768;
         const LAST = 524288;
     }
@@ -129,6 +130,7 @@ bitflags! {
         const DELTA_UNIT = 8192;
         const TAG_MEMORY = 16384;
         const SYNC_AFTER = 32768;
+        #[cfg(any(feature = "v1_14", feature = "dox"))]
         const NON_DROPPABLE = 65536;
         const LAST = 1048576;
     }
@@ -505,6 +507,7 @@ impl SetValue for MemoryFlags {
 
 bitflags! {
     pub struct ObjectFlags: u32 {
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
         const MAY_BE_LEAKED = 1;
         const LAST = 16;
     }
@@ -736,6 +739,7 @@ bitflags! {
         const NONE = 0;
         const FATAL_ERRORS = 1;
         const NO_SINGLE_ELEMENT_BINS = 2;
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
         const PLACE_IN_BIN = 4;
     }
 }
@@ -992,7 +996,9 @@ bitflags! {
         const SNAP_NEAREST = 96;
         const TRICKMODE_KEY_UNITS = 128;
         const TRICKMODE_NO_AUDIO = 256;
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
         const TRICKMODE_FORWARD_PREDICTED = 512;
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
         const INSTANT_RATE_CHANGE = 1024;
     }
 }
@@ -1047,6 +1053,7 @@ bitflags! {
         const SKIP = 16;
         const SEGMENT = 8;
         const TRICKMODE_KEY_UNITS = 128;
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
         const TRICKMODE_FORWARD_PREDICTED = 512;
         const TRICKMODE_NO_AUDIO = 256;
     }

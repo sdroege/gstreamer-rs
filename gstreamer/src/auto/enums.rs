@@ -338,6 +338,7 @@ pub enum ClockType {
     Realtime,
     Monotonic,
     Other,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Tai,
     #[doc(hidden)]
     __Unknown(i32),
@@ -352,6 +353,7 @@ impl ToGlib for ClockType {
             ClockType::Realtime => gst_sys::GST_CLOCK_TYPE_REALTIME,
             ClockType::Monotonic => gst_sys::GST_CLOCK_TYPE_MONOTONIC,
             ClockType::Other => gst_sys::GST_CLOCK_TYPE_OTHER,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             ClockType::Tai => gst_sys::GST_CLOCK_TYPE_TAI,
             ClockType::__Unknown(value) => value,
         }
@@ -366,6 +368,7 @@ impl FromGlib<gst_sys::GstClockType> for ClockType {
             0 => ClockType::Realtime,
             1 => ClockType::Monotonic,
             2 => ClockType::Other,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             3 => ClockType::Tai,
             value => ClockType::__Unknown(value),
         }
@@ -621,12 +624,14 @@ pub enum EventType {
     Tag,
     Buffersize,
     SinkMessage,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     StreamGroupDone,
     Eos,
     Toc,
     Protection,
     SegmentDone,
     Gap,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     InstantRateChange,
     Qos,
     Seek,
@@ -635,7 +640,9 @@ pub enum EventType {
     Step,
     Reconfigure,
     TocSelect,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     SelectStreams,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     InstantRateSyncTime,
     CustomUpstream,
     CustomDownstream,
@@ -663,12 +670,14 @@ impl ToGlib for EventType {
             EventType::Tag => gst_sys::GST_EVENT_TAG,
             EventType::Buffersize => gst_sys::GST_EVENT_BUFFERSIZE,
             EventType::SinkMessage => gst_sys::GST_EVENT_SINK_MESSAGE,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             EventType::StreamGroupDone => gst_sys::GST_EVENT_STREAM_GROUP_DONE,
             EventType::Eos => gst_sys::GST_EVENT_EOS,
             EventType::Toc => gst_sys::GST_EVENT_TOC,
             EventType::Protection => gst_sys::GST_EVENT_PROTECTION,
             EventType::SegmentDone => gst_sys::GST_EVENT_SEGMENT_DONE,
             EventType::Gap => gst_sys::GST_EVENT_GAP,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             EventType::InstantRateChange => gst_sys::GST_EVENT_INSTANT_RATE_CHANGE,
             EventType::Qos => gst_sys::GST_EVENT_QOS,
             EventType::Seek => gst_sys::GST_EVENT_SEEK,
@@ -677,7 +686,9 @@ impl ToGlib for EventType {
             EventType::Step => gst_sys::GST_EVENT_STEP,
             EventType::Reconfigure => gst_sys::GST_EVENT_RECONFIGURE,
             EventType::TocSelect => gst_sys::GST_EVENT_TOC_SELECT,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             EventType::SelectStreams => gst_sys::GST_EVENT_SELECT_STREAMS,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             EventType::InstantRateSyncTime => gst_sys::GST_EVENT_INSTANT_RATE_SYNC_TIME,
             EventType::CustomUpstream => gst_sys::GST_EVENT_CUSTOM_UPSTREAM,
             EventType::CustomDownstream => gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM,
@@ -705,12 +716,14 @@ impl FromGlib<gst_sys::GstEventType> for EventType {
             20510 => EventType::Tag,
             23054 => EventType::Buffersize,
             25630 => EventType::SinkMessage,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             26894 => EventType::StreamGroupDone,
             28174 => EventType::Eos,
             30750 => EventType::Toc,
             33310 => EventType::Protection,
             38406 => EventType::SegmentDone,
             40966 => EventType::Gap,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             46090 => EventType::InstantRateChange,
             48641 => EventType::Qos,
             51201 => EventType::Seek,
@@ -719,7 +732,9 @@ impl FromGlib<gst_sys::GstEventType> for EventType {
             58881 => EventType::Step,
             61441 => EventType::Reconfigure,
             64001 => EventType::TocSelect,
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             66561 => EventType::SelectStreams,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             66817 => EventType::InstantRateSyncTime,
             69121 => EventType::CustomUpstream,
             71686 => EventType::CustomDownstream,

@@ -29,7 +29,6 @@ generate = [
     "GstAudio.AudioSrc",
     "GstAudio.AudioBaseSink",
     "GstAudio.AudioBaseSrc",
-    "GstAudio.AudioRingBufferFormatType",
 ]
 
 manual = [
@@ -226,3 +225,19 @@ manual_traits = ["AudioEncoderExtManual"]
     name = "allocate_output_buffer"
         [object.function.return]
         nullable_return_is_error = "Failed to allocate output buffer"
+
+[[object]]
+name = "GstAudio.AudioRingBufferFormatType"
+status = "generate"
+
+    [[object.member]]
+    name = "mpeg2_aac_raw"
+    version = "1.12"
+
+    [[object.member]]
+    name = "mpeg4_aac_raw"
+    version = "1.12"
+
+    [[object.member]]
+    name = "flac"
+    version = "1.12"

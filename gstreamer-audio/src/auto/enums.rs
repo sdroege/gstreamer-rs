@@ -414,8 +414,11 @@ pub enum AudioRingBufferFormatType {
     Dts,
     Mpeg2Aac,
     Mpeg4Aac,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Mpeg2AacRaw,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Mpeg4AacRaw,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     Flac,
     #[doc(hidden)]
     __Unknown(i32),
@@ -455,12 +458,15 @@ impl ToGlib for AudioRingBufferFormatType {
             AudioRingBufferFormatType::Mpeg4Aac => {
                 gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC
             }
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Mpeg2AacRaw => {
                 gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW
             }
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Mpeg4AacRaw => {
                 gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW
             }
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Flac => {
                 gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC
             }
@@ -486,8 +492,11 @@ impl FromGlib<gst_audio_sys::GstAudioRingBufferFormatType> for AudioRingBufferFo
             9 => AudioRingBufferFormatType::Dts,
             10 => AudioRingBufferFormatType::Mpeg2Aac,
             11 => AudioRingBufferFormatType::Mpeg4Aac,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             12 => AudioRingBufferFormatType::Mpeg2AacRaw,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             13 => AudioRingBufferFormatType::Mpeg4AacRaw,
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             14 => AudioRingBufferFormatType::Flac,
             value => AudioRingBufferFormatType::__Unknown(value),
         }
