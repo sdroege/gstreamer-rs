@@ -10,7 +10,6 @@ use std::fmt;
 use std::mem;
 
 use gst;
-use gst::miniobject::*;
 use gst_video_sys;
 
 use glib;
@@ -20,9 +19,14 @@ gst_define_mini_object_wrapper!(
     VideoOverlayRectangle,
     VideoOverlayRectangleRef,
     gst_video_sys::GstVideoOverlayRectangle,
-    [Debug,],
     || gst_video_sys::gst_video_overlay_rectangle_get_type()
 );
+
+impl fmt::Debug for VideoOverlayRectangle {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        VideoOverlayRectangleRef::fmt(self, f)
+    }
+}
 
 impl fmt::Debug for VideoOverlayRectangleRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -188,9 +192,14 @@ gst_define_mini_object_wrapper!(
     VideoOverlayComposition,
     VideoOverlayCompositionRef,
     gst_video_sys::GstVideoOverlayComposition,
-    [Debug,],
     || gst_video_sys::gst_video_overlay_composition_get_type()
 );
+
+impl fmt::Debug for VideoOverlayComposition {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        VideoOverlayCompositionRef::fmt(self, f)
+    }
+}
 
 impl fmt::Debug for VideoOverlayCompositionRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

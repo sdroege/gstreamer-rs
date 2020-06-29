@@ -16,7 +16,6 @@ use glib::translate::*;
 use glib::subclass::prelude::*;
 use gst;
 use gst::subclass::prelude::*;
-use gst::MiniObject;
 
 use crate::prelude::*;
 use video_codec_state::{Readable, VideoCodecState};

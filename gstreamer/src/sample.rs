@@ -14,7 +14,6 @@ use gst_sys;
 use glib;
 use glib::translate::{from_glib_full, from_glib_none, mut_override, ToGlibPtr};
 
-use miniobject::*;
 use Buffer;
 use BufferList;
 use BufferListRef;
@@ -27,7 +26,7 @@ use Segment;
 use Structure;
 use StructureRef;
 
-gst_define_mini_object_wrapper!(Sample, SampleRef, gst_sys::GstSample, [Debug,], || {
+gst_define_mini_object_wrapper!(Sample, SampleRef, gst_sys::GstSample, || {
     gst_sys::gst_sample_get_type()
 });
 
@@ -212,6 +211,12 @@ impl SampleRef {
                 info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut()),
             );
         }
+    }
+}
+
+impl fmt::Debug for Sample {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        SampleRef::fmt(self, f)
     }
 }
 

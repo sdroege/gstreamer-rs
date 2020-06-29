@@ -78,7 +78,6 @@ mod custom_meta {
         use glib::glib_sys;
         use glib::translate::*;
         use gst::gst_sys;
-        use gst::prelude::*;
         use once_cell::sync::Lazy;
         use std::mem;
         use std::ptr;

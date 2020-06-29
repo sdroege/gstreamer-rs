@@ -6,7 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use miniobject::MiniObject;
 use Buffer;
 use BufferList;
 use Event;

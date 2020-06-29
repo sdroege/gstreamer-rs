@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use gst_sys;
-use miniobject::*;
 use structure::*;
 use GenericFormattedValue;
 use GroupId;
@@ -30,7 +29,7 @@ use glib::value::ToSendValue;
 use glib::Cast;
 use glib::IsA;
 
-gst_define_mini_object_wrapper!(Message, MessageRef, gst_sys::GstMessage, [Debug,], || {
+gst_define_mini_object_wrapper!(Message, MessageRef, gst_sys::GstMessage, || {
     gst_sys::gst_message_get_type()
 });
 
@@ -511,6 +510,12 @@ impl Message {
     ) -> DeviceChangedBuilder<'a> {
         assert_initialized_main_thread!();
         DeviceChangedBuilder::new(device, changed_device)
+    }
+}
+
+impl fmt::Debug for Message {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        MessageRef::fmt(self, f)
     }
 }
 

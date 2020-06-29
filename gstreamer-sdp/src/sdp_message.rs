@@ -16,7 +16,6 @@ use std::ptr;
 use glib::translate::*;
 use gobject_sys;
 use gst;
-use gst::MiniObject;
 use gst_sdp_sys;
 
 use sdp_attribute::SDPAttribute;

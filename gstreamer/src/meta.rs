@@ -10,7 +10,6 @@ use std::fmt;
 use std::marker::PhantomData;
 use std::ops;
 
-use miniobject::MiniObject;
 use Buffer;
 use BufferRef;
 #[cfg(any(feature = "v1_14", feature = "dox"))]

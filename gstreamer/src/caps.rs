@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use caps_features::*;
-use miniobject::*;
 use std::fmt;
 use std::marker::PhantomData;
 use std::ptr;
@@ -21,13 +20,9 @@ use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlib
 use glib::value::ToSendValue;
 use gst_sys;
 
-gst_define_mini_object_wrapper!(
-    Caps,
-    CapsRef,
-    gst_sys::GstCaps,
-    [Debug, PartialEq, Eq,],
-    || gst_sys::gst_caps_get_type()
-);
+gst_define_mini_object_wrapper!(Caps, CapsRef, gst_sys::GstCaps, || {
+    gst_sys::gst_caps_get_type()
+});
 
 impl Caps {
     pub fn builder(name: &str) -> Builder<NoFeature> {
@@ -176,12 +171,6 @@ impl str::FromStr for Caps {
             Option::<_>::from_glib_full(gst_sys::gst_caps_from_string(s.to_glib_none().0))
                 .ok_or_else(|| glib_bool_error!("Failed to parse caps from string"))
         }
-    }
-}
-
-impl fmt::Display for Caps {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        self.0.fmt(f)
     }
 }
 
@@ -556,6 +545,26 @@ define_iter!(
         }
     }
 );
+
+impl fmt::Debug for Caps {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <CapsRef as fmt::Debug>::fmt(self, f)
+    }
+}
+
+impl fmt::Display for Caps {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <CapsRef as fmt::Display>::fmt(self, f)
+    }
+}
+
+impl PartialEq for Caps {
+    fn eq(&self, other: &Caps) -> bool {
+        CapsRef::eq(self, other)
+    }
+}
+
+impl Eq for Caps {}
 
 impl fmt::Debug for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

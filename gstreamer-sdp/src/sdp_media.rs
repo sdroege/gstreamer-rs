@@ -15,7 +15,7 @@ use std::ptr;
 
 use glib::translate::*;
 use gst;
-use gst::prelude::*;
+
 use gst_sdp_sys;
 
 use sdp_attribute::SDPAttribute;

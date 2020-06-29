@@ -98,7 +98,7 @@ mod tests {
             buffer.set_offset(3);
             buffer.set_offset_end(4);
             buffer.set_duration(5.into());
-            buffer.set_flags(BufferFlags::LIVE | BufferFlags::LAST);
+            buffer.set_flags(BufferFlags::LIVE | BufferFlags::DISCONT);
         }
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
@@ -114,7 +114,7 @@ mod tests {
                 "    offset: 3,",
                 "    offset_end: 4,",
                 "    flags: (",
-                "        bits: 1048592,",
+                "        bits: 80,",
                 "    ),",
                 "    buffer: \"AQIDBA==\",",
                 ")"
@@ -132,7 +132,7 @@ mod tests {
                 "\"duration\":5,",
                 "\"offset\":3,",
                 "\"offset_end\":4,",
-                "\"flags\":{\"bits\":1048592},",
+                "\"flags\":{\"bits\":80},",
                 "\"buffer\":[1,2,3,4]",
                 "}"
             )
@@ -153,7 +153,7 @@ mod tests {
                 offset: 3,
                 offset_end: 4,
                 flags: (
-                    bits: 1048592,
+                    bits: 80,
                 ),
                 buffer: "AQIDBA==",
             )
@@ -164,7 +164,7 @@ mod tests {
         assert_eq!(buffer.get_offset(), 3);
         assert_eq!(buffer.get_offset_end(), 4);
         assert_eq!(buffer.get_duration(), 5.into());
-        assert_eq!(buffer.get_flags(), BufferFlags::LIVE | BufferFlags::LAST);
+        assert_eq!(buffer.get_flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
@@ -177,7 +177,7 @@ mod tests {
                 "duration":5,
                 "offset":3,
                 "offset_end":4,
-                "flags":{"bits":1048592},
+                "flags":{"bits":80},
                 "buffer":[1,2,3,4]
             }
         "#;
@@ -187,7 +187,7 @@ mod tests {
         assert_eq!(buffer.get_offset(), 3);
         assert_eq!(buffer.get_offset_end(), 4);
         assert_eq!(buffer.get_duration(), 5.into());
-        assert_eq!(buffer.get_flags(), BufferFlags::LIVE | BufferFlags::LAST);
+        assert_eq!(buffer.get_flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
@@ -205,7 +205,7 @@ mod tests {
             buffer.set_offset(3);
             buffer.set_offset_end(4);
             buffer.set_duration(5.into());
-            buffer.set_flags(BufferFlags::LIVE | BufferFlags::LAST);
+            buffer.set_flags(BufferFlags::LIVE | BufferFlags::DISCONT);
         }
 
         // Ron

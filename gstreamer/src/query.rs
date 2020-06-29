@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use gst_sys;
-use miniobject::*;
 use structure::*;
 use GenericFormattedValue;
 
@@ -21,7 +20,7 @@ use glib;
 use glib::translate::*;
 use glib_sys;
 
-gst_define_mini_object_wrapper!(Query, QueryRef, gst_sys::GstQuery, [Debug,], || {
+gst_define_mini_object_wrapper!(Query, QueryRef, gst_sys::GstQuery, || {
     gst_sys::gst_query_get_type()
 });
 
@@ -243,6 +242,12 @@ impl QueryRef {
     }
 }
 
+impl fmt::Debug for Query {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        QueryRef::fmt(self, f)
+    }
+}
+
 impl fmt::Debug for QueryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Query")
@@ -266,31 +271,31 @@ pub unsafe trait AsMutPtr: AsPtr {
 
 unsafe impl AsPtr for Query {
     unsafe fn as_ptr(&self) -> *mut gst_sys::GstQuery {
-        self.as_ref().as_ptr() as *mut gst_sys::GstQuery
+        QueryRef::as_ptr(self) as *mut gst_sys::GstQuery
     }
 }
 
 unsafe impl AsMutPtr for Query {
     unsafe fn as_mut_ptr(&self) -> *mut gst_sys::GstQuery {
-        self.as_ref().as_mut_ptr()
+        QueryRef::as_ptr(self) as *mut gst_sys::GstQuery
     }
 }
 
 unsafe impl<'a> AsPtr for &'a QueryRef {
     unsafe fn as_ptr(&self) -> *mut gst_sys::GstQuery {
-        MiniObject::as_ptr(self as &QueryRef) as *mut gst_sys::GstQuery
+        QueryRef::as_ptr(self) as *mut gst_sys::GstQuery
     }
 }
 
 unsafe impl<'a> AsPtr for &'a mut QueryRef {
     unsafe fn as_ptr(&self) -> *mut gst_sys::GstQuery {
-        MiniObject::as_ptr(self as &QueryRef) as *mut gst_sys::GstQuery
+        QueryRef::as_ptr(self) as *mut gst_sys::GstQuery
     }
 }
 
 unsafe impl<'a> AsMutPtr for &'a mut QueryRef {
     unsafe fn as_mut_ptr(&self) -> *mut gst_sys::GstQuery {
-        MiniObject::as_mut_ptr(self as &QueryRef) as *mut gst_sys::GstQuery
+        QueryRef::as_ptr(self) as *mut gst_sys::GstQuery
     }
 }
 

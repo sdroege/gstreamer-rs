@@ -11,17 +11,12 @@ use glib::translate::{from_glib_full, from_glib_none};
 use gst_sys;
 use std::fmt;
 
-use miniobject::*;
 use Buffer;
 use BufferRef;
 
-gst_define_mini_object_wrapper!(
-    BufferList,
-    BufferListRef,
-    gst_sys::GstBufferList,
-    [Debug,],
-    || gst_sys::gst_buffer_list_get_type()
-);
+gst_define_mini_object_wrapper!(BufferList, BufferListRef, gst_sys::GstBufferList, || {
+    gst_sys::gst_buffer_list_get_type()
+});
 
 impl BufferList {
     pub fn new() -> Self {
@@ -109,6 +104,12 @@ impl BufferListRef {
 impl Default for BufferList {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl fmt::Debug for BufferList {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        BufferListRef::fmt(self, f)
     }
 }
 

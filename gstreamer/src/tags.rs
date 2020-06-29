@@ -22,8 +22,6 @@ use glib::StaticType;
 use gobject_sys;
 use gst_sys;
 
-use miniobject::*;
-
 use Sample;
 use TagError;
 use TagMergeMode;
@@ -341,13 +339,9 @@ impl_tag!(
 );
 impl_tag!(PrivateData, Sample, TAG_PRIVATE_DATA, GST_TAG_PRIVATE_DATA);
 
-gst_define_mini_object_wrapper!(
-    TagList,
-    TagListRef,
-    gst_sys::GstTagList,
-    [Debug, PartialEq, Eq,],
-    || gst_sys::gst_tag_list_get_type()
-);
+gst_define_mini_object_wrapper!(TagList, TagListRef, gst_sys::GstTagList, || {
+    gst_sys::gst_tag_list_get_type()
+});
 
 impl TagList {
     pub fn new() -> Self {
@@ -359,12 +353,6 @@ impl TagList {
 impl Default for TagList {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-impl fmt::Display for TagList {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        self.0.fmt(f)
     }
 }
 
@@ -512,6 +500,26 @@ impl TagListRef {
         unsafe { gst_sys::gst_tag_list_set_scope(self.as_mut_ptr(), scope.to_glib()) }
     }
 }
+
+impl fmt::Debug for TagList {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <TagListRef as fmt::Debug>::fmt(self, f)
+    }
+}
+
+impl fmt::Display for TagList {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <TagListRef as fmt::Display>::fmt(self, f)
+    }
+}
+
+impl PartialEq for TagList {
+    fn eq(&self, other: &TagList) -> bool {
+        TagListRef::eq(self, other)
+    }
+}
+
+impl Eq for TagList {}
 
 impl fmt::Debug for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

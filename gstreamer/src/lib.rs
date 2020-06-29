@@ -83,7 +83,6 @@ pub use error::*;
 
 #[macro_use]
 pub mod miniobject;
-pub use miniobject::{GstRc, MiniObject};
 pub mod message;
 pub use message::{Message, MessageErrorDomain, MessageRef, MessageView};
 
@@ -372,7 +371,6 @@ pub mod prelude {
     pub use typefind::TypeFindImpl;
     pub use value::GstValueExt;
 
-    pub use miniobject::MiniObject;
     pub use tags::{CustomTag, Tag};
 
     pub use muldiv::MulDiv;

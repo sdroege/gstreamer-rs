@@ -13,7 +13,6 @@ use gst_video_sys;
 
 use glib::translate::{from_glib, ToGlibPtr};
 use gst;
-use gst::MiniObject;
 use gst_video::video_frame::Readable;
 use gst_video::*;
 

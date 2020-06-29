@@ -5,7 +5,6 @@ use std::mem;
 use std::ptr;
 use std::slice;
 
-use gst::MiniObject;
 use gst_rtp_sys;
 
 pub enum Readable {}

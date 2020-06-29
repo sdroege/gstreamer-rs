@@ -16,7 +16,6 @@ use std::u64;
 use std::usize;
 
 use meta::*;
-use miniobject::*;
 use BufferCursor;
 use BufferFlags;
 use BufferRefCursor;
@@ -32,13 +31,9 @@ use gst_sys;
 pub enum Readable {}
 pub enum Writable {}
 
-gst_define_mini_object_wrapper!(
-    Buffer,
-    BufferRef,
-    gst_sys::GstBuffer,
-    [Debug, PartialEq, Eq,],
-    || gst_sys::gst_buffer_get_type()
-);
+gst_define_mini_object_wrapper!(Buffer, BufferRef, gst_sys::GstBuffer, || {
+    gst_sys::gst_buffer_get_type()
+});
 
 pub struct BufferMap<'a, T> {
     buffer: &'a BufferRef,
@@ -831,6 +826,20 @@ define_iter!(
     Memory,
     |buffer: &BufferRef, idx| { buffer.get_memory(idx) }
 );
+
+impl fmt::Debug for Buffer {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        BufferRef::fmt(self, f)
+    }
+}
+
+impl PartialEq for Buffer {
+    fn eq(&self, other: &Buffer) -> bool {
+        BufferRef::eq(self, other)
+    }
+}
+
+impl Eq for Buffer {}
 
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

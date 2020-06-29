@@ -17,14 +17,13 @@ use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib, ToGlibPtr,
 };
 
-use miniobject::*;
 use TagList;
 use TagMergeMode;
 use TocEntryType;
 use TocLoopType;
 use TocScope;
 
-gst_define_mini_object_wrapper!(Toc, TocRef, gst_sys::GstToc, [Debug,], || {
+gst_define_mini_object_wrapper!(Toc, TocRef, gst_sys::GstToc, || {
     gst_sys::gst_toc_get_type()
 });
 
@@ -82,6 +81,12 @@ impl TocRef {
     }
 }
 
+impl fmt::Debug for Toc {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        TocRef::fmt(self, f)
+    }
+}
+
 impl fmt::Debug for TocRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Toc")
@@ -92,13 +97,9 @@ impl fmt::Debug for TocRef {
     }
 }
 
-gst_define_mini_object_wrapper!(
-    TocEntry,
-    TocEntryRef,
-    gst_sys::GstTocEntry,
-    [Debug,],
-    || gst_sys::gst_toc_entry_get_type()
-);
+gst_define_mini_object_wrapper!(TocEntry, TocEntryRef, gst_sys::GstTocEntry, || {
+    gst_sys::gst_toc_entry_get_type()
+});
 
 impl TocEntry {
     pub fn new(type_: TocEntryType, uid: &str) -> Self {
@@ -217,6 +218,12 @@ impl TocEntryRef {
         unsafe {
             gst_sys::gst_toc_entry_set_loop(self.as_mut_ptr(), loop_type.to_glib(), repeat_count);
         }
+    }
+}
+
+impl fmt::Debug for TocEntry {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        TocEntryRef::fmt(self, f)
     }
 }
 

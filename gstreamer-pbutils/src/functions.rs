@@ -9,7 +9,6 @@
 use glib;
 use glib::translate::*;
 use gst;
-use gst::MiniObject;
 use gst_pbutils_sys;
 use std::ptr;
 

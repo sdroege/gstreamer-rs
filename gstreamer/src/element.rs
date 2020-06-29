@@ -20,7 +20,6 @@ use glib::translate::FromGlibPtrBorrow;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer, ToGlib, ToGlibPtr,
 };
-use miniobject::MiniObject;
 use ClockTime;
 use ElementFlags;
 use Event;

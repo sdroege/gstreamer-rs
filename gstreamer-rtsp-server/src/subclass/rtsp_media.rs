@@ -8,11 +8,9 @@
 
 use gst_rtsp_server_sys;
 
+use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use glib::subclass::prelude::*;
-
-use gst::prelude::*;
 use std::ptr;
 
 use RTSPMedia;

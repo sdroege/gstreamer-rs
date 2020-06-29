@@ -8,7 +8,7 @@
 
 use glib::translate::*;
 use glib::IsA;
-use gst::{ContextRef, MiniObject};
+use gst::ContextRef;
 use gst_gl_sys;
 use std::ptr;
 use GLDisplay;

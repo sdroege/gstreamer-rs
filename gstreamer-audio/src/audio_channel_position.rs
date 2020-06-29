@@ -14,7 +14,6 @@ use std::mem;
 use glib;
 use glib::translate::{from_glib, ToGlib};
 use gst;
-use gst::MiniObject;
 
 use array_init;
 

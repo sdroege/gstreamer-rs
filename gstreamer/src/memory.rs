@@ -18,13 +18,11 @@ use gst_sys;
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlibPtr};
 
-use miniobject::MiniObject;
-
 use AllocationParams;
 use Allocator;
 use MemoryFlags;
 
-gst_define_mini_object_wrapper!(Memory, MemoryRef, gst_sys::GstMemory, [Debug,], || {
+gst_define_mini_object_wrapper!(Memory, MemoryRef, gst_sys::GstMemory, || {
     gst_sys::gst_memory_get_type()
 });
 
@@ -38,6 +36,12 @@ pub struct MappedMemory<T> {
     memory: Option<Memory>,
     map_info: gst_sys::GstMapInfo,
     phantom: PhantomData<T>,
+}
+
+impl fmt::Debug for Memory {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        MemoryRef::fmt(self, f)
+    }
 }
 
 impl fmt::Debug for MemoryRef {

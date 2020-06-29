@@ -2,7 +2,6 @@ use glib;
 use glib::translate::*;
 use glib::value::ToSendValue;
 use gst;
-use gst::miniobject::*;
 use gst_rtsp_server_sys;
 
 use std::fmt;
@@ -11,7 +10,6 @@ gst_define_mini_object_wrapper!(
     RTSPToken,
     RTSPTokenRef,
     gst_rtsp_server_sys::GstRTSPToken,
-    [Debug,],
     || gst_rtsp_server_sys::gst_rtsp_token_get_type()
 );
 
@@ -75,6 +73,12 @@ impl RTSPTokenRef {
                 Some(gst::StructureRef::from_glib_borrow_mut(structure))
             }
         }
+    }
+}
+
+impl fmt::Debug for RTSPToken {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        RTSPTokenRef::fmt(self, f)
     }
 }
 

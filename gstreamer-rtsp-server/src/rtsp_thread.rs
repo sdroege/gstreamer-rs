@@ -1,14 +1,12 @@
 use glib;
 use glib::translate::*;
-use gst_rtsp_server_sys;
 
-use gst::prelude::*;
+use gst_rtsp_server_sys;
 
 gst_define_mini_object_wrapper!(
     RTSPThread,
     RTSPThreadRef,
     gst_rtsp_server_sys::GstRTSPThread,
-    [],
     || gst_rtsp_server_sys::gst_rtsp_thread_get_type()
 );
 

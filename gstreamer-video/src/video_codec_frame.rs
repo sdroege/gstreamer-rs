@@ -9,7 +9,6 @@
 
 use glib::translate::*;
 use gst;
-use gst::miniobject::MiniObject;
 use gst_video_sys;
 use std::fmt;
 use std::mem;

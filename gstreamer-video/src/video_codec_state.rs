@@ -16,7 +16,6 @@ use std::ptr;
 use utils::HasStreamLock;
 
 use gst;
-use gst::miniobject::MiniObject;
 
 use video_info::VideoInfo;
 

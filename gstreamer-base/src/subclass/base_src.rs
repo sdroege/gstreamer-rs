@@ -10,10 +10,9 @@ use glib_sys;
 use gst_base_sys;
 use gst_sys;
 
-use glib::translate::*;
-use prelude::*;
-
 use glib::subclass::prelude::*;
+use glib::translate::*;
+
 use gst;
 use gst::subclass::prelude::*;
 

@@ -12,7 +12,6 @@ use gst_sys;
 use glib;
 use glib::translate::{from_glib, Borrowed, FromGlibPtrNone, ToGlibPtr};
 use gst;
-use gst::miniobject::MiniObject;
 
 use std::fmt;
 use std::marker::PhantomData;

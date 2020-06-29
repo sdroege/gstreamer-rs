@@ -8,7 +8,6 @@
 
 use glib::translate::*;
 use gst;
-use gst::MiniObject;
 use gst_base_sys;
 use std::convert::TryFrom;
 use std::fmt;

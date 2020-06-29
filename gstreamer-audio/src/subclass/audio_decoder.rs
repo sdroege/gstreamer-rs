@@ -15,7 +15,6 @@ use glib::translate::*;
 use glib::subclass::prelude::*;
 use gst;
 use gst::subclass::prelude::*;
-use gst::MiniObject;
 use gst_base;
 
 use std::mem;

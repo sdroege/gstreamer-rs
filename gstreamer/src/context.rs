@@ -14,10 +14,9 @@ use gst_sys;
 use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 
-use miniobject::*;
 use StructureRef;
 
-gst_define_mini_object_wrapper!(Context, ContextRef, gst_sys::GstContext, [Debug,], || {
+gst_define_mini_object_wrapper!(Context, ContextRef, gst_sys::GstContext, || {
     gst_sys::gst_context_get_type()
 });
 
@@ -66,6 +65,12 @@ impl ContextRef {
                 self.as_mut_ptr(),
             ))
         }
+    }
+}
+
+impl fmt::Debug for Context {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        ContextRef::fmt(self, f)
     }
 }
 

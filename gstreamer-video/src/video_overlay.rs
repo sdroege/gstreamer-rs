@@ -8,7 +8,6 @@
 
 use glib::translate::*;
 use gst;
-use gst::prelude::*;
 use gst_video_sys;
 use libc::uintptr_t;
 use VideoOverlay;

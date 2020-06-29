@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use gst_sys;
-use miniobject::*;
 use structure::*;
 use GenericFormattedValue;
 
@@ -137,7 +136,7 @@ impl PartialOrd for EventType {
     }
 }
 
-gst_define_mini_object_wrapper!(Event, EventRef, gst_sys::GstEvent, [Debug,], || {
+gst_define_mini_object_wrapper!(Event, EventRef, gst_sys::GstEvent, || {
     gst_sys::gst_event_get_type()
 });
 
@@ -540,6 +539,12 @@ impl Event {
     pub fn new_custom_both_oob<'a>(structure: ::Structure) -> CustomBothOobBuilder<'a> {
         assert_initialized_main_thread!();
         CustomBothOobBuilder::new(structure)
+    }
+}
+
+impl fmt::Debug for Event {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        EventRef::fmt(self, f)
     }
 }
 

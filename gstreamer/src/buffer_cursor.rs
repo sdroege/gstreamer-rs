@@ -14,7 +14,6 @@ use std::ptr;
 use std::u64;
 use std::usize;
 
-use miniobject::*;
 use Buffer;
 use BufferRef;
 

@@ -12,7 +12,6 @@ use gst_video_sys;
 use glib::translate::{from_glib, from_glib_full, ToGlib};
 use glib::ToSendValue;
 use gst;
-use gst::MiniObject;
 use std::mem;
 
 // FIXME: Copy from gstreamer/src/event.rs
