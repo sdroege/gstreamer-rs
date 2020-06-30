@@ -42,6 +42,10 @@ pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl + Send + Sync + 'static {
     ) -> Result<(u32, gst::ClockTime), LoggableError> {
         self.parent_read(src, audio_data)
     }
+
+    fn reset(&self, src: &AudioSrc) {
+        self.parent_reset(src)
+    }
 }
 
 pub trait AudioSrcImplExt {
@@ -59,6 +63,7 @@ pub trait AudioSrcImplExt {
         src: &AudioSrc,
         audio_data: &mut [u8],
     ) -> Result<(u32, gst::ClockTime), LoggableError>;
+    fn parent_reset(&self, src: &AudioSrc);
 }
 
 impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
@@ -183,6 +188,17 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
             }
         }
     }
+
+    fn parent_reset(&self, src: &AudioSrc) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
+            if let Some(f) = (*parent_class).reset {
+                f(src.to_glib_none().0)
+            }
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + AudioSrcImpl + BaseSrcImpl> IsSubclassable<T> for AudioSrcClass
@@ -199,6 +215,7 @@ where
             klass.prepare = Some(audiosrc_prepare::<T>);
             klass.unprepare = Some(audiosrc_unprepare::<T>);
             klass.read = Some(audiosrc_read::<T>);
+            klass.reset = Some(audiosrc_reset::<T>);
         }
     }
 }
@@ -333,4 +350,18 @@ where
 
         res
     })
+}
+
+unsafe extern "C" fn audiosrc_reset<T: ObjectSubclass>(ptr: *mut gst_audio_sys::GstAudioSrc)
+where
+    T: AudioSrcImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+        imp.reset(&wrap);
+    });
 }

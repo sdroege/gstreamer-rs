@@ -40,6 +40,10 @@ pub trait AudioSinkImpl: AudioSinkImplExt + BaseSinkImpl + Send + Sync + 'static
     fn write(&self, sink: &AudioSink, audio_data: &[u8]) -> Result<i32, LoggableError> {
         self.parent_write(sink, audio_data)
     }
+
+    fn reset(&self, sink: &AudioSink) {
+        self.parent_reset(sink)
+    }
 }
 
 pub trait AudioSinkImplExt {
@@ -53,6 +57,7 @@ pub trait AudioSinkImplExt {
     ) -> Result<(), LoggableError>;
     fn parent_unprepare(&self, sink: &AudioSink) -> Result<(), LoggableError>;
     fn parent_write(&self, sink: &AudioSink, audio_data: &[u8]) -> Result<i32, LoggableError>;
+    fn parent_reset(&self, sink: &AudioSink);
 }
 
 impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
@@ -167,6 +172,17 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
             }
         }
     }
+
+    fn parent_reset(&self, sink: &AudioSink) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            if let Some(f) = (*parent_class).reset {
+                f(sink.to_glib_none().0)
+            }
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + AudioSinkImpl + BaseSinkImpl> IsSubclassable<T> for AudioSinkClass
@@ -183,6 +199,7 @@ where
             klass.prepare = Some(audiosink_prepare::<T>);
             klass.unprepare = Some(audiosink_unprepare::<T>);
             klass.write = Some(audiosink_write::<T>);
+            klass.reset = Some(audiosink_reset::<T>);
         }
     }
 }
@@ -313,4 +330,18 @@ where
     gst_panic_to_error!(&wrap, &instance.panicked(), -1, {
         imp.write(&wrap, data_slice).unwrap_or(-1)
     })
+}
+
+unsafe extern "C" fn audiosink_reset<T: ObjectSubclass>(ptr: *mut gst_audio_sys::GstAudioSink)
+where
+    T: AudioSinkImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+        imp.reset(&wrap);
+    });
 }
