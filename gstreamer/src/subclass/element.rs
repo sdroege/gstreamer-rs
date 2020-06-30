@@ -70,6 +70,10 @@ pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync + 'static {
     fn provide_clock(&self, element: &::Element) -> Option<::Clock> {
         self.parent_provide_clock(element)
     }
+
+    fn post_message(&self, element: &::Element, msg: ::Message) -> Result<(), ::LoggableError> {
+        self.parent_post_message(element, msg)
+    }
 }
 
 pub trait ElementImplExt {
@@ -98,6 +102,12 @@ pub trait ElementImplExt {
     fn parent_set_clock(&self, element: &::Element, clock: Option<&::Clock>) -> bool;
 
     fn parent_provide_clock(&self, element: &::Element) -> Option<::Clock>;
+
+    fn parent_post_message(
+        &self,
+        element: &::Element,
+        msg: ::Message,
+    ) -> Result<(), ::LoggableError>;
 
     fn catch_panic<
         R,
@@ -236,6 +246,26 @@ where
         }
     }
 
+    fn parent_post_message(
+        &self,
+        element: &::Element,
+        msg: ::Message,
+    ) -> Result<(), ::LoggableError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
+
+            let f = (*parent_class).post_message.ok_or_else(|| {
+                gst_loggable_error!(::CAT_RUST, "Parent function `post_message` is not defined")
+            })?;
+            gst_result_from_gboolean!(
+                f(element.to_glib_none().0, msg.into_ptr()),
+                ::CAT_RUST,
+                "Failed to post message on the element using the parent function"
+            )
+        }
+    }
+
     fn catch_panic<
         R,
         F: FnOnce(&Self) -> R,
@@ -336,6 +366,7 @@ where
             klass.set_context = Some(element_set_context::<T>);
             klass.set_clock = Some(element_set_clock::<T>);
             klass.provide_clock = Some(element_provide_clock::<T>);
+            klass.post_message = Some(element_post_message::<T>);
         }
     }
 }
@@ -516,6 +547,30 @@ where
         imp.provide_clock(&wrap)
     })
     .to_glib_full()
+}
+
+unsafe extern "C" fn element_post_message<T: ObjectSubclass>(
+    ptr: *mut gst_sys::GstElement,
+    msg: *mut gst_sys::GstMessage,
+) -> glib_sys::gboolean
+where
+    T: ElementImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<Element> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.post_message(&wrap, from_glib_full(msg)) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&*wrap);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 #[cfg(test)]
