@@ -28,6 +28,10 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl + Send + Sync + 'static 
         self.parent_start(element)
     }
 
+    fn stop(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
+        self.parent_stop(element)
+    }
+
     fn set_sink_caps(
         &self,
         element: &BaseParse,
@@ -56,6 +60,8 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl + Send + Sync + 'static 
 
 pub trait BaseParseImplExt {
     fn parent_start(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_stop(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage>;
 
     fn parent_set_sink_caps(
         &self,
@@ -92,6 +98,27 @@ impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
                         Err(gst_error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `start` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_stop(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseParseClass;
+            (*parent_class)
+                .stop
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `stop` failed"]
                         ))
                     }
                 })
@@ -197,6 +224,7 @@ where
         unsafe {
             let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstBaseParseClass);
             klass.start = Some(base_parse_start::<T>);
+            klass.stop = Some(base_parse_stop::<T>);
             klass.set_sink_caps = Some(base_parse_set_sink_caps::<T>);
             klass.handle_frame = Some(base_parse_handle_frame::<T>);
             klass.convert = Some(base_parse_convert::<T>);
@@ -217,6 +245,29 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn base_parse_stop<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseParse,
+) -> glib_sys::gboolean
+where
+    T: BaseParseImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.stop(&wrap) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(&err);
