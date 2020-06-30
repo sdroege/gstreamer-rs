@@ -55,6 +55,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
         self.parent_sink_event(aggregator, aggregator_pad, event)
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn sink_event_pre_queue(
         &self,
         aggregator: &Aggregator,
@@ -73,6 +74,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
         self.parent_sink_query(aggregator, aggregator_pad, query)
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn sink_query_pre_queue(
         &self,
         aggregator: &Aggregator,
@@ -149,6 +151,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
         self.parent_negotiated_src_caps(aggregator, caps)
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn negotiate(&self, aggregator: &Aggregator) -> bool {
         self.parent_negotiate(aggregator)
     }
@@ -177,6 +180,7 @@ pub trait AggregatorImplExt {
         event: gst::Event,
     ) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn parent_sink_event_pre_queue(
         &self,
         aggregator: &Aggregator,
@@ -191,6 +195,7 @@ pub trait AggregatorImplExt {
         query: &mut gst::QueryRef,
     ) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn parent_sink_query_pre_queue(
         &self,
         aggregator: &Aggregator,
@@ -243,6 +248,7 @@ pub trait AggregatorImplExt {
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn parent_negotiate(&self, aggregator: &Aggregator) -> bool;
 }
 
@@ -319,6 +325,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn parent_sink_event_pre_queue(
         &self,
         aggregator: &Aggregator,
@@ -362,6 +369,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn parent_sink_query_pre_queue(
         &self,
         aggregator: &Aggregator,
@@ -584,6 +592,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn parent_negotiate(&self, aggregator: &Aggregator) -> bool {
         unsafe {
             let data = self.get_type_data();
@@ -609,9 +618,7 @@ where
             klass.clip = Some(aggregator_clip::<T>);
             klass.finish_buffer = Some(aggregator_finish_buffer::<T>);
             klass.sink_event = Some(aggregator_sink_event::<T>);
-            klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
             klass.sink_query = Some(aggregator_sink_query::<T>);
-            klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
             klass.src_event = Some(aggregator_src_event::<T>);
             klass.src_query = Some(aggregator_src_query::<T>);
             klass.src_activate = Some(aggregator_src_activate::<T>);
@@ -623,7 +630,12 @@ where
             klass.update_src_caps = Some(aggregator_update_src_caps::<T>);
             klass.fixate_src_caps = Some(aggregator_fixate_src_caps::<T>);
             klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
-            klass.negotiate = Some(aggregator_negotiate::<T>);
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            {
+                klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
+                klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
+                klass.negotiate = Some(aggregator_negotiate::<T>);
+            }
         }
     }
 }
@@ -710,6 +722,7 @@ where
     .to_glib()
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 unsafe extern "C" fn aggregator_sink_event_pre_queue<T: ObjectSubclass>(
     ptr: *mut gst_base_sys::GstAggregator,
     aggregator_pad: *mut gst_base_sys::GstAggregatorPad,
@@ -757,6 +770,7 @@ where
     .to_glib()
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 unsafe extern "C" fn aggregator_sink_query_pre_queue<T: ObjectSubclass>(
     ptr: *mut gst_base_sys::GstAggregator,
     aggregator_pad: *mut gst_base_sys::GstAggregatorPad,
@@ -1020,6 +1034,7 @@ where
     .to_glib()
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 unsafe extern "C" fn aggregator_negotiate<T: ObjectSubclass>(
     ptr: *mut gst_base_sys::GstAggregator,
 ) -> glib_sys::gboolean
