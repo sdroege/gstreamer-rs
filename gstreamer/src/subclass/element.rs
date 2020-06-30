@@ -71,7 +71,7 @@ pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync + 'static {
         self.parent_provide_clock(element)
     }
 
-    fn post_message(&self, element: &::Element, msg: ::Message) -> Result<(), ::LoggableError> {
+    fn post_message(&self, element: &::Element, msg: ::Message) -> bool {
         self.parent_post_message(element, msg)
     }
 }
@@ -103,11 +103,7 @@ pub trait ElementImplExt {
 
     fn parent_provide_clock(&self, element: &::Element) -> Option<::Clock>;
 
-    fn parent_post_message(
-        &self,
-        element: &::Element,
-        msg: ::Message,
-    ) -> Result<(), ::LoggableError>;
+    fn parent_post_message(&self, element: &::Element, msg: ::Message) -> bool;
 
     fn catch_panic<
         R,
@@ -246,23 +242,16 @@ where
         }
     }
 
-    fn parent_post_message(
-        &self,
-        element: &::Element,
-        msg: ::Message,
-    ) -> Result<(), ::LoggableError> {
+    fn parent_post_message(&self, element: &::Element, msg: ::Message) -> bool {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
-            let f = (*parent_class).post_message.ok_or_else(|| {
-                gst_loggable_error!(::CAT_RUST, "Parent function `post_message` is not defined")
-            })?;
-            gst_result_from_gboolean!(
-                f(element.to_glib_none().0, msg.into_ptr()),
-                ::CAT_RUST,
-                "Failed to post message on the element using the parent function"
-            )
+            if let Some(f) = (*parent_class).post_message {
+                from_glib(f(element.to_glib_none().0, msg.into_ptr()))
+            } else {
+                false
+            }
         }
     }
 
@@ -562,13 +551,7 @@ where
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.post_message(&wrap, from_glib_full(msg)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_object(&*wrap);
-                false
-            }
-        }
+        imp.post_message(&wrap, from_glib_full(msg))
     })
     .to_glib()
 }
