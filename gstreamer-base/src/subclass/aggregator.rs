@@ -103,7 +103,9 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
         &self,
         aggregator: &Aggregator,
         timeout: bool,
-    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_aggregate(aggregator, timeout)
+    }
 
     fn start(&self, aggregator: &Aggregator) -> Result<(), gst::ErrorMessage> {
         self.parent_start(aggregator)

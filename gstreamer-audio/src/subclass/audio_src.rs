@@ -39,7 +39,9 @@ pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl + Send + Sync + 'static {
         &self,
         src: &AudioSrc,
         audio_data: &mut [u8],
-    ) -> Result<(u32, gst::ClockTime), LoggableError>;
+    ) -> Result<(u32, gst::ClockTime), LoggableError> {
+        self.parent_read(src, audio_data)
+    }
 }
 
 pub trait AudioSrcImplExt {

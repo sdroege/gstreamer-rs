@@ -49,7 +49,9 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl + Send + Sync + 'static 
         element: &BaseParse,
         src_val: V,
         dest_format: gst::Format,
-    ) -> Option<gst::GenericFormattedValue>;
+    ) -> Option<gst::GenericFormattedValue> {
+        self.parent_convert(element, src_val, dest_format)
+    }
 }
 
 pub trait BaseParseImplExt {

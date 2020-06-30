@@ -37,7 +37,9 @@ pub trait AudioSinkImpl: AudioSinkImplExt + BaseSinkImpl + Send + Sync + 'static
         self.parent_unprepare(sink)
     }
 
-    fn write(&self, sink: &AudioSink, audio_data: &[u8]) -> Result<i32, LoggableError>;
+    fn write(&self, sink: &AudioSink, audio_data: &[u8]) -> Result<i32, LoggableError> {
+        self.parent_write(sink, audio_data)
+    }
 }
 
 pub trait AudioSinkImplExt {
