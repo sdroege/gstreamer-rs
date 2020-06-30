@@ -502,7 +502,7 @@ where
         match imp.open(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -525,7 +525,7 @@ where
         match imp.close(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -548,7 +548,7 @@ where
         match imp.start(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -571,7 +571,7 @@ where
         match imp.stop(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -807,7 +807,7 @@ where
         match imp.propose_allocation(&wrap, query) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -832,7 +832,7 @@ where
         match imp.decide_allocation(&wrap, query) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }

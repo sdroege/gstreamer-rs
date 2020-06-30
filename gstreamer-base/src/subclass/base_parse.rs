@@ -247,7 +247,7 @@ where
         match imp.start(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -270,7 +270,7 @@ where
         match imp.stop(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -295,7 +295,7 @@ where
         match imp.set_sink_caps(&wrap, &caps) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }

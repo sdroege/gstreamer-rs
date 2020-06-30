@@ -513,6 +513,11 @@ manual_traits = ["ElementExtManual"]
     ignore = true
 
     [[object.function]]
+    name = "post_message"
+    # takes ownership of message
+    ignore = true
+
+    [[object.function]]
     name = "add_pad"
         [object.function.return]
         bool_return_is_error = "Failed to add pad"

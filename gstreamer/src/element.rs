@@ -189,7 +189,8 @@ pub trait ElementExtManual: 'static {
         structure: ::Structure,
     );
 
-    fn post_error_message(&self, msg: &::ErrorMessage);
+    fn post_message(&self, message: ::Message) -> Result<(), glib::error::BoolError>;
+    fn post_error_message(&self, msg: ::ErrorMessage);
 
     fn iterate_pads(&self) -> ::Iterator<Pad>;
     fn iterate_sink_pads(&self) -> ::Iterator<Pad>;
@@ -454,7 +455,19 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn post_error_message(&self, msg: &::ErrorMessage) {
+    fn post_message(&self, message: ::Message) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib_result_from_gboolean!(
+                gst_sys::gst_element_post_message(
+                    self.as_ref().to_glib_none().0,
+                    message.into_ptr()
+                ),
+                "Failed to post message"
+            )
+        }
+    }
+
+    fn post_error_message(&self, msg: ::ErrorMessage) {
         let ::ErrorMessage {
             error_domain,
             error_code,
@@ -463,7 +476,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             filename,
             function,
             line,
-        } = *msg;
+        } = msg;
 
         unsafe {
             gst_sys::gst_element_message_full(

@@ -19,7 +19,6 @@ use Clock;
 use ClockTime;
 use Context;
 use ElementFactory;
-use Message;
 use Object;
 use Pad;
 use PadLinkCheck;
@@ -150,8 +149,6 @@ pub trait ElementExt: 'static {
     //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure);
 
     fn no_more_pads(&self);
-
-    fn post_message(&self, message: &Message) -> Result<(), glib::error::BoolError>;
 
     fn provide_clock(&self) -> Option<Clock>;
 
@@ -521,18 +518,6 @@ impl<O: IsA<Element>> ElementExt for O {
     fn no_more_pads(&self) {
         unsafe {
             gst_sys::gst_element_no_more_pads(self.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn post_message(&self, message: &Message) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_post_message(
-                    self.as_ref().to_glib_none().0,
-                    message.to_glib_full()
-                ),
-                "Failed to post message"
-            )
         }
     }
 

@@ -888,7 +888,7 @@ where
         match imp.start(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
@@ -911,7 +911,7 @@ where
         match imp.stop(&wrap) {
             Ok(()) => true,
             Err(err) => {
-                wrap.post_error_message(&err);
+                wrap.post_error_message(err);
                 false
             }
         }
