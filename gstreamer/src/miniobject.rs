@@ -115,21 +115,9 @@ macro_rules! gst_define_mini_object_wrapper(
             }
         }
 
-        impl ::std::ops::DerefMut for $name {
-            fn deref_mut(&mut self) -> &mut Self::Target {
-                unsafe { &mut *(self.obj.as_ptr() as *mut Self::Target) }
-            }
-        }
-
         impl AsRef<$ref_name> for $name {
             fn as_ref(&self) -> &$ref_name {
                 &*self
-            }
-        }
-
-        impl AsMut<$ref_name> for $name {
-            fn as_mut(&mut self) -> &mut $ref_name {
-                &mut *self
             }
         }
 
