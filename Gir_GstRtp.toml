@@ -24,8 +24,6 @@ generate = [
   "GstRtp.RTCPXRType",
   "GstRtp.RTPPayload",
   "GstRtp.RTPProfile",
-  "GstRtp.RTPBufferFlags",
-  "GstRtp.RTPBufferMapFlags",
 ]
 
 [[object]]
@@ -50,3 +48,17 @@ status = "generate"
   [[object.function]]
   name = "rtp_source_meta_api_get_type"
   ignore = true
+
+[[object]]
+name = "GstRtp.RTPBufferFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "GstRtp.RTPBufferMapFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true

@@ -14,12 +14,10 @@ use gst_gl_sys;
 
 bitflags! {
     pub struct GLAPI: u32 {
-        const NONE = 0;
         const OPENGL = 1;
         const OPENGL3 = 2;
         const GLES1 = 32768;
         const GLES2 = 65536;
-        const ANY = 4294967295;
     }
 }
 
@@ -66,7 +64,6 @@ impl SetValue for GLAPI {
 
 bitflags! {
     pub struct GLDisplayType: u32 {
-        const NONE = 0;
         const X11 = 1;
         const WAYLAND = 2;
         const COCOA = 4;
@@ -77,7 +74,6 @@ bitflags! {
         const GBM = 128;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         const EGL_DEVICE = 256;
-        const ANY = 4294967295;
     }
 }
 
@@ -124,13 +120,11 @@ impl SetValue for GLDisplayType {
 
 bitflags! {
     pub struct GLPlatform: u32 {
-        const NONE = 0;
         const EGL = 1;
         const GLX = 2;
         const WGL = 4;
         const CGL = 8;
         const EAGL = 16;
-        const ANY = 4294967295;
     }
 }
 
@@ -177,11 +171,9 @@ impl SetValue for GLPlatform {
 
 bitflags! {
     pub struct GLSLProfile: u32 {
-        const NONE = 0;
         const ES = 1;
         const CORE = 2;
         const COMPATIBILITY = 4;
-        const ANY = 4294967295;
     }
 }
 

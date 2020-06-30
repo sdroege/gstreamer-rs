@@ -36,35 +36,23 @@ generate = [
     "Gst.StructureChangeType",
     "Gst.StreamStatusType",
     "Gst.StreamType",
-    "Gst.StreamFlags",
     "Gst.ProgressType",
     "Gst.BusSyncReply",
     "Gst.TagFlag",
     "Gst.TagMergeMode",
-    "Gst.PadProbeType",
     "Gst.PadProbeReturn",
     "Gst.CapsIntersectMode",
-    "Gst.BufferCopyFlags",
     "Gst.PadMode",
     "Gst.SchedulingFlags",
     "Gst.QOSType",
     "Gst.TocSetter",
-    "Gst.ElementFlags",
-    "Gst.PadFlags",
-    "Gst.PipelineFlags",
     "Gst.PluginFlags",
-    "Gst.MemoryFlags",
-    "Gst.PadLinkCheck",
     "Gst.DebugLevel",
     "Gst.DebugColorFlags",
-    "Gst.StackTraceFlags",
     "Gst.DebugGraphDetails",
     "Gst.TaskState",
-    "Gst.PluginDependencyFlags",
-    "Gst.BufferPoolAcquireFlags",
     "Gst.PromiseResult",
     "Gst.ClockEntryType",
-    "Gst.ClockFlags",
 ]
 
 manual = [
@@ -114,7 +102,9 @@ trait_name = "GstBinExt"
 [[object]]
 name = "Gst.BinFlags"
 status = "generate"
-
+    [[object.member]]
+    name = "last"
+    ignore = true
     [[object.member]]
     name = "streams_aware"
     version = "1.10"
@@ -185,6 +175,26 @@ status = "generate"
     [[object.member]]
     name = "non_droppable"
     version = "1.14"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.BufferCopyFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.BufferPoolAcquireFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "last"
+    ignore = true
 
 [[object]]
 name = "Gst.ChildProxy"
@@ -195,6 +205,13 @@ manual_traits = ["ChildProxyExtManual"]
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"
+
+[[object]]
+name = "Gst.ClockFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
 
 [[object]]
 name = "Gst.Format"
@@ -214,6 +231,9 @@ status = "generate"
     [[object.member]]
     name = "instant_rate_change"
     version = "1.18"
+    [[object.member]]
+    name = "none"
+    ignore = true
 
 [[object]]
 name = "Gst.SegmentFlags"
@@ -224,6 +244,23 @@ status = "generate"
     [[object.member]]
     name = "trickmode_forward_predicted"
     version = "1.18"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.StackTraceFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.StreamFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
 
 [[object]]
 name = "Gst.TagSetter"
@@ -306,6 +343,23 @@ status = "generate"
     [[object.member]]
     name = "place_in_bin"
     version = "1.10"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.PipelineFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.PluginDependencyFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
 
 [[object]]
 name = "Gst.Caps"
@@ -418,6 +472,20 @@ status = "generate"
     name = "obtain"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "Gst.ElementFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.MemoryFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
 
 [[object]]
 name = "Gst.Element"
@@ -748,6 +816,30 @@ status = "generate"
     [[object.member]]
     name = "may_be_leaked"
     version = "1.10"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.PadFlags"
+status = "generate"
+    [[object.member]]
+    name = "last"
+    ignore = true
+
+[[object]]
+name = "Gst.PadLinkCheck"
+status = "generate"
+    [[object.member]]
+    name = "nothing"
+    ignore = true
+
+[[object]]
+name = "Gst.PadProbeType"
+status = "generate"
+    [[object.member]]
+    name = "invalid"
+    ignore = true
 
 [[object]]
 name = "Gst.Pad"

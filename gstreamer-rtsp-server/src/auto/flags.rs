@@ -14,7 +14,6 @@ use gst_rtsp_server_sys;
 
 bitflags! {
     pub struct RTSPAddressFlags: u32 {
-        const NONE = 0;
         const IPV4 = 1;
         const IPV6 = 2;
         const EVEN_PORT = 4;

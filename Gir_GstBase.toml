@@ -18,7 +18,6 @@ external_libraries = [
 
 generate = [
     "GstBase.PushSrc",
-    "GstBase.BaseParseFrameFlags",
 ]
 
 manual = [
@@ -307,4 +306,11 @@ manual_traits = ["BaseParseExtManual"]
     # Didn't bind gst_base_parse_frame_{new,init} so not needed
     [[object.function]]
     name = "push_frame"
+    ignore = true
+
+[[object]]
+name = "GstBase.BaseParseFrameFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
     ignore = true

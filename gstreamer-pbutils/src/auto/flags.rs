@@ -14,11 +14,9 @@ use gst_pbutils_sys;
 
 bitflags! {
     pub struct DiscovererSerializeFlags: u32 {
-        const BASIC = 0;
         const CAPS = 1;
         const TAGS = 2;
         const MISC = 4;
-        const ALL = 7;
     }
 }
 

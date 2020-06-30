@@ -19,10 +19,6 @@ external_libraries = [
 ]
 
 generate = [
-    # BitFlags
-    "GstGL.GLAPI",
-    "GstGL.GLPlatform",
-    "GstGL.GLSLProfile",
     # Enums
     "GstGL.GLFormat",
     "GstGL.GLQueryType",
@@ -429,8 +425,42 @@ final_type = true
 [[object]]
 name = "GstGL.GLDisplayType"
 status = "generate"
-
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "any"
+    ignore = true
     [[object.member]]
     name = "egl_device"
     version = "1.18"
 
+[[object]]
+name = "GstGL.GLAPI"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "any"
+    ignore = true
+
+[[object]]
+name = "GstGL.GLPlatform"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "any"
+    ignore = true
+
+[[object]]
+name = "GstGL.GLSLProfile"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+    [[object.member]]
+    name = "any"
+    ignore = true

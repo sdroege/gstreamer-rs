@@ -416,8 +416,8 @@ mod tests {
         let mut unpacked = [0; 16];
         let mut output = [0; 8];
 
-        info.unpack(::AudioPackFlags::NONE, &mut unpacked, &input);
-        info.pack(::AudioPackFlags::NONE, &mut output, &unpacked);
+        info.unpack(::AudioPackFlags::empty(), &mut unpacked, &input);
+        info.pack(::AudioPackFlags::empty(), &mut output, &unpacked);
 
         assert_eq!(input, output);
     }

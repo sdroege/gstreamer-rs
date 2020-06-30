@@ -17,7 +17,6 @@ bitflags! {
     pub struct RTPBufferFlags: u32 {
         const RETRANSMISSION = 1048576;
         const REDUNDANT = 2097152;
-        const LAST = 268435456;
     }
 }
 
@@ -71,7 +70,6 @@ impl SetValue for RTPBufferFlags {
 bitflags! {
     pub struct RTPBufferMapFlags: u32 {
         const SKIP_PADDING = 65536;
-        const LAST = 16777216;
     }
 }
 

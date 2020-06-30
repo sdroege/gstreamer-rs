@@ -690,14 +690,14 @@ mod tests {
         {
             let meta = VideoMeta::add(
                 buffer.get_mut().unwrap(),
-                ::VideoFrameFlags::NONE,
+                ::VideoFrameFlags::empty(),
                 ::VideoFormat::Argb,
                 320,
                 240,
             )
             .unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
+            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
             assert_eq!(meta.get_format(), ::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);
@@ -709,7 +709,7 @@ mod tests {
         {
             let meta = buffer.get_meta::<VideoMeta>().unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
+            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
             assert_eq!(meta.get_format(), ::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);
@@ -727,7 +727,7 @@ mod tests {
         {
             let meta = VideoMeta::add_full(
                 buffer.get_mut().unwrap(),
-                ::VideoFrameFlags::NONE,
+                ::VideoFrameFlags::empty(),
                 ::VideoFormat::Argb,
                 320,
                 240,
@@ -736,7 +736,7 @@ mod tests {
             )
             .unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
+            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
             assert_eq!(meta.get_format(), ::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);
@@ -748,7 +748,7 @@ mod tests {
         {
             let meta = buffer.get_meta::<VideoMeta>().unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
+            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
             assert_eq!(meta.get_format(), ::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);

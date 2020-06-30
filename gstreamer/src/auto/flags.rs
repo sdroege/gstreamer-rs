@@ -17,7 +17,6 @@ bitflags! {
         const NO_RESYNC = 16384;
         #[cfg(any(feature = "v1_10", feature = "dox"))]
         const STREAMS_AWARE = 32768;
-        const LAST = 524288;
     }
 }
 
@@ -64,7 +63,6 @@ impl SetValue for BinFlags {
 
 bitflags! {
     pub struct BufferCopyFlags: u32 {
-        const NONE = 0;
         const FLAGS = 1;
         const TIMESTAMPS = 2;
         const META = 4;
@@ -132,7 +130,6 @@ bitflags! {
         const SYNC_AFTER = 32768;
         #[cfg(any(feature = "v1_14", feature = "dox"))]
         const NON_DROPPABLE = 65536;
-        const LAST = 1048576;
     }
 }
 
@@ -179,11 +176,9 @@ impl SetValue for BufferFlags {
 
 bitflags! {
     pub struct BufferPoolAcquireFlags: u32 {
-        const NONE = 0;
         const KEY_UNIT = 1;
         const DONTWAIT = 2;
         const DISCONT = 4;
-        const LAST = 65536;
     }
 }
 
@@ -237,7 +232,6 @@ bitflags! {
         const CAN_SET_RESOLUTION = 256;
         const CAN_SET_MASTER = 512;
         const NEEDS_STARTUP_SYNC = 1024;
-        const LAST = 4096;
     }
 }
 
@@ -407,7 +401,6 @@ bitflags! {
         const PROVIDE_CLOCK = 128;
         const REQUIRE_CLOCK = 256;
         const INDEXABLE = 512;
-        const LAST = 16384;
     }
 }
 
@@ -460,7 +453,6 @@ bitflags! {
         const ZERO_PADDED = 64;
         const PHYSICALLY_CONTIGUOUS = 128;
         const NOT_MAPPABLE = 256;
-        const LAST = 1048576;
     }
 }
 
@@ -509,7 +501,6 @@ bitflags! {
     pub struct ObjectFlags: u32 {
         #[cfg(any(feature = "v1_10", feature = "dox"))]
         const MAY_BE_LEAKED = 1;
-        const LAST = 16;
     }
 }
 
@@ -569,7 +560,6 @@ bitflags! {
         const PROXY_SCHEDULING = 16384;
         const ACCEPT_INTERSECT = 32768;
         const ACCEPT_TEMPLATE = 65536;
-        const LAST = 1048576;
     }
 }
 
@@ -616,7 +606,6 @@ impl SetValue for PadFlags {
 
 bitflags! {
     pub struct PadLinkCheck: u32 {
-        const NOTHING = 0;
         const HIERARCHY = 1;
         const TEMPLATE_CAPS = 2;
         const CAPS = 4;
@@ -668,7 +657,6 @@ impl SetValue for PadLinkCheck {
 
 bitflags! {
     pub struct PadProbeType: u32 {
-        const INVALID = 0;
         const IDLE = 1;
         const BLOCK = 2;
         const BUFFER = 16;
@@ -736,7 +724,6 @@ impl SetValue for PadProbeType {
 
 bitflags! {
     pub struct ParseFlags: u32 {
-        const NONE = 0;
         const FATAL_ERRORS = 1;
         const NO_SINGLE_ELEMENT_BINS = 2;
         #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -788,7 +775,6 @@ impl SetValue for ParseFlags {
 bitflags! {
     pub struct PipelineFlags: u32 {
         const FIXED_CLOCK = 524288;
-        const LAST = 8388608;
     }
 }
 
@@ -835,7 +821,6 @@ impl SetValue for PipelineFlags {
 
 bitflags! {
     pub struct PluginDependencyFlags: u32 {
-        const NONE = 0;
         const RECURSE = 1;
         const PATHS_ARE_DEFAULT_ONLY = 2;
         const FILE_NAME_IS_SUFFIX = 4;
@@ -984,7 +969,6 @@ impl SetValue for SchedulingFlags {
 
 bitflags! {
     pub struct SeekFlags: u32 {
-        const NONE = 0;
         const FLUSH = 1;
         const ACCURATE = 2;
         const KEY_UNIT = 4;
@@ -1047,7 +1031,6 @@ impl SetValue for SeekFlags {
 bitflags! {
     #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
     pub struct SegmentFlags: u32 {
-        const NONE = 0;
         const RESET = 1;
         const TRICKMODE = 16;
         const SKIP = 16;
@@ -1103,7 +1086,6 @@ impl SetValue for SegmentFlags {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 bitflags! {
     pub struct StackTraceFlags: u32 {
-        const NONE = 0;
         const FULL = 1;
     }
 }
@@ -1157,7 +1139,6 @@ impl SetValue for StackTraceFlags {
 
 bitflags! {
     pub struct StreamFlags: u32 {
-        const NONE = 0;
         const SPARSE = 1;
         const SELECT = 2;
         const UNSELECT = 4;

@@ -23,16 +23,12 @@ generate = [
     "GstRtsp.RTSPEvent",
     "GstRtsp.RTSPFamily",
     "GstRtsp.RTSPHeaderField",
-    "GstRtsp.RTSPLowerTrans",
-    "GstRtsp.RTSPMethod",
     "GstRtsp.RTSPMsgType",
-    "GstRtsp.RTSPProfile",
     "GstRtsp.RTSPRangeUnit",
     "GstRtsp.RTSPResult",
     "GstRtsp.RTSPState",
     "GstRtsp.RTSPStatusCode",
     "GstRtsp.RTSPTimeType",
-    "GstRtsp.RTSPTransMode"
 ]
 
 manual = [
@@ -68,3 +64,31 @@ ref_mode = "ref"
 name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref-mut"
+
+[[object]]
+name = "GstRtsp.RTSPLowerTrans"
+status = "generate"
+    [[object.member]]
+    name = "unknown"
+    ignore = true
+
+[[object]]
+name = "GstRtsp.RTSPMethod"
+status = "generate"
+    [[object.member]]
+    name = "invalid"
+    ignore = true
+
+[[object]]
+name = "GstRtsp.RTSPProfile"
+status = "generate"
+    [[object.member]]
+    name = "unknown"
+    ignore = true
+
+[[object]]
+name = "GstRtsp.RTSPTransMode"
+status = "generate"
+    [[object.member]]
+    name = "unknown"
+    ignore = true

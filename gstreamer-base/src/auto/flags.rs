@@ -7,7 +7,6 @@ use gst_base_sys;
 
 bitflags! {
     pub struct BaseParseFrameFlags: u32 {
-        const NONE = 0;
         const NEW_FRAME = 1;
         const NO_FRAME = 2;
         const CLIP = 4;

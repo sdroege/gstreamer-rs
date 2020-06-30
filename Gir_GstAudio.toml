@@ -18,10 +18,8 @@ external_libraries = [
 ]
 
 generate = [
-    "GstAudio.AudioFlags",
     "GstAudio.AudioFormatFlags",
     "GstAudio.AudioLayout",
-    "GstAudio.AudioPackFlags",
     "GstAudio.AudioChannelPosition",
     "GstAudio.StreamVolume",
     "GstAudio.StreamVolumeFormat",
@@ -241,3 +239,17 @@ status = "generate"
     [[object.member]]
     name = "flac"
     version = "1.12"
+
+[[object]]
+name = "GstAudio.AudioFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "GstAudio.AudioPackFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true

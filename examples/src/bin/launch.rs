@@ -29,7 +29,7 @@ fn example_main() {
     // install the corresponding gstreamer plugins.
     let mut context = gst::ParseContext::new();
     let pipeline =
-        match gst::parse_launch_full(&pipeline_str, Some(&mut context), gst::ParseFlags::NONE) {
+        match gst::parse_launch_full(&pipeline_str, Some(&mut context), gst::ParseFlags::empty()) {
             Ok(pipeline) => pipeline,
             Err(err) => {
                 if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {

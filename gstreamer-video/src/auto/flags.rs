@@ -26,7 +26,6 @@ bitflags! {
         const BOTTOM_FIELD = 8388608;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
         const MARKER = 512;
-        const LAST = 268435456;
     }
 }
 
@@ -73,7 +72,6 @@ impl SetValue for VideoBufferFlags {
 
 bitflags! {
     pub struct VideoChromaSite: u32 {
-        const UNKNOWN = 0;
         const NONE = 1;
         const H_COSITED = 2;
         const V_COSITED = 4;
@@ -154,7 +152,6 @@ impl FromGlib<gst_video_sys::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
 
 bitflags! {
     pub struct VideoFlags: u32 {
-        const NONE = 0;
         const VARIABLE_FPS = 1;
         const PREMULTIPLIED_ALPHA = 2;
     }
@@ -258,16 +255,13 @@ impl SetValue for VideoFormatFlags {
 
 bitflags! {
     pub struct VideoFrameFlags: u32 {
-        const NONE = 0;
         const INTERLACED = 1;
         const TFF = 2;
         const RFF = 4;
         const ONEFIELD = 8;
         const MULTIPLE_VIEW = 16;
         const FIRST_IN_BUNDLE = 32;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
         const TOP_FIELD = 10;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
         const BOTTOM_FIELD = 8;
     }
 }
@@ -315,7 +309,6 @@ impl SetValue for VideoFrameFlags {
 
 bitflags! {
     pub struct VideoMultiviewFlags: u32 {
-        const NONE = 0;
         const RIGHT_VIEW_FIRST = 1;
         const LEFT_FLIPPED = 2;
         const LEFT_FLOPPED = 4;
@@ -369,7 +362,6 @@ impl SetValue for VideoMultiviewFlags {
 
 bitflags! {
     pub struct VideoOverlayFormatFlags: u32 {
-        const NONE = 0;
         const PREMULTIPLIED_ALPHA = 1;
         const GLOBAL_ALPHA = 2;
     }
@@ -422,7 +414,6 @@ impl SetValue for VideoOverlayFormatFlags {
 
 bitflags! {
     pub struct VideoPackFlags: u32 {
-        const NONE = 0;
         const TRUNCATE_RANGE = 1;
         const INTERLACED = 2;
     }
@@ -472,7 +463,6 @@ impl SetValue for VideoPackFlags {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 bitflags! {
     pub struct VideoTimeCodeFlags: u32 {
-        const NONE = 0;
         const DROP_FRAME = 1;
         const INTERLACED = 2;
     }

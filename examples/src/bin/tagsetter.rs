@@ -49,7 +49,7 @@ fn example_main() -> Result<(), Error> {
     let pipeline = match gst::parse_launch_full(
         "audiotestsrc wave=white-noise num-buffers=100 ! flacenc ! filesink location=test.flac",
         Some(&mut context),
-        gst::ParseFlags::NONE,
+        gst::ParseFlags::empty(),
     ) {
         Ok(pipeline) => pipeline,
         Err(err) => {

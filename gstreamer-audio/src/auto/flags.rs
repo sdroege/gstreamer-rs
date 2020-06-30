@@ -14,7 +14,6 @@ use gst_audio_sys;
 
 bitflags! {
     pub struct AudioFlags: u32 {
-        const NONE = 0;
         const UNPOSITIONED = 1;
     }
 }
@@ -113,7 +112,6 @@ impl SetValue for AudioFormatFlags {
 
 bitflags! {
     pub struct AudioPackFlags: u32 {
-        const NONE = 0;
         const TRUNCATE_RANGE = 1;
     }
 }

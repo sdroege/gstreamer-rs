@@ -22,7 +22,6 @@ external_libraries = [
 ]
 
 generate = [
-    "GstRtspServer.RTSPAddressFlags",
     "GstRtspServer.RTSPAddressPoolResult",
     "GstRtspServer.RTSPMediaFactoryURI",
     "GstRtspServer.RTSPMediaStatus",
@@ -361,3 +360,9 @@ status="generate"
         [object.function.return]
         nullable_return_is_error = "Failed to manage media"
 
+[[object]]
+name = "GstRtspServer.RTSPAddressFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true

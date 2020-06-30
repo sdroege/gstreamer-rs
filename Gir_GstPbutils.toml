@@ -18,7 +18,6 @@ external_libraries = [
 
 generate = [
     "GstPbutils.DiscovererResult",
-    "GstPbutils.DiscovererSerializeFlags",
 ]
 
 manual = [
@@ -336,3 +335,13 @@ status = "generate"
     [[object.function]]
     name = "plugins_base_version"
     assertion = "skip"
+
+[[object]]
+name = "GstPbutils.DiscovererSerializeFlags"
+status = "generate"
+    [[object.member]]
+    name = "basic"
+    ignore = true
+    [[object.member]]
+    name = "all"
+    ignore = true

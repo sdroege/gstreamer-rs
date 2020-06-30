@@ -519,7 +519,7 @@ impl App {
         match api {
             glutin::Api::OpenGl => gst_gl::GLAPI::OPENGL3,
             glutin::Api::OpenGlEs => gst_gl::GLAPI::GLES2,
-            _ => gst_gl::GLAPI::NONE,
+            _ => gst_gl::GLAPI::empty(),
         }
     }
 

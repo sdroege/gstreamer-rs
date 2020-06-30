@@ -62,7 +62,6 @@ impl SetValue for RTSPEvent {
 
 bitflags! {
     pub struct RTSPLowerTrans: u32 {
-        const UNKNOWN = 0;
         const UDP = 1;
         const UDP_MCAST = 2;
         const TCP = 4;
@@ -114,7 +113,6 @@ impl SetValue for RTSPLowerTrans {
 
 bitflags! {
     pub struct RTSPMethod: u32 {
-        const INVALID = 0;
         const DESCRIBE = 1;
         const ANNOUNCE = 2;
         const GET_PARAMETER = 4;
@@ -174,7 +172,6 @@ impl SetValue for RTSPMethod {
 
 bitflags! {
     pub struct RTSPProfile: u32 {
-        const UNKNOWN = 0;
         const AVP = 1;
         const SAVP = 2;
         const AVPF = 4;
@@ -225,7 +222,6 @@ impl SetValue for RTSPProfile {
 
 bitflags! {
     pub struct RTSPTransMode: u32 {
-        const UNKNOWN = 0;
         const RTP = 1;
         const RDT = 2;
     }

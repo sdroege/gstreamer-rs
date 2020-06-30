@@ -165,7 +165,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
             gst_video::VideoMeta::add(
                 buffer.get_mut().unwrap(),
-                gst_video::VideoFrameFlags::NONE,
+                gst_video::VideoFrameFlags::empty(),
                 gst_video::VideoFormat::Bgra,
                 frame_width as u32,
                 frame_height as u32,

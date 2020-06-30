@@ -21,19 +21,15 @@ generate = [
     "GstVideo.VideoCodecFrameFlags",
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoTileMode",
-    "GstVideo.VideoFlags",
-    "GstVideo.VideoChromaSite",
     "GstVideo.VideoColorMatrix",
     "GstVideo.VideoTransferFunction",
     "GstVideo.VideoColorPrimaries",
     "GstVideo.VideoMultiviewMode",
-    "GstVideo.VideoMultiviewFlags",
     "GstVideo.VideoFieldOrder",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
     "GstVideo.VideoCaptionType",
     "GstVideo.VideoBufferPool",
-    "GstVideo.VideoPackFlags",
     "GstVideo.VideoAlphaMode",
     "GstVideo.VideoChromaMode",
     "GstVideo.VideoMatrixMode",
@@ -404,6 +400,9 @@ status = "generate"
     [[object.function]]
     name = "get_type"
     version = "1.16"
+    [[object.member]]
+    name = "none"
+    ignore = true
 
 [[object]]
 name = "GstVideo.VideoTimeCodeFlags"
@@ -411,6 +410,9 @@ status = "generate"
     [[object.function]]
     name = "get_type"
     version = "1.18"
+    [[object.member]]
+    name = "none"
+    ignore = true
 
 [[object]]
 name = "GstVideo.VideoFrameFlags"
@@ -434,6 +436,9 @@ status = "generate"
     [[object.member]]
     name = "marker"
     version = "1.18"
+    [[object.member]]
+    name = "last"
+    ignore = true
 
 [[object]]
 name = "GstVideo.VideoInterlaceMode"
@@ -441,3 +446,38 @@ status = "generate"
     [[object.member]]
     name = "alternate"
     version = "1.16"
+
+[[object]]
+name = "GstVideo.VideoChromaSite"
+status = "generate"
+    [[object.member]]
+    name = "unknown"
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoFrameFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoMultiviewFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoPackFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
