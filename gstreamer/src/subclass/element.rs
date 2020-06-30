@@ -550,10 +550,9 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.post_message(&wrap, from_glib_full(msg))
-    })
-    .to_glib()
+    // Can't catch panics here as posting the error message would cause
+    // this code to be called again recursively forever.
+    imp.post_message(&wrap, from_glib_full(msg)).to_glib()
 }
 
 #[cfg(test)]
