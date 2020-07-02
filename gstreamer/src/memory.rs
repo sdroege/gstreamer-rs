@@ -287,7 +287,7 @@ impl MemoryRef {
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib_bool_error!("Failed to map memory readable"))
+                Err(glib_bool_error!("Failed to map memory writable"))
             }
         }
     }
