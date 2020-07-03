@@ -7,9 +7,10 @@
 // except according to those terms.
 
 use glib;
-use glib::translate::{from_glib_full, from_glib_none};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib};
 use gst_sys;
 use std::fmt;
+use std::ptr;
 
 use Buffer;
 use BufferRef;
@@ -98,6 +99,70 @@ impl BufferListRef {
 
     pub fn iter_owned(&self) -> IterOwned {
         IterOwned::new(self)
+    }
+
+    pub fn foreach<F: FnMut(&BufferRef, u32) -> bool>(&self, func: F) -> bool {
+        unsafe extern "C" fn trampoline<F: FnMut(&BufferRef, u32) -> bool>(
+            buffer: *mut *mut gst_sys::GstBuffer,
+            idx: u32,
+            user_data: glib_sys::gpointer,
+        ) -> glib_sys::gboolean {
+            let func = user_data as *const _ as usize as *mut F;
+            let res = (*func)(BufferRef::from_ptr(*buffer), idx);
+
+            res.to_glib()
+        }
+
+        unsafe {
+            let func_ptr: &F = &func;
+
+            from_glib(gst_sys::gst_buffer_list_foreach(
+                self.as_ptr() as *mut _,
+                Some(trampoline::<F>),
+                func_ptr as *const _ as usize as *mut _,
+            ))
+        }
+    }
+
+    pub fn foreach_mut<F: FnMut(Buffer, u32) -> Result<Option<Buffer>, Option<Buffer>>>(
+        &mut self,
+        func: F,
+    ) -> bool {
+        unsafe extern "C" fn trampoline<
+            F: FnMut(Buffer, u32) -> Result<Option<Buffer>, Option<Buffer>>,
+        >(
+            buffer: *mut *mut gst_sys::GstBuffer,
+            idx: u32,
+            user_data: glib_sys::gpointer,
+        ) -> glib_sys::gboolean {
+            let func = user_data as *const _ as usize as *mut F;
+            let res = (*func)(Buffer::from_glib_full(*buffer), idx);
+
+            match res {
+                Ok(None) | Err(None) => {
+                    *buffer = ptr::null_mut();
+                    res.is_ok().to_glib()
+                }
+                Ok(Some(b)) => {
+                    *buffer = b.into_ptr();
+                    glib_sys::GTRUE
+                }
+                Err(Some(b)) => {
+                    *buffer = b.into_ptr();
+                    glib_sys::GFALSE
+                }
+            }
+        }
+
+        unsafe {
+            let func_ptr: &F = &func;
+
+            from_glib(gst_sys::gst_buffer_list_foreach(
+                self.as_ptr() as *mut _,
+                Some(trampoline::<F>),
+                func_ptr as *const _ as usize as *mut _,
+            ))
+        }
     }
 }
 
@@ -198,3 +263,84 @@ define_iter!(Iter, &'a BufferRef, |list: &'a BufferListRef, idx| {
 define_iter!(IterOwned, Buffer, |list: &BufferListRef, idx| {
     list.get_owned(idx)
 });
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_foreach() {
+        ::init().unwrap();
+
+        let mut buffer_list = BufferList::new();
+        {
+            let buffer_list = buffer_list.get_mut().unwrap();
+            let mut buffer = Buffer::new();
+            buffer.get_mut().unwrap().set_pts(::ClockTime::from(0));
+            buffer_list.add(buffer);
+
+            let mut buffer = Buffer::new();
+            buffer.get_mut().unwrap().set_pts(::SECOND);
+            buffer_list.add(buffer);
+        }
+
+        let mut res = vec![];
+        buffer_list.foreach(|buffer, idx| {
+            res.push((buffer.get_pts(), idx));
+
+            true
+        });
+
+        assert_eq!(res, &[(::ClockTime::from(0), 0), (::SECOND, 1)]);
+    }
+
+    #[test]
+    fn test_foreach_mut() {
+        ::init().unwrap();
+
+        let mut buffer_list = BufferList::new();
+        {
+            let buffer_list = buffer_list.get_mut().unwrap();
+            let mut buffer = Buffer::new();
+            buffer.get_mut().unwrap().set_pts(::ClockTime::from(0));
+            buffer_list.add(buffer);
+
+            let mut buffer = Buffer::new();
+            buffer.get_mut().unwrap().set_pts(::SECOND);
+            buffer_list.add(buffer);
+
+            let mut buffer = Buffer::new();
+            buffer.get_mut().unwrap().set_pts(2 * ::SECOND);
+            buffer_list.add(buffer);
+        }
+
+        let mut res = vec![];
+        buffer_list.get_mut().unwrap().foreach_mut(|buffer, idx| {
+            res.push((buffer.get_pts(), idx));
+
+            if buffer.get_pts() == ::ClockTime::from(0) {
+                Ok(Some(buffer))
+            } else if buffer.get_pts() == ::SECOND {
+                Ok(None)
+            } else {
+                let mut new_buffer = Buffer::new();
+                new_buffer.get_mut().unwrap().set_pts(3 * ::SECOND);
+                Ok(Some(new_buffer))
+            }
+        });
+
+        assert_eq!(
+            res,
+            &[(::ClockTime::from(0), 0), (::SECOND, 1), (2 * ::SECOND, 1)]
+        );
+
+        let mut res = vec![];
+        buffer_list.foreach(|buffer, idx| {
+            res.push((buffer.get_pts(), idx));
+
+            true
+        });
+
+        assert_eq!(res, &[(::ClockTime::from(0), 0), (3 * ::SECOND, 1)]);
+    }
+}
