@@ -426,6 +426,63 @@ impl BufferRef {
         MetaIterMut::new(self)
     }
 
+    pub fn foreach_meta<F: FnMut(MetaRef<Meta>) -> bool>(&self, func: F) -> bool {
+        unsafe extern "C" fn trampoline<F: FnMut(MetaRef<Meta>) -> bool>(
+            buffer: *mut gst_sys::GstBuffer,
+            meta: *mut *mut gst_sys::GstMeta,
+            user_data: glib_sys::gpointer,
+        ) -> glib_sys::gboolean {
+            let func = user_data as *const _ as usize as *mut F;
+            let res = (*func)(Meta::from_ptr(BufferRef::from_ptr(buffer), *meta));
+
+            res.to_glib()
+        }
+
+        unsafe {
+            let func_ptr: &F = &func;
+
+            from_glib(gst_sys::gst_buffer_foreach_meta(
+                self.as_ptr() as *mut _,
+                Some(trampoline::<F>),
+                func_ptr as *const _ as usize as *mut _,
+            ))
+        }
+    }
+
+    pub fn foreach_meta_mut<F: FnMut(MetaRefMut<Meta, ::meta::Iterated>) -> Result<bool, bool>>(
+        &mut self,
+        func: F,
+    ) -> bool {
+        unsafe extern "C" fn trampoline<
+            F: FnMut(MetaRefMut<Meta, ::meta::Iterated>) -> Result<bool, bool>,
+        >(
+            buffer: *mut gst_sys::GstBuffer,
+            meta: *mut *mut gst_sys::GstMeta,
+            user_data: glib_sys::gpointer,
+        ) -> glib_sys::gboolean {
+            let func = user_data as *const _ as usize as *mut F;
+            let res = (*func)(Meta::from_mut_ptr(BufferRef::from_mut_ptr(buffer), *meta));
+
+            match res {
+                Ok(false) | Err(false) => {
+                    *meta = ptr::null_mut();
+                    res.is_ok().to_glib()
+                }
+                Ok(true) | Err(true) => res.is_ok().to_glib(),
+            }
+        }
+
+        unsafe {
+            let func_ptr: &F = &func;
+
+            from_glib(gst_sys::gst_buffer_foreach_meta(
+                self.as_ptr() as *mut _,
+                Some(trampoline::<F>),
+                func_ptr as *const _ as usize as *mut _,
+            ))
+        }
+    }
+
     pub fn append_memory(&mut self, mem: Memory) {
         unsafe { gst_sys::gst_buffer_append_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
@@ -1234,5 +1291,82 @@ mod tests {
         }
 
         assert_eq!(last, 4);
+    }
+
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[test]
+    fn test_meta_foreach() {
+        ::init().unwrap();
+
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            ::ReferenceTimestampMeta::add(
+                buffer,
+                &::Caps::builder("foo/bar").build(),
+                ::ClockTime::from(0),
+                ::CLOCK_TIME_NONE,
+            );
+            ::ReferenceTimestampMeta::add(
+                buffer,
+                &::Caps::builder("foo/bar").build(),
+                ::SECOND,
+                ::CLOCK_TIME_NONE,
+            );
+        }
+
+        let mut res = vec![];
+        buffer.foreach_meta(|meta| {
+            let meta = meta.downcast_ref::<::ReferenceTimestampMeta>().unwrap();
+            res.push(meta.get_timestamp());
+            true
+        });
+
+        assert_eq!(&[::ClockTime::from(0), ::SECOND][..], &res[..]);
+    }
+
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[test]
+    fn test_meta_foreach_mut() {
+        ::init().unwrap();
+
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            ::ReferenceTimestampMeta::add(
+                buffer,
+                &::Caps::builder("foo/bar").build(),
+                ::ClockTime::from(0),
+                ::CLOCK_TIME_NONE,
+            );
+            ::ReferenceTimestampMeta::add(
+                buffer,
+                &::Caps::builder("foo/bar").build(),
+                ::SECOND,
+                ::CLOCK_TIME_NONE,
+            );
+        }
+
+        let mut res = vec![];
+        buffer.get_mut().unwrap().foreach_meta_mut(|mut meta| {
+            let meta = meta.downcast_ref::<::ReferenceTimestampMeta>().unwrap();
+            res.push(meta.get_timestamp());
+            if meta.get_timestamp() == ::SECOND {
+                Ok(false)
+            } else {
+                Ok(true)
+            }
+        });
+
+        assert_eq!(&[::ClockTime::from(0), ::SECOND][..], &res[..]);
+
+        let mut res = vec![];
+        buffer.foreach_meta(|meta| {
+            let meta = meta.downcast_ref::<::ReferenceTimestampMeta>().unwrap();
+            res.push(meta.get_timestamp());
+            true
+        });
+
+        assert_eq!(&[::ClockTime::from(0)][..], &res[..]);
     }
 }
