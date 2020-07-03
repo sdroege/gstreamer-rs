@@ -22,8 +22,6 @@ generate = [
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoTileMode",
     "GstVideo.VideoColorMatrix",
-    "GstVideo.VideoTransferFunction",
-    "GstVideo.VideoColorPrimaries",
     "GstVideo.VideoMultiviewMode",
     "GstVideo.VideoFieldOrder",
     "GstVideo.VideoMultiviewFramePacking",
@@ -481,3 +479,32 @@ status = "generate"
     [[object.member]]
     name = "none"
     ignore = true
+
+[[object]]
+name = "GstVideo.VideoTransferFunction"
+status = "generate"
+    [[object.member]]
+    name = "bt2020_10"
+    version = "1.18"
+    [[object.member]]
+    name = "smpte2084"
+    version = "1.18"
+    [[object.member]]
+    name = "arib_std_b67"
+    version = "1.18"
+
+[[object]]
+name = "GstVideo.VideoColorPrimaries"
+status = "generate"
+    [[object.member]]
+    name = "smptest428"
+    version = "1.16"
+    [[object.member]]
+    name = "smpterp431"
+    version = "1.16"
+    [[object.member]]
+    name = "smpteeg432"
+    version = "1.16"
+    [[object.member]]
+    name = "ebu3213"
+    version = "1.16"

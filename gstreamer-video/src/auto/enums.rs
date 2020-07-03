@@ -462,9 +462,13 @@ pub enum VideoColorPrimaries {
     Film,
     Bt2020,
     Adobergb,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Smptest428,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Smpterp431,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Smpteeg432,
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     Ebu3213,
     #[doc(hidden)]
     __Unknown(i32),
@@ -485,9 +489,13 @@ impl ToGlib for VideoColorPrimaries {
             VideoColorPrimaries::Film => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_FILM,
             VideoColorPrimaries::Bt2020 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_BT2020,
             VideoColorPrimaries::Adobergb => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoColorPrimaries::Smptest428 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTEST428,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoColorPrimaries::Smpterp431 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTERP431,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoColorPrimaries::Smpteeg432 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             VideoColorPrimaries::Ebu3213 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_EBU3213,
             VideoColorPrimaries::__Unknown(value) => value,
         }
@@ -508,9 +516,13 @@ impl FromGlib<gst_video_sys::GstVideoColorPrimaries> for VideoColorPrimaries {
             6 => VideoColorPrimaries::Film,
             7 => VideoColorPrimaries::Bt2020,
             8 => VideoColorPrimaries::Adobergb,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             9 => VideoColorPrimaries::Smptest428,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             10 => VideoColorPrimaries::Smpterp431,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             11 => VideoColorPrimaries::Smpteeg432,
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             12 => VideoColorPrimaries::Ebu3213,
             value => VideoColorPrimaries::__Unknown(value),
         }
@@ -1728,8 +1740,11 @@ pub enum VideoTransferFunction {
     Log316,
     Bt202012,
     Adobergb,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Bt202010,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     Smpte2084,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     AribStdB67,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1754,8 +1769,11 @@ impl ToGlib for VideoTransferFunction {
             VideoTransferFunction::Log316 => gst_video_sys::GST_VIDEO_TRANSFER_LOG316,
             VideoTransferFunction::Bt202012 => gst_video_sys::GST_VIDEO_TRANSFER_BT2020_12,
             VideoTransferFunction::Adobergb => gst_video_sys::GST_VIDEO_TRANSFER_ADOBERGB,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoTransferFunction::Bt202010 => gst_video_sys::GST_VIDEO_TRANSFER_BT2020_10,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoTransferFunction::Smpte2084 => gst_video_sys::GST_VIDEO_TRANSFER_SMPTE2084,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoTransferFunction::AribStdB67 => gst_video_sys::GST_VIDEO_TRANSFER_ARIB_STD_B67,
             VideoTransferFunction::__Unknown(value) => value,
         }
@@ -1780,8 +1798,11 @@ impl FromGlib<gst_video_sys::GstVideoTransferFunction> for VideoTransferFunction
             10 => VideoTransferFunction::Log316,
             11 => VideoTransferFunction::Bt202012,
             12 => VideoTransferFunction::Adobergb,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             13 => VideoTransferFunction::Bt202010,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             14 => VideoTransferFunction::Smpte2084,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             15 => VideoTransferFunction::AribStdB67,
             value => VideoTransferFunction::__Unknown(value),
         }
