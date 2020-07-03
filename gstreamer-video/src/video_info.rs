@@ -609,6 +609,15 @@ impl VideoInfo {
         self.0.height as u32
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn field_height(&self) -> u32 {
+        if self.0.interlace_mode == gst_video_sys::GST_VIDEO_INTERLACE_MODE_ALTERNATE {
+            (self.0.height as u32 + 1) / 2
+        } else {
+            self.0.height as u32
+        }
+    }
+
     pub fn interlace_mode(&self) -> ::VideoInterlaceMode {
         from_glib(self.0.interlace_mode)
     }
