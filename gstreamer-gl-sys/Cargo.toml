@@ -58,4 +58,4 @@ version = "1.14"
 
 [package.metadata.system-deps.gstreamer_gl_1_0.feature-versions]
 v1_16 = "1.16"
-v1_18 = "1.17"
+v1_18 = "1.17.2"
