@@ -38,10 +38,3 @@ lib_version = "1.17"
 gstreamer="Gst"
 gstreamer_audio="GstAudio"
 gstreamer_video="GstVideo"
-
-[[object]]
-name = "GstPbutils.InstallPluginsContext"
-status = "generate"
-    [[object.function]]
-    name = "copy"
-    version = "1.12.1"

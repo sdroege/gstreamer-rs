@@ -49,9 +49,6 @@ status = "generate"
 name = "GstAudio.AudioConverter"
 status = "generate"
     [[object.function]]
-    name = "supports_inplace"
-    version = "1.12"
-    [[object.function]]
     name = "get_type"
     version = "1.14"
 
@@ -61,23 +58,3 @@ status = "generate"
     [[object.function]]
     name = "audio_meta_api_get_type"
     version = "1.16"
-
-[[object]]
-name = "GstAudio.AudioResampler"
-status = "generate"
-version = "1.10"
-
-[[object]]
-name = "GstAudio.AudioResamplerFilterInterpolation"
-status = "generate"
-version = "1.10"
-
-[[object]]
-name = "GstAudio.AudioResamplerFilterMode"
-status = "generate"
-version = "1.10"
-
-[[object]]
-name = "GstAudio.AudioResamplerFlags"
-status = "generate"
-version = "1.10"

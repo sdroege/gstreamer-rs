@@ -33,16 +33,6 @@ gstreamer="Gst"
 gstreamer_sdp="GstSdp"
 
 [[object]]
-name = "GstRtsp.RTSPAuthCredential"
-status = "generate"
-version = "1.12"
-
-[[object]]
-name = "GstRtsp.RTSPAuthParam"
-status = "generate"
-version = "1.12"
-
-[[object]]
 name = "GstRtsp.RTSPMessage"
 status = "generate"
     [[object.function]]
