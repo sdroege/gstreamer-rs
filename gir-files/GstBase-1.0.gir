@@ -309,13 +309,21 @@ the value of the @size argument an empty #GBytes structure may be returned.</doc
           </parameter>
         </parameters>
       </method>
-      <method name="distance_from_discont" c:identifier="gst_adapter_distance_from_discont">
+      <method name="distance_from_discont" c:identifier="gst_adapter_distance_from_discont" version="1.10">
+        <doc xml:space="preserve">Get the distance in bytes since the last buffer with the
+%GST_BUFFER_FLAG_DISCONT flag.
+
+The distance will be reset to 0 for all buffers with
+%GST_BUFFER_FLAG_DISCONT on them, and then calculated for all other
+following buffers based on their size.</doc>
         
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The offset. Can be %GST_BUFFER_OFFSET_NONE.</doc>
           <type name="guint64" c:type="guint64"/>
         </return-value>
         <parameters>
           <instance-parameter name="adapter" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstAdapter</doc>
             <type name="Adapter" c:type="GstAdapter*"/>
           </instance-parameter>
         </parameters>
@@ -2093,7 +2101,7 @@ usage.</doc>
     <record name="AggregatorPrivate" c:type="GstAggregatorPrivate" disguised="1">
       
     </record>
-    <enumeration name="AggregatorStartTimeSelection" version="1.14" glib:type-name="GstAggregatorStartTimeSelection" glib:get-type="gst_aggregator_start_time_selection_get_type" c:type="GstAggregatorStartTimeSelection">
+    <enumeration name="AggregatorStartTimeSelection" version="1.18" glib:type-name="GstAggregatorStartTimeSelection" glib:get-type="gst_aggregator_start_time_selection_get_type" c:type="GstAggregatorStartTimeSelection">
       <member name="zero" value="0" c:identifier="GST_AGGREGATOR_START_TIME_SELECTION_ZERO" glib:nick="zero">
         <doc xml:space="preserve">Start at running time 0.</doc>
       </member>
@@ -3506,7 +3514,7 @@ then use gst_base_parse_frame_init() to initialise it.</doc>
           </parameter>
         </parameters>
       </constructor>
-      <method name="copy" c:identifier="gst_base_parse_frame_copy">
+      <method name="copy" c:identifier="gst_base_parse_frame_copy" version="1.12.1">
         <doc xml:space="preserve">Copies a #GstBaseParseFrame.</doc>
         
         <return-value transfer-ownership="full">

@@ -1656,7 +1656,7 @@ The @deep_element_added vfunc will be called when a new element has been
 added to any bin inside this bin, so it will also be called if a new child
 was added to a sub-bin of this bin. #GstBin implementations that override
 this message should chain up to the parent class implementation so the
-element-added-deep signal is emitted on all parents.</doc>
+#GstBin::deep-element-added signal is emitted on all parents.</doc>
       
       <field name="parent_class">
         <doc xml:space="preserve">bin parent class</doc>
@@ -2729,16 +2729,20 @@ gst_buffer_resize_range().</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="has_flags" c:identifier="gst_buffer_has_flags">
+      <method name="has_flags" c:identifier="gst_buffer_has_flags" version="1.10">
+        <doc xml:space="preserve">Gives the status of a specific flag on a buffer.</doc>
         
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if all flags in @flags are found on @buffer.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="buffer" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstBuffer</doc>
             <type name="Buffer" c:type="GstBuffer*"/>
           </instance-parameter>
           <parameter name="flags" transfer-ownership="none">
+            <doc xml:space="preserve">the #GstBufferFlags flag to check.</doc>
             <type name="BufferFlags" c:type="GstBufferFlags"/>
           </parameter>
         </parameters>
@@ -12773,7 +12777,7 @@ metadata. Free with g_strfreev() when no longer needed.</doc>
     <class name="DoubleRange" c:symbol-prefix="double_range" glib:type-name="GstDoubleRange" glib:get-type="gst_double_range_get_type" glib:fundamental="1">
       <doc xml:space="preserve">A fundamental type that describes a #gdouble range</doc>
     </class>
-    <class name="DynamicTypeFactory" c:symbol-prefix="dynamic_type_factory" c:type="GstDynamicTypeFactory" parent="PluginFeature" glib:type-name="GstDynamicTypeFactory" glib:get-type="gst_dynamic_type_factory_get_type" glib:type-struct="DynamicTypeFactoryClass">
+    <class name="DynamicTypeFactory" c:symbol-prefix="dynamic_type_factory" c:type="GstDynamicTypeFactory" version="1.12" parent="PluginFeature" glib:type-name="GstDynamicTypeFactory" glib:get-type="gst_dynamic_type_factory_get_type" glib:type-struct="DynamicTypeFactoryClass">
       <doc xml:space="preserve">#GstDynamicTypeFactory is used to represent a type that can be
 automatically loaded the first time it is used. For example,
 a non-standard type for use in caps fields.
@@ -19258,13 +19262,15 @@ owned by a ghost pad.</doc>
           </parameter>
         </parameters>
       </function>
-      <method name="construct" c:identifier="gst_ghost_pad_construct">
+      <method name="construct" c:identifier="gst_ghost_pad_construct" deprecated="1">
         <doc xml:space="preserve">Finish initialization of a newly allocated ghost pad.
 
 This function is most useful in language bindings and when subclassing
 #GstGhostPad; plugin and application developers normally will not call this
 function. Call this function directly after a call to g_object_new
 (GST_TYPE_GHOST_PAD, "direction", @dir, ..., NULL).</doc>
+        <doc-deprecated xml:space="preserve">This function is deprecated since 1.18 and does nothing
+anymore.</doc-deprecated>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the construction succeeds, %FALSE otherwise.</doc>
@@ -30980,7 +30986,7 @@ pad functions cannot be called from within the callback.</doc>
         </parameter>
       </parameters>
     </callback>
-    <class name="ParamArray" c:symbol-prefix="param_spec_array" parent="GObject.ParamSpec" glib:type-name="GstParamArray" glib:get-type="gst_param_spec_array_get_type" glib:fundamental="1">
+    <class name="ParamArray" c:symbol-prefix="param_spec_array" version="1.12" parent="GObject.ParamSpec" glib:type-name="GstParamArray" glib:get-type="gst_param_spec_array_get_type" glib:fundamental="1">
       <doc xml:space="preserve">A fundamental type that describes a #GParamSpec for arrays of
 values</doc>
     </class>
@@ -31075,7 +31081,7 @@ Free-function: gst_parse_context_free</doc>
           <type name="ParseContext" c:type="GstParseContext*"/>
         </return-value>
       </constructor>
-      <method name="copy" c:identifier="gst_parse_context_copy">
+      <method name="copy" c:identifier="gst_parse_context_copy" version="1.12.1">
         <doc xml:space="preserve">Copies the @context.</doc>
         
         <return-value transfer-ownership="full" nullable="1">
@@ -37147,6 +37153,15 @@ static GstStaticPadTemplate my_src_template =  *   GST_STATIC_PAD_TEMPLATE("src"
         </parameter>
       </parameters>
     </function-macro>
+    <constant name="STIMEP_FORMAT" value="paS" c:type="GST_STIMEP_FORMAT" version="1.18" introspectable="0">
+      <doc xml:space="preserve">printf format type used to debug GStreamer signed time value pointers. You
+can use this in combination with GStreamer's debug logging system as well as
+the functions gst_info_vasprintf(), gst_info_strdup_vprintf() and
+gst_info_strdup_printf() to pretty-print signed time (pointers to
+#GstClockTimeDiff or #gint64).</doc>
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
     <function-macro name="STIME_ARGS" c:identifier="GST_STIME_ARGS" version="1.6" introspectable="0">
       <doc xml:space="preserve">Format @t for the #GST_STIME_FORMAT format string. Note: @t will be
 evaluated more than once.</doc>
@@ -39806,7 +39821,7 @@ release with either g_free() or the suitable function for the boxed type.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="get_array" c:identifier="gst_structure_get_array">
+      <method name="get_array" c:identifier="gst_structure_get_array" version="1.12">
         <doc xml:space="preserve">This is useful in language bindings where unknown #GValue types are not
 supported. This function will convert the %GST_TYPE_ARRAY into a newly
 allocated #GValueArray and return it through @array. Be aware that this is
@@ -41819,6 +41834,15 @@ The higher the value, the more the user likes this media
         </parameter>
       </parameters>
     </function-macro>
+    <constant name="TIMEP_FORMAT" value="paT" c:type="GST_TIMEP_FORMAT" version="1.18" introspectable="0">
+      <doc xml:space="preserve">printf format type used to debug GStreamer ClockTime pointers. You can use
+this in combination with GStreamer's debug logging system as well as the
+functions gst_info_vasprintf(), gst_info_strdup_vprintf() and
+gst_info_strdup_printf() to pretty-print #GstClockTime pointers. This can
+only be used on pointers to GstClockTime values.</doc>
+      
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
     <function-macro name="TIMESPEC_TO_TIME" c:identifier="GST_TIMESPEC_TO_TIME" introspectable="0">
       <doc xml:space="preserve">Convert a struct timespec (see man pselect) to a #GstClockTime.</doc>
       
@@ -45093,7 +45117,7 @@ Free-function: gst_plugin_feature_list_free</doc>
           </type>
         </return-value>
       </function>
-      <method name="get_tracer_type" c:identifier="gst_tracer_factory_get_tracer_type">
+      <method name="get_tracer_type" c:identifier="gst_tracer_factory_get_tracer_type" version="1.14">
         <doc xml:space="preserve">Get the #GType for elements managed by this factory. The type can
 only be retrieved if the element factory is loaded, which can be
 assured with gst_plugin_feature_load().</doc>
@@ -45121,7 +45145,7 @@ the factory is not loaded.</doc>
       <doc xml:space="preserve">Tracing modules will create instances of this class to announce the data they
 will log and create a log formatter.</doc>
       
-      <constructor name="new" c:identifier="gst_tracer_record_new" introspectable="0">
+      <constructor name="new" c:identifier="gst_tracer_record_new" version="1.8" introspectable="0">
         <doc xml:space="preserve">Create a new tracer record. The record instance can be used to efficiently
 log entries using gst_tracer_record_log().
 
@@ -45160,7 +45184,7 @@ handle that right now.
           </parameter>
         </parameters>
       </constructor>
-      <method name="log" c:identifier="gst_tracer_record_log" introspectable="0">
+      <method name="log" c:identifier="gst_tracer_record_log" version="1.8" introspectable="0">
         <doc xml:space="preserve">Serialzes the trace event into the log.
 
 Right now this is using the gstreamer debug log with the level TRACE (7) and
@@ -46989,7 +47013,7 @@ determine a order for the two provided values.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="0" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="2" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       
       <type name="gint" c:type="gint"/>
@@ -46999,7 +47023,7 @@ determine a order for the two provided values.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_NANO" value="1" c:type="GST_VERSION_NANO">
+    <constant name="VERSION_NANO" value="0" c:type="GST_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer at compile time:
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       
@@ -48446,7 +48470,7 @@ After this call GStreamer (including this method) should not be used anymore.</d
         <type name="none" c:type="void"/>
       </return-value>
     </function>
-    <function name="dynamic_type_register" c:identifier="gst_dynamic_type_register">
+    <function name="dynamic_type_register" c:identifier="gst_dynamic_type_register" version="1.12">
       <doc xml:space="preserve">Registers a new #GstDynamicTypeFactory in the registry</doc>
       
       <return-value transfer-ownership="none">
@@ -49075,7 +49099,7 @@ or gst_init_check().</doc>
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>
     </function>
-    <function name="make_element_message_details" c:identifier="gst_make_element_message_details" introspectable="0">
+    <function name="make_element_message_details" c:identifier="gst_make_element_message_details" version="1.10" introspectable="0">
       <doc xml:space="preserve">Create a #GstStructure to be used with #gst_element_message_full_with_details</doc>
       
       <return-value transfer-ownership="full">
@@ -49728,7 +49752,7 @@ yourself).</doc>
       <return-value transfer-ownership="none" nullable="1">
         <doc xml:space="preserve">a newly-created
   element, which is guaranteed to be a bin unless
-  GST_FLAG_NO_SINGLE_ELEMENT_BINS was passed, or %NULL if an error
+  #GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS was passed, or %NULL if an error
   occurred.</doc>
         <type name="Element" c:type="GstElement*"/>
       </return-value>
@@ -50739,7 +50763,7 @@ the entirety of the run-time of the process or till gst_deinit() is called.</doc
         </type>
       </return-value>
     </function>
-    <function name="tracing_register_hook" c:identifier="gst_tracing_register_hook">
+    <function name="tracing_register_hook" c:identifier="gst_tracing_register_hook" version="1.8">
       <doc xml:space="preserve">Register @func to be called when the trace hook @detail is getting invoked.
 Use %NULL for @detail to register to all hooks.</doc>
       

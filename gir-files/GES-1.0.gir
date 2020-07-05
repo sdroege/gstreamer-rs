@@ -213,7 +213,7 @@ call g_main_context_push_thread_default() in a new thread before
 calling ges_init().
 
 Example of an asynchronous asset request:
-|[
+``` c
 // The request callback
 static void
 asset_loaded_cb (GESAsset * source, GAsyncResult * res, gpointer user_data)
@@ -223,20 +223,20 @@ asset_loaded_cb (GESAsset * source, GAsyncResult * res, gpointer user_data)
 
   asset = ges_asset_request_finish (res, &amp;error);
   if (asset) {
-   g_print ("The file: %s is usable as a FileSource",
+   g_print ("The file: %s is usable as a GESUriClip",
        ges_asset_get_id (asset));
   } else {
-   g_print ("The file: %s is *not* usable as a FileSource because: %s",
+   g_print ("The file: %s is *not* usable as a GESUriClip because: %s",
        ges_asset_get_id (source), error-&gt;message);
   }
 
-  gst_object_unref (mfs);
+  gst_object_unref (asset);
 }
 
 // The request:
 ges_asset_request_async (GES_TYPE_URI_CLIP, some_uri, NULL,
    (GAsyncReadyCallback) asset_loaded_cb, user_data);
-]|</doc>
+```</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -1593,7 +1593,7 @@ elements of the clip.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="add_child_to_track" c:identifier="ges_clip_add_child_to_track" throws="1">
+      <method name="add_child_to_track" c:identifier="ges_clip_add_child_to_track" version="1.18" throws="1">
         <doc xml:space="preserve">Adds the track element child of the clip to a specific track.
 
 If the given child is already in another track, this will create a copy
@@ -1858,7 +1858,7 @@ be performed.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="get_timeline_time_from_internal_time" c:identifier="ges_clip_get_timeline_time_from_internal_time" throws="1">
+      <method name="get_timeline_time_from_internal_time" c:identifier="ges_clip_get_timeline_time_from_internal_time" version="1.18" throws="1">
         <doc xml:space="preserve">Convert the internal source time from the child to a timeline time.
 This will take any time effects placed on the clip into account (see
 #GESBaseEffect for what time effects are supported, and how to
@@ -2219,7 +2219,7 @@ the start and end of the clip</doc>
           </parameter>
         </parameters>
       </method>
-      <property name="duration-limit" transfer-ownership="none">
+      <property name="duration-limit" version="1.18" transfer-ownership="none">
         <doc xml:space="preserve">The maximum #GESTimelineElement:duration that can be *currently* set
 for the clip, taking into account the #GESTimelineElement:in-point,
 #GESTimelineElement:max-duration, #GESTrackElement:active, and
@@ -2271,10 +2271,11 @@ from it can potentialy create #GESTrackElement for.</doc>
       <implements name="MetaContainer"/>
       <implements name="Gio.AsyncInitable"/>
       <implements name="Gio.Initable"/>
-      <virtual-method name="get_natural_framerate" invoker="get_natural_framerate">
+      <virtual-method name="get_natural_framerate" invoker="get_natural_framerate" version="1.18">
         <doc xml:space="preserve">Result: %TRUE if @self has a natural framerate %FALSE otherwise</doc>
         
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @self has a natural framerate @FALSE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -2292,7 +2293,7 @@ from it can potentialy create #GESTrackElement for.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <method name="get_frame_time" c:identifier="ges_clip_asset_get_frame_time">
+      <method name="get_frame_time" c:identifier="ges_clip_asset_get_frame_time" version="1.18">
         <doc xml:space="preserve">Converts the given frame number into a timestamp, using the "natural" frame
 rate of the asset.
 
@@ -2316,7 +2317,7 @@ natural frame rate.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="get_natural_framerate" c:identifier="ges_clip_asset_get_natural_framerate">
+      <method name="get_natural_framerate" c:identifier="ges_clip_asset_get_natural_framerate" version="1.18">
         <doc xml:space="preserve">Result: %TRUE if @self has a natural framerate %FALSE otherwise</doc>
         
         <return-value transfer-ownership="none">
@@ -2394,6 +2395,7 @@ a layer</doc>
         <callback name="get_natural_framerate">
           
           <return-value transfer-ownership="none">
+            <doc xml:space="preserve">%TRUE if @self has a natural framerate @FALSE otherwise.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
@@ -3127,13 +3129,15 @@ if no track elements are created or an error occurred.</doc>
         <doc xml:space="preserve">Represent the fact we are not working with any edge of an
   object.</doc>
       </member>
-      <function name="name" c:identifier="ges_edge_name">
+      <function name="name" c:identifier="ges_edge_name" version="1.16">
         
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">A human friendly name for @edge</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
         <parameters>
           <parameter name="edge" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESEdge to get the name of</doc>
             <type name="Edge" c:type="GESEdge"/>
           </parameter>
         </parameters>
@@ -3319,9 +3323,14 @@ and [clip management](http://pitivi.org/manual/usingclips.html).</doc>
       </function>
     </enumeration>
     <class name="Effect" c:symbol-prefix="effect" c:type="GESEffect" parent="BaseEffect" glib:type-name="GESEffect" glib:get-type="ges_effect_get_type" glib:type-struct="EffectClass">
-      <doc xml:space="preserve">Currently we only support effects with 1 sinkpad and 1 sourcepad
-with the exception of `gesaudiomixer` and `gescompositor` which
-can be used as effects.</doc>
+      <doc xml:space="preserve">Currently we only support effects with N sinkpads and one single srcpad.
+Apart from `gesaudiomixer` and `gescompositor` which can be used as effects
+and where sinkpads will be requested as needed based on the timeline topology
+GES will always request at most one sinkpad per effect (when required).
+
+&gt; Note: GES always adds converters (`audioconvert ! audioresample !
+&gt; audioconvert` for audio effects and `videoconvert` for video effects) to
+&gt; make it simpler for end users.</doc>
       
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
@@ -3567,6 +3576,8 @@ desired operation. (Since: 1.18)</doc>
       <member name="invalid_overlap_in_track" value="7" c:identifier="GES_ERROR_INVALID_OVERLAP_IN_TRACK">
         <doc xml:space="preserve">The operation would break one of
 the overlap conditions for the #GESTimeline. (Since: 1.18)</doc>
+      </member>
+      <member name="invalid_effect_bin_description" value="8" c:identifier="GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION">
       </member>
     </enumeration>
     <interface name="Extractable" c:symbol-prefix="extractable" c:type="GESExtractable" glib:type-name="GESExtractable" glib:get-type="ges_extractable_get_type" glib:type-struct="ExtractableInterface">
@@ -4575,7 +4586,7 @@ if @layer refused to add @clip.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="get_active_for_track" c:identifier="ges_layer_get_active_for_track">
+      <method name="get_active_for_track" c:identifier="ges_layer_get_active_for_track" version="1.18">
         <doc xml:space="preserve">Gets whether the layer is active for the given track. See
 ges_layer_set_active_for_tracks().</doc>
         
@@ -4732,7 +4743,7 @@ operation failed.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="set_active_for_tracks" c:identifier="ges_layer_set_active_for_tracks">
+      <method name="set_active_for_tracks" c:identifier="ges_layer_set_active_for_tracks" version="1.18">
         <doc xml:space="preserve">Activate or deactivate track elements in @tracks (or in all tracks if @tracks
 is %NULL).
 
@@ -4868,7 +4879,7 @@ will make sure there is never 'gaps' between layer priorities.</doc-deprecated>
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
-      <glib:signal name="active-changed" when="first">
+      <glib:signal name="active-changed" when="first" version="1.18">
         <doc xml:space="preserve">Will be emitted whenever the layer is activated or deactivated
 for some #GESTrack. See ges_layer_set_active_for_tracks().</doc>
         <return-value transfer-ownership="none">
@@ -5031,10 +5042,11 @@ assets (string).</doc>
       
       <type name="utf8" c:type="gchar*"/>
     </constant>
-    <class name="Marker" c:symbol-prefix="marker" c:type="GESMarker" parent="GObject.Object" glib:type-name="GESMarker" glib:get-type="ges_marker_get_type" glib:type-struct="MarkerClass">
+    <class name="Marker" c:symbol-prefix="marker" c:type="GESMarker" version="1.18" parent="GObject.Object" glib:type-name="GESMarker" glib:get-type="ges_marker_get_type" glib:type-struct="MarkerClass">
+      <doc xml:space="preserve">A timed #GESMetaContainer object.</doc>
       
       <implements name="MetaContainer"/>
-      <property name="position" transfer-ownership="none">
+      <property name="position" version="1.18" transfer-ownership="none">
         <doc xml:space="preserve">Current position (in nanoseconds) of the #GESMarker</doc>
         <type name="guint64" c:type="guint64"/>
       </property>
@@ -5957,7 +5969,7 @@ and the field was successfully set to @value.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="register_static_meta" c:identifier="ges_meta_container_register_static_meta">
+      <method name="register_static_meta" c:identifier="ges_meta_container_register_static_meta" version="1.18">
         <doc xml:space="preserve">Registers a static metadata field on the container to only hold the
 specified type. After calling this, setting a value under this field
 can only succeed if its type matches the registered type of the field.
@@ -6705,9 +6717,14 @@ native size</doc>
       <method name="set_mode" c:identifier="ges_pipeline_set_mode">
         <doc xml:space="preserve">Sets the #GESPipeline:mode of the pipeline.
 
-Note that the pipeline will be set to #GST_STATE_NULL during this call
-to perform the necessary changes. You will need to set the state again
-yourself after calling this.</doc>
+Note that the pipeline will be set to #GST_STATE_NULL during this call to
+perform the necessary changes. You will need to set the state again yourself
+after calling this.
+
+&gt; **NOTE**: [Rendering settings](ges_pipeline_set_render_settings) need to be
+&gt; set before setting @mode to #GES_PIPELINE_MODE_RENDER or
+&gt; #GES_PIPELINE_MODE_SMART_RENDER, the call to this method will fail
+&gt; otherwise.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the mode of @pipeline was successfully set to @mode.</doc>
@@ -7019,16 +7036,18 @@ the URI it will keep refering to.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="loading">
+      <virtual-method name="loading" version="1.18">
         
         <return-value transfer-ownership="none">
-          <type name="gboolean" c:type="gboolean"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">The self</doc>
             <type name="Project" c:type="GESProject*"/>
           </instance-parameter>
           <parameter name="timeline" transfer-ownership="none">
+            <doc xml:space="preserve">The loading timeline</doc>
             <type name="Timeline" c:type="GESTimeline*"/>
           </parameter>
         </parameters>
@@ -7601,13 +7620,15 @@ only to find out what the new location is.</doc>
         <callback name="loading">
           
           <return-value transfer-ownership="none">
-            <type name="gboolean" c:type="gboolean"/>
+            <type name="none" c:type="void"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
+              <doc xml:space="preserve">The self</doc>
               <type name="Project" c:type="GESProject*"/>
             </parameter>
             <parameter name="timeline" transfer-ownership="none">
+              <doc xml:space="preserve">The loading timeline</doc>
               <type name="Timeline" c:type="GESTimeline*"/>
             </parameter>
           </parameters>
@@ -7683,7 +7704,8 @@ or %NULL if there was an error.</doc>
         </array>
       </field>
     </class>
-    <class name="SourceClipAsset" c:symbol-prefix="source_clip_asset" c:type="GESSourceClipAsset" parent="ClipAsset" glib:type-name="GESSourceClipAsset" glib:get-type="ges_source_clip_asset_get_type" glib:type-struct="SourceClipAssetClass">
+    <class name="SourceClipAsset" c:symbol-prefix="source_clip_asset" c:type="GESSourceClipAsset" version="1.18" parent="ClipAsset" glib:type-name="GESSourceClipAsset" glib:get-type="ges_source_clip_asset_get_type" glib:type-struct="SourceClipAssetClass">
+      <doc xml:space="preserve">An asset types from which #GESSourceClip will be extracted</doc>
       
       <implements name="MetaContainer"/>
       <implements name="Gio.AsyncInitable"/>
@@ -9026,7 +9048,7 @@ with the given @name, or %NULL if it was not found.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="get_frame_at" c:identifier="ges_timeline_get_frame_at">
+      <method name="get_frame_at" c:identifier="ges_timeline_get_frame_at" version="1.18">
         <doc xml:space="preserve">This method allows you to convert a timeline #GstClockTime into its
 corresponding #GESFrameNumber in the timeline's output.</doc>
         
@@ -9045,7 +9067,7 @@ corresponding #GESFrameNumber in the timeline's output.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="get_frame_time" c:identifier="ges_timeline_get_frame_time">
+      <method name="get_frame_time" c:identifier="ges_timeline_get_frame_time" version="1.18">
         <doc xml:space="preserve">This method allows you to convert a timeline output frame number into a
 timeline #GstClockTime. For example, this time could be used to seek to a
 particular frame in the timeline's output, or as the edit position for
@@ -10109,7 +10131,10 @@ See ges_timeline_element_edit() with #GES_EDIT_MODE_ROLL and
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="set_child_property">
+      <virtual-method name="set_child_property" version="1.16">
+        <doc xml:space="preserve">Method for setting the child property given by
+@pspec on @child to @value. Default implementation will use
+g_object_set_property().</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -10129,7 +10154,10 @@ See ges_timeline_element_edit() with #GES_EDIT_MODE_ROLL and
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="set_child_property_full" throws="1">
+      <virtual-method name="set_child_property_full" version="1.18" throws="1">
+        <doc xml:space="preserve">Similar to @set_child_property, except setting can fail, with the @error
+being optionally set. Default implementation will call @set_child_property
+and return %TRUE.</doc>
         
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
@@ -11450,7 +11478,7 @@ to any source content.</doc>
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
-      <glib:signal name="child-property-added" when="first">
+      <glib:signal name="child-property-added" when="first" version="1.18">
         <doc xml:space="preserve">Emitted when the element has a new child property registered. See
 ges_timeline_element_add_child_property().
 
@@ -11471,7 +11499,7 @@ ges_timeline_element_list_children_properties() to list these.</doc>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="child-property-removed" when="first">
+      <glib:signal name="child-property-removed" when="first" version="1.18">
         <doc xml:space="preserve">Emitted when the element has a child property unregistered. See
 ges_timeline_element_remove_child_property().</doc>
         <return-value transfer-ownership="none">
@@ -11913,7 +11941,7 @@ not the case.</doc>
           </parameters>
         </callback>
       </field>
-      <field name="_ges_reserved" readable="0" private="1">
+      <field name="_ges_reserved">
         <array zero-terminated="0" fixed-size="14">
           <type name="gpointer" c:type="gpointer"/>
         </array>
@@ -12960,7 +12988,7 @@ width=400".</doc>
         <doc xml:space="preserve">The capabilities used to choose the output of the #GESTrack's
 elements. Internally, this is used to select output streams when
 several may be available, by determining whether its #GstPad is
-compatible (see #nlecomposition:caps for #nlecomposition). As such,
+compatible (see #NleObject:caps for #nlecomposition). As such,
 this is used as a weaker indication of the desired output type of the
 track, **before** the #GESTrack:restriction-caps is applied.
 Therefore, this should be set to a *generic* superset of the
@@ -13406,7 +13434,7 @@ is much more convenient for C programming.</doc>
         <doc-deprecated xml:space="preserve">Use #ges_timeline_element_get_child_property</doc-deprecated>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the property was found, %FALSE otherwize.</doc>
+          <doc xml:space="preserve">%TRUE if the property was found, %FALSE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -13572,7 +13600,7 @@ or %NULL if it does not belong to a track.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="has_internal_source" c:identifier="ges_track_element_has_internal_source">
+      <method name="has_internal_source" c:identifier="ges_track_element_has_internal_source" version="1.18">
         <doc xml:space="preserve">Gets #GESTrackElement:has-internal-source for the element.</doc>
         
         <return-value transfer-ownership="none">
@@ -13783,7 +13811,7 @@ is much more convenient for C programming.</doc>
         <doc-deprecated xml:space="preserve">use #ges_timeline_element_set_child_property instead</doc-deprecated>
         
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the property was set, %FALSE otherwize.</doc>
+          <doc xml:space="preserve">%TRUE if the property was set, %FALSE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -13885,14 +13913,16 @@ gst_direct_control_binding_new_absolute() instead.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="set_has_internal_source" c:identifier="ges_track_element_set_has_internal_source">
+      <method name="set_has_internal_source" c:identifier="ges_track_element_set_has_internal_source" version="1.18">
         <doc xml:space="preserve">Sets #GESTrackElement:has-internal-source for the element. If this is
 set to %FALSE, this method will also set the
 #GESTimelineElement:in-point of the element to 0 and its
 #GESTimelineElement:max-duration to #GST_CLOCK_TIME_NONE.</doc>
         
         <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
+          <doc xml:space="preserve">%FALSE if @has_internal_source is forbidden for @object and
+%TRUE in any other case.</doc>
+          <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
@@ -13929,7 +13959,7 @@ set to %FALSE, this method will also set the
 the output of the track.</doc>
         <type name="gboolean" c:type="gboolean"/>
       </property>
-      <property name="auto-clamp-control-sources" writable="1" transfer-ownership="none">
+      <property name="auto-clamp-control-sources" version="1.18" writable="1" transfer-ownership="none">
         <doc xml:space="preserve">Whether the control sources on the element (see
 ges_track_element_set_control_source()) will be automatically
 updated whenever the #GESTimelineElement:in-point or out-point of the
@@ -13941,7 +13971,7 @@ per control source.
 Default value: %TRUE</doc>
         <type name="gboolean" c:type="gboolean"/>
       </property>
-      <property name="has-internal-source" writable="1" transfer-ownership="none">
+      <property name="has-internal-source" version="1.18" writable="1" transfer-ownership="none">
         <doc xml:space="preserve">This property is used to determine whether the 'internal time'
 properties of the element have any meaning. In particular, unless
 this is set to %TRUE, the #GESTimelineElement:in-point and
@@ -14039,10 +14069,11 @@ property of the track element.</doc>
       <implements name="MetaContainer"/>
       <implements name="Gio.AsyncInitable"/>
       <implements name="Gio.Initable"/>
-      <virtual-method name="get_natural_framerate" invoker="get_natural_framerate">
+      <virtual-method name="get_natural_framerate" invoker="get_natural_framerate" version="1.18">
         <doc xml:space="preserve">Result: %TRUE if @self has a natural framerate %FALSE otherwise</doc>
         
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @self has a natural framerate @FALSE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -14060,7 +14091,7 @@ property of the track element.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <method name="get_natural_framerate" c:identifier="ges_track_element_asset_get_natural_framerate">
+      <method name="get_natural_framerate" c:identifier="ges_track_element_asset_get_natural_framerate" version="1.18">
         <doc xml:space="preserve">Result: %TRUE if @self has a natural framerate %FALSE otherwise</doc>
         
         <return-value transfer-ownership="none">
@@ -14138,6 +14169,7 @@ should get into</doc>
         <callback name="get_natural_framerate">
           
           <return-value transfer-ownership="none">
+            <doc xml:space="preserve">%TRUE if @self has a natural framerate @FALSE otherwise.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
@@ -14458,7 +14490,12 @@ the URI points to a file of some type.</doc>
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
       <constructor name="new" c:identifier="ges_uri_clip_new">
-        <doc xml:space="preserve">Creates a new #GESUriClip for the provided @uri.</doc>
+        <doc xml:space="preserve">Creates a new #GESUriClip for the provided @uri.
+
+&gt; **WARNING**: This function might 'discover` @uri **synchrounously**, it is
+&gt; an IO and processing intensive task that you probably don't want to run in
+&gt; an application mainloop. Have a look at #ges_asset_request_async to see how
+&gt; to make that operation happen **asynchronously**.</doc>
         
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">The newly created #GESUriClip, or
@@ -14726,7 +14763,7 @@ are different as those can be extended 'infinitely'.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="is_image" c:identifier="ges_uri_clip_asset_is_image">
+      <method name="is_image" c:identifier="ges_uri_clip_asset_is_image" version="1.18">
         <doc xml:space="preserve">Gets Whether the file represented by @self is an image or not</doc>
         
         <return-value transfer-ownership="none">
@@ -14881,7 +14918,7 @@ by #GESUriClipAsset-s.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="is_image" c:identifier="ges_uri_source_asset_is_image">
+      <method name="is_image" c:identifier="ges_uri_source_asset_is_image" version="1.18">
         <doc xml:space="preserve">Check if @asset contains a single image</doc>
         
         <return-value transfer-ownership="none">
@@ -14927,7 +14964,7 @@ contains one frame)</doc>
       
       <implements name="Extractable"/>
       <implements name="MetaContainer"/>
-      <method name="get_natural_size" c:identifier="ges_video_source_get_natural_size">
+      <method name="get_natural_size" c:identifier="ges_video_source_get_natural_size" version="1.18">
         <doc xml:space="preserve">Retrieves the natural size of the video stream. The natural size, is
 the size at which it will be displayed if no scaling is being applied.
 
@@ -15707,13 +15744,15 @@ After this call GES should not be used until another ges_init() call.</doc>
         <type name="none" c:type="void"/>
       </return-value>
     </function>
-    <function name="edge_name" c:identifier="ges_edge_name" moved-to="Edge.name">
+    <function name="edge_name" c:identifier="ges_edge_name" moved-to="Edge.name" version="1.16">
       
       <return-value transfer-ownership="none">
+        <doc xml:space="preserve">A human friendly name for @edge</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
       <parameters>
         <parameter name="edge" transfer-ownership="none">
+          <doc xml:space="preserve">The #GESEdge to get the name of</doc>
           <type name="Edge" c:type="GESEdge"/>
         </parameter>
       </parameters>

@@ -2201,6 +2201,19 @@ count.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_path" c:identifier="gst_encoding_target_get_path" version="1.18">
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The path to the @target file.</doc>
+          <type name="utf8" c:type="const gchar*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="target" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstEncodingTarget</doc>
+            <type name="EncodingTarget" c:type="GstEncodingTarget*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_profile" c:identifier="gst_encoding_target_get_profile">
         
         <return-value transfer-ownership="full">
@@ -2496,13 +2509,16 @@ gst_install_plugins_context_free() when no longer needed</doc>
           <type name="InstallPluginsContext" c:type="GstInstallPluginsContext*"/>
         </return-value>
       </constructor>
-      <method name="copy" c:identifier="gst_install_plugins_context_copy">
+      <method name="copy" c:identifier="gst_install_plugins_context_copy" version="1.12.1">
+        <doc xml:space="preserve">Copies a #GstInstallPluginsContext.</doc>
         
         <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A copy of @ctx</doc>
           <type name="InstallPluginsContext" c:type="GstInstallPluginsContext*"/>
         </return-value>
         <parameters>
           <instance-parameter name="ctx" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstInstallPluginsContext</doc>
             <type name="InstallPluginsContext" c:type="GstInstallPluginsContext*"/>
           </instance-parameter>
         </parameters>
@@ -2740,7 +2756,7 @@ in debugging.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="PLUGINS_BASE_VERSION_MICRO" value="0" c:type="GST_PLUGINS_BASE_VERSION_MICRO">
+    <constant name="PLUGINS_BASE_VERSION_MICRO" value="2" c:type="GST_PLUGINS_BASE_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       
       <type name="gint" c:type="gint"/>
@@ -2750,7 +2766,7 @@ in debugging.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="PLUGINS_BASE_VERSION_NANO" value="1" c:type="GST_PLUGINS_BASE_VERSION_NANO">
+    <constant name="PLUGINS_BASE_VERSION_NANO" value="0" c:type="GST_PLUGINS_BASE_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer's gst-plugins-base libraries at compile time.
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       

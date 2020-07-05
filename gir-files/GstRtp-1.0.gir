@@ -382,7 +382,7 @@ The size of the structure is made public to allow stack allocations.</doc>
       <field name="entry_offset" readable="0" private="1">
         <type name="guint" c:type="guint"/>
       </field>
-      <method name="add_profile_specific_ext" c:identifier="gst_rtcp_packet_add_profile_specific_ext">
+      <method name="add_profile_specific_ext" c:identifier="gst_rtcp_packet_add_profile_specific_ext" version="1.10">
         <doc xml:space="preserve">Add profile-specific extension @data to @packet. If @packet already
 contains profile-specific extension @data will be appended to the existing
 extension.</doc>
@@ -720,7 +720,7 @@ present.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="copy_profile_specific_ext" c:identifier="gst_rtcp_packet_copy_profile_specific_ext">
+      <method name="copy_profile_specific_ext" c:identifier="gst_rtcp_packet_copy_profile_specific_ext" version="1.10">
         <doc xml:space="preserve">The profile-specific extension data is copied into a new allocated
 memory area @data. This must be freed with g_free() after usage.</doc>
         
@@ -930,7 +930,7 @@ valid packet.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="get_profile_specific_ext" c:identifier="gst_rtcp_packet_get_profile_specific_ext">
+      <method name="get_profile_specific_ext" c:identifier="gst_rtcp_packet_get_profile_specific_ext" version="1.10">
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was valid data.</doc>
@@ -953,7 +953,7 @@ valid packet.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="get_profile_specific_ext_length" c:identifier="gst_rtcp_packet_get_profile_specific_ext_length">
+      <method name="get_profile_specific_ext_length" c:identifier="gst_rtcp_packet_get_profile_specific_ext_length" version="1.10">
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of 32-bit words containing profile-specific extension

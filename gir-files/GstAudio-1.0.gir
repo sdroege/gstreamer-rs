@@ -691,7 +691,7 @@ return to upstream/caller (indicating either GST_FLOW_ERROR or GST_FLOW_OK).</do
         </parameter>
       </parameters>
     </function-macro>
-    <constant name="AUDIO_FORMATS_ALL" value="{ F64BE, F64LE, F32BE, F32LE, S32BE, S32LE, U32BE, U32LE, S24_32BE, S24_32LE, U24_32BE, U24_32LE, S24BE, S24LE, U24BE, U24LE, S20BE, S20LE, U20BE, U20LE, S18BE, S18LE, U18BE, U18LE, S16BE, S16LE, U16BE, U16LE, S8,U8 }" c:type="GST_AUDIO_FORMATS_ALL">
+    <constant name="AUDIO_FORMATS_ALL" value="{ F64BE, F64LE, F32BE, F32LE, S32BE, S32LE, U32BE, U32LE, S24_32BE, S24_32LE, U24_32BE, U24_32LE, S24BE, S24LE, U24BE, U24LE, S20BE, S20LE, U20BE, U20LE, S18BE, S18LE, U18BE, U18LE, S16BE, S16LE, U16BE, U16LE, S8, U8 }" c:type="GST_AUDIO_FORMATS_ALL">
       <doc xml:space="preserve">List of all audio formats, for use in template caps strings.
 
 Formats are sorted by decreasing "quality", using these criteria by priority:
@@ -3039,7 +3039,7 @@ be used.</doc>
         </parameter>
       </parameters>
     </callback>
-    <record name="AudioConverter" c:type="GstAudioConverter" glib:type-name="GstAudioConverter" glib:get-type="gst_audio_converter_get_type" c:symbol-prefix="audio_converter">
+    <record name="AudioConverter" c:type="GstAudioConverter" version="1.8" glib:type-name="GstAudioConverter" glib:get-type="gst_audio_converter_get_type" c:symbol-prefix="audio_converter">
       <doc xml:space="preserve">This object is used to convert audio samples from one format to another.
 The object can perform conversion of:
 
@@ -3288,7 +3288,7 @@ are matching and @in and @out point to enough memory.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="supports_inplace" c:identifier="gst_audio_converter_supports_inplace">
+      <method name="supports_inplace" c:identifier="gst_audio_converter_supports_inplace" version="1.12">
         <doc xml:space="preserve">Returns whether the audio converter can perform the conversion in-place.
 The return value would be typically input to gst_base_transform_set_in_place()</doc>
         
@@ -4322,6 +4322,11 @@ handler with %GST_PAD_SET_ACCEPT_INTERSECT and
           </parameter>
         </parameters>
       </method>
+      <property name="max-errors" version="1.18" writable="1" transfer-ownership="none">
+        <doc xml:space="preserve">Maximum number of tolerated consecutive decode errors. See
+gst_audio_decoder_set_max_errors() for more details.</doc>
+        <type name="gint" c:type="gint"/>
+      </property>
       <property name="min-latency" writable="1" transfer-ownership="none">
         <type name="gint64" c:type="gint64"/>
       </property>
@@ -6852,11 +6857,11 @@ the @dither and @ns parameters.</doc>
         <doc xml:space="preserve">samples are non-interleaved</doc>
       </member>
     </bitfield>
-    <record name="AudioResampler" c:type="GstAudioResampler" disguised="1">
+    <record name="AudioResampler" c:type="GstAudioResampler" disguised="1" version="1.10">
       <doc xml:space="preserve">#GstAudioResampler is a structure which holds the information
 required to perform various kinds of resampling filtering.</doc>
       
-      <method name="free" c:identifier="gst_audio_resampler_free" version="1.6">
+      <method name="free" c:identifier="gst_audio_resampler_free">
         <doc xml:space="preserve">Free a previously allocated #GstAudioResampler @resampler.</doc>
         
         <return-value transfer-ownership="none">
@@ -7083,7 +7088,7 @@ for @quality in @options.</doc>
         </parameters>
       </function>
     </record>
-    <enumeration name="AudioResamplerFilterInterpolation" glib:type-name="GstAudioResamplerFilterInterpolation" glib:get-type="gst_audio_resampler_filter_interpolation_get_type" c:type="GstAudioResamplerFilterInterpolation">
+    <enumeration name="AudioResamplerFilterInterpolation" version="1.10" glib:type-name="GstAudioResamplerFilterInterpolation" glib:get-type="gst_audio_resampler_filter_interpolation_get_type" c:type="GstAudioResamplerFilterInterpolation">
       <doc xml:space="preserve">The different filter interpolation methods.</doc>
       <member name="none" value="0" c:identifier="GST_AUDIO_RESAMPLER_FILTER_INTERPOLATION_NONE" glib:nick="none">
         <doc xml:space="preserve">no interpolation</doc>
@@ -7097,7 +7102,7 @@ for @quality in @options.</doc>
   filter coefficients.</doc>
       </member>
     </enumeration>
-    <enumeration name="AudioResamplerFilterMode" glib:type-name="GstAudioResamplerFilterMode" glib:get-type="gst_audio_resampler_filter_mode_get_type" c:type="GstAudioResamplerFilterMode">
+    <enumeration name="AudioResamplerFilterMode" version="1.10" glib:type-name="GstAudioResamplerFilterMode" glib:get-type="gst_audio_resampler_filter_mode_get_type" c:type="GstAudioResamplerFilterMode">
       <doc xml:space="preserve">Select for the filter tables should be set up.</doc>
       <member name="interpolated" value="0" c:identifier="GST_AUDIO_RESAMPLER_FILTER_MODE_INTERPOLATED" glib:nick="interpolated">
         <doc xml:space="preserve">Use interpolated filter tables. This
@@ -7113,7 +7118,7 @@ for @quality in @options.</doc>
     and full filter tables.</doc>
       </member>
     </enumeration>
-    <bitfield name="AudioResamplerFlags" glib:type-name="GstAudioResamplerFlags" glib:get-type="gst_audio_resampler_flags_get_type" c:type="GstAudioResamplerFlags">
+    <bitfield name="AudioResamplerFlags" version="1.10" glib:type-name="GstAudioResamplerFlags" glib:get-type="gst_audio_resampler_flags_get_type" c:type="GstAudioResamplerFlags">
       <doc xml:space="preserve">Different resampler flags.</doc>
       <member name="none" value="0" c:identifier="GST_AUDIO_RESAMPLER_FLAG_NONE" glib:nick="none">
         <doc xml:space="preserve">no flags</doc>
@@ -7134,7 +7139,7 @@ for @quality in @options.</doc>
    when #GST_AUDIO_RESAMPLER_FILTER_MODE_AUTO is configured.</doc>
       </member>
     </bitfield>
-    <enumeration name="AudioResamplerMethod" version="1.6" glib:type-name="GstAudioResamplerMethod" glib:get-type="gst_audio_resampler_method_get_type" c:type="GstAudioResamplerMethod">
+    <enumeration name="AudioResamplerMethod" version="1.10" glib:type-name="GstAudioResamplerMethod" glib:get-type="gst_audio_resampler_method_get_type" c:type="GstAudioResamplerMethod">
       <doc xml:space="preserve">Different subsampling and upsampling methods</doc>
       <member name="nearest" value="0" c:identifier="GST_AUDIO_RESAMPLER_METHOD_NEAREST" glib:nick="nearest">
         <doc xml:space="preserve">Duplicates the samples when

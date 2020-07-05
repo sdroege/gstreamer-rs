@@ -6539,6 +6539,11 @@ handler with %GST_PAD_SET_ACCEPT_INTERSECT and
           </parameter>
         </parameters>
       </method>
+      <property name="max-errors" version="1.18" writable="1" transfer-ownership="none">
+        <doc xml:space="preserve">Maximum number of tolerated consecutive decode errors. See
+gst_video_decoder_set_max_errors() for more details.</doc>
+        <type name="gint" c:type="gint"/>
+      </property>
       <property name="qos" version="1.18" writable="1" transfer-ownership="none">
         <doc xml:space="preserve">If set to %TRUE the decoder will handle QoS events received
 from downstream elements.
@@ -9152,7 +9157,10 @@ separate step after unpacking.</doc>
         </parameters>
       </method>
       <method name="copy_plane" c:identifier="gst_video_frame_copy_plane">
-        <doc xml:space="preserve">Copy the plane with index @plane from @src to @dest.</doc>
+        <doc xml:space="preserve">Copy the plane with index @plane from @src to @dest.
+
+Note: Since: 1.18, @dest dimensions are allowed to be
+smaller than @src dimensions.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if the contents could be copied.</doc>
@@ -11186,13 +11194,13 @@ main (int argc, char **argv)
 ## GstVideoOverlay and Qt
 
 |[
-#include &amp;lt;glib.h&amp;gt;
-#include &amp;lt;gst/gst.h&amp;gt;
-#include &amp;lt;gst/video/videooverlay.h&amp;gt;
+#include &lt;glib.h&gt;;
+#include &lt;gst/gst.h&gt;;
+#include &lt;gst/video/videooverlay.h&gt;;
 
-#include &amp;lt;QApplication&amp;gt;
-#include &amp;lt;QTimer&amp;gt;
-#include &amp;lt;QWidget&amp;gt;
+#include &lt;QApplication&gt;;
+#include &lt;QTimer&gt;;
+#include &lt;QWidget&gt;;
 
 int main(int argc, char *argv[])
 {
@@ -12252,7 +12260,8 @@ gst_video_overlay_composition_copy().</doc>
         <type name="guint" c:type="guint"/>
       </field>
       <field name="params" writable="1">
-        <doc xml:space="preserve">list of #GstStructure containing element-specific params for downstream, see gst_video_region_of_interest_meta_add_params(). (Since: 1.14)</doc>
+        <doc xml:space="preserve">list of #GstStructure containing element-specific params for downstream,
+         see gst_video_region_of_interest_meta_add_param(). (Since: 1.14)</doc>
         <type name="GLib.List" c:type="GList*">
           <type name="gpointer" c:type="gpointer"/>
         </type>
@@ -14179,6 +14188,7 @@ parameters.</doc>
     </function>
     <function-macro name="buffer_get_video_afd_meta" c:identifier="gst_buffer_get_video_afd_meta" version="1.18" introspectable="0">
       <doc xml:space="preserve">Gets the #GstVideoAFDMeta that might be present on @b.
+
 Note: there may be two #GstVideoAFDMeta structs for interlaced video.</doc>
       
       <parameters>
@@ -14195,6 +14205,7 @@ Note: there may be two #GstVideoAFDMeta structs for interlaced video.</doc>
       </parameters>
     </function-macro>
     <function-macro name="buffer_get_video_bar_meta" c:identifier="gst_buffer_get_video_bar_meta" version="1.18" introspectable="0">
+      <doc xml:space="preserve">Gets the #GstVideoBarMeta that might be present on @b.</doc>
       
       <parameters>
         <parameter name="b">
