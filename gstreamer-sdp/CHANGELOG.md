@@ -5,6 +5,102 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.0] - 2020-07-06
+### Added
+- Updated bindings to 1.17.2, adding experimental 1.18 support. This can be
+  opted-in via the "v1_18" feature flag but there might still be API changes
+  in the newly added API.
+- `gst::MemoryRef::dump()` for dumping contents of a memory.
+- `gst::Bus::stream()` instead of a custom constructor on the `BusStream`.
+- Use more accurate types for `Seqnum`, `GroupId` and `MetaSeqnum`. These are
+  now proper wrapper types instead of plain integers, which makes mis-use
+  harder.
+- Provide `TryFrom` impls for conversion between `glib::DateTime` and
+  `gst::DateTime`.
+- Add `get_allocator()` functions to `gst_base::{Aggregator, BaseTransform,
+  BaseSrc}`, and allow overriding `BaseSrc::alloc()`.
+- Add subclassing bindings for `gst_base::PushSrc`.
+- Add new `gst::BufferCursor` API that allows to handle a buffer as `Read`,
+  `Write` and `Seek` and accesses the underlying memories of the buffer
+  individually without mapping them all together.
+- Add `gst::Plugin::get_plugin_name()`.
+- Support for `gst_video::VideoAFDMeta` and `VideoBarMeta`.
+- API for getting all / iterating over all `gst_audio::AudioFormat` and
+  `gst_video::VideoFormat`.
+- Bindings and subclassing bindings for `gst_video::VideoSink`.
+- `gst::Pad` can be constructed via the builder pattern and `gst::PadBuilder`
+  now, which allows to safely set the pad functions and various other fields
+  during construction. The `PadBuilder` works on any `gst::Pad` subclass and
+  also has special support for `GhostPad`s by allowing to set pad functions of
+  the proxy pad.
+- `gst::Message`, `gst::Event` and `gst::Query` type constructors are now on
+  the specific target type instead of various `new_XXX()` functions on the
+  basic type. E.g. `gst::message::Eos::new()`.
+- Support for overriding `gst_audio::AudioSrc/Sink::reset()`.
+- Support for overriding `gst_base::BaseParse::stop()`.
+- Support for overriding `gst::Element::post_message()`.
+- Added bindings for `gst::BufferList::foreach()` and `foreach_mut()`.
+- Added bindings for `gst::Buffer::foreach_meta()` and `foreach_meta_mut()`.
+
+### Fixed
+- Allow using any `glib::Object` as target object for logging instead of just
+  `gst::Object`.
+- Remove restriction API from `gst_pbutils::EncodingContainerProfile`. They
+  are supposed to be used only with the other encoding profiles.
+- Return `&'static str` for various `gst::StructureRef` functions where the
+  string is backed by a `glib::Quark`.
+- Fix various `gst::DateTime` functions to actually return `Option`s.
+- Add support for filling in a buffer passed to the `gst::Pad` getrange
+  function, allow passing one in into `get_range()` and `pull_range()` and
+  provide the corresponding API on `gst_base::BaseSrc` too.
+- Allocator in audio/video `Decoder` base classes is optional and can return
+  `None`.
+- `gst_video::ValidVideoTimeCode::add_interval()` always returns a valid
+  timecode again.
+- Allow resolving a `gst::Promise` with `None` and also handle that correctly
+  in the callback. This is allowed by the API.
+- Allow calling various debugging related functions before `gst::init()`.
+- Various enum/function versions were fixed to only show up if the
+  corresponding version feature is enabled.
+- `gst::Pad` function setters are marked unsafe now as changing the functions
+  is not thread-safe.
+- Remove `gst::Object::set_name()` as changing the name after construction
+  generally causes problems and is potentially unsafe.
+- Remove `gst::Pad::set_pad_template()` as changing the pad template after
+  construction is generally unsafe.
+- `gst::Pad::stream_lock()` borrows the pad now instead of taking a new
+  reference.
+- Unimplemented `Jitter` and `Buffer` queries were removed from the bindings.
+  These are not implemented in C and only have a type registered.
+- Various `LAST`, `NONE` variants of enums and flags were removed as these
+  only make sense in C.
+- Call the parent impl of various vfuncs that were omitted before to not
+  require further subclasses of them to implement them but automatically call
+  the parent ones.
+
+### Changed
+- Use `NonZeroU64/U32` for various ID types to allow further optimizations.
+- Use `thiserror` crate for deriving error types.
+- Switch from `lazy_static` to `once_cell`.
+- Change various miniobject functions like `gst::Caps::append()` from taking
+  the object by value to modifying it internally. This makes them easier to
+  use and only applies to functions that are defined on the non-reference type
+  and take ownership of the values passed in.
+- Use `mem::ManuallyDrop` instead of `mem::forget()` everywhere.
+- Replace most `mem::transmute()` calls with safer alternatives.
+- `gst:StreamCollection` API was changed to the builder pattern for
+  construction as the collection must not be changed after construction.
+- `gst::ProxyPad` default functions are plain functions on `ProxyPad` now
+  instead of trait functions to allow easier usage of them.
+- Use proper error types in various `TryFrom` impls.
+- `gst_video::VideoMeta::add()` returns a `Result` now instead of panicking.
+- Various constructors were renamed from `new_with_XXX()` and `new_from_XXX()`
+  to the more idiomatic `with_XXX()` and `from_XXX()`.
+- Miniobject bindings are simplified now and there is no `gst::GstRc` type
+  anymore, instead everything is directly implemented on the concrete types.
+  As part of this the `gst::MiniObject` trait was also removed as it was
+  unneeded now.
+
 ## [0.15.7] - 2020-06-08
 ### Fixed
 - Allow multiple filter types per process with `gst::Iterator::filter()`.
@@ -746,7 +842,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.7...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.0...HEAD
+[0.16.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.7...0.16.0
 [0.15.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.6...0.15.7
 [0.15.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.5...0.15.6
 [0.15.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.4...0.15.5
