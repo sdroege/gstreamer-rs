@@ -17,7 +17,7 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function-macro>
-    <record name="RTSPAuthCredential" c:type="GstRTSPAuthCredential" glib:type-name="GstRTSPAuthCredential" glib:get-type="gst_rtsp_auth_credential_get_type" c:symbol-prefix="rtsp_auth_credential">
+    <record name="RTSPAuthCredential" c:type="GstRTSPAuthCredential" version="1.12" glib:type-name="GstRTSPAuthCredential" glib:get-type="gst_rtsp_auth_credential_get_type" c:symbol-prefix="rtsp_auth_credential">
       <doc xml:space="preserve">RTSP Authentication credentials</doc>
       
       <field name="scheme" writable="1">
@@ -45,7 +45,7 @@ and/or use gtk-doc annotations.  -->
         <doc xml:space="preserve">digest authentication</doc>
       </member>
     </enumeration>
-    <record name="RTSPAuthParam" c:type="GstRTSPAuthParam" glib:type-name="GstRTSPAuthParam" glib:get-type="gst_rtsp_auth_param_get_type" c:symbol-prefix="rtsp_auth_param">
+    <record name="RTSPAuthParam" c:type="GstRTSPAuthParam" version="1.12" glib:type-name="GstRTSPAuthParam" glib:get-type="gst_rtsp_auth_param_get_type" c:symbol-prefix="rtsp_auth_param">
       <doc xml:space="preserve">RTSP Authentication parameter</doc>
       
       <field name="name" writable="1">
