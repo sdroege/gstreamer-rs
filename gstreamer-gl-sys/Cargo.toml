@@ -49,7 +49,7 @@ links = "gstgl-1.0"
 name = "gstreamer-gl-sys"
 readme = "README.md"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys"
-version = "0.9.0"
+version = "0.10.0"
 [package.metadata.docs.rs]
 features = ["dox"]
 [package.metadata.system-deps.gstreamer_gl_1_0]
