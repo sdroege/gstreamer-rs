@@ -93,6 +93,33 @@ VoIP Metrics Report Block
 
 Feature: `v1_16`
 
+<!-- struct RTPBufferFlags -->
+Additional RTP buffer flags. These flags can potentially be used on any
+buffers carrying RTP packets.
+
+Note that these are only valid for `gst::Caps` of type: application/x-rtp (x-rtcp).
+They can conflict with other extended buffer flags.
+<!-- struct RTPBufferFlags::const RETRANSMISSION -->
+The `gst::Buffer` was once wrapped
+ in a retransmitted packet as specified by RFC 4588.
+<!-- struct RTPBufferFlags::const REDUNDANT -->
+The packet represents redundant RTP packet.
+ The flag is used in gstrtpstorage to be able to hold the packetback
+ and use it only for recovery from packet loss.
+ Since: 1.14
+<!-- struct RTPBufferFlags::const LAST -->
+Offset to define more flags.
+
+Feature: `v1_10`
+
+<!-- struct RTPBufferMapFlags -->
+Additional mapping flags for `RTPBuffer::map`.
+<!-- struct RTPBufferMapFlags::const SKIP_PADDING -->
+Skip mapping and validation of RTP
+ padding and RTP pad count when present. Useful for buffers where
+ the padding may be encrypted.
+<!-- struct RTPBufferMapFlags::const LAST -->
+Offset to define more flags
 <!-- enum RTPPayload -->
 Standard predefined fixed payload types.
 

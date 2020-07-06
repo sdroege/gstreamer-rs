@@ -105,6 +105,54 @@ multiply all alpha with
  `GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE`.
  When the input format has no alpha but the output format has, the
  alpha value will be set to `GST_VIDEO_CONVERTER_OPT_ALPHA_VALUE`
+<!-- struct VideoBufferFlags -->
+Additional video buffer flags. These flags can potentially be used on any
+buffers carrying closed caption data, or video data - even encoded data.
+
+Note that these are only valid for `gst::Caps` of type: video/... and caption/...
+They can conflict with other extended buffer flags.
+<!-- struct VideoBufferFlags::const INTERLACED -->
+If the `gst::Buffer` is interlaced. In mixed
+ interlace-mode, this flags specifies if the frame is
+ interlaced or progressive.
+<!-- struct VideoBufferFlags::const TFF -->
+If the `gst::Buffer` is interlaced, then the first field
+ in the video frame is the top field. If unset, the
+ bottom field is first.
+<!-- struct VideoBufferFlags::const RFF -->
+If the `gst::Buffer` is interlaced, then the first field
+ (as defined by the `VideoBufferFlags::Tff` flag setting)
+ is repeated.
+<!-- struct VideoBufferFlags::const ONEFIELD -->
+If the `gst::Buffer` is interlaced, then only the
+ first field (as defined by the `VideoBufferFlags::Tff`
+ flag setting) is to be displayed (Since: 1.16).
+<!-- struct VideoBufferFlags::const MULTIPLE_VIEW -->
+The `gst::Buffer` contains one or more specific views,
+ such as left or right eye view. This flags is set on
+ any buffer that contains non-mono content - even for
+ streams that contain only a single viewpoint. In mixed
+ mono / non-mono streams, the absence of the flag marks
+ mono buffers.
+<!-- struct VideoBufferFlags::const FIRST_IN_BUNDLE -->
+When conveying stereo/multiview content with
+ frame-by-frame methods, this flag marks the first buffer
+ in a bundle of frames that belong together.
+<!-- struct VideoBufferFlags::const TOP_FIELD -->
+The video frame has the top field only. This is the
+ same as GST_VIDEO_BUFFER_FLAG_TFF |
+ GST_VIDEO_BUFFER_FLAG_ONEFIELD (Since: 1.16).
+ Use GST_VIDEO_BUFFER_IS_TOP_FIELD() to check for this flag.
+<!-- struct VideoBufferFlags::const BOTTOM_FIELD -->
+The video frame has the bottom field only. This is
+ the same as GST_VIDEO_BUFFER_FLAG_ONEFIELD
+ (GST_VIDEO_BUFFER_FLAG_TFF flag unset) (Since: 1.16).
+ Use GST_VIDEO_BUFFER_IS_BOTTOM_FIELD() to check for this flag.
+<!-- struct VideoBufferFlags::const MARKER -->
+The `gst::Buffer` contains the end of a video field or frame
+ boundary such as the last subframe or packet (Since: 1.18).
+<!-- struct VideoBufferFlags::const LAST -->
+Offset to define more flags
 <!-- struct VideoBufferPool -->
 
 
@@ -160,6 +208,26 @@ only perform chroma upsampling
 only perform chroma downsampling
 <!-- enum VideoChromaMode::variant None -->
 disable chroma resampling
+<!-- struct VideoChromaSite -->
+Various Chroma sitings.
+<!-- struct VideoChromaSite::const UNKNOWN -->
+unknown cositing
+<!-- struct VideoChromaSite::const NONE -->
+no cositing
+<!-- struct VideoChromaSite::const H_COSITED -->
+chroma is horizontally cosited
+<!-- struct VideoChromaSite::const V_COSITED -->
+chroma is vertically cosited
+<!-- struct VideoChromaSite::const ALT_LINE -->
+choma samples are sited on alternate lines
+<!-- struct VideoChromaSite::const COSITED -->
+chroma samples cosited with luma samples
+<!-- struct VideoChromaSite::const JPEG -->
+jpeg style cositing, also for mpeg1 and mjpeg
+<!-- struct VideoChromaSite::const MPEG2 -->
+mpeg2 style cositing
+<!-- struct VideoChromaSite::const DV -->
+DV style cositing
 <!-- struct VideoCodecFrame -->
 A `VideoCodecFrame` represents a video frame both in raw and
 encoded form.
@@ -189,6 +257,16 @@ a `GDestroyNotify`
 <!-- impl VideoCodecFrame::fn unref -->
 Decreases the refcount of the frame. If the refcount reaches 0, the frame
 will be freed.
+<!-- struct VideoCodecFrameFlags -->
+Flags for `VideoCodecFrame`
+<!-- struct VideoCodecFrameFlags::const DECODE_ONLY -->
+is the frame only meant to be decoded
+<!-- struct VideoCodecFrameFlags::const SYNC_POINT -->
+is the frame a synchronization point (keyframe)
+<!-- struct VideoCodecFrameFlags::const FORCE_KEYFRAME -->
+should the output frame be made a keyframe
+<!-- struct VideoCodecFrameFlags::const FORCE_KEYFRAME_HEADERS -->
+should the encoder output stream headers
 <!-- struct VideoCodecState -->
 Structure representing the state of an incoming or outgoing video
 stream for encoders and decoders.
@@ -681,6 +759,18 @@ handler with `GST_PAD_SET_ACCEPT_INTERSECT` and
 `GST_PAD_SET_ACCEPT_TEMPLATE`
 ## `use_`
 if the default pad accept-caps query handling should be used
+<!-- trait VideoDecoderExt::fn get_property_max_errors -->
+Maximum number of tolerated consecutive decode errors. See
+`VideoDecoderExt::set_max_errors` for more details.
+
+Feature: `v1_18`
+
+<!-- trait VideoDecoderExt::fn set_property_max_errors -->
+Maximum number of tolerated consecutive decode errors. See
+`VideoDecoderExt::set_max_errors` for more details.
+
+Feature: `v1_18`
+
 <!-- trait VideoDecoderExt::fn get_property_qos -->
 If set to `true` the decoder will handle QoS events received
 from downstream elements.
@@ -888,6 +978,16 @@ a `VideoCodecFrame`
 # Returns
 
 max decoding time.
+<!-- trait VideoEncoderExt::fn get_min_force_key_unit_interval -->
+Returns the minimum force-keyunit interval, see `VideoEncoderExt::set_min_force_key_unit_interval`
+for more details.
+
+Feature: `v1_18`
+
+
+# Returns
+
+the minimum force-keyunit interval
 <!-- trait VideoEncoderExt::fn get_oldest_frame -->
 Get the oldest unfinished pending `VideoCodecFrame`
 
@@ -954,6 +1054,15 @@ Informs baseclass of encoding latency.
 minimum latency
 ## `max_latency`
 maximum latency
+<!-- trait VideoEncoderExt::fn set_min_force_key_unit_interval -->
+Sets the minimum interval for requesting keyframes based on force-keyunit
+events. Setting this to 0 will allow to handle every event, setting this to
+`GST_CLOCK_TIME_NONE` causes force-keyunit events to be ignored.
+
+Feature: `v1_18`
+
+## `interval`
+minimum interval
 <!-- trait VideoEncoderExt::fn set_min_pts -->
 Request minimal value for PTS passed to handle_frame.
 
@@ -995,6 +1104,18 @@ Feature: `v1_14`
 
 ## `enabled`
 the new qos value.
+<!-- trait VideoEncoderExt::fn get_property_min_force_key_unit_interval -->
+Minimum interval between force-keyunit requests in nanoseconds. See
+`VideoEncoderExt::set_min_force_key_unit_interval` for more details.
+
+Feature: `v1_18`
+
+<!-- trait VideoEncoderExt::fn set_property_min_force_key_unit_interval -->
+Minimum interval between force-keyunit requests in nanoseconds. See
+`VideoEncoderExt::set_min_force_key_unit_interval` for more details.
+
+Feature: `v1_18`
+
 <!-- enum VideoFieldOrder -->
 Field order of interlaced content. This is only valid for
 interlace-mode=interleaved and not interlace-mode=mixed. In the case of
@@ -1019,6 +1140,16 @@ to implement frame dropping.
 # Implements
 
 [`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- struct VideoFlags -->
+Extra video flags
+<!-- struct VideoFlags::const NONE -->
+no flags
+<!-- struct VideoFlags::const VARIABLE_FPS -->
+a variable fps is selected, fps_n and fps_d
+ denote the maximum fps of the video
+<!-- struct VideoFlags::const PREMULTIPLIED_ALPHA -->
+Each color has been scaled by the alpha
+ value.
 <!-- enum VideoFormat -->
 Enum value describing the most common video formats.
 
@@ -1221,6 +1352,63 @@ packed 4:2:2 YUV, 12 bits per channel (Y-U-Y-V) (Since: 1.18)
 packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)
 <!-- enum VideoFormat::variant Y412Le -->
 packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)
+<!-- struct VideoFormatFlags -->
+The different video flags that a format info can have.
+<!-- struct VideoFormatFlags::const YUV -->
+The video format is YUV, components are numbered
+ 0=Y, 1=U, 2=V.
+<!-- struct VideoFormatFlags::const RGB -->
+The video format is RGB, components are numbered
+ 0=R, 1=G, 2=B.
+<!-- struct VideoFormatFlags::const GRAY -->
+The video is gray, there is one gray component
+ with index 0.
+<!-- struct VideoFormatFlags::const ALPHA -->
+The video format has an alpha components with
+ the number 3.
+<!-- struct VideoFormatFlags::const LE -->
+The video format has data stored in little
+ endianness.
+<!-- struct VideoFormatFlags::const PALETTE -->
+The video format has a palette. The palette
+ is stored in the second plane and indexes are stored in the first plane.
+<!-- struct VideoFormatFlags::const COMPLEX -->
+The video format has a complex layout that
+ can't be described with the usual information in the `VideoFormatInfo`.
+<!-- struct VideoFormatFlags::const UNPACK -->
+This format can be used in a
+ `GstVideoFormatUnpack` and `GstVideoFormatPack` function.
+<!-- struct VideoFormatFlags::const TILED -->
+The format is tiled, there is tiling information
+ in the last plane.
+<!-- struct VideoFrameFlags -->
+Extra video frame flags
+<!-- struct VideoFrameFlags::const NONE -->
+no flags
+<!-- struct VideoFrameFlags::const INTERLACED -->
+The video frame is interlaced. In mixed
+ interlace-mode, this flag specifies if the frame is interlaced or
+ progressive.
+<!-- struct VideoFrameFlags::const TFF -->
+The video frame has the top field first
+<!-- struct VideoFrameFlags::const RFF -->
+The video frame has the repeat flag
+<!-- struct VideoFrameFlags::const ONEFIELD -->
+The video frame has one field
+<!-- struct VideoFrameFlags::const MULTIPLE_VIEW -->
+The video contains one or
+ more non-mono views
+<!-- struct VideoFrameFlags::const FIRST_IN_BUNDLE -->
+The video frame is the first
+ in a set of corresponding views provided as sequential frames.
+<!-- struct VideoFrameFlags::const TOP_FIELD -->
+The video frame has the top field only. This
+ is the same as GST_VIDEO_FRAME_FLAG_TFF | GST_VIDEO_FRAME_FLAG_ONEFIELD
+ (Since: 1.16).
+<!-- struct VideoFrameFlags::const BOTTOM_FIELD -->
+The video frame has the bottom field
+ only. This is the same as GST_VIDEO_FRAME_FLAG_ONEFIELD
+ (GST_VIDEO_FRAME_FLAG_TFF flag unset) (Since: 1.16).
 <!-- enum VideoGammaMode -->
 <!-- enum VideoGammaMode::variant None -->
 disable gamma handling
@@ -1396,6 +1584,42 @@ use the output color matrix to convert
  to and from R'G'B
 <!-- enum VideoMatrixMode::variant None -->
 disable color matrix conversion.
+<!-- struct VideoMultiviewFlags -->
+GstVideoMultiviewFlags are used to indicate extra properties of a
+stereo/multiview stream beyond the frame layout and buffer mapping
+that is conveyed in the `VideoMultiviewMode`.
+<!-- struct VideoMultiviewFlags::const NONE -->
+No flags
+<!-- struct VideoMultiviewFlags::const RIGHT_VIEW_FIRST -->
+For stereo streams, the
+ normal arrangement of left and right views is reversed.
+<!-- struct VideoMultiviewFlags::const LEFT_FLIPPED -->
+The left view is vertically
+ mirrored.
+<!-- struct VideoMultiviewFlags::const LEFT_FLOPPED -->
+The left view is horizontally
+ mirrored.
+<!-- struct VideoMultiviewFlags::const RIGHT_FLIPPED -->
+The right view is
+ vertically mirrored.
+<!-- struct VideoMultiviewFlags::const RIGHT_FLOPPED -->
+The right view is
+ horizontally mirrored.
+<!-- struct VideoMultiviewFlags::const HALF_ASPECT -->
+For frame-packed
+ multiview modes, indicates that the individual
+ views have been encoded with half the true width or height
+ and should be scaled back up for display. This flag
+ is used for overriding input layout interpretation
+ by adjusting pixel-aspect-ratio.
+ For side-by-side, column interleaved or checkerboard packings, the
+ pixel width will be doubled. For row interleaved and top-bottom
+ encodings, pixel height will be doubled.
+<!-- struct VideoMultiviewFlags::const MIXED_MONO -->
+The video stream contains both
+ mono and multiview portions, signalled on each buffer by the
+ absence or presence of the `VideoBufferFlags::MultipleView`
+ buffer flag.
 <!-- enum VideoMultiviewFramePacking -->
 `VideoMultiviewFramePacking` represents the subset of `VideoMultiviewMode`
 values that can be applied to any video frame without needing extra metadata.
@@ -1694,13 +1918,13 @@ main (int argc, char **argv)
 
 
 ```text
-#include &lt;glib.h&gt;
-#include &lt;gst/gst.h&gt;
-#include &lt;gst/video/videooverlay.h&gt;
+#include <glib.h>;
+#include <gst/gst.h>;
+#include <gst/video/videooverlay.h>;
 
-#include &lt;QApplication&gt;
-#include &lt;QTimer&gt;
-#include &lt;QWidget&gt;
+#include <QApplication>;
+#include <QTimer>;
+#include <QWidget>;
 
 int main(int argc, char *argv[])
 {
@@ -1844,6 +2068,28 @@ specific window (e.g. an XWindow on X11). Passing 0 as the `handle` will
 tell the overlay to stop using that window and create an internal one.
 ## `handle`
 a handle referencing the window.
+<!-- struct VideoOverlayFormatFlags -->
+Overlay format flags.
+<!-- struct VideoOverlayFormatFlags::const NONE -->
+no flags
+<!-- struct VideoOverlayFormatFlags::const PREMULTIPLIED_ALPHA -->
+RGB are premultiplied by A/255.
+<!-- struct VideoOverlayFormatFlags::const GLOBAL_ALPHA -->
+a global-alpha value != 1 is set.
+<!-- struct VideoPackFlags -->
+The different flags that can be used when packing and unpacking.
+<!-- struct VideoPackFlags::const NONE -->
+No flag
+<!-- struct VideoPackFlags::const TRUNCATE_RANGE -->
+When the source has a smaller depth
+ than the target format, set the least significant bits of the target
+ to 0. This is likely slightly faster but less accurate. When this flag
+ is not specified, the most significant bits of the source are duplicated
+ in the least significant bits of the destination.
+<!-- struct VideoPackFlags::const INTERLACED -->
+The source is interlaced. The unpacked
+ format will be interlaced as well with each line containing
+ information from alternating fields. (Since: 1.2)
 <!-- enum VideoPrimariesMode -->
 Different primaries conversion modes
 <!-- enum VideoPrimariesMode::variant None -->
@@ -2200,6 +2446,18 @@ field 2
 ':' for non-drop-frame, non-interlaced content and for non-drop-frame
 interlaced field 2
 '.' for non-drop-frame interlaced field 1
+<!-- struct VideoTimeCodeFlags -->
+Flags related to the time code information.
+For drop frame, only 30000/1001 and 60000/1001 frame rates are supported.
+<!-- struct VideoTimeCodeFlags::const NONE -->
+No flags
+<!-- struct VideoTimeCodeFlags::const DROP_FRAME -->
+Whether we have drop frame rate
+<!-- struct VideoTimeCodeFlags::const INTERLACED -->
+Whether we have interlaced video
+
+Feature: `v1_10`
+
 <!-- struct VideoTimeCodeInterval -->
 A representation of a difference between two `VideoTimeCode` instances.
 Will not necessarily correspond to a real timecode (e.g. 00:00:10;00)

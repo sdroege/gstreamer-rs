@@ -10,6 +10,20 @@ a copy of `self`.
 <!-- impl RTSPAddress::fn free -->
 Free `self` and releasing it back into the pool when owned by a
 pool.
+<!-- struct RTSPAddressFlags -->
+Flags used to control allocation of addresses
+<!-- struct RTSPAddressFlags::const NONE -->
+no flags
+<!-- struct RTSPAddressFlags::const IPV4 -->
+an IPv4 address
+<!-- struct RTSPAddressFlags::const IPV6 -->
+and IPv6 address
+<!-- struct RTSPAddressFlags::const EVEN_PORT -->
+address with an even port
+<!-- struct RTSPAddressFlags::const MULTICAST -->
+a multicast address
+<!-- struct RTSPAddressFlags::const UNICAST -->
+a unicast address
 <!-- struct RTSPAddressPool -->
 An address pool, all member are private
 
@@ -3319,3 +3333,9 @@ pointer becomes invalid when you free the token. This function checks if
 `self` is writable and will never return `None`.
 
 MT safe.
+<!-- struct RTSPTransportMode -->
+The supported modes of the media.
+<!-- struct RTSPTransportMode::const PLAY -->
+Transport supports PLAY mode
+<!-- struct RTSPTransportMode::const RECORD -->
+Transport supports RECORD mode

@@ -1,4 +1,18 @@
 <!-- file * -->
+<!-- struct GLAPI -->
+<!-- struct GLAPI::const NONE -->
+no API
+<!-- struct GLAPI::const OPENGL -->
+Desktop OpenGL up to and including 3.1. The
+ compatibility profile when the OpenGL version is >= 3.2
+<!-- struct GLAPI::const OPENGL3 -->
+Desktop OpenGL >= 3.2 core profile
+<!-- struct GLAPI::const GLES1 -->
+OpenGL ES 1.x
+<!-- struct GLAPI::const GLES2 -->
+OpenGL ES 2.x and 3.x
+<!-- struct GLAPI::const ANY -->
+Any OpenGL API
 <!-- struct GLBaseFilter -->
 `GLBaseFilter` handles the nitty gritty details of retrieving an OpenGL
 context. It also provided some wrappers around `gst_base::BaseTransform`'s
@@ -623,6 +637,29 @@ pointer to a display (or 0)
 # Returns
 
 A `EGLDisplay` or `EGL_NO_DISPLAY`
+<!-- struct GLDisplayType -->
+<!-- struct GLDisplayType::const NONE -->
+no display type
+<!-- struct GLDisplayType::const X11 -->
+X11 display
+<!-- struct GLDisplayType::const WAYLAND -->
+Wayland display
+<!-- struct GLDisplayType::const COCOA -->
+Cocoa display
+<!-- struct GLDisplayType::const WIN32 -->
+Win32 display
+<!-- struct GLDisplayType::const DISPMANX -->
+Dispmanx display
+<!-- struct GLDisplayType::const EGL -->
+EGL display
+<!-- struct GLDisplayType::const VIV_FB -->
+Vivante Framebuffer display
+<!-- struct GLDisplayType::const GBM -->
+Mesa3D GBM display
+<!-- struct GLDisplayType::const EGL_DEVICE -->
+EGLDevice display (Since: 1.18)
+<!-- struct GLDisplayType::const ANY -->
+any display type
 <!-- struct GLDisplayWayland -->
 the contents of a `GLDisplayWayland` are private and should only be accessed
 through the provided API
@@ -794,6 +831,22 @@ Opaque `GLOverlayCompositor` object
 # Implements
 
 [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- struct GLPlatform -->
+<!-- struct GLPlatform::const NONE -->
+no platform
+<!-- struct GLPlatform::const EGL -->
+the EGL platform used primarily with the X11, wayland
+ and android window systems as well as on embedded Linux
+<!-- struct GLPlatform::const GLX -->
+the GLX platform used primarily with the X11 window system
+<!-- struct GLPlatform::const WGL -->
+the WGL platform used primarily on Windows
+<!-- struct GLPlatform::const CGL -->
+the CGL platform used primarily on OS X
+<!-- struct GLPlatform::const EAGL -->
+the EAGL platform used primarily on iOS
+<!-- struct GLPlatform::const ANY -->
+any OpenGL platform
 <!-- enum GLQueryType -->
 <!-- enum GLQueryType::variant None -->
 no query
@@ -809,6 +862,18 @@ Compilation error occurred
 Link error occurred
 <!-- enum GLSLError::variant Program -->
 General program error occurred
+<!-- struct GLSLProfile -->
+GLSL profiles
+<!-- struct GLSLProfile::const NONE -->
+no profile supported/available
+<!-- struct GLSLProfile::const ES -->
+OpenGL|ES profile
+<!-- struct GLSLProfile::const CORE -->
+OpenGL core profile
+<!-- struct GLSLProfile::const COMPATIBILITY -->
+OpenGL compatibility profile
+<!-- struct GLSLProfile::const ANY -->
+any OpenGL/OpenGL|ES profile
 <!-- struct GLSLStage -->
 `GLSLStage` holds and represents a single OpenGL shader stage.
 

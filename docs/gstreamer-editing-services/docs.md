@@ -187,8 +187,7 @@ call `glib::MainContext::push_thread_default` in a new thread before
 calling `ges_init`.
 
 Example of an asynchronous asset request:
-
-```text
+``` c
 // The request callback
 static void
 asset_loaded_cb (GESAsset * source, GAsyncResult * res, gpointer user_data)
@@ -198,14 +197,14 @@ asset_loaded_cb (GESAsset * source, GAsyncResult * res, gpointer user_data)
 
   asset = ges_asset_request_finish (res, &error);
   if (asset) {
-   g_print ("The file: %s is usable as a FileSource",
+   g_print ("The file: %s is usable as a GESUriClip",
        ges_asset_get_id (asset));
   } else {
-   g_print ("The file: %s is *not* usable as a FileSource because: %s",
+   g_print ("The file: %s is *not* usable as a GESUriClip because: %s",
        ges_asset_get_id (source), error->message);
   }
 
-  gst_object_unref (mfs);
+  gst_object_unref (asset);
 }
 
 // The request:
@@ -728,6 +727,9 @@ This method can also fail if the adding the track element to the track
 would break a configuration rule of the corresponding `Timeline`,
 such as causing three sources to overlap at a single time, or causing
 a source to completely overlap another in the same track.
+
+Feature: `v1_18`
+
 ## `child`
 A child of `self`
 ## `track`
@@ -935,6 +937,9 @@ using this position to trim the end of a clip.
 See `ClipExt::get_internal_time_from_timeline_time`, which performs the
 reverse, or `ClipExt::get_timeline_time_from_source_frame` which does
 the same conversion, but using frame numbers.
+
+Feature: `v1_18`
+
 ## `child`
 An `TrackElement:active` child of `self` with a
 `TrackElement:track`
@@ -1122,6 +1127,9 @@ If the duration-limit would ever go below the current
 `TimelineElement:duration` of the clip due to a change in the above
 variables, its `TimelineElement:duration` will be set to the new
 limit.
+
+Feature: `v1_18`
+
 <!-- trait ClipExt::fn get_property_layer -->
 The layer this clip lies in.
 
@@ -1437,9 +1445,14 @@ The element is edited in slide mode (not yet
  (`Edge::Start` and `Edge::End`) is not defined. The element can
  not shift layers under this mode.
 <!-- struct Effect -->
-Currently we only support effects with 1 sinkpad and 1 sourcepad
-with the exception of `gesaudiomixer` and `gescompositor` which
-can be used as effects.
+Currently we only support effects with N sinkpads and one single srcpad.
+Apart from `gesaudiomixer` and `gescompositor` which can be used as effects
+and where sinkpads will be requested as needed based on the timeline topology
+GES will always request at most one sinkpad per effect (when required).
+
+> Note: GES always adds converters (`audioconvert ! audioresample !
+> audioconvert` for audio effects and `videoconvert` for video effects) to
+> make it simpler for end users.
 
 # Implements
 
@@ -1742,6 +1755,9 @@ if `self` refused to add `clip`.
 <!-- trait LayerExt::fn get_active_for_track -->
 Gets whether the layer is active for the given track. See
 `LayerExt::set_active_for_tracks`.
+
+Feature: `v1_18`
+
 ## `track`
 The `Track` to check if `self` is currently active for
 
@@ -1823,6 +1839,9 @@ active in the track, regardless of their individual
 
 Note that by default a layer will be active for all of its
 timeline's tracks.
+
+Feature: `v1_18`
+
 ## `active`
 Whether elements in `tracks` should be active or not
 ## `tracks`
@@ -1856,6 +1875,9 @@ The priority to set
 <!-- trait LayerExt::fn connect_active_changed -->
 Will be emitted whenever the layer is activated or deactivated
 for some `Track`. See `LayerExt::set_active_for_tracks`.
+
+Feature: `v1_18`
+
 ## `active`
 Whether `layer` has been made active or de-active in the `tracks`
 ## `tracks`
@@ -2022,9 +2044,14 @@ to `location` using the given `format`, `height` and `width`.
 <!-- trait GESPipelineExt::fn set_mode -->
 Sets the `Pipeline:mode` of the pipeline.
 
-Note that the pipeline will be set to `gst::State::Null` during this call
-to perform the necessary changes. You will need to set the state again
-yourself after calling this.
+Note that the pipeline will be set to `gst::State::Null` during this call to
+perform the necessary changes. You will need to set the state again yourself
+after calling this.
+
+> **NOTE**: [Rendering settings](ges_pipeline_set_render_settings) need to be
+> set before setting `mode` to `PipelineFlags::Render` or
+> `PipelineFlags::SmartRender`, the call to this method will fail
+> otherwise.
 ## `mode`
 The mode to set for `self`
 
@@ -2109,6 +2136,25 @@ The video sink used for preview. This exposes the
 <!-- trait GESPipelineExt::fn set_property_video_sink -->
 The video sink used for preview. This exposes the
 `playsink:video-sink` property of the internal `playsink`.
+<!-- struct PipelineFlags -->
+The various modes a `Pipeline` can be configured to.
+<!-- struct PipelineFlags::const AUDIO_PREVIEW -->
+Output the `Pipeline:timeline`'s
+audio to the soundcard
+<!-- struct PipelineFlags::const VIDEO_PREVIEW -->
+Output the `Pipeline:timeline`'s
+video to the screen
+<!-- struct PipelineFlags::const FULL_PREVIEW -->
+Output both the `Pipeline:timeline`'s
+audio and video to the soundcard and screen (default)
+<!-- struct PipelineFlags::const RENDER -->
+Render the `Pipeline:timeline` with
+forced decoding (the underlying `encodebin` has its
+`encodebin:avoid-reencoding` property set to `false`)
+<!-- struct PipelineFlags::const SMART_RENDER -->
+Render the `Pipeline:timeline`,
+avoiding decoding/reencoding (the underlying `encodebin` has its
+`encodebin:avoid-reencoding` property set to `true`)
 <!-- struct Project -->
 The `Project` is used to control a set of `Asset` and is a
 `Asset` with `GES_TYPE_TIMELINE` as `extractable_type` itself. That
@@ -2613,6 +2659,9 @@ with the given `name`, or `None` if it was not found.
 <!-- trait TimelineExt::fn get_frame_at -->
 This method allows you to convert a timeline `gst::ClockTime` into its
 corresponding `FrameNumber` in the timeline's output.
+
+Feature: `v1_18`
+
 ## `timestamp`
 The timestamp to get the corresponding frame number of
 
@@ -2624,6 +2673,9 @@ This method allows you to convert a timeline output frame number into a
 timeline `gst::ClockTime`. For example, this time could be used to seek to a
 particular frame in the timeline's output, or as the edit position for
 an element within the timeline.
+
+Feature: `v1_18`
+
 ## `frame_number`
 The frame number to get the corresponding timestamp of in the
  timeline coordinates
@@ -3624,6 +3676,9 @@ Emitted when the element has a new child property registered. See
 Note that some GES elements will be automatically created with
 pre-registered children properties. You can use
 `TimelineElementExt::list_children_properties` to list these.
+
+Feature: `v1_18`
+
 ## `prop_object`
 The child whose property has been registered
 ## `prop`
@@ -3631,6 +3686,9 @@ The specification for the property that has been registered
 <!-- trait TimelineElementExt::fn connect_child_property_removed -->
 Emitted when the element has a child property unregistered. See
 `TimelineElementExt::remove_child_property`.
+
+Feature: `v1_18`
+
 ## `prop_object`
 The child whose property has been unregistered
 ## `prop`
@@ -3979,7 +4037,7 @@ The element that was removed
 The capabilities used to choose the output of the `Track`'s
 elements. Internally, this is used to select output streams when
 several may be available, by determining whether its `gst::Pad` is
-compatible (see `nlecomposition:caps` for `nlecomposition`). As such,
+compatible (see `NleObject:caps` for `nlecomposition`). As such,
 this is used as a weaker indication of the desired output type of the
 track, **before** the `Track:restriction-caps` is applied.
 Therefore, this should be set to a *generic* superset of the
@@ -3997,7 +4055,7 @@ Default value: `GST_CAPS_ANY`.
 The capabilities used to choose the output of the `Track`'s
 elements. Internally, this is used to select output streams when
 several may be available, by determining whether its `gst::Pad` is
-compatible (see `nlecomposition:caps` for `nlecomposition`). As such,
+compatible (see `NleObject:caps` for `nlecomposition`). As such,
 this is used as a weaker indication of the desired output type of the
 track, **before** the `Track:restriction-caps` is applied.
 Therefore, this should be set to a *generic* superset of the
@@ -4226,7 +4284,7 @@ be initialized if it is initialized with 0
 
 # Returns
 
-`true` if the property was found, `false` otherwize.
+`true` if the property was found, `false` otherwise.
 <!-- trait TrackElementExt::fn get_child_property_by_pspec -->
 Gets a property of a child of `self`.
 
@@ -4305,6 +4363,9 @@ Gets the `TrackElement:track-type` for the element.
 The track-type of `self`.
 <!-- trait TrackElementExt::fn has_internal_source -->
 Gets `TrackElement:has-internal-source` for the element.
+
+Feature: `v1_18`
+
 
 # Returns
 
@@ -4436,7 +4497,7 @@ The value
 
 # Returns
 
-`true` if the property was set, `false` otherwize.
+`true` if the property was set, `false` otherwise.
 <!-- trait TrackElementExt::fn set_child_property_by_pspec -->
 Sets a property of a child of `self`.
 
@@ -4488,9 +4549,17 @@ Sets `TrackElement:has-internal-source` for the element. If this is
 set to `false`, this method will also set the
 `TimelineElement:in-point` of the element to 0 and its
 `TimelineElement:max-duration` to `GST_CLOCK_TIME_NONE`.
+
+Feature: `v1_18`
+
 ## `has_internal_source`
 Whether the `self` should be allowed to have its
 'internal time' properties set.
+
+# Returns
+
+`false` if `has_internal_source` is forbidden for `self` and
+`true` in any other case.
 <!-- trait TrackElementExt::fn set_track_type -->
 Sets the `TrackElement:track-type` for the element.
 ## `type_`
@@ -4523,6 +4592,9 @@ See `TrackElementExt::clamp_control_source` for how this is done
 per control source.
 
 Default value: `true`
+
+Feature: `v1_18`
+
 <!-- trait TrackElementExt::fn set_property_auto_clamp_control_sources -->
 Whether the control sources on the element (see
 `TrackElementExt::set_control_source`) will be automatically
@@ -4533,6 +4605,9 @@ See `TrackElementExt::clamp_control_source` for how this is done
 per control source.
 
 Default value: `true`
+
+Feature: `v1_18`
+
 <!-- trait TrackElementExt::fn get_property_has_internal_source -->
 This property is used to determine whether the 'internal time'
 properties of the element have any meaning. In particular, unless
@@ -4568,6 +4643,9 @@ time at which the subtitle file runs out of data.
 Note that GES can not support track elements that have both internal
 content and manipulate the timing of their data streams (time
 effects).
+
+Feature: `v1_18`
+
 <!-- trait TrackElementExt::fn set_property_has_internal_source -->
 This property is used to determine whether the 'internal time'
 properties of the element have any meaning. In particular, unless
@@ -4603,6 +4681,9 @@ time at which the subtitle file runs out of data.
 Note that GES can not support track elements that have both internal
 content and manipulate the timing of their data streams (time
 effects).
+
+Feature: `v1_18`
+
 <!-- trait TrackElementExt::fn get_property_track -->
 The track that this element belongs to, or `None` if it does not
 belong to a track.
@@ -4616,6 +4697,23 @@ The track type of the element, which determines the type of track the
 element can be added to (see `Track:track-type`). This should
 correspond to the type of data that the element can produce or
 process.
+<!-- struct TrackType -->
+Types of content handled by a track. If the content is not one of
+`TrackType::Audio`, `TrackType::Video` or `TrackType::Text`,
+the user of the `Track` must set the type to `TrackType::Custom`.
+
+`TrackType::Unknown` is for internal purposes and should not be used
+by users
+<!-- struct TrackType::const UNKNOWN -->
+A track of unknown type (i.e. invalid)
+<!-- struct TrackType::const AUDIO -->
+An audio track
+<!-- struct TrackType::const VIDEO -->
+A video track
+<!-- struct TrackType::const TEXT -->
+A text (subtitle) track
+<!-- struct TrackType::const CUSTOM -->
+A custom-content track
 <!-- struct UriClip -->
 Represents all the output streams from a particular uri. It is assumed that
 the URI points to a file of some type.
@@ -4631,6 +4729,11 @@ Trait containing all `UriClip` methods.
 [`UriClip`](struct.UriClip.html)
 <!-- impl UriClip::fn new -->
 Creates a new `UriClip` for the provided `uri`.
+
+> **WARNING**: This function might 'discover` @uri **synchrounously**, it is
+> an IO and processing intensive task that you probably don't want to run in
+> an application mainloop. Have a look at #ges_asset_request_async to see how
+> to make that operation happen **asynchronously**.
 ## `uri`
 the URI the source should control
 
@@ -4784,6 +4887,9 @@ a
 <!-- trait UriClipAssetExt::fn is_image -->
 Gets Whether the file represented by `self` is an image or not
 
+Feature: `v1_18`
+
+
 # Returns
 
 Whether the file represented by `self` is an image or not
@@ -4825,6 +4931,9 @@ Get the `gst_pbutils::DiscovererStreamInfo` user by `self`
 a `UriClipAsset`
 <!-- trait UriSourceAssetExt::fn is_image -->
 Check if `self` contains a single image
+
+Feature: `v1_18`
+
 
 # Returns
 

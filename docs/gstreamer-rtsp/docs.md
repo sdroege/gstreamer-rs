@@ -11,6 +11,12 @@ digest authentication
 RTSP Authentication parameter
 
 Feature: `v1_12`
+<!-- struct RTSPEvent -->
+The possible events for the connection.
+<!-- struct RTSPEvent::const READ -->
+connection is readable
+<!-- struct RTSPEvent::const WRITE -->
+connection is writable
 <!-- enum RTSPFamily -->
 The possible network families.
 <!-- enum RTSPFamily::variant None -->
@@ -21,6 +27,50 @@ internet
 internet V6
 <!-- enum RTSPHeaderField -->
 Enumeration of rtsp header fields
+<!-- struct RTSPLowerTrans -->
+The different transport methods.
+<!-- struct RTSPLowerTrans::const UNKNOWN -->
+invalid transport flag
+<!-- struct RTSPLowerTrans::const UDP -->
+stream data over UDP
+<!-- struct RTSPLowerTrans::const UDP_MCAST -->
+stream data over UDP multicast
+<!-- struct RTSPLowerTrans::const TCP -->
+stream data over TCP
+<!-- struct RTSPLowerTrans::const HTTP -->
+stream data tunneled over HTTP.
+<!-- struct RTSPLowerTrans::const TLS -->
+encrypt TCP and HTTP with TLS
+<!-- struct RTSPMethod -->
+The different supported RTSP methods.
+<!-- struct RTSPMethod::const INVALID -->
+invalid method
+<!-- struct RTSPMethod::const DESCRIBE -->
+the DESCRIBE method
+<!-- struct RTSPMethod::const ANNOUNCE -->
+the ANNOUNCE method
+<!-- struct RTSPMethod::const GET_PARAMETER -->
+the GET_PARAMETER method
+<!-- struct RTSPMethod::const OPTIONS -->
+the OPTIONS method
+<!-- struct RTSPMethod::const PAUSE -->
+the PAUSE method
+<!-- struct RTSPMethod::const PLAY -->
+the PLAY method
+<!-- struct RTSPMethod::const RECORD -->
+the RECORD method
+<!-- struct RTSPMethod::const REDIRECT -->
+the REDIRECT method
+<!-- struct RTSPMethod::const SETUP -->
+the SETUP method
+<!-- struct RTSPMethod::const SET_PARAMETER -->
+the SET_PARAMETER method
+<!-- struct RTSPMethod::const TEARDOWN -->
+the TEARDOWN method
+<!-- struct RTSPMethod::const GET -->
+the GET method (HTTP).
+<!-- struct RTSPMethod::const POST -->
+the POST method (HTTP).
 <!-- enum RTSPMsgType -->
 The type of a message.
 <!-- enum RTSPMsgType::variant Invalid -->
@@ -35,6 +85,18 @@ HTTP request message.
 HTTP response message.
 <!-- enum RTSPMsgType::variant Data -->
 data message
+<!-- struct RTSPProfile -->
+The transfer profile to use.
+<!-- struct RTSPProfile::const UNKNOWN -->
+invalid profile
+<!-- struct RTSPProfile::const AVP -->
+the Audio/Visual profile (RFC 3551)
+<!-- struct RTSPProfile::const SAVP -->
+the secure Audio/Visual profile (RFC 3711)
+<!-- struct RTSPProfile::const AVPF -->
+the Audio/Visual profile with feedback (RFC 4585)
+<!-- struct RTSPProfile::const SAVPF -->
+the secure Audio/Visual profile with feedback (RFC 5124)
 <!-- enum RTSPRangeUnit -->
 Different possible time range units.
 <!-- enum RTSPRangeUnit::variant Smpte -->
@@ -113,6 +175,14 @@ end
 frames and subframes
 <!-- enum RTSPTimeType::variant Utc -->
 UTC time
+<!-- struct RTSPTransMode -->
+The transfer mode to use.
+<!-- struct RTSPTransMode::const UNKNOWN -->
+invalid tansport mode
+<!-- struct RTSPTransMode::const RTP -->
+transfer RTP data
+<!-- struct RTSPTransMode::const RDT -->
+transfer RDT (RealMedia) data
 <!-- struct RTSPUrl -->
 Provides helper functions to handle RTSP urls.
 <!-- impl RTSPUrl::fn copy -->

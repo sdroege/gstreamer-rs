@@ -619,6 +619,18 @@ handler with `GST_PAD_SET_ACCEPT_INTERSECT` and
 `GST_PAD_SET_ACCEPT_TEMPLATE`
 ## `use_`
 if the default pad accept-caps query handling should be used
+<!-- trait AudioDecoderExt::fn get_property_max_errors -->
+Maximum number of tolerated consecutive decode errors. See
+`AudioDecoderExt::set_max_errors` for more details.
+
+Feature: `v1_18`
+
+<!-- trait AudioDecoderExt::fn set_property_max_errors -->
+Maximum number of tolerated consecutive decode errors. See
+`AudioDecoderExt::set_max_errors` for more details.
+
+Feature: `v1_18`
+
 <!-- struct AudioEncoder -->
 This base class is for audio encoders turning raw audio samples into
 encoded audio data.
@@ -969,6 +981,13 @@ Configures encoder audio jitter tolerance threshold.
 MT safe.
 ## `tolerance`
 new tolerance
+<!-- struct AudioFlags -->
+Extra audio flags
+<!-- struct AudioFlags::const NONE -->
+no valid flag
+<!-- struct AudioFlags::const UNPOSITIONED -->
+the position array explicitly
+ contains unpositioned channels.
 <!-- enum AudioFormat -->
 Enum value describing the most common audio formats.
 <!-- enum AudioFormat::variant Unknown -->
@@ -1063,6 +1082,19 @@ encoded audio format
 32-bit floating point samples, native endianness
 <!-- enum AudioFormat::variant F64 -->
 64-bit floating point samples, native endianness
+<!-- struct AudioFormatFlags -->
+The different audio flags that a format info can have.
+<!-- struct AudioFormatFlags::const INTEGER -->
+integer samples
+<!-- struct AudioFormatFlags::const FLOAT -->
+float samples
+<!-- struct AudioFormatFlags::const SIGNED -->
+signed samples
+<!-- struct AudioFormatFlags::const COMPLEX -->
+complex layout
+<!-- struct AudioFormatFlags::const UNPACK -->
+the format can be used in
+`GstAudioFormatUnpack` and `GstAudioFormatPack` functions
 <!-- struct AudioInfo -->
 Information describing audio properties. This information can be filled
 in from GstCaps with `AudioInfo::from_caps`.
@@ -1144,6 +1176,16 @@ Layout of the audio samples for the different channels.
 interleaved audio
 <!-- enum AudioLayout::variant NonInterleaved -->
 non-interleaved audio
+<!-- struct AudioPackFlags -->
+The different flags that can be used when packing and unpacking.
+<!-- struct AudioPackFlags::const NONE -->
+No flag
+<!-- struct AudioPackFlags::const TRUNCATE_RANGE -->
+When the source has a smaller depth
+ than the target format, set the least significant bits of the target
+ to 0. This is likely slightly faster but less accurate. When this flag
+ is not specified, the most significant bits of the source are duplicated
+ in the least significant bits of the destination.
 <!-- enum AudioRingBufferFormatType -->
 The format of the samples in the ringbuffer.
 <!-- enum AudioRingBufferFormatType::variant Raw -->
