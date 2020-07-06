@@ -18,6 +18,7 @@ external_libraries = [
 
 generate = [
     "GstBase.PushSrc",
+    "GstBase.AggregatorStartTimeSelection",
 ]
 
 manual = [
@@ -102,10 +103,6 @@ concurrency = "send-unique"
         [object.function.return]
         nullable_return_is_error = "Failed to take buffer list"
 
-    [[object.function]]
-    name = "distance_from_discont"
-    version = "1.10"
-
 [[object]]
 name = "GstBase.FlowCombiner"
 # Manual because ref/unref functions were added much later
@@ -187,7 +184,6 @@ manual_traits = ["BaseTransformExtManual"]
 [[object]]
 name = "GstBase.Aggregator"
 status = "generate"
-version = "1.14"
 manual_traits = ["AggregatorExtManual"]
 
     [[object.function]]
@@ -207,7 +203,6 @@ manual_traits = ["AggregatorExtManual"]
 [[object]]
 name = "GstBase.AggregatorPad"
 status = "generate"
-version = "1.14"
 manual_traits = ["AggregatorPadExtManual"]
 
 [[object]]

@@ -44,6 +44,7 @@ generate = [
     "GES.TrackType",
     "GES.Group",
     "GES.UriClipAsset",
+    "GES.UriSourceAsset",
 ]
 
 [[object]]
@@ -135,13 +136,6 @@ status = "generate"
     name = "remove_track"
         [object.function.return]
         bool_return_is_error = "Failed to remove track"
-
-    [[object.function]]
-    name = "get_frame_at"
-    version = "1.18"
-    [[object.function]]
-    name = "get_frame_time"
-    version = "1.18"
 
 [[object]]
 name = "GES.Container"
@@ -241,13 +235,6 @@ status = "generate"
         [object.function.return]
         nullable_return_is_error = "Failed to split clip"
 
-    [[object.function]]
-    name = "add_child_to_track"
-    version = "1.18"
-    [[object.function]]
-    name = "get_timeline_time_from_internal_time"
-    version = "1.18"
-
 [[object]]
 name = "GES.Extractable"
 status = "generate"
@@ -274,13 +261,6 @@ status = "generate"
     name = "add_asset"
         [object.function.return]
         nullable_return_is_error = "Failed to add asset"
-
-    [[object.function]]
-    name = "get_active_for_track"
-    version = "1.18"
-    [[object.function]]
-    name = "set_active_for_tracks"
-    version = "1.18"
 
 [[object]]
 name = "GES.Project"
@@ -361,17 +341,3 @@ status = "generate"
     name = "remove_control_binding"
         [object.function.return]
         bool_return_is_error = "Failed to remove control binding"
-
-    [[object.function]]
-    name = "has_internal_source"
-    version = "1.18"
-    [[object.function]]
-    name = "set_has_internal_source"
-    version = "1.18"
-
-[[object]]
-name = "GES.UriSourceAsset"
-status = "generate"
-    [[object.function]]
-    name = "is_image"
-    version = "1.18"
