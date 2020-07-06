@@ -60,6 +60,15 @@ impl EncodingTarget {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn get_path(&self) -> Option<GString> {
+        unsafe {
+            from_glib_none(gst_pbutils_sys::gst_encoding_target_get_path(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
     pub fn get_profile(&self, name: &str) -> Option<EncodingProfile> {
         unsafe {
             from_glib_full(gst_pbutils_sys::gst_encoding_target_get_profile(

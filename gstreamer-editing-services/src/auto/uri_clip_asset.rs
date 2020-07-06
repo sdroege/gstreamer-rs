@@ -66,6 +66,7 @@ pub trait UriClipAssetExt: 'static {
 
     fn get_stream_assets(&self) -> Vec<UriSourceAsset>;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn is_image(&self) -> bool;
 
     fn set_property_duration(&self, duration: u64);
@@ -116,6 +117,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn is_image(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_uri_clip_asset_is_image(

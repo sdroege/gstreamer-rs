@@ -83,6 +83,12 @@ pub trait AudioDecoderExt: 'static {
 
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
     fn connect_property_min_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -321,6 +327,34 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
                 self.as_ref().to_glib_none().0,
                 use_.to_glib(),
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_errors_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_audio_sys::GstAudioDecoder,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<AudioDecoder>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&AudioDecoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-errors\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_errors_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

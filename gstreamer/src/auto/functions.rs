@@ -15,6 +15,8 @@ use ClockTime;
 use DebugGraphDetails;
 use DebugLevel;
 use Element;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use PluginAPIFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use StackTraceFlags;
 
@@ -218,6 +220,14 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 //pub fn tracing_register_hook<P: FnOnce() + Send + Sync + 'static>(tracer: /*Ignored*/&Tracer, detail: &str, func: P) {
 //    unsafe { TODO: call gst_sys:gst_tracing_register_hook() }
 //}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) {
+    assert_initialized_main_thread!();
+    unsafe {
+        gst_sys::gst_type_mark_as_plugin_api(type_.to_glib(), flags.to_glib());
+    }
+}
 
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
     assert_initialized_main_thread!();

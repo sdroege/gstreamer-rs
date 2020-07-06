@@ -82,6 +82,12 @@ pub trait VideoDecoderExt: 'static {
     fn set_property_qos(&self, qos: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -245,6 +251,34 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
                 b"qos\0".as_ptr() as *const _,
                 Value::from(&qos).to_glib_none().0,
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_errors_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_video_sys::GstVideoDecoder,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<VideoDecoder>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-errors\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_errors_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

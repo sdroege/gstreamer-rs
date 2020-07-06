@@ -38,6 +38,9 @@ pub trait VideoEncoderExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_min_force_key_unit_interval(&self) -> gst::ClockTime;
+
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn is_qos_enabled(&self) -> bool;
 
@@ -47,6 +50,9 @@ pub trait VideoEncoderExt: 'static {
 
     fn set_headers(&self, headers: &[&gst::Buffer]);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime);
+
     fn set_min_pts(&self, min_pts: gst::ClockTime);
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -55,6 +61,12 @@ pub trait VideoEncoderExt: 'static {
     fn get_property_qos(&self) -> bool;
 
     fn set_property_qos(&self, qos: bool);
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -79,6 +91,17 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             gst_video_sys::gst_video_encoder_get_max_encode_time(
                 self.as_ref().to_glib_none().0,
                 frame.to_glib_none().0,
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_min_force_key_unit_interval(&self) -> gst::ClockTime {
+        unsafe {
+            from_glib(
+                gst_video_sys::gst_video_encoder_get_min_force_key_unit_interval(
+                    self.as_ref().to_glib_none().0,
+                ),
             )
         }
     }
@@ -117,6 +140,16 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             gst_video_sys::gst_video_encoder_set_headers(
                 self.as_ref().to_glib_none().0,
                 headers.to_glib_full(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime) {
+        unsafe {
+            gst_video_sys::gst_video_encoder_set_min_force_key_unit_interval(
+                self.as_ref().to_glib_none().0,
+                interval.to_glib(),
             );
         }
     }
@@ -162,6 +195,37 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
                 b"qos\0".as_ptr() as *const _,
                 Value::from(&qos).to_glib_none().0,
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_min_force_key_unit_interval_trampoline<
+            P,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut gst_video_sys::GstVideoEncoder,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<VideoEncoder>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&VideoEncoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::min-force-key-unit-interval\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_force_key_unit_interval_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

@@ -100,6 +100,7 @@ pub trait LayerExt: 'static {
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P);
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -301,6 +302,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}

@@ -9,10 +9,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
-use glib::Value;
 use glib_sys;
-use gobject_sys;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 use gst;
 use std::boxed::Box as Box_;
@@ -135,8 +132,7 @@ pub trait ClipExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error>;
 
-    fn get_property_duration_limit(&self) -> u64;
-
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -481,21 +477,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn get_property_duration_limit(&self) -> u64 {
-        unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
-                b"duration-limit\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `duration-limit` getter")
-                .unwrap()
-        }
-    }
-
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,

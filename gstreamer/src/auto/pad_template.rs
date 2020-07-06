@@ -74,11 +74,30 @@ impl PadTemplate {
         unsafe { from_glib_full(gst_sys::gst_pad_template_get_caps(self.to_glib_none().0)) }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn get_documentation_caps(&self) -> Option<Caps> {
+        unsafe {
+            from_glib_full(gst_sys::gst_pad_template_get_documentation_caps(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
     pub fn pad_created<P: IsA<Pad>>(&self, pad: &P) {
         unsafe {
             gst_sys::gst_pad_template_pad_created(
                 self.to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn set_documentation_caps(&self, caps: &Caps) {
+        unsafe {
+            gst_sys::gst_pad_template_set_documentation_caps(
+                self.to_glib_none().0,
+                caps.to_glib_none().0,
             );
         }
     }

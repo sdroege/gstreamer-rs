@@ -154,8 +154,10 @@ pub trait TimelineElementExt: 'static {
 
     fn set_property_serialize(&self, serialize: bool);
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
@@ -594,10 +596,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}

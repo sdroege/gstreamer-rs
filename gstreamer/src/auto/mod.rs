@@ -176,6 +176,8 @@ pub use self::flags::PadLinkCheck;
 pub use self::flags::PadProbeType;
 pub use self::flags::ParseFlags;
 pub use self::flags::PipelineFlags;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub use self::flags::PluginAPIFlags;
 pub use self::flags::PluginDependencyFlags;
 pub use self::flags::PluginFlags;
 pub use self::flags::SchedulingFlags;
