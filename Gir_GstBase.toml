@@ -196,6 +196,10 @@ manual_traits = ["AggregatorExtManual"]
     version = "1.14"
 
     [[object.property]]
+    name = "start-time-selection"
+    version = "1.18"
+
+    [[object.property]]
     name = "min-upstream-latency"
     # clock time instead of u64
     ignore = true

@@ -132,6 +132,26 @@ pub fn calculate_linear_regression(
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<::PluginAPIFlags> {
+    assert_initialized_main_thread!();
+    unsafe {
+        use std::mem;
+
+        let mut flags = mem::MaybeUninit::uninit();
+        let ret = from_glib(gst_sys::gst_type_is_plugin_api(
+            type_.to_glib(),
+            flags.as_mut_ptr(),
+        ));
+        let flags = flags.assume_init();
+        if ret {
+            Some(from_glib(flags))
+        } else {
+            None
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     #[cfg(feature = "v1_12")]

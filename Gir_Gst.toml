@@ -53,6 +53,7 @@ generate = [
     "Gst.TaskState",
     "Gst.PromiseResult",
     "Gst.ClockEntryType",
+    "Gst.PluginAPIFlags",
 ]
 
 manual = [
@@ -1701,6 +1702,11 @@ status = "generate"
     name = "version_string"
     # can be called before gst_init()
     assertion = "skip"
+
+    [[object.function]]
+    name = "type_is_plugin_api"
+    # confusing return type
+    ignore = true
 
 [[object]]
 name = "Gst.StateChangeReturn"
