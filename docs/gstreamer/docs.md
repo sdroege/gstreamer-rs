@@ -485,6 +485,20 @@ The messages are converted to an ELEMENT message with the bin as the
 source. The structure of the message is named 'GstBinForwarded' and contains
 a field named 'message' of type GST_TYPE_MESSAGE that contains the original
 forwarded message.
+<!-- struct BinFlags -->
+GstBinFlags are a set of flags specific to bins. Most are set/used
+internally. They can be checked using the GST_OBJECT_FLAG_IS_SET () macro,
+and (un)set using GST_OBJECT_FLAG_SET () and GST_OBJECT_FLAG_UNSET ().
+<!-- struct BinFlags::const NO_RESYNC -->
+don't resync a state change when elements are
+ added or linked in the bin (Since: 1.0.5)
+<!-- struct BinFlags::const STREAMS_AWARE -->
+Indicates whether the bin can handle elements
+ that add/remove source pads at any point in time without
+ first posting a no-more-pads signal (Since: 1.10)
+<!-- struct BinFlags::const LAST -->
+the last enum in the series of flags for bins.
+Derived classes can use this as first value in a list of flags.
 <!-- struct Buffer -->
 Buffers are the basic unit of data transfer in GStreamer. They contain the
 timing and offset along with other arbitrary metadata that is associated
@@ -1000,6 +1014,17 @@ a pointer to the maxsize
 # Returns
 
 total size of `length` memory blocks starting at `idx` in `self`.
+<!-- impl Buffer::fn has_flags -->
+Gives the status of a specific flag on a buffer.
+
+Feature: `v1_10`
+
+## `flags`
+the `BufferFlags` flag to check.
+
+# Returns
+
+`true` if all flags in `flags` are found on `self`.
 <!-- impl Buffer::fn insert_memory -->
 Insert the memory block `mem` to `self` at `idx`. This function takes ownership
 of `mem` and thus doesn't increase its refcount.
@@ -1303,6 +1328,82 @@ pointer to a `Buffer` that will
 # Returns
 
 `true` when `obuf` was different from `nbuf`.
+<!-- struct BufferCopyFlags -->
+A set of flags that can be provided to the `Buffer::copy_into`
+function to specify which items should be copied.
+<!-- struct BufferCopyFlags::const NONE -->
+copy nothing
+<!-- struct BufferCopyFlags::const FLAGS -->
+flag indicating that buffer flags should be copied
+<!-- struct BufferCopyFlags::const TIMESTAMPS -->
+flag indicating that buffer pts, dts,
+ duration, offset and offset_end should be copied
+<!-- struct BufferCopyFlags::const META -->
+flag indicating that buffer meta should be
+ copied
+<!-- struct BufferCopyFlags::const MEMORY -->
+flag indicating that buffer memory should be reffed
+ and appended to already existing memory. Unless the memory is marked as
+ NO_SHARE, no actual copy of the memory is made but it is simply reffed.
+ Add `BufferCopyFlags::Deep` to force a real copy.
+<!-- struct BufferCopyFlags::const MERGE -->
+flag indicating that buffer memory should be
+ merged
+<!-- struct BufferCopyFlags::const DEEP -->
+flag indicating that memory should always be
+ copied instead of reffed (Since: 1.2)
+<!-- struct BufferFlags -->
+A set of buffer flags used to describe properties of a `Buffer`.
+<!-- struct BufferFlags::const LIVE -->
+the buffer is live data and should be discarded in
+ the PAUSED state.
+<!-- struct BufferFlags::const DECODE_ONLY -->
+the buffer contains data that should be dropped
+ because it will be clipped against the segment
+ boundaries or because it does not contain data
+ that should be shown to the user.
+<!-- struct BufferFlags::const DISCONT -->
+the buffer marks a data discontinuity in the stream.
+ This typically occurs after a seek or a dropped buffer
+ from a live or network source.
+<!-- struct BufferFlags::const RESYNC -->
+the buffer timestamps might have a discontinuity
+ and this buffer is a good point to resynchronize.
+<!-- struct BufferFlags::const CORRUPTED -->
+the buffer data is corrupted.
+<!-- struct BufferFlags::const MARKER -->
+the buffer contains a media specific marker. for
+ video this is the end of a frame boundary, for audio
+ this is the start of a talkspurt.
+<!-- struct BufferFlags::const HEADER -->
+the buffer contains header information that is
+ needed to decode the following data.
+<!-- struct BufferFlags::const GAP -->
+the buffer has been created to fill a gap in the
+ stream and contains media neutral data (elements can
+ switch to optimized code path that ignores the buffer
+ content).
+<!-- struct BufferFlags::const DROPPABLE -->
+the buffer can be dropped without breaking the
+ stream, for example to reduce bandwidth.
+<!-- struct BufferFlags::const DELTA_UNIT -->
+this unit cannot be decoded independently.
+<!-- struct BufferFlags::const TAG_MEMORY -->
+this flag is set when memory of the buffer
+ is added/removed
+<!-- struct BufferFlags::const SYNC_AFTER -->
+Elements which write to disk or permanent
+ storage should ensure the data is synced after
+ writing the contents of this buffer. (Since: 1.6)
+<!-- struct BufferFlags::const NON_DROPPABLE -->
+This buffer is important and should not be dropped.
+ This can be used to mark important buffers, e.g. to flag
+ RTP packets carrying keyframes or codec setup data for RTP
+ Forward Error Correction purposes, or to prevent still video
+ frames from being dropped by elements due to QoS. (Since: 1.14)
+<!-- struct BufferFlags::const LAST -->
+additional media specific flags can be added starting from
+ this flag.
 <!-- struct BufferList -->
 Buffer lists are an object containing a list of buffers.
 
@@ -1716,6 +1817,21 @@ Enable or disable the flushing state of a `self` without freeing or
 allocating buffers.
 ## `flushing`
 whether to start or stop flushing
+<!-- struct BufferPoolAcquireFlags -->
+Additional flags to control the allocation of a buffer
+<!-- struct BufferPoolAcquireFlags::const NONE -->
+no flags
+<!-- struct BufferPoolAcquireFlags::const KEY_UNIT -->
+buffer is keyframe
+<!-- struct BufferPoolAcquireFlags::const DONTWAIT -->
+when the bufferpool is empty, acquire_buffer
+will by default block until a buffer is released into the pool again. Setting
+this flag makes acquire_buffer return `FlowReturn::Eos` instead of blocking.
+<!-- struct BufferPoolAcquireFlags::const DISCONT -->
+buffer is discont
+<!-- struct BufferPoolAcquireFlags::const LAST -->
+last flag, subclasses can use private flags
+ starting from this value.
 <!-- enum BufferingMode -->
 The different types of buffering methods.
 <!-- enum BufferingMode::variant Stream -->
@@ -3443,6 +3559,25 @@ The type of the clock entry
 a single shot timeout
 <!-- enum ClockEntryType::variant Periodic -->
 a periodic timeout request
+<!-- struct ClockFlags -->
+The capabilities of this clock
+<!-- struct ClockFlags::const CAN_DO_SINGLE_SYNC -->
+clock can do a single sync timeout request
+<!-- struct ClockFlags::const CAN_DO_SINGLE_ASYNC -->
+clock can do a single async timeout request
+<!-- struct ClockFlags::const CAN_DO_PERIODIC_SYNC -->
+clock can do sync periodic timeout requests
+<!-- struct ClockFlags::const CAN_DO_PERIODIC_ASYNC -->
+clock can do async periodic timeout callbacks
+<!-- struct ClockFlags::const CAN_SET_RESOLUTION -->
+clock's resolution can be changed
+<!-- struct ClockFlags::const CAN_SET_MASTER -->
+clock can be slaved to a master clock
+<!-- struct ClockFlags::const NEEDS_STARTUP_SYNC -->
+clock needs to be synced before it can be used
+ (Since: 1.6)
+<!-- struct ClockFlags::const LAST -->
+subclasses can add additional flags starting from this flag
 <!-- enum ClockReturn -->
 The return value of a clock operation.
 <!-- enum ClockReturn::variant Ok -->
@@ -3926,6 +4061,65 @@ a newly allocated string formatted according
 <!-- impl DateTime::fn unref -->
 Atomically decrements the reference count of `self` by one. When the
 reference count reaches zero, the structure is freed.
+<!-- struct DebugColorFlags -->
+These are some terminal style flags you can use when creating your
+debugging categories to make them stand out in debugging output.
+<!-- struct DebugColorFlags::const FG_BLACK -->
+Use black as foreground color.
+<!-- struct DebugColorFlags::const FG_RED -->
+Use red as foreground color.
+<!-- struct DebugColorFlags::const FG_GREEN -->
+Use green as foreground color.
+<!-- struct DebugColorFlags::const FG_YELLOW -->
+Use yellow as foreground color.
+<!-- struct DebugColorFlags::const FG_BLUE -->
+Use blue as foreground color.
+<!-- struct DebugColorFlags::const FG_MAGENTA -->
+Use magenta as foreground color.
+<!-- struct DebugColorFlags::const FG_CYAN -->
+Use cyan as foreground color.
+<!-- struct DebugColorFlags::const FG_WHITE -->
+Use white as foreground color.
+<!-- struct DebugColorFlags::const BG_BLACK -->
+Use black as background color.
+<!-- struct DebugColorFlags::const BG_RED -->
+Use red as background color.
+<!-- struct DebugColorFlags::const BG_GREEN -->
+Use green as background color.
+<!-- struct DebugColorFlags::const BG_YELLOW -->
+Use yellow as background color.
+<!-- struct DebugColorFlags::const BG_BLUE -->
+Use blue as background color.
+<!-- struct DebugColorFlags::const BG_MAGENTA -->
+Use magenta as background color.
+<!-- struct DebugColorFlags::const BG_CYAN -->
+Use cyan as background color.
+<!-- struct DebugColorFlags::const BG_WHITE -->
+Use white as background color.
+<!-- struct DebugColorFlags::const BOLD -->
+Make the output bold.
+<!-- struct DebugColorFlags::const UNDERLINE -->
+Underline the output.
+<!-- struct DebugGraphDetails -->
+Available details for pipeline graphs produced by GST_DEBUG_BIN_TO_DOT_FILE()
+and GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS().
+<!-- struct DebugGraphDetails::const MEDIA_TYPE -->
+show caps-name on edges
+<!-- struct DebugGraphDetails::const CAPS_DETAILS -->
+show caps-details on edges
+<!-- struct DebugGraphDetails::const NON_DEFAULT_PARAMS -->
+show modified parameters on
+ elements
+<!-- struct DebugGraphDetails::const STATES -->
+show element states
+<!-- struct DebugGraphDetails::const FULL_PARAMS -->
+show full element parameter values even
+ if they are very long
+<!-- struct DebugGraphDetails::const ALL -->
+show all the typical details that one might want
+<!-- struct DebugGraphDetails::const VERBOSE -->
+show all details regardless of how large or
+ verbose they make the resulting output
 <!-- enum DebugLevel -->
 The level defines the importance of a debugging message. The more important a
 message is, the greater the probability that the debugging system outputs it.
@@ -5761,6 +5955,22 @@ a `ElementFactoryListType`
 # Returns
 
 `true` if `self` is of `type_`.
+<!-- struct ElementFlags -->
+The standard flags that an element may have.
+<!-- struct ElementFlags::const LOCKED_STATE -->
+ignore state changes from parent
+<!-- struct ElementFlags::const SINK -->
+the element is a sink
+<!-- struct ElementFlags::const SOURCE -->
+the element is a source.
+<!-- struct ElementFlags::const PROVIDE_CLOCK -->
+the element can provide a clock
+<!-- struct ElementFlags::const REQUIRE_CLOCK -->
+the element requires a clock
+<!-- struct ElementFlags::const INDEXABLE -->
+the element can use an index
+<!-- struct ElementFlags::const LAST -->
+offset to define more flags
 <!-- struct Event -->
 The event class provides factory methods to construct events for sending
 and functions to query (parse) received events.
@@ -7021,6 +7231,11 @@ This function is most useful in language bindings and when subclassing
 function. Call this function directly after a call to g_object_new
 (GST_TYPE_GHOST_PAD, "direction", `dir`, ..., NULL).
 
+# Deprecated
+
+This function is deprecated since 1.18 and does nothing
+anymore.
+
 # Returns
 
 `true` if the construction succeeds, `false` otherwise.
@@ -7062,6 +7277,24 @@ used when the library doesn't accept settings.
 used when the library generated an encoding error.
 <!-- enum LibraryError::variant NumErrors -->
 the number of library error types.
+<!-- struct MemoryFlags -->
+Flags for wrapped memory.
+<!-- struct MemoryFlags::const READONLY -->
+memory is readonly. It is not allowed to map the
+memory with `MapFlags::Write`.
+<!-- struct MemoryFlags::const NO_SHARE -->
+memory must not be shared. Copies will have to be
+made when this memory needs to be shared between buffers.
+<!-- struct MemoryFlags::const ZERO_PREFIXED -->
+the memory prefix is filled with 0 bytes
+<!-- struct MemoryFlags::const ZERO_PADDED -->
+the memory padding is filled with 0 bytes
+<!-- struct MemoryFlags::const PHYSICALLY_CONTIGUOUS -->
+the memory is physically contiguous. (Since: 1.2)
+<!-- struct MemoryFlags::const NOT_MAPPABLE -->
+the memory can't be mapped via `Memory::map` without any preconditions. (Since: 1.2)
+<!-- struct MemoryFlags::const LAST -->
+first flag that can be used for custom purposes
 <!-- struct Message -->
 Messages are implemented as a subclass of `MiniObject` with a generic
 `Structure` as the content. This allows for writing custom messages without
@@ -7078,7 +7311,7 @@ The basic use pattern of posting a message on a `Bus` is as follows:
 ```
 
 A `Element` usually posts messages on the bus provided by the parent
-container using `ElementExt::post_message`.
+container using `Element::post_message`.
 <!-- impl Message::fn new_application -->
 Create a new application-typed message. GStreamer will never create these
 messages; they are a gift from us to you. Enjoy.
@@ -8487,7 +8720,7 @@ floating reference. Be aware that functions such as `GstBinExt::add` and
 `ElementExt::add_pad` take ownership of the floating reference.
 
 In contrast to `gobject::Object` instances, `Object` adds a name property. The functions
-`GstObjectExt::set_name` and `GstObjectExt::get_name` are used to set/get the name
+`Object::set_name` and `GstObjectExt::get_name` are used to set/get the name
 of the object.
 
 ## controlled properties
@@ -8908,6 +9141,14 @@ property, we don't emit `gobject::Object::notify` and `Object::deep-notify`
 signals due to locking issues. In some cases one can use
 `Bin::element-added` or `Bin::element-removed` signals on the parent to
 achieve a similar effect.
+<!-- struct ObjectFlags -->
+The standard flags that an gstobject may have.
+<!-- struct ObjectFlags::const MAY_BE_LEAKED -->
+the object is expected to stay alive even
+after `gst_deinit` has been called and so should be ignored by leak
+detection tools. (Since: 1.10)
+<!-- struct ObjectFlags::const LAST -->
+subclasses can add additional flags starting from this flag
 <!-- struct Pad -->
 A `Element` is linked to other elements via "pads", which are extremely
 light-weight generic link points.
@@ -10138,6 +10379,81 @@ direction is unknown.
 the pad is a source pad.
 <!-- enum PadDirection::variant Sink -->
 the pad is a sink pad.
+<!-- struct PadFlags -->
+Pad state flags
+<!-- struct PadFlags::const BLOCKED -->
+is dataflow on a pad blocked
+<!-- struct PadFlags::const FLUSHING -->
+is pad flushing
+<!-- struct PadFlags::const EOS -->
+is pad in EOS state
+<!-- struct PadFlags::const BLOCKING -->
+is pad currently blocking on a buffer or event
+<!-- struct PadFlags::const NEED_PARENT -->
+ensure that there is a parent object before calling
+ into the pad callbacks.
+<!-- struct PadFlags::const NEED_RECONFIGURE -->
+the pad should be reconfigured/renegotiated.
+ The flag has to be unset manually after
+ reconfiguration happened.
+<!-- struct PadFlags::const PENDING_EVENTS -->
+the pad has pending events
+<!-- struct PadFlags::const FIXED_CAPS -->
+the pad is using fixed caps. This means that
+ once the caps are set on the pad, the default caps query function
+ will only return those caps.
+<!-- struct PadFlags::const PROXY_CAPS -->
+the default event and query handler will forward
+ all events and queries to the internally linked pads
+ instead of discarding them.
+<!-- struct PadFlags::const PROXY_ALLOCATION -->
+the default query handler will forward
+ allocation queries to the internally linked pads
+ instead of discarding them.
+<!-- struct PadFlags::const PROXY_SCHEDULING -->
+the default query handler will forward
+ scheduling queries to the internally linked pads
+ instead of discarding them.
+<!-- struct PadFlags::const ACCEPT_INTERSECT -->
+the default accept-caps handler will check
+ it the caps intersect the query-caps result instead
+ of checking for a subset. This is interesting for
+ parsers that can accept incompletely specified caps.
+<!-- struct PadFlags::const ACCEPT_TEMPLATE -->
+the default accept-caps handler will use
+ the template pad caps instead of query caps to
+ compare with the accept caps. Use this in combination
+ with `PadFlags::AcceptIntersect`. (Since: 1.6)
+<!-- struct PadFlags::const LAST -->
+offset to define more flags
+<!-- struct PadLinkCheck -->
+The amount of checking to be done when linking pads. `PadLinkCheck::Caps`
+and `PadLinkCheck::TemplateCaps` are mutually exclusive. If both are
+specified, expensive but safe `PadLinkCheck::Caps` are performed.
+
+> Only disable some of the checks if you are 100% certain you know the link
+> will not fail because of hierarchy/caps compatibility failures. If uncertain,
+> use the default checks (`PadLinkCheck::Default`) or the regular methods
+> for linking the pads.
+<!-- struct PadLinkCheck::const NOTHING -->
+Don't check hierarchy or caps compatibility.
+<!-- struct PadLinkCheck::const HIERARCHY -->
+Check the pads have same parents/grandparents.
+ Could be omitted if it is already known that the two elements that own the
+ pads are in the same bin.
+<!-- struct PadLinkCheck::const TEMPLATE_CAPS -->
+Check if the pads are compatible by using
+ their template caps. This is much faster than `PadLinkCheck::Caps`, but
+ would be unsafe e.g. if one pad has `GST_CAPS_ANY`.
+<!-- struct PadLinkCheck::const CAPS -->
+Check if the pads are compatible by comparing the
+ caps returned by `PadExt::query_caps`.
+<!-- struct PadLinkCheck::const NO_RECONFIGURE -->
+Disables pushing a reconfigure event when pads are
+ linked.
+<!-- struct PadLinkCheck::const DEFAULT -->
+The default checks done when linking
+ pads (i.e. the ones used by `Pad::link`).
 <!-- enum PadLinkReturn -->
 Result values from gst_pad_link and friends.
 <!-- enum PadLinkReturn::variant Ok -->
@@ -10201,6 +10517,57 @@ Data has been handled in the probe and will not be
  `GST_PAD_PROBE_INFO_FLOW_RETURN`() accessor.
  Note that the resulting query must contain valid entries.
  Since: 1.6
+<!-- struct PadProbeType -->
+The different probing types that can occur. When either one of
+`PadProbeType::Idle` or `PadProbeType::Block` is used, the probe will be a
+blocking probe.
+<!-- struct PadProbeType::const INVALID -->
+invalid probe type
+<!-- struct PadProbeType::const IDLE -->
+probe idle pads and block while the callback is called
+<!-- struct PadProbeType::const BLOCK -->
+probe and block pads
+<!-- struct PadProbeType::const BUFFER -->
+probe buffers
+<!-- struct PadProbeType::const BUFFER_LIST -->
+probe buffer lists
+<!-- struct PadProbeType::const EVENT_DOWNSTREAM -->
+probe downstream events
+<!-- struct PadProbeType::const EVENT_UPSTREAM -->
+probe upstream events
+<!-- struct PadProbeType::const EVENT_FLUSH -->
+probe flush events. This probe has to be
+ explicitly enabled and is not included in the
+ @`PadProbeType::EventDownstream` or
+ @`PadProbeType::EventUpstream` probe types.
+<!-- struct PadProbeType::const QUERY_DOWNSTREAM -->
+probe downstream queries
+<!-- struct PadProbeType::const QUERY_UPSTREAM -->
+probe upstream queries
+<!-- struct PadProbeType::const PUSH -->
+probe push
+<!-- struct PadProbeType::const PULL -->
+probe pull
+<!-- struct PadProbeType::const BLOCKING -->
+probe and block at the next opportunity, at data flow or when idle
+<!-- struct PadProbeType::const DATA_DOWNSTREAM -->
+probe downstream data (buffers, buffer lists, and events)
+<!-- struct PadProbeType::const DATA_UPSTREAM -->
+probe upstream data (events)
+<!-- struct PadProbeType::const DATA_BOTH -->
+probe upstream and downstream data (buffers, buffer lists, and events)
+<!-- struct PadProbeType::const BLOCK_DOWNSTREAM -->
+probe and block downstream data (buffers, buffer lists, and events)
+<!-- struct PadProbeType::const BLOCK_UPSTREAM -->
+probe and block upstream data (events)
+<!-- struct PadProbeType::const EVENT_BOTH -->
+probe upstream and downstream events
+<!-- struct PadProbeType::const QUERY_BOTH -->
+probe upstream and downstream queries
+<!-- struct PadProbeType::const ALL_BOTH -->
+probe upstream events and queries and downstream buffers, buffer lists, events and queries
+<!-- struct PadProbeType::const SCHEDULING -->
+probe push and pull
 <!-- struct PadTemplate -->
 Padtemplates describe the possible media types a pad or an elementfactory can
 handle. This allows for both inspection of handled types before loading the
@@ -10323,10 +10690,30 @@ Gets the capabilities of the pad template.
 
 the `Caps` of the pad template.
 Unref after usage.
+<!-- impl PadTemplate::fn get_documentation_caps -->
+See `PadTemplate::set_documentation_caps`.
+
+Feature: `v1_18`
+
+
+# Returns
+
+The caps to document. For convenience, this will return
+ `PadTemplate::get_caps` when no documentation caps were set.
 <!-- impl PadTemplate::fn pad_created -->
 Emit the pad-created signal for this template when created by this pad.
 ## `pad`
 the `Pad` that created it
+<!-- impl PadTemplate::fn set_documentation_caps -->
+Certain elements will dynamically construct the caps of their
+pad templates. In order not to let environment-specific information
+into the documentation, element authors should use this method to
+expose "stable" caps to the reader.
+
+Feature: `v1_18`
+
+## `caps`
+the documented capabilities
 <!-- impl PadTemplate::fn connect_pad_created -->
 This signal is fired when an element creates a pad from this template.
 ## `pad`
@@ -10372,6 +10759,9 @@ a newly-allocated parse context. Free
 <!-- impl ParseContext::fn copy -->
 Copies the `self`.
 
+Feature: `v1_12_1`
+
+
 # Returns
 
 A copied `ParseContext`
@@ -10405,6 +10795,21 @@ An empty bin was specified.
 An empty description was specified
 <!-- enum ParseError::variant DelayedLink -->
 A delayed link did not get resolved.
+<!-- struct ParseFlags -->
+Parsing options.
+<!-- struct ParseFlags::const NONE -->
+Do not use any special parsing options.
+<!-- struct ParseFlags::const FATAL_ERRORS -->
+Always return `None` when an error occurs
+ (default behaviour is to return partially constructed bins or elements
+ in some cases)
+<!-- struct ParseFlags::const NO_SINGLE_ELEMENT_BINS -->
+If a bin only has a single element,
+ just return the element.
+<!-- struct ParseFlags::const PLACE_IN_BIN -->
+If more than one toplevel element is described
+ by the pipeline description string, put them in a `Bin` instead of a
+ `Pipeline`. (Since: 1.10)
 <!-- struct Pipeline -->
 A `Pipeline` is a special `Bin` used as the toplevel container for
 the filter graph. The `Pipeline` will manage the selection and
@@ -10618,6 +11023,12 @@ see `PipelineExt::set_delay` for more information on this option.
 Latency to configure on the pipeline. See `PipelineExt::set_latency`.
 <!-- trait PipelineExt::fn set_property_latency -->
 Latency to configure on the pipeline. See `PipelineExt::set_latency`.
+<!-- struct PipelineFlags -->
+Pipeline flags
+<!-- struct PipelineFlags::const FIXED_CLOCK -->
+this pipeline works with a fixed clock
+<!-- struct PipelineFlags::const LAST -->
+offset to define more flags
 <!-- struct Plugin -->
 GStreamer is extensible, so `Element` instances can be loaded at runtime.
 A plugin system can provide one or more of the basic GStreamer
@@ -10895,6 +11306,35 @@ the `self`.
 The cache is flushed every time the registry is rebuilt.
 ## `cache_data`
 a structure containing the data to cache
+<!-- struct PluginAPIFlags -->
+<!-- struct PluginAPIFlags::const MEMBERS -->
+Ignore enum members when generating
+ the plugins cache. This is useful if the members of the enum are generated
+ dynamically, in order not to expose incorrect documentation to the end user.
+
+Feature: `v1_18`
+
+<!-- struct PluginDependencyFlags -->
+Flags used in connection with `Plugin::add_dependency`.
+<!-- struct PluginDependencyFlags::const NONE -->
+no special flags
+<!-- struct PluginDependencyFlags::const RECURSE -->
+recurse into subdirectories
+<!-- struct PluginDependencyFlags::const PATHS_ARE_DEFAULT_ONLY -->
+use paths
+ argument only if none of the environment variables is set
+<!-- struct PluginDependencyFlags::const FILE_NAME_IS_SUFFIX -->
+interpret
+ filename argument as filter suffix and check all matching files in
+ the directory
+<!-- struct PluginDependencyFlags::const FILE_NAME_IS_PREFIX -->
+interpret
+ filename argument as filter prefix and check all matching files in
+ the directory. Since: 1.8.
+<!-- struct PluginDependencyFlags::const PATHS_ARE_RELATIVE_TO_EXE -->
+interpret
+ non-absolute paths as relative to the main executable directory. Since
+ 1.14.
 <!-- enum PluginError -->
 The plugin loading errors
 <!-- enum PluginError::variant Module -->
@@ -11010,6 +11450,12 @@ Specifies a rank for a plugin feature, so that autoplugging uses
 the most appropriate feature.
 ## `rank`
 rank value - higher number means more priority rank
+<!-- struct PluginFlags -->
+The plugin loading state
+<!-- struct PluginFlags::const CACHED -->
+Temporarily loaded plugins
+<!-- struct PluginFlags::const BLACKLISTED -->
+The plugin won't be scanned (again)
 <!-- struct Preset -->
 This interface offers methods to query and manipulate parameter preset sets.
 A preset is a bunch of property settings, together with meta data and a name.
@@ -12661,6 +13107,118 @@ A `Segment`
 <!-- impl Sample::fn unref -->
 Decreases the refcount of the sample. If the refcount reaches 0, the
 sample will be freed.
+<!-- struct SchedulingFlags -->
+The different scheduling flags.
+<!-- struct SchedulingFlags::const SEEKABLE -->
+if seeking is possible
+<!-- struct SchedulingFlags::const SEQUENTIAL -->
+if sequential access is recommended
+<!-- struct SchedulingFlags::const BANDWIDTH_LIMITED -->
+if bandwidth is limited and buffering possible (since 1.2)
+<!-- struct SeekFlags -->
+Flags to be used with `Element::seek` or `Event::new_seek`. All flags
+can be used together.
+
+A non flushing seek might take some time to perform as the currently
+playing data in the pipeline will not be cleared.
+
+An accurate seek might be slower for formats that don't have any indexes
+or timestamp markers in the stream. Specifying this flag might require a
+complete scan of the file in those cases.
+
+When performing a segment seek: after the playback of the segment completes,
+no EOS will be emitted by the element that performed the seek, but a
+`MessageType::SegmentDone` message will be posted on the bus by the element.
+When this message is posted, it is possible to send a new seek event to
+continue playback. With this seek method it is possible to perform seamless
+looping or simple linear editing.
+
+When only changing the playback rate and not the direction, the
+`SeekFlags::InstantRateChange` flag can be used for a non-flushing seek
+to signal that the rate change should be applied immediately. This requires
+special support in the seek handlers (e.g. demuxers) and any elements
+synchronizing to the clock, and in general can't work in all cases (for example
+UDP streaming where the delivery rate is controlled by a remote server). The
+instant-rate-change mode supports changing the trickmode-related GST_SEEK_ flags,
+but can't be used in conjunction with other seek flags that affect the new
+playback position - as the playback position will not be changing.
+
+When doing fast forward (rate > 1.0) or fast reverse (rate < -1.0) trickmode
+playback, the `SeekFlags::Trickmode` flag can be used to instruct decoders
+and demuxers to adjust the playback rate by skipping frames. This can improve
+performance and decrease CPU usage because not all frames need to be decoded.
+
+Beyond that, the `SeekFlags::TrickmodeKeyUnits` flag can be used to
+request that decoders skip all frames except key units, and
+`SeekFlags::TrickmodeNoAudio` flags can be used to request that audio
+decoders do no decoding at all, and simple output silence.
+
+The `SeekFlags::SnapBefore` flag can be used to snap to the previous
+relevant location, and the `SeekFlags::SnapAfter` flag can be used to
+select the next relevant location. If `SeekFlags::KeyUnit` is specified,
+the relevant location is a keyframe. If both flags are specified, the nearest
+of these locations will be selected. If none are specified, the implementation is
+free to select whichever it wants.
+
+The before and after here are in running time, so when playing backwards,
+the next location refers to the one that will played in next, and not the
+one that is located after in the actual source stream.
+
+Also see part-seeking.txt in the GStreamer design documentation for more
+details on the meaning of these flags and the behaviour expected of
+elements that handle them.
+<!-- struct SeekFlags::const NONE -->
+no flag
+<!-- struct SeekFlags::const FLUSH -->
+flush pipeline
+<!-- struct SeekFlags::const ACCURATE -->
+accurate position is requested, this might
+ be considerably slower for some formats.
+<!-- struct SeekFlags::const KEY_UNIT -->
+seek to the nearest keyframe. This might be
+ faster but less accurate.
+<!-- struct SeekFlags::const SEGMENT -->
+perform a segment seek.
+<!-- struct SeekFlags::const TRICKMODE -->
+when doing fast forward or fast reverse playback, allow
+ elements to skip frames instead of generating all
+ frames. (Since: 1.6)
+<!-- struct SeekFlags::const SKIP -->
+Deprecated backward compatibility flag, replaced
+ by `SeekFlags::Trickmode`
+<!-- struct SeekFlags::const SNAP_BEFORE -->
+go to a location before the requested position,
+ if `SeekFlags::KeyUnit` this means the keyframe at or before
+ the requested position the one at or before the seek target.
+<!-- struct SeekFlags::const SNAP_AFTER -->
+go to a location after the requested position,
+ if `SeekFlags::KeyUnit` this means the keyframe at of after the
+ requested position.
+<!-- struct SeekFlags::const SNAP_NEAREST -->
+go to a position near the requested position,
+ if `SeekFlags::KeyUnit` this means the keyframe closest
+ to the requested position, if both keyframes are at an equal
+ distance, behaves like `SeekFlags::SnapBefore`.
+<!-- struct SeekFlags::const TRICKMODE_KEY_UNITS -->
+when doing fast forward or fast reverse
+ playback, request that elements only decode keyframes
+ and skip all other content, for formats that have
+ keyframes. (Since: 1.6)
+<!-- struct SeekFlags::const TRICKMODE_NO_AUDIO -->
+when doing fast forward or fast reverse
+ playback, request that audio decoder elements skip
+ decoding and output only gap events or silence. (Since: 1.6)
+<!-- struct SeekFlags::const TRICKMODE_FORWARD_PREDICTED -->
+When doing fast forward or fast reverse
+ playback, request that elements only decode keyframes and
+ forward predicted frames and skip all other content (for example
+ B-Frames), for formats that have keyframes and forward predicted
+ frames. (Since: 1.18)
+<!-- struct SeekFlags::const INSTANT_RATE_CHANGE -->
+Signals that a rate change should be
+ applied immediately. Only valid if start/stop position
+ are GST_CLOCK_TIME_NONE, the playback direction does not change
+ and the seek is not flushing. (Since: 1.18)
 <!-- enum SeekType -->
 The different types of seek events. When constructing a seek event with
 `Event::new_seek` or when doing gst_segment_do_seek ().
@@ -13043,6 +13601,42 @@ result stream-time
 # Returns
 
 a 1 or -1 on success, 0 on failure.
+<!-- struct SegmentFlags -->
+Flags for the GstSegment structure. Currently mapped to the corresponding
+values of the seek flags.
+<!-- struct SegmentFlags::const NONE -->
+no flags
+<!-- struct SegmentFlags::const RESET -->
+reset the pipeline running_time to the segment
+ running_time
+<!-- struct SegmentFlags::const TRICKMODE -->
+perform skip playback (Since: 1.6)
+<!-- struct SegmentFlags::const SKIP -->
+Deprecated backward compatibility flag, replaced
+ by `SegmentFlags::Trickmode`
+<!-- struct SegmentFlags::const SEGMENT -->
+send SEGMENT_DONE instead of EOS
+<!-- struct SegmentFlags::const TRICKMODE_KEY_UNITS -->
+Decode only keyframes, where
+ possible (Since: 1.6)
+<!-- struct SegmentFlags::const TRICKMODE_FORWARD_PREDICTED -->
+Decode only keyframes or forward
+ predicted frames, where possible (Since: 1.18)
+<!-- struct SegmentFlags::const TRICKMODE_NO_AUDIO -->
+Do not decode any audio, where
+ possible (Since: 1.6)
+<!-- struct StackTraceFlags -->
+<!-- struct StackTraceFlags::const NONE -->
+Try to retrieve the minimum information
+ available, which may be none on some platforms
+ (Since: 1.18)
+<!-- struct StackTraceFlags::const FULL -->
+Try to retrieve as much information as possible,
+ including source information when getting the
+ stack trace
+
+Feature: `v1_12`
+
 <!-- enum State -->
 The possible states an element can be in. States can be changed using
 `Element::set_state` and checked using `Element::get_state`.
@@ -13395,6 +13989,23 @@ used when the stream is encrypted and
 can't be decrypted because no suitable key is available.
 <!-- enum StreamError::variant NumErrors -->
 the number of stream error types.
+<!-- struct StreamFlags -->
+<!-- struct StreamFlags::const NONE -->
+This stream has no special attributes
+<!-- struct StreamFlags::const SPARSE -->
+This stream is a sparse stream (e.g. a subtitle
+ stream), data may flow only in irregular intervals with large gaps in
+ between.
+<!-- struct StreamFlags::const SELECT -->
+This stream should be selected by default. This
+ flag may be used by demuxers to signal that a stream should be selected
+ by default in a playback scenario.
+<!-- struct StreamFlags::const UNSELECT -->
+This stream should not be selected by default.
+ This flag may be used by demuxers to signal that a stream should not
+ be selected by default in a playback scenario, but only if explicitly
+ selected by the user (e.g. an audio track for the hard of hearing or
+ a director's commentary track).
 <!-- enum StreamStatusType -->
 The type of a `MessageType::StreamStatus`. The stream status messages inform the
 application of new streaming threads and their status.
@@ -13412,23 +14023,44 @@ a thread is started
 a thread is paused
 <!-- enum StreamStatusType::variant Stop -->
 a thread is stopped
+<!-- struct StreamType -->
+`StreamType` describes a high level classification set for
+flows of data in `Stream` objects.
+
+Note that this is a flag, and therefore users should not assume it
+will be a single value. Do not use the equality operator for checking
+whether a stream is of a certain type.
+<!-- struct StreamType::const UNKNOWN -->
+The stream is of unknown (unclassified) type.
+<!-- struct StreamType::const AUDIO -->
+The stream is of audio data
+<!-- struct StreamType::const VIDEO -->
+The stream carries video data
+<!-- struct StreamType::const CONTAINER -->
+The stream is a muxed container type
+<!-- struct StreamType::const TEXT -->
+The stream contains subtitle / subpicture data.
+
+Feature: `v1_10`
+
 <!-- struct Structure -->
-A `Structure` is a collection of key/value pairs. The keys are expressed
-as GQuarks and the values can be of any GType.
+A `Structure` is a collection of key/value pairs. The keys are expressed as
+GQuarks and the values can be of any GType.
 
 In addition to the key/value pairs, a `Structure` also has a name. The name
-starts with a letter and can be filled by letters, numbers and any of "/-_.:".
+starts with a letter and can be filled by letters, numbers and any of
+"/-_.:".
 
-`Structure` is used by various GStreamer subsystems to store information
-in a flexible and extensible way. A `Structure` does not have a refcount
+`Structure` is used by various GStreamer subsystems to store information in
+a flexible and extensible way. A `Structure` does not have a refcount
 because it usually is part of a higher level object such as `Caps`,
 `Message`, `Event`, `Query`. It provides a means to enforce mutability
 using the refcount of the parent with the `Structure::set_parent_refcount`
 method.
 
 A `Structure` can be created with `Structure::new_empty` or
-`Structure::new`, which both take a name and an optional set of
-key/value pairs along with the types of the values.
+`Structure::new`, which both take a name and an optional set of key/value
+pairs along with the types of the values.
 
 Field values can be changed with `Structure::set_value` or
 `Structure::set`.
@@ -13439,14 +14071,78 @@ convenient gst_structure_get_*() functions.
 Fields can be removed with `Structure::remove_field` or
 `Structure::remove_fields`.
 
-Strings in structures must be ASCII or UTF-8 encoded. Other encodings are
-not allowed. Strings may be `None` however.
+Strings in structures must be ASCII or UTF-8 encoded. Other encodings are not
+allowed. Strings may be `None` however.
 
-Be aware that the current `Caps` / `Structure` serialization into string
-has limited support for nested `Caps` / `Structure` fields. It can only
-support one level of nesting. Using more levels will lead to unexpected
-behavior when using serialization features, such as `Caps::to_string` or
-`gst_value_serialize` and their counterparts.
+## The serialization format
+
+GstStructure serialization format serialize the GstStructure name,
+keys/GType/values in a comma separated list with the structure name as first
+field without value followed by separated key/value pairs in the form
+`key=value`, for example:
+
+```
+a-structure, key=value
+````
+
+The values type will be inferred if not explicitly specified with the
+`(GTypeName)value` syntax, for example the following struct will have one
+field called 'is-string' which has the string 'true' as a value:
+
+```
+a-struct, field-is-string=(string)true, field-is-boolean=true
+```
+
+*Note*: without specifying `(string), `field-is-string` type would have been
+inferred as boolean.
+
+*Note*: we specified `(string)` as a type even if `gchararray` is the actual
+GType name as for convenience some well known types have been aliased or
+abbreviated.
+
+To avoid specifying the type, you can give some hints to the "type system".
+For example to specify a value as a double, you should add a decimal (ie. `1`
+is an `int` while `1.0` is a `double`).
+
+*Note*: when a structure is serialized with `Structure::to_string`, all
+values are explicitly typed.
+
+Some types have special delimiters:
+
+- [GstValueArray](GST_TYPE_ARRAY) are inside curly brackets (`{` and `}`).
+ For example `a-structure, array={1, 2, 3}`
+- Ranges are inside brackets (`[` and `]`). For example `a-structure,
+  range=[1, 6, 2]` 1 being the min value, 6 the maximum and 2 the step. To
+ specify a `GST_TYPE_INT64_RANGE` you need to explicitly specify it like:
+ `a-structure, a-int64-range=(gint64) [1, 5]`
+- [GstValueList](GST_TYPE_LIST) are inside "less and greater than" (`<` and
+ `>`). For example `a-structure, list=<1, 2, 3>
+
+Structures are delimited either by a null character `\0` or a semicolumn `;`
+the latter allowing to store multiple structures in the same string (see
+#GstCaps).
+
+Quotes are used as "default" delimiters and can be used around any types that
+don't use other delimiters (for example `a-struct, i=(int)"1"`). They are use
+to allow adding spaces or special characters (such as delimiters,
+semicolumns, etc..) inside strings and you can use backslashes `\` to escape
+characters inside them, for example:
+
+```
+a-struct, special="\"{[(;)]}\" can be used inside quotes"
+```
+
+They also allow for nested structure, such as:
+
+```
+a-struct, nested=(GstStructure)"nested-struct, nested=true"
+```
+
+> *Note*: Be aware that the current #GstCaps / #GstStructure serialization
+> into string has limited support for nested #GstCaps / #GstStructure fields.
+> It can only support one level of nesting. Using more levels will lead to
+> unexpected behavior when using serialization features, such as
+> gst_caps_to_string() or gst_value_serialize() and their counterparts.
 <!-- impl Structure::fn from_string -->
 Creates a `Structure` from a string representation.
 If end is not `None`, a pointer to the place inside the given string
@@ -13687,6 +14383,9 @@ This is useful in language bindings where unknown `gobject::Value` types are not
 supported. This function will convert the `GST_TYPE_ARRAY` into a newly
 allocated `gobject::ValueArray` and return it through `array`. Be aware that this is
 slower then getting the `gobject::Value` directly.
+
+Feature: `v1_12`
+
 ## `fieldname`
 the name of a field
 ## `array`

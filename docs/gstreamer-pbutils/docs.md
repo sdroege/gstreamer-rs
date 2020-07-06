@@ -331,6 +331,21 @@ the discovery timed-out
 the discoverer was already discovering a file
 <!-- enum DiscovererResult::variant MissingPlugins -->
 Some plugins are missing for full discovery
+<!-- struct DiscovererSerializeFlags -->
+You can use these flags to control what is serialized by
+`DiscovererInfo::to_variant`
+<!-- struct DiscovererSerializeFlags::const BASIC -->
+Serialize only basic information, excluding
+caps, tags and miscellaneous information
+<!-- struct DiscovererSerializeFlags::const CAPS -->
+Serialize the caps for each stream
+<!-- struct DiscovererSerializeFlags::const TAGS -->
+Serialize the tags for each stream
+<!-- struct DiscovererSerializeFlags::const MISC -->
+Serialize miscellaneous information for each stream
+<!-- struct DiscovererSerializeFlags::const ALL -->
+Serialize all the available info, including
+caps, tags and miscellaneous information
 <!-- struct DiscovererStreamInfo -->
 Base structure for information concerning a media stream. Depending on the
 stream type, one can find more media-specific information in
@@ -836,6 +851,14 @@ The description of the `self`.
 # Returns
 
 The name of the `self`.
+<!-- impl EncodingTarget::fn get_path -->
+
+Feature: `v1_18`
+
+
+# Returns
+
+The path to the `self` file.
 <!-- impl EncodingTarget::fn get_profile -->
 ## `name`
 the name of the profile to retrieve

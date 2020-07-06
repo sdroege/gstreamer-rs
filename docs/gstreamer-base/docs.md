@@ -156,6 +156,20 @@ the number of bytes to copy
 # Returns
 
 A new `glib::Bytes` structure containing the copied data.
+<!-- impl Adapter::fn distance_from_discont -->
+Get the distance in bytes since the last buffer with the
+`gst::BufferFlags::Discont` flag.
+
+The distance will be reset to 0 for all buffers with
+`gst::BufferFlags::Discont` on them, and then calculated for all other
+following buffers based on their size.
+
+Feature: `v1_10`
+
+
+# Returns
+
+The offset. Can be `GST_BUFFER_OFFSET_NONE`.
 <!-- impl Adapter::fn dts_at_discont -->
 Get the DTS that was on the last buffer with the GST_BUFFER_FLAG_DISCONT
 flag, or GST_CLOCK_TIME_NONE.
@@ -790,6 +804,18 @@ Enables the emission of signals such as `AggregatorPad::buffer-consumed`
 
 Feature: `v1_16`
 
+<!-- enum AggregatorStartTimeSelection -->
+<!-- enum AggregatorStartTimeSelection::variant Zero -->
+Start at running time 0.
+<!-- enum AggregatorStartTimeSelection::variant First -->
+Start at the running time of
+the first buffer that is received.
+<!-- enum AggregatorStartTimeSelection::variant Set -->
+Start at the running time
+selected by the `start-time` property.
+
+Feature: `v1_18`
+
 <!-- struct BaseParse -->
 This base class is for parser elements that process data and splits it
 into separate audio/video/whatever frames.
@@ -1157,6 +1183,9 @@ a newly-allocated `BaseParseFrame`. Free with
 <!-- impl BaseParseFrame::fn copy -->
 Copies a `BaseParseFrame`.
 
+Feature: `v1_12_1`
+
+
 # Returns
 
 A copy of `self`
@@ -1168,6 +1197,30 @@ all public fields are zero-ed and a private flag is set to make
 sure `BaseParseFrame::free` only frees the contents but not
 the actual frame. Use this function to initialise a `BaseParseFrame`
 allocated on the stack.
+<!-- struct BaseParseFrameFlags -->
+Flags to be used in a `BaseParseFrame`.
+<!-- struct BaseParseFrameFlags::const NONE -->
+no flag
+<!-- struct BaseParseFrameFlags::const NEW_FRAME -->
+set by baseclass if current frame
+ is passed for processing to the subclass for the first time
+ (and not set on subsequent calls with same data).
+<!-- struct BaseParseFrameFlags::const NO_FRAME -->
+set to indicate this buffer should not be
+ counted as frame, e.g. if this frame is dependent on a previous one.
+ As it is not counted as a frame, bitrate increases but frame to time
+ conversions are maintained.
+<!-- struct BaseParseFrameFlags::const CLIP -->
+`pre_push_frame` can set this to indicate
+ that regular segment clipping can still be performed (as opposed to
+ any custom one having been done).
+<!-- struct BaseParseFrameFlags::const DROP -->
+indicates to `finish_frame` that the
+ the frame should be dropped (and might be handled internally by subclass)
+<!-- struct BaseParseFrameFlags::const QUEUE -->
+indicates to `finish_frame` that the
+ the frame should be queued for now and processed fully later
+ when the first non-queued frame is finished
 <!-- struct BaseSink -->
 `BaseSink` is the base class for sink elements in GStreamer, such as
 xvimagesink or filesink. It is a layer on top of `gst::Element` that provides a
