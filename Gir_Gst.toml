@@ -31,6 +31,8 @@ ignore = [
     "Gst.ERROR_SYSTEM",
     "Gst.TIME_FORMAT",
     "Gst.STIME_FORMAT",
+    "Gst.TIMEP_FORMAT",
+    "Gst.STIMEP_FORMAT",
     "Gst.PTR_FORMAT",
     "Gst.SEGMENT_FORMAT",
     "Gst.FOURCC_FORMAT",
