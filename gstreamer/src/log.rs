@@ -51,7 +51,7 @@ pub struct DebugCategory(ptr::NonNull<gst_sys::GstDebugCategory>);
 
 impl DebugCategory {
     pub fn new(name: &str, color: ::DebugColorFlags, description: Option<&str>) -> DebugCategory {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
         extern "C" {
             fn _gst_debug_category_new(
                 name: *const c_char,
