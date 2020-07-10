@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.1] - 2020-07-10
+### Fixed
+- Allow calling `gst::DebugCategory::new()` before `gst::init()` again.
+
 ## [0.16.0] - 2020-07-06
 ### Added
 - Updated bindings to 1.17.2, adding experimental 1.18 support. This can be
@@ -842,7 +846,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.1...HEAD
+[0.16.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.0...0.16.1
 [0.16.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.7...0.16.0
 [0.15.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.6...0.15.7
 [0.15.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.5...0.15.6
