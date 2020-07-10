@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-rs-lgpl-docs"
-version = "0.16.0"
+version = "0.16.1"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 license = "LGPL-2.0"
 description = "LGPL-licensed docs for gstreamer-rs crates"
