@@ -16,6 +16,7 @@ use LoggableError;
 use Object;
 use Pad;
 use PadBuilder;
+use PadExt;
 use PadExtManual;
 use PadFlags;
 use PadGetRangeSuccess;
@@ -97,6 +98,30 @@ impl GhostPad {
     pub fn builder_with_template(templ: &::PadTemplate, name: Option<&str>) -> PadBuilder<Self> {
         skip_assert_initialized!();
         PadBuilder::from_template(templ, name)
+    }
+
+    pub fn with_target<P: IsA<Pad>>(
+        name: Option<&str>,
+        target: &P,
+    ) -> Result<Self, glib::BoolError> {
+        skip_assert_initialized!();
+        Self::builder(name, target.get_direction()).build_with_target(target)
+    }
+
+    pub fn from_template_with_target<P: IsA<Pad>>(
+        templ: &::PadTemplate,
+        name: Option<&str>,
+        target: &P,
+    ) -> Result<Self, glib::BoolError> {
+        skip_assert_initialized!();
+
+        if target.get_direction() != templ.get_property_direction() {
+            return Err(glib_bool_error!(
+                "Template and target have different directions"
+            ));
+        }
+
+        Self::builder_with_template(templ, name).build_with_target(target)
     }
 }
 
@@ -340,7 +365,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
 
     pub fn build_with_target<P: IsA<Pad>>(self, target: &P) -> Result<T, glib::BoolError> {
         use GhostPadExt;
-        use PadExt;
 
         assert_eq!(self.0.get_direction(), target.get_direction());
 
