@@ -15,14 +15,18 @@ fn tutorial_main() {
         .expect("Could not create convert element.");
     let sink = gst::ElementFactory::make("autoaudiosink", Some("sink"))
         .expect("Could not create sink element.");
+    let resample = gst::ElementFactory::make("audioresample", Some("resample"))
+        .expect("Could not create resample element.");
 
     // Create the empty pipeline
     let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
     // Build the pipeline Note that we are NOT linking the source at this
     // point. We will do it later.
-    pipeline.add_many(&[&source, &convert, &sink]).unwrap();
-    convert.link(&sink).expect("Elements could not be linked.");
+    pipeline
+        .add_many(&[&source, &convert, &resample, &sink])
+        .unwrap();
+    gst::Element::link_many(&[&convert, &resample, &sink]).expect("Elements could not be linked.");
 
     // Set the URI to play
     let uri =
