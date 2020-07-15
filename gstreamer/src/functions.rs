@@ -6,14 +6,34 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use auto::functions::parse_bin_from_description;
 use glib;
 use glib::translate::*;
+use glib::Cast;
 use gst_sys;
 use std::ptr;
 
+use Bin;
 use Element;
+use Object;
 use ParseContext;
 use ParseFlags;
+
+pub fn parse_bin_from_description_with_name(
+    bin_description: &str,
+    ghost_unlinked_pads: bool,
+    bin_name: &str,
+) -> Result<Bin, glib::Error> {
+    assert_initialized_main_thread!();
+    let bin = parse_bin_from_description(bin_description, ghost_unlinked_pads)?;
+    if !bin_name.is_empty() {
+        let obj = bin.clone().upcast::<Object>();
+        unsafe {
+            gst_sys::gst_object_set_name(obj.to_glib_none().0, bin_name.to_glib_none().0);
+        }
+    }
+    Ok(bin)
+}
 
 pub fn parse_bin_from_description_full(
     bin_description: &str,
@@ -154,14 +174,12 @@ pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<::PluginAPIFlags> 
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use prelude::*;
+
     #[cfg(feature = "v1_12")]
     #[test]
     fn test_calculate_linear_regression() {
-        // Moved the module `use` inside test function because this is the only test for now
-        // and it is feature-gated, so it generates a warning when the feature is not selected.
-        // Can be moved out of the function when other tests are added.
-        use super::*;
-
         ::init().unwrap();
 
         let values = [(0, 0), (1, 1), (2, 2), (3, 3)];
@@ -173,5 +191,19 @@ mod tests {
         let (m_num, m_denom, b, xbase, _) =
             calculate_linear_regression(&values, Some(&mut temp)).unwrap();
         assert_eq!((m_num, m_denom, b, xbase), (10, 10, 3, 3));
+    }
+
+    #[test]
+    fn test_parse_bin_from_description_with_name() {
+        ::init().unwrap();
+
+        let bin =
+            parse_bin_from_description_with_name("fakesrc ! fakesink", false, "all_fake").unwrap();
+        let name = bin.get_name();
+        assert_eq!(name, "all_fake");
+
+        let bin = parse_bin_from_description_with_name("fakesrc ! fakesink", false, "").unwrap();
+        let name = bin.get_name();
+        assert_ne!(name, "");
     }
 }
