@@ -33,7 +33,7 @@ impl SDPInfo {
     }
 }
 
-pub trait RTSPMediaImpl: RTSPMediaImplExt + ObjectImpl + Send + Sync + 'static {
+pub trait RTSPMediaImpl: RTSPMediaImplExt + ObjectImpl + Send + Sync {
     fn handle_message(&self, media: &RTSPMedia, message: &gst::MessageRef) -> bool {
         self.parent_handle_message(media, message)
     }
@@ -157,10 +157,10 @@ pub trait RTSPMediaImplExt {
     ) -> Result<(), gst::LoggableError>;
 }
 
-impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
+impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
     fn parent_handle_message(&self, media: &RTSPMedia, message: &gst::MessageRef) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).handle_message {
@@ -177,7 +177,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
         thread: &RTSPThread,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).prepare {
@@ -194,7 +194,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_unprepare(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unprepare {
@@ -211,7 +211,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_suspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).suspend {
@@ -228,7 +228,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_unsuspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unsuspend {
@@ -249,7 +249,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
         unsafe {
             use std::mem;
 
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).query_position {
@@ -269,7 +269,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
         unsafe {
             use std::mem;
 
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).query_stop {
@@ -287,7 +287,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_create_rtpbin(&self, media: &RTSPMedia) -> Option<gst::Element> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             let f = (*parent_class)
@@ -304,7 +304,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
         rtpbin: &gst::Element,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).setup_rtpbin {
@@ -340,7 +340,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
         info: &SDPInfo,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             let f = (*parent_class)
@@ -361,7 +361,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_new_stream(&self, media: &RTSPMedia, stream: &::RTSPStream) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).new_stream {
@@ -372,7 +372,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_removed_stream(&self, media: &RTSPMedia, stream: &::RTSPStream) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).removed_stream {
@@ -383,7 +383,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_prepared(&self, media: &RTSPMedia) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).prepared {
@@ -394,7 +394,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_unprepared(&self, media: &RTSPMedia) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unprepared {
@@ -405,7 +405,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_target_state(&self, media: &RTSPMedia, state: gst::State) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).target_state {
@@ -416,7 +416,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
 
     fn parent_new_state(&self, media: &RTSPMedia, state: gst::State) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).new_state {
@@ -431,7 +431,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             let f = (*parent_class)
@@ -449,7 +449,7 @@ impl<T: RTSPMediaImpl + ObjectImpl> RTSPMediaImplExt for T {
         }
     }
 }
-unsafe impl<T: ObjectSubclass + RTSPMediaImpl> IsSubclassable<T> for RTSPMediaClass {
+unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMediaClass {
     fn override_vfuncs(&mut self) {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -475,13 +475,10 @@ unsafe impl<T: ObjectSubclass + RTSPMediaImpl> IsSubclassable<T> for RTSPMediaCl
     }
 }
 
-unsafe extern "C" fn media_handle_message<T: ObjectSubclass>(
+unsafe extern "C" fn media_handle_message<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     message: *mut gst_sys::GstMessage,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -490,13 +487,10 @@ where
         .to_glib()
 }
 
-unsafe extern "C" fn media_prepare<T: ObjectSubclass>(
+unsafe extern "C" fn media_prepare<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     thread: *mut gst_rtsp_server_sys::GstRTSPThread,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -510,12 +504,9 @@ where
     }
 }
 
-unsafe extern "C" fn media_unprepare<T: ObjectSubclass>(
+unsafe extern "C" fn media_unprepare<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -529,12 +520,9 @@ where
     }
 }
 
-unsafe extern "C" fn media_suspend<T: ObjectSubclass>(
+unsafe extern "C" fn media_suspend<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -548,12 +536,9 @@ where
     }
 }
 
-unsafe extern "C" fn media_unsuspend<T: ObjectSubclass>(
+unsafe extern "C" fn media_unsuspend<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -567,13 +552,10 @@ where
     }
 }
 
-unsafe extern "C" fn media_query_position<T: ObjectSubclass>(
+unsafe extern "C" fn media_query_position<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     position: *mut i64,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -587,13 +569,10 @@ where
     }
 }
 
-unsafe extern "C" fn media_query_stop<T: ObjectSubclass>(
+unsafe extern "C" fn media_query_stop<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     stop: *mut i64,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -607,12 +586,9 @@ where
     }
 }
 
-unsafe extern "C" fn media_create_rtpbin<T: ObjectSubclass>(
+unsafe extern "C" fn media_create_rtpbin<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
-) -> *mut gst_sys::GstElement
-where
-    T: RTSPMediaImpl,
-{
+) -> *mut gst_sys::GstElement {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -626,13 +602,10 @@ where
     res
 }
 
-unsafe extern "C" fn media_setup_rtpbin<T: ObjectSubclass>(
+unsafe extern "C" fn media_setup_rtpbin<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     rtpbin: *mut gst_sys::GstElement,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -657,14 +630,11 @@ where
     res
 }
 
-unsafe extern "C" fn media_setup_sdp<T: ObjectSubclass>(
+unsafe extern "C" fn media_setup_sdp<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     sdp: *mut gst_sdp_sys::GstSDPMessage,
     info: *mut gst_rtsp_server_sys::GstSDPInfo,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -682,12 +652,10 @@ where
     }
 }
 
-unsafe extern "C" fn media_new_stream<T: ObjectSubclass>(
+unsafe extern "C" fn media_new_stream<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     stream: *mut gst_rtsp_server_sys::GstRTSPStream,
-) where
-    T: RTSPMediaImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -695,12 +663,10 @@ unsafe extern "C" fn media_new_stream<T: ObjectSubclass>(
     imp.new_stream(&wrap, &from_glib_borrow(stream));
 }
 
-unsafe extern "C" fn media_removed_stream<T: ObjectSubclass>(
+unsafe extern "C" fn media_removed_stream<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     stream: *mut gst_rtsp_server_sys::GstRTSPStream,
-) where
-    T: RTSPMediaImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -708,10 +674,7 @@ unsafe extern "C" fn media_removed_stream<T: ObjectSubclass>(
     imp.removed_stream(&wrap, &from_glib_borrow(stream));
 }
 
-unsafe extern "C" fn media_prepared<T: ObjectSubclass>(ptr: *mut gst_rtsp_server_sys::GstRTSPMedia)
-where
-    T: RTSPMediaImpl,
-{
+unsafe extern "C" fn media_prepared<T: RTSPMediaImpl>(ptr: *mut gst_rtsp_server_sys::GstRTSPMedia) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -719,11 +682,9 @@ where
     imp.prepared(&wrap);
 }
 
-unsafe extern "C" fn media_unprepared<T: ObjectSubclass>(
+unsafe extern "C" fn media_unprepared<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
-) where
-    T: RTSPMediaImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -731,12 +692,10 @@ unsafe extern "C" fn media_unprepared<T: ObjectSubclass>(
     imp.unprepared(&wrap);
 }
 
-unsafe extern "C" fn media_target_state<T: ObjectSubclass>(
+unsafe extern "C" fn media_target_state<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     state: gst_sys::GstState,
-) where
-    T: RTSPMediaImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -744,12 +703,10 @@ unsafe extern "C" fn media_target_state<T: ObjectSubclass>(
     imp.target_state(&wrap, from_glib(state));
 }
 
-unsafe extern "C" fn media_new_state<T: ObjectSubclass>(
+unsafe extern "C" fn media_new_state<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     state: gst_sys::GstState,
-) where
-    T: RTSPMediaImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
@@ -757,13 +714,10 @@ unsafe extern "C" fn media_new_state<T: ObjectSubclass>(
     imp.new_state(&wrap, from_glib(state));
 }
 
-unsafe extern "C" fn media_handle_sdp<T: ObjectSubclass>(
+unsafe extern "C" fn media_handle_sdp<T: RTSPMediaImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPMedia,
     sdp: *mut gst_sdp_sys::GstSDPMessage,
-) -> glib_sys::gboolean
-where
-    T: RTSPMediaImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);

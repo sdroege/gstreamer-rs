@@ -16,7 +16,7 @@ use glib::subclass::prelude::*;
 use Pad;
 use PadClass;
 
-pub trait PadImpl: PadImplExt + ObjectImpl + Send + Sync + 'static {
+pub trait PadImpl: PadImplExt + ObjectImpl + Send + Sync {
     fn linked(&self, pad: &Pad, peer: &Pad) {
         self.parent_linked(pad, peer)
     }
@@ -32,10 +32,10 @@ pub trait PadImplExt {
     fn parent_unlinked(&self, pad: &Pad, peer: &Pad);
 }
 
-impl<T: PadImpl + ObjectImpl> PadImplExt for T {
+impl<T: PadImpl> PadImplExt for T {
     fn parent_linked(&self, pad: &Pad, peer: &Pad) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
 
             (*parent_class)
@@ -47,7 +47,7 @@ impl<T: PadImpl + ObjectImpl> PadImplExt for T {
 
     fn parent_unlinked(&self, pad: &Pad, peer: &Pad) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
 
             (*parent_class)
@@ -58,7 +58,7 @@ impl<T: PadImpl + ObjectImpl> PadImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + PadImpl> IsSubclassable<T> for PadClass {
+unsafe impl<T: PadImpl> IsSubclassable<T> for PadClass {
     fn override_vfuncs(&mut self) {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
 
@@ -70,12 +70,7 @@ unsafe impl<T: ObjectSubclass + PadImpl> IsSubclassable<T> for PadClass {
     }
 }
 
-unsafe extern "C" fn pad_linked<T: ObjectSubclass>(
-    ptr: *mut gst_sys::GstPad,
-    peer: *mut gst_sys::GstPad,
-) where
-    T: PadImpl,
-{
+unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut gst_sys::GstPad, peer: *mut gst_sys::GstPad) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
@@ -83,12 +78,10 @@ unsafe extern "C" fn pad_linked<T: ObjectSubclass>(
     imp.linked(&wrap, &from_glib_borrow(peer))
 }
 
-unsafe extern "C" fn pad_unlinked<T: ObjectSubclass>(
+unsafe extern "C" fn pad_unlinked<T: PadImpl>(
     ptr: *mut gst_sys::GstPad,
     peer: *mut gst_sys::GstPad,
-) where
-    T: PadImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
@@ -125,9 +118,7 @@ mod tests {
         }
     }
 
-    impl ObjectImpl for TestPad {
-        glib_object_impl!();
-    }
+    impl ObjectImpl for TestPad {}
 
     impl PadImpl for TestPad {
         fn linked(&self, pad: &Pad, peer: &Pad) {

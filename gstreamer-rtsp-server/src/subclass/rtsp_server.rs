@@ -14,7 +14,7 @@ use glib::translate::*;
 use RTSPServer;
 use RTSPServerClass;
 
-pub trait RTSPServerImpl: RTSPServerImplExt + ObjectImpl + Send + Sync + 'static {
+pub trait RTSPServerImpl: RTSPServerImplExt + ObjectImpl + Send + Sync {
     fn create_client(&self, server: &RTSPServer) -> Option<::RTSPClient> {
         self.parent_create_client(server)
     }
@@ -30,10 +30,10 @@ pub trait RTSPServerImplExt {
     fn parent_client_connected(&self, server: &RTSPServer, client: &::RTSPClient);
 }
 
-impl<T: RTSPServerImpl + ObjectImpl> RTSPServerImplExt for T {
+impl<T: RTSPServerImpl> RTSPServerImplExt for T {
     fn parent_create_client(&self, server: &RTSPServer) -> Option<::RTSPClient> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPServerClass;
             let f = (*parent_class)
@@ -45,7 +45,7 @@ impl<T: RTSPServerImpl + ObjectImpl> RTSPServerImplExt for T {
 
     fn parent_client_connected(&self, server: &RTSPServer, client: &::RTSPClient) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPServerClass;
             if let Some(f) = (*parent_class).client_connected {
@@ -54,7 +54,7 @@ impl<T: RTSPServerImpl + ObjectImpl> RTSPServerImplExt for T {
         }
     }
 }
-unsafe impl<T: ObjectSubclass + RTSPServerImpl> IsSubclassable<T> for RTSPServerClass {
+unsafe impl<T: RTSPServerImpl> IsSubclassable<T> for RTSPServerClass {
     fn override_vfuncs(&mut self) {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -65,12 +65,9 @@ unsafe impl<T: ObjectSubclass + RTSPServerImpl> IsSubclassable<T> for RTSPServer
     }
 }
 
-unsafe extern "C" fn server_create_client<T: ObjectSubclass>(
+unsafe extern "C" fn server_create_client<T: RTSPServerImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPServer,
-) -> *mut gst_rtsp_server_sys::GstRTSPClient
-where
-    T: RTSPServerImpl,
-{
+) -> *mut gst_rtsp_server_sys::GstRTSPClient {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);
@@ -78,12 +75,10 @@ where
     imp.create_client(&wrap).to_glib_full()
 }
 
-unsafe extern "C" fn server_client_connected<T: ObjectSubclass>(
+unsafe extern "C" fn server_client_connected<T: RTSPServerImpl>(
     ptr: *mut gst_rtsp_server_sys::GstRTSPServer,
     client: *mut gst_rtsp_server_sys::GstRTSPClient,
-) where
-    T: RTSPServerImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);

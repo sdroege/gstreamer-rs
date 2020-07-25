@@ -28,7 +28,7 @@ pub enum CreateSuccess {
     NewBuffer(gst::Buffer),
 }
 
-pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl + Send + Sync + 'static {
+pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
     fn start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
@@ -180,10 +180,10 @@ pub trait BaseSrcImplExt {
     fn parent_unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
 }
 
-impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
+impl<T: BaseSrcImpl> BaseSrcImplExt for T {
     fn parent_start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -204,7 +204,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -225,7 +225,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_is_seekable(&self, element: &BaseSrc) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -237,7 +237,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_get_size(&self, element: &BaseSrc) -> Option<u64> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -260,7 +260,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
         buffer: &gst::BufferRef,
     ) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -291,7 +291,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -316,7 +316,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
         length: u32,
     ) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -348,7 +348,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
         length: u32,
     ) -> Result<CreateSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -427,7 +427,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -439,7 +439,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_query(&self, element: &BaseSrc, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -451,7 +451,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_event(&self, element: &BaseSrc, event: &gst::Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -463,7 +463,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_get_caps(&self, element: &BaseSrc, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
 
@@ -476,7 +476,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -498,7 +498,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -516,7 +516,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_fixate(&self, element: &BaseSrc, caps: gst::Caps) -> gst::Caps {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
 
@@ -529,7 +529,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -550,7 +550,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
 
     fn parent_unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
@@ -570,7 +570,7 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + BaseSrcImpl> IsSubclassable<T> for BaseSrcClass
+unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrcClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -599,11 +599,10 @@ where
     }
 }
 
-unsafe extern "C" fn base_src_start<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_start<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -622,11 +621,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_stop<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_stop<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -645,11 +643,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_is_seekable<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_is_seekable<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -662,12 +659,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_get_size<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_get_size<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     size: *mut u64,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -686,13 +682,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_get_times<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_get_times<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     buffer: *mut gst_sys::GstBuffer,
     start: *mut gst_sys::GstClockTime,
     stop: *mut gst_sys::GstClockTime,
 ) where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -710,14 +705,13 @@ unsafe extern "C" fn base_src_get_times<T: ObjectSubclass>(
     });
 }
 
-unsafe extern "C" fn base_src_fill<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_fill<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     offset: u64,
     length: u32,
     buffer: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -731,14 +725,13 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_alloc<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_alloc<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     offset: u64,
     length: u32,
     buffer_ptr: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -760,14 +753,13 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_create<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     offset: u64,
     length: u32,
     buffer_ptr: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -845,12 +837,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_do_seek<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_do_seek<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     segment: *mut gst_sys::GstSegment,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -867,12 +858,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_query<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_query<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     query_ptr: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -886,12 +876,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_event<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_event<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     event_ptr: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -904,12 +893,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_get_caps<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_get_caps<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     filter: *mut gst_sys::GstCaps,
 ) -> *mut gst_sys::GstCaps
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -924,11 +912,10 @@ where
     .unwrap_or(ptr::null_mut())
 }
 
-unsafe extern "C" fn base_src_negotiate<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_negotiate<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -947,12 +934,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_set_caps<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_set_caps<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     caps: *mut gst_sys::GstCaps,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -972,12 +958,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_fixate<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_fixate<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
     caps: *mut gst_sys::GstCaps,
 ) -> *mut gst_sys::GstCaps
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -991,11 +976,10 @@ where
     .into_ptr()
 }
 
-unsafe extern "C" fn base_src_unlock<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_unlock<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1014,11 +998,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_src_unlock_stop<T: ObjectSubclass>(
+unsafe extern "C" fn base_src_unlock_stop<T: BaseSrcImpl>(
     ptr: *mut gst_base_sys::GstBaseSrc,
 ) -> glib_sys::gboolean
 where
-    T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

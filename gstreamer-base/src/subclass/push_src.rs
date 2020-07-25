@@ -21,7 +21,7 @@ use super::base_src::BaseSrcImpl;
 use PushSrc;
 use PushSrcClass;
 
-pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl + Send + Sync + 'static {
+pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
     fn fill(
         &self,
         element: &PushSrc,
@@ -51,14 +51,14 @@ pub trait PushSrcImplExt {
     fn parent_create(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError>;
 }
 
-impl<T: PushSrcImpl + ObjectImpl> PushSrcImplExt for T {
+impl<T: PushSrcImpl> PushSrcImplExt for T {
     fn parent_fill(
         &self,
         element: &PushSrc,
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstPushSrcClass;
             (*parent_class)
@@ -73,7 +73,7 @@ impl<T: PushSrcImpl + ObjectImpl> PushSrcImplExt for T {
 
     fn parent_alloc(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstPushSrcClass;
             (*parent_class)
@@ -94,7 +94,7 @@ impl<T: PushSrcImpl + ObjectImpl> PushSrcImplExt for T {
 
     fn parent_create(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstPushSrcClass;
             (*parent_class)
@@ -114,7 +114,7 @@ impl<T: PushSrcImpl + ObjectImpl> PushSrcImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + PushSrcImpl> IsSubclassable<T> for PushSrcClass
+unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrcClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -129,12 +129,11 @@ where
     }
 }
 
-unsafe extern "C" fn push_src_fill<T: ObjectSubclass>(
+unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(
     ptr: *mut gst_base_sys::GstPushSrc,
     buffer: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: PushSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -148,12 +147,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn push_src_alloc<T: ObjectSubclass>(
+unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
     ptr: *mut gst_base_sys::GstPushSrc,
     buffer_ptr: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: PushSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -175,12 +173,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn push_src_create<T: ObjectSubclass>(
+unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
     ptr: *mut gst_base_sys::GstPushSrc,
     buffer_ptr: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: PushSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

@@ -20,7 +20,7 @@ use Element;
 use LoggableError;
 use Message;
 
-pub trait BinImpl: BinImplExt + ElementImpl + Send + Sync + 'static {
+pub trait BinImpl: BinImplExt + ElementImpl {
     fn add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
         self.parent_add_element(bin, element)
     }
@@ -42,10 +42,10 @@ pub trait BinImplExt {
     fn parent_handle_message(&self, bin: &Bin, message: Message);
 }
 
-impl<T: BinImpl + ObjectImpl> BinImplExt for T {
+impl<T: BinImpl> BinImplExt for T {
     fn parent_add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
             let f = (*parent_class).add_element.ok_or_else(|| {
                 gst_loggable_error!(::CAT_RUST, "Parent function `add_element` is not defined")
@@ -60,7 +60,7 @@ impl<T: BinImpl + ObjectImpl> BinImplExt for T {
 
     fn parent_remove_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
             let f = (*parent_class).remove_element.ok_or_else(|| {
                 gst_loggable_error!(
@@ -78,7 +78,7 @@ impl<T: BinImpl + ObjectImpl> BinImplExt for T {
 
     fn parent_handle_message(&self, bin: &Bin, message: Message) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
             if let Some(ref f) = (*parent_class).handle_message {
                 f(bin.to_glib_none().0, message.into_ptr());
@@ -87,7 +87,7 @@ impl<T: BinImpl + ObjectImpl> BinImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + BinImpl> IsSubclassable<T> for BinClass
+unsafe impl<T: BinImpl> IsSubclassable<T> for BinClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -102,12 +102,11 @@ where
     }
 }
 
-unsafe extern "C" fn bin_add_element<T: ObjectSubclass>(
+unsafe extern "C" fn bin_add_element<T: BinImpl>(
     ptr: *mut gst_sys::GstBin,
     element: *mut gst_sys::GstElement,
 ) -> glib_sys::gboolean
 where
-    T: BinImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -126,12 +125,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn bin_remove_element<T: ObjectSubclass>(
+unsafe extern "C" fn bin_remove_element<T: BinImpl>(
     ptr: *mut gst_sys::GstBin,
     element: *mut gst_sys::GstElement,
 ) -> glib_sys::gboolean
 where
-    T: BinImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -157,11 +155,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn bin_handle_message<T: ObjectSubclass>(
+unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     ptr: *mut gst_sys::GstBin,
     message: *mut gst_sys::GstMessage,
 ) where
-    T: BinImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

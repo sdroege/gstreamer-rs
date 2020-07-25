@@ -18,7 +18,7 @@ use DeviceProvider;
 use DeviceProviderClass;
 use LoggableError;
 
-pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync + 'static {
+pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync {
     fn probe(&self, device_provider: &DeviceProvider) -> Vec<Device> {
         self.parent_probe(device_provider)
     }
@@ -40,10 +40,10 @@ pub trait DeviceProviderImplExt {
     fn parent_stop(&self, device_provider: &DeviceProvider);
 }
 
-impl<T: DeviceProviderImpl + ObjectImpl> DeviceProviderImplExt for T {
+impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
     fn parent_probe(&self, device_provider: &DeviceProvider) -> Vec<Device> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).probe {
@@ -56,7 +56,7 @@ impl<T: DeviceProviderImpl + ObjectImpl> DeviceProviderImplExt for T {
 
     fn parent_start(&self, device_provider: &DeviceProvider) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceProviderClass;
             let f = (*parent_class).start.ok_or_else(|| {
@@ -72,7 +72,7 @@ impl<T: DeviceProviderImpl + ObjectImpl> DeviceProviderImplExt for T {
 
     fn parent_stop(&self, device_provider: &DeviceProvider) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).stop {
@@ -114,7 +114,7 @@ pub unsafe trait DeviceProviderClassSubclassExt: Sized + 'static {
 
 unsafe impl DeviceProviderClassSubclassExt for DeviceProviderClass {}
 
-unsafe impl<T: ObjectSubclass + DeviceProviderImpl> IsSubclassable<T> for DeviceProviderClass {
+unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProviderClass {
     fn override_vfuncs(&mut self) {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -126,12 +126,9 @@ unsafe impl<T: ObjectSubclass + DeviceProviderImpl> IsSubclassable<T> for Device
     }
 }
 
-unsafe extern "C" fn device_provider_probe<T: ObjectSubclass>(
+unsafe extern "C" fn device_provider_probe<T: DeviceProviderImpl>(
     ptr: *mut gst_sys::GstDeviceProvider,
-) -> *mut glib_sys::GList
-where
-    T: DeviceProviderImpl,
-{
+) -> *mut glib_sys::GList {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
@@ -139,12 +136,9 @@ where
     imp.probe(&wrap).to_glib_full()
 }
 
-unsafe extern "C" fn device_provider_start<T: ObjectSubclass>(
+unsafe extern "C" fn device_provider_start<T: DeviceProviderImpl>(
     ptr: *mut gst_sys::GstDeviceProvider,
-) -> glib_sys::gboolean
-where
-    T: DeviceProviderImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
@@ -159,10 +153,9 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn device_provider_stop<T: ObjectSubclass>(ptr: *mut gst_sys::GstDeviceProvider)
-where
-    T: DeviceProviderImpl,
-{
+unsafe extern "C" fn device_provider_stop<T: DeviceProviderImpl>(
+    ptr: *mut gst_sys::GstDeviceProvider,
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);

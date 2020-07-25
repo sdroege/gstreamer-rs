@@ -23,7 +23,7 @@ use VideoCodecFrame;
 use VideoEncoder;
 use VideoEncoderClass;
 
-pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl + Send + Sync + 'static {
+pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
     fn open(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
         self.parent_open(element)
     }
@@ -155,10 +155,10 @@ pub trait VideoEncoderImplExt {
     ) -> Result<(), gst::ErrorMessage>;
 }
 
-impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
+impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
     fn parent_open(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -179,7 +179,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_close(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -200,7 +200,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_start(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -221,7 +221,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_stop(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -242,7 +242,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_finish(&self, element: &VideoEncoder) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -259,7 +259,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
         state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -281,7 +281,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
         frame: VideoCodecFrame,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -296,7 +296,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_flush(&self, element: &VideoEncoder) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -308,7 +308,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_negotiate(&self, element: &VideoEncoder) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -326,7 +326,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_get_caps(&self, element: &VideoEncoder, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -338,7 +338,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_sink_event(&self, element: &VideoEncoder, event: gst::Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             let f = (*parent_class)
@@ -350,7 +350,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_sink_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             let f = (*parent_class)
@@ -362,7 +362,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_src_event(&self, element: &VideoEncoder, event: gst::Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             let f = (*parent_class)
@@ -374,7 +374,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
 
     fn parent_src_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             let f = (*parent_class)
@@ -390,7 +390,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -415,7 +415,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
@@ -435,7 +435,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + VideoEncoderImpl> IsSubclassable<T> for VideoEncoderClass
+unsafe impl<T: VideoEncoderImpl> IsSubclassable<T> for VideoEncoderClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -463,11 +463,10 @@ where
     }
 }
 
-unsafe extern "C" fn video_encoder_open<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_open<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -486,11 +485,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_close<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_close<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -509,11 +507,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_start<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_start<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -532,11 +529,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_stop<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_stop<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -555,11 +551,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_finish<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_finish<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
 ) -> gst_sys::GstFlowReturn
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -572,12 +567,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_set_format<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_set_format<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     state: *mut gst_video_sys::GstVideoCodecState,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -598,12 +592,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_handle_frame<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_handle_frame<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     frame: *mut gst_video_sys::GstVideoCodecFrame,
 ) -> gst_sys::GstFlowReturn
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -617,11 +610,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_flush<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_flush<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -634,11 +626,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_negotiate<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_negotiate<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -657,12 +648,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_getcaps<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_getcaps<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     filter: *mut gst_sys::GstCaps,
 ) -> *mut gst_sys::GstCaps
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -681,12 +671,11 @@ where
     .to_glib_full()
 }
 
-unsafe extern "C" fn video_encoder_sink_event<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_sink_event<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     event: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -699,12 +688,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_sink_query<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_sink_query<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -717,12 +705,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_src_event<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_src_event<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     event: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -735,12 +722,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_src_query<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_src_query<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -753,12 +739,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_propose_allocation<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_propose_allocation<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -778,12 +763,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn video_encoder_decide_allocation<T: ObjectSubclass>(
+unsafe extern "C" fn video_encoder_decide_allocation<T: VideoEncoderImpl>(
     ptr: *mut gst_video_sys::GstVideoEncoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

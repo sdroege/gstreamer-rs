@@ -6,7 +6,6 @@
 // Our filter can only handle F32 mono and acts as a FIR filter. The filter impulse response /
 // coefficients are provided via Rust API on the filter as a Vec<f32>.
 
-use glib::glib_object_impl;
 use glib::glib_object_subclass;
 use glib::glib_object_wrapper;
 use glib::glib_wrapper;
@@ -160,10 +159,7 @@ mod fir_filter {
         }
 
         // Implementation of glib::Object virtual methods
-        impl ObjectImpl for FirFilter {
-            // This macro provides some boilerplate.
-            glib_object_impl!();
-        }
+        impl ObjectImpl for FirFilter {}
 
         // Implementation of gst::Element virtual methods
         impl ElementImpl for FirFilter {}

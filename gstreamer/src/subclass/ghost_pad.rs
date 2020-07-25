@@ -13,9 +13,9 @@ use glib::subclass::prelude::*;
 
 use GhostPadClass;
 
-pub trait GhostPadImpl: PadImpl + Send + Sync + 'static {}
+pub trait GhostPadImpl: PadImpl {}
 
-unsafe impl<T: ObjectSubclass + GhostPadImpl> IsSubclassable<T> for GhostPadClass {
+unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPadClass {
     fn override_vfuncs(&mut self) {
         <::PadClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {

@@ -12,9 +12,9 @@ use glib::subclass::prelude::*;
 
 use Preset;
 
-pub trait PresetImpl: super::element::ElementImpl + Send + Sync + 'static {}
+pub trait PresetImpl: super::element::ElementImpl {}
 
-unsafe impl<T: ObjectSubclass + PresetImpl> IsImplementable<T> for Preset {
+unsafe impl<T: PresetImpl> IsImplementable<T> for Preset {
     unsafe extern "C" fn interface_init(
         _iface: glib_sys::gpointer,
         _iface_data: glib_sys::gpointer,

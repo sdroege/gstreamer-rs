@@ -19,9 +19,7 @@ use gst_base::subclass::prelude::*;
 use VideoSink;
 use VideoSinkClass;
 
-pub trait VideoSinkImpl:
-    VideoSinkImplExt + BaseSinkImpl + ElementImpl + Send + Sync + 'static
-{
+pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
     fn show_frame(
         &self,
         element: &VideoSink,
@@ -39,14 +37,14 @@ pub trait VideoSinkImplExt {
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
-impl<T: VideoSinkImpl + ObjectImpl> VideoSinkImplExt for T {
+impl<T: VideoSinkImpl> VideoSinkImplExt for T {
     fn parent_show_frame(
         &self,
         element: &VideoSink,
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoSinkClass;
             (*parent_class)
@@ -60,7 +58,7 @@ impl<T: VideoSinkImpl + ObjectImpl> VideoSinkImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + VideoSinkImpl> IsSubclassable<T> for VideoSinkClass
+unsafe impl<T: VideoSinkImpl> IsSubclassable<T> for VideoSinkClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -73,12 +71,11 @@ where
     }
 }
 
-unsafe extern "C" fn video_sink_show_frame<T: ObjectSubclass>(
+unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(
     ptr: *mut gst_video_sys::GstVideoSink,
     buffer: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: VideoSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

@@ -14,7 +14,6 @@ extern crate gstreamer_sdp as gst_sdp;
 
 use gst_rtsp_server::prelude::*;
 
-use glib::glib_object_impl;
 use glib::glib_object_subclass;
 use glib::glib_object_wrapper;
 use glib::glib_wrapper;
@@ -123,9 +122,6 @@ mod media_factory {
 
         // Implementation of glib::Object virtual methods
         impl ObjectImpl for Factory {
-            // This macro provides some boilerplate.
-            glib_object_impl!();
-
             fn constructed(&self, obj: &glib::Object) {
                 self.parent_constructed(obj);
 
@@ -238,10 +234,7 @@ mod media {
         }
 
         // Implementation of glib::Object virtual methods
-        impl ObjectImpl for Media {
-            // This macro provides some boilerplate.
-            glib_object_impl!();
-        }
+        impl ObjectImpl for Media {}
 
         // Implementation of gst_rtsp_server::RTSPMedia virtual methods
         impl RTSPMediaImpl for Media {
@@ -320,10 +313,7 @@ mod server {
         }
 
         // Implementation of glib::Object virtual methods
-        impl ObjectImpl for Server {
-            // This macro provides some boilerplate.
-            glib_object_impl!();
-        }
+        impl ObjectImpl for Server {}
 
         // Implementation of gst_rtsp_server::RTSPServer virtual methods
         impl RTSPServerImpl for Server {
@@ -422,10 +412,7 @@ mod client {
         }
 
         // Implementation of glib::Object virtual methods
-        impl ObjectImpl for Client {
-            // This macro provides some boilerplate.
-            glib_object_impl!();
-        }
+        impl ObjectImpl for Client {}
 
         // Implementation of gst_rtsp_server::RTSPClient virtual methods
         impl RTSPClientImpl for Client {

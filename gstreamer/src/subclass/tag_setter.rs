@@ -12,9 +12,9 @@ use glib::subclass::prelude::*;
 
 use TagSetter;
 
-pub trait TagSetterImpl: super::element::ElementImpl + Send + Sync + 'static {}
+pub trait TagSetterImpl: super::element::ElementImpl {}
 
-unsafe impl<T: ObjectSubclass + TagSetterImpl> IsImplementable<T> for TagSetter {
+unsafe impl<T: TagSetterImpl> IsImplementable<T> for TagSetter {
     unsafe extern "C" fn interface_init(
         _iface: glib_sys::gpointer,
         _iface_data: glib_sys::gpointer,

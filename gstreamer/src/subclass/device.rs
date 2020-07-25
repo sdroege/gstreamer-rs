@@ -20,7 +20,7 @@ use LoggableError;
 
 use std::ptr;
 
-pub trait DeviceImpl: DeviceImplExt + ObjectImpl + Send + Sync + 'static {
+pub trait DeviceImpl: DeviceImplExt + ObjectImpl + Send + Sync {
     fn create_element(
         &self,
         device: &Device,
@@ -48,14 +48,14 @@ pub trait DeviceImplExt {
     ) -> Result<(), LoggableError>;
 }
 
-impl<T: DeviceImpl + ObjectImpl> DeviceImplExt for T {
+impl<T: DeviceImpl> DeviceImplExt for T {
     fn parent_create_element(
         &self,
         device: &Device,
         name: Option<&str>,
     ) -> Result<Element, LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
                 let ptr = f(device.to_glib_none().0, name.to_glib_none().0);
@@ -82,7 +82,7 @@ impl<T: DeviceImpl + ObjectImpl> DeviceImplExt for T {
         element: &Element,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceClass;
             let f = (*parent_class).reconfigure_element.ok_or_else(|| {
                 gst_loggable_error!(
@@ -99,7 +99,7 @@ impl<T: DeviceImpl + ObjectImpl> DeviceImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + DeviceImpl> IsSubclassable<T> for DeviceClass {
+unsafe impl<T: DeviceImpl> IsSubclassable<T> for DeviceClass {
     fn override_vfuncs(&mut self) {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -110,13 +110,10 @@ unsafe impl<T: ObjectSubclass + DeviceImpl> IsSubclassable<T> for DeviceClass {
     }
 }
 
-unsafe extern "C" fn device_create_element<T: ObjectSubclass>(
+unsafe extern "C" fn device_create_element<T: DeviceImpl>(
     ptr: *mut gst_sys::GstDevice,
     name: *const libc::c_char,
-) -> *mut gst_sys::GstElement
-where
-    T: DeviceImpl,
-{
+) -> *mut gst_sys::GstElement {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
@@ -144,13 +141,10 @@ where
     }
 }
 
-unsafe extern "C" fn device_reconfigure_element<T: ObjectSubclass>(
+unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
     ptr: *mut gst_sys::GstDevice,
     element: *mut gst_sys::GstElement,
-) -> glib_sys::gboolean
-where
-    T: DeviceImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);

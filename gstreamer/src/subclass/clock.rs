@@ -22,7 +22,7 @@ use ClockSuccess;
 use ClockTime;
 use ClockTimeDiff;
 
-pub trait ClockImpl: ClockImplExt + ObjectImpl + Send + Sync + 'static {
+pub trait ClockImpl: ClockImplExt + ObjectImpl + Send + Sync {
     fn change_resolution(
         &self,
         clock: &Clock,
@@ -85,7 +85,7 @@ pub trait ClockImplExt {
         <Self as ObjectSubclass>::ParentType: IsA<Clock>;
 }
 
-impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
+impl<T: ClockImpl> ClockImplExt for T {
     fn parent_change_resolution(
         &self,
         clock: &Clock,
@@ -93,7 +93,7 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
         new_resolution: ClockTime,
     ) -> ClockTime {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstClockClass;
 
             if let Some(func) = (*parent_class).change_resolution {
@@ -110,7 +110,7 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
 
     fn parent_get_resolution(&self, clock: &Clock) -> ClockTime {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstClockClass;
 
             from_glib(
@@ -124,7 +124,7 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
 
     fn parent_get_internal_time(&self, clock: &Clock) -> ClockTime {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstClockClass;
 
             from_glib(
@@ -142,7 +142,7 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
         id: &ClockId,
     ) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstClockClass;
             let mut jitter = 0;
 
@@ -167,7 +167,7 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
 
     fn parent_wait_async(&self, clock: &Clock, id: &ClockId) -> Result<ClockSuccess, ClockError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstClockClass;
             ClockReturn::from_glib(
                 (*parent_class)
@@ -186,7 +186,7 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
 
     fn parent_unschedule(&self, clock: &Clock, id: &ClockId) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstClockClass;
             if let Some(func) = (*parent_class).unschedule {
                 func(
@@ -233,7 +233,7 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + ClockImpl> IsSubclassable<T> for ClockClass {
+unsafe impl<T: ClockImpl> IsSubclassable<T> for ClockClass {
     fn override_vfuncs(&mut self) {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
 
@@ -249,14 +249,11 @@ unsafe impl<T: ObjectSubclass + ClockImpl> IsSubclassable<T> for ClockClass {
     }
 }
 
-unsafe extern "C" fn clock_change_resolution<T: ObjectSubclass>(
+unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(
     ptr: *mut gst_sys::GstClock,
     old_resolution: gst_sys::GstClockTime,
     new_resolution: gst_sys::GstClockTime,
-) -> gst_sys::GstClockTime
-where
-    T: ClockImpl,
-{
+) -> gst_sys::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
@@ -265,12 +262,9 @@ where
         .to_glib()
 }
 
-unsafe extern "C" fn clock_get_resolution<T: ObjectSubclass>(
+unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(
     ptr: *mut gst_sys::GstClock,
-) -> gst_sys::GstClockTime
-where
-    T: ClockImpl,
-{
+) -> gst_sys::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
@@ -278,12 +272,9 @@ where
     imp.get_resolution(&wrap).to_glib()
 }
 
-unsafe extern "C" fn clock_get_internal_time<T: ObjectSubclass>(
+unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
     ptr: *mut gst_sys::GstClock,
-) -> gst_sys::GstClockTime
-where
-    T: ClockImpl,
-{
+) -> gst_sys::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
@@ -291,14 +282,11 @@ where
     imp.get_internal_time(&wrap).to_glib()
 }
 
-unsafe extern "C" fn clock_wait<T: ObjectSubclass>(
+unsafe extern "C" fn clock_wait<T: ClockImpl>(
     ptr: *mut gst_sys::GstClock,
     id: *mut gst_sys::GstClockEntry,
     jitter: *mut gst_sys::GstClockTimeDiff,
-) -> gst_sys::GstClockReturn
-where
-    T: ClockImpl,
-{
+) -> gst_sys::GstClockReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
@@ -311,13 +299,10 @@ where
     ClockReturn::from(res).to_glib()
 }
 
-unsafe extern "C" fn clock_wait_async<T: ObjectSubclass>(
+unsafe extern "C" fn clock_wait_async<T: ClockImpl>(
     ptr: *mut gst_sys::GstClock,
     id: *mut gst_sys::GstClockEntry,
-) -> gst_sys::GstClockReturn
-where
-    T: ClockImpl,
-{
+) -> gst_sys::GstClockReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
@@ -325,12 +310,10 @@ where
     ClockReturn::from(imp.wait_async(&wrap, &from_glib_borrow(id as gst_sys::GstClockID))).to_glib()
 }
 
-unsafe extern "C" fn clock_unschedule<T: ObjectSubclass>(
+unsafe extern "C" fn clock_unschedule<T: ClockImpl>(
     ptr: *mut gst_sys::GstClock,
     id: *mut gst_sys::GstClockEntry,
-) where
-    T: ClockImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);

@@ -13,9 +13,9 @@ use glib::subclass::prelude::*;
 
 use PipelineClass;
 
-pub trait PipelineImpl: BinImpl + Send + Sync + 'static {}
+pub trait PipelineImpl: BinImpl {}
 
-unsafe impl<T: ObjectSubclass + PipelineImpl> IsSubclassable<T> for PipelineClass
+unsafe impl<T: PipelineImpl> IsSubclassable<T> for PipelineClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {

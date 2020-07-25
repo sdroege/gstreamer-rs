@@ -28,7 +28,7 @@ use StateChangeError;
 use StateChangeReturn;
 use StateChangeSuccess;
 
-pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync + 'static {
+pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync {
     fn change_state(
         &self,
         element: &::Element,
@@ -124,7 +124,7 @@ pub trait ElementImplExt {
     ) -> R;
 }
 
-impl<T: ElementImpl + ObjectSubclass> ElementImplExt for T
+impl<T: ElementImpl> ElementImplExt for T
 where
     T::Instance: PanicPoison,
 {
@@ -134,7 +134,7 @@ where
         transition: StateChange,
     ) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             let f = (*parent_class)
@@ -153,7 +153,7 @@ where
         caps: Option<&::Caps>,
     ) -> Option<::Pad> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
@@ -172,7 +172,7 @@ where
 
     fn parent_release_pad(&self, element: &::Element, pad: &::Pad) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
@@ -184,7 +184,7 @@ where
 
     fn parent_send_event(&self, element: &::Element, event: Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
@@ -196,7 +196,7 @@ where
 
     fn parent_query(&self, element: &::Element, query: &mut QueryRef) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
@@ -208,7 +208,7 @@ where
 
     fn parent_set_context(&self, element: &::Element, context: &::Context) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
@@ -220,7 +220,7 @@ where
 
     fn parent_set_clock(&self, element: &::Element, clock: Option<&::Clock>) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
@@ -232,7 +232,7 @@ where
 
     fn parent_provide_clock(&self, element: &::Element) -> Option<::Clock> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
@@ -244,7 +244,7 @@ where
 
     fn parent_post_message(&self, element: &::Element, msg: ::Message) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             if let Some(f) = (*parent_class).post_message {
@@ -338,7 +338,7 @@ pub unsafe trait ElementClassSubclassExt: Sized + 'static {
 
 unsafe impl ElementClassSubclassExt for ElementClass {}
 
-unsafe impl<T: ObjectSubclass + ElementImpl> IsSubclassable<T> for ElementClass
+unsafe impl<T: ElementImpl> IsSubclassable<T> for ElementClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -360,12 +360,11 @@ where
     }
 }
 
-unsafe extern "C" fn element_change_state<T: ObjectSubclass>(
+unsafe extern "C" fn element_change_state<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     transition: gst_sys::GstStateChange,
 ) -> gst_sys::GstStateChangeReturn
 where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -388,14 +387,13 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn element_request_new_pad<T: ObjectSubclass>(
+unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     templ: *mut gst_sys::GstPadTemplate,
     name: *const libc::c_char,
     caps: *const gst_sys::GstCaps,
 ) -> *mut gst_sys::GstPad
 where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -426,11 +424,10 @@ where
     pad.to_glib_none().0
 }
 
-unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
+unsafe extern "C" fn element_release_pad<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     pad: *mut gst_sys::GstPad,
 ) where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -448,12 +445,11 @@ unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
     })
 }
 
-unsafe extern "C" fn element_send_event<T: ObjectSubclass>(
+unsafe extern "C" fn element_send_event<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     event: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -466,12 +462,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn element_query<T: ObjectSubclass>(
+unsafe extern "C" fn element_query<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -485,11 +480,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn element_set_context<T: ObjectSubclass>(
+unsafe extern "C" fn element_set_context<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     context: *mut gst_sys::GstContext,
 ) where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -501,12 +495,11 @@ unsafe extern "C" fn element_set_context<T: ObjectSubclass>(
     })
 }
 
-unsafe extern "C" fn element_set_clock<T: ObjectSubclass>(
+unsafe extern "C" fn element_set_clock<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     clock: *mut gst_sys::GstClock,
 ) -> glib_sys::gboolean
 where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -521,11 +514,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn element_provide_clock<T: ObjectSubclass>(
+unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
 ) -> *mut gst_sys::GstClock
 where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -538,12 +530,11 @@ where
     .to_glib_full()
 }
 
-unsafe extern "C" fn element_post_message<T: ObjectSubclass>(
+unsafe extern "C" fn element_post_message<T: ElementImpl>(
     ptr: *mut gst_sys::GstElement,
     msg: *mut gst_sys::GstMessage,
 ) -> glib_sys::gboolean
 where
-    T: ElementImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -679,8 +670,6 @@ mod tests {
     }
 
     impl ObjectImpl for TestElement {
-        glib_object_impl!();
-
         fn constructed(&self, obj: &glib::Object) {
             self.parent_constructed(obj);
 

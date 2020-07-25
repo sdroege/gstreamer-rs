@@ -20,7 +20,7 @@ use Aggregator;
 use AggregatorPad;
 use AggregatorPadClass;
 
-pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl + Send + Sync + 'static {
+pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl {
     fn flush(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -54,14 +54,14 @@ pub trait AggregatorPadImplExt {
     ) -> bool;
 }
 
-impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
+impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
     fn parent_flush(
         &self,
         aggregator_pad: &AggregatorPad,
         aggregator: &Aggregator,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorPadClass;
             (*parent_class)
@@ -84,7 +84,7 @@ impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
         buffer: &gst::Buffer,
     ) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorPadClass;
             (*parent_class)
@@ -100,7 +100,7 @@ impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
         }
     }
 }
-unsafe impl<T: ObjectSubclass + AggregatorPadImpl> IsSubclassable<T> for AggregatorPadClass {
+unsafe impl<T: AggregatorPadImpl> IsSubclassable<T> for AggregatorPadClass {
     fn override_vfuncs(&mut self) {
         <gst::PadClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -111,13 +111,10 @@ unsafe impl<T: ObjectSubclass + AggregatorPadImpl> IsSubclassable<T> for Aggrega
     }
 }
 
-unsafe extern "C" fn aggregator_pad_flush<T: ObjectSubclass>(
+unsafe extern "C" fn aggregator_pad_flush<T: AggregatorPadImpl>(
     ptr: *mut gst_base_sys::GstAggregatorPad,
     aggregator: *mut gst_base_sys::GstAggregator,
-) -> gst_sys::GstFlowReturn
-where
-    T: AggregatorPadImpl,
-{
+) -> gst_sys::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);
@@ -126,14 +123,11 @@ where
     res.to_glib()
 }
 
-unsafe extern "C" fn aggregator_pad_skip_buffer<T: ObjectSubclass>(
+unsafe extern "C" fn aggregator_pad_skip_buffer<T: AggregatorPadImpl>(
     ptr: *mut gst_base_sys::GstAggregatorPad,
     aggregator: *mut gst_base_sys::GstAggregator,
     buffer: *mut gst_sys::GstBuffer,
-) -> glib_sys::gboolean
-where
-    T: AggregatorPadImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);

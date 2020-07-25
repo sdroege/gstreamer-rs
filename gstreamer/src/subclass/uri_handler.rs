@@ -20,14 +20,14 @@ use libc;
 use URIHandler;
 use URIType;
 
-pub trait URIHandlerImpl: super::element::ElementImpl + Send + Sync + 'static {
+pub trait URIHandlerImpl: super::element::ElementImpl {
     fn get_uri(&self, element: &URIHandler) -> Option<String>;
     fn set_uri(&self, element: &URIHandler, uri: &str) -> Result<(), glib::Error>;
     fn get_uri_type() -> URIType;
     fn get_protocols() -> Vec<String>;
 }
 
-unsafe impl<T: ObjectSubclass + URIHandlerImpl> IsImplementable<T> for URIHandler {
+unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
     unsafe extern "C" fn interface_init(
         iface: glib_sys::gpointer,
         _iface_data: glib_sys::gpointer,
@@ -52,46 +52,34 @@ unsafe impl<T: ObjectSubclass + URIHandlerImpl> IsImplementable<T> for URIHandle
     }
 }
 
-unsafe extern "C" fn uri_handler_get_type<T: ObjectSubclass>(
+unsafe extern "C" fn uri_handler_get_type<T: URIHandlerImpl>(
     _type_: glib_sys::GType,
-) -> gst_sys::GstURIType
-where
-    T: URIHandlerImpl,
-{
+) -> gst_sys::GstURIType {
     <T as URIHandlerImpl>::get_uri_type().to_glib()
 }
 
-unsafe extern "C" fn uri_handler_get_protocols<T: ObjectSubclass>(
+unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
     _type_: glib_sys::GType,
-) -> *const *const libc::c_char
-where
-    T: URIHandlerImpl,
-{
+) -> *const *const libc::c_char {
     let data = <T as ObjectSubclass>::type_data();
     data.as_ref()
         .get_interface_data(URIHandler::static_type().to_glib()) as *const _
 }
 
-unsafe extern "C" fn uri_handler_get_uri<T: ObjectSubclass>(
+unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
     uri_handler: *mut gst_sys::GstURIHandler,
-) -> *mut libc::c_char
-where
-    T: URIHandlerImpl,
-{
+) -> *mut libc::c_char {
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
 
     imp.get_uri(&from_glib_borrow(uri_handler)).to_glib_full()
 }
 
-unsafe extern "C" fn uri_handler_set_uri<T: ObjectSubclass>(
+unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
     uri_handler: *mut gst_sys::GstURIHandler,
     uri: *const libc::c_char,
     err: *mut *mut glib_sys::GError,
-) -> glib_sys::gboolean
-where
-    T: URIHandlerImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
 

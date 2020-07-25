@@ -25,7 +25,7 @@ use crate::prelude::*;
 use AudioDecoder;
 use AudioDecoderClass;
 
-pub trait AudioDecoderImpl: AudioDecoderImplExt + ElementImpl + Send + Sync + 'static {
+pub trait AudioDecoderImpl: AudioDecoderImplExt + ElementImpl {
     fn open(&self, element: &AudioDecoder) -> Result<(), gst::ErrorMessage> {
         self.parent_open(element)
     }
@@ -179,10 +179,10 @@ pub trait AudioDecoderImplExt {
     ) -> Result<(), gst::ErrorMessage>;
 }
 
-impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
+impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_open(&self, element: &AudioDecoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -203,7 +203,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_close(&self, element: &AudioDecoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -224,7 +224,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_start(&self, element: &AudioDecoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -245,7 +245,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_stop(&self, element: &AudioDecoder) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -270,7 +270,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -292,7 +292,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
         adapter: &gst_base::Adapter,
     ) -> Result<(u32, u32), gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -328,7 +328,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
         buffer: Option<&gst::Buffer>,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -352,7 +352,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
         buffer: gst::Buffer,
     ) -> Result<Option<gst::Buffer>, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             if let Some(f) = (*parent_class).pre_push {
@@ -371,7 +371,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_flush(&self, element: &AudioDecoder, hard: bool) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -383,7 +383,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_negotiate(&self, element: &AudioDecoder) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -401,7 +401,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_get_caps(&self, element: &AudioDecoder, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -413,7 +413,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_sink_event(&self, element: &AudioDecoder, event: gst::Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             let f = (*parent_class)
@@ -425,7 +425,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_sink_query(&self, element: &AudioDecoder, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             let f = (*parent_class)
@@ -437,7 +437,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_src_event(&self, element: &AudioDecoder, event: gst::Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             let f = (*parent_class)
@@ -449,7 +449,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
 
     fn parent_src_query(&self, element: &AudioDecoder, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             let f = (*parent_class)
@@ -465,7 +465,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -490,7 +490,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
             (*parent_class)
@@ -510,7 +510,7 @@ impl<T: AudioDecoderImpl + ObjectImpl> AudioDecoderImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + AudioDecoderImpl> IsSubclassable<T> for AudioDecoderClass
+unsafe impl<T: AudioDecoderImpl> IsSubclassable<T> for AudioDecoderClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -539,11 +539,10 @@ where
     }
 }
 
-unsafe extern "C" fn audio_decoder_open<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_open<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -562,11 +561,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_close<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_close<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -585,11 +583,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_start<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_start<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -608,11 +605,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_stop<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_stop<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -631,12 +627,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_set_format<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_set_format<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     caps: *mut gst_sys::GstCaps,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -655,14 +650,13 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_parse<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_parse<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     adapter: *mut gst_base_sys::GstAdapter,
     offset: *mut i32,
     len: *mut i32,
 ) -> gst_sys::GstFlowReturn
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -685,12 +679,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_handle_frame<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_handle_frame<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     buffer: *mut *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     // FIXME: Misgenerated in gstreamer-audio-sys
@@ -709,12 +702,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_pre_push<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_pre_push<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     buffer: *mut *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -738,11 +730,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_flush<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_flush<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     hard: glib_sys::gboolean,
 ) where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -754,11 +745,10 @@ unsafe extern "C" fn audio_decoder_flush<T: ObjectSubclass>(
     })
 }
 
-unsafe extern "C" fn audio_decoder_negotiate<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_negotiate<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -777,12 +767,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_getcaps<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_getcaps<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     filter: *mut gst_sys::GstCaps,
 ) -> *mut gst_sys::GstCaps
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -801,12 +790,11 @@ where
     .to_glib_full()
 }
 
-unsafe extern "C" fn audio_decoder_sink_event<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_sink_event<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     event: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -819,12 +807,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_sink_query<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_sink_query<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -837,12 +824,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_src_event<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_src_event<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     event: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -855,12 +841,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_src_query<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_src_query<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -873,12 +858,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_propose_allocation<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_propose_allocation<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -898,12 +882,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audio_decoder_decide_allocation<T: ObjectSubclass>(
+unsafe extern "C" fn audio_decoder_decide_allocation<T: AudioDecoderImpl>(
     ptr: *mut gst_audio_sys::GstAudioDecoder,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

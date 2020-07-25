@@ -13,9 +13,9 @@ use glib::subclass::prelude::*;
 
 use SystemClockClass;
 
-pub trait SystemClockImpl: ClockImpl + Send + Sync + 'static {}
+pub trait SystemClockImpl: ClockImpl {}
 
-unsafe impl<T: ObjectSubclass + SystemClockImpl> IsSubclassable<T> for SystemClockClass {
+unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClockClass {
     fn override_vfuncs(&mut self) {
         <::ClockClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {

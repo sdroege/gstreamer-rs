@@ -23,7 +23,7 @@ use BaseParse;
 use BaseParseClass;
 use BaseParseFrame;
 
-pub trait BaseParseImpl: BaseParseImplExt + ElementImpl + Send + Sync + 'static {
+pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
     fn start(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
@@ -83,10 +83,10 @@ pub trait BaseParseImplExt {
     ) -> Option<gst::GenericFormattedValue>;
 }
 
-impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
+impl<T: BaseParseImpl> BaseParseImplExt for T {
     fn parent_start(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseParseClass;
             (*parent_class)
@@ -107,7 +107,7 @@ impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
 
     fn parent_stop(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseParseClass;
             (*parent_class)
@@ -132,7 +132,7 @@ impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseParseClass;
             (*parent_class)
@@ -157,7 +157,7 @@ impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseParseClass;
             let mut skipsize = 0;
@@ -187,7 +187,7 @@ impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseParseClass;
             let src_val = src_val.into();
@@ -215,7 +215,7 @@ impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + BaseParseImpl> IsSubclassable<T> for BaseParseClass
+unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParseClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -232,11 +232,10 @@ where
     }
 }
 
-unsafe extern "C" fn base_parse_start<T: ObjectSubclass>(
+unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
     ptr: *mut gst_base_sys::GstBaseParse,
 ) -> glib_sys::gboolean
 where
-    T: BaseParseImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -255,11 +254,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_parse_stop<T: ObjectSubclass>(
+unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
     ptr: *mut gst_base_sys::GstBaseParse,
 ) -> glib_sys::gboolean
 where
-    T: BaseParseImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -278,12 +276,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_parse_set_sink_caps<T: ObjectSubclass>(
+unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
     ptr: *mut gst_base_sys::GstBaseParse,
     caps: *mut gst_sys::GstCaps,
 ) -> glib_sys::gboolean
 where
-    T: BaseParseImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -303,13 +300,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_parse_handle_frame<T: ObjectSubclass>(
+unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
     ptr: *mut gst_base_sys::GstBaseParse,
     frame: *mut gst_base_sys::GstBaseParseFrame,
     skipsize: *mut i32,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseParseImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -331,7 +327,7 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_parse_convert<T: ObjectSubclass>(
+unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
     ptr: *mut gst_base_sys::GstBaseParse,
     source_format: gst_sys::GstFormat,
     source_value: i64,
@@ -339,7 +335,6 @@ unsafe extern "C" fn base_parse_convert<T: ObjectSubclass>(
     dest_value: *mut i64,
 ) -> glib_sys::gboolean
 where
-    T: BaseParseImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

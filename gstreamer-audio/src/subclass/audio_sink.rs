@@ -12,7 +12,7 @@ use AudioRingBufferSpec;
 use AudioSink;
 use AudioSinkClass;
 
-pub trait AudioSinkImpl: AudioSinkImplExt + BaseSinkImpl + Send + Sync + 'static {
+pub trait AudioSinkImpl: AudioSinkImplExt + BaseSinkImpl {
     fn close(&self, sink: &AudioSink) -> Result<(), LoggableError> {
         self.parent_close(sink)
     }
@@ -60,10 +60,10 @@ pub trait AudioSinkImplExt {
     fn parent_reset(&self, sink: &AudioSink);
 }
 
-impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
+impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_close(&self, sink: &AudioSink) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
             let f = match (*parent_class).close {
@@ -80,7 +80,7 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
 
     fn parent_delay(&self, sink: &AudioSink) -> u32 {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
             let f = match (*parent_class).delay {
@@ -93,7 +93,7 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
 
     fn parent_open(&self, sink: &AudioSink) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
             let f = match (*parent_class).open {
@@ -114,7 +114,7 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
         spec: &mut AudioRingBufferSpec,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
             let f = match (*parent_class).prepare {
@@ -131,7 +131,7 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
 
     fn parent_unprepare(&self, sink: &AudioSink) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
             let f = match (*parent_class).unprepare {
@@ -153,7 +153,7 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
 
     fn parent_write(&self, sink: &AudioSink, buffer: &[u8]) -> Result<i32, LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
             let f = match (*parent_class).write {
@@ -175,7 +175,7 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
 
     fn parent_reset(&self, sink: &AudioSink) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
             if let Some(f) = (*parent_class).reset {
@@ -185,7 +185,7 @@ impl<T: AudioSinkImpl + ObjectImpl> AudioSinkImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + AudioSinkImpl + BaseSinkImpl> IsSubclassable<T> for AudioSinkClass
+unsafe impl<T: AudioSinkImpl> IsSubclassable<T> for AudioSinkClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -204,11 +204,10 @@ where
     }
 }
 
-unsafe extern "C" fn audiosink_close<T: ObjectSubclass>(
+unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
     ptr: *mut gst_audio_sys::GstAudioSink,
 ) -> glib_sys::gboolean
 where
-    T: AudioSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -227,11 +226,8 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosink_delay<T: ObjectSubclass>(
-    ptr: *mut gst_audio_sys::GstAudioSink,
-) -> u32
+unsafe extern "C" fn audiosink_delay<T: AudioSinkImpl>(ptr: *mut gst_audio_sys::GstAudioSink) -> u32
 where
-    T: AudioSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -241,11 +237,10 @@ where
     gst_panic_to_error!(&wrap, &instance.panicked(), 0, { imp.delay(&wrap) })
 }
 
-unsafe extern "C" fn audiosink_open<T: ObjectSubclass>(
+unsafe extern "C" fn audiosink_open<T: AudioSinkImpl>(
     ptr: *mut gst_audio_sys::GstAudioSink,
 ) -> glib_sys::gboolean
 where
-    T: AudioSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -264,12 +259,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosink_prepare<T: ObjectSubclass>(
+unsafe extern "C" fn audiosink_prepare<T: AudioSinkImpl>(
     ptr: *mut gst_audio_sys::GstAudioSink,
     spec: *mut gst_audio_sys::GstAudioRingBufferSpec,
 ) -> glib_sys::gboolean
 where
-    T: AudioSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -290,11 +284,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosink_unprepare<T: ObjectSubclass>(
+unsafe extern "C" fn audiosink_unprepare<T: AudioSinkImpl>(
     ptr: *mut gst_audio_sys::GstAudioSink,
 ) -> glib_sys::gboolean
 where
-    T: AudioSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -313,13 +306,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosink_write<T: ObjectSubclass>(
+unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(
     ptr: *mut gst_audio_sys::GstAudioSink,
     data: glib_sys::gpointer,
     length: u32,
 ) -> i32
 where
-    T: AudioSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -332,9 +324,8 @@ where
     })
 }
 
-unsafe extern "C" fn audiosink_reset<T: ObjectSubclass>(ptr: *mut gst_audio_sys::GstAudioSink)
+unsafe extern "C" fn audiosink_reset<T: AudioSinkImpl>(ptr: *mut gst_audio_sys::GstAudioSink)
 where
-    T: AudioSinkImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

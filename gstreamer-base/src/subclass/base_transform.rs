@@ -23,7 +23,7 @@ use std::ptr;
 use BaseTransform;
 use BaseTransformClass;
 
-pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 'static {
+pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
     fn start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
@@ -297,10 +297,10 @@ pub trait BaseTransformImplExt {
         <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>;
 }
 
-impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
+impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     fn parent_start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -321,7 +321,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
 
     fn parent_stop(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -348,7 +348,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         filter: Option<&gst::Caps>,
     ) -> Option<gst::Caps> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -373,7 +373,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         othercaps: gst::Caps,
     ) -> gst::Caps {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             match (*parent_class).fixate_caps {
@@ -395,7 +395,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         outcaps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -422,7 +422,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         caps: &gst::Caps,
     ) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -445,7 +445,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         query: &mut gst::QueryRef,
     ) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -470,7 +470,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         othercaps: &gst::Caps,
     ) -> Option<usize> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -497,7 +497,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
 
     fn parent_get_unit_size(&self, element: &BaseTransform, caps: &gst::Caps) -> Option<usize> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class).get_unit_size.unwrap_or_else(|| {
@@ -529,7 +529,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
 
     fn parent_sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -541,7 +541,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
 
     fn parent_src_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -557,7 +557,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         inbuf: &gst::BufferRef,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -593,7 +593,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -625,7 +625,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         buf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
@@ -653,7 +653,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
@@ -683,7 +683,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         outbuf: &mut gst::BufferRef,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             if let Some(ref f) = (*parent_class).copy_metadata {
@@ -710,7 +710,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         inbuf: &'a gst::BufferRef,
     ) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
@@ -729,7 +729,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
 
     fn parent_before_transform(&self, element: &BaseTransform, inbuf: &gst::BufferRef) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             if let Some(ref f) = (*parent_class).before_transform {
@@ -745,7 +745,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         inbuf: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class)
@@ -766,7 +766,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         element: &BaseTransform,
     ) -> Result<GenerateOutputSuccess, gst::FlowError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class)
@@ -827,7 +827,7 @@ pub enum BaseTransformMode {
     Both,
 }
 
-unsafe impl<T: ObjectSubclass + BaseTransformImpl> IsSubclassable<T> for BaseTransformClass
+unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransformClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -857,7 +857,7 @@ where
 }
 
 pub unsafe trait BaseTransformClassSubclassExt: Sized + 'static {
-    fn configure<T: ObjectSubclass + BaseTransformImpl>(
+    fn configure<T: BaseTransformImpl>(
         &mut self,
         mode: BaseTransformMode,
         passthrough_on_same_caps: bool,
@@ -890,7 +890,7 @@ pub unsafe trait BaseTransformClassSubclassExt: Sized + 'static {
 
 unsafe impl<T: ClassStruct> BaseTransformClassSubclassExt for T
 where
-    T::Type: ObjectSubclass + BaseTransformImpl,
+    T::Type: BaseTransformImpl,
     <T::Type as ObjectSubclass>::Instance: PanicPoison,
 {
 }
@@ -908,11 +908,10 @@ pub enum PrepareOutputBufferSuccess {
     InputBuffer,
 }
 
-unsafe extern "C" fn base_transform_start<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_start<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -931,11 +930,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_stop<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_stop<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -954,14 +952,13 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_transform_caps<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_transform_caps<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     direction: gst_sys::GstPadDirection,
     caps: *mut gst_sys::GstCaps,
     filter: *mut gst_sys::GstCaps,
 ) -> *mut gst_sys::GstCaps
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -982,14 +979,13 @@ where
     .unwrap_or(std::ptr::null_mut())
 }
 
-unsafe extern "C" fn base_transform_fixate_caps<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_fixate_caps<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     direction: gst_sys::GstPadDirection,
     caps: *mut gst_sys::GstCaps,
     othercaps: *mut gst_sys::GstCaps,
 ) -> *mut gst_sys::GstCaps
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1007,13 +1003,12 @@ where
     .into_ptr()
 }
 
-unsafe extern "C" fn base_transform_set_caps<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_set_caps<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     incaps: *mut gst_sys::GstCaps,
     outcaps: *mut gst_sys::GstCaps,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1032,13 +1027,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_accept_caps<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_accept_caps<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     direction: gst_sys::GstPadDirection,
     caps: *mut gst_sys::GstCaps,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1051,13 +1045,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_query<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_query<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     direction: gst_sys::GstPadDirection,
     query: *mut gst_sys::GstQuery,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1075,7 +1068,7 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_transform_size<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_transform_size<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     direction: gst_sys::GstPadDirection,
     caps: *mut gst_sys::GstCaps,
@@ -1084,7 +1077,6 @@ unsafe extern "C" fn base_transform_transform_size<T: ObjectSubclass>(
     othersize: *mut usize,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1109,13 +1101,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_get_unit_size<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_get_unit_size<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     caps: *mut gst_sys::GstCaps,
     size: *mut usize,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1134,13 +1125,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_prepare_output_buffer<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     inbuf: *mut gst_sys::GstBuffer,
     outbuf: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1166,12 +1156,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_sink_event<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_sink_event<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     event: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1184,12 +1173,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_src_event<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_src_event<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     event: *mut gst_sys::GstEvent,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1202,13 +1190,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_transform<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_transform<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     inbuf: *mut gst_sys::GstBuffer,
     outbuf: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1226,12 +1213,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_transform_ip<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_transform_ip<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     buf: *mut *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1253,14 +1239,13 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_transform_meta<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_transform_meta<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     outbuf: *mut gst_sys::GstBuffer,
     meta: *mut gst_sys::GstMeta,
     inbuf: *mut gst_sys::GstBuffer,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1280,13 +1265,12 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_copy_metadata<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     inbuf: *mut gst_sys::GstBuffer,
     outbuf: *mut gst_sys::GstBuffer,
 ) -> glib_sys::gboolean
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1319,11 +1303,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_before_transform<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_before_transform<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     inbuf: *mut gst_sys::GstBuffer,
 ) where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1335,13 +1318,12 @@ unsafe extern "C" fn base_transform_before_transform<T: ObjectSubclass>(
     })
 }
 
-unsafe extern "C" fn base_transform_submit_input_buffer<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_submit_input_buffer<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     is_discont: glib_sys::gboolean,
     buf: *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -1355,12 +1337,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn base_transform_generate_output<T: ObjectSubclass>(
+unsafe extern "C" fn base_transform_generate_output<T: BaseTransformImpl>(
     ptr: *mut gst_base_sys::GstBaseTransform,
     buf: *mut *mut gst_sys::GstBuffer,
 ) -> gst_sys::GstFlowReturn
 where
-    T: BaseTransformImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);

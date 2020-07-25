@@ -14,7 +14,7 @@ use AudioRingBufferSpec;
 use AudioSrc;
 use AudioSrcClass;
 
-pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl + Send + Sync + 'static {
+pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl {
     fn close(&self, src: &AudioSrc) -> Result<(), LoggableError> {
         self.parent_close(src)
     }
@@ -66,10 +66,10 @@ pub trait AudioSrcImplExt {
     fn parent_reset(&self, src: &AudioSrc);
 }
 
-impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
+impl<T: AudioSrcImpl> AudioSrcImplExt for T {
     fn parent_close(&self, src: &AudioSrc) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
             let f = match (*parent_class).close {
@@ -86,7 +86,7 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
 
     fn parent_delay(&self, src: &AudioSrc) -> u32 {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
             let f = match (*parent_class).delay {
@@ -99,7 +99,7 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
 
     fn parent_open(&self, src: &AudioSrc) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
             let f = match (*parent_class).open {
@@ -120,7 +120,7 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
         spec: &mut AudioRingBufferSpec,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
             let f = match (*parent_class).prepare {
@@ -137,7 +137,7 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
 
     fn parent_unprepare(&self, src: &AudioSrc) -> Result<(), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
             let f = match (*parent_class).unprepare {
@@ -163,7 +163,7 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
         buffer: &mut [u8],
     ) -> Result<(u32, gst::ClockTime), LoggableError> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
             let f = match (*parent_class).read {
@@ -191,7 +191,7 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
 
     fn parent_reset(&self, src: &AudioSrc) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSrcClass;
             if let Some(f) = (*parent_class).reset {
@@ -201,7 +201,7 @@ impl<T: AudioSrcImpl + ObjectImpl> AudioSrcImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + AudioSrcImpl + BaseSrcImpl> IsSubclassable<T> for AudioSrcClass
+unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrcClass
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
@@ -220,11 +220,10 @@ where
     }
 }
 
-unsafe extern "C" fn audiosrc_close<T: ObjectSubclass>(
+unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(
     ptr: *mut gst_audio_sys::GstAudioSrc,
 ) -> glib_sys::gboolean
 where
-    T: AudioSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -243,9 +242,8 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosrc_delay<T: ObjectSubclass>(ptr: *mut gst_audio_sys::GstAudioSrc) -> u32
+unsafe extern "C" fn audiosrc_delay<T: AudioSrcImpl>(ptr: *mut gst_audio_sys::GstAudioSrc) -> u32
 where
-    T: AudioSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -255,11 +253,10 @@ where
     gst_panic_to_error!(&wrap, &instance.panicked(), 0, { imp.delay(&wrap) })
 }
 
-unsafe extern "C" fn audiosrc_open<T: ObjectSubclass>(
+unsafe extern "C" fn audiosrc_open<T: AudioSrcImpl>(
     ptr: *mut gst_audio_sys::GstAudioSrc,
 ) -> glib_sys::gboolean
 where
-    T: AudioSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -278,12 +275,11 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosrc_prepare<T: ObjectSubclass>(
+unsafe extern "C" fn audiosrc_prepare<T: AudioSrcImpl>(
     ptr: *mut gst_audio_sys::GstAudioSrc,
     spec: *mut gst_audio_sys::GstAudioRingBufferSpec,
 ) -> glib_sys::gboolean
 where
-    T: AudioSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -304,11 +300,10 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosrc_unprepare<T: ObjectSubclass>(
+unsafe extern "C" fn audiosrc_unprepare<T: AudioSrcImpl>(
     ptr: *mut gst_audio_sys::GstAudioSrc,
 ) -> glib_sys::gboolean
 where
-    T: AudioSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -327,14 +322,13 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosrc_read<T: ObjectSubclass>(
+unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
     ptr: *mut gst_audio_sys::GstAudioSrc,
     data: glib_sys::gpointer,
     length: u32,
     timestamp: *mut gst_sys::GstClockTime,
 ) -> u32
 where
-    T: AudioSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
@@ -352,9 +346,8 @@ where
     })
 }
 
-unsafe extern "C" fn audiosrc_reset<T: ObjectSubclass>(ptr: *mut gst_audio_sys::GstAudioSrc)
+unsafe extern "C" fn audiosrc_reset<T: AudioSrcImpl>(ptr: *mut gst_audio_sys::GstAudioSrc)
 where
-    T: AudioSrcImpl,
     T::Instance: PanicPoison,
 {
     let instance = &*(ptr as *mut T::Instance);
