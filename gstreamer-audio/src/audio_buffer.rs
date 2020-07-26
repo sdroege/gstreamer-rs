@@ -118,7 +118,7 @@ impl<T> AudioBuffer<T> {
 
         unsafe {
             Ok(slice::from_raw_parts(
-                self.audio_buffer.planes.add(plane as usize) as *const u8,
+                (*self.audio_buffer.planes.add(plane as usize)) as *const u8,
                 self.plane_size(),
             ))
         }
@@ -227,7 +227,7 @@ impl AudioBuffer<Writable> {
 
         unsafe {
             Ok(slice::from_raw_parts_mut(
-                self.audio_buffer.planes.add(plane as usize) as *mut u8,
+                (*self.audio_buffer.planes.add(plane as usize)) as *mut u8,
                 self.plane_size(),
             ))
         }
@@ -348,7 +348,7 @@ impl<T> AudioBufferRef<T> {
 
         unsafe {
             Ok(slice::from_raw_parts(
-                self.audio_buffer.planes.add(plane as usize) as *const u8,
+                (*self.audio_buffer.planes.add(plane as usize)) as *const u8,
                 self.plane_size(),
             ))
         }
@@ -479,7 +479,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
 
         unsafe {
             Ok(slice::from_raw_parts_mut(
-                self.audio_buffer.planes.add(plane as usize) as *mut u8,
+                (*self.audio_buffer.planes.add(plane as usize)) as *mut u8,
                 self.plane_size(),
             ))
         }
