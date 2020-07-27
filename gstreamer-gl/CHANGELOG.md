@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.2] - 2020-07-27
+### Fixed
+- Use correct pointer for the plane data in `gst_audio::AudioBuffer`.
+
+### Added
+- Add `gst::GhostPad` convenience constructors that take a target pad, similar
+  to the ones that existed in 0.15 and before.
+- Add `gst::parse_bin_from_description_with_name` that allows setting a name
+  for the created bin without having to use unsafe code in application code.
+
 ## [0.16.1] - 2020-07-10
 ### Fixed
 - Allow calling `gst::DebugCategory::new()` before `gst::init()` again.
@@ -846,7 +856,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.2...HEAD
+[0.16.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.1...0.16.2
 [0.16.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.0...0.16.1
 [0.16.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.7...0.16.0
 [0.15.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.6...0.15.7
