@@ -59,6 +59,27 @@ pub fn parse_bin_from_description_full(
     }
 }
 
+pub fn parse_bin_from_description_with_name_full(
+    bin_description: &str,
+    ghost_unlinked_pads: bool,
+    bin_name: &str,
+    context: Option<&mut ParseContext>,
+    flags: ParseFlags,
+) -> Result<Element, glib::Error> {
+    assert_initialized_main_thread!();
+
+    assert_initialized_main_thread!();
+    let bin =
+        parse_bin_from_description_full(bin_description, ghost_unlinked_pads, context, flags)?;
+    if !bin_name.is_empty() {
+        let obj = bin.clone().upcast::<Object>();
+        unsafe {
+            gst_sys::gst_object_set_name(obj.to_glib_none().0, bin_name.to_glib_none().0);
+        }
+    }
+    Ok(bin)
+}
+
 pub fn parse_launch_full(
     pipeline_description: &str,
     mut context: Option<&mut ParseContext>,
