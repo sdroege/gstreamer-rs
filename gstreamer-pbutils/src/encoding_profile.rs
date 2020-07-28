@@ -488,7 +488,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
         for profile in self.profiles {
             container_profile
                 .add_profile(&profile)
-                .or_else(|_error| Err(EncodingProfileBuilderError(())))?;
+                .map_err(|_error| EncodingProfileBuilderError(()))?;
         }
 
         set_common_fields(&container_profile, &self.base);

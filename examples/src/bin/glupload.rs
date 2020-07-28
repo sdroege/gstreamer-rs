@@ -82,6 +82,7 @@ void main() {
 #[allow(clippy::unreadable_literal)]
 #[allow(clippy::unused_unit)]
 #[allow(clippy::too_many_arguments)]
+#[allow(clippy::manual_non_exhaustive)]
 mod gl {
     pub use self::Gles2 as Gl;
     include!(concat!(env!("OUT_DIR"), "/test_gl_bindings.rs"));
