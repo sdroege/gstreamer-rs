@@ -1,7 +1,7 @@
 source ./ci/env.sh
 export CARGO_HOME='/usr/local/cargo'
 
-RUSTUP_VERSION=1.21.1
+RUSTUP_VERSION=1.22.1
 RUST_VERSION=$1
 RUST_ARCH="x86_64-unknown-linux-gnu"
 
@@ -21,5 +21,5 @@ if [ "$RUST_VERSION" = "stable" ]; then
   rustup component add clippy-preview
   rustup component add rustfmt
   cargo install --force cargo-deny
-  cargo install --force --git https://github.com/kbknapp/cargo-outdated
+  cargo install --force cargo-outdated
 fi
