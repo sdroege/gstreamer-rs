@@ -86,6 +86,12 @@ impl<'a> RTPBuffer<'a, Writable> {
         }
     }
 
+    pub fn set_marker(&mut self, m: bool) {
+        unsafe {
+            gst_rtp_sys::gst_rtp_buffer_set_marker(&mut self.rtp_buffer, m.to_glib());
+        }
+    }
+
     pub fn set_payload_type(&mut self, pt: u8) {
         unsafe {
             gst_rtp_sys::gst_rtp_buffer_set_payload_type(&mut self.rtp_buffer, pt);
@@ -216,6 +222,14 @@ impl<'a, T> RTPBuffer<'a, T> {
         unsafe {
             gst_rtp_sys::gst_rtp_buffer_get_csrc_count(glib::translate::mut_override(
                 &self.rtp_buffer,
+            ))
+        }
+    }
+
+    pub fn get_marker(&self) -> bool {
+        unsafe {
+            from_glib(gst_rtp_sys::gst_rtp_buffer_get_marker(
+                glib::translate::mut_override(&self.rtp_buffer),
             ))
         }
     }
@@ -369,6 +383,9 @@ mod tests {
 
         rtp_buffer.set_seq(42);
         assert_eq!(rtp_buffer.get_seq(), 42);
+
+        rtp_buffer.set_marker(true);
+        assert!(rtp_buffer.get_marker());
 
         rtp_buffer.set_payload_type(43);
         assert_eq!(rtp_buffer.get_payload_type(), 43);
