@@ -1070,21 +1070,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
     }
 }
 
-unsafe extern "C" fn trampoline_pad_probe<
-    T,
-    F: Fn(&T, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
->(
-    pad: *mut gst_sys::GstPad,
+unsafe fn create_probe_info<'a>(
     info: *mut gst_sys::GstPadProbeInfo,
-    func: gpointer,
-) -> gst_sys::GstPadProbeReturn
-where
-    T: IsA<Pad>,
-{
-    let func: &F = &*(func as *const F);
+) -> (PadProbeInfo<'a>, Option<glib::Type>) {
     let mut data_type = None;
-
-    let mut probe_info = PadProbeInfo {
+    let info = PadProbeInfo {
         mask: from_glib((*info).type_),
         id: PadProbeId(NonZeroU64::new_unchecked((*info).id as u64)),
         offset: (*info).offset,
@@ -1120,12 +1110,15 @@ where
         },
         flow_ret: from_glib((*info).ABI.abi.flow_ret),
     };
+    (info, data_type)
+}
 
-    let ret = func(
-        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        &mut probe_info,
-    );
-
+unsafe fn update_probe_info(
+    ret: PadProbeReturn,
+    probe_info: PadProbeInfo,
+    data_type: Option<glib::Type>,
+    info: *mut gst_sys::GstPadProbeInfo,
+) {
     if ret == PadProbeReturn::Handled {
         // Handled queries need to be returned
         // Handled buffers are consumed
@@ -1177,6 +1170,29 @@ where
     }
 
     (*info).ABI.abi.flow_ret = probe_info.flow_ret.to_glib();
+}
+
+unsafe extern "C" fn trampoline_pad_probe<
+    T,
+    F: Fn(&T, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
+>(
+    pad: *mut gst_sys::GstPad,
+    info: *mut gst_sys::GstPadProbeInfo,
+    func: gpointer,
+) -> gst_sys::GstPadProbeReturn
+where
+    T: IsA<Pad>,
+{
+    let func: &F = &*(func as *const F);
+
+    let (mut probe_info, data_type) = create_probe_info(info);
+
+    let ret = func(
+        &Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+        &mut probe_info,
+    );
+
+    update_probe_info(ret, probe_info, data_type, info);
 
     ret.to_glib()
 }
