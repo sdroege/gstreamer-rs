@@ -2317,7 +2317,7 @@ return to upstream/caller (indicating either GST_FLOW_ERROR or GST_FLOW_OK).</do
         </parameter>
       </parameters>
     </function-macro>
-    <constant name="VIDEO_FORMATS_ALL" value="{ AYUV64, ARGB64, GBRA_12BE, GBRA_12LE, Y412_BE, Y412_LE, A444_10BE, GBRA_10BE, A444_10LE, GBRA_10LE, A422_10BE, A422_10LE, A420_10BE, A420_10LE, Y410, RGB10A2_LE, BGR10A2_LE, GBRA, ABGR, VUYA, BGRA, AYUV, ARGB, RGBA, A420, Y444_16BE, Y444_16LE, v216, P016_BE, P016_LE, Y444_12BE, GBR_12BE, Y444_12LE, GBR_12LE, I422_12BE, I422_12LE, Y212_BE, Y212_LE, I420_12BE, I420_12LE, P012_BE, P012_LE, Y444_10BE, GBR_10BE, Y444_10LE, GBR_10LE, r210, I422_10BE, I422_10LE, NV16_10LE32, Y210, v210, UYVP, I420_10BE, I420_10LE, P010_10BE, P010_10LE, NV12_10LE32, NV12_10LE40, Y444, GBR, NV24, xBGR, BGRx, xRGB, RGBx, BGR, IYU2, v308, RGB, Y42B, NV61, NV16, VYUY, UYVY, YVYU, YUY2, I420, YV12, NV21, NV12, NV12_64Z32, Y41B, IYU1, YVU9, YUV9, RGB16, BGR16, RGB15, BGR15, RGB8P, GRAY16_BE, GRAY16_LE, GRAY10_LE32, GRAY8 }" c:type="GST_VIDEO_FORMATS_ALL">
+    <constant name="VIDEO_FORMATS_ALL" value="{ AYUV64, ARGB64, GBRA_12BE, GBRA_12LE, Y412_BE, Y412_LE, A444_10BE, GBRA_10BE, A444_10LE, GBRA_10LE, A422_10BE, A422_10LE, A420_10BE, A420_10LE, Y410, RGB10A2_LE, BGR10A2_LE, GBRA, ABGR, VUYA, BGRA, AYUV, ARGB, RGBA, A420, Y444_16BE, Y444_16LE, v216, P016_BE, P016_LE, Y444_12BE, GBR_12BE, Y444_12LE, GBR_12LE, I422_12BE, I422_12LE, Y212_BE, Y212_LE, I420_12BE, I420_12LE, P012_BE, P012_LE, Y444_10BE, GBR_10BE, Y444_10LE, GBR_10LE, r210, I422_10BE, I422_10LE, NV16_10LE32, Y210, v210, UYVP, I420_10BE, I420_10LE, P010_10BE, P010_10LE, NV12_10LE32, NV12_10LE40, Y444, GBR, NV24, xBGR, BGRx, xRGB, RGBx, BGR, IYU2, v308, RGB, Y42B, NV61, NV16, VYUY, UYVY, YVYU, YUY2, I420, YV12, NV21, NV12, NV12_64Z32, NV12_4L4, NV12_32L32, Y41B, IYU1, YVU9, YUV9, RGB16, BGR16, RGB15, BGR15, RGB8P, GRAY16_BE, GRAY16_LE, GRAY10_LE32, GRAY8 }" c:type="GST_VIDEO_FORMATS_ALL">
       <doc xml:space="preserve">List of all video formats, for use in template caps strings.
 
 Formats are sorted by decreasing "quality", using these criteria by priority:
@@ -4878,16 +4878,18 @@ non-linear RGB (R'G'B')</doc>
         <doc xml:space="preserve">unknown matrix</doc>
       </member>
       <member name="rgb" value="1" c:identifier="GST_VIDEO_COLOR_MATRIX_RGB" glib:nick="rgb">
-        <doc xml:space="preserve">identity matrix</doc>
+        <doc xml:space="preserve">identity matrix. Order of coefficients is
+actually GBR, also IEC 61966-2-1 (sRGB)</doc>
       </member>
       <member name="fcc" value="2" c:identifier="GST_VIDEO_COLOR_MATRIX_FCC" glib:nick="fcc">
-        <doc xml:space="preserve">FCC color matrix</doc>
+        <doc xml:space="preserve">FCC Title 47 Code of Federal Regulations 73.682 (a)(20)</doc>
       </member>
       <member name="bt709" value="3" c:identifier="GST_VIDEO_COLOR_MATRIX_BT709" glib:nick="bt709">
-        <doc xml:space="preserve">ITU-R BT.709 color matrix</doc>
+        <doc xml:space="preserve">ITU-R BT.709 color matrix, also ITU-R BT1361
+/ IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B</doc>
       </member>
       <member name="bt601" value="4" c:identifier="GST_VIDEO_COLOR_MATRIX_BT601" glib:nick="bt601">
-        <doc xml:space="preserve">ITU-R BT.601 color matrix</doc>
+        <doc xml:space="preserve">ITU-R BT.601 color matrix, also SMPTE170M / ITU-R BT1358 525 / ITU-R BT1700 NTSC</doc>
       </member>
       <member name="smpte240m" value="5" c:identifier="GST_VIDEO_COLOR_MATRIX_SMPTE240M" glib:nick="smpte240m">
         <doc xml:space="preserve">SMPTE 240M color matrix</doc>
@@ -4984,40 +4986,49 @@ the CIE XYZ colorspace.</doc>
         <doc xml:space="preserve">unknown color primaries</doc>
       </member>
       <member name="bt709" value="1" c:identifier="GST_VIDEO_COLOR_PRIMARIES_BT709" glib:nick="bt709">
-        <doc xml:space="preserve">BT709 primaries</doc>
+        <doc xml:space="preserve">BT709 primaries, also ITU-R BT1361 / IEC
+61966-2-4 / SMPTE RP177 Annex B</doc>
       </member>
       <member name="bt470m" value="2" c:identifier="GST_VIDEO_COLOR_PRIMARIES_BT470M" glib:nick="bt470m">
-        <doc xml:space="preserve">BT470M primaries</doc>
+        <doc xml:space="preserve">BT470M primaries, also FCC Title 47 Code
+of Federal Regulations 73.682 (a)(20)</doc>
       </member>
       <member name="bt470bg" value="3" c:identifier="GST_VIDEO_COLOR_PRIMARIES_BT470BG" glib:nick="bt470bg">
-        <doc xml:space="preserve">BT470BG primaries</doc>
+        <doc xml:space="preserve">BT470BG primaries, also ITU-R BT601-6
+625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL &amp; SECAM</doc>
       </member>
       <member name="smpte170m" value="4" c:identifier="GST_VIDEO_COLOR_PRIMARIES_SMPTE170M" glib:nick="smpte170m">
-        <doc xml:space="preserve">SMPTE170M primaries</doc>
+        <doc xml:space="preserve">SMPTE170M primaries, also ITU-R
+BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC</doc>
       </member>
       <member name="smpte240m" value="5" c:identifier="GST_VIDEO_COLOR_PRIMARIES_SMPTE240M" glib:nick="smpte240m">
         <doc xml:space="preserve">SMPTE240M primaries</doc>
       </member>
       <member name="film" value="6" c:identifier="GST_VIDEO_COLOR_PRIMARIES_FILM" glib:nick="film">
-        <doc xml:space="preserve">Generic film</doc>
+        <doc xml:space="preserve">Generic film (colour filters using
+Illuminant C)</doc>
       </member>
       <member name="bt2020" value="7" c:identifier="GST_VIDEO_COLOR_PRIMARIES_BT2020" glib:nick="bt2020">
-        <doc xml:space="preserve">BT2020 primaries. Since: 1.6</doc>
+        <doc xml:space="preserve">ITU-R BT2020 primaries. Since: 1.6</doc>
       </member>
       <member name="adobergb" value="8" c:identifier="GST_VIDEO_COLOR_PRIMARIES_ADOBERGB" glib:nick="adobergb">
         <doc xml:space="preserve">Adobe RGB primaries. Since: 1.8</doc>
       </member>
       <member name="smptest428" value="9" c:identifier="GST_VIDEO_COLOR_PRIMARIES_SMPTEST428" glib:nick="smptest428">
-        <doc xml:space="preserve">SMPTE ST 428 primaries. Since: 1.16</doc>
+        <doc xml:space="preserve">SMPTE ST 428 primaries (CIE 1931
+XYZ). Since: 1.16</doc>
       </member>
       <member name="smpterp431" value="10" c:identifier="GST_VIDEO_COLOR_PRIMARIES_SMPTERP431" glib:nick="smpterp431">
-        <doc xml:space="preserve">SMPTE RP 431 primaries. Since: 1.16</doc>
+        <doc xml:space="preserve">SMPTE RP 431 primaries (ST 431-2
+(2011) / DCI P3). Since: 1.16</doc>
       </member>
       <member name="smpteeg432" value="11" c:identifier="GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432" glib:nick="smpteeg432">
-        <doc xml:space="preserve">SMPTE EG 432 primaries. Since: 1.16</doc>
+        <doc xml:space="preserve">SMPTE EG 432 primaries (ST 432-1
+(2010) / P3 D65). Since: 1.16</doc>
       </member>
       <member name="ebu3213" value="12" c:identifier="GST_VIDEO_COLOR_PRIMARIES_EBU3213" glib:nick="ebu3213">
-        <doc xml:space="preserve">EBU 3213 primaries. Since: 1.16</doc>
+        <doc xml:space="preserve">EBU 3213 primaries (JEDEC P22
+phosphors). Since: 1.16</doc>
       </member>
       <function name="from_iso" c:identifier="gst_video_color_primaries_from_iso" version="1.18">
         <doc xml:space="preserve">Converts the @value to the #GstVideoColorPrimaries
@@ -8666,6 +8677,12 @@ for details about the layout and packing of these formats in memory.</doc>
       <member name="y412_le" value="96" c:identifier="GST_VIDEO_FORMAT_Y412_LE" glib:nick="y412-le">
         <doc xml:space="preserve">packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)</doc>
       </member>
+      <member name="nv12_4l4" value="97" c:identifier="GST_VIDEO_FORMAT_NV12_4L4" glib:nick="nv12-4l4">
+        <doc xml:space="preserve">NV12 with 4x4 tiles in linear order (Since: 1.18)</doc>
+      </member>
+      <member name="nv12_32l32" value="98" c:identifier="GST_VIDEO_FORMAT_NV12_32L32" glib:nick="nv12-32l32">
+        <doc xml:space="preserve">NV12 with 32x32 tiles in linear order (Since: 1.18)</doc>
+      </member>
       <function name="from_fourcc" c:identifier="gst_video_format_from_fourcc">
         <doc xml:space="preserve">Converts a FOURCC value into the corresponding #GstVideoFormat.
 If the FOURCC cannot be represented by #GstVideoFormat,
@@ -9139,7 +9156,10 @@ separate step after unpacking.</doc>
         </array>
       </field>
       <method name="copy" c:identifier="gst_video_frame_copy">
-        <doc xml:space="preserve">Copy the contents from @src to @dest.</doc>
+        <doc xml:space="preserve">Copy the contents from @src to @dest.
+
+Note: Since: 1.18, @dest dimensions are allowed to be
+smaller than @src dimensions.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if the contents could be copied.</doc>
@@ -12822,6 +12842,9 @@ frames will only be rendered in PLAYING state.</doc>
    in memory in Z or flipped Z order. In case of odd rows, the last row
    of blocks is arranged in linear order.</doc>
       </member>
+      <member name="linear" value="131072" c:identifier="GST_VIDEO_TILE_MODE_LINEAR" glib:nick="linear">
+        <doc xml:space="preserve">Tiles are in row order. (Since: 1.18)</doc>
+      </member>
     </enumeration>
     <enumeration name="VideoTileType" glib:type-name="GstVideoTileType" glib:get-type="gst_video_tile_type_get_type" c:type="GstVideoTileType">
       <doc xml:space="preserve">Enum value describing the most common tiling types.</doc>
@@ -13532,7 +13555,8 @@ non-linear RGB (R'G'B') and linear RGB</doc>
       </member>
       <member name="bt709" value="5" c:identifier="GST_VIDEO_TRANSFER_BT709" glib:nick="bt709">
         <doc xml:space="preserve">Gamma 2.2 curve with a linear segment in the lower
-                          range</doc>
+                          range, also ITU-R BT470M / ITU-R BT1700 625 PAL &amp;
+                          SECAM / ITU-R BT1361</doc>
       </member>
       <member name="smpte240m" value="6" c:identifier="GST_VIDEO_TRANSFER_SMPTE240M" glib:nick="smpte240m">
         <doc xml:space="preserve">Gamma 2.2 curve with a linear segment in the
@@ -13540,10 +13564,10 @@ non-linear RGB (R'G'B') and linear RGB</doc>
       </member>
       <member name="srgb" value="7" c:identifier="GST_VIDEO_TRANSFER_SRGB" glib:nick="srgb">
         <doc xml:space="preserve">Gamma 2.4 curve with a linear segment in the lower
-                         range</doc>
+                         range. IEC 61966-2-1 (sRGB or sYCC)</doc>
       </member>
       <member name="gamma28" value="8" c:identifier="GST_VIDEO_TRANSFER_GAMMA28" glib:nick="gamma28">
-        <doc xml:space="preserve">Gamma 2.8 curve</doc>
+        <doc xml:space="preserve">Gamma 2.8 curve, also ITU-R BT470BG</doc>
       </member>
       <member name="log100" value="9" c:identifier="GST_VIDEO_TRANSFER_LOG100" glib:nick="log100">
         <doc xml:space="preserve">Logarithmic transfer characteristic
@@ -13551,7 +13575,7 @@ non-linear RGB (R'G'B') and linear RGB</doc>
       </member>
       <member name="log316" value="10" c:identifier="GST_VIDEO_TRANSFER_LOG316" glib:nick="log316">
         <doc xml:space="preserve">Logarithmic transfer characteristic
-                            316.22777:1 range</doc>
+                            316.22777:1 range (100 * sqrt(10) : 1)</doc>
       </member>
       <member name="bt2020_12" value="11" c:identifier="GST_VIDEO_TRANSFER_BT2020_12" glib:nick="bt2020-12">
         <doc xml:space="preserve">Gamma 2.2 curve with a linear segment in the lower
@@ -13564,7 +13588,7 @@ non-linear RGB (R'G'B') and linear RGB</doc>
       <member name="bt2020_10" value="13" c:identifier="GST_VIDEO_TRANSFER_BT2020_10" glib:nick="bt2020-10">
         <doc xml:space="preserve">Rec. ITU-R BT.2020-2 with 10 bits per component.
                                (functionally the same as the values
-                               GST_VIDEO_TRANSFER_BT709 and GST_VIDEO_TRANSFER_BT2020_12).
+                               GST_VIDEO_TRANSFER_BT709 and GST_VIDEO_TRANSFER_BT601).
                                Since: 1.18</doc>
       </member>
       <member name="smpte2084" value="14" c:identifier="GST_VIDEO_TRANSFER_SMPTE2084" glib:nick="smpte2084">
@@ -13576,6 +13600,12 @@ non-linear RGB (R'G'B') and linear RGB</doc>
         <doc xml:space="preserve">Association of Radio Industries and Businesses (ARIB)
                                   STD-B67 and Rec. ITU-R BT.2100-1 hybrid loggamma (HLG) system
                                   Since: 1.18</doc>
+      </member>
+      <member name="bt601" value="16" c:identifier="GST_VIDEO_TRANSFER_BT601" glib:nick="bt601">
+        <doc xml:space="preserve">also known as SMPTE170M / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC
+                           Functionally the same as the values
+                           GST_VIDEO_TRANSFER_BT709, and GST_VIDEO_TRANSFER_BT2020_10.
+                           Since: 1.18</doc>
       </member>
     </enumeration>
     <record name="VideoVBIEncoder" c:type="GstVideoVBIEncoder" version="1.16" glib:type-name="GstVideoVBIEncoder" glib:get-type="gst_video_vbi_encoder_get_type" c:symbol-prefix="video_vbi_encoder">
@@ -15356,6 +15386,36 @@ and "ITU-T H.273 Table 3".
       <parameters>
         <parameter name="value" transfer-ownership="none">
           <doc xml:space="preserve">a ITU-T H.273 transfer characteristics value</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="video_color_transfer_is_equivalent" c:identifier="gst_video_color_transfer_is_equivalent" version="1.18">
+      <doc xml:space="preserve">Returns whether @from_func and @to_func are equivalent. There are cases
+(e.g. BT601, BT709, and BT2020_10) where several functions are functionally
+identical. In these cases, when doing conversion, we should consider them
+as equivalent. Also, BT2020_12 is the same as the aforementioned three for
+less than 12 bits per pixel.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">TRUE if @from_func and @to_func can be considered equivalent.</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="from_func" transfer-ownership="none">
+          <doc xml:space="preserve">#GstVideoTransferFunction to convert from</doc>
+          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+        </parameter>
+        <parameter name="from_bpp" transfer-ownership="none">
+          <doc xml:space="preserve">bits per pixel to convert from</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="to_func" transfer-ownership="none">
+          <doc xml:space="preserve">#GstVideoTransferFunction to convert into</doc>
+          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+        </parameter>
+        <parameter name="to_bpp" transfer-ownership="none">
+          <doc xml:space="preserve">bits per pixel to convert into</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
       </parameters>

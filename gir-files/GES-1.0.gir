@@ -949,7 +949,7 @@ be created by clips.</doc-deprecated>
         <type name="utf8" c:type="gchar*"/>
       </field>
       <field name="priv" readable="0" private="1">
-        <type name="AudioUriSourcePrivate" c:type="GESAudioUriSourcePrivate*"/>
+        <type name="UriSource" c:type="GESUriSource*"/>
       </field>
       <field name="_ges_reserved" readable="0" private="1">
         <array zero-terminated="0" fixed-size="4">
@@ -6742,7 +6742,7 @@ after calling this.
         </parameters>
       </method>
       <method name="set_render_settings" c:identifier="ges_pipeline_set_render_settings">
-        <doc xml:space="preserve">Specifies the encoding to be used by the pipeline to render its
+        <doc xml:space="preserve">Specifies encoding setting to be used by the pipeline to render its
 #GESPipeline:timeline, and where the result should be written to.
 
 This method **must** be called before setting the pipeline mode to
@@ -6874,7 +6874,9 @@ forced decoding (the underlying #encodebin has its
       <member name="smart_render" value="8" c:identifier="GES_PIPELINE_MODE_SMART_RENDER" glib:nick="smart_render">
         <doc xml:space="preserve">Render the #GESPipeline:timeline,
 avoiding decoding/reencoding (the underlying #encodebin has its
-#encodebin:avoid-reencoding property set to %TRUE)</doc>
+#encodebin:avoid-reencoding property set to %TRUE).
+&gt; NOTE: Smart rendering can not work in tracks where #GESTrack:mixing
+&gt; is enabled.</doc>
       </member>
     </bitfield>
     <record name="PipelinePrivate" c:type="GESPipelinePrivate" disguised="1">
@@ -6905,6 +6907,7 @@ is really not in good shape and is deprecated.</doc>
       </field>
     </class>
     <record name="PitiviFormatterClass" c:type="GESPitiviFormatterClass" glib:is-gtype-struct-for="PitiviFormatter">
+      <attribute name="doc.skip" value="true"/>
       
       <field name="parent_class" readable="0" private="1">
         <type name="FormatterClass" c:type="GESFormatterClass"/>
@@ -9544,6 +9547,25 @@ layers were created for the timeline.</doc>
           <parameter name="layer" transfer-ownership="none">
             <doc xml:space="preserve">The layer that was removed from @timeline</doc>
             <type name="Layer"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="select-element-track" when="last" version="1.18">
+        <doc xml:space="preserve">Simplified version of #GESTimeline::select-tracks-for-object which only
+allows @track_element to be added to a single #GESTrack.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A track to put @track_element into, or %NULL if
+it should be discarded.</doc>
+          <type name="Track"/>
+        </return-value>
+        <parameters>
+          <parameter name="clip" transfer-ownership="none">
+            <doc xml:space="preserve">The clip that @track_element is being added to</doc>
+            <type name="Clip"/>
+          </parameter>
+          <parameter name="track_element" transfer-ownership="none">
+            <doc xml:space="preserve">The element being added</doc>
+            <type name="TrackElement"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -12915,7 +12937,10 @@ function already set appropriately.</doc>
         </parameters>
       </method>
       <method name="set_restriction_caps" c:identifier="ges_track_set_restriction_caps">
-        <doc xml:space="preserve">Sets the #GESTrack:restriction-caps for the track.</doc>
+        <doc xml:space="preserve">Sets the #GESTrack:restriction-caps for the track.
+
+&gt; **NOTE**: Restriction caps are **not** taken into account when
+&gt; using #GESPipeline:mode=#GES_PIPELINE_MODE_SMART_RENDER.</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -14870,6 +14895,10 @@ are different as those can be extended 'infinitely'.</doc>
     <record name="UriClipPrivate" c:type="GESUriClipPrivate" disguised="1">
       
     </record>
+    <record name="UriSource" c:type="GESUriSource" disguised="1">
+      <attribute name="doc.skip" value="true"/>
+      
+    </record>
     <class name="UriSourceAsset" c:symbol-prefix="uri_source_asset" c:type="GESUriSourceAsset" parent="TrackElementAsset" glib:type-name="GESUriSourceAsset" glib:get-type="ges_uri_source_asset_get_type" glib:type-struct="UriSourceAssetClass">
       <doc xml:space="preserve">Asset to create a stream specific #GESSource for a media file.
 
@@ -14959,6 +14988,22 @@ contains one frame)</doc>
     <record name="UriSourceAssetPrivate" c:type="GESUriSourceAssetPrivate" disguised="1">
       
     </record>
+    <constant name="VERSION_MAJOR" value="1" c:type="GES_VERSION_MAJOR">
+      
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="VERSION_MICRO" value="2" c:type="GES_VERSION_MICRO">
+      
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="VERSION_MINOR" value="17" c:type="GES_VERSION_MINOR">
+      
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="VERSION_NANO" value="1" c:type="GES_VERSION_NANO">
+      
+      <type name="gint" c:type="gint"/>
+    </constant>
     <class name="VideoSource" c:symbol-prefix="video_source" c:type="GESVideoSource" parent="Source" abstract="1" glib:type-name="GESVideoSource" glib:get-type="ges_video_source_get_type" glib:type-struct="VideoSourceClass">
       <doc xml:space="preserve">Base class for video sources</doc>
       
@@ -15665,7 +15710,7 @@ for later use.</doc>
         <type name="utf8" c:type="gchar*"/>
       </field>
       <field name="priv" readable="0" private="1">
-        <type name="VideoUriSourcePrivate" c:type="GESVideoUriSourcePrivate*"/>
+        <type name="UriSource" c:type="GESUriSource*"/>
       </field>
       <field name="_ges_reserved" readable="0" private="1">
         <array zero-terminated="0" fixed-size="4">

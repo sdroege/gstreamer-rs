@@ -40,10 +40,6 @@ synchronization metadata on buffers from the pool.</doc>
       
       <type name="utf8" c:type="gchar*"/>
     </constant>
-    
-    
-    
-    
     <bitfield name="GLAPI" glib:type-name="GstGLAPI" glib:get-type="gst_gl_api_get_type" c:type="GstGLAPI">
       <member name="none" value="0" c:identifier="GST_GL_API_NONE" glib:nick="none">
         <doc xml:space="preserve">no API</doc>
@@ -2660,19 +2656,6 @@ platform and window system specific functionality.
           </instance-parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="get_foreign_display" invoker="get_foreign_display" version="1.18">
-        
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">whether the context belongs to a foreign display</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="display" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstGLDisplay</doc>
-            <type name="GLDisplay" c:type="GstGLDisplay*"/>
-          </instance-parameter>
-        </parameters>
-      </virtual-method>
       <virtual-method name="get_handle" invoker="get_handle" version="1.4">
         
         <return-value transfer-ownership="none">
@@ -2741,7 +2724,6 @@ Must be called with the object lock held.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      
       <method name="filter_gl_api" c:identifier="gst_gl_display_filter_gl_api">
         <doc xml:space="preserve">limit the use of OpenGL to the requested @gl_api.  This is intended to allow
 application and elements to request a specific set of OpenGL API's based on
@@ -2787,19 +2769,6 @@ second argument is @data.</doc>
             <doc xml:space="preserve">a comparison function to run</doc>
             <type name="GLib.CompareFunc" c:type="GCompareFunc"/>
           </parameter>
-        </parameters>
-      </method>
-      <method name="get_foreign_display" c:identifier="gst_gl_display_get_foreign_display" version="1.18">
-        
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">whether the context belongs to a foreign display</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="display" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstGLDisplay</doc>
-            <type name="GLDisplay" c:type="GstGLDisplay*"/>
-          </instance-parameter>
         </parameters>
       </method>
       <method name="get_gl_api" c:identifier="gst_gl_display_get_gl_api">
@@ -3005,98 +2974,12 @@ display's object lock held.</doc>
           </parameters>
         </callback>
       </field>
-      <field name="get_foreign_display">
-        <callback name="get_foreign_display">
-          
-          <return-value transfer-ownership="none">
-            <doc xml:space="preserve">whether the context belongs to a foreign display</doc>
-            <type name="gboolean" c:type="gboolean"/>
-          </return-value>
-          <parameters>
-            <parameter name="display" transfer-ownership="none">
-              <doc xml:space="preserve">a #GstGLDisplay</doc>
-              <type name="GLDisplay" c:type="GstGLDisplay*"/>
-            </parameter>
-          </parameters>
-        </callback>
-      </field>
-      <field name="_padding" readable="0" private="1">
-        <array zero-terminated="0" fixed-size="3">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </record>
-    <class name="GLDisplayEGL" c:symbol-prefix="gl_display_egl" c:type="GstGLDisplayEGL" parent="GLDisplay" glib:type-name="GstGLDisplayEGL" glib:get-type="gst_gl_display_egl_get_type" glib:type-struct="GLDisplayEGLClass">
-      <doc xml:space="preserve">the contents of a #GstGLDisplayEGL are private and should only be accessed
-through the provided API</doc>
-      
-      <constructor name="new" c:identifier="gst_gl_display_egl_new">
-        <doc xml:space="preserve">Create a new #GstGLDisplayEGL using the default EGL_DEFAULT_DISPLAY.</doc>
-        
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstGLDisplayEGL or %NULL</doc>
-          <type name="GLDisplayEGL" c:type="GstGLDisplayEGL*"/>
-        </return-value>
-      </constructor>
-      <constructor name="new_with_egl_display" c:identifier="gst_gl_display_egl_new_with_egl_display">
-        
-        <return-value transfer-ownership="none">
-          <type name="GLDisplayEGL" c:type="GstGLDisplayEGL*"/>
-        </return-value>
-        <parameters>
-          <parameter name="display" transfer-ownership="none" nullable="1" allow-none="1">
-            <type name="gpointer" c:type="gpointer"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <function name="get_from_native" c:identifier="gst_gl_display_egl_get_from_native" version="1.12">
-        <doc xml:space="preserve">Attempts to create a new `EGLDisplay` from @display.  If @type is
-%GST_GL_DISPLAY_TYPE_ANY, then @display must be 0. @type must not be
-%GST_GL_DISPLAY_TYPE_NONE.</doc>
-        
-        <return-value transfer-ownership="none" nullable="1">
-          <doc xml:space="preserve">A `EGLDisplay` or `EGL_NO_DISPLAY`</doc>
-          <type name="gpointer" c:type="gpointer"/>
-        </return-value>
-        <parameters>
-          <parameter name="type" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstGLDisplayType</doc>
-            <type name="GLDisplayType" c:type="GstGLDisplayType"/>
-          </parameter>
-          <parameter name="display" transfer-ownership="none">
-            <doc xml:space="preserve">pointer to a display (or 0)</doc>
-            <type name="guintptr" c:type="guintptr"/>
-          </parameter>
-        </parameters>
-      </function>
-      <field name="parent">
-        <type name="GLDisplay" c:type="GstGLDisplay"/>
-      </field>
-      <field name="display" readable="0" private="1">
-        <type name="gpointer" c:type="gpointer"/>
-      </field>
-      <field name="foreign_display" readable="0" private="1">
-        <type name="gboolean" c:type="gboolean"/>
-      </field>
       <field name="_padding" readable="0" private="1">
         <array zero-terminated="0" fixed-size="4">
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
-    </class>
-    <record name="GLDisplayEGLClass" c:type="GstGLDisplayEGLClass" glib:is-gtype-struct-for="GLDisplayEGL">
-      
-      <field name="object_class">
-        <type name="GLDisplayClass" c:type="GstGLDisplayClass"/>
-      </field>
-      <field name="_padding">
-        <array zero-terminated="0" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
     </record>
-    
-    
     <record name="GLDisplayPrivate" c:type="GstGLDisplayPrivate" disguised="1">
       
     </record>
@@ -3135,142 +3018,6 @@ through the provided API</doc>
         <doc xml:space="preserve">any display type</doc>
       </member>
     </bitfield>
-    <class name="GLDisplayWayland" c:symbol-prefix="gl_display_wayland" c:type="GstGLDisplayWayland" parent="GLDisplay" glib:type-name="GstGLDisplayWayland" glib:get-type="gst_gl_display_wayland_get_type" glib:type-struct="GLDisplayWaylandClass">
-      <doc xml:space="preserve">the contents of a #GstGLDisplayWayland are private and should only be accessed
-through the provided API</doc>
-      
-      <constructor name="new" c:identifier="gst_gl_display_wayland_new">
-        <doc xml:space="preserve">Create a new #GstGLDisplayWayland from the wayland display name.  See `wl_display_connect`()
-for details on what is a valid name.</doc>
-        
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstGLDisplayWayland or %NULL</doc>
-          <type name="GLDisplayWayland" c:type="GstGLDisplayWayland*"/>
-        </return-value>
-        <parameters>
-          <parameter name="name" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">a display name</doc>
-            <type name="utf8" c:type="const gchar*"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <constructor name="new_with_display" c:identifier="gst_gl_display_wayland_new_with_display">
-        <doc xml:space="preserve">Creates a new display connection from a wl_display Display.</doc>
-        
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstGLDisplayWayland</doc>
-          <type name="GLDisplayWayland" c:type="GstGLDisplayWayland*"/>
-        </return-value>
-        <parameters>
-          <parameter name="display" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">an existing, wayland display</doc>
-            <type name="gpointer" c:type="gpointer"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <field name="parent">
-        <type name="GLDisplay" c:type="GstGLDisplay"/>
-      </field>
-      <field name="display">
-        <type name="gpointer" c:type="gpointer"/>
-      </field>
-      <field name="registry">
-        <type name="gpointer" c:type="gpointer"/>
-      </field>
-      <field name="compositor">
-        <type name="gpointer" c:type="gpointer"/>
-      </field>
-      <field name="subcompositor">
-        <type name="gpointer" c:type="gpointer"/>
-      </field>
-      <field name="shell">
-        <type name="gpointer" c:type="gpointer"/>
-      </field>
-      <field name="foreign_display" readable="0" private="1">
-        <type name="gboolean" c:type="gboolean"/>
-      </field>
-      <field name="_padding" readable="0" private="1">
-        <array zero-terminated="0" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </class>
-    <record name="GLDisplayWaylandClass" c:type="GstGLDisplayWaylandClass" glib:is-gtype-struct-for="GLDisplayWayland">
-      
-      <field name="object_class">
-        <type name="GLDisplayClass" c:type="GstGLDisplayClass"/>
-      </field>
-      <field name="_padding">
-        <array zero-terminated="0" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </record>
-    <class name="GLDisplayX11" c:symbol-prefix="gl_display_x11" c:type="GstGLDisplayX11" parent="GLDisplay" glib:type-name="GstGLDisplayX11" glib:get-type="gst_gl_display_x11_get_type" glib:type-struct="GLDisplayX11Class">
-      <doc xml:space="preserve">the contents of a #GstGLDisplayX11 are private and should only be accessed
-through the provided API</doc>
-      
-      <constructor name="new" c:identifier="gst_gl_display_x11_new">
-        <doc xml:space="preserve">Create a new #GstGLDisplayX11 from the x11 display name.  See `XOpenDisplay`()
-for details on what is a valid name.</doc>
-        
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstGLDisplayX11 or %NULL</doc>
-          <type name="GLDisplayX11" c:type="GstGLDisplayX11*"/>
-        </return-value>
-        <parameters>
-          <parameter name="name" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">a display name</doc>
-            <type name="utf8" c:type="const gchar*"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <constructor name="new_with_display" c:identifier="gst_gl_display_x11_new_with_display" introspectable="0">
-        <doc xml:space="preserve">Creates a new display connection from a X11 Display.</doc>
-        
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstGLDisplayX11</doc>
-          <type name="GLDisplayX11" c:type="GstGLDisplayX11*"/>
-        </return-value>
-        <parameters>
-          <parameter name="display" transfer-ownership="none">
-            <doc xml:space="preserve">an existing, x11 display</doc>
-            <type c:type="gpointer" name="gpointer"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <field name="parent" readable="0" private="1">
-        <type name="GLDisplay" c:type="GstGLDisplay"/>
-      </field>
-      <field name="name" readable="0" private="1">
-        <type name="utf8" c:type="gchar*"/>
-      </field>
-      <field name="display" introspectable="0" readable="0" private="1">
-        <type c:type="gpointer" name="gpointer"/>
-      </field>
-      <field name="xcb_connection" introspectable="0" readable="0" private="1">
-        <type c:type="gpointer" name="gpointer"/>
-      </field>
-      <field name="foreign_display" readable="0" private="1">
-        <type name="gboolean" c:type="gboolean"/>
-      </field>
-      <field name="_padding" readable="0" private="1">
-        <array zero-terminated="0" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </class>
-    <record name="GLDisplayX11Class" c:type="GstGLDisplayX11Class" glib:is-gtype-struct-for="GLDisplayX11">
-      
-      <field name="object_class">
-        <type name="GLDisplayClass" c:type="GstGLDisplayClass"/>
-      </field>
-      <field name="_padding">
-        <array zero-terminated="0" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </record>
     <class name="GLFilter" c:symbol-prefix="gl_filter" c:type="GstGLFilter" parent="GLBaseFilter" glib:type-name="GstGLFilter" glib:get-type="gst_gl_filter_get_type" glib:type-struct="GLFilterClass">
       <doc xml:space="preserve">#GstGLFilter helps to implement simple OpenGL filter elements taking a
 single input and producing a single output with a #GstGLFramebuffer</doc>
@@ -4390,9 +4137,6 @@ multiple times.  This must be called before any other GstGLMemory operation.</do
         </array>
       </field>
     </record>
-    
-    
-    
     <record name="GLMemoryPBO" c:type="GstGLMemoryPBO">
       <doc xml:space="preserve">#GstGLMemoryPBO is created or wrapped through gst_gl_base_memory_alloc()
 with #GstGLVideoAllocationParams.
@@ -9270,98 +9014,10 @@ user-defined purposes.</doc>
       
       <type name="utf8" c:type="gchar*"/>
     </constant>
-    <function-macro name="GL_DISPLAY_EGL" c:identifier="GST_GL_DISPLAY_EGL" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_EGL_CAST" c:identifier="GST_GL_DISPLAY_EGL_CAST" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_EGL_CLASS" c:identifier="GST_GL_DISPLAY_EGL_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_EGL_DEVICE" c:identifier="GST_GL_DISPLAY_EGL_DEVICE" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_EGL_DEVICE_CAST" c:identifier="GST_GL_DISPLAY_EGL_DEVICE_CAST" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_EGL_DEVICE_CLASS" c:identifier="GST_GL_DISPLAY_EGL_DEVICE_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <constant name="GL_DISPLAY_EGL_NAME" value="gst.gl.display.egl" c:type="GST_GL_DISPLAY_EGL_NAME">
-      
-      <type name="utf8" c:type="gchar*"/>
-    </constant>
     <function-macro name="GL_DISPLAY_GET_CLASS" c:identifier="GST_GL_DISPLAY_GET_CLASS" introspectable="0">
       
       <parameters>
         <parameter name="o">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_WAYLAND" c:identifier="GST_GL_DISPLAY_WAYLAND" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_WAYLAND_CAST" c:identifier="GST_GL_DISPLAY_WAYLAND_CAST" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_WAYLAND_CLASS" c:identifier="GST_GL_DISPLAY_WAYLAND_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_X11" c:identifier="GST_GL_DISPLAY_X11" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_X11_CAST" c:identifier="GST_GL_DISPLAY_X11_CAST" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="GL_DISPLAY_X11_CLASS" c:identifier="GST_GL_DISPLAY_X11_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
@@ -9447,11 +9103,6 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    
-    
-    
-    
-    
     <function-macro name="GL_MEMORY_PBO_ALLOCATOR" c:identifier="GST_GL_MEMORY_PBO_ALLOCATOR" introspectable="0">
       
       <parameters>
@@ -9693,7 +9344,6 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    
     <function-macro name="IS_GLSL_STAGE" c:identifier="GST_IS_GLSL_STAGE" introspectable="0">
       
       <parameters>
@@ -9813,62 +9463,6 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    <function-macro name="IS_GL_DISPLAY_EGL" c:identifier="GST_IS_GL_DISPLAY_EGL" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="IS_GL_DISPLAY_EGL_CLASS" c:identifier="GST_IS_GL_DISPLAY_EGL_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="IS_GL_DISPLAY_EGL_DEVICE" c:identifier="GST_IS_GL_DISPLAY_EGL_DEVICE" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="IS_GL_DISPLAY_EGL_DEVICE_CLASS" c:identifier="GST_IS_GL_DISPLAY_EGL_DEVICE_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="IS_GL_DISPLAY_WAYLAND" c:identifier="GST_IS_GL_DISPLAY_WAYLAND" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="IS_GL_DISPLAY_WAYLAND_CLASS" c:identifier="GST_IS_GL_DISPLAY_WAYLAND_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="IS_GL_DISPLAY_X11" c:identifier="GST_IS_GL_DISPLAY_X11" introspectable="0">
-      
-      <parameters>
-        <parameter name="obj">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="IS_GL_DISPLAY_X11_CLASS" c:identifier="GST_IS_GL_DISPLAY_X11_CLASS" introspectable="0">
-      
-      <parameters>
-        <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
     <function-macro name="IS_GL_FILTER" c:identifier="GST_IS_GL_FILTER" introspectable="0">
       
       <parameters>
@@ -9911,8 +9505,6 @@ user-defined purposes.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    
-    
     <function-macro name="IS_GL_MEMORY_PBO_ALLOCATOR" c:identifier="GST_IS_GL_MEMORY_PBO_ALLOCATOR" introspectable="0">
       
       <parameters>
@@ -10129,11 +9721,6 @@ you are writing to OpenGL. Conversely, combining #GST_MAP_GL with
         </parameter>
       </parameters>
     </function>
-    
-    
-    
-    
-    
     <function name="gl_api_from_string" c:identifier="gst_gl_api_from_string" moved-to="GLAPI.from_string">
       
       <return-value transfer-ownership="none">
@@ -10499,7 +10086,6 @@ debug category to be at least %GST_LEVEL_FIXME.</doc>
         </parameter>
       </parameters>
     </function>
-    
     <function name="gl_memory_init_once" c:identifier="gst_gl_memory_init_once" moved-to="GLMemory.init_once" version="1.4">
       <doc xml:space="preserve">Initializes the GL Base Texture allocator. It is safe to call this function
 multiple times.  This must be called before any other GstGLMemory operation.</doc>
@@ -11009,7 +10595,6 @@ or a valid GLSL version and/or profile.</doc>
         </parameter>
       </parameters>
     </function>
-    
     <function name="is_gl_memory_pbo" c:identifier="gst_is_gl_memory_pbo" version="1.8">
       
       <return-value transfer-ownership="none">

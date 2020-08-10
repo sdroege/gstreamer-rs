@@ -2988,16 +2988,6 @@ the last processed buffer and current state of the stream being payloaded:
       <property name="timestamp-offset" writable="1" transfer-ownership="none">
         <type name="guint" c:type="guint"/>
       </property>
-      <property name="twcc-ext-id" version="1.18" writable="1" transfer-ownership="none">
-        <doc xml:space="preserve">The RTP header-extension ID used for tagging buffers with Transport-Wide
-Congestion Control sequence-numbers.
-
-To use this across multiple bundled streams (transport wide), the
-GstRTPFunnel can mux TWCC sequence-numbers together.
-
-This is experimental, as it is still a draft and not yet a standard.</doc>
-        <type name="guint" c:type="guint"/>
-      </property>
       <field name="element">
         <type name="Gst.Element" c:type="GstElement"/>
       </field>

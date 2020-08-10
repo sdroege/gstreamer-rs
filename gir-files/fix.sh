@@ -23,7 +23,7 @@ xmlstarlet ed --pf --inplace \
 	      --value gpointer \
 	    --update '//*[@c:type="wl_shell*"]/@c:type' \
 	      --value gpointer \
-	    GstGL-1.0.gir
+	    GstGLWayland-1.0.gir
 
 # Change X11's Display* and xcb_connection_t* pointers to gpointer
 xmlstarlet ed --pf --inplace \
@@ -35,7 +35,7 @@ xmlstarlet ed --pf --inplace \
               --value gpointer \
 	    --update '//*[@c:type="xcb_connection_t*"]/@c:type' \
 	      --value gpointer \
-	    GstGL-1.0.gir
+	    GstGLX11-1.0.gir
 
 # Remove GstMemoryEGL and EGLImage
 xmlstarlet ed --pf --inplace \
@@ -56,12 +56,12 @@ xmlstarlet ed --pf --inplace \
 	   --delete '//_:function-macro[starts-with(@name, "GL_MEMORY_EGL")]' \
 	   --delete '//_:function-macro[starts-with(@name, "IS_EGL_IMAGE")]' \
 	   --delete '//_:function-macro[starts-with(@name, "IS_GL_MEMORY_EGL")]' \
-	   GstGL-1.0.gir
+	   GstGLEGL-1.0.gir
 
 xmlstarlet ed --pf --inplace \
 	   --delete '//_:method[@c:identifier="gst_gl_display_egl_from_gl_display"]' \
 	   --delete '//_:method[@c:identifier="egl_from_gl_display"]' \
-	   GstGL-1.0.gir
+	   GstGLEGL-1.0.gir
 
 # Remove all libcheck related API
 xmlstarlet ed --pf --inplace \
