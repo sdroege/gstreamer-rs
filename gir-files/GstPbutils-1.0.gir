@@ -2027,8 +2027,11 @@ for more about restrictions. Does not apply to #GstEncodingContainerProfile.</do
         </parameters>
       </method>
       <method name="set_single_segment" c:identifier="gst_encoding_profile_set_single_segment" version="1.18">
-        <doc xml:space="preserve">If using a single segment, buffers will be retimestamped
-and segments will be eat so as to appear as one segment.</doc>
+        <doc xml:space="preserve">If using a single segment, buffers will be retimestamped and segments will be
+eat so as to appear as one segment.
+
+&gt; *NOTE*: Single segment is not property supported when using
+&gt; #encodebin:avoid-reencoding</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -2039,8 +2042,8 @@ and segments will be eat so as to appear as one segment.</doc>
             <type name="EncodingProfile" c:type="GstEncodingProfile*"/>
           </instance-parameter>
           <parameter name="single_segment" transfer-ownership="none">
-            <doc xml:space="preserve">#TRUE if the stream represented by @profile should use a single
-segment before the encoder #FALSE otherwise.</doc>
+            <doc xml:space="preserve">#TRUE if the stream represented by @profile should use a
+single segment before the encoder, #FALSE otherwise.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
@@ -2336,6 +2339,8 @@ not a multi-pass profile</doc>
         </parameters>
       </method>
       <method name="get_variableframerate" c:identifier="gst_encoding_video_profile_get_variableframerate">
+        <doc xml:space="preserve">&gt; *NOTE*: Fixed framerate won't be enforced when #encodebin:avoid-reencoding
+&gt; is set.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">Whether non-constant video framerate is allowed for encoding.</doc>
@@ -2766,7 +2771,7 @@ in debugging.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="PLUGINS_BASE_VERSION_NANO" value="0" c:type="GST_PLUGINS_BASE_VERSION_NANO">
+    <constant name="PLUGINS_BASE_VERSION_NANO" value="1" c:type="GST_PLUGINS_BASE_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer's gst-plugins-base libraries at compile time.
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       

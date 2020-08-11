@@ -12081,7 +12081,11 @@ when devices are added or removed from the system.
 Since the #GstDeviceProvider is a singleton,
 gst_device_provider_start() may already have been called by another
 user of the object, gst_device_provider_stop() needs to be called the same
-number of times.</doc>
+number of times.
+
+After this function has been called, gst_device_provider_get_devices() will
+return the same objects that have been received from the
+#GST_MESSAGE_DEVICE_ADDED messages and will no longer probe.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the device providering could be started</doc>
@@ -12203,7 +12207,10 @@ This is for use by subclasses.</doc>
       </method>
       <method name="get_devices" c:identifier="gst_device_provider_get_devices" version="1.4">
         <doc xml:space="preserve">Gets a list of devices that this provider understands. This may actually
-probe the hardware if the provider is not currently started.</doc>
+probe the hardware if the provider is not currently started.
+
+If the provider has been started, this will returned the same #GstDevice
+objedcts that have been returned by the #GST_MESSAGE_DEVICE_ADDED messages.</doc>
         
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GList of
@@ -12300,7 +12307,11 @@ when devices are added or removed from the system.
 Since the #GstDeviceProvider is a singleton,
 gst_device_provider_start() may already have been called by another
 user of the object, gst_device_provider_stop() needs to be called the same
-number of times.</doc>
+number of times.
+
+After this function has been called, gst_device_provider_get_devices() will
+return the same objects that have been received from the
+#GST_MESSAGE_DEVICE_ADDED messages and will no longer probe.</doc>
         
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the device providering could be started</doc>
@@ -18909,8 +18920,8 @@ element scope.</doc>
       </member>
       <member name="error" value="-5" c:identifier="GST_FLOW_ERROR" glib:nick="error">
         <doc xml:space="preserve">Some (fatal) error occurred. Element generating
-                              this error should post an error message with more
-                              details.</doc>
+                              this error should post an error message using
+                              GST_ELEMENT_ERROR() with more details.</doc>
       </member>
       <member name="not_supported" value="-6" c:identifier="GST_FLOW_NOT_SUPPORTED" glib:nick="not-supported">
         <doc xml:space="preserve">This operation is not supported.</doc>
@@ -42339,7 +42350,7 @@ Free-function: gst_tag_list_unref</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="copy" c:identifier="gst_tag_list_copy" introspectable="0">
+      <method name="copy" c:identifier="gst_tag_list_copy">
         <doc xml:space="preserve">Creates a new #GstTagList as a copy of the old @taglist. The new taglist
 will have a refcount of 1, owned by the caller, and will be writable as
 a result.
@@ -46723,6 +46734,32 @@ cannot be parsed.</doc>
           </parameter>
         </parameters>
       </function>
+      <function name="from_string_escaped" c:identifier="gst_uri_from_string_escaped" version="1.18">
+        <doc xml:space="preserve">Parses a URI string into a new #GstUri object. Will return NULL if the URI
+cannot be parsed. This is identical to gst_uri_from_string() except that
+the userinfo and fragment components of the URI will not be unescaped while
+parsing.
+
+Use this when you need to extract a username and password from the userinfo
+such as https://user:password@example.com since either may contain
+a URI-escaped ':' character. gst_uri_from_string() will unescape the entire
+userinfo component, which will make it impossible to know which ':'
+delineates the username and password.
+
+The same applies to the fragment component of the URI, such as
+https://example.com/path#fragment which may contain a URI-escaped '#'.</doc>
+        
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">A new #GstUri object, or NULL.</doc>
+          <type name="Uri" c:type="GstUri*"/>
+        </return-value>
+        <parameters>
+          <parameter name="uri" transfer-ownership="none">
+            <doc xml:space="preserve">The URI string to parse.</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </function>
       <function name="get_location" c:identifier="gst_uri_get_location">
         <doc xml:space="preserve">Extracts the location out of a given valid URI, ie. the protocol and "://"
 are stripped from the URI, which means that the location returned includes
@@ -47023,7 +47060,7 @@ determine a order for the two provided values.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_NANO" value="0" c:type="GST_VERSION_NANO">
+    <constant name="VERSION_NANO" value="1" c:type="GST_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer at compile time:
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       
@@ -50940,6 +50977,32 @@ Free-function: g_free</doc>
     <function name="uri_from_string" c:identifier="gst_uri_from_string" moved-to="Uri.from_string" version="1.6">
       <doc xml:space="preserve">Parses a URI string into a new #GstUri object. Will return NULL if the URI
 cannot be parsed.</doc>
+      
+      <return-value transfer-ownership="full" nullable="1">
+        <doc xml:space="preserve">A new #GstUri object, or NULL.</doc>
+        <type name="Uri" c:type="GstUri*"/>
+      </return-value>
+      <parameters>
+        <parameter name="uri" transfer-ownership="none">
+          <doc xml:space="preserve">The URI string to parse.</doc>
+          <type name="utf8" c:type="const gchar*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="uri_from_string_escaped" c:identifier="gst_uri_from_string_escaped" moved-to="Uri.from_string_escaped" version="1.18">
+      <doc xml:space="preserve">Parses a URI string into a new #GstUri object. Will return NULL if the URI
+cannot be parsed. This is identical to gst_uri_from_string() except that
+the userinfo and fragment components of the URI will not be unescaped while
+parsing.
+
+Use this when you need to extract a username and password from the userinfo
+such as https://user:password@example.com since either may contain
+a URI-escaped ':' character. gst_uri_from_string() will unescape the entire
+userinfo component, which will make it impossible to know which ':'
+delineates the username and password.
+
+The same applies to the fragment component of the URI, such as
+https://example.com/path#fragment which may contain a URI-escaped '#'.</doc>
       
       <return-value transfer-ownership="full" nullable="1">
         <doc xml:space="preserve">A new #GstUri object, or NULL.</doc>

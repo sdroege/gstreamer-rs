@@ -17,13 +17,6 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function-macro>
-    <function-macro name="CHECK_MAIN" c:identifier="GST_CHECK_MAIN" introspectable="0">
-      
-      <parameters>
-        <parameter name="name">
-        </parameter>
-      </parameters>
-    </function-macro>
     
     
     
@@ -2088,15 +2081,6 @@ MT safe.</doc>
       
       <parameters>
         <parameter name="klass">
-        </parameter>
-      </parameters>
-    </function-macro>
-    <function-macro name="START_TEST" c:identifier="GST_START_TEST" introspectable="0">
-      <doc xml:space="preserve">wrapper for checks START_TEST</doc>
-      
-      <parameters>
-        <parameter name="__testname">
-          <doc xml:space="preserve">test function name</doc>
         </parameter>
       </parameters>
     </function-macro>
