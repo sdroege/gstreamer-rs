@@ -38,6 +38,15 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         self.parent_clip(aggregator, aggregator_pad, buffer)
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn finish_buffer_list(
+        &self,
+        aggregator: &Aggregator,
+        buffer_list: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_finish_buffer_list(aggregator, buffer_list)
+    }
+
     fn finish_buffer(
         &self,
         aggregator: &Aggregator,
@@ -155,6 +164,15 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     fn negotiate(&self, aggregator: &Aggregator) -> bool {
         self.parent_negotiate(aggregator)
     }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn peek_next_sample(
+        &self,
+        aggregator: &Aggregator,
+        pad: &AggregatorPad,
+    ) -> Option<gst::Sample> {
+        self.parent_peek_next_sample(aggregator, pad)
+    }
 }
 
 pub trait AggregatorImplExt {
@@ -171,6 +189,13 @@ pub trait AggregatorImplExt {
         &self,
         aggregator: &Aggregator,
         buffer: gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn parent_finish_buffer_list(
+        &self,
+        aggregator: &Aggregator,
+        buffer_list: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_sink_event(
@@ -250,6 +275,13 @@ pub trait AggregatorImplExt {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn parent_negotiate(&self, aggregator: &Aggregator) -> bool;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn parent_peek_next_sample(
+        &self,
+        aggregator: &Aggregator,
+        pad: &AggregatorPad,
+    ) -> Option<gst::Sample>;
 }
 
 impl<T: AggregatorImpl> AggregatorImplExt for T {
@@ -300,6 +332,24 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .finish_buffer
                 .expect("Missing parent function `finish_buffer`");
             gst::FlowReturn::from_glib(f(aggregator.to_glib_none().0, buffer.into_ptr()))
+                .into_result()
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn parent_finish_buffer_list(
+        &self,
+        aggregator: &Aggregator,
+        buffer_list: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = T::type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorClass;
+            let f = (*parent_class)
+                .finish_buffer_list
+                .expect("Missing parent function `finish_buffer_list`");
+            gst::FlowReturn::from_glib(f(aggregator.to_glib_none().0, buffer_list.into_ptr()))
                 .into_result()
         }
     }
@@ -604,6 +654,23 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .unwrap_or(true)
         }
     }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn parent_peek_next_sample(
+        &self,
+        aggregator: &Aggregator,
+        pad: &AggregatorPad,
+    ) -> Option<gst::Sample> {
+        unsafe {
+            let data = T::type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorClass;
+            (*parent_class)
+                .peek_next_sample
+                .map(|f| from_glib_full(f(aggregator.to_glib_none().0, pad.to_glib_none().0)))
+                .unwrap_or(None)
+        }
+    }
 }
 
 unsafe impl<T: AggregatorImpl> IsSubclassable<T> for AggregatorClass
@@ -635,6 +702,8 @@ where
                 klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
                 klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
                 klass.negotiate = Some(aggregator_negotiate::<T>);
+                klass.peek_next_sample = Some(aggregator_peek_next_sample::<T>);
+                klass.finish_buffer_list = Some(aggregator_finish_buffer_list::<T>);
             }
         }
     }
@@ -692,6 +761,25 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.finish_buffer(&wrap, from_glib_full(buffer)).into()
+    })
+    .to_glib()
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe extern "C" fn aggregator_finish_buffer_list<T: AggregatorImpl>(
+    ptr: *mut gst_base_sys::GstAggregator,
+    buffer_list: *mut gst_sys::GstBufferList,
+) -> gst_sys::GstFlowReturn
+where
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+        imp.finish_buffer_list(&wrap, from_glib_full(buffer_list))
+            .into()
     })
     .to_glib()
 }
@@ -1028,4 +1116,22 @@ where
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.negotiate(&wrap) }).to_glib()
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
+    ptr: *mut gst_base_sys::GstAggregator,
+    pad: *mut gst_base_sys::GstAggregatorPad,
+) -> *mut gst_sys::GstSample
+where
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+        imp.peek_next_sample(&wrap, &from_glib_borrow(pad))
+    })
+    .to_glib_full()
 }

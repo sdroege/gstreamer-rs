@@ -27,6 +27,9 @@ pub trait BaseSrcExtManual: 'static {
     fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn query_latency(&self) -> Result<(bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError>;
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
@@ -101,6 +104,22 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
                 ))
             } else {
                 Err(glib_bool_error!("Failed to query latency"))
+            }
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError> {
+        unsafe {
+            let ret = from_glib(gst_base_sys::gst_base_src_new_segment(
+                self.as_ref().to_glib_none().0,
+                segment.to_glib_none().0,
+            ));
+
+            if ret {
+                Ok(())
+            } else {
+                Err(glib_bool_error!("Failed to configure new segment"))
             }
         }
     }
