@@ -10,7 +10,7 @@ use gst_sys;
 use gst_video_sys;
 
 use glib;
-use glib::translate::{from_glib, Borrowed, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, Borrowed, ToGlibPtr};
 use gst;
 
 use std::fmt;
@@ -282,6 +282,10 @@ impl VideoFrame<Readable> {
                 })
             }
         }
+    }
+
+    pub fn buffer_owned(&self) -> gst::Buffer {
+        unsafe { from_glib_none(self.frame.buffer) }
     }
 }
 
