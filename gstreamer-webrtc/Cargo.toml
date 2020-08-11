@@ -16,8 +16,8 @@ build = "build.rs"
 libc = "0.2"
 glib-sys = "0.10"
 gobject-sys = "0.10"
-gstreamer-sys = { version = "0.9", features = ["v1_8"] }
-gstreamer-webrtc-sys = { version = "0.9" }
+gstreamer-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", rev = "0.9", features = ["v1_8"] }
+gstreamer-webrtc-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", rev = "0.9" }
 glib = "0.10"
 gstreamer = { version = "0.16", path = "../gstreamer", features = ["v1_14"] }
 gstreamer-sdp = { version = "0.16", path = "../gstreamer-sdp", features = ["v1_14"] }
