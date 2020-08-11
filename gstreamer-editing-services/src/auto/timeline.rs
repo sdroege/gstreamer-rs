@@ -15,6 +15,8 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 use Asset;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+use Clip;
 use Extractable;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 use FrameNumber;
@@ -145,6 +147,12 @@ pub trait TimelineExt: 'static {
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
@@ -495,7 +503,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     }
 
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 53 }
+    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 54 }
     //}
 
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -546,6 +554,44 @@ impl<O: IsA<Timeline>> TimelineExt for O {
                 b"layer-removed\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     layer_removed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn select_element_track_trampoline<
+            P,
+            F: Fn(&P, &Clip, &TrackElement) -> Track + 'static,
+        >(
+            this: *mut ges_sys::GESTimeline,
+            clip: *mut ges_sys::GESClip,
+            track_element: *mut ges_sys::GESTrackElement,
+            f: glib_sys::gpointer,
+        ) -> *mut ges_sys::GESTrack
+        where
+            P: IsA<Timeline>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast_ref(),
+                &from_glib_borrow(clip),
+                &from_glib_borrow(track_element),
+            )
+            .to_glib_full()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"select-element-track\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_element_track_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
