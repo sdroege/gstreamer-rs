@@ -46,6 +46,7 @@ pub trait BaseSrcExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn negotiate(&self) -> bool;
 
+    #[cfg_attr(feature = "v1_18", deprecated)]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
 
     fn set_async(&self, async: bool);

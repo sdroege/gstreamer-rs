@@ -57,9 +57,6 @@ pub trait GLDisplayExt: 'static {
 
     fn filter_gl_api(&self, gl_api: GLAPI);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    fn get_foreign_display(&self) -> bool;
-
     fn get_gl_api(&self) -> GLAPI;
 
     fn get_gl_api_unlocked(&self) -> GLAPI;
@@ -129,15 +126,6 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
                 self.as_ref().to_glib_none().0,
                 gl_api.to_glib(),
             );
-        }
-    }
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    fn get_foreign_display(&self) -> bool {
-        unsafe {
-            from_glib(gst_gl_sys::gst_gl_display_get_foreign_display(
-                self.as_ref().to_glib_none().0,
-            ))
         }
     }
 

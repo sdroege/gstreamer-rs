@@ -38,7 +38,6 @@ pub use self::base_transform::{BaseTransform, BaseTransformClass, NONE_BASE_TRAN
 mod push_src;
 pub use self::push_src::{PushSrc, PushSrcClass, NONE_PUSH_SRC};
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
 mod enums;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 pub use self::enums::AggregatorStartTimeSelection;

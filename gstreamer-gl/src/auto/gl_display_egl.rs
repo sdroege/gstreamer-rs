@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_gl_sys;
@@ -24,6 +25,15 @@ impl GLDisplayEGL {
     //pub fn with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_display_egl_new_with_egl_display() }
     //}
+
+    pub fn from_gl_display<P: IsA<GLDisplay>>(display: &P) -> Option<GLDisplayEGL> {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_full(gst_gl_sys::gst_gl_display_egl_from_gl_display(
+                display.as_ref().to_glib_none().0,
+            ))
+        }
+    }
 
     //pub fn get_from_native(type_: GLDisplayType, display: /*Unimplemented*/Fundamental: UIntPtr) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_display_egl_get_from_native() }

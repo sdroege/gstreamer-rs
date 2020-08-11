@@ -16,6 +16,8 @@ use gst_base_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+use AggregatorPad;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use AggregatorStartTimeSelection;
 
 glib_wrapper! {
@@ -44,6 +46,9 @@ pub trait AggregatorExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn negotiate(&self) -> bool;
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn peek_next_sample<P: IsA<AggregatorPad>>(&self, pad: &P) -> Option<gst::Sample>;
+
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
@@ -56,6 +61,12 @@ pub trait AggregatorExt: 'static {
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn update_segment(&self, segment: /*Ignored*/&gst::Segment);
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_property_emit_signals(&self) -> bool;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_property_emit_signals(&self, emit_signals: bool);
+
     fn get_property_start_time(&self) -> u64;
 
     fn set_property_start_time(&self, start_time: u64);
@@ -65,6 +76,15 @@ pub trait AggregatorExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn set_property_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection);
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn connect_samples_selected<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
@@ -117,6 +137,16 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn peek_next_sample<P: IsA<AggregatorPad>>(&self, pad: &P) -> Option<gst::Sample> {
+        unsafe {
+            from_glib_full(gst_base_sys::gst_aggregator_peek_next_sample(
+                self.as_ref().to_glib_none().0,
+                pad.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
         unsafe {
@@ -151,6 +181,33 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     //fn update_segment(&self, segment: /*Ignored*/&gst::Segment) {
     //    unsafe { TODO: call gst_base_sys:gst_aggregator_update_segment() }
     //}
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn get_property_emit_signals(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"emit-signals\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `emit-signals` getter")
+                .unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn set_property_emit_signals(&self, emit_signals: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"emit-signals\0".as_ptr() as *const _,
+                Value::from(&emit_signals).to_glib_none().0,
+            );
+        }
+    }
 
     fn get_property_start_time(&self) -> u64 {
         unsafe {
@@ -205,6 +262,39 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
                 b"start-time-selection\0".as_ptr() as *const _,
                 Value::from(&start_time_selection).to_glib_none().0,
             );
+        }
+    }
+
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //fn connect_samples_selected<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
+    //    Ignored object: Gst.Segment
+    //}
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_emit_signals_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_base_sys::GstAggregator,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Aggregator>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Aggregator::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::emit-signals\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_emit_signals_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 

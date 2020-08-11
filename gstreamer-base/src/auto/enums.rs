@@ -2,14 +2,23 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::translate::*;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::value::FromValue;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::value::FromValueOptional;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::value::SetValue;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::value::Value;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::StaticType;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use glib::Type;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use gobject_sys;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
 use gst_base_sys;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]

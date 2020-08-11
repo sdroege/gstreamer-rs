@@ -170,6 +170,11 @@ manual_traits = ["BaseSrcExtManual"]
     # Use Result
     ignore = true
 
+    [[object.function]]
+    name = "new_segment"
+    # Segment parameter
+    ignore = true
+
 [[object]]
 name = "GstBase.BaseTransform"
 status = "generate"
@@ -189,6 +194,16 @@ manual_traits = ["AggregatorExtManual"]
     [[object.function]]
     name = "finish_buffer"
     # Takes ownership
+    ignore = true
+
+    [[object.function]]
+    name = "finish_buffer_list"
+    # Takes ownership
+    ignore = true
+
+    [[object.function]]
+    name = "selected_samples"
+    # Info parameter
     ignore = true
 
     [[object.property]]

@@ -826,6 +826,10 @@ pub enum VideoFormat {
     Y412Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     Y412Le,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    Nv124l4,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    Nv1232l32,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -969,6 +973,10 @@ impl ToGlib for VideoFormat {
             VideoFormat::Y412Be => gst_video_sys::GST_VIDEO_FORMAT_Y412_BE,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoFormat::Y412Le => gst_video_sys::GST_VIDEO_FORMAT_Y412_LE,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            VideoFormat::Nv124l4 => gst_video_sys::GST_VIDEO_FORMAT_NV12_4L4,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            VideoFormat::Nv1232l32 => gst_video_sys::GST_VIDEO_FORMAT_NV12_32L32,
             VideoFormat::__Unknown(value) => value,
         }
     }
@@ -1112,6 +1120,10 @@ impl FromGlib<gst_video_sys::GstVideoFormat> for VideoFormat {
             95 => VideoFormat::Y412Be,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             96 => VideoFormat::Y412Le,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            97 => VideoFormat::Nv124l4,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            98 => VideoFormat::Nv1232l32,
             value => VideoFormat::__Unknown(value),
         }
     }
@@ -1671,6 +1683,8 @@ impl SetValue for VideoResamplerMethod {
 pub enum VideoTileMode {
     Unknown,
     Zflipz2x2,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    Linear,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1683,6 +1697,8 @@ impl ToGlib for VideoTileMode {
         match *self {
             VideoTileMode::Unknown => gst_video_sys::GST_VIDEO_TILE_MODE_UNKNOWN,
             VideoTileMode::Zflipz2x2 => gst_video_sys::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            VideoTileMode::Linear => gst_video_sys::GST_VIDEO_TILE_MODE_LINEAR,
             VideoTileMode::__Unknown(value) => value,
         }
     }
@@ -1695,6 +1711,8 @@ impl FromGlib<gst_video_sys::GstVideoTileMode> for VideoTileMode {
         match value {
             0 => VideoTileMode::Unknown,
             65536 => VideoTileMode::Zflipz2x2,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            131072 => VideoTileMode::Linear,
             value => VideoTileMode::__Unknown(value),
         }
     }
@@ -1746,6 +1764,8 @@ pub enum VideoTransferFunction {
     Smpte2084,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     AribStdB67,
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    Bt601,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1775,6 +1795,8 @@ impl ToGlib for VideoTransferFunction {
             VideoTransferFunction::Smpte2084 => gst_video_sys::GST_VIDEO_TRANSFER_SMPTE2084,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             VideoTransferFunction::AribStdB67 => gst_video_sys::GST_VIDEO_TRANSFER_ARIB_STD_B67,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            VideoTransferFunction::Bt601 => gst_video_sys::GST_VIDEO_TRANSFER_BT601,
             VideoTransferFunction::__Unknown(value) => value,
         }
     }
@@ -1804,6 +1826,8 @@ impl FromGlib<gst_video_sys::GstVideoTransferFunction> for VideoTransferFunction
             14 => VideoTransferFunction::Smpte2084,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             15 => VideoTransferFunction::AribStdB67,
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            16 => VideoTransferFunction::Bt601,
             value => VideoTransferFunction::__Unknown(value),
         }
     }

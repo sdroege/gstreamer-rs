@@ -130,31 +130,6 @@ impl AppSrc {
         }
     }
 
-    pub fn get_property_duration(&self) -> u64 {
-        unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"duration\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `duration` getter")
-                .unwrap()
-        }
-    }
-
-    pub fn set_property_duration(&self, duration: u64) {
-        unsafe {
-            gobject_sys::g_object_set_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
-                b"duration\0".as_ptr() as *const _,
-                Value::from(&duration).to_glib_none().0,
-            );
-        }
-    }
-
     pub fn get_property_format(&self) -> gst::Format {
         unsafe {
             let mut value = Value::from_type(<gst::Format as StaticType>::static_type());
@@ -176,6 +151,33 @@ impl AppSrc {
                 self.as_ptr() as *mut gobject_sys::GObject,
                 b"format\0".as_ptr() as *const _,
                 Value::from(&format).to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn get_property_handle_segment_change(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"handle-segment-change\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `handle-segment-change` getter")
+                .unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn set_property_handle_segment_change(&self, handle_segment_change: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"handle-segment-change\0".as_ptr() as *const _,
+                Value::from(&handle_segment_change).to_glib_none().0,
             );
         }
     }
@@ -310,11 +312,11 @@ impl AppSrc {
     ) -> SignalHandlerId {
         unsafe extern "C" fn need_data_trampoline<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(
             this: *mut gst_app_sys::GstAppSrc,
-            length: libc::c_uint,
+            object: libc::c_uint,
             f: glib_sys::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), length)
+            f(&from_glib_borrow(this), object)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -337,11 +339,11 @@ impl AppSrc {
             F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static,
         >(
             this: *mut gst_app_sys::GstAppSrc,
-            offset: u64,
+            object: u64,
             f: glib_sys::gpointer,
         ) -> glib_sys::gboolean {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), offset).to_glib()
+            f(&from_glib_borrow(this), object).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -433,6 +435,7 @@ impl AppSrc {
         }
     }
 
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn connect_property_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -504,6 +507,34 @@ impl AppSrc {
                 b"notify::format\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_format_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn connect_property_handle_segment_change_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_handle_segment_change_trampoline<
+            F: Fn(&AppSrc) + Send + Sync + 'static,
+        >(
+            this: *mut gst_app_sys::GstAppSrc,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::handle-segment-change\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_handle_segment_change_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
