@@ -187,6 +187,111 @@ impl fmt::Display for ::VideoColorimetry {
     }
 }
 
+impl str::FromStr for ::VideoChromaSite {
+    type Err = glib::error::BoolError;
+
+    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let chroma_site = from_glib(gst_video_sys::gst_video_chroma_from_string(
+                s.to_glib_none().0,
+            ));
+            if chroma_site == ::VideoChromaSite::empty() {
+                Err(glib_bool_error!("Invalid chroma site"))
+            } else {
+                Ok(chroma_site)
+            }
+        }
+    }
+}
+
+impl fmt::Display for ::VideoChromaSite {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        let s = unsafe {
+            glib::GString::from_glib_full(gst_video_sys::gst_video_chroma_to_string(self.to_glib()))
+        };
+        f.write_str(&s)
+    }
+}
+
+impl ::VideoTransferFunction {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn from_iso(iso: u32) -> Result<::VideoTransferFunction, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let value = from_glib(gst_video_sys::gst_video_color_transfer_from_iso(iso));
+            match value {
+                ::VideoTransferFunction::__Unknown(_) => Err(glib_bool_error!("Invalid ISO value")),
+                _ => Ok(value),
+            }
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn to_iso(&self) -> u32 {
+        unsafe { gst_video_sys::gst_video_color_transfer_to_iso(self.to_glib()) }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn is_equivalent(
+        &self,
+        from_bpp: u32,
+        to_func: ::VideoTransferFunction,
+        to_bpp: u32,
+    ) -> bool {
+        unsafe {
+            from_glib(gst_video_sys::gst_video_color_transfer_is_equivalent(
+                self.to_glib(),
+                from_bpp,
+                to_func.to_glib(),
+                to_bpp,
+            ))
+        }
+    }
+}
+
+impl ::VideoColorMatrix {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn from_iso(iso: u32) -> Result<::VideoColorMatrix, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let value = from_glib(gst_video_sys::gst_video_color_matrix_from_iso(iso));
+            match value {
+                ::VideoColorMatrix::__Unknown(_) => Err(glib_bool_error!("Invalid ISO value")),
+                _ => Ok(value),
+            }
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn to_iso(&self) -> u32 {
+        unsafe { gst_video_sys::gst_video_color_matrix_to_iso(self.to_glib()) }
+    }
+}
+
+impl ::VideoColorPrimaries {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn from_iso(iso: u32) -> Result<::VideoColorPrimaries, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let value = from_glib(gst_video_sys::gst_video_color_primaries_from_iso(iso));
+            match value {
+                ::VideoColorPrimaries::__Unknown(_) => Err(glib_bool_error!("Invalid ISO value")),
+                _ => Ok(value),
+            }
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    pub fn to_iso(&self) -> u32 {
+        unsafe { gst_video_sys::gst_video_color_primaries_to_iso(self.to_glib()) }
+    }
+}
+
 impl From<::VideoMultiviewFramePacking> for ::VideoMultiviewMode {
     fn from(v: ::VideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();

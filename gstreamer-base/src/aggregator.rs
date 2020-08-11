@@ -28,6 +28,13 @@ pub trait AggregatorExtManual: 'static {
     fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn finish_buffer_list(
+        &self,
+        bufferlist: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn get_property_min_upstream_latency(&self) -> gst::ClockTime;
 
@@ -42,6 +49,35 @@ pub trait AggregatorExtManual: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>);
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn selected_samples(
+        &self,
+        pts: gst::ClockTime,
+        dts: gst::ClockTime,
+        duration: gst::ClockTime,
+        info: Option<&gst::StructureRef>,
+    );
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_samples_selected<
+        P,
+        F: Fn(
+                &P,
+                &gst::Segment,
+                gst::ClockTime,
+                gst::ClockTime,
+                gst::ClockTime,
+                Option<&gst::StructureRef>,
+            ) + Send
+            + Sync
+            + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId
+    where
+        P: IsA<Aggregator>;
 }
 
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
@@ -63,6 +99,20 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             from_glib(gst_base_sys::gst_aggregator_finish_buffer(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
+            ))
+        };
+        ret.into_result()
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn finish_buffer_list(
+        &self,
+        bufferlist: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(gst_base_sys::gst_aggregator_finish_buffer_list(
+                self.as_ref().to_glib_none().0,
+                bufferlist.into_ptr(),
             ))
         };
         ret.into_result()
@@ -118,6 +168,98 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             gst_base_sys::gst_aggregator_update_segment(
                 self.as_ref().to_glib_none().0,
                 mut_override(segment.to_glib_none().0),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn selected_samples(
+        &self,
+        pts: gst::ClockTime,
+        dts: gst::ClockTime,
+        duration: gst::ClockTime,
+        info: Option<&gst::StructureRef>,
+    ) {
+        unsafe {
+            gst_base_sys::gst_aggregator_selected_samples(
+                self.as_ref().to_glib_none().0,
+                pts.to_glib(),
+                dts.to_glib(),
+                duration.to_glib(),
+                info.as_ref()
+                    .map(|s| s.as_ptr() as *mut _)
+                    .unwrap_or(ptr::null_mut()),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    fn connect_samples_selected<
+        P,
+        F: Fn(
+                &P,
+                &gst::Segment,
+                gst::ClockTime,
+                gst::ClockTime,
+                gst::ClockTime,
+                Option<&gst::StructureRef>,
+            ) + Send
+            + Sync
+            + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId
+    where
+        P: IsA<Aggregator>,
+    {
+        unsafe extern "C" fn samples_selected_trampoline<
+            P,
+            F: Fn(
+                    &P,
+                    &gst::Segment,
+                    gst::ClockTime,
+                    gst::ClockTime,
+                    gst::ClockTime,
+                    Option<&gst::StructureRef>,
+                ) + Send
+                + Sync
+                + 'static,
+        >(
+            this: *mut gst_base_sys::GstAggregator,
+            segment: *mut gst_sys::GstSegment,
+            pts: gst_sys::GstClockTime,
+            dts: gst_sys::GstClockTime,
+            duration: gst_sys::GstClockTime,
+            info: *mut gst_sys::GstStructure,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Aggregator>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Aggregator::from_glib_borrow(this).unsafe_cast_ref(),
+                &gst::Segment::from_glib_borrow(segment),
+                from_glib(pts),
+                from_glib(dts),
+                from_glib(duration),
+                if info.is_null() {
+                    None
+                } else {
+                    Some(gst::StructureRef::from_glib_borrow(info))
+                },
+            )
+        }
+
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"samples-selected\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    samples_selected_trampoline::<P, F> as *const (),
+                )),
+                Box_::into_raw(f),
             )
         }
     }
