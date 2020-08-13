@@ -67,8 +67,6 @@ pub fn parse_bin_from_description_with_name_full(
     flags: ParseFlags,
 ) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
-
-    assert_initialized_main_thread!();
     let bin =
         parse_bin_from_description_full(bin_description, ghost_unlinked_pads, context, flags)?;
     if !bin_name.is_empty() {
