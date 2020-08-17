@@ -70,7 +70,6 @@ pub trait AggregatorExtManual: 'static {
                 gst::ClockTime,
                 Option<&gst::StructureRef>,
             ) + Send
-            + Sync
             + 'static,
     >(
         &self,
@@ -204,7 +203,6 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
                 gst::ClockTime,
                 Option<&gst::StructureRef>,
             ) + Send
-            + Sync
             + 'static,
     >(
         &self,
@@ -223,7 +221,6 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
                     gst::ClockTime,
                     Option<&gst::StructureRef>,
                 ) + Send
-                + Sync
                 + 'static,
         >(
             this: *mut gst_base_sys::GstAggregator,
