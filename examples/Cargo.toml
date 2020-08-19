@@ -74,6 +74,9 @@ name = "custom_meta"
 name = "decodebin"
 
 [[bin]]
+name = "debug_ringbuffer"
+
+[[bin]]
 name = "encodebin"
 
 [[bin]]
