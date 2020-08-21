@@ -37,6 +37,10 @@ stages:
   - "extras"
   - "deploy"
 
+.source_env_anchor: &source_env
+    - source ./ci/env.sh
+    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
+
 .debian:10:
   variables:
     FDO_DISTRIBUTION_VERSION: 10
@@ -45,8 +49,7 @@ stages:
     # Override the CARGO_HOME variable to force its location
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
   before_script:
-    - source ./ci/env.sh
-    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
+    - *source_env
 
 .debian:10-base:
   extends: .debian:10
@@ -115,6 +118,11 @@ update-nightly:
 .dist-debian-container:
   extends:
   - .fdo.distribution-image@debian
+  before_script:
+    - *source_env
+    # Ensure the cache and the .lockfile are up to date
+    - cargo generate-lockfile
+    - cargo update
   cache:
     key: "gst"
     paths:
@@ -124,18 +132,18 @@ update-nightly:
 
 .img-stable:
   extends:
-    - .dist-debian-container
     - .debian:10-stable
+    - .dist-debian-container
 
 .img-1-40:
   extends:
-    - .dist-debian-container
     - .debian:10-1-40
+    - .dist-debian-container
 
 .img-nightly:
   extends:
-    - .dist-debian-container
     - .debian:10-nightly
+    - .dist-debian-container
 
 # GST_PLUGINS_RS_TOKEN is a variable of type 'Var' defined in gstreamer-rs CI
 # settings and containing a gst-plugins-rs pipeline trigger token
@@ -205,10 +213,10 @@ plugins-update-nightly:
             FEATURES=v1_18
           fi
 
-          cargo build --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+          cargo build --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
           G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
         else
-          cargo build --color=always --manifest-path $crate/Cargo.toml
+          cargo build --locked --color=always --manifest-path $crate/Cargo.toml
           G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml
         fi
       done
@@ -217,8 +225,8 @@ plugins-update-nightly:
       # tutorials/examples with all features
     - |
       if [ -n "$ALL_FEATURES" ]; then
-        cargo build --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features
-        cargo build --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
+        cargo build --locked --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features
+        cargo build --locked --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
 
 test 1.40:
@@ -281,12 +289,12 @@ clippy:
           FEATURES=v1_18
         fi
 
-        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
+        cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
       done
     # And also run over all the examples/tutorials
     - |
-      cargo clippy --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
-      cargo clippy --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
+      cargo clippy --locked --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
+      cargo clippy --locked --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
 
 deny:
   extends: .img-stable
@@ -302,7 +310,7 @@ gir-checks:
   script:
     - git clone --depth 1 https://github.com/gtk-rs/checker
     - cd checker && echo '[workspace]' >> Cargo.toml
-    - cargo build --release
+    - cargo build --locked --release
     - |
       cargo run --release -- \
         --gir-file ../Gir_GstApp.toml ../gstreamer-app \
