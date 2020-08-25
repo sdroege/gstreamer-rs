@@ -37,9 +37,6 @@ stages:
   - "extras"
   - "deploy"
 
-.source_env_anchor: &source_env
-    - source ./ci/env.sh
-    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
 
 .debian:10:
   variables:
@@ -49,7 +46,15 @@ stages:
     # Override the CARGO_HOME variable to force its location
     CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
   before_script:
-    - *source_env
+    - source ./ci/env.sh
+    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
+    # If cargo exists assume we probably will want to update
+    # the lockfile
+    - |
+      if command -v cargo; then
+        cargo generate-lockfile
+        cargo update
+      fi
 
 .debian:10-base:
   extends: .debian:10
@@ -118,11 +123,6 @@ update-nightly:
 .dist-debian-container:
   extends:
   - .fdo.distribution-image@debian
-  before_script:
-    - *source_env
-    # Ensure the cache and the .lockfile are up to date
-    - cargo generate-lockfile
-    - cargo update
   cache:
     key: "gst"
     paths:
@@ -149,8 +149,6 @@ update-nightly:
 # settings and containing a gst-plugins-rs pipeline trigger token
 .plugins-update:
   stage: deploy
-  before_script:
-    - *source_env
   script:
     - |
     # FDO_DISTRIBUTION_IMAGE still has indirections
