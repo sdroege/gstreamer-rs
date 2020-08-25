@@ -149,6 +149,8 @@ update-nightly:
 # settings and containing a gst-plugins-rs pipeline trigger token
 .plugins-update:
   stage: deploy
+  before_script:
+    - *source_env
   script:
     - |
     # FDO_DISTRIBUTION_IMAGE still has indirections
