@@ -16,6 +16,12 @@ stages:
   before_script:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
+    # If cargo exists assume we probably will want to update the lockfile
+    - |
+      if command -v cargo; then
+        cargo generate-lockfile
+        cargo update
+      fi
   cache:
     key: "gst"
     paths:
@@ -41,14 +47,14 @@ stages:
   script:
     - rustc --version
     - cargo --version
-    - cargo build --all --color=always
+    - cargo build --locked --all --color=always
     # FIXME: tests are broken
     # https://github.com/sdroege/gstreamer-sys/issues/16
-    # - cargo test --all --color=always
-    - cargo build --all --all-features --color=always
+    # - cargo test --locked --all --color=always
+    - cargo build --locked --all --all-features --color=always
     # FIXME: tests are broken
     # https://github.com/sdroege/gstreamer-sys/issues/16
-    # - cargo test --all --all-features --color=always
+    # - cargo test --locked --all --all-features --color=always
 
     # Run tests for crates we can currently run. The others
     # need a new release of the C library first
@@ -69,7 +75,7 @@ stages:
                      gstreamer-video-sys \
                      gstreamer-webrtc-sys; \
             do \
-                cargo test -p $crate; \
+                cargo test --locked -p $crate; \
             done
 
 test stable:
