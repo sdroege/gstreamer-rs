@@ -1,6 +1,6 @@
 set -e
 
-pip3 install meson==0.55.0
+pip3 install meson==0.55.1
 
 git clone --depth 1 https://gitlab.freedesktop.org/gstreamer/gst-build.git --branch master
 cd gst-build
