@@ -167,7 +167,7 @@ mod tutorial5 {
         let pipeline = playbin.clone();
         let lslider = slider.clone();
         // Update the UI (seekbar) every second
-        let timeout_id = gtk::timeout_add_seconds(1, move || {
+        let timeout_id = glib::timeout_add_seconds_local(1, move || {
             let pipeline = &pipeline;
             let lslider = &lslider;
 
