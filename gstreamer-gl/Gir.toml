@@ -54,6 +54,7 @@ manual = [
     "GstBase.BaseTransform",
     "GstBase.PushSrc",
     "GstGL.GLBaseMemory",
+    "GstGL.GLMemory",
     "GstVideo.VideoAlignment",
     "GstVideo.VideoInfo",
     "GstVideo.VideoMultiviewFlags",
