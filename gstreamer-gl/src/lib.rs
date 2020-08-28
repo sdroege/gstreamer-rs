@@ -58,3 +58,5 @@ pub mod prelude {
     pub use crate::gl_context::GLContextExtManual;
     pub use crate::gl_video_frame::VideoFrameGLExt;
 }
+
+pub mod subclass;

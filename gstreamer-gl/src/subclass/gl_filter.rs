@@ -21,6 +21,10 @@ pub enum GLFilterMode {
 
 pub trait GLFilterImpl: GLFilterImplExt + GLBaseFilterImpl {
     const MODE: GLFilterMode;
+    // rustdoc-stripper-ignore-next
+    /// Calls [`add_rgba_pad_templates`](ffi::gst_gl_filter_add_rgba_pad_templates)
+    /// in [`GLFilter::class_init`] if [`true`].
+    const ADD_RGBA_PAD_TEMPLATES: bool = true;
 
     fn set_caps(
         &self,
@@ -238,6 +242,10 @@ unsafe impl<T: GLFilterImpl> IsSubclassable<T> for GLFilter {
                 klass.filter = None;
                 klass.filter_texture = Some(filter_texture::<T>);
             }
+        }
+
+        if <T as GLFilterImpl>::ADD_RGBA_PAD_TEMPLATES {
+            unsafe { ffi::gst_gl_filter_add_rgba_pad_templates(klass) }
         }
     }
 

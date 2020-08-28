@@ -507,3 +507,29 @@ status = "generate"
     name = "attach"
     # attachment_point parameter unchecked
     unsafe = true
+
+[[object]]
+name = "GstGL.GLFilter"
+status = "generate"
+
+    [[object.function]]
+    name = "add_rgba_pad_templates"
+    # Automatically called if
+    # GLFilterImpl::ADD_RGBA_PAD_TEMPLATES is true
+    ignore = true
+
+    [[object.function]]
+    pattern = "render_to_target\\w*"
+        [[object.function.parameter]]
+        pattern = "input|output"
+        const = true
+
+    [[object.function]]
+    name = "render_to_target"
+        [object.function.return]
+        bool_return_is_error = "`func` returned `false`"
+
+    [[object.function]]
+    name = "filter_texture"
+        [object.function.return]
+        bool_return_is_error = "Failed to transform texture"
