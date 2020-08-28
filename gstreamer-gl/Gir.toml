@@ -30,14 +30,12 @@ generate = [
     "GstGL.GLSLError",
     "GstGL.GLWindowError",
     # Records
-    #"GstGL.GLAllocationParams",
     #"GstGL.GLRenderbufferAllocationParams",
-    #"GstGL.GLVideoAllocationParams",
     # Objects
     #"GstGL.GLBufferPool",
     "GstGL.GLFramebuffer",
-    #"GstGL.GLBaseMemory",
-    #"GstGL.GLBaseMemoryAllocator",
+    "GstGL.GLBaseMemoryAllocator",
+    "GstGL.GLMemoryAllocator",
     #"GstGL.GLMemoryPBOAllocator",
     #"GstGL.GLRenderbufferAllocator",
 ]
@@ -56,6 +54,7 @@ manual = [
     "Gst.PadDirection",
     "GstBase.BaseTransform",
     "GstBase.PushSrc",
+    "GstGL.GLBaseMemory",
     "GstVideo.VideoAlignment",
     "GstVideo.VideoInfo",
     "GstVideo.VideoMultiviewFlags",
@@ -467,3 +466,35 @@ status = "generate"
     [[object.member]]
     name = "any"
     ignore = true
+
+[[object]]
+name = "GstGL.GLAllocationParams"
+status = "generate"
+
+    [[object.function]]
+    name = "free_data"
+    # Function should only be called by subclasses from
+    # an overridden `free` vfunc.
+    ignore = true
+
+    [[object.function]]
+    name = "copy_data"
+        [[object.function.parameter]]
+        name = "src"
+        const = true
+
+[[object]]
+name = "GstGL.GLVideoAllocationParams"
+status = "generate"
+
+    [[object.function]]
+    name = "free_data"
+    # Function should only be called by subclasses from
+    # an overridden `free` vfunc.
+    ignore = true
+
+    [[object.function]]
+    name = "copy_data"
+        [[object.function.parameter]]
+        name = "src_vid"
+        const = true
