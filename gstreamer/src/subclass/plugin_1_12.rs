@@ -45,7 +45,7 @@ macro_rules! gst_plugin_define(
                 _gst_reserved: [0 as $crate::glib_sys::gpointer; 4],
             });
 
-            pub fn plugin_register_static() -> Result<(), glib::BoolError> {
+            pub fn plugin_register_static() -> Result<(), $crate::glib::BoolError> {
                 unsafe {
                     $crate::glib::glib_result_from_gboolean!(
                         $crate::gst_sys::gst_plugin_register_static(
