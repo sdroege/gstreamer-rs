@@ -15,7 +15,6 @@ extern crate gstreamer_sdp as gst_sdp;
 use gst_rtsp_server::prelude::*;
 
 use glib::glib_object_subclass;
-use glib::glib_object_wrapper;
 use glib::glib_wrapper;
 
 use anyhow::Error;

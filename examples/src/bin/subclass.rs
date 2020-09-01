@@ -7,7 +7,6 @@
 // coefficients are provided via Rust API on the filter as a Vec<f32>.
 
 use glib::glib_object_subclass;
-use glib::glib_object_wrapper;
 use glib::glib_wrapper;
 
 extern crate gstreamer as gst;
