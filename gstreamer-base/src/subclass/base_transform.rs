@@ -874,10 +874,12 @@ pub unsafe trait BaseTransformClassSubclassExt: Sized + 'static {
 
             match mode {
                 BaseTransformMode::AlwaysInPlace => {
+                    klass.transform = None;
                     klass.transform_ip = Some(base_transform_transform_ip::<T>);
                 }
                 BaseTransformMode::NeverInPlace => {
                     klass.transform = Some(base_transform_transform::<T>);
+                    klass.transform_ip = None;
                 }
                 BaseTransformMode::Both => {
                     klass.transform = Some(base_transform_transform::<T>);
