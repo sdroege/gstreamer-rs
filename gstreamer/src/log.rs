@@ -382,7 +382,7 @@ where
 pub fn debug_remove_default_log_function() {
     skip_assert_initialized!();
     unsafe {
-        gst_sys::gst_debug_remove_log_function(Some(gst_sys::gst_debug_log_default));
+        gst_sys::gst_debug_remove_log_function(None);
     }
 }
 
