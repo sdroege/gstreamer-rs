@@ -75,6 +75,7 @@ name = "decodebin"
 
 [[bin]]
 name = "debug_ringbuffer"
+required-features = ["v1_14"]
 
 [[bin]]
 name = "encodebin"
