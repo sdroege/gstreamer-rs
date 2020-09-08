@@ -27,5 +27,5 @@ if [ "$RUST_VERSION" = "1.44.1" ]; then
   rustup component add clippy-preview --toolchain $RUST_VERSION
   rustup component add rustfmt --toolchain $RUST_VERSION
   cargo install --force cargo-deny
-  cargo install --force --git https://github.com/kbknapp/cargo-outdated
+  cargo install --force cargo-outdated
 fi
