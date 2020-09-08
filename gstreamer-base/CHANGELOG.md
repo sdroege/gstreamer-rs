@@ -5,6 +5,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.3] - 2020-09-08
+### Fixed
+- Reset vfuncs if calling `BaseTransformClass::configure()` multiple times.
+- Fix `gst::debug_remove_default_log_function()` to actually remove the
+  default log function.
+
+### Added
+- Some more new APIs added in 1.18.
+- API for getting an owned buffer from a readable `gst_video::VideoFrame` /
+  `VideoFrameRef`.
+
+### Changed
+- Updated bindings to 1.18.0. This stabilized GStreamer 1.18 support and any
+  API behind the "v1_18" feature is considered stable now.
+- Factor out some common code from `gst::Pad::ProbeInfo` code. This reduces
+  the code generated for each pad probe considerably.
+- Update paste dependency to 1.0 and pretty-hex to 0.2.
+
 ## [0.16.2] - 2020-07-27
 ### Fixed
 - Use correct pointer for the plane data in `gst_audio::AudioBuffer`.
@@ -856,7 +874,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.3...HEAD
+[0.16.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.2...0.16.3
 [0.16.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.1...0.16.2
 [0.16.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.0...0.16.1
 [0.16.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.15.7...0.16.0
