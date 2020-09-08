@@ -25,7 +25,3 @@ extra_versions = [
 [external_libraries]
 gstreamer="Gst"
 gstreamer_base="GstBase"
-
-[[lib_version_overrides]]
-version = "1.18"
-lib_version = "1.17.2.1"
