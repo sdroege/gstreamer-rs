@@ -10621,7 +10621,10 @@ or a valid GLSL version and/or profile.</doc>
         </parameter>
       </parameters>
     </function>
-
+    
+    
+    
+    
     <class name="GLDisplayEGL" c:symbol-prefix="gl_display_egl" c:type="GstGLDisplayEGL" parent="GstGL.GLDisplay" glib:type-name="GstGLDisplayEGL" glib:get-type="gst_gl_display_egl_get_type" glib:type-struct="GLDisplayEGLClass">
       <doc xml:space="preserve">the contents of a #GstGLDisplayEGL are private and should only be accessed
 through the provided API</doc>
@@ -10793,7 +10796,15 @@ This function will return the same value for multiple calls with the same
         </parameter>
       </parameters>
     </function-macro>
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <class name="GLDisplayWayland" c:symbol-prefix="gl_display_wayland" c:type="GstGLDisplayWayland" parent="GstGL.GLDisplay" glib:type-name="GstGLDisplayWayland" glib:get-type="gst_gl_display_wayland_get_type" glib:type-struct="GLDisplayWaylandClass">
       <doc xml:space="preserve">the contents of a #GstGLDisplayWayland are private and should only be accessed
 through the provided API</doc>
@@ -10900,7 +10911,6 @@ for details on what is a valid name.</doc>
         </parameter>
       </parameters>
     </function-macro>
-
     <class name="GLDisplayX11" c:symbol-prefix="gl_display_x11" c:type="GstGLDisplayX11" parent="GstGL.GLDisplay" glib:type-name="GstGLDisplayX11" glib:get-type="gst_gl_display_x11_get_type" glib:type-struct="GLDisplayX11Class">
       <doc xml:space="preserve">the contents of a #GstGLDisplayX11 are private and should only be accessed
 through the provided API</doc>
@@ -11001,6 +11011,5 @@ for details on what is a valid name.</doc>
         </parameter>
       </parameters>
     </function-macro>
-
   </namespace>
 </repository>

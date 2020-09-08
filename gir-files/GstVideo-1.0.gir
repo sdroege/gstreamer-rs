@@ -13607,6 +13607,71 @@ non-linear RGB (R'G'B') and linear RGB</doc>
                            GST_VIDEO_TRANSFER_BT709, and GST_VIDEO_TRANSFER_BT2020_10.
                            Since: 1.18</doc>
       </member>
+      <function name="from_iso" c:identifier="gst_video_transfer_function_from_iso" version="1.18">
+        <doc xml:space="preserve">Converts the @value to the #GstVideoTransferFunction
+The transfer characteristics (TransferCharacteristics) value is
+defined by "ISO/IEC 23001-8 Section 7.2 Table 3"
+and "ITU-T H.273 Table 3".
+"H.264 Table E-4" and "H.265 Table E.4" share the identical values.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the matched #GstVideoTransferFunction</doc>
+          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+        </return-value>
+        <parameters>
+          <parameter name="value" transfer-ownership="none">
+            <doc xml:space="preserve">a ITU-T H.273 transfer characteristics value</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="is_equivalent" c:identifier="gst_video_transfer_function_is_equivalent" version="1.18">
+        <doc xml:space="preserve">Returns whether @from_func and @to_func are equivalent. There are cases
+(e.g. BT601, BT709, and BT2020_10) where several functions are functionally
+identical. In these cases, when doing conversion, we should consider them
+as equivalent. Also, BT2020_12 is the same as the aforementioned three for
+less than 12 bits per pixel.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">TRUE if @from_func and @to_func can be considered equivalent.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="from_func" transfer-ownership="none">
+            <doc xml:space="preserve">#GstVideoTransferFunction to convert from</doc>
+            <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+          </parameter>
+          <parameter name="from_bpp" transfer-ownership="none">
+            <doc xml:space="preserve">bits per pixel to convert from</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="to_func" transfer-ownership="none">
+            <doc xml:space="preserve">#GstVideoTransferFunction to convert into</doc>
+            <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+          </parameter>
+          <parameter name="to_bpp" transfer-ownership="none">
+            <doc xml:space="preserve">bits per pixel to convert into</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="to_iso" c:identifier="gst_video_transfer_function_to_iso" version="1.18">
+        <doc xml:space="preserve">Converts #GstVideoTransferFunction to the "transfer characteristics"
+(TransferCharacteristics) value defined by "ISO/IEC 23001-8 Section 7.2 Table 3"
+and "ITU-T H.273 Table 3".
+"H.264 Table E-4" and "H.265 Table E.4" share the identical values.</doc>
+        
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The value of ISO/IEC 23001-8 transfer characteristics.</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <parameter name="func" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstVideoTransferFunction</doc>
+            <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+          </parameter>
+        </parameters>
+      </function>
     </enumeration>
     <record name="VideoVBIEncoder" c:type="GstVideoVBIEncoder" version="1.16" glib:type-name="GstVideoVBIEncoder" glib:get-type="gst_video_vbi_encoder_get_type" c:symbol-prefix="video_vbi_encoder">
       <doc xml:space="preserve">An encoder for writing ancillary data to the
@@ -15372,71 +15437,6 @@ encode a linear segment in the lower range.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="video_color_transfer_from_iso" c:identifier="gst_video_color_transfer_from_iso" version="1.18">
-      <doc xml:space="preserve">Converts the @value to the #GstVideoTransferFunction
-The transfer characteristics (TransferCharacteristics) value is
-defined by "ISO/IEC 23001-8 Section 7.2 Table 3"
-and "ITU-T H.273 Table 3".
-"H.264 Table E-4" and "H.265 Table E.4" share the identical values.</doc>
-      
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the matched #GstVideoTransferFunction</doc>
-        <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
-      </return-value>
-      <parameters>
-        <parameter name="value" transfer-ownership="none">
-          <doc xml:space="preserve">a ITU-T H.273 transfer characteristics value</doc>
-          <type name="guint" c:type="guint"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="video_color_transfer_is_equivalent" c:identifier="gst_video_color_transfer_is_equivalent" version="1.18">
-      <doc xml:space="preserve">Returns whether @from_func and @to_func are equivalent. There are cases
-(e.g. BT601, BT709, and BT2020_10) where several functions are functionally
-identical. In these cases, when doing conversion, we should consider them
-as equivalent. Also, BT2020_12 is the same as the aforementioned three for
-less than 12 bits per pixel.</doc>
-      
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">TRUE if @from_func and @to_func can be considered equivalent.</doc>
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="from_func" transfer-ownership="none">
-          <doc xml:space="preserve">#GstVideoTransferFunction to convert from</doc>
-          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
-        </parameter>
-        <parameter name="from_bpp" transfer-ownership="none">
-          <doc xml:space="preserve">bits per pixel to convert from</doc>
-          <type name="guint" c:type="guint"/>
-        </parameter>
-        <parameter name="to_func" transfer-ownership="none">
-          <doc xml:space="preserve">#GstVideoTransferFunction to convert into</doc>
-          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
-        </parameter>
-        <parameter name="to_bpp" transfer-ownership="none">
-          <doc xml:space="preserve">bits per pixel to convert into</doc>
-          <type name="guint" c:type="guint"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="video_color_transfer_to_iso" c:identifier="gst_video_color_transfer_to_iso" version="1.18">
-      <doc xml:space="preserve">Converts #GstVideoTransferFunction to the "transfer characteristics"
-(TransferCharacteristics) value defined by "ISO/IEC 23001-8 Section 7.2 Table 3"
-and "ITU-T H.273 Table 3".
-"H.264 Table E-4" and "H.265 Table E.4" share the identical values.</doc>
-      
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">The value of ISO/IEC 23001-8 transfer characteristics.</doc>
-        <type name="guint" c:type="guint"/>
-      </return-value>
-      <parameters>
-        <parameter name="func" transfer-ownership="none">
-          <doc xml:space="preserve">a #GstVideoTransferFunction</doc>
-          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="video_convert_sample" c:identifier="gst_video_convert_sample" throws="1">
       <doc xml:space="preserve">Converts a raw video buffer into the specified output caps.
 
@@ -16422,6 +16422,71 @@ Use this method when @mode is of type %GST_VIDEO_TILE_TYPE_INDEXED.</doc>
       <return-value transfer-ownership="none">
         <type name="Gst.MetaInfo" c:type="const GstMetaInfo*"/>
       </return-value>
+    </function>
+    <function name="video_transfer_function_from_iso" c:identifier="gst_video_transfer_function_from_iso" moved-to="VideoTransferFunction.from_iso" version="1.18">
+      <doc xml:space="preserve">Converts the @value to the #GstVideoTransferFunction
+The transfer characteristics (TransferCharacteristics) value is
+defined by "ISO/IEC 23001-8 Section 7.2 Table 3"
+and "ITU-T H.273 Table 3".
+"H.264 Table E-4" and "H.265 Table E.4" share the identical values.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">the matched #GstVideoTransferFunction</doc>
+        <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+      </return-value>
+      <parameters>
+        <parameter name="value" transfer-ownership="none">
+          <doc xml:space="preserve">a ITU-T H.273 transfer characteristics value</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="video_transfer_function_is_equivalent" c:identifier="gst_video_transfer_function_is_equivalent" moved-to="VideoTransferFunction.is_equivalent" version="1.18">
+      <doc xml:space="preserve">Returns whether @from_func and @to_func are equivalent. There are cases
+(e.g. BT601, BT709, and BT2020_10) where several functions are functionally
+identical. In these cases, when doing conversion, we should consider them
+as equivalent. Also, BT2020_12 is the same as the aforementioned three for
+less than 12 bits per pixel.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">TRUE if @from_func and @to_func can be considered equivalent.</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="from_func" transfer-ownership="none">
+          <doc xml:space="preserve">#GstVideoTransferFunction to convert from</doc>
+          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+        </parameter>
+        <parameter name="from_bpp" transfer-ownership="none">
+          <doc xml:space="preserve">bits per pixel to convert from</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="to_func" transfer-ownership="none">
+          <doc xml:space="preserve">#GstVideoTransferFunction to convert into</doc>
+          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+        </parameter>
+        <parameter name="to_bpp" transfer-ownership="none">
+          <doc xml:space="preserve">bits per pixel to convert into</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="video_transfer_function_to_iso" c:identifier="gst_video_transfer_function_to_iso" moved-to="VideoTransferFunction.to_iso" version="1.18">
+      <doc xml:space="preserve">Converts #GstVideoTransferFunction to the "transfer characteristics"
+(TransferCharacteristics) value defined by "ISO/IEC 23001-8 Section 7.2 Table 3"
+and "ITU-T H.273 Table 3".
+"H.264 Table E-4" and "H.265 Table E.4" share the identical values.</doc>
+      
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">The value of ISO/IEC 23001-8 transfer characteristics.</doc>
+        <type name="guint" c:type="guint"/>
+      </return-value>
+      <parameters>
+        <parameter name="func" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstVideoTransferFunction</doc>
+          <type name="VideoTransferFunction" c:type="GstVideoTransferFunction"/>
+        </parameter>
+      </parameters>
     </function>
   </namespace>
 </repository>
