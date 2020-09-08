@@ -221,7 +221,7 @@ impl ::VideoTransferFunction {
         assert_initialized_main_thread!();
 
         unsafe {
-            let value = from_glib(gst_video_sys::gst_video_color_transfer_from_iso(iso));
+            let value = from_glib(gst_video_sys::gst_video_transfer_function_from_iso(iso));
             match value {
                 ::VideoTransferFunction::__Unknown(_) => Err(glib_bool_error!("Invalid ISO value")),
                 _ => Ok(value),
@@ -231,7 +231,7 @@ impl ::VideoTransferFunction {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     pub fn to_iso(&self) -> u32 {
-        unsafe { gst_video_sys::gst_video_color_transfer_to_iso(self.to_glib()) }
+        unsafe { gst_video_sys::gst_video_transfer_function_to_iso(self.to_glib()) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -242,7 +242,7 @@ impl ::VideoTransferFunction {
         to_bpp: u32,
     ) -> bool {
         unsafe {
-            from_glib(gst_video_sys::gst_video_color_transfer_is_equivalent(
+            from_glib(gst_video_sys::gst_video_transfer_function_is_equivalent(
                 self.to_glib(),
                 from_bpp,
                 to_func.to_glib(),
