@@ -267,7 +267,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //fn connect_samples_selected<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored object: Gst.Segment
+    //    Ignored segment: Gst.Segment
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
