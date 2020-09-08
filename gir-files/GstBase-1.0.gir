@@ -1514,7 +1514,10 @@ before using any of the properties of the pads that govern
 for video aggregators.
 
 If gst_aggregator_update_segment() is used by the subclass,
-it MUST be called before gst_aggregator_selected_samples().</doc>
+it MUST be called before gst_aggregator_selected_samples().
+
+This function MUST only be called from the #GstAggregatorClass::aggregate()
+function.</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -1664,19 +1667,24 @@ gst_aggregator_peek_next_sample() at that point.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="segment" transfer-ownership="none">
+            <doc xml:space="preserve">The #GstSegment the next output buffer is part of</doc>
             <type name="Gst.Segment"/>
           </parameter>
-          <parameter name="p0" transfer-ownership="none">
+          <parameter name="pts" transfer-ownership="none">
+            <doc xml:space="preserve">The presentation timestamp of the next output buffer</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="p1" transfer-ownership="none">
+          <parameter name="dts" transfer-ownership="none">
+            <doc xml:space="preserve">The decoding timestamp of the next output buffer</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="p2" transfer-ownership="none">
+          <parameter name="duration" transfer-ownership="none">
+            <doc xml:space="preserve">The duration of the next output buffer</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="p3" transfer-ownership="none">
+          <parameter name="info" transfer-ownership="none" nullable="1" allow-none="1">
+            <doc xml:space="preserve">a #GstStructure containing additional information</doc>
             <type name="Gst.Structure"/>
           </parameter>
         </parameters>
