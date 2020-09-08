@@ -123,7 +123,7 @@ mod tests {
         identity.set_property("silent", &false).unwrap();
         assert_eq!(
             *notify.lock().unwrap(),
-            Some((identity.upcast::<::Object>(), String::from("silent")))
+            Some((identity.upcast::<::Object>(), "silent"))
         );
     }
 }
