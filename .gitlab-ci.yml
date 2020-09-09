@@ -32,10 +32,10 @@ stages:
   variables:
     RUST_VERSION: "stable"
 
-.img-1-40:
+.img-1-41:
   extends: .base
   variables:
-    RUST_VERSION: "1.40.0"
+    RUST_VERSION: "1.41.0"
 
 .img-nightly:
   extends: .base
@@ -83,10 +83,10 @@ test stable:
     - '.cargo test'
     - .img-stable
 
-test 1.40:
+test 1.41:
   extends:
     - '.cargo test'
-    - .img-1-40
+    - .img-1-41
 
 test nightly:
   extends:
