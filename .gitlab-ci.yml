@@ -66,10 +66,10 @@ stages:
   variables:
     RUST_VERSION: "stable"
 
-.debian:10-1-40:
+.debian:10-1-41:
   extends: .debian:10
   variables:
-    RUST_VERSION: "1.40.0"
+    RUST_VERSION: "1.41.0"
 
 .debian:10-nightly:
   extends: .debian:10
@@ -102,10 +102,10 @@ build-stable:
     - .build-final-image
     - .debian:10-stable
 
-build-1-40:
+build-1-41:
   extends:
     - .build-final-image
-    - .debian:10-1-40
+    - .debian:10-1-41
 
 build-nightly:
   extends:
@@ -135,9 +135,9 @@ update-nightly:
     - .debian:10-stable
     - .dist-debian-container
 
-.img-1-40:
+.img-1-41:
   extends:
-    - .debian:10-1-40
+    - .debian:10-1-41
     - .dist-debian-container
 
 .img-nightly:
@@ -180,13 +180,13 @@ plugins-update-stable:
   variables:
     UPDATE_IMG: "stable"
 
-plugins-update-1-40:
+plugins-update-1-41:
   extends:
     - .plugins-update
-    - .img-1-40
+    - .img-1-41
   image: registry.freedesktop.org/freedesktop/ci-templates/buildah:2020-03-04
   variables:
-    UPDATE_IMG: "1-40"
+    UPDATE_IMG: "1-41"
 
 plugins-update-nightly:
   extends:
@@ -229,10 +229,10 @@ plugins-update-nightly:
         cargo build --locked --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
 
-test 1.40:
+test 1.41:
   extends:
     - '.cargo test'
-    - .img-1-40
+    - .img-1-41
 
 test stable:
   extends:
