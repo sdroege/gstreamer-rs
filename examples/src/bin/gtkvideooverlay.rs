@@ -195,7 +195,7 @@ fn create_ui(app: &gtk::Application) {
     // the underlying pipeline, and display it in our gui.
     // Since this closure is called by the mainloop thread, we are allowed
     // to modify the gui widgets here.
-    let timeout_id = glib::timeout_add_local(500, move || {
+    let timeout_id = glib::timeout_add_local(std::time::Duration::from_millis(500), move || {
         // Here we temporarily retrieve a strong reference on the pipeline from the weak one
         // we moved into this callback.
         let pipeline = match pipeline_weak.upgrade() {
