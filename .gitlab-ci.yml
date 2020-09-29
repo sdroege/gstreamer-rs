@@ -42,9 +42,6 @@ stages:
   variables:
     FDO_DISTRIBUTION_VERSION: 10
     FDO_DISTRIBUTION_TAG: '$RUST_VERSION-$GST_RS_IMG_TAG'
-    # Only stuff inside the repo directory can be cached
-    # Override the CARGO_HOME variable to force its location
-    CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
   before_script:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
@@ -123,10 +120,6 @@ update-nightly:
 .dist-debian-container:
   extends:
   - .fdo.distribution-image@debian
-  cache:
-    key: "gst"
-    paths:
-      - "${CARGO_HOME}"
   after_script:
     - rm -rf target
 
