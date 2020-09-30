@@ -9,9 +9,6 @@ stages:
 .base:
   image: "registry.freedesktop.org/gstreamer/gstreamer-rs/debian/10:$RUST_VERSION-$GST_RS_IMG_TAG"
   variables:
-    # Only stuff inside the repo directory can be cached
-    # Override the CARGO_HOME variable to force its location
-    CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
     G_DEBUG: "fatal_warnings"
   before_script:
     - source ./ci/env.sh
@@ -22,10 +19,6 @@ stages:
         cargo generate-lockfile
         cargo update
       fi
-  cache:
-    key: "gst"
-    paths:
-      - "${CARGO_HOME}"
 
 .img-stable:
   extends: .base
