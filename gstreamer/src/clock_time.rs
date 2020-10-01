@@ -9,7 +9,8 @@
 use glib;
 use glib::translate::*;
 use gst_sys;
-use std::{cmp, fmt};
+use std::time::Duration;
+use std::{cmp, convert, fmt};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct ClockTime(pub Option<u64>);
@@ -158,5 +159,31 @@ impl glib::value::SetValue for ClockTime {
 impl glib::StaticType for ClockTime {
     fn static_type() -> glib::Type {
         <u64 as glib::StaticType>::static_type()
+    }
+}
+
+impl From<Duration> for ClockTime {
+    fn from(d: Duration) -> Self {
+        skip_assert_initialized!();
+
+        let nanos = d.as_nanos();
+
+        if nanos > std::u64::MAX as u128 {
+            ::CLOCK_TIME_NONE
+        } else {
+            ClockTime::from_nseconds(nanos as u64)
+        }
+    }
+}
+
+impl convert::TryFrom<ClockTime> for Duration {
+    type Error = glib::BoolError;
+
+    fn try_from(t: ClockTime) -> Result<Self, Self::Error> {
+        skip_assert_initialized!();
+
+        t.nanoseconds()
+            .map(Duration::from_nanos)
+            .ok_or_else(|| glib_bool_error!("Can't convert ClockTime::NONE to Duration"))
     }
 }
