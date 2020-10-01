@@ -25,6 +25,9 @@ use ClockSuccess;
 use ClockTime;
 use ClockTimeDiff;
 
+use futures_core::Stream;
+use std::marker::Unpin;
+use std::pin::Pin;
 use std::sync::atomic;
 use std::sync::atomic::AtomicI32;
 
@@ -100,6 +103,24 @@ impl ClockId {
             ))
         };
         ret.into_result()
+    }
+
+    #[allow(clippy::type_complexity)]
+    pub fn wait_async_stream(
+        &self,
+    ) -> Result<
+        Pin<Box<dyn Stream<Item = (ClockTime, ClockId)> + Unpin + Send + 'static>>,
+        ClockError,
+    > {
+        use futures_channel::mpsc;
+
+        let (sender, receiver) = mpsc::unbounded();
+
+        self.wait_async(move |_clock, jitter, id| {
+            let _ = sender.unbounded_send((jitter, id.clone()));
+        })?;
+
+        Ok(Box::pin(receiver))
     }
 
     pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
