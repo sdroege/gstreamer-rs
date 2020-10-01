@@ -117,7 +117,10 @@ impl ClockId {
         let (sender, receiver) = mpsc::unbounded();
 
         self.wait_async(move |_clock, jitter, id| {
-            let _ = sender.unbounded_send((jitter, id.clone()));
+            if sender.unbounded_send((jitter, id.clone())).is_err() {
+                // Unschedule any future calls if the receiver end is disconnected
+                id.unschedule();
+            }
         })?;
 
         Ok(Box::pin(receiver))
