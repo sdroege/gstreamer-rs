@@ -107,14 +107,31 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     // When we want to access its content, we have to map it while requesting the required
                     // mode of access (read, read/write).
                     // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
-                    let mut data = buffer.map_writable().unwrap();
+                    let mut vframe =
+                        gst_video::VideoFrameRef::from_buffer_ref_writable(buffer, &video_info)
+                            .unwrap();
 
-                    for p in data.as_mut_slice().chunks_mut(4) {
-                        assert_eq!(p.len(), 4);
-                        p[0] = b;
-                        p[1] = g;
-                        p[2] = r;
-                        p[3] = 0;
+                    // Remember some values from the frame for later usage
+                    let width = vframe.width() as usize;
+                    let height = vframe.height() as usize;
+
+                    // Each line of the first plane has this many bytes
+                    let stride = vframe.plane_stride()[0] as usize;
+
+                    // Iterate over each of the height many lines of length stride
+                    for line in vframe
+                        .plane_data_mut(0)
+                        .unwrap()
+                        .chunks_exact_mut(stride)
+                        .take(height)
+                    {
+                        // Iterate over each pixel of 4 bytes in that line
+                        for pixel in line[..(4 * width)].chunks_exact_mut(4) {
+                            pixel[0] = b;
+                            pixel[1] = g;
+                            pixel[2] = r;
+                            pixel[3] = 0;
+                        }
                     }
                 }
 
