@@ -402,13 +402,19 @@ impl Iterator for VideoFormatIterator {
             Some(fmt)
         }
     }
-}
 
-impl ExactSizeIterator for VideoFormatIterator {
-    fn len(&self) -> usize {
-        self.len
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        if self.idx == self.len {
+            return (0, Some(0));
+        }
+
+        let remaining = (self.len - self.idx) as usize;
+
+        (remaining, Some(remaining))
     }
 }
+
+impl ExactSizeIterator for VideoFormatIterator {}
 
 impl DoubleEndedIterator for VideoFormatIterator {
     fn next_back(&mut self) -> Option<Self::Item> {
