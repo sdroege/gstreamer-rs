@@ -426,16 +426,12 @@ mod tests {
         }
 
         {
-            let metas = buffer.iter_meta::<Meta>().collect::<Vec<_>>();
-            assert_eq!(metas.len(), 1);
+            let metas = buffer.iter_meta::<Meta>();
+            assert_eq!(metas.count(), 1);
         }
         {
-            let metas = buffer
-                .get_mut()
-                .unwrap()
-                .iter_meta_mut::<Meta>()
-                .collect::<Vec<_>>();
-            assert_eq!(metas.len(), 1);
+            let metas = buffer.get_mut().unwrap().iter_meta_mut::<Meta>();
+            assert_eq!(metas.count(), 1);
         }
         {
             let metas = buffer.iter_meta::<ParentBufferMeta>().collect::<Vec<_>>();
@@ -469,28 +465,23 @@ mod tests {
         }
 
         {
-            let metas = buffer.iter_meta::<Meta>().collect::<Vec<_>>();
-            assert_eq!(metas.len(), 0);
+            let metas = buffer.iter_meta::<Meta>();
+            assert_eq!(metas.count(), 0);
+        }
+        {
+            let metas = buffer.get_mut().unwrap().iter_meta_mut::<Meta>();
+            assert_eq!(metas.count(), 0);
+        }
+        {
+            let metas = buffer.iter_meta::<ParentBufferMeta>();
+            assert_eq!(metas.count(), 0);
         }
         {
             let metas = buffer
                 .get_mut()
                 .unwrap()
-                .iter_meta_mut::<Meta>()
-                .collect::<Vec<_>>();
-            assert_eq!(metas.len(), 0);
-        }
-        {
-            let metas = buffer.iter_meta::<ParentBufferMeta>().collect::<Vec<_>>();
-            assert_eq!(metas.len(), 0);
-        }
-        {
-            let metas = buffer
-                .get_mut()
-                .unwrap()
-                .iter_meta_mut::<ParentBufferMeta>()
-                .collect::<Vec<_>>();
-            assert_eq!(metas.len(), 0);
+                .iter_meta_mut::<ParentBufferMeta>();
+            assert_eq!(metas.count(), 0);
         }
 
         assert!(buffer.get_meta::<ParentBufferMeta>().is_none());
