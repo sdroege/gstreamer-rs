@@ -263,13 +263,19 @@ impl Iterator for AudioFormatIterator {
             Some(fmt)
         }
     }
-}
 
-impl ExactSizeIterator for AudioFormatIterator {
-    fn len(&self) -> usize {
-        self.len
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        if self.idx == self.len {
+            return (0, Some(0));
+        }
+
+        let remaining = (self.len - self.idx) as usize;
+
+        (remaining, Some(remaining))
     }
 }
+
+impl ExactSizeIterator for AudioFormatIterator {}
 
 impl DoubleEndedIterator for AudioFormatIterator {
     fn next_back(&mut self) -> Option<Self::Item> {
