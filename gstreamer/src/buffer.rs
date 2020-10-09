@@ -751,8 +751,6 @@ macro_rules! define_meta_iter(
             }
         }
     }
-
-    impl<'a, T: MetaAPI> ExactSizeIterator for $name<'a, T> {}
     }
 );
 
