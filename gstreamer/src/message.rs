@@ -140,14 +140,26 @@ impl fmt::Debug for Message {
 
 impl fmt::Debug for MessageRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // Don't retrieve `seqnum` using `MessageRef::get_seqnum`
+        // because it would generate a new seqnum if a buggy `Element`
+        // emitted a `Message` with an invalid `seqnum`.
+        // We want to help the user find out there is something wrong here,
+        // so they can investigate the origin.
+        let seqnum = unsafe { gst_sys::gst_message_get_seqnum(self.as_mut_ptr()) };
+        let seqnum = if seqnum != 0 {
+            &seqnum as &dyn fmt::Debug
+        } else {
+            &"INVALID (0)" as &dyn fmt::Debug
+        };
+
         f.debug_struct("Message")
             .field("ptr", unsafe { &self.as_ptr() })
             .field("type", &unsafe {
                 let type_ = gst_sys::gst_message_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
             })
-            .field("seqnum", &self.get_seqnum())
-            .field("src", &self.get_src().map(|s| s.get_name()))
+            .field("seqnum", seqnum)
+            .field("src", &self.get_src().map(|s| s.get_name().to_owned()))
             .field("structure", &self.get_structure())
             .finish()
     }
