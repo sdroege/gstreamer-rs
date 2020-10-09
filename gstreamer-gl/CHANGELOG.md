@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.4] - 2020-10-09
+### Fixed
+- Correctly implement `ExactSizeIterator` on the `AudioFormat` and
+  `VideoFormat` iterators. Previously they returned the overall size instead
+  of the remaining size, and they didn't implement `Iterator::size_hint()`.
+- Don't implement `ExactSizeIterator` on the buffer `gst::Meta` iterator. The
+  overall length is not known easily and the implementation would've simply
+  panicked in the past.
+
+### Added
+- `gst::ClockID::wait_async_stream()` for async integration for clock waiting.
+- `From` / `TryFrom` impls for converting between `gst::ClockTime` and
+  `std::time::Duration`.
+
 ## [0.16.3] - 2020-09-08
 ### Fixed
 - Reset vfuncs if calling `BaseTransformClass::configure()` multiple times.
