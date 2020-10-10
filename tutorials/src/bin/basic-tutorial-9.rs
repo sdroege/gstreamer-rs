@@ -1,5 +1,5 @@
-extern crate failure;
-use failure::Error;
+extern crate anyhow;
+use anyhow::Error;
 
 extern crate glib;
 extern crate gstreamer as gst;

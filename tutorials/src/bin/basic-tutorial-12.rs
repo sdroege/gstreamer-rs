@@ -3,8 +3,8 @@ extern crate gstreamer as gst;
 use gst::prelude::*;
 use std::io::Write;
 
-extern crate failure;
-use failure::Error;
+extern crate anyhow;
+use anyhow::Error;
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;
