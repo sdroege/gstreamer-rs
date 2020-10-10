@@ -1,16 +1,11 @@
 use std::sync::{Arc, Mutex};
 
-extern crate byte_slice_cast;
 use byte_slice_cast::*;
 
-extern crate gstreamer as gst;
-use gst::prelude::*;
-extern crate gstreamer_audio as gst_audio;
-use gst_audio::AudioInfo;
-extern crate gstreamer_app as gst_app;
-use gst_app::{AppSink, AppSrc};
-extern crate glib;
 use glib::source::SourceId;
+use gst::prelude::*;
+use gst_app::{AppSink, AppSrc};
+use gst_audio::AudioInfo;
 
 const CHUNK_SIZE: usize = 1024; // Amount of bytes we are sending in each buffer
 const SAMPLE_RATE: u32 = 44_100; // Samples per second we are sending

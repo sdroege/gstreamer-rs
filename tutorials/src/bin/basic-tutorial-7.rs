@@ -1,4 +1,3 @@
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 #[path = "../tutorials-common.rs"]
@@ -70,6 +69,7 @@ fn tutorial_main() {
     let bus = pipeline.get_bus().unwrap();
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
+
         match msg.view() {
             MessageView::Error(err) => {
                 eprintln!(

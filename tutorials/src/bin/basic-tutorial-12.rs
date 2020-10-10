@@ -1,9 +1,6 @@
-extern crate glib;
-extern crate gstreamer as gst;
 use gst::prelude::*;
 use std::io::Write;
 
-extern crate anyhow;
 use anyhow::Error;
 
 #[path = "../tutorials-common.rs"]

@@ -1,9 +1,5 @@
-extern crate anyhow;
 use anyhow::Error;
 
-extern crate glib;
-extern crate gstreamer as gst;
-extern crate gstreamer_pbutils as gst_pbutils;
 use gst_pbutils::{
     prelude::*, Discoverer, DiscovererContainerInfo, DiscovererInfo, DiscovererResult,
     DiscovererStreamInfo,

@@ -1,6 +1,4 @@
-extern crate gstreamer as gst;
 use gst::prelude::*;
-use gst::MessageView;
 use std::io;
 use std::io::Write;
 
@@ -100,6 +98,8 @@ fn tutorial_main() {
 }
 
 fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
+    use gst::MessageView;
+
     match msg.view() {
         MessageView::Error(err) => {
             println!(

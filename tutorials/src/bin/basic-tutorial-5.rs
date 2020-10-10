@@ -3,19 +3,11 @@ mod tutorial5 {
     use std::os::raw::c_void;
     use std::process;
 
-    extern crate glib;
-    use self::glib::object::ObjectType;
-    use self::glib::*;
+    use gdk::prelude::*;
+    use gtk::prelude::*;
 
-    extern crate gdk;
-    use self::gdk::prelude::*;
-
-    extern crate gtk;
-    use self::gtk::*;
-
-    extern crate gstreamer as gst;
-    extern crate gstreamer_video as gst_video;
-    use self::gst_video::prelude::*;
+    use gst::prelude::*;
+    use gst_video::prelude::*;
 
     use std::ops;
 
@@ -24,14 +16,14 @@ mod tutorial5 {
     // it from the main context again later and drop the
     // references it keeps inside its closures
     struct AppWindow {
-        main_window: Window,
+        main_window: gtk::Window,
         timeout_id: Option<glib::SourceId>,
     }
 
     impl ops::Deref for AppWindow {
-        type Target = Window;
+        type Target = gtk::Window;
 
-        fn deref(&self) -> &Window {
+        fn deref(&self) -> &gtk::Window {
             &self.main_window
         }
     }
@@ -106,7 +98,7 @@ mod tutorial5 {
 
     // This creates all the GTK+ widgets that compose our application, and registers the callbacks
     fn create_ui(playbin: &gst::Element) -> AppWindow {
-        let main_window = Window::new(WindowType::Toplevel);
+        let main_window = gtk::Window::new(gtk::WindowType::Toplevel);
         main_window.connect_delete_event(|_, _| {
             gtk::main_quit();
             Inhibit(false)
@@ -186,13 +178,13 @@ mod tutorial5 {
             Continue(true)
         });
 
-        let controls = Box::new(Orientation::Horizontal, 0);
+        let controls = gtk::Box::new(gtk::Orientation::Horizontal, 0);
         controls.pack_start(&play_button, false, false, 0);
         controls.pack_start(&pause_button, false, false, 0);
         controls.pack_start(&stop_button, false, false, 0);
         controls.pack_start(&slider, true, true, 2);
 
-        let video_window = DrawingArea::new();
+        let video_window = gtk::DrawingArea::new();
 
         let video_overlay = playbin
             .clone()
@@ -282,11 +274,11 @@ mod tutorial5 {
             _ => (),
         });
 
-        let vbox = Box::new(Orientation::Horizontal, 0);
+        let vbox = gtk::Box::new(gtk::Orientation::Horizontal, 0);
         vbox.pack_start(&video_window, true, true, 0);
         vbox.pack_start(&streams_list, false, false, 2);
 
-        let main_box = Box::new(Orientation::Vertical, 0);
+        let main_box = gtk::Box::new(gtk::Orientation::Vertical, 0);
         main_box.pack_start(&vbox, true, true, 0);
         main_box.pack_start(&controls, false, false, 0);
         main_window.add(&main_box);
