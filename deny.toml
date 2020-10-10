@@ -28,28 +28,8 @@ name = "gstreamer-rs-lgpl-docs"
 
 [bans]
 multiple-versions = "deny"
+wildcards = "allow"
 highlight = "all"
-
-# ignore duplicated deps because of outdated glutin
-# https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/merge_requests/409
-[[bans.skip]]
-name = "unicode-xid"
-version = "0.1.0"
-[[bans.skip]]
-name = "rusttype"
-version = "0.7.9"
-[[bans.skip]]
-name = "quote"
-version = "0.6.13"
-[[bans.skip]]
-name = "proc-macro2"
-version = "0.4.30"
-[[bans.skip]]
-name = "gl_generator"
-version = "0.13.1"
-[[bans.skip]]
-name = "libloading"
-version = "0.5.2"
 
 [sources]
 unknown-registry = "deny"
@@ -59,11 +39,4 @@ allow-git = [
   "https://github.com/gtk-rs/sys",
   "https://github.com/gtk-rs/glib",
   "https://github.com/gtk-rs/gio",
-  "https://github.com/gtk-rs/cairo",
-  "https://github.com/gtk-rs/pango",
-  "https://github.com/gtk-rs/pangocairo",
-  "https://github.com/gtk-rs/atk",
-  "https://github.com/gtk-rs/gdk-pixbuf",
-  "https://github.com/gtk-rs/gdk",
-  "https://github.com/gtk-rs/gtk",
 ]
