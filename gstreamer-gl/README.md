@@ -128,7 +128,7 @@ $ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG
 ## Getting Started
 
 The API reference can be found
-[here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer/), however it is
+[here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer/index.html), however it is
 only the Rust API reference and does not explain any of the concepts.
 
 For getting started with GStreamer development, the best would be to follow
