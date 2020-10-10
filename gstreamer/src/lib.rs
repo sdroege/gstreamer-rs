@@ -273,7 +273,7 @@ pub use toc::{Toc, TocEntry, TocEntryRef, TocRef};
 mod toc_serde;
 
 mod clock;
-pub use clock::{AtomicClockReturn, ClockExtManual, ClockId};
+pub use clock::{AtomicClockReturn, ClockExtManual, ClockId, PeriodicClockId, SingleShotClockId};
 
 mod buffer_pool;
 pub use buffer_pool::*;
