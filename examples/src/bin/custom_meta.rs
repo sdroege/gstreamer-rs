@@ -3,11 +3,8 @@
 // It simply attaches a GstMeta with a Rust String to buffers that are passed into
 // an appsrc and retrieves them again from an appsink.
 
-#[macro_use]
-extern crate gstreamer as gst;
+use gst::gst_element_error;
 use gst::prelude::*;
-
-extern crate gstreamer_app as gst_app;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

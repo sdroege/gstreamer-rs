@@ -12,7 +12,6 @@
 // For convenience, the API has a set of pre-defined queries, but also
 // allows custom queries (which can be defined and used by your own elements).
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use std::convert::TryInto;

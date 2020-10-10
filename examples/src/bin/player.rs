@@ -5,10 +5,7 @@
 // audio / subtitle streams or changing the volume) are all supported by simple
 // one-line function calls on the GstPlayer.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
-
-extern crate gstreamer_player as gst_player;
 
 use std::env;
 use std::sync::{Arc, Mutex};

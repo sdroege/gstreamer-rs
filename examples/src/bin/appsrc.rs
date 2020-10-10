@@ -10,10 +10,7 @@
 // The application provides data of the following format:
 // Video / BGRx (4 bytes) / 2 fps
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
-extern crate gstreamer_app as gst_app;
-extern crate gstreamer_video as gst_video;
 
 use anyhow::Error;
 use derive_more::{Display, Error};

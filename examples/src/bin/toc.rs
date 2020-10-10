@@ -9,7 +9,6 @@
 // {filesrc} - {decodebin} - {queue} - {fakesink}
 //                          \- ...
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use std::env;

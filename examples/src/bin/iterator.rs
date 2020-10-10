@@ -2,7 +2,6 @@
 // This is used at multiple occassions - for example to iterate an
 // element's pads.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]

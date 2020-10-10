@@ -1,4 +1,3 @@
-extern crate gstreamer as gst;
 use gst::gst_element_error;
 use gst::prelude::*;
 

@@ -5,7 +5,6 @@
 // is sent on the sink pad, we expect to see it emerge on the other side when
 // the data in front of it has exited.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]

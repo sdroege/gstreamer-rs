@@ -1,7 +1,4 @@
 #[cfg(feature = "gl")]
-extern crate gl_generator;
-
-#[cfg(feature = "gl")]
 fn generate_gl_bindings() {
     let dest = std::path::PathBuf::from(&std::env::var("OUT_DIR").unwrap());
     let mut file = std::fs::File::create(&dest.join("test_gl_bindings.rs")).unwrap();

@@ -9,7 +9,6 @@
 use glib::glib_object_subclass;
 use glib::glib_wrapper;
 
-extern crate gstreamer as gst;
 use gst::gst_element_error;
 use gst::gst_info;
 use gst::gst_trace;
@@ -31,10 +30,7 @@ mod fir_filter {
 
     use gst::subclass::prelude::*;
 
-    extern crate gstreamer_base as gst_base;
     use gst_base::subclass::prelude::*;
-
-    extern crate gstreamer_audio as gst_audio;
 
     use byte_slice_cast::*;
 

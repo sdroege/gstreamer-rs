@@ -7,11 +7,6 @@
 // It also comes with a custom RTSP server/client subclass for hooking into
 // the client machinery and printing some status.
 
-extern crate gstreamer as gst;
-extern crate gstreamer_rtsp as gst_rtsp;
-extern crate gstreamer_rtsp_server as gst_rtsp_server;
-extern crate gstreamer_sdp as gst_sdp;
-
 use gst_rtsp_server::prelude::*;
 
 use glib::glib_object_subclass;
@@ -90,7 +85,6 @@ mod media_factory {
     use glib::subclass::prelude::*;
     use glib::translate::*;
 
-    extern crate gstreamer_rtsp_server as gst_rtsp_server;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -203,7 +197,6 @@ mod media {
     use glib::subclass::prelude::*;
     use glib::translate::*;
 
-    extern crate gstreamer_rtsp_server as gst_rtsp_server;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -282,7 +275,6 @@ mod server {
     use glib::subclass::prelude::*;
     use glib::translate::*;
 
-    extern crate gstreamer_rtsp_server as gst_rtsp_server;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -381,7 +373,6 @@ mod client {
     use glib::subclass::prelude::*;
     use glib::translate::*;
 
-    extern crate gstreamer_rtsp_server as gst_rtsp_server;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation

@@ -4,14 +4,10 @@
 
 // {videotestsrc} - { glsinkbin }
 
-extern crate gstreamer as gst;
 use gst::gst_element_error;
 use gst::prelude::*;
 
-extern crate gstreamer_app as gst_app;
-extern crate gstreamer_gl as gst_gl;
 use gst_gl::prelude::*;
-extern crate gstreamer_video as gst_video;
 
 use std::ffi::CStr;
 use std::mem;

@@ -3,7 +3,6 @@
 // or for an EOS message. When a message notifying about either of both
 // is received, the future is resolved.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use futures::executor::LocalPool;

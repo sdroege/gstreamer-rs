@@ -9,7 +9,6 @@
 // Much of the playbin's behavior can be controlled by so-called flags, as well
 // as the playbin's properties and signals.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use std::env;

@@ -2,8 +2,6 @@
 // API to configure the compositor element to do specific
 // formatting of an input video.
 //
-extern crate gstreamer as gst;
-extern crate gstreamer_video as gst_video;
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]

@@ -19,7 +19,6 @@
 // This makes it possible, e.g., to schedule an arbitrary piece of code
 // to run in the main loop thread - avoiding potential threading issues.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]

@@ -11,10 +11,8 @@
 // There is a small amount of unsafe code that demonstrates how to work around
 // Cairo's internal refcounting of the target buffer surface
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate gstreamer_video as gst_video;
 use pango::prelude::*;
 
 use std::ops;

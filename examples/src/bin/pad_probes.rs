@@ -7,9 +7,7 @@
 //                /
 // {audiotestsrc} - {fakesink}
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
-extern crate gstreamer_audio as gst_audio;
 
 use byte_slice_cast::*;
 

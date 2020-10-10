@@ -3,7 +3,6 @@
 // as launch syntax.
 // When the parsing succeeded, the pipeline is run until the stream ends or an error happens.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use std::env;

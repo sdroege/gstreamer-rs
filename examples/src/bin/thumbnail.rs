@@ -6,13 +6,8 @@
 // The appsink enforces RGBA so that the image crate can use it. The image crate also requires
 // tightly packed pixels, which is the case for RGBA by default in GStreamer.
 
-extern crate gstreamer as gst;
 use gst::gst_element_error;
 use gst::prelude::*;
-extern crate gstreamer_app as gst_app;
-extern crate gstreamer_video as gst_video;
-
-extern crate image;
 
 use anyhow::Error;
 use derive_more::{Display, Error};

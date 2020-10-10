@@ -8,13 +8,10 @@
 // Discovered information could for example contain the stream's duration or whether it is
 // seekable (filesystem) or not (some http servers).
 
-extern crate gstreamer as gst;
+use gst_pbutils::prelude::*;
 
-extern crate gstreamer_pbutils as pbutils;
-use crate::pbutils::prelude::*;
-
-use crate::pbutils::DiscovererInfo;
-use crate::pbutils::DiscovererStreamInfo;
+use gst_pbutils::DiscovererInfo;
+use gst_pbutils::DiscovererStreamInfo;
 
 use anyhow::Error;
 use derive_more::{Display, Error};
@@ -88,7 +85,7 @@ fn run_discoverer() -> Result<(), Error> {
     };
 
     let timeout: gst::ClockTime = gst::ClockTime::from_seconds(15);
-    let discoverer = pbutils::Discoverer::new(timeout)?;
+    let discoverer = gst_pbutils::Discoverer::new(timeout)?;
     let info = discoverer.discover_uri(uri)?;
     print_discoverer_info(&info)?;
     Ok(())

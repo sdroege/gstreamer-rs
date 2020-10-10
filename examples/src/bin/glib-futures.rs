@@ -1,4 +1,3 @@
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use futures::prelude::*;

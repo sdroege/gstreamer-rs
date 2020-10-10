@@ -4,18 +4,11 @@
 // send to the server. For this, the launch syntax pipeline, that is passed
 // to this example's cli is spawned and the client's media is streamed into it.
 
-extern crate gstreamer as gst;
-extern crate gstreamer_rtsp as gst_rtsp;
-extern crate gstreamer_rtsp_server as gst_rtsp_server;
-extern crate gstreamer_rtsp_server_sys as gst_rtsp_server_sys;
-
 use std::env;
 use std::ptr;
 
 use glib::translate::*;
-use gst_rtsp::*;
 use gst_rtsp_server::prelude::*;
-use gst_rtsp_server::*;
 
 use anyhow::Error;
 use derive_more::{Display, Error};
@@ -41,7 +34,7 @@ fn main_loop() -> Result<(), Error> {
     // Mostly analog to the rtsp-server example, the server is created
     // and the factory for our test mount is configured.
     let main_loop = glib::MainLoop::new(None, false);
-    let server = RTSPServer::new();
+    let server = gst_rtsp_server::RTSPServer::new();
     // Much like HTTP servers, RTSP servers have multiple endpoints that
     // provide or take different streams. Here, we ask our server to give
     // us a reference to its list of endpoints, so we can add our
@@ -50,12 +43,15 @@ fn main_loop() -> Result<(), Error> {
     // Next, we create a factory for the endpoint we want to create.
     // The job of the factory is to create a new pipeline for each client that
     // connects, or (if configured to do so) to reuse an existing pipeline.
-    let factory = RTSPMediaFactory::new();
+    let factory = gst_rtsp_server::RTSPMediaFactory::new();
     // Here we configure a method of authentication that we want the
     // server to require from clients.
-    let auth = RTSPAuth::new();
-    let token = RTSPToken::new(&[(*RTSP_TOKEN_MEDIA_FACTORY_ROLE, &"user")]);
-    let basic = RTSPAuth::make_basic("user", "password");
+    let auth = gst_rtsp_server::RTSPAuth::new();
+    let token = gst_rtsp_server::RTSPToken::new(&[(
+        *gst_rtsp_server::RTSP_TOKEN_MEDIA_FACTORY_ROLE,
+        &"user",
+    )]);
+    let basic = gst_rtsp_server::RTSPAuth::make_basic("user", "password");
     // For propery authentication, we want to use encryption. And there's no
     // encryption without a certificate!
     let cert = gio::TlsCertificate::from_pem(
@@ -91,10 +87,12 @@ fn main_loop() -> Result<(), Error> {
         gst_rtsp_server_sys::gst_rtsp_media_factory_add_role(
             factory.to_glib_none().0,
             "user".to_glib_none().0,
-            RTSP_PERM_MEDIA_FACTORY_ACCESS.to_glib_none().0,
+            gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_ACCESS
+                .to_glib_none()
+                .0,
             <bool as StaticType>::static_type().to_glib() as *const u8,
             true.to_glib() as *const u8,
-            RTSP_PERM_MEDIA_FACTORY_CONSTRUCT.as_ptr() as *const u8,
+            gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_CONSTRUCT.as_ptr() as *const u8,
             <bool as StaticType>::static_type().to_glib() as *const u8,
             true.to_glib() as *const u8,
             ptr::null_mut::<u8>(),
@@ -110,7 +108,7 @@ fn main_loop() -> Result<(), Error> {
     factory.set_launch(args[1].as_str());
     // Tell the RTSP server that we want to work in RECORD mode (clients send)
     // data to us.
-    factory.set_transport_mode(RTSPTransportMode::RECORD);
+    factory.set_transport_mode(gst_rtsp_server::RTSPTransportMode::RECORD);
     // The RTSP protocol allows a couple of different profiles for the actually
     // used protocol of data-transmission. With this, we can limit the selection
     // from which connecting clients have to choose.
@@ -118,7 +116,7 @@ fn main_loop() -> Result<(), Error> {
     // The F in the end is for feedback (an extension that allows more bidirectional
     // feedback between sender and receiver). AV is just Audio/Video, P is Profile :)
     // The default, old RTP profile is AVP
-    factory.set_profiles(RTSPProfile::SAVP | RTSPProfile::SAVPF);
+    factory.set_profiles(gst_rtsp::RTSPProfile::SAVP | gst_rtsp::RTSPProfile::SAVPF);
 
     // Now we add a new mount-point and tell the RTSP server to use the factory
     // we configured beforehand. This factory will take on the job of creating

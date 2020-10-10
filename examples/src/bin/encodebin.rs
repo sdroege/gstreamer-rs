@@ -12,12 +12,10 @@
 // {uridecodebin} -|                                          {encodebin}-{filesink}
 //                  \-{queue}-{videoconvert}-{videoscale}----/
 
-extern crate gstreamer as gst;
 use gst::gst_element_error;
 use gst::gst_element_warning;
 use gst::prelude::*;
 
-extern crate gstreamer_pbutils as gst_pbutils;
 use gst_pbutils::prelude::*;
 
 #[cfg(feature = "v1_10")]

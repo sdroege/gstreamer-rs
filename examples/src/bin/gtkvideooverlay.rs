@@ -17,13 +17,9 @@
 // {videotestsrc} - {xvimagesink(on linux)}
 // {videotestsrc} - {glimagesink(on mac)}
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate gstreamer_video as gst_video;
 use gst_video::prelude::*;
-
-use glib::object::ObjectType;
 
 use gio::prelude::*;
 

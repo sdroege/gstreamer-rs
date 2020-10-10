@@ -35,10 +35,8 @@
 //    those with lowers (higher number). Thus, Layers with higher priority are "in the front".
 // - The timeline is the enclosing element, grouping all layers and providing a timeframe.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate gstreamer_editing_services as ges;
 use ges::prelude::*;
 
 use std::env;

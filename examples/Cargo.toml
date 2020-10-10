@@ -7,19 +7,19 @@ edition = "2018"
 
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer" }
-gstreamer-gl = { path = "../gstreamer-gl", optional = true }
-gstreamer-app = { path = "../gstreamer-app" }
-gstreamer-audio = { path = "../gstreamer-audio" }
-gstreamer-base = { path = "../gstreamer-base" }
-gstreamer-video = { path = "../gstreamer-video" }
-gstreamer-pbutils = { path = "../gstreamer-pbutils" }
-gstreamer-player = { path = "../gstreamer-player", optional = true }
-gstreamer-editing-services = { path = "../gstreamer-editing-services", optional = true }
-gstreamer-sdp = { path = "../gstreamer-sdp", optional = true }
-gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
-gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"], optional = true }
+gst = { package = "gstreamer", path = "../gstreamer" }
+gst-gl = { package = "gstreamer-gl", path = "../gstreamer-gl", optional = true }
+gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
+gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
+gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
+gst-video = { package = "gstreamer-video", path = "../gstreamer-video" }
+gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
+gst-player = { package = "gstreamer-player", path = "../gstreamer-player", optional = true }
+ges = { package = "gstreamer-editing-services", path = "../gstreamer-editing-services", optional = true }
+gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", optional = true }
+gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp", optional = true }
+gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "../gstreamer-rtsp-server", optional = true }
+gst-rtsp-server-sys = { package = "gstreamer-rtsp-server-sys", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"], optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
@@ -41,21 +41,19 @@ gl_generator = { version = "0.14", optional = true }
 
 [features]
 default = []
-gst-player = ["gstreamer-player"]
-ges = ["gstreamer-editing-services"]
 gtksink = ["gtk", "gio"]
 gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
-gst-rtsp-server = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gstreamer-sdp"]
-gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
-v1_10 = ["gstreamer/v1_10"]
+rtsp-server = ["gst-rtsp-server", "gst-rtsp", "gst-sdp"]
+rtsp-server-record = ["gst-rtsp-server-sys", "gst-rtsp-server", "gst-rtsp", "gio"]
+v1_10 = ["gst/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 overlay-composition = ["pango", "pangocairo", "cairo-rs", "cairo-sys-rs" ]
-gl = ["gstreamer-gl", "gl_generator", "glutin"]
-gl-egl = ["gstreamer-gl/egl"]
-gl-x11 = ["gstreamer-gl/x11"]
-gl-wayland = ["gstreamer-gl/wayland"]
+gl = ["gst-gl", "gl_generator", "glutin"]
+gl-egl = ["gst-gl/egl"]
+gl-x11 = ["gst-gl/x11"]
+gl-wayland = ["gst-gl/wayland"]
 
 [[bin]]
 name = "appsink"
@@ -124,11 +122,11 @@ name = "rtpfecserver"
 
 [[bin]]
 name = "rtsp-server"
-required-features = ["gst-rtsp-server"]
+required-features = ["rtsp-server"]
 
 [[bin]]
 name = "rtsp-server-subclass"
-required-features = ["gst-rtsp-server"]
+required-features = ["rtsp-server"]
 
 [[bin]]
 name = "tagsetter"
@@ -144,7 +142,7 @@ name = "glib-futures"
 
 [[bin]]
 name = "rtsp-server-record"
-required-features = ["gst-rtsp-server-record"]
+required-features = ["rtsp-server-record"]
 
 [[bin]]
 name = "discoverer"

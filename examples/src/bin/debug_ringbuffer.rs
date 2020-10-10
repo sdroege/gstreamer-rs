@@ -5,7 +5,6 @@
 //
 // It's possible to dump the logs at any time in an application,
 // not just on exit like is done here.
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use std::process;

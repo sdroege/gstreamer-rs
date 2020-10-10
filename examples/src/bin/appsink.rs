@@ -10,11 +10,8 @@
 // This is the format we request:
 // Audio / Signed 16bit / 1 channel / arbitrary sample rate
 
-extern crate gstreamer as gst;
 use gst::gst_element_error;
 use gst::prelude::*;
-extern crate gstreamer_app as gst_app;
-extern crate gstreamer_audio as gst_audio;
 
 use byte_slice_cast::*;
 

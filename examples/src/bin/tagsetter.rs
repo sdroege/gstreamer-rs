@@ -18,7 +18,6 @@
 // (More modes of operation are possible, see: gst::TagMergeMode)
 // This merge-mode can also be supplied to any method that adds new tags.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use anyhow::anyhow;

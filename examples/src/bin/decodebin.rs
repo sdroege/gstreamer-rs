@@ -29,7 +29,6 @@
 // Especially Windows APIs tend to be quite picky about samplerate and sample-format.
 // The same applies to videostreams.
 
-extern crate gstreamer as gst;
 use gst::gst_element_error;
 use gst::gst_element_warning;
 use gst::prelude::*;

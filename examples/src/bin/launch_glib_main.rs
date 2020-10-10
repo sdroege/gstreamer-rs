@@ -7,7 +7,6 @@
 // things from the main loop (timeouts, UI events, socket events, ...) instead
 // of just handling messages from GStreamer's bus.
 
-extern crate gstreamer as gst;
 use gst::prelude::*;
 
 use std::env;
