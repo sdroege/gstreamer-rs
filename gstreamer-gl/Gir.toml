@@ -33,7 +33,6 @@ generate = [
     #"GstGL.GLRenderbufferAllocationParams",
     # Objects
     #"GstGL.GLBufferPool",
-    "GstGL.GLFramebuffer",
     "GstGL.GLBaseMemoryAllocator",
     "GstGL.GLMemoryAllocator",
     #"GstGL.GLMemoryPBOAllocator",
@@ -498,3 +497,12 @@ status = "generate"
         [[object.function.parameter]]
         name = "src_vid"
         const = true
+
+[[object]]
+name = "GstGL.GLFramebuffer"
+status = "generate"
+
+    [[object.function]]
+    name = "attach"
+    # attachment_point parameter unchecked
+    unsafe = true
