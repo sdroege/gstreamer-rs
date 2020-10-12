@@ -69,7 +69,7 @@ mod tests {
 
         let mut buffer = gst::Buffer::new();
         let port = 5000;
-        let inet_addr = gio::InetAddress::from_string("127.0.0.1");
+        let inet_addr = gio::InetAddress::from_string("127.0.0.1").unwrap();
 
         let expected_addr = &gio::InetSocketAddress::new(&inet_addr, port);
 
