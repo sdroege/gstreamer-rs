@@ -41,7 +41,22 @@ impl MessageRef {
     pub fn get_seqnum(&self) -> Seqnum {
         unsafe {
             let seqnum = gst_sys::gst_message_get_seqnum(self.as_mut_ptr());
-            assert_ne!(seqnum, 0);
+
+            if seqnum == 0 {
+                // seqnum for this message is invalid. This can happen with buggy elements
+                // overriding the seqnum with GST_SEQNUM_INVALID instead of the expected seqnum.
+                // As a workaround, let's generate an unused valid seqnum.
+                let next = Seqnum::next();
+
+                ::gst_warning!(
+                    ::CAT_RUST,
+                    "get_seqnum detected invalid seqnum, returning next {:?}",
+                    next
+                );
+
+                return next;
+            }
+
             Seqnum(NonZeroU32::new_unchecked(seqnum))
         }
     }
@@ -3224,6 +3239,44 @@ mod tests {
                 }
             }
             _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
+        }
+    }
+
+    #[test]
+    fn test_get_seqnum_valid() {
+        ::init().unwrap();
+
+        let msg = StreamStart::new();
+        let seqnum = Seqnum(
+            NonZeroU32::new(unsafe { gst_sys::gst_message_get_seqnum(msg.as_mut_ptr()) }).unwrap(),
+        );
+
+        match msg.view() {
+            MessageView::StreamStart(stream_start) => assert_eq!(seqnum, stream_start.get_seqnum()),
+            _ => panic!(),
+        }
+    }
+
+    #[test]
+    fn test_get_seqnum_invalid() {
+        ::init().unwrap();
+
+        let msg = StreamStart::new();
+        let seqnum_init = msg.get_seqnum();
+
+        // Invalid the seqnum
+        unsafe {
+            (*msg.as_mut_ptr()).seqnum = gst_sys::GST_SEQNUM_INVALID as u32;
+            assert_eq!(0, (*msg.as_ptr()).seqnum);
+        };
+
+        match msg.view() {
+            MessageView::StreamStart(stream_start) => {
+                // get_seqnum is expected to return a new Seqnum,
+                // further in the sequence than the last known seqnum.
+                assert!(seqnum_init < stream_start.get_seqnum());
+            }
+            _ => panic!(),
         }
     }
 }
