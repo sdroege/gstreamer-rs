@@ -14,7 +14,7 @@ gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
 gst-video = { package = "gstreamer-video", path = "../gstreamer-video" }
 gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
-byte-slice-cast = "0.3"
+byte-slice-cast = "1"
 anyhow = "1"
 
 [features]

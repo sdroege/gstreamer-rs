@@ -26,7 +26,7 @@ gio = { git = "https://github.com/gtk-rs/gio", optional = true }
 anyhow = "1.0"
 derive_more = "0.99.5"
 futures = "0.3"
-byte-slice-cast = "0.3"
+byte-slice-cast = "1"
 cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
 cairo-sys-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
 pango = { git = "https://github.com/gtk-rs/pango", optional = true }
