@@ -12,7 +12,7 @@ use gst_sys;
 use std::time::Duration;
 use std::{cmp, convert, fmt};
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug, Default)]
 pub struct ClockTime(pub Option<u64>);
 
 impl ClockTime {
@@ -63,44 +63,81 @@ impl ClockTime {
         skip_assert_initialized!();
         nseconds * ::NSECOND
     }
-
-    pub fn zero() -> ClockTime {
-        ClockTime(Some(0))
-    }
-
-    // FIXME `matches!` was introduced in rustc 1.42.0, current MSRV is 1.41.0
-    #[allow(clippy::match_like_matches_macro)]
-    pub fn is_zero(&self) -> bool {
-        match self.0 {
-            Some(0) => true,
-            _ => false,
-        }
-    }
-
-    pub fn none() -> ClockTime {
-        ClockTime(None)
-    }
 }
 
-impl ClockTime {
-    #[must_use = "this returns the result of the operation, without modifying the original"]
-    #[inline]
-    pub fn saturating_add(self, rhs: ClockTime) -> Option<ClockTime> {
-        match (self.0, rhs.0) {
-            (Some(this), Some(rhs)) => Some(ClockTime(Some(this.saturating_add(rhs)))),
-            _ => None,
-        }
-    }
+// This macro is also used by formats with an inner Option.
+// It is defined here because the format module depends on ClockTime.
+macro_rules! impl_common_ops_for_opt_int(
+    ($name:ident) => {
+        impl $name {
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn saturating_add(self, rhs: Self) -> Option<Self> {
+                match (self.0, rhs.0) {
+                    (Some(this), Some(rhs)) => Some(Self(Some(this.saturating_add(rhs)))),
+                    _ => None,
+                }
+            }
 
-    #[must_use = "this returns the result of the operation, without modifying the original"]
-    #[inline]
-    pub fn saturating_sub(self, rhs: ClockTime) -> Option<ClockTime> {
-        match (self.0, rhs.0) {
-            (Some(this), Some(rhs)) => Some(ClockTime(Some(this.saturating_sub(rhs)))),
-            _ => None,
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn saturating_sub(self, rhs: Self) -> Option<Self> {
+                match (self.0, rhs.0) {
+                    (Some(this), Some(rhs)) => Some(Self(Some(this.saturating_sub(rhs)))),
+                    _ => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn min(self, rhs: Self) -> Option<Self> {
+                match (self.0, rhs.0) {
+                    (Some(this), Some(rhs)) => Some(Self(Some(this.min(rhs)))),
+                    _ => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn max(self, rhs: Self) -> Option<Self> {
+                match (self.0, rhs.0) {
+                    (Some(this), Some(rhs)) => Some(Self(Some(this.max(rhs)))),
+                    _ => None,
+                }
+            }
+
+            pub fn zero() -> Self {
+                Self(Some(0))
+            }
+
+            // FIXME `matches!` was introduced in rustc 1.42.0, current MSRV is 1.41.0
+            // FIXME uncomment when CI can upgrade to 1.47.1
+            //#[allow(clippy::match_like_matches_macro)]
+            pub fn is_zero(&self) -> bool {
+                match self.0 {
+                    Some(0) => true,
+                    _ => false,
+                }
+            }
+
+            pub fn none() -> Self {
+                Self(None)
+            }
         }
-    }
-}
+
+        impl cmp::PartialOrd for $name {
+            fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+                match (self.0, other.0) {
+                    (Some(this), Some(other)) => this.partial_cmp(&other),
+                    (None, None) => Some(cmp::Ordering::Equal),
+                    _ => None,
+                }
+            }
+        }
+    };
+);
+
+impl_common_ops_for_opt_int!(ClockTime);
 
 impl fmt::Display for ClockTime {
     #[allow(clippy::many_single_char_names)]
@@ -261,5 +298,116 @@ mod tests {
         assert!(ct_1.saturating_sub(ct_2).unwrap().is_zero());
         assert!(ct_1.saturating_sub(ct_none).is_none());
         assert!(ct_none.saturating_sub(ct_1).is_none());
+    }
+
+    #[test]
+    #[allow(clippy::eq_op)]
+    fn eq() {
+        let ct_10 = ClockTime::from_mseconds(10);
+        let ct_10_2 = ClockTime::from_mseconds(10);
+        let ct_10_3 = ClockTime::from_mseconds(10);
+        let ct_20 = ClockTime::from_mseconds(20);
+
+        let ct_none = ClockTime::none();
+        let ct_none_2 = ClockTime::none();
+        let ct_none_3 = ClockTime::none();
+
+        // ## Eq
+
+        // ### (a == b) and (a != b) are strict inverses
+        assert!(ct_10 == ct_10_2);
+        assert_ne!(ct_10 == ct_10_2, ct_10 != ct_10_2);
+
+        assert!(ct_10 != ct_20);
+        assert_ne!(ct_10 == ct_20, ct_10 != ct_20);
+
+        assert!(ct_none == ct_none_2);
+        assert_ne!(ct_none == ct_none_2, ct_none != ct_none_2);
+
+        assert!(ct_10 != ct_none);
+        assert_ne!(ct_10 == ct_none, ct_10 != ct_none);
+
+        assert!(ct_none != ct_10);
+        assert_ne!(ct_none == ct_10, ct_none != ct_10);
+
+        // ### Reflexivity (a == a)
+        assert!(ct_10 == ct_10);
+        assert!(ct_none == ct_none);
+
+        // ## PartialEq
+
+        // ### Symmetric (a == b) => (b == a)
+        assert!((ct_10 == ct_10_2) && (ct_10_2 == ct_10));
+        assert!((ct_none == ct_none_2) && (ct_none_2 == ct_none));
+
+        // ### Transitive (a == b) and (b == c) => (a == c)
+        assert!((ct_10 == ct_10_2) && (ct_10_2 == ct_10_3) && (ct_10 == ct_10_3));
+        assert!((ct_none == ct_none_2) && (ct_none_2 == ct_none_3) && (ct_none == ct_none_3));
+    }
+
+    #[test]
+    #[allow(clippy::neg_cmp_op_on_partial_ord)]
+    fn partial_ord() {
+        let ct_10 = ClockTime::from_mseconds(10);
+        let ct_20 = ClockTime::from_mseconds(20);
+        let ct_30 = ClockTime::from_mseconds(30);
+
+        let ct_none = ClockTime::none();
+
+        // Special cases
+        assert_eq!(ct_10 < ct_none, false);
+        assert_eq!(ct_10 > ct_none, false);
+        assert_eq!(ct_none < ct_10, false);
+        assert_eq!(ct_none > ct_10, false);
+
+        // Asymmetric a < b => !(a > b)
+        // a < b => !(a > b)
+        assert!((ct_10 < ct_20) && !(ct_10 > ct_20));
+        // a > b => !(a < b)
+        assert!((ct_20 > ct_10) && !(ct_20 < ct_10));
+
+        // Transitive
+        // a < b and b < c => a < c
+        assert!((ct_10 < ct_20) && (ct_20 < ct_30) && (ct_10 < ct_30));
+        // a > b and b > c => a > c
+        assert!((ct_30 > ct_20) && (ct_20 > ct_10) && (ct_30 > ct_10));
+    }
+
+    #[test]
+    fn not_ord() {
+        let ct_10 = ClockTime::from_mseconds(10);
+        let ct_20 = ClockTime::from_mseconds(20);
+        let ct_none = ClockTime::none();
+
+        // Total & Antisymmetric exactly one of a < b, a == b or a > b is true
+
+        assert!((ct_10 < ct_20) ^ (ct_10 == ct_20) ^ (ct_10 > ct_20));
+
+        // Not Ord due to:
+        assert_eq!(
+            (ct_10 < ct_none) ^ (ct_10 == ct_none) ^ (ct_10 > ct_none),
+            false
+        );
+        assert_eq!(
+            (ct_none < ct_10) ^ (ct_none == ct_10) ^ (ct_none > ct_10),
+            false
+        );
+    }
+
+    #[test]
+    fn min_max() {
+        let ct_10 = ClockTime::from_nseconds(10);
+        let ct_20 = ClockTime::from_nseconds(20);
+        let ct_none = ClockTime::none();
+
+        assert_eq!(ct_10.min(ct_20).unwrap(), ct_10);
+        assert_eq!(ct_20.min(ct_10).unwrap(), ct_10);
+        assert!(ct_none.min(ct_10).is_none());
+        assert!(ct_20.min(ct_none).is_none());
+
+        assert_eq!(ct_10.max(ct_20).unwrap(), ct_20);
+        assert_eq!(ct_20.max(ct_10).unwrap(), ct_20);
+        assert!(ct_none.max(ct_10).is_none());
+        assert!(ct_20.max(ct_none).is_none());
     }
 }

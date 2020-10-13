@@ -13,6 +13,8 @@ use thiserror::Error;
 use ClockTime;
 use Format;
 
+use std::cmp;
+
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub enum GenericFormattedValue {
@@ -27,15 +29,24 @@ pub enum GenericFormattedValue {
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Undefined(pub i64);
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug, Default)]
 pub struct Default(pub Option<u64>);
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+impl_common_ops_for_opt_int!(Default);
+
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug, Default)]
 pub struct Bytes(pub Option<u64>);
+impl_common_ops_for_opt_int!(Bytes);
+
 pub type Time = ClockTime;
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug, Default)]
 pub struct Buffers(pub Option<u64>);
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+impl_common_ops_for_opt_int!(Buffers);
+
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug, Default)]
 pub struct Percent(pub Option<u32>);
+impl_common_ops_for_opt_int!(Percent);
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Error)]
 #[error("invalid generic value format")]

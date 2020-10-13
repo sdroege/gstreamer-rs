@@ -188,6 +188,7 @@ cfg_if! {
 }
 
 mod child_proxy;
+#[macro_use]
 mod clock_time;
 #[cfg(feature = "ser_de")]
 mod clock_time_serde;
