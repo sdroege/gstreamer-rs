@@ -64,8 +64,41 @@ impl ClockTime {
         nseconds * ::NSECOND
     }
 
+    pub fn zero() -> ClockTime {
+        ClockTime(Some(0))
+    }
+
+    // FIXME `matches!` was introduced in rustc 1.42.0, current MSRV is 1.41.0
+    #[allow(clippy::match_like_matches_macro)]
+    pub fn is_zero(&self) -> bool {
+        match self.0 {
+            Some(0) => true,
+            _ => false,
+        }
+    }
+
     pub fn none() -> ClockTime {
         ClockTime(None)
+    }
+}
+
+impl ClockTime {
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    #[inline]
+    pub fn saturating_add(self, rhs: ClockTime) -> Option<ClockTime> {
+        match (self.0, rhs.0) {
+            (Some(this), Some(rhs)) => Some(ClockTime(Some(this.saturating_add(rhs)))),
+            _ => None,
+        }
+    }
+
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    #[inline]
+    pub fn saturating_sub(self, rhs: ClockTime) -> Option<ClockTime> {
+        match (self.0, rhs.0) {
+            (Some(this), Some(rhs)) => Some(ClockTime(Some(this.saturating_sub(rhs)))),
+            _ => None,
+        }
     }
 }
 
@@ -185,5 +218,48 @@ impl convert::TryFrom<ClockTime> for Duration {
         t.nanoseconds()
             .map(Duration::from_nanos)
             .ok_or_else(|| glib_bool_error!("Can't convert ClockTime::NONE to Duration"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[allow(clippy::eq_op)]
+    fn ops() {
+        let ct_10 = ClockTime::from_mseconds(10);
+        let ct_20 = ClockTime::from_mseconds(20);
+        let ct_30 = ClockTime::from_mseconds(30);
+
+        let ct_none = ClockTime::none();
+
+        assert_eq!(ct_10 + ct_20, ct_30);
+        assert_eq!(ct_10 + ct_none, ct_none);
+        assert_eq!(ct_none + ct_10, ct_none);
+        assert_eq!(ct_none + ct_none, ct_none);
+
+        assert_eq!(ct_30 - ct_20, ct_10);
+        assert_eq!(ct_30 - ct_30, ClockTime::zero());
+        assert_eq!(ct_30 - ct_none, ct_none);
+        assert_eq!(ct_none - ct_30, ct_none);
+        assert_eq!(ct_none - ct_none, ct_none);
+    }
+
+    #[test]
+    fn saturating_ops() {
+        let ct_1 = ClockTime::from_nseconds(1);
+        let ct_2 = ClockTime::from_nseconds(2);
+
+        let ct_max = ClockTime::from_nseconds(std::u64::MAX);
+        let ct_none = ClockTime::none();
+
+        assert_eq!(ct_max.saturating_add(ct_1), Some(ct_max));
+        assert!(ct_max.saturating_add(ct_none).is_none());
+        assert!(ct_none.saturating_add(ct_max).is_none());
+
+        assert!(ct_1.saturating_sub(ct_2).unwrap().is_zero());
+        assert!(ct_1.saturating_sub(ct_none).is_none());
+        assert!(ct_none.saturating_sub(ct_1).is_none());
     }
 }

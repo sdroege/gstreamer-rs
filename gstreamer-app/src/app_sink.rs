@@ -422,7 +422,7 @@ impl Stream for AppSinkStream {
         };
 
         app_sink
-            .try_pull_sample(gst::ClockTime::from_mseconds(0))
+            .try_pull_sample(gst::ClockTime::zero())
             .map(|sample| Poll::Ready(Some(sample)))
             .unwrap_or_else(|| {
                 if app_sink.is_eos() {
