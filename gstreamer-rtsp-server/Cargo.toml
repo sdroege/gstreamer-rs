@@ -43,7 +43,7 @@ v1_16 = ["gstreamer/v1_16", "gstreamer-sdp/v1_16", "gstreamer-rtsp/v1_16", "gstr
 v1_18 = ["gstreamer/v1_18", "gstreamer-sdp/v1_18", "gstreamer-rtsp/v1_18", "gstreamer-net/v1_18", "gstreamer-rtsp-server-sys/v1_18", "v1_16"]
 embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-dox = ["v1_18", "gstreamer-rtsp-server-sys/dox", "glib/dox", "gstreamer/dox"]
+dox = ["v1_18", "gstreamer-rtsp-server-sys/dox", "glib/dox", "gio/dox", "gstreamer/dox", "gstreamer-sdp/dox", "gstreamer-rtsp/dox", "gstreamer-net/dox"]
 
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]

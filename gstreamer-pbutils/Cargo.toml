@@ -35,7 +35,7 @@ v1_16 = ["gstreamer/v1_16", "gstreamer-pbutils-sys/v1_16", "v1_14"]
 v1_18 = ["gstreamer/v1_18", "gstreamer-pbutils-sys/v1_18", "v1_16"]
 embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-dox = ["v1_18", "gstreamer-pbutils-sys/dox"]
+dox = ["v1_18", "gstreamer-pbutils-sys/dox", "glib/dox", "gstreamer/dox"]
 
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]

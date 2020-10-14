@@ -33,7 +33,7 @@ gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [features]
 default = []
-dox = ["v1_18", "gstreamer-gl-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-base/dox"]
+dox = ["v1_18", "gstreamer-gl-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-base/dox", "gstreamer-video/dox"]
 egl = ["gstreamer-gl-sys/egl"]
 x11 = ["gstreamer-gl-sys/x11"]
 wayland = ["gstreamer-gl-sys/wayland"]

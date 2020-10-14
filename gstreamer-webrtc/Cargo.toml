@@ -29,7 +29,7 @@ gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 default = []
 embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-dox = ["v1_18", "gstreamer-webrtc-sys/dox", "glib/dox", "gstreamer/dox"]
+dox = ["v1_18", "gstreamer-webrtc-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-sdp/dox"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-sdp/v1_16", "gstreamer-webrtc-sys/v1_16"]
 v1_18 = ["gstreamer/v1_18", "gstreamer-sdp/v1_18", "gstreamer-webrtc-sys/v1_18", "v1_16"]
 
