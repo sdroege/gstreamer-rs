@@ -23,7 +23,7 @@ gstreamer-audio-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/g
 glib = "0.10"
 gstreamer = { version = "0.16", path = "../gstreamer" }
 gstreamer-base = { version = "0.16", path = "../gstreamer-base" }
-array-init = "0.1"
+array-init = "1.0"
 once_cell = "1.0"
 
 [build-dependencies]
