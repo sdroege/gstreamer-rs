@@ -19,7 +19,7 @@ path = "../gstreamer-video-sys"
 features = ["v1_12"]
 
 [dev-dependencies]
-shell-words = "0.1.0"
+shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
