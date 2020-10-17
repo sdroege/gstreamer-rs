@@ -381,11 +381,7 @@ impl Clock {
 }
 
 pub trait ClockExtManual: 'static {
-    fn new_periodic_id(
-        &self,
-        start_time: ClockTime,
-        interval: ClockTime,
-    ) -> Result<PeriodicClockId, glib::BoolError>;
+    fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> PeriodicClockId;
 
     fn periodic_id_reinit(
         &self,
@@ -394,7 +390,7 @@ pub trait ClockExtManual: 'static {
         interval: ClockTime,
     ) -> Result<(), glib::BoolError>;
 
-    fn new_single_shot_id(&self, time: ClockTime) -> Result<SingleShotClockId, glib::BoolError>;
+    fn new_single_shot_id(&self, time: ClockTime) -> SingleShotClockId;
 
     fn single_shot_id_reinit(
         &self,
@@ -410,19 +406,17 @@ pub trait ClockExtManual: 'static {
 }
 
 impl<O: IsA<Clock>> ClockExtManual for O {
-    fn new_periodic_id(
-        &self,
-        start_time: ClockTime,
-        interval: ClockTime,
-    ) -> Result<PeriodicClockId, glib::BoolError> {
+    fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> PeriodicClockId {
+        assert!(start_time.is_some());
+        assert!(interval.is_some());
+        assert_ne!(interval, ::ClockTime::from(0));
+
         unsafe {
-            Option::<_>::from_glib_full(gst_sys::gst_clock_new_periodic_id(
+            PeriodicClockId(from_glib_full(gst_sys::gst_clock_new_periodic_id(
                 self.as_ref().to_glib_none().0,
                 start_time.to_glib(),
                 interval.to_glib(),
-            ))
-            .map(PeriodicClockId)
-            .ok_or_else(|| glib_bool_error!("Failed to create new periodic clock id"))
+            )))
         }
     }
 
@@ -448,14 +442,14 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 
-    fn new_single_shot_id(&self, time: ClockTime) -> Result<SingleShotClockId, glib::BoolError> {
+    fn new_single_shot_id(&self, time: ClockTime) -> SingleShotClockId {
+        assert!(time.is_some());
+
         unsafe {
-            Option::<_>::from_glib_full(gst_sys::gst_clock_new_single_shot_id(
+            SingleShotClockId(from_glib_full(gst_sys::gst_clock_new_single_shot_id(
                 self.as_ref().to_glib_none().0,
                 time.to_glib(),
-            ))
-            .map(SingleShotClockId)
-            .ok_or_else(|| glib_bool_error!("Failed to create new single shot clock id"))
+            )))
         }
     }
 
@@ -515,7 +509,7 @@ mod tests {
 
         let clock = SystemClock::obtain();
         let now = clock.get_time();
-        let id = clock.new_single_shot_id(now + 20 * ::MSECOND).unwrap();
+        let id = clock.new_single_shot_id(now + 20 * ::MSECOND);
         let (res, _) = id.wait();
 
         assert!(res == Ok(ClockSuccess::Ok) || res == Err(ClockError::Early));
@@ -529,7 +523,7 @@ mod tests {
 
         let clock = SystemClock::obtain();
         let now = clock.get_time();
-        let id = clock.new_single_shot_id(now + 20 * ::MSECOND).unwrap();
+        let id = clock.new_single_shot_id(now + 20 * ::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             sender.send(()).unwrap();
         });
@@ -545,9 +539,7 @@ mod tests {
 
         let clock = SystemClock::obtain();
         let now = clock.get_time();
-        let id = clock
-            .new_periodic_id(now + 20 * ::MSECOND, 20 * ::MSECOND)
-            .unwrap();
+        let id = clock.new_periodic_id(now + 20 * ::MSECOND, 20 * ::MSECOND);
 
         let (res, _) = id.wait();
         assert!(res == Ok(ClockSuccess::Ok) || res == Err(ClockError::Early));
@@ -564,9 +556,7 @@ mod tests {
 
         let clock = SystemClock::obtain();
         let now = clock.get_time();
-        let id = clock
-            .new_periodic_id(now + 20 * ::MSECOND, 20 * ::MSECOND)
-            .unwrap();
+        let id = clock.new_periodic_id(now + 20 * ::MSECOND, 20 * ::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             let _ = sender.send(());
         });
