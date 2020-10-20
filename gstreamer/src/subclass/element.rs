@@ -14,7 +14,56 @@ use crate::StateChangeError;
 use crate::StateChangeReturn;
 use crate::StateChangeSuccess;
 
+#[derive(Debug, Clone)]
+pub struct ElementMetadata {
+    long_name: String,
+    classification: String,
+    description: String,
+    author: String,
+    additional: Vec<(String, String)>,
+}
+
+impl ElementMetadata {
+    pub fn new(long_name: &str, classification: &str, description: &str, author: &str) -> Self {
+        Self {
+            long_name: long_name.into(),
+            classification: classification.into(),
+            description: description.into(),
+            author: author.into(),
+            additional: vec![],
+        }
+    }
+
+    pub fn with_additional(
+        long_name: &str,
+        classification: &str,
+        description: &str,
+        author: &str,
+        additional: &[(&str, &str)],
+    ) -> Self {
+        Self {
+            long_name: long_name.into(),
+            classification: classification.into(),
+            description: description.into(),
+            author: author.into(),
+            additional: additional
+                .iter()
+                .copied()
+                .map(|(key, value)| (key.into(), value.into()))
+                .collect(),
+        }
+    }
+}
+
 pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync {
+    fn metadata() -> Option<&'static ElementMetadata> {
+        None
+    }
+
+    fn pad_templates() -> &'static [PadTemplate] {
+        &[]
+    }
+
     fn change_state(
         &self,
         element: &Self::Type,
@@ -302,53 +351,13 @@ where
     }
 }
 
-pub unsafe trait ElementClassSubclassExt: Sized + 'static {
-    fn add_pad_template(&mut self, pad_template: PadTemplate) {
-        unsafe {
-            ffi::gst_element_class_add_pad_template(
-                self as *mut Self as *mut ffi::GstElementClass,
-                pad_template.to_glib_none().0,
-            );
-        }
-    }
-
-    fn set_metadata(
-        &mut self,
-        long_name: &str,
-        classification: &str,
-        description: &str,
-        author: &str,
-    ) {
-        unsafe {
-            ffi::gst_element_class_set_metadata(
-                self as *mut Self as *mut ffi::GstElementClass,
-                long_name.to_glib_none().0,
-                classification.to_glib_none().0,
-                description.to_glib_none().0,
-                author.to_glib_none().0,
-            );
-        }
-    }
-
-    fn add_metadata(&mut self, key: &str, value: &str) {
-        unsafe {
-            ffi::gst_element_class_add_metadata(
-                self as *mut Self as *mut ffi::GstElementClass,
-                key.to_glib_none().0,
-                value.to_glib_none().0,
-            );
-        }
-    }
-}
-
-unsafe impl ElementClassSubclassExt for glib::Class<Element> {}
-
 unsafe impl<T: ElementImpl> IsSubclassable<T> for Element
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
+
         let klass = klass.as_mut();
         klass.change_state = Some(element_change_state::<T>);
         klass.request_new_pad = Some(element_request_new_pad::<T>);
@@ -359,6 +368,30 @@ where
         klass.set_clock = Some(element_set_clock::<T>);
         klass.provide_clock = Some(element_provide_clock::<T>);
         klass.post_message = Some(element_post_message::<T>);
+
+        unsafe {
+            for pad_template in T::pad_templates() {
+                ffi::gst_element_class_add_pad_template(klass, pad_template.to_glib_none().0);
+            }
+
+            if let Some(metadata) = T::metadata() {
+                ffi::gst_element_class_set_metadata(
+                    klass,
+                    metadata.long_name.to_glib_none().0,
+                    metadata.classification.to_glib_none().0,
+                    metadata.description.to_glib_none().0,
+                    metadata.author.to_glib_none().0,
+                );
+
+                for (key, value) in &metadata.additional {
+                    ffi::gst_element_class_add_metadata(
+                        klass,
+                        key.to_glib_none().0,
+                        value.to_glib_none().0,
+                    );
+                }
+            }
+        }
     }
 }
 
@@ -623,6 +656,7 @@ mod tests {
             const NAME: &'static str = "TestElement";
             type Type = super::TestElement;
             type ParentType = Element;
+            type Interfaces = ();
             type Instance = crate::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 
@@ -679,34 +713,6 @@ mod tests {
                     sinkpad,
                 }
             }
-
-            fn class_init(klass: &mut Self::Class) {
-                klass.set_metadata(
-                    "Test Element",
-                    "Generic",
-                    "Does nothing",
-                    "Sebastian Dröge <sebastian@centricular.com>",
-                );
-
-                let caps = crate::Caps::new_any();
-                let src_pad_template = crate::PadTemplate::new(
-                    "src",
-                    crate::PadDirection::Src,
-                    crate::PadPresence::Always,
-                    &caps,
-                )
-                .unwrap();
-                klass.add_pad_template(src_pad_template);
-
-                let sink_pad_template = crate::PadTemplate::new(
-                    "sink",
-                    crate::PadDirection::Sink,
-                    crate::PadPresence::Always,
-                    &caps,
-                )
-                .unwrap();
-                klass.add_pad_template(sink_pad_template);
-            }
         }
 
         impl ObjectImpl for TestElement {
@@ -719,6 +725,45 @@ mod tests {
         }
 
         impl ElementImpl for TestElement {
+            fn metadata() -> Option<&'static ElementMetadata> {
+                use once_cell::sync::Lazy;
+                static ELEMENT_METADATA: Lazy<ElementMetadata> = Lazy::new(|| {
+                    ElementMetadata::new(
+                        "Test Element",
+                        "Generic",
+                        "Does nothing",
+                        "Sebastian Dröge <sebastian@centricular.com>",
+                    )
+                });
+
+                Some(&*ELEMENT_METADATA)
+            }
+
+            fn pad_templates() -> &'static [PadTemplate] {
+                use once_cell::sync::Lazy;
+                static PAD_TEMPLATES: Lazy<Vec<PadTemplate>> = Lazy::new(|| {
+                    let caps = crate::Caps::new_any();
+                    vec![
+                        PadTemplate::new(
+                            "src",
+                            crate::PadDirection::Src,
+                            crate::PadPresence::Always,
+                            &caps,
+                        )
+                        .unwrap(),
+                        PadTemplate::new(
+                            "sink",
+                            crate::PadDirection::Sink,
+                            crate::PadPresence::Always,
+                            &caps,
+                        )
+                        .unwrap(),
+                    ]
+                });
+
+                PAD_TEMPLATES.as_ref()
+            }
+
             fn change_state(
                 &self,
                 element: &Self::Type,

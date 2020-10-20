@@ -32,6 +32,9 @@ mod preset;
 mod tag_setter;
 mod uri_handler;
 
+pub use self::device_provider::DeviceProviderMetadata;
+pub use self::element::ElementMetadata;
+
 pub use self::error::FlowError;
 pub use self::plugin::{MAJOR_VERSION, MINOR_VERSION};
 
@@ -43,10 +46,8 @@ pub mod prelude {
     pub use super::child_proxy::ChildProxyImpl;
     pub use super::clock::{ClockImpl, ClockImplExt};
     pub use super::device::{DeviceImpl, DeviceImplExt};
-    pub use super::device_provider::{
-        DeviceProviderClassSubclassExt, DeviceProviderImpl, DeviceProviderImplExt,
-    };
-    pub use super::element::{ElementClassSubclassExt, ElementImpl, ElementImplExt};
+    pub use super::device_provider::{DeviceProviderImpl, DeviceProviderImplExt};
+    pub use super::element::{ElementImpl, ElementImplExt};
     pub use super::ghost_pad::GhostPadImpl;
     pub use super::pad::{PadImpl, PadImplExt};
     pub use super::pipeline::PipelineImpl;

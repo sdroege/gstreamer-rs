@@ -13,7 +13,18 @@ use std::ptr;
 
 use crate::BaseTransform;
 
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum BaseTransformMode {
+    AlwaysInPlace,
+    NeverInPlace,
+    Both,
+}
+
 pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
+    const MODE: BaseTransformMode;
+    const PASSTHROUGH_ON_SAME_CAPS: bool;
+    const TRANSFORM_IP_ON_PASSTHROUGH: bool;
+
     fn start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
@@ -823,13 +834,6 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
-pub enum BaseTransformMode {
-    AlwaysInPlace,
-    NeverInPlace,
-    Both,
-}
-
 unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
@@ -854,48 +858,25 @@ where
         klass.before_transform = Some(base_transform_before_transform::<T>);
         klass.submit_input_buffer = Some(base_transform_submit_input_buffer::<T>);
         klass.generate_output = Some(base_transform_generate_output::<T>);
-    }
-}
 
-pub unsafe trait BaseTransformClassSubclassExt: Sized + 'static {
-    fn configure<T: BaseTransformImpl>(
-        &mut self,
-        mode: BaseTransformMode,
-        passthrough_on_same_caps: bool,
-        transform_ip_on_passthrough: bool,
-    ) where
-        Self: ClassStruct<Type = T>,
-        <T as ObjectSubclass>::Instance: PanicPoison,
-    {
-        unsafe {
-            let klass = &mut *(self as *mut Self as *mut ffi::GstBaseTransformClass);
+        klass.passthrough_on_same_caps = T::PASSTHROUGH_ON_SAME_CAPS.to_glib();
+        klass.transform_ip_on_passthrough = T::TRANSFORM_IP_ON_PASSTHROUGH.to_glib();
 
-            klass.passthrough_on_same_caps = passthrough_on_same_caps.to_glib();
-            klass.transform_ip_on_passthrough = transform_ip_on_passthrough.to_glib();
-
-            match mode {
-                BaseTransformMode::AlwaysInPlace => {
-                    klass.transform = None;
-                    klass.transform_ip = Some(base_transform_transform_ip::<T>);
-                }
-                BaseTransformMode::NeverInPlace => {
-                    klass.transform = Some(base_transform_transform::<T>);
-                    klass.transform_ip = None;
-                }
-                BaseTransformMode::Both => {
-                    klass.transform = Some(base_transform_transform::<T>);
-                    klass.transform_ip = Some(base_transform_transform_ip::<T>);
-                }
+        match T::MODE {
+            BaseTransformMode::AlwaysInPlace => {
+                klass.transform = None;
+                klass.transform_ip = Some(base_transform_transform_ip::<T>);
+            }
+            BaseTransformMode::NeverInPlace => {
+                klass.transform = Some(base_transform_transform::<T>);
+                klass.transform_ip = None;
+            }
+            BaseTransformMode::Both => {
+                klass.transform = Some(base_transform_transform::<T>);
+                klass.transform_ip = Some(base_transform_transform_ip::<T>);
             }
         }
     }
-}
-
-unsafe impl<T: ClassStruct> BaseTransformClassSubclassExt for T
-where
-    T::Type: BaseTransformImpl,
-    <T::Type as ObjectSubclass>::Instance: PanicPoison,
-{
 }
 
 #[derive(Debug)]

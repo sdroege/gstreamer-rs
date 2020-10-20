@@ -8,7 +8,20 @@ use crate::Device;
 use crate::DeviceProvider;
 use crate::LoggableError;
 
+#[derive(Debug, Clone)]
+pub struct DeviceProviderMetadata {
+    long_name: String,
+    classification: String,
+    description: String,
+    author: String,
+    additional: Vec<(String, String)>,
+}
+
 pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync {
+    fn metadata() -> Option<&'static DeviceProviderMetadata> {
+        None
+    }
+
     fn probe(&self, device_provider: &Self::Type) -> Vec<Device> {
         self.parent_probe(device_provider)
     }
@@ -78,38 +91,6 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
     }
 }
 
-pub unsafe trait DeviceProviderClassSubclassExt: Sized + 'static {
-    fn set_metadata(
-        &mut self,
-        long_name: &str,
-        classification: &str,
-        description: &str,
-        author: &str,
-    ) {
-        unsafe {
-            ffi::gst_device_provider_class_set_metadata(
-                self as *mut Self as *mut ffi::GstDeviceProviderClass,
-                long_name.to_glib_none().0,
-                classification.to_glib_none().0,
-                description.to_glib_none().0,
-                author.to_glib_none().0,
-            );
-        }
-    }
-
-    fn add_metadata(&mut self, key: &str, value: &str) {
-        unsafe {
-            ffi::gst_device_provider_class_add_metadata(
-                self as *mut Self as *mut ffi::GstDeviceProviderClass,
-                key.to_glib_none().0,
-                value.to_glib_none().0,
-            );
-        }
-    }
-}
-
-unsafe impl DeviceProviderClassSubclassExt for glib::Class<DeviceProvider> {}
-
 unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
@@ -117,6 +98,26 @@ unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
         klass.probe = Some(device_provider_probe::<T>);
         klass.start = Some(device_provider_start::<T>);
         klass.stop = Some(device_provider_stop::<T>);
+
+        unsafe {
+            if let Some(metadata) = T::metadata() {
+                ffi::gst_device_provider_class_set_metadata(
+                    klass,
+                    metadata.long_name.to_glib_none().0,
+                    metadata.classification.to_glib_none().0,
+                    metadata.description.to_glib_none().0,
+                    metadata.author.to_glib_none().0,
+                );
+
+                for (key, value) in &metadata.additional {
+                    ffi::gst_device_provider_class_add_metadata(
+                        klass,
+                        key.to_glib_none().0,
+                        value.to_glib_none().0,
+                    );
+                }
+            }
+        }
     }
 }
 

@@ -97,6 +97,7 @@ mod media_factory {
             const NAME: &'static str = "RsRTSPMediaFactory";
             type Type = super::Factory;
             type ParentType = gst_rtsp_server::RTSPMediaFactory;
+            type Interfaces = ();
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 
@@ -190,6 +191,7 @@ mod media {
             const NAME: &'static str = "RsRTSPMedia";
             type Type = super::Media;
             type ParentType = gst_rtsp_server::RTSPMedia;
+            type Interfaces = ();
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 
@@ -258,6 +260,7 @@ mod server {
             const NAME: &'static str = "RsRTSPServer";
             type Type = super::Server;
             type ParentType = gst_rtsp_server::RTSPServer;
+            type Interfaces = ();
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 
@@ -334,6 +337,7 @@ mod client {
             const NAME: &'static str = "RsRTSPClient";
             type Type = super::Client;
             type ParentType = gst_rtsp_server::RTSPClient;
+            type Interfaces = ();
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 

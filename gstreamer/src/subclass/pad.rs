@@ -104,6 +104,7 @@ mod tests {
             const NAME: &'static str = "TestPad";
             type Type = super::TestPad;
             type ParentType = Pad;
+            type Interfaces = ();
             type Instance = subclass::simple::InstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 

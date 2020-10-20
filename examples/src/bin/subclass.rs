@@ -59,6 +59,7 @@ mod fir_filter {
             const NAME: &'static str = "RsFirFilter";
             type Type = super::FirFilter;
             type ParentType = gst_base::BaseTransform;
+            type Interfaces = ();
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 
@@ -73,89 +74,85 @@ mod fir_filter {
                     history: Mutex::new(VecDeque::new()),
                 }
             }
-
-            // Called exactly once when registering the type. Used for
-            // setting up metadata for all instances, e.g. the name and
-            // classification and the pad templates with their caps.
-            //
-            // Actual instances can create pads based on those pad templates
-            // with a subset of the caps given here. In case of basetransform,
-            // a "src" and "sink" pad template are required here and the base class
-            // will automatically instantiate pads for them.
-            //
-            // Our element here can only handle F32 mono audio.
-            fn class_init(klass: &mut Self::Class) {
-                // Set the element specific metadata. This information is what
-                // is visible from gst-inspect-1.0 and can also be programatically
-                // retrieved from the gst::Registry after initial registration
-                // without having to load the plugin in memory.
-                klass.set_metadata(
-                    "FIR Filter",
-                    "Filter/Effect/Audio",
-                    "A FIR audio filter",
-                    "Sebastian Dröge <sebastian@centricular.com>",
-                );
-
-                // Create and add pad templates for our sink and source pad. These
-                // are later used for actually creating the pads and beforehand
-                // already provide information to GStreamer about all possible
-                // pads that could exist for this type.
-
-                // On both of pads we can only handle F32 mono at any sample rate.
-                let caps = gst::Caps::new_simple(
-                    "audio/x-raw",
-                    &[
-                        ("format", &gst_audio::AUDIO_FORMAT_F32.to_str()),
-                        ("rate", &gst::IntRange::<i32>::new(1, i32::MAX)),
-                        ("channels", &1i32),
-                        ("layout", &"interleaved"),
-                    ],
-                );
-
-                // The src pad template must be named "src" for basetransform
-                // and specific a pad that is always there
-                let src_pad_template = gst::PadTemplate::new(
-                    "src",
-                    gst::PadDirection::Src,
-                    gst::PadPresence::Always,
-                    &caps,
-                )
-                .unwrap();
-                klass.add_pad_template(src_pad_template);
-
-                // The sink pad template must be named "sink" for basetransform
-                // and specific a pad that is always there
-                let sink_pad_template = gst::PadTemplate::new(
-                    "sink",
-                    gst::PadDirection::Sink,
-                    gst::PadPresence::Always,
-                    &caps,
-                )
-                .unwrap();
-                klass.add_pad_template(sink_pad_template);
-
-                // Configure basetransform so that we are always running in-place,
-                // don't passthrough on same caps and also never call transform_ip
-                // in passthrough mode (which does not matter for us here).
-                //
-                // The way how our processing is implemented, in-place transformation
-                // is simpler.
-                klass.configure(
-                    gst_base::subclass::BaseTransformMode::AlwaysInPlace,
-                    false,
-                    false,
-                );
-            }
         }
 
         // Implementation of glib::Object virtual methods
         impl ObjectImpl for FirFilter {}
 
         // Implementation of gst::Element virtual methods
-        impl ElementImpl for FirFilter {}
+        impl ElementImpl for FirFilter {
+            // The element specific metadata. This information is what is visible from
+            // gst-inspect-1.0 and can also be programatically retrieved from the gst::Registry
+            // after initial registration without having to load the plugin in memory.
+            fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
+                static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+                    gst::subclass::ElementMetadata::new(
+                        "FIR Filter",
+                        "Filter/Effect/Audio",
+                        "A FIR audio filter",
+                        "Sebastian Dröge <sebastian@centricular.com>",
+                    )
+                });
+
+                Some(&*ELEMENT_METADATA)
+            }
+
+            fn pad_templates() -> &'static [gst::PadTemplate] {
+                static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
+                    // Create pad templates for our sink and source pad. These are later used for
+                    // actually creating the pads and beforehand already provide information to
+                    // GStreamer about all possible pads that could exist for this type.
+
+                    // On both of pads we can only handle F32 mono at any sample rate.
+                    let caps = gst::Caps::new_simple(
+                        "audio/x-raw",
+                        &[
+                            ("format", &gst_audio::AUDIO_FORMAT_F32.to_str()),
+                            ("rate", &gst::IntRange::<i32>::new(1, i32::MAX)),
+                            ("channels", &1i32),
+                            ("layout", &"interleaved"),
+                        ],
+                    );
+
+                    vec![
+                        // The src pad template must be named "src" for basetransform
+                        // and specific a pad that is always there
+                        gst::PadTemplate::new(
+                            "src",
+                            gst::PadDirection::Src,
+                            gst::PadPresence::Always,
+                            &caps,
+                        )
+                        .unwrap(),
+                        // The sink pad template must be named "sink" for basetransform
+                        // and specific a pad that is always there
+                        gst::PadTemplate::new(
+                            "sink",
+                            gst::PadDirection::Sink,
+                            gst::PadPresence::Always,
+                            &caps,
+                        )
+                        .unwrap(),
+                    ]
+                });
+
+                PAD_TEMPLATES.as_ref()
+            }
+        }
 
         // Implementation of gst_base::BaseTransform virtual methods
         impl BaseTransformImpl for FirFilter {
+            // Configure basetransform so that we are always running in-place,
+            // don't passthrough on same caps and also never call transform_ip
+            // in passthrough mode (which does not matter for us here).
+            //
+            // The way how our processing is implemented, in-place transformation
+            // is simpler.
+            const MODE: gst_base::subclass::BaseTransformMode =
+                gst_base::subclass::BaseTransformMode::AlwaysInPlace;
+            const PASSTHROUGH_ON_SAME_CAPS: bool = false;
+            const TRANSFORM_IP_ON_PASSTHROUGH: bool = false;
+
             // Returns the size of one processing unit (i.e. a frame in our case) corresponding
             // to the given caps. This is used for allocating a big enough output buffer and
             // sanity checking the input buffer size, among other things.

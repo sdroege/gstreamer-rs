@@ -34,8 +34,6 @@ pub mod prelude {
     pub use super::base_parse::{BaseParseImpl, BaseParseImplExt};
     pub use super::base_sink::{BaseSinkImpl, BaseSinkImplExt};
     pub use super::base_src::{BaseSrcImpl, BaseSrcImplExt};
-    pub use super::base_transform::{
-        BaseTransformClassSubclassExt, BaseTransformImpl, BaseTransformImplExt,
-    };
+    pub use super::base_transform::{BaseTransformImpl, BaseTransformImplExt};
     pub use super::push_src::{PushSrcImpl, PushSrcImplExt};
 }
