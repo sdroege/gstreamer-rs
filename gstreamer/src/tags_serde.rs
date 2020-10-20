@@ -224,7 +224,7 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
             match tag_value {
                 Some(tag_value) => self
                     .1
-                    .add_generic(self.0, &tag_value, TagMergeMode::Append)
+                    .add_value(self.0, &tag_value, TagMergeMode::Append)
                     .map_err(|_| {
                         de::Error::custom(format!("wrong value type for `Tag` {}", self.0))
                     })?,

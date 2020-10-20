@@ -364,8 +364,6 @@ mod tests {
 
     #[test]
     fn test_serialize_collections() {
-        use glib::value::ToValue;
-
         use Fraction;
         use List;
 
@@ -375,33 +373,20 @@ mod tests {
         pretty_config.new_line = "".to_string();
 
         // Array
-        let value_13 = Fraction::new(1, 3).to_value();
-        let send_value_13 = value_13.try_into_send_value::<Fraction>().unwrap();
-
-        let value_12 = Fraction::new(1, 2).to_value();
-        let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
-
-        let value_str = "test str".to_value();
-        let send_value_str = value_str.try_into_send_value::<String>().unwrap();
-
-        let str_none: Option<&str> = None;
-        let value_str_none = str_none.to_value();
-        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
-
-        let value_date = Date::new_dmy(19, DateMonth::August, 2019).to_value();
-        let send_value_date = value_date.try_into_send_value::<Date>().unwrap();
-
-        let date_none: Option<Date> = None;
-        let value_date_none = date_none.to_value();
-        let send_value_date_none = value_date_none.try_into_send_value::<Date>().unwrap();
+        let value_13 = Fraction::new(1, 3);
+        let value_12 = Fraction::new(1, 2);
+        let value_str = "test str";
+        let value_str_none: Option<&str> = None;
+        let value_date = Date::new_dmy(19, DateMonth::August, 2019);
+        let value_date_none: Option<Date> = None;
 
         let array = Array::new(&[
-            &send_value_13,
-            &send_value_12,
-            &send_value_str,
-            &send_value_str_none,
-            &send_value_date,
-            &send_value_date_none,
+            &value_13,
+            &value_12,
+            &value_str,
+            &value_str_none,
+            &value_date,
+            &value_date_none,
         ]);
 
         let res = ron::ser::to_string_pretty(&array, pretty_config.clone());
@@ -428,33 +413,18 @@ mod tests {
         );
 
         // List
-        let value_12 = Fraction::new(1, 2).to_value();
-        let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
-
-        let value_str = "test str".to_value();
-        let send_value_str = value_str.try_into_send_value::<String>().unwrap();
-
-        let str_none: Option<&str> = None;
-        let value_str_none = str_none.to_value();
-        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
-
-        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64)
-            .unwrap()
-            .to_value();
-        let send_value_date_time = value_date_time.try_into_send_value::<DateTime>().unwrap();
-
-        let date_time_none: Option<DateTime> = None;
-        let value_date_time_none = date_time_none.to_value();
-        let send_value_date_time_none = value_date_time_none
-            .try_into_send_value::<DateTime>()
-            .unwrap();
+        let value_12 = Fraction::new(1, 2);
+        let value_str = "test str";
+        let value_str_none: Option<&str> = None;
+        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap();
+        let value_date_time_none: Option<DateTime> = None;
 
         let list = List::new(&[
-            &send_value_12,
-            &send_value_str,
-            &send_value_str_none,
-            &send_value_date_time,
-            &send_value_date_time_none,
+            &value_12,
+            &value_str,
+            &value_str_none,
+            &value_date_time,
+            &value_date_time_none,
         ]);
 
         let res = ron::ser::to_string_pretty(&list, pretty_config);
@@ -664,32 +634,23 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip_collection() {
-        use glib::value::ToValue;
-
         ::init().unwrap();
 
         // Array
-        let value_13 = Fraction::new(1, 3).to_value();
-        let send_value_13 = value_13.try_into_send_value::<Fraction>().unwrap();
-        let value_12 = Fraction::new(1, 2).to_value();
-        let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
-        let value_str = "test str".to_value();
-        let send_value_str = value_str.try_into_send_value::<String>().unwrap();
-        let str_none: Option<&str> = None;
-        let value_str_none = str_none.to_value();
-        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
-        let value_date = Date::new_dmy(19, DateMonth::August, 2019).to_value();
-        let send_value_date = value_date.try_into_send_value::<Date>().unwrap();
-        let date_none: Option<Date> = None;
-        let value_date_none = date_none.to_value();
-        let send_value_date_none = value_date_none.try_into_send_value::<Date>().unwrap();
+        let value_13 = Fraction::new(1, 3);
+        let value_12 = Fraction::new(1, 2);
+        let value_str = "test str";
+        let value_str_none: Option<&str> = None;
+        let value_date = Date::new_dmy(19, DateMonth::August, 2019);
+        let value_date_none: Option<Date> = None;
+
         let array = Array::new(&[
-            &send_value_13,
-            &send_value_12,
-            &send_value_str,
-            &send_value_str_none,
-            &send_value_date,
-            &send_value_date_none,
+            &value_13,
+            &value_12,
+            &value_str,
+            &value_str_none,
+            &value_date,
+            &value_date_none,
         ]);
         let array_ser = ron::ser::to_string(&array).unwrap();
 
@@ -723,28 +684,18 @@ mod tests {
         assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
 
         // List
-        let value_12 = Fraction::new(1, 2).to_value();
-        let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
-        let value_str = "test str".to_value();
-        let send_value_str = value_str.try_into_send_value::<String>().unwrap();
-        let str_none: Option<&str> = None;
-        let value_str_none = str_none.to_value();
-        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
-        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64)
-            .unwrap()
-            .to_value();
-        let send_value_date_time = value_date_time.try_into_send_value::<DateTime>().unwrap();
-        let date_time_none: Option<DateTime> = None;
-        let value_date_time_none = date_time_none.to_value();
-        let send_value_date_time_none = value_date_time_none
-            .try_into_send_value::<DateTime>()
-            .unwrap();
+        let value_12 = Fraction::new(1, 2);
+        let value_str = "test str";
+        let value_str_none: Option<&str> = None;
+        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap();
+        let value_date_time_none: Option<DateTime> = None;
+
         let list = List::new(&[
-            &send_value_12,
-            &send_value_str,
-            &send_value_str_none,
-            &send_value_date_time,
-            &send_value_date_time_none,
+            &value_12,
+            &value_str,
+            &value_str_none,
+            &value_date_time,
+            &value_date_time_none,
         ]);
         let list_ser = ron::ser::to_string(&list).unwrap();
 

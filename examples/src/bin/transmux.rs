@@ -72,13 +72,13 @@ fn example_main() -> Result<(), Error> {
         .expect("setting location property failed");
     // Increase the queue capacity to 100MB to avoid a stalling pipeline
     queue
-        .set_property("max-size-buffers", &0u32.to_value())
+        .set_property("max-size-buffers", &0u32)
         .expect("changing capacity of multiqueue failed");
     queue
-        .set_property("max-size-time", &0u64.to_value())
+        .set_property("max-size-time", &0u64)
         .expect("changing capacity of multiqueue failed");
     queue
-        .set_property("max-size-bytes", &(1024u32 * 1024 * 100).to_value())
+        .set_property("max-size-bytes", &(1024u32 * 1024 * 100))
         .expect("changing capacity of multiqueue failed");
 
     pipeline

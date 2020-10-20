@@ -29,9 +29,7 @@ fn example_main() {
 
     // Create a new playbin element, and tell it what uri to play back.
     let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-    playbin
-        .set_property("uri", &glib::Value::from(uri))
-        .unwrap();
+    playbin.set_property("uri", &uri).unwrap();
 
     // For flags handling
     // With flags, one can configure playbin's behavior such as whether it
@@ -79,10 +77,7 @@ fn example_main() {
             // application is via properties, signals or action signals (or custom messages, events, queries).
             // So what the following code does, is essentially asking playbin to tell us its already
             // internally stored tag list for this stream index.
-            let tags = playbin
-                .emit("get-audio-tags", &[&idx.to_value()])
-                .unwrap()
-                .unwrap();
+            let tags = playbin.emit("get-audio-tags", &[&idx]).unwrap().unwrap();
             let tags = tags.get::<gst::TagList>().expect("tags").unwrap();
 
             if let Some(artist) = tags.get::<gst::tags::Artist>() {

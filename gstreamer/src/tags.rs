@@ -374,13 +374,21 @@ impl TagListRef {
     where
         T: ToSendValue,
     {
-        unsafe {
-            let v = value.to_send_value();
+        let v = value.to_send_value();
+        self.add_value(tag_name, &v, mode)
+    }
 
+    pub fn add_value(
+        &mut self,
+        tag_name: &str,
+        value: &glib::SendValue,
+        mode: TagMergeMode,
+    ) -> Result<(), TagError> {
+        unsafe {
             let tag_name = tag_name.to_glib_none();
 
             let tag_type: glib::Type = from_glib(gst_sys::gst_tag_get_type(tag_name.0));
-            if tag_type != v.type_() {
+            if tag_type != value.type_() {
                 return Err(TagError::TypeMismatch);
             }
 
@@ -388,7 +396,7 @@ impl TagListRef {
                 self.as_mut_ptr(),
                 mode.to_glib(),
                 tag_name.0,
-                v.to_glib_none().0,
+                value.to_glib_none().0,
             );
         }
 

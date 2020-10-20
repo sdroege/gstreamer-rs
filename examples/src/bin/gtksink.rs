@@ -34,9 +34,7 @@ fn create_ui(app: &gtk::Application) {
         // video frames to our texture (if they are not already in the GPU). Now we tell the OpenGL-sink
         // about our gtkglsink element, form where it will retrieve the OpenGL texture to fill.
         let glsinkbin = gst::ElementFactory::make("glsinkbin", None).unwrap();
-        glsinkbin
-            .set_property("sink", &gtkglsink.to_value())
-            .unwrap();
+        glsinkbin.set_property("sink", &gtkglsink).unwrap();
         // The gtkglsink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
         let widget = gtkglsink.get_property("widget").unwrap();

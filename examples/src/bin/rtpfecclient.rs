@@ -83,12 +83,15 @@ fn connect_rtpbin_srcpad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), 
 fn make_fec_decoder(rtpbin: &gst::Element, sess_id: u32) -> Result<gst::Element, Error> {
     let fecdec = make_element("rtpulpfecdec", None)?;
     let internal_storage = rtpbin
-        .emit("get-internal-storage", &[&sess_id.to_value()])
+        .emit("get-internal-storage", &[&sess_id])
         .unwrap()
-        .unwrap();
+        .unwrap()
+        .get::<glib::Object>()
+        .unwrap()
+        .expect("No internal-storage");
 
-    fecdec.set_property("storage", &internal_storage.to_value())?;
-    fecdec.set_property("pt", &100u32.to_value())?;
+    fecdec.set_property("storage", &internal_storage)?;
+    fecdec.set_property("pt", &100u32)?;
 
     Ok(fecdec)
 }
@@ -130,7 +133,7 @@ fn example_main() -> Result<(), Error> {
 
             pipeline.add_many(&[&enc, &mux, &sink])?;
             gst::Element::link_many(&[&filter, &enc, &mux, &sink])?;
-            sink.set_property("location", &"out.mkv".to_value())?;
+            sink.set_property("location", &"out.mkv")?;
             enc.set_property_from_str("tune", "zerolatency");
             eprintln!("Recording to out.mkv");
         }
@@ -144,9 +147,7 @@ fn example_main() -> Result<(), Error> {
             .get::<gst::Element>()
             .expect("rtpbin \"new-storage\" signal values[1]")
             .expect("rtpbin \"new-storage\" signal values[1]: no `Element`");
-        storage
-            .set_property("size-time", &250_000_000u64.to_value())
-            .unwrap();
+        storage.set_property("size-time", &250_000_000u64).unwrap();
 
         None
     })?;
@@ -234,11 +235,11 @@ fn example_main() -> Result<(), Error> {
     let video_caps =
         gst::Caps::new_simple("video/x-raw", &[("width", &1920i32), ("height", &1080i32)]);
 
-    src.set_property("address", &"127.0.0.1".to_value())?;
-    src.set_property("caps", &rtp_caps.to_value())?;
-    netsim.set_property("drop-probability", &drop_probability.to_value())?;
-    rtpbin.set_property("do-lost", &true.to_value())?;
-    filter.set_property("caps", &video_caps.to_value())?;
+    src.set_property("address", &"127.0.0.1")?;
+    src.set_property("caps", &rtp_caps)?;
+    netsim.set_property("drop-probability", &drop_probability)?;
+    rtpbin.set_property("do-lost", &true)?;
+    filter.set_property("caps", &video_caps)?;
 
     let bus = pipeline
         .get_bus()

@@ -431,7 +431,7 @@ impl App {
                                 {
                                     let context = context.get_mut().unwrap();
                                     let s = context.get_mut_structure();
-                                    s.set_value("context", gl_context.to_send_value());
+                                    s.set("context", &gl_context);
                                 }
                                 el.set_context(&context);
                             }
@@ -537,9 +537,9 @@ impl App {
 
         sink.set_property("sink", &appsink)?;
 
-        appsink.set_property("enable-last-sample", &false.to_value())?;
-        appsink.set_property("emit-signals", &false.to_value())?;
-        appsink.set_property("max-buffers", &1u32.to_value())?;
+        appsink.set_property("enable-last-sample", &false)?;
+        appsink.set_property("emit-signals", &false)?;
+        appsink.set_property("max-buffers", &1u32)?;
 
         let caps = gst::Caps::builder("video/x-raw")
             .features(&[&gst_gl::CAPS_FEATURE_MEMORY_GL_MEMORY])

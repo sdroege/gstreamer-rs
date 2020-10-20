@@ -70,9 +70,9 @@ fn connect_decodebin_pad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), 
 fn make_fec_encoder(fec_percentage: u32) -> Result<gst::Element, Error> {
     let fecenc = make_element("rtpulpfecenc", None)?;
 
-    fecenc.set_property("pt", &100u32.to_value())?;
-    fecenc.set_property("multipacket", &true.to_value())?;
-    fecenc.set_property("percentage", &fec_percentage.to_value())?;
+    fecenc.set_property("pt", &100u32)?;
+    fecenc.set_property("multipacket", &true)?;
+    fecenc.set_property("percentage", &fec_percentage)?;
 
     Ok(fecenc)
 }
@@ -151,16 +151,16 @@ fn example_main() -> Result<(), Error> {
     let video_caps = gst::Caps::new_simple("video/x-raw", &[]);
 
     src.set_property_from_str("pattern", "ball");
-    sink.set_property("host", &"127.0.0.1".to_value())?;
-    sink.set_property("sync", &true.to_value())?;
-    enc.set_property("keyframe-max-dist", &30i32.to_value())?;
-    enc.set_property("threads", &12i32.to_value())?;
-    enc.set_property("cpu-used", &(-16i32).to_value())?;
-    enc.set_property("deadline", &1i64.to_value())?;
+    sink.set_property("host", &"127.0.0.1")?;
+    sink.set_property("sync", &true)?;
+    enc.set_property("keyframe-max-dist", &30i32)?;
+    enc.set_property("threads", &12i32)?;
+    enc.set_property("cpu-used", &(-16i32))?;
+    enc.set_property("deadline", &1i64)?;
     enc.set_property_from_str("error-resilient", "default");
-    src.set_property("expose-all-streams", &false.to_value())?;
-    src.set_property("caps", &video_caps.to_value())?;
-    src.set_property("uri", &uri.to_value())?;
+    src.set_property("expose-all-streams", &false)?;
+    src.set_property("caps", &video_caps)?;
+    src.set_property("uri", &uri)?;
 
     let bus = pipeline
         .get_bus()
