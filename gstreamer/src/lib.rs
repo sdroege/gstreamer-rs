@@ -298,6 +298,15 @@ pub const NSECOND_VAL: u64 = 1;
 pub const FORMAT_PERCENT_MAX: u32 = ffi::GST_FORMAT_PERCENT_MAX as u32;
 pub const FORMAT_PERCENT_SCALE: u32 = ffi::GST_FORMAT_PERCENT_SCALE as u32;
 
+pub const PARAM_FLAG_CONTROLLABLE: glib::ParamFlags = glib::ParamFlags::USER_1;
+pub const PARAM_FLAG_MUTABLE_READY: glib::ParamFlags = glib::ParamFlags::USER_2;
+pub const PARAM_FLAG_MUTABLE_PAUSED: glib::ParamFlags = glib::ParamFlags::USER_3;
+pub const PARAM_FLAG_MUTABLE_PLAYING: glib::ParamFlags = glib::ParamFlags::USER_4;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub const PARAM_FLAG_DOC_SHOW_DEFAULT: glib::ParamFlags = glib::ParamFlags::USER_5;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub const PARAM_FLAG_CONDITIONALLY_AVAILABLE: glib::ParamFlags = glib::ParamFlags::USER_6;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
