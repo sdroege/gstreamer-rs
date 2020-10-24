@@ -11,7 +11,7 @@ use std::fmt;
 
 use gst_sdp_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPKey(gst_sdp_sys::GstSDPKey);
 
 unsafe impl Send for SDPKey {}

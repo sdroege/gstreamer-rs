@@ -525,7 +525,7 @@ impl From<ValidVideoTimeCode> for VideoTimeCode {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoTimeCodeMeta(gst_video_sys::GstVideoTimeCodeMeta);
 
 unsafe impl Send for VideoTimeCodeMeta {}

@@ -19,7 +19,6 @@ use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
 
-#[repr(C)]
 pub struct StaticCaps(ptr::NonNull<gst_sys::GstStaticCaps>);
 
 impl StaticCaps {

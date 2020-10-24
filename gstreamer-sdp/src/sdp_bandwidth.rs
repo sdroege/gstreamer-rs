@@ -13,7 +13,7 @@ use std::mem;
 use glib::translate::*;
 use gst_sdp_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPBandwidth(pub(crate) gst_sdp_sys::GstSDPBandwidth);
 
 unsafe impl Send for SDPBandwidth {}

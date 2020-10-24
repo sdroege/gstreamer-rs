@@ -140,7 +140,7 @@ macro_rules! ser_value (
     );
 );
 
-#[repr(C)]
+#[repr(transparent)]
 pub(crate) struct SendValue(glib::SendValue);
 impl SendValue {
     pub(crate) fn from(send_value: glib::SendValue) -> Self {

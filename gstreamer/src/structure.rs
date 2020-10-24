@@ -319,7 +319,7 @@ impl GlibPtrDefault for Structure {
     type GlibType = *mut gst_sys::GstStructure;
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct StructureRef(gst_sys::GstStructure);
 
 unsafe impl Send for StructureRef {}

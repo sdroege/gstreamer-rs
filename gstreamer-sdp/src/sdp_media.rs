@@ -85,7 +85,7 @@ impl fmt::Display for SDPMedia {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPMediaRef(gst_sdp_sys::GstSDPMedia);
 
 impl fmt::Debug for SDPMediaRef {

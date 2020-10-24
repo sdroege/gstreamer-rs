@@ -251,7 +251,7 @@ impl GlibPtrDefault for CapsFeatures {
     type GlibType = *mut gst_sys::GstCapsFeatures;
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct CapsFeaturesRef(gst_sys::GstCapsFeatures);
 
 impl CapsFeaturesRef {

@@ -23,7 +23,7 @@ macro_rules! gst_plugin_define(
         pub mod plugin_desc {
             use $crate::glib::translate::{from_glib_borrow, ToGlib, from_glib};
 
-            #[repr(C)]
+            #[repr(transparent)]
             pub struct GstPluginDesc($crate::gst_sys::GstPluginDesc);
             unsafe impl Send for GstPluginDesc {}
             unsafe impl Sync for GstPluginDesc {}

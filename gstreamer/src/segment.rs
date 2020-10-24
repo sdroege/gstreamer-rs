@@ -22,7 +22,7 @@ use SeekFlags;
 use SeekType;
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;
-#[repr(C)]
+#[repr(transparent)]
 pub struct FormattedSegment<T: FormattedValue>(gst_sys::GstSegment, PhantomData<T>);
 
 impl Segment {

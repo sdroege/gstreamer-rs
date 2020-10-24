@@ -7,7 +7,7 @@ use AudioRingBufferFormatType;
 
 use std::fmt;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct AudioRingBufferSpec(pub(crate) GstAudioRingBufferSpec);
 
 impl AudioRingBufferSpec {

@@ -13,7 +13,7 @@ use std::mem;
 use glib::translate::*;
 use gst_sdp_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPZone(pub(crate) gst_sdp_sys::GstSDPZone);
 
 unsafe impl Send for SDPZone {}

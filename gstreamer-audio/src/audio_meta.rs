@@ -21,7 +21,7 @@ use gst;
 use gst::prelude::*;
 use gst_audio_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct AudioClippingMeta(gst_audio_sys::GstAudioClippingMeta);
 
 unsafe impl Send for AudioClippingMeta {}
@@ -76,7 +76,7 @@ impl fmt::Debug for AudioClippingMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
-#[repr(C)]
+#[repr(transparent)]
 pub struct AudioMeta(gst_audio_sys::GstAudioMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]

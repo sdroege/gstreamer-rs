@@ -309,7 +309,7 @@ impl PeriodicClockId {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Debug)]
 pub struct AtomicClockReturn(AtomicI32);
 

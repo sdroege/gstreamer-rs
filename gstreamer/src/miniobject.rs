@@ -13,7 +13,7 @@ macro_rules! gst_define_mini_object_wrapper(
             obj: ::std::ptr::NonNull<$ref_name>,
         }
 
-        #[repr(C)]
+        #[repr(transparent)]
         pub struct $ref_name($gst_sys_name);
 
         impl $name {
