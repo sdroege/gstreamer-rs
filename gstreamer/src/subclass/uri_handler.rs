@@ -9,10 +9,10 @@ use crate::URIHandler;
 use crate::URIType;
 
 pub trait URIHandlerImpl: super::element::ElementImpl {
+    const URI_TYPE: URIType;
+    fn get_protocols() -> &'static [&'static str];
     fn get_uri(&self, element: &Self::Type) -> Option<String>;
     fn set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error>;
-    fn get_uri_type() -> URIType;
-    fn get_protocols() -> Vec<String>;
 }
 
 unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
@@ -43,7 +43,7 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
 unsafe extern "C" fn uri_handler_get_type<T: URIHandlerImpl>(
     _type_: glib::ffi::GType,
 ) -> ffi::GstURIType {
-    <T as URIHandlerImpl>::get_uri_type().to_glib()
+    <T as URIHandlerImpl>::URI_TYPE.to_glib()
 }
 
 unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
