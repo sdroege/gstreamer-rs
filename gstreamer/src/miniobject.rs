@@ -11,7 +11,6 @@ macro_rules! gst_define_mini_object_wrapper(
     ($name:ident, $ref_name:ident, $gst_sys_name:path, $get_type:expr) => {
         pub struct $name {
             obj: ::std::ptr::NonNull<$ref_name>,
-            phantom: ::std::marker::PhantomData<$ref_name>,
         }
 
         #[repr(C)]
@@ -26,7 +25,6 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 $name {
                     obj: ::std::ptr::NonNull::new_unchecked(ptr as *mut $gst_sys_name as *mut $ref_name),
-                    phantom: ::std::marker::PhantomData,
                 }
             }
 
@@ -36,7 +34,6 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 $name {
                     obj: ::std::ptr::NonNull::new_unchecked(ptr as *mut $gst_sys_name as *mut $ref_name),
-                    phantom: ::std::marker::PhantomData,
                 }
             }
 
@@ -46,7 +43,6 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 $crate::glib::translate::Borrowed::new($name {
                     obj: ::std::ptr::NonNull::new_unchecked(ptr as *mut $gst_sys_name as *mut $ref_name),
-                    phantom: ::std::marker::PhantomData,
                 })
             }
 
