@@ -16,13 +16,12 @@ use TypeFindProbability;
 use glib;
 use glib::translate::*;
 use glib_sys;
-use std::marker::PhantomData;
 use std::ptr;
 use std::slice;
 
 #[repr(C)]
 #[derive(Debug)]
-pub struct TypeFind<'a>(gst_sys::GstTypeFind, PhantomData<&'a ()>);
+pub struct TypeFind(gst_sys::GstTypeFind);
 
 pub trait TypeFindImpl {
     fn peek(&mut self, offset: i64, size: u32) -> Option<&[u8]>;
@@ -32,7 +31,7 @@ pub trait TypeFindImpl {
     }
 }
 
-impl<'a> TypeFind<'a> {
+impl TypeFind {
     pub fn register<F>(
         plugin: Option<&Plugin>,
         name: &str,

@@ -22,10 +22,7 @@ use std::ptr;
 use TestClock;
 
 #[derive(Debug)]
-pub struct Harness(
-    ptr::NonNull<gst_check_sys::GstHarness>,
-    PhantomData<gst_check_sys::GstHarness>,
-);
+pub struct Harness(ptr::NonNull<gst_check_sys::GstHarness>);
 
 impl Drop for Harness {
     fn drop(&mut self) {
@@ -567,7 +564,7 @@ impl Harness {
     unsafe fn from_glib_full(ptr: *mut gst_check_sys::GstHarness) -> Harness {
         assert!(!ptr.is_null());
 
-        Harness(ptr::NonNull::new_unchecked(ptr), PhantomData)
+        Harness(ptr::NonNull::new_unchecked(ptr))
     }
 
     pub fn new(element_name: &str) -> Harness {
@@ -728,10 +725,7 @@ impl Harness {
                 None
             } else {
                 Some(Ref(
-                    mem::ManuallyDrop::new(Harness(
-                        ptr::NonNull::new_unchecked(sink_harness),
-                        PhantomData,
-                    )),
+                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(sink_harness))),
                     PhantomData,
                 ))
             }
@@ -745,10 +739,7 @@ impl Harness {
                 None
             } else {
                 Some(Ref(
-                    mem::ManuallyDrop::new(Harness(
-                        ptr::NonNull::new_unchecked(src_harness),
-                        PhantomData,
-                    )),
+                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(src_harness))),
                     PhantomData,
                 ))
             }
@@ -762,10 +753,7 @@ impl Harness {
                 None
             } else {
                 Some(RefMut(
-                    mem::ManuallyDrop::new(Harness(
-                        ptr::NonNull::new_unchecked(sink_harness),
-                        PhantomData,
-                    )),
+                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(sink_harness))),
                     PhantomData,
                 ))
             }
@@ -779,10 +767,7 @@ impl Harness {
                 None
             } else {
                 Some(RefMut(
-                    mem::ManuallyDrop::new(Harness(
-                        ptr::NonNull::new_unchecked(src_harness),
-                        PhantomData,
-                    )),
+                    mem::ManuallyDrop::new(Harness(ptr::NonNull::new_unchecked(src_harness))),
                     PhantomData,
                 ))
             }

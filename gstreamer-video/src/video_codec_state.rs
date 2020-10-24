@@ -54,7 +54,6 @@ impl<'a> VideoCodecStateContext<'a> for Readable {
 pub struct VideoCodecState<'a, T: VideoCodecStateContext<'a>> {
     state: *mut gst_video_sys::GstVideoCodecState,
     pub(crate) context: T,
-    /* FIXME: should not be needed because lifetime is actually used */
     phantom: PhantomData<&'a T>,
 }
 

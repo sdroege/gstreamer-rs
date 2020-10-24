@@ -9,7 +9,6 @@
 use std::borrow::{Borrow, BorrowMut, ToOwned};
 use std::ffi::CStr;
 use std::fmt;
-use std::marker::PhantomData;
 use std::mem;
 use std::ops::{Deref, DerefMut};
 use std::ptr;
@@ -26,7 +25,7 @@ use glib_sys::gpointer;
 use gobject_sys;
 use gst_sys;
 
-pub struct CapsFeatures(ptr::NonNull<CapsFeaturesRef>, PhantomData<CapsFeaturesRef>);
+pub struct CapsFeatures(ptr::NonNull<CapsFeaturesRef>);
 unsafe impl Send for CapsFeatures {}
 unsafe impl Sync for CapsFeatures {}
 
@@ -45,24 +44,18 @@ impl CapsFeatures {
     pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            CapsFeatures(
-                ptr::NonNull::new_unchecked(
-                    gst_sys::gst_caps_features_new_empty() as *mut CapsFeaturesRef
-                ),
-                PhantomData,
-            )
+            CapsFeatures(ptr::NonNull::new_unchecked(
+                gst_sys::gst_caps_features_new_empty() as *mut CapsFeaturesRef,
+            ))
         }
     }
 
     pub fn new_any() -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            CapsFeatures(
-                ptr::NonNull::new_unchecked(
-                    gst_sys::gst_caps_features_new_any() as *mut CapsFeaturesRef
-                ),
-                PhantomData,
-            )
+            CapsFeatures(ptr::NonNull::new_unchecked(
+                gst_sys::gst_caps_features_new_any() as *mut CapsFeaturesRef,
+            ))
         }
     }
 
@@ -103,7 +96,7 @@ impl Clone for CapsFeatures {
         unsafe {
             let ptr = gst_sys::gst_caps_features_copy(&self.0.as_ref().0) as *mut CapsFeaturesRef;
             assert!(!ptr.is_null());
-            CapsFeatures(ptr::NonNull::new_unchecked(ptr), PhantomData)
+            CapsFeatures(ptr::NonNull::new_unchecked(ptr))
         }
     }
 }
@@ -143,10 +136,9 @@ impl str::FromStr for CapsFeatures {
                 ));
             }
 
-            Ok(CapsFeatures(
-                ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
-                PhantomData,
-            ))
+            Ok(CapsFeatures(ptr::NonNull::new_unchecked(
+                ptr as *mut CapsFeaturesRef,
+            )))
         }
     }
 }
@@ -206,10 +198,7 @@ impl FromGlibPtrNone<*const gst_sys::GstCapsFeatures> for CapsFeatures {
         assert!(!ptr.is_null());
         let ptr = gst_sys::gst_caps_features_copy(ptr);
         assert!(!ptr.is_null());
-        CapsFeatures(
-            ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
-            PhantomData,
-        )
+        CapsFeatures(ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef))
     }
 }
 
@@ -218,30 +207,21 @@ impl FromGlibPtrNone<*mut gst_sys::GstCapsFeatures> for CapsFeatures {
         assert!(!ptr.is_null());
         let ptr = gst_sys::gst_caps_features_copy(ptr);
         assert!(!ptr.is_null());
-        CapsFeatures(
-            ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
-            PhantomData,
-        )
+        CapsFeatures(ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef))
     }
 }
 
 impl FromGlibPtrFull<*const gst_sys::GstCapsFeatures> for CapsFeatures {
     unsafe fn from_glib_full(ptr: *const gst_sys::GstCapsFeatures) -> Self {
         assert!(!ptr.is_null());
-        CapsFeatures(
-            ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
-            PhantomData,
-        )
+        CapsFeatures(ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef))
     }
 }
 
 impl FromGlibPtrFull<*mut gst_sys::GstCapsFeatures> for CapsFeatures {
     unsafe fn from_glib_full(ptr: *mut gst_sys::GstCapsFeatures) -> Self {
         assert!(!ptr.is_null());
-        CapsFeatures(
-            ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
-            PhantomData,
-        )
+        CapsFeatures(ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef))
     }
 }
 

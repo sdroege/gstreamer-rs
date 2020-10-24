@@ -9,7 +9,6 @@
 use std::borrow::{Borrow, BorrowMut, ToOwned};
 use std::ffi::CStr;
 use std::fmt;
-use std::marker::PhantomData;
 use std::mem;
 use std::ops::{Deref, DerefMut};
 use std::ptr;
@@ -56,7 +55,7 @@ impl<'name> GetError<'name> {
     }
 }
 
-pub struct Structure(ptr::NonNull<StructureRef>, PhantomData<StructureRef>);
+pub struct Structure(ptr::NonNull<StructureRef>);
 unsafe impl Send for Structure {}
 unsafe impl Sync for Structure {}
 
@@ -71,7 +70,7 @@ impl Structure {
         unsafe {
             let ptr = gst_sys::gst_structure_new_empty(name.to_glib_none().0) as *mut StructureRef;
             assert!(!ptr.is_null());
-            Structure(ptr::NonNull::new_unchecked(ptr), PhantomData)
+            Structure(ptr::NonNull::new_unchecked(ptr))
         }
     }
 
@@ -143,7 +142,7 @@ impl Clone for Structure {
         unsafe {
             let ptr = gst_sys::gst_structure_copy(&self.0.as_ref().0) as *mut StructureRef;
             assert!(!ptr.is_null());
-            Structure(ptr::NonNull::new_unchecked(ptr), PhantomData)
+            Structure(ptr::NonNull::new_unchecked(ptr))
         }
     }
 }
@@ -192,10 +191,9 @@ impl str::FromStr for Structure {
             if structure.is_null() {
                 Err(glib_bool_error!("Failed to parse structure from string"))
             } else {
-                Ok(Structure(
-                    ptr::NonNull::new_unchecked(structure as *mut StructureRef),
-                    PhantomData,
-                ))
+                Ok(Structure(ptr::NonNull::new_unchecked(
+                    structure as *mut StructureRef,
+                )))
             }
         }
     }
@@ -220,7 +218,7 @@ impl ToOwned for StructureRef {
         unsafe {
             let ptr = gst_sys::gst_structure_copy(&self.0) as *mut StructureRef;
             assert!(!ptr.is_null());
-            Structure(ptr::NonNull::new_unchecked(ptr), PhantomData)
+            Structure(ptr::NonNull::new_unchecked(ptr))
         }
     }
 }
@@ -268,10 +266,7 @@ impl FromGlibPtrNone<*const gst_sys::GstStructure> for Structure {
         assert!(!ptr.is_null());
         let ptr = gst_sys::gst_structure_copy(ptr);
         assert!(!ptr.is_null());
-        Structure(
-            ptr::NonNull::new_unchecked(ptr as *mut StructureRef),
-            PhantomData,
-        )
+        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
     }
 }
 
@@ -280,30 +275,21 @@ impl FromGlibPtrNone<*mut gst_sys::GstStructure> for Structure {
         assert!(!ptr.is_null());
         let ptr = gst_sys::gst_structure_copy(ptr);
         assert!(!ptr.is_null());
-        Structure(
-            ptr::NonNull::new_unchecked(ptr as *mut StructureRef),
-            PhantomData,
-        )
+        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
     }
 }
 
 impl FromGlibPtrFull<*const gst_sys::GstStructure> for Structure {
     unsafe fn from_glib_full(ptr: *const gst_sys::GstStructure) -> Self {
         assert!(!ptr.is_null());
-        Structure(
-            ptr::NonNull::new_unchecked(ptr as *mut StructureRef),
-            PhantomData,
-        )
+        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
     }
 }
 
 impl FromGlibPtrFull<*mut gst_sys::GstStructure> for Structure {
     unsafe fn from_glib_full(ptr: *mut gst_sys::GstStructure) -> Self {
         assert!(!ptr.is_null());
-        Structure(
-            ptr::NonNull::new_unchecked(ptr as *mut StructureRef),
-            PhantomData,
-        )
+        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
     }
 }
 
