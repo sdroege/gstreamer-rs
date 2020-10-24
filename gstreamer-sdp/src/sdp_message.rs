@@ -119,7 +119,7 @@ impl SDPMessage {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPMessageRef(gst_sdp_sys::GstSDPMessage);
 
 impl fmt::Debug for SDPMessageRef {

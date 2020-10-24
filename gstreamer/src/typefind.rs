@@ -19,7 +19,7 @@ use glib_sys;
 use std::ptr;
 use std::slice;
 
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Debug)]
 pub struct TypeFind(gst_sys::GstTypeFind);
 

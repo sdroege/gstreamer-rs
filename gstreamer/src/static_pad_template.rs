@@ -20,7 +20,6 @@ use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
 
-#[repr(C)]
 pub struct StaticPadTemplate(ptr::NonNull<gst_sys::GstStaticPadTemplate>);
 
 impl StaticPadTemplate {

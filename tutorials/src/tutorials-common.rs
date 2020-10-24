@@ -4,7 +4,6 @@
 #[cfg(target_os = "macos")]
 mod runloop {
     use std::os::raw::c_void;
-    #[repr(C)]
     pub struct CFRunLoop(*mut c_void);
 
     #[link(name = "foundation", kind = "framework")]

@@ -7,7 +7,7 @@ use gst;
 use gst::prelude::*;
 use gst_net_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct NetAddressMeta(gst_net_sys::GstNetAddressMeta);
 
 unsafe impl Send for NetAddressMeta {}

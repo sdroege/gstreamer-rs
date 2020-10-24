@@ -19,7 +19,7 @@ mod custom_meta {
     use std::ptr;
 
     // Public Rust type for the custom meta.
-    #[repr(C)]
+    #[repr(transparent)]
     pub struct CustomMeta(imp::CustomMeta);
 
     // Metas must be Send+Sync.

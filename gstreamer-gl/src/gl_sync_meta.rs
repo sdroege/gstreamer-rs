@@ -8,7 +8,7 @@ use gst_gl_sys;
 
 use GLContext;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct GLSyncMeta(gst_gl_sys::GstGLSyncMeta);
 
 unsafe impl Send for GLSyncMeta {}

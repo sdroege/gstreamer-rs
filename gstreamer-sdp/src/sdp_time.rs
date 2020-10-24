@@ -15,7 +15,7 @@ use std::ptr;
 use glib::translate::*;
 use gst_sdp_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPTime(pub(crate) gst_sdp_sys::GstSDPTime);
 
 unsafe impl Send for SDPTime {}

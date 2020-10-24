@@ -13,7 +13,7 @@ use std::mem;
 use glib::translate::*;
 use gst_sdp_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPAttribute(pub(crate) gst_sdp_sys::GstSDPAttribute);
 
 unsafe impl Send for SDPAttribute {}

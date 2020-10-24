@@ -16,7 +16,7 @@ use gst::prelude::*;
 use gst_sys;
 use gst_video_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoMeta(gst_video_sys::GstVideoMeta);
 
 unsafe impl Send for VideoMeta {}
@@ -176,7 +176,7 @@ impl fmt::Debug for VideoMeta {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoCropMeta(gst_video_sys::GstVideoCropMeta);
 
 unsafe impl Send for VideoCropMeta {}
@@ -235,7 +235,7 @@ impl fmt::Debug for VideoCropMeta {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoRegionOfInterestMeta(gst_video_sys::GstVideoRegionOfInterestMeta);
 
 unsafe impl Send for VideoRegionOfInterestMeta {}
@@ -367,7 +367,7 @@ impl fmt::Debug for VideoRegionOfInterestMeta {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoAffineTransformationMeta(gst_video_sys::GstVideoAffineTransformationMeta);
 
 unsafe impl Send for VideoAffineTransformationMeta {}
@@ -426,7 +426,7 @@ impl fmt::Debug for VideoAffineTransformationMeta {
     }
 }
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoOverlayCompositionMeta(gst_video_sys::GstVideoOverlayCompositionMeta);
 
 unsafe impl Send for VideoOverlayCompositionMeta {}
@@ -482,7 +482,7 @@ impl fmt::Debug for VideoOverlayCompositionMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoCaptionMeta(gst_video_sys::GstVideoCaptionMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -544,7 +544,7 @@ impl fmt::Debug for VideoCaptionMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoAFDMeta(gst_video_sys::GstVideoAFDMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -608,7 +608,7 @@ impl fmt::Debug for VideoAFDMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
-#[repr(C)]
+#[repr(transparent)]
 pub struct VideoBarMeta(gst_video_sys::GstVideoBarMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]

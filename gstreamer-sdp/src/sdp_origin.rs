@@ -11,7 +11,7 @@ use std::fmt;
 
 use gst_sdp_sys;
 
-#[repr(C)]
+#[repr(transparent)]
 pub struct SDPOrigin(pub(crate) gst_sdp_sys::GstSDPOrigin);
 
 unsafe impl Send for SDPOrigin {}
