@@ -321,7 +321,7 @@ unsafe extern "C" fn log_handler<T>(
     message: *mut gst_sys::GstDebugMessage,
     user_data: gpointer,
 ) where
-    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&glib::Object>, &DebugMessage)
+    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&LoggedObject>, &DebugMessage)
         + Send
         + Sync
         + 'static,
@@ -331,7 +331,7 @@ unsafe extern "C" fn log_handler<T>(
     let file = CStr::from_ptr(file).to_string_lossy();
     let function = CStr::from_ptr(function).to_string_lossy();
     let line = line as u32;
-    let object: Borrowed<Option<glib::Object>> = from_glib_borrow(object);
+    let object = ptr::NonNull::new(object).map(LoggedObject);
     let message = DebugMessage(ptr::NonNull::new_unchecked(message));
     let handler = &*(user_data as *mut T);
     (handler)(
@@ -340,7 +340,7 @@ unsafe extern "C" fn log_handler<T>(
         &file,
         &function,
         line,
-        object.as_ref().as_ref(),
+        object.as_ref(),
         &message,
     );
 }
@@ -359,9 +359,81 @@ pub struct DebugLogFunction(ptr::NonNull<std::os::raw::c_void>);
 unsafe impl Send for DebugLogFunction {}
 unsafe impl Sync for DebugLogFunction {}
 
+#[derive(Debug)]
+pub struct LoggedObject(ptr::NonNull<gobject_sys::GObject>);
+
+impl LoggedObject {
+    pub fn as_ptr(&self) -> *mut gobject_sys::GObject {
+        self.0.as_ptr()
+    }
+}
+
+impl fmt::Display for LoggedObject {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        unsafe {
+            let ptr = self.0.as_ptr();
+            let g_class = (*ptr).g_type_instance.g_class;
+
+            if !g_class.is_null() {
+                let type_ = (*g_class).g_type;
+
+                if gobject_sys::g_type_is_a(type_, gst_sys::gst_pad_get_type()) != glib_sys::GFALSE
+                {
+                    let name_ptr = (*(ptr as *mut gst_sys::GstObject)).name;
+                    let name = if name_ptr.is_null() {
+                        "<null>"
+                    } else {
+                        CStr::from_ptr(name_ptr)
+                            .to_str()
+                            .unwrap_or("<invalid name>")
+                    };
+
+                    let parent_ptr = (*(ptr as *mut gst_sys::GstObject)).parent;
+                    let parent_name = if parent_ptr.is_null() {
+                        "<null>"
+                    } else {
+                        let name_ptr = (*(parent_ptr as *mut gst_sys::GstObject)).name;
+                        if name_ptr.is_null() {
+                            "<null>"
+                        } else {
+                            CStr::from_ptr(name_ptr)
+                                .to_str()
+                                .unwrap_or("<invalid name>")
+                        }
+                    };
+
+                    write!(f, "{}:{}", parent_name, name)
+                } else if gobject_sys::g_type_is_a(type_, gst_sys::gst_object_get_type())
+                    != glib_sys::GFALSE
+                {
+                    let name_ptr = (*(ptr as *mut gst_sys::GstObject)).name;
+                    let name = if name_ptr.is_null() {
+                        "<null>"
+                    } else {
+                        CStr::from_ptr(name_ptr)
+                            .to_str()
+                            .unwrap_or("<invalid name>")
+                    };
+                    write!(f, "{}", name)
+                } else {
+                    let type_name = CStr::from_ptr(gobject_sys::g_type_name(type_));
+                    write!(
+                        f,
+                        "{}:{:?}",
+                        type_name.to_str().unwrap_or("<invalid type>"),
+                        ptr
+                    )
+                }
+            } else {
+                write!(f, "{:?}", ptr)
+            }
+        }
+    }
+}
+
 pub fn debug_add_log_function<T>(function: T) -> DebugLogFunction
 where
-    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&glib::Object>, &DebugMessage)
+    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&LoggedObject>, &DebugMessage)
         + Send
         + Sync
         + 'static,
@@ -460,7 +532,7 @@ mod tests {
                             _file: &str,
                             _function: &str,
                             _line: u32,
-                            _object: Option<&glib::Object>,
+                            _object: Option<&LoggedObject>,
                             message: &DebugMessage| {
             let cat = DebugCategory::get("test-cat-log").unwrap();
 
