@@ -203,10 +203,10 @@ impl Bus {
     }
 
     pub fn iter(&self) -> Iter {
-        self.iter_timed(0.into())
+        self.iter_timed(Some(crate::ClockTime::ZERO))
     }
 
-    pub fn iter_timed(&self, timeout: crate::ClockTime) -> Iter {
+    pub fn iter_timed(&self, timeout: Option<crate::ClockTime>) -> Iter {
         Iter { bus: self, timeout }
     }
 
@@ -214,12 +214,12 @@ impl Bus {
         &'a self,
         msg_types: &'a [MessageType],
     ) -> impl Iterator<Item = Message> + 'a {
-        self.iter_timed_filtered(0.into(), msg_types)
+        self.iter_timed_filtered(Some(crate::ClockTime::ZERO), msg_types)
     }
 
     pub fn iter_timed_filtered<'a>(
         &'a self,
-        timeout: crate::ClockTime,
+        timeout: Option<crate::ClockTime>,
         msg_types: &'a [MessageType],
     ) -> impl Iterator<Item = Message> + 'a {
         self.iter_timed(timeout)
@@ -228,7 +228,7 @@ impl Bus {
 
     pub fn timed_pop_filtered(
         &self,
-        timeout: crate::ClockTime,
+        timeout: Option<crate::ClockTime>,
         msg_types: &[MessageType],
     ) -> Option<Message> {
         loop {
@@ -267,7 +267,7 @@ impl Bus {
 #[derive(Debug)]
 pub struct Iter<'a> {
     bus: &'a Bus,
-    timeout: crate::ClockTime,
+    timeout: Option<crate::ClockTime>,
 }
 
 impl<'a> Iterator for Iter<'a> {

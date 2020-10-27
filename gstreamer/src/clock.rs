@@ -35,7 +35,7 @@ glib::wrapper! {
 impl ClockId {
     #[doc(alias = "get_time")]
     #[doc(alias = "gst_clock_id_get_time")]
-    pub fn time(&self) -> ClockTime {
+    pub fn time(&self) -> Option<ClockTime> {
         unsafe { from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0)) }
     }
 
@@ -135,9 +135,11 @@ impl SingleShotClockId {
     #[doc(alias = "gst_clock_id_wait_async")]
     pub fn wait_async<F>(&self, func: F) -> Result<ClockSuccess, ClockError>
     where
-        F: FnOnce(&Clock, ClockTime, &ClockId) + Send + 'static,
+        F: FnOnce(&Clock, Option<ClockTime>, &ClockId) + Send + 'static,
     {
-        unsafe extern "C" fn trampoline<F: FnOnce(&Clock, ClockTime, &ClockId) + Send + 'static>(
+        unsafe extern "C" fn trampoline<
+            F: FnOnce(&Clock, Option<ClockTime>, &ClockId) + Send + 'static,
+        >(
             clock: *mut ffi::GstClock,
             time: ffi::GstClockTime,
             id: gpointer,
@@ -156,7 +158,7 @@ impl SingleShotClockId {
         }
 
         unsafe extern "C" fn destroy_notify<
-            F: FnOnce(&Clock, ClockTime, &ClockId) + Send + 'static,
+            F: FnOnce(&Clock, Option<ClockTime>, &ClockId) + Send + 'static,
         >(
             ptr: gpointer,
         ) {
@@ -179,7 +181,13 @@ impl SingleShotClockId {
     pub fn wait_async_future(
         &self,
     ) -> Result<
-        Pin<Box<dyn Future<Output = Result<(ClockTime, ClockId), ClockError>> + Send + 'static>>,
+        Pin<
+            Box<
+                dyn Future<Output = Result<(Option<ClockTime>, ClockId), ClockError>>
+                    + Send
+                    + 'static,
+            >,
+        >,
         ClockError,
     > {
         use futures_channel::oneshot;
@@ -234,7 +242,7 @@ impl PeriodicClockId {
     pub fn interval(&self) -> ClockTime {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
-            from_glib((*ptr).interval)
+            Option::<_>::from_glib((*ptr).interval).expect("undefined interval")
         }
     }
 
@@ -245,9 +253,11 @@ impl PeriodicClockId {
     #[doc(alias = "gst_clock_id_wait_async")]
     pub fn wait_async<F>(&self, func: F) -> Result<ClockSuccess, ClockError>
     where
-        F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static,
+        F: Fn(&Clock, Option<ClockTime>, &ClockId) + Send + 'static,
     {
-        unsafe extern "C" fn trampoline<F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static>(
+        unsafe extern "C" fn trampoline<
+            F: Fn(&Clock, Option<ClockTime>, &ClockId) + Send + 'static,
+        >(
             clock: *mut ffi::GstClock,
             time: ffi::GstClockTime,
             id: gpointer,
@@ -262,7 +272,9 @@ impl PeriodicClockId {
             glib::ffi::GTRUE
         }
 
-        unsafe extern "C" fn destroy_notify<F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static>(
+        unsafe extern "C" fn destroy_notify<
+            F: Fn(&Clock, Option<ClockTime>, &ClockId) + Send + 'static,
+        >(
             ptr: gpointer,
         ) {
             Box::<F>::from_raw(ptr as *mut _);
@@ -283,7 +295,7 @@ impl PeriodicClockId {
     pub fn wait_async_stream(
         &self,
     ) -> Result<
-        Pin<Box<dyn Stream<Item = (ClockTime, ClockId)> + Unpin + Send + 'static>>,
+        Pin<Box<dyn Stream<Item = (Option<ClockTime>, ClockId)> + Unpin + Send + 'static>>,
         ClockError,
     > {
         use futures_channel::mpsc;
@@ -348,7 +360,7 @@ impl Clock {
         cexternal: ClockTime,
         cnum: ClockTime,
         cdenom: ClockTime,
-    ) -> ClockTime {
+    ) -> Option<ClockTime> {
         skip_assert_initialized!();
         unsafe {
             from_glib(ffi::gst_clock_adjust_with_calibration(
@@ -369,7 +381,7 @@ impl Clock {
         cexternal: ClockTime,
         cnum: ClockTime,
         cdenom: ClockTime,
-    ) -> ClockTime {
+    ) -> Option<ClockTime> {
         skip_assert_initialized!();
         unsafe {
             from_glib(ffi::gst_clock_unadjust_with_calibration(
@@ -416,9 +428,7 @@ pub trait ClockExtManual: 'static {
 
 impl<O: IsA<Clock>> ClockExtManual for O {
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> PeriodicClockId {
-        assert!(start_time.is_some());
-        assert!(interval.is_some());
-        assert_ne!(interval, crate::ClockTime::from(0));
+        assert_ne!(interval, ClockTime::ZERO);
 
         unsafe {
             PeriodicClockId(from_glib_full(ffi::gst_clock_new_periodic_id(
@@ -452,8 +462,6 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     }
 
     fn new_single_shot_id(&self, time: ClockTime) -> SingleShotClockId {
-        assert!(time.is_some());
-
         unsafe {
             SingleShotClockId(from_glib_full(ffi::gst_clock_new_single_shot_id(
                 self.as_ref().to_glib_none().0,
@@ -518,8 +526,8 @@ mod tests {
         crate::init().unwrap();
 
         let clock = SystemClock::obtain();
-        let now = clock.time();
-        let id = clock.new_single_shot_id(now + 20 * crate::MSECOND);
+        let now = clock.time().unwrap();
+        let id = clock.new_single_shot_id(now + 20 * ClockTime::MSECOND);
         let (res, _) = id.wait();
 
         assert!(res == Ok(ClockSuccess::Ok) || res == Err(ClockError::Early));
@@ -532,8 +540,8 @@ mod tests {
         let (sender, receiver) = channel();
 
         let clock = SystemClock::obtain();
-        let now = clock.time();
-        let id = clock.new_single_shot_id(now + 20 * crate::MSECOND);
+        let now = clock.time().unwrap();
+        let id = clock.new_single_shot_id(now + 20 * ClockTime::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             sender.send(()).unwrap();
         });
@@ -548,8 +556,8 @@ mod tests {
         crate::init().unwrap();
 
         let clock = SystemClock::obtain();
-        let now = clock.time();
-        let id = clock.new_periodic_id(now + 20 * crate::MSECOND, 20 * crate::MSECOND);
+        let now = clock.time().unwrap();
+        let id = clock.new_periodic_id(now + 20 * ClockTime::MSECOND, 20 * ClockTime::MSECOND);
 
         let (res, _) = id.wait();
         assert!(res == Ok(ClockSuccess::Ok) || res == Err(ClockError::Early));
@@ -565,8 +573,8 @@ mod tests {
         let (sender, receiver) = channel();
 
         let clock = SystemClock::obtain();
-        let now = clock.time();
-        let id = clock.new_periodic_id(now + 20 * crate::MSECOND, 20 * crate::MSECOND);
+        let now = clock.time().unwrap();
+        let id = clock.new_periodic_id(now + 20 * ClockTime::MSECOND, 20 * ClockTime::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             let _ = sender.send(());
         });

@@ -324,7 +324,7 @@ impl Default for Latency<Query> {
 
 impl<T: AsPtr> Latency<T> {
     #[doc(alias = "get_result")]
-    pub fn result(&self) -> (bool, crate::ClockTime, crate::ClockTime) {
+    pub fn result(&self) -> (bool, Option<crate::ClockTime>, Option<crate::ClockTime>) {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
             let mut min = mem::MaybeUninit::uninit();
@@ -1428,6 +1428,7 @@ declare_concrete_query!(Other, T);
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::ClockTime;
     use std::convert::TryInto;
 
     #[test]
@@ -1439,10 +1440,10 @@ mod tests {
             match query.view_mut() {
                 QueryView::Position(ref mut p) => {
                     let pos = p.result();
-                    assert_eq!(pos.try_into(), Ok(crate::CLOCK_TIME_NONE));
-                    p.set(3 * crate::SECOND);
+                    assert_eq!(pos.try_into(), Ok(ClockTime::NONE));
+                    p.set(Some(3 * ClockTime::SECOND));
                     let pos = p.result();
-                    assert_eq!(pos.try_into(), Ok(3 * crate::SECOND));
+                    assert_eq!(pos.try_into(), Ok(Some(3 * ClockTime::SECOND)));
                 }
                 _ => panic!("Wrong concrete Query in Query"),
             }
@@ -1453,7 +1454,7 @@ mod tests {
             match query.view() {
                 QueryView::Position(ref p) => {
                     let pos = p.result();
-                    assert_eq!(pos.try_into(), Ok(3 * crate::SECOND));
+                    assert_eq!(pos.try_into(), Ok(Some(3 * ClockTime::SECOND)));
                     unsafe {
                         assert!(!p.as_mut_ptr().is_null());
                     }
@@ -1464,7 +1465,7 @@ mod tests {
 
         let mut p = Position::new(crate::Format::Time);
         let pos = p.result();
-        assert_eq!(pos.try_into(), Ok(crate::CLOCK_TIME_NONE));
+        assert_eq!(pos.try_into(), Ok(ClockTime::NONE));
 
         p.structure_mut().set("check_mut", &true);
 
@@ -1494,12 +1495,12 @@ mod tests {
 
         let query = query.make_mut();
         if let QueryView::Duration(d) = &mut query.view_mut() {
-            d.set(2 * crate::SECOND);
+            d.set(Some(2 * ClockTime::SECOND));
         }
 
         if let QueryView::Duration(d) = &query.view() {
             let duration = d.result();
-            assert_eq!(duration.try_into(), Ok(2 * crate::SECOND));
+            assert_eq!(duration.try_into(), Ok(Some(2 * ClockTime::SECOND)));
         }
     }
 

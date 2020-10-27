@@ -351,25 +351,25 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_pts")]
-    pub fn pts(&self) -> ClockTime {
+    pub fn pts(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.pts) }
     }
 
-    pub fn set_pts(&mut self, pts: ClockTime) {
-        self.0.pts = pts.into_glib();
+    pub fn set_pts(&mut self, pts: impl Into<Option<ClockTime>>) {
+        self.0.pts = pts.into().into_glib();
     }
 
     #[doc(alias = "get_dts")]
-    pub fn dts(&self) -> ClockTime {
+    pub fn dts(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.dts) }
     }
 
-    pub fn set_dts(&mut self, dts: ClockTime) {
-        self.0.dts = dts.into_glib();
+    pub fn set_dts(&mut self, dts: impl Into<Option<ClockTime>>) {
+        self.0.dts = dts.into().into_glib();
     }
 
     #[doc(alias = "get_dts_or_pts")]
-    pub fn dts_or_pts(&self) -> ClockTime {
+    pub fn dts_or_pts(&self) -> Option<ClockTime> {
         let val = self.dts();
         if val.is_none() {
             self.pts()
@@ -379,12 +379,12 @@ impl BufferRef {
     }
 
     #[doc(alias = "get_duration")]
-    pub fn duration(&self) -> ClockTime {
+    pub fn duration(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.duration) }
     }
 
-    pub fn set_duration(&mut self, duration: ClockTime) {
-        self.0.duration = duration.into_glib();
+    pub fn set_duration(&mut self, duration: impl Into<Option<ClockTime>>) {
+        self.0.duration = duration.into().into_glib();
     }
 
     #[doc(alias = "get_flags")]
@@ -926,6 +926,7 @@ impl Eq for Buffer {}
 
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use crate::utils::Displayable;
         use std::cell::RefCell;
 
         struct DebugIter<I>(RefCell<I>);
@@ -940,9 +941,9 @@ impl fmt::Debug for BufferRef {
 
         f.debug_struct("Buffer")
             .field("ptr", unsafe { &self.as_ptr() })
-            .field("pts", &self.pts().to_string())
-            .field("dts", &self.dts().to_string())
-            .field("duration", &self.duration().to_string())
+            .field("pts", &self.pts().display().to_string())
+            .field("dts", &self.dts().display().to_string())
+            .field("duration", &self.duration().display().to_string())
             .field("size", &self.size())
             .field("offset", &self.offset())
             .field("offset_end", &self.offset_end())
@@ -1149,17 +1150,17 @@ mod tests {
 
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.set_pts(1.into());
-            buffer.set_dts(2.into());
+            buffer.set_pts(ClockTime::NSECOND);
+            buffer.set_dts(2 * ClockTime::NSECOND);
             buffer.set_offset(3);
             buffer.set_offset_end(4);
-            buffer.set_duration(5.into());
+            buffer.set_duration(Some(5 * ClockTime::NSECOND));
         }
-        assert_eq!(buffer.pts(), 1.into());
-        assert_eq!(buffer.dts(), 2.into());
+        assert_eq!(buffer.pts(), Some(ClockTime::NSECOND));
+        assert_eq!(buffer.dts(), Some(2 * ClockTime::NSECOND));
         assert_eq!(buffer.offset(), 3);
         assert_eq!(buffer.offset_end(), 4);
-        assert_eq!(buffer.duration(), 5.into());
+        assert_eq!(buffer.duration(), Some(5 * ClockTime::NSECOND));
     }
 
     #[test]
@@ -1174,7 +1175,7 @@ mod tests {
         assert_ne!(buffer.get_mut(), None);
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.set_pts(1.into());
+            buffer.set_pts(Some(ClockTime::NSECOND));
         }
 
         let mut buffer2 = buffer.clone();
@@ -1190,15 +1191,15 @@ mod tests {
                 assert_ne!(buffer2.as_ptr(), buffer.as_ptr());
             }
 
-            buffer2.set_pts(2.into());
+            buffer2.set_pts(Some(2 * ClockTime::NSECOND));
 
             let mut data = buffer2.map_writable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
             data.as_mut_slice()[0] = 0;
         }
 
-        assert_eq!(buffer.pts(), 1.into());
-        assert_eq!(buffer2.pts(), 2.into());
+        assert_eq!(buffer.pts(), Some(ClockTime::NSECOND));
+        assert_eq!(buffer2.pts(), Some(2 * ClockTime::NSECOND));
 
         {
             let data = buffer.map_readable().unwrap();
@@ -1331,14 +1332,14 @@ mod tests {
             crate::ReferenceTimestampMeta::add(
                 buffer,
                 &crate::Caps::builder("foo/bar").build(),
-                crate::ClockTime::from(0),
-                crate::CLOCK_TIME_NONE,
+                ClockTime::ZERO,
+                ClockTime::NONE,
             );
             crate::ReferenceTimestampMeta::add(
                 buffer,
                 &crate::Caps::builder("foo/bar").build(),
-                crate::SECOND,
-                crate::CLOCK_TIME_NONE,
+                ClockTime::SECOND,
+                ClockTime::NONE,
             );
         }
 
@@ -1351,7 +1352,10 @@ mod tests {
             true
         });
 
-        assert_eq!(&[crate::ClockTime::from(0), crate::SECOND][..], &res[..]);
+        assert_eq!(
+            &[Some(ClockTime::ZERO), Some(ClockTime::SECOND)][..],
+            &res[..]
+        );
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -1366,14 +1370,14 @@ mod tests {
             crate::ReferenceTimestampMeta::add(
                 buffer,
                 &crate::Caps::builder("foo/bar").build(),
-                crate::ClockTime::from(0),
-                crate::CLOCK_TIME_NONE,
+                ClockTime::ZERO,
+                ClockTime::NONE,
             );
             crate::ReferenceTimestampMeta::add(
                 buffer,
                 &crate::Caps::builder("foo/bar").build(),
-                crate::SECOND,
-                crate::CLOCK_TIME_NONE,
+                ClockTime::SECOND,
+                ClockTime::NONE,
             );
         }
 
@@ -1383,14 +1387,17 @@ mod tests {
                 .downcast_ref::<crate::ReferenceTimestampMeta>()
                 .unwrap();
             res.push(meta.timestamp());
-            if meta.timestamp() == crate::SECOND {
+            if let Some(ClockTime::SECOND) = meta.timestamp() {
                 Ok(false)
             } else {
                 Ok(true)
             }
         });
 
-        assert_eq!(&[crate::ClockTime::from(0), crate::SECOND][..], &res[..]);
+        assert_eq!(
+            &[Some(ClockTime::ZERO), Some(ClockTime::SECOND)][..],
+            &res[..]
+        );
 
         let mut res = vec![];
         buffer.foreach_meta(|meta| {
@@ -1401,6 +1408,6 @@ mod tests {
             true
         });
 
-        assert_eq!(&[crate::ClockTime::from(0)][..], &res[..]);
+        assert_eq!(&[Some(ClockTime::ZERO)][..], &res[..]);
     }
 }

@@ -7,10 +7,11 @@ use serde::ser::{Serialize, Serializer};
 use crate::Format;
 use crate::FormattedSegment;
 use crate::FormattedValue;
+use crate::FormattedValueIntrinsic;
 use crate::GenericFormattedValue;
 use crate::Segment;
 use crate::SegmentFlags;
-use crate::SpecificFormattedValue;
+use crate::SpecificFormattedValueIntrinsic;
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct FormattedSegmentSerde {
@@ -27,7 +28,7 @@ struct FormattedSegmentSerde {
     duration: i64,
 }
 
-impl<T: FormattedValue> Serialize for FormattedSegment<T> {
+impl<T: FormattedValueIntrinsic> Serialize for FormattedSegment<T> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let fmt_seg = unsafe {
             FormattedSegmentSerde {
@@ -35,13 +36,13 @@ impl<T: FormattedValue> Serialize for FormattedSegment<T> {
                 rate: self.rate(),
                 applied_rate: self.applied_rate(),
                 format: self.format(),
-                base: self.base().to_raw_value(),
-                offset: self.offset().to_raw_value(),
-                start: self.start().to_raw_value(),
-                stop: self.stop().to_raw_value(),
-                time: self.time().to_raw_value(),
-                position: self.position().to_raw_value(),
-                duration: self.duration().to_raw_value(),
+                base: self.base().into_raw_value(),
+                offset: self.offset().into_raw_value(),
+                start: self.start().into_raw_value(),
+                stop: self.stop().into_raw_value(),
+                time: self.time().into_raw_value(),
+                position: self.position().into_raw_value(),
+                duration: self.duration().into_raw_value(),
             }
         };
         fmt_seg.serialize(serializer)
@@ -91,7 +92,7 @@ impl<'de> Deserialize<'de> for Segment {
     }
 }
 
-impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for FormattedSegment<T> {
+impl<'de, T: SpecificFormattedValueIntrinsic> Deserialize<'de> for FormattedSegment<T> {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         skip_assert_initialized!();
         Segment::deserialize(deserializer).and_then(|segment| {
@@ -99,7 +100,7 @@ impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for Forma
                 de::Error::custom(format!(
                     "failed to convert segment with format {:?} to {:?}",
                     segment.format(),
-                    T::default_format(),
+                    T::FormattedValueType::default_format(),
                 ))
             })
         })
@@ -123,13 +124,13 @@ mod tests {
         segment.set_rate(1f64);
         segment.set_applied_rate(0.9f64);
         segment.set_format(Format::Time);
-        segment.set_base(GenericFormattedValue::Time(ClockTime::from_nseconds(123)));
-        segment.set_offset(GenericFormattedValue::Time(ClockTime::from_nseconds(42)));
-        segment.set_start(GenericFormattedValue::Time(ClockTime::from_nseconds(1024)));
-        segment.set_stop(GenericFormattedValue::Time(ClockTime::from_nseconds(2048)));
-        segment.set_time(GenericFormattedValue::Time(ClockTime::from_nseconds(1042)));
-        segment.set_position(GenericFormattedValue::Time(ClockTime::from_nseconds(256)));
-        segment.set_duration(GenericFormattedValue::Time(ClockTime::none()));
+        segment.set_base(GenericFormattedValue::from(ClockTime::from_nseconds(123)));
+        segment.set_offset(GenericFormattedValue::from(ClockTime::from_nseconds(42)));
+        segment.set_start(GenericFormattedValue::from(ClockTime::from_nseconds(1024)));
+        segment.set_stop(GenericFormattedValue::from(ClockTime::from_nseconds(2048)));
+        segment.set_time(GenericFormattedValue::from(ClockTime::from_nseconds(1042)));
+        segment.set_position(GenericFormattedValue::from(ClockTime::from_nseconds(256)));
+        segment.set_duration(GenericFormattedValue::from(ClockTime::NONE));
 
         let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
 
@@ -184,33 +185,37 @@ mod tests {
         assert!((segment.rate() - 1f64).abs() < std::f64::EPSILON);
         assert!((segment.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
         assert_eq!(segment.format(), Format::Time);
+        assert_eq!(segment.flags(), SegmentFlags::RESET | SegmentFlags::SEGMENT);
+        assert!((segment.rate() - 1f64).abs() < std::f64::EPSILON);
+        assert!((segment.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
+        assert_eq!(segment.format(), Format::Time);
         assert_eq!(
             segment.base(),
-            GenericFormattedValue::Time(ClockTime::from_nseconds(123))
+            GenericFormattedValue::from(ClockTime::from_nseconds(123)),
         );
         assert_eq!(
             segment.offset(),
-            GenericFormattedValue::Time(ClockTime::from_nseconds(42))
+            GenericFormattedValue::from(ClockTime::from_nseconds(42)),
         );
         assert_eq!(
             segment.start(),
-            GenericFormattedValue::Time(ClockTime::from_nseconds(1024))
+            GenericFormattedValue::from(ClockTime::from_nseconds(1024)),
         );
         assert_eq!(
             segment.stop(),
-            GenericFormattedValue::Time(ClockTime::from_nseconds(2048))
+            GenericFormattedValue::from(ClockTime::from_nseconds(2048)),
         );
         assert_eq!(
             segment.time(),
-            GenericFormattedValue::Time(ClockTime::from_nseconds(1042))
+            GenericFormattedValue::from(ClockTime::from_nseconds(1042)),
         );
         assert_eq!(
             segment.position(),
-            GenericFormattedValue::Time(ClockTime::from_nseconds(256))
+            GenericFormattedValue::from(ClockTime::from_nseconds(256)),
         );
         assert_eq!(
             segment.duration(),
-            GenericFormattedValue::Time(ClockTime::none())
+            GenericFormattedValue::from(ClockTime::NONE),
         );
     }
 
@@ -244,13 +249,13 @@ mod tests {
         assert!((fmt_seg.rate() - 1f64).abs() < std::f64::EPSILON);
         assert!((fmt_seg.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
         assert_eq!(fmt_seg.format(), Format::Time);
-        assert_eq!(fmt_seg.base(), ClockTime::from_nseconds(123));
-        assert_eq!(fmt_seg.offset(), ClockTime::from_nseconds(42));
-        assert_eq!(fmt_seg.start(), ClockTime::from_nseconds(1024));
-        assert_eq!(fmt_seg.stop(), ClockTime::from_nseconds(2048));
-        assert_eq!(fmt_seg.time(), ClockTime::from_nseconds(1042));
-        assert_eq!(fmt_seg.position(), ClockTime::from_nseconds(256));
-        assert_eq!(fmt_seg.duration(), ClockTime::none());
+        assert_eq!(fmt_seg.base(), Some(ClockTime::from_nseconds(123)));
+        assert_eq!(fmt_seg.offset(), Some(ClockTime::from_nseconds(42)));
+        assert_eq!(fmt_seg.start(), Some(ClockTime::from_nseconds(1024)));
+        assert_eq!(fmt_seg.stop(), Some(ClockTime::from_nseconds(2048)));
+        assert_eq!(fmt_seg.time(), Some(ClockTime::from_nseconds(1042)));
+        assert_eq!(fmt_seg.position(), Some(ClockTime::from_nseconds(256)));
+        assert_eq!(fmt_seg.duration(), ClockTime::NONE);
     }
 
     #[test]
@@ -262,13 +267,13 @@ mod tests {
         segment.set_rate(1f64);
         segment.set_applied_rate(0.9f64);
         segment.set_format(Format::Time);
-        segment.set_base(GenericFormattedValue::Time(ClockTime::from_nseconds(123)));
-        segment.set_offset(GenericFormattedValue::Time(ClockTime::from_nseconds(42)));
-        segment.set_start(GenericFormattedValue::Time(ClockTime::from_nseconds(1024)));
-        segment.set_stop(GenericFormattedValue::Time(ClockTime::from_nseconds(2048)));
-        segment.set_time(GenericFormattedValue::Time(ClockTime::from_nseconds(1042)));
-        segment.set_position(GenericFormattedValue::Time(ClockTime::from_nseconds(256)));
-        segment.set_duration(GenericFormattedValue::Time(ClockTime::none()));
+        segment.set_base(GenericFormattedValue::from(ClockTime::from_nseconds(123)));
+        segment.set_offset(GenericFormattedValue::from(ClockTime::from_nseconds(42)));
+        segment.set_start(GenericFormattedValue::from(ClockTime::from_nseconds(1024)));
+        segment.set_stop(GenericFormattedValue::from(ClockTime::from_nseconds(2048)));
+        segment.set_time(GenericFormattedValue::from(ClockTime::from_nseconds(1042)));
+        segment.set_position(GenericFormattedValue::from(ClockTime::from_nseconds(256)));
+        segment.set_duration(GenericFormattedValue::from(ClockTime::NONE));
         let segment_se = ron::ser::to_string(&segment).unwrap();
 
         let segment_de: Segment = ron::de::from_str(segment_se.as_str()).unwrap();

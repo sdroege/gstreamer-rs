@@ -7,131 +7,265 @@ use std::io::{self, prelude::*};
 use std::time::Duration;
 use std::{cmp, convert, fmt, str};
 
-#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug, Default)]
-pub struct ClockTime(pub Option<u64>);
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+pub struct ClockTime(pub(crate) u64);
 
 impl ClockTime {
-    pub fn hours(&self) -> Option<u64> {
-        (*self / crate::SECOND / 60 / 60).0
+    pub const SECOND: ClockTime = ClockTime(1_000_000_000);
+    pub const MSECOND: ClockTime = ClockTime(1_000_000);
+    pub const USECOND: ClockTime = ClockTime(1_000);
+    pub const NSECOND: ClockTime = ClockTime(1);
+
+    pub const fn hours(self) -> u64 {
+        self.0 / Self::SECOND.0 / 60 / 60
     }
 
-    pub fn minutes(&self) -> Option<u64> {
-        (*self / crate::SECOND / 60).0
+    pub const fn minutes(self) -> u64 {
+        self.0 / Self::SECOND.0 / 60
     }
 
-    pub fn seconds(&self) -> Option<u64> {
-        (*self / crate::SECOND).0
+    pub const fn seconds(self) -> u64 {
+        self.0 / Self::SECOND.0
     }
 
-    pub fn mseconds(&self) -> Option<u64> {
-        (*self / crate::MSECOND).0
+    pub const fn mseconds(self) -> u64 {
+        self.0 / Self::MSECOND.0
     }
 
-    pub fn useconds(&self) -> Option<u64> {
-        (*self / crate::USECOND).0
+    pub const fn useconds(self) -> u64 {
+        self.0 / Self::USECOND.0
     }
 
-    pub fn nseconds(&self) -> Option<u64> {
-        (*self / crate::NSECOND).0
-    }
-
-    pub fn nanoseconds(&self) -> Option<u64> {
+    pub const fn nseconds(self) -> u64 {
         self.0
     }
 
-    pub fn from_seconds(seconds: u64) -> ClockTime {
+    pub const fn from_seconds(seconds: u64) -> Self {
         skip_assert_initialized!();
-        seconds * crate::SECOND
+        ClockTime(seconds * Self::SECOND.0)
     }
 
-    pub fn from_mseconds(mseconds: u64) -> ClockTime {
+    pub const fn from_mseconds(mseconds: u64) -> Self {
         skip_assert_initialized!();
-        mseconds * crate::MSECOND
+        ClockTime(mseconds * Self::MSECOND.0)
     }
 
-    pub fn from_useconds(useconds: u64) -> ClockTime {
+    pub const fn from_useconds(useconds: u64) -> Self {
         skip_assert_initialized!();
-        useconds * crate::USECOND
+        ClockTime(useconds * Self::USECOND.0)
     }
 
-    pub fn from_nseconds(nseconds: u64) -> ClockTime {
+    pub const fn from_nseconds(nseconds: u64) -> Self {
         skip_assert_initialized!();
-        nseconds * crate::NSECOND
+        ClockTime(nseconds * Self::NSECOND.0)
     }
 }
 
-// This macro is also used by formats with an inner Option.
-// It is defined here because the format module depends on ClockTime.
-macro_rules! impl_common_ops_for_opt_int(
-    ($name:ident) => {
-        impl $name {
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn saturating_add(self, rhs: Self) -> Option<Self> {
-                match (self.0, rhs.0) {
-                    (Some(this), Some(rhs)) => Some(Self(Some(this.saturating_add(rhs)))),
-                    _ => None,
-                }
-            }
+macro_rules! option_glib_newtype_from_to {
+    ($type_:ident, $none_value:expr) => {
+        #[doc(hidden)]
+        impl IntoGlib for $type_ {
+            type GlibType = u64;
 
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn saturating_sub(self, rhs: Self) -> Option<Self> {
-                match (self.0, rhs.0) {
-                    (Some(this), Some(rhs)) => Some(Self(Some(this.saturating_sub(rhs)))),
-                    _ => None,
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn min(self, rhs: Self) -> Option<Self> {
-                match (self.0, rhs.0) {
-                    (Some(this), Some(rhs)) => Some(Self(Some(this.min(rhs)))),
-                    _ => None,
-                }
-            }
-
-            #[must_use = "this returns the result of the operation, without modifying the original"]
-            #[inline]
-            pub fn max(self, rhs: Self) -> Option<Self> {
-                match (self.0, rhs.0) {
-                    (Some(this), Some(rhs)) => Some(Self(Some(this.max(rhs)))),
-                    _ => None,
-                }
-            }
-
-            pub const fn zero() -> Self {
-                Self(Some(0))
-            }
-
-            pub fn is_zero(&self) -> bool {
-                matches!(self.0, Some(0))
-            }
-
-            pub const fn none() -> Self {
-                Self(None)
+            fn into_glib(self) -> u64 {
+                self.0
             }
         }
 
-        impl cmp::PartialOrd for $name {
-            fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-                match (self.0, other.0) {
-                    (Some(this), Some(other)) => this.partial_cmp(&other),
-                    (None, None) => Some(cmp::Ordering::Equal),
-                    _ => None,
+        #[doc(hidden)]
+        impl OptionIntoGlib for $type_ {
+            const GLIB_NONE: u64 = $none_value;
+        }
+
+        #[doc(hidden)]
+        impl TryFromGlib<u64> for $type_ {
+            type Error = GlibNoneError;
+            #[inline]
+            unsafe fn try_from_glib(val: u64) -> Result<Self, GlibNoneError> {
+                skip_assert_initialized!();
+                if val == $none_value {
+                    return Err(GlibNoneError);
                 }
+
+                Ok($type_(val))
+            }
+        }
+    };
+}
+
+option_glib_newtype_from_to!(ClockTime, ffi::GST_CLOCK_TIME_NONE);
+
+impl glib::value::ValueType for ClockTime {
+    type Type = Self;
+}
+
+pub struct ClockTimeValueTypeOrNoneChecker<T>(std::marker::PhantomData<T>);
+
+unsafe impl<T: StaticType> glib::value::ValueTypeChecker for ClockTimeValueTypeOrNoneChecker<T> {
+    type Error = glib::value::ValueTypeMismatchOrNoneError;
+
+    fn check(value: &glib::Value) -> Result<(), Self::Error> {
+        skip_assert_initialized!();
+        glib::value::GenericValueTypeChecker::<T>::check(value)?;
+
+        let gct = unsafe { glib::gobject_ffi::g_value_get_uint64(value.to_glib_none().0) };
+        if gct == ffi::GST_CLOCK_TIME_NONE {
+            return Err(glib::value::ValueTypeMismatchOrNoneError::UnexpectedNone);
+        }
+
+        Ok(())
+    }
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
+    type Checker = ClockTimeValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &glib::Value) -> ClockTime {
+        skip_assert_initialized!();
+        ClockTime(glib::gobject_ffi::g_value_get_uint64(
+            value.to_glib_none().0,
+        ))
+    }
+}
+
+impl glib::value::ToValue for ClockTime {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<ClockTime>();
+        let gct = self.into_glib();
+        if gct == ffi::GST_CLOCK_TIME_NONE {
+            crate::gst_warning!(
+                crate::CAT_RUST,
+                "converting a defined `ClockTime` with value `ffi::GST_CLOCK_TIME_NONE` to `Value`, this is probably not what you wanted.",
+            );
+        }
+        unsafe { glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, gct) }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl glib::value::ToValueOptional for ClockTime {
+    fn to_value_optional(opt: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<ClockTime>();
+        let inner = opt.map(|inner| inner.0).unwrap_or(ffi::GST_CLOCK_TIME_NONE);
+        unsafe { glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, inner) };
+
+        value
+    }
+}
+
+#[doc(hidden)]
+impl glib::StaticType for ClockTime {
+    fn static_type() -> glib::Type {
+        <u64 as glib::StaticType>::static_type()
+    }
+}
+
+#[derive(Debug)]
+pub struct DurationError;
+
+impl fmt::Display for DurationError {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(fmt, "out of range conversion from Duration attempted")
+    }
+}
+
+impl std::error::Error for DurationError {}
+
+impl convert::TryFrom<Duration> for ClockTime {
+    type Error = DurationError;
+
+    fn try_from(d: Duration) -> Result<Self, Self::Error> {
+        skip_assert_initialized!();
+
+        let nanos = d.as_nanos();
+
+        // Note: `std::u64::MAX` is `ClockTime::None`.
+        if nanos >= std::u64::MAX as u128 {
+            return Err(DurationError);
+        }
+
+        Ok(ClockTime::from_nseconds(nanos as u64))
+    }
+}
+
+impl convert::From<ClockTime> for Duration {
+    fn from(t: ClockTime) -> Self {
+        skip_assert_initialized!();
+
+        Duration::from_nanos(t.nseconds())
+    }
+}
+
+macro_rules! impl_common_ops_for_newtype_u64(
+    ($name:ident) => {
+        impl $name {
+            pub const ZERO: Self = Self(0);
+            pub const NONE: Option<Self> = None;
+
+            pub const fn is_zero(self) -> bool {
+                self.0 == Self::ZERO.0
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            // FIXME Can't use `map` in a `const fn` as of rustc 1.53.0-beta.2
+            #[allow(clippy::manual_map)]
+            pub const fn checked_add(self, rhs: Self) -> Option<Self> {
+                match self.0.checked_add(rhs.0) {
+                    Some(res) => Some(Self(res)),
+                    None => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn saturating_add(self, rhs: Self) -> Self {
+                Self(self.0.saturating_add(rhs.0))
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn wrapping_add(self, rhs: Self) -> Self {
+                Self(self.0.wrapping_add(rhs.0))
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            // FIXME Can't use `map` in a `const fn` as of rustc 1.53.0-beta.2
+            #[allow(clippy::manual_map)]
+            pub const fn checked_sub(self, rhs: Self) -> Option<Self> {
+                match self.0.checked_sub(rhs.0) {
+                    Some(res) => Some(Self(res)),
+                    None => None,
+                }
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn saturating_sub(self, rhs: Self) -> Self {
+                Self(self.0.saturating_sub(rhs.0))
+            }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub const fn wrapping_sub(self, rhs: Self) -> Self {
+                Self(self.0.wrapping_sub(rhs.0))
             }
         }
     };
 );
 
-impl_common_ops_for_opt_int!(ClockTime);
+impl_common_ops_for_newtype_u64!(ClockTime);
 
 /// Tell [`pad_clocktime`] what kind of time we're formatting
 enum Sign {
-    /// An invalid time (`None`)
-    Invalid,
+    /// An undefined time (`None`)
+    Undefined,
 
     /// A non-negative time (zero or greater)
     NonNegative,
@@ -161,18 +295,18 @@ fn pad_clocktime(f: &mut fmt::Formatter<'_>, sign: Sign, buf: &str) -> fmt::Resu
     // Choose the fill character
     let sign_aware_zero_pad = f.sign_aware_zero_pad();
     let fill_char = match sign {
-        Invalid if sign_aware_zero_pad => '-', // Zero-padding an invalid time
-        _ if sign_aware_zero_pad => '0',       // Zero-padding a valid time
-        _ => f.fill(),                         // Otherwise, pad with the user-chosen character
+        Undefined if sign_aware_zero_pad => '-', // Zero-padding an undefined time
+        _ if sign_aware_zero_pad => '0',         // Zero-padding a valid time
+        _ => f.fill(),                           // Otherwise, pad with the user-chosen character
     };
 
     // Choose the sign character
     let sign_plus = f.sign_plus();
     let sign_char = match sign {
-        Invalid if sign_plus => Some(fill_char), // User requested sign, time is invalid
-        NonNegative if sign_plus => Some('+'),   // User requested sign, time is zero or above
-        Negative => Some('-'),                   // Time is below zero
-        _ => None,                               // Otherwise, add no sign
+        Undefined if sign_plus => Some(fill_char), // User requested sign, time is undefined
+        NonNegative if sign_plus => Some('+'),     // User requested sign, time is zero or above
+        Negative => Some('-'),                     // Time is below zero
+        _ => None,                                 // Otherwise, add no sign
     };
 
     // Our minimum width is the value's width, plus 1 for the sign if present
@@ -216,15 +350,13 @@ fn pad_clocktime(f: &mut fmt::Formatter<'_>, sign: Sign, buf: &str) -> fmt::Resu
 /// Writes an unpadded, signless clocktime string with the given precision
 fn write_clocktime<W: io::Write>(
     mut writer: W,
-    clocktime: Option<u64>,
+    clocktime: Option<ClockTime>,
     precision: usize,
 ) -> io::Result<()> {
     skip_assert_initialized!();
     let precision = cmp::min(9, precision);
 
-    if let Some(ns) = clocktime {
-        // Valid time
-
+    if let Some(ns) = clocktime.map(ClockTime::nseconds) {
         // Split the time into parts
         let (s, ns) = div_rem(ns, 1_000_000_000);
         let (m, s) = div_rem(s, 60);
@@ -244,7 +376,7 @@ fn write_clocktime<W: io::Write>(
             write!(writer, ".{:.p$}", buf_str, p = precision)?;
         }
     } else {
-        // Invalid time
+        // Undefined time
 
         // Write HH:MM:SS, but invalid
         write!(writer, "--:--:--")?;
@@ -258,114 +390,57 @@ fn write_clocktime<W: io::Write>(
     Ok(())
 }
 
+fn fmt_opt_clock_time(ct: Option<ClockTime>, f: &mut fmt::Formatter) -> fmt::Result {
+    skip_assert_initialized!();
+    let precision = f.precision().unwrap_or(9);
+
+    // What the maximum time (u64::MAX - 1) would format to
+    const MAX_SIZE: usize = "5124095:34:33.709551614".len();
+
+    // Write the unpadded clocktime value into a stack-allocated string
+    let mut buf = [0u8; MAX_SIZE];
+    let mut cursor = io::Cursor::new(&mut buf[..]);
+    write_clocktime(&mut cursor, ct, precision).unwrap();
+    let pos = cursor.position() as usize;
+    let buf_str = str::from_utf8(&buf[..pos]).unwrap();
+
+    let sign = if ct.is_some() {
+        Sign::NonNegative
+    } else {
+        Sign::Undefined
+    };
+
+    pad_clocktime(f, sign, buf_str)
+}
+
 impl fmt::Display for ClockTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let precision = f.precision().unwrap_or(9);
-
-        // What the maximum time (u64::MAX - 1) would format to
-        const MAX_SIZE: usize = "5124095:34:33.709551614".len();
-
-        // Write the unpadded clocktime value into a stack-allocated string
-        let mut buf = [0u8; MAX_SIZE];
-        let mut cursor = io::Cursor::new(&mut buf[..]);
-        write_clocktime(&mut cursor, self.0, precision).unwrap();
-        let pos = cursor.position() as usize;
-        let buf_str = str::from_utf8(&buf[..pos]).unwrap();
-
-        let sign = if self.0.is_some() {
-            Sign::NonNegative
-        } else {
-            Sign::Invalid
-        };
-
-        pad_clocktime(f, sign, buf_str)
+        fmt_opt_clock_time(Some(*self), f)
     }
 }
 
-#[doc(hidden)]
-impl IntoGlib for ClockTime {
-    type GlibType = ffi::GstClockTime;
+#[derive(Debug)]
+pub struct DisplayableOptClockTime(Option<ClockTime>);
 
-    fn into_glib(self) -> ffi::GstClockTime {
-        match self.0 {
-            None => ffi::GST_CLOCK_TIME_NONE,
-            Some(v) => v,
-        }
+impl fmt::Display for DisplayableOptClockTime {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt_opt_clock_time(self.0, f)
     }
 }
 
-#[doc(hidden)]
-impl FromGlib<ffi::GstClockTime> for ClockTime {
-    unsafe fn from_glib(value: ffi::GstClockTime) -> Self {
-        skip_assert_initialized!();
-        match value {
-            ffi::GST_CLOCK_TIME_NONE => ClockTime(None),
-            value => ClockTime(Some(value)),
-        }
+impl crate::utils::Displayable for Option<ClockTime> {
+    type DisplayImpl = DisplayableOptClockTime;
+
+    fn display(self) -> DisplayableOptClockTime {
+        DisplayableOptClockTime(self)
     }
 }
 
-impl glib::value::ValueType for ClockTime {
-    type Type = Self;
-}
+impl crate::utils::Displayable for ClockTime {
+    type DisplayImpl = ClockTime;
 
-#[doc(hidden)]
-unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
-    type Checker = glib::value::GenericValueTypeChecker<Self>;
-
-    unsafe fn from_value(value: &glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_uint64(
-            value.to_glib_none().0,
-        ))
-    }
-}
-
-#[doc(hidden)]
-impl glib::value::ToValue for ClockTime {
-    fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<Self>();
-        unsafe {
-            glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, self.into_glib())
-        }
-        value
-    }
-
-    fn value_type(&self) -> glib::Type {
-        Self::static_type()
-    }
-}
-
-#[doc(hidden)]
-impl glib::StaticType for ClockTime {
-    fn static_type() -> glib::Type {
-        <u64 as glib::StaticType>::static_type()
-    }
-}
-
-impl From<Duration> for ClockTime {
-    fn from(d: Duration) -> Self {
-        skip_assert_initialized!();
-
-        let nanos = d.as_nanos();
-
-        if nanos > std::u64::MAX as u128 {
-            crate::CLOCK_TIME_NONE
-        } else {
-            ClockTime::from_nseconds(nanos as u64)
-        }
-    }
-}
-
-impl convert::TryFrom<ClockTime> for Duration {
-    type Error = glib::BoolError;
-
-    fn try_from(t: ClockTime) -> Result<Self, Self::Error> {
-        skip_assert_initialized!();
-
-        t.nanoseconds()
-            .map(Duration::from_nanos)
-            .ok_or_else(|| glib::bool_error!("Can't convert ClockTime::NONE to Duration"))
+    fn display(self) -> ClockTime {
+        self
     }
 }
 
@@ -374,188 +449,184 @@ mod tests {
     use super::*;
 
     #[test]
-    #[allow(clippy::eq_op)]
-    fn ops() {
-        let ct_10 = ClockTime::from_mseconds(10);
-        let ct_20 = ClockTime::from_mseconds(20);
-        let ct_30 = ClockTime::from_mseconds(30);
+    fn opt_time_clock() {
+        let ct_1 = ClockTime(1);
+        let opt_ct_none: Option<ClockTime> = None;
 
-        let ct_none = ClockTime::none();
+        assert_eq!(ct_1.into_glib(), 1);
+        assert_eq!(Some(ct_1).into_glib(), 1);
+        assert_eq!(opt_ct_none.into_glib(), ffi::GST_CLOCK_TIME_NONE);
+
+        let ct_1_from: ClockTime = unsafe { try_from_glib(1u64) }.unwrap();
+        assert_eq!(ct_1_from, ct_1);
+
+        let opt_ct_some: Option<ClockTime> = unsafe { from_glib(1u64) };
+        assert_eq!(opt_ct_some, Some(ct_1));
+
+        let opt_ct_none: Option<ClockTime> = unsafe { from_glib(ffi::GST_CLOCK_TIME_NONE) };
+        assert_eq!(opt_ct_none, None);
+    }
+
+    #[test]
+    #[allow(clippy::eq_op, clippy::op_ref)]
+    fn ops() {
+        let ct_10 = 10 * ClockTime::MSECOND;
+        let ct_20 = 20 * ClockTime::MSECOND;
+        let ct_30 = 30 * ClockTime::MSECOND;
 
         assert_eq!(ct_10 + ct_20, ct_30);
-        assert_eq!(ct_10 + ct_none, ct_none);
-        assert_eq!(ct_none + ct_10, ct_none);
-        assert_eq!(ct_none + ct_none, ct_none);
-
+        assert_eq!(ct_10 + &ct_20, ct_30);
+        assert_eq!(&ct_10 + &ct_20, ct_30);
         assert_eq!(ct_30 - ct_20, ct_10);
-        assert_eq!(ct_30 - ct_30, ClockTime::zero());
-        assert_eq!(ct_30 - ct_none, ct_none);
-        assert_eq!(ct_none - ct_30, ct_none);
-        assert_eq!(ct_none - ct_none, ct_none);
+        assert_eq!(ct_30 - ct_30, ClockTime::ZERO);
+        assert_eq!(ct_10 * 3, ct_30);
+        assert_eq!(3 * ct_10, ct_30);
+        assert_eq!(3 * &ct_10, ct_30);
+        assert_eq!(ct_30.nseconds(), 30_000_000);
+    }
+
+    #[test]
+    fn checked_ops() {
+        let ct_1 = ClockTime::from_nseconds(1);
+        let ct_2 = ClockTime::from_nseconds(2);
+
+        let ct_max = ClockTime::from_nseconds(std::u64::MAX);
+
+        assert_eq!(ct_1.checked_add(ct_1), Some(ct_2));
+        assert_eq!(ct_1.checked_add(ct_1), Some(ct_2));
+        assert!(ct_max.checked_add(ct_1).is_none());
+
+        assert_eq!(ct_2.checked_sub(ct_1), Some(ct_1));
+        assert_eq!(ct_2.checked_sub(ct_1), Some(ct_1));
+        assert!(ct_1.checked_sub(ct_2).is_none());
     }
 
     #[test]
     fn saturating_ops() {
         let ct_1 = ClockTime::from_nseconds(1);
         let ct_2 = ClockTime::from_nseconds(2);
+        let ct_3 = ClockTime::from_nseconds(3);
 
         let ct_max = ClockTime::from_nseconds(std::u64::MAX);
-        let ct_none = ClockTime::none();
 
-        assert_eq!(ct_max.saturating_add(ct_1), Some(ct_max));
-        assert!(ct_max.saturating_add(ct_none).is_none());
-        assert!(ct_none.saturating_add(ct_max).is_none());
+        assert_eq!(ct_1.saturating_add(ct_2), ct_3);
+        assert_eq!(ct_1.saturating_add(ct_2), ct_3);
+        assert_eq!(ct_max.saturating_add(ct_1), ct_max);
 
-        assert!(ct_1.saturating_sub(ct_2).unwrap().is_zero());
-        assert!(ct_1.saturating_sub(ct_none).is_none());
-        assert!(ct_none.saturating_sub(ct_1).is_none());
+        assert_eq!(ct_3.saturating_sub(ct_2), ct_1);
+        assert_eq!(ct_3.saturating_sub(ct_2), ct_1);
+        assert!(ct_1.saturating_sub(ct_2).is_zero());
     }
 
     #[test]
-    #[allow(clippy::eq_op)]
-    fn eq() {
-        let ct_10 = ClockTime::from_mseconds(10);
-        let ct_10_2 = ClockTime::from_mseconds(10);
-        let ct_10_3 = ClockTime::from_mseconds(10);
-        let ct_20 = ClockTime::from_mseconds(20);
+    fn wrapping_ops() {
+        let ct_1 = ClockTime::NSECOND;
+        let ct_2 = 2 * ClockTime::NSECOND;
+        let ct_3 = 3 * ClockTime::NSECOND;
 
-        let ct_none = ClockTime::none();
-        let ct_none_2 = ClockTime::none();
-        let ct_none_3 = ClockTime::none();
+        let ct_max = ClockTime::from_nseconds(std::u64::MAX);
 
-        // ## Eq
+        assert_eq!(ct_1.wrapping_add(ct_2), ct_3);
+        assert_eq!(ct_1.wrapping_add(ct_2), ct_3);
+        assert_eq!(ct_max.wrapping_add(ct_1), ClockTime::ZERO);
 
-        // ### (a == b) and (a != b) are strict inverses
-        assert!(ct_10 == ct_10_2);
-        assert_ne!(ct_10 == ct_10_2, ct_10 != ct_10_2);
-
-        assert!(ct_10 != ct_20);
-        assert_ne!(ct_10 == ct_20, ct_10 != ct_20);
-
-        assert!(ct_none == ct_none_2);
-        assert_ne!(ct_none == ct_none_2, ct_none != ct_none_2);
-
-        assert!(ct_10 != ct_none);
-        assert_ne!(ct_10 == ct_none, ct_10 != ct_none);
-
-        assert!(ct_none != ct_10);
-        assert_ne!(ct_none == ct_10, ct_none != ct_10);
-
-        // ### Reflexivity (a == a)
-        assert!(ct_10 == ct_10);
-        assert!(ct_none == ct_none);
-
-        // ## PartialEq
-
-        // ### Symmetric (a == b) => (b == a)
-        assert!((ct_10 == ct_10_2) && (ct_10_2 == ct_10));
-        assert!((ct_none == ct_none_2) && (ct_none_2 == ct_none));
-
-        // ### Transitive (a == b) and (b == c) => (a == c)
-        assert!((ct_10 == ct_10_2) && (ct_10_2 == ct_10_3) && (ct_10 == ct_10_3));
-        assert!((ct_none == ct_none_2) && (ct_none_2 == ct_none_3) && (ct_none == ct_none_3));
+        assert_eq!(ct_3.wrapping_sub(ct_2), ct_1);
+        assert_eq!(ct_3.wrapping_sub(ct_2), ct_1);
+        assert_eq!(ct_1.wrapping_sub(ct_2), ct_max);
     }
 
     #[test]
-    #[allow(clippy::neg_cmp_op_on_partial_ord)]
-    fn partial_ord() {
-        let ct_10 = ClockTime::from_mseconds(10);
-        let ct_20 = ClockTime::from_mseconds(20);
-        let ct_30 = ClockTime::from_mseconds(30);
+    fn comp() {
+        let ct_0 = ClockTime::ZERO;
+        let ct_2 = 2 * ClockTime::NSECOND;
+        let ct_3 = 3 * ClockTime::NSECOND;
+        let opt_ct_none: Option<ClockTime> = None;
 
-        let ct_none = ClockTime::none();
+        assert!(ct_0 < ct_2);
+        assert!(Some(ct_0) < Some(ct_2));
+        assert!(ct_2 < ct_3);
+        assert!(Some(ct_2) < Some(ct_3));
+        assert!(ct_0 < ct_3);
+        assert!(Some(ct_0) < Some(ct_3));
 
-        // Special cases
-        assert_eq!(ct_10 < ct_none, false);
-        assert_eq!(ct_10 > ct_none, false);
-        assert_eq!(ct_none < ct_10, false);
-        assert_eq!(ct_none > ct_10, false);
+        assert!(ct_3 > ct_2);
+        assert!(Some(ct_3) > Some(ct_2));
+        assert!(ct_2 > ct_0);
+        assert!(Some(ct_2) > Some(ct_0));
+        assert!(ct_3 > ct_0);
+        assert!(Some(ct_3) > Some(ct_0));
 
-        // Asymmetric a < b => !(a > b)
-        // a < b => !(a > b)
-        assert!((ct_10 < ct_20) && !(ct_10 > ct_20));
-        // a > b => !(a < b)
-        assert!((ct_20 > ct_10) && !(ct_20 < ct_10));
-
-        // Transitive
-        // a < b and b < c => a < c
-        assert!((ct_10 < ct_20) && (ct_20 < ct_30) && (ct_10 < ct_30));
-        // a > b and b > c => a > c
-        assert!((ct_30 > ct_20) && (ct_20 > ct_10) && (ct_30 > ct_10));
-    }
-
-    #[test]
-    fn not_ord() {
-        let ct_10 = ClockTime::from_mseconds(10);
-        let ct_20 = ClockTime::from_mseconds(20);
-        let ct_none = ClockTime::none();
-
-        // Total & Antisymmetric exactly one of a < b, a == b or a > b is true
-
-        assert!((ct_10 < ct_20) ^ (ct_10 == ct_20) ^ (ct_10 > ct_20));
-
-        // Not Ord due to:
-        assert_eq!(
-            (ct_10 < ct_none) ^ (ct_10 == ct_none) ^ (ct_10 > ct_none),
-            false
-        );
-        assert_eq!(
-            (ct_none < ct_10) ^ (ct_none == ct_10) ^ (ct_none > ct_10),
-            false
-        );
-    }
-
-    #[test]
-    fn min_max() {
-        let ct_10 = ClockTime::from_nseconds(10);
-        let ct_20 = ClockTime::from_nseconds(20);
-        let ct_none = ClockTime::none();
-
-        assert_eq!(ct_10.min(ct_20).unwrap(), ct_10);
-        assert_eq!(ct_20.min(ct_10).unwrap(), ct_10);
-        assert!(ct_none.min(ct_10).is_none());
-        assert!(ct_20.min(ct_none).is_none());
-
-        assert_eq!(ct_10.max(ct_20).unwrap(), ct_20);
-        assert_eq!(ct_20.max(ct_10).unwrap(), ct_20);
-        assert!(ct_none.max(ct_10).is_none());
-        assert!(ct_20.max(ct_none).is_none());
+        assert_eq!(opt_ct_none < None, false);
+        assert_eq!(opt_ct_none > None, false);
+        // This doesn't work due to the `PartialOrd` impl on `Option<T>`
+        //assert_eq!(Some(ct_0) > opt_ct_none, false);
+        assert_eq!(Some(ct_0) < opt_ct_none, false);
     }
 
     #[test]
     fn display() {
-        let none = ClockTime::none();
-        let some = ClockTime::from_nseconds(45834908569837);
+        let none = Option::<ClockTime>::None;
+        let some = Some(45_834_908_569_837 * ClockTime::NSECOND);
         let lots = ClockTime::from_nseconds(std::u64::MAX - 1);
 
         // Simple
 
-        assert_eq!(format!("{:.0}", none), "--:--:--");
-        assert_eq!(format!("{:.3}", none), "--:--:--.---");
-        assert_eq!(format!("{}", none), "--:--:--.---------");
+        assert_eq!(format!("{:.0}", DisplayableOptClockTime(none)), "--:--:--");
+        assert_eq!(
+            format!("{:.3}", DisplayableOptClockTime(none)),
+            "--:--:--.---"
+        );
+        assert_eq!(
+            format!("{}", DisplayableOptClockTime(none)),
+            "--:--:--.---------"
+        );
 
-        assert_eq!(format!("{:.0}", some), "12:43:54");
-        assert_eq!(format!("{:.3}", some), "12:43:54.908");
-        assert_eq!(format!("{}", some), "12:43:54.908569837");
+        assert_eq!(format!("{:.0}", DisplayableOptClockTime(some)), "12:43:54");
+        assert_eq!(
+            format!("{:.3}", DisplayableOptClockTime(some)),
+            "12:43:54.908"
+        );
+        assert_eq!(
+            format!("{}", DisplayableOptClockTime(some)),
+            "12:43:54.908569837"
+        );
 
         assert_eq!(format!("{:.0}", lots), "5124095:34:33");
         assert_eq!(format!("{:.3}", lots), "5124095:34:33.709");
         assert_eq!(format!("{}", lots), "5124095:34:33.709551614");
 
         // Precision caps at 9
-        assert_eq!(format!("{:.10}", none), "--:--:--.---------");
-        assert_eq!(format!("{:.10}", some), "12:43:54.908569837");
+        assert_eq!(
+            format!("{:.10}", DisplayableOptClockTime(none)),
+            "--:--:--.---------"
+        );
+        assert_eq!(
+            format!("{:.10}", DisplayableOptClockTime(some)),
+            "12:43:54.908569837"
+        );
         assert_eq!(format!("{:.10}", lots), "5124095:34:33.709551614");
 
         // Short width
 
-        assert_eq!(format!("{:4.0}", none), "--:--:--");
-        assert_eq!(format!("{:4.3}", none), "--:--:--.---");
-        assert_eq!(format!("{:4}", none), "--:--:--.---------");
+        assert_eq!(format!("{:4.0}", DisplayableOptClockTime(none)), "--:--:--");
+        assert_eq!(
+            format!("{:4.3}", DisplayableOptClockTime(none)),
+            "--:--:--.---"
+        );
+        assert_eq!(
+            format!("{:4}", DisplayableOptClockTime(none)),
+            "--:--:--.---------"
+        );
 
-        assert_eq!(format!("{:4.0}", some), "12:43:54");
-        assert_eq!(format!("{:4.3}", some), "12:43:54.908");
-        assert_eq!(format!("{:4}", some), "12:43:54.908569837");
+        assert_eq!(format!("{:4.0}", DisplayableOptClockTime(some)), "12:43:54");
+        assert_eq!(
+            format!("{:4.3}", DisplayableOptClockTime(some)),
+            "12:43:54.908"
+        );
+        assert_eq!(
+            format!("{:4}", DisplayableOptClockTime(some)),
+            "12:43:54.908569837"
+        );
 
         assert_eq!(format!("{:4.0}", lots), "5124095:34:33");
         assert_eq!(format!("{:4.3}", lots), "5124095:34:33.709");
@@ -563,25 +634,79 @@ mod tests {
 
         // Simple padding
 
-        assert_eq!(format!("{:>9.0}", none), " --:--:--");
-        assert_eq!(format!("{:<9.0}", none), "--:--:-- ");
-        assert_eq!(format!("{:^10.0}", none), " --:--:-- ");
-        assert_eq!(format!("{:>13.3}", none), " --:--:--.---");
-        assert_eq!(format!("{:<13.3}", none), "--:--:--.--- ");
-        assert_eq!(format!("{:^14.3}", none), " --:--:--.--- ");
-        assert_eq!(format!("{:>19}", none), " --:--:--.---------");
-        assert_eq!(format!("{:<19}", none), "--:--:--.--------- ");
-        assert_eq!(format!("{:^20}", none), " --:--:--.--------- ");
+        assert_eq!(
+            format!("{:>9.0}", DisplayableOptClockTime(none)),
+            " --:--:--"
+        );
+        assert_eq!(
+            format!("{:<9.0}", DisplayableOptClockTime(none)),
+            "--:--:-- "
+        );
+        assert_eq!(
+            format!("{:^10.0}", DisplayableOptClockTime(none)),
+            " --:--:-- "
+        );
+        assert_eq!(
+            format!("{:>13.3}", DisplayableOptClockTime(none)),
+            " --:--:--.---"
+        );
+        assert_eq!(
+            format!("{:<13.3}", DisplayableOptClockTime(none)),
+            "--:--:--.--- "
+        );
+        assert_eq!(
+            format!("{:^14.3}", DisplayableOptClockTime(none)),
+            " --:--:--.--- "
+        );
+        assert_eq!(
+            format!("{:>19}", DisplayableOptClockTime(none)),
+            " --:--:--.---------"
+        );
+        assert_eq!(
+            format!("{:<19}", DisplayableOptClockTime(none)),
+            "--:--:--.--------- "
+        );
+        assert_eq!(
+            format!("{:^20}", DisplayableOptClockTime(none)),
+            " --:--:--.--------- "
+        );
 
-        assert_eq!(format!("{:>9.0}", some), " 12:43:54");
-        assert_eq!(format!("{:<9.0}", some), "12:43:54 ");
-        assert_eq!(format!("{:^10.0}", some), " 12:43:54 ");
-        assert_eq!(format!("{:>13.3}", some), " 12:43:54.908");
-        assert_eq!(format!("{:<13.3}", some), "12:43:54.908 ");
-        assert_eq!(format!("{:^14.3}", some), " 12:43:54.908 ");
-        assert_eq!(format!("{:>19}", some), " 12:43:54.908569837");
-        assert_eq!(format!("{:<19}", some), "12:43:54.908569837 ");
-        assert_eq!(format!("{:^20}", some), " 12:43:54.908569837 ");
+        assert_eq!(
+            format!("{:>9.0}", DisplayableOptClockTime(some)),
+            " 12:43:54"
+        );
+        assert_eq!(
+            format!("{:<9.0}", DisplayableOptClockTime(some)),
+            "12:43:54 "
+        );
+        assert_eq!(
+            format!("{:^10.0}", DisplayableOptClockTime(some)),
+            " 12:43:54 "
+        );
+        assert_eq!(
+            format!("{:>13.3}", DisplayableOptClockTime(some)),
+            " 12:43:54.908"
+        );
+        assert_eq!(
+            format!("{:<13.3}", DisplayableOptClockTime(some)),
+            "12:43:54.908 "
+        );
+        assert_eq!(
+            format!("{:^14.3}", DisplayableOptClockTime(some)),
+            " 12:43:54.908 "
+        );
+        assert_eq!(
+            format!("{:>19}", DisplayableOptClockTime(some)),
+            " 12:43:54.908569837"
+        );
+        assert_eq!(
+            format!("{:<19}", DisplayableOptClockTime(some)),
+            "12:43:54.908569837 "
+        );
+        assert_eq!(
+            format!("{:^20}", DisplayableOptClockTime(some)),
+            " 12:43:54.908569837 "
+        );
 
         assert_eq!(format!("{:>14.0}", lots), " 5124095:34:33");
         assert_eq!(format!("{:<14.0}", lots), "5124095:34:33 ");
@@ -595,25 +720,79 @@ mod tests {
 
         // Padding with sign or zero-extension
 
-        assert_eq!(format!("{:+11.0}", none), "   --:--:--");
-        assert_eq!(format!("{:011.0}", none), "-----:--:--");
-        assert_eq!(format!("{:+011.0}", none), "-----:--:--");
-        assert_eq!(format!("{:+15.3}", none), "   --:--:--.---");
-        assert_eq!(format!("{:015.3}", none), "-----:--:--.---");
-        assert_eq!(format!("{:+015.3}", none), "-----:--:--.---");
-        assert_eq!(format!("{:+21}", none), "   --:--:--.---------");
-        assert_eq!(format!("{:021}", none), "-----:--:--.---------");
-        assert_eq!(format!("{:+021}", none), "-----:--:--.---------");
+        assert_eq!(
+            format!("{:+11.0}", DisplayableOptClockTime(none)),
+            "   --:--:--"
+        );
+        assert_eq!(
+            format!("{:011.0}", DisplayableOptClockTime(none)),
+            "-----:--:--"
+        );
+        assert_eq!(
+            format!("{:+011.0}", DisplayableOptClockTime(none)),
+            "-----:--:--"
+        );
+        assert_eq!(
+            format!("{:+15.3}", DisplayableOptClockTime(none)),
+            "   --:--:--.---"
+        );
+        assert_eq!(
+            format!("{:015.3}", DisplayableOptClockTime(none)),
+            "-----:--:--.---"
+        );
+        assert_eq!(
+            format!("{:+015.3}", DisplayableOptClockTime(none)),
+            "-----:--:--.---"
+        );
+        assert_eq!(
+            format!("{:+21}", DisplayableOptClockTime(none)),
+            "   --:--:--.---------"
+        );
+        assert_eq!(
+            format!("{:021}", DisplayableOptClockTime(none)),
+            "-----:--:--.---------"
+        );
+        assert_eq!(
+            format!("{:+021}", DisplayableOptClockTime(none)),
+            "-----:--:--.---------"
+        );
 
-        assert_eq!(format!("{:+11.0}", some), "  +12:43:54");
-        assert_eq!(format!("{:011.0}", some), "00012:43:54");
-        assert_eq!(format!("{:+011.0}", some), "+0012:43:54");
-        assert_eq!(format!("{:+15.3}", some), "  +12:43:54.908");
-        assert_eq!(format!("{:015.3}", some), "00012:43:54.908");
-        assert_eq!(format!("{:+015.3}", some), "+0012:43:54.908");
-        assert_eq!(format!("{:+21}", some), "  +12:43:54.908569837");
-        assert_eq!(format!("{:021}", some), "00012:43:54.908569837");
-        assert_eq!(format!("{:+021}", some), "+0012:43:54.908569837");
+        assert_eq!(
+            format!("{:+11.0}", DisplayableOptClockTime(some)),
+            "  +12:43:54"
+        );
+        assert_eq!(
+            format!("{:011.0}", DisplayableOptClockTime(some)),
+            "00012:43:54"
+        );
+        assert_eq!(
+            format!("{:+011.0}", DisplayableOptClockTime(some)),
+            "+0012:43:54"
+        );
+        assert_eq!(
+            format!("{:+15.3}", DisplayableOptClockTime(some)),
+            "  +12:43:54.908"
+        );
+        assert_eq!(
+            format!("{:015.3}", DisplayableOptClockTime(some)),
+            "00012:43:54.908"
+        );
+        assert_eq!(
+            format!("{:+015.3}", DisplayableOptClockTime(some)),
+            "+0012:43:54.908"
+        );
+        assert_eq!(
+            format!("{:+21}", DisplayableOptClockTime(some)),
+            "  +12:43:54.908569837"
+        );
+        assert_eq!(
+            format!("{:021}", DisplayableOptClockTime(some)),
+            "00012:43:54.908569837"
+        );
+        assert_eq!(
+            format!("{:+021}", DisplayableOptClockTime(some)),
+            "+0012:43:54.908569837"
+        );
 
         assert_eq!(format!("{:+16.0}", lots), "  +5124095:34:33");
         assert_eq!(format!("{:016.0}", lots), "0005124095:34:33");

@@ -140,15 +140,13 @@ mod tutorial5 {
             let lslider = &lslider;
 
             if let Some(dur) = pipeline.query_duration::<gst::ClockTime>() {
-                let seconds = dur / gst::SECOND;
-                lslider.set_range(0.0, seconds.map(|v| v as f64).unwrap_or(0.0));
-            }
+                lslider.set_range(0.0, dur.seconds() as f64);
 
-            if let Some(pos) = pipeline.query_position::<gst::ClockTime>() {
-                let seconds = pos / gst::SECOND;
-                lslider.block_signal(&slider_update_signal_id);
-                lslider.set_value(seconds.map(|v| v as f64).unwrap_or(0.0));
-                lslider.unblock_signal(&slider_update_signal_id);
+                if let Some(pos) = pipeline.query_position::<gst::ClockTime>() {
+                    lslider.block_signal(&slider_update_signal_id);
+                    lslider.set_value(pos.seconds() as f64);
+                    lslider.unblock_signal(&slider_update_signal_id);
+                }
             }
 
             Continue(true)

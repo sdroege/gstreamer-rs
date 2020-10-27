@@ -25,3 +25,11 @@ impl<'a> Drop for MutexGuard<'a> {
         }
     }
 }
+
+// rustdoc-stripper-ignore-next
+/// Trait that allows accessing `Display` implementation on types external to this crate.
+pub trait Displayable {
+    type DisplayImpl: std::fmt::Display;
+
+    fn display(self) -> Self::DisplayImpl;
+}

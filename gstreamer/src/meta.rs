@@ -377,7 +377,7 @@ impl ReferenceTimestampMeta {
         buffer: &'a mut BufferRef,
         reference: &Caps,
         timestamp: ClockTime,
-        duration: ClockTime,
+        duration: impl Into<Option<ClockTime>>,
     ) -> MetaRefMut<'a, Self, Standalone> {
         skip_assert_initialized!();
         unsafe {
@@ -385,7 +385,7 @@ impl ReferenceTimestampMeta {
                 buffer.as_mut_ptr(),
                 reference.to_glib_none().0,
                 timestamp.into_glib(),
-                duration.into_glib(),
+                duration.into().into_glib(),
             );
 
             Self::from_mut_ptr(buffer, meta)
@@ -403,12 +403,12 @@ impl ReferenceTimestampMeta {
     }
 
     #[doc(alias = "get_timestamp")]
-    pub fn timestamp(&self) -> ClockTime {
+    pub fn timestamp(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.timestamp) }
     }
 
     #[doc(alias = "get_duration")]
-    pub fn duration(&self) -> ClockTime {
+    pub fn duration(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.duration) }
     }
 }
@@ -428,10 +428,12 @@ unsafe impl MetaAPI for ReferenceTimestampMeta {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl fmt::Debug for ReferenceTimestampMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use crate::utils::Displayable;
+
         f.debug_struct("ReferenceTimestampMeta")
             .field("reference", &self.reference())
-            .field("timestamp", &self.timestamp())
-            .field("duration", &self.duration())
+            .field("timestamp", &self.timestamp().display().to_string())
+            .field("duration", &self.duration().display().to_string())
             .finish()
     }
 }

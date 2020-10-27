@@ -62,6 +62,7 @@ impl<'de> Deserialize<'de> for BufferList {
 #[cfg(test)]
 mod tests {
     use crate::BufferList;
+    use crate::ClockTime;
 
     #[test]
     fn test_serialize() {
@@ -76,20 +77,20 @@ mod tests {
             let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(1.into());
+                buffer.set_pts(ClockTime::NSECOND);
                 buffer.set_offset(0);
                 buffer.set_offset_end(4);
-                buffer.set_duration(4.into());
+                buffer.set_duration(4 * ClockTime::NSECOND);
             }
             buffer_list.add(buffer);
 
             let mut buffer = Buffer::from_slice(vec![5, 6]);
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(5.into());
+                buffer.set_pts(5 * ClockTime::NSECOND);
                 buffer.set_offset(4);
                 buffer.set_offset_end(6);
-                buffer.set_duration(2.into());
+                buffer.set_duration(2 * ClockTime::NSECOND);
             }
             buffer_list.add(buffer);
         }
@@ -163,15 +164,15 @@ mod tests {
         let buffer_list: BufferList = ron::de::from_str(buffer_list_ron).unwrap();
         let mut iter = buffer_list.iter();
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.pts(), 1.into());
-        assert_eq!(buffer.dts(), None.into());
+        assert_eq!(buffer.pts(), Some(ClockTime::NSECOND));
+        assert_eq!(buffer.dts(), None);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
 
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.pts(), 5.into());
+        assert_eq!(buffer.pts(), Some(5 * ClockTime::NSECOND));
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![5, 6].as_slice());
@@ -191,20 +192,20 @@ mod tests {
             let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(1.into());
+                buffer.set_pts(ClockTime::NSECOND);
                 buffer.set_offset(0);
                 buffer.set_offset_end(4);
-                buffer.set_duration(4.into());
+                buffer.set_duration(4 * ClockTime::NSECOND);
             }
             buffer_list.add(buffer);
 
             let mut buffer = Buffer::from_slice(vec![5, 6]);
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(5.into());
+                buffer.set_pts(5 * ClockTime::NSECOND);
                 buffer.set_offset(4);
                 buffer.set_offset_end(6);
-                buffer.set_duration(2.into());
+                buffer.set_duration(2 * ClockTime::NSECOND);
             }
             buffer_list.add(buffer);
         }
@@ -213,15 +214,15 @@ mod tests {
         let buffer_list: BufferList = ron::de::from_str(buffer_list_ser.as_str()).unwrap();
         let mut iter = buffer_list.iter();
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.pts(), 1.into());
-        assert_eq!(buffer.dts(), None.into());
+        assert_eq!(buffer.pts(), Some(ClockTime::NSECOND));
+        assert_eq!(buffer.dts(), None);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
 
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.pts(), 5.into());
+        assert_eq!(buffer.pts(), Some(5 * ClockTime::NSECOND));
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![5, 6].as_slice());

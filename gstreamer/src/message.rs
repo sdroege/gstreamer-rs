@@ -956,7 +956,7 @@ impl<'a> AsyncDone<'a> {
     }
 
     #[doc(alias = "get_running_time")]
-    pub fn running_time(&self) -> crate::ClockTime {
+    pub fn running_time(&self) -> Option<crate::ClockTime> {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
 
@@ -1079,10 +1079,10 @@ impl<'a> Qos<'a> {
         &self,
     ) -> (
         bool,
-        crate::ClockTime,
-        crate::ClockTime,
-        crate::ClockTime,
-        crate::ClockTime,
+        Option<crate::ClockTime>,
+        Option<crate::ClockTime>,
+        Option<crate::ClockTime>,
+        Option<crate::ClockTime>,
     ) {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
@@ -1241,7 +1241,7 @@ impl<'a> ResetTime<'a> {
     }
 
     #[doc(alias = "get_running_time")]
-    pub fn running_time(&self) -> crate::ClockTime {
+    pub fn running_time(&self) -> Option<crate::ClockTime> {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
 

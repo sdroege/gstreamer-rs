@@ -96,10 +96,10 @@ mod tests {
             let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(1.into());
+                buffer.set_pts(Some(ClockTime::NSECOND));
                 buffer.set_offset(0);
                 buffer.set_offset_end(4);
-                buffer.set_duration(4.into());
+                buffer.set_duration(Some(4 * ClockTime::NSECOND));
             }
 
             let caps = Caps::builder("sample/caps")
@@ -112,13 +112,13 @@ mod tests {
             segment.set_rate(1f64);
             segment.set_applied_rate(0.9f64);
             segment.set_format(Format::Time);
-            segment.set_base(GenericFormattedValue::Time(ClockTime::from_nseconds(123)));
-            segment.set_offset(GenericFormattedValue::Time(ClockTime::from_nseconds(42)));
-            segment.set_start(GenericFormattedValue::Time(ClockTime::from_nseconds(1024)));
-            segment.set_stop(GenericFormattedValue::Time(ClockTime::from_nseconds(2048)));
-            segment.set_time(GenericFormattedValue::Time(ClockTime::from_nseconds(1042)));
-            segment.set_position(GenericFormattedValue::Time(ClockTime::from_nseconds(256)));
-            segment.set_duration(GenericFormattedValue::Time(ClockTime::none()));
+            segment.set_base(GenericFormattedValue::from(ClockTime::from_nseconds(123)));
+            segment.set_offset(GenericFormattedValue::from(ClockTime::from_nseconds(42)));
+            segment.set_start(GenericFormattedValue::from(ClockTime::from_nseconds(1024)));
+            segment.set_stop(GenericFormattedValue::from(ClockTime::from_nseconds(2048)));
+            segment.set_time(GenericFormattedValue::from(ClockTime::from_nseconds(1042)));
+            segment.set_position(GenericFormattedValue::from(ClockTime::from_nseconds(256)));
+            segment.set_duration(GenericFormattedValue::from(ClockTime::NONE));
 
             let info = Structure::builder("sample.info")
                 .field("f3", &123i32)
@@ -182,10 +182,10 @@ mod tests {
             let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(1.into());
+                buffer.set_pts(Some(ClockTime::NSECOND));
                 buffer.set_offset(0);
                 buffer.set_offset_end(4);
-                buffer.set_duration(4.into());
+                buffer.set_duration(Some(4 * ClockTime::NSECOND));
             }
             Sample::builder().buffer(&buffer).build()
         };
@@ -277,7 +277,7 @@ mod tests {
             )"#;
         let sample: Sample = ron::de::from_str(buffer_ron).unwrap();
         let buffer = sample.buffer().unwrap();
-        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer.pts(), Some(ClockTime::NSECOND));
         assert_eq!(buffer.offset_end(), 4);
         {
             let data = buffer.map_readable().unwrap();
@@ -326,10 +326,10 @@ mod tests {
             let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(1.into());
+                buffer.set_pts(Some(ClockTime::NSECOND));
                 buffer.set_offset(0);
                 buffer.set_offset_end(4);
-                buffer.set_duration(4.into());
+                buffer.set_duration(Some(4 * ClockTime::NSECOND));
             }
 
             let caps = Caps::builder("sample/caps")
@@ -342,13 +342,13 @@ mod tests {
             segment.set_rate(1f64);
             segment.set_applied_rate(0.9f64);
             segment.set_format(Format::Time);
-            segment.set_base(GenericFormattedValue::Time(ClockTime::from_nseconds(123)));
-            segment.set_offset(GenericFormattedValue::Time(ClockTime::from_nseconds(42)));
-            segment.set_start(GenericFormattedValue::Time(ClockTime::from_nseconds(1024)));
-            segment.set_stop(GenericFormattedValue::Time(ClockTime::from_nseconds(2048)));
-            segment.set_time(GenericFormattedValue::Time(ClockTime::from_nseconds(1042)));
-            segment.set_position(GenericFormattedValue::Time(ClockTime::from_nseconds(256)));
-            segment.set_duration(GenericFormattedValue::Time(ClockTime::none()));
+            segment.set_base(GenericFormattedValue::from(ClockTime::from_nseconds(123)));
+            segment.set_offset(GenericFormattedValue::from(ClockTime::from_nseconds(42)));
+            segment.set_start(GenericFormattedValue::from(ClockTime::from_nseconds(1024)));
+            segment.set_stop(GenericFormattedValue::from(ClockTime::from_nseconds(2048)));
+            segment.set_time(GenericFormattedValue::from(ClockTime::from_nseconds(1042)));
+            segment.set_position(GenericFormattedValue::from(ClockTime::from_nseconds(256)));
+            segment.set_duration(GenericFormattedValue::from(ClockTime::NONE));
 
             let info = Structure::builder("sample.info")
                 .field("f3", &123i32)
@@ -364,7 +364,7 @@ mod tests {
         let sample_ser = ron::ser::to_string(&sample).unwrap();
         let sample_de: Sample = ron::de::from_str(sample_ser.as_str()).unwrap();
         let buffer_de = sample_de.buffer().unwrap();
-        assert_eq!(buffer_de.pts(), 1.into());
+        assert_eq!(buffer_de.pts(), Some(ClockTime::NSECOND));
         assert_eq!(buffer_de.offset_end(), 4);
         {
             let data = buffer_de.map_readable().unwrap();

@@ -89,9 +89,7 @@ fn create_ui(app: &gtk::Application) {
         };
 
         // Query the current playing position from the underlying pipeline.
-        let position = pipeline
-            .query_position::<gst::ClockTime>()
-            .unwrap_or_else(|| 0.into());
+        let position = pipeline.query_position::<gst::ClockTime>();
         // Display the playing position in the gui.
         label.set_text(&format!("Position: {:.0}", position));
         // Tell the callback to continue calling this closure.

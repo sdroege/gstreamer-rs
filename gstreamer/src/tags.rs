@@ -951,6 +951,7 @@ pub fn merge_strings_with_comma(src: &Value) -> Value {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::ClockTime;
 
     #[test]
     fn test_add() {
@@ -961,7 +962,7 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append);
+            tags.add::<Duration>(&(ClockTime::SECOND * 120), TagMergeMode::Append);
         }
         assert_eq!(
             tags.to_string(),
@@ -978,15 +979,19 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append);
+            tags.add::<Duration>(&(ClockTime::SECOND * 120), TagMergeMode::Append);
         }
 
         assert_eq!(tags.get::<Title>().unwrap().get(), "some title");
-        assert_eq!(tags.get::<Duration>().unwrap().get(), crate::SECOND * 120);
+        assert_eq!(
+            tags.get::<Duration>().unwrap().get(),
+            ClockTime::SECOND * 120,
+        );
+        assert_eq!(tags.index::<Title>(0).unwrap().get(), "some title");
         assert_eq!(tags.index::<Title>(0).unwrap().get(), "some title");
         assert_eq!(
             tags.index::<Duration>(0).unwrap().get(),
-            crate::SECOND * 120
+            ClockTime::SECOND * 120,
         );
     }
 
@@ -1018,7 +1023,11 @@ mod tests {
                 .add_generic(&TAG_TITLE, "second title", TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_DURATION, crate::SECOND * 120, TagMergeMode::Append)
+                .add_generic(
+                    &TAG_DURATION,
+                    &(ClockTime::SECOND * 120),
+                    TagMergeMode::Append
+                )
                 .is_ok());
             assert!(tags
                 .add_generic(&TAG_TITLE, "third title", TagMergeMode::Append)
@@ -1044,7 +1053,7 @@ mod tests {
         );
         assert_eq!(
             tags.index_generic(&TAG_DURATION, 0).unwrap().get(),
-            Ok(crate::SECOND * 120)
+            Ok(Some(ClockTime::SECOND * 120))
         );
         assert_eq!(
             tags.index_generic(&TAG_TITLE, 2).unwrap().get(),
@@ -1090,7 +1099,7 @@ mod tests {
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
         let first_duration = tag_iter.next().unwrap();
-        assert_eq!(first_duration.get(), Ok(crate::SECOND * 120));
+        assert_eq!(first_duration.get(), Ok(Some(ClockTime::SECOND * 120)));
         assert!(tag_iter.next().is_none());
 
         // Iter
@@ -1106,7 +1115,7 @@ mod tests {
 
         let (tag_name, tag_value) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
-        assert_eq!(tag_value.get(), Ok(crate::SECOND * 120));
+        assert_eq!(tag_value.get(), Ok(Some(ClockTime::SECOND * 120)));
         assert!(tag_iter.next().is_none());
     }
 

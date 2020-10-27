@@ -12,7 +12,7 @@ use crate::BufferRef;
 use crate::Caps;
 use crate::CapsRef;
 use crate::FormattedSegment;
-use crate::FormattedValue;
+use crate::FormattedValueIntrinsic;
 use crate::Segment;
 use crate::Structure;
 use crate::StructureRef;
@@ -54,7 +54,7 @@ impl<'a> SampleBuilder<'a> {
         }
     }
 
-    pub fn segment<F: FormattedValue>(self, segment: &'a FormattedSegment<F>) -> Self {
+    pub fn segment<F: FormattedValueIntrinsic>(self, segment: &'a FormattedSegment<F>) -> Self {
         Self {
             segment: Some(segment.upcast_ref()),
             ..self

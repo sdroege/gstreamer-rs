@@ -226,11 +226,11 @@ pub trait ElementExtManual: 'static {
     ) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_element_query_duration")]
-    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_element_query_position")]
-    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_element_seek")]
@@ -265,9 +265,10 @@ pub trait ElementExtManual: 'static {
         T: Send + 'static;
 
     #[doc(alias = "get_current_running_time")]
-    fn current_running_time(&self) -> crate::ClockTime;
+    fn current_running_time(&self) -> Option<crate::ClockTime>;
+
     #[doc(alias = "get_current_clock_time")]
-    fn current_clock_time(&self) -> crate::ClockTime;
+    fn current_clock_time(&self) -> Option<crate::ClockTime>;
 
     #[cfg(not(feature = "v1_20"))]
     #[cfg_attr(feature = "dox", doc(cfg(not(feature = "v1_20"))))]
@@ -286,11 +287,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn current_state(&self) -> State {
-        self.state(ClockTime::zero()).1
+        self.state(Some(ClockTime::ZERO)).1
     }
 
     fn pending_state(&self) -> State {
-        self.state(ClockTime::zero()).2
+        self.state(Some(ClockTime::ZERO)).2
     }
 
     fn query(&self, query: &mut QueryRef) -> bool {
@@ -575,7 +576,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let ret = from_glib(ffi::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -613,16 +614,16 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
+    fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::default_format().into_glib(),
+                T::FormattedValueType::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::default_format(), duration.assume_init()))
+                try_from_glib(duration.assume_init()).ok()
             } else {
                 None
             }
@@ -645,16 +646,16 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
+    fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
-                T::default_format().into_glib(),
+                T::FormattedValueType::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::default_format(), cur.assume_init()))
+                try_from_glib(cur.assume_init()).ok()
             } else {
                 None
             }
@@ -779,18 +780,18 @@ impl<O: IsA<Element>> ElementExtManual for O {
         Box::pin(async move { receiver.await.expect("sender dropped") })
     }
 
-    fn current_running_time(&self) -> crate::ClockTime {
+    fn current_running_time(&self) -> Option<crate::ClockTime> {
         let base_time = self.base_time();
         let clock_time = self.current_clock_time();
 
-        clock_time - base_time
+        clock_time.zip(base_time).map(|(ct, bt)| ct - bt)
     }
 
-    fn current_clock_time(&self) -> crate::ClockTime {
+    fn current_clock_time(&self) -> Option<crate::ClockTime> {
         if let Some(clock) = self.clock() {
             clock.time()
         } else {
-            crate::CLOCK_TIME_NONE
+            crate::ClockTime::NONE
         }
     }
 

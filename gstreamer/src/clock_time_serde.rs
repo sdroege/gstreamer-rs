@@ -1,46 +1,20 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use serde::de;
-use serde::de::{Deserialize, Deserializer, Visitor};
+use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, Serializer};
-
-use std::fmt;
 
 use crate::ClockTime;
 
 impl<'a> Serialize for ClockTime {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        match self.nanoseconds() {
-            Some(ref value) => serializer.serialize_some(value),
-            None => serializer.serialize_none(),
-        }
-    }
-}
-
-struct ClockTimeVisitor;
-impl<'de> Visitor<'de> for ClockTimeVisitor {
-    type Value = ClockTime;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("an optional u64 ClockTime with ns precision")
-    }
-
-    fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        u64::deserialize(deserializer).map(ClockTime::from_nseconds)
-    }
-
-    fn visit_none<E: de::Error>(self) -> Result<Self::Value, E> {
-        Ok(ClockTime(None))
+        self.0.serialize(serializer)
     }
 }
 
 impl<'de> Deserialize<'de> for ClockTime {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         skip_assert_initialized!();
-        deserializer.deserialize_option(ClockTimeVisitor)
+        u64::deserialize(deserializer).map(ClockTime::from_nseconds)
     }
 }
 
@@ -53,7 +27,7 @@ mod tests {
         crate::init().unwrap();
 
         // Some
-        let clocktime = ClockTime::from_nseconds(42_123_456_789);
+        let clocktime = Some(ClockTime::from_nseconds(42_123_456_789));
 
         let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
 
@@ -64,7 +38,7 @@ mod tests {
         assert_eq!("42123456789".to_owned(), res);
 
         // None
-        let clocktime = ClockTime(None);
+        let clocktime = ClockTime::NONE;
 
         let res = ron::ser::to_string_pretty(&clocktime, pretty_config);
         assert_eq!(Ok("None".to_owned()), res);
@@ -79,46 +53,59 @@ mod tests {
 
         // Some
         let clocktime_ron = "Some(42123456789)";
-        let clocktime: ClockTime = ron::de::from_str(clocktime_ron).unwrap();
-        assert_eq!(clocktime.seconds(), Some(42));
-        assert_eq!(clocktime.mseconds(), Some(42_123));
-        assert_eq!(clocktime.useconds(), Some(42_123_456));
-        assert_eq!(clocktime.nseconds(), Some(42_123_456_789));
+        let clocktime: Option<ClockTime> = ron::de::from_str(clocktime_ron).unwrap();
+        let clocktime = clocktime.unwrap();
+        assert_eq!(clocktime.seconds(), 42);
+        assert_eq!(clocktime.mseconds(), 42_123);
+        assert_eq!(clocktime.useconds(), 42_123_456);
+        assert_eq!(clocktime.nseconds(), 42_123_456_789);
 
         let clocktime_json = "42123456789";
-        let clocktime: ClockTime = serde_json::from_str(clocktime_json).unwrap();
-        assert_eq!(clocktime.seconds(), Some(42));
-        assert_eq!(clocktime.mseconds(), Some(42_123));
-        assert_eq!(clocktime.useconds(), Some(42_123_456));
-        assert_eq!(clocktime.nseconds(), Some(42_123_456_789));
+        let clocktime: Option<ClockTime> = serde_json::from_str(clocktime_json).unwrap();
+        let clocktime = clocktime.unwrap();
+        assert_eq!(clocktime.seconds(), 42);
+        assert_eq!(clocktime.mseconds(), 42_123);
+        assert_eq!(clocktime.useconds(), 42_123_456);
+        assert_eq!(clocktime.nseconds(), 42_123_456_789);
 
         // None
         let clocktime_ron = "None";
-        let clocktime: ClockTime = ron::de::from_str(clocktime_ron).unwrap();
-        assert_eq!(clocktime.nseconds(), None);
+        let clocktime: Option<ClockTime> = ron::de::from_str(clocktime_ron).unwrap();
+        assert!(clocktime.is_none());
 
         let clocktime_json = "null";
-        let clocktime: ClockTime = serde_json::from_str(clocktime_json).unwrap();
-        assert_eq!(clocktime.nseconds(), None);
+        let clocktime: Option<ClockTime> = serde_json::from_str(clocktime_json).unwrap();
+        assert!(clocktime.is_none());
+        assert!(clocktime.is_none());
     }
 
     #[test]
     fn test_serde_roundtrip() {
         crate::init().unwrap();
 
-        // Some
+        // Direct
         let clocktime = ClockTime::from_nseconds(42_123_456_789);
         let clocktime_ser = ron::ser::to_string(&clocktime).unwrap();
         let clocktime: ClockTime = ron::de::from_str(clocktime_ser.as_str()).unwrap();
-        assert_eq!(clocktime.seconds(), Some(42));
-        assert_eq!(clocktime.mseconds(), Some(42_123));
-        assert_eq!(clocktime.useconds(), Some(42_123_456));
-        assert_eq!(clocktime.nseconds(), Some(42_123_456_789));
+        assert_eq!(clocktime.seconds(), 42);
+        assert_eq!(clocktime.mseconds(), 42_123);
+        assert_eq!(clocktime.useconds(), 42_123_456);
+        assert_eq!(clocktime.nseconds(), 42_123_456_789);
+
+        // Some
+        let clocktime = Some(ClockTime::from_nseconds(42_123_456_789));
+        let clocktime_ser = ron::ser::to_string(&clocktime).unwrap();
+        let clocktime: Option<ClockTime> = ron::de::from_str(clocktime_ser.as_str()).unwrap();
+        let clocktime = clocktime.unwrap();
+        assert_eq!(clocktime.seconds(), 42);
+        assert_eq!(clocktime.mseconds(), 42_123);
+        assert_eq!(clocktime.useconds(), 42_123_456);
+        assert_eq!(clocktime.nseconds(), 42_123_456_789);
 
         // None
-        let clocktime = ClockTime(None);
+        let clocktime = ClockTime::NONE;
         let clocktime_ser = ron::ser::to_string(&clocktime).unwrap();
-        let clocktime: ClockTime = ron::de::from_str(clocktime_ser.as_str()).unwrap();
-        assert_eq!(clocktime.nseconds(), None);
+        let clocktime: Option<ClockTime> = ron::de::from_str(clocktime_ser.as_str()).unwrap();
+        assert!(clocktime.is_none());
     }
 }

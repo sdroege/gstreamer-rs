@@ -40,9 +40,9 @@ impl<'a> Serialize for Buffer {
 
 #[derive(serde::Deserialize)]
 struct BufferDe {
-    pts: ClockTime,
-    dts: ClockTime,
-    duration: ClockTime,
+    pts: Option<ClockTime>,
+    dts: Option<ClockTime>,
+    duration: Option<ClockTime>,
     offset: u64,
     offset_end: u64,
     flags: BufferFlags,
@@ -77,6 +77,7 @@ impl<'de> Deserialize<'de> for Buffer {
 mod tests {
     use crate::Buffer;
     use crate::BufferFlags;
+    use crate::ClockTime;
 
     #[test]
     fn test_serialize() {
@@ -85,10 +86,10 @@ mod tests {
         let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.set_pts(1.into());
+            buffer.set_pts(Some(ClockTime::NSECOND));
             buffer.set_offset(3);
             buffer.set_offset_end(4);
-            buffer.set_duration(5.into());
+            buffer.set_duration(5 * ClockTime::NSECOND);
             buffer.set_flags(BufferFlags::LIVE | BufferFlags::DISCONT);
         }
 
@@ -149,11 +150,11 @@ mod tests {
             )
         "#;
         let buffer: Buffer = ron::de::from_str(buffer_ron).unwrap();
-        assert_eq!(buffer.pts(), 1.into());
-        assert_eq!(buffer.dts(), None.into());
+        assert_eq!(buffer.pts(), Some(ClockTime::NSECOND));
+        assert_eq!(buffer.dts(), crate::ClockTime::NONE);
         assert_eq!(buffer.offset(), 3);
         assert_eq!(buffer.offset_end(), 4);
-        assert_eq!(buffer.duration(), 5.into());
+        assert_eq!(buffer.duration(), Some(5 * ClockTime::NSECOND));
         assert_eq!(buffer.flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
         {
             let data = buffer.map_readable().unwrap();
@@ -172,11 +173,11 @@ mod tests {
             }
         "#;
         let buffer: Buffer = serde_json::from_str(buffer_json).unwrap();
-        assert_eq!(buffer.pts(), 1.into());
-        assert_eq!(buffer.dts(), None.into());
+        assert_eq!(buffer.pts(), Some(ClockTime::NSECOND));
+        assert_eq!(buffer.dts(), crate::ClockTime::NONE);
         assert_eq!(buffer.offset(), 3);
         assert_eq!(buffer.offset_end(), 4);
-        assert_eq!(buffer.duration(), 5.into());
+        assert_eq!(buffer.duration(), Some(5 * ClockTime::NSECOND));
         assert_eq!(buffer.flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
         {
             let data = buffer.map_readable().unwrap();
@@ -191,10 +192,10 @@ mod tests {
         let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.set_pts(1.into());
+            buffer.set_pts(Some(ClockTime::NSECOND));
             buffer.set_offset(3);
             buffer.set_offset_end(4);
-            buffer.set_duration(5.into());
+            buffer.set_duration(5 * ClockTime::NSECOND);
             buffer.set_flags(BufferFlags::LIVE | BufferFlags::DISCONT);
         }
 

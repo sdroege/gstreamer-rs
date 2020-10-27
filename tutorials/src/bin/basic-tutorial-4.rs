@@ -60,11 +60,8 @@ fn tutorial_main() {
                         .expect("Could not query current position.");
 
                     // If we didn't know it yet, query the stream duration
-                    if custom_data.duration == gst::CLOCK_TIME_NONE {
-                        custom_data.duration = custom_data
-                            .playbin
-                            .query_duration()
-                            .expect("Could not query current duration.")
+                    if custom_data.duration == gst::ClockTime::NONE {
+                        custom_data.duration = custom_data.playbin.query_duration();
                     }
 
                     // Print current position and total duration
@@ -73,7 +70,7 @@ fn tutorial_main() {
 
                     if custom_data.seek_enabled
                         && !custom_data.seek_done
-                        && position > 10 * gst::SECOND
+                        && position > 10 * gst::ClockTime::SECOND
                     {
                         println!("\nReached 10s, performing seek...");
                         custom_data

@@ -214,8 +214,8 @@ impl BufferPoolAcquireParams {
         unsafe {
             BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams {
                 format: start.format().into_glib(),
-                start: start.to_raw_value(),
-                stop: stop.to_raw_value(),
+                start: start.into_raw_value(),
+                stop: stop.into_raw_value(),
                 flags: flags.into_glib(),
                 _gst_reserved: [ptr::null_mut(); 4],
             })

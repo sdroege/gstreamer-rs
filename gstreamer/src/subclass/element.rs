@@ -797,7 +797,7 @@ mod tests {
         pipeline.set_state(crate::State::Playing).unwrap();
         let bus = pipeline.bus().unwrap();
 
-        let eos = bus.timed_pop_filtered(crate::CLOCK_TIME_NONE, &[crate::MessageType::Eos]);
+        let eos = bus.timed_pop_filtered(crate::ClockTime::NONE, &[crate::MessageType::Eos]);
         assert!(eos.is_some());
 
         pipeline.set_state(crate::State::Null).unwrap();

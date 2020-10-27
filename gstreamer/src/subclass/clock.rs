@@ -18,15 +18,15 @@ pub trait ClockImpl: ClockImplExt + ObjectImpl + Send + Sync {
         clock: &Self::Type,
         old_resolution: ClockTime,
         new_resolution: ClockTime,
-    ) -> ClockTime {
+    ) -> Option<ClockTime> {
         self.parent_change_resolution(clock, old_resolution, new_resolution)
     }
 
-    fn resolution(&self, clock: &Self::Type) -> ClockTime {
+    fn resolution(&self, clock: &Self::Type) -> Option<ClockTime> {
         self.parent_resolution(clock)
     }
 
-    fn internal_time(&self, clock: &Self::Type) -> ClockTime {
+    fn internal_time(&self, clock: &Self::Type) -> Option<ClockTime> {
         self.parent_internal_time(clock)
     }
 
@@ -53,11 +53,11 @@ pub trait ClockImplExt: ObjectSubclass {
         clock: &Self::Type,
         old_resolution: ClockTime,
         new_resolution: ClockTime,
-    ) -> ClockTime;
+    ) -> Option<ClockTime>;
 
-    fn parent_resolution(&self, clock: &Self::Type) -> ClockTime;
+    fn parent_resolution(&self, clock: &Self::Type) -> Option<ClockTime>;
 
-    fn parent_internal_time(&self, clock: &Self::Type) -> ClockTime;
+    fn parent_internal_time(&self, clock: &Self::Type) -> Option<ClockTime>;
 
     fn parent_wait(
         &self,
@@ -85,7 +85,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         clock: &Self::Type,
         old_resolution: ClockTime,
         new_resolution: ClockTime,
-    ) -> ClockTime {
+    ) -> Option<ClockTime> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -102,7 +102,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         }
     }
 
-    fn parent_resolution(&self, clock: &Self::Type) -> ClockTime {
+    fn parent_resolution(&self, clock: &Self::Type) -> Option<ClockTime> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -116,7 +116,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         }
     }
 
-    fn parent_internal_time(&self, clock: &Self::Type) -> ClockTime {
+    fn parent_internal_time(&self, clock: &Self::Type) -> Option<ClockTime> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -254,12 +254,17 @@ unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.change_resolution(
-        wrap.unsafe_cast_ref(),
-        from_glib(old_resolution),
-        from_glib(new_resolution),
-    )
-    .into_glib()
+    let old_resolution = match from_glib(old_resolution) {
+        Some(old_resolution) => old_resolution,
+        None => return ffi::GST_CLOCK_TIME_NONE,
+    };
+    let new_resolution = match from_glib(new_resolution) {
+        Some(new_resolution) => new_resolution,
+        None => return ffi::GST_CLOCK_TIME_NONE,
+    };
+
+    imp.change_resolution(wrap.unsafe_cast_ref(), old_resolution, new_resolution)
+        .into_glib()
 }
 
 unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(

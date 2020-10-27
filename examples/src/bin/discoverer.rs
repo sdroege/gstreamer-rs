@@ -56,7 +56,7 @@ fn print_discoverer_info(info: &DiscovererInfo) -> Result<(), Error> {
         .uri()
         .ok_or(DiscovererError("URI should not be null"))?;
     println!("URI: {}", uri);
-    println!("Duration: {}", info.duration());
+    println!("Duration: {}", info.duration().display());
     print_tags(info);
     print_stream_info(
         &info

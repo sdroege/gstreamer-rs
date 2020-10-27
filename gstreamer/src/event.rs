@@ -447,12 +447,12 @@ impl<'a> Caps<'a> {
 declare_concrete_event!(Segment);
 impl<'a> Segment<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<F: crate::FormattedValue>(segment: &crate::FormattedSegment<F>) -> Event {
+    pub fn new<F: crate::FormattedValueIntrinsic>(segment: &crate::FormattedSegment<F>) -> Event {
         skip_assert_initialized!();
         Self::builder(segment).build()
     }
 
-    pub fn builder<F: crate::FormattedValue>(
+    pub fn builder<F: crate::FormattedValueIntrinsic>(
         segment: &crate::FormattedSegment<F>,
     ) -> SegmentBuilder {
         assert_initialized_main_thread!();
@@ -776,7 +776,7 @@ impl<'a> Gap<'a> {
         GapBuilder::new(timestamp, duration)
     }
 
-    pub fn get(&self) -> (crate::ClockTime, crate::ClockTime) {
+    pub fn get(&self) -> (Option<crate::ClockTime>, Option<crate::ClockTime>) {
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
             let mut duration = mem::MaybeUninit::uninit();
@@ -818,7 +818,7 @@ impl<'a> Qos<'a> {
         QosBuilder::new(type_, proportion, diff, timestamp)
     }
 
-    pub fn get(&self) -> (crate::QOSType, f64, i64, crate::ClockTime) {
+    pub fn get(&self) -> (crate::QOSType, f64, i64, Option<crate::ClockTime>) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
             let mut proportion = mem::MaybeUninit::uninit();
@@ -919,7 +919,7 @@ impl<'a> Seek<'a> {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "get_trickmode_interval")]
     #[doc(alias = "gst_event_parse_seek_trickmode_interval")]
-    pub fn trickmode_interval(&self) -> crate::ClockTime {
+    pub fn trickmode_interval(&self) -> Option<crate::ClockTime> {
         unsafe {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
 
@@ -962,7 +962,7 @@ impl<'a> Latency<'a> {
 
     #[doc(alias = "get_latency")]
     #[doc(alias = "gst_event_parse_latency")]
-    pub fn latency(&self) -> crate::ClockTime {
+    pub fn latency(&self) -> Option<crate::ClockTime> {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
 

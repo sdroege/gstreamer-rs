@@ -185,17 +185,20 @@ impl fmt::Debug for BufferList {
 
 impl fmt::Debug for BufferListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use crate::clock_time::ClockTime;
+        use crate::utils::Displayable;
+
         let size = self.iter().map(|b| b.size()).sum::<usize>();
         let (pts, dts) = self
             .get(0)
             .map(|b| (b.pts(), b.dts()))
-            .unwrap_or((crate::ClockTime::none(), crate::ClockTime::none()));
+            .unwrap_or((ClockTime::NONE, ClockTime::NONE));
 
         f.debug_struct("BufferList")
             .field("ptr", unsafe { &self.as_ptr() })
             .field("buffers", &self.len())
-            .field("pts", &pts.to_string())
-            .field("dts", &dts.to_string())
+            .field("pts", &pts.display().to_string())
+            .field("dts", &dts.display().to_string())
             .field("size", &size)
             .finish()
     }
@@ -272,6 +275,7 @@ define_iter!(IterOwned, Buffer, |list: &BufferListRef, idx| {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::ClockTime;
 
     #[test]
     fn test_foreach() {
@@ -281,11 +285,11 @@ mod tests {
         {
             let buffer_list = buffer_list.get_mut().unwrap();
             let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(crate::ClockTime::from(0));
+            buffer.get_mut().unwrap().set_pts(ClockTime::ZERO);
             buffer_list.add(buffer);
 
             let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(crate::SECOND);
+            buffer.get_mut().unwrap().set_pts(ClockTime::SECOND);
             buffer_list.add(buffer);
         }
 
@@ -296,7 +300,10 @@ mod tests {
             true
         });
 
-        assert_eq!(res, &[(crate::ClockTime::from(0), 0), (crate::SECOND, 1)]);
+        assert_eq!(
+            res,
+            &[(Some(ClockTime::ZERO), 0), (Some(ClockTime::SECOND), 1)]
+        );
     }
 
     #[test]
@@ -307,15 +314,15 @@ mod tests {
         {
             let buffer_list = buffer_list.get_mut().unwrap();
             let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(crate::ClockTime::from(0));
+            buffer.get_mut().unwrap().set_pts(ClockTime::ZERO);
             buffer_list.add(buffer);
 
             let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(crate::SECOND);
+            buffer.get_mut().unwrap().set_pts(ClockTime::SECOND);
             buffer_list.add(buffer);
 
             let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(2 * crate::SECOND);
+            buffer.get_mut().unwrap().set_pts(2 * ClockTime::SECOND);
             buffer_list.add(buffer);
         }
 
@@ -323,13 +330,13 @@ mod tests {
         buffer_list.get_mut().unwrap().foreach_mut(|buffer, idx| {
             res.push((buffer.pts(), idx));
 
-            if buffer.pts() == crate::ClockTime::from(0) {
+            if let Some(ClockTime::ZERO) = buffer.pts() {
                 Ok(Some(buffer))
-            } else if buffer.pts() == crate::SECOND {
+            } else if let Some(ClockTime::SECOND) = buffer.pts() {
                 Ok(None)
             } else {
                 let mut new_buffer = Buffer::new();
-                new_buffer.get_mut().unwrap().set_pts(3 * crate::SECOND);
+                new_buffer.get_mut().unwrap().set_pts(3 * ClockTime::SECOND);
                 Ok(Some(new_buffer))
             }
         });
@@ -337,9 +344,9 @@ mod tests {
         assert_eq!(
             res,
             &[
-                (crate::ClockTime::from(0), 0),
-                (crate::SECOND, 1),
-                (2 * crate::SECOND, 1)
+                (Some(ClockTime::ZERO), 0),
+                (Some(ClockTime::SECOND), 1),
+                (Some(2 * ClockTime::SECOND), 1)
             ]
         );
 
@@ -352,7 +359,7 @@ mod tests {
 
         assert_eq!(
             res,
-            &[(crate::ClockTime::from(0), 0), (3 * crate::SECOND, 1)]
+            &[(Some(ClockTime::ZERO), 0), (Some(3 * ClockTime::SECOND), 1)]
         );
     }
 }

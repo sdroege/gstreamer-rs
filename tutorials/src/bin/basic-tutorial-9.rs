@@ -107,7 +107,7 @@ fn on_discovered(
         return;
     }
 
-    println!("Duration: {}", discoverer_info.duration());
+    println!("Duration: {}", discoverer_info.duration().display());
 
     if let Some(tags) = discoverer_info.tags() {
         println!("Tags:");

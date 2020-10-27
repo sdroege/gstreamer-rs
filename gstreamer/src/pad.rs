@@ -16,8 +16,8 @@ use crate::PadProbeReturn;
 use crate::PadProbeType;
 use crate::Query;
 use crate::QueryRef;
-use crate::SpecificFormattedValue;
 use crate::StaticPadTemplate;
+use crate::{SpecificFormattedValue, SpecificFormattedValueIntrinsic};
 
 use std::cell::RefCell;
 use std::mem;
@@ -243,11 +243,11 @@ pub trait PadExtManual: 'static {
     ) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_peer_query_duration")]
-    fn peer_query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn peer_query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
     fn peer_query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_peer_query_position")]
-    fn peer_query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn peer_query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
     fn peer_query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_query_convert")]
@@ -262,11 +262,11 @@ pub trait PadExtManual: 'static {
     ) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_query_duration")]
-    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "gst_pad_query_position")]
-    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T>;
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     #[doc(alias = "get_mode")]
@@ -734,7 +734,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -757,7 +757,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -772,16 +772,16 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn peer_query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
+    fn peer_query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::default_format().into_glib(),
+                T::FormattedValueType::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::default_format(), duration.assume_init()))
+                try_from_glib(duration.assume_init()).ok()
             } else {
                 None
             }
@@ -804,16 +804,16 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn peer_query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
+    fn peer_query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
                 self.as_ref().to_glib_none().0,
-                T::default_format().into_glib(),
+                T::FormattedValueType::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::default_format(), cur.assume_init()))
+                try_from_glib(cur.assume_init()).ok()
             } else {
                 None
             }
@@ -847,7 +847,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -886,16 +886,16 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
+    fn query_duration<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::default_format().into_glib(),
+                T::FormattedValueType::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::default_format(), duration.assume_init()))
+                try_from_glib(duration.assume_init()).ok()
             } else {
                 None
             }
@@ -918,16 +918,16 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
+    fn query_position<T: SpecificFormattedValueIntrinsic>(&self) -> Option<T> {
         unsafe {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_position(
                 self.as_ref().to_glib_none().0,
-                T::default_format().into_glib(),
+                T::FormattedValueType::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::default_format(), cur.assume_init()))
+                try_from_glib(cur.assume_init()).ok()
             } else {
                 None
             }

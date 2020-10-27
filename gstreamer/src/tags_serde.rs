@@ -311,6 +311,7 @@ impl<'de> Deserialize<'de> for TagList {
 mod tests {
     use crate::tags::*;
     use crate::Buffer;
+    use crate::ClockTime;
     use crate::Sample;
     use crate::TagMergeMode;
     use crate::TagScope;
@@ -325,7 +326,7 @@ mod tests {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"a title", TagMergeMode::Append); // String
             tags.add::<Title>(&"another title", TagMergeMode::Append); // String
-            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append); // u64
+            tags.add::<Duration>(&(ClockTime::SECOND * 120), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
@@ -465,9 +466,10 @@ mod tests {
 
         assert_eq!(tags.index::<Title>(0).unwrap().get(), "a title");
         assert_eq!(tags.index::<Title>(1).unwrap().get(), "another title");
+        assert_eq!(tags.index::<Title>(1).unwrap().get(), "another title");
         assert_eq!(
             tags.index::<Duration>(0).unwrap().get(),
-            crate::SECOND * 120
+            120 * ClockTime::SECOND,
         );
         assert_eq!(tags.index::<Bitrate>(0).unwrap().get(), 96_000);
         assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < std::f64::EPSILON);
@@ -534,7 +536,7 @@ mod tests {
             tags.set_scope(TagScope::Global);
             tags.add::<Title>(&"a title", TagMergeMode::Append); // String
             tags.add::<Title>(&"another title", TagMergeMode::Append); // String
-            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append); // u64
+            tags.add::<Duration>(&(ClockTime::SECOND * 120), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
