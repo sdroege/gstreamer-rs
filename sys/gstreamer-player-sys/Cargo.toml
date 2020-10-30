@@ -1,0 +1,56 @@
+[build-dependencies]
+system-deps = "1.3"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gobject-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+features = ["v1_12"]
+
+[dependencies.gstreamer-video-sys]
+path = "../gstreamer-video-sys"
+features = ["v1_12"]
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[features]
+v1_14 = []
+v1_16 = ["v1_14"]
+v1_18 = ["v1_16"]
+dox = []
+
+[lib]
+name = "gstreamer_player_sys"
+
+[package]
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libgstplayer-1.0"
+documentation = "https://slomo.pages.freedesktop.org/rustdocs/gstreamer-sys/gstreamer_player_sys/"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+links = "gstplayer-1.0"
+name = "gstreamer-player-sys"
+readme = "README.md"
+repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys"
+version = "0.10.0"
+[package.metadata.docs.rs]
+features = ["dox"]
+[package.metadata.system-deps.gstreamer_player_1_0]
+name = "gstreamer-player-1.0"
+version = "1.12"
+
+[package.metadata.system-deps.gstreamer_player_1_0.feature-versions]
+v1_14 = "1.14"
+v1_16 = "1.16"
+v1_18 = "1.18"

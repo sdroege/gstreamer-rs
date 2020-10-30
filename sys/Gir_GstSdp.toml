@@ -1,0 +1,27 @@
+[options]
+girs_dir = "gir-files"
+library = "GstSdp"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-sdp-sys"
+work_mode = "sys"
+
+extra_versions = [
+    "1.18",
+    "1.16",
+    "1.14",
+    "1.12",
+    "1.10",
+    "1.8",
+    "1.6",
+    "1.4",
+    "1.2",
+]
+
+external_libraries = [
+    "GLib",
+    "GObject"
+]
+
+[external_libraries]
+gstreamer="Gst"

@@ -1,0 +1,198 @@
+[options]
+girs_dir = "gir-files"
+library = "Gst"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-sys"
+work_mode = "sys"
+
+extra_versions = [
+    "1.18",
+    "1.16",
+    "1.14",
+    "1.12",
+    "1.10",
+    "1.8",
+    "1.6",
+    "1.4",
+    "1.2",
+]
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+ignore = [
+    "Gst.VERSION_MAJOR",
+    "Gst.VERSION_MINOR",
+    "Gst.VERSION_MICRO",
+    "Gst.VERSION_NANO",
+    "Gst.ERROR_SYSTEM",
+    "Gst.TIME_FORMAT",
+    "Gst.STIME_FORMAT",
+    "Gst.TIMEP_FORMAT",
+    "Gst.STIMEP_FORMAT",
+    "Gst.PTR_FORMAT",
+    "Gst.SEGMENT_FORMAT",
+    "Gst.FOURCC_FORMAT",
+]
+
+[[object]]
+name = "Gst.Buffer"
+status = "generate"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+    [[object.function]]
+    name = "replace"
+    version = "1.18"
+    [[object.function]]
+    name = "copy"
+    version = "1.18"
+
+[[object]]
+name = "Gst.BufferList"
+status = "generate"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+    [[object.function]]
+    name = "copy"
+    version = "1.18"
+
+[[object]]
+name = "Gst.ParamArray"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.12"
+
+[[object]]
+name = "Gst.*"
+status = "generate"
+    [[object.function]]
+    name = "reference_timestamp_meta_api_get_type"
+    version = "1.14"
+
+[[object]]
+name = "Gst.Caps"
+status = "generate"
+    [[object.function]]
+    name = "copy"
+    version = "1.16"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+    [[object.function]]
+    name = "replace"
+    version = "1.18"
+    [[object.function]]
+    name = "take"
+    version = "1.18"
+
+[[object]]
+name = "Gst.Event"
+status = "generate"
+    [[object.function]]
+    name = "copy"
+    version = "1.16"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+    [[object.function]]
+    name = "replace"
+    version = "1.18"
+    [[object.function]]
+    name = "take"
+    version = "1.18"
+    [[object.function]]
+    name = "steal"
+    version = "1.18"
+
+[[object]]
+name = "Gst.Memory"
+status = "generate"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+
+[[object]]
+name = "Gst.Message"
+status = "generate"
+    [[object.function]]
+    name = "copy"
+    version = "1.18"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+    [[object.function]]
+    name = "replace"
+    version = "1.18"
+
+[[object]]
+name = "Gst.Query"
+status = "generate"
+    [[object.function]]
+    name = "copy"
+    version = "1.18"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+    [[object.function]]
+    name = "replace"
+    version = "1.18"
+
+[[object]]
+name = "Gst.Sample"
+status = "generate"
+    [[object.function]]
+    name = "copy"
+    version = "1.18"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+
+[[object]]
+name = "Gst.TagList"
+status = "generate"
+    [[object.function]]
+    name = "copy"
+    version = "1.18"
+    [[object.function]]
+    name = "ref"
+    version = "1.18"
+    [[object.function]]
+    name = "unref"
+    version = "1.18"
+
+[[object]]
+name = "Gst.Tracer"
+status = "generate"
+    [[object.function]]
+    name = "register"
+    version = "1.18"

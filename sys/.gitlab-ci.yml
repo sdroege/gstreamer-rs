@@ -1,0 +1,118 @@
+include:
+  - remote: "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/raw/master/ci/images_template.yml"
+
+stages:
+  - "lint"
+  - "test"
+  - "extras"
+
+.base:
+  image: "registry.freedesktop.org/gstreamer/gstreamer-rs/debian/10:$RUST_VERSION-$GST_RS_IMG_TAG"
+  variables:
+    G_DEBUG: "fatal_warnings"
+  before_script:
+    - source ./ci/env.sh
+    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
+    # If cargo exists assume we probably will want to update the lockfile
+    - |
+      if command -v cargo; then
+        cargo generate-lockfile
+        cargo update
+      fi
+
+.img-stable:
+  extends: .base
+  variables:
+    RUST_VERSION: "stable"
+
+.img-1-41:
+  extends: .base
+  variables:
+    RUST_VERSION: "1.41.0"
+
+.img-nightly:
+  extends: .base
+  variables:
+    RUST_VERSION: "nightly"
+
+.cargo test:
+  stage: "test"
+  script:
+    - rustc --version
+    - cargo --version
+    - cargo build --locked --all --color=always
+    # FIXME: tests are broken
+    # https://github.com/sdroege/gstreamer-sys/issues/16
+    # - cargo test --locked --all --color=always
+    - cargo build --locked --all --all-features --color=always
+    # FIXME: tests are broken
+    # https://github.com/sdroege/gstreamer-sys/issues/16
+    # - cargo test --locked --all --all-features --color=always
+
+    # Run tests for crates we can currently run. The others
+    # need a new release of the C library first
+    - |
+        for crate in gstreamer-app-sys \
+                     gstreamer-audio-sys \
+                     gstreamer-base-sys \
+                     gstreamer-check-sys \
+                     gstreamer-gl-sys \
+                     gstreamer-mpegts-sys \
+                     gstreamer-net-sys \
+                     gstreamer-pbutils-sys \
+                     gstreamer-player-sys \
+                     gstreamer-rtsp-sys \
+                     gstreamer-sdp-sys \
+                     gstreamer-sys \
+                     gstreamer-tag-sys \
+                     gstreamer-video-sys \
+                     gstreamer-webrtc-sys \
+                     gstreamer-controller-sys; \
+            do \
+                cargo test --locked -p $crate; \
+            done
+
+test stable:
+  extends:
+    - '.cargo test'
+    - .img-stable
+
+test 1.41:
+  extends:
+    - '.cargo test'
+    - .img-1-41
+
+test nightly:
+  extends:
+    - '.cargo test'
+    - .img-nightly
+
+rustfmt:
+  extends: .img-stable
+  stage: "lint"
+  script:
+    - cargo fmt --version
+    - cargo fmt -- --color=always --check
+
+check commits:
+  extends: .img-stable
+  stage: "lint"
+  script:
+    - ci-fairy check-commits --textwidth 0 --no-signed-off-by
+
+outdated:
+  extends: .img-stable
+  allow_failure: true
+  stage: 'extras'
+  only:
+    - schedules
+  script:
+    - cargo outdated --root-deps-only --exit-code 1 -v
+
+deny:
+  extends: .img-stable
+  stage: 'extras'
+  only:
+    - schedules
+  script:
+    - cargo deny check

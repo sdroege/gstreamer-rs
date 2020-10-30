@@ -1,0 +1,56 @@
+[options]
+girs_dir = "gir-files"
+library = "GstAudio"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-audio-sys"
+work_mode = "sys"
+
+extra_versions = [
+    "1.18",
+    "1.16",
+    "1.14",
+    "1.12",
+    "1.10",
+    "1.8",
+    "1.6",
+    "1.4",
+    "1.2",
+]
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+ignore = [
+    "GstAudio.AUDIO_FORMATS_ALL",
+]
+
+[external_libraries]
+gstreamer="Gst"
+gstreamer_base="GstBase"
+
+[[object]]
+name = "GstAudio.AudioBuffer"
+status = "generate"
+    [[object.function]]
+    name = "clip"
+    version = "1.0"
+    [[object.function]]
+    name = "reorder_channels"
+    version = "1.0"
+
+[[object]]
+name = "GstAudio.AudioConverter"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.14"
+
+[[object]]
+name = "GstAudio.*"
+status = "generate"
+    [[object.function]]
+    name = "audio_meta_api_get_type"
+    version = "1.16"

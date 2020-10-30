@@ -1,0 +1,23 @@
+[workspace]
+
+members = [
+  "gstreamer-sys",
+  "gstreamer-base-sys",
+  "gstreamer-tag-sys",
+  "gstreamer-audio-sys",
+  "gstreamer-video-sys",
+  "gstreamer-pbutils-sys",
+  "gstreamer-app-sys",
+  "gstreamer-player-sys",
+  "gstreamer-mpegts-sys",
+  "gstreamer-net-sys",
+  "gstreamer-sdp-sys",
+  "gstreamer-rtsp-sys",
+  "gstreamer-rtsp-server-sys",
+  "gstreamer-webrtc-sys",
+  "gstreamer-gl-sys",
+  "gstreamer-editing-services-sys",
+  "gstreamer-check-sys",
+  "gstreamer-rtp-sys",
+  "gstreamer-controller-sys",
+]
