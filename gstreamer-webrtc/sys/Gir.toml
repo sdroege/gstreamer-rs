@@ -1,0 +1,21 @@
+[options]
+girs_dir = "../../gir-files"
+library = "GstWebRTC"
+version = "1.0"
+min_cfg_version = "1.14"
+target_path = "."
+work_mode = "sys"
+
+extra_versions = [
+    "1.18",
+    "1.16",
+]
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+[external_libraries]
+gstreamer="Gst"
+gstreamer_sdp="GstSdp"
