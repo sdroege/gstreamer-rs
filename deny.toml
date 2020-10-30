@@ -35,8 +35,5 @@ highlight = "all"
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-git = [
-  "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys",
-  "https://github.com/gtk-rs/sys",
-  "https://github.com/gtk-rs/glib",
-  "https://github.com/gtk-rs/gio",
+  "https://github.com/gtk-rs/gtk-rs",
 ]
