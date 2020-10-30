@@ -14,7 +14,7 @@ git = "https://github.com/gtk-rs/gtk-rs"
 git = "https://github.com/gtk-rs/gtk-rs"
 
 [dependencies.gstreamer-sys]
-path = "../gstreamer-sys"
+path = "../../gstreamer/sys"
 
 [dev-dependencies]
 shell-words = "1.0.0"

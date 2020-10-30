@@ -14,16 +14,16 @@ git = "https://github.com/gtk-rs/gtk-rs"
 git = "https://github.com/gtk-rs/gtk-rs"
 
 [dependencies.gstreamer-net-sys]
-path = "../gstreamer-net-sys"
+path = "../../gstreamer-net/sys"
 
 [dependencies.gstreamer-rtsp-sys]
-path = "../gstreamer-rtsp-sys"
+path = "../../gstreamer-rtsp/sys"
 
 [dependencies.gstreamer-sdp-sys]
-path = "../gstreamer-sdp-sys"
+path = "../../gstreamer-sdp/sys"
 
 [dependencies.gstreamer-sys]
-path = "../gstreamer-sys"
+path = "../../gstreamer/sys"
 
 [dev-dependencies]
 shell-words = "1.0.0"

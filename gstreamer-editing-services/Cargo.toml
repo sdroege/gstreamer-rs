@@ -18,8 +18,8 @@ bitflags = "1.0"
 glib-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
 gio-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
 gobject-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
-gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-gstreamer-editing-services-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"]}
+gstreamer-sys = { path = "../gstreamer/sys", features = ["v1_8"] }
+gstreamer-editing-services-sys = { path = "../gstreamer-editing-services/sys", features = ["v1_8"]}
 glib = { git = "https://github.com/gtk-rs/gtk-rs" }
 gio = { git = "https://github.com/gtk-rs/gtk-rs" }
 gstreamer = { path = "../gstreamer" }

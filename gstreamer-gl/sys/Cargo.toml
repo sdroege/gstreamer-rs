@@ -11,15 +11,15 @@ git = "https://github.com/gtk-rs/gtk-rs"
 git = "https://github.com/gtk-rs/gtk-rs"
 
 [dependencies.gstreamer-base-sys]
-path = "../gstreamer-base-sys"
+path = "../../gstreamer-base/sys"
 features = ["v1_14"]
 
 [dependencies.gstreamer-sys]
-path = "../gstreamer-sys"
+path = "../../gstreamer/sys"
 features = ["v1_14"]
 
 [dependencies.gstreamer-video-sys]
-path = "../gstreamer-video-sys"
+path = "../../gstreamer-video/sys"
 features = ["v1_14"]
 
 [dev-dependencies]

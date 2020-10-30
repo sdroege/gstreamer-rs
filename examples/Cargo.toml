@@ -19,7 +19,7 @@ ges = { package = "gstreamer-editing-services", path = "../gstreamer-editing-ser
 gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", optional = true }
 gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp", optional = true }
 gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "../gstreamer-rtsp-server", optional = true }
-gst-rtsp-server-sys = { package = "gstreamer-rtsp-server-sys", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"], optional = true }
+gst-rtsp-server-sys = { package = "gstreamer-rtsp-server-sys", path = "../gstreamer-rtsp-server/sys", features = ["v1_8"], optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gio = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }

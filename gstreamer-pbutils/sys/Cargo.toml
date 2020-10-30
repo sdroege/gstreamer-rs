@@ -11,13 +11,13 @@ git = "https://github.com/gtk-rs/gtk-rs"
 git = "https://github.com/gtk-rs/gtk-rs"
 
 [dependencies.gstreamer-audio-sys]
-path = "../gstreamer-audio-sys"
+path = "../../gstreamer-audio/sys"
 
 [dependencies.gstreamer-sys]
-path = "../gstreamer-sys"
+path = "../../gstreamer/sys"
 
 [dependencies.gstreamer-video-sys]
-path = "../gstreamer-video-sys"
+path = "../../gstreamer-video/sys"
 
 [dev-dependencies]
 shell-words = "1.0.0"
