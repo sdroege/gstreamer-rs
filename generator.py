@@ -66,29 +66,38 @@ def build_gir_if_needed(updated_submodule):
             return False
     return True
 
+def regen_crates(path, level=0):
+    for entry in listdir(path):
+        entry_file = join(path, entry)
+        if isdir(entry_file):
+            if level < 2 and not regen_crates(entry_file, level + 1):
+                return False
+        elif entry == 'Gir.toml':
+            print('==> Regenerating "{}"...'.format(entry_file))
 
-def regen_crates():
-    for entry in [f for f in listdir('.') if isfile(join('.', f))]:
-        if entry.startswith('Gir_Gst') and entry.endswith('.toml'):
-            print('==> Regenerating "{}"...'.format(entry))
+            args = ['./gir/target/release/gir', '-c', entry_file, '-o', path, '-d', 'gir-files']
+            if level > 1:
+                args.append('-m')
+                args.append('sys')
+            error = False
             try:
-                run_command(['./gir/target/release/gir', '-c', entry])
+                error = run_command(args) is False
             except Exception as err:
                 print('The following error occurred: {}'.format(err))
+                error = True
+            if error is True:
                 line = input('Do you want to continue? [y/N] ').strip().lower()
                 if line != 'y':
-                    sys.exit(1)
+                    return False
             print('<== Done!')
-
+    return True
 
 def main():
-    if def_check_submodule("gir-files") == FAILURE:
-        return 1
     if not build_gir_if_needed(def_check_submodule("gir")):
         return 1
 
     print('=> Regenerating crates...')
-    if not regen_crates():
+    if not regen_crates("."):
         return 1
     if not run_command(['cargo', 'fmt']):
         return 1

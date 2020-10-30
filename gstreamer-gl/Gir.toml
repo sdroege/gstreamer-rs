@@ -1,9 +1,9 @@
 [options]
-girs_dir = "gir-files"
+girs_dir = "../gir-files"
 library = "GstGL"
 version = "1.0"
 min_cfg_version = "1.14"
-target_path = "gstreamer-gl"
+target_path = "."
 work_mode = "normal"
 concurrency = "send+sync"
 generate_safety_asserts = true

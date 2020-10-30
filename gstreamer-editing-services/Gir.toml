@@ -1,9 +1,9 @@
 [options]
-girs_dir = "gir-files"
+girs_dir = "../gir-files"
 library = "GES"
 version = "1.0"
 min_cfg_version = "1.8"
-target_path = "gstreamer-editing-services"
+target_path = "."
 work_mode = "normal"
 generate_safety_asserts = true
 single_version_file = true
