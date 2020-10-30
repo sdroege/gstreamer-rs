@@ -1,6 +1,4 @@
-# NOTE: The canonical repository for gstreamer-sys has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys)!
-
-# gstreamer-check-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-check-sys.svg)](https://crates.io/crates/gstreamer-check-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/commits/master)
+# gstreamer-check-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-check-sys.svg)](https://crates.io/crates/gstreamer-check-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Check library) FFI bindings for Rust.
 

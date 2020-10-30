@@ -50,7 +50,7 @@ license = "MIT"
 links = "gstpbutils-1.0"
 name = "gstreamer-pbutils-sys"
 readme = "README.md"
-repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys"
+repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.10.0"
 [package.metadata.docs.rs]
 features = ["dox"]

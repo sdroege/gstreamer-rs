@@ -1,6 +1,4 @@
-# NOTE: The canonical repository for gstreamer-sys has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys)!
-
-# gstreamer-rtp-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-rtp-sys.svg)](https://crates.io/crates/gstreamer-rtp-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/commits/master)
+# gstreamer-rtp-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-rtp-sys.svg)](https://crates.io/crates/gstreamer-rtp-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (RTP library) FFI bindings for Rust.
 
