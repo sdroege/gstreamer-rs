@@ -197,20 +197,22 @@ plugins-update-nightly:
       # Keep features in sync with below
     - |
       for crate in gstreamer*; do
-        if [ -n "$ALL_FEATURES" ]; then
-          if [ $crate = "gstreamer" ]; then
-            FEATURES=ser_de,v1_18
-          elif [ $crate = "gstreamer-gl" ]; then
-            FEATURES=egl,x11,wayland,v1_18
-          else
-            FEATURES=v1_18
-          fi
+        if [ -e $crate/Cargo.toml ]; then
+          if [ -n "$ALL_FEATURES" ]; then
+            if [ $crate = "gstreamer" ]; then
+              FEATURES=ser_de,v1_18
+            elif [ $crate = "gstreamer-gl" ]; then
+              FEATURES=egl,x11,wayland,v1_18
+            else
+              FEATURES=v1_18
+            fi
 
-          cargo build --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
-          G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
-        else
-          cargo build --locked --color=always --manifest-path $crate/Cargo.toml
-          G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml
+            cargo build --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+            G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+          else
+            cargo build --locked --color=always --manifest-path $crate/Cargo.toml
+            G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml
+          fi
         fi
       done
 
@@ -274,15 +276,17 @@ clippy:
       # Keep features in sync with above
     - |
       for crate in gstreamer*; do
-        if [ $crate = "gstreamer" ]; then
-          FEATURES=ser_de,v1_18
-        elif [ $crate = "gstreamer-gl" ]; then
-          FEATURES=egl,x11,wayland,v1_18
-        else
-          FEATURES=v1_18
-        fi
+        if [ -e $crate/Cargo.toml ]; then
+          if [ $crate = "gstreamer" ]; then
+            FEATURES=ser_de,v1_18
+          elif [ $crate = "gstreamer-gl" ]; then
+            FEATURES=egl,x11,wayland,v1_18
+          else
+            FEATURES=v1_18
+          fi
 
-        cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
+          cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
+        fi
       done
     # And also run over all the examples/tutorials
     - |
