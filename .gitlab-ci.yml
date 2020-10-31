@@ -49,8 +49,8 @@ stages:
     # the lockfile
     - |
       if command -v cargo; then
-        cargo generate-lockfile
-        cargo update
+        cargo generate-lockfile --color=always
+        cargo update --color=always
       fi
 
 .debian:10-base:
@@ -289,7 +289,7 @@ test nightly all-features:
                      gstreamer-video/sys \
                      gstreamer-webrtc/sys; \
             do \
-                cargo test --locked --manifest-path $crate/Cargo.toml; \
+                cargo test --locked --color=always --manifest-path $crate/Cargo.toml; \
             done
 
 test stable sys:
@@ -351,7 +351,7 @@ deny:
   only:
     - schedules
   script:
-    - cargo deny check
+    - cargo deny --color=always check
 
 gir-checks:
   extends: .img-stable
@@ -359,9 +359,9 @@ gir-checks:
   script:
     - git clone --depth 1 https://github.com/gtk-rs/checker
     - cd checker && echo '[workspace]' >> Cargo.toml
-    - cargo build --locked --release
+    - cargo build --locked --color=always --release
     - |
-      cargo run --release -- \
+      cargo run --color=always --release -- \
         --gir-file ../Gir_Gst.toml ../gstreamer/ \
         --gir-file ../Gir_GstApp.toml ../gstreamer-app \
         --gir-file ../Gir_GstAudio.toml ../gstreamer-audio/ \
@@ -393,7 +393,7 @@ outdated:
   only:
     - schedules
   script:
-    - cargo outdated --root-deps-only --exit-code 1 -v
+    - cargo outdated --color=always --root-deps-only --exit-code 1 -v
 
 pages:
   extends: .img-stable
@@ -402,7 +402,7 @@ pages:
     - |
       for crate in gstreamer*; do
         cd $crate
-        cargo doc --features --features=dox,embed-lgpl-docs
+        cargo doc --color=always --features --features=dox,embed-lgpl-docs
         cd ..
       done
     - mv target/doc public/
