@@ -38,7 +38,7 @@ name = "gstreamer_mpegts_sys"
 [package]
 authors = ["Russel Winder <russel@winder.org.uk>", "Sebastian Dröge <sebastian@centricular.com>"]
 build = "build.rs"
-documentation = "https://slomo.pages.freedesktop.org/rustdocs/gstreamer-sys/gstreamer_mpegts_sys/"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_mpegts_sys/"
 description = "FFI bindings to libgstmpegts-1.0"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
