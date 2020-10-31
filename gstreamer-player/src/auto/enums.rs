@@ -116,6 +116,7 @@ impl FromGlib<gst_player_sys::GstPlayerError> for PlayerError {
 impl ErrorDomain for PlayerError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_player_sys::gst_player_error_quark()) }
     }
 

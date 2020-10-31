@@ -475,6 +475,7 @@ impl FromGlib<gst_sys::GstCoreError> for CoreError {
 impl ErrorDomain for CoreError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_sys::gst_core_error_quark()) }
     }
 
@@ -986,6 +987,7 @@ impl FromGlib<gst_sys::GstLibraryError> for LibraryError {
 impl ErrorDomain for LibraryError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_sys::gst_library_error_quark()) }
     }
 
@@ -1411,6 +1413,7 @@ impl FromGlib<gst_sys::GstParseError> for ParseError {
 impl ErrorDomain for ParseError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_sys::gst_parse_error_quark()) }
     }
 
@@ -1498,6 +1501,7 @@ impl FromGlib<gst_sys::GstPluginError> for PluginError {
 impl ErrorDomain for PluginError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_sys::gst_plugin_error_quark()) }
     }
 
@@ -1882,6 +1886,7 @@ impl FromGlib<gst_sys::GstResourceError> for ResourceError {
 impl ErrorDomain for ResourceError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_sys::gst_resource_error_quark()) }
     }
 
@@ -2285,6 +2290,7 @@ impl FromGlib<gst_sys::GstStreamError> for StreamError {
 impl ErrorDomain for StreamError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_sys::gst_stream_error_quark()) }
     }
 
@@ -3043,6 +3049,7 @@ impl FromGlib<gst_sys::GstURIError> for URIError {
 impl ErrorDomain for URIError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_sys::gst_uri_error_quark()) }
     }
 

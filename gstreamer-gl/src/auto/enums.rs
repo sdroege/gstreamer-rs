@@ -65,6 +65,7 @@ impl FromGlib<gst_gl_sys::GstGLContextError> for GLContextError {
 impl ErrorDomain for GLContextError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_gl_sys::gst_gl_context_error_quark()) }
     }
 
@@ -320,6 +321,7 @@ impl FromGlib<gst_gl_sys::GstGLSLError> for GLSLError {
 impl ErrorDomain for GLSLError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_gl_sys::gst_glsl_error_quark()) }
     }
 
@@ -705,6 +707,7 @@ impl FromGlib<gst_gl_sys::GstGLWindowError> for GLWindowError {
 impl ErrorDomain for GLWindowError {
     fn domain() -> Quark {
         skip_assert_initialized!();
+
         unsafe { from_glib(gst_gl_sys::gst_gl_window_error_quark()) }
     }
 
