@@ -362,10 +362,12 @@ gir-checks:
     - cargo build --locked --release
     - |
       cargo run --release -- \
+        --gir-file ../Gir_Gst.toml ../gstreamer/ \
         --gir-file ../Gir_GstApp.toml ../gstreamer-app \
         --gir-file ../Gir_GstAudio.toml ../gstreamer-audio/ \
         --gir-file ../Gir_GstBase.toml ../gstreamer-base \
         --gir-file ../Gir_GstCheck.toml ../gstreamer-check/ \
+        --gir-file ../Gir_GstController.toml ../gstreamer-controller/ \
         --gir-file ../Gir_GstEditingServices.toml ../gstreamer-editing-services/ \
         --gir-file ../Gir_GstGL.toml ../gstreamer-gl/ \
         --gir-file ../Gir_GstNet.toml ../gstreamer-net/ \
@@ -375,7 +377,6 @@ gir-checks:
         --gir-file ../Gir_GstRtspServer.toml ../gstreamer-rtsp-server/ \
         --gir-file ../Gir_GstRtsp.toml ../gstreamer-rtsp/ \
         --gir-file ../Gir_GstSdp.toml ../gstreamer-sdp/ \
-        --gir-file ../Gir_Gst.toml ../gstreamer/ \
         --gir-file ../Gir_GstVideo.toml ../gstreamer-video/ \
         --gir-file ../Gir_GstWebRTC.toml ../gstreamer-webrtc/
     - cd ..
