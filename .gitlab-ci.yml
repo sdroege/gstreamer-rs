@@ -277,7 +277,6 @@ test nightly all-features:
                      gstreamer-base/sys \
                      gstreamer-check/sys \
                      gstreamer-controller/sys \
-                     gstreamer-gl/sys \
                      gstreamer-mpegts/sys \
                      gstreamer-net/sys \
                      gstreamer-pbutils/sys \
