@@ -265,7 +265,6 @@ test nightly all-features:
     - |
       for crate in gstreamer*/sys; do
         if [ -e $crate/Cargo.toml ]; then
-          cargo build --locked --color=always --manifest-path $crate/Cargo.toml
           cargo build --locked --color=always --manifest-path $crate/Cargo.toml --all-features
         fi
       done
@@ -290,7 +289,7 @@ test nightly all-features:
                      gstreamer-video/sys \
                      gstreamer-webrtc/sys; \
             do \
-                cargo test --locked --color=always --manifest-path $crate/Cargo.toml; \
+                cargo test --locked --color=always --manifest-path $crate/Cargo.toml --all-features; \
             done
 
 test stable sys:
