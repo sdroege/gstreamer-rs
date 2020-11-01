@@ -61,18 +61,18 @@ stages:
 .debian:10-stable:
   extends: .debian:10
   variables:
-    RUST_VERSION: "1.46.0"
+    RUST_VERSION: '$GST_RS_STABLE'
     RUST_IMAGE_FULL: "1"
 
-.debian:10-1-41:
+.debian:10-msrv:
   extends: .debian:10
   variables:
-    RUST_VERSION: "1.41.0"
+    RUST_VERSION: '$GST_RS_MSRV'
 
 .debian:10-nightly:
   extends: .debian:10
   variables:
-    RUST_VERSION: "nightly"
+    RUST_VERSION: 'nightly'
 
 .build-base-image:
   extends:
@@ -100,10 +100,10 @@ build-stable:
     - .build-final-image
     - .debian:10-stable
 
-build-1-41:
+build-msrv:
   extends:
     - .build-final-image
-    - .debian:10-1-41
+    - .debian:10-msrv
 
 build-nightly:
   extends:
@@ -129,9 +129,9 @@ update-nightly:
     - .debian:10-stable
     - .dist-debian-container
 
-.img-1-41:
+.img-msrv:
   extends:
-    - .debian:10-1-41
+    - .debian:10-msrv
     - .dist-debian-container
 
 .img-nightly:
@@ -174,13 +174,13 @@ plugins-update-stable:
   variables:
     UPDATE_IMG: "stable"
 
-plugins-update-1-41:
+plugins-update-msrv:
   extends:
     - .plugins-update
-    - .img-1-41
+    - .img-msrv
   image: registry.freedesktop.org/freedesktop/ci-templates/buildah:2020-03-04
   variables:
-    UPDATE_IMG: "1-41"
+    UPDATE_IMG: "msrv"
 
 plugins-update-nightly:
   extends:
@@ -225,10 +225,10 @@ plugins-update-nightly:
         cargo build --locked --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
 
-test 1.41:
+test msrv:
   extends:
     - '.cargo test'
-    - .img-1-41
+    - .img-msrv
 
 test stable:
   extends:
@@ -296,10 +296,10 @@ test stable sys:
     - '.cargo test sys'
     - .img-stable
 
-test 1.41 sys:
+test msrv sys:
   extends:
     - '.cargo test sys'
-    - .img-1-41
+    - .img-msrv
 
 test nightly sys:
   extends:
