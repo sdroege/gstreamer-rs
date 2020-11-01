@@ -2,7 +2,7 @@
 # to build the images used by the ci.
 #
 # Here is how to properly update thoses images:
-# - new Rust stable version: update GST_RS_IMG_TAG
+# - new Rust stable version: update GST_RS_IMG_TAG and update Rust version
 # - add dependencies: update FDO_DISTRIBUTION_PACKAGES and update GST_RS_IMG_TAG
 # - update GStreamer version: update the tag in ci/install-gst.sh and update GST_RS_IMG_TAG
 #
@@ -61,7 +61,8 @@ stages:
 .debian:10-stable:
   extends: .debian:10
   variables:
-    RUST_VERSION: "stable"
+    RUST_VERSION: "1.46.0"
+    RUST_IMAGE_FULL: "1"
 
 .debian:10-1-41:
   extends: .debian:10
@@ -87,7 +88,7 @@ stages:
   stage: container-final
   variables:
     FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/10:base-$GST_RS_IMG_TAG'
-    FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $RUST_VERSION'
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $RUST_VERSION $RUST_IMAGE_FULL'
 
 build-base:
   extends:
