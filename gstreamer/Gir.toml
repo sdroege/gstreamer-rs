@@ -79,7 +79,7 @@ trait_name = "GstBinExt"
     [[object.signal]]
     name = "do-latency"
     # Use Result<(), glib::BoolError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add"
@@ -118,40 +118,40 @@ final_type = true
     [[object.function]]
     name = "set_sync_handler"
     # Into<Option<_>> makes this hard to use
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_signal_watch_full"
     # Priority
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "timed_pop_filtered"
     # Uses enum as flags
-    ignore = true
+    manual = true
     [[object.function]]
     name = "pop_filtered"
     # Uses enum as flags
-    ignore = true
+    manual = true
     [[object.function]]
     name = "poll"
     # Uses enum as flags
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "create_watch"
     # More convenient manual implementation
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_watch"
     # More specific trait bounds possible for the closure
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_watch_full"
     # More specific trait bounds possible for the closure
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "remove_watch"
@@ -204,10 +204,10 @@ status = "generate"
 manual_traits = ["ChildProxyExtManual"]
     [[object.function]]
     name = "get_property"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "set_property"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.ClockTime"
@@ -276,7 +276,7 @@ status = "generate"
 manual_traits = ["TagSetterExtManual"]
     [[object.function]]
     name = "add_tag_value"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.TocScope"
@@ -511,22 +511,22 @@ manual_traits = ["ElementExtManual"]
     [[object.function]]
     name = "call_async"
     # more specific closure type possible
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_current_running_time"
     # manual implementation also works for earlier versions
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_current_clock_time"
     # manual implementation also works for earlier versions
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "post_message"
     # takes ownership of message
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_pad"
@@ -591,32 +591,32 @@ manual_traits = ["ElementExtManual"]
     [[object.function]]
     name = "change_state"
     # Use Result<StateChangeSuccess, StateChangeError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "continue_state"
     # Use Result<StateChangeSuccess, StateChangeError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_state"
     # Use Result<StateChangeSuccess, StateChangeError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_state"
     # Use Result<StateChangeSuccess, StateChangeError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query"
     # correct mutability
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "send_event"
     # Pass by value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_context_unlocked"
@@ -626,42 +626,42 @@ manual_traits = ["ElementExtManual"]
     [[object.function]]
     name = "add_property_deep_notify_watch"
     # ulong
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_property_notify_watch"
     # ulong
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "remove_property_notify_watch"
     # ulong
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_duration"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_position"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_convert"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "seek"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "seek_simple"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "state_change_return_get_name"
@@ -676,21 +676,21 @@ manual_traits = ["ElementExtManual"]
     [[object.function]]
     name = "get_metadata"
     # better manual function
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_pad_template"
     # better manual function
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_pad_template_list"
     # better manual function
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "register"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.ElementFactory"
@@ -732,12 +732,12 @@ manual_traits = ["DeviceProviderExtManual"]
 
     [[object.function]]
     name = "register"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_metadata"
     # better manual function
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.DeviceMonitor"
@@ -746,12 +746,12 @@ manual_traits = ["DeviceMonitorExtManual"]
     [[object.function]]
     name = "new"
     # Work-around for 1.14 switch from transfer-floating to transfer-full
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_filter"
     # Return Option<DeviceMonitorFilterId>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_bus"
@@ -766,7 +766,7 @@ manual_traits = ["DeviceMonitorExtManual"]
     [[object.function]]
     name = "remove_filter"
     # Use DeviceMonitorFilterId and return Result<(), glib::BoolError>
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.Device"
@@ -908,167 +908,167 @@ manual_traits = ["PadExtManual"]
     [[object.function]]
     name = "remove_probe"
     # Don't use a ulong
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "chain"
     # Move buffer
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "push"
     # Move buffer
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "chain_list"
     # Move buffer
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "push_list"
     # Move buffer
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "pull_range"
     # Buffer can be NULL
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_range"
     # Buffer can be NULL
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_last_flow_return"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query"
     # Correct mutability
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "peer_query"
     # Correct mutability
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_default"
     # Correct mutability
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "proxy_query_caps"
     # Correct mutability
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "proxy_query_accept_caps"
     # Correct mutability
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "event_default"
     # Pass by value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "push_event"
     # Pass by value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "send_event"
     # Pass by value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "link"
     # Use Result<PadLinkSuccess, PadLinkError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "link_full"
     # Use Result<PadLinkSuccess, PadLinkError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "store_sticky_event"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new"
     # Builder
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new_from_template"
     # Builder
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new_from_static_template"
     # Builder
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_duration"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_position"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_convert"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "peer_query_duration"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "peer_query_position"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "peer_query_convert"
     # formatted value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "link_get_name"
     # Wrong place
-    ignore = true
+    manual = true
 
     [[object.function]]
     pattern = "set_.*_function_full"
     # More specific closure trait bounds possible
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "start_task"
     # More specific closure trait bounds possible
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "sticky_events_foreach"
     # Complex closure argument handling
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_probe"
     # Complex closure argument handling
-    ignore = true
+    manual = true
 
     [[object.property]]
     name = "template"
@@ -1092,7 +1092,7 @@ final_type = true
     [[object.function]]
     name = "new_from_static_pad_template_with_gtype"
     # static pad template manual
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.GhostPad"
@@ -1104,19 +1104,19 @@ status = "generate"
 
     [[object.function]]
     name = "new"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new_from_template"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new_no_target"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new_no_target_from_template"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "construct"
@@ -1125,12 +1125,12 @@ status = "generate"
     [[object.function]]
     name = "activate_mode_default"
     # wrong instance type
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "internal_activate_mode_default"
     # wrong instance type
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.ProxyPad"
@@ -1140,17 +1140,17 @@ manual_traits = ["ProxyPadExtManual"]
     [[object.function]]
     name = "chain_default"
     # Buffer move
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "chain_list_default"
     # Buffer move
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "getrange_default"
     # Buffer move
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Gst.Stream"
@@ -1159,7 +1159,7 @@ final_type = true
     [[object.function]]
     name = "new"
     # Work-around for 1.14 switch from transfer-floating to transfer-full
-    ignore = true
+    manual = true
 
     [[object.property]]
     name = "caps"
@@ -1188,12 +1188,12 @@ final_type = true
     [[object.function]]
     name = "new"
     # Work-around for 1.14 switch from transfer-floating to transfer-full
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_stream"
     # Ignore return value which is always `true`
-    ignore = true
+    manual = true
 
     [[object.property]]
     name = "upstream-id"
@@ -1218,12 +1218,12 @@ final_type = true
     [[object.function]]
     name = "set_cache_data"
     # pass by value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_cache_data"
     # structure ref
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_description"
@@ -1284,11 +1284,11 @@ manual_traits = ["PluginFeatureExtManual"]
 
     [[object.function]]
     name = "get_rank"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_rank"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "load"
@@ -1331,27 +1331,27 @@ manual_traits = ["BufferPoolExtManual"]
     [[object.function]]
     name = "get_config"
     # A different type
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_config"
     # Takes ownership
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "acquire_buffer"
     # Params and return value
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "release_buffer"
     # Takes ownership
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new"
     # Work-around for 1.14 switch from transfer-floating to transfer-full
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_active"
@@ -1808,7 +1808,7 @@ generate_builder = true
     rename = "get_value"
     [[object.function]]
     name = "control_source_get_value_array"
-    ignore = true
+    manual = true
 
 
 [[object]]
@@ -1818,4 +1818,4 @@ manual_traits = ["ControlBindingExtManual"]
 generate_builder = true
     [[object.function]]
     name = "get_g_value_array"
-    ignore = true
+    manual = true

@@ -217,7 +217,7 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 //    unsafe { TODO: call gst_sys:gst_tracing_get_active_tracers() }
 //}
 
-//pub fn tracing_register_hook<P: FnOnce() + 'static>(tracer: /*Ignored*/&Tracer, detail: &str, func: P) {
+//pub fn tracing_register_hook<P: FnOnce() + Send + Sync + 'static>(tracer: /*Ignored*/&Tracer, detail: &str, func: P) {
 //    unsafe { TODO: call gst_sys:gst_tracing_register_hook() }
 //}
 
