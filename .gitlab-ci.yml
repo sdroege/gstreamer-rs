@@ -41,7 +41,6 @@ stages:
 .debian:10:
   variables:
     FDO_DISTRIBUTION_VERSION: 10
-    FDO_DISTRIBUTION_TAG: '$RUST_VERSION-$GST_RS_IMG_TAG'
   before_script:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
@@ -61,18 +60,21 @@ stages:
 .debian:10-stable:
   extends: .debian:10
   variables:
-    RUST_VERSION: '$GST_RS_STABLE'
     RUST_IMAGE_FULL: "1"
+    FDO_DISTRIBUTION_TAG: '$GST_RS_STABLE-$GST_RS_IMG_TAG'
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_STABLE $RUST_IMAGE_FULL'
 
 .debian:10-msrv:
   extends: .debian:10
   variables:
-    RUST_VERSION: '$GST_RS_MSRV'
+    FDO_DISTRIBUTION_TAG: '$GST_RS_MSRV-$GST_RS_IMG_TAG'
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_MSRV $RUST_IMAGE_FULL'
 
 .debian:10-nightly:
   extends: .debian:10
   variables:
-    RUST_VERSION: 'nightly'
+    FDO_DISTRIBUTION_TAG: 'nightly-$GST_RS_IMG_TAG'
+    FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh nightly $RUST_IMAGE_FULL'
 
 .build-base-image:
   extends:
@@ -88,7 +90,6 @@ stages:
   stage: container-final
   variables:
     FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/10:base-$GST_RS_IMG_TAG'
-    FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $RUST_VERSION $RUST_IMAGE_FULL'
 
 build-base:
   extends:
