@@ -40,7 +40,7 @@ final_type = true
     [[object.function]]
     name = "new"
     # Floating reference handling
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstNet.PtpClock"
@@ -50,7 +50,7 @@ final_type = true
     [[object.function]]
     name = "new"
     # Floating reference handling
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstNet.NetClientClock"
@@ -60,7 +60,7 @@ final_type = true
     [[object.function]]
     name = "new"
     # Floating reference handling
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstNet.NetTimeProvider"
@@ -70,4 +70,4 @@ final_type = true
     [[object.function]]
     name = "new"
     # Floating reference handling
-    ignore = true
+    manual = true
