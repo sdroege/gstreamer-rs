@@ -88,4 +88,4 @@ final_type = true
     [[object.function]]
     name = "on_error"
     # takes ownership of SDP message
-    ignore = true
+    manual = true
