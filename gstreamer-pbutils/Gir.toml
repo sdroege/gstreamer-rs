@@ -83,7 +83,7 @@ final_type = true
     # Manually implemented to use ClockTime
     [[object.property]]
     name = "timeout"
-    ignore = true
+    manual = true
 
     [[object.property]]
     name = "use-cache"
@@ -136,16 +136,16 @@ final_type = true
     # Implement manually to expose as gst::Fraction
     [[object.function]]
     name = "get_framerate_num"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "get_framerate_denom"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "get_par_num"
-    ignore = true
+    manual = true
     [[object.function]]
     name = "get_par_denom"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstPbutils.DiscovererSubtitleInfo"
@@ -164,14 +164,14 @@ status = "generate"
     # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"
-    ignore = true
+    manual = true
     [[object.function]]
     pattern = "set_.*"
-    ignore = true
+    manual = true
 
     [[object.function]]
     pattern = "get_restriction"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "copy"
@@ -205,11 +205,11 @@ status = "generate"
     # Make it immutable, only able to be constructed for a builder
     [[object.function]]
     name = "new"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "add_profile"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstPbutils.EncodingTarget"
@@ -241,10 +241,10 @@ final_type = true
     # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"
-    ignore = true
+    manual = true
     [[object.function]]
     pattern = "set_.*"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstPbutils.EncodingVideoProfile"
@@ -253,10 +253,10 @@ final_type = true
     # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"
-    ignore = true
+    manual = true
     [[object.function]]
     pattern = "set_.*"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstPbutils.*"
