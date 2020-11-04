@@ -112,7 +112,7 @@ manual_traits = ["RTSPServerExtManual"]
 
     [[object.function]]
     name = "attach"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "io_func"
@@ -131,7 +131,7 @@ manual_traits = ["RTSPClientExtManual"]
 
     [[object.function]]
     name = "attach"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstRtspServer.RTSPStream"
@@ -141,12 +141,12 @@ manual_traits = ["RTSPStreamExtManual"]
     [[object.function]]
     name = "recv_rtcp"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "recv_rtp"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_position"
@@ -205,7 +205,7 @@ manual_traits = ["RTSPStreamTransportExtManual"]
     [[object.function]]
     name = "recv_data"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "send_rtcp"
@@ -239,7 +239,7 @@ manual_traits = ["RTSPAddressPoolExtManual"]
 
     [[object.function]]
     name = "reserve_address"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstRtspServer.RTSPMedia"
@@ -268,7 +268,7 @@ manual_traits = ["RTSPMediaExtManual"]
 
     [[object.function]]
     name = "take_pipeline"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstRtspServer.RTSPMediaFactory"
@@ -278,7 +278,7 @@ manual_traits = ["RTSPMediaFactoryExtManual"]
     [[object.function]]
     name = "add_role_from_structure"
     # Different structure mutability needed
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "construct"
@@ -312,7 +312,7 @@ manual_traits = ["RTSPSessionPoolExtManual"]
     [[object.function]]
     name = "create_watch"
     # GSource return
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "create"
@@ -332,7 +332,7 @@ manual_traits = ["RTSPAuthExtManual"]
     [[object.function]]
     name = "connect_accept_certificate"
     # Use Result<(), LoggableError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "make_basic"
@@ -342,7 +342,7 @@ manual_traits = ["RTSPAuthExtManual"]
     [[object.function]]
     name = "set_default_token"
     # gir forgets mut
-    ignore = true
+    manual = true
 
 [[object]]
 name="GstRtspServer.RTSPMountPoints"
