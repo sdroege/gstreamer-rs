@@ -92,7 +92,7 @@ manual_traits = ["VideoDecoderExtManual"]
 
     [[object.function]]
     name = "allocate_output_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "allocate_output_frame_with_params"
@@ -100,59 +100,59 @@ manual_traits = ["VideoDecoderExtManual"]
 
     [[object.function]]
     name = "finish_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "release_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "drop_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "have_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_latency"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_latency"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_frames"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_oldest_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_output_state"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_output_state"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_interlaced_output_state"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "negotiate"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_allocator"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "proxy_getcaps"
@@ -171,7 +171,7 @@ manual_traits = ["VideoEncoderExtManual"]
 
     [[object.function]]
     name = "allocate_output_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "allocate_output_frame_with_params"
@@ -179,47 +179,47 @@ manual_traits = ["VideoEncoderExtManual"]
 
     [[object.function]]
     name = "finish_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "finish_subframe"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_latency"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_latency"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_frames"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_oldest_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_output_state"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_output_state"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "negotiate"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_allocator"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "proxy_getcaps"
@@ -397,7 +397,7 @@ status = "generate"
     [[object.function]]
     name = "center_rect"
     # Implemented in video_rectangle
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstVideo.VideoOverlayFormatFlags"
