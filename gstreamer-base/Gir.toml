@@ -56,12 +56,12 @@ concurrency = "send-unique"
     [[object.function]]
     name = "copy"
     # Unsafe
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "push"
     # Move Buffer
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "take"
@@ -118,22 +118,22 @@ manual_traits = ["BaseSinkExtManual"]
     [[object.function]]
     name = "wait"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "wait_preroll"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "wait_clock"
     # Use Result<ClockSuccess, ClockError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_latency"
     # Use Result
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstBase.BaseSrc"
@@ -148,12 +148,12 @@ manual_traits = ["BaseSrcExtManual"]
     [[object.function]]
     name = "start_complete"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "start_wait"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "submit_buffer_list"
@@ -163,17 +163,17 @@ manual_traits = ["BaseSrcExtManual"]
     [[object.function]]
     name = "wait_playing"
     # Use Result<FlowSuccess, FlowError>
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "query_latency"
     # Use Result
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new_segment"
     # Segment parameter
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstBase.BaseTransform"
@@ -194,17 +194,17 @@ manual_traits = ["AggregatorExtManual"]
     [[object.function]]
     name = "finish_buffer"
     # Takes ownership
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "finish_buffer_list"
     # Takes ownership
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "selected_samples"
     # Info parameter
-    ignore = true
+    manual = true
 
     [[object.property]]
     name = "latency"
@@ -217,7 +217,7 @@ manual_traits = ["AggregatorExtManual"]
     [[object.property]]
     name = "min-upstream-latency"
     # clock time instead of u64
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstBase.AggregatorPad"
@@ -303,19 +303,19 @@ status = "generate"
 manual_traits = ["BaseParseExtManual"]
     [[object.function]]
     name = "finish_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_duration"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "convert_default"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_frame_rate"
-    ignore = true
+    manual = true
 
     # Didn't bind gst_base_parse_frame_{new,init} so not needed
     [[object.function]]
