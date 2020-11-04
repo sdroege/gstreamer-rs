@@ -70,7 +70,7 @@ final_type = true
     [[object.function]]
     name = "set_config"
     # Custom type
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "new"
@@ -79,7 +79,7 @@ final_type = true
     [[object.function]]
     name = "get_config"
     # Custom type
-    ignore = true
+    manual = true
 
     [[object.function]]
     pattern = "config_.*"
@@ -123,7 +123,7 @@ final_type = true
     name = "duration-changed"
     concurrency = "send"
     # Pass ClockTime instead of u64
-    ignore = true
+    manual = true
 
     [[object.signal]]
     name = "end-of-stream"
@@ -145,13 +145,13 @@ final_type = true
     name = "position-updated"
     concurrency = "send"
     # Pass ClockTime instead of u64
-    ignore = true
+    manual = true
 
     [[object.signal]]
     name = "seek-done"
     concurrency = "send"
     # Pass ClockTime instead of u64
-    ignore = true
+    manual = true
 
     [[object.signal]]
     name = "state-changed"
@@ -199,12 +199,12 @@ final_type = true
     [[object.function]]
     name = "get_framerate"
     # Fraction
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_pixel_aspect_ratio"
     # Fraction
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstPlayer.PlayerSubtitleInfo"
