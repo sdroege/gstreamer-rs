@@ -68,72 +68,72 @@ status = "generate"
     [[object.member]]
     name = "s16"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "u16"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "s24_32"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "u24_32"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "s32"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "u32"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "s24"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "u24"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "s20"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "u20"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "s18"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "u18"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "f32"
     # Platform dependant
-    ignore = true
+    manual = true
 
     [[object.member]]
     name = "f64"
     # Platform dependant
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstAudio.AudioStreamAlign"
@@ -142,7 +142,7 @@ status = "generate"
     [[object.function]]
     name = "process"
     # bool does not signal error
-    ignore = true
+    manual = true
 
     [[object.function]]
     pattern = "get_.*"
@@ -157,27 +157,27 @@ manual_traits = ["AudioDecoderExtManual"]
 
     [[object.function]]
     name = "finish_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "finish_subframe"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "negotiate"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_output_caps"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_output_format"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_allocator"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "proxy_getcaps"
@@ -196,23 +196,23 @@ manual_traits = ["AudioEncoderExtManual"]
 
     [[object.function]]
     name = "finish_frame"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "negotiate"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "set_output_format"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_allocator"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_latency"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "proxy_getcaps"
