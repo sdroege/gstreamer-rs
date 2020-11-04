@@ -94,21 +94,21 @@ manual_traits = ["GLContextExtManual"]
     [[object.function]]
     name = "new_wrapped"
     # input handle
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_gl_context"
     # return handle
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_current_gl_context"
     # return handle
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_proc_address"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "default_get_proc_address"
@@ -116,7 +116,7 @@ manual_traits = ["GLContextExtManual"]
 
     [[object.function]]
     name = "get_proc_address_with_platform"
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "thread_add"
