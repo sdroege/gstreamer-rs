@@ -384,7 +384,7 @@ unsafe impl<T: BaseSinkImpl> IsSubclassable<T> for BaseSink
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
             let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseSinkClass);

@@ -16,7 +16,7 @@ use SystemClock;
 pub trait SystemClockImpl: ClockImpl {}
 
 unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <::Clock as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
             let _klass = &mut *(klass.as_mut() as *mut gst_sys::GstSystemClockClass);

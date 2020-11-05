@@ -16,7 +16,7 @@ use GhostPad;
 pub trait GhostPadImpl: PadImpl {}
 
 unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <::Pad as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
             let _klass = &mut *(klass.as_mut() as *mut gst_sys::GstGhostPadClass);

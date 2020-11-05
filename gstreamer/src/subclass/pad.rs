@@ -58,7 +58,7 @@ impl<T: PadImpl> PadImplExt for T {
 }
 
 unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
 
         unsafe {

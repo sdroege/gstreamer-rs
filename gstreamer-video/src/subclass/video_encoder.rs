@@ -438,7 +438,7 @@ unsafe impl<T: VideoEncoderImpl> IsSubclassable<T> for VideoEncoder
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
             let klass = &mut *(klass.as_mut() as *mut gst_video_sys::GstVideoEncoderClass);

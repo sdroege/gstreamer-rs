@@ -99,7 +99,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
 }
 
 unsafe impl<T: DeviceImpl> IsSubclassable<T> for Device {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
             let klass = &mut *(klass.as_mut() as *mut gst_sys::GstDeviceClass);

@@ -202,7 +202,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
     }
 }
 unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
             let klass =

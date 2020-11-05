@@ -342,7 +342,7 @@ unsafe impl<T: ElementImpl> IsSubclassable<T> for Element
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+    fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
 
         unsafe {
