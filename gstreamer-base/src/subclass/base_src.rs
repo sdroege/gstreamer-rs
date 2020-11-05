@@ -575,26 +575,24 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseSrcClass);
-            klass.start = Some(base_src_start::<T>);
-            klass.stop = Some(base_src_stop::<T>);
-            klass.is_seekable = Some(base_src_is_seekable::<T>);
-            klass.get_size = Some(base_src_get_size::<T>);
-            klass.get_times = Some(base_src_get_times::<T>);
-            klass.fill = Some(base_src_fill::<T>);
-            klass.alloc = Some(base_src_alloc::<T>);
-            klass.create = Some(base_src_create::<T>);
-            klass.do_seek = Some(base_src_do_seek::<T>);
-            klass.query = Some(base_src_query::<T>);
-            klass.event = Some(base_src_event::<T>);
-            klass.get_caps = Some(base_src_get_caps::<T>);
-            klass.negotiate = Some(base_src_negotiate::<T>);
-            klass.set_caps = Some(base_src_set_caps::<T>);
-            klass.fixate = Some(base_src_fixate::<T>);
-            klass.unlock = Some(base_src_unlock::<T>);
-            klass.unlock_stop = Some(base_src_unlock_stop::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.start = Some(base_src_start::<T>);
+        klass.stop = Some(base_src_stop::<T>);
+        klass.is_seekable = Some(base_src_is_seekable::<T>);
+        klass.get_size = Some(base_src_get_size::<T>);
+        klass.get_times = Some(base_src_get_times::<T>);
+        klass.fill = Some(base_src_fill::<T>);
+        klass.alloc = Some(base_src_alloc::<T>);
+        klass.create = Some(base_src_create::<T>);
+        klass.do_seek = Some(base_src_do_seek::<T>);
+        klass.query = Some(base_src_query::<T>);
+        klass.event = Some(base_src_event::<T>);
+        klass.get_caps = Some(base_src_get_caps::<T>);
+        klass.negotiate = Some(base_src_negotiate::<T>);
+        klass.set_caps = Some(base_src_set_caps::<T>);
+        klass.fixate = Some(base_src_fixate::<T>);
+        klass.unlock = Some(base_src_unlock::<T>);
+        klass.unlock_stop = Some(base_src_unlock_stop::<T>);
     }
 }
 

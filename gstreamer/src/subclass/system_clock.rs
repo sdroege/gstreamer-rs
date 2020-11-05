@@ -6,8 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
@@ -18,9 +16,7 @@ pub trait SystemClockImpl: ClockImpl {}
 unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <::Clock as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let _klass = &mut *(klass.as_mut() as *mut gst_sys::GstSystemClockClass);
-            // Nothing to do here
-        }
+        let _klass = klass.as_mut();
+        // Nothing to do here
     }
 }

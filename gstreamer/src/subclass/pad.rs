@@ -60,12 +60,9 @@ impl<T: PadImpl> PadImplExt for T {
 unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstPadClass);
-            klass.linked = Some(pad_linked::<T>);
-            klass.unlinked = Some(pad_unlinked::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.linked = Some(pad_linked::<T>);
+        klass.unlinked = Some(pad_unlinked::<T>);
     }
 }
 

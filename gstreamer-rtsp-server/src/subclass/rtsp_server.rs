@@ -56,11 +56,9 @@ impl<T: RTSPServerImpl> RTSPServerImplExt for T {
 unsafe impl<T: RTSPServerImpl> IsSubclassable<T> for RTSPServer {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_rtsp_server_sys::GstRTSPServerClass);
-            klass.create_client = Some(server_create_client::<T>);
-            klass.client_connected = Some(server_client_connected::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.create_client = Some(server_create_client::<T>);
+        klass.client_connected = Some(server_client_connected::<T>);
     }
 }
 

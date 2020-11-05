@@ -344,19 +344,16 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstElementClass);
-            klass.change_state = Some(element_change_state::<T>);
-            klass.request_new_pad = Some(element_request_new_pad::<T>);
-            klass.release_pad = Some(element_release_pad::<T>);
-            klass.send_event = Some(element_send_event::<T>);
-            klass.query = Some(element_query::<T>);
-            klass.set_context = Some(element_set_context::<T>);
-            klass.set_clock = Some(element_set_clock::<T>);
-            klass.provide_clock = Some(element_provide_clock::<T>);
-            klass.post_message = Some(element_post_message::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.change_state = Some(element_change_state::<T>);
+        klass.request_new_pad = Some(element_request_new_pad::<T>);
+        klass.release_pad = Some(element_release_pad::<T>);
+        klass.send_event = Some(element_send_event::<T>);
+        klass.query = Some(element_query::<T>);
+        klass.set_context = Some(element_set_context::<T>);
+        klass.set_clock = Some(element_set_clock::<T>);
+        klass.provide_clock = Some(element_provide_clock::<T>);
+        klass.post_message = Some(element_post_message::<T>);
     }
 }
 

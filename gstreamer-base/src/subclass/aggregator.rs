@@ -678,32 +678,30 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstAggregatorClass);
-            klass.flush = Some(aggregator_flush::<T>);
-            klass.clip = Some(aggregator_clip::<T>);
-            klass.finish_buffer = Some(aggregator_finish_buffer::<T>);
-            klass.sink_event = Some(aggregator_sink_event::<T>);
-            klass.sink_query = Some(aggregator_sink_query::<T>);
-            klass.src_event = Some(aggregator_src_event::<T>);
-            klass.src_query = Some(aggregator_src_query::<T>);
-            klass.src_activate = Some(aggregator_src_activate::<T>);
-            klass.aggregate = Some(aggregator_aggregate::<T>);
-            klass.start = Some(aggregator_start::<T>);
-            klass.stop = Some(aggregator_stop::<T>);
-            klass.get_next_time = Some(aggregator_get_next_time::<T>);
-            klass.create_new_pad = Some(aggregator_create_new_pad::<T>);
-            klass.update_src_caps = Some(aggregator_update_src_caps::<T>);
-            klass.fixate_src_caps = Some(aggregator_fixate_src_caps::<T>);
-            klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
-            {
-                klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
-                klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
-                klass.negotiate = Some(aggregator_negotiate::<T>);
-                klass.peek_next_sample = Some(aggregator_peek_next_sample::<T>);
-                klass.finish_buffer_list = Some(aggregator_finish_buffer_list::<T>);
-            }
+        let klass = klass.as_mut();
+        klass.flush = Some(aggregator_flush::<T>);
+        klass.clip = Some(aggregator_clip::<T>);
+        klass.finish_buffer = Some(aggregator_finish_buffer::<T>);
+        klass.sink_event = Some(aggregator_sink_event::<T>);
+        klass.sink_query = Some(aggregator_sink_query::<T>);
+        klass.src_event = Some(aggregator_src_event::<T>);
+        klass.src_query = Some(aggregator_src_query::<T>);
+        klass.src_activate = Some(aggregator_src_activate::<T>);
+        klass.aggregate = Some(aggregator_aggregate::<T>);
+        klass.start = Some(aggregator_start::<T>);
+        klass.stop = Some(aggregator_stop::<T>);
+        klass.get_next_time = Some(aggregator_get_next_time::<T>);
+        klass.create_new_pad = Some(aggregator_create_new_pad::<T>);
+        klass.update_src_caps = Some(aggregator_update_src_caps::<T>);
+        klass.fixate_src_caps = Some(aggregator_fixate_src_caps::<T>);
+        klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        {
+            klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
+            klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
+            klass.negotiate = Some(aggregator_negotiate::<T>);
+            klass.peek_next_sample = Some(aggregator_peek_next_sample::<T>);
+            klass.finish_buffer_list = Some(aggregator_finish_buffer_list::<T>);
         }
     }
 }

@@ -464,25 +464,23 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioEncoderClass);
-            klass.open = Some(audio_encoder_open::<T>);
-            klass.close = Some(audio_encoder_close::<T>);
-            klass.start = Some(audio_encoder_start::<T>);
-            klass.stop = Some(audio_encoder_stop::<T>);
-            klass.set_format = Some(audio_encoder_set_format::<T>);
-            klass.handle_frame = Some(audio_encoder_handle_frame::<T>);
-            klass.pre_push = Some(audio_encoder_pre_push::<T>);
-            klass.flush = Some(audio_encoder_flush::<T>);
-            klass.negotiate = Some(audio_encoder_negotiate::<T>);
-            klass.getcaps = Some(audio_encoder_getcaps::<T>);
-            klass.sink_event = Some(audio_encoder_sink_event::<T>);
-            klass.src_event = Some(audio_encoder_src_event::<T>);
-            klass.sink_query = Some(audio_encoder_sink_query::<T>);
-            klass.src_query = Some(audio_encoder_src_query::<T>);
-            klass.propose_allocation = Some(audio_encoder_propose_allocation::<T>);
-            klass.decide_allocation = Some(audio_encoder_decide_allocation::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.open = Some(audio_encoder_open::<T>);
+        klass.close = Some(audio_encoder_close::<T>);
+        klass.start = Some(audio_encoder_start::<T>);
+        klass.stop = Some(audio_encoder_stop::<T>);
+        klass.set_format = Some(audio_encoder_set_format::<T>);
+        klass.handle_frame = Some(audio_encoder_handle_frame::<T>);
+        klass.pre_push = Some(audio_encoder_pre_push::<T>);
+        klass.flush = Some(audio_encoder_flush::<T>);
+        klass.negotiate = Some(audio_encoder_negotiate::<T>);
+        klass.getcaps = Some(audio_encoder_getcaps::<T>);
+        klass.sink_event = Some(audio_encoder_sink_event::<T>);
+        klass.src_event = Some(audio_encoder_src_event::<T>);
+        klass.sink_query = Some(audio_encoder_sink_query::<T>);
+        klass.src_query = Some(audio_encoder_src_query::<T>);
+        klass.propose_allocation = Some(audio_encoder_propose_allocation::<T>);
+        klass.decide_allocation = Some(audio_encoder_decide_allocation::<T>);
     }
 }
 

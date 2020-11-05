@@ -220,14 +220,12 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseParseClass);
-            klass.start = Some(base_parse_start::<T>);
-            klass.stop = Some(base_parse_stop::<T>);
-            klass.set_sink_caps = Some(base_parse_set_sink_caps::<T>);
-            klass.handle_frame = Some(base_parse_handle_frame::<T>);
-            klass.convert = Some(base_parse_convert::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.start = Some(base_parse_start::<T>);
+        klass.stop = Some(base_parse_stop::<T>);
+        klass.set_sink_caps = Some(base_parse_set_sink_caps::<T>);
+        klass.handle_frame = Some(base_parse_handle_frame::<T>);
+        klass.convert = Some(base_parse_convert::<T>);
     }
 }
 

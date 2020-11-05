@@ -206,16 +206,14 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst_base::BaseSrc as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioSrcClass);
-            klass.close = Some(audiosrc_close::<T>);
-            klass.delay = Some(audiosrc_delay::<T>);
-            klass.open = Some(audiosrc_open::<T>);
-            klass.prepare = Some(audiosrc_prepare::<T>);
-            klass.unprepare = Some(audiosrc_unprepare::<T>);
-            klass.read = Some(audiosrc_read::<T>);
-            klass.reset = Some(audiosrc_reset::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.close = Some(audiosrc_close::<T>);
+        klass.delay = Some(audiosrc_delay::<T>);
+        klass.open = Some(audiosrc_open::<T>);
+        klass.prepare = Some(audiosrc_prepare::<T>);
+        klass.unprepare = Some(audiosrc_unprepare::<T>);
+        klass.read = Some(audiosrc_read::<T>);
+        klass.reset = Some(audiosrc_reset::<T>);
     }
 }
 

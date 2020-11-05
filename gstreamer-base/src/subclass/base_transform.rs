@@ -832,26 +832,24 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseTransformClass);
-            klass.start = Some(base_transform_start::<T>);
-            klass.stop = Some(base_transform_stop::<T>);
-            klass.transform_caps = Some(base_transform_transform_caps::<T>);
-            klass.fixate_caps = Some(base_transform_fixate_caps::<T>);
-            klass.set_caps = Some(base_transform_set_caps::<T>);
-            klass.accept_caps = Some(base_transform_accept_caps::<T>);
-            klass.query = Some(base_transform_query::<T>);
-            klass.transform_size = Some(base_transform_transform_size::<T>);
-            klass.get_unit_size = Some(base_transform_get_unit_size::<T>);
-            klass.prepare_output_buffer = Some(base_transform_prepare_output_buffer::<T>);
-            klass.sink_event = Some(base_transform_sink_event::<T>);
-            klass.src_event = Some(base_transform_src_event::<T>);
-            klass.transform_meta = Some(base_transform_transform_meta::<T>);
-            klass.copy_metadata = Some(base_transform_copy_metadata::<T>);
-            klass.before_transform = Some(base_transform_before_transform::<T>);
-            klass.submit_input_buffer = Some(base_transform_submit_input_buffer::<T>);
-            klass.generate_output = Some(base_transform_generate_output::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.start = Some(base_transform_start::<T>);
+        klass.stop = Some(base_transform_stop::<T>);
+        klass.transform_caps = Some(base_transform_transform_caps::<T>);
+        klass.fixate_caps = Some(base_transform_fixate_caps::<T>);
+        klass.set_caps = Some(base_transform_set_caps::<T>);
+        klass.accept_caps = Some(base_transform_accept_caps::<T>);
+        klass.query = Some(base_transform_query::<T>);
+        klass.transform_size = Some(base_transform_transform_size::<T>);
+        klass.get_unit_size = Some(base_transform_get_unit_size::<T>);
+        klass.prepare_output_buffer = Some(base_transform_prepare_output_buffer::<T>);
+        klass.sink_event = Some(base_transform_sink_event::<T>);
+        klass.src_event = Some(base_transform_src_event::<T>);
+        klass.transform_meta = Some(base_transform_transform_meta::<T>);
+        klass.copy_metadata = Some(base_transform_copy_metadata::<T>);
+        klass.before_transform = Some(base_transform_before_transform::<T>);
+        klass.submit_input_buffer = Some(base_transform_submit_input_buffer::<T>);
+        klass.generate_output = Some(base_transform_generate_output::<T>);
     }
 }
 

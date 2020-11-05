@@ -515,26 +515,24 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioDecoderClass);
-            klass.open = Some(audio_decoder_open::<T>);
-            klass.close = Some(audio_decoder_close::<T>);
-            klass.start = Some(audio_decoder_start::<T>);
-            klass.stop = Some(audio_decoder_stop::<T>);
-            klass.set_format = Some(audio_decoder_set_format::<T>);
-            klass.parse = Some(audio_decoder_parse::<T>);
-            klass.handle_frame = Some(audio_decoder_handle_frame::<T>);
-            klass.pre_push = Some(audio_decoder_pre_push::<T>);
-            klass.flush = Some(audio_decoder_flush::<T>);
-            klass.negotiate = Some(audio_decoder_negotiate::<T>);
-            klass.getcaps = Some(audio_decoder_getcaps::<T>);
-            klass.sink_event = Some(audio_decoder_sink_event::<T>);
-            klass.src_event = Some(audio_decoder_src_event::<T>);
-            klass.sink_query = Some(audio_decoder_sink_query::<T>);
-            klass.src_query = Some(audio_decoder_src_query::<T>);
-            klass.propose_allocation = Some(audio_decoder_propose_allocation::<T>);
-            klass.decide_allocation = Some(audio_decoder_decide_allocation::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.open = Some(audio_decoder_open::<T>);
+        klass.close = Some(audio_decoder_close::<T>);
+        klass.start = Some(audio_decoder_start::<T>);
+        klass.stop = Some(audio_decoder_stop::<T>);
+        klass.set_format = Some(audio_decoder_set_format::<T>);
+        klass.parse = Some(audio_decoder_parse::<T>);
+        klass.handle_frame = Some(audio_decoder_handle_frame::<T>);
+        klass.pre_push = Some(audio_decoder_pre_push::<T>);
+        klass.flush = Some(audio_decoder_flush::<T>);
+        klass.negotiate = Some(audio_decoder_negotiate::<T>);
+        klass.getcaps = Some(audio_decoder_getcaps::<T>);
+        klass.sink_event = Some(audio_decoder_sink_event::<T>);
+        klass.src_event = Some(audio_decoder_src_event::<T>);
+        klass.sink_query = Some(audio_decoder_sink_query::<T>);
+        klass.src_query = Some(audio_decoder_src_query::<T>);
+        klass.propose_allocation = Some(audio_decoder_propose_allocation::<T>);
+        klass.decide_allocation = Some(audio_decoder_decide_allocation::<T>);
     }
 }
 

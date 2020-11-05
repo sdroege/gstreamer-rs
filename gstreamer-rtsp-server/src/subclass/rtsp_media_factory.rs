@@ -204,17 +204,14 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
 unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass =
-                &mut *(klass.as_mut() as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass);
-            klass.gen_key = Some(factory_gen_key::<T>);
-            klass.create_element = Some(factory_create_element::<T>);
-            klass.construct = Some(factory_construct::<T>);
-            klass.create_pipeline = Some(factory_create_pipeline::<T>);
-            klass.configure = Some(factory_configure::<T>);
-            klass.media_constructed = Some(factory_media_constructed::<T>);
-            klass.media_configure = Some(factory_media_configure::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.gen_key = Some(factory_gen_key::<T>);
+        klass.create_element = Some(factory_create_element::<T>);
+        klass.construct = Some(factory_construct::<T>);
+        klass.create_pipeline = Some(factory_create_pipeline::<T>);
+        klass.configure = Some(factory_configure::<T>);
+        klass.media_constructed = Some(factory_media_constructed::<T>);
+        klass.media_configure = Some(factory_media_configure::<T>);
     }
 }
 

@@ -117,12 +117,10 @@ unsafe impl DeviceProviderClassSubclassExt for DeviceProviderClass {}
 unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstDeviceProviderClass);
-            klass.probe = Some(device_provider_probe::<T>);
-            klass.start = Some(device_provider_start::<T>);
-            klass.stop = Some(device_provider_stop::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.probe = Some(device_provider_probe::<T>);
+        klass.start = Some(device_provider_start::<T>);
+        klass.stop = Some(device_provider_stop::<T>);
     }
 }
 

@@ -63,10 +63,8 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst_base::BaseSink as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_video_sys::GstVideoSinkClass);
-            klass.show_frame = Some(video_sink_show_frame::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.show_frame = Some(video_sink_show_frame::<T>);
     }
 }
 

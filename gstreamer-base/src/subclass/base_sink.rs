@@ -386,22 +386,20 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseSinkClass);
-            klass.start = Some(base_sink_start::<T>);
-            klass.stop = Some(base_sink_stop::<T>);
-            klass.render = Some(base_sink_render::<T>);
-            klass.render_list = Some(base_sink_render_list::<T>);
-            klass.prepare = Some(base_sink_prepare::<T>);
-            klass.prepare_list = Some(base_sink_prepare_list::<T>);
-            klass.query = Some(base_sink_query::<T>);
-            klass.event = Some(base_sink_event::<T>);
-            klass.get_caps = Some(base_sink_get_caps::<T>);
-            klass.set_caps = Some(base_sink_set_caps::<T>);
-            klass.fixate = Some(base_sink_fixate::<T>);
-            klass.unlock = Some(base_sink_unlock::<T>);
-            klass.unlock_stop = Some(base_sink_unlock_stop::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.start = Some(base_sink_start::<T>);
+        klass.stop = Some(base_sink_stop::<T>);
+        klass.render = Some(base_sink_render::<T>);
+        klass.render_list = Some(base_sink_render_list::<T>);
+        klass.prepare = Some(base_sink_prepare::<T>);
+        klass.prepare_list = Some(base_sink_prepare_list::<T>);
+        klass.query = Some(base_sink_query::<T>);
+        klass.event = Some(base_sink_event::<T>);
+        klass.get_caps = Some(base_sink_get_caps::<T>);
+        klass.set_caps = Some(base_sink_set_caps::<T>);
+        klass.fixate = Some(base_sink_fixate::<T>);
+        klass.unlock = Some(base_sink_unlock::<T>);
+        klass.unlock_stop = Some(base_sink_unlock_stop::<T>);
     }
 }
 

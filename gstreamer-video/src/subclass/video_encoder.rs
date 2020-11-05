@@ -440,25 +440,23 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_video_sys::GstVideoEncoderClass);
-            klass.open = Some(video_encoder_open::<T>);
-            klass.close = Some(video_encoder_close::<T>);
-            klass.start = Some(video_encoder_start::<T>);
-            klass.stop = Some(video_encoder_stop::<T>);
-            klass.finish = Some(video_encoder_finish::<T>);
-            klass.set_format = Some(video_encoder_set_format::<T>);
-            klass.handle_frame = Some(video_encoder_handle_frame::<T>);
-            klass.flush = Some(video_encoder_flush::<T>);
-            klass.negotiate = Some(video_encoder_negotiate::<T>);
-            klass.getcaps = Some(video_encoder_getcaps::<T>);
-            klass.sink_event = Some(video_encoder_sink_event::<T>);
-            klass.src_event = Some(video_encoder_src_event::<T>);
-            klass.sink_query = Some(video_encoder_sink_query::<T>);
-            klass.src_query = Some(video_encoder_src_query::<T>);
-            klass.propose_allocation = Some(video_encoder_propose_allocation::<T>);
-            klass.decide_allocation = Some(video_encoder_decide_allocation::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.open = Some(video_encoder_open::<T>);
+        klass.close = Some(video_encoder_close::<T>);
+        klass.start = Some(video_encoder_start::<T>);
+        klass.stop = Some(video_encoder_stop::<T>);
+        klass.finish = Some(video_encoder_finish::<T>);
+        klass.set_format = Some(video_encoder_set_format::<T>);
+        klass.handle_frame = Some(video_encoder_handle_frame::<T>);
+        klass.flush = Some(video_encoder_flush::<T>);
+        klass.negotiate = Some(video_encoder_negotiate::<T>);
+        klass.getcaps = Some(video_encoder_getcaps::<T>);
+        klass.sink_event = Some(video_encoder_sink_event::<T>);
+        klass.src_event = Some(video_encoder_src_event::<T>);
+        klass.sink_query = Some(video_encoder_sink_query::<T>);
+        klass.src_query = Some(video_encoder_src_query::<T>);
+        klass.propose_allocation = Some(video_encoder_propose_allocation::<T>);
+        klass.decide_allocation = Some(video_encoder_decide_allocation::<T>);
     }
 }
 

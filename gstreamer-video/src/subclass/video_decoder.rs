@@ -504,27 +504,25 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_video_sys::GstVideoDecoderClass);
-            klass.open = Some(video_decoder_open::<T>);
-            klass.close = Some(video_decoder_close::<T>);
-            klass.start = Some(video_decoder_start::<T>);
-            klass.stop = Some(video_decoder_stop::<T>);
-            klass.finish = Some(video_decoder_finish::<T>);
-            klass.drain = Some(video_decoder_drain::<T>);
-            klass.set_format = Some(video_decoder_set_format::<T>);
-            klass.parse = Some(video_decoder_parse::<T>);
-            klass.handle_frame = Some(video_decoder_handle_frame::<T>);
-            klass.flush = Some(video_decoder_flush::<T>);
-            klass.negotiate = Some(video_decoder_negotiate::<T>);
-            klass.getcaps = Some(video_decoder_getcaps::<T>);
-            klass.sink_event = Some(video_decoder_sink_event::<T>);
-            klass.src_event = Some(video_decoder_src_event::<T>);
-            klass.sink_query = Some(video_decoder_sink_query::<T>);
-            klass.src_query = Some(video_decoder_src_query::<T>);
-            klass.propose_allocation = Some(video_decoder_propose_allocation::<T>);
-            klass.decide_allocation = Some(video_decoder_decide_allocation::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.open = Some(video_decoder_open::<T>);
+        klass.close = Some(video_decoder_close::<T>);
+        klass.start = Some(video_decoder_start::<T>);
+        klass.stop = Some(video_decoder_stop::<T>);
+        klass.finish = Some(video_decoder_finish::<T>);
+        klass.drain = Some(video_decoder_drain::<T>);
+        klass.set_format = Some(video_decoder_set_format::<T>);
+        klass.parse = Some(video_decoder_parse::<T>);
+        klass.handle_frame = Some(video_decoder_handle_frame::<T>);
+        klass.flush = Some(video_decoder_flush::<T>);
+        klass.negotiate = Some(video_decoder_negotiate::<T>);
+        klass.getcaps = Some(video_decoder_getcaps::<T>);
+        klass.sink_event = Some(video_decoder_sink_event::<T>);
+        klass.src_event = Some(video_decoder_src_event::<T>);
+        klass.sink_query = Some(video_decoder_sink_query::<T>);
+        klass.src_query = Some(video_decoder_src_query::<T>);
+        klass.propose_allocation = Some(video_decoder_propose_allocation::<T>);
+        klass.decide_allocation = Some(video_decoder_decide_allocation::<T>);
     }
 }
 

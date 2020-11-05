@@ -190,16 +190,14 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <gst_base::BaseSink as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioSinkClass);
-            klass.close = Some(audiosink_close::<T>);
-            klass.delay = Some(audiosink_delay::<T>);
-            klass.open = Some(audiosink_open::<T>);
-            klass.prepare = Some(audiosink_prepare::<T>);
-            klass.unprepare = Some(audiosink_unprepare::<T>);
-            klass.write = Some(audiosink_write::<T>);
-            klass.reset = Some(audiosink_reset::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.close = Some(audiosink_close::<T>);
+        klass.delay = Some(audiosink_delay::<T>);
+        klass.open = Some(audiosink_open::<T>);
+        klass.prepare = Some(audiosink_prepare::<T>);
+        klass.unprepare = Some(audiosink_unprepare::<T>);
+        klass.write = Some(audiosink_write::<T>);
+        klass.reset = Some(audiosink_reset::<T>);
     }
 }
 

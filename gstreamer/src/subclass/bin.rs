@@ -92,12 +92,10 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <::Element as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstBinClass);
-            klass.add_element = Some(bin_add_element::<T>);
-            klass.remove_element = Some(bin_remove_element::<T>);
-            klass.handle_message = Some(bin_handle_message::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.add_element = Some(bin_add_element::<T>);
+        klass.remove_element = Some(bin_remove_element::<T>);
+        klass.handle_message = Some(bin_handle_message::<T>);
     }
 }
 

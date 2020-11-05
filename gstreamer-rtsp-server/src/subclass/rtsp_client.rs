@@ -795,39 +795,37 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_rtsp_server_sys::GstRTSPClientClass);
-            klass.create_sdp = Some(client_create_sdp::<T>);
-            klass.configure_client_media = Some(client_configure_client_media::<T>);
-            klass.params_set = Some(client_params_set::<T>);
-            klass.params_get = Some(client_params_get::<T>);
-            klass.make_path_from_uri = Some(client_make_path_from_uri::<T>);
-            klass.closed = Some(client_closed::<T>);
-            klass.new_session = Some(client_new_session::<T>);
-            klass.options_request = Some(client_options_request::<T>);
-            klass.describe_request = Some(client_describe_request::<T>);
-            klass.setup_request = Some(client_setup_request::<T>);
-            klass.play_request = Some(client_play_request::<T>);
-            klass.pause_request = Some(client_pause_request::<T>);
-            klass.teardown_request = Some(client_teardown_request::<T>);
-            klass.set_parameter_request = Some(client_set_parameter_request::<T>);
-            klass.get_parameter_request = Some(client_get_parameter_request::<T>);
-            klass.announce_request = Some(client_announce_request::<T>);
-            klass.record_request = Some(client_record_request::<T>);
-            klass.handle_response = Some(client_handle_response::<T>);
-            klass.handle_sdp = Some(client_handle_sdp::<T>);
-            klass.check_requirements = Some(client_check_requirements::<T>);
-            klass.pre_options_request = Some(client_pre_options_request::<T>);
-            klass.pre_describe_request = Some(client_pre_describe_request::<T>);
-            klass.pre_setup_request = Some(client_pre_setup_request::<T>);
-            klass.pre_play_request = Some(client_pre_play_request::<T>);
-            klass.pre_pause_request = Some(client_pre_pause_request::<T>);
-            klass.pre_teardown_request = Some(client_pre_teardown_request::<T>);
-            klass.pre_set_parameter_request = Some(client_pre_set_parameter_request::<T>);
-            klass.pre_get_parameter_request = Some(client_pre_get_parameter_request::<T>);
-            klass.pre_announce_request = Some(client_pre_announce_request::<T>);
-            klass.pre_record_request = Some(client_pre_record_request::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.create_sdp = Some(client_create_sdp::<T>);
+        klass.configure_client_media = Some(client_configure_client_media::<T>);
+        klass.params_set = Some(client_params_set::<T>);
+        klass.params_get = Some(client_params_get::<T>);
+        klass.make_path_from_uri = Some(client_make_path_from_uri::<T>);
+        klass.closed = Some(client_closed::<T>);
+        klass.new_session = Some(client_new_session::<T>);
+        klass.options_request = Some(client_options_request::<T>);
+        klass.describe_request = Some(client_describe_request::<T>);
+        klass.setup_request = Some(client_setup_request::<T>);
+        klass.play_request = Some(client_play_request::<T>);
+        klass.pause_request = Some(client_pause_request::<T>);
+        klass.teardown_request = Some(client_teardown_request::<T>);
+        klass.set_parameter_request = Some(client_set_parameter_request::<T>);
+        klass.get_parameter_request = Some(client_get_parameter_request::<T>);
+        klass.announce_request = Some(client_announce_request::<T>);
+        klass.record_request = Some(client_record_request::<T>);
+        klass.handle_response = Some(client_handle_response::<T>);
+        klass.handle_sdp = Some(client_handle_sdp::<T>);
+        klass.check_requirements = Some(client_check_requirements::<T>);
+        klass.pre_options_request = Some(client_pre_options_request::<T>);
+        klass.pre_describe_request = Some(client_pre_describe_request::<T>);
+        klass.pre_setup_request = Some(client_pre_setup_request::<T>);
+        klass.pre_play_request = Some(client_pre_play_request::<T>);
+        klass.pre_pause_request = Some(client_pre_pause_request::<T>);
+        klass.pre_teardown_request = Some(client_pre_teardown_request::<T>);
+        klass.pre_set_parameter_request = Some(client_pre_set_parameter_request::<T>);
+        klass.pre_get_parameter_request = Some(client_pre_get_parameter_request::<T>);
+        klass.pre_announce_request = Some(client_pre_announce_request::<T>);
+        klass.pre_record_request = Some(client_pre_record_request::<T>);
     }
 }
 

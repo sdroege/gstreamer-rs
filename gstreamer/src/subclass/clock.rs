@@ -235,16 +235,13 @@ impl<T: ClockImpl> ClockImplExt for T {
 unsafe impl<T: ClockImpl> IsSubclassable<T> for Clock {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstClockClass);
-            klass.change_resolution = Some(clock_change_resolution::<T>);
-            klass.get_resolution = Some(clock_get_resolution::<T>);
-            klass.get_internal_time = Some(clock_get_internal_time::<T>);
-            klass.wait = Some(clock_wait::<T>);
-            klass.wait_async = Some(clock_wait_async::<T>);
-            klass.unschedule = Some(clock_unschedule::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.change_resolution = Some(clock_change_resolution::<T>);
+        klass.get_resolution = Some(clock_get_resolution::<T>);
+        klass.get_internal_time = Some(clock_get_internal_time::<T>);
+        klass.wait = Some(clock_wait::<T>);
+        klass.wait_async = Some(clock_wait_async::<T>);
+        klass.unschedule = Some(clock_unschedule::<T>);
     }
 }
 

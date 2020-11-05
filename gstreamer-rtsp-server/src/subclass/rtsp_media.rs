@@ -451,26 +451,24 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
 unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMedia {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_rtsp_server_sys::GstRTSPMediaClass);
-            klass.handle_message = Some(media_handle_message::<T>);
-            klass.prepare = Some(media_prepare::<T>);
-            klass.unprepare = Some(media_unprepare::<T>);
-            klass.suspend = Some(media_suspend::<T>);
-            klass.unsuspend = Some(media_unsuspend::<T>);
-            klass.query_position = Some(media_query_position::<T>);
-            klass.query_stop = Some(media_query_stop::<T>);
-            klass.create_rtpbin = Some(media_create_rtpbin::<T>);
-            klass.setup_rtpbin = Some(media_setup_rtpbin::<T>);
-            klass.setup_sdp = Some(media_setup_sdp::<T>);
-            klass.new_stream = Some(media_new_stream::<T>);
-            klass.removed_stream = Some(media_removed_stream::<T>);
-            klass.prepared = Some(media_prepared::<T>);
-            klass.unprepared = Some(media_unprepared::<T>);
-            klass.target_state = Some(media_target_state::<T>);
-            klass.new_state = Some(media_new_state::<T>);
-            klass.handle_sdp = Some(media_handle_sdp::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.handle_message = Some(media_handle_message::<T>);
+        klass.prepare = Some(media_prepare::<T>);
+        klass.unprepare = Some(media_unprepare::<T>);
+        klass.suspend = Some(media_suspend::<T>);
+        klass.unsuspend = Some(media_unsuspend::<T>);
+        klass.query_position = Some(media_query_position::<T>);
+        klass.query_stop = Some(media_query_stop::<T>);
+        klass.create_rtpbin = Some(media_create_rtpbin::<T>);
+        klass.setup_rtpbin = Some(media_setup_rtpbin::<T>);
+        klass.setup_sdp = Some(media_setup_sdp::<T>);
+        klass.new_stream = Some(media_new_stream::<T>);
+        klass.removed_stream = Some(media_removed_stream::<T>);
+        klass.prepared = Some(media_prepared::<T>);
+        klass.unprepared = Some(media_unprepared::<T>);
+        klass.target_state = Some(media_target_state::<T>);
+        klass.new_state = Some(media_new_state::<T>);
+        klass.handle_sdp = Some(media_handle_sdp::<T>);
     }
 }
 

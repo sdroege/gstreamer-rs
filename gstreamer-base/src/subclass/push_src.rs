@@ -119,12 +119,10 @@ where
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
         <::BaseSrc as IsSubclassable<T>>::override_vfuncs(klass);
-        unsafe {
-            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstPushSrcClass);
-            klass.fill = Some(push_src_fill::<T>);
-            klass.alloc = Some(push_src_alloc::<T>);
-            klass.create = Some(push_src_create::<T>);
-        }
+        let klass = klass.as_mut();
+        klass.fill = Some(push_src_fill::<T>);
+        klass.alloc = Some(push_src_alloc::<T>);
+        klass.create = Some(push_src_create::<T>);
     }
 }
 
