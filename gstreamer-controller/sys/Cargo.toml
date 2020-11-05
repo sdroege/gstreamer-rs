@@ -1,6 +1,6 @@
 [build-dependencies]
 pkg-config = "0.3.7"
-system-deps = "1.3"
+system-deps = "2.0"
 
 [dependencies]
 libc = "0.2"
@@ -55,9 +55,17 @@ features = ["dox"]
 name = "gstreamer-controller-1.0"
 version = "1.8"
 
-[package.metadata.system-deps.gstreamer_controller_1_0.feature-versions]
-v1_10 = "1.10"
-v1_12 = "1.12"
-v1_14 = "1.14"
-v1_16 = "1.16"
-v1_18 = "1.18"
+[package.metadata.system-deps.gstreamer_controller_1_0.v1_10]
+version = "1.10"
+
+[package.metadata.system-deps.gstreamer_controller_1_0.v1_12]
+version = "1.12"
+
+[package.metadata.system-deps.gstreamer_controller_1_0.v1_14]
+version = "1.14"
+
+[package.metadata.system-deps.gstreamer_controller_1_0.v1_16]
+version = "1.16"
+
+[package.metadata.system-deps.gstreamer_controller_1_0.v1_18]
+version = "1.18"
