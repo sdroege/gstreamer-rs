@@ -12,7 +12,6 @@ use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use RTSPServer;
-use RTSPServerClass;
 
 pub trait RTSPServerImpl: RTSPServerImplExt + ObjectImpl + Send + Sync {
     fn create_client(&self, server: &RTSPServer) -> Option<::RTSPClient> {
@@ -54,11 +53,11 @@ impl<T: RTSPServerImpl> RTSPServerImplExt for T {
         }
     }
 }
-unsafe impl<T: RTSPServerImpl> IsSubclassable<T> for RTSPServerClass {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: RTSPServerImpl> IsSubclassable<T> for RTSPServer {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_rtsp_server_sys::GstRTSPServerClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_rtsp_server_sys::GstRTSPServerClass);
             klass.create_client = Some(server_create_client::<T>);
             klass.client_connected = Some(server_client_connected::<T>);
         }

@@ -11,18 +11,18 @@ use gst_sys;
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use PipelineClass;
+use Pipeline;
 
 pub trait PipelineImpl: BinImpl {}
 
-unsafe impl<T: PipelineImpl> IsSubclassable<T> for PipelineClass
+unsafe impl<T: PipelineImpl> IsSubclassable<T> for Pipeline
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <::BinClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <::Bin as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let _klass = &mut *(self as *mut Self as *mut gst_sys::GstPipelineClass);
+            let _klass = &mut *(klass.as_mut() as *mut gst_sys::GstPipelineClass);
             // Nothing to do here
         }
     }

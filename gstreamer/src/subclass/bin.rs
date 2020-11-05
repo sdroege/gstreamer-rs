@@ -15,7 +15,6 @@ use super::prelude::*;
 use glib::subclass::prelude::*;
 
 use Bin;
-use BinClass;
 use Element;
 use LoggableError;
 use Message;
@@ -87,14 +86,14 @@ impl<T: BinImpl> BinImplExt for T {
     }
 }
 
-unsafe impl<T: BinImpl> IsSubclassable<T> for BinClass
+unsafe impl<T: BinImpl> IsSubclassable<T> for Bin
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_sys::GstBinClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstBinClass);
             klass.add_element = Some(bin_add_element::<T>);
             klass.remove_element = Some(bin_remove_element::<T>);
             klass.handle_message = Some(bin_handle_message::<T>);

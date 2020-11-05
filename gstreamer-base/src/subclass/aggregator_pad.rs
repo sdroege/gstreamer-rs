@@ -18,7 +18,6 @@ use gst::subclass::prelude::*;
 
 use Aggregator;
 use AggregatorPad;
-use AggregatorPadClass;
 
 pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl {
     fn flush(
@@ -100,11 +99,11 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
         }
     }
 }
-unsafe impl<T: AggregatorPadImpl> IsSubclassable<T> for AggregatorPadClass {
-    fn override_vfuncs(&mut self) {
-        <gst::PadClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: AggregatorPadImpl> IsSubclassable<T> for AggregatorPad {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Pad as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstAggregatorPadClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstAggregatorPadClass);
             klass.flush = Some(aggregator_pad_flush::<T>);
             klass.skip_buffer = Some(aggregator_pad_skip_buffer::<T>);
         }

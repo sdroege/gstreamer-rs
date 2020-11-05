@@ -14,7 +14,6 @@ use glib::translate::*;
 use std::mem;
 
 use RTSPClient;
-use RTSPClientClass;
 
 pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn create_sdp(&self, client: &RTSPClient, media: &::RTSPMedia) -> Option<gst_sdp::SDPMessage> {
@@ -793,11 +792,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 }
-unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClientClass {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_rtsp_server_sys::GstRTSPClientClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_rtsp_server_sys::GstRTSPClientClass);
             klass.create_sdp = Some(client_create_sdp::<T>);
             klass.configure_client_media = Some(client_configure_client_media::<T>);
             klass.params_set = Some(client_params_set::<T>);

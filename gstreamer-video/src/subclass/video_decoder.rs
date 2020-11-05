@@ -22,7 +22,6 @@ use crate::prelude::*;
 use video_codec_state::{Readable, VideoCodecState};
 use VideoCodecFrame;
 use VideoDecoder;
-use VideoDecoderClass;
 
 pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
     fn open(&self, element: &VideoDecoder) -> Result<(), gst::ErrorMessage> {
@@ -499,14 +498,14 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
     }
 }
 
-unsafe impl<T: VideoDecoderImpl> IsSubclassable<T> for VideoDecoderClass
+unsafe impl<T: VideoDecoderImpl> IsSubclassable<T> for VideoDecoder
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_video_sys::GstVideoDecoderClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_video_sys::GstVideoDecoderClass);
             klass.open = Some(video_decoder_open::<T>);
             klass.close = Some(video_decoder_close::<T>);
             klass.start = Some(video_decoder_start::<T>);

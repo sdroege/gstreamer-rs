@@ -14,7 +14,6 @@ use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use Clock;
-use ClockClass;
 use ClockError;
 use ClockId;
 use ClockReturn;
@@ -233,12 +232,12 @@ impl<T: ClockImpl> ClockImplExt for T {
     }
 }
 
-unsafe impl<T: ClockImpl> IsSubclassable<T> for ClockClass {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: ClockImpl> IsSubclassable<T> for Clock {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
 
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_sys::GstClockClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstClockClass);
             klass.change_resolution = Some(clock_change_resolution::<T>);
             klass.get_resolution = Some(clock_get_resolution::<T>);
             klass.get_internal_time = Some(clock_get_internal_time::<T>);

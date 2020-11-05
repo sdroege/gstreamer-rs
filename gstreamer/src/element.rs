@@ -844,8 +844,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 }
 
-impl ElementClass {
-    pub fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
+pub unsafe trait ElementClassExt {
+    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = self as *const _ as *const gst_sys::GstElementClass;
 
@@ -860,7 +860,7 @@ impl ElementClass {
         }
     }
 
-    pub fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
+    fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const gst_sys::GstElementClass;
 
@@ -871,7 +871,7 @@ impl ElementClass {
         }
     }
 
-    pub fn get_pad_template_list(&self) -> Vec<PadTemplate> {
+    fn get_pad_template_list(&self) -> Vec<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const gst_sys::GstElementClass;
 
@@ -881,6 +881,8 @@ impl ElementClass {
         }
     }
 }
+
+unsafe impl<T: IsA<Element>> ElementClassExt for glib::object::Class<T> {}
 
 pub static ELEMENT_METADATA_AUTHOR: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_AUTHOR)

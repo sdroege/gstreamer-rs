@@ -20,7 +20,6 @@ use gst;
 use gst::subclass::prelude::*;
 
 use BaseParse;
-use BaseParseClass;
 use BaseParseFrame;
 
 pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
@@ -215,14 +214,14 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
     }
 }
 
-unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParseClass
+unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstBaseParseClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseParseClass);
             klass.start = Some(base_parse_start::<T>);
             klass.stop = Some(base_parse_stop::<T>);
             klass.set_sink_caps = Some(base_parse_set_sink_caps::<T>);

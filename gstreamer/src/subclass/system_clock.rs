@@ -11,15 +11,15 @@ use gst_sys;
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use SystemClockClass;
+use SystemClock;
 
 pub trait SystemClockImpl: ClockImpl {}
 
-unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClockClass {
-    fn override_vfuncs(&mut self) {
-        <::ClockClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <::Clock as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let _klass = &mut *(self as *mut Self as *mut gst_sys::GstSystemClockClass);
+            let _klass = &mut *(klass.as_mut() as *mut gst_sys::GstSystemClockClass);
             // Nothing to do here
         }
     }

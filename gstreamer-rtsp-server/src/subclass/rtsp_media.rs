@@ -14,7 +14,6 @@ use glib::translate::*;
 use std::ptr;
 
 use RTSPMedia;
-use RTSPMediaClass;
 use RTSPThread;
 
 #[derive(Debug)]
@@ -449,11 +448,11 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 }
-unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMediaClass {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMedia {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_rtsp_server_sys::GstRTSPMediaClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_rtsp_server_sys::GstRTSPMediaClass);
             klass.handle_message = Some(media_handle_message::<T>);
             klass.prepare = Some(media_prepare::<T>);
             klass.unprepare = Some(media_unprepare::<T>);

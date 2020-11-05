@@ -14,7 +14,6 @@ use glib::translate::*;
 use glib::subclass::prelude::*;
 
 use Pad;
-use PadClass;
 
 pub trait PadImpl: PadImplExt + ObjectImpl + Send + Sync {
     fn linked(&self, pad: &Pad, peer: &Pad) {
@@ -58,12 +57,12 @@ impl<T: PadImpl> PadImplExt for T {
     }
 }
 
-unsafe impl<T: PadImpl> IsSubclassable<T> for PadClass {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
 
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_sys::GstPadClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstPadClass);
             klass.linked = Some(pad_linked::<T>);
             klass.unlinked = Some(pad_unlinked::<T>);
         }

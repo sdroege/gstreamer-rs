@@ -17,7 +17,6 @@ use gst::subclass::prelude::*;
 use gst_base::subclass::prelude::*;
 
 use VideoSink;
-use VideoSinkClass;
 
 pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
     fn show_frame(
@@ -58,14 +57,14 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
     }
 }
 
-unsafe impl<T: VideoSinkImpl> IsSubclassable<T> for VideoSinkClass
+unsafe impl<T: VideoSinkImpl> IsSubclassable<T> for VideoSink
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst_base::BaseSinkClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst_base::BaseSink as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_video_sys::GstVideoSinkClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_video_sys::GstVideoSinkClass);
             klass.show_frame = Some(video_sink_show_frame::<T>);
         }
     }

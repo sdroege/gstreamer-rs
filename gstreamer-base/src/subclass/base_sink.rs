@@ -19,7 +19,6 @@ use gst::subclass::prelude::*;
 use std::ptr;
 
 use BaseSink;
-use BaseSinkClass;
 
 pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
     fn start(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
@@ -381,14 +380,14 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
     }
 }
 
-unsafe impl<T: BaseSinkImpl> IsSubclassable<T> for BaseSinkClass
+unsafe impl<T: BaseSinkImpl> IsSubclassable<T> for BaseSink
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstBaseSinkClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseSinkClass);
             klass.start = Some(base_sink_start::<T>);
             klass.stop = Some(base_sink_stop::<T>);
             klass.render = Some(base_sink_render::<T>);

@@ -21,7 +21,6 @@ use crate::prelude::*;
 use video_codec_state::{Readable, VideoCodecState};
 use VideoCodecFrame;
 use VideoEncoder;
-use VideoEncoderClass;
 
 pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
     fn open(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
@@ -435,14 +434,14 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
     }
 }
 
-unsafe impl<T: VideoEncoderImpl> IsSubclassable<T> for VideoEncoderClass
+unsafe impl<T: VideoEncoderImpl> IsSubclassable<T> for VideoEncoder
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_video_sys::GstVideoEncoderClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_video_sys::GstVideoEncoderClass);
             klass.open = Some(video_encoder_open::<T>);
             klass.close = Some(video_encoder_close::<T>);
             klass.start = Some(video_encoder_start::<T>);

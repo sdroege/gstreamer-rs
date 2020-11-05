@@ -341,7 +341,7 @@ pub mod prelude {
 
     pub use allocator::AllocatorExtManual;
     pub use bin::GstBinExtManual;
-    pub use element::ElementExtManual;
+    pub use element::{ElementClassExt, ElementExtManual};
 
     // OS dependent Bus extensions (also import the other plateform trait for doc)
     #[cfg(any(feature = "v1_14", feature = "dox"))]

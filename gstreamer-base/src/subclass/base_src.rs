@@ -20,7 +20,6 @@ use std::mem;
 use std::ptr;
 
 use BaseSrc;
-use BaseSrcClass;
 
 #[derive(Debug)]
 pub enum CreateSuccess {
@@ -570,14 +569,14 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
     }
 }
 
-unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrcClass
+unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstBaseSrcClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseSrcClass);
             klass.start = Some(base_src_start::<T>);
             klass.stop = Some(base_src_stop::<T>);
             klass.is_seekable = Some(base_src_is_seekable::<T>);

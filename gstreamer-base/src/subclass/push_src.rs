@@ -19,7 +19,6 @@ use std::ptr;
 
 use super::base_src::BaseSrcImpl;
 use PushSrc;
-use PushSrcClass;
 
 pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
     fn fill(
@@ -114,14 +113,14 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
     }
 }
 
-unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrcClass
+unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrc
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <::BaseSrcClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <::BaseSrc as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstPushSrcClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstPushSrcClass);
             klass.fill = Some(push_src_fill::<T>);
             klass.alloc = Some(push_src_alloc::<T>);
             klass.create = Some(push_src_create::<T>);

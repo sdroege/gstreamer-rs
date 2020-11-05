@@ -12,7 +12,6 @@ use gst_base::subclass::prelude::*;
 
 use AudioRingBufferSpec;
 use AudioSrc;
-use AudioSrcClass;
 
 pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl {
     fn close(&self, src: &AudioSrc) -> Result<(), LoggableError> {
@@ -201,14 +200,14 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
     }
 }
 
-unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrcClass
+unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst_base::BaseSrcClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst_base::BaseSrc as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_audio_sys::GstAudioSrcClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioSrcClass);
             klass.close = Some(audiosrc_close::<T>);
             klass.delay = Some(audiosrc_delay::<T>);
             klass.open = Some(audiosrc_open::<T>);

@@ -338,15 +338,15 @@ pub unsafe trait ElementClassSubclassExt: Sized + 'static {
 
 unsafe impl ElementClassSubclassExt for ElementClass {}
 
-unsafe impl<T: ElementImpl> IsSubclassable<T> for ElementClass
+unsafe impl<T: ElementImpl> IsSubclassable<T> for Element
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
 
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_sys::GstElementClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstElementClass);
             klass.change_state = Some(element_change_state::<T>);
             klass.request_new_pad = Some(element_request_new_pad::<T>);
             klass.release_pad = Some(element_release_pad::<T>);

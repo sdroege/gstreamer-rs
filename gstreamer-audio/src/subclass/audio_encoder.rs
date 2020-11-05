@@ -21,7 +21,6 @@ use std::ptr;
 use crate::prelude::*;
 
 use AudioEncoder;
-use AudioEncoderClass;
 use AudioInfo;
 
 pub trait AudioEncoderImpl: AudioEncoderImplExt + ElementImpl {
@@ -459,14 +458,14 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
     }
 }
 
-unsafe impl<T: AudioEncoderImpl> IsSubclassable<T> for AudioEncoderClass
+unsafe impl<T: AudioEncoderImpl> IsSubclassable<T> for AudioEncoder
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_audio_sys::GstAudioEncoderClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioEncoderClass);
             klass.open = Some(audio_encoder_open::<T>);
             klass.close = Some(audio_encoder_close::<T>);
             klass.start = Some(audio_encoder_start::<T>);

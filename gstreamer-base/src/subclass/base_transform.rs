@@ -21,7 +21,6 @@ use std::mem;
 use std::ptr;
 
 use BaseTransform;
-use BaseTransformClass;
 
 pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
     fn start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
@@ -827,14 +826,14 @@ pub enum BaseTransformMode {
     Both,
 }
 
-unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransformClass
+unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstBaseTransformClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_base_sys::GstBaseTransformClass);
             klass.start = Some(base_transform_start::<T>);
             klass.stop = Some(base_transform_stop::<T>);
             klass.transform_caps = Some(base_transform_transform_caps::<T>);

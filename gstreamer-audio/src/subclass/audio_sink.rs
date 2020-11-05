@@ -10,7 +10,6 @@ use gst_base::subclass::prelude::*;
 
 use AudioRingBufferSpec;
 use AudioSink;
-use AudioSinkClass;
 
 pub trait AudioSinkImpl: AudioSinkImplExt + BaseSinkImpl {
     fn close(&self, sink: &AudioSink) -> Result<(), LoggableError> {
@@ -185,14 +184,14 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     }
 }
 
-unsafe impl<T: AudioSinkImpl> IsSubclassable<T> for AudioSinkClass
+unsafe impl<T: AudioSinkImpl> IsSubclassable<T> for AudioSink
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst_base::BaseSinkClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst_base::BaseSink as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_audio_sys::GstAudioSinkClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioSinkClass);
             klass.close = Some(audiosink_close::<T>);
             klass.delay = Some(audiosink_delay::<T>);
             klass.open = Some(audiosink_open::<T>);

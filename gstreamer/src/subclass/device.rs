@@ -14,7 +14,6 @@ use glib::translate::*;
 use glib::subclass::prelude::*;
 
 use Device;
-use DeviceClass;
 use Element;
 use LoggableError;
 
@@ -99,11 +98,11 @@ impl<T: DeviceImpl> DeviceImplExt for T {
     }
 }
 
-unsafe impl<T: DeviceImpl> IsSubclassable<T> for DeviceClass {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: DeviceImpl> IsSubclassable<T> for Device {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_sys::GstDeviceClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstDeviceClass);
             klass.create_element = Some(device_create_element::<T>);
             klass.reconfigure_element = Some(device_reconfigure_element::<T>);
         }

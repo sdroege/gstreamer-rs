@@ -23,7 +23,6 @@ use std::ptr;
 use crate::prelude::*;
 
 use AudioDecoder;
-use AudioDecoderClass;
 
 pub trait AudioDecoderImpl: AudioDecoderImplExt + ElementImpl {
     fn open(&self, element: &AudioDecoder) -> Result<(), gst::ErrorMessage> {
@@ -510,14 +509,14 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     }
 }
 
-unsafe impl<T: AudioDecoderImpl> IsSubclassable<T> for AudioDecoderClass
+unsafe impl<T: AudioDecoderImpl> IsSubclassable<T> for AudioDecoder
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(&mut self) {
-        <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_audio_sys::GstAudioDecoderClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_audio_sys::GstAudioDecoderClass);
             klass.open = Some(audio_decoder_open::<T>);
             klass.close = Some(audio_decoder_close::<T>);
             klass.start = Some(audio_decoder_start::<T>);

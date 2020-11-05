@@ -11,15 +11,15 @@ use gst_sys;
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use GhostPadClass;
+use GhostPad;
 
 pub trait GhostPadImpl: PadImpl {}
 
-unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPadClass {
-    fn override_vfuncs(&mut self) {
-        <::PadClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <::Pad as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let _klass = &mut *(self as *mut Self as *mut gst_sys::GstGhostPadClass);
+            let _klass = &mut *(klass.as_mut() as *mut gst_sys::GstGhostPadClass);
             // Nothing to do here
         }
     }

@@ -114,11 +114,11 @@ pub unsafe trait DeviceProviderClassSubclassExt: Sized + 'static {
 
 unsafe impl DeviceProviderClassSubclassExt for DeviceProviderClass {}
 
-unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProviderClass {
-    fn override_vfuncs(&mut self) {
-        <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
+unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
+    fn override_vfuncs(klass: &mut glib::object::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut gst_sys::GstDeviceProviderClass);
+            let klass = &mut *(klass.as_mut() as *mut gst_sys::GstDeviceProviderClass);
             klass.probe = Some(device_provider_probe::<T>);
             klass.start = Some(device_provider_start::<T>);
             klass.stop = Some(device_provider_stop::<T>);
