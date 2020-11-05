@@ -26,7 +26,6 @@ mod fir_filter {
 
     use glib::subclass;
     use glib::subclass::prelude::*;
-    use glib::translate::*;
 
     use gst::subclass::prelude::*;
 
@@ -250,17 +249,7 @@ mod fir_filter {
     // This here defines the public interface of our element and implements
     // the corresponding traits so that it behaves like any other gst::Element
     glib_wrapper! {
-        pub struct FirFilter(
-            Object<
-                gst::subclass::ElementInstanceStruct<imp::FirFilter>,
-                subclass::simple::ClassStruct<imp::FirFilter>,
-                FirFilterClass
-            >
-        ) @extends gst_base::BaseTransform, gst::Element, gst::Object;
-
-        match fn {
-            get_type => || imp::FirFilter::get_type().to_glib(),
-        }
+        pub struct FirFilter(ObjectSubclass<imp::FirFilter>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
     }
 
     // GStreamer elements must be Send+Sync, and ours is

@@ -83,7 +83,6 @@ mod media_factory {
 
     use glib::subclass;
     use glib::subclass::prelude::*;
-    use glib::translate::*;
 
     use gst_rtsp_server::subclass::prelude::*;
 
@@ -161,17 +160,7 @@ mod media_factory {
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPMediaFactory
     glib_wrapper! {
-        pub struct Factory(
-            Object<
-                gst::subclass::ElementInstanceStruct<imp::Factory>,
-                subclass::simple::ClassStruct<imp::Factory>,
-                FactoryClass
-            >
-        ) @extends gst_rtsp_server::RTSPMediaFactory;
-
-        match fn {
-            get_type => || imp::Factory::get_type().to_glib(),
-        }
+        pub struct Factory(ObjectSubclass<imp::Factory>) @extends gst_rtsp_server::RTSPMediaFactory;
     }
 
     // Factories must be Send+Sync, and ours is
@@ -195,7 +184,6 @@ mod media {
 
     use glib::subclass;
     use glib::subclass::prelude::*;
-    use glib::translate::*;
 
     use gst_rtsp_server::subclass::prelude::*;
 
@@ -248,17 +236,7 @@ mod media {
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPMedia
     glib_wrapper! {
-        pub struct Media(
-            Object<
-                gst::subclass::ElementInstanceStruct<imp::Media>,
-                subclass::simple::ClassStruct<imp::Media>,
-                MediaClass
-            >
-        ) @extends gst_rtsp_server::RTSPMedia;
-
-        match fn {
-            get_type => || imp::Media::get_type().to_glib(),
-        }
+        pub struct Media(ObjectSubclass<imp::Media>) @extends gst_rtsp_server::RTSPMedia;
     }
 
     // Medias must be Send+Sync, and ours is
@@ -273,7 +251,6 @@ mod server {
 
     use glib::subclass;
     use glib::subclass::prelude::*;
-    use glib::translate::*;
 
     use gst_rtsp_server::subclass::prelude::*;
 
@@ -337,17 +314,7 @@ mod server {
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPServer
     glib_wrapper! {
-        pub struct Server(
-            Object<
-                gst::subclass::ElementInstanceStruct<imp::Server>,
-                subclass::simple::ClassStruct<imp::Server>,
-                ServerClass
-            >
-        ) @extends gst_rtsp_server::RTSPServer;
-
-        match fn {
-            get_type => || imp::Server::get_type().to_glib(),
-        }
+        pub struct Server(ObjectSubclass<imp::Server>) @extends gst_rtsp_server::RTSPServer;
     }
 
     // Servers must be Send+Sync, and ours is
@@ -371,7 +338,6 @@ mod client {
 
     use glib::subclass;
     use glib::subclass::prelude::*;
-    use glib::translate::*;
 
     use gst_rtsp_server::subclass::prelude::*;
 
@@ -416,17 +382,7 @@ mod client {
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPClient
     glib_wrapper! {
-        pub struct Client(
-            Object<
-                gst::subclass::ElementInstanceStruct<imp::Client>,
-                subclass::simple::ClassStruct<imp::Client>,
-                ClientClass
-            >
-        ) @extends gst_rtsp_server::RTSPClient;
-
-        match fn {
-            get_type => || imp::Client::get_type().to_glib(),
-        }
+        pub struct Client(ObjectSubclass<imp::Client>) @extends gst_rtsp_server::RTSPClient;
     }
 
     // Clients must be Send+Sync, and ours is
