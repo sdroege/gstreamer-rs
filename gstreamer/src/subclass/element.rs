@@ -19,7 +19,6 @@ use glib::translate::*;
 use prelude::*;
 
 use Element;
-use ElementClass;
 use Event;
 use PadTemplate;
 use QueryRef;
@@ -336,7 +335,7 @@ pub unsafe trait ElementClassSubclassExt: Sized + 'static {
     }
 }
 
-unsafe impl ElementClassSubclassExt for ElementClass {}
+unsafe impl ElementClassSubclassExt for glib::Class<Element> {}
 
 unsafe impl<T: ElementImpl> IsSubclassable<T> for Element
 where

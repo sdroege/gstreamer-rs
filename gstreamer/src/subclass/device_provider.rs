@@ -15,7 +15,6 @@ use glib::subclass::prelude::*;
 
 use Device;
 use DeviceProvider;
-use DeviceProviderClass;
 use LoggableError;
 
 pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync {
@@ -112,7 +111,7 @@ pub unsafe trait DeviceProviderClassSubclassExt: Sized + 'static {
     }
 }
 
-unsafe impl DeviceProviderClassSubclassExt for DeviceProviderClass {}
+unsafe impl DeviceProviderClassSubclassExt for glib::Class<DeviceProvider> {}
 
 unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {

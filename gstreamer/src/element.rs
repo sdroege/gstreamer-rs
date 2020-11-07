@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use Element;
-use ElementClass;
 
 use once_cell::sync::Lazy;
 
@@ -133,7 +132,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
 }
 
 pub trait ElementExtManual: 'static {
-    fn get_element_class(&self) -> &ElementClass;
+    fn get_element_class(&self) -> &glib::Class<Element>;
 
     fn change_state(&self, transition: StateChange)
         -> Result<StateChangeSuccess, StateChangeError>;
@@ -271,10 +270,10 @@ pub trait ElementExtManual: 'static {
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
-    fn get_element_class(&self) -> &ElementClass {
+    fn get_element_class(&self) -> &glib::Class<Element> {
         unsafe {
             let klass = (*(self.as_ptr() as *mut gobject_sys::GTypeInstance)).g_class
-                as *const ElementClass;
+                as *const glib::Class<Element>;
             &*klass
         }
     }
