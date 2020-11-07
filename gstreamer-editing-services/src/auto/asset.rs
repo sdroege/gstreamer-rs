@@ -21,7 +21,7 @@ use std::ptr;
 use Extractable;
 
 glib_wrapper! {
-    pub struct Asset(Object<ges_sys::GESAsset, ges_sys::GESAssetClass, AssetClass>);
+    pub struct Asset(Object<ges_sys::GESAsset, ges_sys::GESAssetClass>);
 
     match fn {
         get_type => || ges_sys::ges_asset_get_type(),

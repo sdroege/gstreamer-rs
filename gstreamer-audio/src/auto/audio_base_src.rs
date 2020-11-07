@@ -18,7 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct AudioBaseSrc(Object<gst_audio_sys::GstAudioBaseSrc, gst_audio_sys::GstAudioBaseSrcClass, AudioBaseSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object;
+    pub struct AudioBaseSrc(Object<gst_audio_sys::GstAudioBaseSrc, gst_audio_sys::GstAudioBaseSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_audio_sys::gst_audio_base_src_get_type(),

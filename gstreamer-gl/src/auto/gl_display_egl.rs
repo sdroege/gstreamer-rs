@@ -9,7 +9,7 @@ use gst_gl_sys;
 use GLDisplay;
 
 glib_wrapper! {
-    pub struct GLDisplayEGL(Object<gst_gl_sys::GstGLDisplayEGL, gst_gl_sys::GstGLDisplayEGLClass, GLDisplayEGLClass>) @extends GLDisplay, gst::Object;
+    pub struct GLDisplayEGL(Object<gst_gl_sys::GstGLDisplayEGL, gst_gl_sys::GstGLDisplayEGLClass>) @extends GLDisplay, gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_display_egl_get_type(),

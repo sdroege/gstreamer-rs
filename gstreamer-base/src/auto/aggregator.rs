@@ -21,7 +21,7 @@ use AggregatorPad;
 use AggregatorStartTimeSelection;
 
 glib_wrapper! {
-    pub struct Aggregator(Object<gst_base_sys::GstAggregator, gst_base_sys::GstAggregatorClass, AggregatorClass>) @extends gst::Element, gst::Object;
+    pub struct Aggregator(Object<gst_base_sys::GstAggregator, gst_base_sys::GstAggregatorClass>) @extends gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_base_sys::gst_aggregator_get_type(),

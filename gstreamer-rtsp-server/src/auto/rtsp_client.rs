@@ -29,7 +29,7 @@ use RTSPStreamTransport;
 use RTSPThreadPool;
 
 glib_wrapper! {
-    pub struct RTSPClient(Object<gst_rtsp_server_sys::GstRTSPClient, gst_rtsp_server_sys::GstRTSPClientClass, RTSPClientClass>);
+    pub struct RTSPClient(Object<gst_rtsp_server_sys::GstRTSPClient, gst_rtsp_server_sys::GstRTSPClientClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_client_get_type(),

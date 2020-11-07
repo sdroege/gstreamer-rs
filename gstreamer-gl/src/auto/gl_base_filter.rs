@@ -18,7 +18,7 @@ use std::mem::transmute;
 use GLContext;
 
 glib_wrapper! {
-    pub struct GLBaseFilter(Object<gst_gl_sys::GstGLBaseFilter, gst_gl_sys::GstGLBaseFilterClass, GLBaseFilterClass>) @extends gst::Object;
+    pub struct GLBaseFilter(Object<gst_gl_sys::GstGLBaseFilter, gst_gl_sys::GstGLBaseFilterClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_base_filter_get_type(),

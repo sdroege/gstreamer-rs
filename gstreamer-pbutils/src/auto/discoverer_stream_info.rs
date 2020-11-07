@@ -9,7 +9,7 @@ use gst;
 use gst_pbutils_sys;
 
 glib_wrapper! {
-    pub struct DiscovererStreamInfo(Object<gst_pbutils_sys::GstDiscovererStreamInfo, DiscovererStreamInfoClass>);
+    pub struct DiscovererStreamInfo(Object<gst_pbutils_sys::GstDiscovererStreamInfo>);
 
     match fn {
         get_type => || gst_pbutils_sys::gst_discoverer_stream_info_get_type(),

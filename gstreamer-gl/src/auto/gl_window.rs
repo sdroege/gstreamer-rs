@@ -20,7 +20,7 @@ use GLContext;
 use GLDisplay;
 
 glib_wrapper! {
-    pub struct GLWindow(Object<gst_gl_sys::GstGLWindow, gst_gl_sys::GstGLWindowClass, GLWindowClass>) @extends gst::Object;
+    pub struct GLWindow(Object<gst_gl_sys::GstGLWindow, gst_gl_sys::GstGLWindowClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_window_get_type(),

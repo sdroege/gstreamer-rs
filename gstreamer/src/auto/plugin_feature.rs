@@ -11,7 +11,7 @@ use Object;
 use Plugin;
 
 glib_wrapper! {
-    pub struct PluginFeature(Object<gst_sys::GstPluginFeature, gst_sys::GstPluginFeatureClass, PluginFeatureClass>) @extends Object;
+    pub struct PluginFeature(Object<gst_sys::GstPluginFeature, gst_sys::GstPluginFeatureClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_plugin_feature_get_type(),

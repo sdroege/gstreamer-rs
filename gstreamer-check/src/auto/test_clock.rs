@@ -17,7 +17,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct TestClock(Object<gst_check_sys::GstTestClock, gst_check_sys::GstTestClockClass, TestClockClass>) @extends gst::Clock, gst::Object;
+    pub struct TestClock(Object<gst_check_sys::GstTestClock, gst_check_sys::GstTestClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
         get_type => || gst_check_sys::gst_test_clock_get_type(),

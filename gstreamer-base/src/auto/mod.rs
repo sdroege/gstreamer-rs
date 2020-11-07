@@ -3,40 +3,40 @@
 // DO NOT EDIT
 
 mod adapter;
-pub use self::adapter::{Adapter, AdapterClass};
+pub use self::adapter::Adapter;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use self::aggregator::AggregatorExt;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub use self::aggregator::{Aggregator, AggregatorClass, NONE_AGGREGATOR};
+pub use self::aggregator::{Aggregator, NONE_AGGREGATOR};
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator_pad;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use self::aggregator_pad::AggregatorPadExt;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub use self::aggregator_pad::{AggregatorPad, AggregatorPadClass, NONE_AGGREGATOR_PAD};
+pub use self::aggregator_pad::{AggregatorPad, NONE_AGGREGATOR_PAD};
 
 mod base_parse;
 pub use self::base_parse::BaseParseExt;
-pub use self::base_parse::{BaseParse, BaseParseClass, NONE_BASE_PARSE};
+pub use self::base_parse::{BaseParse, NONE_BASE_PARSE};
 
 mod base_sink;
 pub use self::base_sink::BaseSinkExt;
-pub use self::base_sink::{BaseSink, BaseSinkClass, NONE_BASE_SINK};
+pub use self::base_sink::{BaseSink, NONE_BASE_SINK};
 
 mod base_src;
 pub use self::base_src::BaseSrcExt;
-pub use self::base_src::{BaseSrc, BaseSrcClass, NONE_BASE_SRC};
+pub use self::base_src::{BaseSrc, NONE_BASE_SRC};
 
 mod base_transform;
 pub use self::base_transform::BaseTransformExt;
-pub use self::base_transform::{BaseTransform, BaseTransformClass, NONE_BASE_TRANSFORM};
+pub use self::base_transform::{BaseTransform, NONE_BASE_TRANSFORM};
 
 mod push_src;
-pub use self::push_src::{PushSrc, PushSrcClass, NONE_PUSH_SRC};
+pub use self::push_src::{PushSrc, NONE_PUSH_SRC};
 
 mod enums;
 #[cfg(any(feature = "v1_18", feature = "dox"))]

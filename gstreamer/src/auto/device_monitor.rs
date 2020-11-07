@@ -21,7 +21,7 @@ use Device;
 use Object;
 
 glib_wrapper! {
-    pub struct DeviceMonitor(Object<gst_sys::GstDeviceMonitor, gst_sys::GstDeviceMonitorClass, DeviceMonitorClass>) @extends Object;
+    pub struct DeviceMonitor(Object<gst_sys::GstDeviceMonitor, gst_sys::GstDeviceMonitorClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_device_monitor_get_type(),

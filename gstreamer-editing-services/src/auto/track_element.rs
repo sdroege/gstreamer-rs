@@ -25,7 +25,7 @@ use Track;
 use TrackType;
 
 glib_wrapper! {
-    pub struct TrackElement(Object<ges_sys::GESTrackElement, ges_sys::GESTrackElementClass, TrackElementClass>) @extends TimelineElement, @implements Extractable;
+    pub struct TrackElement(Object<ges_sys::GESTrackElement, ges_sys::GESTrackElementClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ges_sys::ges_track_element_get_type(),

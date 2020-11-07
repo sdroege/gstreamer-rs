@@ -17,7 +17,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct BaseParse(Object<gst_base_sys::GstBaseParse, gst_base_sys::GstBaseParseClass, BaseParseClass>) @extends gst::Element, gst::Object;
+    pub struct BaseParse(Object<gst_base_sys::GstBaseParse, gst_base_sys::GstBaseParseClass>) @extends gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_base_sys::gst_base_parse_get_type(),

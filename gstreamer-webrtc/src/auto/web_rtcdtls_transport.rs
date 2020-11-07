@@ -18,7 +18,7 @@ use WebRTCDTLSTransportState;
 use WebRTCICETransport;
 
 glib_wrapper! {
-    pub struct WebRTCDTLSTransport(Object<gst_web_rtc_sys::GstWebRTCDTLSTransport, gst_web_rtc_sys::GstWebRTCDTLSTransportClass, WebRTCDTLSTransportClass>);
+    pub struct WebRTCDTLSTransport(Object<gst_web_rtc_sys::GstWebRTCDTLSTransport, gst_web_rtc_sys::GstWebRTCDTLSTransportClass>);
 
     match fn {
         get_type => || gst_web_rtc_sys::gst_webrtc_dtls_transport_get_type(),

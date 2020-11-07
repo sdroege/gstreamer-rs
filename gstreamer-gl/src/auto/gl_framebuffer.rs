@@ -10,7 +10,7 @@ use std::mem;
 use GLContext;
 
 glib_wrapper! {
-    pub struct GLFramebuffer(Object<gst_gl_sys::GstGLFramebuffer, gst_gl_sys::GstGLFramebufferClass, GLFramebufferClass>) @extends gst::Object;
+    pub struct GLFramebuffer(Object<gst_gl_sys::GstGLFramebuffer, gst_gl_sys::GstGLFramebufferClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_framebuffer_get_type(),

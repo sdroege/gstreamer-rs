@@ -18,7 +18,7 @@ use std::mem::transmute;
 use TimedValueControlSource;
 
 glib_wrapper! {
-    pub struct TriggerControlSource(Object<gst_controller_sys::GstTriggerControlSource, gst_controller_sys::GstTriggerControlSourceClass, TriggerControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
+    pub struct TriggerControlSource(Object<gst_controller_sys::GstTriggerControlSource, gst_controller_sys::GstTriggerControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
 
     match fn {
         get_type => || gst_controller_sys::gst_trigger_control_source_get_type(),

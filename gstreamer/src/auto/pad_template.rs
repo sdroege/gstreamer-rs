@@ -23,7 +23,7 @@ use PadDirection;
 use PadPresence;
 
 glib_wrapper! {
-    pub struct PadTemplate(Object<gst_sys::GstPadTemplate, gst_sys::GstPadTemplateClass, PadTemplateClass>) @extends Object;
+    pub struct PadTemplate(Object<gst_sys::GstPadTemplate, gst_sys::GstPadTemplateClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_pad_template_get_type(),

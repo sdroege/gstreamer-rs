@@ -27,7 +27,7 @@ use std::mem::transmute;
 use GLContext;
 
 glib_wrapper! {
-    pub struct GLOverlayCompositor(Object<gst_gl_sys::GstGLOverlayCompositor, gst_gl_sys::GstGLOverlayCompositorClass, GLOverlayCompositorClass>) @extends gst::Object;
+    pub struct GLOverlayCompositor(Object<gst_gl_sys::GstGLOverlayCompositor, gst_gl_sys::GstGLOverlayCompositorClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_overlay_compositor_get_type(),

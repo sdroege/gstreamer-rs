@@ -8,7 +8,7 @@ use gst_pbutils_sys;
 use DiscovererStreamInfo;
 
 glib_wrapper! {
-    pub struct DiscovererSubtitleInfo(Object<gst_pbutils_sys::GstDiscovererSubtitleInfo, DiscovererSubtitleInfoClass>) @extends DiscovererStreamInfo;
+    pub struct DiscovererSubtitleInfo(Object<gst_pbutils_sys::GstDiscovererSubtitleInfo>) @extends DiscovererStreamInfo;
 
     match fn {
         get_type => || gst_pbutils_sys::gst_discoverer_subtitle_info_get_type(),

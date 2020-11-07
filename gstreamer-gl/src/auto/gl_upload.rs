@@ -11,7 +11,7 @@ use std::ptr;
 use GLContext;
 
 glib_wrapper! {
-    pub struct GLUpload(Object<gst_gl_sys::GstGLUpload, gst_gl_sys::GstGLUploadClass, GLUploadClass>) @extends gst::Object;
+    pub struct GLUpload(Object<gst_gl_sys::GstGLUpload, gst_gl_sys::GstGLUploadClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_upload_get_type(),

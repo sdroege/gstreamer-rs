@@ -7,7 +7,7 @@ use gst_web_rtc_sys;
 use WebRTCDTLSTransport;
 
 glib_wrapper! {
-    pub struct WebRTCRTPSender(Object<gst_web_rtc_sys::GstWebRTCRTPSender, gst_web_rtc_sys::GstWebRTCRTPSenderClass, WebRTCRTPSenderClass>);
+    pub struct WebRTCRTPSender(Object<gst_web_rtc_sys::GstWebRTCRTPSender, gst_web_rtc_sys::GstWebRTCRTPSenderClass>);
 
     match fn {
         get_type => || gst_web_rtc_sys::gst_webrtc_rtp_sender_get_type(),

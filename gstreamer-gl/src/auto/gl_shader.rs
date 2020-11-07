@@ -27,7 +27,7 @@ use GLSLStage;
 use GLSLVersion;
 
 glib_wrapper! {
-    pub struct GLShader(Object<gst_gl_sys::GstGLShader, gst_gl_sys::GstGLShaderClass, GLShaderClass>) @extends gst::Object;
+    pub struct GLShader(Object<gst_gl_sys::GstGLShader, gst_gl_sys::GstGLShaderClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_shader_get_type(),

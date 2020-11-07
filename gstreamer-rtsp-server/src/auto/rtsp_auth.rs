@@ -22,7 +22,7 @@ use std::mem::transmute;
 use RTSPToken;
 
 glib_wrapper! {
-    pub struct RTSPAuth(Object<gst_rtsp_server_sys::GstRTSPAuth, gst_rtsp_server_sys::GstRTSPAuthClass, RTSPAuthClass>);
+    pub struct RTSPAuth(Object<gst_rtsp_server_sys::GstRTSPAuth, gst_rtsp_server_sys::GstRTSPAuthClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_auth_get_type(),

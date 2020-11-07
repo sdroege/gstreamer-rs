@@ -3,46 +3,42 @@
 // DO NOT EDIT
 
 mod discoverer;
-pub use self::discoverer::{Discoverer, DiscovererClass};
+pub use self::discoverer::Discoverer;
 
 mod discoverer_audio_info;
-pub use self::discoverer_audio_info::{DiscovererAudioInfo, DiscovererAudioInfoClass};
+pub use self::discoverer_audio_info::DiscovererAudioInfo;
 
 mod discoverer_container_info;
-pub use self::discoverer_container_info::{DiscovererContainerInfo, DiscovererContainerInfoClass};
+pub use self::discoverer_container_info::DiscovererContainerInfo;
 
 mod discoverer_info;
-pub use self::discoverer_info::{DiscovererInfo, DiscovererInfoClass};
+pub use self::discoverer_info::DiscovererInfo;
 
 mod discoverer_stream_info;
 pub use self::discoverer_stream_info::DiscovererStreamInfoExt;
-pub use self::discoverer_stream_info::{
-    DiscovererStreamInfo, DiscovererStreamInfoClass, NONE_DISCOVERER_STREAM_INFO,
-};
+pub use self::discoverer_stream_info::{DiscovererStreamInfo, NONE_DISCOVERER_STREAM_INFO};
 
 mod discoverer_subtitle_info;
-pub use self::discoverer_subtitle_info::{DiscovererSubtitleInfo, DiscovererSubtitleInfoClass};
+pub use self::discoverer_subtitle_info::DiscovererSubtitleInfo;
 
 mod discoverer_video_info;
-pub use self::discoverer_video_info::{DiscovererVideoInfo, DiscovererVideoInfoClass};
+pub use self::discoverer_video_info::DiscovererVideoInfo;
 
 mod encoding_audio_profile;
-pub use self::encoding_audio_profile::{EncodingAudioProfile, EncodingAudioProfileClass};
+pub use self::encoding_audio_profile::EncodingAudioProfile;
 
 mod encoding_container_profile;
-pub use self::encoding_container_profile::{
-    EncodingContainerProfile, EncodingContainerProfileClass,
-};
+pub use self::encoding_container_profile::EncodingContainerProfile;
 
 mod encoding_profile;
 pub use self::encoding_profile::EncodingProfileExt;
-pub use self::encoding_profile::{EncodingProfile, EncodingProfileClass, NONE_ENCODING_PROFILE};
+pub use self::encoding_profile::{EncodingProfile, NONE_ENCODING_PROFILE};
 
 mod encoding_target;
-pub use self::encoding_target::{EncodingTarget, EncodingTargetClass};
+pub use self::encoding_target::EncodingTarget;
 
 mod encoding_video_profile;
-pub use self::encoding_video_profile::{EncodingVideoProfile, EncodingVideoProfileClass};
+pub use self::encoding_video_profile::EncodingVideoProfile;
 
 mod enums;
 pub use self::enums::DiscovererResult;

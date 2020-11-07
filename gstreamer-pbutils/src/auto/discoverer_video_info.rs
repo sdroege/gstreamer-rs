@@ -7,7 +7,7 @@ use gst_pbutils_sys;
 use DiscovererStreamInfo;
 
 glib_wrapper! {
-    pub struct DiscovererVideoInfo(Object<gst_pbutils_sys::GstDiscovererVideoInfo, DiscovererVideoInfoClass>) @extends DiscovererStreamInfo;
+    pub struct DiscovererVideoInfo(Object<gst_pbutils_sys::GstDiscovererVideoInfo>) @extends DiscovererStreamInfo;
 
     match fn {
         get_type => || gst_pbutils_sys::gst_discoverer_video_info_get_type(),

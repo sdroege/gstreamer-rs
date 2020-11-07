@@ -22,7 +22,7 @@ use Layer;
 use TimelineElement;
 
 glib_wrapper! {
-    pub struct Container(Object<ges_sys::GESContainer, ges_sys::GESContainerClass, ContainerClass>) @extends TimelineElement, @implements Extractable;
+    pub struct Container(Object<ges_sys::GESContainer, ges_sys::GESContainerClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ges_sys::ges_container_get_type(),

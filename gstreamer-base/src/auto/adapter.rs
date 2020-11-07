@@ -10,7 +10,7 @@ use gst_base_sys;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Adapter(Object<gst_base_sys::GstAdapter, gst_base_sys::GstAdapterClass, AdapterClass>);
+    pub struct Adapter(Object<gst_base_sys::GstAdapter, gst_base_sys::GstAdapterClass>);
 
     match fn {
         get_type => || gst_base_sys::gst_adapter_get_type(),

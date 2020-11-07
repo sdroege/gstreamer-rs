@@ -7,7 +7,7 @@ use gst_pbutils_sys;
 use EncodingProfile;
 
 glib_wrapper! {
-    pub struct EncodingVideoProfile(Object<gst_pbutils_sys::GstEncodingVideoProfile, gst_pbutils_sys::GstEncodingVideoProfileClass, EncodingVideoProfileClass>) @extends EncodingProfile;
+    pub struct EncodingVideoProfile(Object<gst_pbutils_sys::GstEncodingVideoProfile, gst_pbutils_sys::GstEncodingVideoProfileClass>) @extends EncodingProfile;
 
     match fn {
         get_type => || gst_pbutils_sys::gst_encoding_video_profile_get_type(),

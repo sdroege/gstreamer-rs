@@ -23,7 +23,7 @@ use Asset;
 use UriSourceAsset;
 
 glib_wrapper! {
-    pub struct UriClipAsset(Object<ges_sys::GESUriClipAsset, ges_sys::GESUriClipAssetClass, UriClipAssetClass>) @extends Asset;
+    pub struct UriClipAsset(Object<ges_sys::GESUriClipAsset, ges_sys::GESUriClipAssetClass>) @extends Asset;
 
     match fn {
         get_type => || ges_sys::ges_uri_clip_asset_get_type(),

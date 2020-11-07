@@ -20,7 +20,7 @@ use DeviceProviderFactory;
 use Object;
 
 glib_wrapper! {
-    pub struct DeviceProvider(Object<gst_sys::GstDeviceProvider, gst_sys::GstDeviceProviderClass, DeviceProviderClass>) @extends Object;
+    pub struct DeviceProvider(Object<gst_sys::GstDeviceProvider, gst_sys::GstDeviceProviderClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_device_provider_get_type(),

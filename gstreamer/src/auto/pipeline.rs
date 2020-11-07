@@ -19,7 +19,7 @@ use Element;
 use Object;
 
 glib_wrapper! {
-    pub struct Pipeline(Object<gst_sys::GstPipeline, gst_sys::GstPipelineClass, PipelineClass>) @extends Bin, Element, Object, @implements ChildProxy;
+    pub struct Pipeline(Object<gst_sys::GstPipeline, gst_sys::GstPipelineClass>) @extends Bin, Element, Object, @implements ChildProxy;
 
     match fn {
         get_type => || gst_sys::gst_pipeline_get_type(),

@@ -10,7 +10,7 @@ use gst_gl_sys;
 use GLContext;
 
 glib_wrapper! {
-    pub struct GLColorConvert(Object<gst_gl_sys::GstGLColorConvert, gst_gl_sys::GstGLColorConvertClass, GLColorConvertClass>) @extends gst::Object;
+    pub struct GLColorConvert(Object<gst_gl_sys::GstGLColorConvert, gst_gl_sys::GstGLColorConvertClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_color_convert_get_type(),

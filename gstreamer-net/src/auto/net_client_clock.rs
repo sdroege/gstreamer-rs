@@ -19,7 +19,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct NetClientClock(Object<gst_net_sys::GstNetClientClock, gst_net_sys::GstNetClientClockClass, NetClientClockClass>) @extends gst::Clock, gst::Object;
+    pub struct NetClientClock(Object<gst_net_sys::GstNetClientClock, gst_net_sys::GstNetClientClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
         get_type => || gst_net_sys::gst_net_client_clock_get_type(),

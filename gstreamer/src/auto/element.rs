@@ -26,7 +26,7 @@ use PadTemplate;
 use URIType;
 
 glib_wrapper! {
-    pub struct Element(Object<gst_sys::GstElement, gst_sys::GstElementClass, ElementClass>) @extends Object;
+    pub struct Element(Object<gst_sys::GstElement, gst_sys::GstElementClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_element_get_type(),

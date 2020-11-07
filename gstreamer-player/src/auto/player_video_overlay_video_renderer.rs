@@ -20,7 +20,7 @@ use std::mem::transmute;
 use PlayerVideoRenderer;
 
 glib_wrapper! {
-    pub struct PlayerVideoOverlayVideoRenderer(Object<gst_player_sys::GstPlayerVideoOverlayVideoRenderer, gst_player_sys::GstPlayerVideoOverlayVideoRendererClass, PlayerVideoOverlayVideoRendererClass>) @implements PlayerVideoRenderer;
+    pub struct PlayerVideoOverlayVideoRenderer(Object<gst_player_sys::GstPlayerVideoOverlayVideoRenderer, gst_player_sys::GstPlayerVideoOverlayVideoRendererClass>) @implements PlayerVideoRenderer;
 
     match fn {
         get_type => || gst_player_sys::gst_player_video_overlay_video_renderer_get_type(),

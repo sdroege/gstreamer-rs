@@ -10,7 +10,7 @@ use ClockTime;
 use Object;
 
 glib_wrapper! {
-    pub struct ControlSource(Object<gst_sys::GstControlSource, gst_sys::GstControlSourceClass, ControlSourceClass>) @extends Object;
+    pub struct ControlSource(Object<gst_sys::GstControlSource, gst_sys::GstControlSourceClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_control_source_get_type(),

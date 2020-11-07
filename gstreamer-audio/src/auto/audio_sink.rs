@@ -9,7 +9,7 @@ use gst_base;
 use AudioBaseSink;
 
 glib_wrapper! {
-    pub struct AudioSink(Object<gst_audio_sys::GstAudioSink, gst_audio_sys::GstAudioSinkClass, AudioSinkClass>) @extends AudioBaseSink, gst_base::BaseSink, gst::Element, gst::Object;
+    pub struct AudioSink(Object<gst_audio_sys::GstAudioSink, gst_audio_sys::GstAudioSinkClass>) @extends AudioBaseSink, gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_audio_sys::gst_audio_sink_get_type(),

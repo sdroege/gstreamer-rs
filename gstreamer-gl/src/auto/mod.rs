@@ -7,56 +7,56 @@ mod gl_base_filter;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 pub use self::gl_base_filter::GLBaseFilterExt;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
-pub use self::gl_base_filter::{GLBaseFilter, GLBaseFilterClass, NONE_GL_BASE_FILTER};
+pub use self::gl_base_filter::{GLBaseFilter, NONE_GL_BASE_FILTER};
 
 mod gl_color_convert;
-pub use self::gl_color_convert::{GLColorConvert, GLColorConvertClass};
+pub use self::gl_color_convert::GLColorConvert;
 
 mod gl_context;
 pub use self::gl_context::GLContextExt;
-pub use self::gl_context::{GLContext, GLContextClass, NONE_GL_CONTEXT};
+pub use self::gl_context::{GLContext, NONE_GL_CONTEXT};
 
 mod gl_display;
 pub use self::gl_display::GLDisplayExt;
-pub use self::gl_display::{GLDisplay, GLDisplayClass, NONE_GL_DISPLAY};
+pub use self::gl_display::{GLDisplay, NONE_GL_DISPLAY};
 
 #[cfg(any(feature = "egl", feature = "dox"))]
 mod gl_display_egl;
 #[cfg(any(feature = "egl", feature = "dox"))]
-pub use self::gl_display_egl::{GLDisplayEGL, GLDisplayEGLClass};
+pub use self::gl_display_egl::GLDisplayEGL;
 
 #[cfg(any(feature = "wayland", feature = "dox"))]
 mod gl_display_wayland;
 #[cfg(any(feature = "wayland", feature = "dox"))]
-pub use self::gl_display_wayland::{GLDisplayWayland, GLDisplayWaylandClass};
+pub use self::gl_display_wayland::GLDisplayWayland;
 
 #[cfg(any(feature = "x11", feature = "dox"))]
 mod gl_display_x11;
 #[cfg(any(feature = "x11", feature = "dox"))]
-pub use self::gl_display_x11::{GLDisplayX11, GLDisplayX11Class};
+pub use self::gl_display_x11::GLDisplayX11;
 
 mod gl_framebuffer;
 pub use self::gl_framebuffer::GLFramebufferExt;
-pub use self::gl_framebuffer::{GLFramebuffer, GLFramebufferClass, NONE_GL_FRAMEBUFFER};
+pub use self::gl_framebuffer::{GLFramebuffer, NONE_GL_FRAMEBUFFER};
 
 mod gl_overlay_compositor;
-pub use self::gl_overlay_compositor::{GLOverlayCompositor, GLOverlayCompositorClass};
+pub use self::gl_overlay_compositor::GLOverlayCompositor;
 
 mod glsl_stage;
-pub use self::glsl_stage::{GLSLStage, GLSLStageClass};
+pub use self::glsl_stage::GLSLStage;
 
 mod gl_shader;
-pub use self::gl_shader::{GLShader, GLShaderClass};
+pub use self::gl_shader::GLShader;
 
 mod gl_upload;
-pub use self::gl_upload::{GLUpload, GLUploadClass};
+pub use self::gl_upload::GLUpload;
 
 mod gl_view_convert;
-pub use self::gl_view_convert::{GLViewConvert, GLViewConvertClass};
+pub use self::gl_view_convert::GLViewConvert;
 
 mod gl_window;
 pub use self::gl_window::GLWindowExt;
-pub use self::gl_window::{GLWindow, GLWindowClass, NONE_GL_WINDOW};
+pub use self::gl_window::{GLWindow, NONE_GL_WINDOW};
 
 mod enums;
 pub use self::enums::GLContextError;

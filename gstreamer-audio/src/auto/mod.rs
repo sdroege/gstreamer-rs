@@ -4,25 +4,25 @@
 
 mod audio_base_sink;
 pub use self::audio_base_sink::AudioBaseSinkExt;
-pub use self::audio_base_sink::{AudioBaseSink, AudioBaseSinkClass, NONE_AUDIO_BASE_SINK};
+pub use self::audio_base_sink::{AudioBaseSink, NONE_AUDIO_BASE_SINK};
 
 mod audio_base_src;
 pub use self::audio_base_src::AudioBaseSrcExt;
-pub use self::audio_base_src::{AudioBaseSrc, AudioBaseSrcClass, NONE_AUDIO_BASE_SRC};
+pub use self::audio_base_src::{AudioBaseSrc, NONE_AUDIO_BASE_SRC};
 
 mod audio_decoder;
 pub use self::audio_decoder::AudioDecoderExt;
-pub use self::audio_decoder::{AudioDecoder, AudioDecoderClass, NONE_AUDIO_DECODER};
+pub use self::audio_decoder::{AudioDecoder, NONE_AUDIO_DECODER};
 
 mod audio_encoder;
 pub use self::audio_encoder::AudioEncoderExt;
-pub use self::audio_encoder::{AudioEncoder, AudioEncoderClass, NONE_AUDIO_ENCODER};
+pub use self::audio_encoder::{AudioEncoder, NONE_AUDIO_ENCODER};
 
 mod audio_sink;
-pub use self::audio_sink::{AudioSink, AudioSinkClass, NONE_AUDIO_SINK};
+pub use self::audio_sink::{AudioSink, NONE_AUDIO_SINK};
 
 mod audio_src;
-pub use self::audio_src::{AudioSrc, AudioSrcClass, NONE_AUDIO_SRC};
+pub use self::audio_src::{AudioSrc, NONE_AUDIO_SRC};
 
 mod stream_volume;
 pub use self::stream_volume::StreamVolumeExt;

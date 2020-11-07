@@ -26,7 +26,7 @@ use RTSPSessionPool;
 use RTSPThreadPool;
 
 glib_wrapper! {
-    pub struct RTSPServer(Object<gst_rtsp_server_sys::GstRTSPServer, gst_rtsp_server_sys::GstRTSPServerClass, RTSPServerClass>);
+    pub struct RTSPServer(Object<gst_rtsp_server_sys::GstRTSPServer, gst_rtsp_server_sys::GstRTSPServerClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_server_get_type(),

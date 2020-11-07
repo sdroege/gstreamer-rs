@@ -25,7 +25,7 @@ use TrackElement;
 use TrackType;
 
 glib_wrapper! {
-    pub struct Track(Object<ges_sys::GESTrack, ges_sys::GESTrackClass, TrackClass>) @extends gst::Element, gst::Object;
+    pub struct Track(Object<ges_sys::GESTrack, ges_sys::GESTrackClass>) @extends gst::Element, gst::Object;
 
     match fn {
         get_type => || ges_sys::ges_track_get_type(),

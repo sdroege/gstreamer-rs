@@ -19,7 +19,7 @@ use ClockType;
 use Object;
 
 glib_wrapper! {
-    pub struct SystemClock(Object<gst_sys::GstSystemClock, gst_sys::GstSystemClockClass, SystemClockClass>) @extends Clock, Object;
+    pub struct SystemClock(Object<gst_sys::GstSystemClock, gst_sys::GstSystemClockClass>) @extends Clock, Object;
 
     match fn {
         get_type => || gst_sys::gst_system_clock_get_type(),

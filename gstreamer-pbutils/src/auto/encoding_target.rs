@@ -11,7 +11,7 @@ use std::ptr;
 use EncodingProfile;
 
 glib_wrapper! {
-    pub struct EncodingTarget(Object<gst_pbutils_sys::GstEncodingTarget, EncodingTargetClass>);
+    pub struct EncodingTarget(Object<gst_pbutils_sys::GstEncodingTarget>);
 
     match fn {
         get_type => || gst_pbutils_sys::gst_encoding_target_get_type(),

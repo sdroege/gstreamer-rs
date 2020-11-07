@@ -13,7 +13,7 @@ use GLSLProfile;
 use GLSLVersion;
 
 glib_wrapper! {
-    pub struct GLSLStage(Object<gst_gl_sys::GstGLSLStage, gst_gl_sys::GstGLSLStageClass, GLSLStageClass>) @extends gst::Object;
+    pub struct GLSLStage(Object<gst_gl_sys::GstGLSLStage, gst_gl_sys::GstGLSLStageClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_glsl_stage_get_type(),

@@ -19,7 +19,7 @@ use InterpolationMode;
 use TimedValueControlSource;
 
 glib_wrapper! {
-    pub struct InterpolationControlSource(Object<gst_controller_sys::GstInterpolationControlSource, gst_controller_sys::GstInterpolationControlSourceClass, InterpolationControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
+    pub struct InterpolationControlSource(Object<gst_controller_sys::GstInterpolationControlSource, gst_controller_sys::GstInterpolationControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
 
     match fn {
         get_type => || gst_controller_sys::gst_interpolation_control_source_get_type(),

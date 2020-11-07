@@ -4,46 +4,36 @@
 
 mod argb_control_binding;
 pub use self::argb_control_binding::ARGBControlBindingExt;
-pub use self::argb_control_binding::{
-    ARGBControlBinding, ARGBControlBindingClass, NONE_ARGB_CONTROL_BINDING,
-};
+pub use self::argb_control_binding::{ARGBControlBinding, NONE_ARGB_CONTROL_BINDING};
 
 mod direct_control_binding;
 pub use self::direct_control_binding::DirectControlBindingExt;
-pub use self::direct_control_binding::{
-    DirectControlBinding, DirectControlBindingClass, NONE_DIRECT_CONTROL_BINDING,
-};
+pub use self::direct_control_binding::{DirectControlBinding, NONE_DIRECT_CONTROL_BINDING};
 
 mod interpolation_control_source;
 pub use self::interpolation_control_source::InterpolationControlSourceExt;
 pub use self::interpolation_control_source::{
-    InterpolationControlSource, InterpolationControlSourceClass, NONE_INTERPOLATION_CONTROL_SOURCE,
+    InterpolationControlSource, NONE_INTERPOLATION_CONTROL_SOURCE,
 };
 
 mod lfo_control_source;
 pub use self::lfo_control_source::LFOControlSourceExt;
-pub use self::lfo_control_source::{
-    LFOControlSource, LFOControlSourceClass, NONE_LFO_CONTROL_SOURCE,
-};
+pub use self::lfo_control_source::{LFOControlSource, NONE_LFO_CONTROL_SOURCE};
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 mod proxy_control_binding;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-pub use self::proxy_control_binding::{
-    ProxyControlBinding, ProxyControlBindingClass, NONE_PROXY_CONTROL_BINDING,
-};
+pub use self::proxy_control_binding::{ProxyControlBinding, NONE_PROXY_CONTROL_BINDING};
 
 mod timed_value_control_source;
 pub use self::timed_value_control_source::TimedValueControlSourceExt;
 pub use self::timed_value_control_source::{
-    TimedValueControlSource, TimedValueControlSourceClass, NONE_TIMED_VALUE_CONTROL_SOURCE,
+    TimedValueControlSource, NONE_TIMED_VALUE_CONTROL_SOURCE,
 };
 
 mod trigger_control_source;
 pub use self::trigger_control_source::TriggerControlSourceExt;
-pub use self::trigger_control_source::{
-    TriggerControlSource, TriggerControlSourceClass, NONE_TRIGGER_CONTROL_SOURCE,
-};
+pub use self::trigger_control_source::{TriggerControlSource, NONE_TRIGGER_CONTROL_SOURCE};
 
 mod enums;
 pub use self::enums::InterpolationMode;

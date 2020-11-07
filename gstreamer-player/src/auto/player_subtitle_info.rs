@@ -8,7 +8,7 @@ use gst_player_sys;
 use PlayerStreamInfo;
 
 glib_wrapper! {
-    pub struct PlayerSubtitleInfo(Object<gst_player_sys::GstPlayerSubtitleInfo, gst_player_sys::GstPlayerSubtitleInfoClass, PlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
+    pub struct PlayerSubtitleInfo(Object<gst_player_sys::GstPlayerSubtitleInfo, gst_player_sys::GstPlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
         get_type => || gst_player_sys::gst_player_subtitle_info_get_type(),

@@ -28,7 +28,7 @@ use std::mem::transmute;
 use VideoCodecFrame;
 
 glib_wrapper! {
-    pub struct VideoDecoder(Object<gst_video_sys::GstVideoDecoder, gst_video_sys::GstVideoDecoderClass, VideoDecoderClass>) @extends gst::Element, gst::Object;
+    pub struct VideoDecoder(Object<gst_video_sys::GstVideoDecoder, gst_video_sys::GstVideoDecoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_video_sys::gst_video_decoder_get_type(),

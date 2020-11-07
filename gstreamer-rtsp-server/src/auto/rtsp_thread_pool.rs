@@ -16,7 +16,7 @@ use RTSPThread;
 use RTSPThreadType;
 
 glib_wrapper! {
-    pub struct RTSPThreadPool(Object<gst_rtsp_server_sys::GstRTSPThreadPool, gst_rtsp_server_sys::GstRTSPThreadPoolClass, RTSPThreadPoolClass>);
+    pub struct RTSPThreadPool(Object<gst_rtsp_server_sys::GstRTSPThreadPool, gst_rtsp_server_sys::GstRTSPThreadPoolClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_thread_pool_get_type(),

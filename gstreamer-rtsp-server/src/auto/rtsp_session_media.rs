@@ -13,7 +13,7 @@ use RTSPMedia;
 use RTSPStreamTransport;
 
 glib_wrapper! {
-    pub struct RTSPSessionMedia(Object<gst_rtsp_server_sys::GstRTSPSessionMedia, gst_rtsp_server_sys::GstRTSPSessionMediaClass, RTSPSessionMediaClass>);
+    pub struct RTSPSessionMedia(Object<gst_rtsp_server_sys::GstRTSPSessionMedia, gst_rtsp_server_sys::GstRTSPSessionMediaClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_session_media_get_type(),

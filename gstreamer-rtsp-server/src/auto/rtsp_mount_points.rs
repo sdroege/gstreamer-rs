@@ -12,7 +12,7 @@ use std::mem;
 use RTSPMediaFactory;
 
 glib_wrapper! {
-    pub struct RTSPMountPoints(Object<gst_rtsp_server_sys::GstRTSPMountPoints, gst_rtsp_server_sys::GstRTSPMountPointsClass, RTSPMountPointsClass>);
+    pub struct RTSPMountPoints(Object<gst_rtsp_server_sys::GstRTSPMountPoints, gst_rtsp_server_sys::GstRTSPMountPointsClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_mount_points_get_type(),

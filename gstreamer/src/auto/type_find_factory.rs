@@ -10,7 +10,7 @@ use Object;
 use PluginFeature;
 
 glib_wrapper! {
-    pub struct TypeFindFactory(Object<gst_sys::GstTypeFindFactory, gst_sys::GstTypeFindFactoryClass, TypeFindFactoryClass>) @extends PluginFeature, Object;
+    pub struct TypeFindFactory(Object<gst_sys::GstTypeFindFactory, gst_sys::GstTypeFindFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
         get_type => || gst_sys::gst_type_find_factory_get_type(),

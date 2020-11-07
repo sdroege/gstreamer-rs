@@ -21,7 +21,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct AggregatorPad(Object<gst_base_sys::GstAggregatorPad, gst_base_sys::GstAggregatorPadClass, AggregatorPadClass>) @extends gst::Pad, gst::Object;
+    pub struct AggregatorPad(Object<gst_base_sys::GstAggregatorPad, gst_base_sys::GstAggregatorPadClass>) @extends gst::Pad, gst::Object;
 
     match fn {
         get_type => || gst_base_sys::gst_aggregator_pad_get_type(),

@@ -18,7 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct DirectControlBinding(Object<gst_controller_sys::GstDirectControlBinding, gst_controller_sys::GstDirectControlBindingClass, DirectControlBindingClass>) @extends gst::ControlBinding, gst::Object;
+    pub struct DirectControlBinding(Object<gst_controller_sys::GstDirectControlBinding, gst_controller_sys::GstDirectControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {
         get_type => || gst_controller_sys::gst_direct_control_binding_get_type(),

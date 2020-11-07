@@ -8,7 +8,7 @@ use gst;
 use gst_video_sys;
 
 glib_wrapper! {
-    pub struct VideoBufferPool(Object<gst_video_sys::GstVideoBufferPool, gst_video_sys::GstVideoBufferPoolClass, VideoBufferPoolClass>) @extends gst::BufferPool, gst::Object;
+    pub struct VideoBufferPool(Object<gst_video_sys::GstVideoBufferPool, gst_video_sys::GstVideoBufferPoolClass>) @extends gst::BufferPool, gst::Object;
 
     match fn {
         get_type => || gst_video_sys::gst_video_buffer_pool_get_type(),

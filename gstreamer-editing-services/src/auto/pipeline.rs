@@ -23,7 +23,7 @@ use PipelineFlags;
 use Timeline;
 
 glib_wrapper! {
-    pub struct Pipeline(Object<ges_sys::GESPipeline, ges_sys::GESPipelineClass, PipelineClass>) @extends gst::Pipeline, gst::Element, gst::Object;
+    pub struct Pipeline(Object<ges_sys::GESPipeline, ges_sys::GESPipelineClass>) @extends gst::Pipeline, gst::Element, gst::Object;
 
     match fn {
         get_type => || ges_sys::ges_pipeline_get_type(),

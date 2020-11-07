@@ -32,7 +32,7 @@ use Stream;
 use TaskState;
 
 glib_wrapper! {
-    pub struct Pad(Object<gst_sys::GstPad, gst_sys::GstPadClass, PadClass>) @extends Object;
+    pub struct Pad(Object<gst_sys::GstPad, gst_sys::GstPadClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_pad_get_type(),

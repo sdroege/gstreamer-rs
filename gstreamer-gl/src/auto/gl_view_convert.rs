@@ -21,7 +21,7 @@ use GLContext;
 use GLStereoDownmix;
 
 glib_wrapper! {
-    pub struct GLViewConvert(Object<gst_gl_sys::GstGLViewConvert, gst_gl_sys::GstGLViewConvertClass, GLViewConvertClass>) @extends gst::Object;
+    pub struct GLViewConvert(Object<gst_gl_sys::GstGLViewConvert, gst_gl_sys::GstGLViewConvertClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_view_convert_get_type(),

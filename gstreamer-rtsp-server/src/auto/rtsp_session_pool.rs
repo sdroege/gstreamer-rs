@@ -16,7 +16,7 @@ use RTSPFilterResult;
 use RTSPSession;
 
 glib_wrapper! {
-    pub struct RTSPSessionPool(Object<gst_rtsp_server_sys::GstRTSPSessionPool, gst_rtsp_server_sys::GstRTSPSessionPoolClass, RTSPSessionPoolClass>);
+    pub struct RTSPSessionPool(Object<gst_rtsp_server_sys::GstRTSPSessionPool, gst_rtsp_server_sys::GstRTSPSessionPoolClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_session_pool_get_type(),

@@ -11,7 +11,7 @@ use Object;
 use Stream;
 
 glib_wrapper! {
-    pub struct StreamCollection(Object<gst_sys::GstStreamCollection, gst_sys::GstStreamCollectionClass, StreamCollectionClass>) @extends Object;
+    pub struct StreamCollection(Object<gst_sys::GstStreamCollection, gst_sys::GstStreamCollectionClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_stream_collection_get_type(),

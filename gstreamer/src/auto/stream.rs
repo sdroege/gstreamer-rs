@@ -29,7 +29,7 @@ use StreamType;
 use TagList;
 
 glib_wrapper! {
-    pub struct Stream(Object<gst_sys::GstStream, gst_sys::GstStreamClass, StreamClass>) @extends Object;
+    pub struct Stream(Object<gst_sys::GstStream, gst_sys::GstStreamClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_stream_get_type(),

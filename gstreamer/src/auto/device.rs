@@ -19,7 +19,7 @@ use Object;
 use Structure;
 
 glib_wrapper! {
-    pub struct Device(Object<gst_sys::GstDevice, gst_sys::GstDeviceClass, DeviceClass>) @extends Object;
+    pub struct Device(Object<gst_sys::GstDevice, gst_sys::GstDeviceClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_device_get_type(),

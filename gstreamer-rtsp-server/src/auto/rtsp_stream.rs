@@ -25,7 +25,7 @@ use RTSPPublishClockMode;
 use RTSPStreamTransport;
 
 glib_wrapper! {
-    pub struct RTSPStream(Object<gst_rtsp_server_sys::GstRTSPStream, gst_rtsp_server_sys::GstRTSPStreamClass, RTSPStreamClass>);
+    pub struct RTSPStream(Object<gst_rtsp_server_sys::GstRTSPStream, gst_rtsp_server_sys::GstRTSPStreamClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_stream_get_type(),

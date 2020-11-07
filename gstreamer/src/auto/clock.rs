@@ -20,7 +20,7 @@ use ClockTime;
 use Object;
 
 glib_wrapper! {
-    pub struct Clock(Object<gst_sys::GstClock, gst_sys::GstClockClass, ClockClass>) @extends Object;
+    pub struct Clock(Object<gst_sys::GstClock, gst_sys::GstClockClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_clock_get_type(),

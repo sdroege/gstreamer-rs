@@ -24,7 +24,7 @@ use WebRTCRTPSender;
 use WebRTCRTPTransceiverDirection;
 
 glib_wrapper! {
-    pub struct WebRTCRTPTransceiver(Object<gst_web_rtc_sys::GstWebRTCRTPTransceiver, gst_web_rtc_sys::GstWebRTCRTPTransceiverClass, WebRTCRTPTransceiverClass>);
+    pub struct WebRTCRTPTransceiver(Object<gst_web_rtc_sys::GstWebRTCRTPTransceiver, gst_web_rtc_sys::GstWebRTCRTPTransceiverClass>);
 
     match fn {
         get_type => || gst_web_rtc_sys::gst_webrtc_rtp_transceiver_get_type(),

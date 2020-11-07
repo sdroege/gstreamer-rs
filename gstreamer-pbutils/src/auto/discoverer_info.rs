@@ -12,7 +12,7 @@ use DiscovererSerializeFlags;
 use DiscovererStreamInfo;
 
 glib_wrapper! {
-    pub struct DiscovererInfo(Object<gst_pbutils_sys::GstDiscovererInfo, DiscovererInfoClass>);
+    pub struct DiscovererInfo(Object<gst_pbutils_sys::GstDiscovererInfo>);
 
     match fn {
         get_type => || gst_pbutils_sys::gst_discoverer_info_get_type(),

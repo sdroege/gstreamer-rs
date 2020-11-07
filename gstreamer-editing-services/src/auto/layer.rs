@@ -24,7 +24,7 @@ use Track;
 use TrackType;
 
 glib_wrapper! {
-    pub struct Layer(Object<ges_sys::GESLayer, ges_sys::GESLayerClass, LayerClass>) @implements Extractable;
+    pub struct Layer(Object<ges_sys::GESLayer, ges_sys::GESLayerClass>) @implements Extractable;
 
     match fn {
         get_type => || ges_sys::ges_layer_get_type(),

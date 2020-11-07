@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 use RTSPStream;
 
 glib_wrapper! {
-    pub struct RTSPStreamTransport(Object<gst_rtsp_server_sys::GstRTSPStreamTransport, gst_rtsp_server_sys::GstRTSPStreamTransportClass, RTSPStreamTransportClass>);
+    pub struct RTSPStreamTransport(Object<gst_rtsp_server_sys::GstRTSPStreamTransport, gst_rtsp_server_sys::GstRTSPStreamTransportClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_stream_transport_get_type(),

@@ -17,7 +17,7 @@ use StaticPadTemplate;
 use URIType;
 
 glib_wrapper! {
-    pub struct ElementFactory(Object<gst_sys::GstElementFactory, gst_sys::GstElementFactoryClass, ElementFactoryClass>) @extends PluginFeature, Object;
+    pub struct ElementFactory(Object<gst_sys::GstElementFactory, gst_sys::GstElementFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
         get_type => || gst_sys::gst_element_factory_get_type(),

@@ -12,7 +12,7 @@ use gst_player_sys;
 use PlayerSignalDispatcher;
 
 glib_wrapper! {
-    pub struct PlayerGMainContextSignalDispatcher(Object<gst_player_sys::GstPlayerGMainContextSignalDispatcher, gst_player_sys::GstPlayerGMainContextSignalDispatcherClass, PlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;
+    pub struct PlayerGMainContextSignalDispatcher(Object<gst_player_sys::GstPlayerGMainContextSignalDispatcher, gst_player_sys::GstPlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;
 
     match fn {
         get_type => || gst_player_sys::gst_player_g_main_context_signal_dispatcher_get_type(),

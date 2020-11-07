@@ -8,7 +8,7 @@ use gst_base_sys;
 use BaseSrc;
 
 glib_wrapper! {
-    pub struct PushSrc(Object<gst_base_sys::GstPushSrc, gst_base_sys::GstPushSrcClass, PushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
+    pub struct PushSrc(Object<gst_base_sys::GstPushSrc, gst_base_sys::GstPushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_base_sys::gst_push_src_get_type(),

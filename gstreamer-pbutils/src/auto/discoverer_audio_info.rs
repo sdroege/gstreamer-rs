@@ -8,7 +8,7 @@ use gst_pbutils_sys;
 use DiscovererStreamInfo;
 
 glib_wrapper! {
-    pub struct DiscovererAudioInfo(Object<gst_pbutils_sys::GstDiscovererAudioInfo, DiscovererAudioInfoClass>) @extends DiscovererStreamInfo;
+    pub struct DiscovererAudioInfo(Object<gst_pbutils_sys::GstDiscovererAudioInfo>) @extends DiscovererStreamInfo;
 
     match fn {
         get_type => || gst_pbutils_sys::gst_discoverer_audio_info_get_type(),

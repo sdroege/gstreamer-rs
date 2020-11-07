@@ -20,7 +20,7 @@ use WebRTCICEConnectionState;
 use WebRTCICEGatheringState;
 
 glib_wrapper! {
-    pub struct WebRTCICETransport(Object<gst_web_rtc_sys::GstWebRTCICETransport, gst_web_rtc_sys::GstWebRTCICETransportClass, WebRTCICETransportClass>);
+    pub struct WebRTCICETransport(Object<gst_web_rtc_sys::GstWebRTCICETransport, gst_web_rtc_sys::GstWebRTCICETransportClass>);
 
     match fn {
         get_type => || gst_web_rtc_sys::gst_webrtc_ice_transport_get_type(),

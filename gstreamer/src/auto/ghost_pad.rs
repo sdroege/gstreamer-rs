@@ -11,7 +11,7 @@ use Pad;
 use ProxyPad;
 
 glib_wrapper! {
-    pub struct GhostPad(Object<gst_sys::GstGhostPad, gst_sys::GstGhostPadClass, GhostPadClass>) @extends ProxyPad, Pad, Object;
+    pub struct GhostPad(Object<gst_sys::GstGhostPad, gst_sys::GstGhostPadClass>) @extends ProxyPad, Pad, Object;
 
     match fn {
         get_type => || gst_sys::gst_ghost_pad_get_type(),

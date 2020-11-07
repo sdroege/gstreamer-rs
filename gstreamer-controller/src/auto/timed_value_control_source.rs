@@ -15,7 +15,7 @@ use std::mem::transmute;
 use ControlPoint;
 
 glib_wrapper! {
-    pub struct TimedValueControlSource(Object<gst_controller_sys::GstTimedValueControlSource, gst_controller_sys::GstTimedValueControlSourceClass, TimedValueControlSourceClass>) @extends gst::ControlSource, gst::Object;
+    pub struct TimedValueControlSource(Object<gst_controller_sys::GstTimedValueControlSource, gst_controller_sys::GstTimedValueControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {
         get_type => || gst_controller_sys::gst_timed_value_control_source_get_type(),

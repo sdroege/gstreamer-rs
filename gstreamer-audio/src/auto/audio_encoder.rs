@@ -16,7 +16,7 @@ use std::mem::transmute;
 use AudioInfo;
 
 glib_wrapper! {
-    pub struct AudioEncoder(Object<gst_audio_sys::GstAudioEncoder, gst_audio_sys::GstAudioEncoderClass, AudioEncoderClass>) @extends gst::Element, gst::Object;
+    pub struct AudioEncoder(Object<gst_audio_sys::GstAudioEncoder, gst_audio_sys::GstAudioEncoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_audio_sys::gst_audio_encoder_get_type(),

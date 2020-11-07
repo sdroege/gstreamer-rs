@@ -22,7 +22,7 @@ use RTSPMedia;
 use RTSPSessionMedia;
 
 glib_wrapper! {
-    pub struct RTSPSession(Object<gst_rtsp_server_sys::GstRTSPSession, gst_rtsp_server_sys::GstRTSPSessionClass, RTSPSessionClass>);
+    pub struct RTSPSession(Object<gst_rtsp_server_sys::GstRTSPSession, gst_rtsp_server_sys::GstRTSPSessionClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_session_get_type(),

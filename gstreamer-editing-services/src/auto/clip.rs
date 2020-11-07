@@ -29,7 +29,7 @@ use TrackElement;
 use TrackType;
 
 glib_wrapper! {
-    pub struct Clip(Object<ges_sys::GESClip, ges_sys::GESClipClass, ClipClass>) @extends Container, TimelineElement, @implements Extractable;
+    pub struct Clip(Object<ges_sys::GESClip, ges_sys::GESClipClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ges_sys::ges_clip_get_type(),

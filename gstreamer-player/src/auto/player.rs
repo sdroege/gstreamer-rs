@@ -28,7 +28,7 @@ use PlayerVideoInfo;
 use PlayerVisualization;
 
 glib_wrapper! {
-    pub struct Player(Object<gst_player_sys::GstPlayer, gst_player_sys::GstPlayerClass, PlayerClass>) @extends gst::Object;
+    pub struct Player(Object<gst_player_sys::GstPlayer, gst_player_sys::GstPlayerClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_player_sys::gst_player_get_type(),

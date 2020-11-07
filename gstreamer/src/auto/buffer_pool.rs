@@ -10,7 +10,7 @@ use gst_sys;
 use Object;
 
 glib_wrapper! {
-    pub struct BufferPool(Object<gst_sys::GstBufferPool, gst_sys::GstBufferPoolClass, BufferPoolClass>) @extends Object;
+    pub struct BufferPool(Object<gst_sys::GstBufferPool, gst_sys::GstBufferPoolClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_buffer_pool_get_type(),

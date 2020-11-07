@@ -18,7 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct AudioBaseSink(Object<gst_audio_sys::GstAudioBaseSink, gst_audio_sys::GstAudioBaseSinkClass, AudioBaseSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object;
+    pub struct AudioBaseSink(Object<gst_audio_sys::GstAudioBaseSink, gst_audio_sys::GstAudioBaseSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_audio_sys::gst_audio_base_sink_get_type(),

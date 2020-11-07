@@ -31,7 +31,7 @@ use RTSPThread;
 use RTSPTransportMode;
 
 glib_wrapper! {
-    pub struct RTSPMedia(Object<gst_rtsp_server_sys::GstRTSPMedia, gst_rtsp_server_sys::GstRTSPMediaClass, RTSPMediaClass>);
+    pub struct RTSPMedia(Object<gst_rtsp_server_sys::GstRTSPMedia, gst_rtsp_server_sys::GstRTSPMediaClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_media_get_type(),

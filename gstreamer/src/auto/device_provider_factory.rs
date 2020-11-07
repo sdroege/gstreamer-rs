@@ -12,7 +12,7 @@ use PluginFeature;
 use Rank;
 
 glib_wrapper! {
-    pub struct DeviceProviderFactory(Object<gst_sys::GstDeviceProviderFactory, gst_sys::GstDeviceProviderFactoryClass, DeviceProviderFactoryClass>) @extends PluginFeature, Object;
+    pub struct DeviceProviderFactory(Object<gst_sys::GstDeviceProviderFactory, gst_sys::GstDeviceProviderFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
         get_type => || gst_sys::gst_device_provider_factory_get_type(),

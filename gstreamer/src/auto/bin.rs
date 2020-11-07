@@ -24,7 +24,7 @@ use Pad;
 use PadDirection;
 
 glib_wrapper! {
-    pub struct Bin(Object<gst_sys::GstBin, gst_sys::GstBinClass, BinClass>) @extends Element, Object, @implements ChildProxy;
+    pub struct Bin(Object<gst_sys::GstBin, gst_sys::GstBinClass>) @extends Element, Object, @implements ChildProxy;
 
     match fn {
         get_type => || gst_sys::gst_bin_get_type(),

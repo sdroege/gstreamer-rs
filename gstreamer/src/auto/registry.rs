@@ -18,7 +18,7 @@ use Plugin;
 use PluginFeature;
 
 glib_wrapper! {
-    pub struct Registry(Object<gst_sys::GstRegistry, gst_sys::GstRegistryClass, RegistryClass>) @extends Object;
+    pub struct Registry(Object<gst_sys::GstRegistry, gst_sys::GstRegistryClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_registry_get_type(),

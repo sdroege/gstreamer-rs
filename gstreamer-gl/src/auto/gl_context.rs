@@ -17,7 +17,7 @@ use GLWindow;
 use GLAPI;
 
 glib_wrapper! {
-    pub struct GLContext(Object<gst_gl_sys::GstGLContext, gst_gl_sys::GstGLContextClass, GLContextClass>) @extends gst::Object;
+    pub struct GLContext(Object<gst_gl_sys::GstGLContext, gst_gl_sys::GstGLContextClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_context_get_type(),

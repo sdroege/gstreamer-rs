@@ -9,7 +9,7 @@ use gst_base;
 use AudioBaseSrc;
 
 glib_wrapper! {
-    pub struct AudioSrc(Object<gst_audio_sys::GstAudioSrc, gst_audio_sys::GstAudioSrcClass, AudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;
+    pub struct AudioSrc(Object<gst_audio_sys::GstAudioSrc, gst_audio_sys::GstAudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {
         get_type => || gst_audio_sys::gst_audio_src_get_type(),

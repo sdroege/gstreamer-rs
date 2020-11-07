@@ -17,7 +17,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct NetTimeProvider(Object<gst_net_sys::GstNetTimeProvider, gst_net_sys::GstNetTimeProviderClass, NetTimeProviderClass>) @extends gst::Object;
+    pub struct NetTimeProvider(Object<gst_net_sys::GstNetTimeProvider, gst_net_sys::GstNetTimeProviderClass>) @extends gst::Object;
 
     match fn {
         get_type => || gst_net_sys::gst_net_time_provider_get_type(),

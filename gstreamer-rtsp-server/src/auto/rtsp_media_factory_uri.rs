@@ -18,7 +18,7 @@ use std::mem::transmute;
 use RTSPMediaFactory;
 
 glib_wrapper! {
-    pub struct RTSPMediaFactoryURI(Object<gst_rtsp_server_sys::GstRTSPMediaFactoryURI, gst_rtsp_server_sys::GstRTSPMediaFactoryURIClass, RTSPMediaFactoryURIClass>) @extends RTSPMediaFactory;
+    pub struct RTSPMediaFactoryURI(Object<gst_rtsp_server_sys::GstRTSPMediaFactoryURI, gst_rtsp_server_sys::GstRTSPMediaFactoryURIClass>) @extends RTSPMediaFactory;
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_media_factory_uri_get_type(),

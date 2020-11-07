@@ -9,7 +9,7 @@ use gst;
 use gst_player_sys;
 
 glib_wrapper! {
-    pub struct PlayerStreamInfo(Object<gst_player_sys::GstPlayerStreamInfo, gst_player_sys::GstPlayerStreamInfoClass, PlayerStreamInfoClass>);
+    pub struct PlayerStreamInfo(Object<gst_player_sys::GstPlayerStreamInfo, gst_player_sys::GstPlayerStreamInfoClass>);
 
     match fn {
         get_type => || gst_player_sys::gst_player_stream_info_get_type(),

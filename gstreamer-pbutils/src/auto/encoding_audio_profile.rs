@@ -7,7 +7,7 @@ use gst_pbutils_sys;
 use EncodingProfile;
 
 glib_wrapper! {
-    pub struct EncodingAudioProfile(Object<gst_pbutils_sys::GstEncodingAudioProfile, gst_pbutils_sys::GstEncodingAudioProfileClass, EncodingAudioProfileClass>) @extends EncodingProfile;
+    pub struct EncodingAudioProfile(Object<gst_pbutils_sys::GstEncodingAudioProfile, gst_pbutils_sys::GstEncodingAudioProfileClass>) @extends EncodingProfile;
 
     match fn {
         get_type => || gst_pbutils_sys::gst_encoding_audio_profile_get_type(),

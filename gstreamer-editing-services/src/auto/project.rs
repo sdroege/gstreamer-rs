@@ -20,7 +20,7 @@ use Asset;
 use Timeline;
 
 glib_wrapper! {
-    pub struct Project(Object<ges_sys::GESProject, ges_sys::GESProjectClass, ProjectClass>) @extends Asset;
+    pub struct Project(Object<ges_sys::GESProject, ges_sys::GESProjectClass>) @extends Asset;
 
     match fn {
         get_type => || ges_sys::ges_project_get_type(),

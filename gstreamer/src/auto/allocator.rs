@@ -8,7 +8,7 @@ use gst_sys;
 use Object;
 
 glib_wrapper! {
-    pub struct Allocator(Object<gst_sys::GstAllocator, gst_sys::GstAllocatorClass, AllocatorClass>) @extends Object;
+    pub struct Allocator(Object<gst_sys::GstAllocator, gst_sys::GstAllocatorClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_allocator_get_type(),

@@ -18,7 +18,7 @@ use std::mem::transmute;
 use LFOWaveform;
 
 glib_wrapper! {
-    pub struct LFOControlSource(Object<gst_controller_sys::GstLFOControlSource, gst_controller_sys::GstLFOControlSourceClass, LFOControlSourceClass>) @extends gst::ControlSource, gst::Object;
+    pub struct LFOControlSource(Object<gst_controller_sys::GstLFOControlSource, gst_controller_sys::GstLFOControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {
         get_type => || gst_controller_sys::gst_lfo_control_source_get_type(),

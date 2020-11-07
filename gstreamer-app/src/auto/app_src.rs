@@ -19,7 +19,7 @@ use std::mem::transmute;
 use AppStreamType;
 
 glib_wrapper! {
-    pub struct AppSrc(Object<gst_app_sys::GstAppSrc, gst_app_sys::GstAppSrcClass, AppSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object, @implements gst::URIHandler;
+    pub struct AppSrc(Object<gst_app_sys::GstAppSrc, gst_app_sys::GstAppSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {
         get_type => || gst_app_sys::gst_app_src_get_type(),

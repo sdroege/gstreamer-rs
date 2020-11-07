@@ -11,7 +11,7 @@ use gst;
 use gst_controller_sys;
 
 glib_wrapper! {
-    pub struct ProxyControlBinding(Object<gst_controller_sys::GstProxyControlBinding, gst_controller_sys::GstProxyControlBindingClass, ProxyControlBindingClass>) @extends gst::ControlBinding, gst::Object;
+    pub struct ProxyControlBinding(Object<gst_controller_sys::GstProxyControlBinding, gst_controller_sys::GstProxyControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {
         get_type => || gst_controller_sys::gst_proxy_control_binding_get_type(),

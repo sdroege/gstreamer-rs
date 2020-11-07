@@ -10,7 +10,7 @@ use TimelineElement;
 use TrackElement;
 
 glib_wrapper! {
-    pub struct BaseEffect(Object<ges_sys::GESBaseEffect, ges_sys::GESBaseEffectClass, BaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
+    pub struct BaseEffect(Object<ges_sys::GESBaseEffect, ges_sys::GESBaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ges_sys::ges_base_effect_get_type(),

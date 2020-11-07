@@ -3,24 +3,24 @@
 // DO NOT EDIT
 
 mod web_rtcdtls_transport;
-pub use self::web_rtcdtls_transport::{WebRTCDTLSTransport, WebRTCDTLSTransportClass};
+pub use self::web_rtcdtls_transport::WebRTCDTLSTransport;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 mod web_rtc_data_channel;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
-pub use self::web_rtc_data_channel::{WebRTCDataChannel, WebRTCDataChannelClass};
+pub use self::web_rtc_data_channel::WebRTCDataChannel;
 
 mod web_rtcice_transport;
-pub use self::web_rtcice_transport::{WebRTCICETransport, WebRTCICETransportClass};
+pub use self::web_rtcice_transport::WebRTCICETransport;
 
 mod web_rtcrtp_receiver;
-pub use self::web_rtcrtp_receiver::{WebRTCRTPReceiver, WebRTCRTPReceiverClass};
+pub use self::web_rtcrtp_receiver::WebRTCRTPReceiver;
 
 mod web_rtcrtp_sender;
-pub use self::web_rtcrtp_sender::{WebRTCRTPSender, WebRTCRTPSenderClass};
+pub use self::web_rtcrtp_sender::WebRTCRTPSender;
 
 mod web_rtcrtp_transceiver;
-pub use self::web_rtcrtp_transceiver::{WebRTCRTPTransceiver, WebRTCRTPTransceiverClass};
+pub use self::web_rtcrtp_transceiver::WebRTCRTPTransceiver;
 
 mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;

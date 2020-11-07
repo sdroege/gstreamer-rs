@@ -23,7 +23,7 @@ use std::ptr;
 use DiscovererInfo;
 
 glib_wrapper! {
-    pub struct Discoverer(Object<gst_pbutils_sys::GstDiscoverer, gst_pbutils_sys::GstDiscovererClass, DiscovererClass>);
+    pub struct Discoverer(Object<gst_pbutils_sys::GstDiscoverer, gst_pbutils_sys::GstDiscovererClass>);
 
     match fn {
         get_type => || gst_pbutils_sys::gst_discoverer_get_type(),

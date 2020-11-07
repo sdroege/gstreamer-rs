@@ -8,7 +8,7 @@ use gst_gl_sys;
 use GLDisplay;
 
 glib_wrapper! {
-    pub struct GLDisplayWayland(Object<gst_gl_sys::GstGLDisplayWayland, gst_gl_sys::GstGLDisplayWaylandClass, GLDisplayWaylandClass>) @extends GLDisplay, gst::Object;
+    pub struct GLDisplayWayland(Object<gst_gl_sys::GstGLDisplayWayland, gst_gl_sys::GstGLDisplayWaylandClass>) @extends GLDisplay, gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_display_wayland_get_type(),

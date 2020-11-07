@@ -8,7 +8,7 @@ use gst_player_sys;
 use PlayerStreamInfo;
 
 glib_wrapper! {
-    pub struct PlayerAudioInfo(Object<gst_player_sys::GstPlayerAudioInfo, gst_player_sys::GstPlayerAudioInfoClass, PlayerAudioInfoClass>) @extends PlayerStreamInfo;
+    pub struct PlayerAudioInfo(Object<gst_player_sys::GstPlayerAudioInfo, gst_player_sys::GstPlayerAudioInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
         get_type => || gst_player_sys::gst_player_audio_info_get_type(),

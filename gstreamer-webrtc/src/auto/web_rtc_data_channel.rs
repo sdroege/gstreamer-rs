@@ -21,7 +21,7 @@ use WebRTCDataChannelState;
 use WebRTCPriorityType;
 
 glib_wrapper! {
-    pub struct WebRTCDataChannel(Object<gst_web_rtc_sys::GstWebRTCDataChannel, gst_web_rtc_sys::GstWebRTCDataChannelClass, WebRTCDataChannelClass>);
+    pub struct WebRTCDataChannel(Object<gst_web_rtc_sys::GstWebRTCDataChannel, gst_web_rtc_sys::GstWebRTCDataChannelClass>);
 
     match fn {
         get_type => || gst_web_rtc_sys::gst_webrtc_data_channel_get_type(),

@@ -17,7 +17,7 @@ use ClockTime;
 use ControlBinding;
 
 glib_wrapper! {
-    pub struct Object(Object<gst_sys::GstObject, gst_sys::GstObjectClass, ObjectClass>);
+    pub struct Object(Object<gst_sys::GstObject, gst_sys::GstObjectClass>);
 
     match fn {
         get_type => || gst_sys::gst_object_get_type(),

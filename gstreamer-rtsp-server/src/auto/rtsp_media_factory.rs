@@ -25,7 +25,7 @@ use RTSPSuspendMode;
 use RTSPTransportMode;
 
 glib_wrapper! {
-    pub struct RTSPMediaFactory(Object<gst_rtsp_server_sys::GstRTSPMediaFactory, gst_rtsp_server_sys::GstRTSPMediaFactoryClass, RTSPMediaFactoryClass>);
+    pub struct RTSPMediaFactory(Object<gst_rtsp_server_sys::GstRTSPMediaFactory, gst_rtsp_server_sys::GstRTSPMediaFactoryClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_media_factory_get_type(),

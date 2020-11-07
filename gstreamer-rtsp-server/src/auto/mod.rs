@@ -4,67 +4,59 @@
 
 mod rtsp_address_pool;
 pub use self::rtsp_address_pool::RTSPAddressPoolExt;
-pub use self::rtsp_address_pool::{RTSPAddressPool, RTSPAddressPoolClass, NONE_RTSP_ADDRESS_POOL};
+pub use self::rtsp_address_pool::{RTSPAddressPool, NONE_RTSP_ADDRESS_POOL};
 
 mod rtsp_auth;
 pub use self::rtsp_auth::RTSPAuthExt;
-pub use self::rtsp_auth::{RTSPAuth, RTSPAuthClass, NONE_RTSP_AUTH};
+pub use self::rtsp_auth::{RTSPAuth, NONE_RTSP_AUTH};
 
 mod rtsp_client;
 pub use self::rtsp_client::RTSPClientExt;
-pub use self::rtsp_client::{RTSPClient, RTSPClientClass, NONE_RTSP_CLIENT};
+pub use self::rtsp_client::{RTSPClient, NONE_RTSP_CLIENT};
 
 mod rtsp_media;
 pub use self::rtsp_media::RTSPMediaExt;
-pub use self::rtsp_media::{RTSPMedia, RTSPMediaClass, NONE_RTSP_MEDIA};
+pub use self::rtsp_media::{RTSPMedia, NONE_RTSP_MEDIA};
 
 mod rtsp_media_factory;
 pub use self::rtsp_media_factory::RTSPMediaFactoryExt;
-pub use self::rtsp_media_factory::{
-    RTSPMediaFactory, RTSPMediaFactoryClass, NONE_RTSP_MEDIA_FACTORY,
-};
+pub use self::rtsp_media_factory::{RTSPMediaFactory, NONE_RTSP_MEDIA_FACTORY};
 
 mod rtsp_media_factory_uri;
 pub use self::rtsp_media_factory_uri::RTSPMediaFactoryURIExt;
-pub use self::rtsp_media_factory_uri::{
-    RTSPMediaFactoryURI, RTSPMediaFactoryURIClass, NONE_RTSP_MEDIA_FACTORY_URI,
-};
+pub use self::rtsp_media_factory_uri::{RTSPMediaFactoryURI, NONE_RTSP_MEDIA_FACTORY_URI};
 
 mod rtsp_mount_points;
 pub use self::rtsp_mount_points::RTSPMountPointsExt;
-pub use self::rtsp_mount_points::{RTSPMountPoints, RTSPMountPointsClass, NONE_RTSP_MOUNT_POINTS};
+pub use self::rtsp_mount_points::{RTSPMountPoints, NONE_RTSP_MOUNT_POINTS};
 
 mod rtsp_server;
 pub use self::rtsp_server::RTSPServerExt;
-pub use self::rtsp_server::{RTSPServer, RTSPServerClass, NONE_RTSP_SERVER};
+pub use self::rtsp_server::{RTSPServer, NONE_RTSP_SERVER};
 
 mod rtsp_session;
 pub use self::rtsp_session::RTSPSessionExt;
-pub use self::rtsp_session::{RTSPSession, RTSPSessionClass, NONE_RTSP_SESSION};
+pub use self::rtsp_session::{RTSPSession, NONE_RTSP_SESSION};
 
 mod rtsp_session_media;
 pub use self::rtsp_session_media::RTSPSessionMediaExt;
-pub use self::rtsp_session_media::{
-    RTSPSessionMedia, RTSPSessionMediaClass, NONE_RTSP_SESSION_MEDIA,
-};
+pub use self::rtsp_session_media::{RTSPSessionMedia, NONE_RTSP_SESSION_MEDIA};
 
 mod rtsp_session_pool;
 pub use self::rtsp_session_pool::RTSPSessionPoolExt;
-pub use self::rtsp_session_pool::{RTSPSessionPool, RTSPSessionPoolClass, NONE_RTSP_SESSION_POOL};
+pub use self::rtsp_session_pool::{RTSPSessionPool, NONE_RTSP_SESSION_POOL};
 
 mod rtsp_stream;
 pub use self::rtsp_stream::RTSPStreamExt;
-pub use self::rtsp_stream::{RTSPStream, RTSPStreamClass, NONE_RTSP_STREAM};
+pub use self::rtsp_stream::{RTSPStream, NONE_RTSP_STREAM};
 
 mod rtsp_stream_transport;
 pub use self::rtsp_stream_transport::RTSPStreamTransportExt;
-pub use self::rtsp_stream_transport::{
-    RTSPStreamTransport, RTSPStreamTransportClass, NONE_RTSP_STREAM_TRANSPORT,
-};
+pub use self::rtsp_stream_transport::{RTSPStreamTransport, NONE_RTSP_STREAM_TRANSPORT};
 
 mod rtsp_thread_pool;
 pub use self::rtsp_thread_pool::RTSPThreadPoolExt;
-pub use self::rtsp_thread_pool::{RTSPThreadPool, RTSPThreadPoolClass, NONE_RTSP_THREAD_POOL};
+pub use self::rtsp_thread_pool::{RTSPThreadPool, NONE_RTSP_THREAD_POOL};
 
 mod rtsp_address;
 pub use self::rtsp_address::RTSPAddress;

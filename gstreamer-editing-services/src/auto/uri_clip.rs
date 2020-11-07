@@ -22,7 +22,7 @@ use Extractable;
 use TimelineElement;
 
 glib_wrapper! {
-    pub struct UriClip(Object<ges_sys::GESUriClip, ges_sys::GESUriClipClass, UriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
+    pub struct UriClip(Object<ges_sys::GESUriClip, ges_sys::GESUriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ges_sys::ges_uri_clip_get_type(),

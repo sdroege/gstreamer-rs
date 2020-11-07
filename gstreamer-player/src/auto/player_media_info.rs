@@ -12,7 +12,7 @@ use PlayerSubtitleInfo;
 use PlayerVideoInfo;
 
 glib_wrapper! {
-    pub struct PlayerMediaInfo(Object<gst_player_sys::GstPlayerMediaInfo, gst_player_sys::GstPlayerMediaInfoClass, PlayerMediaInfoClass>);
+    pub struct PlayerMediaInfo(Object<gst_player_sys::GstPlayerMediaInfo, gst_player_sys::GstPlayerMediaInfoClass>);
 
     match fn {
         get_type => || gst_player_sys::gst_player_media_info_get_type(),

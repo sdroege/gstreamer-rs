@@ -12,7 +12,7 @@ use Object;
 use PluginDependencyFlags;
 
 glib_wrapper! {
-    pub struct Plugin(Object<gst_sys::GstPlugin, gst_sys::GstPluginClass, PluginClass>) @extends Object;
+    pub struct Plugin(Object<gst_sys::GstPlugin, gst_sys::GstPluginClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_plugin_get_type(),

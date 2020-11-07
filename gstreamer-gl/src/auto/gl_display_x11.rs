@@ -8,7 +8,7 @@ use gst_gl_sys;
 use GLDisplay;
 
 glib_wrapper! {
-    pub struct GLDisplayX11(Object<gst_gl_sys::GstGLDisplayX11, gst_gl_sys::GstGLDisplayX11Class, GLDisplayX11Class>) @extends GLDisplay, gst::Object;
+    pub struct GLDisplayX11(Object<gst_gl_sys::GstGLDisplayX11, gst_gl_sys::GstGLDisplayX11Class>) @extends GLDisplay, gst::Object;
 
     match fn {
         get_type => || gst_gl_sys::gst_gl_display_x11_get_type(),

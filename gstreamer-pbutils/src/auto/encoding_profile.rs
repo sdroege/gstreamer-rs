@@ -11,7 +11,7 @@ use gst_pbutils_sys;
 use DiscovererInfo;
 
 glib_wrapper! {
-    pub struct EncodingProfile(Object<gst_pbutils_sys::GstEncodingProfile, gst_pbutils_sys::GstEncodingProfileClass, EncodingProfileClass>);
+    pub struct EncodingProfile(Object<gst_pbutils_sys::GstEncodingProfile, gst_pbutils_sys::GstEncodingProfileClass>);
 
     match fn {
         get_type => || gst_pbutils_sys::gst_encoding_profile_get_type(),

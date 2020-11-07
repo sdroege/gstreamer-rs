@@ -10,7 +10,7 @@ use RTSPAddress;
 use RTSPAddressFlags;
 
 glib_wrapper! {
-    pub struct RTSPAddressPool(Object<gst_rtsp_server_sys::GstRTSPAddressPool, gst_rtsp_server_sys::GstRTSPAddressPoolClass, RTSPAddressPoolClass>);
+    pub struct RTSPAddressPool(Object<gst_rtsp_server_sys::GstRTSPAddressPool, gst_rtsp_server_sys::GstRTSPAddressPoolClass>);
 
     match fn {
         get_type => || gst_rtsp_server_sys::gst_rtsp_address_pool_get_type(),

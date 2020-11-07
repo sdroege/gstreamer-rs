@@ -19,7 +19,7 @@ use Extractable;
 use TimelineElement;
 
 glib_wrapper! {
-    pub struct Group(Object<ges_sys::GESGroup, ges_sys::GESGroupClass, GroupClass>) @extends Container, TimelineElement, @implements Extractable;
+    pub struct Group(Object<ges_sys::GESGroup, ges_sys::GESGroupClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ges_sys::ges_group_get_type(),

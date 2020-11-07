@@ -16,7 +16,7 @@ use Message;
 use Object;
 
 glib_wrapper! {
-    pub struct Bus(Object<gst_sys::GstBus, gst_sys::GstBusClass, BusClass>) @extends Object;
+    pub struct Bus(Object<gst_sys::GstBus, gst_sys::GstBusClass>) @extends Object;
 
     match fn {
         get_type => || gst_sys::gst_bus_get_type(),

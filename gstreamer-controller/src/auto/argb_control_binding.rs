@@ -18,7 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct ARGBControlBinding(Object<gst_controller_sys::GstARGBControlBinding, gst_controller_sys::GstARGBControlBindingClass, ARGBControlBindingClass>) @extends gst::ControlBinding, gst::Object;
+    pub struct ARGBControlBinding(Object<gst_controller_sys::GstARGBControlBinding, gst_controller_sys::GstARGBControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {
         get_type => || gst_controller_sys::gst_argb_control_binding_get_type(),

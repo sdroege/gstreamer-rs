@@ -8,7 +8,7 @@ use gst_pbutils_sys;
 use EncodingProfile;
 
 glib_wrapper! {
-    pub struct EncodingContainerProfile(Object<gst_pbutils_sys::GstEncodingContainerProfile, gst_pbutils_sys::GstEncodingContainerProfileClass, EncodingContainerProfileClass>) @extends EncodingProfile;
+    pub struct EncodingContainerProfile(Object<gst_pbutils_sys::GstEncodingContainerProfile, gst_pbutils_sys::GstEncodingContainerProfileClass>) @extends EncodingProfile;
 
     match fn {
         get_type => || gst_pbutils_sys::gst_encoding_container_profile_get_type(),
