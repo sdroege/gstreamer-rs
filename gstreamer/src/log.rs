@@ -372,10 +372,13 @@ impl fmt::Display for LoggedObject {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         unsafe {
             let ptr = self.0.as_ptr();
-            let g_class = (*ptr).g_type_instance.g_class;
-
-            if !g_class.is_null() {
-                let type_ = (*g_class).g_type;
+            let g_type_instance = &mut (*ptr).g_type_instance;
+            if gobject_sys::g_type_check_instance_is_fundamentally_a(
+                g_type_instance,
+                gobject_sys::g_object_get_type(),
+            ) != glib_sys::GFALSE
+            {
+                let type_ = (*g_type_instance.g_class).g_type;
 
                 if gobject_sys::g_type_is_a(type_, gst_sys::gst_pad_get_type()) != glib_sys::GFALSE
                 {
