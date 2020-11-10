@@ -17,8 +17,8 @@ bitflags = "1.0"
 libc = "0.2"
 glib-sys = "0.10"
 gobject-sys = "0.10"
-gstreamer-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", rev = "0.9", features = ["v1_8"] }
-gstreamer-pbutils-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", rev = "0.9", features = ["v1_8"] }
+gstreamer-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", branch = "0.9", features = ["v1_8"] }
+gstreamer-pbutils-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", branch = "0.9", features = ["v1_8"] }
 glib = "0.10"
 gstreamer = { version = "0.16", path = "../gstreamer" }
 thiserror = "1.0"

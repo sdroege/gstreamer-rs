@@ -19,7 +19,7 @@ gstreamer-editing-services = { version = "0.16", path = "../gstreamer-editing-se
 gstreamer-sdp = { version = "0.16", path = "../gstreamer-sdp", optional = true }
 gstreamer-rtsp = { version = "0.16", path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { version = "0.16", path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", rev = "0.9", features = ["v1_8"], optional = true }
+gstreamer-rtsp-server-sys = { version = "0.9", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys.git", branch = "0.9", features = ["v1_8"], optional = true }
 gtk = { version = "0.9", optional = true }
 gdk = { version = "0.13", optional = true }
 gio = { version = "0.9", optional = true }
