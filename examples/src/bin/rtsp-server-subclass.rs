@@ -28,7 +28,7 @@ struct UsageError(#[error(not(source))] String);
 
 fn main_loop() -> Result<(), Error> {
     let main_loop = glib::MainLoop::new(None, false);
-    let server = server::Server::new();
+    let server = server::Server::default();
     // Much like HTTP servers, RTSP servers have multiple endpoints that
     // provide different streams. Here, we ask our server to give
     // us a reference to his list of endpoints, so we can add our
@@ -38,7 +38,7 @@ fn main_loop() -> Result<(), Error> {
     // Next, we create our custom factory for the endpoint we want to create.
     // The job of the factory is to create a new pipeline for each client that
     // connects, or (if configured to do so) to reuse an existing pipeline.
-    let factory = media_factory::Factory::new();
+    let factory = media_factory::Factory::default();
     // This setting specifies whether each connecting client gets the output
     // of a new instance of the pipeline, or whether all connected clients share
     // the output of the same pipeline.
@@ -167,9 +167,9 @@ mod media_factory {
     unsafe impl Send for Factory {}
     unsafe impl Sync for Factory {}
 
-    impl Factory {
+    impl Default for Factory {
         // Creates a new instance of our factory
-        pub fn new() -> Factory {
+        fn default() -> Factory {
             glib::Object::new(Self::static_type(), &[])
                 .expect("Failed to create factory")
                 .downcast()
@@ -289,7 +289,7 @@ mod server {
                 &self,
                 server: &gst_rtsp_server::RTSPServer,
             ) -> Option<gst_rtsp_server::RTSPClient> {
-                let client = super::client::Client::new();
+                let client = super::client::Client::default();
 
                 // Duplicated from the default implementation
                 client.set_session_pool(server.get_session_pool().as_ref());
@@ -321,9 +321,9 @@ mod server {
     unsafe impl Send for Server {}
     unsafe impl Sync for Server {}
 
-    impl Server {
+    impl Default for Server {
         // Creates a new instance of our factory
-        pub fn new() -> Server {
+        fn default() -> Server {
             glib::Object::new(Self::static_type(), &[])
                 .expect("Failed to create server")
                 .downcast()
@@ -389,9 +389,9 @@ mod client {
     unsafe impl Send for Client {}
     unsafe impl Sync for Client {}
 
-    impl Client {
+    impl Default for Client {
         // Creates a new instance of our factory
-        pub fn new() -> Client {
+        fn default() -> Client {
             glib::Object::new(Self::static_type(), &[])
                 .expect("Failed to create client")
                 .downcast()
