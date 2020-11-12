@@ -106,6 +106,6 @@ macro_rules! gst_plugin_define(
                 }
             }
         }
-        pub use plugin_desc::plugin_register_static;
+        pub use self::plugin_desc::plugin_register_static;
     };
 );
