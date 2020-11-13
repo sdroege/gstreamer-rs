@@ -289,12 +289,6 @@ impl ToGlib for VideoEndianness {
 }
 
 impl crate::VideoFormat {
-    pub fn from_fourcc(fourcc: u32) -> crate::VideoFormat {
-        assert_initialized_main_thread!();
-
-        unsafe { from_glib(ffi::gst_video_format_from_fourcc(fourcc)) }
-    }
-
     pub fn from_masks(
         depth: u32,
         bpp: u32,
