@@ -8,12 +8,17 @@
 
 pub const MAJOR_VERSION: i32 = 1;
 
-#[cfg(all(feature = "v1_14", not(feature = "v1_16")))]
-pub const MINOR_VERSION: i32 = 14;
-#[cfg(all(feature = "v1_16", not(feature = "v1_18")))]
-pub const MINOR_VERSION: i32 = 16;
-#[cfg(all(feature = "v1_18", not(feature = "v1_20")))]
-pub const MINOR_VERSION: i32 = 18;
+cfg_if::cfg_if! {
+    if #[cfg(feature = "v1_20")] {
+        pub const MINOR_VERSION: i32 = 20;
+    } else if #[cfg(feature = "v1_18")] {
+        pub const MINOR_VERSION: i32 = 18;
+    } else if #[cfg(feature = "v1_16")] {
+        pub const MINOR_VERSION: i32 = 16;
+    } else if #[cfg(feature = "v1_14")] {
+        pub const MINOR_VERSION: i32 = 14;
+    }
+}
 
 #[macro_export]
 macro_rules! gst_plugin_define(
