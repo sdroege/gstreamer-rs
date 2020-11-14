@@ -8,29 +8,30 @@
 
 use gst_rtsp_server_sys;
 
+use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use RTSPServer;
 
 pub trait RTSPServerImpl: RTSPServerImplExt + ObjectImpl + Send + Sync {
-    fn create_client(&self, server: &RTSPServer) -> Option<::RTSPClient> {
+    fn create_client(&self, server: &Self::Type) -> Option<::RTSPClient> {
         self.parent_create_client(server)
     }
 
-    fn client_connected(&self, server: &RTSPServer, client: &::RTSPClient) {
+    fn client_connected(&self, server: &Self::Type, client: &::RTSPClient) {
         self.parent_client_connected(server, client);
     }
 }
 
-pub trait RTSPServerImplExt {
-    fn parent_create_client(&self, server: &RTSPServer) -> Option<::RTSPClient>;
+pub trait RTSPServerImplExt: ObjectSubclass {
+    fn parent_create_client(&self, server: &Self::Type) -> Option<::RTSPClient>;
 
-    fn parent_client_connected(&self, server: &RTSPServer, client: &::RTSPClient);
+    fn parent_client_connected(&self, server: &Self::Type, client: &::RTSPClient);
 }
 
 impl<T: RTSPServerImpl> RTSPServerImplExt for T {
-    fn parent_create_client(&self, server: &RTSPServer) -> Option<::RTSPClient> {
+    fn parent_create_client(&self, server: &Self::Type) -> Option<::RTSPClient> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -38,17 +39,20 @@ impl<T: RTSPServerImpl> RTSPServerImplExt for T {
             let f = (*parent_class)
                 .create_client
                 .expect("No `create_client` virtual method implementation in parent class");
-            from_glib_full(f(server.to_glib_none().0))
+            from_glib_full(f(server.unsafe_cast_ref::<RTSPServer>().to_glib_none().0))
         }
     }
 
-    fn parent_client_connected(&self, server: &RTSPServer, client: &::RTSPClient) {
+    fn parent_client_connected(&self, server: &Self::Type, client: &::RTSPClient) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPServerClass;
             if let Some(f) = (*parent_class).client_connected {
-                f(server.to_glib_none().0, client.to_glib_none().0)
+                f(
+                    server.unsafe_cast_ref::<RTSPServer>().to_glib_none().0,
+                    client.to_glib_none().0,
+                )
             }
         }
     }
@@ -69,7 +73,7 @@ unsafe extern "C" fn server_create_client<T: RTSPServerImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);
 
-    imp.create_client(&wrap).to_glib_full()
+    imp.create_client(wrap.unsafe_cast_ref()).to_glib_full()
 }
 
 unsafe extern "C" fn server_client_connected<T: RTSPServerImpl>(
@@ -80,5 +84,5 @@ unsafe extern "C" fn server_client_connected<T: RTSPServerImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPServer> = from_glib_borrow(ptr);
 
-    imp.client_connected(&wrap, &from_glib_borrow(client));
+    imp.client_connected(wrap.unsafe_cast_ref(), &from_glib_borrow(client));
 }

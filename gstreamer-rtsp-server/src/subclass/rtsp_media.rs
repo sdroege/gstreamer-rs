@@ -8,6 +8,7 @@
 
 use gst_rtsp_server_sys;
 
+use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
@@ -33,43 +34,43 @@ impl SDPInfo {
 }
 
 pub trait RTSPMediaImpl: RTSPMediaImplExt + ObjectImpl + Send + Sync {
-    fn handle_message(&self, media: &RTSPMedia, message: &gst::MessageRef) -> bool {
+    fn handle_message(&self, media: &Self::Type, message: &gst::MessageRef) -> bool {
         self.parent_handle_message(media, message)
     }
 
-    fn prepare(&self, media: &RTSPMedia, thread: &RTSPThread) -> Result<(), gst::LoggableError> {
+    fn prepare(&self, media: &Self::Type, thread: &RTSPThread) -> Result<(), gst::LoggableError> {
         self.parent_prepare(media, thread)
     }
 
-    fn unprepare(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
+    fn unprepare(&self, media: &Self::Type) -> Result<(), gst::LoggableError> {
         self.parent_unprepare(media)
     }
 
-    fn suspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
+    fn suspend(&self, media: &Self::Type) -> Result<(), gst::LoggableError> {
         self.parent_suspend(media)
     }
 
-    fn unsuspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
+    fn unsuspend(&self, media: &Self::Type) -> Result<(), gst::LoggableError> {
         self.parent_unsuspend(media)
     }
 
     // TODO missing: convert_range
 
-    fn query_position(&self, media: &RTSPMedia) -> Option<gst::ClockTime> {
+    fn query_position(&self, media: &Self::Type) -> Option<gst::ClockTime> {
         self.parent_query_position(media)
     }
 
-    fn query_stop(&self, media: &RTSPMedia) -> Option<gst::ClockTime> {
+    fn query_stop(&self, media: &Self::Type) -> Option<gst::ClockTime> {
         self.parent_query_stop(media)
     }
 
-    fn create_rtpbin(&self, media: &RTSPMedia) -> Option<gst::Element> {
+    fn create_rtpbin(&self, media: &Self::Type) -> Option<gst::Element> {
         self.parent_create_rtpbin(media)
     }
 
     fn setup_rtpbin(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         rtpbin: &gst::Element,
     ) -> Result<(), gst::LoggableError> {
         self.parent_setup_rtpbin(media, rtpbin)
@@ -77,93 +78,96 @@ pub trait RTSPMediaImpl: RTSPMediaImplExt + ObjectImpl + Send + Sync {
 
     fn setup_sdp(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         sdp: &mut gst_sdp::SDPMessageRef,
         info: &SDPInfo,
     ) -> Result<(), gst::LoggableError> {
         self.parent_setup_sdp(media, sdp, info)
     }
 
-    fn new_stream(&self, media: &RTSPMedia, stream: &::RTSPStream) {
+    fn new_stream(&self, media: &Self::Type, stream: &::RTSPStream) {
         self.parent_new_stream(media, stream);
     }
 
-    fn removed_stream(&self, media: &RTSPMedia, stream: &::RTSPStream) {
+    fn removed_stream(&self, media: &Self::Type, stream: &::RTSPStream) {
         self.parent_removed_stream(media, stream);
     }
 
-    fn prepared(&self, media: &RTSPMedia) {
+    fn prepared(&self, media: &Self::Type) {
         self.parent_prepared(media);
     }
 
-    fn unprepared(&self, media: &RTSPMedia) {
+    fn unprepared(&self, media: &Self::Type) {
         self.parent_unprepared(media);
     }
 
-    fn target_state(&self, media: &RTSPMedia, state: gst::State) {
+    fn target_state(&self, media: &Self::Type, state: gst::State) {
         self.parent_target_state(media, state);
     }
 
-    fn new_state(&self, media: &RTSPMedia, state: gst::State) {
+    fn new_state(&self, media: &Self::Type, state: gst::State) {
         self.parent_new_state(media, state);
     }
 
     fn handle_sdp(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError> {
         self.parent_handle_sdp(media, sdp)
     }
 }
 
-pub trait RTSPMediaImplExt {
-    fn parent_handle_message(&self, media: &RTSPMedia, message: &gst::MessageRef) -> bool;
+pub trait RTSPMediaImplExt: ObjectSubclass {
+    fn parent_handle_message(&self, media: &Self::Type, message: &gst::MessageRef) -> bool;
     fn parent_prepare(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         thread: &RTSPThread,
     ) -> Result<(), gst::LoggableError>;
-    fn parent_unprepare(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError>;
-    fn parent_suspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError>;
-    fn parent_unsuspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError>;
+    fn parent_unprepare(&self, media: &Self::Type) -> Result<(), gst::LoggableError>;
+    fn parent_suspend(&self, media: &Self::Type) -> Result<(), gst::LoggableError>;
+    fn parent_unsuspend(&self, media: &Self::Type) -> Result<(), gst::LoggableError>;
     // TODO missing: convert_range
 
-    fn parent_query_position(&self, media: &RTSPMedia) -> Option<gst::ClockTime>;
-    fn parent_query_stop(&self, media: &RTSPMedia) -> Option<gst::ClockTime>;
-    fn parent_create_rtpbin(&self, media: &RTSPMedia) -> Option<gst::Element>;
+    fn parent_query_position(&self, media: &Self::Type) -> Option<gst::ClockTime>;
+    fn parent_query_stop(&self, media: &Self::Type) -> Option<gst::ClockTime>;
+    fn parent_create_rtpbin(&self, media: &Self::Type) -> Option<gst::Element>;
     fn parent_setup_rtpbin(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         rtpbin: &gst::Element,
     ) -> Result<(), gst::LoggableError>;
     fn parent_setup_sdp(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         sdp: &mut gst_sdp::SDPMessageRef,
         info: &SDPInfo,
     ) -> Result<(), gst::LoggableError>;
-    fn parent_new_stream(&self, media: &RTSPMedia, stream: &::RTSPStream);
-    fn parent_removed_stream(&self, media: &RTSPMedia, stream: &::RTSPStream);
-    fn parent_prepared(&self, media: &RTSPMedia);
-    fn parent_unprepared(&self, media: &RTSPMedia);
-    fn parent_target_state(&self, media: &RTSPMedia, state: gst::State);
-    fn parent_new_state(&self, media: &RTSPMedia, state: gst::State);
+    fn parent_new_stream(&self, media: &Self::Type, stream: &::RTSPStream);
+    fn parent_removed_stream(&self, media: &Self::Type, stream: &::RTSPStream);
+    fn parent_prepared(&self, media: &Self::Type);
+    fn parent_unprepared(&self, media: &Self::Type);
+    fn parent_target_state(&self, media: &Self::Type, state: gst::State);
+    fn parent_new_state(&self, media: &Self::Type, state: gst::State);
     fn parent_handle_sdp(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError>;
 }
 
 impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
-    fn parent_handle_message(&self, media: &RTSPMedia, message: &gst::MessageRef) -> bool {
+    fn parent_handle_message(&self, media: &Self::Type, message: &gst::MessageRef) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).handle_message {
-                from_glib(f(media.to_glib_none().0, message.as_ptr() as *mut _))
+                from_glib(f(
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                    message.as_ptr() as *mut _,
+                ))
             } else {
                 false
             }
@@ -172,7 +176,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
 
     fn parent_prepare(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         thread: &RTSPThread,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
@@ -181,7 +185,10 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).prepare {
                 gst_result_from_gboolean!(
-                    f(media.to_glib_none().0, thread.to_glib_none().0),
+                    f(
+                        media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                        thread.to_glib_none().0
+                    ),
                     gst::CAT_RUST,
                     "Parent function `prepare` failed"
                 )
@@ -191,14 +198,14 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 
-    fn parent_unprepare(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
+    fn parent_unprepare(&self, media: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unprepare {
                 gst_result_from_gboolean!(
-                    f(media.to_glib_none().0),
+                    f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0),
                     gst::CAT_RUST,
                     "Parent function `unprepare` failed"
                 )
@@ -208,14 +215,14 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 
-    fn parent_suspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
+    fn parent_suspend(&self, media: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).suspend {
                 gst_result_from_gboolean!(
-                    f(media.to_glib_none().0),
+                    f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0),
                     gst::CAT_RUST,
                     "Parent function `suspend` failed"
                 )
@@ -225,14 +232,14 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 
-    fn parent_unsuspend(&self, media: &RTSPMedia) -> Result<(), gst::LoggableError> {
+    fn parent_unsuspend(&self, media: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unsuspend {
                 gst_result_from_gboolean!(
-                    f(media.to_glib_none().0),
+                    f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0),
                     gst::CAT_RUST,
                     "Parent function `unsuspend` failed"
                 )
@@ -244,7 +251,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
 
     // TODO missing: convert_range
 
-    fn parent_query_position(&self, media: &RTSPMedia) -> Option<gst::ClockTime> {
+    fn parent_query_position(&self, media: &Self::Type) -> Option<gst::ClockTime> {
         unsafe {
             use std::mem;
 
@@ -253,7 +260,11 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).query_position {
                 let mut position = mem::MaybeUninit::uninit();
-                if f(media.to_glib_none().0, position.as_mut_ptr()) == glib_sys::GFALSE {
+                if f(
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                    position.as_mut_ptr(),
+                ) == glib_sys::GFALSE
+                {
                     None
                 } else {
                     Some(from_glib(position.assume_init() as u64))
@@ -264,7 +275,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 
-    fn parent_query_stop(&self, media: &RTSPMedia) -> Option<gst::ClockTime> {
+    fn parent_query_stop(&self, media: &Self::Type) -> Option<gst::ClockTime> {
         unsafe {
             use std::mem;
 
@@ -273,7 +284,11 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).query_stop {
                 let mut stop = mem::MaybeUninit::uninit();
-                if f(media.to_glib_none().0, stop.as_mut_ptr()) == glib_sys::GFALSE {
+                if f(
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                    stop.as_mut_ptr(),
+                ) == glib_sys::GFALSE
+                {
                     None
                 } else {
                     Some(from_glib(stop.assume_init() as u64))
@@ -284,7 +299,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 
-    fn parent_create_rtpbin(&self, media: &RTSPMedia) -> Option<gst::Element> {
+    fn parent_create_rtpbin(&self, media: &Self::Type) -> Option<gst::Element> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -293,13 +308,13 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 .create_rtpbin
                 .expect("No `create_rtpbin` virtual method implementation in parent class");
 
-            from_glib_none(f(media.to_glib_none().0))
+            from_glib_none(f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0))
         }
     }
 
     fn parent_setup_rtpbin(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         rtpbin: &gst::Element,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
@@ -313,7 +328,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 gobject_sys::g_object_force_floating(ptr as *mut _);
 
                 let res = gst_result_from_gboolean!(
-                    f(media.to_glib_none().0, ptr),
+                    f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0, ptr),
                     gst::CAT_RUST,
                     "Parent function `setup_sdp` failed"
                 );
@@ -334,7 +349,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
 
     fn parent_setup_sdp(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         sdp: &mut gst_sdp::SDPMessageRef,
         info: &SDPInfo,
     ) -> Result<(), gst::LoggableError> {
@@ -348,7 +363,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
 
             gst_result_from_gboolean!(
                 f(
-                    media.to_glib_none().0,
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
                     sdp as *mut _ as *mut gst_sdp_sys::GstSDPMessage,
                     info.0.as_ptr()
                 ),
@@ -358,75 +373,87 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
         }
     }
 
-    fn parent_new_stream(&self, media: &RTSPMedia, stream: &::RTSPStream) {
+    fn parent_new_stream(&self, media: &Self::Type, stream: &::RTSPStream) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).new_stream {
-                f(media.to_glib_none().0, stream.to_glib_none().0);
+                f(
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                    stream.to_glib_none().0,
+                );
             }
         }
     }
 
-    fn parent_removed_stream(&self, media: &RTSPMedia, stream: &::RTSPStream) {
+    fn parent_removed_stream(&self, media: &Self::Type, stream: &::RTSPStream) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).removed_stream {
-                f(media.to_glib_none().0, stream.to_glib_none().0);
+                f(
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                    stream.to_glib_none().0,
+                );
             }
         }
     }
 
-    fn parent_prepared(&self, media: &RTSPMedia) {
+    fn parent_prepared(&self, media: &Self::Type) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).prepared {
-                f(media.to_glib_none().0);
+                f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0);
             }
         }
     }
 
-    fn parent_unprepared(&self, media: &RTSPMedia) {
+    fn parent_unprepared(&self, media: &Self::Type) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unprepared {
-                f(media.to_glib_none().0);
+                f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0);
             }
         }
     }
 
-    fn parent_target_state(&self, media: &RTSPMedia, state: gst::State) {
+    fn parent_target_state(&self, media: &Self::Type, state: gst::State) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).target_state {
-                f(media.to_glib_none().0, state.to_glib());
+                f(
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                    state.to_glib(),
+                );
             }
         }
     }
 
-    fn parent_new_state(&self, media: &RTSPMedia, state: gst::State) {
+    fn parent_new_state(&self, media: &Self::Type, state: gst::State) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).new_state {
-                f(media.to_glib_none().0, state.to_glib());
+                f(
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
+                    state.to_glib(),
+                );
             }
         }
     }
 
     fn parent_handle_sdp(
         &self,
-        media: &RTSPMedia,
+        media: &Self::Type,
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
@@ -439,7 +466,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
 
             gst_result_from_gboolean!(
                 f(
-                    media.to_glib_none().0,
+                    media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
                     sdp as *const _ as *mut gst_sdp_sys::GstSDPMessage
                 ),
                 gst::CAT_RUST,
@@ -480,7 +507,7 @@ unsafe extern "C" fn media_handle_message<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    imp.handle_message(&wrap, gst::MessageRef::from_ptr(message))
+    imp.handle_message(wrap.unsafe_cast_ref(), gst::MessageRef::from_ptr(message))
         .to_glib()
 }
 
@@ -492,7 +519,7 @@ unsafe extern "C" fn media_prepare<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    match imp.prepare(&wrap, &from_glib_borrow(thread)) {
+    match imp.prepare(wrap.unsafe_cast_ref(), &from_glib_borrow(thread)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);
@@ -508,7 +535,7 @@ unsafe extern "C" fn media_unprepare<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    match imp.unprepare(&wrap) {
+    match imp.unprepare(wrap.unsafe_cast_ref()) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);
@@ -524,7 +551,7 @@ unsafe extern "C" fn media_suspend<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    match imp.suspend(&wrap) {
+    match imp.suspend(wrap.unsafe_cast_ref()) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);
@@ -540,7 +567,7 @@ unsafe extern "C" fn media_unsuspend<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    match imp.unsuspend(&wrap) {
+    match imp.unsuspend(wrap.unsafe_cast_ref()) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);
@@ -557,7 +584,7 @@ unsafe extern "C" fn media_query_position<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    match imp.query_position(&wrap) {
+    match imp.query_position(wrap.unsafe_cast_ref()) {
         Some(pos) => {
             *position = pos.to_glib() as i64;
             glib_sys::GTRUE
@@ -574,7 +601,7 @@ unsafe extern "C" fn media_query_stop<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    match imp.query_stop(&wrap) {
+    match imp.query_stop(wrap.unsafe_cast_ref()) {
         Some(s) => {
             *stop = s.to_glib() as i64;
             glib_sys::GTRUE
@@ -590,7 +617,7 @@ unsafe extern "C" fn media_create_rtpbin<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    let res: *mut gst_sys::GstElement = imp.create_rtpbin(&wrap).to_glib_full();
+    let res: *mut gst_sys::GstElement = imp.create_rtpbin(wrap.unsafe_cast_ref()).to_glib_full();
 
     if !res.is_null() {
         gobject_sys::g_object_force_floating(res as *mut _);
@@ -613,7 +640,7 @@ unsafe extern "C" fn media_setup_rtpbin<T: RTSPMediaImpl>(
         gobject_sys::g_object_ref_sink(rtpbin as *mut _);
     }
 
-    let res = match imp.setup_rtpbin(&wrap, &from_glib_borrow(rtpbin)) {
+    let res = match imp.setup_rtpbin(wrap.unsafe_cast_ref(), &from_glib_borrow(rtpbin)) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);
@@ -637,7 +664,7 @@ unsafe extern "C" fn media_setup_sdp<T: RTSPMediaImpl>(
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     match imp.setup_sdp(
-        &wrap,
+        wrap.unsafe_cast_ref(),
         &mut *(sdp as *mut gst_sdp::SDPMessageRef),
         &SDPInfo(ptr::NonNull::new(info).expect("NULL SDPInfo")),
     ) {
@@ -657,7 +684,7 @@ unsafe extern "C" fn media_new_stream<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    imp.new_stream(&wrap, &from_glib_borrow(stream));
+    imp.new_stream(wrap.unsafe_cast_ref(), &from_glib_borrow(stream));
 }
 
 unsafe extern "C" fn media_removed_stream<T: RTSPMediaImpl>(
@@ -668,7 +695,7 @@ unsafe extern "C" fn media_removed_stream<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    imp.removed_stream(&wrap, &from_glib_borrow(stream));
+    imp.removed_stream(wrap.unsafe_cast_ref(), &from_glib_borrow(stream));
 }
 
 unsafe extern "C" fn media_prepared<T: RTSPMediaImpl>(ptr: *mut gst_rtsp_server_sys::GstRTSPMedia) {
@@ -676,7 +703,7 @@ unsafe extern "C" fn media_prepared<T: RTSPMediaImpl>(ptr: *mut gst_rtsp_server_
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    imp.prepared(&wrap);
+    imp.prepared(wrap.unsafe_cast_ref());
 }
 
 unsafe extern "C" fn media_unprepared<T: RTSPMediaImpl>(
@@ -686,7 +713,7 @@ unsafe extern "C" fn media_unprepared<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    imp.unprepared(&wrap);
+    imp.unprepared(wrap.unsafe_cast_ref());
 }
 
 unsafe extern "C" fn media_target_state<T: RTSPMediaImpl>(
@@ -697,7 +724,7 @@ unsafe extern "C" fn media_target_state<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    imp.target_state(&wrap, from_glib(state));
+    imp.target_state(wrap.unsafe_cast_ref(), from_glib(state));
 }
 
 unsafe extern "C" fn media_new_state<T: RTSPMediaImpl>(
@@ -708,7 +735,7 @@ unsafe extern "C" fn media_new_state<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    imp.new_state(&wrap, from_glib(state));
+    imp.new_state(wrap.unsafe_cast_ref(), from_glib(state));
 }
 
 unsafe extern "C" fn media_handle_sdp<T: RTSPMediaImpl>(
@@ -719,7 +746,10 @@ unsafe extern "C" fn media_handle_sdp<T: RTSPMediaImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
-    match imp.handle_sdp(&wrap, &*(sdp as *const gst_sdp::SDPMessageRef)) {
+    match imp.handle_sdp(
+        wrap.unsafe_cast_ref(),
+        &*(sdp as *const gst_sdp::SDPMessageRef),
+    ) {
         Ok(()) => glib_sys::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);

@@ -129,7 +129,7 @@ mod media_factory {
         impl RTSPMediaFactoryImpl for Factory {
             fn create_element(
                 &self,
-                _factory: &gst_rtsp_server::RTSPMediaFactory,
+                _factory: &Self::Type,
                 _url: &gst_rtsp::RTSPUrl,
             ) -> Option<gst::Element> {
                 // Create a simple VP8 videotestsrc input
@@ -218,7 +218,7 @@ mod media {
         impl RTSPMediaImpl for Media {
             fn setup_sdp(
                 &self,
-                media: &gst_rtsp_server::RTSPMedia,
+                media: &Self::Type,
                 sdp: &mut gst_sdp::SDPMessageRef,
                 info: &gst_rtsp_server::subclass::SDPInfo,
             ) -> Result<(), gst::LoggableError> {
@@ -284,10 +284,7 @@ mod server {
 
         // Implementation of gst_rtsp_server::RTSPServer virtual methods
         impl RTSPServerImpl for Server {
-            fn create_client(
-                &self,
-                server: &gst_rtsp_server::RTSPServer,
-            ) -> Option<gst_rtsp_server::RTSPClient> {
+            fn create_client(&self, server: &Self::Type) -> Option<gst_rtsp_server::RTSPClient> {
                 let client = super::client::Client::default();
 
                 // Duplicated from the default implementation
@@ -299,11 +296,7 @@ mod server {
                 Some(client.upcast())
             }
 
-            fn client_connected(
-                &self,
-                server: &gst_rtsp_server::RTSPServer,
-                client: &gst_rtsp_server::RTSPClient,
-            ) {
+            fn client_connected(&self, server: &Self::Type, client: &gst_rtsp_server::RTSPClient) {
                 self.parent_client_connected(server, client);
                 println!("Client {:?} connected", client);
             }
@@ -372,7 +365,7 @@ mod client {
 
         // Implementation of gst_rtsp_server::RTSPClient virtual methods
         impl RTSPClientImpl for Client {
-            fn closed(&self, client: &gst_rtsp_server::RTSPClient) {
+            fn closed(&self, client: &Self::Type) {
                 self.parent_closed(client);
                 println!("Client {:?} closed", client);
             }
