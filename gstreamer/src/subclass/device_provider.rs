@@ -9,51 +9,54 @@
 use glib_sys;
 use gst_sys;
 
-use glib::translate::*;
-
+use glib::prelude::*;
 use glib::subclass::prelude::*;
+use glib::translate::*;
 
 use Device;
 use DeviceProvider;
 use LoggableError;
 
 pub trait DeviceProviderImpl: DeviceProviderImplExt + ObjectImpl + Send + Sync {
-    fn probe(&self, device_provider: &DeviceProvider) -> Vec<Device> {
+    fn probe(&self, device_provider: &Self::Type) -> Vec<Device> {
         self.parent_probe(device_provider)
     }
 
-    fn start(&self, device_provider: &DeviceProvider) -> Result<(), LoggableError> {
+    fn start(&self, device_provider: &Self::Type) -> Result<(), LoggableError> {
         self.parent_start(device_provider)
     }
 
-    fn stop(&self, device_provider: &DeviceProvider) {
+    fn stop(&self, device_provider: &Self::Type) {
         self.parent_stop(device_provider)
     }
 }
 
-pub trait DeviceProviderImplExt {
-    fn parent_probe(&self, device_provider: &DeviceProvider) -> Vec<Device>;
+pub trait DeviceProviderImplExt: ObjectSubclass {
+    fn parent_probe(&self, device_provider: &Self::Type) -> Vec<Device>;
 
-    fn parent_start(&self, device_provider: &DeviceProvider) -> Result<(), LoggableError>;
+    fn parent_start(&self, device_provider: &Self::Type) -> Result<(), LoggableError>;
 
-    fn parent_stop(&self, device_provider: &DeviceProvider);
+    fn parent_stop(&self, device_provider: &Self::Type);
 }
 
 impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
-    fn parent_probe(&self, device_provider: &DeviceProvider) -> Vec<Device> {
+    fn parent_probe(&self, device_provider: &Self::Type) -> Vec<Device> {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).probe {
-                FromGlibPtrContainer::from_glib_full(f(device_provider.to_glib_none().0))
+                FromGlibPtrContainer::from_glib_full(f(device_provider
+                    .unsafe_cast_ref::<DeviceProvider>()
+                    .to_glib_none()
+                    .0))
             } else {
                 Vec::new()
             }
         }
     }
 
-    fn parent_start(&self, device_provider: &DeviceProvider) -> Result<(), LoggableError> {
+    fn parent_start(&self, device_provider: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -62,20 +65,26 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
                 gst_loggable_error!(::CAT_RUST, "Parent function `start` is not defined")
             })?;
             gst_result_from_gboolean!(
-                f(device_provider.to_glib_none().0),
+                f(device_provider
+                    .unsafe_cast_ref::<DeviceProvider>()
+                    .to_glib_none()
+                    .0),
                 ::CAT_RUST,
                 "Failed to start the device provider using the parent function"
             )
         }
     }
 
-    fn parent_stop(&self, device_provider: &DeviceProvider) {
+    fn parent_stop(&self, device_provider: &Self::Type) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).stop {
-                f(device_provider.to_glib_none().0);
+                f(device_provider
+                    .unsafe_cast_ref::<DeviceProvider>()
+                    .to_glib_none()
+                    .0);
             }
         }
     }
@@ -130,7 +139,7 @@ unsafe extern "C" fn device_provider_probe<T: DeviceProviderImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
-    imp.probe(&wrap).to_glib_full()
+    imp.probe(wrap.unsafe_cast_ref()).to_glib_full()
 }
 
 unsafe extern "C" fn device_provider_start<T: DeviceProviderImpl>(
@@ -140,7 +149,7 @@ unsafe extern "C" fn device_provider_start<T: DeviceProviderImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
-    match imp.start(&wrap) {
+    match imp.start(wrap.unsafe_cast_ref()) {
         Ok(()) => true,
         Err(err) => {
             err.log_with_object(&*wrap);
@@ -157,5 +166,5 @@ unsafe extern "C" fn device_provider_stop<T: DeviceProviderImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<DeviceProvider> = from_glib_borrow(ptr);
 
-    imp.stop(&wrap);
+    imp.stop(wrap.unsafe_cast_ref());
 }

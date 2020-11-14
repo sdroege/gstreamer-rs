@@ -9,49 +9,59 @@
 use gst_sys;
 
 use glib;
-use glib::translate::*;
-
+use glib::prelude::*;
 use glib::subclass::prelude::*;
+use glib::translate::*;
 
 use Pad;
 
 pub trait PadImpl: PadImplExt + ObjectImpl + Send + Sync {
-    fn linked(&self, pad: &Pad, peer: &Pad) {
+    fn linked(&self, pad: &Self::Type, peer: &Pad) {
         self.parent_linked(pad, peer)
     }
 
-    fn unlinked(&self, pad: &Pad, peer: &Pad) {
+    fn unlinked(&self, pad: &Self::Type, peer: &Pad) {
         self.parent_unlinked(pad, peer)
     }
 }
 
-pub trait PadImplExt {
-    fn parent_linked(&self, pad: &Pad, peer: &Pad);
+pub trait PadImplExt: ObjectSubclass {
+    fn parent_linked(&self, pad: &Self::Type, peer: &Pad);
 
-    fn parent_unlinked(&self, pad: &Pad, peer: &Pad);
+    fn parent_unlinked(&self, pad: &Self::Type, peer: &Pad);
 }
 
 impl<T: PadImpl> PadImplExt for T {
-    fn parent_linked(&self, pad: &Pad, peer: &Pad) {
+    fn parent_linked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
 
             (*parent_class)
                 .linked
-                .map(|f| f(pad.to_glib_none().0, peer.to_glib_none().0))
+                .map(|f| {
+                    f(
+                        pad.unsafe_cast_ref::<Pad>().to_glib_none().0,
+                        peer.to_glib_none().0,
+                    )
+                })
                 .unwrap_or(())
         }
     }
 
-    fn parent_unlinked(&self, pad: &Pad, peer: &Pad) {
+    fn parent_unlinked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
 
             (*parent_class)
                 .unlinked
-                .map(|f| f(pad.to_glib_none().0, peer.to_glib_none().0))
+                .map(|f| {
+                    f(
+                        pad.unsafe_cast_ref::<Pad>().to_glib_none().0,
+                        peer.to_glib_none().0,
+                    )
+                })
                 .unwrap_or(())
         }
     }
@@ -71,7 +81,7 @@ unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut gst_sys::GstPad, peer: *mu
     let imp = instance.get_impl();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
-    imp.linked(&wrap, &from_glib_borrow(peer))
+    imp.linked(wrap.unsafe_cast_ref(), &from_glib_borrow(peer))
 }
 
 unsafe extern "C" fn pad_unlinked<T: PadImpl>(
@@ -82,7 +92,7 @@ unsafe extern "C" fn pad_unlinked<T: PadImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
-    imp.unlinked(&wrap, &from_glib_borrow(peer))
+    imp.unlinked(wrap.unsafe_cast_ref(), &from_glib_borrow(peer))
 }
 
 #[cfg(test)]
@@ -92,6 +102,8 @@ mod tests {
     use glib;
     use glib::subclass;
     use std::sync::atomic;
+
+    use PadDirection;
 
     pub mod imp {
         use super::*;
@@ -104,7 +116,7 @@ mod tests {
         impl ObjectSubclass for TestPad {
             const NAME: &'static str = "TestPad";
             type Type = super::TestPad;
-            type ParentType = ::Pad;
+            type ParentType = Pad;
             type Instance = subclass::simple::InstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 
@@ -121,12 +133,12 @@ mod tests {
         impl ObjectImpl for TestPad {}
 
         impl PadImpl for TestPad {
-            fn linked(&self, pad: &Pad, peer: &Pad) {
+            fn linked(&self, pad: &Self::Type, peer: &Pad) {
                 self.linked.store(true, atomic::Ordering::SeqCst);
                 self.parent_linked(pad, peer)
             }
 
-            fn unlinked(&self, pad: &Pad, peer: &Pad) {
+            fn unlinked(&self, pad: &Self::Type, peer: &Pad) {
                 self.unlinked.store(true, atomic::Ordering::SeqCst);
                 self.parent_unlinked(pad, peer)
             }
@@ -134,14 +146,14 @@ mod tests {
     }
 
     glib_wrapper! {
-        pub struct TestPad(ObjectSubclass<imp::TestPad>) @extends ::Pad, ::Object;
+        pub struct TestPad(ObjectSubclass<imp::TestPad>) @extends Pad, ::Object;
     }
 
     unsafe impl Send for TestPad {}
     unsafe impl Sync for TestPad {}
 
     impl TestPad {
-        pub fn new(name: &str, direction: ::PadDirection) -> Self {
+        pub fn new(name: &str, direction: PadDirection) -> Self {
             glib::Object::new(
                 TestPad::static_type(),
                 &[("name", &name), ("direction", &direction)],
@@ -156,11 +168,11 @@ mod tests {
     fn test_pad_subclass() {
         ::init().unwrap();
 
-        let pad = TestPad::new("test", ::PadDirection::Src);
+        let pad = TestPad::new("test", PadDirection::Src);
 
         assert_eq!(pad.get_name(), "test");
 
-        let otherpad = ::Pad::new(Some("other-test"), ::PadDirection::Sink);
+        let otherpad = Pad::new(Some("other-test"), PadDirection::Sink);
         pad.link(&otherpad).unwrap();
         pad.unlink(&otherpad).unwrap();
 

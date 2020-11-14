@@ -11,6 +11,7 @@ use gobject_sys;
 use gst_sys;
 
 use glib;
+use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
@@ -19,7 +20,7 @@ use libc;
 use ChildProxy;
 
 pub trait ChildProxyImpl: ObjectImpl + Send + Sync {
-    fn get_child_by_name(&self, object: &ChildProxy, name: &str) -> Option<glib::Object> {
+    fn get_child_by_name(&self, object: &Self::Type, name: &str) -> Option<glib::Object> {
         unsafe {
             let type_ = gst_sys::gst_child_proxy_get_type();
             let iface = gobject_sys::g_type_default_interface_ref(type_)
@@ -27,7 +28,7 @@ pub trait ChildProxyImpl: ObjectImpl + Send + Sync {
             assert!(!iface.is_null());
 
             let ret = ((*iface).get_child_by_name.as_ref().unwrap())(
-                object.to_glib_none().0,
+                object.unsafe_cast_ref::<ChildProxy>().to_glib_none().0,
                 name.to_glib_none().0,
             );
 
@@ -37,11 +38,11 @@ pub trait ChildProxyImpl: ObjectImpl + Send + Sync {
         }
     }
 
-    fn get_child_by_index(&self, object: &ChildProxy, index: u32) -> Option<glib::Object>;
-    fn get_children_count(&self, object: &ChildProxy) -> u32;
+    fn get_child_by_index(&self, object: &Self::Type, index: u32) -> Option<glib::Object>;
+    fn get_children_count(&self, object: &Self::Type) -> u32;
 
-    fn child_added(&self, _object: &ChildProxy, _child: &glib::Object, _name: &str) {}
-    fn child_removed(&self, _object: &ChildProxy, _child: &glib::Object, _name: &str) {}
+    fn child_added(&self, _object: &Self::Type, _child: &glib::Object, _name: &str) {}
+    fn child_removed(&self, _object: &Self::Type, _child: &glib::Object, _name: &str) {}
 }
 
 unsafe impl<T: ChildProxyImpl> IsImplementable<T> for ChildProxy {
@@ -67,7 +68,7 @@ unsafe extern "C" fn child_proxy_get_child_by_name<T: ChildProxyImpl>(
     let imp = instance.get_impl();
 
     imp.get_child_by_name(
-        &from_glib_borrow(child_proxy),
+        &from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),
         &glib::GString::from_glib_borrow(name),
     )
     .to_glib_full()
@@ -80,8 +81,11 @@ unsafe extern "C" fn child_proxy_get_child_by_index<T: ChildProxyImpl>(
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
-    imp.get_child_by_index(&from_glib_borrow(child_proxy), index)
-        .to_glib_full()
+    imp.get_child_by_index(
+        &from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),
+        index,
+    )
+    .to_glib_full()
 }
 
 unsafe extern "C" fn child_proxy_get_children_count<T: ChildProxyImpl>(
@@ -90,7 +94,7 @@ unsafe extern "C" fn child_proxy_get_children_count<T: ChildProxyImpl>(
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
-    imp.get_children_count(&from_glib_borrow(child_proxy))
+    imp.get_children_count(&from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref())
 }
 
 unsafe extern "C" fn child_proxy_child_added<T: ChildProxyImpl>(
@@ -102,7 +106,7 @@ unsafe extern "C" fn child_proxy_child_added<T: ChildProxyImpl>(
     let imp = instance.get_impl();
 
     imp.child_added(
-        &from_glib_borrow(child_proxy),
+        &from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),
         &from_glib_borrow(child),
         &glib::GString::from_glib_borrow(name),
     )
@@ -117,7 +121,7 @@ unsafe extern "C" fn child_proxy_child_removed<T: ChildProxyImpl>(
     let imp = instance.get_impl();
 
     imp.child_removed(
-        &from_glib_borrow(child_proxy),
+        &from_glib_borrow::<_, ChildProxy>(child_proxy).unsafe_cast_ref(),
         &from_glib_borrow(child),
         &glib::GString::from_glib_borrow(name),
     )

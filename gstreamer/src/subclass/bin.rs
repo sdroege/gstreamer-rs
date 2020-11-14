@@ -9,6 +9,7 @@
 use glib_sys;
 use gst_sys;
 
+use glib::prelude::*;
 use glib::translate::*;
 
 use super::prelude::*;
@@ -20,29 +21,33 @@ use LoggableError;
 use Message;
 
 pub trait BinImpl: BinImplExt + ElementImpl {
-    fn add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
+    fn add_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError> {
         self.parent_add_element(bin, element)
     }
 
-    fn remove_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
+    fn remove_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError> {
         self.parent_remove_element(bin, element)
     }
 
-    fn handle_message(&self, bin: &Bin, message: Message) {
+    fn handle_message(&self, bin: &Self::Type, message: Message) {
         self.parent_handle_message(bin, message)
     }
 }
 
-pub trait BinImplExt {
-    fn parent_add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError>;
+pub trait BinImplExt: ObjectSubclass {
+    fn parent_add_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError>;
 
-    fn parent_remove_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError>;
+    fn parent_remove_element(
+        &self,
+        bin: &Self::Type,
+        element: &Element,
+    ) -> Result<(), LoggableError>;
 
-    fn parent_handle_message(&self, bin: &Bin, message: Message);
+    fn parent_handle_message(&self, bin: &Self::Type, message: Message);
 }
 
 impl<T: BinImpl> BinImplExt for T {
-    fn parent_add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
+    fn parent_add_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
@@ -50,14 +55,21 @@ impl<T: BinImpl> BinImplExt for T {
                 gst_loggable_error!(::CAT_RUST, "Parent function `add_element` is not defined")
             })?;
             gst_result_from_gboolean!(
-                f(bin.to_glib_none().0, element.to_glib_none().0),
+                f(
+                    bin.unsafe_cast_ref::<::Bin>().to_glib_none().0,
+                    element.to_glib_none().0
+                ),
                 ::CAT_RUST,
                 "Failed to add the element using the parent function"
             )
         }
     }
 
-    fn parent_remove_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
+    fn parent_remove_element(
+        &self,
+        bin: &Self::Type,
+        element: &Element,
+    ) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
@@ -68,19 +80,25 @@ impl<T: BinImpl> BinImplExt for T {
                 )
             })?;
             gst_result_from_gboolean!(
-                f(bin.to_glib_none().0, element.to_glib_none().0),
+                f(
+                    bin.unsafe_cast_ref::<::Bin>().to_glib_none().0,
+                    element.to_glib_none().0
+                ),
                 ::CAT_RUST,
                 "Failed to remove the element using the parent function"
             )
         }
     }
 
-    fn parent_handle_message(&self, bin: &Bin, message: Message) {
+    fn parent_handle_message(&self, bin: &Self::Type, message: Message) {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
             if let Some(ref f) = (*parent_class).handle_message {
-                f(bin.to_glib_none().0, message.into_ptr());
+                f(
+                    bin.unsafe_cast_ref::<::Bin>().to_glib_none().0,
+                    message.into_ptr(),
+                );
             }
         }
     }
@@ -111,7 +129,7 @@ where
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.add_element(&wrap, &from_glib_none(element)) {
+        match imp.add_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
@@ -141,7 +159,7 @@ where
     }
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.remove_element(&wrap, &from_glib_none(element)) {
+        match imp.remove_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
@@ -163,6 +181,6 @@ unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
-        imp.handle_message(&wrap, from_glib_full(message))
+        imp.handle_message(wrap.unsafe_cast_ref(), from_glib_full(message))
     });
 }

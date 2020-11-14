@@ -21,8 +21,8 @@ use URIHandler;
 use URIType;
 
 pub trait URIHandlerImpl: super::element::ElementImpl {
-    fn get_uri(&self, element: &URIHandler) -> Option<String>;
-    fn set_uri(&self, element: &URIHandler, uri: &str) -> Result<(), glib::Error>;
+    fn get_uri(&self, element: &Self::Type) -> Option<String>;
+    fn set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error>;
     fn get_uri_type() -> URIType;
     fn get_protocols() -> Vec<String>;
 }
@@ -72,7 +72,8 @@ unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
 
-    imp.get_uri(&from_glib_borrow(uri_handler)).to_glib_full()
+    imp.get_uri(&from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref())
+        .to_glib_full()
 }
 
 unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
@@ -84,7 +85,7 @@ unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
     let imp = instance.get_impl();
 
     match imp.set_uri(
-        &from_glib_borrow(uri_handler),
+        &from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref(),
         glib::GString::from_glib_borrow(uri).as_str(),
     ) {
         Ok(()) => true.to_glib(),

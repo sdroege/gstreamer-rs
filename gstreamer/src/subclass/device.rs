@@ -9,9 +9,9 @@
 use glib_sys;
 use gst_sys;
 
-use glib::translate::*;
-
+use glib::prelude::*;
 use glib::subclass::prelude::*;
+use glib::translate::*;
 
 use Device;
 use Element;
@@ -22,27 +22,31 @@ use std::ptr;
 pub trait DeviceImpl: DeviceImplExt + ObjectImpl + Send + Sync {
     fn create_element(
         &self,
-        device: &Device,
+        device: &Self::Type,
         name: Option<&str>,
     ) -> Result<Element, LoggableError> {
         self.parent_create_element(device, name)
     }
 
-    fn reconfigure_element(&self, device: &Device, element: &Element) -> Result<(), LoggableError> {
+    fn reconfigure_element(
+        &self,
+        device: &Self::Type,
+        element: &Element,
+    ) -> Result<(), LoggableError> {
         self.parent_reconfigure_element(device, element)
     }
 }
 
-pub trait DeviceImplExt {
+pub trait DeviceImplExt: ObjectSubclass {
     fn parent_create_element(
         &self,
-        device: &Device,
+        device: &Self::Type,
         name: Option<&str>,
     ) -> Result<Element, LoggableError>;
 
     fn parent_reconfigure_element(
         &self,
-        device: &Device,
+        device: &Self::Type,
         element: &Element,
     ) -> Result<(), LoggableError>;
 }
@@ -50,14 +54,17 @@ pub trait DeviceImplExt {
 impl<T: DeviceImpl> DeviceImplExt for T {
     fn parent_create_element(
         &self,
-        device: &Device,
+        device: &Self::Type,
         name: Option<&str>,
     ) -> Result<Element, LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
-                let ptr = f(device.to_glib_none().0, name.to_glib_none().0);
+                let ptr = f(
+                    device.unsafe_cast_ref::<Device>().to_glib_none().0,
+                    name.to_glib_none().0,
+                );
 
                 // Don't steal floating reference here but pass it further to the caller
                 Option::<_>::from_glib_full(ptr).ok_or_else(|| {
@@ -77,7 +84,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
 
     fn parent_reconfigure_element(
         &self,
-        device: &Device,
+        device: &Self::Type,
         element: &Element,
     ) -> Result<(), LoggableError> {
         unsafe {
@@ -90,7 +97,10 @@ impl<T: DeviceImpl> DeviceImplExt for T {
                 )
             })?;
             gst_result_from_gboolean!(
-                f(device.to_glib_none().0, element.to_glib_none().0),
+                f(
+                    device.unsafe_cast_ref::<Device>().to_glib_none().0,
+                    element.to_glib_none().0
+                ),
                 ::CAT_RUST,
                 "Failed to reconfigure the element using the parent function"
             )
@@ -116,7 +126,7 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.create_element(
-        &wrap,
+        wrap.unsafe_cast_ref(),
         Option::<glib::GString>::from_glib_borrow(name)
             .as_ref()
             .as_ref()
@@ -146,7 +156,7 @@ unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
-    match imp.reconfigure_element(&wrap, &from_glib_borrow(element)) {
+    match imp.reconfigure_element(wrap.unsafe_cast_ref(), &from_glib_borrow(element)) {
         Ok(()) => true,
         Err(err) => {
             err.log_with_object(&*wrap);
