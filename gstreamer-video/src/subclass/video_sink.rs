@@ -9,9 +9,10 @@
 use gst_sys;
 use gst_video_sys;
 
+use glib::prelude::*;
+use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use glib::subclass::prelude::*;
 use gst;
 use gst::subclass::prelude::*;
 use gst_base::subclass::prelude::*;
@@ -21,17 +22,17 @@ use VideoSink;
 pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
     fn show_frame(
         &self,
-        element: &VideoSink,
+        element: &Self::Type,
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_show_frame(element, buffer)
     }
 }
 
-pub trait VideoSinkImplExt {
+pub trait VideoSinkImplExt: ObjectSubclass {
     fn parent_show_frame(
         &self,
-        element: &VideoSink,
+        element: &Self::Type,
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
@@ -39,7 +40,7 @@ pub trait VideoSinkImplExt {
 impl<T: VideoSinkImpl> VideoSinkImplExt for T {
     fn parent_show_frame(
         &self,
-        element: &VideoSink,
+        element: &Self::Type,
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -49,7 +50,10 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
             (*parent_class)
                 .show_frame
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, buffer.to_glib_none().0))
+                    gst::FlowReturn::from_glib(f(
+                        element.unsafe_cast_ref::<VideoSink>().to_glib_none().0,
+                        buffer.to_glib_none().0,
+                    ))
                 })
                 .unwrap_or(gst::FlowReturn::Error)
                 .into_result()
@@ -81,7 +85,7 @@ where
     let buffer = from_glib_borrow(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.show_frame(&wrap, &buffer).into()
+        imp.show_frame(wrap.unsafe_cast_ref(), &buffer).into()
     })
     .to_glib()
 }

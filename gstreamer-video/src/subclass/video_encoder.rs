@@ -11,9 +11,10 @@ use glib_sys;
 use gst_sys;
 use gst_video_sys;
 
+use glib::prelude::*;
+use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use glib::subclass::prelude::*;
 use gst;
 use gst::subclass::prelude::*;
 
@@ -23,29 +24,29 @@ use VideoCodecFrame;
 use VideoEncoder;
 
 pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
-    fn open(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn open(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_open(element)
     }
 
-    fn close(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn close(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_close(element)
     }
 
-    fn start(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
 
-    fn stop(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_stop(element)
     }
 
-    fn finish(&self, element: &VideoEncoder) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn finish(&self, element: &Self::Type) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_finish(element)
     }
 
     fn set_format(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError> {
         self.parent_set_format(element, state)
@@ -53,43 +54,43 @@ pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
 
     fn handle_frame(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         frame: VideoCodecFrame,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_handle_frame(element, frame)
     }
 
-    fn flush(&self, element: &VideoEncoder) -> bool {
+    fn flush(&self, element: &Self::Type) -> bool {
         self.parent_flush(element)
     }
 
-    fn negotiate(&self, element: &VideoEncoder) -> Result<(), gst::LoggableError> {
+    fn negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         self.parent_negotiate(element)
     }
 
-    fn get_caps(&self, element: &VideoEncoder, filter: Option<&gst::Caps>) -> gst::Caps {
+    fn get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
         self.parent_get_caps(element, filter)
     }
 
-    fn sink_event(&self, element: &VideoEncoder, event: gst::Event) -> bool {
+    fn sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         self.parent_sink_event(element, event)
     }
 
-    fn sink_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool {
+    fn sink_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         self.parent_sink_query(element, query)
     }
 
-    fn src_event(&self, element: &VideoEncoder, event: gst::Event) -> bool {
+    fn src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         self.parent_src_event(element, event)
     }
 
-    fn src_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool {
+    fn src_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         self.parent_src_query(element, query)
     }
 
     fn propose_allocation(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_propose_allocation(element, query)
@@ -97,65 +98,65 @@ pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
 
     fn decide_allocation(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_decide_allocation(element, query)
     }
 }
 
-pub trait VideoEncoderImplExt {
-    fn parent_open(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage>;
+pub trait VideoEncoderImplExt: ObjectSubclass {
+    fn parent_open(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_close(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage>;
+    fn parent_close(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_start(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage>;
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_stop(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage>;
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_finish(&self, element: &VideoEncoder) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn parent_finish(&self, element: &Self::Type) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_set_format(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError>;
 
     fn parent_handle_frame(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         frame: VideoCodecFrame,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn parent_flush(&self, element: &VideoEncoder) -> bool;
+    fn parent_flush(&self, element: &Self::Type) -> bool;
 
-    fn parent_negotiate(&self, element: &VideoEncoder) -> Result<(), gst::LoggableError>;
+    fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError>;
 
-    fn parent_get_caps(&self, element: &VideoEncoder, filter: Option<&gst::Caps>) -> gst::Caps;
+    fn parent_get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps;
 
-    fn parent_sink_event(&self, element: &VideoEncoder, event: gst::Event) -> bool;
+    fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool;
 
-    fn parent_sink_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool;
+    fn parent_sink_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool;
 
-    fn parent_src_event(&self, element: &VideoEncoder, event: gst::Event) -> bool;
+    fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool;
 
-    fn parent_src_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool;
+    fn parent_src_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool;
 
     fn parent_propose_allocation(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage>;
 
     fn parent_decide_allocation(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage>;
 }
 
 impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
-    fn parent_open(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn parent_open(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -163,7 +164,11 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .open
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element
+                        .unsafe_cast_ref::<VideoEncoder>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -176,7 +181,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         }
     }
 
-    fn parent_close(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn parent_close(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -184,7 +189,11 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .close
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element
+                        .unsafe_cast_ref::<VideoEncoder>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -197,7 +206,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         }
     }
 
-    fn parent_start(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -205,7 +214,11 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element
+                        .unsafe_cast_ref::<VideoEncoder>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -218,7 +231,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         }
     }
 
-    fn parent_stop(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage> {
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -226,7 +239,11 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element
+                        .unsafe_cast_ref::<VideoEncoder>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -239,14 +256,19 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         }
     }
 
-    fn parent_finish(&self, element: &VideoEncoder) -> Result<gst::FlowSuccess, gst::FlowError> {
+    fn parent_finish(&self, element: &Self::Type) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
                 .finish
-                .map(|f| gst::FlowReturn::from_glib(f(element.to_glib_none().0)))
+                .map(|f| {
+                    gst::FlowReturn::from_glib(f(element
+                        .unsafe_cast_ref::<VideoEncoder>()
+                        .to_glib_none()
+                        .0))
+                })
                 .unwrap_or(gst::FlowReturn::Ok)
                 .into_result()
         }
@@ -254,7 +276,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_set_format(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
@@ -265,7 +287,10 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .set_format
                 .map(|f| {
                     gst_result_from_gboolean!(
-                        f(element.to_glib_none().0, state.as_mut_ptr()),
+                        f(
+                            element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                            state.as_mut_ptr()
+                        ),
                         gst::CAT_RUST,
                         "parent function `set_format` failed"
                     )
@@ -276,7 +301,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_handle_frame(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         frame: VideoCodecFrame,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -286,26 +311,34 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, frame.to_glib_none().0))
+                    gst::FlowReturn::from_glib(f(
+                        element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                        frame.to_glib_none().0,
+                    ))
                 })
                 .unwrap_or(gst::FlowReturn::Error)
                 .into_result()
         }
     }
 
-    fn parent_flush(&self, element: &VideoEncoder) -> bool {
+    fn parent_flush(&self, element: &Self::Type) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
                 .flush
-                .map(|f| from_glib(f(element.to_glib_none().0)))
+                .map(|f| {
+                    from_glib(f(element
+                        .unsafe_cast_ref::<VideoEncoder>()
+                        .to_glib_none()
+                        .0))
+                })
                 .unwrap_or(false)
         }
     }
 
-    fn parent_negotiate(&self, element: &VideoEncoder) -> Result<(), gst::LoggableError> {
+    fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -314,7 +347,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                 .negotiate
                 .map(|f| {
                     gst_result_from_gboolean!(
-                        f(element.to_glib_none().0),
+                        f(element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiate` failed"
                     )
@@ -323,19 +356,28 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         }
     }
 
-    fn parent_get_caps(&self, element: &VideoEncoder, filter: Option<&gst::Caps>) -> gst::Caps {
+    fn parent_get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
             (*parent_class)
                 .getcaps
-                .map(|f| from_glib_full(f(element.to_glib_none().0, filter.to_glib_none().0)))
-                .unwrap_or_else(|| element.proxy_getcaps(None, filter))
+                .map(|f| {
+                    from_glib_full(f(
+                        element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                        filter.to_glib_none().0,
+                    ))
+                })
+                .unwrap_or_else(|| {
+                    element
+                        .unsafe_cast_ref::<VideoEncoder>()
+                        .proxy_getcaps(None, filter)
+                })
         }
     }
 
-    fn parent_sink_event(&self, element: &VideoEncoder, event: gst::Event) -> bool {
+    fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -343,11 +385,14 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             let f = (*parent_class)
                 .sink_event
                 .expect("Missing parent function `sink_event`");
-            from_glib(f(element.to_glib_none().0, event.into_ptr()))
+            from_glib(f(
+                element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                event.into_ptr(),
+            ))
         }
     }
 
-    fn parent_sink_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool {
+    fn parent_sink_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -355,11 +400,14 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             let f = (*parent_class)
                 .sink_query
                 .expect("Missing parent function `sink_query`");
-            from_glib(f(element.to_glib_none().0, query.as_mut_ptr()))
+            from_glib(f(
+                element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                query.as_mut_ptr(),
+            ))
         }
     }
 
-    fn parent_src_event(&self, element: &VideoEncoder, event: gst::Event) -> bool {
+    fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -367,11 +415,14 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             let f = (*parent_class)
                 .src_event
                 .expect("Missing parent function `src_event`");
-            from_glib(f(element.to_glib_none().0, event.into_ptr()))
+            from_glib(f(
+                element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                event.into_ptr(),
+            ))
         }
     }
 
-    fn parent_src_query(&self, element: &VideoEncoder, query: &mut gst::QueryRef) -> bool {
+    fn parent_src_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -379,13 +430,16 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             let f = (*parent_class)
                 .src_query
                 .expect("Missing parent function `src_query`");
-            from_glib(f(element.to_glib_none().0, query.as_mut_ptr()))
+            from_glib(f(
+                element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                query.as_mut_ptr(),
+            ))
         }
     }
 
     fn parent_propose_allocation(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
@@ -395,7 +449,10 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .propose_allocation
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0, query.as_mut_ptr())) {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                        query.as_mut_ptr(),
+                    )) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -410,7 +467,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_decide_allocation(
         &self,
-        element: &VideoEncoder,
+        element: &Self::Type,
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
@@ -420,7 +477,10 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .decide_allocation
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0, query.as_mut_ptr())) {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
+                        query.as_mut_ptr(),
+                    )) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -471,7 +531,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.open(&wrap) {
+        match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -493,7 +553,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.close(&wrap) {
+        match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -515,7 +575,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.start(&wrap) {
+        match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -537,7 +597,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.stop(&wrap) {
+        match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -559,7 +619,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.finish(&wrap).into()
+        imp.finish(wrap.unsafe_cast_ref()).into()
     })
     .to_glib()
 }
@@ -578,7 +638,7 @@ where
     let wrap_state = VideoCodecState::<Readable>::new(state);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_format(&wrap, &wrap_state) {
+        match imp.set_format(wrap.unsafe_cast_ref(), &wrap_state) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
@@ -602,7 +662,7 @@ where
     let wrap_frame = VideoCodecFrame::new(frame, &*wrap);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.handle_frame(&wrap, wrap_frame).into()
+        imp.handle_frame(wrap.unsafe_cast_ref(), wrap_frame).into()
     })
     .to_glib()
 }
@@ -618,7 +678,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        VideoEncoderImpl::flush(imp, &wrap)
+        VideoEncoderImpl::flush(imp, wrap.unsafe_cast_ref())
     })
     .to_glib()
 }
@@ -634,7 +694,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.negotiate(&wrap) {
+        match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
@@ -659,7 +719,7 @@ where
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         VideoEncoderImpl::get_caps(
             imp,
-            &wrap,
+            wrap.unsafe_cast_ref(),
             Option::<gst::Caps>::from_glib_borrow(filter)
                 .as_ref()
                 .as_ref(),
@@ -680,7 +740,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.sink_event(&wrap, from_glib_full(event))
+        imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
 }
@@ -697,7 +757,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.sink_query(&wrap, gst::QueryRef::from_mut_ptr(query))
+        imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
 }
@@ -714,7 +774,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.src_event(&wrap, from_glib_full(event))
+        imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
 }
@@ -731,7 +791,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.src_query(&wrap, gst::QueryRef::from_mut_ptr(query))
+        imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
 }
@@ -749,7 +809,7 @@ where
     let query = gst::QueryRef::from_mut_ptr(query);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.propose_allocation(&wrap, query) {
+        match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -773,7 +833,7 @@ where
     let query = gst::QueryRef::from_mut_ptr(query);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.decide_allocation(&wrap, query) {
+        match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
