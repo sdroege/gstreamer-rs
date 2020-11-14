@@ -81,7 +81,7 @@ pub trait ClockImplExt {
     fn wake_id(&self, id: &ClockId)
     where
         Self: ObjectSubclass,
-        <Self as ObjectSubclass>::ParentType: IsA<Clock>;
+        <Self as ObjectSubclass>::Type: IsA<Clock>;
 }
 
 impl<T: ClockImpl> ClockImplExt for T {
@@ -199,7 +199,7 @@ impl<T: ClockImpl> ClockImplExt for T {
     fn wake_id(&self, id: &ClockId)
     where
         Self: ObjectSubclass,
-        <Self as ObjectSubclass>::ParentType: IsA<Clock>,
+        <Self as ObjectSubclass>::Type: IsA<Clock>,
     {
         let clock = self.get_instance();
 

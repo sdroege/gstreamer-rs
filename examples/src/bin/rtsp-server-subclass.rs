@@ -98,6 +98,7 @@ mod media_factory {
         // up the class data
         impl ObjectSubclass for Factory {
             const NAME: &'static str = "RsRTSPMediaFactory";
+            type Type = super::Factory;
             type ParentType = gst_rtsp_server::RTSPMediaFactory;
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
@@ -114,12 +115,8 @@ mod media_factory {
 
         // Implementation of glib::Object virtual methods
         impl ObjectImpl for Factory {
-            fn constructed(&self, obj: &glib::Object) {
-                self.parent_constructed(obj);
-
-                let factory = obj
-                    .downcast_ref::<gst_rtsp_server::RTSPMediaFactory>()
-                    .unwrap();
+            fn constructed(&self, factory: &Self::Type) {
+                self.parent_constructed(factory);
 
                 // All media created by this factory are our custom media type. This would
                 // not require a media factory subclass and can also be called on the normal
@@ -199,6 +196,7 @@ mod media {
         // up the class data
         impl ObjectSubclass for Media {
             const NAME: &'static str = "RsRTSPMedia";
+            type Type = super::Media;
             type ParentType = gst_rtsp_server::RTSPMedia;
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
@@ -266,6 +264,7 @@ mod server {
         // up the class data
         impl ObjectSubclass for Server {
             const NAME: &'static str = "RsRTSPServer";
+            type Type = super::Server;
             type ParentType = gst_rtsp_server::RTSPServer;
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
@@ -353,6 +352,7 @@ mod client {
         // up the class data
         impl ObjectSubclass for Client {
             const NAME: &'static str = "RsRTSPClient";
+            type Type = super::Client;
             type ParentType = gst_rtsp_server::RTSPClient;
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;

@@ -62,6 +62,7 @@ mod fir_filter {
         // up the class data
         impl ObjectSubclass for FirFilter {
             const NAME: &'static str = "RsFirFilter";
+            type Type = super::FirFilter;
             type ParentType = gst_base::BaseTransform;
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
@@ -88,7 +89,7 @@ mod fir_filter {
             // will automatically instantiate pads for them.
             //
             // Our element here can only handle F32 mono audio.
-            fn class_init(klass: &mut subclass::simple::ClassStruct<Self>) {
+            fn class_init(klass: &mut Self::Class) {
                 // Set the element specific metadata. This information is what
                 // is visible from gst-inspect-1.0 and can also be programatically
                 // retrieved from the gst::Registry after initial registration

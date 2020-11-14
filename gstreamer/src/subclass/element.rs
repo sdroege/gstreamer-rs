@@ -549,145 +549,175 @@ mod tests {
     use glib::subclass;
     use std::sync::atomic;
 
-    struct TestElement {
-        srcpad: ::Pad,
-        sinkpad: ::Pad,
-        n_buffers: atomic::AtomicU32,
-        reached_playing: atomic::AtomicBool,
+    pub mod imp {
+        use super::*;
+
+        pub struct TestElement {
+            pub(super) srcpad: ::Pad,
+            pub(super) sinkpad: ::Pad,
+            pub(super) n_buffers: atomic::AtomicU32,
+            pub(super) reached_playing: atomic::AtomicBool,
+        }
+
+        impl TestElement {
+            fn sink_chain(
+                &self,
+                _pad: &::Pad,
+                _element: &::Element,
+                buffer: ::Buffer,
+            ) -> Result<::FlowSuccess, ::FlowError> {
+                self.n_buffers.fetch_add(1, atomic::Ordering::SeqCst);
+                self.srcpad.push(buffer)
+            }
+
+            fn sink_event(&self, _pad: &::Pad, _element: &::Element, event: ::Event) -> bool {
+                self.srcpad.push_event(event)
+            }
+
+            fn sink_query(
+                &self,
+                _pad: &::Pad,
+                _element: &::Element,
+                query: &mut ::QueryRef,
+            ) -> bool {
+                self.srcpad.peer_query(query)
+            }
+
+            fn src_event(&self, _pad: &::Pad, _element: &::Element, event: ::Event) -> bool {
+                self.sinkpad.push_event(event)
+            }
+
+            fn src_query(
+                &self,
+                _pad: &::Pad,
+                _element: &::Element,
+                query: &mut ::QueryRef,
+            ) -> bool {
+                self.sinkpad.peer_query(query)
+            }
+        }
+
+        impl ObjectSubclass for TestElement {
+            const NAME: &'static str = "TestElement";
+            type Type = super::TestElement;
+            type ParentType = ::Element;
+            type Instance = ::subclass::ElementInstanceStruct<Self>;
+            type Class = subclass::simple::ClassStruct<Self>;
+
+            glib_object_subclass!();
+
+            fn with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
+                let templ = klass.get_pad_template("sink").unwrap();
+                let sinkpad = ::Pad::builder_with_template(&templ, Some("sink"))
+                    .chain_function(|pad, parent, buffer| {
+                        TestElement::catch_panic_pad_function(
+                            parent,
+                            || Err(::FlowError::Error),
+                            |identity, element| identity.sink_chain(pad, element, buffer),
+                        )
+                    })
+                    .event_function(|pad, parent, event| {
+                        TestElement::catch_panic_pad_function(
+                            parent,
+                            || false,
+                            |identity, element| identity.sink_event(pad, element, event),
+                        )
+                    })
+                    .query_function(|pad, parent, query| {
+                        TestElement::catch_panic_pad_function(
+                            parent,
+                            || false,
+                            |identity, element| identity.sink_query(pad, element, query),
+                        )
+                    })
+                    .build();
+
+                let templ = klass.get_pad_template("src").unwrap();
+                let srcpad = ::Pad::builder_with_template(&templ, Some("src"))
+                    .event_function(|pad, parent, event| {
+                        TestElement::catch_panic_pad_function(
+                            parent,
+                            || false,
+                            |identity, element| identity.src_event(pad, element, event),
+                        )
+                    })
+                    .query_function(|pad, parent, query| {
+                        TestElement::catch_panic_pad_function(
+                            parent,
+                            || false,
+                            |identity, element| identity.src_query(pad, element, query),
+                        )
+                    })
+                    .build();
+
+                Self {
+                    n_buffers: atomic::AtomicU32::new(0),
+                    reached_playing: atomic::AtomicBool::new(false),
+                    srcpad,
+                    sinkpad,
+                }
+            }
+
+            fn class_init(klass: &mut subclass::simple::ClassStruct<Self>) {
+                klass.set_metadata(
+                    "Test Element",
+                    "Generic",
+                    "Does nothing",
+                    "Sebastian Dröge <sebastian@centricular.com>",
+                );
+
+                let caps = ::Caps::new_any();
+                let src_pad_template =
+                    ::PadTemplate::new("src", ::PadDirection::Src, ::PadPresence::Always, &caps)
+                        .unwrap();
+                klass.add_pad_template(src_pad_template);
+
+                let sink_pad_template =
+                    ::PadTemplate::new("sink", ::PadDirection::Sink, ::PadPresence::Always, &caps)
+                        .unwrap();
+                klass.add_pad_template(sink_pad_template);
+            }
+        }
+
+        impl ObjectImpl for TestElement {
+            fn constructed(&self, element: &Self::Type) {
+                self.parent_constructed(element);
+
+                element.add_pad(&self.sinkpad).unwrap();
+                element.add_pad(&self.srcpad).unwrap();
+            }
+        }
+
+        impl ElementImpl for TestElement {
+            fn change_state(
+                &self,
+                element: &::Element,
+                transition: ::StateChange,
+            ) -> Result<::StateChangeSuccess, ::StateChangeError> {
+                let res = self.parent_change_state(element, transition)?;
+
+                if transition == ::StateChange::PausedToPlaying {
+                    self.reached_playing.store(true, atomic::Ordering::SeqCst);
+                }
+
+                Ok(res)
+            }
+        }
     }
+
+    glib_wrapper! {
+        pub struct TestElement(ObjectSubclass<imp::TestElement>) @extends ::Element, ::Object;
+    }
+
+    unsafe impl Send for TestElement {}
+    unsafe impl Sync for TestElement {}
 
     impl TestElement {
-        fn sink_chain(
-            &self,
-            _pad: &::Pad,
-            _element: &::Element,
-            buffer: ::Buffer,
-        ) -> Result<::FlowSuccess, ::FlowError> {
-            self.n_buffers.fetch_add(1, atomic::Ordering::SeqCst);
-            self.srcpad.push(buffer)
-        }
-
-        fn sink_event(&self, _pad: &::Pad, _element: &::Element, event: ::Event) -> bool {
-            self.srcpad.push_event(event)
-        }
-
-        fn sink_query(&self, _pad: &::Pad, _element: &::Element, query: &mut ::QueryRef) -> bool {
-            self.srcpad.peer_query(query)
-        }
-
-        fn src_event(&self, _pad: &::Pad, _element: &::Element, event: ::Event) -> bool {
-            self.sinkpad.push_event(event)
-        }
-
-        fn src_query(&self, _pad: &::Pad, _element: &::Element, query: &mut ::QueryRef) -> bool {
-            self.sinkpad.peer_query(query)
-        }
-    }
-
-    impl ObjectSubclass for TestElement {
-        const NAME: &'static str = "TestElement";
-        type ParentType = ::Element;
-        type Instance = ::subclass::ElementInstanceStruct<Self>;
-        type Class = subclass::simple::ClassStruct<Self>;
-
-        glib_object_subclass!();
-
-        fn with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
-            let templ = klass.get_pad_template("sink").unwrap();
-            let sinkpad = ::Pad::builder_with_template(&templ, Some("sink"))
-                .chain_function(|pad, parent, buffer| {
-                    TestElement::catch_panic_pad_function(
-                        parent,
-                        || Err(::FlowError::Error),
-                        |identity, element| identity.sink_chain(pad, element, buffer),
-                    )
-                })
-                .event_function(|pad, parent, event| {
-                    TestElement::catch_panic_pad_function(
-                        parent,
-                        || false,
-                        |identity, element| identity.sink_event(pad, element, event),
-                    )
-                })
-                .query_function(|pad, parent, query| {
-                    TestElement::catch_panic_pad_function(
-                        parent,
-                        || false,
-                        |identity, element| identity.sink_query(pad, element, query),
-                    )
-                })
-                .build();
-
-            let templ = klass.get_pad_template("src").unwrap();
-            let srcpad = ::Pad::builder_with_template(&templ, Some("src"))
-                .event_function(|pad, parent, event| {
-                    TestElement::catch_panic_pad_function(
-                        parent,
-                        || false,
-                        |identity, element| identity.src_event(pad, element, event),
-                    )
-                })
-                .query_function(|pad, parent, query| {
-                    TestElement::catch_panic_pad_function(
-                        parent,
-                        || false,
-                        |identity, element| identity.src_query(pad, element, query),
-                    )
-                })
-                .build();
-
-            Self {
-                n_buffers: atomic::AtomicU32::new(0),
-                reached_playing: atomic::AtomicBool::new(false),
-                srcpad,
-                sinkpad,
-            }
-        }
-
-        fn class_init(klass: &mut subclass::simple::ClassStruct<Self>) {
-            klass.set_metadata(
-                "Test Element",
-                "Generic",
-                "Does nothing",
-                "Sebastian Dröge <sebastian@centricular.com>",
-            );
-
-            let caps = ::Caps::new_any();
-            let src_pad_template =
-                ::PadTemplate::new("src", ::PadDirection::Src, ::PadPresence::Always, &caps)
-                    .unwrap();
-            klass.add_pad_template(src_pad_template);
-
-            let sink_pad_template =
-                ::PadTemplate::new("sink", ::PadDirection::Sink, ::PadPresence::Always, &caps)
-                    .unwrap();
-            klass.add_pad_template(sink_pad_template);
-        }
-    }
-
-    impl ObjectImpl for TestElement {
-        fn constructed(&self, obj: &glib::Object) {
-            self.parent_constructed(obj);
-
-            let element = obj.downcast_ref::<::Element>().unwrap();
-            element.add_pad(&self.sinkpad).unwrap();
-            element.add_pad(&self.srcpad).unwrap();
-        }
-    }
-
-    impl ElementImpl for TestElement {
-        fn change_state(
-            &self,
-            element: &::Element,
-            transition: ::StateChange,
-        ) -> Result<::StateChangeSuccess, ::StateChangeError> {
-            let res = self.parent_change_state(element, transition)?;
-
-            if transition == ::StateChange::PausedToPlaying {
-                self.reached_playing.store(true, atomic::Ordering::SeqCst);
-            }
-
-            Ok(res)
+        pub fn new(name: Option<&str>) -> Self {
+            glib::Object::new(TestElement::static_type(), &[("name", &name)])
+                .unwrap()
+                .downcast::<Self>()
+                .unwrap()
         }
     }
 
@@ -695,10 +725,7 @@ mod tests {
     fn test_element_subclass() {
         ::init().unwrap();
 
-        let element = glib::Object::new(TestElement::get_type(), &[("name", &"test")])
-            .unwrap()
-            .downcast::<::Element>()
-            .unwrap();
+        let element = TestElement::new(Some("test"));
 
         assert_eq!(element.get_name(), "test");
 
@@ -713,8 +740,10 @@ mod tests {
 
         src.set_property("num-buffers", &100i32).unwrap();
 
-        pipeline.add_many(&[&src, &element, &sink]).unwrap();
-        ::Element::link_many(&[&src, &element, &sink]).unwrap();
+        pipeline
+            .add_many(&[&src, &element.upcast_ref(), &sink])
+            .unwrap();
+        ::Element::link_many(&[&src, &element.upcast_ref(), &sink]).unwrap();
 
         pipeline.set_state(::State::Playing).unwrap();
         let bus = pipeline.get_bus().unwrap();
@@ -724,7 +753,7 @@ mod tests {
 
         pipeline.set_state(::State::Null).unwrap();
 
-        let imp = TestElement::from_instance(&element);
+        let imp = imp::TestElement::from_instance(&element);
         assert_eq!(imp.n_buffers.load(atomic::Ordering::SeqCst), 100);
         assert_eq!(imp.reached_playing.load(atomic::Ordering::SeqCst), true);
     }

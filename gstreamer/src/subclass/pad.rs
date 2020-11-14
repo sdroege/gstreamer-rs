@@ -93,38 +93,62 @@ mod tests {
     use glib::subclass;
     use std::sync::atomic;
 
-    struct TestPad {
-        linked: atomic::AtomicBool,
-        unlinked: atomic::AtomicBool,
-    }
+    pub mod imp {
+        use super::*;
 
-    impl ObjectSubclass for TestPad {
-        const NAME: &'static str = "TestPad";
-        type ParentType = ::Pad;
-        type Instance = subclass::simple::InstanceStruct<Self>;
-        type Class = subclass::simple::ClassStruct<Self>;
+        pub struct TestPad {
+            pub(super) linked: atomic::AtomicBool,
+            pub(super) unlinked: atomic::AtomicBool,
+        }
 
-        glib_object_subclass!();
+        impl ObjectSubclass for TestPad {
+            const NAME: &'static str = "TestPad";
+            type Type = super::TestPad;
+            type ParentType = ::Pad;
+            type Instance = subclass::simple::InstanceStruct<Self>;
+            type Class = subclass::simple::ClassStruct<Self>;
 
-        fn new() -> Self {
-            Self {
-                linked: atomic::AtomicBool::new(false),
-                unlinked: atomic::AtomicBool::new(false),
+            glib_object_subclass!();
+
+            fn new() -> Self {
+                Self {
+                    linked: atomic::AtomicBool::new(false),
+                    unlinked: atomic::AtomicBool::new(false),
+                }
+            }
+        }
+
+        impl ObjectImpl for TestPad {}
+
+        impl PadImpl for TestPad {
+            fn linked(&self, pad: &Pad, peer: &Pad) {
+                self.linked.store(true, atomic::Ordering::SeqCst);
+                self.parent_linked(pad, peer)
+            }
+
+            fn unlinked(&self, pad: &Pad, peer: &Pad) {
+                self.unlinked.store(true, atomic::Ordering::SeqCst);
+                self.parent_unlinked(pad, peer)
             }
         }
     }
 
-    impl ObjectImpl for TestPad {}
+    glib_wrapper! {
+        pub struct TestPad(ObjectSubclass<imp::TestPad>) @extends ::Pad, ::Object;
+    }
 
-    impl PadImpl for TestPad {
-        fn linked(&self, pad: &Pad, peer: &Pad) {
-            self.linked.store(true, atomic::Ordering::SeqCst);
-            self.parent_linked(pad, peer)
-        }
+    unsafe impl Send for TestPad {}
+    unsafe impl Sync for TestPad {}
 
-        fn unlinked(&self, pad: &Pad, peer: &Pad) {
-            self.unlinked.store(true, atomic::Ordering::SeqCst);
-            self.parent_unlinked(pad, peer)
+    impl TestPad {
+        pub fn new(name: &str, direction: ::PadDirection) -> Self {
+            glib::Object::new(
+                TestPad::static_type(),
+                &[("name", &name), ("direction", &direction)],
+            )
+            .unwrap()
+            .downcast::<Self>()
+            .unwrap()
         }
     }
 
@@ -132,13 +156,7 @@ mod tests {
     fn test_pad_subclass() {
         ::init().unwrap();
 
-        let pad = glib::Object::new(
-            TestPad::get_type(),
-            &[("name", &"test"), ("direction", &::PadDirection::Src)],
-        )
-        .unwrap()
-        .downcast::<::Pad>()
-        .unwrap();
+        let pad = TestPad::new("test", ::PadDirection::Src);
 
         assert_eq!(pad.get_name(), "test");
 
@@ -146,7 +164,7 @@ mod tests {
         pad.link(&otherpad).unwrap();
         pad.unlink(&otherpad).unwrap();
 
-        let imp = TestPad::from_instance(&pad);
+        let imp = imp::TestPad::from_instance(&pad);
         assert!(imp.linked.load(atomic::Ordering::SeqCst));
         assert!(imp.unlinked.load(atomic::Ordering::SeqCst));
     }
