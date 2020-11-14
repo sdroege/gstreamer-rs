@@ -12,10 +12,11 @@ use gst_sys;
 use std::convert::TryFrom;
 use std::mem;
 
-use glib::translate::*;
 use prelude::*;
 
 use glib::subclass::prelude::*;
+use glib::translate::*;
+
 use gst;
 use gst::subclass::prelude::*;
 
@@ -23,17 +24,17 @@ use BaseParse;
 use BaseParseFrame;
 
 pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
-    fn start(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
+    fn start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
 
-    fn stop(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
+    fn stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_stop(element)
     }
 
     fn set_sink_caps(
         &self,
-        element: &BaseParse,
+        element: &Self::Type,
         caps: &gst::Caps,
     ) -> Result<(), gst::ErrorMessage> {
         self.parent_set_sink_caps(element, caps)
@@ -41,7 +42,7 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
 
     fn handle_frame<'a>(
         &'a self,
-        element: &BaseParse,
+        element: &Self::Type,
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError> {
         self.parent_handle_frame(element, frame)
@@ -49,7 +50,7 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
 
     fn convert<V: Into<gst::GenericFormattedValue>>(
         &self,
-        element: &BaseParse,
+        element: &Self::Type,
         src_val: V,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
@@ -57,33 +58,33 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
     }
 }
 
-pub trait BaseParseImplExt {
-    fn parent_start(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage>;
+pub trait BaseParseImplExt: ObjectSubclass {
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_stop(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage>;
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
     fn parent_set_sink_caps(
         &self,
-        element: &BaseParse,
+        element: &Self::Type,
         caps: &gst::Caps,
     ) -> Result<(), gst::ErrorMessage>;
 
     fn parent_handle_frame<'a>(
         &'a self,
-        element: &BaseParse,
+        element: &Self::Type,
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError>;
 
     fn parent_convert<V: Into<gst::GenericFormattedValue>>(
         &self,
-        element: &BaseParse,
+        element: &Self::Type,
         src_val: V,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue>;
 }
 
 impl<T: BaseParseImpl> BaseParseImplExt for T {
-    fn parent_start(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -91,7 +92,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element.unsafe_cast_ref::<BaseParse>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -104,7 +105,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         }
     }
 
-    fn parent_stop(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -112,7 +113,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element.unsafe_cast_ref::<BaseParse>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -127,7 +128,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
     fn parent_set_sink_caps(
         &self,
-        element: &BaseParse,
+        element: &Self::Type,
         caps: &gst::Caps,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
@@ -137,7 +138,10 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
             (*parent_class)
                 .set_sink_caps
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0, caps.to_glib_none().0)) {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
+                        caps.to_glib_none().0,
+                    )) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -152,7 +156,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
     fn parent_handle_frame<'a>(
         &'a self,
-        element: &'a BaseParse,
+        element: &'a Self::Type,
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError> {
         unsafe {
@@ -162,7 +166,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
             let mut skipsize = 0;
             let res = (*parent_class).handle_frame.map(|f| {
                 let res = gst::FlowReturn::from_glib(f(
-                    element.to_glib_none().0,
+                    element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
                     frame.to_glib_none().0,
                     &mut skipsize,
                 ));
@@ -181,7 +185,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
     fn parent_convert<V: Into<gst::GenericFormattedValue>>(
         &self,
-        element: &BaseParse,
+        element: &Self::Type,
         src_val: V,
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
@@ -194,7 +198,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 let mut dest_val = mem::MaybeUninit::uninit();
 
                 let res = from_glib(f(
-                    element.to_glib_none().0,
+                    element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
                     src_val.get_format().to_glib(),
                     src_val.to_raw_value(),
                     dest_format.to_glib(),
@@ -240,7 +244,7 @@ where
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.start(&wrap) {
+        match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -262,7 +266,7 @@ where
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.stop(&wrap) {
+        match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -286,7 +290,7 @@ where
     let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_sink_caps(&wrap, &caps) {
+        match imp.set_sink_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -311,7 +315,7 @@ where
     let wrap_frame = BaseParseFrame::new(frame, &wrap);
 
     let res = gst_panic_to_error!(&wrap, &instance.panicked(), Err(gst::FlowError::Error), {
-        imp.handle_frame(&wrap, wrap_frame)
+        imp.handle_frame(&wrap.unsafe_cast_ref(), wrap_frame)
     });
 
     match res {
@@ -340,7 +344,7 @@ where
     let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
     let res = gst_panic_to_error!(&wrap, &instance.panicked(), None, {
-        imp.convert(&wrap, source, from_glib(dest_format))
+        imp.convert(wrap.unsafe_cast_ref(), source, from_glib(dest_format))
     });
 
     match res {

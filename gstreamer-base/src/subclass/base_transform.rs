@@ -10,10 +10,11 @@ use glib_sys;
 use gst_base_sys;
 use gst_sys;
 
-use glib::translate::*;
 use prelude::*;
 
 use glib::subclass::prelude::*;
+use glib::translate::*;
+
 use gst;
 use gst::subclass::prelude::*;
 
@@ -23,17 +24,17 @@ use std::ptr;
 use BaseTransform;
 
 pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
-    fn start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+    fn start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
 
-    fn stop(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+    fn stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_stop(element)
     }
 
     fn transform_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: Option<&gst::Caps>,
@@ -43,7 +44,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn fixate_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         othercaps: gst::Caps,
@@ -53,7 +54,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn set_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         incaps: &gst::Caps,
         outcaps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
@@ -62,7 +63,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn accept_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
     ) -> bool {
@@ -71,7 +72,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn query(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         query: &mut gst::QueryRef,
     ) -> bool {
@@ -80,7 +81,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn transform_size(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         size: usize,
@@ -89,21 +90,21 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
         self.parent_transform_size(element, direction, caps, size, othercaps)
     }
 
-    fn get_unit_size(&self, element: &BaseTransform, caps: &gst::Caps) -> Option<usize> {
+    fn get_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
         self.parent_get_unit_size(element, caps)
     }
 
-    fn sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
+    fn sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         self.parent_sink_event(element, event)
     }
 
-    fn src_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
+    fn src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         self.parent_src_event(element, event)
     }
 
     fn prepare_output_buffer(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::BufferRef,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         self.parent_prepare_output_buffer(element, inbuf)
@@ -111,7 +112,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn transform(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::Buffer,
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
@@ -120,7 +121,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn transform_ip(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         buf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_transform_ip(element, buf)
@@ -128,7 +129,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn transform_ip_passthrough(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_transform_ip_passthrough(element, buf)
@@ -136,7 +137,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn copy_metadata(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::BufferRef,
         outbuf: &mut gst::BufferRef,
     ) -> Result<(), gst::LoggableError> {
@@ -145,7 +146,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn transform_meta<'a>(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         outbuf: &mut gst::BufferRef,
         meta: gst::MetaRef<'a, gst::Meta>,
         inbuf: &'a gst::BufferRef,
@@ -153,13 +154,13 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
         self.parent_transform_meta(element, outbuf, meta, inbuf)
     }
 
-    fn before_transform(&self, element: &BaseTransform, inbuf: &gst::BufferRef) {
+    fn before_transform(&self, element: &Self::Type, inbuf: &gst::BufferRef) {
         self.parent_before_transform(element, inbuf);
     }
 
     fn submit_input_buffer(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         is_discont: bool,
         inbuf: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
@@ -168,20 +169,20 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
 
     fn generate_output(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
     ) -> Result<GenerateOutputSuccess, gst::FlowError> {
         self.parent_generate_output(element)
     }
 }
 
-pub trait BaseTransformImplExt {
-    fn parent_start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage>;
+pub trait BaseTransformImplExt: ObjectSubclass {
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_stop(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage>;
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
     fn parent_transform_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: Option<&gst::Caps>,
@@ -189,7 +190,7 @@ pub trait BaseTransformImplExt {
 
     fn parent_fixate_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         othercaps: gst::Caps,
@@ -197,92 +198,92 @@ pub trait BaseTransformImplExt {
 
     fn parent_set_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         incaps: &gst::Caps,
         outcaps: &gst::Caps,
     ) -> Result<(), gst::LoggableError>;
 
     fn parent_accept_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
     ) -> bool;
 
     fn parent_query(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         query: &mut gst::QueryRef,
     ) -> bool;
 
     fn parent_transform_size(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         size: usize,
         othercaps: &gst::Caps,
     ) -> Option<usize>;
 
-    fn parent_get_unit_size(&self, element: &BaseTransform, caps: &gst::Caps) -> Option<usize>;
+    fn parent_get_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize>;
 
-    fn parent_sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool;
+    fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool;
 
-    fn parent_src_event(&self, element: &BaseTransform, event: gst::Event) -> bool;
+    fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool;
 
     fn parent_prepare_output_buffer(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::BufferRef,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError>;
 
     fn parent_transform(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::Buffer,
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_transform_ip(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         buf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_transform_ip_passthrough(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_copy_metadata(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::BufferRef,
         outbuf: &mut gst::BufferRef,
     ) -> Result<(), gst::LoggableError>;
 
     fn parent_transform_meta<'a>(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         outbuf: &mut gst::BufferRef,
         meta: gst::MetaRef<'a, gst::Meta>,
         inbuf: &'a gst::BufferRef,
     ) -> bool;
 
-    fn parent_before_transform(&self, element: &BaseTransform, inbuf: &gst::BufferRef);
+    fn parent_before_transform(&self, element: &Self::Type, inbuf: &gst::BufferRef);
 
     fn parent_submit_input_buffer(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         is_discont: bool,
         inbuf: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_generate_output(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
     ) -> Result<GenerateOutputSuccess, gst::FlowError>;
 
     fn take_queued_buffer(&self) -> Option<gst::Buffer>
@@ -297,7 +298,7 @@ pub trait BaseTransformImplExt {
 }
 
 impl<T: BaseTransformImpl> BaseTransformImplExt for T {
-    fn parent_start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -305,7 +306,11 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element
+                        .unsafe_cast_ref::<BaseTransform>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -318,7 +323,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         }
     }
 
-    fn parent_stop(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -326,7 +331,11 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element
+                        .unsafe_cast_ref::<BaseTransform>()
+                        .to_glib_none()
+                        .0))
+                    {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -341,7 +350,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_transform_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: Option<&gst::Caps>,
@@ -354,7 +363,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .transform_caps
                 .map(|f| {
                     from_glib_full(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         direction.to_glib(),
                         caps.to_glib_none().0,
                         filter.to_glib_none().0,
@@ -366,7 +375,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_fixate_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         othercaps: gst::Caps,
@@ -377,7 +386,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             match (*parent_class).fixate_caps {
                 Some(f) => from_glib_full(f(
-                    element.to_glib_none().0,
+                    element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                     direction.to_glib(),
                     caps.to_glib_none().0,
                     othercaps.into_ptr(),
@@ -389,7 +398,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_set_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         incaps: &gst::Caps,
         outcaps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
@@ -402,7 +411,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     gst_result_from_gboolean!(
                         f(
-                            element.to_glib_none().0,
+                            element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                             incaps.to_glib_none().0,
                             outcaps.to_glib_none().0,
                         ),
@@ -416,7 +425,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_accept_caps(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
     ) -> bool {
@@ -428,7 +437,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .accept_caps
                 .map(|f| {
                     from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         direction.to_glib(),
                         caps.to_glib_none().0,
                     ))
@@ -439,7 +448,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_query(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         query: &mut gst::QueryRef,
     ) -> bool {
@@ -451,7 +460,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .query
                 .map(|f| {
                     from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         direction.to_glib(),
                         query.as_mut_ptr(),
                     ))
@@ -462,7 +471,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_transform_size(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         direction: gst::PadDirection,
         caps: &gst::Caps,
         size: usize,
@@ -477,7 +486,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     let mut othersize = mem::MaybeUninit::uninit();
                     let res: bool = from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         direction.to_glib(),
                         caps.to_glib_none().0,
                         size,
@@ -494,13 +503,13 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         }
     }
 
-    fn parent_get_unit_size(&self, element: &BaseTransform, caps: &gst::Caps) -> Option<usize> {
+    fn parent_get_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class).get_unit_size.unwrap_or_else(|| {
-                if !element.is_in_place() {
+                if !element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
                     unimplemented!(concat!(
                         "Missing parent function `get_unit_size`. Required because ",
                         "transform element doesn't operate in-place"
@@ -515,7 +524,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
             let mut size = mem::MaybeUninit::uninit();
             if from_glib(f(
-                element.to_glib_none().0,
+                element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 caps.to_glib_none().0,
                 size.as_mut_ptr(),
             )) {
@@ -526,33 +535,43 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         }
     }
 
-    fn parent_sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
+    fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
                 .sink_event
-                .map(|f| from_glib(f(element.to_glib_none().0, event.into_ptr())))
+                .map(|f| {
+                    from_glib(f(
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                        event.into_ptr(),
+                    ))
+                })
                 .unwrap_or(true)
         }
     }
 
-    fn parent_src_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
+    fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             (*parent_class)
                 .src_event
-                .map(|f| from_glib(f(element.to_glib_none().0, event.into_ptr())))
+                .map(|f| {
+                    from_glib(f(
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                        event.into_ptr(),
+                    ))
+                })
                 .unwrap_or(true)
         }
     }
 
     fn parent_prepare_output_buffer(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::BufferRef,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         unsafe {
@@ -565,7 +584,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                     let mut outbuf: *mut gst_sys::GstBuffer = ptr::null_mut();
                     // FIXME: Wrong signature in FFI
                     let res = from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         inbuf.as_ptr() as *mut gst_sys::GstBuffer,
                         (&mut outbuf) as *mut *mut gst_sys::GstBuffer as *mut gst_sys::GstBuffer,
                     ));
@@ -587,7 +606,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_transform(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::Buffer,
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
@@ -599,13 +618,13 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .transform
                 .map(|f| {
                     from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         inbuf.to_glib_none().0,
                         outbuf.as_mut_ptr(),
                     ))
                 })
                 .unwrap_or_else(|| {
-                    if !element.is_in_place() {
+                    if !element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
                         gst::FlowReturn::NotSupported
                     } else {
                         unreachable!(concat!(
@@ -620,7 +639,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_transform_ip(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         buf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -628,7 +647,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
-                if element.is_in_place() {
+                if element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
                     panic!(concat!(
                         "Missing parent function `transform_ip`. Required because ",
                         "transform element operates in-place"
@@ -641,14 +660,17 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 }
             });
 
-            gst::FlowReturn::from_glib(f(element.to_glib_none().0, buf.as_mut_ptr() as *mut _))
-                .into_result()
+            gst::FlowReturn::from_glib(f(
+                element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                buf.as_mut_ptr() as *mut _,
+            ))
+            .into_result()
         }
     }
 
     fn parent_transform_ip_passthrough(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -656,7 +678,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
-                if element.is_in_place() {
+                if element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
                     panic!(concat!(
                         "Missing parent function `transform_ip`. Required because ",
                         "transform element operates in-place (passthrough mode)"
@@ -671,13 +693,17 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
             // FIXME: Wrong signature in FFI
             let buf: *mut gst_sys::GstBuffer = buf.to_glib_none().0;
-            gst::FlowReturn::from_glib(f(element.to_glib_none().0, buf as *mut _)).into_result()
+            gst::FlowReturn::from_glib(f(
+                element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                buf as *mut _,
+            ))
+            .into_result()
         }
     }
 
     fn parent_copy_metadata(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         inbuf: &gst::BufferRef,
         outbuf: &mut gst::BufferRef,
     ) -> Result<(), gst::LoggableError> {
@@ -688,7 +714,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             if let Some(ref f) = (*parent_class).copy_metadata {
                 gst_result_from_gboolean!(
                     f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         inbuf.as_ptr() as *mut _,
                         outbuf.as_mut_ptr()
                     ),
@@ -703,7 +729,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_transform_meta<'a>(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         outbuf: &mut gst::BufferRef,
         meta: gst::MetaRef<'a, gst::Meta>,
         inbuf: &'a gst::BufferRef,
@@ -716,7 +742,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .transform_meta
                 .map(|f| {
                     from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         outbuf.as_mut_ptr(),
                         meta.as_ptr() as *mut _,
                         inbuf.as_ptr() as *mut _,
@@ -726,20 +752,23 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         }
     }
 
-    fn parent_before_transform(&self, element: &BaseTransform, inbuf: &gst::BufferRef) {
+    fn parent_before_transform(&self, element: &Self::Type, inbuf: &gst::BufferRef) {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseTransformClass;
             if let Some(ref f) = (*parent_class).before_transform {
-                f(element.to_glib_none().0, inbuf.as_ptr() as *mut _);
+                f(
+                    element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                    inbuf.as_ptr() as *mut _,
+                );
             }
         }
     }
 
     fn parent_submit_input_buffer(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
         is_discont: bool,
         inbuf: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
@@ -752,7 +781,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .expect("Missing parent function `submit_input_buffer`");
 
             gst::FlowReturn::from_glib(f(
-                element.to_glib_none().0,
+                element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 is_discont.to_glib(),
                 inbuf.into_ptr(),
             ))
@@ -762,7 +791,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_generate_output(
         &self,
-        element: &BaseTransform,
+        element: &Self::Type,
     ) -> Result<GenerateOutputSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
@@ -773,17 +802,20 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .expect("Missing parent function `generate_output`");
 
             let mut outbuf = ptr::null_mut();
-            gst::FlowReturn::from_glib(f(element.to_glib_none().0, &mut outbuf))
-                .into_result()
-                .map(|res| {
-                    if res == ::BASE_TRANSFORM_FLOW_DROPPED {
-                        GenerateOutputSuccess::Dropped
-                    } else if res != gst::FlowSuccess::Ok || outbuf.is_null() {
-                        GenerateOutputSuccess::NoOutput
-                    } else {
-                        GenerateOutputSuccess::Buffer(from_glib_full(outbuf))
-                    }
-                })
+            gst::FlowReturn::from_glib(f(
+                element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
+                &mut outbuf,
+            ))
+            .into_result()
+            .map(|res| {
+                if res == ::BASE_TRANSFORM_FLOW_DROPPED {
+                    GenerateOutputSuccess::Dropped
+                } else if res != gst::FlowSuccess::Ok || outbuf.is_null() {
+                    GenerateOutputSuccess::NoOutput
+                } else {
+                    GenerateOutputSuccess::Buffer(from_glib_full(outbuf))
+                }
+            })
         }
     }
 
@@ -794,7 +826,8 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     {
         unsafe {
             let element = self.get_instance();
-            let ptr: *mut gst_base_sys::GstBaseTransform = element.to_glib_none().0 as *mut _;
+            let ptr: *mut gst_base_sys::GstBaseTransform =
+                element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0;
             let sinkpad: Borrowed<gst::Pad> = from_glib_borrow((*ptr).sinkpad);
             let _stream_lock = sinkpad.stream_lock();
             let buffer = (*ptr).queued_buf;
@@ -810,7 +843,8 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     {
         unsafe {
             let element = self.get_instance();
-            let ptr: *mut gst_base_sys::GstBaseTransform = element.to_glib_none().0 as *mut _;
+            let ptr: *mut gst_base_sys::GstBaseTransform =
+                element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0;
             let sinkpad: Borrowed<gst::Pad> = from_glib_borrow((*ptr).sinkpad);
             let _stream_lock = sinkpad.stream_lock();
             let buffer = (*ptr).queued_buf;
@@ -918,7 +952,7 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.start(&wrap) {
+        match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -940,7 +974,7 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.stop(&wrap) {
+        match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -968,7 +1002,7 @@ where
         let filter: Borrowed<Option<gst::Caps>> = from_glib_borrow(filter);
 
         imp.transform_caps(
-            &wrap,
+            wrap.unsafe_cast_ref(),
             from_glib(direction),
             &from_glib_borrow(caps),
             filter.as_ref().as_ref(),
@@ -993,7 +1027,7 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         imp.fixate_caps(
-            &wrap,
+            wrap.unsafe_cast_ref(),
             from_glib(direction),
             &from_glib_borrow(caps),
             from_glib_full(othercaps),
@@ -1015,7 +1049,11 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_caps(&wrap, &from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
+        match imp.set_caps(
+            wrap.unsafe_cast_ref(),
+            &from_glib_borrow(incaps),
+            &from_glib_borrow(outcaps),
+        ) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
@@ -1039,7 +1077,11 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.accept_caps(&wrap, from_glib(direction), &from_glib_borrow(caps))
+        imp.accept_caps(
+            wrap.unsafe_cast_ref(),
+            from_glib(direction),
+            &from_glib_borrow(caps),
+        )
     })
     .to_glib()
 }
@@ -1059,7 +1101,7 @@ where
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         BaseTransformImpl::query(
             imp,
-            &wrap,
+            wrap.unsafe_cast_ref(),
             from_glib(direction),
             gst::QueryRef::from_mut_ptr(query),
         )
@@ -1084,7 +1126,7 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.transform_size(
-            &wrap,
+            wrap.unsafe_cast_ref(),
             from_glib(direction),
             &from_glib_borrow(caps),
             size,
@@ -1113,7 +1155,7 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.get_unit_size(&wrap, &from_glib_borrow(caps)) {
+        match imp.get_unit_size(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
             Some(s) => {
                 *size = s;
                 true
@@ -1140,7 +1182,7 @@ where
     let outbuf = outbuf as *mut *mut gst_sys::GstBuffer;
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match imp.prepare_output_buffer(&wrap, gst::BufferRef::from_ptr(inbuf)) {
+        match imp.prepare_output_buffer(wrap.unsafe_cast_ref(), gst::BufferRef::from_ptr(inbuf)) {
             Ok(PrepareOutputBufferSuccess::InputBuffer) => {
                 *outbuf = inbuf;
                 gst::FlowReturn::Ok
@@ -1167,7 +1209,7 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.sink_event(&wrap, from_glib_full(event))
+        imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
 }
@@ -1184,7 +1226,7 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.src_event(&wrap, from_glib_full(event))
+        imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
 }
@@ -1203,7 +1245,7 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.transform(
-            &wrap,
+            wrap.unsafe_cast_ref(),
             &from_glib_borrow(inbuf),
             gst::BufferRef::from_mut_ptr(outbuf),
         )
@@ -1228,10 +1270,10 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         if from_glib(gst_base_sys::gst_base_transform_is_passthrough(ptr)) {
-            imp.transform_ip_passthrough(&wrap, &from_glib_borrow(buf))
+            imp.transform_ip_passthrough(wrap.unsafe_cast_ref(), &from_glib_borrow(buf))
                 .into()
         } else {
-            imp.transform_ip(&wrap, gst::BufferRef::from_mut_ptr(buf))
+            imp.transform_ip(wrap.unsafe_cast_ref(), gst::BufferRef::from_mut_ptr(buf))
                 .into()
         }
     })
@@ -1255,7 +1297,7 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.transform_meta(
-            &wrap,
+            wrap.unsafe_cast_ref(),
             gst::BufferRef::from_mut_ptr(outbuf),
             gst::Meta::from_ptr(inbuf, meta),
             inbuf,
@@ -1288,7 +1330,7 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), true, {
         match imp.copy_metadata(
-            &wrap,
+            wrap.unsafe_cast_ref(),
             gst::BufferRef::from_ptr(inbuf),
             gst::BufferRef::from_mut_ptr(outbuf),
         ) {
@@ -1313,7 +1355,7 @@ unsafe extern "C" fn base_transform_before_transform<T: BaseTransformImpl>(
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
-        imp.before_transform(&wrap, gst::BufferRef::from_ptr(inbuf));
+        imp.before_transform(wrap.unsafe_cast_ref(), gst::BufferRef::from_ptr(inbuf));
     })
 }
 
@@ -1330,8 +1372,12 @@ where
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.submit_input_buffer(&wrap, from_glib(is_discont), from_glib_full(buf))
-            .into()
+        imp.submit_input_buffer(
+            wrap.unsafe_cast_ref(),
+            from_glib(is_discont),
+            from_glib_full(buf),
+        )
+        .into()
     })
     .to_glib()
 }
@@ -1350,7 +1396,7 @@ where
     *buf = ptr::null_mut();
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match imp.generate_output(&wrap) {
+        match imp.generate_output(wrap.unsafe_cast_ref()) {
             Ok(GenerateOutputSuccess::Dropped) => ::BASE_TRANSFORM_FLOW_DROPPED.into(),
             Ok(GenerateOutputSuccess::NoOutput) => gst::FlowReturn::Ok,
             Ok(GenerateOutputSuccess::Buffer(outbuf)) => {

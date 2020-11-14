@@ -10,6 +10,7 @@ use glib_sys;
 use gst_base_sys;
 use gst_sys;
 
+use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
@@ -28,25 +29,25 @@ pub enum CreateSuccess {
 }
 
 pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
-    fn start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
 
-    fn stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_stop(element)
     }
 
-    fn is_seekable(&self, element: &BaseSrc) -> bool {
+    fn is_seekable(&self, element: &Self::Type) -> bool {
         self.parent_is_seekable(element)
     }
 
-    fn get_size(&self, element: &BaseSrc) -> Option<u64> {
+    fn get_size(&self, element: &Self::Type) -> Option<u64> {
         self.parent_get_size(element)
     }
 
     fn get_times(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         buffer: &gst::BufferRef,
     ) -> (gst::ClockTime, gst::ClockTime) {
         self.parent_get_times(element, buffer)
@@ -54,7 +55,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
 
     fn fill(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         length: u32,
         buffer: &mut gst::BufferRef,
@@ -64,7 +65,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
 
     fn alloc(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         length: u32,
     ) -> Result<gst::Buffer, gst::FlowError> {
@@ -73,7 +74,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
 
     fn create(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         buffer: Option<&mut gst::BufferRef>,
         length: u32,
@@ -81,61 +82,61 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
         self.parent_create(element, offset, buffer, length)
     }
 
-    fn do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool {
+    fn do_seek(&self, element: &Self::Type, segment: &mut gst::Segment) -> bool {
         self.parent_do_seek(element, segment)
     }
 
-    fn query(&self, element: &BaseSrc, query: &mut gst::QueryRef) -> bool {
+    fn query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         BaseSrcImplExt::parent_query(self, element, query)
     }
 
-    fn event(&self, element: &BaseSrc, event: &gst::Event) -> bool {
+    fn event(&self, element: &Self::Type, event: &gst::Event) -> bool {
         self.parent_event(element, event)
     }
 
-    fn get_caps(&self, element: &BaseSrc, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+    fn get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         self.parent_get_caps(element, filter)
     }
 
-    fn negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError> {
+    fn negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         self.parent_negotiate(element)
     }
 
-    fn set_caps(&self, element: &BaseSrc, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+    fn set_caps(&self, element: &Self::Type, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
         self.parent_set_caps(element, caps)
     }
 
-    fn fixate(&self, element: &BaseSrc, caps: gst::Caps) -> gst::Caps {
+    fn fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps {
         self.parent_fixate(element, caps)
     }
 
-    fn unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_unlock(element)
     }
 
-    fn unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         self.parent_unlock_stop(element)
     }
 }
 
-pub trait BaseSrcImplExt {
-    fn parent_start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+pub trait BaseSrcImplExt: ObjectSubclass {
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_is_seekable(&self, element: &BaseSrc) -> bool;
+    fn parent_is_seekable(&self, element: &Self::Type) -> bool;
 
-    fn parent_get_size(&self, element: &BaseSrc) -> Option<u64>;
+    fn parent_get_size(&self, element: &Self::Type) -> Option<u64>;
 
     fn parent_get_times(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         buffer: &gst::BufferRef,
     ) -> (gst::ClockTime, gst::ClockTime);
 
     fn parent_fill(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         length: u32,
         buffer: &mut gst::BufferRef,
@@ -143,44 +144,48 @@ pub trait BaseSrcImplExt {
 
     fn parent_alloc(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         length: u32,
     ) -> Result<gst::Buffer, gst::FlowError>;
 
     fn parent_create(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         buffer: Option<&mut gst::BufferRef>,
         length: u32,
     ) -> Result<CreateSuccess, gst::FlowError>;
 
-    fn parent_do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool;
+    fn parent_do_seek(&self, element: &Self::Type, segment: &mut gst::Segment) -> bool;
 
-    fn parent_query(&self, element: &BaseSrc, query: &mut gst::QueryRef) -> bool;
+    fn parent_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool;
 
-    fn parent_event(&self, element: &BaseSrc, event: &gst::Event) -> bool;
+    fn parent_event(&self, element: &Self::Type, event: &gst::Event) -> bool;
 
-    fn parent_get_caps(&self, element: &BaseSrc, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
+    fn parent_get_caps(
+        &self,
+        element: &Self::Type,
+        filter: Option<&gst::Caps>,
+    ) -> Option<gst::Caps>;
 
-    fn parent_negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError>;
+    fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError>;
 
     fn parent_set_caps(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError>;
 
-    fn parent_fixate(&self, element: &BaseSrc, caps: gst::Caps) -> gst::Caps;
+    fn parent_fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps;
 
-    fn parent_unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+    fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+    fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage>;
 }
 
 impl<T: BaseSrcImpl> BaseSrcImplExt for T {
-    fn parent_start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -188,7 +193,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .start
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -201,7 +206,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -209,7 +214,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .stop
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -222,19 +227,19 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_is_seekable(&self, element: &BaseSrc) -> bool {
+    fn parent_is_seekable(&self, element: &Self::Type) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .is_seekable
-                .map(|f| from_glib(f(element.to_glib_none().0)))
+                .map(|f| from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)))
                 .unwrap_or(false)
         }
     }
 
-    fn parent_get_size(&self, element: &BaseSrc) -> Option<u64> {
+    fn parent_get_size(&self, element: &Self::Type) -> Option<u64> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -243,7 +248,10 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .get_size
                 .map(|f| {
                     let mut size = mem::MaybeUninit::uninit();
-                    if from_glib(f(element.to_glib_none().0, size.as_mut_ptr())) {
+                    if from_glib(f(
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                        size.as_mut_ptr(),
+                    )) {
                         Some(size.assume_init())
                     } else {
                         None
@@ -255,7 +263,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_get_times(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         buffer: &gst::BufferRef,
     ) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
@@ -268,7 +276,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     let mut start = mem::MaybeUninit::uninit();
                     let mut stop = mem::MaybeUninit::uninit();
                     f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         buffer.as_mut_ptr(),
                         start.as_mut_ptr(),
                         stop.as_mut_ptr(),
@@ -284,7 +292,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_fill(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         length: u32,
         buffer: &mut gst::BufferRef,
@@ -297,7 +305,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .fill
                 .map(|f| {
                     gst::FlowReturn::from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         offset,
                         length,
                         buffer.as_mut_ptr(),
@@ -310,7 +318,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_alloc(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         length: u32,
     ) -> Result<gst::Buffer, gst::FlowError> {
@@ -328,7 +336,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst_sys::GstBuffer;
 
                     let res = gst::FlowReturn::from_glib(f(
-                        element.to_glib_none().0,
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         offset,
                         length,
                         buffer_ref,
@@ -341,7 +349,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_create(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         offset: u64,
         mut buffer: Option<&mut gst::BufferRef>,
         length: u32,
@@ -365,7 +373,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
                     gst::FlowReturn::from_glib(
                         f(
-                            element.to_glib_none().0,
+                            element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                             offset,
                             length,
                             buffer_ref,
@@ -378,7 +386,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
                             gst_debug!(
                                 gst::CAT_PERFORMANCE,
-                                obj: element,
+                                obj: element.unsafe_cast_ref::<BaseSrc>(),
                                 "Returned new buffer from parent create function, copying into passed buffer"
                             );
 
@@ -387,7 +395,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                                 Err(_) => {
                                     gst_error!(
                                         gst::CAT_RUST,
-                                        obj: element,
+                                        obj: element.unsafe_cast_ref::<BaseSrc>(),
                                         "Failed to map passed buffer writable"
                                     );
                                     return Err(gst::FlowError::Error);
@@ -406,7 +414,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                                 Err(_) => {
                                     gst_error!(
                                         gst::CAT_RUST,
-                                        obj: element,
+                                        obj: element.unsafe_cast_ref::<BaseSrc>(),
                                         "Failed to copy buffer metadata"
                                     );
 
@@ -424,43 +432,62 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool {
+    fn parent_do_seek(&self, element: &Self::Type, segment: &mut gst::Segment) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .do_seek
-                .map(|f| from_glib(f(element.to_glib_none().0, segment.to_glib_none_mut().0)))
+                .map(|f| {
+                    from_glib(f(
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                        segment.to_glib_none_mut().0,
+                    ))
+                })
                 .unwrap_or(false)
         }
     }
 
-    fn parent_query(&self, element: &BaseSrc, query: &mut gst::QueryRef) -> bool {
+    fn parent_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .query
-                .map(|f| from_glib(f(element.to_glib_none().0, query.as_mut_ptr())))
+                .map(|f| {
+                    from_glib(f(
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                        query.as_mut_ptr(),
+                    ))
+                })
                 .unwrap_or(false)
         }
     }
 
-    fn parent_event(&self, element: &BaseSrc, event: &gst::Event) -> bool {
+    fn parent_event(&self, element: &Self::Type, event: &gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .event
-                .map(|f| from_glib(f(element.to_glib_none().0, event.to_glib_none().0)))
+                .map(|f| {
+                    from_glib(f(
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                        event.to_glib_none().0,
+                    ))
+                })
                 .unwrap_or(false)
         }
     }
 
-    fn parent_get_caps(&self, element: &BaseSrc, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+    fn parent_get_caps(
+        &self,
+        element: &Self::Type,
+        filter: Option<&gst::Caps>,
+    ) -> Option<gst::Caps> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -468,12 +495,17 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
             (*parent_class)
                 .get_caps
-                .map(|f| from_glib_full(f(element.to_glib_none().0, filter.to_glib_none().0)))
+                .map(|f| {
+                    from_glib_full(f(
+                        element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                        filter.to_glib_none().0,
+                    ))
+                })
                 .unwrap_or(None)
         }
     }
 
-    fn parent_negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError> {
+    fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -482,7 +514,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .negotiate
                 .map(|f| {
                     gst_result_from_gboolean!(
-                        f(element.to_glib_none().0),
+                        f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiate` failed"
                     )
@@ -493,7 +525,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_set_caps(
         &self,
-        element: &BaseSrc,
+        element: &Self::Type,
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
@@ -504,7 +536,10 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                 .set_caps
                 .map(|f| {
                     gst_result_from_gboolean!(
-                        f(element.to_glib_none().0, caps.to_glib_none().0),
+                        f(
+                            element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                            caps.to_glib_none().0
+                        ),
                         gst::CAT_RUST,
                         "Parent function `set_caps` failed"
                     )
@@ -513,20 +548,23 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_fixate(&self, element: &BaseSrc, caps: gst::Caps) -> gst::Caps {
+    fn parent_fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps {
         unsafe {
             let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
 
             match (*parent_class).fixate {
-                Some(fixate) => from_glib_full(fixate(element.to_glib_none().0, caps.into_ptr())),
+                Some(fixate) => from_glib_full(fixate(
+                    element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                    caps.into_ptr(),
+                )),
                 None => caps,
             }
         }
     }
 
-    fn parent_unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -534,7 +572,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .unlock
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -547,7 +585,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+    fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -555,7 +593,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .unlock_stop
                 .map(|f| {
-                    if from_glib(f(element.to_glib_none().0)) {
+                    if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
                         Err(gst_error_msg!(
@@ -607,7 +645,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.start(&wrap) {
+        match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -629,7 +667,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.stop(&wrap) {
+        match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -651,7 +689,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.is_seekable(&wrap)
+        imp.is_seekable(wrap.unsafe_cast_ref())
     })
     .to_glib()
 }
@@ -668,7 +706,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.get_size(&wrap) {
+        match imp.get_size(wrap.unsafe_cast_ref()) {
             Some(s) => {
                 *size = s;
                 true
@@ -696,7 +734,7 @@ unsafe extern "C" fn base_src_get_times<T: BaseSrcImpl>(
     *stop = gst_sys::GST_CLOCK_TIME_NONE;
 
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
-        let (start_, stop_) = imp.get_times(&wrap, buffer);
+        let (start_, stop_) = imp.get_times(wrap.unsafe_cast_ref(), buffer);
         *start = start_.to_glib();
         *stop = stop_.to_glib();
     });
@@ -717,7 +755,8 @@ where
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.fill(&wrap, offset, length, buffer).into()
+        imp.fill(wrap.unsafe_cast_ref(), offset, length, buffer)
+            .into()
     })
     .to_glib()
 }
@@ -739,7 +778,7 @@ where
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match imp.alloc(&wrap, offset, length) {
+        match imp.alloc(wrap.unsafe_cast_ref(), offset, length) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();
                 gst::FlowReturn::Ok
@@ -773,7 +812,12 @@ where
     };
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match imp.create(&wrap, offset, buffer.as_deref_mut(), length) {
+        match imp.create(
+            wrap.unsafe_cast_ref(),
+            offset,
+            buffer.as_deref_mut(),
+            length,
+        ) {
             Ok(CreateSuccess::NewBuffer(new_buffer)) => {
                 if let Some(passed_buffer) = buffer {
                     if passed_buffer.as_ptr() != new_buffer.as_ptr() {
@@ -847,7 +891,7 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         let mut s = from_glib_none(segment);
-        let res = imp.do_seek(&wrap, &mut s);
+        let res = imp.do_seek(wrap.unsafe_cast_ref(), &mut s);
         ptr::write(segment, *(s.to_glib_none().0));
 
         res
@@ -868,7 +912,7 @@ where
     let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        BaseSrcImpl::query(imp, &wrap, query)
+        BaseSrcImpl::query(imp, wrap.unsafe_cast_ref(), query)
     })
     .to_glib()
 }
@@ -885,7 +929,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.event(&wrap, &from_glib_borrow(event_ptr))
+        imp.event(wrap.unsafe_cast_ref(), &from_glib_borrow(event_ptr))
     })
     .to_glib()
 }
@@ -903,7 +947,7 @@ where
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), None, {
-        imp.get_caps(&wrap, filter.as_ref().as_ref())
+        imp.get_caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
     })
     .map(|caps| caps.into_ptr())
     .unwrap_or(ptr::null_mut())
@@ -920,7 +964,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.negotiate(&wrap) {
+        match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
@@ -944,7 +988,7 @@ where
     let caps = from_glib_borrow(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_caps(&wrap, &caps) {
+        match imp.set_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&*wrap);
@@ -968,7 +1012,7 @@ where
     let caps = from_glib_full(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
-        imp.fixate(&wrap, caps)
+        imp.fixate(wrap.unsafe_cast_ref(), caps)
     })
     .into_ptr()
 }
@@ -984,7 +1028,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.unlock(&wrap) {
+        match imp.unlock(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);
@@ -1006,7 +1050,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.unlock_stop(&wrap) {
+        match imp.unlock_stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
                 wrap.post_error_message(err);

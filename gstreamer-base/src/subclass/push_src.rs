@@ -9,6 +9,7 @@
 use gst_base_sys;
 use gst_sys;
 
+use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
@@ -23,37 +24,37 @@ use PushSrc;
 pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
     fn fill(
         &self,
-        element: &PushSrc,
+        element: &Self::Type,
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         PushSrcImplExt::parent_fill(self, element, buffer)
     }
 
-    fn alloc(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError> {
+    fn alloc(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         PushSrcImplExt::parent_alloc(self, element)
     }
 
-    fn create(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError> {
+    fn create(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         PushSrcImplExt::parent_create(self, element)
     }
 }
 
-pub trait PushSrcImplExt {
+pub trait PushSrcImplExt: ObjectSubclass {
     fn parent_fill(
         &self,
-        element: &PushSrc,
+        element: &Self::Type,
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn parent_alloc(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError>;
+    fn parent_alloc(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError>;
 
-    fn parent_create(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError>;
+    fn parent_create(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError>;
 }
 
 impl<T: PushSrcImpl> PushSrcImplExt for T {
     fn parent_fill(
         &self,
-        element: &PushSrc,
+        element: &Self::Type,
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -63,14 +64,17 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
             (*parent_class)
                 .fill
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, buffer.as_mut_ptr()))
+                    gst::FlowReturn::from_glib(f(
+                        element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
+                        buffer.as_mut_ptr(),
+                    ))
                 })
                 .unwrap_or(gst::FlowReturn::NotSupported)
                 .into_result()
         }
     }
 
-    fn parent_alloc(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError> {
+    fn parent_alloc(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -84,14 +88,17 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst_sys::GstBuffer;
 
-                    let res = gst::FlowReturn::from_glib(f(element.to_glib_none().0, buffer_ref));
+                    let res = gst::FlowReturn::from_glib(f(
+                        element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
+                        buffer_ref,
+                    ));
                     res.into_result_value(|| from_glib_full(buffer_ref))
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }
     }
 
-    fn parent_create(&self, element: &PushSrc) -> Result<gst::Buffer, gst::FlowError> {
+    fn parent_create(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
             let data = T::type_data();
             let parent_class =
@@ -105,7 +112,10 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst_sys::GstBuffer;
 
-                    let res = gst::FlowReturn::from_glib(f(element.to_glib_none().0, buffer_ref));
+                    let res = gst::FlowReturn::from_glib(f(
+                        element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
+                        buffer_ref,
+                    ));
                     res.into_result_value(|| from_glib_full(buffer_ref))
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
@@ -139,7 +149,7 @@ where
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        PushSrcImpl::fill(imp, &wrap, buffer).into()
+        PushSrcImpl::fill(imp, wrap.unsafe_cast_ref(), buffer).into()
     })
     .to_glib()
 }
@@ -159,7 +169,7 @@ where
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match PushSrcImpl::alloc(imp, &wrap) {
+        match PushSrcImpl::alloc(imp, wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();
                 gst::FlowReturn::Ok
@@ -185,7 +195,7 @@ where
     let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match PushSrcImpl::create(imp, &wrap) {
+        match PushSrcImpl::create(imp, wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();
                 gst::FlowReturn::Ok

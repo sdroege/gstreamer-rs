@@ -164,18 +164,14 @@ mod fir_filter {
             // Returns the size of one processing unit (i.e. a frame in our case) corresponding
             // to the given caps. This is used for allocating a big enough output buffer and
             // sanity checking the input buffer size, among other things.
-            fn get_unit_size(
-                &self,
-                _element: &gst_base::BaseTransform,
-                caps: &gst::Caps,
-            ) -> Option<usize> {
+            fn get_unit_size(&self, _element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
                 let audio_info = gst_audio::AudioInfo::from_caps(caps).ok();
                 audio_info.map(|info| info.bpf() as usize)
             }
 
             // Called when shutting down the element so we can release all stream-related state
             // There's also start(), which is called whenever starting the element again
-            fn stop(&self, element: &gst_base::BaseTransform) -> Result<(), gst::ErrorMessage> {
+            fn stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
                 // Drop state
                 self.history.lock().unwrap().clear();
 
@@ -187,7 +183,7 @@ mod fir_filter {
             // Does the actual transformation of the input buffer to the output buffer
             fn transform_ip(
                 &self,
-                element: &gst_base::BaseTransform,
+                element: &Self::Type,
                 buf: &mut gst::BufferRef,
             ) -> Result<gst::FlowSuccess, gst::FlowError> {
                 // Get coefficients and return directly if we have none
