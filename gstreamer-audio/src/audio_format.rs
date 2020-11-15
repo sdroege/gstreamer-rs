@@ -141,17 +141,15 @@ impl str::FromStr for crate::AudioFormat {
     type Err = glib::BoolError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
-        unsafe {
-            let fmt = Self::from_glib(ffi::gst_audio_format_from_string(s.to_glib_none().0));
-            if fmt == Self::Unknown {
-                Err(glib::glib_bool_error!(
-                    "Failed to parse audio format from string"
-                ))
-            } else {
-                Ok(fmt)
-            }
+        let fmt = Self::from_string(s);
+        if fmt == Self::Unknown {
+            Err(glib::glib_bool_error!(
+                "Failed to parse audio format from string"
+            ))
+        } else {
+            Ok(fmt)
         }
     }
 }

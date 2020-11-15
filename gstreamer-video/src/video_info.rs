@@ -956,12 +956,15 @@ impl str::FromStr for crate::VideoFieldOrder {
     type Err = glib::error::BoolError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
-        unsafe {
-            Ok(from_glib(ffi::gst_video_field_order_from_string(
-                s.to_glib_none().0,
-            )))
+        let fmt = Self::from_string(s);
+        if fmt == Self::Unknown {
+            Err(glib::glib_bool_error!(
+                "Failed to parse video field order from string"
+            ))
+        } else {
+            Ok(fmt)
         }
     }
 }
@@ -970,13 +973,10 @@ impl str::FromStr for crate::VideoInterlaceMode {
     type Err = glib::error::BoolError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
-        unsafe {
-            Ok(from_glib(ffi::gst_video_interlace_mode_from_string(
-                s.to_glib_none().0,
-            )))
-        }
+        let fmt = Self::from_string(s);
+        Ok(fmt)
     }
 }
 
