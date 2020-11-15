@@ -369,6 +369,14 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioFormatInfo> for AudioFor
     }
 }
 
+#[doc(hidden)]
+impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioFormatInfo> for AudioFormatInfo {
+    #[inline]
+    unsafe fn from_glib_none(ptr: *const ffi::GstAudioFormatInfo) -> Self {
+        AudioFormatInfo(&*ptr)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

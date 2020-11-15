@@ -471,6 +471,14 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoFormatInfo> for VideoFor
     }
 }
 
+#[doc(hidden)]
+impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoFormatInfo> for VideoFormatInfo {
+    #[inline]
+    unsafe fn from_glib_none(ptr: *const ffi::GstVideoFormatInfo) -> Self {
+        VideoFormatInfo(&*ptr)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
