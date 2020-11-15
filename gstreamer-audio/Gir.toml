@@ -141,6 +141,13 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "fill_silence"
+    # Function does not belong in AudioFormat but AudioFormatInfo.
+    # Manual implementation is available, and glib argument conversion
+    # is broken.
+    manual = true
+
 [[object]]
 name = "GstAudio.AudioStreamAlign"
 status = "generate"
