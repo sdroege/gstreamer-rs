@@ -9,7 +9,8 @@
 use std::ffi::CStr;
 use std::str;
 
-use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, ToGlib};
+
 use once_cell::sync::Lazy;
 
 #[cfg(feature = "v1_18")]

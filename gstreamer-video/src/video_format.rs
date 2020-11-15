@@ -10,7 +10,7 @@ use once_cell::sync::Lazy;
 use std::ffi::CStr;
 use std::str;
 
-use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, FromGlib, ToGlib};
 
 #[cfg(feature = "v1_18")]
 pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| unsafe {
