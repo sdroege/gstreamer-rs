@@ -1133,8 +1133,14 @@ unsafe fn update_probe_info(
                 assert_eq!(data_type, Some(Buffer::static_type()));
                 // Buffer not consumed by probe; consume it here
             }
-            None if data_type == Some(Buffer::static_type()) => {
-                // Buffer consumed by probe
+            Some(PadProbeData::Event(_)) => {
+                assert_eq!(data_type, Some(Event::static_type()));
+                // Event not consumed by probe; consume it here
+            }
+            None if data_type == Some(Buffer::static_type())
+                || data_type == Some(Event::static_type()) =>
+            {
+                // Buffer or Event consumed by probe
             }
             other => panic!(
                 "Bad data for {:?} pad probe returning Handled: {:?}",
@@ -2000,6 +2006,19 @@ mod tests {
         }
 
         {
+            let events = events.clone();
+            pad.add_probe(::PadProbeType::EVENT_UPSTREAM, move |_, info| {
+                if let Some(PadProbeData::Event(event)) = info.data.take() {
+                    let mut events = events.lock().unwrap();
+                    events.push(event);
+                } else {
+                    unreachable!();
+                }
+                ::PadProbeReturn::Handled
+            });
+        }
+
+        {
             let buffers = buffers.clone();
             let flow_override = flow_override;
             pad.add_probe(::PadProbeType::BUFFER, move |_, info| {
@@ -2020,6 +2039,7 @@ mod tests {
 
         pad.set_active(true).unwrap();
 
+        assert!(pad.send_event(::event::Latency::new(::ClockTime::from_nseconds(10))));
         assert!(pad.push_event(::event::StreamStart::new("test")));
         let segment = ::FormattedSegment::<::ClockTime>::new();
         assert!(pad.push_event(::event::Segment::new(segment.as_ref())));
@@ -2029,11 +2049,12 @@ mod tests {
 
         let events = events.lock().unwrap();
         let buffers = buffers.lock().unwrap();
-        assert_eq!(events.len(), 2);
+        assert_eq!(events.len(), 3);
         assert_eq!(buffers.len(), 2);
 
-        assert_eq!(events[0].get_type(), ::EventType::StreamStart);
-        assert_eq!(events[1].get_type(), ::EventType::Segment);
+        assert_eq!(events[0].get_type(), ::EventType::Latency);
+        assert_eq!(events[1].get_type(), ::EventType::StreamStart);
+        assert_eq!(events[2].get_type(), ::EventType::Segment);
 
         assert!(
             buffers.iter().all(|b| b.is_writable()),
