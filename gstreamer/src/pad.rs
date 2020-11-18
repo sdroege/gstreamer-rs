@@ -73,7 +73,7 @@ pub struct PadProbeInfo<'a> {
     pub offset: u64,
     pub size: u32,
     pub data: Option<PadProbeData<'a>>,
-    pub flow_ret: FlowReturn,
+    pub flow_res: Result<FlowSuccess, FlowError>,
 }
 
 #[derive(Debug)]
@@ -144,7 +144,7 @@ pub trait PadExtManual: 'static {
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 
-    fn get_last_flow_return(&self) -> Result<FlowSuccess, FlowError>;
+    fn get_last_flow_result(&self) -> Result<FlowSuccess, FlowError>;
 
     fn iterate_internal_links(&self) -> ::Iterator<Pad>;
     fn iterate_internal_links_default<P: IsA<::Object>>(
@@ -510,7 +510,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_last_flow_return(&self) -> Result<FlowSuccess, FlowError> {
+    fn get_last_flow_result(&self) -> Result<FlowSuccess, FlowError> {
         let ret: FlowReturn = unsafe {
             from_glib(gst_sys::gst_pad_get_last_flow_return(
                 self.as_ref().to_glib_none().0,
@@ -1074,6 +1074,7 @@ unsafe fn create_probe_info<'a>(
     info: *mut gst_sys::GstPadProbeInfo,
 ) -> (PadProbeInfo<'a>, Option<glib::Type>) {
     let mut data_type = None;
+    let flow_ret: FlowReturn = from_glib((*info).ABI.abi.flow_ret);
     let info = PadProbeInfo {
         mask: from_glib((*info).type_),
         id: PadProbeId(NonZeroU64::new_unchecked((*info).id as u64)),
@@ -1108,7 +1109,7 @@ unsafe fn create_probe_info<'a>(
                 Some(PadProbeData::__Unknown(data))
             }
         },
-        flow_ret: from_glib((*info).ABI.abi.flow_ret),
+        flow_res: flow_ret.into_result(),
     };
     (info, data_type)
 }
@@ -1175,7 +1176,8 @@ unsafe fn update_probe_info(
         }
     }
 
-    (*info).ABI.abi.flow_ret = probe_info.flow_ret.to_glib();
+    let flow_ret: FlowReturn = probe_info.flow_res.into();
+    (*info).ABI.abi.flow_ret = flow_ret.to_glib();
 }
 
 unsafe extern "C" fn trampoline_pad_probe<
@@ -1985,11 +1987,11 @@ mod tests {
         let buffers = Arc::new(Mutex::new(Vec::new()));
 
         let flow_override = if (major, minor, micro) >= (1, 16, 1) {
-            FlowReturn::Eos
+            Err(FlowError::Eos)
         } else {
             // Broken on 1.16.0
             // https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/151
-            FlowReturn::Ok
+            Ok(FlowSuccess::Ok)
         };
 
         {
@@ -2024,8 +2026,8 @@ mod tests {
             pad.add_probe(::PadProbeType::BUFFER, move |_, info| {
                 if let Some(PadProbeData::Buffer(buffer)) = info.data.take() {
                     let mut buffers = buffers.lock().unwrap();
-                    info.flow_ret = if buffers.is_empty() {
-                        FlowReturn::Ok
+                    info.flow_res = if buffers.is_empty() {
+                        Ok(FlowSuccess::Ok)
                     } else {
                         flow_override
                     };
@@ -2045,7 +2047,7 @@ mod tests {
         assert!(pad.push_event(::event::Segment::new(segment.as_ref())));
 
         assert_eq!(pad.push(::Buffer::new()), Ok(FlowSuccess::Ok));
-        assert_eq!(pad.push(::Buffer::new()), flow_override.into_result());
+        assert_eq!(pad.push(::Buffer::new()), flow_override);
 
         let events = events.lock().unwrap();
         let buffers = buffers.lock().unwrap();
