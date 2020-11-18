@@ -7,6 +7,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
+
 #[macro_use]
 extern crate bitflags;
 extern crate byteorder;

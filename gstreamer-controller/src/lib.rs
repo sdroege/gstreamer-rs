@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
+
 #[macro_use]
 extern crate glib;
 extern crate glib_sys;

@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![recursion_limit = "256"]
 #[macro_use]
 extern crate bitflags;
