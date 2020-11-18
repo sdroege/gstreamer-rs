@@ -19,7 +19,6 @@ external_libraries = [
 generate = [
     "GstVideo.VideoCodecFrameFlags",
     "GstVideo.VideoFormatFlags",
-    "GstVideo.VideoColorMatrix",
     "GstVideo.VideoMultiviewMode",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
@@ -551,3 +550,11 @@ status = "generate"
     manual = true
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "GstVideo.VideoColorMatrix"
+status = "generate"
+    [[object.function]]
+    name = "get_Kr_Kb"
+    # Function and parameter name capitalization is wrong
+    ignore = true

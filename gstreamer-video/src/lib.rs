@@ -41,6 +41,8 @@ pub use crate::caps_features::{
     CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META, CAPS_FEATURE_META_GST_VIDEO_META,
     CAPS_FEATURE_META_GST_VIDEO_OVERLAY_COMPOSITION,
 };
+mod video_color_matrix;
+pub use video_color_matrix::*;
 mod video_format;
 pub use crate::video_format::*;
 mod video_format_info;
