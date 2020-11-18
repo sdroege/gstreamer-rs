@@ -456,6 +456,31 @@ where
 mod tests {
 
     #[test]
+    fn enum_to_string() {
+        gst::init().unwrap();
+
+        assert_eq!(&format!("{}", crate::VideoFormat::Argb), "ARGB");
+        assert_eq!(&format!("{:?}", crate::VideoFormat::Argb), "Argb");
+        assert_eq!(crate::VideoFormat::Argb.to_str(), "ARGB");
+
+        assert_eq!(&format!("{}", crate::VideoFormat::Unknown), "UNKNOWN");
+        assert_eq!(&format!("{:?}", crate::VideoFormat::Unknown), "Unknown");
+        assert_eq!(crate::VideoFormat::Unknown.to_str(), "UNKNOWN");
+
+        assert_eq!(
+            &format!("{:?}", crate::VideoFormat::__Unknown(-1)),
+            "__Unknown(-1)"
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn enum_to_string_panics() {
+        assert_eq!(&format!("{}", crate::VideoFormat::__Unknown(-1)), "UNKNOWN");
+        assert_eq!(crate::VideoFormat::__Unknown(-1).to_str(), "UNKNOWN");
+    }
+
+    #[test]
     fn test_display() {
         gst::init().unwrap();
 
