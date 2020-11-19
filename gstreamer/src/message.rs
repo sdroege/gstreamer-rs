@@ -159,7 +159,7 @@ impl fmt::Debug for MessageRef {
                 CStr::from_ptr(type_).to_str().unwrap()
             })
             .field("seqnum", seqnum)
-            .field("src", &self.get_src().map(|s| s.get_name().to_owned()))
+            .field("src", &self.get_src().map(|s| s.get_name()))
             .field("structure", &self.get_structure())
             .finish()
     }
