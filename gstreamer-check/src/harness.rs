@@ -99,6 +99,7 @@ impl Harness {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn add_propose_allocation_meta(
         &mut self,
         api: glib::types::Type,
@@ -493,6 +494,7 @@ impl Harness {
     //}
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn take_all_data_as_buffer(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(gst_check_sys::gst_harness_take_all_data_as_buffer(
@@ -503,6 +505,7 @@ impl Harness {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn take_all_data_as_bytes(&mut self) -> Result<glib::Bytes, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(gst_check_sys::gst_harness_take_all_data_as_bytes(

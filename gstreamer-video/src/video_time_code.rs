@@ -21,10 +21,12 @@ use std::fmt;
 use std::mem;
 use std::ptr;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use std::str;
 
 use VideoTimeCodeFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use VideoTimeCodeInterval;
 
 pub struct VideoTimeCode(gst_video_sys::GstVideoTimeCode);
@@ -72,6 +74,7 @@ impl VideoTimeCode {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn from_date_time(
         fps: gst::Fraction,
         dt: &glib::DateTime,
@@ -183,6 +186,7 @@ impl ValidVideoTimeCode {
     }
 
     //    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //    pub fn from_date_time(
     //        fps: gst::Fraction,
     //        dt: &glib::DateTime,
@@ -201,6 +205,7 @@ impl ValidVideoTimeCode {
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn add_interval(
         &self,
         tc_inter: &VideoTimeCodeInterval,
@@ -481,6 +486,7 @@ generic_impl!(VideoTimeCode);
 generic_impl!(ValidVideoTimeCode);
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl str::FromStr for VideoTimeCode {
     type Err = glib::error::BoolError;
 

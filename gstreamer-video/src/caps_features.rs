@@ -13,12 +13,14 @@ use std::ffi::CStr;
 use once_cell::sync::Lazy;
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub static CAPS_FEATURE_FORMAT_INTERLACED: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(gst_video_sys::GST_CAPS_FEATURE_FORMAT_INTERLACED)
         .to_str()
         .unwrap()
 });
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub static CAPS_FEATURES_FORMAT_INTERLACED: Lazy<CapsFeatures> =
     Lazy::new(|| CapsFeatures::new(&[*CAPS_FEATURE_FORMAT_INTERLACED]));
 

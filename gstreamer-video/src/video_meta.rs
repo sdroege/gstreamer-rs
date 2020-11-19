@@ -482,15 +482,19 @@ impl fmt::Debug for VideoOverlayCompositionMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[repr(transparent)]
 pub struct VideoCaptionMeta(gst_video_sys::GstVideoCaptionMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl Send for VideoCaptionMeta {}
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl Sync for VideoCaptionMeta {}
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl VideoCaptionMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
@@ -525,6 +529,7 @@ impl VideoCaptionMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl MetaAPI for VideoCaptionMeta {
     type GstType = gst_video_sys::GstVideoCaptionMeta;
 
@@ -534,6 +539,7 @@ unsafe impl MetaAPI for VideoCaptionMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl fmt::Debug for VideoCaptionMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoCaptionMeta")
@@ -544,15 +550,19 @@ impl fmt::Debug for VideoCaptionMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[repr(transparent)]
 pub struct VideoAFDMeta(gst_video_sys::GstVideoAFDMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl Send for VideoAFDMeta {}
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl Sync for VideoAFDMeta {}
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl VideoAFDMeta {
     pub fn add(
         buffer: &mut gst::BufferRef,
@@ -588,6 +598,7 @@ impl VideoAFDMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl MetaAPI for VideoAFDMeta {
     type GstType = gst_video_sys::GstVideoAFDMeta;
 
@@ -597,6 +608,7 @@ unsafe impl MetaAPI for VideoAFDMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl fmt::Debug for VideoAFDMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoAFDMeta")
@@ -608,15 +620,19 @@ impl fmt::Debug for VideoAFDMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[repr(transparent)]
 pub struct VideoBarMeta(gst_video_sys::GstVideoBarMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl Send for VideoBarMeta {}
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl Sync for VideoBarMeta {}
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl VideoBarMeta {
     pub fn add(
         buffer: &mut gst::BufferRef,
@@ -658,6 +674,7 @@ impl VideoBarMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl MetaAPI for VideoBarMeta {
     type GstType = gst_video_sys::GstVideoBarMeta;
 
@@ -667,6 +684,7 @@ unsafe impl MetaAPI for VideoBarMeta {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl fmt::Debug for VideoBarMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoBarMeta")

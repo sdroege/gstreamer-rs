@@ -182,11 +182,13 @@ impl SampleRef {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_buffer(&mut self, buffer: Option<&Buffer>) {
         unsafe { gst_sys::gst_sample_set_buffer(self.as_mut_ptr(), buffer.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_buffer_list(&mut self, buffer_list: Option<&BufferList>) {
         unsafe {
             gst_sys::gst_sample_set_buffer_list(self.as_mut_ptr(), buffer_list.to_glib_none().0)
@@ -194,16 +196,19 @@ impl SampleRef {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_caps(&mut self, caps: Option<&Caps>) {
         unsafe { gst_sys::gst_sample_set_caps(self.as_mut_ptr(), caps.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_segment(&mut self, segment: Option<&Segment>) {
         unsafe { gst_sys::gst_sample_set_segment(self.as_mut_ptr(), segment.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_info(&mut self, info: Option<Structure>) {
         unsafe {
             gst_sys::gst_sample_set_info(

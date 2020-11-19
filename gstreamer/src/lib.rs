@@ -11,6 +11,7 @@
 #[macro_use]
 extern crate bitflags;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[macro_use]
 extern crate cfg_if;
 extern crate libc;
@@ -120,8 +121,10 @@ mod tags_serde;
 
 pub mod meta;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use meta::MetaSeqnum;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use meta::ReferenceTimestampMeta;
 pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta};
 pub mod buffer;
@@ -157,8 +160,10 @@ mod static_pad_template;
 pub use static_pad_template::*;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub mod promise;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use promise::{Promise, PromiseError};
 
 pub mod bus;
@@ -176,6 +181,7 @@ pub use self::allocation_params::AllocationParams;
 
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 cfg_if! {
     if #[cfg(unix)] {
         mod bus_unix;
@@ -222,6 +228,7 @@ pub use object::GstObjectExtManual;
 
 // OS dependent Bus extensions (also import the other plateform trait for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 cfg_if! {
     if #[cfg(unix)] {
         pub use bus_unix::UnixBusExtManual;
@@ -253,8 +260,10 @@ pub use tag_setter::TagSetterExtManual;
 mod plugin;
 pub use plugin::GstPluginExtManual;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub mod stream;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub mod stream_collection;
 
 mod typefind;
@@ -347,6 +356,7 @@ pub mod prelude {
 
     // OS dependent Bus extensions (also import the other plateform trait for doc)
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     cfg_if! {
         if #[cfg(unix)] {
             pub use bus_unix::UnixBusExtManual;

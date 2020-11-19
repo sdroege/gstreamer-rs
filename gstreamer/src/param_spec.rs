@@ -12,6 +12,7 @@ use gst_sys;
 
 pub trait GstParamSpecExt {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn array(
         name: &str,
         nick: &str,
@@ -33,6 +34,7 @@ pub trait GstParamSpecExt {
 
 impl GstParamSpecExt for glib::ParamSpec {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn array(
         name: &str,
         nick: &str,

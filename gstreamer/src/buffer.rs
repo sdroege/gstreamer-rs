@@ -1292,6 +1292,7 @@ mod tests {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[test]
     fn test_meta_foreach() {
         ::init().unwrap();
@@ -1324,6 +1325,7 @@ mod tests {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[test]
     fn test_meta_foreach_mut() {
         ::init().unwrap();

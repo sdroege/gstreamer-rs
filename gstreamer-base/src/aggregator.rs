@@ -7,19 +7,24 @@
 // except according to those terms.
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::prelude::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
 use glib::IsA;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::Value;
 use gst;
 use gst_base_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::boxed::Box as Box_;
 use std::mem;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::mem::transmute;
 use std::ptr;
 use Aggregator;
@@ -30,27 +35,33 @@ pub trait AggregatorExtManual: 'static {
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn finish_buffer_list(
         &self,
         bufferlist: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_property_min_upstream_latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_property_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn connect_property_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn selected_samples(
         &self,
         pts: gst::ClockTime,
@@ -60,6 +71,7 @@ pub trait AggregatorExtManual: 'static {
     );
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_samples_selected<
         P,
         F: Fn(
@@ -104,6 +116,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn finish_buffer_list(
         &self,
         bufferlist: gst::BufferList,
@@ -118,6 +131,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_property_min_upstream_latency(&self) -> gst::ClockTime {
         unsafe {
             let mut value = Value::from_type(<gst::ClockTime as StaticType>::static_type());
@@ -134,6 +148,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_property_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime) {
         unsafe {
             gobject_sys::g_object_set_property(
@@ -145,6 +160,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn connect_property_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -162,6 +178,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         }
     }
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>) {
         unsafe {
             gst_base_sys::gst_aggregator_update_segment(
@@ -172,6 +189,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn selected_samples(
         &self,
         pts: gst::ClockTime,
@@ -193,6 +211,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_samples_selected<
         P,
         F: Fn(
@@ -263,6 +282,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe extern "C" fn notify_min_upstream_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
     this: *mut gst_base_sys::GstAggregator,
     _param_spec: glib_sys::gpointer,

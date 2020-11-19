@@ -38,6 +38,7 @@ mod auto;
 pub use auto::*;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 mod web_rtc_data_channel;
 mod web_rtc_session_description;
 

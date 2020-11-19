@@ -12,9 +12,11 @@ use once_cell::sync::Lazy;
 
 use glib;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::translate::FromGlibPtrBorrow;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer, ToGlib, ToGlibPtr,
@@ -39,17 +41,21 @@ use StateChangeSuccess;
 
 use std::ffi::CStr;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::future::Future;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::marker::Unpin;
 use std::mem;
 use std::num::NonZeroU64;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::pin::Pin;
 
 use libc;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib_sys;
 use gobject_sys;
 use gst_sys;
@@ -175,6 +181,7 @@ pub trait ElementExtManual: 'static {
     fn get_element_flags(&self) -> ElementFlags;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::too_many_arguments)]
     fn message_full_with_details<T: ::MessageErrorDomain>(
         &self,
@@ -204,6 +211,7 @@ pub trait ElementExtManual: 'static {
     fn num_src_pads(&self) -> u16;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn add_property_deep_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -211,6 +219,7 @@ pub trait ElementExtManual: 'static {
     ) -> NotifyWatchId;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn add_property_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -218,6 +227,7 @@ pub trait ElementExtManual: 'static {
     ) -> NotifyWatchId;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
 
     fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
@@ -252,11 +262,13 @@ pub trait ElementExtManual: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn call_async<F>(&self, func: F)
     where
         F: FnOnce(&Self) + Send + 'static;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn call_async_future<F, T>(
         &self,
         func: F,
@@ -421,6 +433,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn message_full_with_details<T: ::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -565,6 +578,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn add_property_deep_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -581,6 +595,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn add_property_notify_watch(
         &self,
         property_name: Option<&str>,
@@ -597,6 +612,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId) {
         unsafe {
             gst_sys::gst_element_remove_property_notify_watch(
@@ -769,6 +785,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn call_async<F>(&self, func: F)
     where
         F: FnOnce(&Self) + Send + 'static,
@@ -802,6 +819,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn call_async_future<F, T>(
         &self,
         func: F,

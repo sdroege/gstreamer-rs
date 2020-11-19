@@ -254,6 +254,7 @@ impl CapsRef {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_features_simple(&mut self, features: Option<CapsFeatures>) {
         unsafe {
             gst_sys::gst_caps_set_features_simple(

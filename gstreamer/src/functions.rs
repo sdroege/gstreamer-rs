@@ -123,6 +123,7 @@ pub fn parse_launchv_full(
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub fn calculate_linear_regression(
     xy: &[(u64, u64)],
     temp: Option<&mut [(u64, u64)]>,
@@ -172,6 +173,7 @@ pub fn calculate_linear_regression(
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<::PluginAPIFlags> {
     assert_initialized_main_thread!();
     unsafe {

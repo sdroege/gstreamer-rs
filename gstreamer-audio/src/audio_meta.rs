@@ -9,13 +9,16 @@
 
 use std::fmt;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::ptr;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::slice;
 
 use glib;
 use glib::translate::{from_glib, ToGlib};
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::translate::{from_glib_none, ToGlibPtr};
 use gst;
 use gst::prelude::*;
@@ -76,15 +79,19 @@ impl fmt::Debug for AudioClippingMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[repr(transparent)]
 pub struct AudioMeta(gst_audio_sys::GstAudioMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl Send for AudioMeta {}
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl Sync for AudioMeta {}
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl AudioMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
@@ -190,6 +197,7 @@ impl AudioMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl MetaAPI for AudioMeta {
     type GstType = gst_audio_sys::GstAudioMeta;
 
@@ -199,6 +207,7 @@ unsafe impl MetaAPI for AudioMeta {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl fmt::Debug for AudioMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("AudioMeta")

@@ -15,6 +15,7 @@ use std::mem;
 
 impl AudioStreamAlign {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn process(
         &mut self,
         discont: bool,

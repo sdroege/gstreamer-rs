@@ -7,18 +7,23 @@
 // except according to those terms.
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 use PadTemplate;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use StaticPadTemplate;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use gst_sys;
 
 impl PadTemplate {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn from_static_pad_template_with_gtype(
         pad_template: &StaticPadTemplate,
         pad_type: glib::types::Type,

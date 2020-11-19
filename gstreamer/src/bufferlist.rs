@@ -69,6 +69,7 @@ impl BufferListRef {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn get_writable(&mut self, idx: u32) -> Option<&mut BufferRef> {
         unsafe {
             let ptr = gst_sys::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);
@@ -85,6 +86,7 @@ impl BufferListRef {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn calculate_size(&self) -> usize {
         unsafe { gst_sys::gst_buffer_list_calculate_size(self.as_mut_ptr()) as usize }
     }

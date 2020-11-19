@@ -51,12 +51,16 @@ pub use adapter::*;
 mod flow_combiner;
 pub use flow_combiner::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use aggregator::AggregatorExtManual;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use aggregator_pad::AggregatorPadExtManual;
 mod base_parse;
 pub use base_parse::BaseParseExtManual;
@@ -81,8 +85,10 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use aggregator::AggregatorExtManual;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use aggregator_pad::AggregatorPadExtManual;
     pub use auto::traits::*;
     pub use base_parse::BaseParseExtManual;

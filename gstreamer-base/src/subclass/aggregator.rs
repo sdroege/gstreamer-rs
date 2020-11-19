@@ -39,6 +39,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn finish_buffer_list(
         &self,
         aggregator: &Self::Type,
@@ -65,6 +66,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn sink_event_pre_queue(
         &self,
         aggregator: &Self::Type,
@@ -84,6 +86,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn sink_query_pre_queue(
         &self,
         aggregator: &Self::Type,
@@ -161,11 +164,13 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn negotiate(&self, aggregator: &Self::Type) -> bool {
         self.parent_negotiate(aggregator)
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn peek_next_sample(
         &self,
         aggregator: &Self::Type,
@@ -192,6 +197,7 @@ pub trait AggregatorImplExt: ObjectSubclass {
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_finish_buffer_list(
         &self,
         aggregator: &Self::Type,
@@ -206,6 +212,7 @@ pub trait AggregatorImplExt: ObjectSubclass {
     ) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_sink_event_pre_queue(
         &self,
         aggregator: &Self::Type,
@@ -221,6 +228,7 @@ pub trait AggregatorImplExt: ObjectSubclass {
     ) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_sink_query_pre_queue(
         &self,
         aggregator: &Self::Type,
@@ -274,9 +282,11 @@ pub trait AggregatorImplExt: ObjectSubclass {
     ) -> Result<(), gst::LoggableError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_negotiate(&self, aggregator: &Self::Type) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_peek_next_sample(
         &self,
         aggregator: &Self::Type,
@@ -345,6 +355,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_finish_buffer_list(
         &self,
         aggregator: &Self::Type,
@@ -387,6 +398,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_sink_event_pre_queue(
         &self,
         aggregator: &Self::Type,
@@ -431,6 +443,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_sink_query_pre_queue(
         &self,
         aggregator: &Self::Type,
@@ -682,6 +695,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_negotiate(&self, aggregator: &Self::Type) -> bool {
         unsafe {
             let data = T::type_data();
@@ -700,6 +714,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_peek_next_sample(
         &self,
         aggregator: &Self::Type,
@@ -746,6 +761,7 @@ where
         klass.fixate_src_caps = Some(aggregator_fixate_src_caps::<T>);
         klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
         #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         {
             klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
             klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);
@@ -814,6 +830,7 @@ where
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_finish_buffer_list<T: AggregatorImpl>(
     ptr: *mut gst_base_sys::GstAggregator,
     buffer_list: *mut gst_sys::GstBufferList,
@@ -855,6 +872,7 @@ where
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_sink_event_pre_queue<T: AggregatorImpl>(
     ptr: *mut gst_base_sys::GstAggregator,
     aggregator_pad: *mut gst_base_sys::GstAggregatorPad,
@@ -901,6 +919,7 @@ where
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_sink_query_pre_queue<T: AggregatorImpl>(
     ptr: *mut gst_base_sys::GstAggregator,
     aggregator_pad: *mut gst_base_sys::GstAggregatorPad,
@@ -1154,6 +1173,7 @@ where
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_negotiate<T: AggregatorImpl>(
     ptr: *mut gst_base_sys::GstAggregator,
 ) -> glib_sys::gboolean
@@ -1171,6 +1191,7 @@ where
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
     ptr: *mut gst_base_sys::GstAggregator,
     pad: *mut gst_base_sys::GstAggregatorPad,

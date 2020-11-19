@@ -9,20 +9,25 @@
 use RTSPMediaFactory;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 use glib::IsA;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use gst;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use gst_rtsp_server_sys;
 
 pub trait RTSPMediaFactoryExtManual: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn add_role_from_structure(&self, structure: &gst::StructureRef);
 }
 
 impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn add_role_from_structure(&self, structure: &gst::StructureRef) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_media_factory_add_role_from_structure(

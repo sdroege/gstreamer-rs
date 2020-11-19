@@ -36,6 +36,7 @@ pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u8]>>(
     obj: Option<&P>,
     data: R,
@@ -82,6 +83,7 @@ pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
     obj: Option<&P>,
     buf: &gst::Buffer,

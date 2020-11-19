@@ -19,6 +19,7 @@ use VideoCodecFrame;
 use VideoDecoder;
 use VideoFormat;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use VideoInterlaceMode;
 
 extern "C" {
@@ -37,6 +38,7 @@ extern "C" {
 
 pub trait VideoDecoderExtManual: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -66,6 +68,7 @@ pub trait VideoDecoderExtManual: 'static {
         reference: Option<&VideoCodecState<Readable>>,
     ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError>;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_interlaced_output_state(
         &self,
         fmt: VideoFormat,
@@ -95,6 +98,7 @@ pub trait VideoDecoderExtManual: 'static {
 
 impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -274,6 +278,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_interlaced_output_state(
         &self,
         fmt: VideoFormat,

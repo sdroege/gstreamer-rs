@@ -50,6 +50,7 @@ pub use auto::*;
 
 mod caps_features;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use caps_features::{CAPS_FEATURES_FORMAT_INTERLACED, CAPS_FEATURE_FORMAT_INTERLACED};
 pub use caps_features::{
     CAPS_FEATURES_META_GST_VIDEO_AFFINE_TRANSFORMATION_META,
@@ -81,20 +82,26 @@ mod video_overlay_composition;
 pub use video_overlay_composition::*;
 pub mod video_meta;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use video_meta::VideoCaptionMeta;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use video_meta::{VideoAFDMeta, VideoBarMeta};
 pub use video_meta::{
     VideoAffineTransformationMeta, VideoCropMeta, VideoMeta, VideoOverlayCompositionMeta,
     VideoRegionOfInterestMeta,
 };
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 mod video_time_code;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use video_time_code::{ValidVideoTimeCode, VideoTimeCode, VideoTimeCodeMeta};
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 mod video_time_code_interval;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use video_time_code_interval::VideoTimeCodeInterval;
 mod video_buffer_pool;
 pub use video_buffer_pool::{

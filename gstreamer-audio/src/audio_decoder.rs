@@ -37,6 +37,7 @@ pub trait AudioDecoderExtManual: 'static {
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn finish_subframe(
         &self,
         buffer: Option<gst::Buffer>,
@@ -45,6 +46,7 @@ pub trait AudioDecoderExtManual: 'static {
     fn negotiate(&self) -> Result<(), gst::FlowError>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_output_caps(&self, caps: &gst::Caps) -> Result<(), gst::FlowError>;
 
     fn set_output_format(&self, info: &AudioInfo) -> Result<(), gst::FlowError>;
@@ -81,6 +83,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn finish_subframe(
         &self,
         buffer: Option<gst::Buffer>,
@@ -108,6 +111,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_output_caps(&self, caps: &gst::Caps) -> Result<(), gst::FlowError> {
         unsafe {
             let ret = from_glib(gst_audio_sys::gst_audio_decoder_set_output_caps(

@@ -35,6 +35,7 @@ pub trait GstBinExtManual: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> ::Iterator<Element>;
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element>;
     fn iterate_elements(&self) -> ::Iterator<Element>;
@@ -110,6 +111,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> ::Iterator<Element> {
         unsafe {
             from_glib_full(gst_sys::gst_bin_iterate_all_by_element_factory_name(

@@ -33,6 +33,7 @@ pub fn audio_buffer_clip(
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub fn audio_buffer_truncate(
     buffer: gst::Buffer,
     bpf: u32,

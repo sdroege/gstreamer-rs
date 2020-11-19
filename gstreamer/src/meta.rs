@@ -13,14 +13,18 @@ use std::ops;
 use Buffer;
 use BufferRef;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use Caps;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use CapsRef;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use ClockTime;
 
 use glib;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::ToGlib;
 use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 use glib_sys;
@@ -71,6 +75,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq)]
 pub struct MetaSeqnum(u64);
 
@@ -151,6 +156,7 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn get_seqnum(&self) -> MetaSeqnum {
         unsafe {
             let meta = self.meta as *const _ as *const gst_sys::GstMeta;
@@ -186,6 +192,7 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn get_seqnum(&self) -> u64 {
         unsafe {
             let meta = self.meta as *const _ as *const gst_sys::GstMeta;
@@ -342,15 +349,19 @@ impl fmt::Debug for ProtectionMeta {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[repr(transparent)]
 pub struct ReferenceTimestampMeta(gst_sys::GstReferenceTimestampMeta);
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl Send for ReferenceTimestampMeta {}
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl Sync for ReferenceTimestampMeta {}
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl ReferenceTimestampMeta {
     pub fn add<'a>(
         buffer: &'a mut BufferRef,
@@ -389,6 +400,7 @@ impl ReferenceTimestampMeta {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 unsafe impl MetaAPI for ReferenceTimestampMeta {
     type GstType = gst_sys::GstReferenceTimestampMeta;
 
@@ -398,6 +410,7 @@ unsafe impl MetaAPI for ReferenceTimestampMeta {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl fmt::Debug for ReferenceTimestampMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("ReferenceTimestampMeta")

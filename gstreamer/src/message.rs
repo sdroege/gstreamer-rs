@@ -272,6 +272,7 @@ impl<'a> Error<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -321,6 +322,7 @@ impl<'a> Warning<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -370,6 +372,7 @@ impl<'a> Info<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -1332,6 +1335,7 @@ impl<'a> DeviceRemoved<'a> {
 declare_concrete_message!(PropertyNotify);
 impl<'a> PropertyNotify<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(property_name: &str) -> Message {
         skip_assert_initialized!();
@@ -1339,12 +1343,14 @@ impl<'a> PropertyNotify<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(property_name: &str) -> PropertyNotifyBuilder {
         assert_initialized_main_thread!();
         PropertyNotifyBuilder::new(property_name)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get(&self) -> (Object, &str, Option<&'a glib::Value>) {
         unsafe {
             let mut object = ptr::null_mut();
@@ -1374,6 +1380,7 @@ impl<'a> PropertyNotify<'a> {
 declare_concrete_message!(StreamCollection);
 impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &::StreamCollection) -> Message {
         skip_assert_initialized!();
@@ -1381,12 +1388,14 @@ impl<'a> StreamCollection<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(collection: &::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
@@ -1401,6 +1410,7 @@ impl<'a> StreamCollection<'a> {
 declare_concrete_message!(StreamsSelected);
 impl<'a> StreamsSelected<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(collection: &::StreamCollection) -> Message {
         skip_assert_initialized!();
@@ -1408,12 +1418,14 @@ impl<'a> StreamsSelected<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(collection: &::StreamCollection) -> StreamsSelectedBuilder {
         assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
@@ -1425,6 +1437,7 @@ impl<'a> StreamsSelected<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_streams(&self) -> Vec<::Stream> {
         unsafe {
             let n = gst_sys::gst_message_streams_selected_get_size(self.as_mut_ptr());
@@ -1444,6 +1457,7 @@ impl<'a> StreamsSelected<'a> {
 declare_concrete_message!(Redirect);
 impl<'a> Redirect<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(location: &str) -> Message {
         skip_assert_initialized!();
@@ -1451,12 +1465,14 @@ impl<'a> Redirect<'a> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(location: &str) -> RedirectBuilder {
         assert_initialized_main_thread!();
         RedirectBuilder::new(location)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
             let n = gst_sys::gst_message_get_num_redirect_entries(self.as_mut_ptr());
@@ -1495,6 +1511,7 @@ impl<'a> Redirect<'a> {
 declare_concrete_message!(DeviceChanged);
 impl<'a> DeviceChanged<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(device: &'a ::Device, changed_device: &'a ::Device) -> Message {
         skip_assert_initialized!();
@@ -1502,12 +1519,14 @@ impl<'a> DeviceChanged<'a> {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn builder(device: &'a ::Device, changed_device: &'a ::Device) -> DeviceChangedBuilder<'a> {
         assert_initialized_main_thread!();
         DeviceChangedBuilder::new(device, changed_device)
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn get_device_changed(&self) -> (::Device, ::Device) {
         unsafe {
             let mut device = ptr::null_mut();
@@ -1555,6 +1574,7 @@ impl<'a> MessageBuilder<'a> {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
         Self {
             other_fields: self
@@ -1587,6 +1607,7 @@ macro_rules! message_builder_generic_impl {
         }
 
         #[cfg(any(feature = "v1_14", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
         #[allow(clippy::needless_update)]
         pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
             Self {
@@ -1605,6 +1626,7 @@ macro_rules! message_builder_generic_impl {
                 }
 
                 #[cfg(any(feature = "v1_14", feature = "dox"))]
+                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
                 {
                     if !self.builder.other_fields.is_empty() {
                         let structure = gst_sys::gst_message_writable_structure(msg);
@@ -1676,6 +1698,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -1685,6 +1708,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         #[cfg(any(feature = "v1_10", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -1742,6 +1766,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -1751,6 +1776,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         #[cfg(any(feature = "v1_10", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -1808,6 +1834,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -1817,6 +1844,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         #[cfg(any(feature = "v1_10", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -2588,6 +2616,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct PropertyNotifyBuilder<'a> {
     builder: MessageBuilder<'a>,
     property_name: &'a str,
@@ -2595,6 +2624,7 @@ pub struct PropertyNotifyBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> PropertyNotifyBuilder<'a> {
     fn new(property_name: &'a str) -> Self {
         skip_assert_initialized!();
@@ -2627,12 +2657,14 @@ impl<'a> PropertyNotifyBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct StreamCollectionBuilder<'a> {
     builder: MessageBuilder<'a>,
     collection: &'a ::StreamCollection,
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -2651,15 +2683,19 @@ impl<'a> StreamCollectionBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct StreamsSelectedBuilder<'a> {
     builder: MessageBuilder<'a>,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     collection: &'a ::StreamCollection,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     streams: Option<&'a [&'a ::Stream]>,
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamsSelectedBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -2689,6 +2725,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct RedirectBuilder<'a> {
     builder: MessageBuilder<'a>,
     location: &'a str,
@@ -2699,6 +2736,7 @@ pub struct RedirectBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> RedirectBuilder<'a> {
     fn new(location: &'a str) -> Self {
         skip_assert_initialized!();
@@ -2771,6 +2809,7 @@ impl<'a> RedirectBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub struct DeviceChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
     device: &'a ::Device,
@@ -2778,6 +2817,7 @@ pub struct DeviceChangedBuilder<'a> {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> DeviceChangedBuilder<'a> {
     fn new(device: &'a ::Device, changed_device: &'a ::Device) -> Self {
         skip_assert_initialized!();
