@@ -198,23 +198,28 @@ plugins-update-nightly:
       # First build and test all the crates with their relevant features
       # Keep features in sync with below
     - |
+      get_features() {
+        crate=$1
+        if [ "$crate" = "gstreamer" ]; then
+          echo "ser_de,v1_18"
+        elif [ "$crate" = "gstreamer-gl" ]; then
+          echo "egl,x11,wayland,v1_18"
+        else
+          echo "v1_18"
+        fi
+      }
       for crate in gstreamer*; do
         if [ -e $crate/Cargo.toml ]; then
           if [ -n "$ALL_FEATURES" ]; then
-            if [ $crate = "gstreamer" ]; then
-              FEATURES=ser_de,v1_18
-            elif [ $crate = "gstreamer-gl" ]; then
-              FEATURES=egl,x11,wayland,v1_18
-            else
-              FEATURES=v1_18
-            fi
-
-            cargo build --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
-            G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+            FEATURES="--features=$(get_features $crate)"
           else
-            cargo build --locked --color=always --manifest-path $crate/Cargo.toml
-            G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml
+            FEATURES=""
           fi
+
+          echo "Building and testing $crate with $FEATURES"
+
+          cargo build --locked --color=always --manifest-path $crate/Cargo.toml $FEATURES
+          G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml $FEATURES
         fi
       done
 
@@ -261,36 +266,44 @@ test nightly all-features:
   stage: "test"
   script:
     - rustc --version
+    - |
+      get_features() {
+        module=${1%%/sys}
+        if [ "$module" = "gstreamer-gl" ]; then
+          echo "egl,x11,wayland,v1_18"
+        else
+          echo "v1_18"
+        fi
+      }
       # First build and test all the crates with their relevant features
       # Keep features in sync with below
-    - |
       for crate in gstreamer*/sys; do
         if [ -e $crate/Cargo.toml ]; then
-          cargo build --locked --color=always --manifest-path $crate/Cargo.toml --all-features
+          echo "Building $crate with $(get_features $crate)"
+          cargo build --locked --color=always --manifest-path $crate/Cargo.toml --features $(get_features $crate)
         fi
       done
-    # Run tests for crates we can currently run.
-    # Other tests are broken currently.
-    - |
-        for crate in gstreamer/sys \
-                     gstreamer-app/sys \
-                     gstreamer-audio/sys \
-                     gstreamer-base/sys \
-                     gstreamer-check/sys \
-                     gstreamer-controller/sys \
-                     gstreamer-mpegts/sys \
-                     gstreamer-net/sys \
-                     gstreamer-pbutils/sys \
-                     gstreamer-player/sys \
-                     gstreamer-rtsp-server/sys \
-                     gstreamer-rtsp/sys \
-                     gstreamer-sdp/sys \
-                     gstreamer-tag/sys \
-                     gstreamer-video/sys \
-                     gstreamer-webrtc/sys; \
-            do \
-                cargo test --locked --color=always --manifest-path $crate/Cargo.toml --all-features; \
-            done
+      # Run tests for crates we can currently run.
+      # Other tests are broken currently.
+      for crate in gstreamer/sys \
+                   gstreamer-app/sys \
+                   gstreamer-audio/sys \
+                   gstreamer-base/sys \
+                   gstreamer-check/sys \
+                   gstreamer-controller/sys \
+                   gstreamer-mpegts/sys \
+                   gstreamer-net/sys \
+                   gstreamer-pbutils/sys \
+                   gstreamer-player/sys \
+                   gstreamer-rtsp-server/sys \
+                   gstreamer-rtsp/sys \
+                   gstreamer-sdp/sys \
+                   gstreamer-tag/sys \
+                   gstreamer-video/sys \
+                   gstreamer-webrtc/sys; do
+        echo "Testing $crate with $(get_features $crate)"
+        cargo test --locked --color=always --manifest-path $crate/Cargo.toml --features $(get_features $crate)
+      done
 
 test stable sys:
   extends:
@@ -327,15 +340,21 @@ clippy:
     - cargo clippy --version
       # Keep features in sync with above
     - |
+      get_features() {
+        crate=$1
+        if [ "$crate" = "gstreamer" ]; then
+          echo "ser_de,v1_18"
+        elif [ "$crate" = "gstreamer-gl" ]; then
+          echo "egl,x11,wayland,v1_18"
+        else
+          echo "v1_18"
+        fi
+      }
       for crate in gstreamer*; do
         if [ -e $crate/Cargo.toml ]; then
-          if [ $crate = "gstreamer" ]; then
-            FEATURES=ser_de,v1_18
-          elif [ $crate = "gstreamer-gl" ]; then
-            FEATURES=egl,x11,wayland,v1_18
-          else
-            FEATURES=v1_18
-          fi
+          FEATURES=$(get_features $crate)
+
+          echo "Running clippy on $crate with $FEATURES"
 
           cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
         fi
