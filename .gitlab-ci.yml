@@ -402,7 +402,7 @@ pages:
     - |
       for crate in gstreamer*; do
         cd $crate
-        cargo doc --color=always --features --features=dox,embed-lgpl-docs
+        cargo +nightly doc --color=always --features --features=dox,embed-lgpl-docs
         cd ..
       done
     - mv target/doc public/
