@@ -761,7 +761,6 @@ where
         klass.fixate_src_caps = Some(aggregator_fixate_src_caps::<T>);
         klass.negotiated_src_caps = Some(aggregator_negotiated_src_caps::<T>);
         #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         {
             klass.sink_event_pre_queue = Some(aggregator_sink_event_pre_queue::<T>);
             klass.sink_query_pre_queue = Some(aggregator_sink_query_pre_queue::<T>);

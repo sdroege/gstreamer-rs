@@ -1626,17 +1626,14 @@ macro_rules! message_builder_generic_impl {
                 }
 
                 #[cfg(any(feature = "v1_14", feature = "dox"))]
-                #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-                {
-                    if !self.builder.other_fields.is_empty() {
-                        let structure = gst_sys::gst_message_writable_structure(msg);
+                if !self.builder.other_fields.is_empty() {
+                    let structure = gst_sys::gst_message_writable_structure(msg);
 
-                        if !structure.is_null() {
-                            let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
+                    if !structure.is_null() {
+                        let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
 
-                            for (k, v) in self.builder.other_fields {
-                                structure.set_value(k, v.to_send_value());
-                            }
+                        for (k, v) in self.builder.other_fields {
+                            structure.set_value(k, v.to_send_value());
                         }
                     }
                 }
@@ -1708,7 +1705,6 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         #[cfg(any(feature = "v1_10", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -1776,7 +1772,6 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         #[cfg(any(feature = "v1_10", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -1844,7 +1839,6 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         #[cfg(any(feature = "v1_10", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),

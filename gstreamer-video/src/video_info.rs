@@ -346,10 +346,7 @@ impl fmt::Debug for VideoInfo {
             .field("multiview_flags", &self.multiview_flags());
 
         #[cfg(any(feature = "v1_12", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-        {
-            b.field("field_order", &self.field_order());
-        };
+        b.field("field_order", &self.field_order());
 
         b.finish()
     }
@@ -520,12 +517,9 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-            {
-                if let Some(field_order) = self.field_order {
-                    let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
-                    ptr::write(ptr.offset(2), field_order.to_glib());
-                }
+            if let Some(field_order) = self.field_order {
+                let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
+                ptr::write(ptr.offset(2), field_order.to_glib());
             }
 
             Ok(VideoInfo(info))
@@ -631,7 +625,6 @@ impl VideoInfo {
         assert_initialized_main_thread!();
 
         #[cfg(not(any(feature = "v1_12", feature = "dox")))]
-        #[cfg_attr(feature = "dox", doc(cfg(not(feature = "v1_12"))))]
         {
             VideoInfoBuilder {
                 format,
@@ -652,7 +645,6 @@ impl VideoInfo {
             }
         }
         #[cfg(any(feature = "v1_12", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
         {
             VideoInfoBuilder {
                 format,

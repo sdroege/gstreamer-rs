@@ -1327,11 +1327,8 @@ impl<'a> StreamStartBuilder<'a> {
         }
 
         #[cfg(any(feature = "v1_10", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-        {
-            if let Some(ref stream) = s.stream {
-                gst_sys::gst_event_set_stream(ev, stream.to_glib_none().0);
-            }
+        if let Some(ref stream) = s.stream {
+            gst_sys::gst_event_set_stream(ev, stream.to_glib_none().0);
         }
 
         ev
@@ -1675,14 +1672,8 @@ impl<'a> SeekBuilder<'a> {
             );
 
             #[cfg(any(feature = "v1_16", feature = "dox"))]
-            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-            {
-                if let Some(trickmode_interval) = s.trickmode_interval {
-                    gst_sys::gst_event_set_seek_trickmode_interval(
-                        ev,
-                        trickmode_interval.to_glib(),
-                    );
-                }
+            if let Some(trickmode_interval) = s.trickmode_interval {
+                gst_sys::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.to_glib());
             }
 
             ev
