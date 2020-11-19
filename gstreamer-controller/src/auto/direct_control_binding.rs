@@ -7,7 +7,6 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::Value;
 use glib_sys;
@@ -71,10 +70,7 @@ pub trait DirectControlBindingExt: 'static {
 
     fn get_property_control_source(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source<P: IsA<gst::ControlSource> + SetValueOptional>(
-        &self,
-        control_source: Option<&P>,
-    );
+    fn set_property_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>);
 
     fn connect_property_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -112,10 +108,7 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source<P: IsA<gst::ControlSource> + SetValueOptional>(
-        &self,
-        control_source: Option<&P>,
-    ) {
+    fn set_property_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,

@@ -7,7 +7,6 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::Value;
 use glib_sys;
@@ -63,28 +62,28 @@ pub const NONE_ARGB_CONTROL_BINDING: Option<&ARGBControlBinding> = None;
 pub trait ARGBControlBindingExt: 'static {
     fn get_property_control_source_a(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_a<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_a<P: IsA<gst::ControlSource>>(
         &self,
         control_source_a: Option<&P>,
     );
 
     fn get_property_control_source_b(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_b<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_b<P: IsA<gst::ControlSource>>(
         &self,
         control_source_b: Option<&P>,
     );
 
     fn get_property_control_source_g(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_g<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_g<P: IsA<gst::ControlSource>>(
         &self,
         control_source_g: Option<&P>,
     );
 
     fn get_property_control_source_r(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_r<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_r<P: IsA<gst::ControlSource>>(
         &self,
         control_source_r: Option<&P>,
     );
@@ -125,7 +124,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_a<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_a<P: IsA<gst::ControlSource>>(
         &self,
         control_source_a: Option<&P>,
     ) {
@@ -152,7 +151,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_b<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_b<P: IsA<gst::ControlSource>>(
         &self,
         control_source_b: Option<&P>,
     ) {
@@ -179,7 +178,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_g<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_g<P: IsA<gst::ControlSource>>(
         &self,
         control_source_g: Option<&P>,
     ) {
@@ -206,7 +205,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_r<P: IsA<gst::ControlSource> + SetValueOptional>(
+    fn set_property_control_source_r<P: IsA<gst::ControlSource>>(
         &self,
         control_source_r: Option<&P>,
     ) {
