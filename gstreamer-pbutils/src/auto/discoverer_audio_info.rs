@@ -21,6 +21,7 @@ impl DiscovererAudioInfo {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn get_channel_mask(&self) -> u64 {
         unsafe {
             gst_pbutils_sys::gst_discoverer_audio_info_get_channel_mask(self.to_glib_none().0)

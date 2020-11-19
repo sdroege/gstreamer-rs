@@ -339,6 +339,7 @@ pub enum ClockType {
     Monotonic,
     Other,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Tai,
     #[doc(hidden)]
     __Unknown(i32),
@@ -626,6 +627,7 @@ pub enum EventType {
     Buffersize,
     SinkMessage,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamGroupDone,
     Eos,
     Toc,
@@ -633,6 +635,7 @@ pub enum EventType {
     SegmentDone,
     Gap,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     InstantRateChange,
     Qos,
     Seek,
@@ -642,8 +645,10 @@ pub enum EventType {
     Reconfigure,
     TocSelect,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     SelectStreams,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     InstantRateSyncTime,
     CustomUpstream,
     CustomDownstream,
@@ -1612,6 +1617,7 @@ impl SetValue for ProgressType {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum PromiseResult {
@@ -1624,6 +1630,7 @@ pub enum PromiseResult {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl ToGlib for PromiseResult {
     type GlibType = gst_sys::GstPromiseResult;
@@ -1640,6 +1647,7 @@ impl ToGlib for PromiseResult {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl FromGlib<gst_sys::GstPromiseResult> for PromiseResult {
     fn from_glib(value: gst_sys::GstPromiseResult) -> Self {
@@ -1655,6 +1663,7 @@ impl FromGlib<gst_sys::GstPromiseResult> for PromiseResult {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl StaticType for PromiseResult {
     fn static_type() -> Type {
         unsafe { from_glib(gst_sys::gst_promise_result_get_type()) }
@@ -1662,6 +1671,7 @@ impl StaticType for PromiseResult {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl<'a> FromValueOptional<'a> for PromiseResult {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -1669,6 +1679,7 @@ impl<'a> FromValueOptional<'a> for PromiseResult {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl<'a> FromValue<'a> for PromiseResult {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
@@ -1676,6 +1687,7 @@ impl<'a> FromValue<'a> for PromiseResult {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl SetValue for PromiseResult {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())

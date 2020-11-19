@@ -33,6 +33,7 @@ impl Clock {
     //}
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //pub fn id_get_clock(id: /*Unimplemented*/ClockID) -> Option<Clock> {
     //    unsafe { TODO: call gst_sys:gst_clock_id_get_clock() }
     //}
@@ -54,6 +55,7 @@ impl Clock {
     //}
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //pub fn id_uses_clock<P: IsA<Clock>>(id: /*Unimplemented*/ClockID, clock: &P) -> bool {
     //    unsafe { TODO: call gst_sys:gst_clock_id_uses_clock() }
     //}

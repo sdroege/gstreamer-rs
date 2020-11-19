@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -21,9 +22,11 @@ use std::mem::transmute;
 use std::ptr;
 use GLContext;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use GLSLProfile;
 use GLSLStage;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use GLSLVersion;
 
 glib_wrapper! {
@@ -391,6 +394,7 @@ impl GLShader {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn string_fragment_external_oes_get_default<P: IsA<GLContext>>(
         context: &P,
         version: GLSLVersion,
@@ -409,6 +413,7 @@ impl GLShader {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn string_fragment_get_default<P: IsA<GLContext>>(
         context: &P,
         version: GLSLVersion,
@@ -425,6 +430,7 @@ impl GLShader {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn string_get_highest_precision<P: IsA<GLContext>>(
         context: &P,
         version: GLSLVersion,

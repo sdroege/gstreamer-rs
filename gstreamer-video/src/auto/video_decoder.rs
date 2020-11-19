@@ -4,26 +4,35 @@
 
 use glib;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::signal::connect_raw;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::StaticType;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::Value;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib_sys;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use gobject_sys;
 use gst;
 use gst_video_sys;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem::transmute;
 use VideoCodecFrame;
 
@@ -76,18 +85,22 @@ pub trait VideoDecoderExt: 'static {
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_property_qos(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_property_qos(&self, qos: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -228,6 +241,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_property_qos(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -244,6 +258,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_property_qos(&self, qos: bool) {
         unsafe {
             gobject_sys::g_object_set_property(
@@ -255,6 +270,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -283,6 +299,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

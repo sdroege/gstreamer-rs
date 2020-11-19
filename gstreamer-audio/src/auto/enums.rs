@@ -415,10 +415,13 @@ pub enum AudioRingBufferFormatType {
     Mpeg2Aac,
     Mpeg4Aac,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Mpeg2AacRaw,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Mpeg4AacRaw,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Flac,
     #[doc(hidden)]
     __Unknown(i32),

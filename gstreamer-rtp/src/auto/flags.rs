@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_rtp_sys;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 bitflags! {
     pub struct RTPBufferFlags: u32 {
         const RETRANSMISSION = 1048576;
@@ -21,6 +22,7 @@ bitflags! {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl ToGlib for RTPBufferFlags {
     type GlibType = gst_rtp_sys::GstRTPBufferFlags;
@@ -31,6 +33,7 @@ impl ToGlib for RTPBufferFlags {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<gst_rtp_sys::GstRTPBufferFlags> for RTPBufferFlags {
     fn from_glib(value: gst_rtp_sys::GstRTPBufferFlags) -> RTPBufferFlags {
@@ -40,6 +43,7 @@ impl FromGlib<gst_rtp_sys::GstRTPBufferFlags> for RTPBufferFlags {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StaticType for RTPBufferFlags {
     fn static_type() -> Type {
         unsafe { from_glib(gst_rtp_sys::gst_rtp_buffer_flags_get_type()) }
@@ -47,6 +51,7 @@ impl StaticType for RTPBufferFlags {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> FromValueOptional<'a> for RTPBufferFlags {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -54,6 +59,7 @@ impl<'a> FromValueOptional<'a> for RTPBufferFlags {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> FromValue<'a> for RTPBufferFlags {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
@@ -61,6 +67,7 @@ impl<'a> FromValue<'a> for RTPBufferFlags {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SetValue for RTPBufferFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())

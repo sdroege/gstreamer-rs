@@ -53,6 +53,7 @@ impl DiscovererInfo {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn get_live(&self) -> bool {
         unsafe {
             from_glib(gst_pbutils_sys::gst_discoverer_info_get_live(

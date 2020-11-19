@@ -64,11 +64,13 @@ pub trait GLDisplayExt: 'static {
     fn get_handle_type(&self) -> GLDisplayType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn remove_context<P: IsA<GLContext>>(&self, context: &P);
 
     fn remove_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow>;
 
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(
@@ -154,6 +156,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn remove_context<P: IsA<GLContext>>(&self, context: &P) {
         unsafe {
             gst_gl_sys::gst_gl_display_remove_context(
@@ -176,6 +179,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     }
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow> {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_display_retrieve_window() }
     //}

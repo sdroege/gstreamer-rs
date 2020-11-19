@@ -4,10 +4,12 @@
 
 use glib::translate::*;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::GString;
 use gst_sys;
 use Object;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use Stream;
 
 glib_wrapper! {
@@ -20,11 +22,13 @@ glib_wrapper! {
 
 impl StreamCollection {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_size(&self) -> u32 {
         unsafe { gst_sys::gst_stream_collection_get_size(self.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream(&self, index: u32) -> Option<Stream> {
         unsafe {
             from_glib_none(gst_sys::gst_stream_collection_get_stream(
@@ -35,6 +39,7 @@ impl StreamCollection {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_upstream_id(&self) -> Option<GString> {
         unsafe {
             from_glib_none(gst_sys::gst_stream_collection_get_upstream_id(

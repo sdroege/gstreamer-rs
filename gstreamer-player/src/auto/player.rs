@@ -143,6 +143,7 @@ impl Player {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn get_subtitle_video_offset(&self) -> i64 {
         unsafe { gst_player_sys::gst_player_get_subtitle_video_offset(self.to_glib_none().0) }
     }
@@ -281,6 +282,7 @@ impl Player {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_subtitle_video_offset(&self, offset: i64) {
         unsafe {
             gst_player_sys::gst_player_set_subtitle_video_offset(self.to_glib_none().0, offset);
@@ -966,6 +968,7 @@ impl Player {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn connect_property_subtitle_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,

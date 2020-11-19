@@ -3,29 +3,40 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::signal::connect_raw;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::GString;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib_sys;
 use gst_sys;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::mem::transmute;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use Caps;
 use Object;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use StreamFlags;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use StreamType;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use TagList;
 
 glib_wrapper! {
@@ -38,31 +49,37 @@ glib_wrapper! {
 
 impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_caps(&self) -> Option<Caps> {
         unsafe { from_glib_full(gst_sys::gst_stream_get_caps(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_flags(&self) -> StreamFlags {
         unsafe { from_glib(gst_sys::gst_stream_get_stream_flags(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_id(&self) -> Option<GString> {
         unsafe { from_glib_none(gst_sys::gst_stream_get_stream_id(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_type(&self) -> StreamType {
         unsafe { from_glib(gst_sys::gst_stream_get_stream_type(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_tags(&self) -> Option<TagList> {
         unsafe { from_glib_full(gst_sys::gst_stream_get_tags(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_caps(&self, caps: Option<&Caps>) {
         unsafe {
             gst_sys::gst_stream_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
@@ -70,6 +87,7 @@ impl Stream {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_stream_flags(&self, flags: StreamFlags) {
         unsafe {
             gst_sys::gst_stream_set_stream_flags(self.to_glib_none().0, flags.to_glib());
@@ -77,6 +95,7 @@ impl Stream {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_stream_type(&self, stream_type: StreamType) {
         unsafe {
             gst_sys::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.to_glib());
@@ -84,6 +103,7 @@ impl Stream {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_tags(&self, tags: Option<&TagList>) {
         unsafe {
             gst_sys::gst_stream_set_tags(self.to_glib_none().0, tags.to_glib_none().0);
@@ -91,6 +111,7 @@ impl Stream {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn connect_property_caps_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -117,6 +138,7 @@ impl Stream {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn connect_property_stream_flags_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -145,6 +167,7 @@ impl Stream {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn connect_property_stream_type_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -173,6 +196,7 @@ impl Stream {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn connect_property_tags_notify<F: Fn(&Stream) + Send + Sync + 'static>(
         &self,
         f: F,

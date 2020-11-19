@@ -6,17 +6,23 @@ mod adapter;
 pub use self::adapter::Adapter;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator::AggregatorExt;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator::{Aggregator, NONE_AGGREGATOR};
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator_pad::AggregatorPadExt;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator_pad::{AggregatorPad, NONE_AGGREGATOR_PAD};
 
 mod base_parse;
@@ -40,6 +46,7 @@ pub use self::push_src::{PushSrc, NONE_PUSH_SRC};
 
 mod enums;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::enums::AggregatorStartTimeSelection;
 
 mod flags;
@@ -50,8 +57,10 @@ pub mod functions;
 #[doc(hidden)]
 pub mod traits {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::AggregatorExt;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::AggregatorPadExt;
     pub use super::BaseParseExt;
     pub use super::BaseSinkExt;

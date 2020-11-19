@@ -21,8 +21,10 @@ pub use self::lfo_control_source::LFOControlSourceExt;
 pub use self::lfo_control_source::{LFOControlSource, NONE_LFO_CONTROL_SOURCE};
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 mod proxy_control_binding;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use self::proxy_control_binding::{ProxyControlBinding, NONE_PROXY_CONTROL_BINDING};
 
 mod timed_value_control_source;

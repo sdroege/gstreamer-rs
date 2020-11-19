@@ -56,6 +56,7 @@ pub const NONE_RTSP_STREAM: Option<&RTSPStream> = None;
 
 pub trait RTSPStreamExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn add_multicast_client_address(
         &self,
         destination: &str,
@@ -72,6 +73,7 @@ pub trait RTSPStreamExt: 'static {
     //fn allocate_udp_sockets(&self, family: gio::SocketFamily, transport: /*Ignored*/&mut gst_rtsp::RTSPTransport, use_client_settings: bool) -> bool;
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn complete_stream(&self, transport: /*Ignored*/&gst_rtsp::RTSPTransport) -> bool;
 
     fn get_address_pool(&self) -> Option<RTSPAddressPool>;
@@ -91,6 +93,7 @@ pub trait RTSPStreamExt: 'static {
     fn get_joined_bin(&self) -> Option<gst::Bin>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_max_mcast_ttl(&self) -> u32;
 
     fn get_mtu(&self) -> u32;
@@ -98,6 +101,7 @@ pub trait RTSPStreamExt: 'static {
     fn get_multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_multicast_client_addresses(&self) -> Option<GString>;
 
     fn get_multicast_iface(&self) -> Option<GString>;
@@ -111,9 +115,11 @@ pub trait RTSPStreamExt: 'static {
     fn get_publish_clock_mode(&self) -> RTSPPublishClockMode;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_rate_control(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_rates(&self) -> Option<(f64, f64)>;
 
     fn get_retransmission_pt(&self) -> u32;
@@ -121,6 +127,7 @@ pub trait RTSPStreamExt: 'static {
     fn get_retransmission_time(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     fn get_rtcp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
@@ -146,17 +153,21 @@ pub trait RTSPStreamExt: 'static {
     fn get_ulpfec_enabled(&self) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_ulpfec_percentage(&self) -> u32;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_ulpfec_pt(&self) -> u32;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn handle_keymgmt(&self, keymgmt: &str) -> bool;
 
     fn has_control(&self, control: Option<&str>) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn is_bind_mcast_address(&self) -> bool;
 
     fn is_blocking(&self) -> bool;
@@ -164,12 +175,15 @@ pub trait RTSPStreamExt: 'static {
     fn is_client_side(&self) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_complete(&self) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_receiver(&self) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_sender(&self) -> bool;
 
     //fn is_transport_supported(&self, transport: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> bool;
@@ -193,11 +207,13 @@ pub trait RTSPStreamExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn request_aux_receiver(&self, sessid: u32) -> Option<gst::Element>;
 
     fn request_aux_sender(&self, sessid: u32) -> Option<gst::Element>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn request_ulpfec_decoder<P: IsA<gst::Element>>(
         &self,
         rtpbin: &P,
@@ -205,6 +221,7 @@ pub trait RTSPStreamExt: 'static {
     ) -> Option<gst::Element>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn request_ulpfec_encoder(&self, sessid: u32) -> Option<gst::Element>;
 
     fn reserve_address(
@@ -216,11 +233,13 @@ pub trait RTSPStreamExt: 'static {
     ) -> Option<RTSPAddress>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn seekable(&self) -> bool;
 
     fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool);
 
     fn set_blocked(&self, blocked: bool) -> Result<(), glib::error::BoolError>;
@@ -234,6 +253,7 @@ pub trait RTSPStreamExt: 'static {
     fn set_dscp_qos(&self, dscp_qos: i32);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool;
 
     fn set_mtu(&self, mtu: u32);
@@ -249,6 +269,7 @@ pub trait RTSPStreamExt: 'static {
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_rate_control(&self, enabled: bool);
 
     fn set_retransmission_pt(&self, rtx_pt: u32);
@@ -258,9 +279,11 @@ pub trait RTSPStreamExt: 'static {
     fn set_seqnum_offset(&self, seqnum: u16);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_ulpfec_percentage(&self, percentage: u32);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_ulpfec_pt(&self, pt: u32);
 
     fn transport_filter(
@@ -277,6 +300,7 @@ pub trait RTSPStreamExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn verify_mcast_ttl(&self, ttl: u32) -> bool;
 
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(
@@ -312,6 +336,7 @@ pub trait RTSPStreamExt: 'static {
 
 impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn add_multicast_client_address(
         &self,
         destination: &str,
@@ -352,6 +377,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     //}
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn complete_stream(&self, transport: /*Ignored*/&gst_rtsp::RTSPTransport) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_complete_stream() }
     //}
@@ -409,6 +435,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_max_mcast_ttl(&self) -> u32 {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_get_max_mcast_ttl(self.as_ref().to_glib_none().0)
@@ -429,6 +456,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_multicast_client_addresses(&self) -> Option<GString> {
         unsafe {
             from_glib_full(
@@ -476,6 +504,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_rate_control(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_get_rate_control(
@@ -485,6 +514,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_rates(&self) -> Option<(f64, f64)> {
         unsafe {
             let mut rate = mem::MaybeUninit::uninit();
@@ -523,6 +553,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
         unsafe {
             from_glib_full(
@@ -645,6 +676,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_ulpfec_percentage(&self) -> u32 {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_get_ulpfec_percentage(
@@ -654,6 +686,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_ulpfec_pt(&self) -> u32 {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_get_ulpfec_pt(self.as_ref().to_glib_none().0)
@@ -661,6 +694,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn handle_keymgmt(&self, keymgmt: &str) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_handle_keymgmt(
@@ -680,6 +714,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn is_bind_mcast_address(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_is_bind_mcast_address(
@@ -705,6 +740,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_complete(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_is_complete(
@@ -714,6 +750,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_receiver(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_is_receiver(
@@ -723,6 +760,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_sender(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_is_sender(
@@ -787,6 +825,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn request_aux_receiver(&self, sessid: u32) -> Option<gst::Element> {
         unsafe {
             from_glib_full(gst_rtsp_server_sys::gst_rtsp_stream_request_aux_receiver(
@@ -806,6 +845,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn request_ulpfec_decoder<P: IsA<gst::Element>>(
         &self,
         rtpbin: &P,
@@ -821,6 +861,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn request_ulpfec_encoder(&self, sessid: u32) -> Option<gst::Element> {
         unsafe {
             from_glib_full(gst_rtsp_server_sys::gst_rtsp_stream_request_ulpfec_encoder(
@@ -849,6 +890,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn seekable(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_seekable(
@@ -867,6 +909,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_set_bind_mcast_address(
@@ -925,6 +968,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_set_max_mcast_ttl(
@@ -987,6 +1031,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_rate_control(&self, enabled: bool) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_set_rate_control(
@@ -1024,6 +1069,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_ulpfec_percentage(&self, percentage: u32) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_set_ulpfec_percentage(
@@ -1034,6 +1080,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_ulpfec_pt(&self, pt: u32) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_set_ulpfec_pt(self.as_ref().to_glib_none().0, pt);
@@ -1113,6 +1160,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn verify_mcast_ttl(&self, ttl: u32) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_stream_verify_mcast_ttl(

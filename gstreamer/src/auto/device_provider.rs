@@ -38,6 +38,7 @@ pub trait DeviceProviderExt: 'static {
     fn device_add<P: IsA<Device>>(&self, device: &P);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn device_changed<P: IsA<Device>, Q: IsA<Device>>(&self, device: &P, changed_device: &Q);
 
     fn device_remove<P: IsA<Device>>(&self, device: &P);
@@ -88,6 +89,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn device_changed<P: IsA<Device>, Q: IsA<Device>>(&self, device: &P, changed_device: &Q) {
         unsafe {
             gst_sys::gst_device_provider_device_changed(

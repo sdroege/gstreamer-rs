@@ -8,11 +8,14 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::StaticType;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::Value;
 use glib_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use gobject_sys;
 use gst;
 use gst_base_sys;
@@ -35,24 +38,31 @@ pub const NONE_AGGREGATOR_PAD: Option<&AggregatorPad> = None;
 
 pub trait AggregatorPadExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn drop_buffer(&self) -> bool;
 
     #[cfg(any(feature = "v1_14_1", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
     fn has_buffer(&self) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_eos(&self) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn peek_buffer(&self) -> Option<gst::Buffer>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn pop_buffer(&self) -> Option<gst::Buffer>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_property_emit_signals(&self) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_property_emit_signals(&self, emit_signals: bool);
 
     fn connect_buffer_consumed<F: Fn(&Self, &gst::Buffer) + Send + Sync + 'static>(
@@ -61,6 +71,7 @@ pub trait AggregatorPadExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -69,6 +80,7 @@ pub trait AggregatorPadExt: 'static {
 
 impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn drop_buffer(&self) -> bool {
         unsafe {
             from_glib(gst_base_sys::gst_aggregator_pad_drop_buffer(
@@ -78,6 +90,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     #[cfg(any(feature = "v1_14_1", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
     fn has_buffer(&self) -> bool {
         unsafe {
             from_glib(gst_base_sys::gst_aggregator_pad_has_buffer(
@@ -87,6 +100,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_eos(&self) -> bool {
         unsafe {
             from_glib(gst_base_sys::gst_aggregator_pad_is_eos(
@@ -96,6 +110,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn peek_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
             from_glib_full(gst_base_sys::gst_aggregator_pad_peek_buffer(
@@ -105,6 +120,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn pop_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
             from_glib_full(gst_base_sys::gst_aggregator_pad_pop_buffer(
@@ -114,6 +130,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_property_emit_signals(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -130,6 +147,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_property_emit_signals(&self, emit_signals: bool) {
         unsafe {
             gobject_sys::g_object_set_property(
@@ -174,6 +192,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

@@ -253,6 +253,7 @@ impl SetValue for RTCPType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum RTCPXRType {
@@ -269,6 +270,7 @@ pub enum RTCPXRType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for RTCPXRType {
     type GlibType = gst_rtp_sys::GstRTCPXRType;
@@ -289,6 +291,7 @@ impl ToGlib for RTCPXRType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<gst_rtp_sys::GstRTCPXRType> for RTCPXRType {
     fn from_glib(value: gst_rtp_sys::GstRTCPXRType) -> Self {
@@ -308,6 +311,7 @@ impl FromGlib<gst_rtp_sys::GstRTCPXRType> for RTCPXRType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for RTCPXRType {
     fn static_type() -> Type {
         unsafe { from_glib(gst_rtp_sys::gst_rtcpxr_type_get_type()) }
@@ -315,6 +319,7 @@ impl StaticType for RTCPXRType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for RTCPXRType {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -322,6 +327,7 @@ impl<'a> FromValueOptional<'a> for RTCPXRType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for RTCPXRType {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
@@ -329,6 +335,7 @@ impl<'a> FromValue<'a> for RTCPXRType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for RTCPXRType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())

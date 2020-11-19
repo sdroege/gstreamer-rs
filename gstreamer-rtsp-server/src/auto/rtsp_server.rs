@@ -94,6 +94,7 @@ pub trait RTSPServerExt: 'static {
     fn get_bound_port(&self) -> i32;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_content_length_limit(&self) -> u32;
 
     fn get_mount_points(&self) -> Option<RTSPMountPoints>;
@@ -111,6 +112,7 @@ pub trait RTSPServerExt: 'static {
     fn set_backlog(&self, backlog: i32);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32);
 
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
@@ -283,6 +285,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_content_length_limit(&self) -> u32 {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_server_get_content_length_limit(
@@ -351,6 +354,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_server_set_content_length_limit(

@@ -93,13 +93,17 @@ mod registry;
 pub use self::registry::Registry;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 mod stream;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::stream::Stream;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 mod stream_collection;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::stream_collection::StreamCollection;
 
 mod system_clock;
@@ -146,6 +150,7 @@ pub use self::enums::ParseError;
 pub use self::enums::PluginError;
 pub use self::enums::ProgressType;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::enums::PromiseResult;
 pub use self::enums::QOSType;
 pub use self::enums::Rank;
@@ -185,6 +190,7 @@ pub use self::flags::PadProbeType;
 pub use self::flags::ParseFlags;
 pub use self::flags::PipelineFlags;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::flags::PluginAPIFlags;
 pub use self::flags::PluginDependencyFlags;
 pub use self::flags::PluginFlags;
@@ -192,9 +198,11 @@ pub use self::flags::SchedulingFlags;
 pub use self::flags::SeekFlags;
 pub use self::flags::SegmentFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use self::flags::StackTraceFlags;
 pub use self::flags::StreamFlags;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::flags::StreamType;
 
 mod alias;

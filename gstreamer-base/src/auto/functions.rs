@@ -41,6 +41,7 @@ pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(
 //}
 
 //#[cfg(any(feature = "v1_14_3", feature = "dox"))]
+//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_3")))]
 //pub fn type_find_helper_get_range_full<P: IsA<gst::Object>, Q: IsA<gst::Object>, R: FnMut(&gst::Object, Option<&gst::Object>, u64, u32, &gst::Buffer) -> gst::FlowReturn>(obj: &P, parent: Option<&Q>, func: R, size: u64, extension: Option<&str>) -> (gst::FlowReturn, gst::Caps, gst::TypeFindProbability) {
 //    unsafe { TODO: call gst_base_sys:gst_type_find_helper_get_range_full() }
 //}

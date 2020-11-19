@@ -8,11 +8,13 @@ use gst_rtp_sys;
 use RTCPSDESType;
 
 //#[cfg(any(feature = "v1_16", feature = "dox"))]
+//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 //pub fn buffer_add_rtp_source_meta(buffer: &gst::Buffer, ssrc: u32, csrc: u32, csrc_count: u32) -> /*Ignored*/Option<RTPSourceMeta> {
 //    unsafe { TODO: call gst_rtp_sys:gst_buffer_add_rtp_source_meta() }
 //}
 
 //#[cfg(any(feature = "v1_16", feature = "dox"))]
+//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 //pub fn buffer_get_rtp_source_meta(buffer: &gst::Buffer) -> /*Ignored*/Option<RTPSourceMeta> {
 //    unsafe { TODO: call gst_rtp_sys:gst_buffer_get_rtp_source_meta() }
 //}

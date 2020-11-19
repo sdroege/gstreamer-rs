@@ -17,6 +17,7 @@ use gst_video_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use VideoCodecFrame;
 
 glib_wrapper! {
@@ -36,12 +37,15 @@ pub trait VideoEncoderExt: 'static {
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_min_force_key_unit_interval(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_qos_enabled(&self) -> bool;
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
@@ -51,11 +55,13 @@ pub trait VideoEncoderExt: 'static {
     fn set_headers(&self, headers: &[&gst::Buffer]);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime);
 
     fn set_min_pts(&self, min_pts: gst::ClockTime);
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn set_qos_enabled(&self, enabled: bool);
 
     fn get_property_qos(&self) -> bool;
@@ -63,6 +69,7 @@ pub trait VideoEncoderExt: 'static {
     fn set_property_qos(&self, qos: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -86,6 +93,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
         unsafe {
             gst_video_sys::gst_video_encoder_get_max_encode_time(
@@ -96,6 +104,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_min_force_key_unit_interval(&self) -> gst::ClockTime {
         unsafe {
             from_glib(
@@ -107,6 +116,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_qos_enabled(&self) -> bool {
         unsafe {
             from_glib(gst_video_sys::gst_video_encoder_is_qos_enabled(
@@ -145,6 +155,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime) {
         unsafe {
             gst_video_sys::gst_video_encoder_set_min_force_key_unit_interval(
@@ -164,6 +175,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
             gst_video_sys::gst_video_encoder_set_qos_enabled(
@@ -199,6 +211,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

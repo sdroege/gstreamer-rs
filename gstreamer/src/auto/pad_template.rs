@@ -50,6 +50,7 @@ impl PadTemplate {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn with_gtype(
         name_template: &str,
         direction: PadDirection,
@@ -75,6 +76,7 @@ impl PadTemplate {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_documentation_caps(&self) -> Option<Caps> {
         unsafe {
             from_glib_full(gst_sys::gst_pad_template_get_documentation_caps(
@@ -93,6 +95,7 @@ impl PadTemplate {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_documentation_caps(&self, caps: &Caps) {
         unsafe {
             gst_sys::gst_pad_template_set_documentation_caps(
@@ -118,6 +121,7 @@ impl PadTemplate {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn get_property_gtype(&self) -> glib::types::Type {
         unsafe {
             let mut value = Value::from_type(<glib::types::Type as StaticType>::static_type());

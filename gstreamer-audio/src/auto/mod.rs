@@ -29,8 +29,10 @@ pub use self::stream_volume::StreamVolumeExt;
 pub use self::stream_volume::{StreamVolume, NONE_STREAM_VOLUME};
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_stream_align;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::audio_stream_align::AudioStreamAlign;
 
 mod enums;

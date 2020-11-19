@@ -71,6 +71,7 @@ impl TestClock {
     //}
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //pub fn process_id(&self, pending_id: /*Ignored*/gst::ClockID) -> bool {
     //    unsafe { TODO: call gst_check_sys:gst_test_clock_process_id() }
     //}
@@ -90,6 +91,7 @@ impl TestClock {
     }
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //pub fn timed_wait_for_multiple_pending_ids(&self, count: u32, timeout_ms: u32, pending_list: /*Unimplemented*/Vec<gst::ClockID>) -> bool {
     //    unsafe { TODO: call gst_check_sys:gst_test_clock_timed_wait_for_multiple_pending_ids() }
     //}

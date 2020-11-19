@@ -32,9 +32,11 @@ pub const NONE_GL_BASE_FILTER: Option<&GLBaseFilter> = None;
 
 pub trait GLBaseFilterExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_gl_context(&self) -> Option<GLContext>;
 
     fn get_property_context(&self) -> Option<GLContext>;
@@ -47,6 +49,7 @@ pub trait GLBaseFilterExt: 'static {
 
 impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool {
         unsafe {
             from_glib(gst_gl_sys::gst_gl_base_filter_find_gl_context(
@@ -56,6 +59,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_gl_context(&self) -> Option<GLContext> {
         unsafe {
             from_glib_full(gst_gl_sys::gst_gl_base_filter_get_gl_context(

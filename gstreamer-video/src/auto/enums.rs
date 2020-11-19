@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_video_sys;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum VideoAFDSpec {
@@ -24,6 +25,7 @@ pub enum VideoAFDSpec {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl ToGlib for VideoAFDSpec {
     type GlibType = gst_video_sys::GstVideoAFDSpec;
@@ -39,6 +41,7 @@ impl ToGlib for VideoAFDSpec {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<gst_video_sys::GstVideoAFDSpec> for VideoAFDSpec {
     fn from_glib(value: gst_video_sys::GstVideoAFDSpec) -> Self {
@@ -53,6 +56,7 @@ impl FromGlib<gst_video_sys::GstVideoAFDSpec> for VideoAFDSpec {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDSpec {
     fn static_type() -> Type {
         unsafe { from_glib(gst_video_sys::gst_video_afd_spec_get_type()) }
@@ -60,6 +64,7 @@ impl StaticType for VideoAFDSpec {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValueOptional<'a> for VideoAFDSpec {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -67,6 +72,7 @@ impl<'a> FromValueOptional<'a> for VideoAFDSpec {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for VideoAFDSpec {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
@@ -74,6 +80,7 @@ impl<'a> FromValue<'a> for VideoAFDSpec {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl SetValue for VideoAFDSpec {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -81,6 +88,7 @@ impl SetValue for VideoAFDSpec {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum VideoAFDValue {
@@ -100,6 +108,7 @@ pub enum VideoAFDValue {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl ToGlib for VideoAFDValue {
     type GlibType = gst_video_sys::GstVideoAFDValue;
@@ -129,6 +138,7 @@ impl ToGlib for VideoAFDValue {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<gst_video_sys::GstVideoAFDValue> for VideoAFDValue {
     fn from_glib(value: gst_video_sys::GstVideoAFDValue) -> Self {
@@ -151,6 +161,7 @@ impl FromGlib<gst_video_sys::GstVideoAFDValue> for VideoAFDValue {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDValue {
     fn static_type() -> Type {
         unsafe { from_glib(gst_video_sys::gst_video_afd_value_get_type()) }
@@ -158,6 +169,7 @@ impl StaticType for VideoAFDValue {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValueOptional<'a> for VideoAFDValue {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -165,6 +177,7 @@ impl<'a> FromValueOptional<'a> for VideoAFDValue {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for VideoAFDValue {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
@@ -172,6 +185,7 @@ impl<'a> FromValue<'a> for VideoAFDValue {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl SetValue for VideoAFDValue {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -240,6 +254,7 @@ impl SetValue for VideoAlphaMode {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum VideoCaptionType {
@@ -253,6 +268,7 @@ pub enum VideoCaptionType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for VideoCaptionType {
     type GlibType = gst_video_sys::GstVideoCaptionType;
@@ -270,6 +286,7 @@ impl ToGlib for VideoCaptionType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<gst_video_sys::GstVideoCaptionType> for VideoCaptionType {
     fn from_glib(value: gst_video_sys::GstVideoCaptionType) -> Self {
@@ -286,6 +303,7 @@ impl FromGlib<gst_video_sys::GstVideoCaptionType> for VideoCaptionType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoCaptionType {
     fn static_type() -> Type {
         unsafe { from_glib(gst_video_sys::gst_video_caption_type_get_type()) }
@@ -293,6 +311,7 @@ impl StaticType for VideoCaptionType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for VideoCaptionType {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -300,6 +319,7 @@ impl<'a> FromValueOptional<'a> for VideoCaptionType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for VideoCaptionType {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
@@ -307,6 +327,7 @@ impl<'a> FromValue<'a> for VideoCaptionType {
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for VideoCaptionType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -463,12 +484,16 @@ pub enum VideoColorPrimaries {
     Bt2020,
     Adobergb,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Smptest428,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Smpterp431,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Smpteeg432,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Ebu3213,
     #[doc(hidden)]
     __Unknown(i32),
@@ -621,6 +646,7 @@ impl SetValue for VideoDitherMethod {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum VideoFieldOrder {
@@ -632,6 +658,7 @@ pub enum VideoFieldOrder {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl ToGlib for VideoFieldOrder {
     type GlibType = gst_video_sys::GstVideoFieldOrder;
@@ -649,6 +676,7 @@ impl ToGlib for VideoFieldOrder {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl FromGlib<gst_video_sys::GstVideoFieldOrder> for VideoFieldOrder {
     fn from_glib(value: gst_video_sys::GstVideoFieldOrder) -> Self {
@@ -663,6 +691,7 @@ impl FromGlib<gst_video_sys::GstVideoFieldOrder> for VideoFieldOrder {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl StaticType for VideoFieldOrder {
     fn static_type() -> Type {
         unsafe { from_glib(gst_video_sys::gst_video_field_order_get_type()) }
@@ -670,6 +699,7 @@ impl StaticType for VideoFieldOrder {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl<'a> FromValueOptional<'a> for VideoFieldOrder {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -677,6 +707,7 @@ impl<'a> FromValueOptional<'a> for VideoFieldOrder {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl<'a> FromValue<'a> for VideoFieldOrder {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
@@ -684,6 +715,7 @@ impl<'a> FromValue<'a> for VideoFieldOrder {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl SetValue for VideoFieldOrder {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -755,80 +787,118 @@ pub enum VideoFormat {
     A44410le,
     Nv61,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     P01010be,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     P01010le,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     Iyu2,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Vyuy,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Gbra,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Gbra10be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Gbra10le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Gbr12be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Gbr12le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Gbra12be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Gbra12le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     I42012be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     I42012le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     I42212be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     I42212le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Y44412be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Y44412le,
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     Gray10Le32,
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     Nv1210le32,
     #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     Nv1610le32,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Nv1210le40,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Y210,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Y410,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Vuya,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Bgr10a2Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Rgb10a2Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Y44416be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Y44416le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     P016Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     P016Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     P012Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     P012Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Y212Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Y212Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Y412Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Y412Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Nv124l4,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Nv1232l32,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1219,6 +1289,7 @@ pub enum VideoInterlaceMode {
     Mixed,
     Fields,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     Alternate,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1684,6 +1755,7 @@ pub enum VideoTileMode {
     Unknown,
     Zflipz2x2,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Linear,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1759,12 +1831,16 @@ pub enum VideoTransferFunction {
     Bt202012,
     Adobergb,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Bt202010,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Smpte2084,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     AribStdB67,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Bt601,
     #[doc(hidden)]
     __Unknown(i32),

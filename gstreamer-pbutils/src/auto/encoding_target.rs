@@ -61,6 +61,7 @@ impl EncodingTarget {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_path(&self) -> Option<GString> {
         unsafe {
             from_glib_none(gst_pbutils_sys::gst_encoding_target_get_path(

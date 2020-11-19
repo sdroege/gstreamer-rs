@@ -52,6 +52,7 @@ pub const NONE_ENCODING_PROFILE: Option<&EncodingProfile> = None;
 
 pub trait EncodingProfileExt: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn copy(&self) -> EncodingProfile;
 
     fn get_allow_dynamic_output(&self) -> bool;
@@ -73,6 +74,7 @@ pub trait EncodingProfileExt: 'static {
     fn get_preset_name(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_single_segment(&self) -> bool;
 
     fn get_type_nick(&self) -> Option<GString>;
@@ -84,6 +86,7 @@ pub trait EncodingProfileExt: 'static {
 
 impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn copy(&self) -> EncodingProfile {
         unsafe {
             from_glib_full(gst_pbutils_sys::gst_encoding_profile_copy(
@@ -165,6 +168,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_single_segment(&self) -> bool {
         unsafe {
             from_glib(gst_pbutils_sys::gst_encoding_profile_get_single_segment(

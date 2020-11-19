@@ -45,6 +45,7 @@ pub trait ProjectExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn add_formatter(&self, formatter: /*Ignored*/&Formatter);
 
     fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool;
@@ -84,6 +85,7 @@ pub trait ProjectExt: 'static {
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
         &self,
         f: F,
@@ -97,6 +99,7 @@ pub trait ProjectExt: 'static {
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_missing_uri<F: Fn(&Self, &glib::Error, &Asset) -> Option<GString> + 'static>(
@@ -131,6 +134,7 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn add_formatter(&self, formatter: /*Ignored*/&Formatter) {
     //    unsafe { TODO: call ges_sys:ges_project_add_formatter() }
     //}
@@ -340,6 +344,7 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_error_loading<F: Fn(&Self, &Timeline, &glib::Error) + 'static>(
         &self,
         f: F,
@@ -442,6 +447,7 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_loading<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn loading_trampoline<P, F: Fn(&P, &Timeline) + 'static>(
             this: *mut ges_sys::GESProject,

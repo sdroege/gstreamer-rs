@@ -36,6 +36,7 @@ impl AppSrc {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe { from_glib(gst_app_sys::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
@@ -75,6 +76,7 @@ impl AppSrc {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_duration(&self, duration: gst::ClockTime) {
         unsafe {
             gst_app_sys::gst_app_src_set_duration(self.to_glib_none().0, duration.to_glib());
@@ -156,6 +158,7 @@ impl AppSrc {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_property_handle_segment_change(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -172,6 +175,7 @@ impl AppSrc {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_property_handle_segment_change(&self, handle_segment_change: bool) {
         unsafe {
             gobject_sys::g_object_set_property(
@@ -436,6 +440,7 @@ impl AppSrc {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn connect_property_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -514,6 +519,7 @@ impl AppSrc {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn connect_property_handle_segment_change_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,

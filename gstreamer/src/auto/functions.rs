@@ -16,11 +16,14 @@ use DebugGraphDetails;
 use DebugLevel;
 use Element;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use PluginAPIFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use StackTraceFlags;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
     skip_assert_initialized!();
     unsafe {
@@ -74,6 +77,7 @@ pub fn debug_get_default_threshold() -> DebugLevel {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<GString, glib::BoolError> {
     skip_assert_initialized!();
     unsafe {
@@ -100,6 +104,7 @@ pub fn debug_print_stack_trace() {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub fn debug_remove_ring_buffer_logger() {
     skip_assert_initialized!();
     unsafe {
@@ -108,6 +113,7 @@ pub fn debug_remove_ring_buffer_logger() {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub fn debug_ring_buffer_logger_get_logs() -> Vec<GString> {
     skip_assert_initialized!();
     unsafe {
@@ -158,6 +164,7 @@ pub fn debug_unset_threshold_for_name(name: &str) {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub fn get_main_executable_path() -> Result<GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
@@ -213,6 +220,7 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 }
 
 //#[cfg(any(feature = "v1_18", feature = "dox"))]
+//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 //pub fn tracing_get_active_tracers() -> /*Ignored*/Vec<Tracer> {
 //    unsafe { TODO: call gst_sys:gst_tracing_get_active_tracers() }
 //}
@@ -222,6 +230,7 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 //}
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) {
     assert_initialized_main_thread!();
     unsafe {

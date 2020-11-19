@@ -44,6 +44,7 @@ pub trait TrackElementExt: 'static {
     );
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn clamp_control_source(&self, property_name: &str);
 
     #[cfg_attr(feature = "v1_18", deprecated)]
@@ -58,6 +59,7 @@ pub trait TrackElementExt: 'static {
     //fn get_all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 };
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_auto_clamp_control_sources(&self) -> bool;
 
     //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding>;
@@ -73,11 +75,13 @@ pub trait TrackElementExt: 'static {
     fn get_track_type(&self) -> TrackType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn has_internal_source(&self) -> bool;
 
     fn is_active(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn is_core(&self) -> bool;
 
     //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<gst::Element>;
@@ -87,11 +91,13 @@ pub trait TrackElementExt: 'static {
     fn set_active(&self, active: bool) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool);
 
     //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_has_internal_source(&self, has_internal_source: bool) -> bool;
 
     fn set_track_type(&self, type_: TrackType);
@@ -99,6 +105,7 @@ pub trait TrackElementExt: 'static {
     fn get_property_active(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_property_has_internal_source(&self) -> bool;
 
     //fn connect_control_binding_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
@@ -108,12 +115,14 @@ pub trait TrackElementExt: 'static {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_has_internal_source_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -144,6 +153,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn clamp_control_source(&self, property_name: &str) {
         unsafe {
             ges_sys::ges_track_element_clamp_control_source(
@@ -179,6 +189,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_auto_clamp_control_sources(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_track_element_get_auto_clamp_control_sources(
@@ -232,6 +243,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn has_internal_source(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_track_element_has_internal_source(
@@ -249,6 +261,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn is_core(&self) -> bool {
         unsafe {
             from_glib(ges_sys::ges_track_element_is_core(
@@ -283,6 +296,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool) {
         unsafe {
             ges_sys::ges_track_element_set_auto_clamp_control_sources(
@@ -297,6 +311,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_has_internal_source(&self, has_internal_source: bool) -> bool {
         unsafe {
             from_glib(ges_sys::ges_track_element_set_has_internal_source(
@@ -331,6 +346,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_property_has_internal_source(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -379,6 +395,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_auto_clamp_control_sources_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -407,6 +424,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_has_internal_source_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,

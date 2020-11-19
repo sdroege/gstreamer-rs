@@ -73,6 +73,7 @@ bitflags! {
         const VIV_FB = 64;
         const GBM = 128;
         #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         const EGL_DEVICE = 256;
     }
 }

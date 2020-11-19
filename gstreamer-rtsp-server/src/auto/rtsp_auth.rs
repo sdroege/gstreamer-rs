@@ -13,9 +13,11 @@ use glib::translate::*;
 use glib::GString;
 use glib_sys;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use gst_rtsp;
 use gst_rtsp_server_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
@@ -71,14 +73,17 @@ pub trait RTSPAuthExt: 'static {
     fn add_basic(&self, basic: &str, token: &RTSPToken);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken);
 
     fn get_default_token(&self) -> Option<RTSPToken>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_realm(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn get_supported_methods(&self) -> gst_rtsp::RTSPAuthMethod;
 
     fn get_tls_authentication_mode(&self) -> gio::TlsAuthenticationMode;
@@ -88,17 +93,21 @@ pub trait RTSPAuthExt: 'static {
     fn get_tls_database(&self) -> Option<gio::TlsDatabase>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn parse_htdigest<P: AsRef<std::path::Path>>(&self, path: P, token: &RTSPToken) -> bool;
 
     fn remove_basic(&self, basic: &str);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn remove_digest(&self, user: &str);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_realm(&self, realm: &str);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod);
 
     fn set_tls_authentication_mode(&self, mode: gio::TlsAuthenticationMode);
@@ -130,6 +139,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_auth_add_digest(
@@ -150,6 +160,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_realm(&self) -> Option<GString> {
         unsafe {
             from_glib_full(gst_rtsp_server_sys::gst_rtsp_auth_get_realm(
@@ -159,6 +170,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn get_supported_methods(&self) -> gst_rtsp::RTSPAuthMethod {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_auth_get_supported_methods(
@@ -194,6 +206,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn parse_htdigest<P: AsRef<std::path::Path>>(&self, path: P, token: &RTSPToken) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_auth_parse_htdigest(
@@ -214,6 +227,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn remove_digest(&self, user: &str) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_auth_remove_digest(
@@ -224,6 +238,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_realm(&self, realm: &str) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_auth_set_realm(
@@ -234,6 +249,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_auth_set_supported_methods(

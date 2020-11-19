@@ -49,11 +49,13 @@ impl Adapter {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn distance_from_discont(&self) -> u64 {
         unsafe { gst_base_sys::gst_adapter_distance_from_discont(self.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn dts_at_discont(&self) -> gst::ClockTime {
         unsafe {
             from_glib(gst_base_sys::gst_adapter_dts_at_discont(
@@ -142,6 +144,7 @@ impl Adapter {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn offset_at_discont(&self) -> u64 {
         unsafe { gst_base_sys::gst_adapter_offset_at_discont(self.to_glib_none().0) }
     }
@@ -172,6 +175,7 @@ impl Adapter {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn prev_offset(&self) -> (u64, u64) {
         unsafe {
             let mut distance = mem::MaybeUninit::uninit();
@@ -208,6 +212,7 @@ impl Adapter {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn pts_at_discont(&self) -> gst::ClockTime {
         unsafe {
             from_glib(gst_base_sys::gst_adapter_pts_at_discont(

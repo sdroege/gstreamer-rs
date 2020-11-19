@@ -13,6 +13,7 @@ use gobject_sys;
 use gst_base_sys;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum AggregatorStartTimeSelection {
@@ -24,6 +25,7 @@ pub enum AggregatorStartTimeSelection {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl ToGlib for AggregatorStartTimeSelection {
     type GlibType = gst_base_sys::GstAggregatorStartTimeSelection;
@@ -45,6 +47,7 @@ impl ToGlib for AggregatorStartTimeSelection {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<gst_base_sys::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelection {
     fn from_glib(value: gst_base_sys::GstAggregatorStartTimeSelection) -> Self {
@@ -59,6 +62,7 @@ impl FromGlib<gst_base_sys::GstAggregatorStartTimeSelection> for AggregatorStart
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for AggregatorStartTimeSelection {
     fn static_type() -> Type {
         unsafe { from_glib(gst_base_sys::gst_aggregator_start_time_selection_get_type()) }
@@ -66,6 +70,7 @@ impl StaticType for AggregatorStartTimeSelection {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValueOptional<'a> for AggregatorStartTimeSelection {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
@@ -73,6 +78,7 @@ impl<'a> FromValueOptional<'a> for AggregatorStartTimeSelection {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
@@ -80,6 +86,7 @@ impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
 }
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl SetValue for AggregatorStartTimeSelection {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())

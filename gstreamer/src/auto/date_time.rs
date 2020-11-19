@@ -63,6 +63,7 @@ impl DateTime {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> DateTime {
         assert_initialized_main_thread!();
         unsafe {
@@ -78,6 +79,7 @@ impl DateTime {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn from_unix_epoch_utc_usecs(usecs: i64) -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(gst_sys::gst_date_time_new_from_unix_epoch_utc_usecs(usecs)) }

@@ -4,23 +4,29 @@
 
 use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::signal::connect_raw;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib_sys;
 use gobject_sys;
 use gst_web_rtc_sys;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem::transmute;
 use WebRTCRTPReceiver;
 use WebRTCRTPSender;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use WebRTCRTPTransceiverDirection;
 
 glib_wrapper! {
@@ -33,6 +39,7 @@ glib_wrapper! {
 
 impl WebRTCRTPTransceiver {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_property_direction(&self) -> WebRTCRTPTransceiverDirection {
         unsafe {
             let mut value =
@@ -50,6 +57,7 @@ impl WebRTCRTPTransceiver {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_property_direction(&self, direction: WebRTCRTPTransceiverDirection) {
         unsafe {
             gobject_sys::g_object_set_property(
@@ -104,6 +112,7 @@ impl WebRTCRTPTransceiver {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn connect_property_direction_notify<
         F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static,
     >(

@@ -30,6 +30,7 @@ glib_wrapper! {
 
 impl WebRTCDataChannel {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn close(&self) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_close(self.to_glib_none().0);
@@ -37,6 +38,7 @@ impl WebRTCDataChannel {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_buffered_amount_low(&self) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_on_buffered_amount_low(self.to_glib_none().0);
@@ -44,6 +46,7 @@ impl WebRTCDataChannel {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_close(&self) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_on_close(self.to_glib_none().0);
@@ -51,6 +54,7 @@ impl WebRTCDataChannel {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_message_data(&self, data: Option<&glib::Bytes>) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_on_message_data(
@@ -61,6 +65,7 @@ impl WebRTCDataChannel {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_message_string(&self, str: Option<&str>) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_on_message_string(
@@ -71,6 +76,7 @@ impl WebRTCDataChannel {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_open(&self) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_on_open(self.to_glib_none().0);
@@ -78,6 +84,7 @@ impl WebRTCDataChannel {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn send_data(&self, data: Option<&glib::Bytes>) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_send_data(
@@ -88,6 +95,7 @@ impl WebRTCDataChannel {
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn send_string(&self, str: Option<&str>) {
         unsafe {
             gst_web_rtc_sys::gst_webrtc_data_channel_send_string(
