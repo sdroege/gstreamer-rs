@@ -1,4 +1,4 @@
 variables:
-  GST_RS_IMG_TAG: '2020-11-01.1'
-  GST_RS_STABLE: '1.46.0'
-  GST_RS_MSRV: '1.41.0'
+  GST_RS_IMG_TAG: '2020-11-19.0'
+  GST_RS_STABLE: '1.48.0'
+  GST_RS_MSRV: '1.48.0'
