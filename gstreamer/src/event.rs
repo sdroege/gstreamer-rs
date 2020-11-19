@@ -169,6 +169,14 @@ impl EventRef {
         }
     }
 
+    pub fn structure_mut(&mut self) -> &mut StructureRef {
+        unsafe {
+            StructureRef::from_glib_borrow_mut(gst_sys::gst_event_writable_structure(
+                self.as_mut_ptr(),
+            ))
+        }
+    }
+
     pub fn is_upstream(&self) -> bool {
         self.get_type().is_upstream()
     }
@@ -1975,5 +1983,21 @@ mod tests {
             }
             _ => panic!("flush_stop_evt.view() is not an EventView::FlushStop(_)"),
         }
+    }
+
+    #[test]
+    fn test_get_structure_mut() {
+        ::init().unwrap();
+
+        let mut flush_start_evt = FlushStart::new();
+
+        {
+            let flush_start_evt = flush_start_evt.get_mut().unwrap();
+            let structure = flush_start_evt.structure_mut();
+            structure.set("test", &42u32);
+        }
+
+        let structure = flush_start_evt.get_structure().unwrap();
+        assert_eq!(structure.get_some("test"), Ok(42u32));
     }
 }
