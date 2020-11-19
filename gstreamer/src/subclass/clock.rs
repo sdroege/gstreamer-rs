@@ -211,15 +211,14 @@ impl<T: ClockImpl> ClockImplExt for T {
     {
         let clock = self.get_instance();
 
-        #[cfg(feature = "v1_16")]
-        {
-            assert!(id.uses_clock(&clock));
-        }
-        #[cfg(not(feature = "v1_16"))]
-        {
-            unsafe {
-                let ptr: *mut gst_sys::GstClockEntry = id.to_glib_none().0 as *mut _;
-                assert_eq!((*ptr).clock, clock.as_ref().to_glib_none().0);
+        cfg_if! {
+            if #[cfg(feature = "v1_16")] {
+                assert!(id.uses_clock(&clock));
+            } else {
+                unsafe {
+                    let ptr: *mut gst_sys::GstClockEntry = id.to_glib_none().0 as *mut _;
+                    assert_eq!((*ptr).clock, clock.as_ref().to_glib_none().0);
+                }
             }
         }
 

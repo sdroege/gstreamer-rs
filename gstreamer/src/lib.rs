@@ -10,8 +10,6 @@
 #![recursion_limit = "256"]
 #[macro_use]
 extern crate bitflags;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[macro_use]
 extern crate cfg_if;
 extern crate libc;

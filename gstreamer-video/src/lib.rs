@@ -14,6 +14,9 @@ extern crate libc;
 extern crate once_cell;
 
 #[macro_use]
+extern crate cfg_if;
+
+#[macro_use]
 extern crate glib;
 extern crate glib_sys;
 extern crate gobject_sys;

@@ -1704,31 +1704,30 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        #[cfg(any(feature = "v1_10", feature = "dox"))]
-        {
-            let details = match s.details.take() {
-                None => ptr::null_mut(),
-                Some(details) => details.into_ptr(),
-            };
+        cfg_if! {
+            if #[cfg(any(feature = "v1_10", feature = "dox"))] {
+                let details = match s.details.take() {
+                    None => ptr::null_mut(),
+                    Some(details) => details.into_ptr(),
+                };
 
-            let error = glib::Error::new(s.error, s.message);
+                let error = glib::Error::new(s.error, s.message);
 
-            gst_sys::gst_message_new_error_with_details(
-                src,
-                mut_override(error.to_glib_none().0),
-                s.debug.to_glib_none().0,
-                details,
-            )
-        }
-        #[cfg(not(any(feature = "v1_10", feature = "dox")))]
-        {
-            let error = glib::Error::new(s.error, s.message);
+                gst_sys::gst_message_new_error_with_details(
+                    src,
+                    mut_override(error.to_glib_none().0),
+                    s.debug.to_glib_none().0,
+                    details,
+                )
+            } else {
+                let error = glib::Error::new(s.error, s.message);
 
-            gst_sys::gst_message_new_error(
-                src,
-                mut_override(error.to_glib_none().0),
-                s.debug.to_glib_none().0,
-            )
+                gst_sys::gst_message_new_error(
+                    src,
+                    mut_override(error.to_glib_none().0),
+                    s.debug.to_glib_none().0,
+                )
+            }
         }
     });
 }
@@ -1771,31 +1770,30 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        #[cfg(any(feature = "v1_10", feature = "dox"))]
-        {
-            let details = match s.details.take() {
-                None => ptr::null_mut(),
-                Some(details) => details.into_ptr(),
-            };
+        cfg_if! {
+            if #[cfg(any(feature = "v1_10", feature = "dox"))] {
+                let details = match s.details.take() {
+                    None => ptr::null_mut(),
+                    Some(details) => details.into_ptr(),
+                };
 
-            let error = glib::Error::new(s.error, s.message);
+                let error = glib::Error::new(s.error, s.message);
 
-            gst_sys::gst_message_new_warning_with_details(
-                src,
-                mut_override(error.to_glib_none().0),
-                s.debug.to_glib_none().0,
-                details,
-            )
-        }
-        #[cfg(not(any(feature = "v1_10", feature = "dox")))]
-        {
-            let error = glib::Error::new(s.error, s.message);
+                gst_sys::gst_message_new_warning_with_details(
+                    src,
+                    mut_override(error.to_glib_none().0),
+                    s.debug.to_glib_none().0,
+                    details,
+                )
+            } else {
+                let error = glib::Error::new(s.error, s.message);
 
-            gst_sys::gst_message_new_warning(
-                src,
-                mut_override(error.to_glib_none().0),
-                s.debug.to_glib_none().0,
-            )
+                gst_sys::gst_message_new_warning(
+                    src,
+                    mut_override(error.to_glib_none().0),
+                    s.debug.to_glib_none().0,
+                )
+            }
         }
     });
 }
@@ -1838,31 +1836,30 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        #[cfg(any(feature = "v1_10", feature = "dox"))]
-        {
-            let details = match s.details.take() {
-                None => ptr::null_mut(),
-                Some(details) => details.into_ptr(),
-            };
+        cfg_if! {
+            if #[cfg(any(feature = "v1_10", feature = "dox"))] {
+                let details = match s.details.take() {
+                    None => ptr::null_mut(),
+                    Some(details) => details.into_ptr(),
+                };
 
-            let error = glib::Error::new(s.error, s.message);
+                let error = glib::Error::new(s.error, s.message);
 
-            gst_sys::gst_message_new_info_with_details(
-                src,
-                mut_override(error.to_glib_none().0),
-                s.debug.to_glib_none().0,
-                details,
-            )
-        }
-        #[cfg(not(any(feature = "v1_10", feature = "dox")))]
-        {
-            let error = glib::Error::new(s.error, s.message);
+                gst_sys::gst_message_new_info_with_details(
+                    src,
+                    mut_override(error.to_glib_none().0),
+                    s.debug.to_glib_none().0,
+                    details,
+                )
+            } else {
+                let error = glib::Error::new(s.error, s.message);
 
-            gst_sys::gst_message_new_info(
-                src,
-                mut_override(error.to_glib_none().0),
-                s.debug.to_glib_none().0,
-            )
+                gst_sys::gst_message_new_info(
+                    src,
+                    mut_override(error.to_glib_none().0),
+                    s.debug.to_glib_none().0,
+                )
+            }
         }
     });
 }

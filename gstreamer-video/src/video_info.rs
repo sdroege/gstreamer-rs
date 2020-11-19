@@ -379,74 +379,77 @@ impl<'a> VideoInfoBuilder<'a> {
         unsafe {
             let mut info = mem::MaybeUninit::uninit();
 
-            #[cfg(not(feature = "v1_12"))]
-            let res: bool = {
-                // The bool return value is new with 1.11.1, see
-                // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
-                let res = if gst::version() < (1, 11, 1, 0) {
-                    gst_video_sys::gst_video_info_set_format(
-                        info.as_mut_ptr(),
-                        self.format.to_glib(),
-                        self.width,
-                        self.height,
-                    );
+            cfg_if! {
+                if #[cfg(feature = "v1_16")] {
+                    let res: bool = {
+                        from_glib(if let Some(interlace_mode) = self.interlace_mode {
+                            gst_video_sys::gst_video_info_set_interlaced_format(
+                                info.as_mut_ptr(),
+                                self.format.to_glib(),
+                                interlace_mode.to_glib(),
+                                self.width,
+                                self.height,
+                            )
+                        } else {
+                            gst_video_sys::gst_video_info_set_format(
+                                info.as_mut_ptr(),
+                                self.format.to_glib(),
+                                self.width,
+                                self.height,
+                            )
+                        })
+                    };
+                } else if #[cfg(feature = "v1_12")] {
+                    let res: bool = {
+                        let res = from_glib(gst_video_sys::gst_video_info_set_format(
+                            info.as_mut_ptr(),
+                            self.format.to_glib(),
+                            self.width,
+                            self.height,
+                        ));
 
-                    true
+                        if res {
+                            if let Some(interlace_mode) = self.interlace_mode {
+                                let info = info.as_mut_ptr();
+                                (*info).interlace_mode = interlace_mode.to_glib();
+                            }
+                        }
+
+                        res
+                    };
                 } else {
-                    from_glib(gst_video_sys::gst_video_info_set_format(
-                        info.as_mut_ptr(),
-                        self.format.to_glib(),
-                        self.width,
-                        self.height,
-                    ))
-                };
+                    let res: bool = {
+                        // The bool return value is new with 1.11.1, see
+                        // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
+                        let res = if gst::version() < (1, 11, 1, 0) {
+                            gst_video_sys::gst_video_info_set_format(
+                                info.as_mut_ptr(),
+                                self.format.to_glib(),
+                                self.width,
+                                self.height,
+                            );
 
-                if res {
-                    if let Some(interlace_mode) = self.interlace_mode {
-                        let info = info.as_mut_ptr();
-                        (*info).interlace_mode = interlace_mode.to_glib();
-                    }
+                            true
+                        } else {
+                            from_glib(gst_video_sys::gst_video_info_set_format(
+                                info.as_mut_ptr(),
+                                self.format.to_glib(),
+                                self.width,
+                                self.height,
+                            ))
+                        };
+
+                        if res {
+                            if let Some(interlace_mode) = self.interlace_mode {
+                                let info = info.as_mut_ptr();
+                                (*info).interlace_mode = interlace_mode.to_glib();
+                            }
+                        }
+
+                        res
+                    };
                 }
-
-                res
-            };
-            #[cfg(all(feature = "v1_12", not(feature = "v1_16")))]
-            let res: bool = {
-                let res = from_glib(gst_video_sys::gst_video_info_set_format(
-                    info.as_mut_ptr(),
-                    self.format.to_glib(),
-                    self.width,
-                    self.height,
-                ));
-
-                if res {
-                    if let Some(interlace_mode) = self.interlace_mode {
-                        let info = info.as_mut_ptr();
-                        (*info).interlace_mode = interlace_mode.to_glib();
-                    }
-                }
-
-                res
-            };
-            #[cfg(feature = "v1_16")]
-            let res: bool = {
-                from_glib(if let Some(interlace_mode) = self.interlace_mode {
-                    gst_video_sys::gst_video_info_set_interlaced_format(
-                        info.as_mut_ptr(),
-                        self.format.to_glib(),
-                        interlace_mode.to_glib(),
-                        self.width,
-                        self.height,
-                    )
-                } else {
-                    gst_video_sys::gst_video_info_set_format(
-                        info.as_mut_ptr(),
-                        self.format.to_glib(),
-                        self.width,
-                        self.height,
-                    )
-                })
-            };
+            }
 
             if !res {
                 return Err(glib_bool_error!("Failed to build VideoInfo"));
@@ -624,45 +627,44 @@ impl VideoInfo {
     pub fn builder<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
         assert_initialized_main_thread!();
 
-        #[cfg(not(any(feature = "v1_12", feature = "dox")))]
-        {
-            VideoInfoBuilder {
-                format,
-                width,
-                height,
-                interlace_mode: None,
-                flags: None,
-                size: None,
-                views: None,
-                chroma_site: None,
-                colorimetry: None,
-                par: None,
-                fps: None,
-                offset: None,
-                stride: None,
-                multiview_mode: None,
-                multiview_flags: None,
-            }
-        }
-        #[cfg(any(feature = "v1_12", feature = "dox"))]
-        {
-            VideoInfoBuilder {
-                format,
-                width,
-                height,
-                interlace_mode: None,
-                flags: None,
-                size: None,
-                views: None,
-                chroma_site: None,
-                colorimetry: None,
-                par: None,
-                fps: None,
-                offset: None,
-                stride: None,
-                multiview_mode: None,
-                multiview_flags: None,
-                field_order: None,
+        cfg_if! {
+            if #[cfg(any(feature = "v1_12", feature = "dox"))] {
+                VideoInfoBuilder {
+                    format,
+                    width,
+                    height,
+                    interlace_mode: None,
+                    flags: None,
+                    size: None,
+                    views: None,
+                    chroma_site: None,
+                    colorimetry: None,
+                    par: None,
+                    fps: None,
+                    offset: None,
+                    stride: None,
+                    multiview_mode: None,
+                    multiview_flags: None,
+                    field_order: None,
+                }
+            } else {
+                VideoInfoBuilder {
+                    format,
+                    width,
+                    height,
+                    interlace_mode: None,
+                    flags: None,
+                    size: None,
+                    views: None,
+                    chroma_site: None,
+                    colorimetry: None,
+                    par: None,
+                    fps: None,
+                    offset: None,
+                    stride: None,
+                    multiview_mode: None,
+                    multiview_flags: None,
+                }
             }
         }
     }
@@ -871,27 +873,30 @@ impl VideoInfo {
     }
 
     pub fn align(&mut self, align: &mut ::VideoAlignment) -> bool {
-        #[cfg(not(feature = "v1_12"))]
-        unsafe {
-            // The bool return value is new with 1.11.1, see
-            // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
-            if gst::version() < (1, 11, 1, 0) {
-                gst_video_sys::gst_video_info_align(&mut self.0, &mut align.0);
-
-                true
+        cfg_if! {
+            if #[cfg(feature = "v1_12")] {
+                unsafe {
+                    from_glib(gst_video_sys::gst_video_info_align(
+                        &mut self.0,
+                        &mut align.0,
+                    ))
+                }
             } else {
-                from_glib(gst_video_sys::gst_video_info_align(
-                    &mut self.0,
-                    &mut align.0,
-                ))
+                unsafe {
+                    // The bool return value is new with 1.11.1, see
+                    // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
+                    if gst::version() < (1, 11, 1, 0) {
+                        gst_video_sys::gst_video_info_align(&mut self.0, &mut align.0);
+
+                        true
+                    } else {
+                        from_glib(gst_video_sys::gst_video_info_align(
+                            &mut self.0,
+                            &mut align.0,
+                        ))
+                    }
+                }
             }
-        }
-        #[cfg(feature = "v1_12")]
-        unsafe {
-            from_glib(gst_video_sys::gst_video_info_align(
-                &mut self.0,
-                &mut align.0,
-            ))
         }
     }
 }
