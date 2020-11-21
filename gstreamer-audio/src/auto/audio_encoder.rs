@@ -2,24 +2,20 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::AudioInfo;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
-use gst;
-use gst_audio_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use AudioInfo;
 
-glib_wrapper! {
-    pub struct AudioEncoder(Object<gst_audio_sys::GstAudioEncoder, gst_audio_sys::GstAudioEncoderClass>) @extends gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct AudioEncoder(Object<ffi::GstAudioEncoder, ffi::GstAudioEncoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_audio_sys::gst_audio_encoder_get_type(),
+        get_type => || ffi::gst_audio_encoder_get_type(),
     }
 }
 
@@ -109,17 +105,17 @@ pub trait AudioEncoderExt: 'static {
 impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_full(gst_audio_sys::gst_audio_encoder_allocate_output_buffer(
+            Option::<_>::from_glib_full(ffi::gst_audio_encoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to allocate output buffer"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate output buffer"))
         }
     }
 
     fn get_audio_info(&self) -> Option<AudioInfo> {
         unsafe {
-            from_glib_full(gst_audio_sys::gst_audio_encoder_get_audio_info(
+            from_glib_full(ffi::gst_audio_encoder_get_audio_info(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -127,31 +123,27 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn get_drainable(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_encoder_get_drainable(
+            from_glib(ffi::gst_audio_encoder_get_drainable(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_frame_max(&self) -> i32 {
-        unsafe { gst_audio_sys::gst_audio_encoder_get_frame_max(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_audio_encoder_get_frame_max(self.as_ref().to_glib_none().0) }
     }
 
     fn get_frame_samples_max(&self) -> i32 {
-        unsafe {
-            gst_audio_sys::gst_audio_encoder_get_frame_samples_max(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::gst_audio_encoder_get_frame_samples_max(self.as_ref().to_glib_none().0) }
     }
 
     fn get_frame_samples_min(&self) -> i32 {
-        unsafe {
-            gst_audio_sys::gst_audio_encoder_get_frame_samples_min(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::gst_audio_encoder_get_frame_samples_min(self.as_ref().to_glib_none().0) }
     }
 
     fn get_hard_min(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_encoder_get_hard_min(
+            from_glib(ffi::gst_audio_encoder_get_hard_min(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -159,19 +151,19 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn get_hard_resync(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_encoder_get_hard_resync(
+            from_glib(ffi::gst_audio_encoder_get_hard_resync(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_lookahead(&self) -> i32 {
-        unsafe { gst_audio_sys::gst_audio_encoder_get_lookahead(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_audio_encoder_get_lookahead(self.as_ref().to_glib_none().0) }
     }
 
     fn get_mark_granule(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_encoder_get_mark_granule(
+            from_glib(ffi::gst_audio_encoder_get_mark_granule(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -179,7 +171,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn get_perfect_timestamp(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_encoder_get_perfect_timestamp(
+            from_glib(ffi::gst_audio_encoder_get_perfect_timestamp(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -187,7 +179,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn get_tolerance(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_encoder_get_tolerance(
+            from_glib(ffi::gst_audio_encoder_get_tolerance(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -195,7 +187,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_merge_tags(
+            ffi::gst_audio_encoder_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
                 mode.to_glib(),
@@ -205,7 +197,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
-            from_glib_full(gst_audio_sys::gst_audio_encoder_proxy_getcaps(
+            from_glib_full(ffi::gst_audio_encoder_proxy_getcaps(
                 self.as_ref().to_glib_none().0,
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
@@ -217,7 +209,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_allocation_caps(
+            ffi::gst_audio_encoder_set_allocation_caps(
                 self.as_ref().to_glib_none().0,
                 allocation_caps.to_glib_none().0,
             );
@@ -226,49 +218,37 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_drainable(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_drainable(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::gst_audio_encoder_set_drainable(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_frame_max(&self, num: i32) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_frame_max(self.as_ref().to_glib_none().0, num);
+            ffi::gst_audio_encoder_set_frame_max(self.as_ref().to_glib_none().0, num);
         }
     }
 
     fn set_frame_samples_max(&self, num: i32) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_frame_samples_max(
-                self.as_ref().to_glib_none().0,
-                num,
-            );
+            ffi::gst_audio_encoder_set_frame_samples_max(self.as_ref().to_glib_none().0, num);
         }
     }
 
     fn set_frame_samples_min(&self, num: i32) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_frame_samples_min(
-                self.as_ref().to_glib_none().0,
-                num,
-            );
+            ffi::gst_audio_encoder_set_frame_samples_min(self.as_ref().to_glib_none().0, num);
         }
     }
 
     fn set_hard_min(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_hard_min(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::gst_audio_encoder_set_hard_min(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_hard_resync(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_hard_resync(
+            ffi::gst_audio_encoder_set_hard_resync(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -277,7 +257,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_headers(&self, headers: &[&gst::Buffer]) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_headers(
+            ffi::gst_audio_encoder_set_headers(
                 self.as_ref().to_glib_none().0,
                 headers.to_glib_full(),
             );
@@ -286,7 +266,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_latency(
+            ffi::gst_audio_encoder_set_latency(
                 self.as_ref().to_glib_none().0,
                 min.to_glib(),
                 max.to_glib(),
@@ -296,13 +276,13 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_lookahead(&self, num: i32) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_lookahead(self.as_ref().to_glib_none().0, num);
+            ffi::gst_audio_encoder_set_lookahead(self.as_ref().to_glib_none().0, num);
         }
     }
 
     fn set_mark_granule(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_mark_granule(
+            ffi::gst_audio_encoder_set_mark_granule(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -311,7 +291,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_perfect_timestamp(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_perfect_timestamp(
+            ffi::gst_audio_encoder_set_perfect_timestamp(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -320,7 +300,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_tolerance(&self, tolerance: gst::ClockTime) {
         unsafe {
-            gst_audio_sys::gst_audio_encoder_set_tolerance(
+            ffi::gst_audio_encoder_set_tolerance(
                 self.as_ref().to_glib_none().0,
                 tolerance.to_glib(),
             );
@@ -332,9 +312,9 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_hard_resync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioEncoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioEncoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioEncoder>,
         {
@@ -359,9 +339,9 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_mark_granule_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioEncoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioEncoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioEncoder>,
         {
@@ -389,9 +369,9 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_audio_sys::GstAudioEncoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioEncoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioEncoder>,
         {
@@ -416,9 +396,9 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_tolerance_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioEncoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioEncoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioEncoder>,
         {

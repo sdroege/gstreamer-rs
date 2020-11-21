@@ -9,8 +9,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_audio_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -52,85 +50,61 @@ pub enum AudioChannelPosition {
 
 #[doc(hidden)]
 impl ToGlib for AudioChannelPosition {
-    type GlibType = gst_audio_sys::GstAudioChannelPosition;
+    type GlibType = ffi::GstAudioChannelPosition;
 
-    fn to_glib(&self) -> gst_audio_sys::GstAudioChannelPosition {
+    fn to_glib(&self) -> ffi::GstAudioChannelPosition {
         match *self {
-            AudioChannelPosition::None => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_NONE,
-            AudioChannelPosition::Mono => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_MONO,
-            AudioChannelPosition::Invalid => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID,
-            AudioChannelPosition::FrontLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-            AudioChannelPosition::FrontRight => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT
-            }
-            AudioChannelPosition::FrontCenter => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER
-            }
-            AudioChannelPosition::Lfe1 => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_LFE1,
-            AudioChannelPosition::RearLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_REAR_LEFT,
-            AudioChannelPosition::RearRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_REAR_RIGHT,
+            AudioChannelPosition::None => ffi::GST_AUDIO_CHANNEL_POSITION_NONE,
+            AudioChannelPosition::Mono => ffi::GST_AUDIO_CHANNEL_POSITION_MONO,
+            AudioChannelPosition::Invalid => ffi::GST_AUDIO_CHANNEL_POSITION_INVALID,
+            AudioChannelPosition::FrontLeft => ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
+            AudioChannelPosition::FrontRight => ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT,
+            AudioChannelPosition::FrontCenter => ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
+            AudioChannelPosition::Lfe1 => ffi::GST_AUDIO_CHANNEL_POSITION_LFE1,
+            AudioChannelPosition::RearLeft => ffi::GST_AUDIO_CHANNEL_POSITION_REAR_LEFT,
+            AudioChannelPosition::RearRight => ffi::GST_AUDIO_CHANNEL_POSITION_REAR_RIGHT,
             AudioChannelPosition::FrontLeftOfCenter => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER
+                ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER
             }
             AudioChannelPosition::FrontRightOfCenter => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER
+                ffi::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER
             }
-            AudioChannelPosition::RearCenter => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_REAR_CENTER
-            }
-            AudioChannelPosition::Lfe2 => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_LFE2,
-            AudioChannelPosition::SideLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SIDE_LEFT,
-            AudioChannelPosition::SideRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SIDE_RIGHT,
-            AudioChannelPosition::TopFrontLeft => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_LEFT
-            }
-            AudioChannelPosition::TopFrontRight => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_RIGHT
-            }
+            AudioChannelPosition::RearCenter => ffi::GST_AUDIO_CHANNEL_POSITION_REAR_CENTER,
+            AudioChannelPosition::Lfe2 => ffi::GST_AUDIO_CHANNEL_POSITION_LFE2,
+            AudioChannelPosition::SideLeft => ffi::GST_AUDIO_CHANNEL_POSITION_SIDE_LEFT,
+            AudioChannelPosition::SideRight => ffi::GST_AUDIO_CHANNEL_POSITION_SIDE_RIGHT,
+            AudioChannelPosition::TopFrontLeft => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_LEFT,
+            AudioChannelPosition::TopFrontRight => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_RIGHT,
             AudioChannelPosition::TopFrontCenter => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_CENTER
+                ffi::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_CENTER
             }
-            AudioChannelPosition::TopCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_CENTER,
-            AudioChannelPosition::TopRearLeft => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_LEFT
-            }
-            AudioChannelPosition::TopRearRight => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_RIGHT
-            }
-            AudioChannelPosition::TopSideLeft => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_LEFT
-            }
-            AudioChannelPosition::TopSideRight => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_RIGHT
-            }
-            AudioChannelPosition::TopRearCenter => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_CENTER
-            }
+            AudioChannelPosition::TopCenter => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_CENTER,
+            AudioChannelPosition::TopRearLeft => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_LEFT,
+            AudioChannelPosition::TopRearRight => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_RIGHT,
+            AudioChannelPosition::TopSideLeft => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_LEFT,
+            AudioChannelPosition::TopSideRight => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_RIGHT,
+            AudioChannelPosition::TopRearCenter => ffi::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_CENTER,
             AudioChannelPosition::BottomFrontCenter => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_CENTER
+                ffi::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_CENTER
             }
             AudioChannelPosition::BottomFrontLeft => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_LEFT
+                ffi::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_LEFT
             }
             AudioChannelPosition::BottomFrontRight => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_RIGHT
+                ffi::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_RIGHT
             }
-            AudioChannelPosition::WideLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_WIDE_LEFT,
-            AudioChannelPosition::WideRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_WIDE_RIGHT,
-            AudioChannelPosition::SurroundLeft => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SURROUND_LEFT
-            }
-            AudioChannelPosition::SurroundRight => {
-                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT
-            }
+            AudioChannelPosition::WideLeft => ffi::GST_AUDIO_CHANNEL_POSITION_WIDE_LEFT,
+            AudioChannelPosition::WideRight => ffi::GST_AUDIO_CHANNEL_POSITION_WIDE_RIGHT,
+            AudioChannelPosition::SurroundLeft => ffi::GST_AUDIO_CHANNEL_POSITION_SURROUND_LEFT,
+            AudioChannelPosition::SurroundRight => ffi::GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT,
             AudioChannelPosition::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_audio_sys::GstAudioChannelPosition> for AudioChannelPosition {
-    fn from_glib(value: gst_audio_sys::GstAudioChannelPosition) -> Self {
+impl FromGlib<ffi::GstAudioChannelPosition> for AudioChannelPosition {
+    fn from_glib(value: ffi::GstAudioChannelPosition) -> Self {
         skip_assert_initialized!();
         match value {
             -3 => AudioChannelPosition::None,
@@ -171,7 +145,7 @@ impl FromGlib<gst_audio_sys::GstAudioChannelPosition> for AudioChannelPosition {
 
 impl StaticType for AudioChannelPosition {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_audio_sys::gst_audio_channel_position_get_type()) }
+        unsafe { from_glib(ffi::gst_audio_channel_position_get_type()) }
     }
 }
 
@@ -183,13 +157,13 @@ impl<'a> FromValueOptional<'a> for AudioChannelPosition {
 
 impl<'a> FromValue<'a> for AudioChannelPosition {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioChannelPosition {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -234,50 +208,50 @@ pub enum AudioFormat {
 
 #[doc(hidden)]
 impl ToGlib for AudioFormat {
-    type GlibType = gst_audio_sys::GstAudioFormat;
+    type GlibType = ffi::GstAudioFormat;
 
-    fn to_glib(&self) -> gst_audio_sys::GstAudioFormat {
+    fn to_glib(&self) -> ffi::GstAudioFormat {
         match *self {
-            AudioFormat::Unknown => gst_audio_sys::GST_AUDIO_FORMAT_UNKNOWN,
-            AudioFormat::Encoded => gst_audio_sys::GST_AUDIO_FORMAT_ENCODED,
-            AudioFormat::S8 => gst_audio_sys::GST_AUDIO_FORMAT_S8,
-            AudioFormat::U8 => gst_audio_sys::GST_AUDIO_FORMAT_U8,
-            AudioFormat::S16le => gst_audio_sys::GST_AUDIO_FORMAT_S16LE,
-            AudioFormat::S16be => gst_audio_sys::GST_AUDIO_FORMAT_S16BE,
-            AudioFormat::U16le => gst_audio_sys::GST_AUDIO_FORMAT_U16LE,
-            AudioFormat::U16be => gst_audio_sys::GST_AUDIO_FORMAT_U16BE,
-            AudioFormat::S2432le => gst_audio_sys::GST_AUDIO_FORMAT_S24_32LE,
-            AudioFormat::S2432be => gst_audio_sys::GST_AUDIO_FORMAT_S24_32BE,
-            AudioFormat::U2432le => gst_audio_sys::GST_AUDIO_FORMAT_U24_32LE,
-            AudioFormat::U2432be => gst_audio_sys::GST_AUDIO_FORMAT_U24_32BE,
-            AudioFormat::S32le => gst_audio_sys::GST_AUDIO_FORMAT_S32LE,
-            AudioFormat::S32be => gst_audio_sys::GST_AUDIO_FORMAT_S32BE,
-            AudioFormat::U32le => gst_audio_sys::GST_AUDIO_FORMAT_U32LE,
-            AudioFormat::U32be => gst_audio_sys::GST_AUDIO_FORMAT_U32BE,
-            AudioFormat::S24le => gst_audio_sys::GST_AUDIO_FORMAT_S24LE,
-            AudioFormat::S24be => gst_audio_sys::GST_AUDIO_FORMAT_S24BE,
-            AudioFormat::U24le => gst_audio_sys::GST_AUDIO_FORMAT_U24LE,
-            AudioFormat::U24be => gst_audio_sys::GST_AUDIO_FORMAT_U24BE,
-            AudioFormat::S20le => gst_audio_sys::GST_AUDIO_FORMAT_S20LE,
-            AudioFormat::S20be => gst_audio_sys::GST_AUDIO_FORMAT_S20BE,
-            AudioFormat::U20le => gst_audio_sys::GST_AUDIO_FORMAT_U20LE,
-            AudioFormat::U20be => gst_audio_sys::GST_AUDIO_FORMAT_U20BE,
-            AudioFormat::S18le => gst_audio_sys::GST_AUDIO_FORMAT_S18LE,
-            AudioFormat::S18be => gst_audio_sys::GST_AUDIO_FORMAT_S18BE,
-            AudioFormat::U18le => gst_audio_sys::GST_AUDIO_FORMAT_U18LE,
-            AudioFormat::U18be => gst_audio_sys::GST_AUDIO_FORMAT_U18BE,
-            AudioFormat::F32le => gst_audio_sys::GST_AUDIO_FORMAT_F32LE,
-            AudioFormat::F32be => gst_audio_sys::GST_AUDIO_FORMAT_F32BE,
-            AudioFormat::F64le => gst_audio_sys::GST_AUDIO_FORMAT_F64LE,
-            AudioFormat::F64be => gst_audio_sys::GST_AUDIO_FORMAT_F64BE,
+            AudioFormat::Unknown => ffi::GST_AUDIO_FORMAT_UNKNOWN,
+            AudioFormat::Encoded => ffi::GST_AUDIO_FORMAT_ENCODED,
+            AudioFormat::S8 => ffi::GST_AUDIO_FORMAT_S8,
+            AudioFormat::U8 => ffi::GST_AUDIO_FORMAT_U8,
+            AudioFormat::S16le => ffi::GST_AUDIO_FORMAT_S16LE,
+            AudioFormat::S16be => ffi::GST_AUDIO_FORMAT_S16BE,
+            AudioFormat::U16le => ffi::GST_AUDIO_FORMAT_U16LE,
+            AudioFormat::U16be => ffi::GST_AUDIO_FORMAT_U16BE,
+            AudioFormat::S2432le => ffi::GST_AUDIO_FORMAT_S24_32LE,
+            AudioFormat::S2432be => ffi::GST_AUDIO_FORMAT_S24_32BE,
+            AudioFormat::U2432le => ffi::GST_AUDIO_FORMAT_U24_32LE,
+            AudioFormat::U2432be => ffi::GST_AUDIO_FORMAT_U24_32BE,
+            AudioFormat::S32le => ffi::GST_AUDIO_FORMAT_S32LE,
+            AudioFormat::S32be => ffi::GST_AUDIO_FORMAT_S32BE,
+            AudioFormat::U32le => ffi::GST_AUDIO_FORMAT_U32LE,
+            AudioFormat::U32be => ffi::GST_AUDIO_FORMAT_U32BE,
+            AudioFormat::S24le => ffi::GST_AUDIO_FORMAT_S24LE,
+            AudioFormat::S24be => ffi::GST_AUDIO_FORMAT_S24BE,
+            AudioFormat::U24le => ffi::GST_AUDIO_FORMAT_U24LE,
+            AudioFormat::U24be => ffi::GST_AUDIO_FORMAT_U24BE,
+            AudioFormat::S20le => ffi::GST_AUDIO_FORMAT_S20LE,
+            AudioFormat::S20be => ffi::GST_AUDIO_FORMAT_S20BE,
+            AudioFormat::U20le => ffi::GST_AUDIO_FORMAT_U20LE,
+            AudioFormat::U20be => ffi::GST_AUDIO_FORMAT_U20BE,
+            AudioFormat::S18le => ffi::GST_AUDIO_FORMAT_S18LE,
+            AudioFormat::S18be => ffi::GST_AUDIO_FORMAT_S18BE,
+            AudioFormat::U18le => ffi::GST_AUDIO_FORMAT_U18LE,
+            AudioFormat::U18be => ffi::GST_AUDIO_FORMAT_U18BE,
+            AudioFormat::F32le => ffi::GST_AUDIO_FORMAT_F32LE,
+            AudioFormat::F32be => ffi::GST_AUDIO_FORMAT_F32BE,
+            AudioFormat::F64le => ffi::GST_AUDIO_FORMAT_F64LE,
+            AudioFormat::F64be => ffi::GST_AUDIO_FORMAT_F64BE,
             AudioFormat::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_audio_sys::GstAudioFormat> for AudioFormat {
-    fn from_glib(value: gst_audio_sys::GstAudioFormat) -> Self {
+impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
+    fn from_glib(value: ffi::GstAudioFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AudioFormat::Unknown,
@@ -319,7 +293,7 @@ impl FromGlib<gst_audio_sys::GstAudioFormat> for AudioFormat {
 
 impl StaticType for AudioFormat {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_audio_sys::gst_audio_format_get_type()) }
+        unsafe { from_glib(ffi::gst_audio_format_get_type()) }
     }
 }
 
@@ -331,13 +305,13 @@ impl<'a> FromValueOptional<'a> for AudioFormat {
 
 impl<'a> FromValue<'a> for AudioFormat {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioFormat {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -352,20 +326,20 @@ pub enum AudioLayout {
 
 #[doc(hidden)]
 impl ToGlib for AudioLayout {
-    type GlibType = gst_audio_sys::GstAudioLayout;
+    type GlibType = ffi::GstAudioLayout;
 
-    fn to_glib(&self) -> gst_audio_sys::GstAudioLayout {
+    fn to_glib(&self) -> ffi::GstAudioLayout {
         match *self {
-            AudioLayout::Interleaved => gst_audio_sys::GST_AUDIO_LAYOUT_INTERLEAVED,
-            AudioLayout::NonInterleaved => gst_audio_sys::GST_AUDIO_LAYOUT_NON_INTERLEAVED,
+            AudioLayout::Interleaved => ffi::GST_AUDIO_LAYOUT_INTERLEAVED,
+            AudioLayout::NonInterleaved => ffi::GST_AUDIO_LAYOUT_NON_INTERLEAVED,
             AudioLayout::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_audio_sys::GstAudioLayout> for AudioLayout {
-    fn from_glib(value: gst_audio_sys::GstAudioLayout) -> Self {
+impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
+    fn from_glib(value: ffi::GstAudioLayout) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AudioLayout::Interleaved,
@@ -377,7 +351,7 @@ impl FromGlib<gst_audio_sys::GstAudioLayout> for AudioLayout {
 
 impl StaticType for AudioLayout {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_audio_sys::gst_audio_layout_get_type()) }
+        unsafe { from_glib(ffi::gst_audio_layout_get_type()) }
     }
 }
 
@@ -389,13 +363,13 @@ impl<'a> FromValueOptional<'a> for AudioLayout {
 
 impl<'a> FromValue<'a> for AudioLayout {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioLayout {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -429,58 +403,40 @@ pub enum AudioRingBufferFormatType {
 
 #[doc(hidden)]
 impl ToGlib for AudioRingBufferFormatType {
-    type GlibType = gst_audio_sys::GstAudioRingBufferFormatType;
+    type GlibType = ffi::GstAudioRingBufferFormatType;
 
-    fn to_glib(&self) -> gst_audio_sys::GstAudioRingBufferFormatType {
+    fn to_glib(&self) -> ffi::GstAudioRingBufferFormatType {
         match *self {
-            AudioRingBufferFormatType::Raw => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_RAW,
-            AudioRingBufferFormatType::MuLaw => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MU_LAW
-            }
-            AudioRingBufferFormatType::ALaw => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_A_LAW
-            }
-            AudioRingBufferFormatType::ImaAdpcm => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IMA_ADPCM
-            }
-            AudioRingBufferFormatType::Mpeg => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG
-            }
-            AudioRingBufferFormatType::Gsm => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_GSM,
-            AudioRingBufferFormatType::Iec958 => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IEC958
-            }
-            AudioRingBufferFormatType::Ac3 => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_AC3,
-            AudioRingBufferFormatType::Eac3 => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_EAC3
-            }
-            AudioRingBufferFormatType::Dts => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS,
-            AudioRingBufferFormatType::Mpeg2Aac => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC
-            }
-            AudioRingBufferFormatType::Mpeg4Aac => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC
-            }
+            AudioRingBufferFormatType::Raw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_RAW,
+            AudioRingBufferFormatType::MuLaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MU_LAW,
+            AudioRingBufferFormatType::ALaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_A_LAW,
+            AudioRingBufferFormatType::ImaAdpcm => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IMA_ADPCM,
+            AudioRingBufferFormatType::Mpeg => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG,
+            AudioRingBufferFormatType::Gsm => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_GSM,
+            AudioRingBufferFormatType::Iec958 => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IEC958,
+            AudioRingBufferFormatType::Ac3 => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_AC3,
+            AudioRingBufferFormatType::Eac3 => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_EAC3,
+            AudioRingBufferFormatType::Dts => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS,
+            AudioRingBufferFormatType::Mpeg2Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC,
+            AudioRingBufferFormatType::Mpeg4Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC,
             #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Mpeg2AacRaw => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW
+                ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW
             }
             #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Mpeg4AacRaw => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW
+                ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW
             }
             #[cfg(any(feature = "v1_12", feature = "dox"))]
-            AudioRingBufferFormatType::Flac => {
-                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC
-            }
+            AudioRingBufferFormatType::Flac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC,
             AudioRingBufferFormatType::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_audio_sys::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
-    fn from_glib(value: gst_audio_sys::GstAudioRingBufferFormatType) -> Self {
+impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
+    fn from_glib(value: ffi::GstAudioRingBufferFormatType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AudioRingBufferFormatType::Raw,
@@ -508,7 +464,7 @@ impl FromGlib<gst_audio_sys::GstAudioRingBufferFormatType> for AudioRingBufferFo
 
 impl StaticType for AudioRingBufferFormatType {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_audio_sys::gst_audio_ring_buffer_format_type_get_type()) }
+        unsafe { from_glib(ffi::gst_audio_ring_buffer_format_type_get_type()) }
     }
 }
 
@@ -520,13 +476,13 @@ impl<'a> FromValueOptional<'a> for AudioRingBufferFormatType {
 
 impl<'a> FromValue<'a> for AudioRingBufferFormatType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioRingBufferFormatType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -542,21 +498,21 @@ pub enum StreamVolumeFormat {
 
 #[doc(hidden)]
 impl ToGlib for StreamVolumeFormat {
-    type GlibType = gst_audio_sys::GstStreamVolumeFormat;
+    type GlibType = ffi::GstStreamVolumeFormat;
 
-    fn to_glib(&self) -> gst_audio_sys::GstStreamVolumeFormat {
+    fn to_glib(&self) -> ffi::GstStreamVolumeFormat {
         match *self {
-            StreamVolumeFormat::Linear => gst_audio_sys::GST_STREAM_VOLUME_FORMAT_LINEAR,
-            StreamVolumeFormat::Cubic => gst_audio_sys::GST_STREAM_VOLUME_FORMAT_CUBIC,
-            StreamVolumeFormat::Db => gst_audio_sys::GST_STREAM_VOLUME_FORMAT_DB,
+            StreamVolumeFormat::Linear => ffi::GST_STREAM_VOLUME_FORMAT_LINEAR,
+            StreamVolumeFormat::Cubic => ffi::GST_STREAM_VOLUME_FORMAT_CUBIC,
+            StreamVolumeFormat::Db => ffi::GST_STREAM_VOLUME_FORMAT_DB,
             StreamVolumeFormat::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_audio_sys::GstStreamVolumeFormat> for StreamVolumeFormat {
-    fn from_glib(value: gst_audio_sys::GstStreamVolumeFormat) -> Self {
+impl FromGlib<ffi::GstStreamVolumeFormat> for StreamVolumeFormat {
+    fn from_glib(value: ffi::GstStreamVolumeFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StreamVolumeFormat::Linear,

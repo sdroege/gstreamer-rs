@@ -2,17 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::AudioBaseSink;
 use glib::translate::*;
-use gst;
-use gst_audio_sys;
-use gst_base;
-use AudioBaseSink;
 
-glib_wrapper! {
-    pub struct AudioSink(Object<gst_audio_sys::GstAudioSink, gst_audio_sys::GstAudioSinkClass>) @extends AudioBaseSink, gst_base::BaseSink, gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct AudioSink(Object<ffi::GstAudioSink, ffi::GstAudioSinkClass>) @extends AudioBaseSink, gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_audio_sys::gst_audio_sink_get_type(),
+        get_type => || ffi::gst_audio_sink_get_type(),
     }
 }
 

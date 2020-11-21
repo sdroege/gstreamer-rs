@@ -2,17 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::AudioBaseSrc;
 use glib::translate::*;
-use gst;
-use gst_audio_sys;
-use gst_base;
-use AudioBaseSrc;
 
-glib_wrapper! {
-    pub struct AudioSrc(Object<gst_audio_sys::GstAudioSrc, gst_audio_sys::GstAudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct AudioSrc(Object<ffi::GstAudioSrc, ffi::GstAudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_audio_sys::gst_audio_src_get_type(),
+        get_type => || ffi::gst_audio_src_get_type(),
     }
 }
 

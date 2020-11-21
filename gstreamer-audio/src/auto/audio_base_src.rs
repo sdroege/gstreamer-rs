@@ -9,19 +9,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_audio_sys;
-use gst_base;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib_wrapper! {
-    pub struct AudioBaseSrc(Object<gst_audio_sys::GstAudioBaseSrc, gst_audio_sys::GstAudioBaseSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct AudioBaseSrc(Object<ffi::GstAudioBaseSrc, ffi::GstAudioBaseSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_audio_sys::gst_audio_base_src_get_type(),
+        get_type => || ffi::gst_audio_base_src_get_type(),
     }
 }
 
@@ -86,24 +81,24 @@ pub trait AudioBaseSrcExt: 'static {
 
 impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer> {
-    //    unsafe { TODO: call gst_audio_sys:gst_audio_base_src_create_ringbuffer() }
+    //    unsafe { TODO: call ffi:gst_audio_base_src_create_ringbuffer() }
     //}
 
     fn get_provide_clock(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_base_src_get_provide_clock(
+            from_glib(ffi::gst_audio_base_src_get_provide_clock(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn get_slave_method(&self) -> /*Ignored*/AudioBaseSrcSlaveMethod {
-    //    unsafe { TODO: call gst_audio_sys:gst_audio_base_src_get_slave_method() }
+    //    unsafe { TODO: call ffi:gst_audio_base_src_get_slave_method() }
     //}
 
     fn set_provide_clock(&self, provide: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_base_src_set_provide_clock(
+            ffi::gst_audio_base_src_set_provide_clock(
                 self.as_ref().to_glib_none().0,
                 provide.to_glib(),
             );
@@ -111,14 +106,14 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     }
 
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSrcSlaveMethod) {
-    //    unsafe { TODO: call gst_audio_sys:gst_audio_base_src_set_slave_method() }
+    //    unsafe { TODO: call ffi:gst_audio_base_src_set_slave_method() }
     //}
 
     fn get_property_actual_buffer_time(&self) -> i64 {
         unsafe {
             let mut value = Value::from_type(<i64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"actual-buffer-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -132,8 +127,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     fn get_property_actual_latency_time(&self) -> i64 {
         unsafe {
             let mut value = Value::from_type(<i64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"actual-latency-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -147,8 +142,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     fn get_property_buffer_time(&self) -> i64 {
         unsafe {
             let mut value = Value::from_type(<i64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"buffer-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -161,8 +156,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
 
     fn set_property_buffer_time(&self, buffer_time: i64) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"buffer-time\0".as_ptr() as *const _,
                 Value::from(&buffer_time).to_glib_none().0,
             );
@@ -172,8 +167,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
     fn get_property_latency_time(&self) -> i64 {
         unsafe {
             let mut value = Value::from_type(<i64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"latency-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -186,8 +181,8 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
 
     fn set_property_latency_time(&self, latency_time: i64) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"latency-time\0".as_ptr() as *const _,
                 Value::from(&latency_time).to_glib_none().0,
             );
@@ -202,9 +197,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_audio_sys::GstAudioBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioBaseSrc>,
         {
@@ -232,9 +227,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_audio_sys::GstAudioBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioBaseSrc>,
         {
@@ -259,9 +254,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_buffer_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioBaseSrc>,
         {
@@ -286,9 +281,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_latency_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioBaseSrc>,
         {
@@ -313,9 +308,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_provide_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioBaseSrc>,
         {
@@ -340,9 +335,9 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_slave_method_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioBaseSrc>,
         {

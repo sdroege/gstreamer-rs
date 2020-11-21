@@ -2,25 +2,21 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::AudioInfo;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
-use gst;
-use gst_audio_sys;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
-use AudioInfo;
 
-glib_wrapper! {
-    pub struct AudioDecoder(Object<gst_audio_sys::GstAudioDecoder, gst_audio_sys::GstAudioDecoderClass>) @extends gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct AudioDecoder(Object<ffi::GstAudioDecoder, ffi::GstAudioDecoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_audio_sys::gst_audio_decoder_get_type(),
+        get_type => || ffi::gst_audio_decoder_get_type(),
     }
 }
 
@@ -110,45 +106,43 @@ pub trait AudioDecoderExt: 'static {
 impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_full(gst_audio_sys::gst_audio_decoder_allocate_output_buffer(
+            Option::<_>::from_glib_full(ffi::gst_audio_decoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to allocate output buffer"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate output buffer"))
         }
     }
 
     fn get_audio_info(&self) -> Option<AudioInfo> {
         unsafe {
-            from_glib_full(gst_audio_sys::gst_audio_decoder_get_audio_info(
+            from_glib_full(ffi::gst_audio_decoder_get_audio_info(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_delay(&self) -> i32 {
-        unsafe { gst_audio_sys::gst_audio_decoder_get_delay(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_audio_decoder_get_delay(self.as_ref().to_glib_none().0) }
     }
 
     fn get_drainable(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_decoder_get_drainable(
+            from_glib(ffi::gst_audio_decoder_get_drainable(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_estimate_rate(&self) -> i32 {
-        unsafe {
-            gst_audio_sys::gst_audio_decoder_get_estimate_rate(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::gst_audio_decoder_get_estimate_rate(self.as_ref().to_glib_none().0) }
     }
 
     fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();
-            gst_audio_sys::gst_audio_decoder_get_latency(
+            ffi::gst_audio_decoder_get_latency(
                 self.as_ref().to_glib_none().0,
                 min.as_mut_ptr(),
                 max.as_mut_ptr(),
@@ -160,12 +154,12 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
     }
 
     fn get_max_errors(&self) -> i32 {
-        unsafe { gst_audio_sys::gst_audio_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_audio_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
     }
 
     fn get_min_latency(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_decoder_get_min_latency(
+            from_glib(ffi::gst_audio_decoder_get_min_latency(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -173,7 +167,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn get_needs_format(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_decoder_get_needs_format(
+            from_glib(ffi::gst_audio_decoder_get_needs_format(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -183,7 +177,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         unsafe {
             let mut sync = mem::MaybeUninit::uninit();
             let mut eos = mem::MaybeUninit::uninit();
-            gst_audio_sys::gst_audio_decoder_get_parse_state(
+            ffi::gst_audio_decoder_get_parse_state(
                 self.as_ref().to_glib_none().0,
                 sync.as_mut_ptr(),
                 eos.as_mut_ptr(),
@@ -196,19 +190,19 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn get_plc(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_decoder_get_plc(
+            from_glib(ffi::gst_audio_decoder_get_plc(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_plc_aware(&self) -> i32 {
-        unsafe { gst_audio_sys::gst_audio_decoder_get_plc_aware(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_audio_decoder_get_plc_aware(self.as_ref().to_glib_none().0) }
     }
 
     fn get_tolerance(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_decoder_get_tolerance(
+            from_glib(ffi::gst_audio_decoder_get_tolerance(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -216,7 +210,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_merge_tags(
+            ffi::gst_audio_decoder_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
                 mode.to_glib(),
@@ -226,7 +220,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
-            from_glib_full(gst_audio_sys::gst_audio_decoder_proxy_getcaps(
+            from_glib_full(ffi::gst_audio_decoder_proxy_getcaps(
                 self.as_ref().to_glib_none().0,
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
@@ -238,7 +232,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_allocation_caps(
+            ffi::gst_audio_decoder_set_allocation_caps(
                 self.as_ref().to_glib_none().0,
                 allocation_caps.to_glib_none().0,
             );
@@ -247,16 +241,13 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn set_drainable(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_drainable(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::gst_audio_decoder_set_drainable(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_estimate_rate(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_estimate_rate(
+            ffi::gst_audio_decoder_set_estimate_rate(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -265,7 +256,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_latency(
+            ffi::gst_audio_decoder_set_latency(
                 self.as_ref().to_glib_none().0,
                 min.to_glib(),
                 max.to_glib(),
@@ -275,22 +266,19 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn set_max_errors(&self, num: i32) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_max_errors(self.as_ref().to_glib_none().0, num);
+            ffi::gst_audio_decoder_set_max_errors(self.as_ref().to_glib_none().0, num);
         }
     }
 
     fn set_min_latency(&self, num: gst::ClockTime) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_min_latency(
-                self.as_ref().to_glib_none().0,
-                num.to_glib(),
-            );
+            ffi::gst_audio_decoder_set_min_latency(self.as_ref().to_glib_none().0, num.to_glib());
         }
     }
 
     fn set_needs_format(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_needs_format(
+            ffi::gst_audio_decoder_set_needs_format(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -299,25 +287,19 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn set_plc(&self, enabled: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_plc(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::gst_audio_decoder_set_plc(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_plc_aware(&self, plc: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_plc_aware(
-                self.as_ref().to_glib_none().0,
-                plc.to_glib(),
-            );
+            ffi::gst_audio_decoder_set_plc_aware(self.as_ref().to_glib_none().0, plc.to_glib());
         }
     }
 
     fn set_tolerance(&self, tolerance: gst::ClockTime) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_tolerance(
+            ffi::gst_audio_decoder_set_tolerance(
                 self.as_ref().to_glib_none().0,
                 tolerance.to_glib(),
             );
@@ -326,7 +308,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn set_use_default_pad_acceptcaps(&self, use_: bool) {
         unsafe {
-            gst_audio_sys::gst_audio_decoder_set_use_default_pad_acceptcaps(
+            ffi::gst_audio_decoder_set_use_default_pad_acceptcaps(
                 self.as_ref().to_glib_none().0,
                 use_.to_glib(),
             );
@@ -340,9 +322,9 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_errors_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioDecoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioDecoder>,
         {
@@ -367,9 +349,9 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_min_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioDecoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioDecoder>,
         {
@@ -394,9 +376,9 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_plc_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioDecoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioDecoder>,
         {
@@ -421,9 +403,9 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_tolerance_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_audio_sys::GstAudioDecoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAudioDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<AudioDecoder>,
         {
