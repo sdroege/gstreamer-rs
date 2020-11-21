@@ -6,11 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_audio_sys;
-use AudioStreamAlign;
+use crate::AudioStreamAlign;
 
 use glib::translate::*;
-use gst;
 use std::mem;
 
 impl AudioStreamAlign {
@@ -26,7 +24,7 @@ impl AudioStreamAlign {
             let mut out_timestamp = mem::MaybeUninit::uninit();
             let mut out_duration = mem::MaybeUninit::uninit();
             let mut out_sample_position = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_audio_sys::gst_audio_stream_align_process(
+            let ret = from_glib(ffi::gst_audio_stream_align_process(
                 self.to_glib_none_mut().0,
                 discont.to_glib(),
                 timestamp.to_glib(),

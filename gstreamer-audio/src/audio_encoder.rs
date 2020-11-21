@@ -6,13 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::AudioEncoder;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_audio_sys;
 use std::mem;
 use std::ptr;
-use AudioEncoder;
 
 pub trait AudioEncoderExtManual: 'static {
     fn finish_frame(
@@ -37,7 +35,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         frames: i32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_audio_sys::gst_audio_encoder_finish_frame(
+            from_glib(ffi::gst_audio_encoder_finish_frame(
                 self.as_ref().to_glib_none().0,
                 buffer.map(|b| b.into_ptr()).unwrap_or(ptr::null_mut()),
                 frames,
@@ -48,7 +46,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
 
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {
-            let ret = from_glib(gst_audio_sys::gst_audio_encoder_negotiate(
+            let ret = from_glib(ffi::gst_audio_encoder_negotiate(
                 self.as_ref().to_glib_none().0,
             ));
             if ret {
@@ -61,7 +59,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
 
     fn set_output_format(&self, caps: &gst::Caps) -> Result<(), gst::FlowError> {
         unsafe {
-            let ret = from_glib(gst_audio_sys::gst_audio_encoder_set_output_format(
+            let ret = from_glib(ffi::gst_audio_encoder_set_output_format(
                 self.as_ref().to_glib_none().0,
                 caps.to_glib_none().0,
             ));
@@ -77,7 +75,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
-            gst_audio_sys::gst_audio_encoder_get_allocator(
+            ffi::gst_audio_encoder_get_allocator(
                 self.as_ref().to_glib_none().0,
                 &mut allocator,
                 &mut params,
@@ -90,7 +88,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();
-            gst_audio_sys::gst_audio_encoder_get_latency(
+            ffi::gst_audio_encoder_get_latency(
                 self.as_ref().to_glib_none().0,
                 min.as_mut_ptr(),
                 max.as_mut_ptr(),

@@ -1,9 +1,9 @@
+use crate::ffi::GstAudioRingBufferSpec;
 use glib::translate::*;
 use gst::Caps;
-use gst_audio_sys::GstAudioRingBufferSpec;
 
-use AudioInfo;
-use AudioRingBufferFormatType;
+use crate::AudioInfo;
+use crate::AudioRingBufferFormatType;
 
 use std::fmt;
 
@@ -72,7 +72,7 @@ impl Clone for AudioRingBufferSpec {
     fn clone(&self) -> Self {
         unsafe {
             let spec = self.0;
-            gst_sys::gst_mini_object_ref(spec.caps as *mut gst_sys::GstMiniObject);
+            gst::ffi::gst_mini_object_ref(spec.caps as *mut gst::ffi::GstMiniObject);
 
             AudioRingBufferSpec(spec)
         }
@@ -82,7 +82,7 @@ impl Clone for AudioRingBufferSpec {
 impl Drop for AudioRingBufferSpec {
     fn drop(&mut self) {
         unsafe {
-            gst_sys::gst_mini_object_unref(self.0.caps as *mut gst_sys::GstMiniObject);
+            gst::ffi::gst_mini_object_unref(self.0.caps as *mut gst::ffi::GstMiniObject);
         }
     }
 }

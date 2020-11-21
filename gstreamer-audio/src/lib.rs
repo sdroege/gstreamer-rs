@@ -8,28 +8,11 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-extern crate array_init;
-#[macro_use]
-extern crate bitflags;
-extern crate once_cell;
-
-#[macro_use]
-extern crate glib;
-extern crate glib_sys;
-extern crate gobject_sys;
-#[macro_use]
-extern crate gstreamer as gst;
-extern crate gstreamer_audio_sys as gst_audio_sys;
-extern crate gstreamer_base as gst_base;
-extern crate gstreamer_base_sys as gst_base_sys;
-extern crate gstreamer_sys as gst_sys;
-
-#[cfg(test)]
-extern crate itertools;
+pub use ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -44,25 +27,25 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::match_same_arms)]
 #[allow(unused_imports)]
 mod auto;
-pub use auto::*;
+pub use crate::auto::*;
 
 mod audio_format;
-pub use audio_format::*;
+pub use crate::audio_format::*;
 mod audio_format_info;
-pub use audio_format_info::*;
+pub use crate::audio_format_info::*;
 mod audio_ring_buffer_spec;
-pub use audio_ring_buffer_spec::*;
+pub use crate::audio_ring_buffer_spec::*;
 mod audio_info;
-pub use audio_info::*;
+pub use crate::audio_info::*;
 mod audio_meta;
-pub use audio_meta::*;
+pub use crate::audio_meta::*;
 mod audio_channel_position;
-pub use audio_channel_position::*;
+pub use crate::audio_channel_position::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_stream_align;
 mod functions;
-pub use functions::*;
+pub use crate::functions::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub mod audio_buffer;
@@ -71,9 +54,9 @@ pub mod audio_buffer;
 pub use audio_buffer::{AudioBuffer, AudioBufferRef};
 
 mod audio_decoder;
-pub use audio_decoder::AudioDecoderExtManual;
+pub use crate::audio_decoder::AudioDecoderExtManual;
 mod audio_encoder;
-pub use audio_encoder::AudioEncoderExtManual;
+pub use crate::audio_encoder::AudioEncoderExtManual;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -83,8 +66,8 @@ pub mod prelude {
 
     pub use super::audio_decoder::AudioDecoderExtManual;
     pub use super::audio_encoder::AudioEncoderExtManual;
-    pub use audio_format::AudioFormatIteratorExt;
-    pub use auto::traits::*;
+    pub use crate::audio_format::AudioFormatIteratorExt;
+    pub use crate::auto::traits::*;
 }
 
 pub mod subclass;

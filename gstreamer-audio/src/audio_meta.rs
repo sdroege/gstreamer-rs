@@ -15,17 +15,14 @@ use std::ptr;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::slice;
 
-use glib;
 use glib::translate::{from_glib, ToGlib};
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::translate::{from_glib_none, ToGlibPtr};
-use gst;
 use gst::prelude::*;
-use gst_audio_sys;
 
 #[repr(transparent)]
-pub struct AudioClippingMeta(gst_audio_sys::GstAudioClippingMeta);
+pub struct AudioClippingMeta(ffi::GstAudioClippingMeta);
 
 unsafe impl Send for AudioClippingMeta {}
 unsafe impl Sync for AudioClippingMeta {}
@@ -41,7 +38,7 @@ impl AudioClippingMeta {
         let end = end.into();
         assert_eq!(start.get_format(), end.get_format());
         unsafe {
-            let meta = gst_audio_sys::gst_buffer_add_audio_clipping_meta(
+            let meta = ffi::gst_buffer_add_audio_clipping_meta(
                 buffer.as_mut_ptr(),
                 start.get_format().to_glib(),
                 start.get_value() as u64,
@@ -62,10 +59,10 @@ impl AudioClippingMeta {
 }
 
 unsafe impl MetaAPI for AudioClippingMeta {
-    type GstType = gst_audio_sys::GstAudioClippingMeta;
+    type GstType = ffi::GstAudioClippingMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_audio_sys::gst_audio_clipping_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_audio_clipping_meta_api_get_type()) }
     }
 }
 
@@ -81,7 +78,7 @@ impl fmt::Debug for AudioClippingMeta {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[repr(transparent)]
-pub struct AudioMeta(gst_audio_sys::GstAudioMeta);
+pub struct AudioMeta(ffi::GstAudioMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -95,39 +92,42 @@ unsafe impl Sync for AudioMeta {}
 impl AudioMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
-        info: &::AudioInfo,
+        info: &crate::AudioInfo,
         samples: usize,
         offsets: &[usize],
     ) -> Result<gst::MetaRefMut<'a, Self, gst::meta::Standalone>, glib::BoolError> {
         skip_assert_initialized!();
 
         if !info.is_valid() {
-            return Err(glib_bool_error!("Invalid audio info"));
+            return Err(glib::glib_bool_error!("Invalid audio info"));
         }
 
         if info.rate() == 0
             || info.channels() == 0
-            || info.format() == ::AudioFormat::Unknown
-            || info.format() == ::AudioFormat::Encoded
+            || info.format() == crate::AudioFormat::Unknown
+            || info.format() == crate::AudioFormat::Encoded
         {
-            return Err(glib_bool_error!("Unsupported audio format {:?}", info));
+            return Err(glib::glib_bool_error!(
+                "Unsupported audio format {:?}",
+                info
+            ));
         }
 
-        if !offsets.is_empty() && info.layout() != ::AudioLayout::NonInterleaved {
-            return Err(glib_bool_error!(
+        if !offsets.is_empty() && info.layout() != crate::AudioLayout::NonInterleaved {
+            return Err(glib::glib_bool_error!(
                 "Channel offsets only supported for non-interleaved audio"
             ));
         }
 
         if !offsets.is_empty() && offsets.len() != info.channels() as usize {
-            return Err(glib_bool_error!(
+            return Err(glib::glib_bool_error!(
                 "Number of channel offsets different than number of channels ({} != {})",
                 offsets.len(),
                 info.channels()
             ));
         }
 
-        if info.layout() == ::AudioLayout::NonInterleaved {
+        if info.layout() == crate::AudioLayout::NonInterleaved {
             let plane_size = samples * (info.width() / 8) as usize;
             let max_offset = if offsets.is_empty() {
                 plane_size * (info.channels() - 1) as usize
@@ -146,7 +146,7 @@ impl AudioMeta {
                             && !(other_offset + plane_size <= offset
                                 || offset + plane_size <= other_offset)
                         {
-                            return Err(glib_bool_error!("Overlapping audio channel offsets: offset {} for channel {} and offset {} for channel {} with a plane size of {}", offset, i, other_offset, j, plane_size));
+                            return Err(glib::glib_bool_error!("Overlapping audio channel offsets: offset {} for channel {} and offset {} for channel {} with a plane size of {}", offset, i, other_offset, j, plane_size));
                         }
                     }
                 }
@@ -155,12 +155,12 @@ impl AudioMeta {
             };
 
             if max_offset + plane_size > buffer.get_size() {
-                return Err(glib_bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.get_size()));
+                return Err(glib::glib_bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.get_size()));
             }
         }
 
         unsafe {
-            let meta = gst_audio_sys::gst_buffer_add_audio_meta(
+            let meta = ffi::gst_buffer_add_audio_meta(
                 buffer.as_mut_ptr(),
                 info.to_glib_none().0,
                 samples,
@@ -172,15 +172,15 @@ impl AudioMeta {
             );
 
             if meta.is_null() {
-                return Err(glib_bool_error!("Failed to add audio meta"));
+                return Err(glib::glib_bool_error!("Failed to add audio meta"));
             }
 
             Ok(Self::from_mut_ptr(buffer, meta))
         }
     }
 
-    pub fn get_info(&self) -> ::AudioInfo {
-        unsafe { from_glib_none(&self.0.info as *const _ as *mut gst_audio_sys::GstAudioInfo) }
+    pub fn get_info(&self) -> crate::AudioInfo {
+        unsafe { from_glib_none(&self.0.info as *const _ as *mut ffi::GstAudioInfo) }
     }
 
     pub fn get_samples(&self) -> usize {
@@ -199,10 +199,10 @@ impl AudioMeta {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl MetaAPI for AudioMeta {
-    type GstType = gst_audio_sys::GstAudioMeta;
+    type GstType = ffi::GstAudioMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_audio_sys::gst_audio_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_audio_meta_api_get_type()) }
     }
 }
 

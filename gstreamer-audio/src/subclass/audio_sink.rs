@@ -1,6 +1,3 @@
-use glib_sys;
-use gst_audio_sys;
-
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
@@ -9,8 +6,8 @@ use gst::subclass::prelude::*;
 use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
-use AudioRingBufferSpec;
-use AudioSink;
+use crate::AudioRingBufferSpec;
+use crate::AudioSink;
 
 pub trait AudioSinkImpl: AudioSinkImplExt + BaseSinkImpl {
     fn close(&self, sink: &Self::Type) -> Result<(), LoggableError> {
@@ -64,13 +61,12 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_close(&self, sink: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).close {
                 None => return Ok(()),
                 Some(f) => f,
             };
-            gst_result_from_gboolean!(
+            gst::gst_result_from_gboolean!(
                 f(sink.unsafe_cast_ref::<AudioSink>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to close element using the parent function"
@@ -81,8 +77,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_delay(&self, sink: &Self::Type) -> u32 {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).delay {
                 Some(f) => f,
                 None => return 0,
@@ -94,13 +89,12 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_open(&self, sink: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).open {
                 Some(f) => f,
                 None => return Ok(()),
             };
-            gst_result_from_gboolean!(
+            gst::gst_result_from_gboolean!(
                 f(sink.unsafe_cast_ref::<AudioSink>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to open element using the parent function"
@@ -115,13 +109,12 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     ) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).prepare {
                 Some(f) => f,
                 None => return Ok(()),
             };
-            gst_result_from_gboolean!(
+            gst::gst_result_from_gboolean!(
                 f(
                     sink.unsafe_cast_ref::<AudioSink>().to_glib_none().0,
                     &mut spec.0
@@ -135,8 +128,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_unprepare(&self, sink: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).unprepare {
                 Some(f) => f,
                 None => {
@@ -146,7 +138,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
                     ))
                 }
             };
-            gst_result_from_gboolean!(
+            gst::gst_result_from_gboolean!(
                 f(sink.unsafe_cast_ref::<AudioSink>().to_glib_none().0),
                 gst::CAT_RUST,
                 "Failed to unprepare element using the parent function"
@@ -157,8 +149,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_write(&self, sink: &Self::Type, buffer: &[u8]) -> Result<i32, LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).write {
                 Some(f) => f,
                 None => return Ok(-1),
@@ -183,8 +174,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_reset(&self, sink: &Self::Type) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioSinkClass;
             if let Some(f) = (*parent_class).reset {
                 f(sink.unsafe_cast_ref::<AudioSink>().to_glib_none().0)
             }
@@ -210,8 +200,8 @@ where
 }
 
 unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
-    ptr: *mut gst_audio_sys::GstAudioSink,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioSink,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -219,7 +209,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -231,7 +221,7 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosink_delay<T: AudioSinkImpl>(ptr: *mut gst_audio_sys::GstAudioSink) -> u32
+unsafe extern "C" fn audiosink_delay<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSink) -> u32
 where
     T::Instance: PanicPoison,
 {
@@ -239,14 +229,14 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), 0, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), 0, {
         imp.delay(wrap.unsafe_cast_ref())
     })
 }
 
 unsafe extern "C" fn audiosink_open<T: AudioSinkImpl>(
-    ptr: *mut gst_audio_sys::GstAudioSink,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioSink,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -254,7 +244,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -267,9 +257,9 @@ where
 }
 
 unsafe extern "C" fn audiosink_prepare<T: AudioSinkImpl>(
-    ptr: *mut gst_audio_sys::GstAudioSink,
-    spec: *mut gst_audio_sys::GstAudioRingBufferSpec,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioSink,
+    spec: *mut ffi::GstAudioRingBufferSpec,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -279,7 +269,7 @@ where
 
     let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match AudioSinkImpl::prepare(imp, wrap.unsafe_cast_ref(), spec) {
             Ok(()) => true,
             Err(err) => {
@@ -292,8 +282,8 @@ where
 }
 
 unsafe extern "C" fn audiosink_unprepare<T: AudioSinkImpl>(
-    ptr: *mut gst_audio_sys::GstAudioSink,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioSink,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -301,7 +291,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unprepare(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -314,8 +304,8 @@ where
 }
 
 unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(
-    ptr: *mut gst_audio_sys::GstAudioSink,
-    data: glib_sys::gpointer,
+    ptr: *mut ffi::GstAudioSink,
+    data: glib::ffi::gpointer,
     length: u32,
 ) -> i32
 where
@@ -326,12 +316,12 @@ where
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
     let data_slice = std::slice::from_raw_parts(data as *const u8, length as usize);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), -1, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), -1, {
         imp.write(wrap.unsafe_cast_ref(), data_slice).unwrap_or(-1)
     })
 }
 
-unsafe extern "C" fn audiosink_reset<T: AudioSinkImpl>(ptr: *mut gst_audio_sys::GstAudioSink)
+unsafe extern "C" fn audiosink_reset<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSink)
 where
     T::Instance: PanicPoison,
 {
@@ -339,7 +329,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSink> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.reset(wrap.unsafe_cast_ref());
     });
 }

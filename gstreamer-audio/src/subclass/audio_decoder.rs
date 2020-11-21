@@ -6,23 +6,17 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gst_audio_sys;
-use gst_sys;
-
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use gst;
 use gst::subclass::prelude::*;
-use gst_base;
 
 use std::mem;
 use std::ptr;
 
 use crate::prelude::*;
 
-use AudioDecoder;
+use crate::AudioDecoder;
 
 pub trait AudioDecoderImpl: AudioDecoderImplExt + ElementImpl {
     fn open(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
@@ -178,8 +172,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_open(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .open
                 .map(|f| {
@@ -190,7 +183,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst_error_msg!(
+                        Err(gst::gst_error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `open` failed"]
                         ))
@@ -203,8 +196,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_close(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .close
                 .map(|f| {
@@ -215,7 +207,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst_error_msg!(
+                        Err(gst::gst_error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `close` failed"]
                         ))
@@ -228,8 +220,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .start
                 .map(|f| {
@@ -240,7 +231,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst_error_msg!(
+                        Err(gst::gst_error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `start` failed"]
                         ))
@@ -253,8 +244,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .stop
                 .map(|f| {
@@ -265,7 +255,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst_error_msg!(
+                        Err(gst::gst_error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `stop` failed"]
                         ))
@@ -282,12 +272,11 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .set_format
                 .map(|f| {
-                    gst_result_from_gboolean!(
+                    gst::gst_result_from_gboolean!(
                         f(
                             element.unsafe_cast_ref::<AudioDecoder>().to_glib_none().0,
                             caps.to_glib_none().0
@@ -307,8 +296,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     ) -> Result<(u32, u32), gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .parse
                 .map(|f| {
@@ -343,15 +331,14 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .handle_frame
                 .map(|f| {
                     gst::FlowReturn::from_glib(f(
                         element.unsafe_cast_ref::<AudioDecoder>().to_glib_none().0,
                         buffer
-                            .map(|buffer| buffer.as_mut_ptr() as *mut *mut gst_sys::GstBuffer)
+                            .map(|buffer| buffer.as_mut_ptr() as *mut *mut gst::ffi::GstBuffer)
                             .unwrap_or(ptr::null_mut()),
                     ))
                 })
@@ -367,8 +354,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     ) -> Result<Option<gst::Buffer>, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             if let Some(f) = (*parent_class).pre_push {
                 let mut buffer = buffer.into_ptr();
                 match gst::FlowReturn::from_glib(f(
@@ -389,8 +375,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_flush(&self, element: &Self::Type, hard: bool) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .flush
                 .map(|f| {
@@ -406,12 +391,11 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .negotiate
                 .map(|f| {
-                    gst_result_from_gboolean!(
+                    gst::gst_result_from_gboolean!(
                         f(element.unsafe_cast_ref::<AudioDecoder>().to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiate` failed"
@@ -424,8 +408,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .getcaps
                 .map(|f| {
@@ -445,8 +428,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .sink_event
                 .expect("Missing parent function `sink_event`");
@@ -460,8 +442,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_sink_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .sink_query
                 .expect("Missing parent function `sink_query`");
@@ -475,8 +456,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .src_event
                 .expect("Missing parent function `src_event`");
@@ -490,8 +470,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_src_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .src_query
                 .expect("Missing parent function `src_query`");
@@ -509,8 +488,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .propose_allocation
                 .map(|f| {
@@ -520,7 +498,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     )) {
                         Ok(())
                     } else {
-                        Err(gst_error_msg!(
+                        Err(gst::gst_error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `propose_allocation` failed"]
                         ))
@@ -537,8 +515,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_audio_sys::GstAudioDecoderClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .decide_allocation
                 .map(|f| {
@@ -548,7 +525,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                     )) {
                         Ok(())
                     } else {
-                        Err(gst_error_msg!(
+                        Err(gst::gst_error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `decide_allocation` failed"]
                         ))
@@ -587,8 +564,8 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_open<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -596,7 +573,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -609,8 +586,8 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_close<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -618,7 +595,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -631,8 +608,8 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_start<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -640,7 +617,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -653,8 +630,8 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_stop<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -662,7 +639,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -675,9 +652,9 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_set_format<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    caps: *mut gst_sys::GstCaps,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+    caps: *mut gst::ffi::GstCaps,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -685,7 +662,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_format(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
             Ok(()) => true,
             Err(err) => {
@@ -698,11 +675,11 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_parse<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    adapter: *mut gst_base_sys::GstAdapter,
+    ptr: *mut ffi::GstAudioDecoder,
+    adapter: *mut gst_base::ffi::GstAdapter,
     offset: *mut i32,
     len: *mut i32,
-) -> gst_sys::GstFlowReturn
+) -> gst::ffi::GstFlowReturn
 where
     T::Instance: PanicPoison,
 {
@@ -710,7 +687,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.parse(wrap.unsafe_cast_ref(), &from_glib_borrow(adapter)) {
             Ok((new_offset, new_len)) => {
                 assert!(new_offset <= std::i32::MAX as u32);
@@ -727,19 +704,19 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_handle_frame<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    buffer: *mut *mut gst_sys::GstBuffer,
-) -> gst_sys::GstFlowReturn
+    ptr: *mut ffi::GstAudioDecoder,
+    buffer: *mut *mut gst::ffi::GstBuffer,
+) -> gst::ffi::GstFlowReturn
 where
     T::Instance: PanicPoison,
 {
     // FIXME: Misgenerated in gstreamer-audio-sys
-    let buffer = buffer as *mut gst_sys::GstBuffer;
+    let buffer = buffer as *mut gst::ffi::GstBuffer;
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(
             wrap.unsafe_cast_ref(),
             Option::<gst::Buffer>::from_glib_none(buffer).as_ref(),
@@ -750,9 +727,9 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_pre_push<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    buffer: *mut *mut gst_sys::GstBuffer,
-) -> gst_sys::GstFlowReturn
+    ptr: *mut ffi::GstAudioDecoder,
+    buffer: *mut *mut gst::ffi::GstBuffer,
+) -> gst::ffi::GstFlowReturn
 where
     T::Instance: PanicPoison,
 {
@@ -760,7 +737,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.pre_push(wrap.unsafe_cast_ref(), from_glib_full(*buffer)) {
             Ok(Some(new_buffer)) => {
                 *buffer = new_buffer.into_ptr();
@@ -778,8 +755,8 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_flush<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    hard: glib_sys::gboolean,
+    ptr: *mut ffi::GstAudioDecoder,
+    hard: glib::ffi::gboolean,
 ) where
     T::Instance: PanicPoison,
 {
@@ -787,14 +764,14 @@ unsafe extern "C" fn audio_decoder_flush<T: AudioDecoderImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), (), {
         AudioDecoderImpl::flush(imp, wrap.unsafe_cast_ref(), from_glib(hard))
     })
 }
 
 unsafe extern "C" fn audio_decoder_negotiate<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -802,7 +779,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -815,9 +792,9 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_getcaps<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    filter: *mut gst_sys::GstCaps,
-) -> *mut gst_sys::GstCaps
+    ptr: *mut ffi::GstAudioDecoder,
+    filter: *mut gst::ffi::GstCaps,
+) -> *mut gst::ffi::GstCaps
 where
     T::Instance: PanicPoison,
 {
@@ -825,7 +802,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         AudioDecoderImpl::get_caps(
             imp,
             wrap.unsafe_cast_ref(),
@@ -838,9 +815,9 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_sink_event<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    event: *mut gst_sys::GstEvent,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+    event: *mut gst::ffi::GstEvent,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -848,16 +825,16 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
 }
 
 unsafe extern "C" fn audio_decoder_sink_query<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    query: *mut gst_sys::GstQuery,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -865,16 +842,16 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
 }
 
 unsafe extern "C" fn audio_decoder_src_event<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    event: *mut gst_sys::GstEvent,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+    event: *mut gst::ffi::GstEvent,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -882,16 +859,16 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
 }
 
 unsafe extern "C" fn audio_decoder_src_query<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    query: *mut gst_sys::GstQuery,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -899,16 +876,16 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
 }
 
 unsafe extern "C" fn audio_decoder_propose_allocation<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    query: *mut gst_sys::GstQuery,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -917,7 +894,7 @@ where
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
@@ -930,9 +907,9 @@ where
 }
 
 unsafe extern "C" fn audio_decoder_decide_allocation<T: AudioDecoderImpl>(
-    ptr: *mut gst_audio_sys::GstAudioDecoder,
-    query: *mut gst_sys::GstQuery,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstAudioDecoder,
+    query: *mut gst::ffi::GstQuery,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -941,7 +918,7 @@ where
     let wrap: Borrowed<AudioDecoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {

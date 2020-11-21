@@ -6,8 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_audio_sys;
-
 use std::ffi::CStr;
 use std::fmt;
 use std::str;
@@ -16,10 +14,10 @@ use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
 use once_cell::sync::Lazy;
 
 #[cfg(feature = "v1_18")]
-pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| unsafe {
+pub static AUDIO_FORMATS_ALL: Lazy<Box<[crate::AudioFormat]>> = Lazy::new(|| unsafe {
     let mut len: u32 = 0;
     let mut res = Vec::with_capacity(len as usize);
-    let formats = gst_audio_sys::gst_audio_formats_raw(&mut len);
+    let formats = ffi::gst_audio_formats_raw(&mut len);
     for i in 0..len {
         let format = formats.offset(i as isize);
         res.push(from_glib(*format));
@@ -28,40 +26,40 @@ pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| unsafe {
 });
 
 #[cfg(not(feature = "v1_18"))]
-pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| {
+pub static AUDIO_FORMATS_ALL: Lazy<Box<[crate::AudioFormat]>> = Lazy::new(|| {
     #[cfg(target_endian = "little")]
     {
         Box::new([
-            ::AudioFormat::F64le,
-            ::AudioFormat::F64be,
-            ::AudioFormat::F32le,
-            ::AudioFormat::F32be,
-            ::AudioFormat::S32le,
-            ::AudioFormat::S32be,
-            ::AudioFormat::U32le,
-            ::AudioFormat::U32be,
-            ::AudioFormat::S2432le,
-            ::AudioFormat::S2432be,
-            ::AudioFormat::U2432le,
-            ::AudioFormat::U2432be,
-            ::AudioFormat::S24le,
-            ::AudioFormat::S24be,
-            ::AudioFormat::U24le,
-            ::AudioFormat::U24be,
-            ::AudioFormat::S20le,
-            ::AudioFormat::S20be,
-            ::AudioFormat::U20le,
-            ::AudioFormat::U20be,
-            ::AudioFormat::S18le,
-            ::AudioFormat::S18be,
-            ::AudioFormat::U18le,
-            ::AudioFormat::U18be,
-            ::AudioFormat::S16le,
-            ::AudioFormat::S16be,
-            ::AudioFormat::U16le,
-            ::AudioFormat::U16be,
-            ::AudioFormat::S8,
-            ::AudioFormat::U8,
+            crate::AudioFormat::F64le,
+            crate::AudioFormat::F64be,
+            crate::AudioFormat::F32le,
+            crate::AudioFormat::F32be,
+            crate::AudioFormat::S32le,
+            crate::AudioFormat::S32be,
+            crate::AudioFormat::U32le,
+            crate::AudioFormat::U32be,
+            crate::AudioFormat::S2432le,
+            crate::AudioFormat::S2432be,
+            crate::AudioFormat::U2432le,
+            crate::AudioFormat::U2432be,
+            crate::AudioFormat::S24le,
+            crate::AudioFormat::S24be,
+            crate::AudioFormat::U24le,
+            crate::AudioFormat::U24be,
+            crate::AudioFormat::S20le,
+            crate::AudioFormat::S20be,
+            crate::AudioFormat::U20le,
+            crate::AudioFormat::U20be,
+            crate::AudioFormat::S18le,
+            crate::AudioFormat::S18be,
+            crate::AudioFormat::U18le,
+            crate::AudioFormat::U18be,
+            crate::AudioFormat::S16le,
+            crate::AudioFormat::S16be,
+            crate::AudioFormat::U16le,
+            crate::AudioFormat::U16be,
+            crate::AudioFormat::S8,
+            crate::AudioFormat::U8,
         ])
     }
     #[cfg(target_endian = "big")]
@@ -101,17 +99,17 @@ pub static AUDIO_FORMATS_ALL: Lazy<Box<[::AudioFormat]>> = Lazy::new(|| {
     }
 });
 
-impl ::AudioFormat {
+impl crate::AudioFormat {
     pub fn build_integer(
         sign: bool,
-        endianness: ::AudioEndianness,
+        endianness: crate::AudioEndianness,
         width: i32,
         depth: i32,
-    ) -> ::AudioFormat {
+    ) -> crate::AudioFormat {
         assert_initialized_main_thread!();
 
         unsafe {
-            from_glib(gst_audio_sys::gst_audio_format_build_integer(
+            from_glib(ffi::gst_audio_format_build_integer(
                 sign.to_glib(),
                 endianness.to_glib(),
                 width,
@@ -121,12 +119,12 @@ impl ::AudioFormat {
     }
 
     pub fn to_str<'a>(self) -> &'a str {
-        if self == ::AudioFormat::Unknown {
+        if self == crate::AudioFormat::Unknown {
             return "UNKNOWN";
         }
 
         unsafe {
-            CStr::from_ptr(gst_audio_sys::gst_audio_format_to_string(self.to_glib()))
+            CStr::from_ptr(ffi::gst_audio_format_to_string(self.to_glib()))
                 .to_str()
                 .unwrap()
         }
@@ -137,18 +135,20 @@ impl ::AudioFormat {
     }
 }
 
-impl str::FromStr for ::AudioFormat {
+impl str::FromStr for crate::AudioFormat {
     type Err = glib::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let fmt = ::AudioFormat::from_glib(gst_audio_sys::gst_audio_format_from_string(
+            let fmt = crate::AudioFormat::from_glib(ffi::gst_audio_format_from_string(
                 s.to_glib_none().0,
             ));
-            if fmt == ::AudioFormat::Unknown {
-                Err(glib_bool_error!("Failed to parse audio format from string"))
+            if fmt == crate::AudioFormat::Unknown {
+                Err(glib::glib_bool_error!(
+                    "Failed to parse audio format from string"
+                ))
             } else {
                 Ok(fmt)
             }
@@ -156,28 +156,29 @@ impl str::FromStr for ::AudioFormat {
     }
 }
 
-impl fmt::Display for ::AudioFormat {
+impl fmt::Display for crate::AudioFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.write_str((*self).to_str())
     }
 }
 
-impl PartialOrd for ::AudioFormat {
-    fn partial_cmp(&self, other: &::AudioFormat) -> Option<std::cmp::Ordering> {
-        ::AudioFormatInfo::from_format(*self).partial_cmp(&::AudioFormatInfo::from_format(*other))
+impl PartialOrd for crate::AudioFormat {
+    fn partial_cmp(&self, other: &crate::AudioFormat) -> Option<std::cmp::Ordering> {
+        crate::AudioFormatInfo::from_format(*self)
+            .partial_cmp(&crate::AudioFormatInfo::from_format(*other))
     }
 }
 
-impl Ord for ::AudioFormat {
-    fn cmp(&self, other: &::AudioFormat) -> std::cmp::Ordering {
-        ::AudioFormatInfo::from_format(*self).cmp(&::AudioFormatInfo::from_format(*other))
+impl Ord for crate::AudioFormat {
+    fn cmp(&self, other: &crate::AudioFormat) -> std::cmp::Ordering {
+        crate::AudioFormatInfo::from_format(*self).cmp(&crate::AudioFormatInfo::from_format(*other))
     }
 }
 
-pub const AUDIO_FORMAT_UNKNOWN: ::AudioFormat = ::AudioFormat::Unknown;
-pub const AUDIO_FORMAT_ENCODED: ::AudioFormat = ::AudioFormat::Encoded;
-pub const AUDIO_FORMAT_S8: ::AudioFormat = ::AudioFormat::S8;
-pub const AUDIO_FORMAT_U8: ::AudioFormat = ::AudioFormat::U8;
+pub const AUDIO_FORMAT_UNKNOWN: crate::AudioFormat = crate::AudioFormat::Unknown;
+pub const AUDIO_FORMAT_ENCODED: crate::AudioFormat = crate::AudioFormat::Encoded;
+pub const AUDIO_FORMAT_S8: crate::AudioFormat = crate::AudioFormat::S8;
+pub const AUDIO_FORMAT_U8: crate::AudioFormat = crate::AudioFormat::U8;
 
 #[cfg(target_endian = "big")]
 pub const AUDIO_FORMAT_S16: ::AudioFormat = ::AudioFormat::S16be;
@@ -209,33 +210,33 @@ pub const AUDIO_FORMAT_F32: ::AudioFormat = ::AudioFormat::F32be;
 pub const AUDIO_FORMAT_F64: ::AudioFormat = ::AudioFormat::F64be;
 
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_S16: ::AudioFormat = ::AudioFormat::S16le;
+pub const AUDIO_FORMAT_S16: crate::AudioFormat = crate::AudioFormat::S16le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_U16: ::AudioFormat = ::AudioFormat::U16le;
+pub const AUDIO_FORMAT_U16: crate::AudioFormat = crate::AudioFormat::U16le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_S2432: ::AudioFormat = ::AudioFormat::S2432le;
+pub const AUDIO_FORMAT_S2432: crate::AudioFormat = crate::AudioFormat::S2432le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_U2432: ::AudioFormat = ::AudioFormat::U2432le;
+pub const AUDIO_FORMAT_U2432: crate::AudioFormat = crate::AudioFormat::U2432le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_S32: ::AudioFormat = ::AudioFormat::S32le;
+pub const AUDIO_FORMAT_S32: crate::AudioFormat = crate::AudioFormat::S32le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_U32: ::AudioFormat = ::AudioFormat::U32le;
+pub const AUDIO_FORMAT_U32: crate::AudioFormat = crate::AudioFormat::U32le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_S24: ::AudioFormat = ::AudioFormat::S24le;
+pub const AUDIO_FORMAT_S24: crate::AudioFormat = crate::AudioFormat::S24le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_U24: ::AudioFormat = ::AudioFormat::U24le;
+pub const AUDIO_FORMAT_U24: crate::AudioFormat = crate::AudioFormat::U24le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_S20: ::AudioFormat = ::AudioFormat::S20le;
+pub const AUDIO_FORMAT_S20: crate::AudioFormat = crate::AudioFormat::S20le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_U20: ::AudioFormat = ::AudioFormat::U20le;
+pub const AUDIO_FORMAT_U20: crate::AudioFormat = crate::AudioFormat::U20le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_S18: ::AudioFormat = ::AudioFormat::S18le;
+pub const AUDIO_FORMAT_S18: crate::AudioFormat = crate::AudioFormat::S18le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_U18: ::AudioFormat = ::AudioFormat::U18le;
+pub const AUDIO_FORMAT_U18: crate::AudioFormat = crate::AudioFormat::U18le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_F32: ::AudioFormat = ::AudioFormat::F32le;
+pub const AUDIO_FORMAT_F32: crate::AudioFormat = crate::AudioFormat::F32le;
 #[cfg(target_endian = "little")]
-pub const AUDIO_FORMAT_F64: ::AudioFormat = ::AudioFormat::F64le;
+pub const AUDIO_FORMAT_F64: crate::AudioFormat = crate::AudioFormat::F64le;
 
 pub struct AudioFormatIterator {
     idx: usize,
@@ -252,7 +253,7 @@ impl Default for AudioFormatIterator {
 }
 
 impl Iterator for AudioFormatIterator {
-    type Item = ::AudioFormat;
+    type Item = crate::AudioFormat;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.len {
@@ -291,21 +292,21 @@ impl DoubleEndedIterator for AudioFormatIterator {
 pub trait AudioFormatIteratorExt {
     fn into_audio_caps(
         self,
-        layout: ::AudioLayout,
+        layout: crate::AudioLayout,
     ) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
 }
 
 impl<T> AudioFormatIteratorExt for T
 where
-    T: Iterator<Item = ::AudioFormat>,
+    T: Iterator<Item = crate::AudioFormat>,
 {
     fn into_audio_caps(
         self,
-        layout: ::AudioLayout,
+        layout: crate::AudioLayout,
     ) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
-        let formats: Vec<::AudioFormat> = self.collect();
+        let formats: Vec<crate::AudioFormat> = self.collect();
         if !formats.is_empty() {
-            Some(::functions::audio_make_raw_caps(&formats, layout))
+            Some(crate::functions::audio_make_raw_caps(&formats, layout))
         } else {
             None
         }
@@ -315,21 +316,21 @@ where
 pub trait AudioFormatIteratorExtRef {
     fn into_audio_caps(
         self,
-        layout: ::AudioLayout,
+        layout: crate::AudioLayout,
     ) -> Option<gst::caps::Builder<gst::caps::NoFeature>>;
 }
 
 impl<'a, T> AudioFormatIteratorExtRef for T
 where
-    T: Iterator<Item = &'a ::AudioFormat>,
+    T: Iterator<Item = &'a crate::AudioFormat>,
 {
     fn into_audio_caps(
         self,
-        layout: ::AudioLayout,
+        layout: crate::AudioLayout,
     ) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
-        let formats: Vec<::AudioFormat> = self.copied().collect();
+        let formats: Vec<crate::AudioFormat> = self.copied().collect();
         if !formats.is_empty() {
-            Some(::functions::audio_make_raw_caps(&formats, layout))
+            Some(crate::functions::audio_make_raw_caps(&formats, layout))
         } else {
             None
         }
@@ -338,14 +339,13 @@ where
 
 #[cfg(test)]
 mod tests {
-    use gst;
     use itertools::Itertools;
 
     #[test]
     fn test_display() {
         gst::init().unwrap();
 
-        format!("{}", ::AudioFormat::S16be);
+        format!("{}", crate::AudioFormat::S16be);
     }
 
     #[test]
@@ -353,13 +353,13 @@ mod tests {
         use super::*;
         gst::init().unwrap();
 
-        assert!(::AudioFormat::iter_raw().count() > 0);
+        assert!(crate::AudioFormat::iter_raw().count() > 0);
         assert_eq!(
-            ::AudioFormat::iter_raw().count(),
-            ::AudioFormat::iter_raw().len()
+            crate::AudioFormat::iter_raw().count(),
+            crate::AudioFormat::iter_raw().len()
         );
 
-        let mut i = ::AudioFormat::iter_raw();
+        let mut i = crate::AudioFormat::iter_raw();
         let mut count = 0;
         loop {
             if i.next().is_none() {
@@ -371,29 +371,29 @@ mod tests {
             }
             count += 1;
         }
-        assert_eq!(count, ::AudioFormat::iter_raw().len());
+        assert_eq!(count, crate::AudioFormat::iter_raw().len());
 
-        assert!(::AudioFormat::iter_raw().any(|f| f == ::AudioFormat::F64be));
-        assert!(::AudioFormat::iter_raw()
-            .find(|f| *f == ::AudioFormat::Encoded)
+        assert!(crate::AudioFormat::iter_raw().any(|f| f == crate::AudioFormat::F64be));
+        assert!(crate::AudioFormat::iter_raw()
+            .find(|f| *f == crate::AudioFormat::Encoded)
             .is_none());
 
-        let caps = ::AudioFormat::iter_raw().into_audio_caps(::AudioLayout::Interleaved);
+        let caps = crate::AudioFormat::iter_raw().into_audio_caps(crate::AudioLayout::Interleaved);
         assert!(caps.is_some());
 
-        let caps = ::AudioFormat::iter_raw()
-            .filter(|f| ::AudioFormatInfo::from_format(*f).is_little_endian())
-            .into_audio_caps(::AudioLayout::Interleaved);
+        let caps = crate::AudioFormat::iter_raw()
+            .filter(|f| crate::AudioFormatInfo::from_format(*f).is_little_endian())
+            .into_audio_caps(crate::AudioLayout::Interleaved);
         assert!(caps.is_some());
 
-        let caps = ::AudioFormat::iter_raw()
+        let caps = crate::AudioFormat::iter_raw()
             .skip(1000)
-            .into_audio_caps(::AudioLayout::Interleaved);
+            .into_audio_caps(crate::AudioLayout::Interleaved);
         assert!(caps.is_none());
 
-        let caps = [::AudioFormat::S16le, ::AudioFormat::S16be]
+        let caps = [crate::AudioFormat::S16le, crate::AudioFormat::S16be]
             .iter()
-            .into_audio_caps(::AudioLayout::Interleaved)
+            .into_audio_caps(crate::AudioLayout::Interleaved)
             .unwrap()
             .build();
         assert_eq!(caps.to_string(), "audio/x-raw, format=(string){ S16LE, S16BE }, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved");
@@ -404,16 +404,17 @@ mod tests {
         gst::init().unwrap();
 
         assert!(
-            ::AudioFormatInfo::from_format(::AudioFormat::F64be)
-                > ::AudioFormatInfo::from_format(::AudioFormat::U8)
+            crate::AudioFormatInfo::from_format(crate::AudioFormat::F64be)
+                > crate::AudioFormatInfo::from_format(crate::AudioFormat::U8)
         );
-        assert!(::AudioFormat::S20be > ::AudioFormat::S18be);
+        assert!(crate::AudioFormat::S20be > crate::AudioFormat::S18be);
 
-        let sorted: Vec<::AudioFormat> = ::AudioFormat::iter_raw().sorted().rev().collect();
+        let sorted: Vec<crate::AudioFormat> =
+            crate::AudioFormat::iter_raw().sorted().rev().collect();
         // FIXME: use is_sorted_by() once API is in stable
         assert_eq!(
             sorted,
-            ::AudioFormat::iter_raw().collect::<Vec<::AudioFormat>>()
+            crate::AudioFormat::iter_raw().collect::<Vec<crate::AudioFormat>>()
         );
     }
 }

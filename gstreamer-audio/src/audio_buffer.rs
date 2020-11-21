@@ -6,12 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_audio_sys;
-use gst_sys;
-
-use glib;
 use glib::translate::{from_glib, Borrowed, FromGlibPtrNone, ToGlibPtr};
-use gst;
 
 use std::fmt;
 use std::marker::PhantomData;
@@ -25,9 +20,9 @@ pub enum Writable {}
 
 pub struct AudioBuffer<T> {
     // Has to be boxed because it contains self-references
-    audio_buffer: Box<gst_audio_sys::GstAudioBuffer>,
+    audio_buffer: Box<ffi::GstAudioBuffer>,
     buffer: Option<gst::Buffer>,
-    info: ::AudioInfo,
+    info: crate::AudioInfo,
     phantom: PhantomData<T>,
 }
 
@@ -46,7 +41,7 @@ impl<T> fmt::Debug for AudioBuffer<T> {
 }
 
 impl<T> AudioBuffer<T> {
-    pub fn info(&self) -> &::AudioInfo {
+    pub fn info(&self) -> &crate::AudioInfo {
         &self.info
     }
 
@@ -54,11 +49,11 @@ impl<T> AudioBuffer<T> {
         self.buffer.take().unwrap()
     }
 
-    pub fn format(&self) -> ::AudioFormat {
+    pub fn format(&self) -> crate::AudioFormat {
         self.info().format()
     }
 
-    pub fn format_info(&self) -> ::AudioFormatInfo {
+    pub fn format_info(&self) -> crate::AudioFormatInfo {
         self.info().format_info()
     }
 
@@ -70,7 +65,7 @@ impl<T> AudioBuffer<T> {
         self.info().rate()
     }
 
-    pub fn layout(&self) -> ::AudioLayout {
+    pub fn layout(&self) -> crate::AudioLayout {
         self.info().layout()
     }
 
@@ -113,7 +108,9 @@ impl<T> AudioBuffer<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         unsafe {
@@ -134,7 +131,7 @@ impl<T> AudioBuffer<T> {
         }
     }
 
-    pub fn as_ptr(&self) -> *const gst_audio_sys::GstAudioBuffer {
+    pub fn as_ptr(&self) -> *const ffi::GstAudioBuffer {
         &*self.audio_buffer
     }
 }
@@ -142,7 +139,7 @@ impl<T> AudioBuffer<T> {
 impl<T> Drop for AudioBuffer<T> {
     fn drop(&mut self) {
         unsafe {
-            gst_audio_sys::gst_audio_buffer_unmap(&mut *self.audio_buffer);
+            ffi::gst_audio_buffer_unmap(&mut *self.audio_buffer);
         }
     }
 }
@@ -150,7 +147,7 @@ impl<T> Drop for AudioBuffer<T> {
 impl AudioBuffer<Readable> {
     pub fn from_buffer_readable(
         buffer: gst::Buffer,
-        info: &::AudioInfo,
+        info: &crate::AudioInfo,
     ) -> Result<AudioBuffer<Readable>, gst::Buffer> {
         skip_assert_initialized!();
 
@@ -158,18 +155,18 @@ impl AudioBuffer<Readable> {
 
         unsafe {
             let mut audio_buffer = Box::new(mem::MaybeUninit::zeroed().assume_init());
-            let res: bool = from_glib(gst_audio_sys::gst_audio_buffer_map(
+            let res: bool = from_glib(ffi::gst_audio_buffer_map(
                 &mut *audio_buffer,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                gst_sys::GST_MAP_READ,
+                gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
                 Err(buffer)
             } else {
-                let info = ::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut gst_audio_sys::GstAudioInfo,
+                let info = crate::AudioInfo::from_glib_none(
+                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
                 Ok(AudioBuffer {
                     audio_buffer,
@@ -185,7 +182,7 @@ impl AudioBuffer<Readable> {
 impl AudioBuffer<Writable> {
     pub fn from_buffer_writable(
         buffer: gst::Buffer,
-        info: &::AudioInfo,
+        info: &crate::AudioInfo,
     ) -> Result<AudioBuffer<Writable>, gst::Buffer> {
         skip_assert_initialized!();
 
@@ -193,18 +190,18 @@ impl AudioBuffer<Writable> {
 
         unsafe {
             let mut audio_buffer = Box::new(mem::MaybeUninit::zeroed().assume_init());
-            let res: bool = from_glib(gst_audio_sys::gst_audio_buffer_map(
+            let res: bool = from_glib(ffi::gst_audio_buffer_map(
                 &mut *audio_buffer,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                gst_sys::GST_MAP_READ | gst_sys::GST_MAP_WRITE,
+                gst::ffi::GST_MAP_READ | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
                 Err(buffer)
             } else {
-                let info = ::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut gst_audio_sys::GstAudioInfo,
+                let info = crate::AudioInfo::from_glib_none(
+                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
                 Ok(AudioBuffer {
                     audio_buffer,
@@ -222,7 +219,9 @@ impl AudioBuffer<Writable> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         unsafe {
@@ -243,19 +242,19 @@ impl AudioBuffer<Writable> {
         }
     }
 
-    pub fn as_mut_ptr(&mut self) -> *mut gst_audio_sys::GstAudioBuffer {
+    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstAudioBuffer {
         &mut *self.audio_buffer
     }
 }
 
 #[derive(Debug)]
 enum AudioBufferPtr {
-    Owned(Box<gst_audio_sys::GstAudioBuffer>),
-    Borrowed(ptr::NonNull<gst_audio_sys::GstAudioBuffer>),
+    Owned(Box<ffi::GstAudioBuffer>),
+    Borrowed(ptr::NonNull<ffi::GstAudioBuffer>),
 }
 
 impl ops::Deref for AudioBufferPtr {
-    type Target = gst_audio_sys::GstAudioBuffer;
+    type Target = ffi::GstAudioBuffer;
 
     fn deref(&self) -> &Self::Target {
         match self {
@@ -279,20 +278,20 @@ pub struct AudioBufferRef<T> {
     // Has to be boxed because it contains self-references
     audio_buffer: AudioBufferPtr,
     buffer: Option<T>,
-    info: ::AudioInfo,
+    info: crate::AudioInfo,
     unmap: bool,
 }
 
 impl<T> AudioBufferRef<T> {
-    pub fn info(&self) -> &::AudioInfo {
+    pub fn info(&self) -> &crate::AudioInfo {
         &self.info
     }
 
-    pub fn format(&self) -> ::AudioFormat {
+    pub fn format(&self) -> crate::AudioFormat {
         self.info().format()
     }
 
-    pub fn format_info(&self) -> ::AudioFormatInfo {
+    pub fn format_info(&self) -> crate::AudioFormatInfo {
         self.info().format_info()
     }
 
@@ -304,7 +303,7 @@ impl<T> AudioBufferRef<T> {
         self.info().rate()
     }
 
-    pub fn layout(&self) -> ::AudioLayout {
+    pub fn layout(&self) -> crate::AudioLayout {
         self.info().layout()
     }
 
@@ -343,7 +342,9 @@ impl<T> AudioBufferRef<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         unsafe {
@@ -354,19 +355,17 @@ impl<T> AudioBufferRef<T> {
         }
     }
 
-    pub fn as_ptr(&self) -> *const gst_audio_sys::GstAudioBuffer {
+    pub fn as_ptr(&self) -> *const ffi::GstAudioBuffer {
         &*self.audio_buffer
     }
 }
 
 impl<'a> AudioBufferRef<&'a gst::BufferRef> {
-    pub unsafe fn from_glib_borrow(
-        audio_buffer: *const gst_audio_sys::GstAudioBuffer,
-    ) -> Borrowed<Self> {
+    pub unsafe fn from_glib_borrow(audio_buffer: *const ffi::GstAudioBuffer) -> Borrowed<Self> {
         assert!(!audio_buffer.is_null());
 
-        let info = ::AudioInfo::from_glib_none(
-            &(*audio_buffer).info as *const _ as *mut gst_audio_sys::GstAudioInfo,
+        let info = crate::AudioInfo::from_glib_none(
+            &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
         );
         let buffer = gst::BufferRef::from_ptr((*audio_buffer).buffer);
         Borrowed::new(AudioBufferRef {
@@ -381,7 +380,7 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
 
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
-        info: &'b ::AudioInfo,
+        info: &'b crate::AudioInfo,
     ) -> Result<AudioBufferRef<&'a gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
@@ -389,18 +388,18 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
 
         unsafe {
             let mut audio_buffer = Box::new(mem::MaybeUninit::zeroed().assume_init());
-            let res: bool = from_glib(gst_audio_sys::gst_audio_buffer_map(
+            let res: bool = from_glib(ffi::gst_audio_buffer_map(
                 &mut *audio_buffer,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                gst_sys::GST_MAP_READ,
+                gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
-                Err(glib_bool_error!("Failed to map AudioBuffer"))
+                Err(glib::glib_bool_error!("Failed to map AudioBuffer"))
             } else {
-                let info = ::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut gst_audio_sys::GstAudioInfo,
+                let info = crate::AudioInfo::from_glib_none(
+                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
                 Ok(AudioBufferRef {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
@@ -418,13 +417,11 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
 }
 
 impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
-    pub unsafe fn from_glib_borrow_mut(
-        audio_buffer: *mut gst_audio_sys::GstAudioBuffer,
-    ) -> Borrowed<Self> {
+    pub unsafe fn from_glib_borrow_mut(audio_buffer: *mut ffi::GstAudioBuffer) -> Borrowed<Self> {
         assert!(!audio_buffer.is_null());
 
-        let info = ::AudioInfo::from_glib_none(
-            &(*audio_buffer).info as *const _ as *mut gst_audio_sys::GstAudioInfo,
+        let info = crate::AudioInfo::from_glib_none(
+            &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
         );
         let buffer = gst::BufferRef::from_mut_ptr((*audio_buffer).buffer);
         Borrowed::new(AudioBufferRef {
@@ -437,7 +434,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
 
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
-        info: &'b ::AudioInfo,
+        info: &'b crate::AudioInfo,
     ) -> Result<AudioBufferRef<&'a mut gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
@@ -445,18 +442,18 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
 
         unsafe {
             let mut audio_buffer = Box::new(mem::MaybeUninit::zeroed().assume_init());
-            let res: bool = from_glib(gst_audio_sys::gst_audio_buffer_map(
+            let res: bool = from_glib(ffi::gst_audio_buffer_map(
                 &mut *audio_buffer,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                gst_sys::GST_MAP_READ | gst_sys::GST_MAP_WRITE,
+                gst::ffi::GST_MAP_READ | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
-                Err(glib_bool_error!("Failed to map AudioBuffer"))
+                Err(glib::glib_bool_error!("Failed to map AudioBuffer"))
             } else {
-                let info = ::AudioInfo::from_glib_none(
-                    &audio_buffer.info as *const _ as *mut gst_audio_sys::GstAudioInfo,
+                let info = crate::AudioInfo::from_glib_none(
+                    &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
                 Ok(AudioBufferRef {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
@@ -474,7 +471,9 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         unsafe {
@@ -485,7 +484,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
         }
     }
 
-    pub fn as_mut_ptr(&mut self) -> *mut gst_audio_sys::GstAudioBuffer {
+    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstAudioBuffer {
         &mut *self.audio_buffer
     }
 }
@@ -508,7 +507,7 @@ impl<T> Drop for AudioBufferRef<T> {
     fn drop(&mut self) {
         unsafe {
             if self.unmap {
-                gst_audio_sys::gst_audio_buffer_unmap(&mut *self.audio_buffer);
+                ffi::gst_audio_buffer_unmap(&mut *self.audio_buffer);
             }
         }
     }
@@ -517,13 +516,12 @@ impl<T> Drop for AudioBufferRef<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gst;
 
     #[test]
     fn test_map_read() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
@@ -553,15 +551,15 @@ mod tests {
     fn test_map_read_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
-            .layout(::AudioLayout::NonInterleaved)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
+            .layout(crate::AudioLayout::NonInterleaved)
             .build()
             .unwrap();
         let mut buffer =
             gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
         {
             let buffer = buffer.get_mut().unwrap();
-            ::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
+            crate::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
         }
         let buffer = AudioBuffer::from_buffer_readable(buffer, &info).unwrap();
 
@@ -592,7 +590,7 @@ mod tests {
     fn test_map_write() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
@@ -622,15 +620,15 @@ mod tests {
     fn test_map_write_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
-            .layout(::AudioLayout::NonInterleaved)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
+            .layout(crate::AudioLayout::NonInterleaved)
             .build()
             .unwrap();
         let mut buffer =
             gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
         {
             let buffer = buffer.get_mut().unwrap();
-            ::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
+            crate::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
         }
         let mut buffer = AudioBuffer::from_buffer_writable(buffer, &info).unwrap();
 
@@ -661,7 +659,7 @@ mod tests {
     fn test_map_ref_read() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
@@ -682,15 +680,15 @@ mod tests {
     fn test_map_ref_read_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
-            .layout(::AudioLayout::NonInterleaved)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
+            .layout(crate::AudioLayout::NonInterleaved)
             .build()
             .unwrap();
         let mut buffer =
             gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
         {
             let buffer = buffer.get_mut().unwrap();
-            ::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
+            crate::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
         }
         let buffer = AudioBufferRef::from_buffer_ref_readable(&buffer, &info).unwrap();
 
@@ -711,7 +709,7 @@ mod tests {
     fn test_map_ref_write() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
             .build()
             .unwrap();
         let mut buffer =
@@ -737,15 +735,15 @@ mod tests {
     fn test_map_ref_write_planar() {
         gst::init().unwrap();
 
-        let info = ::AudioInfo::builder(::AUDIO_FORMAT_S16, 48000, 2)
-            .layout(::AudioLayout::NonInterleaved)
+        let info = crate::AudioInfo::builder(crate::AUDIO_FORMAT_S16, 48000, 2)
+            .layout(crate::AudioLayout::NonInterleaved)
             .build()
             .unwrap();
         let mut buffer =
             gst::Buffer::with_size(info.rate() as usize * info.bpf() as usize).unwrap();
         {
             let buffer = buffer.get_mut().unwrap();
-            ::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
+            crate::AudioMeta::add(buffer, &info, 48000, &[]).unwrap();
         }
 
         {

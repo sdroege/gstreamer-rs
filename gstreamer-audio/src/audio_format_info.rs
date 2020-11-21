@@ -6,16 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gobject_sys;
-use gst_audio_sys;
-
 use std::cmp::Ordering;
 use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-use glib;
 use glib::translate::{from_glib, FromGlib, FromGlibPtrNone, ToGlib, ToGlibPtr, ToGlibPtrMut};
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
@@ -49,21 +44,21 @@ impl ToGlib for AudioEndianness {
     }
 }
 
-pub struct AudioFormatInfo(&'static gst_audio_sys::GstAudioFormatInfo);
+pub struct AudioFormatInfo(&'static ffi::GstAudioFormatInfo);
 
 impl AudioFormatInfo {
-    pub fn from_format(format: ::AudioFormat) -> AudioFormatInfo {
+    pub fn from_format(format: crate::AudioFormat) -> AudioFormatInfo {
         assert_initialized_main_thread!();
 
         unsafe {
-            let info = gst_audio_sys::gst_audio_format_get_info(format.to_glib());
+            let info = ffi::gst_audio_format_get_info(format.to_glib());
             assert!(!info.is_null());
 
             AudioFormatInfo(&*info)
         }
     }
 
-    pub fn format(&self) -> ::AudioFormat {
+    pub fn format(&self) -> crate::AudioFormat {
         from_glib(self.0.format)
     }
 
@@ -75,7 +70,7 @@ impl AudioFormatInfo {
         unsafe { CStr::from_ptr(self.0.description).to_str().unwrap() }
     }
 
-    pub fn flags(&self) -> ::AudioFormatFlags {
+    pub fn flags(&self) -> crate::AudioFormatFlags {
         from_glib(self.0.flags)
     }
 
@@ -91,7 +86,7 @@ impl AudioFormatInfo {
         self.0.depth as u32
     }
 
-    pub fn unpack_format(&self) -> ::AudioFormat {
+    pub fn unpack_format(&self) -> crate::AudioFormat {
         from_glib(self.0.unpack_format)
     }
 
@@ -99,7 +94,7 @@ impl AudioFormatInfo {
         &self.0.silence
     }
 
-    pub fn unpack(&self, flags: ::AudioPackFlags, dest: &mut [u8], src: &[u8]) {
+    pub fn unpack(&self, flags: crate::AudioPackFlags, dest: &mut [u8], src: &[u8]) {
         let unpack_format = Self::from_format(self.unpack_format());
         let unpack_width = unpack_format.width() as usize;
 
@@ -133,7 +128,7 @@ impl AudioFormatInfo {
         }
     }
 
-    pub fn pack(&self, flags: ::AudioPackFlags, dest: &mut [u8], src: &[u8]) {
+    pub fn pack(&self, flags: crate::AudioPackFlags, dest: &mut [u8], src: &[u8]) {
         let unpack_format = Self::from_format(self.unpack_format());
         let unpack_width = unpack_format.width() as usize;
 
@@ -179,24 +174,20 @@ impl AudioFormatInfo {
         }
 
         unsafe {
-            gst_audio_sys::gst_audio_format_fill_silence(
-                self.0,
-                dest.as_mut_ptr() as *mut _,
-                dest.len(),
-            )
+            ffi::gst_audio_format_fill_silence(self.0, dest.as_mut_ptr() as *mut _, dest.len())
         }
     }
 
     pub fn is_float(&self) -> bool {
-        self.flags().contains(::AudioFormatFlags::FLOAT)
+        self.flags().contains(crate::AudioFormatFlags::FLOAT)
     }
 
     pub fn is_integer(&self) -> bool {
-        self.flags().contains(::AudioFormatFlags::INTEGER)
+        self.flags().contains(crate::AudioFormatFlags::INTEGER)
     }
 
     pub fn is_signed(&self) -> bool {
-        self.flags().contains(::AudioFormatFlags::SIGNED)
+        self.flags().contains(crate::AudioFormatFlags::SIGNED)
     }
 
     pub fn is_little_endian(&self) -> bool {
@@ -233,8 +224,8 @@ impl Ord for AudioFormatInfo {
             .then_with(|| self.width().cmp(&other.width()))
             .then_with(|| {
                 match (
-                    self.flags().contains(::AudioFormatFlags::FLOAT),
-                    other.flags().contains(::AudioFormatFlags::FLOAT),
+                    self.flags().contains(crate::AudioFormatFlags::FLOAT),
+                    other.flags().contains(crate::AudioFormatFlags::FLOAT),
                 ) {
                     (true, false) => Ordering::Greater,
                     (false, true) => Ordering::Less,
@@ -243,8 +234,8 @@ impl Ord for AudioFormatInfo {
             })
             .then_with(|| {
                 match (
-                    self.flags().contains(::AudioFormatFlags::SIGNED),
-                    other.flags().contains(::AudioFormatFlags::SIGNED),
+                    self.flags().contains(crate::AudioFormatFlags::SIGNED),
+                    other.flags().contains(crate::AudioFormatFlags::SIGNED),
                 ) {
                     (true, false) => Ordering::Greater,
                     (false, true) => Ordering::Less,
@@ -252,7 +243,7 @@ impl Ord for AudioFormatInfo {
                 }
             })
             .then_with(|| match (self.endianness(), other.endianness()) {
-                (::AudioEndianness::LittleEndian, ::AudioEndianness::BigEndian) => {
+                (crate::AudioEndianness::LittleEndian, crate::AudioEndianness::BigEndian) => {
                     #[cfg(target_endian = "little")]
                     {
                         Ordering::Greater
@@ -262,7 +253,7 @@ impl Ord for AudioFormatInfo {
                         Ordering::Less
                     }
                 }
-                (::AudioEndianness::BigEndian, ::AudioEndianness::LittleEndian) => {
+                (crate::AudioEndianness::BigEndian, crate::AudioEndianness::LittleEndian) => {
                     #[cfg(target_endian = "little")]
                     {
                         Ordering::Less
@@ -298,7 +289,7 @@ impl fmt::Display for AudioFormatInfo {
     }
 }
 
-impl str::FromStr for ::AudioFormatInfo {
+impl str::FromStr for crate::AudioFormatInfo {
     type Err = glib::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::BoolError> {
@@ -308,8 +299,8 @@ impl str::FromStr for ::AudioFormatInfo {
     }
 }
 
-impl From<::AudioFormat> for AudioFormatInfo {
-    fn from(f: ::AudioFormat) -> Self {
+impl From<crate::AudioFormat> for AudioFormatInfo {
+    fn from(f: crate::AudioFormat) -> Self {
         skip_assert_initialized!();
         Self::from_format(f)
     }
@@ -317,29 +308,26 @@ impl From<::AudioFormat> for AudioFormatInfo {
 
 impl glib::types::StaticType for AudioFormatInfo {
     fn static_type() -> glib::types::Type {
-        unsafe { glib::translate::from_glib(gst_audio_sys::gst_audio_format_info_get_type()) }
+        unsafe { glib::translate::from_glib(ffi::gst_audio_format_info_get_type()) }
     }
 }
 
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for AudioFormatInfo {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<AudioFormatInfo>::from_glib_none(gobject_sys::g_value_get_boxed(
+        Option::<AudioFormatInfo>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
             value.to_glib_none().0,
-        )
-            as *mut gst_audio_sys::GstAudioFormatInfo)
+        ) as *mut ffi::GstAudioFormatInfo)
     }
 }
 
 #[doc(hidden)]
 impl glib::value::SetValue for AudioFormatInfo {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_audio_sys::GstAudioFormatInfo>::to_glib_none(
-                this,
-            )
-            .0 as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstAudioFormatInfo>::to_glib_none(this).0
+                as glib::ffi::gpointer,
         )
     }
 }
@@ -347,42 +335,36 @@ impl glib::value::SetValue for AudioFormatInfo {
 #[doc(hidden)]
 impl glib::value::SetValueOptional for AudioFormatInfo {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_audio_sys::GstAudioFormatInfo>::to_glib_none(
-                &this,
-            )
-            .0 as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstAudioFormatInfo>::to_glib_none(&this).0
+                as glib::ffi::gpointer,
         )
     }
 }
 
 #[doc(hidden)]
 impl glib::translate::GlibPtrDefault for AudioFormatInfo {
-    type GlibType = *mut gst_audio_sys::GstAudioFormatInfo;
+    type GlibType = *mut ffi::GstAudioFormatInfo;
 }
 
 #[doc(hidden)]
-impl<'a> glib::translate::ToGlibPtr<'a, *const gst_audio_sys::GstAudioFormatInfo>
-    for AudioFormatInfo
-{
+impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioFormatInfo> for AudioFormatInfo {
     type Storage = &'a AudioFormatInfo;
 
-    fn to_glib_none(
-        &'a self,
-    ) -> glib::translate::Stash<'a, *const gst_audio_sys::GstAudioFormatInfo, Self> {
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstAudioFormatInfo, Self> {
         glib::translate::Stash(self.0, self)
     }
 
-    fn to_glib_full(&self) -> *const gst_audio_sys::GstAudioFormatInfo {
+    fn to_glib_full(&self) -> *const ffi::GstAudioFormatInfo {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*mut gst_audio_sys::GstAudioFormatInfo> for AudioFormatInfo {
+impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioFormatInfo> for AudioFormatInfo {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut gst_audio_sys::GstAudioFormatInfo) -> Self {
+    unsafe fn from_glib_none(ptr: *mut ffi::GstAudioFormatInfo) -> Self {
         AudioFormatInfo(&*ptr)
     }
 }
@@ -390,13 +372,12 @@ impl glib::translate::FromGlibPtrNone<*mut gst_audio_sys::GstAudioFormatInfo> fo
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gst;
 
     #[test]
     fn test_get() {
         gst::init().unwrap();
 
-        let info = AudioFormatInfo::from_format(::AudioFormat::S16le);
+        let info = AudioFormatInfo::from_format(crate::AudioFormat::S16le);
         assert_eq!(info.name(), "S16LE");
 
         let other_info = "S16LE".parse().unwrap();
@@ -407,7 +388,7 @@ mod tests {
     fn pack_unpack() {
         gst::init().unwrap();
 
-        let info = AudioFormatInfo::from_format(::AudioFormat::S16le);
+        let info = AudioFormatInfo::from_format(crate::AudioFormat::S16le);
         let unpack_info = AudioFormatInfo::from_format(info.unpack_format());
 
         assert!(unpack_info.width() > 0);
@@ -416,8 +397,8 @@ mod tests {
         let mut unpacked = [0; 16];
         let mut output = [0; 8];
 
-        info.unpack(::AudioPackFlags::empty(), &mut unpacked, &input);
-        info.pack(::AudioPackFlags::empty(), &mut output, &unpacked);
+        info.unpack(crate::AudioPackFlags::empty(), &mut unpacked, &input);
+        info.pack(crate::AudioPackFlags::empty(), &mut output, &unpacked);
 
         assert_eq!(input, output);
     }
