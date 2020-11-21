@@ -2,32 +2,28 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_sys;
-use Object;
 
-glib_wrapper! {
-    pub struct Allocator(Object<gst_sys::GstAllocator, gst_sys::GstAllocatorClass>) @extends Object;
+glib::glib_wrapper! {
+    pub struct Allocator(Object<ffi::GstAllocator, ffi::GstAllocatorClass>) @extends Object;
 
     match fn {
-        get_type => || gst_sys::gst_allocator_get_type(),
+        get_type => || ffi::gst_allocator_get_type(),
     }
 }
 
 impl Allocator {
     pub fn find(name: Option<&str>) -> Option<Allocator> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_allocator_find(name.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_allocator_find(name.to_glib_none().0)) }
     }
 
     pub fn register<P: IsA<Allocator>>(name: &str, allocator: &P) {
         skip_assert_initialized!();
         unsafe {
-            gst_sys::gst_allocator_register(
-                name.to_glib_none().0,
-                allocator.as_ref().to_glib_full(),
-            );
+            ffi::gst_allocator_register(name.to_glib_none().0, allocator.as_ref().to_glib_full());
         }
     }
 }
@@ -47,16 +43,16 @@ pub trait AllocatorExt: 'static {
 
 impl<O: IsA<Allocator>> AllocatorExt for O {
     //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory> {
-    //    unsafe { TODO: call gst_sys:gst_allocator_alloc() }
+    //    unsafe { TODO: call ffi:gst_allocator_alloc() }
     //}
 
     //fn free(&self, memory: /*Ignored*/&Memory) {
-    //    unsafe { TODO: call gst_sys:gst_allocator_free() }
+    //    unsafe { TODO: call ffi:gst_allocator_free() }
     //}
 
     fn set_default(&self) {
         unsafe {
-            gst_sys::gst_allocator_set_default(self.as_ref().to_glib_full());
+            ffi::gst_allocator_set_default(self.as_ref().to_glib_full());
         }
     }
 }

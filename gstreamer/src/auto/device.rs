@@ -2,27 +2,23 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::Caps;
+use crate::Element;
+use crate::Object;
+use crate::Structure;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
-use glib_sys;
-use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use Caps;
-use Element;
-use Object;
-use Structure;
 
-glib_wrapper! {
-    pub struct Device(Object<gst_sys::GstDevice, gst_sys::GstDeviceClass>) @extends Object;
+glib::glib_wrapper! {
+    pub struct Device(Object<ffi::GstDevice, ffi::GstDeviceClass>) @extends Object;
 
     match fn {
-        get_type => || gst_sys::gst_device_get_type(),
+        get_type => || ffi::gst_device_get_type(),
     }
 }
 
@@ -36,9 +32,9 @@ pub trait DeviceExt: 'static {
 
     fn get_caps(&self) -> Option<Caps>;
 
-    fn get_device_class(&self) -> GString;
+    fn get_device_class(&self) -> glib::GString;
 
-    fn get_display_name(&self) -> GString;
+    fn get_display_name(&self) -> glib::GString;
 
     fn get_properties(&self) -> Option<Structure>;
 
@@ -57,29 +53,29 @@ pub trait DeviceExt: 'static {
 impl<O: IsA<Device>> DeviceExt for O {
     fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_none(gst_sys::gst_device_create_element(
+            Option::<_>::from_glib_none(ffi::gst_device_create_element(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to create element for device"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to create element for device"))
         }
     }
 
     fn get_caps(&self) -> Option<Caps> {
-        unsafe { from_glib_full(gst_sys::gst_device_get_caps(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_device_get_caps(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_device_class(&self) -> GString {
+    fn get_device_class(&self) -> glib::GString {
         unsafe {
-            from_glib_full(gst_sys::gst_device_get_device_class(
+            from_glib_full(ffi::gst_device_get_device_class(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_display_name(&self) -> GString {
+    fn get_display_name(&self) -> glib::GString {
         unsafe {
-            from_glib_full(gst_sys::gst_device_get_display_name(
+            from_glib_full(ffi::gst_device_get_display_name(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -87,7 +83,7 @@ impl<O: IsA<Device>> DeviceExt for O {
 
     fn get_properties(&self) -> Option<Structure> {
         unsafe {
-            from_glib_full(gst_sys::gst_device_get_properties(
+            from_glib_full(ffi::gst_device_get_properties(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -95,7 +91,7 @@ impl<O: IsA<Device>> DeviceExt for O {
 
     fn has_classes(&self, classes: &str) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_device_has_classes(
+            from_glib(ffi::gst_device_has_classes(
                 self.as_ref().to_glib_none().0,
                 classes.to_glib_none().0,
             ))
@@ -104,7 +100,7 @@ impl<O: IsA<Device>> DeviceExt for O {
 
     fn has_classesv(&self, classes: &[&str]) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_device_has_classesv(
+            from_glib(ffi::gst_device_has_classesv(
                 self.as_ref().to_glib_none().0,
                 classes.to_glib_none().0,
             ))
@@ -116,8 +112,8 @@ impl<O: IsA<Device>> DeviceExt for O {
         element: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_device_reconfigure_element(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_device_reconfigure_element(
                     self.as_ref().to_glib_none().0,
                     element.as_ref().to_glib_none().0
                 ),
@@ -128,8 +124,8 @@ impl<O: IsA<Device>> DeviceExt for O {
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn removed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstDevice,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstDevice,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Device>,
         {

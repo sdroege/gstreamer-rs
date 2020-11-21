@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::Element;
+use crate::Object;
+use crate::Toc;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_sys;
-use Element;
-use Object;
-use Toc;
 
-glib_wrapper! {
-    pub struct TocSetter(Interface<gst_sys::GstTocSetter>) @requires Element, Object;
+glib::glib_wrapper! {
+    pub struct TocSetter(Interface<ffi::GstTocSetter>) @requires Element, Object;
 
     match fn {
-        get_type => || gst_sys::gst_toc_setter_get_type(),
+        get_type => || ffi::gst_toc_setter_get_type(),
     }
 }
 
@@ -32,22 +31,18 @@ pub trait TocSetterExt: 'static {
 
 impl<O: IsA<TocSetter>> TocSetterExt for O {
     fn get_toc(&self) -> Option<Toc> {
-        unsafe {
-            from_glib_full(gst_sys::gst_toc_setter_get_toc(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_full(ffi::gst_toc_setter_get_toc(self.as_ref().to_glib_none().0)) }
     }
 
     fn reset(&self) {
         unsafe {
-            gst_sys::gst_toc_setter_reset(self.as_ref().to_glib_none().0);
+            ffi::gst_toc_setter_reset(self.as_ref().to_glib_none().0);
         }
     }
 
     fn set_toc(&self, toc: Option<&Toc>) {
         unsafe {
-            gst_sys::gst_toc_setter_set_toc(self.as_ref().to_glib_none().0, toc.to_glib_none().0);
+            ffi::gst_toc_setter_set_toc(self.as_ref().to_glib_none().0, toc.to_glib_none().0);
         }
     }
 }

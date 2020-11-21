@@ -2,25 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
-use glib_sys;
-use gobject_sys;
-use gst_sys;
-use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib_wrapper! {
-    pub struct ChildProxy(Interface<gst_sys::GstChildProxy>);
+glib::glib_wrapper! {
+    pub struct ChildProxy(Interface<ffi::GstChildProxy>);
 
     match fn {
-        get_type => || gst_sys::gst_child_proxy_get_type(),
+        get_type => || ffi::gst_child_proxy_get_type(),
     }
 }
 
@@ -64,7 +58,7 @@ pub trait ChildProxyExt: 'static {
 impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str) {
         unsafe {
-            gst_sys::gst_child_proxy_child_added(
+            ffi::gst_child_proxy_child_added(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
@@ -74,7 +68,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
 
     fn child_removed<P: IsA<glib::Object>>(&self, child: &P, name: &str) {
         unsafe {
-            gst_sys::gst_child_proxy_child_removed(
+            ffi::gst_child_proxy_child_removed(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
@@ -83,12 +77,12 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     }
 
     //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call gst_sys:gst_child_proxy_get() }
+    //    unsafe { TODO: call ffi:gst_child_proxy_get() }
     //}
 
     fn get_child_by_index(&self, index: u32) -> Option<glib::Object> {
         unsafe {
-            from_glib_full(gst_sys::gst_child_proxy_get_child_by_index(
+            from_glib_full(ffi::gst_child_proxy_get_child_by_index(
                 self.as_ref().to_glib_none().0,
                 index,
             ))
@@ -97,7 +91,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
 
     fn get_child_by_name(&self, name: &str) -> Option<glib::Object> {
         unsafe {
-            from_glib_full(gst_sys::gst_child_proxy_get_child_by_name(
+            from_glib_full(ffi::gst_child_proxy_get_child_by_name(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))
@@ -105,23 +99,23 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     }
 
     fn get_children_count(&self) -> u32 {
-        unsafe { gst_sys::gst_child_proxy_get_children_count(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_child_proxy_get_children_count(self.as_ref().to_glib_none().0) }
     }
 
     //fn get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
-    //    unsafe { TODO: call gst_sys:gst_child_proxy_get_valist() }
+    //    unsafe { TODO: call ffi:gst_child_proxy_get_valist() }
     //}
 
     //fn lookup(&self, name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object> {
-    //    unsafe { TODO: call gst_sys:gst_child_proxy_lookup() }
+    //    unsafe { TODO: call ffi:gst_child_proxy_lookup() }
     //}
 
     //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call gst_sys:gst_child_proxy_set() }
+    //    unsafe { TODO: call ffi:gst_child_proxy_set() }
     //}
 
     //fn set_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
-    //    unsafe { TODO: call gst_sys:gst_child_proxy_set_valist() }
+    //    unsafe { TODO: call ffi:gst_child_proxy_set_valist() }
     //}
 
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(
@@ -132,10 +126,10 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
             P,
             F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static,
         >(
-            this: *mut gst_sys::GstChildProxy,
-            object: *mut gobject_sys::GObject,
+            this: *mut ffi::GstChildProxy,
+            object: *mut glib::gobject_ffi::GObject,
             name: *mut libc::c_char,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<ChildProxy>,
         {
@@ -143,7 +137,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
             f(
                 &ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
-                &GString::from_glib_borrow(name),
+                &glib::GString::from_glib_borrow(name),
             )
         }
         unsafe {
@@ -167,10 +161,10 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
             P,
             F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static,
         >(
-            this: *mut gst_sys::GstChildProxy,
-            object: *mut gobject_sys::GObject,
+            this: *mut ffi::GstChildProxy,
+            object: *mut glib::gobject_ffi::GObject,
             name: *mut libc::c_char,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<ChildProxy>,
         {
@@ -178,7 +172,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
             f(
                 &ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
-                &GString::from_glib_borrow(name),
+                &glib::GString::from_glib_borrow(name),
             )
         }
         unsafe {

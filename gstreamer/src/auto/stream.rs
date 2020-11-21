@@ -4,6 +4,19 @@
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+use crate::Caps;
+use crate::Object;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+use crate::StreamFlags;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+use crate::StreamType;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+use crate::TagList;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -14,36 +27,16 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use glib::GString;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use glib_sys;
-use gst_sys;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::mem::transmute;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use Caps;
-use Object;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use StreamFlags;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use StreamType;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use TagList;
 
-glib_wrapper! {
-    pub struct Stream(Object<gst_sys::GstStream, gst_sys::GstStreamClass>) @extends Object;
+glib::glib_wrapper! {
+    pub struct Stream(Object<ffi::GstStream, ffi::GstStreamClass>) @extends Object;
 
     match fn {
-        get_type => || gst_sys::gst_stream_get_type(),
+        get_type => || ffi::gst_stream_get_type(),
     }
 }
 
@@ -51,38 +44,38 @@ impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_caps(&self) -> Option<Caps> {
-        unsafe { from_glib_full(gst_sys::gst_stream_get_caps(self.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_stream_get_caps(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_flags(&self) -> StreamFlags {
-        unsafe { from_glib(gst_sys::gst_stream_get_stream_flags(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gst_stream_get_stream_flags(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream_id(&self) -> Option<GString> {
-        unsafe { from_glib_none(gst_sys::gst_stream_get_stream_id(self.to_glib_none().0)) }
+    pub fn get_stream_id(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::gst_stream_get_stream_id(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_type(&self) -> StreamType {
-        unsafe { from_glib(gst_sys::gst_stream_get_stream_type(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gst_stream_get_stream_type(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_tags(&self) -> Option<TagList> {
-        unsafe { from_glib_full(gst_sys::gst_stream_get_tags(self.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_stream_get_tags(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_caps(&self, caps: Option<&Caps>) {
         unsafe {
-            gst_sys::gst_stream_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
+            ffi::gst_stream_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
         }
     }
 
@@ -90,7 +83,7 @@ impl Stream {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_stream_flags(&self, flags: StreamFlags) {
         unsafe {
-            gst_sys::gst_stream_set_stream_flags(self.to_glib_none().0, flags.to_glib());
+            ffi::gst_stream_set_stream_flags(self.to_glib_none().0, flags.to_glib());
         }
     }
 
@@ -98,7 +91,7 @@ impl Stream {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_stream_type(&self, stream_type: StreamType) {
         unsafe {
-            gst_sys::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.to_glib());
+            ffi::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.to_glib());
         }
     }
 
@@ -106,7 +99,7 @@ impl Stream {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_tags(&self, tags: Option<&TagList>) {
         unsafe {
-            gst_sys::gst_stream_set_tags(self.to_glib_none().0, tags.to_glib_none().0);
+            ffi::gst_stream_set_tags(self.to_glib_none().0, tags.to_glib_none().0);
         }
     }
 
@@ -117,9 +110,9 @@ impl Stream {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_caps_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstStream,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstStream,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -146,9 +139,9 @@ impl Stream {
         unsafe extern "C" fn notify_stream_flags_trampoline<
             F: Fn(&Stream) + Send + Sync + 'static,
         >(
-            this: *mut gst_sys::GstStream,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstStream,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -175,9 +168,9 @@ impl Stream {
         unsafe extern "C" fn notify_stream_type_trampoline<
             F: Fn(&Stream) + Send + Sync + 'static,
         >(
-            this: *mut gst_sys::GstStream,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstStream,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -202,9 +195,9 @@ impl Stream {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_tags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstStream,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstStream,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))

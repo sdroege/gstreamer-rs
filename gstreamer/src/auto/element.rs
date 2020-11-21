@@ -2,34 +2,31 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::Bus;
+use crate::Caps;
+use crate::Clock;
+use crate::ClockTime;
+use crate::Context;
+use crate::ElementFactory;
+use crate::Object;
+use crate::Pad;
+use crate::PadLinkCheck;
+use crate::PadTemplate;
+use crate::URIType;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
-use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
-use Bus;
-use Caps;
-use Clock;
-use ClockTime;
-use Context;
-use ElementFactory;
-use Object;
-use Pad;
-use PadLinkCheck;
-use PadTemplate;
-use URIType;
 
-glib_wrapper! {
-    pub struct Element(Object<gst_sys::GstElement, gst_sys::GstElementClass>) @extends Object;
+glib::glib_wrapper! {
+    pub struct Element(Object<ffi::GstElement, ffi::GstElementClass>) @extends Object;
 
     match fn {
-        get_type => || gst_sys::gst_element_get_type(),
+        get_type => || ffi::gst_element_get_type(),
     }
 }
 
@@ -42,7 +39,7 @@ impl Element {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = gst_sys::gst_element_make_from_uri(
+            let ret = ffi::gst_element_make_from_uri(
                 type_.to_glib(),
                 uri.to_glib_none().0,
                 elementname.to_glib_none().0,
@@ -203,14 +200,14 @@ pub trait ElementExt: 'static {
 impl<O: IsA<Element>> ElementExt for O {
     fn abort_state(&self) {
         unsafe {
-            gst_sys::gst_element_abort_state(self.as_ref().to_glib_none().0);
+            ffi::gst_element_abort_state(self.as_ref().to_glib_none().0);
         }
     }
 
     fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_add_pad(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_add_pad(
                     self.as_ref().to_glib_none().0,
                     pad.as_ref().to_glib_none().0
                 ),
@@ -221,7 +218,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn create_all_pads(&self) {
         unsafe {
-            gst_sys::gst_element_create_all_pads(self.as_ref().to_glib_none().0);
+            ffi::gst_element_create_all_pads(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -230,10 +227,10 @@ impl<O: IsA<Element>> ElementExt for O {
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
-            element: *mut gst_sys::GstElement,
-            pad: *mut gst_sys::GstPad,
-            user_data: glib_sys::gpointer,
-        ) -> glib_sys::gboolean {
+            element: *mut ffi::GstElement,
+            pad: *mut ffi::GstPad,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
             let element = from_glib_borrow(element);
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
@@ -243,7 +240,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
         unsafe {
-            from_glib(gst_sys::gst_element_foreach_pad(
+            from_glib(ffi::gst_element_foreach_pad(
                 self.as_ref().to_glib_none().0,
                 func,
                 super_callback0 as *const _ as usize as *mut _,
@@ -256,10 +253,10 @@ impl<O: IsA<Element>> ElementExt for O {
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
-            element: *mut gst_sys::GstElement,
-            pad: *mut gst_sys::GstPad,
-            user_data: glib_sys::gpointer,
-        ) -> glib_sys::gboolean {
+            element: *mut ffi::GstElement,
+            pad: *mut ffi::GstPad,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
             let element = from_glib_borrow(element);
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
@@ -269,7 +266,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
         unsafe {
-            from_glib(gst_sys::gst_element_foreach_sink_pad(
+            from_glib(ffi::gst_element_foreach_sink_pad(
                 self.as_ref().to_glib_none().0,
                 func,
                 super_callback0 as *const _ as usize as *mut _,
@@ -282,10 +279,10 @@ impl<O: IsA<Element>> ElementExt for O {
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
-            element: *mut gst_sys::GstElement,
-            pad: *mut gst_sys::GstPad,
-            user_data: glib_sys::gpointer,
-        ) -> glib_sys::gboolean {
+            element: *mut ffi::GstElement,
+            pad: *mut ffi::GstPad,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
             let element = from_glib_borrow(element);
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
@@ -295,7 +292,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
         unsafe {
-            from_glib(gst_sys::gst_element_foreach_src_pad(
+            from_glib(ffi::gst_element_foreach_src_pad(
                 self.as_ref().to_glib_none().0,
                 func,
                 super_callback0 as *const _ as usize as *mut _,
@@ -305,27 +302,23 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn get_base_time(&self) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_element_get_base_time(
+            from_glib(ffi::gst_element_get_base_time(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_bus(&self) -> Option<Bus> {
-        unsafe { from_glib_full(gst_sys::gst_element_get_bus(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_element_get_bus(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_clock(&self) -> Option<Clock> {
-        unsafe {
-            from_glib_full(gst_sys::gst_element_get_clock(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_full(ffi::gst_element_get_clock(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad> {
         unsafe {
-            from_glib_full(gst_sys::gst_element_get_compatible_pad(
+            from_glib_full(ffi::gst_element_get_compatible_pad(
                 self.as_ref().to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
                 caps.to_glib_none().0,
@@ -335,7 +328,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate> {
         unsafe {
-            from_glib_none(gst_sys::gst_element_get_compatible_pad_template(
+            from_glib_none(ffi::gst_element_get_compatible_pad_template(
                 self.as_ref().to_glib_none().0,
                 compattempl.to_glib_none().0,
             ))
@@ -344,7 +337,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn get_context(&self, context_type: &str) -> Option<Context> {
         unsafe {
-            from_glib_full(gst_sys::gst_element_get_context(
+            from_glib_full(ffi::gst_element_get_context(
                 self.as_ref().to_glib_none().0,
                 context_type.to_glib_none().0,
             ))
@@ -353,23 +346,19 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn get_contexts(&self) -> Vec<Context> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_element_get_contexts(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_get_contexts(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_factory(&self) -> Option<ElementFactory> {
-        unsafe {
-            from_glib_none(gst_sys::gst_element_get_factory(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_element_get_factory(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_request_pad(&self, name: &str) -> Option<Pad> {
         unsafe {
-            from_glib_full(gst_sys::gst_element_get_request_pad(
+            from_glib_full(ffi::gst_element_get_request_pad(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))
@@ -378,7 +367,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn get_start_time(&self) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_element_get_start_time(
+            from_glib(ffi::gst_element_get_start_time(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -386,7 +375,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn get_static_pad(&self, name: &str) -> Option<Pad> {
         unsafe {
-            from_glib_full(gst_sys::gst_element_get_static_pad(
+            from_glib_full(ffi::gst_element_get_static_pad(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))
@@ -395,28 +384,28 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn is_locked_state(&self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_is_locked_state(
+            from_glib(ffi::gst_element_is_locked_state(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn iterate_pads(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call gst_sys:gst_element_iterate_pads() }
+    //    unsafe { TODO: call ffi:gst_element_iterate_pads() }
     //}
 
     //fn iterate_sink_pads(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call gst_sys:gst_element_iterate_sink_pads() }
+    //    unsafe { TODO: call ffi:gst_element_iterate_sink_pads() }
     //}
 
     //fn iterate_src_pads(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call gst_sys:gst_element_iterate_src_pads() }
+    //    unsafe { TODO: call ffi:gst_element_iterate_src_pads() }
     //}
 
     fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_link(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_link(
                     self.as_ref().to_glib_none().0,
                     dest.as_ref().to_glib_none().0
                 ),
@@ -431,8 +420,8 @@ impl<O: IsA<Element>> ElementExt for O {
         filter: Option<&Caps>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_link_filtered(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_link_filtered(
                     self.as_ref().to_glib_none().0,
                     dest.as_ref().to_glib_none().0,
                     filter.to_glib_none().0
@@ -443,7 +432,7 @@ impl<O: IsA<Element>> ElementExt for O {
     }
 
     //fn link_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> bool {
-    //    unsafe { TODO: call gst_sys:gst_element_link_many() }
+    //    unsafe { TODO: call ffi:gst_element_link_many() }
     //}
 
     fn link_pads<P: IsA<Element>>(
@@ -453,8 +442,8 @@ impl<O: IsA<Element>> ElementExt for O {
         destpadname: Option<&str>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_link_pads(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_link_pads(
                     self.as_ref().to_glib_none().0,
                     srcpadname.to_glib_none().0,
                     dest.as_ref().to_glib_none().0,
@@ -473,8 +462,8 @@ impl<O: IsA<Element>> ElementExt for O {
         filter: Option<&Caps>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_link_pads_filtered(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_link_pads_filtered(
                     self.as_ref().to_glib_none().0,
                     srcpadname.to_glib_none().0,
                     dest.as_ref().to_glib_none().0,
@@ -494,8 +483,8 @@ impl<O: IsA<Element>> ElementExt for O {
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_link_pads_full(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_link_pads_full(
                     self.as_ref().to_glib_none().0,
                     srcpadname.to_glib_none().0,
                     dest.as_ref().to_glib_none().0,
@@ -509,29 +498,29 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn lost_state(&self) {
         unsafe {
-            gst_sys::gst_element_lost_state(self.as_ref().to_glib_none().0);
+            ffi::gst_element_lost_state(self.as_ref().to_glib_none().0);
         }
     }
 
     //fn message_full(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32) {
-    //    unsafe { TODO: call gst_sys:gst_element_message_full() }
+    //    unsafe { TODO: call ffi:gst_element_message_full() }
     //}
 
     //#[cfg(any(feature = "v1_10", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure) {
-    //    unsafe { TODO: call gst_sys:gst_element_message_full_with_details() }
+    //    unsafe { TODO: call ffi:gst_element_message_full_with_details() }
     //}
 
     fn no_more_pads(&self) {
         unsafe {
-            gst_sys::gst_element_no_more_pads(self.as_ref().to_glib_none().0);
+            ffi::gst_element_no_more_pads(self.as_ref().to_glib_none().0);
         }
     }
 
     fn provide_clock(&self) -> Option<Clock> {
         unsafe {
-            from_glib_full(gst_sys::gst_element_provide_clock(
+            from_glib_full(ffi::gst_element_provide_clock(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -539,7 +528,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn release_request_pad<P: IsA<Pad>>(&self, pad: &P) {
         unsafe {
-            gst_sys::gst_element_release_request_pad(
+            ffi::gst_element_release_request_pad(
                 self.as_ref().to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
             );
@@ -548,8 +537,8 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_remove_pad(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_remove_pad(
                     self.as_ref().to_glib_none().0,
                     pad.as_ref().to_glib_none().0
                 ),
@@ -565,7 +554,7 @@ impl<O: IsA<Element>> ElementExt for O {
         caps: Option<&Caps>,
     ) -> Option<Pad> {
         unsafe {
-            from_glib_full(gst_sys::gst_element_request_pad(
+            from_glib_full(ffi::gst_element_request_pad(
                 self.as_ref().to_glib_none().0,
                 templ.to_glib_none().0,
                 name.to_glib_none().0,
@@ -576,20 +565,20 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn set_base_time(&self, time: ClockTime) {
         unsafe {
-            gst_sys::gst_element_set_base_time(self.as_ref().to_glib_none().0, time.to_glib());
+            ffi::gst_element_set_base_time(self.as_ref().to_glib_none().0, time.to_glib());
         }
     }
 
     fn set_bus(&self, bus: Option<&Bus>) {
         unsafe {
-            gst_sys::gst_element_set_bus(self.as_ref().to_glib_none().0, bus.to_glib_none().0);
+            ffi::gst_element_set_bus(self.as_ref().to_glib_none().0, bus.to_glib_none().0);
         }
     }
 
     fn set_clock<P: IsA<Clock>>(&self, clock: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_set_clock(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_set_clock(
                     self.as_ref().to_glib_none().0,
                     clock.map(|p| p.as_ref()).to_glib_none().0
                 ),
@@ -600,16 +589,13 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn set_context(&self, context: &Context) {
         unsafe {
-            gst_sys::gst_element_set_context(
-                self.as_ref().to_glib_none().0,
-                context.to_glib_none().0,
-            );
+            ffi::gst_element_set_context(self.as_ref().to_glib_none().0, context.to_glib_none().0);
         }
     }
 
     fn set_locked_state(&self, locked_state: bool) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_set_locked_state(
+            from_glib(ffi::gst_element_set_locked_state(
                 self.as_ref().to_glib_none().0,
                 locked_state.to_glib(),
             ))
@@ -618,14 +604,14 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn set_start_time(&self, time: ClockTime) {
         unsafe {
-            gst_sys::gst_element_set_start_time(self.as_ref().to_glib_none().0, time.to_glib());
+            ffi::gst_element_set_start_time(self.as_ref().to_glib_none().0, time.to_glib());
         }
     }
 
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_element_sync_state_with_parent(self.as_ref().to_glib_none().0),
+            glib::glib_result_from_gboolean!(
+                ffi::gst_element_sync_state_with_parent(self.as_ref().to_glib_none().0),
                 "Failed to sync state with parent"
             )
         }
@@ -633,7 +619,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn unlink<P: IsA<Element>>(&self, dest: &P) {
         unsafe {
-            gst_sys::gst_element_unlink(
+            ffi::gst_element_unlink(
                 self.as_ref().to_glib_none().0,
                 dest.as_ref().to_glib_none().0,
             );
@@ -641,12 +627,12 @@ impl<O: IsA<Element>> ElementExt for O {
     }
 
     //fn unlink_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call gst_sys:gst_element_unlink_many() }
+    //    unsafe { TODO: call ffi:gst_element_unlink_many() }
     //}
 
     fn unlink_pads<P: IsA<Element>>(&self, srcpadname: &str, dest: &P, destpadname: &str) {
         unsafe {
-            gst_sys::gst_element_unlink_pads(
+            ffi::gst_element_unlink_pads(
                 self.as_ref().to_glib_none().0,
                 srcpadname.to_glib_none().0,
                 dest.as_ref().to_glib_none().0,
@@ -657,8 +643,8 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn no_more_pads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstElement,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstElement,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Element>,
         {
@@ -683,9 +669,9 @@ impl<O: IsA<Element>> ElementExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pad_added_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstElement,
-            new_pad: *mut gst_sys::GstPad,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstElement,
+            new_pad: *mut ffi::GstPad,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Element>,
         {
@@ -713,9 +699,9 @@ impl<O: IsA<Element>> ElementExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn pad_removed_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstElement,
-            old_pad: *mut gst_sys::GstPad,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstElement,
+            old_pad: *mut ffi::GstPad,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Element>,
         {

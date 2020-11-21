@@ -2,19 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::URIType;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
-use gst_sys;
 use std::ptr;
-use URIType;
 
-glib_wrapper! {
-    pub struct URIHandler(Interface<gst_sys::GstURIHandler>);
+glib::glib_wrapper! {
+    pub struct URIHandler(Interface<ffi::GstURIHandler>);
 
     match fn {
-        get_type => || gst_sys::gst_uri_handler_get_type(),
+        get_type => || ffi::gst_uri_handler_get_type(),
     }
 }
 
@@ -24,9 +21,9 @@ unsafe impl Sync for URIHandler {}
 pub const NONE_URI_HANDLER: Option<&URIHandler> = None;
 
 pub trait URIHandlerExt: 'static {
-    fn get_protocols(&self) -> Vec<GString>;
+    fn get_protocols(&self) -> Vec<glib::GString>;
 
-    fn get_uri(&self) -> Option<GString>;
+    fn get_uri(&self) -> Option<glib::GString>;
 
     fn get_uri_type(&self) -> URIType;
 
@@ -34,25 +31,21 @@ pub trait URIHandlerExt: 'static {
 }
 
 impl<O: IsA<URIHandler>> URIHandlerExt for O {
-    fn get_protocols(&self) -> Vec<GString> {
+    fn get_protocols(&self) -> Vec<glib::GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(gst_sys::gst_uri_handler_get_protocols(
+            FromGlibPtrContainer::from_glib_none(ffi::gst_uri_handler_get_protocols(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_uri(&self) -> Option<GString> {
-        unsafe {
-            from_glib_full(gst_sys::gst_uri_handler_get_uri(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn get_uri(&self) -> Option<glib::GString> {
+        unsafe { from_glib_full(ffi::gst_uri_handler_get_uri(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_uri_type(&self) -> URIType {
         unsafe {
-            from_glib(gst_sys::gst_uri_handler_get_uri_type(
+            from_glib(ffi::gst_uri_handler_get_uri_type(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -61,7 +54,7 @@ impl<O: IsA<URIHandler>> URIHandlerExt for O {
     fn set_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = gst_sys::gst_uri_handler_set_uri(
+            let _ = ffi::gst_uri_handler_set_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 &mut error,

@@ -2,32 +2,29 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::Caps;
+use crate::Element;
+use crate::ElementFactoryListType;
+use crate::Object;
+use crate::PadDirection;
+use crate::PluginFeature;
+use crate::Rank;
+use crate::StaticPadTemplate;
+use crate::URIType;
 use glib::translate::*;
-use glib::GString;
-use gst_sys;
-use Caps;
-use Element;
-use ElementFactoryListType;
-use Object;
-use PadDirection;
-use PluginFeature;
-use Rank;
-use StaticPadTemplate;
-use URIType;
 
-glib_wrapper! {
-    pub struct ElementFactory(Object<gst_sys::GstElementFactory, gst_sys::GstElementFactoryClass>) @extends PluginFeature, Object;
+glib::glib_wrapper! {
+    pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
-        get_type => || gst_sys::gst_element_factory_get_type(),
+        get_type => || ffi::gst_element_factory_get_type(),
     }
 }
 
 impl ElementFactory {
     pub fn can_sink_all_caps(&self, caps: &Caps) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_factory_can_sink_all_caps(
+            from_glib(ffi::gst_element_factory_can_sink_all_caps(
                 self.to_glib_none().0,
                 caps.to_glib_none().0,
             ))
@@ -36,7 +33,7 @@ impl ElementFactory {
 
     pub fn can_sink_any_caps(&self, caps: &Caps) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_factory_can_sink_any_caps(
+            from_glib(ffi::gst_element_factory_can_sink_any_caps(
                 self.to_glib_none().0,
                 caps.to_glib_none().0,
             ))
@@ -45,7 +42,7 @@ impl ElementFactory {
 
     pub fn can_src_all_caps(&self, caps: &Caps) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_factory_can_src_all_caps(
+            from_glib(ffi::gst_element_factory_can_src_all_caps(
                 self.to_glib_none().0,
                 caps.to_glib_none().0,
             ))
@@ -54,7 +51,7 @@ impl ElementFactory {
 
     pub fn can_src_any_caps(&self, caps: &Caps) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_factory_can_src_any_caps(
+            from_glib(ffi::gst_element_factory_can_src_any_caps(
                 self.to_glib_none().0,
                 caps.to_glib_none().0,
             ))
@@ -63,70 +60,66 @@ impl ElementFactory {
 
     pub fn create(&self, name: Option<&str>) -> Result<Element, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_none(gst_sys::gst_element_factory_create(
+            Option::<_>::from_glib_none(ffi::gst_element_factory_create(
                 self.to_glib_none().0,
                 name.to_glib_none().0,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to create element from factory"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to create element from factory"))
         }
     }
 
     pub fn get_element_type(&self) -> glib::types::Type {
         unsafe {
-            from_glib(gst_sys::gst_element_factory_get_element_type(
+            from_glib(ffi::gst_element_factory_get_element_type(
                 self.to_glib_none().0,
             ))
         }
     }
 
-    pub fn get_metadata(&self, key: &str) -> Option<GString> {
+    pub fn get_metadata(&self, key: &str) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_sys::gst_element_factory_get_metadata(
+            from_glib_none(ffi::gst_element_factory_get_metadata(
                 self.to_glib_none().0,
                 key.to_glib_none().0,
             ))
         }
     }
 
-    pub fn get_metadata_keys(&self) -> Vec<GString> {
+    pub fn get_metadata_keys(&self) -> Vec<glib::GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_element_factory_get_metadata_keys(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_get_metadata_keys(
                 self.to_glib_none().0,
             ))
         }
     }
 
     pub fn get_num_pad_templates(&self) -> u32 {
-        unsafe { gst_sys::gst_element_factory_get_num_pad_templates(self.to_glib_none().0) }
+        unsafe { ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0) }
     }
 
     pub fn get_static_pad_templates(&self) -> Vec<StaticPadTemplate> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                gst_sys::gst_element_factory_get_static_pad_templates(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_static_pad_templates(
+                self.to_glib_none().0,
+            ))
         }
     }
 
-    pub fn get_uri_protocols(&self) -> Vec<GString> {
+    pub fn get_uri_protocols(&self) -> Vec<glib::GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(gst_sys::gst_element_factory_get_uri_protocols(
+            FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_uri_protocols(
                 self.to_glib_none().0,
             ))
         }
     }
 
     pub fn get_uri_type(&self) -> URIType {
-        unsafe {
-            from_glib(gst_sys::gst_element_factory_get_uri_type(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_element_factory_get_uri_type(self.to_glib_none().0)) }
     }
 
     pub fn has_interface(&self, interfacename: &str) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_factory_has_interface(
+            from_glib(ffi::gst_element_factory_has_interface(
                 self.to_glib_none().0,
                 interfacename.to_glib_none().0,
             ))
@@ -135,7 +128,7 @@ impl ElementFactory {
 
     pub fn list_is_type(&self, type_: ElementFactoryListType) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_element_factory_list_is_type(
+            from_glib(ffi::gst_element_factory_list_is_type(
                 self.to_glib_none().0,
                 type_,
             ))
@@ -144,7 +137,7 @@ impl ElementFactory {
 
     pub fn find(name: &str) -> Option<ElementFactory> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_element_factory_find(name.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_element_factory_find(name.to_glib_none().0)) }
     }
 
     pub fn list_filter(
@@ -155,7 +148,7 @@ impl ElementFactory {
     ) -> Vec<ElementFactory> {
         assert_initialized_main_thread!();
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_element_factory_list_filter(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_list_filter(
                 list.to_glib_none().0,
                 caps.to_glib_none().0,
                 direction.to_glib(),
@@ -167,7 +160,7 @@ impl ElementFactory {
     pub fn list_get_elements(type_: ElementFactoryListType, minrank: Rank) -> Vec<ElementFactory> {
         assert_initialized_main_thread!();
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_element_factory_list_get_elements(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_list_get_elements(
                 type_,
                 minrank.to_glib(),
             ))
@@ -177,11 +170,11 @@ impl ElementFactory {
     pub fn make(factoryname: &str, name: Option<&str>) -> Result<Element, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<_>::from_glib_none(gst_sys::gst_element_factory_make(
+            Option::<_>::from_glib_none(ffi::gst_element_factory_make(
                 factoryname.to_glib_none().0,
                 name.to_glib_none().0,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to create element from factory name"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to create element from factory name"))
         }
     }
 }

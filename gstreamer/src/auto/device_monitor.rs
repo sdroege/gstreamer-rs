@@ -2,29 +2,24 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::Bus;
+use crate::Device;
+use crate::Object;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use Bus;
-use Device;
-use Object;
 
-glib_wrapper! {
-    pub struct DeviceMonitor(Object<gst_sys::GstDeviceMonitor, gst_sys::GstDeviceMonitorClass>) @extends Object;
+glib::glib_wrapper! {
+    pub struct DeviceMonitor(Object<ffi::GstDeviceMonitor, ffi::GstDeviceMonitorClass>) @extends Object;
 
     match fn {
-        get_type => || gst_sys::gst_device_monitor_get_type(),
+        get_type => || ffi::gst_device_monitor_get_type(),
     }
 }
 
@@ -38,7 +33,7 @@ pub trait DeviceMonitorExt: 'static {
 
     fn get_devices(&self) -> Vec<Device>;
 
-    fn get_providers(&self) -> Vec<GString>;
+    fn get_providers(&self) -> Vec<glib::GString>;
 
     fn get_show_all_devices(&self) -> bool;
 
@@ -61,7 +56,7 @@ pub trait DeviceMonitorExt: 'static {
 impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
     fn get_bus(&self) -> Bus {
         unsafe {
-            from_glib_full(gst_sys::gst_device_monitor_get_bus(
+            from_glib_full(ffi::gst_device_monitor_get_bus(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -69,15 +64,15 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn get_devices(&self) -> Vec<Device> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_device_monitor_get_devices(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_devices(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_providers(&self) -> Vec<GString> {
+    fn get_providers(&self) -> Vec<glib::GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_device_monitor_get_providers(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_providers(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -85,7 +80,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn get_show_all_devices(&self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_device_monitor_get_show_all_devices(
+            from_glib(ffi::gst_device_monitor_get_show_all_devices(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -93,7 +88,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn set_show_all_devices(&self, show_all: bool) {
         unsafe {
-            gst_sys::gst_device_monitor_set_show_all_devices(
+            ffi::gst_device_monitor_set_show_all_devices(
                 self.as_ref().to_glib_none().0,
                 show_all.to_glib(),
             );
@@ -102,8 +97,8 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_device_monitor_start(self.as_ref().to_glib_none().0),
+            glib::glib_result_from_gboolean!(
+                ffi::gst_device_monitor_start(self.as_ref().to_glib_none().0),
                 "Failed to start"
             )
         }
@@ -111,15 +106,15 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn stop(&self) {
         unsafe {
-            gst_sys::gst_device_monitor_stop(self.as_ref().to_glib_none().0);
+            ffi::gst_device_monitor_stop(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_property_show_all(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"show-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -132,8 +127,8 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn set_property_show_all(&self, show_all: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"show-all\0".as_ptr() as *const _,
                 Value::from(&show_all).to_glib_none().0,
             );
@@ -145,9 +140,9 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_show_all_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_sys::GstDeviceMonitor,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstDeviceMonitor,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<DeviceMonitor>,
         {

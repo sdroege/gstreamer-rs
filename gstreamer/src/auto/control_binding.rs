@@ -2,21 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::ClockTime;
+use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use gobject_sys;
-use gst_sys;
-use ClockTime;
-use Object;
 
-glib_wrapper! {
-    pub struct ControlBinding(Object<gst_sys::GstControlBinding, gst_sys::GstControlBindingClass>) @extends Object;
+glib::glib_wrapper! {
+    pub struct ControlBinding(Object<ffi::GstControlBinding, ffi::GstControlBindingClass>) @extends Object;
 
     match fn {
-        get_type => || gst_sys::gst_control_binding_get_type(),
+        get_type => || ffi::gst_control_binding_get_type(),
     }
 }
 
@@ -47,7 +44,7 @@ pub trait ControlBindingExt: 'static {
 impl<O: IsA<ControlBinding>> ControlBindingExt for O {
     fn get_value(&self, timestamp: ClockTime) -> Option<glib::Value> {
         unsafe {
-            from_glib_full(gst_sys::gst_control_binding_get_value(
+            from_glib_full(ffi::gst_control_binding_get_value(
                 self.as_ref().to_glib_none().0,
                 timestamp.to_glib(),
             ))
@@ -55,12 +52,12 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
     }
 
     //fn get_value_array(&self, timestamp: ClockTime, interval: ClockTime, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool {
-    //    unsafe { TODO: call gst_sys:gst_control_binding_get_value_array() }
+    //    unsafe { TODO: call ffi:gst_control_binding_get_value_array() }
     //}
 
     fn is_disabled(&self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_control_binding_is_disabled(
+            from_glib(ffi::gst_control_binding_is_disabled(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -68,7 +65,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
 
     fn set_disabled(&self, disabled: bool) {
         unsafe {
-            gst_sys::gst_control_binding_set_disabled(
+            ffi::gst_control_binding_set_disabled(
                 self.as_ref().to_glib_none().0,
                 disabled.to_glib(),
             );
@@ -82,7 +79,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
         last_sync: ClockTime,
     ) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_control_binding_sync_values(
+            from_glib(ffi::gst_control_binding_sync_values(
                 self.as_ref().to_glib_none().0,
                 object.as_ref().to_glib_none().0,
                 timestamp.to_glib(),
@@ -94,8 +91,8 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
     fn get_property_object(&self) -> Option<Object> {
         unsafe {
             let mut value = Value::from_type(<Object as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"object\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );

@@ -2,19 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::Object;
+use crate::Pad;
+use crate::ProxyPad;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_sys;
-use Object;
-use Pad;
-use ProxyPad;
 
-glib_wrapper! {
-    pub struct GhostPad(Object<gst_sys::GstGhostPad, gst_sys::GstGhostPadClass>) @extends ProxyPad, Pad, Object;
+glib::glib_wrapper! {
+    pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass>) @extends ProxyPad, Pad, Object;
 
     match fn {
-        get_type => || gst_sys::gst_ghost_pad_get_type(),
+        get_type => || ffi::gst_ghost_pad_get_type(),
     }
 }
 
@@ -32,7 +30,7 @@ pub trait GhostPadExt: 'static {
 impl<O: IsA<GhostPad>> GhostPadExt for O {
     fn get_target(&self) -> Option<Pad> {
         unsafe {
-            from_glib_full(gst_sys::gst_ghost_pad_get_target(
+            from_glib_full(ffi::gst_ghost_pad_get_target(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -40,8 +38,8 @@ impl<O: IsA<GhostPad>> GhostPadExt for O {
 
     fn set_target<P: IsA<Pad>>(&self, newtarget: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_ghost_pad_set_target(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_ghost_pad_set_target(
                     self.as_ref().to_glib_none().0,
                     newtarget.map(|p| p.as_ref()).to_glib_none().0
                 ),

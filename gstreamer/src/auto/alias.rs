@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 #[allow(unused_imports)]
-use auto::*;
+use crate::auto::*;
 
 pub type ClockTimeDiff = i64;
 pub type ElementFactoryListType = u64;

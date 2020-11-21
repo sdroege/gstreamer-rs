@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ClockTime;
+use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_sys;
 use std::mem;
-use ClockTime;
-use Object;
 
-glib_wrapper! {
-    pub struct ControlSource(Object<gst_sys::GstControlSource, gst_sys::GstControlSourceClass>) @extends Object;
+glib::glib_wrapper! {
+    pub struct ControlSource(Object<ffi::GstControlSource, ffi::GstControlSourceClass>) @extends Object;
 
     match fn {
-        get_type => || gst_sys::gst_control_source_get_type(),
+        get_type => || ffi::gst_control_source_get_type(),
     }
 }
 
@@ -30,7 +29,7 @@ impl<O: IsA<ControlSource>> ControlSourceExt for O {
     fn get_value(&self, timestamp: ClockTime) -> Option<f64> {
         unsafe {
             let mut value = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_sys::gst_control_source_get_value(
+            let ret = from_glib(ffi::gst_control_source_get_value(
                 self.as_ref().to_glib_none().0,
                 timestamp.to_glib(),
                 value.as_mut_ptr(),
