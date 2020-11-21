@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -10,18 +9,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_base_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib_wrapper! {
-    pub struct BaseSrc(Object<gst_base_sys::GstBaseSrc, gst_base_sys::GstBaseSrcClass>) @extends gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_base_sys::gst_base_src_get_type(),
+        get_type => || ffi::gst_base_src_get_type(),
     }
 }
 
@@ -50,7 +45,7 @@ pub trait BaseSrcExt: 'static {
     #[cfg_attr(feature = "v1_18", deprecated)]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
 
-    fn set_async(&self, async: bool);
+    fn set_async(&self, async_: bool);
 
     fn set_automatic_eos(&self, automatic_eos: bool);
 
@@ -97,16 +92,16 @@ pub trait BaseSrcExt: 'static {
 
 impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams) {
-    //    unsafe { TODO: call gst_base_sys:gst_base_src_get_allocator() }
+    //    unsafe { TODO: call ffi:gst_base_src_get_allocator() }
     //}
 
     fn get_blocksize(&self) -> u32 {
-        unsafe { gst_base_sys::gst_base_src_get_blocksize(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_base_src_get_blocksize(self.as_ref().to_glib_none().0) }
     }
 
     fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_base_src_get_buffer_pool(
+            from_glib_full(ffi::gst_base_src_get_buffer_pool(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -114,41 +109,29 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn get_do_timestamp(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_src_get_do_timestamp(
+            from_glib(ffi::gst_base_src_get_do_timestamp(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn is_async(&self) -> bool {
-        unsafe {
-            from_glib(gst_base_sys::gst_base_src_is_async(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_base_src_is_async(self.as_ref().to_glib_none().0)) }
     }
 
     fn is_live(&self) -> bool {
-        unsafe {
-            from_glib(gst_base_sys::gst_base_src_is_live(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_base_src_is_live(self.as_ref().to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool {
-        unsafe {
-            from_glib(gst_base_sys::gst_base_src_negotiate(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_base_src_negotiate(self.as_ref().to_glib_none().0)) }
     }
 
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_src_new_seamless_segment(
+            from_glib(ffi::gst_base_src_new_seamless_segment(
                 self.as_ref().to_glib_none().0,
                 start,
                 stop,
@@ -157,15 +140,15 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn set_async(&self, async: bool) {
+    fn set_async(&self, async_: bool) {
         unsafe {
-            gst_base_sys::gst_base_src_set_async(self.as_ref().to_glib_none().0, async.to_glib());
+            ffi::gst_base_src_set_async(self.as_ref().to_glib_none().0, async_.to_glib());
         }
     }
 
     fn set_automatic_eos(&self, automatic_eos: bool) {
         unsafe {
-            gst_base_sys::gst_base_src_set_automatic_eos(
+            ffi::gst_base_src_set_automatic_eos(
                 self.as_ref().to_glib_none().0,
                 automatic_eos.to_glib(),
             );
@@ -174,17 +157,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
-            gst_base_sys::gst_base_src_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
+            ffi::gst_base_src_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
         }
     }
 
     fn set_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_base_sys::gst_base_src_set_caps(
-                    self.as_ref().to_glib_none().0,
-                    caps.to_glib_none().0
-                ),
+            glib::glib_result_from_gboolean!(
+                ffi::gst_base_src_set_caps(self.as_ref().to_glib_none().0, caps.to_glib_none().0),
                 "Failed to set caps"
             )
         }
@@ -192,39 +172,33 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn set_do_timestamp(&self, timestamp: bool) {
         unsafe {
-            gst_base_sys::gst_base_src_set_do_timestamp(
-                self.as_ref().to_glib_none().0,
-                timestamp.to_glib(),
-            );
+            ffi::gst_base_src_set_do_timestamp(self.as_ref().to_glib_none().0, timestamp.to_glib());
         }
     }
 
     fn set_dynamic_size(&self, dynamic: bool) {
         unsafe {
-            gst_base_sys::gst_base_src_set_dynamic_size(
-                self.as_ref().to_glib_none().0,
-                dynamic.to_glib(),
-            );
+            ffi::gst_base_src_set_dynamic_size(self.as_ref().to_glib_none().0, dynamic.to_glib());
         }
     }
 
     fn set_format(&self, format: gst::Format) {
         unsafe {
-            gst_base_sys::gst_base_src_set_format(self.as_ref().to_glib_none().0, format.to_glib());
+            ffi::gst_base_src_set_format(self.as_ref().to_glib_none().0, format.to_glib());
         }
     }
 
     fn set_live(&self, live: bool) {
         unsafe {
-            gst_base_sys::gst_base_src_set_live(self.as_ref().to_glib_none().0, live.to_glib());
+            ffi::gst_base_src_set_live(self.as_ref().to_glib_none().0, live.to_glib());
         }
     }
 
     fn get_property_num_buffers(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"num-buffers\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -237,8 +211,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn set_property_num_buffers(&self, num_buffers: i32) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"num-buffers\0".as_ptr() as *const _,
                 Value::from(&num_buffers).to_glib_none().0,
             );
@@ -248,8 +222,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn get_property_typefind(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"typefind\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -262,8 +236,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn set_property_typefind(&self, typefind: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"typefind\0".as_ptr() as *const _,
                 Value::from(&typefind).to_glib_none().0,
             );
@@ -275,9 +249,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSrc>,
         {
@@ -302,9 +276,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_do_timestamp_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSrc>,
         {
@@ -329,9 +303,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_num_buffers_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSrc>,
         {
@@ -356,9 +330,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_typefind_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSrc,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSrc>,
         {

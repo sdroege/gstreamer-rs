@@ -2,8 +2,8 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use bitflags::bitflags;
 use glib::translate::*;
-use gst_base_sys;
 
 bitflags! {
     pub struct BaseParseFrameFlags: u32 {
@@ -17,16 +17,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for BaseParseFrameFlags {
-    type GlibType = gst_base_sys::GstBaseParseFrameFlags;
+    type GlibType = ffi::GstBaseParseFrameFlags;
 
-    fn to_glib(&self) -> gst_base_sys::GstBaseParseFrameFlags {
+    fn to_glib(&self) -> ffi::GstBaseParseFrameFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_base_sys::GstBaseParseFrameFlags> for BaseParseFrameFlags {
-    fn from_glib(value: gst_base_sys::GstBaseParseFrameFlags) -> BaseParseFrameFlags {
+impl FromGlib<ffi::GstBaseParseFrameFlags> for BaseParseFrameFlags {
+    fn from_glib(value: ffi::GstBaseParseFrameFlags) -> BaseParseFrameFlags {
         skip_assert_initialized!();
         BaseParseFrameFlags::from_bits_truncate(value)
     }

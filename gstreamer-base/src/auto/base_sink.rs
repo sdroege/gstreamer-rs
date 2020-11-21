@@ -9,18 +9,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_base_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib_wrapper! {
-    pub struct BaseSink(Object<gst_base_sys::GstBaseSink, gst_base_sys::GstBaseSinkClass>) @extends gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct BaseSink(Object<ffi::GstBaseSink, ffi::GstBaseSinkClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_base_sys::gst_base_sink_get_type(),
+        get_type => || ffi::gst_base_sink_get_type(),
     }
 }
 
@@ -98,7 +94,7 @@ pub trait BaseSinkExt: 'static {
 
     fn get_property_async(&self) -> bool;
 
-    fn set_property_async(&self, async: bool);
+    fn set_property_async(&self, async_: bool);
 
     fn get_property_enable_last_sample(&self) -> bool;
 
@@ -180,18 +176,18 @@ pub trait BaseSinkExt: 'static {
 
 impl<O: IsA<BaseSink>> BaseSinkExt for O {
     //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> gst::FlowReturn {
-    //    unsafe { TODO: call gst_base_sys:gst_base_sink_do_preroll() }
+    //    unsafe { TODO: call ffi:gst_base_sink_do_preroll() }
     //}
 
     fn get_blocksize(&self) -> u32 {
-        unsafe { gst_base_sys::gst_base_sink_get_blocksize(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_base_sink_get_blocksize(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn get_drop_out_of_segment(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_sink_get_drop_out_of_segment(
+            from_glib(ffi::gst_base_sink_get_drop_out_of_segment(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -199,7 +195,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn get_last_sample(&self) -> Option<gst::Sample> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_base_sink_get_last_sample(
+            from_glib_full(ffi::gst_base_sink_get_last_sample(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -207,25 +203,25 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn get_latency(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_base_sys::gst_base_sink_get_latency(
+            from_glib(ffi::gst_base_sink_get_latency(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_max_bitrate(&self) -> u64 {
-        unsafe { gst_base_sys::gst_base_sink_get_max_bitrate(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_base_sink_get_max_bitrate(self.as_ref().to_glib_none().0) }
     }
 
     fn get_max_lateness(&self) -> i64 {
-        unsafe { gst_base_sys::gst_base_sink_get_max_lateness(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_base_sink_get_max_lateness(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_processing_deadline(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_base_sys::gst_base_sink_get_processing_deadline(
+            from_glib(ffi::gst_base_sink_get_processing_deadline(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -233,7 +229,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn get_render_delay(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_base_sys::gst_base_sink_get_render_delay(
+            from_glib(ffi::gst_base_sink_get_render_delay(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -242,32 +238,24 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_stats(&self) -> Option<gst::Structure> {
-        unsafe {
-            from_glib_full(gst_base_sys::gst_base_sink_get_stats(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_full(ffi::gst_base_sink_get_stats(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_sync(&self) -> bool {
-        unsafe {
-            from_glib(gst_base_sys::gst_base_sink_get_sync(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_base_sink_get_sync(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_throttle_time(&self) -> u64 {
-        unsafe { gst_base_sys::gst_base_sink_get_throttle_time(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_base_sink_get_throttle_time(self.as_ref().to_glib_none().0) }
     }
 
     fn get_ts_offset(&self) -> gst::ClockTimeDiff {
-        unsafe { gst_base_sys::gst_base_sink_get_ts_offset(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_base_sink_get_ts_offset(self.as_ref().to_glib_none().0) }
     }
 
     fn is_async_enabled(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_sink_is_async_enabled(
+            from_glib(ffi::gst_base_sink_is_async_enabled(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -275,7 +263,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn is_last_sample_enabled(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_sink_is_last_sample_enabled(
+            from_glib(ffi::gst_base_sink_is_last_sample_enabled(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -283,7 +271,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn is_qos_enabled(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_sink_is_qos_enabled(
+            from_glib(ffi::gst_base_sink_is_qos_enabled(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -291,16 +279,13 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn set_async_enabled(&self, enabled: bool) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_async_enabled(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::gst_base_sink_set_async_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
+            ffi::gst_base_sink_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
         }
     }
 
@@ -308,7 +293,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_drop_out_of_segment(
+            ffi::gst_base_sink_set_drop_out_of_segment(
                 self.as_ref().to_glib_none().0,
                 drop_out_of_segment.to_glib(),
             );
@@ -317,7 +302,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn set_last_sample_enabled(&self, enabled: bool) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_last_sample_enabled(
+            ffi::gst_base_sink_set_last_sample_enabled(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -326,19 +311,13 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn set_max_bitrate(&self, max_bitrate: u64) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_max_bitrate(
-                self.as_ref().to_glib_none().0,
-                max_bitrate,
-            );
+            ffi::gst_base_sink_set_max_bitrate(self.as_ref().to_glib_none().0, max_bitrate);
         }
     }
 
     fn set_max_lateness(&self, max_lateness: i64) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_max_lateness(
-                self.as_ref().to_glib_none().0,
-                max_lateness,
-            );
+            ffi::gst_base_sink_set_max_lateness(self.as_ref().to_glib_none().0, max_lateness);
         }
     }
 
@@ -346,7 +325,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_processing_deadline(
+            ffi::gst_base_sink_set_processing_deadline(
                 self.as_ref().to_glib_none().0,
                 processing_deadline.to_glib(),
             );
@@ -355,45 +334,39 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_qos_enabled(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::gst_base_sink_set_qos_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_render_delay(&self, delay: gst::ClockTime) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_render_delay(
-                self.as_ref().to_glib_none().0,
-                delay.to_glib(),
-            );
+            ffi::gst_base_sink_set_render_delay(self.as_ref().to_glib_none().0, delay.to_glib());
         }
     }
 
     fn set_sync(&self, sync: bool) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_sync(self.as_ref().to_glib_none().0, sync.to_glib());
+            ffi::gst_base_sink_set_sync(self.as_ref().to_glib_none().0, sync.to_glib());
         }
     }
 
     fn set_throttle_time(&self, throttle: u64) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_throttle_time(self.as_ref().to_glib_none().0, throttle);
+            ffi::gst_base_sink_set_throttle_time(self.as_ref().to_glib_none().0, throttle);
         }
     }
 
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff) {
         unsafe {
-            gst_base_sys::gst_base_sink_set_ts_offset(self.as_ref().to_glib_none().0, offset);
+            ffi::gst_base_sink_set_ts_offset(self.as_ref().to_glib_none().0, offset);
         }
     }
 
     fn get_property_async(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"async\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -404,12 +377,12 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn set_property_async(&self, async: bool) {
+    fn set_property_async(&self, async_: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"async\0".as_ptr() as *const _,
-                Value::from(&async).to_glib_none().0,
+                Value::from(&async_).to_glib_none().0,
             );
         }
     }
@@ -417,8 +390,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     fn get_property_enable_last_sample(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"enable-last-sample\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -431,8 +404,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn set_property_enable_last_sample(&self, enable_last_sample: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"enable-last-sample\0".as_ptr() as *const _,
                 Value::from(&enable_last_sample).to_glib_none().0,
             );
@@ -442,8 +415,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     fn get_property_qos(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -456,8 +429,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn set_property_qos(&self, qos: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
                 Value::from(&qos).to_glib_none().0,
             );
@@ -469,9 +442,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_async_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -496,9 +469,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -526,9 +499,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -553,9 +526,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -580,9 +553,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_bitrate_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -607,9 +580,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_lateness_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -639,9 +612,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -666,9 +639,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -693,9 +666,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_render_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -722,9 +695,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_stats_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -749,9 +722,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_sync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -776,9 +749,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_throttle_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {
@@ -803,9 +776,9 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_ts_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_base_sys::GstBaseSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<BaseSink>,
         {

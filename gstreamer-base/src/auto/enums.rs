@@ -9,8 +9,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_base_sys;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -28,19 +26,13 @@ pub enum AggregatorStartTimeSelection {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl ToGlib for AggregatorStartTimeSelection {
-    type GlibType = gst_base_sys::GstAggregatorStartTimeSelection;
+    type GlibType = ffi::GstAggregatorStartTimeSelection;
 
-    fn to_glib(&self) -> gst_base_sys::GstAggregatorStartTimeSelection {
+    fn to_glib(&self) -> ffi::GstAggregatorStartTimeSelection {
         match *self {
-            AggregatorStartTimeSelection::Zero => {
-                gst_base_sys::GST_AGGREGATOR_START_TIME_SELECTION_ZERO
-            }
-            AggregatorStartTimeSelection::First => {
-                gst_base_sys::GST_AGGREGATOR_START_TIME_SELECTION_FIRST
-            }
-            AggregatorStartTimeSelection::Set => {
-                gst_base_sys::GST_AGGREGATOR_START_TIME_SELECTION_SET
-            }
+            AggregatorStartTimeSelection::Zero => ffi::GST_AGGREGATOR_START_TIME_SELECTION_ZERO,
+            AggregatorStartTimeSelection::First => ffi::GST_AGGREGATOR_START_TIME_SELECTION_FIRST,
+            AggregatorStartTimeSelection::Set => ffi::GST_AGGREGATOR_START_TIME_SELECTION_SET,
             AggregatorStartTimeSelection::__Unknown(value) => value,
         }
     }
@@ -49,8 +41,8 @@ impl ToGlib for AggregatorStartTimeSelection {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
-impl FromGlib<gst_base_sys::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelection {
-    fn from_glib(value: gst_base_sys::GstAggregatorStartTimeSelection) -> Self {
+impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelection {
+    fn from_glib(value: ffi::GstAggregatorStartTimeSelection) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AggregatorStartTimeSelection::Zero,
@@ -65,7 +57,7 @@ impl FromGlib<gst_base_sys::GstAggregatorStartTimeSelection> for AggregatorStart
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for AggregatorStartTimeSelection {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_base_sys::gst_aggregator_start_time_selection_get_type()) }
+        unsafe { from_glib(ffi::gst_aggregator_start_time_selection_get_type()) }
     }
 }
 
@@ -81,7 +73,7 @@ impl<'a> FromValueOptional<'a> for AggregatorStartTimeSelection {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
@@ -89,6 +81,6 @@ impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl SetValue for AggregatorStartTimeSelection {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

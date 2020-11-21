@@ -2,16 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::BaseSrc;
 use glib::translate::*;
-use gst;
-use gst_base_sys;
-use BaseSrc;
 
-glib_wrapper! {
-    pub struct PushSrc(Object<gst_base_sys::GstPushSrc, gst_base_sys::GstPushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_base_sys::gst_push_src_get_type(),
+        get_type => || ffi::gst_push_src_get_type(),
     }
 }
 
