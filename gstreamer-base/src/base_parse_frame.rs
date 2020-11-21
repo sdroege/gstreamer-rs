@@ -7,18 +7,16 @@
 // except according to those terms.
 
 use glib::translate::*;
-use gst;
-use gst_base_sys;
 use std::convert::TryFrom;
 use std::fmt;
 use std::marker::PhantomData;
 use std::ptr;
 
-use BaseParse;
-use BaseParseFrameFlags;
+use crate::BaseParse;
+use crate::BaseParseFrameFlags;
 
 pub struct BaseParseFrame<'a>(
-    ptr::NonNull<gst_base_sys::GstBaseParseFrame>,
+    ptr::NonNull<ffi::GstBaseParseFrame>,
     PhantomData<&'a BaseParse>,
 );
 
@@ -59,18 +57,14 @@ impl FromGlib<i32> for Overhead {
 }
 
 #[doc(hidden)]
-impl<'a> ::glib::translate::ToGlibPtr<'a, *mut gst_base_sys::GstBaseParseFrame>
-    for BaseParseFrame<'a>
-{
+impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstBaseParseFrame> for BaseParseFrame<'a> {
     type Storage = &'a Self;
 
-    fn to_glib_none(
-        &'a self,
-    ) -> ::glib::translate::Stash<*mut gst_base_sys::GstBaseParseFrame, Self> {
+    fn to_glib_none(&'a self) -> ::glib::translate::Stash<*mut ffi::GstBaseParseFrame, Self> {
         Stash(self.0.as_ptr(), self)
     }
 
-    fn to_glib_full(&self) -> *mut gst_base_sys::GstBaseParseFrame {
+    fn to_glib_full(&self) -> *mut ffi::GstBaseParseFrame {
         unimplemented!()
     }
 }
@@ -91,7 +85,7 @@ impl<'a> fmt::Debug for BaseParseFrame<'a> {
 
 impl<'a> BaseParseFrame<'a> {
     pub(crate) unsafe fn new(
-        frame: *mut gst_base_sys::GstBaseParseFrame,
+        frame: *mut ffi::GstBaseParseFrame,
         _parse: &'a BaseParse,
     ) -> BaseParseFrame<'a> {
         skip_assert_initialized!();
@@ -116,8 +110,8 @@ impl<'a> BaseParseFrame<'a> {
             if ptr.is_null() {
                 None
             } else {
-                let writable: bool = from_glib(gst_sys::gst_mini_object_is_writable(
-                    ptr as *const gst_sys::GstMiniObject,
+                let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
+                    ptr as *const gst::ffi::GstMiniObject,
                 ));
                 assert!(writable);
 
@@ -143,8 +137,8 @@ impl<'a> BaseParseFrame<'a> {
             if ptr.is_null() {
                 None
             } else {
-                let writable: bool = from_glib(gst_sys::gst_mini_object_is_writable(
-                    ptr as *const gst_sys::GstMiniObject,
+                let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
+                    ptr as *const gst::ffi::GstMiniObject,
                 ));
                 assert!(writable);
 
@@ -158,12 +152,12 @@ impl<'a> BaseParseFrame<'a> {
             let prev = (*self.to_glib_none().0).out_buffer;
 
             if !prev.is_null() {
-                gst_sys::gst_mini_object_unref(prev as *mut gst_sys::GstMiniObject);
+                gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject);
             }
 
             let ptr = output_buffer.into_ptr();
-            let writable: bool = from_glib(gst_sys::gst_mini_object_is_writable(
-                ptr as *const gst_sys::GstMiniObject,
+            let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
+                ptr as *const gst::ffi::GstMiniObject,
             ));
             assert!(writable);
 

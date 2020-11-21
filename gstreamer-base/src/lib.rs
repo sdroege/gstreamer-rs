@@ -8,23 +8,11 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-extern crate glib_sys;
-extern crate gobject_sys;
-#[macro_use]
-extern crate gstreamer as gst;
-extern crate gstreamer_base_sys as gst_base_sys;
-extern crate gstreamer_sys as gst_sys;
-
-extern crate libc;
-#[macro_use]
-extern crate bitflags;
-
-#[macro_use]
-extern crate glib;
+pub use ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -40,16 +28,16 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::type_complexity)]
 #[allow(unused_imports)]
 mod auto;
-pub use auto::functions::*;
-pub use auto::*;
+pub use crate::auto::functions::*;
+pub use crate::auto::*;
 
 pub mod functions;
-pub use functions::*;
+pub use crate::functions::*;
 
 mod adapter;
-pub use adapter::*;
+pub use crate::adapter::*;
 mod flow_combiner;
-pub use flow_combiner::*;
+pub use crate::flow_combiner::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator;
@@ -63,16 +51,16 @@ mod aggregator_pad;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use aggregator_pad::AggregatorPadExtManual;
 mod base_parse;
-pub use base_parse::BaseParseExtManual;
+pub use crate::base_parse::BaseParseExtManual;
 mod base_sink;
-pub use base_sink::BaseSinkExtManual;
+pub use crate::base_sink::BaseSinkExtManual;
 mod base_src;
-pub use base_src::BaseSrcExtManual;
+pub use crate::base_src::BaseSrcExtManual;
 mod base_transform;
-pub use base_transform::BaseTransformExtManual;
+pub use crate::base_transform::BaseTransformExtManual;
 
 pub mod base_parse_frame;
-pub use base_parse_frame::BaseParseFrame;
+pub use crate::base_parse_frame::BaseParseFrame;
 
 pub const BASE_TRANSFORM_FLOW_DROPPED: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
 pub const BASE_PARSE_FLOW_DROPPED: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
@@ -86,15 +74,15 @@ pub mod prelude {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    pub use aggregator::AggregatorExtManual;
+    pub use crate::aggregator::AggregatorExtManual;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    pub use aggregator_pad::AggregatorPadExtManual;
-    pub use auto::traits::*;
-    pub use base_parse::BaseParseExtManual;
-    pub use base_sink::BaseSinkExtManual;
-    pub use base_src::BaseSrcExtManual;
-    pub use base_transform::BaseTransformExtManual;
+    pub use crate::aggregator_pad::AggregatorPadExtManual;
+    pub use crate::auto::traits::*;
+    pub use crate::base_parse::BaseParseExtManual;
+    pub use crate::base_sink::BaseSinkExtManual;
+    pub use crate::base_src::BaseSrcExtManual;
+    pub use crate::base_transform::BaseTransformExtManual;
 }
 
 mod utils;

@@ -8,8 +8,6 @@
 
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_base_sys;
 use std::mem;
 
 pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
@@ -21,14 +19,14 @@ pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
         let mut prob = mem::MaybeUninit::uninit();
         let data = data.as_ref();
         let (ptr, len) = (data.as_ptr(), data.len());
-        let ret = gst_base_sys::gst_type_find_helper_for_data(
+        let ret = ffi::gst_type_find_helper_for_data(
             obj.map(|p| p.as_ref()).to_glib_none().0,
             mut_override(ptr),
             len,
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib_bool_error!("No type could be found"))
+            Err(glib::glib_bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
@@ -47,7 +45,7 @@ pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u
         let mut prob = mem::MaybeUninit::uninit();
         let data = data.as_ref();
         let (ptr, len) = (data.as_ptr(), data.len());
-        let ret = gst_base_sys::gst_type_find_helper_for_data_with_extension(
+        let ret = ffi::gst_type_find_helper_for_data_with_extension(
             obj.map(|p| p.as_ref()).to_glib_none().0,
             mut_override(ptr),
             len,
@@ -55,7 +53,7 @@ pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib_bool_error!("No type could be found"))
+            Err(glib::glib_bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
@@ -69,13 +67,13 @@ pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
     assert_initialized_main_thread!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
-        let ret = gst_base_sys::gst_type_find_helper_for_buffer(
+        let ret = ffi::gst_type_find_helper_for_buffer(
             obj.map(|p| p.as_ref()).to_glib_none().0,
             buf.to_glib_none().0,
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib_bool_error!("No type could be found"))
+            Err(glib::glib_bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
@@ -92,14 +90,14 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
     assert_initialized_main_thread!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
-        let ret = gst_base_sys::gst_type_find_helper_for_buffer_with_extension(
+        let ret = ffi::gst_type_find_helper_for_buffer_with_extension(
             obj.map(|p| p.as_ref()).to_glib_none().0,
             buf.to_glib_none().0,
             extension.to_glib_none().0,
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib_bool_error!("No type could be found"))
+            Err(glib::glib_bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }

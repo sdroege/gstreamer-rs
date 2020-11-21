@@ -6,13 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::BaseTransform;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_base_sys;
 use std::mem;
 use std::ptr;
-use BaseTransform;
 
 pub trait BaseTransformExtManual: 'static {
     fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
@@ -25,7 +23,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
-            gst_base_sys::gst_base_transform_get_allocator(
+            ffi::gst_base_transform_get_allocator(
                 self.as_ref().to_glib_none().0,
                 &mut allocator,
                 &mut params,
@@ -36,8 +34,8 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
 
     fn get_segment(&self) -> gst::Segment {
         unsafe {
-            let trans: &gst_base_sys::GstBaseTransform = &*(self.as_ptr() as *const _);
-            let _guard = ::utils::MutexGuard::lock(&trans.element.object.lock);
+            let trans: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
+            let _guard = crate::utils::MutexGuard::lock(&trans.element.object.lock);
             from_glib_none(&trans.segment as *const _)
         }
     }

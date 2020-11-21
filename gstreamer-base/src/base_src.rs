@@ -8,12 +8,10 @@
 
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_base_sys;
 use std::mem;
 use std::ptr;
 
-use BaseSrc;
+use crate::BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
     fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
@@ -38,7 +36,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
-            gst_base_sys::gst_base_src_get_allocator(
+            ffi::gst_base_src_get_allocator(
                 self.as_ref().to_glib_none().0,
                 &mut allocator,
                 &mut params,
@@ -49,8 +47,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
 
     fn get_segment(&self) -> gst::Segment {
         unsafe {
-            let src: &gst_base_sys::GstBaseSrc = &*(self.as_ptr() as *const _);
-            let _guard = ::utils::MutexGuard::lock(&src.element.object.lock);
+            let src: &ffi::GstBaseSrc = &*(self.as_ptr() as *const _);
+            let _guard = crate::utils::MutexGuard::lock(&src.element.object.lock);
             from_glib_none(&src.segment as *const _)
         }
     }
@@ -58,25 +56,19 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>) {
         let ret: gst::FlowReturn = ret.into();
         unsafe {
-            gst_base_sys::gst_base_src_start_complete(
-                self.as_ref().to_glib_none().0,
-                ret.to_glib(),
-            );
+            ffi::gst_base_src_start_complete(self.as_ref().to_glib_none().0, ret.to_glib());
         }
     }
 
     fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_base_sys::gst_base_src_start_wait(
-                self.as_ref().to_glib_none().0,
-            ))
-        };
+        let ret: gst::FlowReturn =
+            unsafe { from_glib(ffi::gst_base_src_start_wait(self.as_ref().to_glib_none().0)) };
         ret.into_result()
     }
 
     fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_base_sys::gst_base_src_wait_playing(
+            from_glib(ffi::gst_base_src_wait_playing(
                 self.as_ref().to_glib_none().0,
             ))
         };
@@ -88,7 +80,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             let mut live = mem::MaybeUninit::uninit();
             let mut min_latency = mem::MaybeUninit::uninit();
             let mut max_latency = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_base_sys::gst_base_src_query_latency(
+            let ret = from_glib(ffi::gst_base_src_query_latency(
                 self.as_ref().to_glib_none().0,
                 live.as_mut_ptr(),
                 min_latency.as_mut_ptr(),
@@ -104,7 +96,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
                     from_glib(max_latency),
                 ))
             } else {
-                Err(glib_bool_error!("Failed to query latency"))
+                Err(glib::glib_bool_error!("Failed to query latency"))
             }
         }
     }
@@ -113,7 +105,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError> {
         unsafe {
-            let ret = from_glib(gst_base_sys::gst_base_src_new_segment(
+            let ret = from_glib(ffi::gst_base_src_new_segment(
                 self.as_ref().to_glib_none().0,
                 segment.to_glib_none().0,
             ));
@@ -121,7 +113,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             if ret {
                 Ok(())
             } else {
-                Err(glib_bool_error!("Failed to configure new segment"))
+                Err(glib::glib_bool_error!("Failed to configure new segment"))
             }
         }
     }

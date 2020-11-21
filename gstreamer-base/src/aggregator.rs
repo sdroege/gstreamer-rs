@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::Aggregator;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::prelude::*;
@@ -17,8 +18,6 @@ use glib::IsA;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::Value;
-use gst;
-use gst_base_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::boxed::Box as Box_;
@@ -27,7 +26,6 @@ use std::mem;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::mem::transmute;
 use std::ptr;
-use Aggregator;
 
 pub trait AggregatorExtManual: 'static {
     fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
@@ -96,7 +94,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
-            gst_base_sys::gst_aggregator_get_allocator(
+            ffi::gst_aggregator_get_allocator(
                 self.as_ref().to_glib_none().0,
                 &mut allocator,
                 &mut params,
@@ -107,7 +105,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_base_sys::gst_aggregator_finish_buffer(
+            from_glib(ffi::gst_aggregator_finish_buffer(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -122,7 +120,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         bufferlist: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_base_sys::gst_aggregator_finish_buffer_list(
+            from_glib(ffi::gst_aggregator_finish_buffer_list(
                 self.as_ref().to_glib_none().0,
                 bufferlist.into_ptr(),
             ))
@@ -135,8 +133,8 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     fn get_property_min_upstream_latency(&self) -> gst::ClockTime {
         unsafe {
             let mut value = Value::from_type(<gst::ClockTime as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"min-upstream-latency\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -151,8 +149,8 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_property_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"min-upstream-latency\0".as_ptr() as *const _,
                 Value::from(&min_upstream_latency).to_glib_none().0,
             );
@@ -181,7 +179,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>) {
         unsafe {
-            gst_base_sys::gst_aggregator_update_segment(
+            ffi::gst_aggregator_update_segment(
                 self.as_ref().to_glib_none().0,
                 mut_override(segment.to_glib_none().0),
             )
@@ -198,7 +196,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         info: Option<&gst::StructureRef>,
     ) {
         unsafe {
-            gst_base_sys::gst_aggregator_selected_samples(
+            ffi::gst_aggregator_selected_samples(
                 self.as_ref().to_glib_none().0,
                 pts.to_glib(),
                 dts.to_glib(),
@@ -242,13 +240,13 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
                 ) + Send
                 + 'static,
         >(
-            this: *mut gst_base_sys::GstAggregator,
-            segment: *mut gst_sys::GstSegment,
-            pts: gst_sys::GstClockTime,
-            dts: gst_sys::GstClockTime,
-            duration: gst_sys::GstClockTime,
-            info: *mut gst_sys::GstStructure,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstAggregator,
+            segment: *mut gst::ffi::GstSegment,
+            pts: gst::ffi::GstClockTime,
+            dts: gst::ffi::GstClockTime,
+            duration: gst::ffi::GstClockTime,
+            info: *mut gst::ffi::GstStructure,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Aggregator>,
         {
@@ -284,9 +282,9 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe extern "C" fn notify_min_upstream_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-    this: *mut gst_base_sys::GstAggregator,
-    _param_spec: glib_sys::gpointer,
-    f: glib_sys::gpointer,
+    this: *mut ffi::GstAggregator,
+    _param_spec: glib::ffi::gpointer,
+    f: glib::ffi::gpointer,
 ) where
     P: IsA<Aggregator>,
 {

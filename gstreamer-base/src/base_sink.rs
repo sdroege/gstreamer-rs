@@ -6,12 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::BaseSink;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_base_sys;
 use std::mem;
-use BaseSink;
 
 pub trait BaseSinkExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
@@ -38,8 +36,8 @@ pub trait BaseSinkExtManual: 'static {
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
-            let sink: &gst_base_sys::GstBaseSink = &*(self.as_ptr() as *const _);
-            let _guard = ::utils::MutexGuard::lock(&sink.element.object.lock);
+            let sink: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
+            let _guard = crate::utils::MutexGuard::lock(&sink.element.object.lock);
             from_glib_none(&sink.segment as *const _)
         }
     }
@@ -50,7 +48,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
     ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff) {
         unsafe {
             let mut jitter = 0;
-            let ret: gst::FlowReturn = from_glib(gst_base_sys::gst_base_sink_wait(
+            let ret: gst::FlowReturn = from_glib(ffi::gst_base_sink_wait(
                 self.as_ref().to_glib_none().0,
                 time.to_glib(),
                 &mut jitter,
@@ -61,7 +59,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
 
     fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_base_sys::gst_base_sink_wait_preroll(
+            from_glib(ffi::gst_base_sink_wait_preroll(
                 self.as_ref().to_glib_none().0,
             ))
         };
@@ -77,7 +75,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
     ) {
         unsafe {
             let mut jitter = 0;
-            let ret: gst::ClockReturn = from_glib(gst_base_sys::gst_base_sink_wait_clock(
+            let ret: gst::ClockReturn = from_glib(ffi::gst_base_sink_wait_clock(
                 self.as_ref().to_glib_none().0,
                 time.to_glib(),
                 &mut jitter,
@@ -94,7 +92,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             let mut upstream_live = mem::MaybeUninit::uninit();
             let mut min_latency = mem::MaybeUninit::uninit();
             let mut max_latency = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_base_sys::gst_base_sink_query_latency(
+            let ret = from_glib(ffi::gst_base_sink_query_latency(
                 self.as_ref().to_glib_none().0,
                 live.as_mut_ptr(),
                 upstream_live.as_mut_ptr(),
@@ -113,7 +111,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
                     from_glib(max_latency),
                 ))
             } else {
-                Err(glib_bool_error!("Failed to query latency"))
+                Err(glib::glib_bool_error!("Failed to query latency"))
             }
         }
     }

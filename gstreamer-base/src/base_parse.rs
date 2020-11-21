@@ -6,15 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::BaseParse;
+use crate::BaseParseFrame;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
 use gst::FormattedValue;
-use gst_base_sys;
 use std::convert::TryFrom;
 use std::mem;
-use BaseParse;
-use BaseParseFrame;
 
 pub trait BaseParseExtManual: 'static {
     fn get_sink_pad(&self) -> gst::Pad;
@@ -43,14 +41,14 @@ pub trait BaseParseExtManual: 'static {
 impl<O: IsA<BaseParse>> BaseParseExtManual for O {
     fn get_sink_pad(&self) -> gst::Pad {
         unsafe {
-            let elt: &gst_base_sys::GstBaseParse = &*(self.as_ptr() as *const _);
+            let elt: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
             from_glib_none(elt.sinkpad)
         }
     }
 
     fn get_src_pad(&self) -> gst::Pad {
         unsafe {
-            let elt: &gst_base_sys::GstBaseParse = &*(self.as_ptr() as *const _);
+            let elt: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
             from_glib_none(elt.srcpad)
         }
     }
@@ -58,7 +56,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
     fn set_duration<V: Into<gst::GenericFormattedValue>>(&self, duration: V, interval: u32) {
         let duration = duration.into();
         unsafe {
-            gst_base_sys::gst_base_parse_set_duration(
+            ffi::gst_base_parse_set_duration(
                 self.as_ref().to_glib_none().0,
                 duration.get_format().to_glib(),
                 duration.get_value(),
@@ -70,7 +68,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
     fn set_frame_rate(&self, fps: gst::Fraction, lead_in: u32, lead_out: u32) {
         let (fps_num, fps_den) = fps.into();
         unsafe {
-            gst_base_sys::gst_base_parse_set_frame_rate(
+            ffi::gst_base_parse_set_frame_rate(
                 self.as_ref().to_glib_none().0,
                 fps_num as u32,
                 fps_den as u32,
@@ -87,7 +85,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_base_sys::gst_base_parse_convert_default(
+            let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
@@ -110,7 +108,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_base_sys::gst_base_parse_convert_default(
+            let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
@@ -134,7 +132,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         size: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            gst::FlowReturn::from_glib(gst_base_sys::gst_base_parse_finish_frame(
+            gst::FlowReturn::from_glib(ffi::gst_base_parse_finish_frame(
                 self.as_ref().to_glib_none().0,
                 frame.to_glib_none().0,
                 i32::try_from(size).expect("size higher than i32::MAX"),
