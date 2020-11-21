@@ -13,7 +13,7 @@ pub const MINOR_VERSION: i32 = 14;
 #[cfg(all(feature = "v1_16", not(feature = "v1_18")))]
 pub const MINOR_VERSION: i32 = 16;
 #[cfg(all(feature = "v1_18", not(feature = "v1_20")))]
-pub const MINOR_VERSION: i32 = 17;
+pub const MINOR_VERSION: i32 = 18;
 
 #[macro_export]
 macro_rules! gst_plugin_define(
