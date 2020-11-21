@@ -6,22 +6,18 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::AppSink;
+use glib::ffi::gpointer;
 use glib::object::ObjectType;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys::gpointer;
-use gst;
-use gst::gst_element_error;
-use gst_app_sys;
-use gst_sys;
 use std::boxed::Box as Box_;
 use std::cell::RefCell;
 use std::mem::transmute;
 use std::panic;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering};
-use AppSink;
 
 #[cfg(any(feature = "v1_10"))]
 use {
@@ -48,7 +44,7 @@ pub struct AppSinkCallbacks {
         >,
     >,
     panicked: AtomicBool,
-    callbacks: gst_app_sys::GstAppSinkCallbacks,
+    callbacks: ffi::GstAppSinkCallbacks,
 }
 
 unsafe impl Send for AppSinkCallbacks {}
@@ -122,7 +118,7 @@ impl AppSinkCallbacksBuilder {
             new_preroll: self.new_preroll,
             new_sample: self.new_sample,
             panicked: AtomicBool::new(false),
-            callbacks: gst_app_sys::GstAppSinkCallbacks {
+            callbacks: ffi::GstAppSinkCallbacks {
                 eos: if have_eos { Some(trampoline_eos) } else { None },
                 new_preroll: if have_new_preroll {
                     Some(trampoline_new_preroll)
@@ -148,21 +144,21 @@ impl AppSinkCallbacksBuilder {
 fn post_panic_error_message(element: &AppSink, err: &dyn std::any::Any) {
     skip_assert_initialized!();
     if let Some(cause) = err.downcast_ref::<&str>() {
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else if let Some(cause) = err.downcast_ref::<String>() {
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else {
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
     }
 }
 
-unsafe extern "C" fn trampoline_eos(appsink: *mut gst_app_sys::GstAppSink, callbacks: gpointer) {
+unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gpointer) {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
@@ -181,15 +177,15 @@ unsafe extern "C" fn trampoline_eos(appsink: *mut gst_app_sys::GstAppSink, callb
 }
 
 unsafe extern "C" fn trampoline_new_preroll(
-    appsink: *mut gst_app_sys::GstAppSink,
+    appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
-) -> gst_sys::GstFlowReturn {
+) -> gst::ffi::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.to_glib();
     }
 
@@ -214,15 +210,15 @@ unsafe extern "C" fn trampoline_new_preroll(
 }
 
 unsafe extern "C" fn trampoline_new_sample(
-    appsink: *mut gst_app_sys::GstAppSink,
+    appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
-) -> gst_sys::GstFlowReturn {
+) -> gst::ffi::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
     let element: Borrowed<AppSink> = from_glib_borrow(appsink);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return gst::FlowReturn::Error.to_glib();
     }
 
@@ -262,20 +258,20 @@ impl AppSink {
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
             if gst::version() < (1, 16, 3, 0) {
-                if !gobject_sys::g_object_get_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib())
+                if !glib::gobject_ffi::g_object_get_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib())
                     .is_null()
                 {
                     panic!("AppSink callbacks can only be set once");
                 }
 
-                gobject_sys::g_object_set_qdata(
+                glib::gobject_ffi::g_object_set_qdata(
                     sink as *mut _,
                     SET_ONCE_QUARK.to_glib(),
                     1 as *mut _,
                 );
             }
 
-            gst_app_sys::gst_app_sink_set_callbacks(
+            ffi::gst_app_sink_set_callbacks(
                 sink,
                 mut_override(&callbacks.callbacks),
                 Box::into_raw(Box::new(callbacks)) as *mut _,
@@ -331,9 +327,9 @@ impl AppSink {
 unsafe extern "C" fn new_sample_trampoline<
     F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
 >(
-    this: *mut gst_app_sys::GstAppSink,
-    f: glib_sys::gpointer,
-) -> gst_sys::GstFlowReturn {
+    this: *mut ffi::GstAppSink,
+    f: glib::ffi::gpointer,
+) -> gst::ffi::GstFlowReturn {
     let f: &F = &*(f as *const F);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
     ret.to_glib()
@@ -342,9 +338,9 @@ unsafe extern "C" fn new_sample_trampoline<
 unsafe extern "C" fn new_preroll_trampoline<
     F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
 >(
-    this: *mut gst_app_sys::GstAppSink,
-    f: glib_sys::gpointer,
-) -> gst_sys::GstFlowReturn {
+    this: *mut ffi::GstAppSink,
+    f: glib::ffi::gpointer,
+) -> gst::ffi::GstFlowReturn {
     let f: &F = &*(f as *const F);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
     ret.to_glib()

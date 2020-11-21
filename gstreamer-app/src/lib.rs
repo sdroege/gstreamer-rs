@@ -8,27 +8,7 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-extern crate libc;
-
-extern crate futures_core;
-extern crate futures_sink;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_app_sys as gst_app_sys;
-extern crate gstreamer_base as gst_base;
-extern crate gstreamer_sys as gst_sys;
-
-extern crate once_cell;
-
-#[macro_use]
-extern crate glib;
-
-#[cfg(test)]
-extern crate futures_util;
-
-#[cfg(test)]
-extern crate futures_executor;
+pub use ffi;
 
 macro_rules! skip_assert_initialized {
     () => {};
@@ -38,13 +18,13 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
 mod auto;
-pub use auto::*;
+pub use crate::auto::*;
 
 pub mod app_sink;
-pub use app_sink::AppSinkCallbacks;
+pub use crate::app_sink::AppSinkCallbacks;
 
 pub mod app_src;
-pub use app_src::AppSrcCallbacks;
+pub use crate::app_src::AppSrcCallbacks;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -52,5 +32,5 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use auto::traits::*;
+    pub use crate::auto::traits::*;
 }

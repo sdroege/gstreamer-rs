@@ -7,13 +7,11 @@
 // except according to those terms.
 
 use futures_sink::Sink;
+use glib::ffi::{gboolean, gpointer};
 use glib::prelude::*;
 use glib::translate::*;
-use glib_sys::{gboolean, gpointer};
-use gst;
-use gst::gst_element_error;
 
-use gst_app_sys;
+use crate::AppSrc;
 use std::cell::RefCell;
 use std::mem;
 use std::panic;
@@ -22,7 +20,6 @@ use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::task::{Context, Poll, Waker};
-use AppSrc;
 
 #[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacks {
@@ -30,7 +27,7 @@ pub struct AppSrcCallbacks {
     enough_data: Option<Box<dyn Fn(&AppSrc) + Send + Sync + 'static>>,
     seek_data: Option<Box<dyn Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
     panicked: AtomicBool,
-    callbacks: gst_app_sys::GstAppSrcCallbacks,
+    callbacks: ffi::GstAppSrcCallbacks,
 }
 
 unsafe impl Send for AppSrcCallbacks {}
@@ -90,7 +87,7 @@ impl AppSrcCallbacksBuilder {
             enough_data: self.enough_data,
             seek_data: self.seek_data,
             panicked: AtomicBool::new(false),
-            callbacks: gst_app_sys::GstAppSrcCallbacks {
+            callbacks: ffi::GstAppSrcCallbacks {
                 need_data: if have_need_data {
                     Some(trampoline_need_data)
                 } else {
@@ -120,16 +117,16 @@ impl AppSrcCallbacksBuilder {
 fn post_panic_error_message(element: &AppSrc, err: &dyn std::any::Any) {
     skip_assert_initialized!();
     if let Some(cause) = err.downcast_ref::<&str>() {
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else if let Some(cause) = err.downcast_ref::<String>() {
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else {
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
     }
 }
 
 unsafe extern "C" fn trampoline_need_data(
-    appsrc: *mut gst_app_sys::GstAppSrc,
+    appsrc: *mut ffi::GstAppSrc,
     length: u32,
     callbacks: gpointer,
 ) {
@@ -138,7 +135,7 @@ unsafe extern "C" fn trampoline_need_data(
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
@@ -156,16 +153,13 @@ unsafe extern "C" fn trampoline_need_data(
     }
 }
 
-unsafe extern "C" fn trampoline_enough_data(
-    appsrc: *mut gst_app_sys::GstAppSrc,
-    callbacks: gpointer,
-) {
+unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
     let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
@@ -182,7 +176,7 @@ unsafe extern "C" fn trampoline_enough_data(
 }
 
 unsafe extern "C" fn trampoline_seek_data(
-    appsrc: *mut gst_app_sys::GstAppSrc,
+    appsrc: *mut ffi::GstAppSrc,
     offset: u64,
     callbacks: gpointer,
 ) -> gboolean {
@@ -191,7 +185,7 @@ unsafe extern "C" fn trampoline_seek_data(
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return false.to_glib();
     }
 
@@ -220,17 +214,14 @@ unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
 
 impl AppSrc {
     pub fn end_of_stream(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_app_sys::gst_app_src_end_of_stream(
-                self.to_glib_none().0,
-            ))
-        };
+        let ret: gst::FlowReturn =
+            unsafe { from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0)) };
         ret.into_result()
     }
 
     pub fn push_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_app_sys::gst_app_src_push_buffer(
+            from_glib(ffi::gst_app_src_push_buffer(
                 self.to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -245,7 +236,7 @@ impl AppSrc {
         list: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_app_sys::gst_app_src_push_buffer_list(
+            from_glib(ffi::gst_app_src_push_buffer_list(
                 self.to_glib_none().0,
                 list.into_ptr(),
             ))
@@ -255,7 +246,7 @@ impl AppSrc {
 
     pub fn push_sample(&self, sample: &gst::Sample) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_app_sys::gst_app_src_push_sample(
+            from_glib(ffi::gst_app_src_push_sample(
                 self.to_glib_none().0,
                 sample.to_glib_none().0,
             ))
@@ -273,20 +264,20 @@ impl AppSrc {
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
             if gst::version() < (1, 16, 3, 0) {
-                if !gobject_sys::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.to_glib())
+                if !glib::gobject_ffi::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.to_glib())
                     .is_null()
                 {
                     panic!("AppSrc callbacks can only be set once");
                 }
 
-                gobject_sys::g_object_set_qdata(
+                glib::gobject_ffi::g_object_set_qdata(
                     src as *mut _,
                     SET_ONCE_QUARK.to_glib(),
                     1 as *mut _,
                 );
             }
 
-            gst_app_sys::gst_app_src_set_callbacks(
+            ffi::gst_app_src_set_callbacks(
                 src,
                 mut_override(&callbacks.callbacks),
                 Box::into_raw(Box::new(callbacks)) as *mut _,
@@ -297,11 +288,7 @@ impl AppSrc {
 
     pub fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
         unsafe {
-            gst_app_sys::gst_app_src_set_latency(
-                self.to_glib_none().0,
-                min.to_glib(),
-                max.to_glib(),
-            );
+            ffi::gst_app_src_set_latency(self.to_glib_none().0, min.to_glib(), max.to_glib());
         }
     }
 
@@ -309,11 +296,7 @@ impl AppSrc {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();
-            gst_app_sys::gst_app_src_get_latency(
-                self.to_glib_none().0,
-                min.as_mut_ptr(),
-                max.as_mut_ptr(),
-            );
+            ffi::gst_app_src_get_latency(self.to_glib_none().0, min.as_mut_ptr(), max.as_mut_ptr());
             (from_glib(min.assume_init()), from_glib(max.assume_init()))
         }
     }
