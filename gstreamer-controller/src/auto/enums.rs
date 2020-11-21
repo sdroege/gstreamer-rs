@@ -9,8 +9,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_controller_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -25,24 +23,22 @@ pub enum InterpolationMode {
 
 #[doc(hidden)]
 impl ToGlib for InterpolationMode {
-    type GlibType = gst_controller_sys::GstInterpolationMode;
+    type GlibType = ffi::GstInterpolationMode;
 
-    fn to_glib(&self) -> gst_controller_sys::GstInterpolationMode {
+    fn to_glib(&self) -> ffi::GstInterpolationMode {
         match *self {
-            InterpolationMode::None => gst_controller_sys::GST_INTERPOLATION_MODE_NONE,
-            InterpolationMode::Linear => gst_controller_sys::GST_INTERPOLATION_MODE_LINEAR,
-            InterpolationMode::Cubic => gst_controller_sys::GST_INTERPOLATION_MODE_CUBIC,
-            InterpolationMode::CubicMonotonic => {
-                gst_controller_sys::GST_INTERPOLATION_MODE_CUBIC_MONOTONIC
-            }
+            InterpolationMode::None => ffi::GST_INTERPOLATION_MODE_NONE,
+            InterpolationMode::Linear => ffi::GST_INTERPOLATION_MODE_LINEAR,
+            InterpolationMode::Cubic => ffi::GST_INTERPOLATION_MODE_CUBIC,
+            InterpolationMode::CubicMonotonic => ffi::GST_INTERPOLATION_MODE_CUBIC_MONOTONIC,
             InterpolationMode::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_controller_sys::GstInterpolationMode> for InterpolationMode {
-    fn from_glib(value: gst_controller_sys::GstInterpolationMode) -> Self {
+impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
+    fn from_glib(value: ffi::GstInterpolationMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => InterpolationMode::None,
@@ -56,7 +52,7 @@ impl FromGlib<gst_controller_sys::GstInterpolationMode> for InterpolationMode {
 
 impl StaticType for InterpolationMode {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_controller_sys::gst_interpolation_mode_get_type()) }
+        unsafe { from_glib(ffi::gst_interpolation_mode_get_type()) }
     }
 }
 
@@ -68,13 +64,13 @@ impl<'a> FromValueOptional<'a> for InterpolationMode {
 
 impl<'a> FromValue<'a> for InterpolationMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for InterpolationMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -92,23 +88,23 @@ pub enum LFOWaveform {
 
 #[doc(hidden)]
 impl ToGlib for LFOWaveform {
-    type GlibType = gst_controller_sys::GstLFOWaveform;
+    type GlibType = ffi::GstLFOWaveform;
 
-    fn to_glib(&self) -> gst_controller_sys::GstLFOWaveform {
+    fn to_glib(&self) -> ffi::GstLFOWaveform {
         match *self {
-            LFOWaveform::Sine => gst_controller_sys::GST_LFO_WAVEFORM_SINE,
-            LFOWaveform::Square => gst_controller_sys::GST_LFO_WAVEFORM_SQUARE,
-            LFOWaveform::Saw => gst_controller_sys::GST_LFO_WAVEFORM_SAW,
-            LFOWaveform::ReverseSaw => gst_controller_sys::GST_LFO_WAVEFORM_REVERSE_SAW,
-            LFOWaveform::Triangle => gst_controller_sys::GST_LFO_WAVEFORM_TRIANGLE,
+            LFOWaveform::Sine => ffi::GST_LFO_WAVEFORM_SINE,
+            LFOWaveform::Square => ffi::GST_LFO_WAVEFORM_SQUARE,
+            LFOWaveform::Saw => ffi::GST_LFO_WAVEFORM_SAW,
+            LFOWaveform::ReverseSaw => ffi::GST_LFO_WAVEFORM_REVERSE_SAW,
+            LFOWaveform::Triangle => ffi::GST_LFO_WAVEFORM_TRIANGLE,
             LFOWaveform::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_controller_sys::GstLFOWaveform> for LFOWaveform {
-    fn from_glib(value: gst_controller_sys::GstLFOWaveform) -> Self {
+impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
+    fn from_glib(value: ffi::GstLFOWaveform) -> Self {
         skip_assert_initialized!();
         match value {
             0 => LFOWaveform::Sine,
@@ -123,7 +119,7 @@ impl FromGlib<gst_controller_sys::GstLFOWaveform> for LFOWaveform {
 
 impl StaticType for LFOWaveform {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_controller_sys::gst_lfo_waveform_get_type()) }
+        unsafe { from_glib(ffi::gst_lfo_waveform_get_type()) }
     }
 }
 
@@ -135,12 +131,12 @@ impl<'a> FromValueOptional<'a> for LFOWaveform {
 
 impl<'a> FromValue<'a> for LFOWaveform {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for LFOWaveform {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

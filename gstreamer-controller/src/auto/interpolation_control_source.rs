@@ -2,6 +2,8 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::InterpolationMode;
+use crate::TimedValueControlSource;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -9,20 +11,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_controller_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use InterpolationMode;
-use TimedValueControlSource;
 
-glib_wrapper! {
-    pub struct InterpolationControlSource(Object<gst_controller_sys::GstInterpolationControlSource, gst_controller_sys::GstInterpolationControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
+glib::glib_wrapper! {
+    pub struct InterpolationControlSource(Object<ffi::GstInterpolationControlSource, ffi::GstInterpolationControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
 
     match fn {
-        get_type => || gst_controller_sys::gst_interpolation_control_source_get_type(),
+        get_type => || ffi::gst_interpolation_control_source_get_type(),
     }
 }
 
@@ -30,10 +26,8 @@ impl InterpolationControlSource {
     pub fn new() -> InterpolationControlSource {
         assert_initialized_main_thread!();
         unsafe {
-            gst::ControlSource::from_glib_full(
-                gst_controller_sys::gst_interpolation_control_source_new(),
-            )
-            .unsafe_cast()
+            gst::ControlSource::from_glib_full(ffi::gst_interpolation_control_source_new())
+                .unsafe_cast()
         }
     }
 }
@@ -64,8 +58,8 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
     fn get_property_mode(&self) -> InterpolationMode {
         unsafe {
             let mut value = Value::from_type(<InterpolationMode as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -78,8 +72,8 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
 
     fn set_property_mode(&self, mode: InterpolationMode) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"mode\0".as_ptr() as *const _,
                 Value::from(&mode).to_glib_none().0,
             );
@@ -91,9 +85,9 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_controller_sys::GstInterpolationControlSource,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstInterpolationControlSource,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<InterpolationControlSource>,
         {

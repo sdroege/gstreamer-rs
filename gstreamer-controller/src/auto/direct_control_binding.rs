@@ -9,18 +9,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_controller_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib_wrapper! {
-    pub struct DirectControlBinding(Object<gst_controller_sys::GstDirectControlBinding, gst_controller_sys::GstDirectControlBindingClass>) @extends gst::ControlBinding, gst::Object;
+glib::glib_wrapper! {
+    pub struct DirectControlBinding(Object<ffi::GstDirectControlBinding, ffi::GstDirectControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {
-        get_type => || gst_controller_sys::gst_direct_control_binding_get_type(),
+        get_type => || ffi::gst_direct_control_binding_get_type(),
     }
 }
 
@@ -32,7 +28,7 @@ impl DirectControlBinding {
     ) -> DirectControlBinding {
         assert_initialized_main_thread!();
         unsafe {
-            gst::ControlBinding::from_glib_none(gst_controller_sys::gst_direct_control_binding_new(
+            gst::ControlBinding::from_glib_none(ffi::gst_direct_control_binding_new(
                 object.as_ref().to_glib_none().0,
                 property_name.to_glib_none().0,
                 cs.as_ref().to_glib_none().0,
@@ -48,13 +44,11 @@ impl DirectControlBinding {
     ) -> DirectControlBinding {
         assert_initialized_main_thread!();
         unsafe {
-            gst::ControlBinding::from_glib_none(
-                gst_controller_sys::gst_direct_control_binding_new_absolute(
-                    object.as_ref().to_glib_none().0,
-                    property_name.to_glib_none().0,
-                    cs.as_ref().to_glib_none().0,
-                ),
-            )
+            gst::ControlBinding::from_glib_none(ffi::gst_direct_control_binding_new_absolute(
+                object.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                cs.as_ref().to_glib_none().0,
+            ))
             .unsafe_cast()
         }
     }
@@ -82,8 +76,8 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
     fn get_property_absolute(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"absolute\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -97,8 +91,8 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
     fn get_property_control_source(&self) -> Option<gst::ControlSource> {
         unsafe {
             let mut value = Value::from_type(<gst::ControlSource as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -110,8 +104,8 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
 
     fn set_property_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source\0".as_ptr() as *const _,
                 Value::from(control_source).to_glib_none().0,
             );
@@ -126,9 +120,9 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_controller_sys::GstDirectControlBinding,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstDirectControlBinding,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<DirectControlBinding>,
         {

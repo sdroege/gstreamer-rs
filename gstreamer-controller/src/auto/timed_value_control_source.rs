@@ -2,23 +2,20 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ControlPoint;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
-use gst;
-use gst_controller_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use ControlPoint;
 
-glib_wrapper! {
-    pub struct TimedValueControlSource(Object<gst_controller_sys::GstTimedValueControlSource, gst_controller_sys::GstTimedValueControlSourceClass>) @extends gst::ControlSource, gst::Object;
+glib::glib_wrapper! {
+    pub struct TimedValueControlSource(Object<ffi::GstTimedValueControlSource, ffi::GstTimedValueControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {
-        get_type => || gst_controller_sys::gst_timed_value_control_source_get_type(),
+        get_type => || ffi::gst_timed_value_control_source_get_type(),
     }
 }
 
@@ -60,24 +57,20 @@ pub trait TimedValueControlSourceExt: 'static {
 
 impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
     //fn find_control_point_iter(&self, timestamp: gst::ClockTime) -> /*Ignored*/Option<glib::SequenceIter> {
-    //    unsafe { TODO: call gst_controller_sys:gst_timed_value_control_source_find_control_point_iter() }
+    //    unsafe { TODO: call ffi:gst_timed_value_control_source_find_control_point_iter() }
     //}
 
     //fn get_all(&self) -> /*Ignored*/Vec<gst::TimedValue> {
-    //    unsafe { TODO: call gst_controller_sys:gst_timed_value_control_source_get_all() }
+    //    unsafe { TODO: call ffi:gst_timed_value_control_source_get_all() }
     //}
 
     fn get_count(&self) -> i32 {
-        unsafe {
-            gst_controller_sys::gst_timed_value_control_source_get_count(
-                self.as_ref().to_glib_none().0,
-            )
-        }
+        unsafe { ffi::gst_timed_value_control_source_get_count(self.as_ref().to_glib_none().0) }
     }
 
     fn set(&self, timestamp: gst::ClockTime, value: f64) -> bool {
         unsafe {
-            from_glib(gst_controller_sys::gst_timed_value_control_source_set(
+            from_glib(ffi::gst_timed_value_control_source_set(
                 self.as_ref().to_glib_none().0,
                 timestamp.to_glib(),
                 value,
@@ -86,12 +79,12 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
     }
 
     //fn set_from_list(&self, timedvalues: /*Ignored*/&[&gst::TimedValue]) -> bool {
-    //    unsafe { TODO: call gst_controller_sys:gst_timed_value_control_source_set_from_list() }
+    //    unsafe { TODO: call ffi:gst_timed_value_control_source_set_from_list() }
     //}
 
     fn unset(&self, timestamp: gst::ClockTime) -> bool {
         unsafe {
-            from_glib(gst_controller_sys::gst_timed_value_control_source_unset(
+            from_glib(ffi::gst_timed_value_control_source_unset(
                 self.as_ref().to_glib_none().0,
                 timestamp.to_glib(),
             ))
@@ -100,9 +93,7 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
 
     fn unset_all(&self) {
         unsafe {
-            gst_controller_sys::gst_timed_value_control_source_unset_all(
-                self.as_ref().to_glib_none().0,
-            );
+            ffi::gst_timed_value_control_source_unset_all(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -114,9 +105,9 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
             P,
             F: Fn(&P, &ControlPoint) + Send + Sync + 'static,
         >(
-            this: *mut gst_controller_sys::GstTimedValueControlSource,
-            timed_value: *mut gst_controller_sys::GstControlPoint,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstTimedValueControlSource,
+            timed_value: *mut ffi::GstControlPoint,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<TimedValueControlSource>,
         {
@@ -147,9 +138,9 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
             P,
             F: Fn(&P, &ControlPoint) + Send + Sync + 'static,
         >(
-            this: *mut gst_controller_sys::GstTimedValueControlSource,
-            timed_value: *mut gst_controller_sys::GstControlPoint,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstTimedValueControlSource,
+            timed_value: *mut ffi::GstControlPoint,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<TimedValueControlSource>,
         {
@@ -180,9 +171,9 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
             P,
             F: Fn(&P, &ControlPoint) + Send + Sync + 'static,
         >(
-            this: *mut gst_controller_sys::GstTimedValueControlSource,
-            timed_value: *mut gst_controller_sys::GstControlPoint,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstTimedValueControlSource,
+            timed_value: *mut ffi::GstControlPoint,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<TimedValueControlSource>,
         {
