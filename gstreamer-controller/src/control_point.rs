@@ -1,14 +1,13 @@
 use glib::translate::*;
-use gst_controller_sys;
 
-glib_wrapper! {
+glib::glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct ControlPoint(Boxed<gst_controller_sys::GstControlPoint>);
+    pub struct ControlPoint(Boxed<ffi::GstControlPoint>);
 
     match fn {
-        copy => |ptr| gst_controller_sys::gst_control_point_copy(mut_override(ptr)),
-        free => |ptr| gst_controller_sys::gst_control_point_free(ptr),
-        get_type => || gst_controller_sys::gst_control_point_get_type(),
+        copy => |ptr| ffi::gst_control_point_copy(mut_override(ptr)),
+        free => |ptr| ffi::gst_control_point_free(ptr),
+        get_type => || ffi::gst_control_point_get_type(),
     }
 }
 
