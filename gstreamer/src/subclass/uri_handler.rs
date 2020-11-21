@@ -6,19 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gst_sys;
-
-use glib;
 use glib::prelude::*;
 use glib::translate::*;
 
 use glib::subclass::prelude::*;
 
-use libc;
-
-use URIHandler;
-use URIType;
+use crate::URIHandler;
+use crate::URIType;
 
 pub trait URIHandlerImpl: super::element::ElementImpl {
     fn get_uri(&self, element: &Self::Type) -> Option<String>;
@@ -29,10 +23,10 @@ pub trait URIHandlerImpl: super::element::ElementImpl {
 
 unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
     unsafe extern "C" fn interface_init(
-        iface: glib_sys::gpointer,
-        _iface_data: glib_sys::gpointer,
+        iface: glib::ffi::gpointer,
+        _iface_data: glib::ffi::gpointer,
     ) {
-        let uri_handler_iface = &mut *(iface as *mut gst_sys::GstURIHandlerInterface);
+        let uri_handler_iface = &mut *(iface as *mut ffi::GstURIHandlerInterface);
 
         // Store the protocols in the interface data for later use
         let mut data = T::type_data();
@@ -42,7 +36,7 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
         if data.interface_data.is_null() {
             data.interface_data = Box::into_raw(Box::new(Vec::new()));
         }
-        (*(data.interface_data as *mut Vec<(glib_sys::GType, glib_sys::gpointer)>))
+        (*(data.interface_data as *mut Vec<(glib::ffi::GType, glib::ffi::gpointer)>))
             .push((URIHandler::static_type().to_glib(), protocols as *mut _));
 
         uri_handler_iface.get_type = Some(uri_handler_get_type::<T>);
@@ -53,13 +47,13 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
 }
 
 unsafe extern "C" fn uri_handler_get_type<T: URIHandlerImpl>(
-    _type_: glib_sys::GType,
-) -> gst_sys::GstURIType {
+    _type_: glib::ffi::GType,
+) -> ffi::GstURIType {
     <T as URIHandlerImpl>::get_uri_type().to_glib()
 }
 
 unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
-    _type_: glib_sys::GType,
+    _type_: glib::ffi::GType,
 ) -> *const *const libc::c_char {
     let data = <T as ObjectSubclass>::type_data();
     data.as_ref()
@@ -67,7 +61,7 @@ unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
 }
 
 unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
-    uri_handler: *mut gst_sys::GstURIHandler,
+    uri_handler: *mut ffi::GstURIHandler,
 ) -> *mut libc::c_char {
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
@@ -77,10 +71,10 @@ unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
 }
 
 unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
-    uri_handler: *mut gst_sys::GstURIHandler,
+    uri_handler: *mut ffi::GstURIHandler,
     uri: *const libc::c_char,
-    err: *mut *mut glib_sys::GError,
-) -> glib_sys::gboolean {
+    err: *mut *mut glib::ffi::GError,
+) -> glib::ffi::gboolean {
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
 

@@ -13,28 +13,25 @@ use std::ops;
 use std::ptr;
 use std::slice;
 
-use gst_sys;
-
-use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlibPtr};
 
-use AllocationParams;
-use Allocator;
-use MemoryFlags;
+use crate::AllocationParams;
+use crate::Allocator;
+use crate::MemoryFlags;
 
-gst_define_mini_object_wrapper!(Memory, MemoryRef, gst_sys::GstMemory, || {
-    gst_sys::gst_memory_get_type()
+gst_define_mini_object_wrapper!(Memory, MemoryRef, ffi::GstMemory, || {
+    ffi::gst_memory_get_type()
 });
 
 pub struct MemoryMap<'a, T> {
     memory: &'a MemoryRef,
-    map_info: gst_sys::GstMapInfo,
+    map_info: ffi::GstMapInfo,
     phantom: PhantomData<T>,
 }
 
 pub struct MappedMemory<T> {
     memory: Option<Memory>,
-    map_info: gst_sys::GstMapInfo,
+    map_info: ffi::GstMapInfo,
     phantom: PhantomData<T>,
 }
 
@@ -63,7 +60,7 @@ pub enum Readable {}
 pub enum Writable {}
 
 impl Memory {
-    unsafe extern "C" fn drop_box<T>(vec: glib_sys::gpointer) {
+    unsafe extern "C" fn drop_box<T>(vec: glib::ffi::gpointer) {
         let slice: Box<T> = Box::from_raw(vec as *mut T);
         drop(slice);
     }
@@ -71,7 +68,7 @@ impl Memory {
     pub fn with_size(size: usize) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_allocator_alloc(
+            from_glib_full(ffi::gst_allocator_alloc(
                 ptr::null_mut(),
                 size,
                 ptr::null_mut(),
@@ -82,7 +79,7 @@ impl Memory {
     pub fn with_size_and_params(size: usize, params: &AllocationParams) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_allocator_alloc(
+            from_glib_full(ffi::gst_allocator_alloc(
                 ptr::null_mut(),
                 size,
                 params.as_ptr() as *mut _,
@@ -99,13 +96,13 @@ impl Memory {
                 (slice.len(), slice.as_ptr())
             };
             let user_data = Box::into_raw(b);
-            from_glib_full(gst_sys::gst_memory_new_wrapped(
-                gst_sys::GST_MEMORY_FLAG_READONLY,
-                data as glib_sys::gpointer,
+            from_glib_full(ffi::gst_memory_new_wrapped(
+                ffi::GST_MEMORY_FLAG_READONLY,
+                data as glib::ffi::gpointer,
                 size,
                 0,
                 size,
-                user_data as glib_sys::gpointer,
+                user_data as glib::ffi::gpointer,
                 Some(Self::drop_box::<T>),
             ))
         }
@@ -121,13 +118,13 @@ impl Memory {
                 (slice.len(), slice.as_mut_ptr())
             };
             let user_data = Box::into_raw(b);
-            from_glib_full(gst_sys::gst_memory_new_wrapped(
+            from_glib_full(ffi::gst_memory_new_wrapped(
                 0,
-                data as glib_sys::gpointer,
+                data as glib::ffi::gpointer,
                 size,
                 0,
                 size,
-                user_data as glib_sys::gpointer,
+                user_data as glib::ffi::gpointer,
                 Some(Self::drop_box::<T>),
             ))
         }
@@ -136,10 +133,10 @@ impl Memory {
     pub fn into_mapped_memory_readable(self) -> Result<MappedMemory<Readable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_sys::gst_memory_map(
+            let res: bool = from_glib(ffi::gst_memory_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READ,
+                ffi::GST_MAP_READ,
             ));
             if res {
                 Ok(MappedMemory {
@@ -156,10 +153,10 @@ impl Memory {
     pub fn into_mapped_memory_writable(self) -> Result<MappedMemory<Writable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_sys::gst_memory_map(
+            let res: bool = from_glib(ffi::gst_memory_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READWRITE,
+                ffi::GST_MAP_READWRITE,
             ));
             if res {
                 Ok(MappedMemory {
@@ -216,7 +213,7 @@ impl MemoryRef {
         };
         assert!(offset + pos_sz < (self.get_maxsize() as isize));
         unsafe {
-            from_glib_full(gst_sys::gst_memory_copy(
+            from_glib_full(ffi::gst_memory_copy(
                 self.as_mut_ptr(),
                 offset,
                 match size {
@@ -230,7 +227,7 @@ impl MemoryRef {
     pub fn is_span(&self, mem2: &MemoryRef) -> Option<usize> {
         unsafe {
             let mut offset = mem::MaybeUninit::uninit();
-            let res = from_glib(gst_sys::gst_memory_is_span(
+            let res = from_glib(ffi::gst_memory_is_span(
                 self.as_mut_ptr(),
                 mem2.as_mut_ptr(),
                 offset.as_mut_ptr(),
@@ -245,7 +242,7 @@ impl MemoryRef {
 
     pub fn is_type(&self, mem_type: &str) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_memory_is_type(
+            from_glib(ffi::gst_memory_is_type(
                 self.as_mut_ptr(),
                 mem_type.to_glib_none().0,
             ))
@@ -255,19 +252,16 @@ impl MemoryRef {
     pub fn map_readable(&self) -> Result<MemoryMap<Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res = gst_sys::gst_memory_map(
-                self.as_mut_ptr(),
-                map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READ,
-            );
-            if res == glib_sys::GTRUE {
+            let res =
+                ffi::gst_memory_map(self.as_mut_ptr(), map_info.as_mut_ptr(), ffi::GST_MAP_READ);
+            if res == glib::ffi::GTRUE {
                 Ok(MemoryMap {
                     memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib_bool_error!("Failed to map memory readable"))
+                Err(glib::glib_bool_error!("Failed to map memory readable"))
             }
         }
     }
@@ -275,19 +269,19 @@ impl MemoryRef {
     pub fn map_writable(&mut self) -> Result<MemoryMap<Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res = gst_sys::gst_memory_map(
+            let res = ffi::gst_memory_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READWRITE,
+                ffi::GST_MAP_READWRITE,
             );
-            if res == glib_sys::GTRUE {
+            if res == glib::ffi::GTRUE {
                 Ok(MemoryMap {
                     memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib_bool_error!("Failed to map memory writable"))
+                Err(glib::glib_bool_error!("Failed to map memory writable"))
             }
         }
     }
@@ -299,7 +293,7 @@ impl MemoryRef {
         };
         assert!(offset + pos_sz < (self.get_maxsize() as isize));
         unsafe {
-            from_glib_full(gst_sys::gst_memory_share(
+            from_glib_full(ffi::gst_memory_share(
                 self.as_ptr() as *mut _,
                 offset,
                 match size {
@@ -312,7 +306,7 @@ impl MemoryRef {
 
     pub fn resize(&mut self, offset: isize, size: usize) {
         assert!(offset + (size as isize) < (self.get_maxsize() as isize));
-        unsafe { gst_sys::gst_memory_resize(self.as_mut_ptr(), offset, size) }
+        unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size) }
     }
 
     pub fn dump(&self, size: Option<usize>) -> Dump {
@@ -385,7 +379,7 @@ impl<'a, T> Eq for MemoryMap<'a, T> {}
 impl<'a, T> Drop for MemoryMap<'a, T> {
     fn drop(&mut self) {
         unsafe {
-            gst_sys::gst_memory_unmap(self.memory.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_memory_unmap(self.memory.as_mut_ptr(), &mut self.map_info);
         }
     }
 }
@@ -409,7 +403,7 @@ impl<T> MappedMemory<T> {
     pub fn into_memory(mut self) -> Memory {
         let memory = self.memory.take().unwrap();
         unsafe {
-            gst_sys::gst_memory_unmap(memory.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_memory_unmap(memory.as_mut_ptr(), &mut self.map_info);
         }
 
         memory
@@ -452,7 +446,7 @@ impl<T> Drop for MappedMemory<T> {
     fn drop(&mut self) {
         if let Some(ref memory) = self.memory {
             unsafe {
-                gst_sys::gst_memory_unmap(memory.as_mut_ptr(), &mut self.map_info);
+                ffi::gst_memory_unmap(memory.as_mut_ptr(), &mut self.map_info);
             }
         }
     }
@@ -515,15 +509,15 @@ impl<'a> fmt::Debug for Dump<'a> {
 mod tests {
     #[test]
     fn test_dump() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
-        let mem = ::Memory::from_slice(vec![1, 2, 3, 4]);
+        let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
         println!("{}", mem.dump(Some(mem.get_size())));
 
-        let mem = ::Memory::from_slice(vec![1, 2, 3, 4]);
+        let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
         println!("{:?}", mem.dump(Some(2)));
 
-        let mem = ::Memory::from_slice(vec![0; 64]);
+        let mem = crate::Memory::from_slice(vec![0; 64]);
         dbg!(mem.dump(None));
     }
 }

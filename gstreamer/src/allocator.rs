@@ -8,14 +8,12 @@
 
 use std::ptr;
 
-use gst_sys;
-
 use glib::translate::from_glib_full;
 use glib::IsA;
 
-use AllocationParams;
-use Allocator;
-use Memory;
+use crate::AllocationParams;
+use crate::Allocator;
+use crate::Memory;
 
 pub trait AllocatorExtManual: 'static {
     fn alloc(
@@ -32,7 +30,7 @@ impl<O: IsA<Allocator>> AllocatorExtManual for O {
         params: Option<&AllocationParams>,
     ) -> Result<Memory, glib::BoolError> {
         unsafe {
-            let ret = gst_sys::gst_allocator_alloc(
+            let ret = ffi::gst_allocator_alloc(
                 self.as_ptr() as *mut _,
                 size,
                 match params {
@@ -41,7 +39,7 @@ impl<O: IsA<Allocator>> AllocatorExtManual for O {
                 },
             );
             if ret.is_null() {
-                Err(glib_bool_error!("Failed to allocate memory"))
+                Err(glib::glib_bool_error!("Failed to allocate memory"))
             } else {
                 Ok(from_glib_full(ret))
             }

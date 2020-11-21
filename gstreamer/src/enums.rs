@@ -6,14 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::ClockReturn;
+use crate::FlowReturn;
+use crate::PadLinkReturn;
+use crate::State;
+use crate::StateChange;
+use crate::StateChangeReturn;
 use std::{cmp, ops};
 use thiserror::Error;
-use ClockReturn;
-use FlowReturn;
-use PadLinkReturn;
-use State;
-use StateChange;
-use StateChangeReturn;
 
 use glib::translate::*;
 use glib::value::FromValue;
@@ -352,104 +352,104 @@ impl From<Result<ClockSuccess, ClockError>> for ClockReturn {
     }
 }
 
-impl PartialEq for ::TypeFindProbability {
-    fn eq(&self, other: &::TypeFindProbability) -> bool {
+impl PartialEq for crate::TypeFindProbability {
+    fn eq(&self, other: &crate::TypeFindProbability) -> bool {
         (self.to_glib() as u32).eq(&(other.to_glib() as u32))
     }
 }
 
-impl Eq for ::TypeFindProbability {}
+impl Eq for crate::TypeFindProbability {}
 
-impl PartialOrd for ::TypeFindProbability {
+impl PartialOrd for crate::TypeFindProbability {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         (self.to_glib() as u32).partial_cmp(&(other.to_glib() as u32))
     }
 }
 
-impl Ord for ::TypeFindProbability {
+impl Ord for crate::TypeFindProbability {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         (self.to_glib() as u32).cmp(&(other.to_glib() as u32))
     }
 }
 
-impl ops::Add<u32> for ::TypeFindProbability {
-    type Output = ::TypeFindProbability;
+impl ops::Add<u32> for crate::TypeFindProbability {
+    type Output = crate::TypeFindProbability;
 
-    fn add(self, rhs: u32) -> ::TypeFindProbability {
+    fn add(self, rhs: u32) -> crate::TypeFindProbability {
         let res = (self.to_glib() as u32).saturating_add(rhs);
         from_glib(res as i32)
     }
 }
 
-impl ops::AddAssign<u32> for ::TypeFindProbability {
+impl ops::AddAssign<u32> for crate::TypeFindProbability {
     fn add_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_add(rhs);
         *self = from_glib(res as i32);
     }
 }
 
-impl ops::Sub<u32> for ::TypeFindProbability {
-    type Output = ::TypeFindProbability;
+impl ops::Sub<u32> for crate::TypeFindProbability {
+    type Output = crate::TypeFindProbability;
 
-    fn sub(self, rhs: u32) -> ::TypeFindProbability {
+    fn sub(self, rhs: u32) -> crate::TypeFindProbability {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
         from_glib(res as i32)
     }
 }
 
-impl ops::SubAssign<u32> for ::TypeFindProbability {
+impl ops::SubAssign<u32> for crate::TypeFindProbability {
     fn sub_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
         *self = from_glib(res as i32);
     }
 }
 
-impl PartialEq for ::Rank {
-    fn eq(&self, other: &::Rank) -> bool {
+impl PartialEq for crate::Rank {
+    fn eq(&self, other: &crate::Rank) -> bool {
         (self.to_glib() as u32).eq(&(other.to_glib() as u32))
     }
 }
 
-impl Eq for ::Rank {}
+impl Eq for crate::Rank {}
 
-impl PartialOrd for ::Rank {
+impl PartialOrd for crate::Rank {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         (self.to_glib() as u32).partial_cmp(&(other.to_glib() as u32))
     }
 }
 
-impl Ord for ::Rank {
+impl Ord for crate::Rank {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         (self.to_glib() as u32).cmp(&(other.to_glib() as u32))
     }
 }
 
-impl ops::Add<u32> for ::Rank {
-    type Output = ::Rank;
+impl ops::Add<u32> for crate::Rank {
+    type Output = crate::Rank;
 
-    fn add(self, rhs: u32) -> ::Rank {
+    fn add(self, rhs: u32) -> crate::Rank {
         let res = (self.to_glib() as u32).saturating_add(rhs);
         from_glib(res as i32)
     }
 }
 
-impl ops::AddAssign<u32> for ::Rank {
+impl ops::AddAssign<u32> for crate::Rank {
     fn add_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_add(rhs);
         *self = from_glib(res as i32);
     }
 }
 
-impl ops::Sub<u32> for ::Rank {
-    type Output = ::Rank;
+impl ops::Sub<u32> for crate::Rank {
+    type Output = crate::Rank;
 
-    fn sub(self, rhs: u32) -> ::Rank {
+    fn sub(self, rhs: u32) -> crate::Rank {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
         from_glib(res as i32)
     }
 }
 
-impl ops::SubAssign<u32> for ::Rank {
+impl ops::SubAssign<u32> for crate::Rank {
     fn sub_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
         *self = from_glib(res as i32);
@@ -512,58 +512,58 @@ pub enum MessageType {
 
 #[doc(hidden)]
 impl ToGlib for MessageType {
-    type GlibType = gst_sys::GstMessageType;
+    type GlibType = ffi::GstMessageType;
 
-    fn to_glib(&self) -> gst_sys::GstMessageType {
+    fn to_glib(&self) -> ffi::GstMessageType {
         match *self {
-            MessageType::Unknown => gst_sys::GST_MESSAGE_UNKNOWN,
-            MessageType::Eos => gst_sys::GST_MESSAGE_EOS,
-            MessageType::Error => gst_sys::GST_MESSAGE_ERROR,
-            MessageType::Warning => gst_sys::GST_MESSAGE_WARNING,
-            MessageType::Info => gst_sys::GST_MESSAGE_INFO,
-            MessageType::Tag => gst_sys::GST_MESSAGE_TAG,
-            MessageType::Buffering => gst_sys::GST_MESSAGE_BUFFERING,
-            MessageType::StateChanged => gst_sys::GST_MESSAGE_STATE_CHANGED,
-            MessageType::StateDirty => gst_sys::GST_MESSAGE_STATE_DIRTY,
-            MessageType::StepDone => gst_sys::GST_MESSAGE_STEP_DONE,
-            MessageType::ClockProvide => gst_sys::GST_MESSAGE_CLOCK_PROVIDE,
-            MessageType::ClockLost => gst_sys::GST_MESSAGE_CLOCK_LOST,
-            MessageType::NewClock => gst_sys::GST_MESSAGE_NEW_CLOCK,
-            MessageType::StructureChange => gst_sys::GST_MESSAGE_STRUCTURE_CHANGE,
-            MessageType::StreamStatus => gst_sys::GST_MESSAGE_STREAM_STATUS,
-            MessageType::Application => gst_sys::GST_MESSAGE_APPLICATION,
-            MessageType::Element => gst_sys::GST_MESSAGE_ELEMENT,
-            MessageType::SegmentStart => gst_sys::GST_MESSAGE_SEGMENT_START,
-            MessageType::SegmentDone => gst_sys::GST_MESSAGE_SEGMENT_DONE,
-            MessageType::DurationChanged => gst_sys::GST_MESSAGE_DURATION_CHANGED,
-            MessageType::Latency => gst_sys::GST_MESSAGE_LATENCY,
-            MessageType::AsyncStart => gst_sys::GST_MESSAGE_ASYNC_START,
-            MessageType::AsyncDone => gst_sys::GST_MESSAGE_ASYNC_DONE,
-            MessageType::RequestState => gst_sys::GST_MESSAGE_REQUEST_STATE,
-            MessageType::StepStart => gst_sys::GST_MESSAGE_STEP_START,
-            MessageType::Qos => gst_sys::GST_MESSAGE_QOS,
-            MessageType::Progress => gst_sys::GST_MESSAGE_PROGRESS,
-            MessageType::Toc => gst_sys::GST_MESSAGE_TOC,
-            MessageType::ResetTime => gst_sys::GST_MESSAGE_RESET_TIME,
-            MessageType::StreamStart => gst_sys::GST_MESSAGE_STREAM_START,
-            MessageType::NeedContext => gst_sys::GST_MESSAGE_NEED_CONTEXT,
-            MessageType::HaveContext => gst_sys::GST_MESSAGE_HAVE_CONTEXT,
-            MessageType::Extended => gst_sys::GST_MESSAGE_EXTENDED,
-            MessageType::DeviceAdded => gst_sys::GST_MESSAGE_DEVICE_ADDED,
-            MessageType::DeviceRemoved => gst_sys::GST_MESSAGE_DEVICE_REMOVED,
-            MessageType::PropertyNotify => gst_sys::GST_MESSAGE_PROPERTY_NOTIFY,
-            MessageType::StreamCollection => gst_sys::GST_MESSAGE_STREAM_COLLECTION,
-            MessageType::StreamsSelected => gst_sys::GST_MESSAGE_STREAMS_SELECTED,
-            MessageType::Redirect => gst_sys::GST_MESSAGE_REDIRECT,
+            MessageType::Unknown => ffi::GST_MESSAGE_UNKNOWN,
+            MessageType::Eos => ffi::GST_MESSAGE_EOS,
+            MessageType::Error => ffi::GST_MESSAGE_ERROR,
+            MessageType::Warning => ffi::GST_MESSAGE_WARNING,
+            MessageType::Info => ffi::GST_MESSAGE_INFO,
+            MessageType::Tag => ffi::GST_MESSAGE_TAG,
+            MessageType::Buffering => ffi::GST_MESSAGE_BUFFERING,
+            MessageType::StateChanged => ffi::GST_MESSAGE_STATE_CHANGED,
+            MessageType::StateDirty => ffi::GST_MESSAGE_STATE_DIRTY,
+            MessageType::StepDone => ffi::GST_MESSAGE_STEP_DONE,
+            MessageType::ClockProvide => ffi::GST_MESSAGE_CLOCK_PROVIDE,
+            MessageType::ClockLost => ffi::GST_MESSAGE_CLOCK_LOST,
+            MessageType::NewClock => ffi::GST_MESSAGE_NEW_CLOCK,
+            MessageType::StructureChange => ffi::GST_MESSAGE_STRUCTURE_CHANGE,
+            MessageType::StreamStatus => ffi::GST_MESSAGE_STREAM_STATUS,
+            MessageType::Application => ffi::GST_MESSAGE_APPLICATION,
+            MessageType::Element => ffi::GST_MESSAGE_ELEMENT,
+            MessageType::SegmentStart => ffi::GST_MESSAGE_SEGMENT_START,
+            MessageType::SegmentDone => ffi::GST_MESSAGE_SEGMENT_DONE,
+            MessageType::DurationChanged => ffi::GST_MESSAGE_DURATION_CHANGED,
+            MessageType::Latency => ffi::GST_MESSAGE_LATENCY,
+            MessageType::AsyncStart => ffi::GST_MESSAGE_ASYNC_START,
+            MessageType::AsyncDone => ffi::GST_MESSAGE_ASYNC_DONE,
+            MessageType::RequestState => ffi::GST_MESSAGE_REQUEST_STATE,
+            MessageType::StepStart => ffi::GST_MESSAGE_STEP_START,
+            MessageType::Qos => ffi::GST_MESSAGE_QOS,
+            MessageType::Progress => ffi::GST_MESSAGE_PROGRESS,
+            MessageType::Toc => ffi::GST_MESSAGE_TOC,
+            MessageType::ResetTime => ffi::GST_MESSAGE_RESET_TIME,
+            MessageType::StreamStart => ffi::GST_MESSAGE_STREAM_START,
+            MessageType::NeedContext => ffi::GST_MESSAGE_NEED_CONTEXT,
+            MessageType::HaveContext => ffi::GST_MESSAGE_HAVE_CONTEXT,
+            MessageType::Extended => ffi::GST_MESSAGE_EXTENDED,
+            MessageType::DeviceAdded => ffi::GST_MESSAGE_DEVICE_ADDED,
+            MessageType::DeviceRemoved => ffi::GST_MESSAGE_DEVICE_REMOVED,
+            MessageType::PropertyNotify => ffi::GST_MESSAGE_PROPERTY_NOTIFY,
+            MessageType::StreamCollection => ffi::GST_MESSAGE_STREAM_COLLECTION,
+            MessageType::StreamsSelected => ffi::GST_MESSAGE_STREAMS_SELECTED,
+            MessageType::Redirect => ffi::GST_MESSAGE_REDIRECT,
             MessageType::__Unknown(value) => value as u32,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_sys::GstMessageType> for MessageType {
+impl FromGlib<ffi::GstMessageType> for MessageType {
     #[allow(clippy::unreadable_literal)]
-    fn from_glib(value: gst_sys::GstMessageType) -> Self {
+    fn from_glib(value: ffi::GstMessageType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => MessageType::Unknown,
@@ -612,7 +612,7 @@ impl FromGlib<gst_sys::GstMessageType> for MessageType {
 
 impl StaticType for MessageType {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_sys::gst_message_type_get_type()) }
+        unsafe { from_glib(ffi::gst_message_type_get_type()) }
     }
 }
 
@@ -624,13 +624,13 @@ impl<'a> FromValueOptional<'a> for MessageType {
 
 impl<'a> FromValue<'a> for MessageType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for MessageType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

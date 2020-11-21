@@ -10,15 +10,15 @@ use serde::de;
 use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, Serializer};
 
-use Format;
-use FormattedSegment;
-use FormattedValue;
-use GenericFormattedValue;
-use Segment;
-use SegmentFlags;
-use SpecificFormattedValue;
+use crate::Format;
+use crate::FormattedSegment;
+use crate::FormattedValue;
+use crate::GenericFormattedValue;
+use crate::Segment;
+use crate::SegmentFlags;
+use crate::SpecificFormattedValue;
 
-#[derive(Serialize, Deserialize)]
+#[derive(serde::Serialize, serde::Deserialize)]
 struct FormattedSegmentSerde {
     flags: SegmentFlags,
     rate: f64,
@@ -114,17 +114,15 @@ impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for Forma
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-
-    use ClockTime;
-    use Format;
-    use GenericFormattedValue;
-    use Segment;
-    use SegmentFlags;
+    use crate::ClockTime;
+    use crate::Format;
+    use crate::GenericFormattedValue;
+    use crate::Segment;
+    use crate::SegmentFlags;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut segment = Segment::new();
         segment.set_flags(SegmentFlags::RESET | SegmentFlags::SEGMENT);
@@ -168,7 +166,7 @@ mod tests {
 
     #[test]
     fn test_deserialize_segment() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let segment_ron = r#"
             (
@@ -228,10 +226,10 @@ mod tests {
 
     #[test]
     fn test_deserialize_formatted() {
-        use format::Time;
-        use FormattedSegment;
+        use crate::format::Time;
+        use crate::FormattedSegment;
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let segment_ron = r#"
             (
@@ -270,7 +268,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut segment = Segment::new();
         segment.set_flags(SegmentFlags::RESET | SegmentFlags::SEGMENT);

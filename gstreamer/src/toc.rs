@@ -10,73 +10,63 @@ use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 
-use gst_sys;
-
-use glib;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib, ToGlibPtr,
 };
 
-use TagList;
-use TagMergeMode;
-use TocEntryType;
-use TocLoopType;
-use TocScope;
+use crate::TagList;
+use crate::TagMergeMode;
+use crate::TocEntryType;
+use crate::TocLoopType;
+use crate::TocScope;
 
-gst_define_mini_object_wrapper!(Toc, TocRef, gst_sys::GstToc, || {
-    gst_sys::gst_toc_get_type()
-});
+gst_define_mini_object_wrapper!(Toc, TocRef, ffi::GstToc, || { ffi::gst_toc_get_type() });
 
 impl Toc {
     pub fn new(scope: TocScope) -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_toc_new(scope.to_glib())) }
+        unsafe { from_glib_full(ffi::gst_toc_new(scope.to_glib())) }
     }
 }
 
 impl TocRef {
     pub fn get_scope(&self) -> TocScope {
-        unsafe { from_glib(gst_sys::gst_toc_get_scope(self.as_ptr())) }
+        unsafe { from_glib(ffi::gst_toc_get_scope(self.as_ptr())) }
     }
 
     pub fn find_entry(&self, uid: &str) -> Option<TocEntry> {
-        unsafe {
-            from_glib_none(gst_sys::gst_toc_find_entry(
-                self.as_ptr(),
-                uid.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_toc_find_entry(self.as_ptr(), uid.to_glib_none().0)) }
     }
 
     pub fn get_entries(&self) -> Vec<TocEntry> {
-        unsafe { FromGlibPtrContainer::from_glib_none(gst_sys::gst_toc_get_entries(self.as_ptr())) }
+        unsafe { FromGlibPtrContainer::from_glib_none(ffi::gst_toc_get_entries(self.as_ptr())) }
     }
 
     pub fn append_entry(&mut self, entry: TocEntry) {
         unsafe {
-            gst_sys::gst_toc_append_entry(self.as_mut_ptr(), entry.into_ptr());
+            ffi::gst_toc_append_entry(self.as_mut_ptr(), entry.into_ptr());
         }
     }
 
     pub fn get_tags(&self) -> Option<TagList> {
-        unsafe { from_glib_none(gst_sys::gst_toc_get_tags(self.as_ptr())) }
+        unsafe { from_glib_none(ffi::gst_toc_get_tags(self.as_ptr())) }
     }
 
     pub fn set_tags(&mut self, tag_list: TagList) {
         unsafe {
-            gst_sys::gst_toc_set_tags(self.as_mut_ptr(), tag_list.into_ptr());
+            ffi::gst_toc_set_tags(self.as_mut_ptr(), tag_list.into_ptr());
         }
     }
 
     pub fn merge_tags(&mut self, tag_list: &TagList, mode: TagMergeMode) {
         unsafe {
-            gst_sys::gst_toc_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.to_glib());
+            ffi::gst_toc_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.to_glib());
         }
     }
 
     pub fn dump(&self) {
         unsafe {
-            gst_sys::gst_toc_dump(self.as_mut_ptr());
+            ffi::gst_toc_dump(self.as_mut_ptr());
         }
     }
 }
@@ -97,15 +87,15 @@ impl fmt::Debug for TocRef {
     }
 }
 
-gst_define_mini_object_wrapper!(TocEntry, TocEntryRef, gst_sys::GstTocEntry, || {
-    gst_sys::gst_toc_entry_get_type()
+gst_define_mini_object_wrapper!(TocEntry, TocEntryRef, ffi::GstTocEntry, || {
+    ffi::gst_toc_entry_get_type()
 });
 
 impl TocEntry {
     pub fn new(type_: TocEntryType, uid: &str) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_toc_entry_new(
+            from_glib_full(ffi::gst_toc_entry_new(
                 type_.to_glib(),
                 uid.to_glib_none().0,
             ))
@@ -115,12 +105,12 @@ impl TocEntry {
 
 impl TocEntryRef {
     pub fn get_entry_type(&self) -> TocEntryType {
-        unsafe { from_glib(gst_sys::gst_toc_entry_get_entry_type(self.as_ptr())) }
+        unsafe { from_glib(ffi::gst_toc_entry_get_entry_type(self.as_ptr())) }
     }
 
     pub fn get_uid(&self) -> &str {
         unsafe {
-            CStr::from_ptr(gst_sys::gst_toc_entry_get_uid(self.as_ptr()))
+            CStr::from_ptr(ffi::gst_toc_entry_get_uid(self.as_ptr()))
                 .to_str()
                 .unwrap()
         }
@@ -128,20 +118,18 @@ impl TocEntryRef {
 
     pub fn append_sub_entry(&mut self, subentry: TocEntry) {
         unsafe {
-            gst_sys::gst_toc_entry_append_sub_entry(self.as_mut_ptr(), subentry.into_ptr());
+            ffi::gst_toc_entry_append_sub_entry(self.as_mut_ptr(), subentry.into_ptr());
         }
     }
 
     pub fn get_sub_entries(&self) -> Vec<TocEntry> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(gst_sys::gst_toc_entry_get_sub_entries(
-                self.as_ptr(),
-            ))
+            FromGlibPtrContainer::from_glib_none(ffi::gst_toc_entry_get_sub_entries(self.as_ptr()))
         }
     }
 
     pub fn get_parent(&self) -> Option<TocEntry> {
-        unsafe { from_glib_none(gst_sys::gst_toc_entry_get_parent(self.as_mut_ptr())) }
+        unsafe { from_glib_none(ffi::gst_toc_entry_get_parent(self.as_mut_ptr())) }
     }
 
     pub fn get_start_stop_times(&self) -> Option<(i64, i64)> {
@@ -149,7 +137,7 @@ impl TocEntryRef {
             let mut start = mem::MaybeUninit::uninit();
             let mut stop = mem::MaybeUninit::uninit();
 
-            if from_glib(gst_sys::gst_toc_entry_get_start_stop_times(
+            if from_glib(ffi::gst_toc_entry_get_start_stop_times(
                 self.as_ptr(),
                 start.as_mut_ptr(),
                 stop.as_mut_ptr(),
@@ -163,43 +151,39 @@ impl TocEntryRef {
 
     pub fn set_start_stop_times(&mut self, start: i64, stop: i64) {
         unsafe {
-            gst_sys::gst_toc_entry_set_start_stop_times(self.as_mut_ptr(), start, stop);
+            ffi::gst_toc_entry_set_start_stop_times(self.as_mut_ptr(), start, stop);
         }
     }
 
     pub fn get_tags(&self) -> Option<TagList> {
-        unsafe { from_glib_none(gst_sys::gst_toc_entry_get_tags(self.as_ptr())) }
+        unsafe { from_glib_none(ffi::gst_toc_entry_get_tags(self.as_ptr())) }
     }
 
     pub fn set_tags(&mut self, tag_list: TagList) {
         unsafe {
-            gst_sys::gst_toc_entry_set_tags(self.as_mut_ptr(), tag_list.into_ptr());
+            ffi::gst_toc_entry_set_tags(self.as_mut_ptr(), tag_list.into_ptr());
         }
     }
 
     pub fn merge_tags(&mut self, tag_list: &TagList, mode: TagMergeMode) {
         unsafe {
-            gst_sys::gst_toc_entry_merge_tags(
-                self.as_mut_ptr(),
-                tag_list.as_mut_ptr(),
-                mode.to_glib(),
-            );
+            ffi::gst_toc_entry_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.to_glib());
         }
     }
 
     pub fn is_alternative(&self) -> bool {
-        unsafe { from_glib(gst_sys::gst_toc_entry_is_alternative(self.as_ptr())) }
+        unsafe { from_glib(ffi::gst_toc_entry_is_alternative(self.as_ptr())) }
     }
 
     pub fn is_sequence(&self) -> bool {
-        unsafe { from_glib(gst_sys::gst_toc_entry_is_sequence(self.as_ptr())) }
+        unsafe { from_glib(ffi::gst_toc_entry_is_sequence(self.as_ptr())) }
     }
 
     pub fn get_loop(&self) -> Option<(TocLoopType, i32)> {
         unsafe {
             let mut loop_type = mem::MaybeUninit::uninit();
             let mut repeat_count = mem::MaybeUninit::uninit();
-            if from_glib(gst_sys::gst_toc_entry_get_loop(
+            if from_glib(ffi::gst_toc_entry_get_loop(
                 self.as_ptr(),
                 loop_type.as_mut_ptr(),
                 repeat_count.as_mut_ptr(),
@@ -216,7 +200,7 @@ impl TocEntryRef {
 
     pub fn set_loop(&mut self, loop_type: TocLoopType, repeat_count: i32) {
         unsafe {
-            gst_sys::gst_toc_entry_set_loop(self.as_mut_ptr(), loop_type.to_glib(), repeat_count);
+            ffi::gst_toc_entry_set_loop(self.as_mut_ptr(), loop_type.to_glib(), repeat_count);
         }
     }
 }
@@ -248,7 +232,7 @@ mod tests {
 
     #[test]
     fn test_simple() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Top level toc entry
         let mut toc_entry = TocEntry::new(TocEntryType::Chapter, "chapter");

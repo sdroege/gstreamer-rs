@@ -6,16 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gst_sys;
-
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use Device;
-use Element;
-use LoggableError;
+use crate::Device;
+use crate::Element;
+use crate::LoggableError;
 
 use std::ptr;
 
@@ -59,7 +56,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
     ) -> Result<Element, LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
                 let ptr = f(
                     device.unsafe_cast_ref::<Device>().to_glib_none().0,
@@ -69,13 +66,13 @@ impl<T: DeviceImpl> DeviceImplExt for T {
                 // Don't steal floating reference here but pass it further to the caller
                 Option::<_>::from_glib_full(ptr).ok_or_else(|| {
                     gst_loggable_error!(
-                        ::CAT_RUST,
+                        crate::CAT_RUST,
                         "Failed to create element using the parent function"
                     )
                 })
             } else {
                 Err(gst_loggable_error!(
-                    ::CAT_RUST,
+                    crate::CAT_RUST,
                     "Parent function `create_element` is not defined"
                 ))
             }
@@ -89,10 +86,10 @@ impl<T: DeviceImpl> DeviceImplExt for T {
     ) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstDeviceClass;
             let f = (*parent_class).reconfigure_element.ok_or_else(|| {
                 gst_loggable_error!(
-                    ::CAT_RUST,
+                    crate::CAT_RUST,
                     "Parent function `reconfigure_element` is not defined"
                 )
             })?;
@@ -101,7 +98,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
                     device.unsafe_cast_ref::<Device>().to_glib_none().0,
                     element.to_glib_none().0
                 ),
-                ::CAT_RUST,
+                crate::CAT_RUST,
                 "Failed to reconfigure the element using the parent function"
             )
         }
@@ -118,9 +115,9 @@ unsafe impl<T: DeviceImpl> IsSubclassable<T> for Device {
 }
 
 unsafe extern "C" fn device_create_element<T: DeviceImpl>(
-    ptr: *mut gst_sys::GstDevice,
+    ptr: *mut ffi::GstDevice,
     name: *const libc::c_char,
-) -> *mut gst_sys::GstElement {
+) -> *mut ffi::GstElement {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
@@ -138,7 +135,9 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
             let element_ptr = element.to_glib_full();
             drop(element);
             // See https://gitlab.freedesktop.org/gstreamer/gstreamer/issues/444
-            gobject_sys::g_object_force_floating(element_ptr as *mut gobject_sys::GObject);
+            glib::gobject_ffi::g_object_force_floating(
+                element_ptr as *mut glib::gobject_ffi::GObject,
+            );
             element_ptr
         }
         Err(err) => {
@@ -149,9 +148,9 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
 }
 
 unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
-    ptr: *mut gst_sys::GstDevice,
-    element: *mut gst_sys::GstElement,
-) -> glib_sys::gboolean {
+    ptr: *mut ffi::GstDevice,
+    element: *mut ffi::GstElement,
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);

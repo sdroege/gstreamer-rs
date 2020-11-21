@@ -12,12 +12,12 @@ use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 
 use std::fmt;
 
-use Caps;
-use CapsFeatures;
-use CapsFeaturesRef;
-use CapsRef;
-use Structure;
-use StructureRef;
+use crate::Caps;
+use crate::CapsFeatures;
+use crate::CapsFeaturesRef;
+use crate::CapsRef;
+use crate::Structure;
+use crate::StructureRef;
 
 enum CapsVariantKinds {
     Any,
@@ -57,7 +57,7 @@ impl<'a> Serialize for CapsForIterSe<'a> {
             let mut seq = serializer.serialize_seq(Some(size))?;
             for (structure, features) in iter {
                 let features = if !features.is_any()
-                    && features.is_equal(::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
+                    && features.is_equal(crate::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
                 {
                     None
                 } else {
@@ -229,16 +229,14 @@ impl<'de> Deserialize<'de> for Caps {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-
-    use Array;
-    use Caps;
-    use CapsFeatures;
-    use Fraction;
+    use crate::Array;
+    use crate::Caps;
+    use crate::CapsFeatures;
+    use crate::Fraction;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let caps = Caps::builder("foo/bar")
             .field("int", &12)
@@ -349,9 +347,9 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        use Structure;
+        use crate::Structure;
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let caps_ron = "Any";
         let caps: Caps = ron::de::from_str(caps_ron).unwrap();
@@ -468,7 +466,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let caps = Caps::new_any();
         let caps_ser = ron::ser::to_string(&caps).unwrap();

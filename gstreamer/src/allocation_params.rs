@@ -10,10 +10,10 @@ use std::mem;
 
 use glib::translate::*;
 
-use MemoryFlags;
+use crate::MemoryFlags;
 
 #[derive(Debug, Clone)]
-pub struct AllocationParams(gst_sys::GstAllocationParams);
+pub struct AllocationParams(ffi::GstAllocationParams);
 
 unsafe impl Send for AllocationParams {}
 unsafe impl Sync for AllocationParams {}
@@ -38,7 +38,7 @@ impl AllocationParams {
     pub fn new(flags: MemoryFlags, align: usize, prefix: usize, padding: usize) -> Self {
         assert_initialized_main_thread!();
         let allocationparams = unsafe {
-            let mut allocationparams: gst_sys::GstAllocationParams = mem::zeroed();
+            let mut allocationparams: ffi::GstAllocationParams = mem::zeroed();
 
             allocationparams.flags = flags.to_glib();
             allocationparams.align = align;
@@ -51,13 +51,13 @@ impl AllocationParams {
         AllocationParams(allocationparams)
     }
 
-    pub fn as_ptr(&self) -> *const gst_sys::GstAllocationParams {
+    pub fn as_ptr(&self) -> *const ffi::GstAllocationParams {
         &self.0
     }
 }
 
-impl From<gst_sys::GstAllocationParams> for AllocationParams {
-    fn from(params: gst_sys::GstAllocationParams) -> Self {
+impl From<ffi::GstAllocationParams> for AllocationParams {
+    fn from(params: ffi::GstAllocationParams) -> Self {
         skip_assert_initialized!();
         AllocationParams(params)
     }

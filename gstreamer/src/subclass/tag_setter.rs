@@ -6,18 +6,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-
 use glib::subclass::prelude::*;
 
-use TagSetter;
+use crate::TagSetter;
 
 pub trait TagSetterImpl: super::element::ElementImpl {}
 
 unsafe impl<T: TagSetterImpl> IsImplementable<T> for TagSetter {
     unsafe extern "C" fn interface_init(
-        _iface: glib_sys::gpointer,
-        _iface_data: glib_sys::gpointer,
+        _iface: glib::ffi::gpointer,
+        _iface_data: glib::ffi::gpointer,
     ) {
     }
 }

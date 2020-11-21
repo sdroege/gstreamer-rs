@@ -9,25 +9,22 @@
 use std::fmt;
 use std::ptr;
 
-use gst_sys;
-
-use glib;
 use glib::translate::{from_glib_full, from_glib_none, mut_override, ToGlibPtr};
 
-use Buffer;
-use BufferList;
-use BufferListRef;
-use BufferRef;
-use Caps;
-use CapsRef;
-use FormattedSegment;
-use FormattedValue;
-use Segment;
-use Structure;
-use StructureRef;
+use crate::Buffer;
+use crate::BufferList;
+use crate::BufferListRef;
+use crate::BufferRef;
+use crate::Caps;
+use crate::CapsRef;
+use crate::FormattedSegment;
+use crate::FormattedValue;
+use crate::Segment;
+use crate::Structure;
+use crate::StructureRef;
 
-gst_define_mini_object_wrapper!(Sample, SampleRef, gst_sys::GstSample, || {
-    gst_sys::gst_sample_get_type()
+gst_define_mini_object_wrapper!(Sample, SampleRef, ffi::GstSample, || {
+    ffi::gst_sample_get_type()
 });
 
 #[derive(Debug, Clone)]
@@ -83,7 +80,7 @@ impl<'a> SampleBuilder<'a> {
         unsafe {
             let info = self.info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut());
 
-            let sample: Sample = from_glib_full(gst_sys::gst_sample_new(
+            let sample: Sample = from_glib_full(ffi::gst_sample_new(
                 self.buffer.to_glib_none().0,
                 self.caps.to_glib_none().0,
                 self.segment.to_glib_none().0,
@@ -91,7 +88,7 @@ impl<'a> SampleBuilder<'a> {
             ));
 
             if let Some(buffer_list) = self.buffer_list {
-                gst_sys::gst_sample_set_buffer_list(
+                ffi::gst_sample_set_buffer_list(
                     sample.to_glib_none().0,
                     buffer_list.to_glib_none().0,
                 );
@@ -117,7 +114,7 @@ impl Sample {
 impl SampleRef {
     pub fn get_buffer(&self) -> Option<&BufferRef> {
         unsafe {
-            let ptr = gst_sys::gst_sample_get_buffer(self.as_mut_ptr());
+            let ptr = ffi::gst_sample_get_buffer(self.as_mut_ptr());
             if ptr.is_null() {
                 None
             } else {
@@ -135,7 +132,7 @@ impl SampleRef {
 
     pub fn get_buffer_list(&self) -> Option<&BufferListRef> {
         unsafe {
-            let ptr = gst_sys::gst_sample_get_buffer_list(self.as_mut_ptr());
+            let ptr = ffi::gst_sample_get_buffer_list(self.as_mut_ptr());
             if ptr.is_null() {
                 None
             } else {
@@ -153,7 +150,7 @@ impl SampleRef {
 
     pub fn get_caps(&self) -> Option<&CapsRef> {
         unsafe {
-            let ptr = gst_sys::gst_sample_get_caps(self.as_mut_ptr());
+            let ptr = ffi::gst_sample_get_caps(self.as_mut_ptr());
             if ptr.is_null() {
                 None
             } else {
@@ -167,12 +164,12 @@ impl SampleRef {
     }
 
     pub fn get_segment(&self) -> Option<Segment> {
-        unsafe { from_glib_none(gst_sys::gst_sample_get_segment(self.as_mut_ptr())) }
+        unsafe { from_glib_none(ffi::gst_sample_get_segment(self.as_mut_ptr())) }
     }
 
     pub fn get_info(&self) -> Option<&StructureRef> {
         unsafe {
-            let ptr = gst_sys::gst_sample_get_info(self.as_mut_ptr());
+            let ptr = ffi::gst_sample_get_info(self.as_mut_ptr());
             if ptr.is_null() {
                 None
             } else {
@@ -184,34 +181,32 @@ impl SampleRef {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_buffer(&mut self, buffer: Option<&Buffer>) {
-        unsafe { gst_sys::gst_sample_set_buffer(self.as_mut_ptr(), buffer.to_glib_none().0) }
+        unsafe { ffi::gst_sample_set_buffer(self.as_mut_ptr(), buffer.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_buffer_list(&mut self, buffer_list: Option<&BufferList>) {
-        unsafe {
-            gst_sys::gst_sample_set_buffer_list(self.as_mut_ptr(), buffer_list.to_glib_none().0)
-        }
+        unsafe { ffi::gst_sample_set_buffer_list(self.as_mut_ptr(), buffer_list.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_caps(&mut self, caps: Option<&Caps>) {
-        unsafe { gst_sys::gst_sample_set_caps(self.as_mut_ptr(), caps.to_glib_none().0) }
+        unsafe { ffi::gst_sample_set_caps(self.as_mut_ptr(), caps.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_segment(&mut self, segment: Option<&Segment>) {
-        unsafe { gst_sys::gst_sample_set_segment(self.as_mut_ptr(), segment.to_glib_none().0) }
+        unsafe { ffi::gst_sample_set_segment(self.as_mut_ptr(), segment.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_info(&mut self, info: Option<Structure>) {
         unsafe {
-            gst_sys::gst_sample_set_info(
+            ffi::gst_sample_set_info(
                 self.as_mut_ptr(),
                 info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut()),
             );
@@ -240,10 +235,10 @@ impl fmt::Debug for SampleRef {
 mod tests {
     #[test]
     fn test_sample_new_with_info() {
-        use Sample;
-        use Structure;
+        use crate::Sample;
+        use crate::Structure;
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let info = Structure::builder("sample.info")
             .field("f3", &123i32)

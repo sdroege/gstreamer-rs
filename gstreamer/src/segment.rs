@@ -6,29 +6,25 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
+use crate::Format;
+use crate::FormattedValue;
+use crate::GenericFormattedValue;
+use crate::SeekFlags;
+use crate::SeekType;
 use glib::translate::*;
-use glib_sys;
-use gobject_sys;
-use gst_sys;
 use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
-use Format;
-use FormattedValue;
-use GenericFormattedValue;
-use SeekFlags;
-use SeekType;
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;
 #[repr(transparent)]
-pub struct FormattedSegment<T: FormattedValue>(gst_sys::GstSegment, PhantomData<T>);
+pub struct FormattedSegment<T: FormattedValue>(ffi::GstSegment, PhantomData<T>);
 
 impl Segment {
     pub fn reset_with_format(&mut self, format: Format) {
         unsafe {
-            gst_sys::gst_segment_init(self.to_glib_none_mut().0, format.to_glib());
+            ffi::gst_segment_init(self.to_glib_none_mut().0, format.to_glib());
         }
     }
 
@@ -78,7 +74,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         assert_initialized_main_thread!();
         let segment = unsafe {
             let mut segment = mem::MaybeUninit::zeroed();
-            gst_sys::gst_segment_init(segment.as_mut_ptr(), T::get_default_format().to_glib());
+            ffi::gst_segment_init(segment.as_mut_ptr(), T::get_default_format().to_glib());
             segment.assume_init()
         };
         FormattedSegment(segment, PhantomData)
@@ -96,7 +92,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
     pub fn reset(&mut self) {
         unsafe {
-            gst_sys::gst_segment_init(&mut self.0, T::get_default_format().to_glib());
+            ffi::gst_segment_init(&mut self.0, T::get_default_format().to_glib());
         }
     }
 
@@ -112,7 +108,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         unsafe {
             let mut clip_start = mem::MaybeUninit::uninit();
             let mut clip_stop = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_sys::gst_segment_clip(
+            let ret = from_glib(ffi::gst_segment_clip(
                 &self.0,
                 start.get_format().to_glib(),
                 start.to_raw_value() as u64,
@@ -152,7 +148,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
         unsafe {
             let mut update = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_sys::gst_segment_do_seek(
+            let ret = from_glib(ffi::gst_segment_do_seek(
                 &mut self.0,
                 rate,
                 self.get_format().to_glib(),
@@ -173,8 +169,8 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
     pub fn offset_running_time(&mut self, offset: i64) -> Result<(), glib::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_segment_offset_running_time(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_segment_offset_running_time(
                     &mut self.0,
                     self.get_format().to_glib(),
                     offset,
@@ -194,7 +190,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         unsafe {
             T::from_raw(
                 self.get_format(),
-                gst_sys::gst_segment_position_from_running_time(
+                ffi::gst_segment_position_from_running_time(
                     &self.0,
                     self.get_format().to_glib(),
                     running_time.to_raw_value() as u64,
@@ -212,7 +208,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
-            let ret = gst_sys::gst_segment_position_from_running_time_full(
+            let ret = ffi::gst_segment_position_from_running_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 running_time.to_raw_value() as u64,
@@ -235,7 +231,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         unsafe {
             T::from_raw(
                 self.get_format(),
-                gst_sys::gst_segment_position_from_stream_time(
+                ffi::gst_segment_position_from_stream_time(
                     &self.0,
                     self.get_format().to_glib(),
                     stream_time.to_raw_value() as u64,
@@ -253,7 +249,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
-            let ret = gst_sys::gst_segment_position_from_stream_time_full(
+            let ret = ffi::gst_segment_position_from_stream_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 stream_time.to_raw_value() as u64,
@@ -274,8 +270,8 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_segment_set_running_time(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_segment_set_running_time(
                     &mut self.0,
                     self.get_format().to_glib(),
                     running_time.to_raw_value() as u64,
@@ -295,7 +291,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         unsafe {
             T::from_raw(
                 self.get_format(),
-                gst_sys::gst_segment_to_running_time(
+                ffi::gst_segment_to_running_time(
                     &self.0,
                     self.get_format().to_glib(),
                     position.to_raw_value() as u64,
@@ -313,7 +309,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
-            let ret = gst_sys::gst_segment_to_running_time_full(
+            let ret = ffi::gst_segment_to_running_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 position.to_raw_value() as u64,
@@ -336,7 +332,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         unsafe {
             T::from_raw(
                 self.get_format(),
-                gst_sys::gst_segment_to_stream_time(
+                ffi::gst_segment_to_stream_time(
                     &self.0,
                     self.get_format().to_glib(),
                     position.to_raw_value() as u64,
@@ -354,7 +350,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
         unsafe {
             let mut stream_time = mem::MaybeUninit::uninit();
-            let ret = gst_sys::gst_segment_to_stream_time_full(
+            let ret = ffi::gst_segment_to_stream_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 position.to_raw_value() as u64,
@@ -367,11 +363,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
-    pub fn get_flags(&self) -> ::SegmentFlags {
+    pub fn get_flags(&self) -> crate::SegmentFlags {
         from_glib(self.0.flags)
     }
 
-    pub fn set_flags(&mut self, flags: ::SegmentFlags) {
+    pub fn set_flags(&mut self, flags: crate::SegmentFlags) {
         self.0.flags = flags.to_glib();
     }
 
@@ -501,7 +497,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 impl<T: FormattedValue> PartialEq for FormattedSegment<T> {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        unsafe { from_glib(gst_sys::gst_segment_is_equal(&self.0, &other.0)) }
+        unsafe { from_glib(ffi::gst_segment_is_equal(&self.0, &other.0)) }
     }
 }
 
@@ -533,7 +529,7 @@ impl<T: FormattedValue> fmt::Debug for FormattedSegment<T> {
                 .field("format", &Format::Undefined)
                 .finish(),
             Format::Time => {
-                let segment = segment.downcast_ref::<::ClockTime>().unwrap();
+                let segment = segment.downcast_ref::<crate::ClockTime>().unwrap();
                 f.debug_struct("Segment")
                     .field("format", &Format::Time)
                     .field("start", &segment.get_start().to_string())
@@ -574,26 +570,26 @@ impl<T: FormattedValue> Default for FormattedSegment<T> {
 
 impl<T: FormattedValue> glib::types::StaticType for FormattedSegment<T> {
     fn static_type() -> glib::types::Type {
-        unsafe { glib::translate::from_glib(gst_sys::gst_segment_get_type()) }
+        unsafe { glib::translate::from_glib(ffi::gst_segment_get_type()) }
     }
 }
 
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for Segment {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<Segment>::from_glib_none(
-            gobject_sys::g_value_get_boxed(value.to_glib_none().0) as *mut gst_sys::GstSegment
-        )
+        Option::<Segment>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
+            value.to_glib_none().0,
+        ) as *mut ffi::GstSegment)
     }
 }
 
 #[doc(hidden)]
 impl<T: FormattedValue> glib::value::SetValue for FormattedSegment<T> {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_sys::GstSegment>::to_glib_none(this).0
-                as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(this).0
+                as glib::ffi::gpointer,
         )
     }
 }
@@ -601,78 +597,76 @@ impl<T: FormattedValue> glib::value::SetValue for FormattedSegment<T> {
 #[doc(hidden)]
 impl<T: FormattedValue> glib::value::SetValueOptional for FormattedSegment<T> {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_sys::GstSegment>::to_glib_none(&this).0
-                as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(&this).0
+                as glib::ffi::gpointer,
         )
     }
 }
 
 #[doc(hidden)]
 impl<T: FormattedValue> glib::translate::GlibPtrDefault for FormattedSegment<T> {
-    type GlibType = *mut gst_sys::GstSegment;
+    type GlibType = *mut ffi::GstSegment;
 }
 
 #[doc(hidden)]
-impl<'a, T: FormattedValue> glib::translate::ToGlibPtr<'a, *const gst_sys::GstSegment>
+impl<'a, T: FormattedValue> glib::translate::ToGlibPtr<'a, *const ffi::GstSegment>
     for FormattedSegment<T>
 {
     type Storage = &'a FormattedSegment<T>;
 
-    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const gst_sys::GstSegment, Self> {
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstSegment, Self> {
         glib::translate::Stash(&self.0, self)
     }
 
-    fn to_glib_full(&self) -> *const gst_sys::GstSegment {
+    fn to_glib_full(&self) -> *const ffi::GstSegment {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl<'a, T: FormattedValue> glib::translate::ToGlibPtrMut<'a, *mut gst_sys::GstSegment>
+impl<'a, T: FormattedValue> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstSegment>
     for FormattedSegment<T>
 {
     type Storage = &'a mut FormattedSegment<T>;
 
     #[inline]
-    fn to_glib_none_mut(
-        &'a mut self,
-    ) -> glib::translate::StashMut<'a, *mut gst_sys::GstSegment, Self> {
+    fn to_glib_none_mut(&'a mut self) -> glib::translate::StashMut<'a, *mut ffi::GstSegment, Self> {
         glib::translate::StashMut(&mut self.0, self)
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*const gst_sys::GstSegment> for Segment {
+impl glib::translate::FromGlibPtrNone<*const ffi::GstSegment> for Segment {
     #[inline]
-    unsafe fn from_glib_none(ptr: *const gst_sys::GstSegment) -> Self {
+    unsafe fn from_glib_none(ptr: *const ffi::GstSegment) -> Self {
         FormattedSegment(ptr::read(ptr), PhantomData)
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*mut gst_sys::GstSegment> for Segment {
+impl glib::translate::FromGlibPtrNone<*mut ffi::GstSegment> for Segment {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut gst_sys::GstSegment) -> Self {
+    unsafe fn from_glib_none(ptr: *mut ffi::GstSegment) -> Self {
         FormattedSegment(ptr::read(ptr), PhantomData)
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrBorrow<*mut gst_sys::GstSegment> for Segment {
+impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstSegment> for Segment {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstSegment) -> Borrowed<Self> {
+    unsafe fn from_glib_borrow(ptr: *mut ffi::GstSegment) -> Borrowed<Self> {
         Borrowed::new(FormattedSegment(ptr::read(ptr), PhantomData))
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrFull<*mut gst_sys::GstSegment> for Segment {
+impl glib::translate::FromGlibPtrFull<*mut ffi::GstSegment> for Segment {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut gst_sys::GstSegment) -> Self {
+    unsafe fn from_glib_full(ptr: *mut ffi::GstSegment) -> Self {
         let segment = from_glib_none(ptr);
-        glib_sys::g_free(ptr as *mut _);
+        glib::ffi::g_free(ptr as *mut _);
         segment
     }
 }

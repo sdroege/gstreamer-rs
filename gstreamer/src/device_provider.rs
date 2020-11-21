@@ -6,18 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use DeviceProvider;
-use Plugin;
-use Rank;
+use crate::DeviceProvider;
+use crate::Plugin;
+use crate::Rank;
 
 use glib::object::IsA;
 use glib::translate::ToGlib;
 use glib::translate::ToGlibPtr;
 
 use std::ffi::CStr;
-
-use gobject_sys;
-use gst_sys;
 
 impl DeviceProvider {
     pub fn register(
@@ -28,8 +25,8 @@ impl DeviceProvider {
     ) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_device_provider_register(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_device_provider_register(
                     plugin.to_glib_none().0,
                     name.to_glib_none().0,
                     rank.to_glib() as u32,
@@ -48,10 +45,10 @@ pub trait DeviceProviderExtManual: 'static {
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
-            let klass = (*(self.as_ptr() as *mut gobject_sys::GTypeInstance)).g_class
-                as *mut gst_sys::GstDeviceProviderClass;
+            let klass = (*(self.as_ptr() as *mut glib::gobject_ffi::GTypeInstance)).g_class
+                as *mut ffi::GstDeviceProviderClass;
 
-            let ptr = gst_sys::gst_device_provider_class_get_metadata(klass, key.to_glib_none().0);
+            let ptr = ffi::gst_device_provider_class_get_metadata(klass, key.to_glib_none().0);
 
             if ptr.is_null() {
                 None

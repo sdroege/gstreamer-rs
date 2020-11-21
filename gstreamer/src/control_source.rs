@@ -6,11 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::ClockTime;
+use crate::ControlSource;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_sys;
-use ClockTime;
-use ControlSource;
 
 pub trait ControlSourceExtManual: 'static {
     fn get_value_array(
@@ -30,8 +29,8 @@ impl<O: IsA<ControlSource>> ControlSourceExtManual for O {
     ) -> Result<(), glib::error::BoolError> {
         let n_values = values.len() as u32;
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_control_source_get_value_array(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_control_source_get_value_array(
                     self.as_ref().to_glib_none().0,
                     timestamp.to_glib(),
                     interval.to_glib(),

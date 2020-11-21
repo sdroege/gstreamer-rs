@@ -9,11 +9,11 @@
 use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, SerializeStruct, Serializer};
 
-use toc::*;
-use TagList;
-use TocEntryType;
-use TocLoopType;
-use TocScope;
+use crate::toc::*;
+use crate::TagList;
+use crate::TocEntryType;
+use crate::TocLoopType;
+use crate::TocScope;
 
 impl Serialize for TocRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -50,7 +50,7 @@ impl Serialize for TocEntry {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct TocDe {
     scope: TocScope,
     tags: Option<TagList>,
@@ -82,7 +82,7 @@ impl<'de> Deserialize<'de> for Toc {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct TocEntryDe {
     entry_type: TocEntryType,
     uid: String,
@@ -127,18 +127,16 @@ impl<'de> Deserialize<'de> for TocEntry {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-
-    use tags::Title;
-    use toc::*;
-    use TagList;
-    use TagMergeMode;
-    use TocEntryType;
-    use TocScope;
+    use crate::tags::Title;
+    use crate::toc::*;
+    use crate::TagList;
+    use crate::TagMergeMode;
+    use crate::TocEntryType;
+    use crate::TocScope;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut toc = Toc::new(TocScope::Global);
         {
@@ -290,9 +288,9 @@ mod tests {
     #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_deserialize() {
-        use tags::Title;
+        use crate::tags::Title;
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let toc_ron = r#"
             (
@@ -425,7 +423,7 @@ mod tests {
     #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut toc = Toc::new(TocScope::Global);
         {

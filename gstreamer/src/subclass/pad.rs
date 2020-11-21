@@ -6,14 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-
-use glib;
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use Pad;
+use crate::Pad;
 
 pub trait PadImpl: PadImplExt + ObjectImpl + Send + Sync {
     fn linked(&self, pad: &Self::Type, peer: &Pad) {
@@ -35,7 +32,7 @@ impl<T: PadImpl> PadImplExt for T {
     fn parent_linked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPadClass;
 
             (*parent_class)
                 .linked
@@ -52,7 +49,7 @@ impl<T: PadImpl> PadImplExt for T {
     fn parent_unlinked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPadClass;
 
             (*parent_class)
                 .unlinked
@@ -76,7 +73,7 @@ unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
     }
 }
 
-unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut gst_sys::GstPad, peer: *mut gst_sys::GstPad) {
+unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
@@ -84,10 +81,7 @@ unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut gst_sys::GstPad, peer: *mu
     imp.linked(wrap.unsafe_cast_ref(), &from_glib_borrow(peer))
 }
 
-unsafe extern "C" fn pad_unlinked<T: PadImpl>(
-    ptr: *mut gst_sys::GstPad,
-    peer: *mut gst_sys::GstPad,
-) {
+unsafe extern "C" fn pad_unlinked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
@@ -99,11 +93,10 @@ unsafe extern "C" fn pad_unlinked<T: PadImpl>(
 mod tests {
     use super::*;
     use crate::prelude::*;
-    use glib;
     use glib::subclass;
     use std::sync::atomic;
 
-    use PadDirection;
+    use crate::PadDirection;
 
     pub mod imp {
         use super::*;
@@ -120,7 +113,7 @@ mod tests {
             type Instance = subclass::simple::InstanceStruct<Self>;
             type Class = subclass::simple::ClassStruct<Self>;
 
-            glib_object_subclass!();
+            glib::glib_object_subclass!();
 
             fn new() -> Self {
                 Self {
@@ -145,8 +138,8 @@ mod tests {
         }
     }
 
-    glib_wrapper! {
-        pub struct TestPad(ObjectSubclass<imp::TestPad>) @extends Pad, ::Object;
+    glib::glib_wrapper! {
+        pub struct TestPad(ObjectSubclass<imp::TestPad>) @extends Pad, crate::Object;
     }
 
     unsafe impl Send for TestPad {}
@@ -166,7 +159,7 @@ mod tests {
 
     #[test]
     fn test_pad_subclass() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let pad = TestPad::new("test", PadDirection::Src);
 

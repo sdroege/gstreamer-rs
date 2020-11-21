@@ -7,9 +7,8 @@
 // except according to those terms.
 
 #[macro_use]
-cfg_if! {
+cfg_if::cfg_if! {
     if #[cfg(windows)] {
-        use gst_sys;
         use glib::translate::ToGlibPtr;
 
         use std::mem;
@@ -35,7 +34,7 @@ impl WindowsBusExtManual for Bus {
         #[cfg(windows)]
         unsafe {
             let mut pollfd = mem::MaybeUninit::zeroed();
-            gst_sys::gst_bus_get_pollfd(self.to_glib_none().0, pollfd.as_mut_ptr());
+            ffi::gst_bus_get_pollfd(self.to_glib_none().0, pollfd.as_mut_ptr());
             let pollfd = pollfd.assume_init();
             pollfd.fd as *mut _
         }

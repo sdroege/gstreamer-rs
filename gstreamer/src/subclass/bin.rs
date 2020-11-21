@@ -6,19 +6,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gst_sys;
-
 use glib::prelude::*;
 use glib::translate::*;
 
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use Bin;
-use Element;
-use LoggableError;
-use Message;
+use crate::Bin;
+use crate::Element;
+use crate::LoggableError;
+use crate::Message;
 
 pub trait BinImpl: BinImplExt + ElementImpl {
     fn add_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError> {
@@ -50,16 +47,19 @@ impl<T: BinImpl> BinImplExt for T {
     fn parent_add_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).add_element.ok_or_else(|| {
-                gst_loggable_error!(::CAT_RUST, "Parent function `add_element` is not defined")
+                gst_loggable_error!(
+                    crate::CAT_RUST,
+                    "Parent function `add_element` is not defined"
+                )
             })?;
             gst_result_from_gboolean!(
                 f(
-                    bin.unsafe_cast_ref::<::Bin>().to_glib_none().0,
+                    bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     element.to_glib_none().0
                 ),
-                ::CAT_RUST,
+                crate::CAT_RUST,
                 "Failed to add the element using the parent function"
             )
         }
@@ -72,19 +72,19 @@ impl<T: BinImpl> BinImplExt for T {
     ) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).remove_element.ok_or_else(|| {
                 gst_loggable_error!(
-                    ::CAT_RUST,
+                    crate::CAT_RUST,
                     "Parent function `remove_element` is not defined"
                 )
             })?;
             gst_result_from_gboolean!(
                 f(
-                    bin.unsafe_cast_ref::<::Bin>().to_glib_none().0,
+                    bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     element.to_glib_none().0
                 ),
-                ::CAT_RUST,
+                crate::CAT_RUST,
                 "Failed to remove the element using the parent function"
             )
         }
@@ -93,10 +93,10 @@ impl<T: BinImpl> BinImplExt for T {
     fn parent_handle_message(&self, bin: &Self::Type, message: Message) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
             if let Some(ref f) = (*parent_class).handle_message {
                 f(
-                    bin.unsafe_cast_ref::<::Bin>().to_glib_none().0,
+                    bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     message.into_ptr(),
                 );
             }
@@ -109,7 +109,7 @@ where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <::Element as IsSubclassable<T>>::override_vfuncs(klass);
+        <crate::Element as IsSubclassable<T>>::override_vfuncs(klass);
         let klass = klass.as_mut();
         klass.add_element = Some(bin_add_element::<T>);
         klass.remove_element = Some(bin_remove_element::<T>);
@@ -118,9 +118,9 @@ where
 }
 
 unsafe extern "C" fn bin_add_element<T: BinImpl>(
-    ptr: *mut gst_sys::GstBin,
-    element: *mut gst_sys::GstElement,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstBin,
+    element: *mut ffi::GstElement,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -141,9 +141,9 @@ where
 }
 
 unsafe extern "C" fn bin_remove_element<T: BinImpl>(
-    ptr: *mut gst_sys::GstBin,
-    element: *mut gst_sys::GstElement,
-) -> glib_sys::gboolean
+    ptr: *mut ffi::GstBin,
+    element: *mut ffi::GstElement,
+) -> glib::ffi::gboolean
 where
     T::Instance: PanicPoison,
 {
@@ -154,8 +154,10 @@ where
     // If we get a floating reference passed simply return FALSE here. It can't be
     // stored inside this bin, and if we continued to use it we would take ownership
     // of this floating reference.
-    if gobject_sys::g_object_is_floating(element as *mut gobject_sys::GObject) != glib_sys::GFALSE {
-        return glib_sys::GFALSE;
+    if glib::gobject_ffi::g_object_is_floating(element as *mut glib::gobject_ffi::GObject)
+        != glib::ffi::GFALSE
+    {
+        return glib::ffi::GFALSE;
     }
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
@@ -171,8 +173,8 @@ where
 }
 
 unsafe extern "C" fn bin_handle_message<T: BinImpl>(
-    ptr: *mut gst_sys::GstBin,
-    message: *mut gst_sys::GstMessage,
+    ptr: *mut ffi::GstBin,
+    message: *mut ffi::GstMessage,
 ) where
     T::Instance: PanicPoison,
 {

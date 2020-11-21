@@ -6,15 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-use structure::*;
-use GenericFormattedValue;
-use GroupId;
-use GstObjectExt;
-use MessageType;
-use Object;
-use Seqnum;
-use TagList;
+use crate::structure::*;
+use crate::GenericFormattedValue;
+use crate::GroupId;
+use crate::GstObjectExt;
+use crate::MessageType;
+use crate::Object;
+use crate::Seqnum;
+use crate::TagList;
 
 use std::ffi::CStr;
 use std::fmt;
@@ -23,14 +22,13 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
-use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 use glib::Cast;
 use glib::IsA;
 
-gst_define_mini_object_wrapper!(Message, MessageRef, gst_sys::GstMessage, || {
-    gst_sys::gst_message_get_type()
+gst_define_mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
+    ffi::gst_message_get_type()
 });
 
 impl MessageRef {
@@ -40,7 +38,7 @@ impl MessageRef {
 
     pub fn get_seqnum(&self) -> Seqnum {
         unsafe {
-            let seqnum = gst_sys::gst_message_get_seqnum(self.as_mut_ptr());
+            let seqnum = ffi::gst_message_get_seqnum(self.as_mut_ptr());
 
             if seqnum == 0 {
                 // seqnum for this message is invalid. This can happen with buggy elements
@@ -48,8 +46,8 @@ impl MessageRef {
                 // As a workaround, let's generate an unused valid seqnum.
                 let next = Seqnum::next();
 
-                ::gst_warning!(
-                    ::CAT_RUST,
+                crate::gst_warning!(
+                    crate::CAT_RUST,
                     "get_seqnum detected invalid seqnum, returning next {:?}",
                     next
                 );
@@ -63,7 +61,7 @@ impl MessageRef {
 
     pub fn get_structure(&self) -> Option<&StructureRef> {
         unsafe {
-            let structure = gst_sys::gst_message_get_structure(self.as_mut_ptr());
+            let structure = ffi::gst_message_get_structure(self.as_mut_ptr());
             if structure.is_null() {
                 None
             } else {
@@ -76,53 +74,51 @@ impl MessageRef {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
         match type_ {
-            gst_sys::GST_MESSAGE_EOS => MessageView::Eos(Eos(self)),
-            gst_sys::GST_MESSAGE_ERROR => MessageView::Error(Error(self)),
-            gst_sys::GST_MESSAGE_WARNING => MessageView::Warning(Warning(self)),
-            gst_sys::GST_MESSAGE_INFO => MessageView::Info(Info(self)),
-            gst_sys::GST_MESSAGE_TAG => MessageView::Tag(Tag(self)),
-            gst_sys::GST_MESSAGE_BUFFERING => MessageView::Buffering(Buffering(self)),
-            gst_sys::GST_MESSAGE_STATE_CHANGED => MessageView::StateChanged(StateChanged(self)),
-            gst_sys::GST_MESSAGE_STATE_DIRTY => MessageView::StateDirty(StateDirty(self)),
-            gst_sys::GST_MESSAGE_STEP_DONE => MessageView::StepDone(StepDone(self)),
-            gst_sys::GST_MESSAGE_CLOCK_PROVIDE => MessageView::ClockProvide(ClockProvide(self)),
-            gst_sys::GST_MESSAGE_CLOCK_LOST => MessageView::ClockLost(ClockLost(self)),
-            gst_sys::GST_MESSAGE_NEW_CLOCK => MessageView::NewClock(NewClock(self)),
-            gst_sys::GST_MESSAGE_STRUCTURE_CHANGE => {
+            ffi::GST_MESSAGE_EOS => MessageView::Eos(Eos(self)),
+            ffi::GST_MESSAGE_ERROR => MessageView::Error(Error(self)),
+            ffi::GST_MESSAGE_WARNING => MessageView::Warning(Warning(self)),
+            ffi::GST_MESSAGE_INFO => MessageView::Info(Info(self)),
+            ffi::GST_MESSAGE_TAG => MessageView::Tag(Tag(self)),
+            ffi::GST_MESSAGE_BUFFERING => MessageView::Buffering(Buffering(self)),
+            ffi::GST_MESSAGE_STATE_CHANGED => MessageView::StateChanged(StateChanged(self)),
+            ffi::GST_MESSAGE_STATE_DIRTY => MessageView::StateDirty(StateDirty(self)),
+            ffi::GST_MESSAGE_STEP_DONE => MessageView::StepDone(StepDone(self)),
+            ffi::GST_MESSAGE_CLOCK_PROVIDE => MessageView::ClockProvide(ClockProvide(self)),
+            ffi::GST_MESSAGE_CLOCK_LOST => MessageView::ClockLost(ClockLost(self)),
+            ffi::GST_MESSAGE_NEW_CLOCK => MessageView::NewClock(NewClock(self)),
+            ffi::GST_MESSAGE_STRUCTURE_CHANGE => {
                 MessageView::StructureChange(StructureChange(self))
             }
-            gst_sys::GST_MESSAGE_STREAM_STATUS => MessageView::StreamStatus(StreamStatus(self)),
-            gst_sys::GST_MESSAGE_APPLICATION => MessageView::Application(Application(self)),
-            gst_sys::GST_MESSAGE_ELEMENT => MessageView::Element(Element(self)),
-            gst_sys::GST_MESSAGE_SEGMENT_START => MessageView::SegmentStart(SegmentStart(self)),
-            gst_sys::GST_MESSAGE_SEGMENT_DONE => MessageView::SegmentDone(SegmentDone(self)),
-            gst_sys::GST_MESSAGE_DURATION_CHANGED => {
+            ffi::GST_MESSAGE_STREAM_STATUS => MessageView::StreamStatus(StreamStatus(self)),
+            ffi::GST_MESSAGE_APPLICATION => MessageView::Application(Application(self)),
+            ffi::GST_MESSAGE_ELEMENT => MessageView::Element(Element(self)),
+            ffi::GST_MESSAGE_SEGMENT_START => MessageView::SegmentStart(SegmentStart(self)),
+            ffi::GST_MESSAGE_SEGMENT_DONE => MessageView::SegmentDone(SegmentDone(self)),
+            ffi::GST_MESSAGE_DURATION_CHANGED => {
                 MessageView::DurationChanged(DurationChanged(self))
             }
-            gst_sys::GST_MESSAGE_LATENCY => MessageView::Latency(Latency(self)),
-            gst_sys::GST_MESSAGE_ASYNC_START => MessageView::AsyncStart(AsyncStart(self)),
-            gst_sys::GST_MESSAGE_ASYNC_DONE => MessageView::AsyncDone(AsyncDone(self)),
-            gst_sys::GST_MESSAGE_REQUEST_STATE => MessageView::RequestState(RequestState(self)),
-            gst_sys::GST_MESSAGE_STEP_START => MessageView::StepStart(StepStart(self)),
-            gst_sys::GST_MESSAGE_QOS => MessageView::Qos(Qos(self)),
-            gst_sys::GST_MESSAGE_PROGRESS => MessageView::Progress(Progress(self)),
-            gst_sys::GST_MESSAGE_TOC => MessageView::Toc(Toc(self)),
-            gst_sys::GST_MESSAGE_RESET_TIME => MessageView::ResetTime(ResetTime(self)),
-            gst_sys::GST_MESSAGE_STREAM_START => MessageView::StreamStart(StreamStart(self)),
-            gst_sys::GST_MESSAGE_NEED_CONTEXT => MessageView::NeedContext(NeedContext(self)),
-            gst_sys::GST_MESSAGE_HAVE_CONTEXT => MessageView::HaveContext(HaveContext(self)),
-            gst_sys::GST_MESSAGE_DEVICE_ADDED => MessageView::DeviceAdded(DeviceAdded(self)),
-            gst_sys::GST_MESSAGE_DEVICE_REMOVED => MessageView::DeviceRemoved(DeviceRemoved(self)),
-            gst_sys::GST_MESSAGE_PROPERTY_NOTIFY => {
-                MessageView::PropertyNotify(PropertyNotify(self))
-            }
-            gst_sys::GST_MESSAGE_STREAM_COLLECTION => {
+            ffi::GST_MESSAGE_LATENCY => MessageView::Latency(Latency(self)),
+            ffi::GST_MESSAGE_ASYNC_START => MessageView::AsyncStart(AsyncStart(self)),
+            ffi::GST_MESSAGE_ASYNC_DONE => MessageView::AsyncDone(AsyncDone(self)),
+            ffi::GST_MESSAGE_REQUEST_STATE => MessageView::RequestState(RequestState(self)),
+            ffi::GST_MESSAGE_STEP_START => MessageView::StepStart(StepStart(self)),
+            ffi::GST_MESSAGE_QOS => MessageView::Qos(Qos(self)),
+            ffi::GST_MESSAGE_PROGRESS => MessageView::Progress(Progress(self)),
+            ffi::GST_MESSAGE_TOC => MessageView::Toc(Toc(self)),
+            ffi::GST_MESSAGE_RESET_TIME => MessageView::ResetTime(ResetTime(self)),
+            ffi::GST_MESSAGE_STREAM_START => MessageView::StreamStart(StreamStart(self)),
+            ffi::GST_MESSAGE_NEED_CONTEXT => MessageView::NeedContext(NeedContext(self)),
+            ffi::GST_MESSAGE_HAVE_CONTEXT => MessageView::HaveContext(HaveContext(self)),
+            ffi::GST_MESSAGE_DEVICE_ADDED => MessageView::DeviceAdded(DeviceAdded(self)),
+            ffi::GST_MESSAGE_DEVICE_REMOVED => MessageView::DeviceRemoved(DeviceRemoved(self)),
+            ffi::GST_MESSAGE_PROPERTY_NOTIFY => MessageView::PropertyNotify(PropertyNotify(self)),
+            ffi::GST_MESSAGE_STREAM_COLLECTION => {
                 MessageView::StreamCollection(StreamCollection(self))
             }
-            gst_sys::GST_MESSAGE_STREAMS_SELECTED => {
+            ffi::GST_MESSAGE_STREAMS_SELECTED => {
                 MessageView::StreamsSelected(StreamsSelected(self))
             }
-            gst_sys::GST_MESSAGE_DEVICE_CHANGED => MessageView::DeviceChanged(DeviceChanged(self)),
+            ffi::GST_MESSAGE_DEVICE_CHANGED => MessageView::DeviceChanged(DeviceChanged(self)),
             _ => MessageView::Other,
         }
     }
@@ -145,7 +141,7 @@ impl fmt::Debug for MessageRef {
         // emitted a `Message` with an invalid `seqnum`.
         // We want to help the user find out there is something wrong here,
         // so they can investigate the origin.
-        let seqnum = unsafe { gst_sys::gst_message_get_seqnum(self.as_mut_ptr()) };
+        let seqnum = unsafe { ffi::gst_message_get_seqnum(self.as_mut_ptr()) };
         let seqnum = if seqnum != 0 {
             &seqnum as &dyn fmt::Debug
         } else {
@@ -155,7 +151,7 @@ impl fmt::Debug for MessageRef {
         f.debug_struct("Message")
             .field("ptr", unsafe { &self.as_ptr() })
             .field("type", &unsafe {
-                let type_ = gst_sys::gst_message_type_get_name((*self.as_ptr()).type_);
+                let type_ = ffi::gst_message_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
             })
             .field("seqnum", seqnum)
@@ -255,7 +251,7 @@ impl<'a> Error<'a> {
         unsafe {
             let mut error = ptr::null_mut();
 
-            gst_sys::gst_message_parse_error(self.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_error(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -265,7 +261,7 @@ impl<'a> Error<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            gst_sys::gst_message_parse_error(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_error(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -277,7 +273,7 @@ impl<'a> Error<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            gst_sys::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -305,7 +301,7 @@ impl<'a> Warning<'a> {
         unsafe {
             let mut error = ptr::null_mut();
 
-            gst_sys::gst_message_parse_warning(self.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_warning(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -315,7 +311,7 @@ impl<'a> Warning<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            gst_sys::gst_message_parse_warning(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_warning(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -327,7 +323,7 @@ impl<'a> Warning<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            gst_sys::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -355,7 +351,7 @@ impl<'a> Info<'a> {
         unsafe {
             let mut error = ptr::null_mut();
 
-            gst_sys::gst_message_parse_info(self.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_info(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -365,7 +361,7 @@ impl<'a> Info<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            gst_sys::gst_message_parse_info(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_info(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -377,7 +373,7 @@ impl<'a> Info<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            gst_sys::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -404,7 +400,7 @@ impl<'a> Tag<'a> {
     pub fn get_tags(&self) -> TagList {
         unsafe {
             let mut tags = ptr::null_mut();
-            gst_sys::gst_message_parse_tag(self.as_mut_ptr(), &mut tags);
+            ffi::gst_message_parse_tag(self.as_mut_ptr(), &mut tags);
             from_glib_full(tags)
         }
     }
@@ -426,19 +422,19 @@ impl<'a> Buffering<'a> {
     pub fn get_percent(&self) -> i32 {
         unsafe {
             let mut p = mem::MaybeUninit::uninit();
-            gst_sys::gst_message_parse_buffering(self.as_mut_ptr(), p.as_mut_ptr());
+            ffi::gst_message_parse_buffering(self.as_mut_ptr(), p.as_mut_ptr());
             p.assume_init()
         }
     }
 
-    pub fn get_buffering_stats(&self) -> (::BufferingMode, i32, i32, i64) {
+    pub fn get_buffering_stats(&self) -> (crate::BufferingMode, i32, i32, i64) {
         unsafe {
             let mut mode = mem::MaybeUninit::uninit();
             let mut avg_in = mem::MaybeUninit::uninit();
             let mut avg_out = mem::MaybeUninit::uninit();
             let mut buffering_left = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_buffering_stats(
+            ffi::gst_message_parse_buffering_stats(
                 self.as_mut_ptr(),
                 mode.as_mut_ptr(),
                 avg_in.as_mut_ptr(),
@@ -459,21 +455,25 @@ impl<'a> Buffering<'a> {
 declare_concrete_message!(StateChanged);
 impl<'a> StateChanged<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(old: ::State, new: ::State, pending: ::State) -> Message {
+    pub fn new(old: crate::State, new: crate::State, pending: crate::State) -> Message {
         skip_assert_initialized!();
         Self::builder(old, new, pending).build()
     }
 
-    pub fn builder(old: ::State, new: ::State, pending: ::State) -> StateChangedBuilder<'a> {
+    pub fn builder(
+        old: crate::State,
+        new: crate::State,
+        pending: crate::State,
+    ) -> StateChangedBuilder<'a> {
         assert_initialized_main_thread!();
         StateChangedBuilder::new(old, new, pending)
     }
 
-    pub fn get_old(&self) -> ::State {
+    pub fn get_old(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_state_changed(
+            ffi::gst_message_parse_state_changed(
                 self.as_mut_ptr(),
                 state.as_mut_ptr(),
                 ptr::null_mut(),
@@ -484,11 +484,11 @@ impl<'a> StateChanged<'a> {
         }
     }
 
-    pub fn get_current(&self) -> ::State {
+    pub fn get_current(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_state_changed(
+            ffi::gst_message_parse_state_changed(
                 self.as_mut_ptr(),
                 ptr::null_mut(),
                 state.as_mut_ptr(),
@@ -499,11 +499,11 @@ impl<'a> StateChanged<'a> {
         }
     }
 
-    pub fn get_pending(&self) -> ::State {
+    pub fn get_pending(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_state_changed(
+            ffi::gst_message_parse_state_changed(
                 self.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
@@ -590,7 +590,7 @@ impl<'a> StepDone<'a> {
             let mut duration = mem::MaybeUninit::uninit();
             let mut eos = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_step_done(
+            ffi::gst_message_parse_step_done(
                 self.as_mut_ptr(),
                 format.as_mut_ptr(),
                 amount.as_mut_ptr(),
@@ -622,25 +622,21 @@ impl<'a> StepDone<'a> {
 declare_concrete_message!(ClockProvide);
 impl<'a> ClockProvide<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(clock: &::Clock, ready: bool) -> Message {
+    pub fn new(clock: &crate::Clock, ready: bool) -> Message {
         skip_assert_initialized!();
         Self::builder(clock, ready).build()
     }
 
-    pub fn builder(clock: &::Clock, ready: bool) -> ClockProvideBuilder {
+    pub fn builder(clock: &crate::Clock, ready: bool) -> ClockProvideBuilder {
         assert_initialized_main_thread!();
         ClockProvideBuilder::new(clock, ready)
     }
 
-    pub fn get_clock(&self) -> Option<::Clock> {
+    pub fn get_clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            gst_sys::gst_message_parse_clock_provide(
-                self.as_mut_ptr(),
-                &mut clock,
-                ptr::null_mut(),
-            );
+            ffi::gst_message_parse_clock_provide(self.as_mut_ptr(), &mut clock, ptr::null_mut());
 
             from_glib_none(clock)
         }
@@ -650,7 +646,7 @@ impl<'a> ClockProvide<'a> {
         unsafe {
             let mut ready = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_clock_provide(
+            ffi::gst_message_parse_clock_provide(
                 self.as_mut_ptr(),
                 ptr::null_mut(),
                 ready.as_mut_ptr(),
@@ -664,21 +660,21 @@ impl<'a> ClockProvide<'a> {
 declare_concrete_message!(ClockLost);
 impl<'a> ClockLost<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(clock: &::Clock) -> Message {
+    pub fn new(clock: &crate::Clock) -> Message {
         skip_assert_initialized!();
         Self::builder(clock).build()
     }
 
-    pub fn builder(clock: &::Clock) -> ClockLostBuilder {
+    pub fn builder(clock: &crate::Clock) -> ClockLostBuilder {
         assert_initialized_main_thread!();
         ClockLostBuilder::new(clock)
     }
 
-    pub fn get_clock(&self) -> Option<::Clock> {
+    pub fn get_clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            gst_sys::gst_message_parse_clock_lost(self.as_mut_ptr(), &mut clock);
+            ffi::gst_message_parse_clock_lost(self.as_mut_ptr(), &mut clock);
 
             from_glib_none(clock)
         }
@@ -688,21 +684,21 @@ impl<'a> ClockLost<'a> {
 declare_concrete_message!(NewClock);
 impl<'a> NewClock<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(clock: &::Clock) -> Message {
+    pub fn new(clock: &crate::Clock) -> Message {
         skip_assert_initialized!();
         Self::builder(clock).build()
     }
 
-    pub fn builder(clock: &::Clock) -> NewClockBuilder {
+    pub fn builder(clock: &crate::Clock) -> NewClockBuilder {
         assert_initialized_main_thread!();
         NewClockBuilder::new(clock)
     }
 
-    pub fn get_clock(&self) -> Option<::Clock> {
+    pub fn get_clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            gst_sys::gst_message_parse_new_clock(self.as_mut_ptr(), &mut clock);
+            ffi::gst_message_parse_new_clock(self.as_mut_ptr(), &mut clock);
 
             from_glib_none(clock)
         }
@@ -712,27 +708,27 @@ impl<'a> NewClock<'a> {
 declare_concrete_message!(StructureChange);
 impl<'a> StructureChange<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(type_: ::StructureChangeType, owner: &::Element, busy: bool) -> Message {
+    pub fn new(type_: crate::StructureChangeType, owner: &crate::Element, busy: bool) -> Message {
         skip_assert_initialized!();
         Self::builder(type_, owner, busy).build()
     }
 
     pub fn builder(
-        type_: ::StructureChangeType,
-        owner: &::Element,
+        type_: crate::StructureChangeType,
+        owner: &crate::Element,
         busy: bool,
     ) -> StructureChangeBuilder {
         assert_initialized_main_thread!();
         StructureChangeBuilder::new(type_, owner, busy)
     }
 
-    pub fn get(&self) -> (::StructureChangeType, ::Element, bool) {
+    pub fn get(&self) -> (crate::StructureChangeType, crate::Element, bool) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
             let mut owner = ptr::null_mut();
             let mut busy = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_structure_change(
+            ffi::gst_message_parse_structure_change(
                 self.as_mut_ptr(),
                 type_.as_mut_ptr(),
                 &mut owner,
@@ -751,26 +747,22 @@ impl<'a> StructureChange<'a> {
 declare_concrete_message!(StreamStatus);
 impl<'a> StreamStatus<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(type_: ::StreamStatusType, owner: &::Element) -> Message {
+    pub fn new(type_: crate::StreamStatusType, owner: &crate::Element) -> Message {
         skip_assert_initialized!();
         Self::builder(type_, owner).build()
     }
 
-    pub fn builder(type_: ::StreamStatusType, owner: &::Element) -> StreamStatusBuilder {
+    pub fn builder(type_: crate::StreamStatusType, owner: &crate::Element) -> StreamStatusBuilder {
         assert_initialized_main_thread!();
         StreamStatusBuilder::new(type_, owner)
     }
 
-    pub fn get(&self) -> (::StreamStatusType, ::Element) {
+    pub fn get(&self) -> (crate::StreamStatusType, crate::Element) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
             let mut owner = ptr::null_mut();
 
-            gst_sys::gst_message_parse_stream_status(
-                self.as_mut_ptr(),
-                type_.as_mut_ptr(),
-                &mut owner,
-            );
+            ffi::gst_message_parse_stream_status(self.as_mut_ptr(), type_.as_mut_ptr(), &mut owner);
 
             (from_glib(type_.assume_init()), from_glib_none(owner))
         }
@@ -778,7 +770,7 @@ impl<'a> StreamStatus<'a> {
 
     pub fn get_stream_status_object(&self) -> Option<glib::Value> {
         unsafe {
-            let value = gst_sys::gst_message_get_stream_status_object(self.as_mut_ptr());
+            let value = ffi::gst_message_get_stream_status_object(self.as_mut_ptr());
 
             from_glib_none(value)
         }
@@ -788,12 +780,12 @@ impl<'a> StreamStatus<'a> {
 declare_concrete_message!(Application);
 impl<'a> Application<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Message {
+    pub fn new(structure: crate::Structure) -> Message {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> ApplicationBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> ApplicationBuilder<'a> {
         assert_initialized_main_thread!();
         ApplicationBuilder::new(structure)
     }
@@ -802,12 +794,12 @@ impl<'a> Application<'a> {
 declare_concrete_message!(Element);
 impl<'a> Element<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Message {
+    pub fn new(structure: crate::Structure) -> Message {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> ElementBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> ElementBuilder<'a> {
         assert_initialized_main_thread!();
         ElementBuilder::new(structure)
     }
@@ -832,7 +824,7 @@ impl<'a> SegmentStart<'a> {
             let mut format = mem::MaybeUninit::uninit();
             let mut position = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_segment_start(
+            ffi::gst_message_parse_segment_start(
                 self.as_mut_ptr(),
                 format.as_mut_ptr(),
                 position.as_mut_ptr(),
@@ -862,7 +854,7 @@ impl<'a> SegmentDone<'a> {
             let mut format = mem::MaybeUninit::uninit();
             let mut position = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_segment_done(
+            ffi::gst_message_parse_segment_done(
                 self.as_mut_ptr(),
                 format.as_mut_ptr(),
                 position.as_mut_ptr(),
@@ -918,21 +910,21 @@ impl<'a> AsyncStart<'a> {
 declare_concrete_message!(AsyncDone);
 impl<'a> AsyncDone<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(running_time: ::ClockTime) -> Message {
+    pub fn new(running_time: crate::ClockTime) -> Message {
         skip_assert_initialized!();
         Self::builder(running_time).build()
     }
 
-    pub fn builder(running_time: ::ClockTime) -> AsyncDoneBuilder<'a> {
+    pub fn builder(running_time: crate::ClockTime) -> AsyncDoneBuilder<'a> {
         assert_initialized_main_thread!();
         AsyncDoneBuilder::new(running_time)
     }
 
-    pub fn get_running_time(&self) -> ::ClockTime {
+    pub fn get_running_time(&self) -> crate::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_async_done(self.as_mut_ptr(), running_time.as_mut_ptr());
+            ffi::gst_message_parse_async_done(self.as_mut_ptr(), running_time.as_mut_ptr());
 
             from_glib(running_time.assume_init())
         }
@@ -942,21 +934,21 @@ impl<'a> AsyncDone<'a> {
 declare_concrete_message!(RequestState);
 impl<'a> RequestState<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(state: ::State) -> Message {
+    pub fn new(state: crate::State) -> Message {
         skip_assert_initialized!();
         Self::builder(state).build()
     }
 
-    pub fn builder(state: ::State) -> RequestStateBuilder<'a> {
+    pub fn builder(state: crate::State) -> RequestStateBuilder<'a> {
         assert_initialized_main_thread!();
         RequestStateBuilder::new(state)
     }
 
-    pub fn get_requested_state(&self) -> ::State {
+    pub fn get_requested_state(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_request_state(self.as_mut_ptr(), state.as_mut_ptr());
+            ffi::gst_message_parse_request_state(self.as_mut_ptr(), state.as_mut_ptr());
 
             from_glib(state.assume_init())
         }
@@ -997,7 +989,7 @@ impl<'a> StepStart<'a> {
             let mut flush = mem::MaybeUninit::uninit();
             let mut intermediate = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_step_start(
+            ffi::gst_message_parse_step_start(
                 self.as_mut_ptr(),
                 active.as_mut_ptr(),
                 format.as_mut_ptr(),
@@ -1026,10 +1018,10 @@ impl<'a> Qos<'a> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
         live: bool,
-        running_time: ::ClockTime,
-        stream_time: ::ClockTime,
-        timestamp: ::ClockTime,
-        duration: ::ClockTime,
+        running_time: crate::ClockTime,
+        stream_time: crate::ClockTime,
+        timestamp: crate::ClockTime,
+        duration: crate::ClockTime,
     ) -> Message {
         skip_assert_initialized!();
         Self::builder(live, running_time, stream_time, timestamp, duration).build()
@@ -1037,16 +1029,24 @@ impl<'a> Qos<'a> {
 
     pub fn builder(
         live: bool,
-        running_time: ::ClockTime,
-        stream_time: ::ClockTime,
-        timestamp: ::ClockTime,
-        duration: ::ClockTime,
+        running_time: crate::ClockTime,
+        stream_time: crate::ClockTime,
+        timestamp: crate::ClockTime,
+        duration: crate::ClockTime,
     ) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
     }
 
-    pub fn get(&self) -> (bool, ::ClockTime, ::ClockTime, ::ClockTime, ::ClockTime) {
+    pub fn get(
+        &self,
+    ) -> (
+        bool,
+        crate::ClockTime,
+        crate::ClockTime,
+        crate::ClockTime,
+        crate::ClockTime,
+    ) {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
             let mut running_time = mem::MaybeUninit::uninit();
@@ -1054,7 +1054,7 @@ impl<'a> Qos<'a> {
             let mut timestamp = mem::MaybeUninit::uninit();
             let mut duration = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_qos(
+            ffi::gst_message_parse_qos(
                 self.as_mut_ptr(),
                 live.as_mut_ptr(),
                 running_time.as_mut_ptr(),
@@ -1079,7 +1079,7 @@ impl<'a> Qos<'a> {
             let mut proportion = mem::MaybeUninit::uninit();
             let mut quality = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_qos_values(
+            ffi::gst_message_parse_qos_values(
                 self.as_mut_ptr(),
                 jitter.as_mut_ptr(),
                 proportion.as_mut_ptr(),
@@ -1100,7 +1100,7 @@ impl<'a> Qos<'a> {
             let mut processed = mem::MaybeUninit::uninit();
             let mut dropped = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_qos_stats(
+            ffi::gst_message_parse_qos_stats(
                 self.as_mut_ptr(),
                 format.as_mut_ptr(),
                 processed.as_mut_ptr(),
@@ -1124,23 +1124,27 @@ impl<'a> Qos<'a> {
 declare_concrete_message!(Progress);
 impl<'a> Progress<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(type_: ::ProgressType, code: &'a str, text: &'a str) -> Message {
+    pub fn new(type_: crate::ProgressType, code: &'a str, text: &'a str) -> Message {
         skip_assert_initialized!();
         Self::builder(type_, code, text).build()
     }
 
-    pub fn builder(type_: ::ProgressType, code: &'a str, text: &'a str) -> ProgressBuilder<'a> {
+    pub fn builder(
+        type_: crate::ProgressType,
+        code: &'a str,
+        text: &'a str,
+    ) -> ProgressBuilder<'a> {
         assert_initialized_main_thread!();
         ProgressBuilder::new(type_, code, text)
     }
 
-    pub fn get(&self) -> (::ProgressType, &'a str, &'a str) {
+    pub fn get(&self) -> (crate::ProgressType, &'a str, &'a str) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
             let mut code = ptr::null_mut();
             let mut text = ptr::null_mut();
 
-            gst_sys::gst_message_parse_progress(
+            ffi::gst_message_parse_progress(
                 self.as_mut_ptr(),
                 type_.as_mut_ptr(),
                 &mut code,
@@ -1160,21 +1164,21 @@ impl<'a> Toc<'a> {
     // FIXME could use false for updated as default
     // Even better: use an enum for updated so that it is more explicit than true / false
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(toc: &::Toc, updated: bool) -> Message {
+    pub fn new(toc: &crate::Toc, updated: bool) -> Message {
         skip_assert_initialized!();
         Self::builder(toc, updated).build()
     }
 
-    pub fn builder(toc: &::Toc, updated: bool) -> TocBuilder {
+    pub fn builder(toc: &crate::Toc, updated: bool) -> TocBuilder {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
 
-    pub fn get_toc(&self) -> (::Toc, bool) {
+    pub fn get_toc(&self) -> (crate::Toc, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::MaybeUninit::uninit();
-            gst_sys::gst_message_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
+            ffi::gst_message_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
             (from_glib_full(toc), from_glib(updated.assume_init()))
         }
     }
@@ -1183,21 +1187,21 @@ impl<'a> Toc<'a> {
 declare_concrete_message!(ResetTime);
 impl<'a> ResetTime<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(running_time: ::ClockTime) -> Message {
+    pub fn new(running_time: crate::ClockTime) -> Message {
         skip_assert_initialized!();
         Self::builder(running_time).build()
     }
 
-    pub fn builder(running_time: ::ClockTime) -> ResetTimeBuilder<'a> {
+    pub fn builder(running_time: crate::ClockTime) -> ResetTimeBuilder<'a> {
         assert_initialized_main_thread!();
         ResetTimeBuilder::new(running_time)
     }
 
-    pub fn get_running_time(&self) -> ::ClockTime {
+    pub fn get_running_time(&self) -> crate::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_reset_time(self.as_mut_ptr(), running_time.as_mut_ptr());
+            ffi::gst_message_parse_reset_time(self.as_mut_ptr(), running_time.as_mut_ptr());
 
             from_glib(running_time.assume_init())
         }
@@ -1221,7 +1225,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
-            if from_glib(gst_sys::gst_message_parse_group_id(
+            if from_glib(ffi::gst_message_parse_group_id(
                 self.as_mut_ptr(),
                 group_id.as_mut_ptr(),
             )) {
@@ -1255,7 +1259,7 @@ impl<'a> NeedContext<'a> {
         unsafe {
             let mut context_type = ptr::null();
 
-            gst_sys::gst_message_parse_context_type(self.as_mut_ptr(), &mut context_type);
+            ffi::gst_message_parse_context_type(self.as_mut_ptr(), &mut context_type);
 
             CStr::from_ptr(context_type).to_str().unwrap()
         }
@@ -1265,20 +1269,20 @@ impl<'a> NeedContext<'a> {
 declare_concrete_message!(HaveContext);
 impl<'a> HaveContext<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(context: ::Context) -> Message {
+    pub fn new(context: crate::Context) -> Message {
         skip_assert_initialized!();
         Self::builder(context).build()
     }
 
-    pub fn builder(context: ::Context) -> HaveContextBuilder<'a> {
+    pub fn builder(context: crate::Context) -> HaveContextBuilder<'a> {
         assert_initialized_main_thread!();
         HaveContextBuilder::new(context)
     }
 
-    pub fn get_context(&self) -> ::Context {
+    pub fn get_context(&self) -> crate::Context {
         unsafe {
             let mut context = ptr::null_mut();
-            gst_sys::gst_message_parse_have_context(self.as_mut_ptr(), &mut context);
+            ffi::gst_message_parse_have_context(self.as_mut_ptr(), &mut context);
             from_glib_full(context)
         }
     }
@@ -1287,21 +1291,21 @@ impl<'a> HaveContext<'a> {
 declare_concrete_message!(DeviceAdded);
 impl<'a> DeviceAdded<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(device: &::Device) -> Message {
+    pub fn new(device: &crate::Device) -> Message {
         skip_assert_initialized!();
         Self::builder(device).build()
     }
 
-    pub fn builder(device: &::Device) -> DeviceAddedBuilder {
+    pub fn builder(device: &crate::Device) -> DeviceAddedBuilder {
         assert_initialized_main_thread!();
         DeviceAddedBuilder::new(device)
     }
 
-    pub fn get_device(&self) -> ::Device {
+    pub fn get_device(&self) -> crate::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
-            gst_sys::gst_message_parse_device_added(self.as_mut_ptr(), &mut device);
+            ffi::gst_message_parse_device_added(self.as_mut_ptr(), &mut device);
 
             from_glib_full(device)
         }
@@ -1311,21 +1315,21 @@ impl<'a> DeviceAdded<'a> {
 declare_concrete_message!(DeviceRemoved);
 impl<'a> DeviceRemoved<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(device: &::Device) -> Message {
+    pub fn new(device: &crate::Device) -> Message {
         skip_assert_initialized!();
         Self::builder(device).build()
     }
 
-    pub fn builder(device: &::Device) -> DeviceRemovedBuilder {
+    pub fn builder(device: &crate::Device) -> DeviceRemovedBuilder {
         assert_initialized_main_thread!();
         DeviceRemovedBuilder::new(device)
     }
 
-    pub fn get_device(&self) -> ::Device {
+    pub fn get_device(&self) -> crate::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
-            gst_sys::gst_message_parse_device_removed(self.as_mut_ptr(), &mut device);
+            ffi::gst_message_parse_device_removed(self.as_mut_ptr(), &mut device);
 
             from_glib_full(device)
         }
@@ -1357,7 +1361,7 @@ impl<'a> PropertyNotify<'a> {
             let mut property_name = ptr::null();
             let mut value = ptr::null();
 
-            gst_sys::gst_message_parse_property_notify(
+            ffi::gst_message_parse_property_notify(
                 self.as_mut_ptr(),
                 &mut object,
                 &mut property_name,
@@ -1382,25 +1386,25 @@ impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(collection: &::StreamCollection) -> Message {
+    pub fn new(collection: &crate::StreamCollection) -> Message {
         skip_assert_initialized!();
         Self::builder(collection).build()
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn builder(collection: &::StreamCollection) -> StreamCollectionBuilder {
+    pub fn builder(collection: &crate::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream_collection(&self) -> ::StreamCollection {
+    pub fn get_stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
-            gst_sys::gst_message_parse_stream_collection(self.as_mut_ptr(), &mut collection);
+            ffi::gst_message_parse_stream_collection(self.as_mut_ptr(), &mut collection);
 
             from_glib_full(collection)
         }
@@ -1412,25 +1416,25 @@ impl<'a> StreamsSelected<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(collection: &::StreamCollection) -> Message {
+    pub fn new(collection: &crate::StreamCollection) -> Message {
         skip_assert_initialized!();
         Self::builder(collection).build()
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn builder(collection: &::StreamCollection) -> StreamsSelectedBuilder {
+    pub fn builder(collection: &crate::StreamCollection) -> StreamsSelectedBuilder {
         assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream_collection(&self) -> ::StreamCollection {
+    pub fn get_stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
-            gst_sys::gst_message_parse_streams_selected(self.as_mut_ptr(), &mut collection);
+            ffi::gst_message_parse_streams_selected(self.as_mut_ptr(), &mut collection);
 
             from_glib_full(collection)
         }
@@ -1438,13 +1442,13 @@ impl<'a> StreamsSelected<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_streams(&self) -> Vec<::Stream> {
+    pub fn get_streams(&self) -> Vec<crate::Stream> {
         unsafe {
-            let n = gst_sys::gst_message_streams_selected_get_size(self.as_mut_ptr());
+            let n = ffi::gst_message_streams_selected_get_size(self.as_mut_ptr());
 
             (0..n)
                 .map(|i| {
-                    from_glib_full(gst_sys::gst_message_streams_selected_get_stream(
+                    from_glib_full(ffi::gst_message_streams_selected_get_stream(
                         self.as_mut_ptr(),
                         i,
                     ))
@@ -1475,7 +1479,7 @@ impl<'a> Redirect<'a> {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
-            let n = gst_sys::gst_message_get_num_redirect_entries(self.as_mut_ptr());
+            let n = ffi::gst_message_get_num_redirect_entries(self.as_mut_ptr());
 
             (0..n)
                 .map(|i| {
@@ -1483,7 +1487,7 @@ impl<'a> Redirect<'a> {
                     let mut tags = ptr::null_mut();
                     let mut structure = ptr::null();
 
-                    gst_sys::gst_message_parse_redirect_entry(
+                    ffi::gst_message_parse_redirect_entry(
                         self.as_mut_ptr(),
                         i,
                         &mut location,
@@ -1513,26 +1517,29 @@ impl<'a> DeviceChanged<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(device: &'a ::Device, changed_device: &'a ::Device) -> Message {
+    pub fn new(device: &'a crate::Device, changed_device: &'a crate::Device) -> Message {
         skip_assert_initialized!();
         Self::builder(device, changed_device).build()
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn builder(device: &'a ::Device, changed_device: &'a ::Device) -> DeviceChangedBuilder<'a> {
+    pub fn builder(
+        device: &'a crate::Device,
+        changed_device: &'a crate::Device,
+    ) -> DeviceChangedBuilder<'a> {
         assert_initialized_main_thread!();
         DeviceChangedBuilder::new(device, changed_device)
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_device_changed(&self) -> (::Device, ::Device) {
+    pub fn get_device_changed(&self) -> (crate::Device, crate::Device) {
         unsafe {
             let mut device = ptr::null_mut();
             let mut changed_device = ptr::null_mut();
 
-            gst_sys::gst_message_parse_device_changed(
+            ffi::gst_message_parse_device_changed(
                 self.as_mut_ptr(),
                 &mut device,
                 &mut changed_device,
@@ -1622,12 +1629,12 @@ macro_rules! message_builder_generic_impl {
                 let src = self.builder.src.to_glib_none().0;
                 let msg = $new_fn(&mut self, src);
                 if let Some(seqnum) = self.builder.seqnum {
-                    gst_sys::gst_message_set_seqnum(msg, seqnum.0.get());
+                    ffi::gst_message_set_seqnum(msg, seqnum.0.get());
                 }
 
                 #[cfg(any(feature = "v1_14", feature = "dox"))]
                 if !self.builder.other_fields.is_empty() {
-                    let structure = gst_sys::gst_message_writable_structure(msg);
+                    let structure = ffi::gst_message_writable_structure(msg);
 
                     if !structure.is_null() {
                         let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
@@ -1656,15 +1663,15 @@ impl<'a> EosBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|_, src| gst_sys::gst_message_new_eos(src));
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_eos(src));
 }
 
 pub trait MessageErrorDomain: glib::error::ErrorDomain {}
 
-impl MessageErrorDomain for ::CoreError {}
-impl MessageErrorDomain for ::ResourceError {}
-impl MessageErrorDomain for ::StreamError {}
-impl MessageErrorDomain for ::LibraryError {}
+impl MessageErrorDomain for crate::CoreError {}
+impl MessageErrorDomain for crate::ResourceError {}
+impl MessageErrorDomain for crate::StreamError {}
+impl MessageErrorDomain for crate::LibraryError {}
 
 pub struct ErrorBuilder<'a, T> {
     builder: MessageBuilder<'a>,
@@ -1704,7 +1711,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        cfg_if! {
+        cfg_if::cfg_if! {
             if #[cfg(any(feature = "v1_10", feature = "dox"))] {
                 let details = match s.details.take() {
                     None => ptr::null_mut(),
@@ -1713,7 +1720,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
 
                 let error = glib::Error::new(s.error, s.message);
 
-                gst_sys::gst_message_new_error_with_details(
+                ffi::gst_message_new_error_with_details(
                     src,
                     mut_override(error.to_glib_none().0),
                     s.debug.to_glib_none().0,
@@ -1722,7 +1729,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
             } else {
                 let error = glib::Error::new(s.error, s.message);
 
-                gst_sys::gst_message_new_error(
+                ffi::gst_message_new_error(
                     src,
                     mut_override(error.to_glib_none().0),
                     s.debug.to_glib_none().0,
@@ -1770,7 +1777,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        cfg_if! {
+        cfg_if::cfg_if! {
             if #[cfg(any(feature = "v1_10", feature = "dox"))] {
                 let details = match s.details.take() {
                     None => ptr::null_mut(),
@@ -1779,7 +1786,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
 
                 let error = glib::Error::new(s.error, s.message);
 
-                gst_sys::gst_message_new_warning_with_details(
+                ffi::gst_message_new_warning_with_details(
                     src,
                     mut_override(error.to_glib_none().0),
                     s.debug.to_glib_none().0,
@@ -1788,7 +1795,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
             } else {
                 let error = glib::Error::new(s.error, s.message);
 
-                gst_sys::gst_message_new_warning(
+                ffi::gst_message_new_warning(
                     src,
                     mut_override(error.to_glib_none().0),
                     s.debug.to_glib_none().0,
@@ -1836,7 +1843,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        cfg_if! {
+        cfg_if::cfg_if! {
             if #[cfg(any(feature = "v1_10", feature = "dox"))] {
                 let details = match s.details.take() {
                     None => ptr::null_mut(),
@@ -1845,7 +1852,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
 
                 let error = glib::Error::new(s.error, s.message);
 
-                gst_sys::gst_message_new_info_with_details(
+                ffi::gst_message_new_info_with_details(
                     src,
                     mut_override(error.to_glib_none().0),
                     s.debug.to_glib_none().0,
@@ -1854,7 +1861,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
             } else {
                 let error = glib::Error::new(s.error, s.message);
 
-                gst_sys::gst_message_new_info(
+                ffi::gst_message_new_info(
                     src,
                     mut_override(error.to_glib_none().0),
                     s.debug.to_glib_none().0,
@@ -1878,7 +1885,7 @@ impl<'a> TagBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| gst_sys::gst_message_new_tag(
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_tag(
         src,
         s.tags.to_glib_full()
     ));
@@ -1887,7 +1894,7 @@ impl<'a> TagBuilder<'a> {
 pub struct BufferingBuilder<'a> {
     builder: MessageBuilder<'a>,
     percent: i32,
-    stats: Option<(::BufferingMode, i32, i32, i64)>,
+    stats: Option<(crate::BufferingMode, i32, i32, i64)>,
 }
 
 impl<'a> BufferingBuilder<'a> {
@@ -1902,7 +1909,7 @@ impl<'a> BufferingBuilder<'a> {
 
     pub fn stats(
         self,
-        mode: ::BufferingMode,
+        mode: crate::BufferingMode,
         avg_in: i32,
         avg_out: i32,
         buffering_left: i64,
@@ -1915,10 +1922,10 @@ impl<'a> BufferingBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = gst_sys::gst_message_new_buffering(src, s.percent);
+        let msg = ffi::gst_message_new_buffering(src, s.percent);
 
         if let Some((mode, avg_in, avg_out, buffering_left)) = s.stats {
-            gst_sys::gst_message_set_buffering_stats(
+            ffi::gst_message_set_buffering_stats(
                 msg,
                 mode.to_glib(),
                 avg_in,
@@ -1933,13 +1940,13 @@ impl<'a> BufferingBuilder<'a> {
 
 pub struct StateChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
-    old: ::State,
-    new: ::State,
-    pending: ::State,
+    old: crate::State,
+    new: crate::State,
+    pending: crate::State,
 }
 
 impl<'a> StateChangedBuilder<'a> {
-    fn new(old: ::State, new: ::State, pending: ::State) -> Self {
+    fn new(old: crate::State, new: crate::State, pending: crate::State) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -1949,7 +1956,7 @@ impl<'a> StateChangedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_state_changed(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_state_changed(
         src,
         s.old.to_glib(),
         s.new.to_glib(),
@@ -1969,7 +1976,7 @@ impl<'a> StateDirtyBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|_, src| gst_sys::gst_message_new_state_dirty(src));
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_state_dirty(src));
 }
 
 pub struct StepDoneBuilder<'a> {
@@ -2004,7 +2011,7 @@ impl<'a> StepDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_step_done(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_done(
         src,
         s.amount.get_format().to_glib(),
         s.amount.get_value() as u64,
@@ -2018,12 +2025,12 @@ impl<'a> StepDoneBuilder<'a> {
 
 pub struct ClockProvideBuilder<'a> {
     builder: MessageBuilder<'a>,
-    clock: &'a ::Clock,
+    clock: &'a crate::Clock,
     ready: bool,
 }
 
 impl<'a> ClockProvideBuilder<'a> {
-    fn new(clock: &'a ::Clock, ready: bool) -> Self {
+    fn new(clock: &'a crate::Clock, ready: bool) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2032,7 +2039,7 @@ impl<'a> ClockProvideBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_clock_provide(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_clock_provide(
         src,
         s.clock.to_glib_none().0,
         s.ready.to_glib()
@@ -2041,11 +2048,11 @@ impl<'a> ClockProvideBuilder<'a> {
 
 pub struct ClockLostBuilder<'a> {
     builder: MessageBuilder<'a>,
-    clock: &'a ::Clock,
+    clock: &'a crate::Clock,
 }
 
 impl<'a> ClockLostBuilder<'a> {
-    fn new(clock: &'a ::Clock) -> Self {
+    fn new(clock: &'a crate::Clock) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2053,7 +2060,7 @@ impl<'a> ClockLostBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_clock_lost(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_clock_lost(
         src,
         s.clock.to_glib_none().0
     ));
@@ -2061,11 +2068,11 @@ impl<'a> ClockLostBuilder<'a> {
 
 pub struct NewClockBuilder<'a> {
     builder: MessageBuilder<'a>,
-    clock: &'a ::Clock,
+    clock: &'a crate::Clock,
 }
 
 impl<'a> NewClockBuilder<'a> {
-    fn new(clock: &'a ::Clock) -> Self {
+    fn new(clock: &'a crate::Clock) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2073,7 +2080,7 @@ impl<'a> NewClockBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_new_clock(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_new_clock(
         src,
         s.clock.to_glib_none().0
     ));
@@ -2081,13 +2088,13 @@ impl<'a> NewClockBuilder<'a> {
 
 pub struct StructureChangeBuilder<'a> {
     builder: MessageBuilder<'a>,
-    type_: ::StructureChangeType,
-    owner: &'a ::Element,
+    type_: crate::StructureChangeType,
+    owner: &'a crate::Element,
     busy: bool,
 }
 
 impl<'a> StructureChangeBuilder<'a> {
-    fn new(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> Self {
+    fn new(type_: crate::StructureChangeType, owner: &'a crate::Element, busy: bool) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2097,25 +2104,23 @@ impl<'a> StructureChangeBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(
-        |s: &mut Self, src| gst_sys::gst_message_new_structure_change(
-            src,
-            s.type_.to_glib(),
-            s.owner.to_glib_none().0,
-            s.busy.to_glib(),
-        )
-    );
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_structure_change(
+        src,
+        s.type_.to_glib(),
+        s.owner.to_glib_none().0,
+        s.busy.to_glib(),
+    ));
 }
 
 pub struct StreamStatusBuilder<'a> {
     builder: MessageBuilder<'a>,
-    type_: ::StreamStatusType,
-    owner: &'a ::Element,
+    type_: crate::StreamStatusType,
+    owner: &'a crate::Element,
     status_object: Option<&'a dyn glib::ToSendValue>,
 }
 
 impl<'a> StreamStatusBuilder<'a> {
-    fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
+    fn new(type_: crate::StreamStatusType, owner: &'a crate::Element) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2133,13 +2138,10 @@ impl<'a> StreamStatusBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = gst_sys::gst_message_new_stream_status(
-            src,
-            s.type_.to_glib(),
-            s.owner.to_glib_none().0,
-        );
+        let msg =
+            ffi::gst_message_new_stream_status(src, s.type_.to_glib(), s.owner.to_glib_none().0);
         if let Some(status_object) = s.status_object {
-            gst_sys::gst_message_set_stream_status_object(
+            ffi::gst_message_set_stream_status_object(
                 msg,
                 status_object.to_send_value().to_glib_none().0,
             );
@@ -2150,11 +2152,11 @@ impl<'a> StreamStatusBuilder<'a> {
 
 pub struct ApplicationBuilder<'a> {
     builder: MessageBuilder<'a>,
-    structure: Option<::Structure>,
+    structure: Option<crate::Structure>,
 }
 
 impl<'a> ApplicationBuilder<'a> {
-    fn new(structure: ::Structure) -> Self {
+    fn new(structure: crate::Structure) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2162,7 +2164,7 @@ impl<'a> ApplicationBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_application(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_application(
         src,
         s.structure.take().unwrap().into_ptr()
     ));
@@ -2170,11 +2172,11 @@ impl<'a> ApplicationBuilder<'a> {
 
 pub struct ElementBuilder<'a> {
     builder: MessageBuilder<'a>,
-    structure: Option<::Structure>,
+    structure: Option<crate::Structure>,
 }
 
 impl<'a> ElementBuilder<'a> {
-    fn new(structure: ::Structure) -> Self {
+    fn new(structure: crate::Structure) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2182,7 +2184,7 @@ impl<'a> ElementBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_element(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_element(
         src,
         s.structure.take().unwrap().into_ptr()
     ));
@@ -2202,7 +2204,7 @@ impl<'a> SegmentStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_segment_start(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_start(
         src,
         s.position.get_format().to_glib(),
         s.position.get_value(),
@@ -2223,7 +2225,7 @@ impl<'a> SegmentDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_segment_done(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_done(
         src,
         s.position.get_format().to_glib(),
         s.position.get_value(),
@@ -2242,7 +2244,7 @@ impl<'a> DurationChangedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|_, src| gst_sys::gst_message_new_duration_changed(src));
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_duration_changed(src));
 }
 
 pub struct LatencyBuilder<'a> {
@@ -2257,7 +2259,7 @@ impl<'a> LatencyBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|_, src| gst_sys::gst_message_new_latency(src));
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_latency(src));
 }
 
 pub struct AsyncStartBuilder<'a> {
@@ -2272,16 +2274,16 @@ impl<'a> AsyncStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|_, src| gst_sys::gst_message_new_async_start(src));
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_async_start(src));
 }
 
 pub struct AsyncDoneBuilder<'a> {
     builder: MessageBuilder<'a>,
-    running_time: ::ClockTime,
+    running_time: crate::ClockTime,
 }
 
 impl<'a> AsyncDoneBuilder<'a> {
-    fn new(running_time: ::ClockTime) -> Self {
+    fn new(running_time: crate::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2289,7 +2291,7 @@ impl<'a> AsyncDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_async_done(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_async_done(
         src,
         s.running_time.to_glib()
     ));
@@ -2297,11 +2299,11 @@ impl<'a> AsyncDoneBuilder<'a> {
 
 pub struct RequestStateBuilder<'a> {
     builder: MessageBuilder<'a>,
-    state: ::State,
+    state: crate::State,
 }
 
 impl<'a> RequestStateBuilder<'a> {
-    fn new(state: ::State) -> Self {
+    fn new(state: crate::State) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2309,7 +2311,7 @@ impl<'a> RequestStateBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_request_state(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_request_state(
         src,
         s.state.to_glib()
     ));
@@ -2343,7 +2345,7 @@ impl<'a> StepStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_step_start(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_start(
         src,
         s.active.to_glib(),
         s.amount.get_format().to_glib(),
@@ -2357,10 +2359,10 @@ impl<'a> StepStartBuilder<'a> {
 pub struct QosBuilder<'a> {
     builder: MessageBuilder<'a>,
     live: bool,
-    running_time: ::ClockTime,
-    stream_time: ::ClockTime,
-    timestamp: ::ClockTime,
-    duration: ::ClockTime,
+    running_time: crate::ClockTime,
+    stream_time: crate::ClockTime,
+    timestamp: crate::ClockTime,
+    duration: crate::ClockTime,
     values: Option<(i64, f64, i32)>,
     stats: Option<(GenericFormattedValue, GenericFormattedValue)>,
 }
@@ -2368,10 +2370,10 @@ pub struct QosBuilder<'a> {
 impl<'a> QosBuilder<'a> {
     fn new(
         live: bool,
-        running_time: ::ClockTime,
-        stream_time: ::ClockTime,
-        timestamp: ::ClockTime,
-        duration: ::ClockTime,
+        running_time: crate::ClockTime,
+        stream_time: crate::ClockTime,
+        timestamp: crate::ClockTime,
+        duration: crate::ClockTime,
     ) -> Self {
         skip_assert_initialized!();
         Self {
@@ -2404,7 +2406,7 @@ impl<'a> QosBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = gst_sys::gst_message_new_qos(
+        let msg = ffi::gst_message_new_qos(
             src,
             s.live.to_glib(),
             s.running_time.to_glib(),
@@ -2413,10 +2415,10 @@ impl<'a> QosBuilder<'a> {
             s.duration.to_glib(),
         );
         if let Some((jitter, proportion, quality)) = s.values {
-            gst_sys::gst_message_set_qos_values(msg, jitter, proportion, quality);
+            ffi::gst_message_set_qos_values(msg, jitter, proportion, quality);
         }
         if let Some((processed, dropped)) = s.stats {
-            gst_sys::gst_message_set_qos_stats(
+            ffi::gst_message_set_qos_stats(
                 msg,
                 processed.get_format().to_glib(),
                 processed.get_value() as u64,
@@ -2429,13 +2431,13 @@ impl<'a> QosBuilder<'a> {
 
 pub struct ProgressBuilder<'a> {
     builder: MessageBuilder<'a>,
-    type_: ::ProgressType,
+    type_: crate::ProgressType,
     code: &'a str,
     text: &'a str,
 }
 
 impl<'a> ProgressBuilder<'a> {
-    fn new(type_: ::ProgressType, code: &'a str, text: &'a str) -> Self {
+    fn new(type_: crate::ProgressType, code: &'a str, text: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2445,7 +2447,7 @@ impl<'a> ProgressBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_progress(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_progress(
         src,
         s.type_.to_glib(),
         s.code.to_glib_none().0,
@@ -2455,12 +2457,12 @@ impl<'a> ProgressBuilder<'a> {
 
 pub struct TocBuilder<'a> {
     builder: MessageBuilder<'a>,
-    toc: &'a ::Toc,
+    toc: &'a crate::Toc,
     updated: bool,
 }
 
 impl<'a> TocBuilder<'a> {
-    fn new(toc: &'a ::Toc, updated: bool) -> Self {
+    fn new(toc: &'a crate::Toc, updated: bool) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2469,7 +2471,7 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| gst_sys::gst_message_new_toc(
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_toc(
         src,
         s.toc.to_glib_none().0,
         s.updated.to_glib()
@@ -2478,11 +2480,11 @@ impl<'a> TocBuilder<'a> {
 
 pub struct ResetTimeBuilder<'a> {
     builder: MessageBuilder<'a>,
-    running_time: ::ClockTime,
+    running_time: crate::ClockTime,
 }
 
 impl<'a> ResetTimeBuilder<'a> {
-    fn new(running_time: ::ClockTime) -> Self {
+    fn new(running_time: crate::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2490,7 +2492,7 @@ impl<'a> ResetTimeBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_reset_time(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_reset_time(
         src,
         s.running_time.to_glib()
     ));
@@ -2518,9 +2520,9 @@ impl<'a> StreamStartBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = gst_sys::gst_message_new_stream_start(src);
+        let msg = ffi::gst_message_new_stream_start(src);
         if let Some(group_id) = s.group_id {
-            gst_sys::gst_message_set_group_id(msg, group_id.0.get());
+            ffi::gst_message_set_group_id(msg, group_id.0.get());
         }
         msg
     });
@@ -2540,7 +2542,7 @@ impl<'a> NeedContextBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_need_context(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_need_context(
         src,
         s.context_type.to_glib_none().0
     ));
@@ -2548,11 +2550,11 @@ impl<'a> NeedContextBuilder<'a> {
 
 pub struct HaveContextBuilder<'a> {
     builder: MessageBuilder<'a>,
-    context: Option<::Context>,
+    context: Option<crate::Context>,
 }
 
 impl<'a> HaveContextBuilder<'a> {
-    fn new(context: ::Context) -> Self {
+    fn new(context: crate::Context) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2562,17 +2564,17 @@ impl<'a> HaveContextBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         let context = s.context.take().unwrap();
-        gst_sys::gst_message_new_have_context(src, context.into_ptr())
+        ffi::gst_message_new_have_context(src, context.into_ptr())
     });
 }
 
 pub struct DeviceAddedBuilder<'a> {
     builder: MessageBuilder<'a>,
-    device: &'a ::Device,
+    device: &'a crate::Device,
 }
 
 impl<'a> DeviceAddedBuilder<'a> {
-    fn new(device: &'a ::Device) -> Self {
+    fn new(device: &'a crate::Device) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2580,7 +2582,7 @@ impl<'a> DeviceAddedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_device_added(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_device_added(
         src,
         s.device.to_glib_none().0
     ));
@@ -2588,11 +2590,11 @@ impl<'a> DeviceAddedBuilder<'a> {
 
 pub struct DeviceRemovedBuilder<'a> {
     builder: MessageBuilder<'a>,
-    device: &'a ::Device,
+    device: &'a crate::Device,
 }
 
 impl<'a> DeviceRemovedBuilder<'a> {
-    fn new(device: &'a ::Device) -> Self {
+    fn new(device: &'a crate::Device) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2600,7 +2602,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_device_removed(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_device_removed(
         src,
         s.device.to_glib_none().0
     ));
@@ -2635,7 +2637,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         let val = s.value.map(|v| v.to_send_value());
-        gst_sys::gst_message_new_property_notify(
+        ffi::gst_message_new_property_notify(
             src,
             s.property_name.to_glib_none().0,
             mut_override(
@@ -2651,13 +2653,13 @@ impl<'a> PropertyNotifyBuilder<'a> {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct StreamCollectionBuilder<'a> {
     builder: MessageBuilder<'a>,
-    collection: &'a ::StreamCollection,
+    collection: &'a crate::StreamCollection,
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollectionBuilder<'a> {
-    fn new(collection: &'a ::StreamCollection) -> Self {
+    fn new(collection: &'a crate::StreamCollection) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2665,12 +2667,9 @@ impl<'a> StreamCollectionBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(
-        |s: &mut Self, src| gst_sys::gst_message_new_stream_collection(
-            src,
-            s.collection.to_glib_none().0
-        )
-    );
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_stream_collection(src, s.collection.to_glib_none().0)
+    });
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2679,16 +2678,16 @@ pub struct StreamsSelectedBuilder<'a> {
     builder: MessageBuilder<'a>,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    collection: &'a ::StreamCollection,
+    collection: &'a crate::StreamCollection,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    streams: Option<&'a [&'a ::Stream]>,
+    streams: Option<&'a [&'a crate::Stream]>,
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamsSelectedBuilder<'a> {
-    fn new(collection: &'a ::StreamCollection) -> Self {
+    fn new(collection: &'a crate::StreamCollection) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2697,7 +2696,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    pub fn streams(self, streams: &'a [&'a ::Stream]) -> Self {
+    pub fn streams(self, streams: &'a [&'a crate::Stream]) -> Self {
         Self {
             streams: Some(streams),
             ..self
@@ -2705,10 +2704,10 @@ impl<'a> StreamsSelectedBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = gst_sys::gst_message_new_streams_selected(src, s.collection.to_glib_none().0);
+        let msg = ffi::gst_message_new_streams_selected(src, s.collection.to_glib_none().0);
         if let Some(streams) = s.streams {
             for stream in streams {
-                gst_sys::gst_message_streams_selected_add(msg, stream.to_glib_none().0);
+                ffi::gst_message_streams_selected_add(msg, stream.to_glib_none().0);
             }
         }
         msg
@@ -2773,7 +2772,7 @@ impl<'a> RedirectBuilder<'a> {
             ptr::null_mut()
         };
 
-        let msg = gst_sys::gst_message_new_redirect(
+        let msg = ffi::gst_message_new_redirect(
             src,
             s.location.to_glib_none().0,
             s.tag_list.to_glib_full(),
@@ -2787,7 +2786,7 @@ impl<'a> RedirectBuilder<'a> {
                 } else {
                     ptr::null_mut()
                 };
-                gst_sys::gst_message_add_redirect_entry(
+                ffi::gst_message_add_redirect_entry(
                     msg,
                     location.to_glib_none().0,
                     tag_list.to_glib_full(),
@@ -2803,14 +2802,14 @@ impl<'a> RedirectBuilder<'a> {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub struct DeviceChangedBuilder<'a> {
     builder: MessageBuilder<'a>,
-    device: &'a ::Device,
-    changed_device: &'a ::Device,
+    device: &'a crate::Device,
+    changed_device: &'a crate::Device,
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> DeviceChangedBuilder<'a> {
-    fn new(device: &'a ::Device, changed_device: &'a ::Device) -> Self {
+    fn new(device: &'a crate::Device, changed_device: &'a crate::Device) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
@@ -2819,7 +2818,7 @@ impl<'a> DeviceChangedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_device_changed(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_device_changed(
         src,
         s.device.to_glib_none().0,
         s.changed_device.to_glib_none().0,
@@ -2832,7 +2831,7 @@ mod tests {
 
     #[test]
     fn test_simple() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Message without arguments
         let seqnum = Seqnum::next();
@@ -2858,7 +2857,7 @@ mod tests {
     #[cfg(feature = "v1_14")]
     #[test]
     fn test_other_fields() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let seqnum = Seqnum::next();
         let eos_msg = Eos::builder()
@@ -2891,11 +2890,11 @@ mod tests {
 
     #[test]
     fn test_get_seqnum_valid() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let msg = StreamStart::new();
         let seqnum = Seqnum(
-            NonZeroU32::new(unsafe { gst_sys::gst_message_get_seqnum(msg.as_mut_ptr()) }).unwrap(),
+            NonZeroU32::new(unsafe { ffi::gst_message_get_seqnum(msg.as_mut_ptr()) }).unwrap(),
         );
 
         match msg.view() {
@@ -2906,14 +2905,14 @@ mod tests {
 
     #[test]
     fn test_get_seqnum_invalid() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let msg = StreamStart::new();
         let seqnum_init = msg.get_seqnum();
 
         // Invalid the seqnum
         unsafe {
-            (*msg.as_mut_ptr()).seqnum = gst_sys::GST_SEQNUM_INVALID as u32;
+            (*msg.as_mut_ptr()).seqnum = ffi::GST_SEQNUM_INVALID as u32;
             assert_eq!(0, (*msg.as_ptr()).seqnum);
         };
 

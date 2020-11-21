@@ -12,12 +12,12 @@ use glib::translate::{FromGlib, ToGlib};
 use glib::value::{SetValue, SetValueOptional};
 use glib::StaticType;
 
+use crate::DateTime;
 use serde::de::{Deserialize, Deserializer, Error};
 use serde::ser;
 use serde::ser::{Serialize, Serializer};
-use DateTime;
 
-#[derive(Serialize, Deserialize)]
+#[derive(serde::Serialize, serde::Deserialize)]
 enum DateTimeVariants {
     Y(i32),
     YM(i32, i32),
@@ -115,18 +115,18 @@ impl TryFrom<DateTimeVariants> for Date {
             DateTimeVariants::YMD(y, m, d) => {
                 let month = glib::DateMonth::from_glib(m);
                 if let glib::DateMonth::__Unknown(_) = month {
-                    return Err(glib_bool_error!("Out of range `month` for `Date`"));
+                    return Err(glib::glib_bool_error!("Out of range `month` for `Date`"));
                 }
 
                 Ok(Date(glib::Date::new_dmy(
                     d.try_into()
-                        .map_err(|_| glib_bool_error!("Out of range `day` for `Date`"))?,
+                        .map_err(|_| glib::glib_bool_error!("Out of range `day` for `Date`"))?,
                     month,
                     y.try_into()
-                        .map_err(|_| glib_bool_error!("Out of range `year` for `Date`"))?,
+                        .map_err(|_| glib::glib_bool_error!("Out of range `year` for `Date`"))?,
                 )))
             }
-            _ => Err(glib_bool_error!(
+            _ => Err(glib::glib_bool_error!(
                 "Incompatible variant for `Date` (expecting \"YMD\")"
             )),
         }
@@ -171,14 +171,11 @@ impl<'de> Deserialize<'de> for DateTime {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-    extern crate serde_json;
-
-    use DateTime;
+    use crate::DateTime;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
@@ -215,7 +212,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let datetime_ron = "YMDhmsTz(2018, 5, 28, 16, 6, 42.123456, 2)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
@@ -253,7 +250,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap();
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();

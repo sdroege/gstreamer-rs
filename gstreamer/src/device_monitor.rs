@@ -6,26 +6,23 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Caps;
-use DeviceMonitor;
+use crate::Caps;
+use crate::DeviceMonitor;
 
-use glib;
 use glib::object::IsA;
 use glib::translate::*;
-
-use gst_sys;
 
 use std::num::NonZeroU32;
 
 impl DeviceMonitor {
     pub fn new() -> DeviceMonitor {
         assert_initialized_main_thread!();
-        let (major, minor, _, _) = ::version();
+        let (major, minor, _, _) = crate::version();
         if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(gst_sys::gst_device_monitor_new()) }
+            unsafe { from_glib_full(ffi::gst_device_monitor_new()) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(gst_sys::gst_device_monitor_new()) }
+            unsafe { from_glib_none(ffi::gst_device_monitor_new()) }
         }
     }
 }
@@ -73,7 +70,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         caps: Option<&Caps>,
     ) -> Option<DeviceMonitorFilterId> {
         let id = unsafe {
-            gst_sys::gst_device_monitor_add_filter(
+            ffi::gst_device_monitor_add_filter(
                 self.as_ref().to_glib_none().0,
                 classes.to_glib_none().0,
                 caps.to_glib_none().0,
@@ -92,8 +89,8 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         filter_id: DeviceMonitorFilterId,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_device_monitor_remove_filter(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_device_monitor_remove_filter(
                     self.as_ref().to_glib_none().0,
                     filter_id.to_glib()
                 ),

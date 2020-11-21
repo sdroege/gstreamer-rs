@@ -9,7 +9,7 @@
 use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, Serializer};
 
-use format::{Buffers, Bytes, Default, Percent, Undefined};
+use crate::format::{Buffers, Bytes, Default, Percent, Undefined};
 
 // Manual implementation for some types that would otherwise yield representations such as:
 // "Default((Some(42)))"
@@ -63,18 +63,15 @@ impl<'de> Deserialize<'de> for Percent {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-    extern crate serde_json;
-
-    use format::{Buffers, Bytes, Default, Percent, Undefined};
+    use crate::format::{Buffers, Bytes, Default, Percent, Undefined};
+    use crate::ClockTime;
+    use crate::Format;
+    use crate::GenericFormattedValue;
     use std::convert::TryFrom;
-    use ClockTime;
-    use Format;
-    use GenericFormattedValue;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
@@ -136,7 +133,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let value_ron = "Default(Some(42))";
         let value_de: GenericFormattedValue = ron::de::from_str(value_ron).unwrap();
@@ -157,7 +154,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         macro_rules! test_roundrip(
             ($value:expr) => {

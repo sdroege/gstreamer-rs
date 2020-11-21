@@ -8,7 +8,6 @@
 
 use thiserror::Error;
 
-use glib;
 use glib::IsA;
 
 #[macro_export]
@@ -62,7 +61,7 @@ pub struct ErrorMessage {
 }
 
 impl ErrorMessage {
-    pub fn new<T: ::MessageErrorDomain>(
+    pub fn new<T: crate::MessageErrorDomain>(
         error: &T,
         message: Option<&str>,
         debug: Option<&str>,
@@ -102,14 +101,14 @@ macro_rules! gst_loggable_error(
 #[macro_export]
 macro_rules! gst_result_from_gboolean(
 // Plain strings
-    ($gst_sys_bool:expr, $cat:expr, $msg:expr) =>  {
-        $crate::glib::glib_result_from_gboolean!($gst_sys_bool, $msg)
+    ($ffi_bool:expr, $cat:expr, $msg:expr) =>  {
+        $crate::glib::glib_result_from_gboolean!($ffi_bool, $msg)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     };
 
 // Format strings
-    ($gst_sys_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
-        $crate::glib::glib_result_from_gboolean!($gst_sys_bool, $($msg)*)
+    ($ffi_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
+        $crate::glib::glib_result_from_gboolean!($ffi_bool, $($msg)*)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     }};
 );
@@ -117,12 +116,12 @@ macro_rules! gst_result_from_gboolean(
 #[derive(Debug, Clone, Error)]
 #[error("Error {:?}: {:?} at {}:{}", .category.get_name(), .bool_error.message, .bool_error.filename, .bool_error.line)]
 pub struct LoggableError {
-    category: ::DebugCategory,
+    category: crate::DebugCategory,
     bool_error: glib::BoolError,
 }
 
 impl LoggableError {
-    pub fn new(category: ::DebugCategory, bool_error: glib::BoolError) -> LoggableError {
+    pub fn new(category: crate::DebugCategory, bool_error: glib::BoolError) -> LoggableError {
         assert_initialized_main_thread!();
         LoggableError {
             category,
@@ -133,7 +132,7 @@ impl LoggableError {
     pub fn log(&self) {
         self.category.log(
             None as Option<&glib::Object>,
-            ::DebugLevel::Error,
+            crate::DebugLevel::Error,
             self.bool_error.filename,
             self.bool_error.function,
             self.bool_error.line,
@@ -144,7 +143,7 @@ impl LoggableError {
     pub fn log_with_object<O: IsA<glib::Object>>(&self, obj: &O) {
         self.category.log(
             Some(obj),
-            ::DebugLevel::Error,
+            crate::DebugLevel::Error,
             self.bool_error.filename,
             self.bool_error.function,
             self.bool_error.line,
@@ -152,7 +151,7 @@ impl LoggableError {
         );
     }
 
-    pub fn category(&self) -> ::DebugCategory {
+    pub fn category(&self) -> crate::DebugCategory {
         self.category
     }
 }
@@ -161,7 +160,7 @@ impl From<glib::BoolError> for LoggableError {
     fn from(bool_error: glib::BoolError) -> Self {
         skip_assert_initialized!();
         LoggableError {
-            category: *::CAT_RUST,
+            category: *crate::CAT_RUST,
             bool_error,
         }
     }
@@ -173,10 +172,10 @@ mod tests {
 
     #[test]
     fn error_message() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let e = ErrorMessage::new(
-            &::CoreError::Failed,
+            &crate::CoreError::Failed,
             Some("message"),
             Some("debug"),
             "filename",
@@ -191,7 +190,7 @@ mod tests {
 
     #[test]
     fn logabble_error() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let e: LoggableError = glib::BoolError::new("msg", "filename", "function", 7).into();
         assert_eq!(

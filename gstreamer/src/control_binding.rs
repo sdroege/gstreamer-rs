@@ -6,11 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::ClockTime;
+use crate::ControlBinding;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_sys;
-use ClockTime;
-use ControlBinding;
 
 pub trait ControlBindingExtManual: 'static {
     fn get_g_value_array(
@@ -30,13 +29,13 @@ impl<O: IsA<ControlBinding>> ControlBindingExtManual for O {
     ) -> Result<(), glib::error::BoolError> {
         let n_values = values.len() as u32;
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_control_binding_get_g_value_array(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_control_binding_get_g_value_array(
                     self.as_ref().to_glib_none().0,
                     timestamp.to_glib(),
                     interval.to_glib(),
                     n_values,
-                    values.as_mut_ptr() as *mut gobject_sys::GValue,
+                    values.as_mut_ptr() as *mut glib::gobject_ffi::GValue,
                 ),
                 "Failed to get value array"
             )

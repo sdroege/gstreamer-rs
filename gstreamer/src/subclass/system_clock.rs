@@ -9,13 +9,13 @@
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use SystemClock;
+use crate::SystemClock;
 
 pub trait SystemClockImpl: ClockImpl {}
 
 unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <::Clock as IsSubclassable<T>>::override_vfuncs(klass);
+        <crate::Clock as IsSubclassable<T>>::override_vfuncs(klass);
         let _klass = klass.as_mut();
         // Nothing to do here
     }

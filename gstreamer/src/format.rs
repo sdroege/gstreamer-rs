@@ -6,17 +6,17 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::ClockTime;
+use crate::Format;
 use muldiv::MulDiv;
 use std::convert::TryFrom;
 use std::ops;
 use thiserror::Error;
-use ClockTime;
-use Format;
 
 use std::cmp;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 pub enum GenericFormattedValue {
     Undefined(Undefined),
     Default(Default),
@@ -615,7 +615,7 @@ impl FormattedValue for Percent {
 
     unsafe fn from_raw(format: Format, value: i64) -> Self {
         debug_assert_eq!(format, Format::Percent);
-        if value < 0 || value > gst_sys::GST_FORMAT_PERCENT_MAX {
+        if value < 0 || value > ffi::GST_FORMAT_PERCENT_MAX {
             Percent(None)
         } else {
             Percent(Some(value as u32))
@@ -688,7 +688,7 @@ impl TryFrom<f64> for Percent {
             Err(TryPercentFromFloatError(()))
         } else {
             Ok(Percent(Some(
-                (v * gst_sys::GST_FORMAT_PERCENT_SCALE as f64).round() as u32,
+                (v * ffi::GST_FORMAT_PERCENT_SCALE as f64).round() as u32,
             )))
         }
     }
@@ -703,7 +703,7 @@ impl TryFrom<f32> for Percent {
             Err(TryPercentFromFloatError(()))
         } else {
             Ok(Percent(Some(
-                (v * gst_sys::GST_FORMAT_PERCENT_SCALE as f32).round() as u32,
+                (v * ffi::GST_FORMAT_PERCENT_SCALE as f32).round() as u32,
             )))
         }
     }
@@ -713,9 +713,9 @@ impl TryFrom<f32> for Percent {
 mod tests {
     #[test]
     fn test_clock_time() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
-        let t1 = ::SECOND;
+        let t1 = crate::SECOND;
         let t2 = 2 * t1;
         let t3 = &t1 * 2;
         let mut t4 = t2 + t3;
@@ -723,7 +723,7 @@ mod tests {
 
         assert_eq!(t4.nanoseconds(), Some(5_000_000_000));
 
-        let t5 = t4 - 6 * ::SECOND;
+        let t5 = t4 - 6 * crate::SECOND;
         assert!(t5.is_none());
     }
 }

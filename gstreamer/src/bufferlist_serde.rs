@@ -11,9 +11,9 @@ use serde::ser::{Serialize, SerializeSeq, Serializer};
 
 use std::fmt;
 
-use Buffer;
-use BufferList;
-use BufferListRef;
+use crate::Buffer;
+use crate::BufferList;
+use crate::BufferListRef;
 
 impl Serialize for BufferListRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -67,15 +67,13 @@ impl<'de> Deserialize<'de> for BufferList {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-
-    use BufferList;
+    use crate::BufferList;
 
     #[test]
     fn test_serialize() {
-        use Buffer;
+        use crate::Buffer;
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer_list = BufferList::new();
         {
@@ -140,7 +138,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let buffer_list_ron = r#"
             [
@@ -189,9 +187,9 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        use Buffer;
+        use crate::Buffer;
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer_list = BufferList::new();
         {

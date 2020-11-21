@@ -14,14 +14,10 @@ use std::ptr;
 use std::u64;
 use std::usize;
 
-use Buffer;
-use BufferRef;
+use crate::Buffer;
+use crate::BufferRef;
 
-use glib;
-use glib_sys;
-use gst_sys;
-
-use buffer::{Readable, Writable};
+use crate::buffer::{Readable, Writable};
 
 pub struct BufferCursor<T> {
     buffer: Option<Buffer>,
@@ -30,7 +26,7 @@ pub struct BufferCursor<T> {
     cur_mem_idx: u32,
     cur_offset: u64,
     cur_mem_offset: usize,
-    map_info: gst_sys::GstMapInfo,
+    map_info: ffi::GstMapInfo,
     phantom: PhantomData<T>,
 }
 
@@ -41,7 +37,7 @@ pub struct BufferRefCursor<T> {
     cur_mem_idx: u32,
     cur_offset: u64,
     cur_mem_offset: usize,
-    map_info: gst_sys::GstMapInfo,
+    map_info: ffi::GstMapInfo,
 }
 
 macro_rules! define_seek_impl(
@@ -91,7 +87,7 @@ macro_rules! define_seek_impl(
 
             if idx != self.cur_mem_idx && !self.map_info.memory.is_null() {
                 unsafe {
-                    gst_sys::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
+                    ffi::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
                     self.map_info.memory = ptr::null_mut();
                 }
             }
@@ -124,14 +120,14 @@ macro_rules! define_read_write_fn_impl(
                 unsafe {
                     // Work around lifetime annotation issues with closures
                     let get_buffer_ref: fn(&Self) -> &BufferRef = $get_buffer_ref;
-                    let memory = gst_sys::gst_buffer_peek_memory(
+                    let memory = ffi::gst_buffer_peek_memory(
                         get_buffer_ref($self).as_mut_ptr(),
                         $self.cur_mem_idx,
                     );
                     assert!(!memory.is_null());
 
-                    if gst_sys::gst_memory_map(memory, &mut $self.map_info, $map_flags)
-                        == glib_sys::GFALSE
+                    if ffi::gst_memory_map(memory, &mut $self.map_info, $map_flags)
+                        == glib::ffi::GFALSE
                     {
                         return Err(io::Error::new(
                             io::ErrorKind::InvalidData,
@@ -162,7 +158,7 @@ macro_rules! define_read_write_fn_impl(
             // If we're at the end of the current memory, unmap and advance to the next memory
             if $self.cur_mem_offset == $self.map_info.size {
                 unsafe {
-                    gst_sys::gst_memory_unmap($self.map_info.memory, &mut $self.map_info);
+                    ffi::gst_memory_unmap($self.map_info.memory, &mut $self.map_info);
                 }
                 $self.map_info.memory = ptr::null_mut();
                 $self.cur_mem_idx += 1;
@@ -182,8 +178,8 @@ macro_rules! define_read_impl(
                 data,
                 &mut [u8],
                 $get_buffer_ref,
-                gst_sys::GST_MAP_READ,
-                |map_info: &gst_sys::GstMapInfo, off, data: &mut [u8], to_copy| unsafe {
+                ffi::GST_MAP_READ,
+                |map_info: &ffi::GstMapInfo, off, data: &mut [u8], to_copy| unsafe {
                     ptr::copy_nonoverlapping(
                         (map_info.data as *const u8).add(off),
                         data.as_mut_ptr(),
@@ -204,8 +200,8 @@ macro_rules! define_write_impl(
                 data,
                 &[u8],
                 $get_buffer_ref,
-                gst_sys::GST_MAP_WRITE,
-                |map_info: &gst_sys::GstMapInfo, off, data: &[u8], to_copy| unsafe {
+                ffi::GST_MAP_WRITE,
+                |map_info: &ffi::GstMapInfo, off, data: &[u8], to_copy| unsafe {
                     ptr::copy_nonoverlapping(
                         data.as_ptr(),
                         (map_info.data as *mut u8).add(off),
@@ -219,7 +215,7 @@ macro_rules! define_write_impl(
         fn flush(&mut self) -> Result<(), io::Error> {
             if !self.map_info.memory.is_null() {
                 unsafe {
-                    gst_sys::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
+                    ffi::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
                     self.map_info.memory = ptr::null_mut();
                 }
             }
@@ -247,7 +243,7 @@ impl<T> Drop for BufferCursor<T> {
     fn drop(&mut self) {
         if !self.map_info.memory.is_null() {
             unsafe {
-                gst_sys::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
+                ffi::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
             }
         }
     }
@@ -306,7 +302,7 @@ impl BufferCursor<Writable> {
     pub(crate) fn new_writable(buffer: Buffer) -> Result<BufferCursor<Writable>, glib::BoolError> {
         skip_assert_initialized!();
         if !buffer.is_writable() || !buffer.is_all_memory_writable() {
-            return Err(glib_bool_error!("Not all memories are writable"));
+            return Err(glib::glib_bool_error!("Not all memories are writable"));
         }
 
         let size = buffer.get_size() as u64;
@@ -346,7 +342,7 @@ impl<T> Drop for BufferRefCursor<T> {
     fn drop(&mut self) {
         if !self.map_info.memory.is_null() {
             unsafe {
-                gst_sys::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
+                ffi::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
             }
         }
     }
@@ -410,7 +406,7 @@ impl<'a> BufferRefCursor<&'a mut BufferRef> {
     ) -> Result<BufferRefCursor<&'a mut BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
         if !buffer.is_all_memory_writable() {
-            return Err(glib_bool_error!("Not all memories are writable"));
+            return Err(glib::glib_bool_error!("Not all memories are writable"));
         }
 
         let size = buffer.get_size() as u64;
@@ -440,16 +436,16 @@ mod tests {
     fn test_buffer_cursor() {
         use std::io::{self, Read, Seek, Write};
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::new();
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 10]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 10]));
         }
 
         assert!(buffer.is_all_memory_writable());
@@ -532,16 +528,16 @@ mod tests {
     fn test_buffer_cursor_ref() {
         use std::io::{self, Read, Seek, Write};
 
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::new();
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 10]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 10]));
         }
 
         assert!(buffer.is_all_memory_writable());

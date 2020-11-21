@@ -6,25 +6,18 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gobject_sys;
-use gst_sys;
-
-use glib;
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use libc;
-
-use ChildProxy;
+use crate::ChildProxy;
 
 pub trait ChildProxyImpl: ObjectImpl + Send + Sync {
     fn get_child_by_name(&self, object: &Self::Type, name: &str) -> Option<glib::Object> {
         unsafe {
-            let type_ = gst_sys::gst_child_proxy_get_type();
-            let iface = gobject_sys::g_type_default_interface_ref(type_)
-                as *mut gst_sys::GstChildProxyInterface;
+            let type_ = ffi::gst_child_proxy_get_type();
+            let iface = glib::gobject_ffi::g_type_default_interface_ref(type_)
+                as *mut ffi::GstChildProxyInterface;
             assert!(!iface.is_null());
 
             let ret = ((*iface).get_child_by_name.as_ref().unwrap())(
@@ -32,7 +25,7 @@ pub trait ChildProxyImpl: ObjectImpl + Send + Sync {
                 name.to_glib_none().0,
             );
 
-            gobject_sys::g_type_default_interface_unref(iface as glib_sys::gpointer);
+            glib::gobject_ffi::g_type_default_interface_unref(iface as glib::ffi::gpointer);
 
             from_glib_full(ret)
         }
@@ -47,10 +40,10 @@ pub trait ChildProxyImpl: ObjectImpl + Send + Sync {
 
 unsafe impl<T: ChildProxyImpl> IsImplementable<T> for ChildProxy {
     unsafe extern "C" fn interface_init(
-        iface: glib_sys::gpointer,
-        _iface_data: glib_sys::gpointer,
+        iface: glib::ffi::gpointer,
+        _iface_data: glib::ffi::gpointer,
     ) {
-        let child_proxy_iface = &mut *(iface as *mut gst_sys::GstChildProxyInterface);
+        let child_proxy_iface = &mut *(iface as *mut ffi::GstChildProxyInterface);
 
         child_proxy_iface.get_child_by_name = Some(child_proxy_get_child_by_name::<T>);
         child_proxy_iface.get_child_by_index = Some(child_proxy_get_child_by_index::<T>);
@@ -61,9 +54,9 @@ unsafe impl<T: ChildProxyImpl> IsImplementable<T> for ChildProxy {
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_name<T: ChildProxyImpl>(
-    child_proxy: *mut gst_sys::GstChildProxy,
+    child_proxy: *mut ffi::GstChildProxy,
     name: *const libc::c_char,
-) -> *mut gobject_sys::GObject {
+) -> *mut glib::gobject_ffi::GObject {
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
@@ -75,9 +68,9 @@ unsafe extern "C" fn child_proxy_get_child_by_name<T: ChildProxyImpl>(
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_index<T: ChildProxyImpl>(
-    child_proxy: *mut gst_sys::GstChildProxy,
+    child_proxy: *mut ffi::GstChildProxy,
     index: u32,
-) -> *mut gobject_sys::GObject {
+) -> *mut glib::gobject_ffi::GObject {
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
@@ -89,7 +82,7 @@ unsafe extern "C" fn child_proxy_get_child_by_index<T: ChildProxyImpl>(
 }
 
 unsafe extern "C" fn child_proxy_get_children_count<T: ChildProxyImpl>(
-    child_proxy: *mut gst_sys::GstChildProxy,
+    child_proxy: *mut ffi::GstChildProxy,
 ) -> u32 {
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
@@ -98,8 +91,8 @@ unsafe extern "C" fn child_proxy_get_children_count<T: ChildProxyImpl>(
 }
 
 unsafe extern "C" fn child_proxy_child_added<T: ChildProxyImpl>(
-    child_proxy: *mut gst_sys::GstChildProxy,
-    child: *mut gobject_sys::GObject,
+    child_proxy: *mut ffi::GstChildProxy,
+    child: *mut glib::gobject_ffi::GObject,
     name: *const libc::c_char,
 ) {
     let instance = &*(child_proxy as *mut T::Instance);
@@ -113,8 +106,8 @@ unsafe extern "C" fn child_proxy_child_added<T: ChildProxyImpl>(
 }
 
 unsafe extern "C" fn child_proxy_child_removed<T: ChildProxyImpl>(
-    child_proxy: *mut gst_sys::GstChildProxy,
-    child: *mut gobject_sys::GObject,
+    child_proxy: *mut ffi::GstChildProxy,
+    child: *mut glib::gobject_ffi::GObject,
     name: *const libc::c_char,
 ) {
     let instance = &*(child_proxy as *mut T::Instance);

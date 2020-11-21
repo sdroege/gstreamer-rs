@@ -6,10 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
 use glib::translate::{from_glib, ToGlibPtr};
 use glib::{Date, SendValue, ToValue};
-use gst_sys;
 
 use serde::de;
 use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
@@ -21,13 +19,13 @@ use std::cmp;
 use std::fmt;
 use std::rc::Rc;
 
-use date_time_serde;
-use tags::{GenericTagIter, TagList, TagListRef};
-use value_serde::{DATE_OTHER_TYPE_ID, DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
-use DateTime;
-use Sample;
-use TagMergeMode;
-use TagScope;
+use crate::date_time_serde;
+use crate::tags::{GenericTagIter, TagList, TagListRef};
+use crate::value_serde::{DATE_OTHER_TYPE_ID, DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
+use crate::DateTime;
+use crate::Sample;
+use crate::TagMergeMode;
+use crate::TagScope;
 
 macro_rules! ser_some_tag (
     ($value:ident, $seq:ident, $t:ty) => (
@@ -183,7 +181,7 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
         let tag_type: glib::Type = unsafe {
             let tag_name = self.0.to_glib_none();
-            from_glib(gst_sys::gst_tag_get_type(tag_name.0))
+            from_glib(ffi::gst_tag_get_type(tag_name.0))
         };
 
         loop {
@@ -304,7 +302,7 @@ impl<'de> Deserialize<'de> for TagsDe {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct TagListDe {
     scope: TagScope,
     tags: TagsDe,
@@ -329,17 +327,15 @@ impl<'de> Deserialize<'de> for TagList {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-
-    use tags::*;
-    use Buffer;
-    use Sample;
-    use TagMergeMode;
-    use TagScope;
+    use crate::tags::*;
+    use crate::Buffer;
+    use crate::Sample;
+    use crate::TagMergeMode;
+    use crate::TagScope;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut tags = TagList::new();
         assert_eq!(tags.to_string(), "taglist;");
@@ -347,7 +343,7 @@ mod tests {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"a title", TagMergeMode::Append); // String
             tags.add::<Title>(&"another title", TagMergeMode::Append); // String
-            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append); // u64
+            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
@@ -355,7 +351,7 @@ mod tests {
                 TagMergeMode::Append,
             );
             tags.add::<DateTime>(
-                &::DateTime::new_ymd(2018, 5, 28).unwrap(),
+                &crate::DateTime::new_ymd(2018, 5, 28).unwrap(),
                 TagMergeMode::Append,
             );
 
@@ -442,9 +438,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        extern crate serde_json;
-
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let tag_list_ron = r#"
             (
@@ -495,7 +489,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index::<Duration>(0).unwrap().get_some(),
-            ::SECOND * 120
+            crate::SECOND * 120
         );
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
         assert!(
@@ -507,7 +501,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
-            ::DateTime::new_ymd(2018, 5, 28).unwrap()
+            crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
@@ -548,7 +542,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
-            ::DateTime::new_ymd(2018, 5, 28).unwrap()
+            crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
@@ -560,7 +554,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut tags = TagList::new();
         assert_eq!(tags.to_string(), "taglist;");
@@ -569,7 +563,7 @@ mod tests {
             tags.set_scope(TagScope::Global);
             tags.add::<Title>(&"a title", TagMergeMode::Append); // String
             tags.add::<Title>(&"another title", TagMergeMode::Append); // String
-            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append); // u64
+            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
             tags.add::<Date>(
@@ -577,7 +571,7 @@ mod tests {
                 TagMergeMode::Append,
             );
             tags.add::<DateTime>(
-                &::DateTime::new_ymd(2018, 5, 28).unwrap(),
+                &crate::DateTime::new_ymd(2018, 5, 28).unwrap(),
                 TagMergeMode::Append,
             );
 
@@ -625,7 +619,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
-            ::DateTime::new_ymd(2018, 5, 28).unwrap()
+            crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();

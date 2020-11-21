@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use DebugLevel;
+use crate::DebugLevel;
 
 use libc::c_char;
 use std::borrow::Cow;
@@ -16,15 +16,12 @@ use std::ptr;
 
 use once_cell::sync::Lazy;
 
-use gobject_sys;
-use gst_sys;
-
+use glib::ffi::gpointer;
 use glib::translate::*;
 use glib::IsA;
-use glib_sys::gpointer;
 
 #[derive(PartialEq, Eq)]
-pub struct DebugMessage(ptr::NonNull<gst_sys::GstDebugMessage>);
+pub struct DebugMessage(ptr::NonNull<ffi::GstDebugMessage>);
 
 impl fmt::Debug for DebugMessage {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -35,7 +32,7 @@ impl fmt::Debug for DebugMessage {
 impl DebugMessage {
     pub fn get(&self) -> Option<Cow<str>> {
         unsafe {
-            let message = gst_sys::gst_debug_message_get(self.0.as_ptr());
+            let message = ffi::gst_debug_message_get(self.0.as_ptr());
 
             if message.is_null() {
                 None
@@ -47,17 +44,21 @@ impl DebugMessage {
 }
 
 #[derive(PartialEq, Eq, Clone, Copy)]
-pub struct DebugCategory(ptr::NonNull<gst_sys::GstDebugCategory>);
+pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
 
 impl DebugCategory {
-    pub fn new(name: &str, color: ::DebugColorFlags, description: Option<&str>) -> DebugCategory {
+    pub fn new(
+        name: &str,
+        color: crate::DebugColorFlags,
+        description: Option<&str>,
+    ) -> DebugCategory {
         skip_assert_initialized!();
         extern "C" {
             fn _gst_debug_category_new(
                 name: *const c_char,
-                color: gst_sys::GstDebugColorFlags,
+                color: ffi::GstDebugColorFlags,
                 description: *const c_char,
-            ) -> *mut gst_sys::GstDebugCategory;
+            ) -> *mut ffi::GstDebugCategory;
         }
 
         // Gets the category if it exists already
@@ -76,7 +77,7 @@ impl DebugCategory {
         skip_assert_initialized!();
         unsafe {
             extern "C" {
-                fn _gst_debug_get_category(name: *const c_char) -> *mut gst_sys::GstDebugCategory;
+                fn _gst_debug_get_category(name: *const c_char) -> *mut ffi::GstDebugCategory;
             }
 
             let cat = _gst_debug_get_category(name.to_glib_none().0);
@@ -89,25 +90,25 @@ impl DebugCategory {
         }
     }
 
-    pub fn get_threshold(self) -> ::DebugLevel {
-        from_glib(unsafe { gst_sys::gst_debug_category_get_threshold(self.0.as_ptr()) })
+    pub fn get_threshold(self) -> crate::DebugLevel {
+        from_glib(unsafe { ffi::gst_debug_category_get_threshold(self.0.as_ptr()) })
     }
 
-    pub fn set_threshold(self, threshold: ::DebugLevel) {
-        unsafe { gst_sys::gst_debug_category_set_threshold(self.0.as_ptr(), threshold.to_glib()) }
+    pub fn set_threshold(self, threshold: crate::DebugLevel) {
+        unsafe { ffi::gst_debug_category_set_threshold(self.0.as_ptr(), threshold.to_glib()) }
     }
 
     pub fn reset_threshold(self) {
-        unsafe { gst_sys::gst_debug_category_reset_threshold(self.0.as_ptr()) }
+        unsafe { ffi::gst_debug_category_reset_threshold(self.0.as_ptr()) }
     }
 
-    pub fn get_color(self) -> ::DebugColorFlags {
-        unsafe { from_glib(gst_sys::gst_debug_category_get_color(self.0.as_ptr())) }
+    pub fn get_color(self) -> crate::DebugColorFlags {
+        unsafe { from_glib(ffi::gst_debug_category_get_color(self.0.as_ptr())) }
     }
 
     pub fn get_name<'a>(self) -> &'a str {
         unsafe {
-            CStr::from_ptr(gst_sys::gst_debug_category_get_name(self.0.as_ptr()))
+            CStr::from_ptr(ffi::gst_debug_category_get_name(self.0.as_ptr()))
                 .to_str()
                 .unwrap()
         }
@@ -115,7 +116,7 @@ impl DebugCategory {
 
     pub fn get_description<'a>(self) -> Option<&'a str> {
         unsafe {
-            let ptr = gst_sys::gst_debug_category_get_description(self.0.as_ptr());
+            let ptr = ffi::gst_debug_category_get_description(self.0.as_ptr());
 
             if ptr.is_null() {
                 None
@@ -129,7 +130,7 @@ impl DebugCategory {
     pub fn log<O: IsA<glib::Object>>(
         self,
         obj: Option<&O>,
-        level: ::DebugLevel,
+        level: crate::DebugLevel,
         file: &str,
         module: &str,
         line: u32,
@@ -142,12 +143,12 @@ impl DebugCategory {
         }
 
         let obj_ptr = match obj {
-            Some(obj) => obj.to_glib_none().0 as *mut gobject_sys::GObject,
+            Some(obj) => obj.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
             None => ptr::null_mut(),
         };
 
         unsafe {
-            gst_sys::gst_debug_log(
+            ffi::gst_debug_log(
                 self.0.as_ptr(),
                 level.to_glib(),
                 file.to_glib_none().0,
@@ -174,7 +175,7 @@ impl fmt::Debug for DebugCategory {
 pub static CAT_RUST: Lazy<DebugCategory> = Lazy::new(|| {
     DebugCategory::new(
         "GST_RUST",
-        ::DebugColorFlags::UNDERLINE,
+        crate::DebugColorFlags::UNDERLINE,
         Some("GStreamer's Rust binding core"),
     )
 });
@@ -312,13 +313,13 @@ macro_rules! gst_log_with_level(
 );
 
 unsafe extern "C" fn log_handler<T>(
-    category: *mut gst_sys::GstDebugCategory,
-    level: gst_sys::GstDebugLevel,
+    category: *mut ffi::GstDebugCategory,
+    level: ffi::GstDebugLevel,
     file: *const c_char,
     function: *const c_char,
     line: i32,
-    object: *mut gobject_sys::GObject,
-    message: *mut gst_sys::GstDebugMessage,
+    object: *mut glib::gobject_ffi::GObject,
+    message: *mut ffi::GstDebugMessage,
     user_data: gpointer,
 ) where
     T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&LoggedObject>, &DebugMessage)
@@ -360,10 +361,10 @@ unsafe impl Send for DebugLogFunction {}
 unsafe impl Sync for DebugLogFunction {}
 
 #[derive(Debug)]
-pub struct LoggedObject(ptr::NonNull<gobject_sys::GObject>);
+pub struct LoggedObject(ptr::NonNull<glib::gobject_ffi::GObject>);
 
 impl LoggedObject {
-    pub fn as_ptr(&self) -> *mut gobject_sys::GObject {
+    pub fn as_ptr(&self) -> *mut glib::gobject_ffi::GObject {
         self.0.as_ptr()
     }
 }
@@ -373,16 +374,17 @@ impl fmt::Display for LoggedObject {
         unsafe {
             let ptr = self.0.as_ptr();
             let g_type_instance = &mut (*ptr).g_type_instance;
-            if gobject_sys::g_type_check_instance_is_fundamentally_a(
+            if glib::gobject_ffi::g_type_check_instance_is_fundamentally_a(
                 g_type_instance,
-                gobject_sys::g_object_get_type(),
-            ) != glib_sys::GFALSE
+                glib::gobject_ffi::g_object_get_type(),
+            ) != glib::ffi::GFALSE
             {
                 let type_ = (*g_type_instance.g_class).g_type;
 
-                if gobject_sys::g_type_is_a(type_, gst_sys::gst_pad_get_type()) != glib_sys::GFALSE
+                if glib::gobject_ffi::g_type_is_a(type_, ffi::gst_pad_get_type())
+                    != glib::ffi::GFALSE
                 {
-                    let name_ptr = (*(ptr as *mut gst_sys::GstObject)).name;
+                    let name_ptr = (*(ptr as *mut ffi::GstObject)).name;
                     let name = if name_ptr.is_null() {
                         "<null>"
                     } else {
@@ -391,11 +393,11 @@ impl fmt::Display for LoggedObject {
                             .unwrap_or("<invalid name>")
                     };
 
-                    let parent_ptr = (*(ptr as *mut gst_sys::GstObject)).parent;
+                    let parent_ptr = (*(ptr as *mut ffi::GstObject)).parent;
                     let parent_name = if parent_ptr.is_null() {
                         "<null>"
                     } else {
-                        let name_ptr = (*(parent_ptr as *mut gst_sys::GstObject)).name;
+                        let name_ptr = (*(parent_ptr as *mut ffi::GstObject)).name;
                         if name_ptr.is_null() {
                             "<null>"
                         } else {
@@ -406,10 +408,10 @@ impl fmt::Display for LoggedObject {
                     };
 
                     write!(f, "{}:{}", parent_name, name)
-                } else if gobject_sys::g_type_is_a(type_, gst_sys::gst_object_get_type())
-                    != glib_sys::GFALSE
+                } else if glib::gobject_ffi::g_type_is_a(type_, ffi::gst_object_get_type())
+                    != glib::ffi::GFALSE
                 {
-                    let name_ptr = (*(ptr as *mut gst_sys::GstObject)).name;
+                    let name_ptr = (*(ptr as *mut ffi::GstObject)).name;
                     let name = if name_ptr.is_null() {
                         "<null>"
                     } else {
@@ -419,7 +421,7 @@ impl fmt::Display for LoggedObject {
                     };
                     write!(f, "{}", name)
                 } else {
-                    let type_name = CStr::from_ptr(gobject_sys::g_type_name(type_));
+                    let type_name = CStr::from_ptr(glib::gobject_ffi::g_type_name(type_));
                     write!(
                         f,
                         "{}:{:?}",
@@ -445,7 +447,7 @@ where
     unsafe {
         let user_data = Box::new(function);
         let user_data_ptr = Box::into_raw(user_data) as gpointer;
-        gst_sys::gst_debug_add_log_function(
+        ffi::gst_debug_add_log_function(
             Some(log_handler::<T>),
             user_data_ptr,
             Some(log_handler_data_free::<T>),
@@ -457,14 +459,14 @@ where
 pub fn debug_remove_default_log_function() {
     skip_assert_initialized!();
     unsafe {
-        gst_sys::gst_debug_remove_log_function(None);
+        ffi::gst_debug_remove_log_function(None);
     }
 }
 
 pub fn debug_remove_log_function(log_fn: DebugLogFunction) {
     skip_assert_initialized!();
     unsafe {
-        let removed = gst_sys::gst_debug_remove_log_function_by_data(log_fn.0.as_ptr());
+        let removed = ffi::gst_debug_remove_log_function_by_data(log_fn.0.as_ptr());
         assert_eq!(removed, 1);
     }
 }
@@ -477,7 +479,7 @@ mod tests {
 
     #[test]
     fn get_existing() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let perf_cat = DebugCategory::get("GST_PERFORMANCE")
             .expect("Unable to find `DebugCategory` with name \"GST_PERFORMANCE\"");
@@ -486,11 +488,11 @@ mod tests {
 
     #[test]
     fn new_and_log() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let cat = DebugCategory::new(
             "test-cat",
-            ::DebugColorFlags::empty(),
+            crate::DebugColorFlags::empty(),
             Some("some debug category"),
         );
 
@@ -503,7 +505,7 @@ mod tests {
         gst_trace!(cat, "meh");
         gst_memdump!(cat, "meh");
 
-        let obj = ::Bin::new(Some("meh"));
+        let obj = crate::Bin::new(Some("meh"));
         gst_error!(cat, obj: &obj, "meh");
         gst_warning!(cat, obj: &obj, "meh");
         gst_fixme!(cat, obj: &obj, "meh");
@@ -516,15 +518,15 @@ mod tests {
 
     #[test]
     fn log_handler() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let cat = DebugCategory::new(
             "test-cat-log",
-            ::DebugColorFlags::empty(),
+            crate::DebugColorFlags::empty(),
             Some("some debug category"),
         );
         cat.set_threshold(DebugLevel::Info);
-        let obj = ::Bin::new(Some("meh"));
+        let obj = crate::Bin::new(Some("meh"));
 
         let (sender, receiver) = mpsc::channel();
 

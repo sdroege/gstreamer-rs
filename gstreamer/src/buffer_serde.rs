@@ -11,10 +11,10 @@ use serde::ser;
 use serde::ser::{Serialize, SerializeStruct, Serializer};
 use serde_bytes::{ByteBuf, Bytes};
 
-use Buffer;
-use BufferFlags;
-use BufferRef;
-use ClockTime;
+use crate::Buffer;
+use crate::BufferFlags;
+use crate::BufferRef;
+use crate::ClockTime;
 
 // TODO: try `Either<ByteBuf, Bytes>` to merge the base reprensentations for ser and de
 // while avoiding unneeded copy
@@ -44,7 +44,7 @@ impl<'a> Serialize for Buffer {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct BufferDe {
     pts: ClockTime,
     dts: ClockTime,
@@ -81,15 +81,12 @@ impl<'de> Deserialize<'de> for Buffer {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-    extern crate serde_json;
-
-    use Buffer;
-    use BufferFlags;
+    use crate::Buffer;
+    use crate::BufferFlags;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {
@@ -143,7 +140,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let buffer_ron = r#"
             (
@@ -196,7 +193,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {

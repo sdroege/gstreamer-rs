@@ -9,7 +9,7 @@
 use glib::translate::*;
 use glib::IsA;
 
-use PipelineFlags;
+use crate::PipelineFlags;
 
 pub trait GstPipelineExtManual: 'static {
     fn set_pipeline_flags(&self, flags: PipelineFlags);
@@ -19,27 +19,27 @@ pub trait GstPipelineExtManual: 'static {
     fn get_pipeline_flags(&self) -> PipelineFlags;
 }
 
-impl<O: IsA<::Pipeline>> GstPipelineExtManual for O {
+impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
     fn set_pipeline_flags(&self, flags: PipelineFlags) {
         unsafe {
-            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
-            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags |= flags.to_glib();
         }
     }
 
     fn unset_pipeline_flags(&self, flags: PipelineFlags) {
         unsafe {
-            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
-            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags &= !flags.to_glib();
         }
     }
 
     fn get_pipeline_flags(&self) -> PipelineFlags {
         unsafe {
-            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
-            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             from_glib((*ptr).flags)
         }
     }

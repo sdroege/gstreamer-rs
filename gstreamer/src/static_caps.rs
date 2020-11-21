@@ -6,24 +6,19 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Caps;
+use crate::Caps;
 
-use glib_sys;
-use gobject_sys;
-use gst_sys;
-
-use glib;
 use glib::translate::*;
 
 use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
 
-pub struct StaticCaps(ptr::NonNull<gst_sys::GstStaticCaps>);
+pub struct StaticCaps(ptr::NonNull<ffi::GstStaticCaps>);
 
 impl StaticCaps {
     pub fn get(&self) -> Caps {
-        unsafe { from_glib_full(gst_sys::gst_static_caps_get(self.0.as_ptr())) }
+        unsafe { from_glib_full(ffi::gst_static_caps_get(self.0.as_ptr())) }
     }
 }
 
@@ -42,26 +37,26 @@ impl fmt::Debug for StaticCaps {
 
 impl glib::types::StaticType for StaticCaps {
     fn static_type() -> glib::types::Type {
-        unsafe { glib::translate::from_glib(gst_sys::gst_static_caps_get_type()) }
+        unsafe { glib::translate::from_glib(ffi::gst_static_caps_get_type()) }
     }
 }
 
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for StaticCaps {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<StaticCaps>::from_glib_none(
-            gobject_sys::g_value_get_boxed(value.to_glib_none().0) as *mut gst_sys::GstStaticCaps
-        )
+        Option::<StaticCaps>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
+            value.to_glib_none().0,
+        ) as *mut ffi::GstStaticCaps)
     }
 }
 
 #[doc(hidden)]
 impl glib::value::SetValue for StaticCaps {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_sys::GstStaticCaps>::to_glib_none(this).0
-                as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstStaticCaps>::to_glib_none(this).0
+                as glib::ffi::gpointer,
         )
     }
 }
@@ -69,63 +64,63 @@ impl glib::value::SetValue for StaticCaps {
 #[doc(hidden)]
 impl glib::value::SetValueOptional for StaticCaps {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_sys::GstStaticCaps>::to_glib_none(&this).0
-                as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstStaticCaps>::to_glib_none(&this).0
+                as glib::ffi::gpointer,
         )
     }
 }
 
 #[doc(hidden)]
 impl glib::translate::GlibPtrDefault for StaticCaps {
-    type GlibType = *mut gst_sys::GstStaticCaps;
+    type GlibType = *mut ffi::GstStaticCaps;
 }
 
 #[doc(hidden)]
-impl<'a> glib::translate::ToGlibPtr<'a, *const gst_sys::GstStaticCaps> for StaticCaps {
+impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCaps {
     type Storage = &'a StaticCaps;
 
-    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const gst_sys::GstStaticCaps, Self> {
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstStaticCaps, Self> {
         glib::translate::Stash(self.0.as_ptr(), self)
     }
 
-    fn to_glib_full(&self) -> *const gst_sys::GstStaticCaps {
+    fn to_glib_full(&self) -> *const ffi::GstStaticCaps {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*const gst_sys::GstStaticCaps> for StaticCaps {
+impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps {
     #[inline]
-    unsafe fn from_glib_none(ptr: *const gst_sys::GstStaticCaps) -> Self {
+    unsafe fn from_glib_none(ptr: *const ffi::GstStaticCaps) -> Self {
         assert!(!ptr.is_null());
         StaticCaps(ptr::NonNull::new_unchecked(ptr as *mut _))
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*mut gst_sys::GstStaticCaps> for StaticCaps {
+impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut gst_sys::GstStaticCaps) -> Self {
+    unsafe fn from_glib_none(ptr: *mut ffi::GstStaticCaps) -> Self {
         assert!(!ptr.is_null());
         StaticCaps(ptr::NonNull::new_unchecked(ptr))
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrBorrow<*mut gst_sys::GstStaticCaps> for StaticCaps {
+impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstStaticCaps) -> Borrowed<Self> {
+    unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticCaps) -> Borrowed<Self> {
         assert!(!ptr.is_null());
         Borrowed::new(StaticCaps(ptr::NonNull::new_unchecked(ptr)))
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrFull<*mut gst_sys::GstStaticCaps> for StaticCaps {
+impl glib::translate::FromGlibPtrFull<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
-    unsafe fn from_glib_full(_ptr: *mut gst_sys::GstStaticCaps) -> Self {
+    unsafe fn from_glib_full(_ptr: *mut ffi::GstStaticCaps) -> Self {
         unimplemented!();
     }
 }

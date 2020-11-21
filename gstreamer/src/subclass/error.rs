@@ -8,8 +8,8 @@
 
 use thiserror::Error;
 
-use ErrorMessage;
-use FlowReturn;
+use crate::ErrorMessage;
+use crate::FlowReturn;
 
 #[macro_export]
 macro_rules! gst_panic_to_error(

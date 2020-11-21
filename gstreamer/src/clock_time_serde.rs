@@ -12,7 +12,7 @@ use serde::ser::{Serialize, Serializer};
 
 use std::fmt;
 
-use ClockTime;
+use crate::ClockTime;
 
 impl<'a> Serialize for ClockTime {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -52,14 +52,11 @@ impl<'de> Deserialize<'de> for ClockTime {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-    extern crate serde_json;
-
-    use ClockTime;
+    use crate::ClockTime;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Some
         let clocktime = ClockTime::from_nseconds(42_123_456_789);
@@ -85,7 +82,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Some
         let clocktime_ron = "Some(42123456789)";
@@ -114,7 +111,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Some
         let clocktime = ClockTime::from_nseconds(42_123_456_789);

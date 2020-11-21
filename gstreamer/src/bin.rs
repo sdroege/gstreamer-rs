@@ -6,20 +6,17 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Bin;
-use BinFlags;
-use Element;
-use LoggableError;
+use crate::Bin;
+use crate::BinFlags;
+use crate::Element;
+use crate::LoggableError;
 
-use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
-
-use gst_sys;
 
 use std::boxed::Box as Box_;
 use std::mem::transmute;
@@ -36,20 +33,24 @@ pub trait GstBinExtManual: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> ::Iterator<Element>;
-    fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element>;
-    fn iterate_elements(&self) -> ::Iterator<Element>;
-    fn iterate_recurse(&self) -> ::Iterator<Element>;
-    fn iterate_sinks(&self) -> ::Iterator<Element>;
-    fn iterate_sorted(&self) -> ::Iterator<Element>;
-    fn iterate_sources(&self) -> ::Iterator<Element>;
+    fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> crate::Iterator<Element>;
+    fn iterate_all_by_interface(&self, iface: glib::types::Type) -> crate::Iterator<Element>;
+    fn iterate_elements(&self) -> crate::Iterator<Element>;
+    fn iterate_recurse(&self) -> crate::Iterator<Element>;
+    fn iterate_sinks(&self) -> crate::Iterator<Element>;
+    fn iterate_sorted(&self) -> crate::Iterator<Element>;
+    fn iterate_sources(&self) -> crate::Iterator<Element>;
     fn get_children(&self) -> Vec<Element>;
 
-    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> GString;
-    fn debug_to_dot_file<Q: AsRef<path::Path>>(&self, details: ::DebugGraphDetails, file_name: Q);
+    fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString;
+    fn debug_to_dot_file<Q: AsRef<path::Path>>(
+        &self,
+        details: crate::DebugGraphDetails,
+        file_name: Q,
+    );
     fn debug_to_dot_file_with_ts<Q: AsRef<path::Path>>(
         &self,
-        details: ::DebugGraphDetails,
+        details: crate::DebugGraphDetails,
         file_name: Q,
     );
 
@@ -64,11 +65,8 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
-                glib_result_from_gboolean!(
-                    gst_sys::gst_bin_add(
-                        self.as_ref().to_glib_none().0,
-                        e.as_ref().to_glib_none().0
-                    ),
+                glib::glib_result_from_gboolean!(
+                    ffi::gst_bin_add(self.as_ref().to_glib_none().0, e.as_ref().to_glib_none().0),
                     "Failed to add elements"
                 )?;
             }
@@ -80,8 +78,8 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
-                glib_result_from_gboolean!(
-                    gst_sys::gst_bin_remove(
+                glib::glib_result_from_gboolean!(
+                    ffi::gst_bin_remove(
                         self.as_ref().to_glib_none().0,
                         e.as_ref().to_glib_none().0,
                     ),
@@ -112,108 +110,96 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> ::Iterator<Element> {
+    fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> crate::Iterator<Element> {
         unsafe {
-            from_glib_full(gst_sys::gst_bin_iterate_all_by_element_factory_name(
+            from_glib_full(ffi::gst_bin_iterate_all_by_element_factory_name(
                 self.as_ref().to_glib_none().0,
                 factory_name.to_glib_none().0,
             ))
         }
     }
 
-    fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element> {
+    fn iterate_all_by_interface(&self, iface: glib::types::Type) -> crate::Iterator<Element> {
         unsafe {
-            from_glib_full(gst_sys::gst_bin_iterate_all_by_interface(
+            from_glib_full(ffi::gst_bin_iterate_all_by_interface(
                 self.as_ref().to_glib_none().0,
                 iface.to_glib(),
             ))
         }
     }
 
-    fn iterate_elements(&self) -> ::Iterator<Element> {
+    fn iterate_elements(&self) -> crate::Iterator<Element> {
         unsafe {
-            from_glib_full(gst_sys::gst_bin_iterate_elements(
+            from_glib_full(ffi::gst_bin_iterate_elements(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn iterate_recurse(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(gst_sys::gst_bin_iterate_recurse(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn iterate_recurse(&self) -> crate::Iterator<Element> {
+        unsafe { from_glib_full(ffi::gst_bin_iterate_recurse(self.as_ref().to_glib_none().0)) }
     }
 
-    fn iterate_sinks(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(gst_sys::gst_bin_iterate_sinks(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn iterate_sinks(&self) -> crate::Iterator<Element> {
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sinks(self.as_ref().to_glib_none().0)) }
     }
 
-    fn iterate_sorted(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(gst_sys::gst_bin_iterate_sorted(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn iterate_sorted(&self) -> crate::Iterator<Element> {
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sorted(self.as_ref().to_glib_none().0)) }
     }
 
-    fn iterate_sources(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(gst_sys::gst_bin_iterate_sources(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn iterate_sources(&self) -> crate::Iterator<Element> {
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_children(&self) -> Vec<Element> {
         unsafe {
-            let bin: &gst_sys::GstBin = &*(self.as_ptr() as *const _);
-            let _guard = ::utils::MutexGuard::lock(&bin.element.object.lock);
+            let bin: &ffi::GstBin = &*(self.as_ptr() as *const _);
+            let _guard = crate::utils::MutexGuard::lock(&bin.element.object.lock);
             FromGlibPtrContainer::from_glib_none(bin.children)
         }
     }
 
-    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> GString {
-        ::debug_bin_to_dot_data(self, details)
+    fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString {
+        crate::debug_bin_to_dot_data(self, details)
     }
 
-    fn debug_to_dot_file<Q: AsRef<path::Path>>(&self, details: ::DebugGraphDetails, file_name: Q) {
-        ::debug_bin_to_dot_file(self, details, file_name)
+    fn debug_to_dot_file<Q: AsRef<path::Path>>(
+        &self,
+        details: crate::DebugGraphDetails,
+        file_name: Q,
+    ) {
+        crate::debug_bin_to_dot_file(self, details, file_name)
     }
 
     fn debug_to_dot_file_with_ts<Q: AsRef<path::Path>>(
         &self,
-        details: ::DebugGraphDetails,
+        details: crate::DebugGraphDetails,
         file_name: Q,
     ) {
-        ::debug_bin_to_dot_file_with_ts(self, details, file_name)
+        crate::debug_bin_to_dot_file_with_ts(self, details, file_name)
     }
 
     fn set_bin_flags(&self, flags: BinFlags) {
         unsafe {
-            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
-            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags |= flags.to_glib();
         }
     }
 
     fn unset_bin_flags(&self, flags: BinFlags) {
         unsafe {
-            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
-            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags &= !flags.to_glib();
         }
     }
 
     fn get_bin_flags(&self) -> BinFlags {
         unsafe {
-            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
-            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             from_glib((*ptr).flags)
         }
     }
@@ -223,9 +209,9 @@ unsafe extern "C" fn do_latency_trampoline<
     P,
     F: Fn(&P) -> Result<(), LoggableError> + Send + Sync + 'static,
 >(
-    this: *mut gst_sys::GstBin,
-    f: glib_sys::gpointer,
-) -> glib_sys::gboolean
+    this: *mut ffi::GstBin,
+    f: glib::ffi::gpointer,
+) -> glib::ffi::gboolean
 where
     P: IsA<Bin>,
 {
@@ -243,16 +229,16 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use prelude::*;
+    use crate::prelude::*;
 
     #[test]
     fn test_get_children() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
-        let bin = ::Bin::new(None);
-        bin.add(&::ElementFactory::make("identity", Some("identity0")).unwrap())
+        let bin = crate::Bin::new(None);
+        bin.add(&crate::ElementFactory::make("identity", Some("identity0")).unwrap())
             .unwrap();
-        bin.add(&::ElementFactory::make("identity", Some("identity1")).unwrap())
+        bin.add(&crate::ElementFactory::make("identity", Some("identity1")).unwrap())
             .unwrap();
 
         let mut child_names = bin

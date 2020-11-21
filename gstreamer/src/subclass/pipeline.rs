@@ -9,7 +9,7 @@
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use Pipeline;
+use crate::Pipeline;
 
 pub trait PipelineImpl: BinImpl {}
 
@@ -18,7 +18,7 @@ where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <::Bin as IsSubclassable<T>>::override_vfuncs(klass);
+        <crate::Bin as IsSubclassable<T>>::override_vfuncs(klass);
         let _klass = klass.as_mut();
         // Nothing to do here
     }

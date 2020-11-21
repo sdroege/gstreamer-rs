@@ -6,9 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
 use glib::translate::*;
-use gst_sys;
 
 pub trait GstParamSpecExt {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -25,9 +23,9 @@ pub trait GstParamSpecExt {
         name: &str,
         nick: &str,
         blurb: &str,
-        min: ::Fraction,
-        max: ::Fraction,
-        default: ::Fraction,
+        min: crate::Fraction,
+        max: crate::Fraction,
+        default: crate::Fraction,
         flags: glib::ParamFlags,
     ) -> Self;
 }
@@ -44,7 +42,7 @@ impl GstParamSpecExt for glib::ParamSpec {
     ) -> glib::ParamSpec {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_param_spec_array(
+            from_glib_full(ffi::gst_param_spec_array(
                 name.to_glib_none().0,
                 nick.to_glib_none().0,
                 blurb.to_glib_none().0,
@@ -58,14 +56,14 @@ impl GstParamSpecExt for glib::ParamSpec {
         name: &str,
         nick: &str,
         blurb: &str,
-        min: ::Fraction,
-        max: ::Fraction,
-        default: ::Fraction,
+        min: crate::Fraction,
+        max: crate::Fraction,
+        default: crate::Fraction,
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_sys::gst_param_spec_fraction(
+            from_glib_full(ffi::gst_param_spec_fraction(
                 name.to_glib_none().0,
                 nick.to_glib_none().0,
                 blurb.to_glib_none().0,
@@ -83,12 +81,11 @@ impl GstParamSpecExt for glib::ParamSpec {
 
 #[cfg(test)]
 mod tests {
-    use glib;
-    use prelude::*;
+    use crate::prelude::*;
 
     #[test]
     fn test_trait() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let _pspec = glib::ParamSpec::fraction(
             "foo",

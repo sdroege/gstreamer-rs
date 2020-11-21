@@ -6,18 +6,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use auto::functions::parse_bin_from_description;
-use glib;
+use crate::auto::functions::parse_bin_from_description;
 use glib::translate::*;
 use glib::Cast;
-use gst_sys;
 use std::ptr;
 
-use Bin;
-use Element;
-use Object;
-use ParseContext;
-use ParseFlags;
+use crate::Bin;
+use crate::Element;
+use crate::Object;
+use crate::ParseContext;
+use crate::ParseFlags;
 
 pub fn parse_bin_from_description_with_name(
     bin_description: &str,
@@ -29,7 +27,7 @@ pub fn parse_bin_from_description_with_name(
     if !bin_name.is_empty() {
         let obj = bin.clone().upcast::<Object>();
         unsafe {
-            gst_sys::gst_object_set_name(obj.to_glib_none().0, bin_name.to_glib_none().0);
+            ffi::gst_object_set_name(obj.to_glib_none().0, bin_name.to_glib_none().0);
         }
     }
     Ok(bin)
@@ -44,7 +42,7 @@ pub fn parse_bin_from_description_full(
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
-        let ret = gst_sys::gst_parse_bin_from_description_full(
+        let ret = ffi::gst_parse_bin_from_description_full(
             bin_description.to_glib_none().0,
             ghost_unlinked_pads.to_glib(),
             context.to_glib_none_mut().0,
@@ -72,7 +70,7 @@ pub fn parse_bin_from_description_with_name_full(
     if !bin_name.is_empty() {
         let obj = bin.clone().upcast::<Object>();
         unsafe {
-            gst_sys::gst_object_set_name(obj.to_glib_none().0, bin_name.to_glib_none().0);
+            ffi::gst_object_set_name(obj.to_glib_none().0, bin_name.to_glib_none().0);
         }
     }
     Ok(bin)
@@ -86,7 +84,7 @@ pub fn parse_launch_full(
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
-        let ret = gst_sys::gst_parse_launch_full(
+        let ret = ffi::gst_parse_launch_full(
             pipeline_description.to_glib_none().0,
             context.to_glib_none_mut().0,
             flags.to_glib(),
@@ -108,7 +106,7 @@ pub fn parse_launchv_full(
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
-        let ret = gst_sys::gst_parse_launchv_full(
+        let ret = ffi::gst_parse_launchv_full(
             argv.to_glib_none().0,
             context.to_glib_none_mut().0,
             flags.to_glib(),
@@ -147,7 +145,7 @@ pub fn calculate_linear_regression(
         let mut xbase = mem::MaybeUninit::uninit();
         let mut r_squared = mem::MaybeUninit::uninit();
 
-        let res = from_glib(gst_sys::gst_calculate_linear_regression(
+        let res = from_glib(ffi::gst_calculate_linear_regression(
             xy.as_ptr() as *const u64,
             temp.map(|temp| temp.as_mut_ptr() as *mut u64)
                 .unwrap_or(ptr::null_mut()),
@@ -174,13 +172,13 @@ pub fn calculate_linear_regression(
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<::PluginAPIFlags> {
+pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<crate::PluginAPIFlags> {
     assert_initialized_main_thread!();
     unsafe {
         use std::mem;
 
         let mut flags = mem::MaybeUninit::uninit();
-        let ret = from_glib(gst_sys::gst_type_is_plugin_api(
+        let ret = from_glib(ffi::gst_type_is_plugin_api(
             type_.to_glib(),
             flags.as_mut_ptr(),
         ));
@@ -196,12 +194,12 @@ pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<::PluginAPIFlags> 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use prelude::*;
+    use crate::prelude::*;
 
     #[cfg(feature = "v1_12")]
     #[test]
     fn test_calculate_linear_regression() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let values = [(0, 0), (1, 1), (2, 2), (3, 3)];
 
@@ -216,7 +214,7 @@ mod tests {
 
     #[test]
     fn test_parse_bin_from_description_with_name() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let bin =
             parse_bin_from_description_with_name("fakesrc ! fakesink", false, "all_fake").unwrap();

@@ -9,26 +9,23 @@
 use futures_channel::mpsc::{self, UnboundedReceiver};
 use futures_core::Stream;
 use futures_util::{future, StreamExt};
-use glib;
+use glib::ffi::{gboolean, gpointer};
 use glib::prelude::*;
 use glib::source::{Continue, Priority, SourceId};
 use glib::translate::*;
-use glib_sys;
-use glib_sys::{gboolean, gpointer};
-use gst_sys;
 use std::cell::RefCell;
 use std::mem::transmute;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use Bus;
-use BusSyncReply;
-use Message;
-use MessageType;
+use crate::Bus;
+use crate::BusSyncReply;
+use crate::Message;
+use crate::MessageType;
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
-    bus: *mut gst_sys::GstBus,
-    msg: *mut gst_sys::GstMessage,
+    bus: *mut ffi::GstBus,
+    msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
@@ -50,15 +47,15 @@ fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gp
 unsafe extern "C" fn trampoline_sync<
     F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
 >(
-    bus: *mut gst_sys::GstBus,
-    msg: *mut gst_sys::GstMessage,
+    bus: *mut ffi::GstBus,
+    msg: *mut ffi::GstMessage,
     func: gpointer,
-) -> gst_sys::GstBusSyncReply {
+) -> ffi::GstBusSyncReply {
     let f: &F = &*(func as *const F);
     let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib();
 
-    if res == gst_sys::GST_BUS_DROP {
-        gst_sys::gst_mini_object_unref(msg as *mut _);
+    if res == ffi::GST_BUS_DROP {
+        ffi::gst_mini_object_unref(msg as *mut _);
     }
 
     res
@@ -82,7 +79,7 @@ fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
 impl Bus {
     pub fn add_signal_watch_full(&self, priority: Priority) {
         unsafe {
-            gst_sys::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.to_glib());
+            ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.to_glib());
         }
     }
 
@@ -92,20 +89,20 @@ impl Bus {
     {
         skip_assert_initialized!();
         unsafe {
-            let source = gst_sys::gst_bus_create_watch(self.to_glib_none().0);
-            glib_sys::g_source_set_callback(
+            let source = ffi::gst_bus_create_watch(self.to_glib_none().0);
+            glib::ffi::g_source_set_callback(
                 source,
                 Some(transmute::<
                     _,
-                    unsafe extern "C" fn(glib_sys::gpointer) -> i32,
+                    unsafe extern "C" fn(glib::ffi::gpointer) -> i32,
                 >(trampoline_watch::<F> as *const ())),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );
-            glib_sys::g_source_set_priority(source, priority.to_glib());
+            glib::ffi::g_source_set_priority(source, priority.to_glib());
 
             if let Some(name) = name {
-                glib_sys::g_source_set_name(source, name.to_glib_none().0);
+                glib::ffi::g_source_set_name(source, name.to_glib_none().0);
             }
 
             from_glib_full(source)
@@ -117,16 +114,16 @@ impl Bus {
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
         unsafe {
-            let res = gst_sys::gst_bus_add_watch_full(
+            let res = ffi::gst_bus_add_watch_full(
                 self.to_glib_none().0,
-                glib_sys::G_PRIORITY_DEFAULT,
+                glib::ffi::G_PRIORITY_DEFAULT,
                 Some(trampoline_watch::<F>),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );
 
             if res == 0 {
-                Err(glib_bool_error!("Bus already has a watch"))
+                Err(glib::glib_bool_error!("Bus already has a watch"))
             } else {
                 Ok(from_glib(res))
             }
@@ -140,16 +137,16 @@ impl Bus {
         unsafe {
             assert!(glib::MainContext::ref_thread_default().is_owner());
 
-            let res = gst_sys::gst_bus_add_watch_full(
+            let res = ffi::gst_bus_add_watch_full(
                 self.to_glib_none().0,
-                glib_sys::G_PRIORITY_DEFAULT,
+                glib::ffi::G_PRIORITY_DEFAULT,
                 Some(trampoline_watch::<F>),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );
 
             if res == 0 {
-                Err(glib_bool_error!("Bus already has a watch"))
+                Err(glib::glib_bool_error!("Bus already has a watch"))
             } else {
                 Ok(from_glib(res))
             }
@@ -169,21 +166,21 @@ impl Bus {
 
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
-            if ::version() < (1, 16, 3, 0) {
-                if !gobject_sys::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib())
+            if crate::version() < (1, 16, 3, 0) {
+                if !glib::gobject_ffi::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib())
                     .is_null()
                 {
                     panic!("Bus sync handler can only be set once");
                 }
 
-                gobject_sys::g_object_set_qdata(
+                glib::gobject_ffi::g_object_set_qdata(
                     bus as *mut _,
                     SET_ONCE_QUARK.to_glib(),
                     1 as *mut _,
                 );
             }
 
-            gst_sys::gst_bus_set_sync_handler(
+            ffi::gst_bus_set_sync_handler(
                 bus,
                 Some(trampoline_sync::<F>),
                 into_raw_sync(func),
@@ -195,14 +192,14 @@ impl Bus {
     pub fn unset_sync_handler(&self) {
         // This is not thread-safe before 1.16.3, see
         // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
-        if ::version() < (1, 16, 3, 0) {
+        if crate::version() < (1, 16, 3, 0) {
             return;
         }
 
         unsafe {
             use std::ptr;
 
-            gst_sys::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None)
+            ffi::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None)
         }
     }
 
@@ -210,7 +207,7 @@ impl Bus {
         self.iter_timed(0.into())
     }
 
-    pub fn iter_timed(&self, timeout: ::ClockTime) -> Iter {
+    pub fn iter_timed(&self, timeout: crate::ClockTime) -> Iter {
         Iter { bus: self, timeout }
     }
 
@@ -223,7 +220,7 @@ impl Bus {
 
     pub fn iter_timed_filtered<'a>(
         &'a self,
-        timeout: ::ClockTime,
+        timeout: crate::ClockTime,
         msg_types: &'a [MessageType],
     ) -> impl Iterator<Item = Message> + 'a {
         self.iter_timed(timeout)
@@ -232,7 +229,7 @@ impl Bus {
 
     pub fn timed_pop_filtered(
         &self,
-        timeout: ::ClockTime,
+        timeout: crate::ClockTime,
         msg_types: &[MessageType],
     ) -> Option<Message> {
         loop {
@@ -271,7 +268,7 @@ impl Bus {
 #[derive(Debug)]
 pub struct Iter<'a> {
     bus: &'a Bus,
-    timeout: ::ClockTime,
+    timeout: crate::ClockTime,
 }
 
 impl<'a> Iterator for Iter<'a> {
@@ -330,7 +327,7 @@ mod tests {
 
     #[test]
     fn test_sync_handler() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let bus = Bus::new();
         let msgs = Arc::new(Mutex::new(Vec::new()));
@@ -340,31 +337,31 @@ mod tests {
             BusSyncReply::Pass
         });
 
-        bus.post(&::message::Eos::new()).unwrap();
+        bus.post(&crate::message::Eos::new()).unwrap();
 
         let msgs = msgs.lock().unwrap();
         assert_eq!(msgs.len(), 1);
         match msgs[0].view() {
-            ::MessageView::Eos(_) => (),
+            crate::MessageView::Eos(_) => (),
             _ => unreachable!(),
         }
     }
 
     #[test]
     fn test_bus_stream() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let bus = Bus::new();
         let bus_stream = bus.stream();
 
-        let eos_message = ::message::Eos::new();
+        let eos_message = crate::message::Eos::new();
         bus.post(&eos_message).unwrap();
 
         let bus_future = bus_stream.into_future();
         let (message, _) = futures_executor::block_on(bus_future);
 
         match message.unwrap().view() {
-            ::MessageView::Eos(_) => (),
+            crate::MessageView::Eos(_) => (),
             _ => unreachable!(),
         }
     }

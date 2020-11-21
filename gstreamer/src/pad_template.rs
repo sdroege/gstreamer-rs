@@ -6,20 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::PadTemplate;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+use crate::StaticPadTemplate;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
-use PadTemplate;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-use StaticPadTemplate;
-
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-use glib;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-use gst_sys;
 
 impl PadTemplate {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -31,12 +24,12 @@ impl PadTemplate {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_none(
-                gst_sys::gst_pad_template_new_from_static_pad_template_with_gtype(
+                ffi::gst_pad_template_new_from_static_pad_template_with_gtype(
                     mut_override(pad_template.to_glib_none().0),
                     pad_type.to_glib(),
                 ),
             )
-            .ok_or_else(|| glib_bool_error!("Failed to create PadTemplate"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to create PadTemplate"))
         }
     }
 }

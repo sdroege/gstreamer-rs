@@ -6,11 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-use Plugin;
-use PluginFlags;
-use Structure;
-use StructureRef;
+use crate::Plugin;
+use crate::PluginFlags;
+use crate::Structure;
+use crate::StructureRef;
 
 use glib::translate::*;
 use glib::IsA;
@@ -18,7 +17,7 @@ use glib::IsA;
 impl Plugin {
     pub fn get_cache_data(&self) -> Option<&StructureRef> {
         unsafe {
-            let cache_data = gst_sys::gst_plugin_get_cache_data(self.to_glib_none().0);
+            let cache_data = ffi::gst_plugin_get_cache_data(self.to_glib_none().0);
             if cache_data.is_null() {
                 None
             } else {
@@ -29,7 +28,7 @@ impl Plugin {
 
     pub fn set_cache_data(&self, cache_data: Structure) {
         unsafe {
-            gst_sys::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_ptr());
+            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_ptr());
         }
     }
 }
@@ -40,16 +39,16 @@ pub trait GstPluginExtManual: 'static {
     fn get_plugin_name(&self) -> glib::GString;
 }
 
-impl<O: IsA<::Plugin>> GstPluginExtManual for O {
+impl<O: IsA<crate::Plugin>> GstPluginExtManual for O {
     fn get_plugin_flags(&self) -> PluginFlags {
         unsafe {
-            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
-            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
+            let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
             from_glib((*ptr).flags)
         }
     }
 
     fn get_plugin_name(&self) -> glib::GString {
-        unsafe { from_glib_none(gst_sys::gst_plugin_get_name(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::gst_plugin_get_name(self.as_ref().to_glib_none().0)) }
     }
 }

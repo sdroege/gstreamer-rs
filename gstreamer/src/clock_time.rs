@@ -6,9 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
 use glib::translate::*;
-use gst_sys;
 use std::time::Duration;
 use std::{cmp, convert, fmt};
 
@@ -17,27 +15,27 @@ pub struct ClockTime(pub Option<u64>);
 
 impl ClockTime {
     pub fn hours(&self) -> Option<u64> {
-        (*self / ::SECOND / 60 / 60).0
+        (*self / crate::SECOND / 60 / 60).0
     }
 
     pub fn minutes(&self) -> Option<u64> {
-        (*self / ::SECOND / 60).0
+        (*self / crate::SECOND / 60).0
     }
 
     pub fn seconds(&self) -> Option<u64> {
-        (*self / ::SECOND).0
+        (*self / crate::SECOND).0
     }
 
     pub fn mseconds(&self) -> Option<u64> {
-        (*self / ::MSECOND).0
+        (*self / crate::MSECOND).0
     }
 
     pub fn useconds(&self) -> Option<u64> {
-        (*self / ::USECOND).0
+        (*self / crate::USECOND).0
     }
 
     pub fn nseconds(&self) -> Option<u64> {
-        (*self / ::NSECOND).0
+        (*self / crate::NSECOND).0
     }
 
     pub fn nanoseconds(&self) -> Option<u64> {
@@ -46,22 +44,22 @@ impl ClockTime {
 
     pub fn from_seconds(seconds: u64) -> ClockTime {
         skip_assert_initialized!();
-        seconds * ::SECOND
+        seconds * crate::SECOND
     }
 
     pub fn from_mseconds(mseconds: u64) -> ClockTime {
         skip_assert_initialized!();
-        mseconds * ::MSECOND
+        mseconds * crate::MSECOND
     }
 
     pub fn from_useconds(useconds: u64) -> ClockTime {
         skip_assert_initialized!();
-        useconds * ::USECOND
+        useconds * crate::USECOND
     }
 
     pub fn from_nseconds(nseconds: u64) -> ClockTime {
         skip_assert_initialized!();
-        nseconds * ::NSECOND
+        nseconds * crate::NSECOND
     }
 }
 
@@ -182,22 +180,22 @@ impl fmt::Display for ClockTime {
 
 #[doc(hidden)]
 impl ToGlib for ClockTime {
-    type GlibType = gst_sys::GstClockTime;
+    type GlibType = ffi::GstClockTime;
 
-    fn to_glib(&self) -> gst_sys::GstClockTime {
+    fn to_glib(&self) -> ffi::GstClockTime {
         match self.0 {
-            None => gst_sys::GST_CLOCK_TIME_NONE,
+            None => ffi::GST_CLOCK_TIME_NONE,
             Some(v) => v,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_sys::GstClockTime> for ClockTime {
-    fn from_glib(value: gst_sys::GstClockTime) -> Self {
+impl FromGlib<ffi::GstClockTime> for ClockTime {
+    fn from_glib(value: ffi::GstClockTime) -> Self {
         skip_assert_initialized!();
         match value {
-            gst_sys::GST_CLOCK_TIME_NONE => ClockTime(None),
+            ffi::GST_CLOCK_TIME_NONE => ClockTime(None),
             value => ClockTime(Some(value)),
         }
     }
@@ -239,7 +237,7 @@ impl From<Duration> for ClockTime {
         let nanos = d.as_nanos();
 
         if nanos > std::u64::MAX as u128 {
-            ::CLOCK_TIME_NONE
+            crate::CLOCK_TIME_NONE
         } else {
             ClockTime::from_nseconds(nanos as u64)
         }
@@ -254,7 +252,7 @@ impl convert::TryFrom<ClockTime> for Duration {
 
         t.nanoseconds()
             .map(Duration::from_nanos)
-            .ok_or_else(|| glib_bool_error!("Can't convert ClockTime::NONE to Duration"))
+            .ok_or_else(|| glib::glib_bool_error!("Can't convert ClockTime::NONE to Duration"))
     }
 }
 

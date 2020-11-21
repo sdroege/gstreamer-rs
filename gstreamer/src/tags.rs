@@ -13,19 +13,16 @@ use std::mem;
 
 use once_cell::sync::Lazy;
 
-use glib;
 use glib::translate::{
     from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr, ToGlibPtrMut,
 };
 use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue, Value};
 use glib::StaticType;
-use gobject_sys;
-use gst_sys;
 
-use Sample;
-use TagError;
-use TagMergeMode;
-use TagScope;
+use crate::Sample;
+use crate::TagError;
+use crate::TagMergeMode;
+use crate::TagScope;
 
 pub trait Tag<'a> {
     type TagType: FromValueOptional<'a> + SetValue + Send;
@@ -43,7 +40,7 @@ macro_rules! impl_tag(
         }
 
         pub(crate) static $rust_tag: Lazy<&'static str> = Lazy::new(||
-            unsafe { CStr::from_ptr(gst_sys::$gst_tag).to_str().unwrap() });
+            unsafe { CStr::from_ptr(ffi::$gst_tag).to_str().unwrap() });
     };
 );
 
@@ -76,7 +73,12 @@ impl_tag!(
     GST_TAG_ALBUM_ARTIST_SORTNAME
 );
 impl_tag!(Date, glib::Date, TAG_DATE, GST_TAG_DATE);
-impl_tag!(DateTime, ::auto::DateTime, TAG_DATE_TIME, GST_TAG_DATE_TIME);
+impl_tag!(
+    DateTime,
+    crate::auto::DateTime,
+    TAG_DATE_TIME,
+    GST_TAG_DATE_TIME
+);
 impl_tag!(Genre, &'a str, TAG_GENRE, GST_TAG_GENRE);
 impl_tag!(Comment, &'a str, TAG_COMMENT, GST_TAG_COMMENT);
 impl_tag!(
@@ -124,7 +126,7 @@ impl_tag!(Contact, &'a str, TAG_CONTACT, GST_TAG_CONTACT);
 impl_tag!(License, &'a str, TAG_LICENSE, GST_TAG_LICENSE);
 impl_tag!(LicenseUri, &'a str, TAG_LICENSE_URI, GST_TAG_LICENSE_URI);
 impl_tag!(Performer, &'a str, TAG_PERFORMER, GST_TAG_PERFORMER);
-impl_tag!(Duration, ::ClockTime, TAG_DURATION, GST_TAG_DURATION);
+impl_tag!(Duration, crate::ClockTime, TAG_DURATION, GST_TAG_DURATION);
 impl_tag!(Codec, &'a str, TAG_CODEC, GST_TAG_CODEC);
 impl_tag!(VideoCodec, &'a str, TAG_VIDEO_CODEC, GST_TAG_VIDEO_CODEC);
 impl_tag!(AudioCodec, &'a str, TAG_AUDIO_CODEC, GST_TAG_AUDIO_CODEC);
@@ -339,14 +341,14 @@ impl_tag!(
 );
 impl_tag!(PrivateData, Sample, TAG_PRIVATE_DATA, GST_TAG_PRIVATE_DATA);
 
-gst_define_mini_object_wrapper!(TagList, TagListRef, gst_sys::GstTagList, || {
-    gst_sys::gst_tag_list_get_type()
+gst_define_mini_object_wrapper!(TagList, TagListRef, ffi::GstTagList, || {
+    ffi::gst_tag_list_get_type()
 });
 
 impl TagList {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_tag_list_new_empty()) }
+        unsafe { from_glib_full(ffi::gst_tag_list_new_empty()) }
     }
 }
 
@@ -387,12 +389,12 @@ impl TagListRef {
         unsafe {
             let tag_name = tag_name.to_glib_none();
 
-            let tag_type: glib::Type = from_glib(gst_sys::gst_tag_get_type(tag_name.0));
+            let tag_type: glib::Type = from_glib(ffi::gst_tag_get_type(tag_name.0));
             if tag_type != value.type_() {
                 return Err(TagError::TypeMismatch);
             }
 
-            gst_sys::gst_tag_list_add_value(
+            ffi::gst_tag_list_add_value(
                 self.as_mut_ptr(),
                 mode.to_glib(),
                 tag_name.0,
@@ -415,7 +417,7 @@ impl TagListRef {
         unsafe {
             let mut value: mem::MaybeUninit<SendValue> = mem::MaybeUninit::zeroed();
 
-            let found: bool = from_glib(gst_sys::gst_tag_list_copy_value(
+            let found: bool = from_glib(ffi::gst_tag_list_copy_value(
                 (*value.as_mut_ptr()).to_glib_none_mut().0,
                 self.as_ptr(),
                 tag_name.to_glib_none().0,
@@ -430,12 +432,12 @@ impl TagListRef {
     }
 
     pub fn n_tags(&self) -> i32 {
-        unsafe { gst_sys::gst_tag_list_n_tags(self.as_ptr()) }
+        unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) }
     }
 
     pub fn nth_tag_name(&self, idx: u32) -> &str {
         unsafe {
-            CStr::from_ptr(gst_sys::gst_tag_list_nth_tag_name(self.as_ptr(), idx))
+            CStr::from_ptr(ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx))
                 .to_str()
                 .unwrap()
         }
@@ -448,11 +450,8 @@ impl TagListRef {
 
     pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
         unsafe {
-            let value = gst_sys::gst_tag_list_get_value_index(
-                self.as_ptr(),
-                tag_name.to_glib_none().0,
-                idx,
-            );
+            let value =
+                ffi::gst_tag_list_get_value_index(self.as_ptr(), tag_name.to_glib_none().0, idx);
 
             if value.is_null() {
                 return None;
@@ -467,7 +466,7 @@ impl TagListRef {
     }
 
     pub fn get_size_by_name(&self, tag_name: &str) -> u32 {
-        unsafe { gst_sys::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
+        unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
     }
 
     pub fn iter_tag<'a, T: Tag<'a>>(&'a self) -> TagIter<'a, T> {
@@ -487,12 +486,12 @@ impl TagListRef {
     }
 
     pub fn insert(&mut self, other: &TagListRef, mode: TagMergeMode) {
-        unsafe { gst_sys::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.to_glib()) }
+        unsafe { ffi::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.to_glib()) }
     }
 
     pub fn merge(&self, other: &TagListRef, mode: TagMergeMode) -> TagList {
         unsafe {
-            from_glib_full(gst_sys::gst_tag_list_merge(
+            from_glib_full(ffi::gst_tag_list_merge(
                 self.as_ptr(),
                 other.as_ptr(),
                 mode.to_glib(),
@@ -501,11 +500,11 @@ impl TagListRef {
     }
 
     pub fn get_scope(&self) -> TagScope {
-        unsafe { from_glib(gst_sys::gst_tag_list_get_scope(self.as_ptr())) }
+        unsafe { from_glib(ffi::gst_tag_list_get_scope(self.as_ptr())) }
     }
 
     pub fn set_scope(&mut self, scope: TagScope) {
-        unsafe { gst_sys::gst_tag_list_set_scope(self.as_mut_ptr(), scope.to_glib()) }
+        unsafe { ffi::gst_tag_list_set_scope(self.as_mut_ptr(), scope.to_glib()) }
     }
 }
 
@@ -537,21 +536,15 @@ impl fmt::Debug for TagListRef {
 
 impl fmt::Display for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let s = unsafe {
-            glib::GString::from_glib_full(gst_sys::gst_tag_list_to_string(self.as_ptr()))
-        };
+        let s =
+            unsafe { glib::GString::from_glib_full(ffi::gst_tag_list_to_string(self.as_ptr())) };
         f.write_str(&s)
     }
 }
 
 impl PartialEq for TagListRef {
     fn eq(&self, other: &TagListRef) -> bool {
-        unsafe {
-            from_glib(gst_sys::gst_tag_list_is_equal(
-                self.as_ptr(),
-                other.as_ptr(),
-            ))
-        }
+        unsafe { from_glib(ffi::gst_tag_list_is_equal(self.as_ptr(), other.as_ptr())) }
     }
 }
 
@@ -806,18 +799,18 @@ impl<'a> ExactSizeIterator for Iter<'a> {}
 
 pub fn tag_exists(name: &str) -> bool {
     skip_assert_initialized!();
-    unsafe { from_glib(gst_sys::gst_tag_exists(name.to_glib_none().0)) }
+    unsafe { from_glib(ffi::gst_tag_exists(name.to_glib_none().0)) }
 }
 
 pub fn tag_get_type(name: &str) -> glib::Type {
     skip_assert_initialized!();
-    unsafe { from_glib(gst_sys::gst_tag_get_type(name.to_glib_none().0)) }
+    unsafe { from_glib(ffi::gst_tag_get_type(name.to_glib_none().0)) }
 }
 
 pub fn tag_get_nick<'b>(name: &str) -> Option<&'b str> {
     skip_assert_initialized!();
     unsafe {
-        let ptr = gst_sys::gst_tag_get_nick(name.to_glib_none().0);
+        let ptr = ffi::gst_tag_get_nick(name.to_glib_none().0);
 
         if ptr.is_null() {
             None
@@ -830,7 +823,7 @@ pub fn tag_get_nick<'b>(name: &str) -> Option<&'b str> {
 pub fn tag_get_description<'b>(name: &str) -> Option<&'b str> {
     skip_assert_initialized!();
     unsafe {
-        let ptr = gst_sys::gst_tag_get_description(name.to_glib_none().0);
+        let ptr = ffi::gst_tag_get_description(name.to_glib_none().0);
 
         if ptr.is_null() {
             None
@@ -840,13 +833,13 @@ pub fn tag_get_description<'b>(name: &str) -> Option<&'b str> {
     }
 }
 
-pub fn tag_get_flag(name: &str) -> ::TagFlag {
+pub fn tag_get_flag(name: &str) -> crate::TagFlag {
     skip_assert_initialized!();
-    unsafe { from_glib(gst_sys::gst_tag_get_flag(name.to_glib_none().0)) }
+    unsafe { from_glib(ffi::gst_tag_get_flag(name.to_glib_none().0)) }
 }
 
 pub trait CustomTag<'a>: Tag<'a> {
-    const FLAG: ::TagFlag;
+    const FLAG: crate::TagFlag;
     const NICK: &'static str;
     const DESCRIPTION: &'static str;
 
@@ -860,14 +853,14 @@ pub fn register<T: for<'a> CustomTag<'a>>() {
     assert!(!tag_exists(T::tag_name()));
 
     unsafe extern "C" fn merge_func_trampoline<T: for<'a> CustomTag<'a>>(
-        dest: *mut gobject_sys::GValue,
-        src: *const gobject_sys::GValue,
+        dest: *mut glib::gobject_ffi::GValue,
+        src: *const glib::gobject_ffi::GValue,
     ) {
         *dest = T::merge_func(&*(src as *const Value)).into_raw();
     }
 
     unsafe {
-        gst_sys::gst_tag_register(
+        ffi::gst_tag_register(
             T::tag_name().to_glib_none().0,
             T::FLAG.to_glib(),
             T::TagType::static_type().to_glib(),
@@ -880,26 +873,26 @@ pub fn register<T: for<'a> CustomTag<'a>>() {
 
 pub fn merge_use_first(src: &Value) -> Value {
     skip_assert_initialized!();
-    assert_eq!(src.type_(), ::List::static_type());
+    assert_eq!(src.type_(), crate::List::static_type());
 
     unsafe {
         use glib::translate::Uninitialized;
 
         let mut res = Value::uninitialized();
-        gst_sys::gst_tag_merge_use_first(res.to_glib_none_mut().0, src.to_glib_none().0);
+        ffi::gst_tag_merge_use_first(res.to_glib_none_mut().0, src.to_glib_none().0);
         res
     }
 }
 
 pub fn merge_strings_with_comma(src: &Value) -> Value {
     skip_assert_initialized!();
-    assert_eq!(src.type_(), ::List::static_type());
+    assert_eq!(src.type_(), crate::List::static_type());
 
     unsafe {
         use glib::translate::Uninitialized;
 
         let mut res = Value::uninitialized();
-        gst_sys::gst_tag_merge_strings_with_comma(res.to_glib_none_mut().0, src.to_glib_none().0);
+        ffi::gst_tag_merge_strings_with_comma(res.to_glib_none_mut().0, src.to_glib_none().0);
         res
     }
 }
@@ -910,14 +903,14 @@ mod tests {
 
     #[test]
     fn test_add() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut tags = TagList::new();
         assert_eq!(tags.to_string(), "taglist;");
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append);
+            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append);
         }
         assert_eq!(
             tags.to_string(),
@@ -927,31 +920,34 @@ mod tests {
 
     #[test]
     fn test_get() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut tags = TagList::new();
         assert_eq!(tags.to_string(), "taglist;");
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(::SECOND * 120), TagMergeMode::Append);
+            tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append);
         }
 
         assert_eq!(tags.get::<Title>().unwrap().get(), Some("some title"));
-        assert_eq!(tags.get::<Duration>().unwrap().get_some(), (::SECOND * 120));
+        assert_eq!(
+            tags.get::<Duration>().unwrap().get_some(),
+            (crate::SECOND * 120)
+        );
         assert_eq!(
             tags.get_index::<Title>(0).unwrap().get(),
             Some("some title")
         );
         assert_eq!(
             tags.get_index::<Duration>(0).unwrap().get_some(),
-            (::SECOND * 120)
+            (crate::SECOND * 120)
         );
     }
 
     #[test]
     fn test_scope() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut tags = TagList::new();
         assert_eq!(tags.get_scope(), TagScope::Stream);
@@ -965,7 +961,7 @@ mod tests {
     #[test]
     #[allow(clippy::cognitive_complexity)]
     fn test_generic() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut tags = TagList::new();
         {
@@ -977,7 +973,7 @@ mod tests {
                 .add_generic(&TAG_TITLE, &"second title", TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_DURATION, &(::SECOND * 120), TagMergeMode::Append)
+                .add_generic(&TAG_DURATION, &(crate::SECOND * 120), TagMergeMode::Append)
                 .is_ok());
             assert!(tags
                 .add_generic(&TAG_TITLE, &"third title", TagMergeMode::Append)
@@ -1003,7 +999,7 @@ mod tests {
         );
         assert_eq!(
             tags.get_index_generic(&TAG_DURATION, 0).unwrap().get(),
-            Ok(Some(::SECOND * 120))
+            Ok(Some(crate::SECOND * 120))
         );
         assert_eq!(
             tags.get_index_generic(&TAG_TITLE, 2).unwrap().get(),
@@ -1049,7 +1045,7 @@ mod tests {
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
         let first_duration = tag_iter.next().unwrap();
-        assert_eq!(first_duration.get_some(), Ok(::SECOND * 120));
+        assert_eq!(first_duration.get_some(), Ok(crate::SECOND * 120));
         assert!(tag_iter.next().is_none());
 
         // Iter
@@ -1065,13 +1061,13 @@ mod tests {
 
         let (tag_name, tag_value) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
-        assert_eq!(tag_value.get_some(), Ok(::SECOND * 120));
+        assert_eq!(tag_value.get_some(), Ok(crate::SECOND * 120));
         assert!(tag_iter.next().is_none());
     }
 
     #[test]
     fn test_custom_tags() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         enum MyCustomTag {};
 
@@ -1083,7 +1079,7 @@ mod tests {
         }
 
         impl<'a> CustomTag<'a> for MyCustomTag {
-            const FLAG: ::TagFlag = ::TagFlag::Meta;
+            const FLAG: crate::TagFlag = crate::TagFlag::Meta;
             const NICK: &'static str = "my custom tag";
             const DESCRIPTION: &'static str = "My own custom tag type for testing";
 
@@ -1131,7 +1127,7 @@ mod tests {
 
     #[test]
     fn test_display() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         format!("{}", TagList::new());
     }

@@ -10,7 +10,7 @@ use std::cmp;
 use std::convert;
 use std::fmt;
 
-use DateTime;
+use crate::DateTime;
 
 impl DateTime {
     pub fn to_utc(&self) -> Result<DateTime, glib::BoolError> {
@@ -28,7 +28,7 @@ impl DateTime {
             self.to_g_date_time()
                 .and_then(|d| {
                     d.to_utc()
-                        .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
+                        .ok_or_else(|| glib::glib_bool_error!("Can't convert datetime to UTC"))
                 })
                 .and_then(|d| DateTime::from_g_date_time(&d))
         } else {
@@ -48,7 +48,7 @@ impl DateTime {
             .and_then(|d| d.to_g_date_time())
             .and_then(|d| {
                 d.to_utc()
-                    .ok_or_else(|| glib_bool_error!("Can't convert datetime to UTC"))
+                    .ok_or_else(|| glib::glib_bool_error!("Can't convert datetime to UTC"))
             })
             .and_then(|d| {
                 DateTime::new(
@@ -273,7 +273,7 @@ mod tests {
     #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_to_utc() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Hour offset
         let utc_date_time = DateTime::new(2f32, 2019, 8, 20, 20, 9, 42.123_456f64)
@@ -324,7 +324,7 @@ mod tests {
 
     #[test]
     fn test_partial_ord() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Different years
         assert!(
@@ -429,7 +429,7 @@ mod tests {
 
     #[test]
     fn test_eq() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         assert_eq!(
             DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64).unwrap(),

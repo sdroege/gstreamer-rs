@@ -9,13 +9,13 @@
 use super::prelude::*;
 use glib::subclass::prelude::*;
 
-use GhostPad;
+use crate::GhostPad;
 
 pub trait GhostPadImpl: PadImpl {}
 
 unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {
     fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <::Pad as IsSubclassable<T>>::override_vfuncs(klass);
+        <crate::Pad as IsSubclassable<T>>::override_vfuncs(klass);
         let _klass = klass.as_mut();
         // Nothing to do here
     }

@@ -62,7 +62,6 @@ pub mod prelude {
 }
 
 use self::prelude::*;
-use glib;
 use std::sync::atomic::AtomicBool;
 
 #[repr(C)]

@@ -171,7 +171,7 @@ final_type = true
 name = "Gst.BufferFlags"
 status = "generate"
     [[object.derive]]
-    name = "Serialize, Deserialize"
+    name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
 
     [[object.member]]
@@ -225,7 +225,7 @@ status = "generate"
 name = "Gst.Format"
 status = "generate"
     [[object.derive]]
-    name = "Serialize, Deserialize"
+    name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
@@ -247,7 +247,7 @@ status = "generate"
 name = "Gst.SegmentFlags"
 status = "generate"
     [[object.derive]]
-    name = "Serialize, Deserialize"
+    name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
     [[object.member]]
     name = "trickmode_forward_predicted"
@@ -282,7 +282,7 @@ manual_traits = ["TagSetterExtManual"]
 name = "Gst.TocScope"
 status = "generate"
     [[object.derive]]
-    name = "Serialize, Deserialize"
+    name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
@@ -291,7 +291,7 @@ status = "generate"
 name = "Gst.TocEntryType"
 status = "generate"
     [[object.derive]]
-    name = "Serialize, Deserialize"
+    name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
@@ -300,7 +300,7 @@ status = "generate"
 name = "Gst.TocLoopType"
 status = "generate"
     [[object.derive]]
-    name = "Serialize, Deserialize"
+    name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
@@ -411,7 +411,7 @@ ref_mode = "ref"
 name = "Gst.TagScope"
 status = "generate"
     [[object.derive]]
-    name = "Serialize, Deserialize"
+    name = "serde::Serialize, serde::Deserialize"
     cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"

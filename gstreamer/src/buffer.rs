@@ -15,35 +15,32 @@ use std::slice;
 use std::u64;
 use std::usize;
 
-use meta::*;
-use BufferCursor;
-use BufferFlags;
-use BufferRefCursor;
-use ClockTime;
-use Memory;
-use MemoryRef;
+use crate::meta::*;
+use crate::BufferCursor;
+use crate::BufferFlags;
+use crate::BufferRefCursor;
+use crate::ClockTime;
+use crate::Memory;
+use crate::MemoryRef;
 
-use glib;
 use glib::translate::{from_glib, from_glib_full, FromGlib, FromGlibPtrFull, ToGlib};
-use glib_sys;
-use gst_sys;
 
 pub enum Readable {}
 pub enum Writable {}
 
-gst_define_mini_object_wrapper!(Buffer, BufferRef, gst_sys::GstBuffer, || {
-    gst_sys::gst_buffer_get_type()
+gst_define_mini_object_wrapper!(Buffer, BufferRef, ffi::GstBuffer, || {
+    ffi::gst_buffer_get_type()
 });
 
 pub struct BufferMap<'a, T> {
     buffer: &'a BufferRef,
-    map_info: gst_sys::GstMapInfo,
+    map_info: ffi::GstMapInfo,
     phantom: PhantomData<T>,
 }
 
 pub struct MappedBuffer<T> {
     buffer: Option<Buffer>,
-    map_info: gst_sys::GstMapInfo,
+    map_info: ffi::GstMapInfo,
     phantom: PhantomData<T>,
 }
 
@@ -51,23 +48,23 @@ impl Buffer {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
 
-        unsafe { from_glib_full(gst_sys::gst_buffer_new()) }
+        unsafe { from_glib_full(ffi::gst_buffer_new()) }
     }
 
     pub fn with_size(size: usize) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            Option::<_>::from_glib_full(gst_sys::gst_buffer_new_allocate(
+            Option::<_>::from_glib_full(ffi::gst_buffer_new_allocate(
                 ptr::null_mut(),
                 size,
                 ptr::null_mut(),
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to allocate buffer"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate buffer"))
         }
     }
 
-    unsafe extern "C" fn drop_box<T>(vec: glib_sys::gpointer) {
+    unsafe extern "C" fn drop_box<T>(vec: glib::ffi::gpointer) {
         let slice: Box<T> = Box::from_raw(vec as *mut T);
         drop(slice);
     }
@@ -82,13 +79,13 @@ impl Buffer {
                 (slice.len(), slice.as_mut_ptr())
             };
             let user_data = Box::into_raw(b);
-            from_glib_full(gst_sys::gst_buffer_new_wrapped_full(
+            from_glib_full(ffi::gst_buffer_new_wrapped_full(
                 0,
-                data as glib_sys::gpointer,
+                data as glib::ffi::gpointer,
                 size,
                 0,
                 size,
-                user_data as glib_sys::gpointer,
+                user_data as glib::ffi::gpointer,
                 Some(Self::drop_box::<T>),
             ))
         }
@@ -104,13 +101,13 @@ impl Buffer {
                 (slice.len(), slice.as_ptr())
             };
             let user_data = Box::into_raw(b);
-            from_glib_full(gst_sys::gst_buffer_new_wrapped_full(
-                gst_sys::GST_MEMORY_FLAG_READONLY,
-                data as glib_sys::gpointer,
+            from_glib_full(ffi::gst_buffer_new_wrapped_full(
+                ffi::GST_MEMORY_FLAG_READONLY,
+                data as glib::ffi::gpointer,
                 size,
                 0,
                 size,
-                user_data as glib_sys::gpointer,
+                user_data as glib::ffi::gpointer,
                 Some(Self::drop_box::<T>),
             ))
         }
@@ -119,10 +116,10 @@ impl Buffer {
     pub fn into_mapped_buffer_readable(self) -> Result<MappedBuffer<Readable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_sys::gst_buffer_map(
+            let res: bool = from_glib(ffi::gst_buffer_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READ,
+                ffi::GST_MAP_READ,
             ));
             if res {
                 Ok(MappedBuffer {
@@ -139,10 +136,10 @@ impl Buffer {
     pub fn into_mapped_buffer_writable(self) -> Result<MappedBuffer<Writable>, Self> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_sys::gst_buffer_map(
+            let res: bool = from_glib(ffi::gst_buffer_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READWRITE,
+                ffi::GST_MAP_READWRITE,
             ));
             if res {
                 Ok(MappedBuffer {
@@ -167,7 +164,7 @@ impl Buffer {
     pub fn append(&mut self, other: Self) {
         skip_assert_initialized!();
         unsafe {
-            let ptr = gst_sys::gst_buffer_append(self.as_mut_ptr(), other.into_ptr());
+            let ptr = ffi::gst_buffer_append(self.as_mut_ptr(), other.into_ptr());
             self.replace_ptr(ptr);
         }
     }
@@ -183,19 +180,16 @@ impl BufferRef {
     pub fn map_readable(&self) -> Result<BufferMap<Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res = gst_sys::gst_buffer_map(
-                self.as_mut_ptr(),
-                map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READ,
-            );
-            if res == glib_sys::GTRUE {
+            let res =
+                ffi::gst_buffer_map(self.as_mut_ptr(), map_info.as_mut_ptr(), ffi::GST_MAP_READ);
+            if res == glib::ffi::GTRUE {
                 Ok(BufferMap {
                     buffer: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib_bool_error!("Failed to map buffer readable"))
+                Err(glib::glib_bool_error!("Failed to map buffer readable"))
             }
         }
     }
@@ -203,52 +197,52 @@ impl BufferRef {
     pub fn map_writable(&mut self) -> Result<BufferMap<Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::zeroed();
-            let res = gst_sys::gst_buffer_map(
+            let res = ffi::gst_buffer_map(
                 self.as_mut_ptr(),
                 map_info.as_mut_ptr(),
-                gst_sys::GST_MAP_READWRITE,
+                ffi::GST_MAP_READWRITE,
             );
-            if res == glib_sys::GTRUE {
+            if res == glib::ffi::GTRUE {
                 Ok(BufferMap {
                     buffer: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib_bool_error!("Failed to map buffer writable"))
+                Err(glib::glib_bool_error!("Failed to map buffer writable"))
             }
         }
     }
 
     pub fn copy_region(
         &self,
-        flags: ::BufferCopyFlags,
+        flags: crate::BufferCopyFlags,
         offset: usize,
         size: Option<usize>,
     ) -> Result<Buffer, glib::BoolError> {
         let size_real = size.unwrap_or(usize::MAX);
         unsafe {
-            Option::<_>::from_glib_full(gst_sys::gst_buffer_copy_region(
+            Option::<_>::from_glib_full(ffi::gst_buffer_copy_region(
                 self.as_mut_ptr(),
                 flags.to_glib(),
                 offset,
                 size_real,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to copy region of buffer"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to copy region of buffer"))
         }
     }
 
     pub fn copy_into(
         &self,
         dest: &mut BufferRef,
-        flags: ::BufferCopyFlags,
+        flags: crate::BufferCopyFlags,
         offset: usize,
         size: Option<usize>,
     ) -> Result<(), glib::BoolError> {
         let size_real = size.unwrap_or(usize::MAX);
         unsafe {
-            glib_result_from_gboolean!(
-                gst_sys::gst_buffer_copy_into(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_buffer_copy_into(
                     dest.as_mut_ptr(),
                     self.as_mut_ptr(),
                     flags.to_glib(),
@@ -268,10 +262,10 @@ impl BufferRef {
 
         let copied = unsafe {
             let src = slice.as_ptr();
-            gst_sys::gst_buffer_fill(
+            ffi::gst_buffer_fill(
                 self.as_mut_ptr(),
                 offset,
-                src as glib_sys::gconstpointer,
+                src as glib::ffi::gconstpointer,
                 size,
             )
         };
@@ -291,7 +285,7 @@ impl BufferRef {
 
         let copied = unsafe {
             let dest = slice.as_mut_ptr();
-            gst_sys::gst_buffer_extract(self.as_mut_ptr(), offset, dest as glib_sys::gpointer, size)
+            ffi::gst_buffer_extract(self.as_mut_ptr(), offset, dest as glib::ffi::gpointer, size)
         };
 
         if copied == size {
@@ -303,19 +297,19 @@ impl BufferRef {
 
     pub fn copy_deep(&self) -> Result<Buffer, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_full(gst_sys::gst_buffer_copy_deep(self.as_ptr()))
-                .ok_or_else(|| glib_bool_error!("Failed to deep copy buffer"))
+            Option::<_>::from_glib_full(ffi::gst_buffer_copy_deep(self.as_ptr()))
+                .ok_or_else(|| glib::glib_bool_error!("Failed to deep copy buffer"))
         }
     }
 
     pub fn get_size(&self) -> usize {
-        unsafe { gst_sys::gst_buffer_get_size(self.as_mut_ptr()) }
+        unsafe { ffi::gst_buffer_get_size(self.as_mut_ptr()) }
     }
 
     pub fn get_maxsize(&self) -> usize {
         unsafe {
             let mut maxsize = mem::MaybeUninit::uninit();
-            gst_sys::gst_buffer_get_sizes_range(
+            ffi::gst_buffer_get_sizes_range(
                 self.as_mut_ptr(),
                 0,
                 -1,
@@ -331,7 +325,7 @@ impl BufferRef {
         assert!(self.get_maxsize() >= size);
 
         unsafe {
-            gst_sys::gst_buffer_set_size(self.as_mut_ptr(), size as isize);
+            ffi::gst_buffer_set_size(self.as_mut_ptr(), size as isize);
         }
     }
 
@@ -398,7 +392,7 @@ impl BufferRef {
 
     pub fn get_meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
         unsafe {
-            let meta = gst_sys::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
             if meta.is_null() {
                 None
             } else {
@@ -407,9 +401,9 @@ impl BufferRef {
         }
     }
 
-    pub fn get_meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, ::meta::Standalone>> {
+    pub fn get_meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
         unsafe {
-            let meta = gst_sys::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
             if meta.is_null() {
                 None
             } else {
@@ -428,10 +422,10 @@ impl BufferRef {
 
     pub fn foreach_meta<F: FnMut(MetaRef<Meta>) -> bool>(&self, func: F) -> bool {
         unsafe extern "C" fn trampoline<F: FnMut(MetaRef<Meta>) -> bool>(
-            buffer: *mut gst_sys::GstBuffer,
-            meta: *mut *mut gst_sys::GstMeta,
-            user_data: glib_sys::gpointer,
-        ) -> glib_sys::gboolean {
+            buffer: *mut ffi::GstBuffer,
+            meta: *mut *mut ffi::GstMeta,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
             let func = user_data as *const _ as usize as *mut F;
             let res = (*func)(Meta::from_ptr(BufferRef::from_ptr(buffer), *meta));
 
@@ -441,7 +435,7 @@ impl BufferRef {
         unsafe {
             let func_ptr: &F = &func;
 
-            from_glib(gst_sys::gst_buffer_foreach_meta(
+            from_glib(ffi::gst_buffer_foreach_meta(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
                 func_ptr as *const _ as usize as *mut _,
@@ -449,17 +443,19 @@ impl BufferRef {
         }
     }
 
-    pub fn foreach_meta_mut<F: FnMut(MetaRefMut<Meta, ::meta::Iterated>) -> Result<bool, bool>>(
+    pub fn foreach_meta_mut<
+        F: FnMut(MetaRefMut<Meta, crate::meta::Iterated>) -> Result<bool, bool>,
+    >(
         &mut self,
         func: F,
     ) -> bool {
         unsafe extern "C" fn trampoline<
-            F: FnMut(MetaRefMut<Meta, ::meta::Iterated>) -> Result<bool, bool>,
+            F: FnMut(MetaRefMut<Meta, crate::meta::Iterated>) -> Result<bool, bool>,
         >(
-            buffer: *mut gst_sys::GstBuffer,
-            meta: *mut *mut gst_sys::GstMeta,
-            user_data: glib_sys::gpointer,
-        ) -> glib_sys::gboolean {
+            buffer: *mut ffi::GstBuffer,
+            meta: *mut *mut ffi::GstMeta,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
             let func = user_data as *const _ as usize as *mut F;
             let res = (*func)(Meta::from_mut_ptr(BufferRef::from_mut_ptr(buffer), *meta));
 
@@ -475,7 +471,7 @@ impl BufferRef {
         unsafe {
             let func_ptr: &F = &func;
 
-            from_glib(gst_sys::gst_buffer_foreach_meta(
+            from_glib(ffi::gst_buffer_foreach_meta(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
                 func_ptr as *const _ as usize as *mut _,
@@ -484,7 +480,7 @@ impl BufferRef {
     }
 
     pub fn append_memory(&mut self, mem: Memory) {
-        unsafe { gst_sys::gst_buffer_append_memory(self.as_mut_ptr(), mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_append_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
 
     pub fn find_memory(&self, offset: usize, size: Option<usize>) -> Option<(u32, u32, usize)> {
@@ -493,7 +489,7 @@ impl BufferRef {
             let mut length = mem::MaybeUninit::uninit();
             let mut skip = mem::MaybeUninit::uninit();
 
-            let res = from_glib(gst_sys::gst_buffer_find_memory(
+            let res = from_glib(ffi::gst_buffer_find_memory(
                 self.as_mut_ptr(),
                 offset,
                 size.unwrap_or(usize::MAX),
@@ -512,7 +508,7 @@ impl BufferRef {
 
     pub fn get_all_memory(&self) -> Option<Memory> {
         unsafe {
-            let res = gst_sys::gst_buffer_get_all_memory(self.as_mut_ptr());
+            let res = ffi::gst_buffer_get_all_memory(self.as_mut_ptr());
             if res.is_null() {
                 None
             } else {
@@ -522,7 +518,7 @@ impl BufferRef {
     }
 
     pub fn get_max_memory() -> u32 {
-        unsafe { gst_sys::gst_buffer_get_max_memory() }
+        unsafe { ffi::gst_buffer_get_max_memory() }
     }
 
     pub fn get_memory(&self, idx: u32) -> Option<Memory> {
@@ -530,7 +526,7 @@ impl BufferRef {
             None
         } else {
             unsafe {
-                let res = gst_sys::gst_buffer_get_memory(self.as_mut_ptr(), idx);
+                let res = ffi::gst_buffer_get_memory(self.as_mut_ptr(), idx);
                 if res.is_null() {
                     None
                 } else {
@@ -543,7 +539,7 @@ impl BufferRef {
     pub fn get_memory_range(&self, idx: u32, length: Option<u32>) -> Option<Memory> {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {
-            let res = gst_sys::gst_buffer_get_memory_range(
+            let res = ffi::gst_buffer_get_memory_range(
                 self.as_mut_ptr(),
                 idx,
                 match length {
@@ -561,7 +557,7 @@ impl BufferRef {
 
     pub fn insert_memory(&mut self, idx: Option<u32>, mem: Memory) {
         unsafe {
-            gst_sys::gst_buffer_insert_memory(
+            ffi::gst_buffer_insert_memory(
                 self.as_mut_ptr(),
                 match idx {
                     Some(val) => val as i32,
@@ -573,16 +569,12 @@ impl BufferRef {
     }
 
     pub fn is_all_memory_writable(&self) -> bool {
-        unsafe {
-            from_glib(gst_sys::gst_buffer_is_all_memory_writable(
-                self.as_mut_ptr(),
-            ))
-        }
+        unsafe { from_glib(ffi::gst_buffer_is_all_memory_writable(self.as_mut_ptr())) }
     }
 
     pub fn is_memory_range_writable(&self, idx: u32, length: Option<u16>) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_buffer_is_memory_range_writable(
+            from_glib(ffi::gst_buffer_is_memory_range_writable(
                 self.as_mut_ptr(),
                 idx,
                 match length {
@@ -594,22 +586,22 @@ impl BufferRef {
     }
 
     pub fn n_memory(&self) -> u32 {
-        unsafe { gst_sys::gst_buffer_n_memory(self.as_ptr() as *mut _) }
+        unsafe { ffi::gst_buffer_n_memory(self.as_ptr() as *mut _) }
     }
 
     pub fn peek_memory(&self, idx: u32) -> &MemoryRef {
         assert!(idx < self.n_memory());
-        unsafe { MemoryRef::from_ptr(gst_sys::gst_buffer_peek_memory(self.as_mut_ptr(), idx)) }
+        unsafe { MemoryRef::from_ptr(ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx)) }
     }
 
     pub fn peek_memory_mut(&mut self, idx: u32) -> Result<&mut MemoryRef, glib::BoolError> {
         assert!(idx < self.n_memory());
         unsafe {
-            let mem = gst_sys::gst_buffer_peek_memory(self.as_mut_ptr(), idx);
-            if gst_sys::gst_mini_object_is_writable(mem as *mut _) == glib_sys::GFALSE {
-                Err(glib_bool_error!("Memory not writable"))
+            let mem = ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx);
+            if ffi::gst_mini_object_is_writable(mem as *mut _) == glib::ffi::GFALSE {
+                Err(glib::glib_bool_error!("Memory not writable"))
             } else {
-                Ok(MemoryRef::from_mut_ptr(gst_sys::gst_buffer_peek_memory(
+                Ok(MemoryRef::from_mut_ptr(ffi::gst_buffer_peek_memory(
                     self.as_mut_ptr(),
                     idx,
                 )))
@@ -618,22 +610,22 @@ impl BufferRef {
     }
 
     pub fn prepend_memory(&mut self, mem: Memory) {
-        unsafe { gst_sys::gst_buffer_prepend_memory(self.as_mut_ptr(), mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_prepend_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
 
     pub fn remove_all_memory(&mut self) {
-        unsafe { gst_sys::gst_buffer_remove_all_memory(self.as_mut_ptr()) }
+        unsafe { ffi::gst_buffer_remove_all_memory(self.as_mut_ptr()) }
     }
 
     pub fn remove_memory(&mut self, idx: u32) {
         assert!(idx < self.n_memory());
-        unsafe { gst_sys::gst_buffer_remove_memory(self.as_mut_ptr(), idx) }
+        unsafe { ffi::gst_buffer_remove_memory(self.as_mut_ptr(), idx) }
     }
 
     pub fn remove_memory_range(&mut self, idx: u32, length: Option<u32>) {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {
-            gst_sys::gst_buffer_remove_memory_range(
+            ffi::gst_buffer_remove_memory_range(
                 self.as_mut_ptr(),
                 idx,
                 match length {
@@ -645,18 +637,18 @@ impl BufferRef {
     }
 
     pub fn replace_all_memory(&mut self, mem: Memory) {
-        unsafe { gst_sys::gst_buffer_replace_all_memory(self.as_mut_ptr(), mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_replace_all_memory(self.as_mut_ptr(), mem.into_ptr()) }
     }
 
     pub fn replace_memory(&mut self, idx: u32, mem: Memory) {
         assert!(idx < self.n_memory());
-        unsafe { gst_sys::gst_buffer_replace_memory(self.as_mut_ptr(), idx, mem.into_ptr()) }
+        unsafe { ffi::gst_buffer_replace_memory(self.as_mut_ptr(), idx, mem.into_ptr()) }
     }
 
     pub fn replace_memory_range(&mut self, idx: u32, length: Option<u32>, mem: Memory) {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {
-            gst_sys::gst_buffer_replace_memory_range(
+            ffi::gst_buffer_replace_memory_range(
                 self.as_mut_ptr(),
                 idx,
                 match length {
@@ -674,7 +666,7 @@ impl BufferRef {
 
     pub fn iter_memories_mut(&mut self) -> Result<IterMut, glib::BoolError> {
         if !self.is_all_memory_writable() {
-            Err(glib_bool_error!("Not all memory are writable"))
+            Err(glib::glib_bool_error!("Not all memory are writable"))
         } else {
             Ok(IterMut::new(self))
         }
@@ -699,7 +691,7 @@ macro_rules! define_meta_iter(
     ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
-        state: glib_sys::gpointer,
+        state: glib::ffi::gpointer,
         meta_api: glib::Type,
         items: PhantomData<$mtyp>,
     }
@@ -737,7 +729,7 @@ macro_rules! define_meta_iter(
         fn next(&mut self) -> Option<Self::Item> {
             loop {
                 unsafe {
-                    let meta = gst_sys::gst_buffer_iterate_meta(self.buffer.as_mut_ptr(), &mut self.state);
+                    let meta = ffi::gst_buffer_iterate_meta(self.buffer.as_mut_ptr(), &mut self.state);
 
                     if meta.is_null() {
                         return None;
@@ -758,14 +750,14 @@ define_meta_iter!(
     MetaIter,
     &'a BufferRef,
     MetaRef<'a, T>,
-    |buffer: *const gst_sys::GstBuffer| BufferRef::from_ptr(buffer),
+    |buffer: *const ffi::GstBuffer| BufferRef::from_ptr(buffer),
     |buffer, meta| T::from_ptr(buffer, meta as *const <T as MetaAPI>::GstType)
 );
 define_meta_iter!(
     MetaIterMut,
     &'a mut BufferRef,
-    MetaRefMut<'a, T, ::meta::Iterated>,
-    |buffer: *mut gst_sys::GstBuffer| BufferRef::from_mut_ptr(buffer),
+    MetaRefMut<'a, T, crate::meta::Iterated>,
+    |buffer: *mut ffi::GstBuffer| BufferRef::from_mut_ptr(buffer),
     |buffer: &'a mut BufferRef, meta| T::from_mut_ptr(buffer, meta as *mut <T as MetaAPI>::GstType)
 );
 
@@ -852,11 +844,11 @@ define_iter!(
     &'a BufferRef,
     &'a MemoryRef,
     |buffer: &BufferRef, idx| {
-        let ptr = gst_sys::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
+        let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
         if ptr.is_null() {
             None
         } else {
-            Some(MemoryRef::from_ptr(ptr as *const gst_sys::GstMemory))
+            Some(MemoryRef::from_ptr(ptr as *const ffi::GstMemory))
         }
     }
 );
@@ -866,11 +858,11 @@ define_iter!(
     &'a mut BufferRef,
     &'a mut MemoryRef,
     |buffer: &mut BufferRef, idx| {
-        let ptr = gst_sys::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
+        let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
         if ptr.is_null() {
             None
         } else {
-            Some(MemoryRef::from_mut_ptr(ptr as *mut gst_sys::GstMemory))
+            Some(MemoryRef::from_mut_ptr(ptr as *mut ffi::GstMemory))
         }
     }
 );
@@ -922,7 +914,7 @@ impl fmt::Debug for BufferRef {
             .field(
                 "metas",
                 &DebugIter(RefCell::new(
-                    self.iter_meta::<::Meta>().map(|m| m.get_api()),
+                    self.iter_meta::<crate::Meta>().map(|m| m.get_api()),
                 )),
             )
             .finish()
@@ -1012,7 +1004,7 @@ impl<'a, T> Eq for BufferMap<'a, T> {}
 impl<'a, T> Drop for BufferMap<'a, T> {
     fn drop(&mut self) {
         unsafe {
-            gst_sys::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
         }
     }
 }
@@ -1036,7 +1028,7 @@ impl<T> MappedBuffer<T> {
     pub fn into_buffer(mut self) -> Buffer {
         let buffer = self.buffer.take().unwrap();
         unsafe {
-            gst_sys::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
         }
 
         buffer
@@ -1079,7 +1071,7 @@ impl<T> Drop for MappedBuffer<T> {
     fn drop(&mut self) {
         if let Some(ref buffer) = self.buffer {
             unsafe {
-                gst_sys::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
+                ffi::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
             }
         }
     }
@@ -1104,10 +1096,10 @@ impl<T> Eq for MappedBuffer<T> {}
 unsafe impl<T> Send for MappedBuffer<T> {}
 unsafe impl<T> Sync for MappedBuffer<T> {}
 
-pub const BUFFER_COPY_METADATA: ::BufferCopyFlags =
-    ::BufferCopyFlags::from_bits_truncate(gst_sys::GST_BUFFER_COPY_METADATA);
-pub const BUFFER_COPY_ALL: ::BufferCopyFlags =
-    ::BufferCopyFlags::from_bits_truncate(gst_sys::GST_BUFFER_COPY_ALL);
+pub const BUFFER_COPY_METADATA: crate::BufferCopyFlags =
+    crate::BufferCopyFlags::from_bits_truncate(ffi::GST_BUFFER_COPY_METADATA);
+pub const BUFFER_COPY_ALL: crate::BufferCopyFlags =
+    crate::BufferCopyFlags::from_bits_truncate(ffi::GST_BUFFER_COPY_ALL);
 
 #[cfg(test)]
 mod tests {
@@ -1115,7 +1107,7 @@ mod tests {
 
     #[test]
     fn test_fields() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::new();
 
@@ -1136,7 +1128,7 @@ mod tests {
 
     #[test]
     fn test_writability() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {
@@ -1184,16 +1176,16 @@ mod tests {
     #[test]
     #[allow(clippy::cognitive_complexity)]
     fn test_memories() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::new();
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 5]));
-            buffer.append_memory(::Memory::from_mut_slice(vec![0; 10]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 5]));
+            buffer.append_memory(crate::Memory::from_mut_slice(vec![0; 10]));
         }
 
         assert!(buffer.is_all_memory_writable());
@@ -1295,78 +1287,84 @@ mod tests {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[test]
     fn test_meta_foreach() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::new();
         {
             let buffer = buffer.get_mut().unwrap();
-            ::ReferenceTimestampMeta::add(
+            crate::ReferenceTimestampMeta::add(
                 buffer,
-                &::Caps::builder("foo/bar").build(),
-                ::ClockTime::from(0),
-                ::CLOCK_TIME_NONE,
+                &crate::Caps::builder("foo/bar").build(),
+                crate::ClockTime::from(0),
+                crate::CLOCK_TIME_NONE,
             );
-            ::ReferenceTimestampMeta::add(
+            crate::ReferenceTimestampMeta::add(
                 buffer,
-                &::Caps::builder("foo/bar").build(),
-                ::SECOND,
-                ::CLOCK_TIME_NONE,
+                &crate::Caps::builder("foo/bar").build(),
+                crate::SECOND,
+                crate::CLOCK_TIME_NONE,
             );
         }
 
         let mut res = vec![];
         buffer.foreach_meta(|meta| {
-            let meta = meta.downcast_ref::<::ReferenceTimestampMeta>().unwrap();
+            let meta = meta
+                .downcast_ref::<crate::ReferenceTimestampMeta>()
+                .unwrap();
             res.push(meta.get_timestamp());
             true
         });
 
-        assert_eq!(&[::ClockTime::from(0), ::SECOND][..], &res[..]);
+        assert_eq!(&[crate::ClockTime::from(0), crate::SECOND][..], &res[..]);
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[test]
     fn test_meta_foreach_mut() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut buffer = Buffer::new();
         {
             let buffer = buffer.get_mut().unwrap();
-            ::ReferenceTimestampMeta::add(
+            crate::ReferenceTimestampMeta::add(
                 buffer,
-                &::Caps::builder("foo/bar").build(),
-                ::ClockTime::from(0),
-                ::CLOCK_TIME_NONE,
+                &crate::Caps::builder("foo/bar").build(),
+                crate::ClockTime::from(0),
+                crate::CLOCK_TIME_NONE,
             );
-            ::ReferenceTimestampMeta::add(
+            crate::ReferenceTimestampMeta::add(
                 buffer,
-                &::Caps::builder("foo/bar").build(),
-                ::SECOND,
-                ::CLOCK_TIME_NONE,
+                &crate::Caps::builder("foo/bar").build(),
+                crate::SECOND,
+                crate::CLOCK_TIME_NONE,
             );
         }
 
         let mut res = vec![];
         buffer.get_mut().unwrap().foreach_meta_mut(|mut meta| {
-            let meta = meta.downcast_ref::<::ReferenceTimestampMeta>().unwrap();
+            let meta = meta
+                .downcast_ref::<crate::ReferenceTimestampMeta>()
+                .unwrap();
             res.push(meta.get_timestamp());
-            if meta.get_timestamp() == ::SECOND {
+            if meta.get_timestamp() == crate::SECOND {
                 Ok(false)
             } else {
                 Ok(true)
             }
         });
 
-        assert_eq!(&[::ClockTime::from(0), ::SECOND][..], &res[..]);
+        assert_eq!(&[crate::ClockTime::from(0), crate::SECOND][..], &res[..]);
 
         let mut res = vec![];
         buffer.foreach_meta(|meta| {
-            let meta = meta.downcast_ref::<::ReferenceTimestampMeta>().unwrap();
+            let meta = meta
+                .downcast_ref::<crate::ReferenceTimestampMeta>()
+                .unwrap();
             res.push(meta.get_timestamp());
             true
         });
 
-        assert_eq!(&[::ClockTime::from(0)][..], &res[..]);
+        assert_eq!(&[crate::ClockTime::from(0)][..], &res[..]);
     }
 }

@@ -6,9 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-use structure::*;
-use GenericFormattedValue;
+use crate::structure::*;
+use crate::GenericFormattedValue;
 
 use std::cmp;
 use std::ffi::CStr;
@@ -18,7 +17,6 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
-use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
@@ -26,7 +24,7 @@ use glib::value::ToSendValue;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::translate::FromGlibPtrContainer;
 
-use EventType;
+use crate::EventType;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Seqnum(pub(crate) NonZeroU32);
@@ -34,7 +32,7 @@ pub struct Seqnum(pub(crate) NonZeroU32);
 impl Seqnum {
     pub fn next() -> Self {
         unsafe {
-            let v = gst_sys::gst_util_seqnum_next();
+            let v = ffi::gst_util_seqnum_next();
             if v == 0 {
                 Seqnum::next()
             } else {
@@ -61,7 +59,7 @@ impl cmp::PartialOrd for Seqnum {
 impl cmp::Ord for Seqnum {
     fn cmp(&self, other: &Seqnum) -> cmp::Ordering {
         unsafe {
-            let ret = gst_sys::gst_util_seqnum_compare(self.0.get(), other.0.get());
+            let ret = ffi::gst_util_seqnum_compare(self.0.get(), other.0.get());
             ret.cmp(&0)
         }
     }
@@ -73,7 +71,7 @@ pub struct GroupId(pub(crate) NonZeroU32);
 impl GroupId {
     pub fn next() -> Self {
         unsafe {
-            let v = gst_sys::gst_util_group_id_next();
+            let v = ffi::gst_util_group_id_next();
             if v == 0 {
                 GroupId::next()
             } else {
@@ -85,23 +83,23 @@ impl GroupId {
 
 impl EventType {
     pub fn is_upstream(self) -> bool {
-        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_UPSTREAM != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
     }
 
     pub fn is_downstream(self) -> bool {
-        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_DOWNSTREAM != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
     }
 
     pub fn is_serialized(self) -> bool {
-        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_SERIALIZED != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
     }
 
     pub fn is_sticky(self) -> bool {
-        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_STICKY != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
     }
 
     pub fn is_sticky_multi(self) -> bool {
-        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_STICKY_MULTI != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
 }
 
@@ -114,9 +112,9 @@ impl PartialOrd for EventType {
         let v1 = self.to_glib() as u32;
         let v2 = other.to_glib() as u32;
 
-        let stream_start = gst_sys::GST_EVENT_STREAM_START as u32;
-        let segment = gst_sys::GST_EVENT_SEGMENT as u32;
-        let eos = gst_sys::GST_EVENT_EOS as u32;
+        let stream_start = ffi::GST_EVENT_STREAM_START as u32;
+        let segment = ffi::GST_EVENT_SEGMENT as u32;
+        let eos = ffi::GST_EVENT_EOS as u32;
 
         // Strictly ordered range between stream_start and segment,
         // and EOS is bigger than everything else
@@ -137,30 +135,30 @@ impl PartialOrd for EventType {
     }
 }
 
-gst_define_mini_object_wrapper!(Event, EventRef, gst_sys::GstEvent, || {
-    gst_sys::gst_event_get_type()
+gst_define_mini_object_wrapper!(Event, EventRef, ffi::GstEvent, || {
+    ffi::gst_event_get_type()
 });
 
 impl EventRef {
     pub fn get_seqnum(&self) -> Seqnum {
         unsafe {
-            let seqnum = gst_sys::gst_event_get_seqnum(self.as_mut_ptr());
+            let seqnum = ffi::gst_event_get_seqnum(self.as_mut_ptr());
             assert_ne!(seqnum, 0);
             Seqnum(NonZeroU32::new_unchecked(seqnum))
         }
     }
 
     pub fn get_running_time_offset(&self) -> i64 {
-        unsafe { gst_sys::gst_event_get_running_time_offset(self.as_mut_ptr()) }
+        unsafe { ffi::gst_event_get_running_time_offset(self.as_mut_ptr()) }
     }
 
     pub fn set_running_time_offset(&mut self, offset: i64) {
-        unsafe { gst_sys::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
+        unsafe { ffi::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
     }
 
     pub fn get_structure(&self) -> Option<&StructureRef> {
         unsafe {
-            let structure = gst_sys::gst_event_get_structure(self.as_mut_ptr());
+            let structure = ffi::gst_event_get_structure(self.as_mut_ptr());
             if structure.is_null() {
                 None
             } else {
@@ -171,9 +169,7 @@ impl EventRef {
 
     pub fn structure_mut(&mut self) -> &mut StructureRef {
         unsafe {
-            StructureRef::from_glib_borrow_mut(gst_sys::gst_event_writable_structure(
-                self.as_mut_ptr(),
-            ))
+            StructureRef::from_glib_borrow_mut(ffi::gst_event_writable_structure(self.as_mut_ptr()))
         }
     }
 
@@ -205,45 +201,39 @@ impl EventRef {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
         match type_ {
-            gst_sys::GST_EVENT_FLUSH_START => EventView::FlushStart(FlushStart(self)),
-            gst_sys::GST_EVENT_FLUSH_STOP => EventView::FlushStop(FlushStop(self)),
-            gst_sys::GST_EVENT_STREAM_START => EventView::StreamStart(StreamStart(self)),
-            gst_sys::GST_EVENT_CAPS => EventView::Caps(Caps(self)),
-            gst_sys::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
-            gst_sys::GST_EVENT_STREAM_COLLECTION => {
-                EventView::StreamCollection(StreamCollection(self))
-            }
-            gst_sys::GST_EVENT_TAG => EventView::Tag(Tag(self)),
-            gst_sys::GST_EVENT_BUFFERSIZE => EventView::BufferSize(BufferSize(self)),
-            gst_sys::GST_EVENT_SINK_MESSAGE => EventView::SinkMessage(SinkMessage(self)),
-            gst_sys::GST_EVENT_STREAM_GROUP_DONE => {
-                EventView::StreamGroupDone(StreamGroupDone(self))
-            }
-            gst_sys::GST_EVENT_EOS => EventView::Eos(Eos(self)),
-            gst_sys::GST_EVENT_TOC => EventView::Toc(Toc(self)),
-            gst_sys::GST_EVENT_PROTECTION => EventView::Protection(Protection(self)),
-            gst_sys::GST_EVENT_SEGMENT_DONE => EventView::SegmentDone(SegmentDone(self)),
-            gst_sys::GST_EVENT_GAP => EventView::Gap(Gap(self)),
-            gst_sys::GST_EVENT_QOS => EventView::Qos(Qos(self)),
-            gst_sys::GST_EVENT_SEEK => EventView::Seek(Seek(self)),
-            gst_sys::GST_EVENT_NAVIGATION => EventView::Navigation(Navigation(self)),
-            gst_sys::GST_EVENT_LATENCY => EventView::Latency(Latency(self)),
-            gst_sys::GST_EVENT_STEP => EventView::Step(Step(self)),
-            gst_sys::GST_EVENT_RECONFIGURE => EventView::Reconfigure(Reconfigure(self)),
-            gst_sys::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
-            gst_sys::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
-            gst_sys::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
-            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM => {
-                EventView::CustomDownstream(CustomDownstream(self))
-            }
-            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => {
+            ffi::GST_EVENT_FLUSH_START => EventView::FlushStart(FlushStart(self)),
+            ffi::GST_EVENT_FLUSH_STOP => EventView::FlushStop(FlushStop(self)),
+            ffi::GST_EVENT_STREAM_START => EventView::StreamStart(StreamStart(self)),
+            ffi::GST_EVENT_CAPS => EventView::Caps(Caps(self)),
+            ffi::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
+            ffi::GST_EVENT_STREAM_COLLECTION => EventView::StreamCollection(StreamCollection(self)),
+            ffi::GST_EVENT_TAG => EventView::Tag(Tag(self)),
+            ffi::GST_EVENT_BUFFERSIZE => EventView::BufferSize(BufferSize(self)),
+            ffi::GST_EVENT_SINK_MESSAGE => EventView::SinkMessage(SinkMessage(self)),
+            ffi::GST_EVENT_STREAM_GROUP_DONE => EventView::StreamGroupDone(StreamGroupDone(self)),
+            ffi::GST_EVENT_EOS => EventView::Eos(Eos(self)),
+            ffi::GST_EVENT_TOC => EventView::Toc(Toc(self)),
+            ffi::GST_EVENT_PROTECTION => EventView::Protection(Protection(self)),
+            ffi::GST_EVENT_SEGMENT_DONE => EventView::SegmentDone(SegmentDone(self)),
+            ffi::GST_EVENT_GAP => EventView::Gap(Gap(self)),
+            ffi::GST_EVENT_QOS => EventView::Qos(Qos(self)),
+            ffi::GST_EVENT_SEEK => EventView::Seek(Seek(self)),
+            ffi::GST_EVENT_NAVIGATION => EventView::Navigation(Navigation(self)),
+            ffi::GST_EVENT_LATENCY => EventView::Latency(Latency(self)),
+            ffi::GST_EVENT_STEP => EventView::Step(Step(self)),
+            ffi::GST_EVENT_RECONFIGURE => EventView::Reconfigure(Reconfigure(self)),
+            ffi::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
+            ffi::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
+            ffi::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM => EventView::CustomDownstream(CustomDownstream(self)),
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => {
                 EventView::CustomDownstreamOob(CustomDownstreamOob(self))
             }
-            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => {
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => {
                 EventView::CustomDownstreamSticky(CustomDownstreamSticky(self))
             }
-            gst_sys::GST_EVENT_CUSTOM_BOTH => EventView::CustomBoth(CustomBoth(self)),
-            gst_sys::GST_EVENT_CUSTOM_BOTH_OOB => EventView::CustomBothOob(CustomBothOob(self)),
+            ffi::GST_EVENT_CUSTOM_BOTH => EventView::CustomBoth(CustomBoth(self)),
+            ffi::GST_EVENT_CUSTOM_BOTH_OOB => EventView::CustomBothOob(CustomBothOob(self)),
             _ => EventView::Other,
         }
     }
@@ -260,7 +250,7 @@ impl fmt::Debug for EventRef {
         f.debug_struct("Event")
             .field("ptr", unsafe { &self.as_ptr() })
             .field("type", &unsafe {
-                let type_ = gst_sys::gst_event_type_get_name((*self.as_ptr()).type_);
+                let type_ = ffi::gst_event_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
             })
             .field("seqnum", &self.get_seqnum())
@@ -350,7 +340,7 @@ impl<'a> FlushStop<'a> {
         unsafe {
             let mut reset_time = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_flush_stop(self.as_mut_ptr(), reset_time.as_mut_ptr());
+            ffi::gst_event_parse_flush_stop(self.as_mut_ptr(), reset_time.as_mut_ptr());
 
             from_glib(reset_time.assume_init())
         }
@@ -374,16 +364,16 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut stream_id = ptr::null();
 
-            gst_sys::gst_event_parse_stream_start(self.as_mut_ptr(), &mut stream_id);
+            ffi::gst_event_parse_stream_start(self.as_mut_ptr(), &mut stream_id);
             CStr::from_ptr(stream_id).to_str().unwrap()
         }
     }
 
-    pub fn get_stream_flags(&self) -> ::StreamFlags {
+    pub fn get_stream_flags(&self) -> crate::StreamFlags {
         unsafe {
             let mut stream_flags = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_stream_flags(self.as_mut_ptr(), stream_flags.as_mut_ptr());
+            ffi::gst_event_parse_stream_flags(self.as_mut_ptr(), stream_flags.as_mut_ptr());
 
             from_glib(stream_flags.assume_init())
         }
@@ -393,7 +383,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_group_id(self.as_mut_ptr(), group_id.as_mut_ptr());
+            ffi::gst_event_parse_group_id(self.as_mut_ptr(), group_id.as_mut_ptr());
 
             let group_id = group_id.assume_init();
             if group_id == 0 {
@@ -406,10 +396,10 @@ impl<'a> StreamStart<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream(&self) -> Option<::Stream> {
+    pub fn get_stream(&self) -> Option<crate::Stream> {
         unsafe {
             let mut stream = ptr::null_mut();
-            gst_sys::gst_event_parse_stream(self.as_mut_ptr(), &mut stream);
+            ffi::gst_event_parse_stream(self.as_mut_ptr(), &mut stream);
             from_glib_full(stream)
         }
     }
@@ -418,26 +408,26 @@ impl<'a> StreamStart<'a> {
 declare_concrete_event!(Caps);
 impl<'a> Caps<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(caps: &::Caps) -> Event {
+    pub fn new(caps: &crate::Caps) -> Event {
         skip_assert_initialized!();
         Self::builder(caps).build()
     }
 
-    pub fn builder(caps: &::Caps) -> CapsBuilder {
+    pub fn builder(caps: &crate::Caps) -> CapsBuilder {
         assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
 
-    pub fn get_caps(&self) -> &'a ::CapsRef {
+    pub fn get_caps(&self) -> &'a crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
 
-            gst_sys::gst_event_parse_caps(self.as_mut_ptr(), &mut caps);
-            ::CapsRef::from_ptr(caps)
+            ffi::gst_event_parse_caps(self.as_mut_ptr(), &mut caps);
+            crate::CapsRef::from_ptr(caps)
         }
     }
 
-    pub fn get_caps_owned(&self) -> ::Caps {
+    pub fn get_caps_owned(&self) -> crate::Caps {
         unsafe { from_glib_none(self.get_caps().as_ptr()) }
     }
 }
@@ -445,22 +435,24 @@ impl<'a> Caps<'a> {
 declare_concrete_event!(Segment);
 impl<'a> Segment<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<F: ::FormattedValue>(segment: &::FormattedSegment<F>) -> Event {
+    pub fn new<F: crate::FormattedValue>(segment: &crate::FormattedSegment<F>) -> Event {
         skip_assert_initialized!();
         Self::builder(segment).build()
     }
 
-    pub fn builder<F: ::FormattedValue>(segment: &::FormattedSegment<F>) -> SegmentBuilder {
+    pub fn builder<F: crate::FormattedValue>(
+        segment: &crate::FormattedSegment<F>,
+    ) -> SegmentBuilder {
         assert_initialized_main_thread!();
         SegmentBuilder::new(segment.as_ref())
     }
 
-    pub fn get_segment(&self) -> &'a ::Segment {
+    pub fn get_segment(&self) -> &'a crate::Segment {
         unsafe {
             let mut segment = ptr::null();
 
-            gst_sys::gst_event_parse_segment(self.as_mut_ptr(), &mut segment);
-            &*(segment as *mut gst_sys::GstSegment as *mut ::Segment)
+            ffi::gst_event_parse_segment(self.as_mut_ptr(), &mut segment);
+            &*(segment as *mut ffi::GstSegment as *mut crate::Segment)
         }
     }
 }
@@ -470,25 +462,25 @@ impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(stream_collection: &::StreamCollection) -> Event {
+    pub fn new(stream_collection: &crate::StreamCollection) -> Event {
         skip_assert_initialized!();
         Self::builder(stream_collection).build()
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn builder(stream_collection: &::StreamCollection) -> StreamCollectionBuilder {
+    pub fn builder(stream_collection: &crate::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(stream_collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream_collection(&self) -> ::StreamCollection {
+    pub fn get_stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
 
-            gst_sys::gst_event_parse_stream_collection(self.as_mut_ptr(), &mut stream_collection);
+            ffi::gst_event_parse_stream_collection(self.as_mut_ptr(), &mut stream_collection);
             from_glib_full(stream_collection)
         }
     }
@@ -497,26 +489,26 @@ impl<'a> StreamCollection<'a> {
 declare_concrete_event!(Tag);
 impl<'a> Tag<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(tags: ::TagList) -> Event {
+    pub fn new(tags: crate::TagList) -> Event {
         skip_assert_initialized!();
         Self::builder(tags).build()
     }
 
-    pub fn builder(tags: ::TagList) -> TagBuilder<'a> {
+    pub fn builder(tags: crate::TagList) -> TagBuilder<'a> {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
 
-    pub fn get_tag(&self) -> &'a ::TagListRef {
+    pub fn get_tag(&self) -> &'a crate::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
 
-            gst_sys::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
-            ::TagListRef::from_ptr(tags)
+            ffi::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
+            crate::TagListRef::from_ptr(tags)
         }
     }
 
-    pub fn get_tag_owned(&self) -> ::TagList {
+    pub fn get_tag_owned(&self) -> crate::TagList {
         unsafe { from_glib_none(self.get_tag().as_ptr()) }
     }
 }
@@ -524,22 +516,22 @@ impl<'a> Tag<'a> {
 declare_concrete_event!(BufferSize);
 impl<'a> BufferSize<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new<V: Into<GenericFormattedValue>>(minsize: V, maxsize: V, async: bool) -> Event {
+    pub fn new<V: Into<GenericFormattedValue>>(minsize: V, maxsize: V, r#async: bool) -> Event {
         skip_assert_initialized!();
-        Self::builder(minsize, maxsize, async).build()
+        Self::builder(minsize, maxsize, r#async).build()
     }
 
     pub fn builder<V: Into<GenericFormattedValue>>(
         minsize: V,
         maxsize: V,
-        async: bool,
+        r#async: bool,
     ) -> BufferSizeBuilder<'a> {
         assert_initialized_main_thread!();
         let minsize = minsize.into();
         let maxsize = maxsize.into();
         assert_eq!(minsize.get_format(), maxsize.get_format());
 
-        BufferSizeBuilder::new(minsize, maxsize, async)
+        BufferSizeBuilder::new(minsize, maxsize, r#async)
     }
 
     pub fn get(&self) -> (GenericFormattedValue, GenericFormattedValue, bool) {
@@ -549,7 +541,7 @@ impl<'a> BufferSize<'a> {
             let mut maxsize = mem::MaybeUninit::uninit();
             let mut async_ = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_buffer_size(
+            ffi::gst_event_parse_buffer_size(
                 self.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 minsize.as_mut_ptr(),
@@ -568,21 +560,21 @@ impl<'a> BufferSize<'a> {
 declare_concrete_event!(SinkMessage);
 impl<'a> SinkMessage<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(name: &'a str, msg: &'a ::Message) -> Event {
+    pub fn new(name: &'a str, msg: &'a crate::Message) -> Event {
         skip_assert_initialized!();
         Self::builder(name, msg).build()
     }
 
-    pub fn builder(name: &'a str, msg: &'a ::Message) -> SinkMessageBuilder<'a> {
+    pub fn builder(name: &'a str, msg: &'a crate::Message) -> SinkMessageBuilder<'a> {
         assert_initialized_main_thread!();
         SinkMessageBuilder::new(name, msg)
     }
 
-    pub fn get_message(&self) -> ::Message {
+    pub fn get_message(&self) -> crate::Message {
         unsafe {
             let mut msg = ptr::null_mut();
 
-            gst_sys::gst_event_parse_sink_message(self.as_mut_ptr(), &mut msg);
+            ffi::gst_event_parse_sink_message(self.as_mut_ptr(), &mut msg);
             from_glib_full(msg)
         }
     }
@@ -611,7 +603,7 @@ impl<'a> StreamGroupDone<'a> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_stream_group_done(self.as_mut_ptr(), group_id.as_mut_ptr());
+            ffi::gst_event_parse_stream_group_done(self.as_mut_ptr(), group_id.as_mut_ptr());
 
             let group_id = group_id.assume_init();
             assert_ne!(group_id, 0);
@@ -639,27 +631,30 @@ impl<'a> Toc<'a> {
     // FIXME could use false for updated as default
     // Even better: use an enum for updated so that it is more explicit than true / false
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(toc: &::Toc, updated: bool) -> Event {
+    pub fn new(toc: &crate::Toc, updated: bool) -> Event {
         skip_assert_initialized!();
         Self::builder(toc, updated).build()
     }
 
-    pub fn builder(toc: &::Toc, updated: bool) -> TocBuilder {
+    pub fn builder(toc: &crate::Toc, updated: bool) -> TocBuilder {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
 
-    pub fn get_toc(&self) -> (&'a ::TocRef, bool) {
+    pub fn get_toc(&self) -> (&'a crate::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
-            (::TocRef::from_ptr(toc), from_glib(updated.assume_init()))
+            ffi::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
+            (
+                crate::TocRef::from_ptr(toc),
+                from_glib(updated.assume_init()),
+            )
         }
     }
 
-    pub fn get_toc_owned(&self) -> (::Toc, bool) {
+    pub fn get_toc_owned(&self) -> (crate::Toc, bool) {
         unsafe {
             let (toc, updated) = self.get_toc();
             (from_glib_none(toc.as_ptr()), updated)
@@ -670,23 +665,23 @@ impl<'a> Toc<'a> {
 declare_concrete_event!(Protection);
 impl<'a> Protection<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(system_id: &'a str, data: &'a ::Buffer) -> Event {
+    pub fn new(system_id: &'a str, data: &'a crate::Buffer) -> Event {
         skip_assert_initialized!();
         Self::builder(system_id, data).build()
     }
 
-    pub fn builder(system_id: &'a str, data: &'a ::Buffer) -> ProtectionBuilder<'a> {
+    pub fn builder(system_id: &'a str, data: &'a crate::Buffer) -> ProtectionBuilder<'a> {
         assert_initialized_main_thread!();
         ProtectionBuilder::new(system_id, data)
     }
 
-    pub fn get(&self) -> (&'a str, &'a ::BufferRef, Option<&'a str>) {
+    pub fn get(&self) -> (&'a str, &'a crate::BufferRef, Option<&'a str>) {
         unsafe {
             let mut system_id = ptr::null();
             let mut buffer = ptr::null_mut();
             let mut origin = ptr::null();
 
-            gst_sys::gst_event_parse_protection(
+            ffi::gst_event_parse_protection(
                 self.as_mut_ptr(),
                 &mut system_id,
                 &mut buffer,
@@ -695,7 +690,7 @@ impl<'a> Protection<'a> {
 
             (
                 CStr::from_ptr(system_id).to_str().unwrap(),
-                ::BufferRef::from_ptr(buffer),
+                crate::BufferRef::from_ptr(buffer),
                 if origin.is_null() {
                     None
                 } else {
@@ -705,7 +700,7 @@ impl<'a> Protection<'a> {
         }
     }
 
-    pub fn get_owned(&self) -> (&'a str, ::Buffer, Option<&'a str>) {
+    pub fn get_owned(&self) -> (&'a str, crate::Buffer, Option<&'a str>) {
         unsafe {
             let (system_id, buffer, origin) = self.get();
             (system_id, from_glib_none(buffer.as_ptr()), origin)
@@ -732,7 +727,7 @@ impl<'a> SegmentDone<'a> {
             let mut fmt = mem::MaybeUninit::uninit();
             let mut position = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_segment_done(
+            ffi::gst_event_parse_segment_done(
                 self.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 position.as_mut_ptr(),
@@ -746,22 +741,22 @@ impl<'a> SegmentDone<'a> {
 declare_concrete_event!(Gap);
 impl<'a> Gap<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(timestamp: ::ClockTime, duration: ::ClockTime) -> Event {
+    pub fn new(timestamp: crate::ClockTime, duration: crate::ClockTime) -> Event {
         skip_assert_initialized!();
         Self::builder(timestamp, duration).build()
     }
 
-    pub fn builder(timestamp: ::ClockTime, duration: ::ClockTime) -> GapBuilder<'a> {
+    pub fn builder(timestamp: crate::ClockTime, duration: crate::ClockTime) -> GapBuilder<'a> {
         assert_initialized_main_thread!();
         GapBuilder::new(timestamp, duration)
     }
 
-    pub fn get(&self) -> (::ClockTime, ::ClockTime) {
+    pub fn get(&self) -> (crate::ClockTime, crate::ClockTime) {
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
             let mut duration = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_gap(
+            ffi::gst_event_parse_gap(
                 self.as_mut_ptr(),
                 timestamp.as_mut_ptr(),
                 duration.as_mut_ptr(),
@@ -778,29 +773,34 @@ impl<'a> Gap<'a> {
 declare_concrete_event!(Qos);
 impl<'a> Qos<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: ::ClockTime) -> Event {
+    pub fn new(
+        type_: crate::QOSType,
+        proportion: f64,
+        diff: i64,
+        timestamp: crate::ClockTime,
+    ) -> Event {
         skip_assert_initialized!();
         Self::builder(type_, proportion, diff, timestamp).build()
     }
 
     pub fn builder(
-        type_: ::QOSType,
+        type_: crate::QOSType,
         proportion: f64,
         diff: i64,
-        timestamp: ::ClockTime,
+        timestamp: crate::ClockTime,
     ) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
         QosBuilder::new(type_, proportion, diff, timestamp)
     }
 
-    pub fn get(&self) -> (::QOSType, f64, i64, ::ClockTime) {
+    pub fn get(&self) -> (crate::QOSType, f64, i64, crate::ClockTime) {
         unsafe {
             let mut type_ = mem::MaybeUninit::uninit();
             let mut proportion = mem::MaybeUninit::uninit();
             let mut diff = mem::MaybeUninit::uninit();
             let mut timestamp = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_qos(
+            ffi::gst_event_parse_qos(
                 self.as_mut_ptr(),
                 type_.as_mut_ptr(),
                 proportion.as_mut_ptr(),
@@ -823,10 +823,10 @@ impl<'a> Seek<'a> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<V: Into<GenericFormattedValue>>(
         rate: f64,
-        flags: ::SeekFlags,
-        start_type: ::SeekType,
+        flags: crate::SeekFlags,
+        start_type: crate::SeekType,
         start: V,
-        stop_type: ::SeekType,
+        stop_type: crate::SeekType,
         stop: V,
     ) -> Event {
         skip_assert_initialized!();
@@ -835,10 +835,10 @@ impl<'a> Seek<'a> {
 
     pub fn builder<V: Into<GenericFormattedValue>>(
         rate: f64,
-        flags: ::SeekFlags,
-        start_type: ::SeekType,
+        flags: crate::SeekFlags,
+        start_type: crate::SeekType,
         start: V,
-        stop_type: ::SeekType,
+        stop_type: crate::SeekType,
         stop: V,
     ) -> SeekBuilder<'a> {
         assert_initialized_main_thread!();
@@ -853,10 +853,10 @@ impl<'a> Seek<'a> {
         &self,
     ) -> (
         f64,
-        ::SeekFlags,
-        ::SeekType,
+        crate::SeekFlags,
+        crate::SeekType,
         GenericFormattedValue,
-        ::SeekType,
+        crate::SeekType,
         GenericFormattedValue,
     ) {
         unsafe {
@@ -868,7 +868,7 @@ impl<'a> Seek<'a> {
             let mut stop_type = mem::MaybeUninit::uninit();
             let mut stop = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_seek(
+            ffi::gst_event_parse_seek(
                 self.as_mut_ptr(),
                 rate.as_mut_ptr(),
                 fmt.as_mut_ptr(),
@@ -892,11 +892,11 @@ impl<'a> Seek<'a> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_trickmode_interval(&self) -> ::ClockTime {
+    pub fn get_trickmode_interval(&self) -> crate::ClockTime {
         unsafe {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_seek_trickmode_interval(
+            ffi::gst_event_parse_seek_trickmode_interval(
                 self.as_mut_ptr(),
                 trickmode_interval.as_mut_ptr(),
             );
@@ -909,12 +909,12 @@ impl<'a> Seek<'a> {
 declare_concrete_event!(Navigation);
 impl<'a> Navigation<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Event {
+    pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> NavigationBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> NavigationBuilder<'a> {
         assert_initialized_main_thread!();
         NavigationBuilder::new(structure)
     }
@@ -923,21 +923,21 @@ impl<'a> Navigation<'a> {
 declare_concrete_event!(Latency);
 impl<'a> Latency<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(latency: ::ClockTime) -> Event {
+    pub fn new(latency: crate::ClockTime) -> Event {
         skip_assert_initialized!();
         Self::builder(latency).build()
     }
 
-    pub fn builder(latency: ::ClockTime) -> LatencyBuilder<'a> {
+    pub fn builder(latency: crate::ClockTime) -> LatencyBuilder<'a> {
         assert_initialized_main_thread!();
         LatencyBuilder::new(latency)
     }
 
-    pub fn get_latency(&self) -> ::ClockTime {
+    pub fn get_latency(&self) -> crate::ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_latency(self.as_mut_ptr(), latency.as_mut_ptr());
+            ffi::gst_event_parse_latency(self.as_mut_ptr(), latency.as_mut_ptr());
 
             from_glib(latency.assume_init())
         }
@@ -975,7 +975,7 @@ impl<'a> Step<'a> {
             let mut flush = mem::MaybeUninit::uninit();
             let mut intermediate = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_step(
+            ffi::gst_event_parse_step(
                 self.as_mut_ptr(),
                 fmt.as_mut_ptr(),
                 amount.as_mut_ptr(),
@@ -1028,7 +1028,7 @@ impl<'a> TocSelect<'a> {
         unsafe {
             let mut uid = ptr::null_mut();
 
-            gst_sys::gst_event_parse_toc_select(self.as_mut_ptr(), &mut uid);
+            ffi::gst_event_parse_toc_select(self.as_mut_ptr(), &mut uid);
 
             CStr::from_ptr(uid).to_str().unwrap()
         }
@@ -1058,7 +1058,7 @@ impl<'a> SelectStreams<'a> {
         unsafe {
             let mut streams = ptr::null_mut();
 
-            gst_sys::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
+            ffi::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
 
             FromGlibPtrContainer::from_glib_full(streams)
         }
@@ -1068,12 +1068,12 @@ impl<'a> SelectStreams<'a> {
 declare_concrete_event!(CustomUpstream);
 impl<'a> CustomUpstream<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Event {
+    pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> CustomUpstreamBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> CustomUpstreamBuilder<'a> {
         assert_initialized_main_thread!();
         CustomUpstreamBuilder::new(structure)
     }
@@ -1082,12 +1082,12 @@ impl<'a> CustomUpstream<'a> {
 declare_concrete_event!(CustomDownstream);
 impl<'a> CustomDownstream<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Event {
+    pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> CustomDownstreamBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> CustomDownstreamBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamBuilder::new(structure)
     }
@@ -1096,12 +1096,12 @@ impl<'a> CustomDownstream<'a> {
 declare_concrete_event!(CustomDownstreamOob);
 impl<'a> CustomDownstreamOob<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Event {
+    pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> CustomDownstreamOobBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> CustomDownstreamOobBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamOobBuilder::new(structure)
     }
@@ -1110,12 +1110,12 @@ impl<'a> CustomDownstreamOob<'a> {
 declare_concrete_event!(CustomDownstreamSticky);
 impl<'a> CustomDownstreamSticky<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Event {
+    pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> CustomDownstreamStickyBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> CustomDownstreamStickyBuilder<'a> {
         assert_initialized_main_thread!();
         CustomDownstreamStickyBuilder::new(structure)
     }
@@ -1124,12 +1124,12 @@ impl<'a> CustomDownstreamSticky<'a> {
 declare_concrete_event!(CustomBoth);
 impl<'a> CustomBoth<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Event {
+    pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> CustomBothBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> CustomBothBuilder<'a> {
         assert_initialized_main_thread!();
         CustomBothBuilder::new(structure)
     }
@@ -1138,12 +1138,12 @@ impl<'a> CustomBoth<'a> {
 declare_concrete_event!(CustomBothOob);
 impl<'a> CustomBothOob<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(structure: ::Structure) -> Event {
+    pub fn new(structure: crate::Structure) -> Event {
         skip_assert_initialized!();
         Self::builder(structure).build()
     }
 
-    pub fn builder(structure: ::Structure) -> CustomBothOobBuilder<'a> {
+    pub fn builder(structure: crate::Structure) -> CustomBothOobBuilder<'a> {
         assert_initialized_main_thread!();
         CustomBothOobBuilder::new(structure)
     }
@@ -1222,17 +1222,17 @@ macro_rules! event_builder_generic_impl {
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.builder.seqnum {
-                    gst_sys::gst_event_set_seqnum(event, seqnum.0.get());
+                    ffi::gst_event_set_seqnum(event, seqnum.0.get());
                 }
 
                 if let Some(running_time_offset) = self.builder.running_time_offset {
-                    gst_sys::gst_event_set_running_time_offset(event, running_time_offset);
+                    ffi::gst_event_set_running_time_offset(event, running_time_offset);
                 }
 
                 if !self.builder.other_fields.is_empty() {
-                    let s = StructureRef::from_glib_borrow_mut(
-                        gst_sys::gst_event_writable_structure(event),
-                    );
+                    let s = StructureRef::from_glib_borrow_mut(ffi::gst_event_writable_structure(
+                        event,
+                    ));
 
                     for (k, v) in self.builder.other_fields {
                         s.set_value(k, v.to_send_value());
@@ -1257,7 +1257,7 @@ impl<'a> FlushStartBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| gst_sys::gst_event_new_flush_start());
+    event_builder_generic_impl!(|_| ffi::gst_event_new_flush_start());
 }
 
 pub struct FlushStopBuilder<'a> {
@@ -1273,19 +1273,17 @@ impl<'a> FlushStopBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_flush_stop(
-        s.reset_time.to_glib()
-    ));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_flush_stop(s.reset_time.to_glib()));
 }
 
 pub struct StreamStartBuilder<'a> {
     builder: EventBuilder<'a>,
     stream_id: &'a str,
-    flags: Option<::StreamFlags>,
+    flags: Option<crate::StreamFlags>,
     group_id: Option<GroupId>,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    stream: Option<::Stream>,
+    stream: Option<crate::Stream>,
 }
 
 impl<'a> StreamStartBuilder<'a> {
@@ -1302,7 +1300,7 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
-    pub fn flags(self, flags: ::StreamFlags) -> Self {
+    pub fn flags(self, flags: crate::StreamFlags) -> Self {
         Self {
             flags: Some(flags),
             ..self
@@ -1318,7 +1316,7 @@ impl<'a> StreamStartBuilder<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn stream(self, stream: ::Stream) -> Self {
+    pub fn stream(self, stream: crate::Stream) -> Self {
         Self {
             stream: Some(stream),
             ..self
@@ -1326,17 +1324,17 @@ impl<'a> StreamStartBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        let ev = gst_sys::gst_event_new_stream_start(s.stream_id.to_glib_none().0);
+        let ev = ffi::gst_event_new_stream_start(s.stream_id.to_glib_none().0);
         if let Some(flags) = s.flags {
-            gst_sys::gst_event_set_stream_flags(ev, flags.to_glib());
+            ffi::gst_event_set_stream_flags(ev, flags.to_glib());
         }
         if let Some(group_id) = s.group_id {
-            gst_sys::gst_event_set_group_id(ev, group_id.0.get());
+            ffi::gst_event_set_group_id(ev, group_id.0.get());
         }
 
         #[cfg(any(feature = "v1_10", feature = "dox"))]
         if let Some(ref stream) = s.stream {
-            gst_sys::gst_event_set_stream(ev, stream.to_glib_none().0);
+            ffi::gst_event_set_stream(ev, stream.to_glib_none().0);
         }
 
         ev
@@ -1345,11 +1343,11 @@ impl<'a> StreamStartBuilder<'a> {
 
 pub struct CapsBuilder<'a> {
     builder: EventBuilder<'a>,
-    caps: &'a ::Caps,
+    caps: &'a crate::Caps,
 }
 
 impl<'a> CapsBuilder<'a> {
-    fn new(caps: &'a ::Caps) -> Self {
+    fn new(caps: &'a crate::Caps) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1357,16 +1355,16 @@ impl<'a> CapsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_caps(s.caps.as_mut_ptr()));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_caps(s.caps.as_mut_ptr()));
 }
 
 pub struct SegmentBuilder<'a> {
     builder: EventBuilder<'a>,
-    segment: &'a ::Segment,
+    segment: &'a crate::Segment,
 }
 
 impl<'a> SegmentBuilder<'a> {
-    fn new(segment: &'a ::Segment) -> Self {
+    fn new(segment: &'a crate::Segment) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1374,22 +1372,20 @@ impl<'a> SegmentBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_segment(
-        s.segment.to_glib_none().0
-    ));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment(s.segment.to_glib_none().0));
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct StreamCollectionBuilder<'a> {
     builder: EventBuilder<'a>,
-    stream_collection: &'a ::StreamCollection,
+    stream_collection: &'a crate::StreamCollection,
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollectionBuilder<'a> {
-    fn new(stream_collection: &'a ::StreamCollection) -> Self {
+    fn new(stream_collection: &'a crate::StreamCollection) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1397,18 +1393,18 @@ impl<'a> StreamCollectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_stream_collection(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_collection(
         s.stream_collection.to_glib_none().0
     ));
 }
 
 pub struct TagBuilder<'a> {
     builder: EventBuilder<'a>,
-    tags: Option<::TagList>,
+    tags: Option<crate::TagList>,
 }
 
 impl<'a> TagBuilder<'a> {
-    fn new(tags: ::TagList) -> Self {
+    fn new(tags: crate::TagList) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1418,7 +1414,7 @@ impl<'a> TagBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let tags = s.tags.take().unwrap();
-        gst_sys::gst_event_new_tag(tags.into_ptr())
+        ffi::gst_event_new_tag(tags.into_ptr())
     });
 }
 
@@ -1426,36 +1422,36 @@ pub struct BufferSizeBuilder<'a> {
     builder: EventBuilder<'a>,
     minsize: GenericFormattedValue,
     maxsize: GenericFormattedValue,
-    async: bool,
+    r#async: bool,
 }
 
 impl<'a> BufferSizeBuilder<'a> {
-    fn new(minsize: GenericFormattedValue, maxsize: GenericFormattedValue, async: bool) -> Self {
+    fn new(minsize: GenericFormattedValue, maxsize: GenericFormattedValue, r#async: bool) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
             minsize,
             maxsize,
-            async,
+            r#async,
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_buffer_size(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_buffer_size(
         s.minsize.get_format().to_glib(),
         s.minsize.get_value(),
         s.maxsize.get_value(),
-        s.async.to_glib(),
+        s.r#async.to_glib(),
     ));
 }
 
 pub struct SinkMessageBuilder<'a> {
     builder: EventBuilder<'a>,
     name: &'a str,
-    msg: &'a ::Message,
+    msg: &'a crate::Message,
 }
 
 impl<'a> SinkMessageBuilder<'a> {
-    fn new(name: &'a str, msg: &'a ::Message) -> Self {
+    fn new(name: &'a str, msg: &'a crate::Message) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1464,7 +1460,7 @@ impl<'a> SinkMessageBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_sink_message(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_sink_message(
         s.name.to_glib_none().0,
         s.msg.as_mut_ptr()
     ));
@@ -1488,7 +1484,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_stream_group_done(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(
         s.group_id.0.get()
     ));
 }
@@ -1505,17 +1501,17 @@ impl<'a> EosBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| gst_sys::gst_event_new_eos());
+    event_builder_generic_impl!(|_| ffi::gst_event_new_eos());
 }
 
 pub struct TocBuilder<'a> {
     builder: EventBuilder<'a>,
-    toc: &'a ::Toc,
+    toc: &'a crate::Toc,
     updated: bool,
 }
 
 impl<'a> TocBuilder<'a> {
-    fn new(toc: &'a ::Toc, updated: bool) -> Self {
+    fn new(toc: &'a crate::Toc, updated: bool) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1524,7 +1520,7 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_toc(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc(
         s.toc.to_glib_none().0,
         s.updated.to_glib()
     ));
@@ -1533,12 +1529,12 @@ impl<'a> TocBuilder<'a> {
 pub struct ProtectionBuilder<'a> {
     builder: EventBuilder<'a>,
     system_id: &'a str,
-    data: &'a ::Buffer,
+    data: &'a crate::Buffer,
     origin: Option<&'a str>,
 }
 
 impl<'a> ProtectionBuilder<'a> {
-    fn new(system_id: &'a str, data: &'a ::Buffer) -> Self {
+    fn new(system_id: &'a str, data: &'a crate::Buffer) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1555,7 +1551,7 @@ impl<'a> ProtectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_protection(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_protection(
         s.system_id.to_glib_none().0,
         s.data.as_mut_ptr(),
         s.origin.to_glib_none().0,
@@ -1576,7 +1572,7 @@ impl<'a> SegmentDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_segment_done(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment_done(
         s.position.get_format().to_glib(),
         s.position.get_value()
     ));
@@ -1584,12 +1580,12 @@ impl<'a> SegmentDoneBuilder<'a> {
 
 pub struct GapBuilder<'a> {
     builder: EventBuilder<'a>,
-    timestamp: ::ClockTime,
-    duration: ::ClockTime,
+    timestamp: crate::ClockTime,
+    duration: crate::ClockTime,
 }
 
 impl<'a> GapBuilder<'a> {
-    fn new(timestamp: ::ClockTime, duration: ::ClockTime) -> Self {
+    fn new(timestamp: crate::ClockTime, duration: crate::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1598,7 +1594,7 @@ impl<'a> GapBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_gap(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_gap(
         s.timestamp.to_glib(),
         s.duration.to_glib()
     ));
@@ -1606,14 +1602,14 @@ impl<'a> GapBuilder<'a> {
 
 pub struct QosBuilder<'a> {
     builder: EventBuilder<'a>,
-    type_: ::QOSType,
+    type_: crate::QOSType,
     proportion: f64,
     diff: i64,
-    timestamp: ::ClockTime,
+    timestamp: crate::ClockTime,
 }
 
 impl<'a> QosBuilder<'a> {
-    fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: ::ClockTime) -> Self {
+    fn new(type_: crate::QOSType, proportion: f64, diff: i64, timestamp: crate::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1624,7 +1620,7 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_qos(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_qos(
         s.type_.to_glib(),
         s.proportion,
         s.diff,
@@ -1635,22 +1631,22 @@ impl<'a> QosBuilder<'a> {
 pub struct SeekBuilder<'a> {
     builder: EventBuilder<'a>,
     rate: f64,
-    flags: ::SeekFlags,
-    start_type: ::SeekType,
+    flags: crate::SeekFlags,
+    start_type: crate::SeekType,
     start: GenericFormattedValue,
-    stop_type: ::SeekType,
+    stop_type: crate::SeekType,
     stop: GenericFormattedValue,
     #[allow(unused)]
-    trickmode_interval: Option<::ClockTime>,
+    trickmode_interval: Option<crate::ClockTime>,
 }
 
 impl<'a> SeekBuilder<'a> {
     fn new(
         rate: f64,
-        flags: ::SeekFlags,
-        start_type: ::SeekType,
+        flags: crate::SeekFlags,
+        start_type: crate::SeekType,
         start: GenericFormattedValue,
-        stop_type: ::SeekType,
+        stop_type: crate::SeekType,
         stop: GenericFormattedValue,
     ) -> Self {
         skip_assert_initialized!();
@@ -1669,7 +1665,7 @@ impl<'a> SeekBuilder<'a> {
     event_builder_generic_impl!(|s: &Self| {
         #[allow(clippy::let_and_return)]
         {
-            let ev = gst_sys::gst_event_new_seek(
+            let ev = ffi::gst_event_new_seek(
                 s.rate,
                 s.start.get_format().to_glib(),
                 s.flags.to_glib(),
@@ -1681,7 +1677,7 @@ impl<'a> SeekBuilder<'a> {
 
             #[cfg(any(feature = "v1_16", feature = "dox"))]
             if let Some(trickmode_interval) = s.trickmode_interval {
-                gst_sys::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.to_glib());
+                ffi::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.to_glib());
             }
 
             ev
@@ -1705,17 +1701,17 @@ impl<'a> NavigationBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        gst_sys::gst_event_new_navigation(structure.into_ptr())
+        ffi::gst_event_new_navigation(structure.into_ptr())
     });
 }
 
 pub struct LatencyBuilder<'a> {
     builder: EventBuilder<'a>,
-    latency: ::ClockTime,
+    latency: crate::ClockTime,
 }
 
 impl<'a> LatencyBuilder<'a> {
-    fn new(latency: ::ClockTime) -> Self {
+    fn new(latency: crate::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
@@ -1723,7 +1719,7 @@ impl<'a> LatencyBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_latency(s.latency.to_glib()));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_latency(s.latency.to_glib()));
 }
 
 pub struct StepBuilder<'a> {
@@ -1746,7 +1742,7 @@ impl<'a> StepBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_step(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_step(
         s.amount.get_format().to_glib(),
         s.amount.get_value() as u64,
         s.rate,
@@ -1767,7 +1763,7 @@ impl<'a> ReconfigureBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| gst_sys::gst_event_new_reconfigure());
+    event_builder_generic_impl!(|_| ffi::gst_event_new_reconfigure());
 }
 
 pub struct TocSelectBuilder<'a> {
@@ -1784,9 +1780,7 @@ impl<'a> TocSelectBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_toc_select(
-        s.uid.to_glib_none().0
-    ));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc_select(s.uid.to_glib_none().0));
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1807,7 +1801,7 @@ impl<'a> SelectStreamsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_select_streams(
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_select_streams(
         s.streams.to_glib_full()
     ));
 }
@@ -1828,7 +1822,7 @@ impl<'a> CustomUpstreamBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_UPSTREAM, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_UPSTREAM, structure.into_ptr())
     });
 }
 
@@ -1848,7 +1842,7 @@ impl<'a> CustomDownstreamBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_DOWNSTREAM, structure.into_ptr())
     });
 }
 
@@ -1868,10 +1862,7 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        gst_sys::gst_event_new_custom(
-            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
-            structure.into_ptr(),
-        )
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB, structure.into_ptr())
     });
 }
 
@@ -1891,8 +1882,8 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        gst_sys::gst_event_new_custom(
-            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
+        ffi::gst_event_new_custom(
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
             structure.into_ptr(),
         )
     });
@@ -1914,7 +1905,7 @@ impl<'a> CustomBothBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_BOTH, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH, structure.into_ptr())
     });
 }
 
@@ -1934,7 +1925,7 @@ impl<'a> CustomBothOobBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take().unwrap();
-        gst_sys::gst_event_new_custom(gst_sys::GST_EVENT_CUSTOM_BOTH_OOB, structure.into_ptr())
+        ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH_OOB, structure.into_ptr())
     });
 }
 
@@ -1944,7 +1935,7 @@ mod tests {
 
     #[test]
     fn test_simple() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Event without arguments
         let flush_start_evt = FlushStart::new();
@@ -1987,7 +1978,7 @@ mod tests {
 
     #[test]
     fn test_get_structure_mut() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut flush_start_evt = FlushStart::new();
 

@@ -6,11 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::Stream;
+use crate::StreamCollection;
 use glib::translate::*;
-use gst_sys;
 use std::fmt;
-use Stream;
-use StreamCollection;
 
 #[derive(Debug)]
 pub struct Iter<'a> {
@@ -74,10 +73,7 @@ pub struct StreamCollectionBuilder(StreamCollection);
 impl StreamCollectionBuilder {
     pub fn stream(self, stream: &Stream) -> Self {
         unsafe {
-            gst_sys::gst_stream_collection_add_stream(
-                (self.0).to_glib_none().0,
-                stream.to_glib_full(),
-            );
+            ffi::gst_stream_collection_add_stream((self.0).to_glib_none().0, stream.to_glib_full());
         }
 
         self
@@ -86,7 +82,7 @@ impl StreamCollectionBuilder {
     pub fn streams<S: AsRef<Stream>>(self, streams: &[S]) -> Self {
         for stream in streams {
             unsafe {
-                gst_sys::gst_stream_collection_add_stream(
+                ffi::gst_stream_collection_add_stream(
                     (self.0).to_glib_none().0,
                     stream.as_ref().to_glib_full(),
                 );
@@ -105,12 +101,12 @@ impl StreamCollection {
     pub fn builder(upstream_id: Option<&str>) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         let upstream_id = upstream_id.to_glib_none();
-        let (major, minor, _, _) = ::version();
+        let (major, minor, _, _) = crate::version();
         let collection = if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(gst_sys::gst_stream_collection_new(upstream_id.0)) }
+            unsafe { from_glib_full(ffi::gst_stream_collection_new(upstream_id.0)) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(gst_sys::gst_stream_collection_new(upstream_id.0)) }
+            unsafe { from_glib_none(ffi::gst_stream_collection_new(upstream_id.0)) }
         };
 
         StreamCollectionBuilder(collection)

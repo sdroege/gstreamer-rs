@@ -13,12 +13,8 @@ use std::fmt;
 use std::ops;
 use std::slice;
 
-use glib;
 use glib::translate::{from_glib, FromGlibPtrFull, ToGlibPtr, ToGlibPtrMut, Uninitialized};
 use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
-
-use glib_sys;
-use gst_sys;
 
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct Fraction(pub Rational32);
@@ -248,14 +244,14 @@ impl From<Fraction> for Rational32 {
 
 impl glib::types::StaticType for Fraction {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(gst_sys::gst_fraction_get_type()) }
+        unsafe { from_glib(ffi::gst_fraction_get_type()) }
     }
 }
 
 impl<'a> FromValue<'a> for Fraction {
     unsafe fn from_value(v: &'a Value) -> Fraction {
-        let n = gst_sys::gst_value_get_fraction_numerator(v.to_glib_none().0);
-        let d = gst_sys::gst_value_get_fraction_denominator(v.to_glib_none().0);
+        let n = ffi::gst_value_get_fraction_numerator(v.to_glib_none().0);
+        let d = ffi::gst_value_get_fraction_denominator(v.to_glib_none().0);
 
         Fraction::new(n, d)
     }
@@ -269,12 +265,12 @@ impl<'a> FromValueOptional<'a> for Fraction {
 
 impl SetValue for Fraction {
     unsafe fn set_value(v: &mut Value, f: &Self) {
-        gst_sys::gst_value_set_fraction(v.to_glib_none_mut().0, *f.numer(), *f.denom());
+        ffi::gst_value_set_fraction(v.to_glib_none_mut().0, *f.numer(), *f.denom());
     }
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 pub struct IntRange<T> {
     min: T,
     max: T,
@@ -357,15 +353,15 @@ impl From<(i64, i64, i64)> for IntRange<i64> {
 
 impl glib::types::StaticType for IntRange<i32> {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(gst_sys::gst_int_range_get_type()) }
+        unsafe { from_glib(ffi::gst_int_range_get_type()) }
     }
 }
 
 impl<'a> FromValue<'a> for IntRange<i32> {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let min = gst_sys::gst_value_get_int_range_min(v.to_glib_none().0);
-        let max = gst_sys::gst_value_get_int_range_max(v.to_glib_none().0);
-        let step = gst_sys::gst_value_get_int_range_step(v.to_glib_none().0);
+        let min = ffi::gst_value_get_int_range_min(v.to_glib_none().0);
+        let max = ffi::gst_value_get_int_range_max(v.to_glib_none().0);
+        let step = ffi::gst_value_get_int_range_step(v.to_glib_none().0);
 
         Self::with_step(min, max, step)
     }
@@ -379,21 +375,21 @@ impl<'a> FromValueOptional<'a> for IntRange<i32> {
 
 impl SetValue for IntRange<i32> {
     unsafe fn set_value(v: &mut Value, r: &Self) {
-        gst_sys::gst_value_set_int_range_step(v.to_glib_none_mut().0, r.min(), r.max(), r.step());
+        ffi::gst_value_set_int_range_step(v.to_glib_none_mut().0, r.min(), r.max(), r.step());
     }
 }
 
 impl glib::types::StaticType for IntRange<i64> {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(gst_sys::gst_int64_range_get_type()) }
+        unsafe { from_glib(ffi::gst_int64_range_get_type()) }
     }
 }
 
 impl<'a> FromValue<'a> for IntRange<i64> {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let min = gst_sys::gst_value_get_int64_range_min(v.to_glib_none().0);
-        let max = gst_sys::gst_value_get_int64_range_max(v.to_glib_none().0);
-        let step = gst_sys::gst_value_get_int64_range_step(v.to_glib_none().0);
+        let min = ffi::gst_value_get_int64_range_min(v.to_glib_none().0);
+        let max = ffi::gst_value_get_int64_range_max(v.to_glib_none().0);
+        let step = ffi::gst_value_get_int64_range_step(v.to_glib_none().0);
 
         Self::with_step(min, max, step)
     }
@@ -407,12 +403,12 @@ impl<'a> FromValueOptional<'a> for IntRange<i64> {
 
 impl SetValue for IntRange<i64> {
     unsafe fn set_value(v: &mut Value, r: &Self) {
-        gst_sys::gst_value_set_int64_range_step(v.to_glib_none_mut().0, r.min(), r.max(), r.step());
+        ffi::gst_value_set_int64_range_step(v.to_glib_none_mut().0, r.min(), r.max(), r.step());
     }
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 pub struct FractionRange {
     min: Fraction,
     max: Fraction,
@@ -449,19 +445,19 @@ impl From<(Fraction, Fraction)> for FractionRange {
 
 impl glib::types::StaticType for FractionRange {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(gst_sys::gst_fraction_range_get_type()) }
+        unsafe { from_glib(ffi::gst_fraction_range_get_type()) }
     }
 }
 
 impl<'a> FromValue<'a> for FractionRange {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let min = gst_sys::gst_value_get_fraction_range_min(v.to_glib_none().0);
-        let max = gst_sys::gst_value_get_fraction_range_max(v.to_glib_none().0);
+        let min = ffi::gst_value_get_fraction_range_min(v.to_glib_none().0);
+        let max = ffi::gst_value_get_fraction_range_max(v.to_glib_none().0);
 
-        let min_n = gst_sys::gst_value_get_fraction_numerator(min);
-        let min_d = gst_sys::gst_value_get_fraction_denominator(min);
-        let max_n = gst_sys::gst_value_get_fraction_numerator(max);
-        let max_d = gst_sys::gst_value_get_fraction_denominator(max);
+        let min_n = ffi::gst_value_get_fraction_numerator(min);
+        let min_d = ffi::gst_value_get_fraction_denominator(min);
+        let max_n = ffi::gst_value_get_fraction_numerator(max);
+        let max_d = ffi::gst_value_get_fraction_denominator(max);
 
         Self::new((min_n, min_d), (max_n, max_d))
     }
@@ -475,7 +471,7 @@ impl<'a> FromValueOptional<'a> for FractionRange {
 
 impl SetValue for FractionRange {
     unsafe fn set_value(v: &mut Value, r: &Self) {
-        gst_sys::gst_value_set_fraction_range_full(
+        ffi::gst_value_set_fraction_range_full(
             v.to_glib_none_mut().0,
             *r.min().numer(),
             *r.min().denom(),
@@ -486,7 +482,7 @@ impl SetValue for FractionRange {
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 pub struct Bitmask(pub u64);
 
 impl Bitmask {
@@ -551,13 +547,13 @@ impl From<u64> for Bitmask {
 
 impl glib::types::StaticType for Bitmask {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(gst_sys::gst_bitmask_get_type()) }
+        unsafe { from_glib(ffi::gst_bitmask_get_type()) }
     }
 }
 
 impl<'a> FromValue<'a> for Bitmask {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let v = gst_sys::gst_value_get_bitmask(v.to_glib_none().0);
+        let v = ffi::gst_value_get_bitmask(v.to_glib_none().0);
         Self::new(v)
     }
 }
@@ -570,7 +566,7 @@ impl<'a> FromValueOptional<'a> for Bitmask {
 
 impl SetValue for Bitmask {
     unsafe fn set_value(v: &mut Value, r: &Self) {
-        gst_sys::gst_value_set_bitmask(v.to_glib_none_mut().0, r.0);
+        ffi::gst_value_set_bitmask(v.to_glib_none_mut().0, r.0);
     }
 }
 
@@ -625,7 +621,7 @@ impl<'a> From<&'a [glib::SendValue]> for Array<'a> {
 
 impl<'a> FromValue<'a> for Array<'a> {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib_sys::GArray;
+        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
         if arr.is_null() {
             Array(Cow::Borrowed(&[]))
         } else {
@@ -647,14 +643,14 @@ impl<'a> FromValueOptional<'a> for Array<'a> {
 impl<'a> SetValue for Array<'a> {
     unsafe fn set_value(v: &mut Value, a: &Self) {
         for value in a.as_slice() {
-            gst_sys::gst_value_array_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
+            ffi::gst_value_array_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
         }
     }
 }
 
 impl<'a> glib::types::StaticType for Array<'a> {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(gst_sys::gst_value_array_get_type()) }
+        unsafe { from_glib(ffi::gst_value_array_get_type()) }
     }
 }
 
@@ -709,7 +705,7 @@ impl<'a> From<&'a [glib::SendValue]> for List<'a> {
 
 impl<'a> FromValue<'a> for List<'a> {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib_sys::GArray;
+        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
         if arr.is_null() {
             List(Cow::Borrowed(&[]))
         } else {
@@ -731,14 +727,14 @@ impl<'a> FromValueOptional<'a> for List<'a> {
 impl<'a> SetValue for List<'a> {
     unsafe fn set_value(v: &mut Value, a: &Self) {
         for value in a.as_slice() {
-            gst_sys::gst_value_list_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
+            ffi::gst_value_list_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
         }
     }
 }
 
 impl<'a> glib::types::StaticType for List<'a> {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(gst_sys::gst_value_list_get_type()) }
+        unsafe { from_glib(ffi::gst_value_list_get_type()) }
     }
 }
 
@@ -762,7 +758,7 @@ pub trait GstValueExt: Sized {
 impl GstValueExt for glib::Value {
     fn can_compare(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_value_can_compare(
+            from_glib(ffi::gst_value_can_compare(
                 self.to_glib_none().0,
                 other.to_glib_none().0,
             ))
@@ -771,12 +767,12 @@ impl GstValueExt for glib::Value {
 
     fn compare(&self, other: &Self) -> Option<cmp::Ordering> {
         unsafe {
-            let val = gst_sys::gst_value_compare(self.to_glib_none().0, other.to_glib_none().0);
+            let val = ffi::gst_value_compare(self.to_glib_none().0, other.to_glib_none().0);
 
             match val {
-                gst_sys::GST_VALUE_LESS_THAN => Some(cmp::Ordering::Less),
-                gst_sys::GST_VALUE_EQUAL => Some(cmp::Ordering::Equal),
-                gst_sys::GST_VALUE_GREATER_THAN => Some(cmp::Ordering::Greater),
+                ffi::GST_VALUE_LESS_THAN => Some(cmp::Ordering::Less),
+                ffi::GST_VALUE_EQUAL => Some(cmp::Ordering::Equal),
+                ffi::GST_VALUE_GREATER_THAN => Some(cmp::Ordering::Greater),
                 _ => None,
             }
         }
@@ -788,7 +784,7 @@ impl GstValueExt for glib::Value {
 
     fn can_intersect(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_value_can_intersect(
+            from_glib(ffi::gst_value_can_intersect(
                 self.to_glib_none().0,
                 other.to_glib_none().0,
             ))
@@ -798,7 +794,7 @@ impl GstValueExt for glib::Value {
     fn intersect(&self, other: &Self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(gst_sys::gst_value_intersect(
+            let ret: bool = from_glib(ffi::gst_value_intersect(
                 value.to_glib_none_mut().0,
                 self.to_glib_none().0,
                 other.to_glib_none().0,
@@ -813,7 +809,7 @@ impl GstValueExt for glib::Value {
 
     fn can_subtract(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_value_can_subtract(
+            from_glib(ffi::gst_value_can_subtract(
                 self.to_glib_none().0,
                 other.to_glib_none().0,
             ))
@@ -823,7 +819,7 @@ impl GstValueExt for glib::Value {
     fn subtract(&self, other: &Self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(gst_sys::gst_value_subtract(
+            let ret: bool = from_glib(ffi::gst_value_subtract(
                 value.to_glib_none_mut().0,
                 self.to_glib_none().0,
                 other.to_glib_none().0,
@@ -838,7 +834,7 @@ impl GstValueExt for glib::Value {
 
     fn can_union(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_value_can_union(
+            from_glib(ffi::gst_value_can_union(
                 self.to_glib_none().0,
                 other.to_glib_none().0,
             ))
@@ -848,7 +844,7 @@ impl GstValueExt for glib::Value {
     fn union(&self, other: &Self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(gst_sys::gst_value_union(
+            let ret: bool = from_glib(ffi::gst_value_union(
                 value.to_glib_none_mut().0,
                 self.to_glib_none().0,
                 other.to_glib_none().0,
@@ -864,7 +860,7 @@ impl GstValueExt for glib::Value {
     fn fixate(&self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(gst_sys::gst_value_fixate(
+            let ret: bool = from_glib(ffi::gst_value_fixate(
                 value.to_glib_none_mut().0,
                 self.to_glib_none().0,
             ));
@@ -877,12 +873,12 @@ impl GstValueExt for glib::Value {
     }
 
     fn is_fixed(&self) -> bool {
-        unsafe { from_glib(gst_sys::gst_value_is_fixed(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gst_value_is_fixed(self.to_glib_none().0)) }
     }
 
     fn is_subset(&self, superset: &Self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_value_is_subset(
+            from_glib(ffi::gst_value_is_subset(
                 self.to_glib_none().0,
                 superset.to_glib_none().0,
             ))
@@ -891,8 +887,8 @@ impl GstValueExt for glib::Value {
 
     fn serialize(&self) -> Result<glib::GString, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_full(gst_sys::gst_value_serialize(self.to_glib_none().0))
-                .ok_or_else(|| glib_bool_error!("Failed to serialize value"))
+            Option::<_>::from_glib_full(ffi::gst_value_serialize(self.to_glib_none().0))
+                .ok_or_else(|| glib::glib_bool_error!("Failed to serialize value"))
         }
     }
 
@@ -903,14 +899,14 @@ impl GstValueExt for glib::Value {
 
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(gst_sys::gst_value_deserialize(
+            let ret: bool = from_glib(ffi::gst_value_deserialize(
                 value.to_glib_none_mut().0,
                 s.to_glib_none().0,
             ));
             if ret {
                 Ok(value)
             } else {
-                Err(glib_bool_error!("Failed to deserialize value"))
+                Err(glib::glib_bool_error!("Failed to deserialize value"))
             }
         }
     }
@@ -920,15 +916,15 @@ impl GstValueExt for glib::Value {
 mod tests {
     #[test]
     fn test_fraction() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
-        let f1 = ::Fraction::new(1, 2);
-        let f2 = ::Fraction::new(2, 3);
+        let f1 = crate::Fraction::new(1, 2);
+        let f2 = crate::Fraction::new(2, 3);
         let mut f3 = f1 * f2;
         let f4 = f1 * f2;
         f3 *= f2;
         f3 *= f4;
 
-        assert_eq!(f3, ::Fraction::new(2, 27));
+        assert_eq!(f3, crate::Fraction::new(2, 27));
     }
 }

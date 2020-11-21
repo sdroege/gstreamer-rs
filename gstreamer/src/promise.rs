@@ -6,26 +6,24 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::PromiseResult;
+use crate::Structure;
+use crate::StructureRef;
 use glib::translate::*;
-use glib_sys;
-use gst_sys;
-use PromiseResult;
-use Structure;
-use StructureRef;
 
 use std::marker::PhantomData;
 use std::pin::Pin;
 use std::ptr;
 use std::task::{Context, Poll};
 
-glib_wrapper! {
+glib::glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct Promise(Shared<gst_sys::GstPromise>);
+    pub struct Promise(Shared<ffi::GstPromise>);
 
     match fn {
-        ref => |ptr| gst_sys::gst_mini_object_ref(ptr as *mut _),
-        unref => |ptr| gst_sys::gst_mini_object_unref(ptr as *mut _),
-        get_type => || gst_sys::gst_promise_get_type(),
+        ref => |ptr| ffi::gst_mini_object_ref(ptr as *mut _),
+        unref => |ptr| ffi::gst_mini_object_unref(ptr as *mut _),
+        get_type => || ffi::gst_promise_get_type(),
     }
 }
 
@@ -39,7 +37,7 @@ pub enum PromiseError {
 impl Promise {
     pub fn new() -> Promise {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_promise_new()) }
+        unsafe { from_glib_full(ffi::gst_promise_new()) }
     }
 
     pub fn with_change_func<F>(func: F) -> Promise
@@ -52,8 +50,8 @@ impl Promise {
         unsafe extern "C" fn trampoline<
             F: FnOnce(Result<Option<&StructureRef>, PromiseError>) + Send + 'static,
         >(
-            promise: *mut gst_sys::GstPromise,
-            user_data: glib_sys::gpointer,
+            promise: *mut ffi::GstPromise,
+            user_data: glib::ffi::gpointer,
         ) {
             let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
@@ -76,13 +74,13 @@ impl Promise {
         unsafe extern "C" fn free_user_data<
             F: FnOnce(Result<Option<&StructureRef>, PromiseError>) + Send + 'static,
         >(
-            user_data: glib_sys::gpointer,
+            user_data: glib::ffi::gpointer,
         ) {
             let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
         }
 
         unsafe {
-            from_glib_full(gst_sys::gst_promise_new_with_change_func(
+            from_glib_full(ffi::gst_promise_new_with_change_func(
                 Some(trampoline::<F>),
                 Box::into_raw(user_data) as *mut _,
                 Some(free_user_data::<F>),
@@ -107,13 +105,13 @@ impl Promise {
 
     pub fn expire(&self) {
         unsafe {
-            gst_sys::gst_promise_expire(self.to_glib_none().0);
+            ffi::gst_promise_expire(self.to_glib_none().0);
         }
     }
 
     pub fn get_reply(&self) -> Option<&StructureRef> {
         unsafe {
-            let s = gst_sys::gst_promise_get_reply(self.to_glib_none().0);
+            let s = ffi::gst_promise_get_reply(self.to_glib_none().0);
             if s.is_null() {
                 None
             } else {
@@ -124,13 +122,13 @@ impl Promise {
 
     pub fn interrupt(&self) {
         unsafe {
-            gst_sys::gst_promise_interrupt(self.to_glib_none().0);
+            ffi::gst_promise_interrupt(self.to_glib_none().0);
         }
     }
 
     pub fn reply(&self, s: Option<Structure>) {
         unsafe {
-            gst_sys::gst_promise_reply(
+            ffi::gst_promise_reply(
                 self.to_glib_none().0,
                 s.map(|s| s.into_ptr()).unwrap_or(ptr::null_mut()),
             );
@@ -138,7 +136,7 @@ impl Promise {
     }
 
     pub fn wait(&self) -> PromiseResult {
-        unsafe { from_glib(gst_sys::gst_promise_wait(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gst_promise_wait(self.to_glib_none().0)) }
     }
 }
 
@@ -167,7 +165,7 @@ impl<'a> std::future::Future for PromiseFuture<'a> {
             Poll::Ready(Ok(())) => {
                 let res = match self.0.wait() {
                     PromiseResult::Replied => unsafe {
-                        let s = gst_sys::gst_promise_get_reply(self.0.to_glib_none().0);
+                        let s = ffi::gst_promise_get_reply(self.0.to_glib_none().0);
                         if s.is_null() {
                             Ok(None)
                         } else {
@@ -196,7 +194,7 @@ mod tests {
 
     #[test]
     fn test_change_func() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let (sender, receiver) = channel();
         let promise = Promise::with_change_func(move |res| {

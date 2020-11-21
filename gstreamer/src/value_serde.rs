@@ -6,7 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
 use glib::{Date, StaticType, ToValue};
 
 use num_rational::Rational32;
@@ -20,12 +19,12 @@ use std::{fmt, mem};
 
 use once_cell::sync::Lazy;
 
-use Buffer;
-use DateTime;
-use Sample;
+use crate::Buffer;
+use crate::DateTime;
+use crate::Sample;
 
-use date_time_serde;
-use value::*;
+use crate::date_time_serde;
+use crate::value::*;
 
 fn get_other_type_id<T: StaticType>() -> usize {
     match T::static_type() {
@@ -306,22 +305,19 @@ impl_de_send_value_collection!(List);
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-    extern crate serde_json;
-
-    use Array;
-    use Bitmask;
-    use DateTime;
-    use Fraction;
-    use FractionRange;
-    use IntRange;
-    use List;
+    use crate::Array;
+    use crate::Bitmask;
+    use crate::DateTime;
+    use crate::Fraction;
+    use crate::FractionRange;
+    use crate::IntRange;
+    use crate::List;
 
     use glib::{Date, DateMonth};
 
     #[test]
     fn test_serialize_simple() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
@@ -364,10 +360,7 @@ mod tests {
 
     #[test]
     fn test_serialize_collections() {
-        use Fraction;
-        use List;
-
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
@@ -445,7 +438,7 @@ mod tests {
 
     #[test]
     fn test_deserialize_simple() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Fraction
         let fraction_ron = "(1, 3)";
@@ -496,7 +489,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip_simple() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Fraction
         let fraction = Fraction::new(1, 3);
@@ -537,7 +530,7 @@ mod tests {
     #[allow(clippy::cognitive_complexity)]
     #[test]
     fn test_deserialize_collections() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Array
         let array_ron = r#"[
@@ -634,7 +627,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip_collection() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Array
         let value_13 = Fraction::new(1, 3);

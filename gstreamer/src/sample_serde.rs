@@ -9,13 +9,13 @@
 use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, SerializeStruct, Serializer};
 
-use Buffer;
-use BufferList;
-use Caps;
-use Sample;
-use SampleRef;
-use Segment;
-use Structure;
+use crate::Buffer;
+use crate::BufferList;
+use crate::Caps;
+use crate::Sample;
+use crate::SampleRef;
+use crate::Segment;
+use crate::Structure;
 
 impl<'a> Serialize for SampleRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -35,7 +35,7 @@ impl<'a> Serialize for Sample {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct SampleDe {
     buffer: Option<Buffer>,
     buffer_list: Option<BufferList>,
@@ -82,21 +82,19 @@ impl<'de> Deserialize<'de> for Sample {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-
-    use Buffer;
-    use Caps;
-    use ClockTime;
-    use Format;
-    use GenericFormattedValue;
-    use Sample;
-    use Segment;
-    use SegmentFlags;
-    use Structure;
+    use crate::Buffer;
+    use crate::Caps;
+    use crate::ClockTime;
+    use crate::Format;
+    use crate::GenericFormattedValue;
+    use crate::Sample;
+    use crate::Segment;
+    use crate::SegmentFlags;
+    use crate::Structure;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
@@ -243,7 +241,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let buffer_ron = r#"
             (
@@ -328,7 +326,7 @@ mod tests {
 
     #[test]
     fn test_roundrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         // Segment present
         let sample = {

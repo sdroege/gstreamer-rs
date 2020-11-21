@@ -6,13 +6,12 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::Caps;
+use crate::Stream;
+use crate::StreamFlags;
+use crate::StreamType;
 use glib::translate::*;
-use gst_sys;
 use std::fmt;
-use Caps;
-use Stream;
-use StreamFlags;
-use StreamType;
 
 impl Stream {
     pub fn new(
@@ -25,10 +24,10 @@ impl Stream {
         let stream_id = stream_id.to_glib_none();
         let caps = caps.to_glib_none();
 
-        let (major, minor, _, _) = ::version();
+        let (major, minor, _, _) = crate::version();
         if (major, minor) > (1, 12) {
             unsafe {
-                from_glib_full(gst_sys::gst_stream_new(
+                from_glib_full(ffi::gst_stream_new(
                     stream_id.0,
                     caps.0,
                     type_.to_glib(),
@@ -38,7 +37,7 @@ impl Stream {
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
             unsafe {
-                from_glib_none(gst_sys::gst_stream_new(
+                from_glib_none(ffi::gst_stream_new(
                     stream_id.0,
                     caps.0,
                     type_.to_glib(),

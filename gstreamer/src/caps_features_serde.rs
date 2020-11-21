@@ -12,8 +12,8 @@ use serde::ser::{Serialize, SerializeSeq, Serializer};
 
 use std::fmt;
 
-use CapsFeatures;
-use CapsFeaturesRef;
+use crate::CapsFeatures;
+use crate::CapsFeaturesRef;
 
 enum CapsFeaturesVariantKinds {
     Any,

@@ -6,7 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
 use glib::{Date, ToValue};
 
 use serde::de;
@@ -16,16 +15,16 @@ use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 
 use std::fmt;
 
-use Buffer;
-use DateTime;
-use Sample;
+use crate::Buffer;
+use crate::DateTime;
+use crate::Sample;
 
-use date_time_serde;
-use value::*;
-use value_serde::*;
+use crate::date_time_serde;
+use crate::value::*;
+use crate::value_serde::*;
 
-use Structure;
-use StructureRef;
+use crate::Structure;
+use crate::StructureRef;
 
 struct FieldSe<'a>(&'static str, &'a glib::SendValue);
 impl<'a> Serialize for FieldSe<'a> {
@@ -169,18 +168,16 @@ impl<'de> Deserialize<'de> for Structure {
 
 #[cfg(test)]
 mod tests {
-    extern crate ron;
-
     use glib::{Date, DateMonth};
 
-    use Array;
-    use DateTime;
-    use Fraction;
-    use Structure;
+    use crate::Array;
+    use crate::DateTime;
+    use crate::Fraction;
+    use crate::Structure;
 
     #[test]
     fn test_serialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let s = Structure::builder("test")
             .field("f1", &"abc")
@@ -221,7 +218,7 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let s_ron = r#"
             ("test", [
@@ -260,7 +257,7 @@ mod tests {
 
     #[test]
     fn test_serde_roundtrip() {
-        ::init().unwrap();
+        crate::init().unwrap();
 
         let s = Structure::builder("test")
             .field("f1", &"abc")
