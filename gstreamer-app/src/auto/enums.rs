@@ -9,8 +9,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_app_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -24,21 +22,21 @@ pub enum AppStreamType {
 
 #[doc(hidden)]
 impl ToGlib for AppStreamType {
-    type GlibType = gst_app_sys::GstAppStreamType;
+    type GlibType = ffi::GstAppStreamType;
 
-    fn to_glib(&self) -> gst_app_sys::GstAppStreamType {
+    fn to_glib(&self) -> ffi::GstAppStreamType {
         match *self {
-            AppStreamType::Stream => gst_app_sys::GST_APP_STREAM_TYPE_STREAM,
-            AppStreamType::Seekable => gst_app_sys::GST_APP_STREAM_TYPE_SEEKABLE,
-            AppStreamType::RandomAccess => gst_app_sys::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
+            AppStreamType::Stream => ffi::GST_APP_STREAM_TYPE_STREAM,
+            AppStreamType::Seekable => ffi::GST_APP_STREAM_TYPE_SEEKABLE,
+            AppStreamType::RandomAccess => ffi::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
             AppStreamType::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_app_sys::GstAppStreamType> for AppStreamType {
-    fn from_glib(value: gst_app_sys::GstAppStreamType) -> Self {
+impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
+    fn from_glib(value: ffi::GstAppStreamType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AppStreamType::Stream,
@@ -51,7 +49,7 @@ impl FromGlib<gst_app_sys::GstAppStreamType> for AppStreamType {
 
 impl StaticType for AppStreamType {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_app_sys::gst_app_stream_type_get_type()) }
+        unsafe { from_glib(ffi::gst_app_stream_type_get_type()) }
     }
 }
 
@@ -63,12 +61,12 @@ impl<'a> FromValueOptional<'a> for AppStreamType {
 
 impl<'a> FromValue<'a> for AppStreamType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AppStreamType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
