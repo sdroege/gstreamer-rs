@@ -676,13 +676,13 @@ impl BufferRef {
         IterOwned::new(self)
     }
 
-    pub fn as_cursor_readable<'a>(&'a self) -> BufferRefCursor<&'a BufferRef> {
+    pub fn as_cursor_readable(&self) -> BufferRefCursor<&BufferRef> {
         BufferRefCursor::new_readable(self)
     }
 
-    pub fn as_cursor_writable<'a>(
-        &'a mut self,
-    ) -> Result<BufferRefCursor<&'a mut BufferRef>, glib::BoolError> {
+    pub fn as_cursor_writable(
+        &mut self,
+    ) -> Result<BufferRefCursor<&mut BufferRef>, glib::BoolError> {
         BufferRefCursor::new_writable(self)
     }
 }
