@@ -20,7 +20,6 @@ extra_versions = [
 
 external_libraries = [
     "GLib",
-    "GObject"
 ]
 
 [external_libraries]

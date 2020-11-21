@@ -22,4 +22,3 @@ extra_versions = [
 
 [external_libraries]
 gstreamer="Gst"
-gstreamer_base="GstBase"
