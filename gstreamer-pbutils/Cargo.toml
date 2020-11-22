@@ -11,16 +11,14 @@ homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_pbutils/"
 keywords = ["gstreamer", "multimedia", "audio", "pbutils", "gnome"]
 build = "build.rs"
+edition = "2018"
 
 [dependencies]
 bitflags = "1.0"
 libc = "0.2"
-glib-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
-gobject-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
-gstreamer-sys = { path = "../gstreamer/sys", features = ["v1_8"] }
-gstreamer-pbutils-sys = { path = "../gstreamer-pbutils/sys", features = ["v1_8"] }
+ffi = { package = "gstreamer-pbutils-sys", path = "../gstreamer-pbutils/sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/gtk-rs" }
-gstreamer = { path = "../gstreamer" }
+gst = { package = "gstreamer", path = "../gstreamer" }
 thiserror = "1.0"
 
 [build-dependencies]
@@ -28,14 +26,14 @@ gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [features]
 default = []
-v1_10 = ["gstreamer/v1_10", "gstreamer-pbutils-sys/v1_10"]
-v1_12 = ["gstreamer/v1_12", "gstreamer-pbutils-sys/v1_12", "v1_10"]
-v1_14 = ["gstreamer/v1_14", "gstreamer-pbutils-sys/v1_14", "v1_12"]
-v1_16 = ["gstreamer/v1_16", "gstreamer-pbutils-sys/v1_16", "v1_14"]
-v1_18 = ["gstreamer/v1_18", "gstreamer-pbutils-sys/v1_18", "v1_16"]
+v1_10 = ["gst/v1_10", "ffi/v1_10"]
+v1_12 = ["gst/v1_12", "ffi/v1_12", "v1_10"]
+v1_14 = ["gst/v1_14", "ffi/v1_14", "v1_12"]
+v1_16 = ["gst/v1_16", "ffi/v1_16", "v1_14"]
+v1_18 = ["gst/v1_18", "ffi/v1_18", "v1_16"]
 embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-dox = ["v1_18", "gstreamer-pbutils-sys/dox", "glib/dox", "gstreamer/dox"]
+dox = ["v1_18", "ffi/dox", "glib/dox", "gst/dox"]
 
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]

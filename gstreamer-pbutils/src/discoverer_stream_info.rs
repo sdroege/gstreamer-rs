@@ -7,8 +7,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use DiscovererStreamInfo;
-use DiscovererStreamInfoExt;
+use crate::DiscovererStreamInfo;
+use crate::DiscovererStreamInfoExt;
 
 #[derive(Debug)]
 pub struct Iter {

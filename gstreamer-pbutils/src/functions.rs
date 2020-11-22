@@ -6,10 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
 use glib::translate::*;
-use gst;
-use gst_pbutils_sys;
 use std::ptr;
 
 pub unsafe trait CodecTag<'a>: gst::Tag<'a, TagType = &'a str> {}
@@ -27,8 +24,8 @@ pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     assert_initialized_main_thread!();
     let codec_tag = T::tag_name();
     unsafe {
-        glib_result_from_gboolean!(
-            gst_pbutils_sys::gst_pb_utils_add_codec_description_to_tag_list(
+        glib::glib_result_from_gboolean!(
+            ffi::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 codec_tag.to_glib_none().0,
                 caps.as_ptr(),
@@ -44,8 +41,8 @@ pub fn pb_utils_add_codec_description_to_tag_list(
 ) -> Result<(), glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        glib_result_from_gboolean!(
-            gst_pbutils_sys::gst_pb_utils_add_codec_description_to_tag_list(
+        glib::glib_result_from_gboolean!(
+            ffi::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 ptr::null_mut(),
                 caps.as_ptr(),
@@ -60,11 +57,9 @@ pub fn pb_utils_get_encoder_description(
 ) -> Result<glib::GString, glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        match from_glib_full(gst_pbutils_sys::gst_pb_utils_get_encoder_description(
-            caps.as_ptr(),
-        )) {
+        match from_glib_full(ffi::gst_pb_utils_get_encoder_description(caps.as_ptr())) {
             Some(s) => Ok(s),
-            None => Err(glib_bool_error!("Failed to get encoder description")),
+            None => Err(glib::glib_bool_error!("Failed to get encoder description")),
         }
     }
 }
@@ -74,11 +69,9 @@ pub fn pb_utils_get_decoder_description(
 ) -> Result<glib::GString, glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        match from_glib_full(gst_pbutils_sys::gst_pb_utils_get_decoder_description(
-            caps.as_ptr(),
-        )) {
+        match from_glib_full(ffi::gst_pb_utils_get_decoder_description(caps.as_ptr())) {
             Some(s) => Ok(s),
-            None => Err(glib_bool_error!("Failed to get decoder description")),
+            None => Err(glib::glib_bool_error!("Failed to get decoder description")),
         }
     }
 }
@@ -88,11 +81,9 @@ pub fn pb_utils_get_codec_description(
 ) -> Result<glib::GString, glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        match from_glib_full(gst_pbutils_sys::gst_pb_utils_get_codec_description(
-            caps.as_ptr(),
-        )) {
+        match from_glib_full(ffi::gst_pb_utils_get_codec_description(caps.as_ptr())) {
             Some(s) => Ok(s),
-            None => Err(glib_bool_error!("Failed to get codec description")),
+            None => Err(glib::glib_bool_error!("Failed to get codec description")),
         }
     }
 }

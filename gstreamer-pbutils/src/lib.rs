@@ -8,31 +8,19 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-#[macro_use]
-extern crate bitflags;
-extern crate libc;
+pub use ffi;
 
 use std::sync::Once;
-
-#[macro_use]
-extern crate glib;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_pbutils_sys as gst_pbutils_sys;
-extern crate gstreamer_sys as gst_sys;
-
-extern crate thiserror;
 
 static PBUTILS_INIT: Once = Once::new();
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
-        ::PBUTILS_INIT.call_once(|| {
-            unsafe { ::gst_pbutils_sys::gst_pb_utils_init() };
+        crate::PBUTILS_INIT.call_once(|| {
+            unsafe { ffi::gst_pb_utils_init() };
         });
     };
 }
@@ -47,22 +35,22 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::type_complexity)]
 #[allow(unused_imports)]
 mod auto;
-pub use auto::functions::*;
-pub use auto::*;
+pub use crate::auto::functions::*;
+pub use crate::auto::*;
 
 mod discoverer;
-pub use discoverer::*;
+pub use crate::discoverer::*;
 
 pub mod discoverer_stream_info;
 
 mod discoverer_video_info;
-pub use discoverer_video_info::*;
+pub use crate::discoverer_video_info::*;
 
 mod encoding_profile;
-pub use encoding_profile::*;
+pub use crate::encoding_profile::*;
 
 pub mod functions;
-pub use functions::*;
+pub use crate::functions::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -70,8 +58,10 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use auto::traits::*;
-    pub use encoding_profile::{EncodingProfileBuilder, EncodingProfileHasRestrictionGetter};
+    pub use crate::auto::traits::*;
+    pub use crate::encoding_profile::{
+        EncodingProfileBuilder, EncodingProfileHasRestrictionGetter,
+    };
 
-    pub use functions::CodecTag;
+    pub use crate::functions::CodecTag;
 }

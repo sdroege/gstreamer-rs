@@ -7,9 +7,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst;
-
-use auto::Discoverer;
+use crate::auto::Discoverer;
 
 use glib::object::{Cast, ObjectType};
 use glib::signal::connect_raw;
@@ -18,17 +16,13 @@ use glib::translate::*;
 use glib::IsA;
 use glib::Value;
 
-use glib_sys;
-use gobject_sys;
-use gst_pbutils_sys;
-
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 impl Discoverer {
     pub fn set_property_timeout(&self, timeout: gst::ClockTime) {
         unsafe {
-            gobject_sys::g_object_set_property(
+            glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut _,
                 "timeout".to_glib_none().0,
                 Value::from(&timeout).to_glib_none().0,
@@ -39,7 +33,7 @@ impl Discoverer {
     pub fn get_property_timeout(&self) -> gst::ClockTime {
         let mut value = Value::from(&0u64);
         unsafe {
-            gobject_sys::g_object_get_property(
+            glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut _,
                 "timeout".to_glib_none().0,
                 value.to_glib_none_mut().0,
@@ -70,9 +64,9 @@ impl Discoverer {
 }
 
 unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-    this: *mut gst_pbutils_sys::GstDiscoverer,
-    _param_spec: glib_sys::gpointer,
-    f: glib_sys::gpointer,
+    this: *mut ffi::GstDiscoverer,
+    _param_spec: glib::ffi::gpointer,
+    f: glib::ffi::gpointer,
 ) where
     P: IsA<Discoverer>,
 {

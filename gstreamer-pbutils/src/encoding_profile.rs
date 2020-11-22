@@ -7,20 +7,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
-use gst;
-use gst_pbutils_sys;
-use gst_sys;
-
 use thiserror::Error;
 
 use glib::object::IsA;
 use glib::translate::*;
 
-use auto::EncodingAudioProfile;
-use auto::EncodingContainerProfile;
-use auto::EncodingProfile;
-use auto::EncodingVideoProfile;
+use crate::auto::EncodingAudioProfile;
+use crate::auto::EncodingContainerProfile;
+use crate::auto::EncodingProfile;
+use crate::auto::EncodingVideoProfile;
 
 trait EncodingProfileBuilderCommon {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool);
@@ -43,7 +38,7 @@ trait EncodingProfileBuilderCommon {
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool) {
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_allow_dynamic_output(
+            ffi::gst_encoding_profile_set_allow_dynamic_output(
                 self.as_ref().to_glib_none().0,
                 allow_dynamic_output.to_glib(),
             );
@@ -53,7 +48,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
     fn set_description(&self, description: Option<&str>) {
         let description = description.to_glib_none();
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_description(
+            ffi::gst_encoding_profile_set_description(
                 self.as_ref().to_glib_none().0,
                 description.0,
             );
@@ -62,7 +57,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
 
     fn set_enabled(&self, enabled: bool) {
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_enabled(
+            ffi::gst_encoding_profile_set_enabled(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -71,7 +66,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
 
     fn set_format(&self, format: &gst::Caps) {
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_format(
+            ffi::gst_encoding_profile_set_format(
                 self.as_ref().to_glib_none().0,
                 format.to_glib_none().0,
             );
@@ -81,33 +76,27 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
     fn set_name(&self, name: Option<&str>) {
         let name = name.to_glib_none();
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_name(self.as_ref().to_glib_none().0, name.0);
+            ffi::gst_encoding_profile_set_name(self.as_ref().to_glib_none().0, name.0);
         }
     }
 
     fn set_presence(&self, presence: u32) {
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_presence(
-                self.as_ref().to_glib_none().0,
-                presence,
-            );
+            ffi::gst_encoding_profile_set_presence(self.as_ref().to_glib_none().0, presence);
         }
     }
 
     fn set_preset(&self, preset: Option<&str>) {
         let preset = preset.to_glib_none();
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_preset(
-                self.as_ref().to_glib_none().0,
-                preset.0,
-            );
+            ffi::gst_encoding_profile_set_preset(self.as_ref().to_glib_none().0, preset.0);
         }
     }
 
     fn set_preset_name(&self, preset_name: Option<&str>) {
         let preset_name = preset_name.to_glib_none();
         unsafe {
-            gst_pbutils_sys::gst_encoding_profile_set_preset_name(
+            ffi::gst_encoding_profile_set_preset_name(
                 self.as_ref().to_glib_none().0,
                 preset_name.0,
             );
@@ -133,10 +122,10 @@ macro_rules! declare_encoding_profile_has_restriction(
                 unsafe {
                     let restriction = match restriction {
                         Some(restriction) => restriction.to_glib_full(),
-                        None => gst_sys::gst_caps_new_any(),
+                        None => gst::ffi::gst_caps_new_any(),
                     };
 
-                    gst_pbutils_sys::gst_encoding_profile_set_restriction(
+                    ffi::gst_encoding_profile_set_restriction(
                         profile.to_glib_none().0,
                         restriction,
                     );
@@ -149,7 +138,7 @@ macro_rules! declare_encoding_profile_has_restriction(
                 let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
 
                 unsafe {
-                   from_glib_full(gst_pbutils_sys::gst_encoding_profile_get_restriction(
+                   from_glib_full(ffi::gst_encoding_profile_get_restriction(
                        profile.to_glib_none().0,
                    ))
                }
@@ -169,7 +158,7 @@ impl EncodingAudioProfile {
         let preset = preset.to_glib_none();
         let restriction = restriction.to_glib_none();
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_audio_profile_new(
+            from_glib_full(ffi::gst_encoding_audio_profile_new(
                 format.to_glib_none().0,
                 preset.0,
                 restriction.0,
@@ -192,7 +181,7 @@ impl EncodingVideoProfile {
         let preset = preset.to_glib_none();
         let restriction = restriction.to_glib_none();
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_video_profile_new(
+            from_glib_full(ffi::gst_encoding_video_profile_new(
                 format.to_glib_none().0,
                 preset.0,
                 restriction.0,
@@ -203,13 +192,13 @@ impl EncodingVideoProfile {
 
     fn set_pass(&self, pass: u32) {
         unsafe {
-            gst_pbutils_sys::gst_encoding_video_profile_set_pass(self.to_glib_none().0, pass);
+            ffi::gst_encoding_video_profile_set_pass(self.to_glib_none().0, pass);
         }
     }
 
     fn set_variableframerate(&self, variableframerate: bool) {
         unsafe {
-            gst_pbutils_sys::gst_encoding_video_profile_set_variableframerate(
+            ffi::gst_encoding_video_profile_set_variableframerate(
                 self.to_glib_none().0,
                 variableframerate.to_glib(),
             );
@@ -231,7 +220,7 @@ impl EncodingContainerProfile {
         let description = description.to_glib_none();
         let preset = preset.to_glib_none();
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_container_profile_new(
+            from_glib_full(ffi::gst_encoding_container_profile_new(
                 name.0,
                 description.0,
                 format.to_glib_none().0,
@@ -245,8 +234,8 @@ impl EncodingContainerProfile {
         profile: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_pbutils_sys::gst_encoding_container_profile_add_profile(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_encoding_container_profile_add_profile(
                     self.to_glib_none().0,
                     profile.as_ref().to_glib_full(),
                 ),
@@ -504,10 +493,9 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use auto::EncodingContainerProfile;
-    use auto::EncodingProfileExt;
-    use auto::EncodingVideoProfile;
-    use gst;
+    use crate::auto::EncodingContainerProfile;
+    use crate::auto::EncodingProfileExt;
+    use crate::auto::EncodingVideoProfile;
 
     const AUDIO_PROFILE_NAME: &str = "audio-profile";
     const AUDIO_PROFILE_DESCRIPTION: &str = "audio-profile-description";
