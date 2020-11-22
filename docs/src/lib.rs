@@ -1,5 +1,3 @@
-extern crate stripper_lib;
-
 use std::io;
 use std::path::Path;
 use stripper_lib::{loop_over_files, parse_cmts, regenerate_comments, strip_comments};

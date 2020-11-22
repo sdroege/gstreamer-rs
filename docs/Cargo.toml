@@ -6,6 +6,7 @@ license = "LGPL-2.0"
 description = "LGPL-licensed docs for gstreamer-rs crates"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 homepage = "https://gstreamer.freedesktop.org"
+edition = "2018"
 
 [lib]
 name = "lgpl_docs"
