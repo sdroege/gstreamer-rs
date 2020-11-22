@@ -2,35 +2,30 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::WebRTCICEComponent;
+use crate::WebRTCICEConnectionState;
+use crate::WebRTCICEGatheringState;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst_web_rtc_sys;
-use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use WebRTCICEComponent;
-use WebRTCICEConnectionState;
-use WebRTCICEGatheringState;
 
-glib_wrapper! {
-    pub struct WebRTCICETransport(Object<gst_web_rtc_sys::GstWebRTCICETransport, gst_web_rtc_sys::GstWebRTCICETransportClass>);
+glib::glib_wrapper! {
+    pub struct WebRTCICETransport(Object<ffi::GstWebRTCICETransport, ffi::GstWebRTCICETransportClass>);
 
     match fn {
-        get_type => || gst_web_rtc_sys::gst_webrtc_ice_transport_get_type(),
+        get_type => || ffi::gst_webrtc_ice_transport_get_type(),
     }
 }
 
 impl WebRTCICETransport {
     pub fn connection_state_change(&self, new_state: WebRTCICEConnectionState) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_ice_transport_connection_state_change(
+            ffi::gst_webrtc_ice_transport_connection_state_change(
                 self.to_glib_none().0,
                 new_state.to_glib(),
             );
@@ -39,7 +34,7 @@ impl WebRTCICETransport {
 
     pub fn gathering_state_change(&self, new_state: WebRTCICEGatheringState) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_ice_transport_gathering_state_change(
+            ffi::gst_webrtc_ice_transport_gathering_state_change(
                 self.to_glib_none().0,
                 new_state.to_glib(),
             );
@@ -48,7 +43,7 @@ impl WebRTCICETransport {
 
     pub fn new_candidate(&self, stream_id: u32, component: WebRTCICEComponent, attr: &str) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_ice_transport_new_candidate(
+            ffi::gst_webrtc_ice_transport_new_candidate(
                 self.to_glib_none().0,
                 stream_id,
                 component.to_glib(),
@@ -59,15 +54,15 @@ impl WebRTCICETransport {
 
     pub fn selected_pair_change(&self) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_ice_transport_selected_pair_change(self.to_glib_none().0);
+            ffi::gst_webrtc_ice_transport_selected_pair_change(self.to_glib_none().0);
         }
     }
 
     pub fn get_property_component(&self) -> WebRTCICEComponent {
         unsafe {
             let mut value = Value::from_type(<WebRTCICEComponent as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"component\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -82,8 +77,8 @@ impl WebRTCICETransport {
         unsafe {
             let mut value =
                 Value::from_type(<WebRTCICEGatheringState as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"gathering-state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -98,8 +93,8 @@ impl WebRTCICETransport {
         unsafe {
             let mut value =
                 Value::from_type(<WebRTCICEConnectionState as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -117,12 +112,15 @@ impl WebRTCICETransport {
         unsafe extern "C" fn on_new_candidate_trampoline<
             F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCICETransport,
+            this: *mut ffi::GstWebRTCICETransport,
             object: *mut libc::c_char,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
+            f(
+                &from_glib_borrow(this),
+                &glib::GString::from_glib_borrow(object),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -146,8 +144,8 @@ impl WebRTCICETransport {
         unsafe extern "C" fn on_selected_candidate_pair_change_trampoline<
             F: Fn(&WebRTCICETransport) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCICETransport,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCICETransport,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -174,9 +172,9 @@ impl WebRTCICETransport {
         unsafe extern "C" fn notify_gathering_state_trampoline<
             F: Fn(&WebRTCICETransport) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCICETransport,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCICETransport,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -201,9 +199,9 @@ impl WebRTCICETransport {
         unsafe extern "C" fn notify_state_trampoline<
             F: Fn(&WebRTCICETransport) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCICETransport,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCICETransport,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))

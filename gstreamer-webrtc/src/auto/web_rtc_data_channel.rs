@@ -2,29 +2,23 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::WebRTCDataChannelState;
+use crate::WebRTCPriorityType;
 use glib::object::ObjectExt;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst_web_rtc_sys;
-use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use WebRTCDataChannelState;
-use WebRTCPriorityType;
 
-glib_wrapper! {
-    pub struct WebRTCDataChannel(Object<gst_web_rtc_sys::GstWebRTCDataChannel, gst_web_rtc_sys::GstWebRTCDataChannelClass>);
+glib::glib_wrapper! {
+    pub struct WebRTCDataChannel(Object<ffi::GstWebRTCDataChannel, ffi::GstWebRTCDataChannelClass>);
 
     match fn {
-        get_type => || gst_web_rtc_sys::gst_webrtc_data_channel_get_type(),
+        get_type => || ffi::gst_webrtc_data_channel_get_type(),
     }
 }
 
@@ -33,7 +27,7 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn close(&self) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_close(self.to_glib_none().0);
+            ffi::gst_webrtc_data_channel_close(self.to_glib_none().0);
         }
     }
 
@@ -41,7 +35,7 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_buffered_amount_low(&self) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_on_buffered_amount_low(self.to_glib_none().0);
+            ffi::gst_webrtc_data_channel_on_buffered_amount_low(self.to_glib_none().0);
         }
     }
 
@@ -49,7 +43,7 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_close(&self) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_on_close(self.to_glib_none().0);
+            ffi::gst_webrtc_data_channel_on_close(self.to_glib_none().0);
         }
     }
 
@@ -57,7 +51,7 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_message_data(&self, data: Option<&glib::Bytes>) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_on_message_data(
+            ffi::gst_webrtc_data_channel_on_message_data(
                 self.to_glib_none().0,
                 data.to_glib_none().0,
             );
@@ -68,7 +62,7 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_message_string(&self, str: Option<&str>) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_on_message_string(
+            ffi::gst_webrtc_data_channel_on_message_string(
                 self.to_glib_none().0,
                 str.to_glib_none().0,
             );
@@ -79,7 +73,7 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_open(&self) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_on_open(self.to_glib_none().0);
+            ffi::gst_webrtc_data_channel_on_open(self.to_glib_none().0);
         }
     }
 
@@ -87,10 +81,7 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn send_data(&self, data: Option<&glib::Bytes>) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_send_data(
-                self.to_glib_none().0,
-                data.to_glib_none().0,
-            );
+            ffi::gst_webrtc_data_channel_send_data(self.to_glib_none().0, data.to_glib_none().0);
         }
     }
 
@@ -98,18 +89,15 @@ impl WebRTCDataChannel {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn send_string(&self, str: Option<&str>) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_data_channel_send_string(
-                self.to_glib_none().0,
-                str.to_glib_none().0,
-            );
+            ffi::gst_webrtc_data_channel_send_string(self.to_glib_none().0, str.to_glib_none().0);
         }
     }
 
     pub fn get_property_buffered_amount(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffered-amount\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -123,8 +111,8 @@ impl WebRTCDataChannel {
     pub fn get_property_buffered_amount_low_threshold(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffered-amount-low-threshold\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -137,8 +125,8 @@ impl WebRTCDataChannel {
 
     pub fn set_property_buffered_amount_low_threshold(&self, buffered_amount_low_threshold: u64) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffered-amount-low-threshold\0".as_ptr() as *const _,
                 Value::from(&buffered_amount_low_threshold).to_glib_none().0,
             );
@@ -148,8 +136,8 @@ impl WebRTCDataChannel {
     pub fn get_property_id(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"id\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -160,11 +148,11 @@ impl WebRTCDataChannel {
         }
     }
 
-    pub fn get_property_label(&self) -> Option<GString> {
+    pub fn get_property_label(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"label\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -177,8 +165,8 @@ impl WebRTCDataChannel {
     pub fn get_property_max_packet_lifetime(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"max-packet-lifetime\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -192,8 +180,8 @@ impl WebRTCDataChannel {
     pub fn get_property_max_retransmits(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"max-retransmits\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -207,8 +195,8 @@ impl WebRTCDataChannel {
     pub fn get_property_negotiated(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"negotiated\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -222,8 +210,8 @@ impl WebRTCDataChannel {
     pub fn get_property_ordered(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"ordered\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -237,8 +225,8 @@ impl WebRTCDataChannel {
     pub fn get_property_priority(&self) -> WebRTCPriorityType {
         unsafe {
             let mut value = Value::from_type(<WebRTCPriorityType as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"priority\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -249,11 +237,11 @@ impl WebRTCDataChannel {
         }
     }
 
-    pub fn get_property_protocol(&self) -> Option<GString> {
+    pub fn get_property_protocol(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"protocol\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -266,8 +254,8 @@ impl WebRTCDataChannel {
     pub fn get_property_ready_state(&self) -> WebRTCDataChannelState {
         unsafe {
             let mut value = Value::from_type(<WebRTCDataChannelState as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"ready-state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -283,8 +271,8 @@ impl WebRTCDataChannel {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn close_trampoline<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -304,7 +292,7 @@ impl WebRTCDataChannel {
 
     pub fn emit_close(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
                 .emit("close", &[])
                 .unwrap()
         };
@@ -317,8 +305,8 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn on_buffered_amount_low_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -343,8 +331,8 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn on_close_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -369,9 +357,9 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn on_error_trampoline<
             F: Fn(&WebRTCDataChannel, &glib::Error) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            error: *mut glib_sys::GError,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            error: *mut glib::ffi::GError,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this), &from_glib_borrow(error))
@@ -398,9 +386,9 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn on_message_data_trampoline<
             F: Fn(&WebRTCDataChannel, Option<&glib::Bytes>) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            data: *mut glib_sys::GBytes,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            data: *mut glib::ffi::GBytes,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
@@ -432,14 +420,14 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn on_message_string_trampoline<
             F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
+            this: *mut ffi::GstWebRTCDataChannel,
             data: *mut libc::c_char,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
                 &from_glib_borrow(this),
-                Option::<GString>::from_glib_borrow(data)
+                Option::<glib::GString>::from_glib_borrow(data)
                     .as_ref()
                     .as_deref(),
             )
@@ -464,8 +452,8 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn on_open_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -492,9 +480,9 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn send_data_trampoline<
             F: Fn(&WebRTCDataChannel, Option<&glib::Bytes>) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            data: *mut glib_sys::GBytes,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            data: *mut glib::ffi::GBytes,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
@@ -519,7 +507,7 @@ impl WebRTCDataChannel {
 
     pub fn emit_send_data(&self, data: Option<&glib::Bytes>) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
                 .emit("send-data", &[&data])
                 .unwrap()
         };
@@ -532,14 +520,14 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn send_string_trampoline<
             F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
+            this: *mut ffi::GstWebRTCDataChannel,
             data: *mut libc::c_char,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
                 &from_glib_borrow(this),
-                Option::<GString>::from_glib_borrow(data)
+                Option::<glib::GString>::from_glib_borrow(data)
                     .as_ref()
                     .as_deref(),
             )
@@ -559,7 +547,7 @@ impl WebRTCDataChannel {
 
     pub fn emit_send_string(&self, data: Option<&str>) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
                 .emit("send-string", &[&data])
                 .unwrap()
         };
@@ -574,9 +562,9 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn notify_buffered_amount_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -603,9 +591,9 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn notify_buffered_amount_low_threshold_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
@@ -632,9 +620,9 @@ impl WebRTCDataChannel {
         unsafe extern "C" fn notify_ready_state_trampoline<
             F: Fn(&WebRTCDataChannel) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCDataChannel,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCDataChannel,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))

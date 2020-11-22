@@ -2,27 +2,26 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::WebRTCDTLSTransport;
 use glib::translate::*;
-use gst_web_rtc_sys;
-use WebRTCDTLSTransport;
 
-glib_wrapper! {
-    pub struct WebRTCRTPSender(Object<gst_web_rtc_sys::GstWebRTCRTPSender, gst_web_rtc_sys::GstWebRTCRTPSenderClass>);
+glib::glib_wrapper! {
+    pub struct WebRTCRTPSender(Object<ffi::GstWebRTCRTPSender, ffi::GstWebRTCRTPSenderClass>);
 
     match fn {
-        get_type => || gst_web_rtc_sys::gst_webrtc_rtp_sender_get_type(),
+        get_type => || ffi::gst_webrtc_rtp_sender_get_type(),
     }
 }
 
 impl WebRTCRTPSender {
     pub fn new() -> WebRTCRTPSender {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(gst_web_rtc_sys::gst_webrtc_rtp_sender_new()) }
+        unsafe { from_glib_none(ffi::gst_webrtc_rtp_sender_new()) }
     }
 
     pub fn set_rtcp_transport(&self, transport: &WebRTCDTLSTransport) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_rtp_sender_set_rtcp_transport(
+            ffi::gst_webrtc_rtp_sender_set_rtcp_transport(
                 self.to_glib_none().0,
                 transport.to_glib_none().0,
             );
@@ -31,7 +30,7 @@ impl WebRTCRTPSender {
 
     pub fn set_transport(&self, transport: &WebRTCDTLSTransport) {
         unsafe {
-            gst_web_rtc_sys::gst_webrtc_rtp_sender_set_transport(
+            ffi::gst_webrtc_rtp_sender_set_transport(
                 self.to_glib_none().0,
                 transport.to_glib_none().0,
             );

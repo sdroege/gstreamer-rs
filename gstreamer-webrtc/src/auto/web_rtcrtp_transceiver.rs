@@ -2,6 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::WebRTCRTPReceiver;
+use crate::WebRTCRTPSender;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::WebRTCRTPTransceiverDirection;
 use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -14,26 +19,16 @@ use glib::StaticType;
 use glib::Value;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use glib_sys;
-use gobject_sys;
-use gst_web_rtc_sys;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem::transmute;
-use WebRTCRTPReceiver;
-use WebRTCRTPSender;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use WebRTCRTPTransceiverDirection;
 
-glib_wrapper! {
-    pub struct WebRTCRTPTransceiver(Object<gst_web_rtc_sys::GstWebRTCRTPTransceiver, gst_web_rtc_sys::GstWebRTCRTPTransceiverClass>);
+glib::glib_wrapper! {
+    pub struct WebRTCRTPTransceiver(Object<ffi::GstWebRTCRTPTransceiver, ffi::GstWebRTCRTPTransceiverClass>);
 
     match fn {
-        get_type => || gst_web_rtc_sys::gst_webrtc_rtp_transceiver_get_type(),
+        get_type => || ffi::gst_webrtc_rtp_transceiver_get_type(),
     }
 }
 
@@ -44,8 +39,8 @@ impl WebRTCRTPTransceiver {
         unsafe {
             let mut value =
                 Value::from_type(<WebRTCRTPTransceiverDirection as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"direction\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -60,8 +55,8 @@ impl WebRTCRTPTransceiver {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_property_direction(&self, direction: WebRTCRTPTransceiverDirection) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"direction\0".as_ptr() as *const _,
                 Value::from(&direction).to_glib_none().0,
             );
@@ -71,8 +66,8 @@ impl WebRTCRTPTransceiver {
     pub fn get_property_mlineindex(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"mlineindex\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -86,8 +81,8 @@ impl WebRTCRTPTransceiver {
     pub fn get_property_receiver(&self) -> Option<WebRTCRTPReceiver> {
         unsafe {
             let mut value = Value::from_type(<WebRTCRTPReceiver as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"receiver\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -100,8 +95,8 @@ impl WebRTCRTPTransceiver {
     pub fn get_property_sender(&self) -> Option<WebRTCRTPSender> {
         unsafe {
             let mut value = Value::from_type(<WebRTCRTPSender as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.as_ptr() as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"sender\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -122,9 +117,9 @@ impl WebRTCRTPTransceiver {
         unsafe extern "C" fn notify_direction_trampoline<
             F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static,
         >(
-            this: *mut gst_web_rtc_sys::GstWebRTCRTPTransceiver,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstWebRTCRTPTransceiver,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
