@@ -8,23 +8,11 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-#[macro_use]
-extern crate bitflags;
-extern crate libc;
-
-#[macro_use]
-extern crate glib;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_rtsp_sys as gst_rtsp_sys;
-extern crate gstreamer_sdp as gst_sdp;
-extern crate gstreamer_sdp_sys as gst_sdp_sys;
-extern crate gstreamer_sys as gst_sys;
+pub use ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -38,7 +26,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
 mod auto;
-pub use auto::*;
+pub use crate::auto::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -46,5 +34,5 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use auto::traits::*;
+    pub use crate::auto::traits::*;
 }
