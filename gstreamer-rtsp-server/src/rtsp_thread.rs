@@ -1,38 +1,28 @@
-use glib;
 use glib::translate::*;
 
-use gst_rtsp_server_sys;
-
-gst_define_mini_object_wrapper!(
-    RTSPThread,
-    RTSPThreadRef,
-    gst_rtsp_server_sys::GstRTSPThread,
-    || gst_rtsp_server_sys::gst_rtsp_thread_get_type()
-);
+gst::gst_define_mini_object_wrapper!(RTSPThread, RTSPThreadRef, ffi::GstRTSPThread, || {
+    ffi::gst_rtsp_thread_get_type()
+});
 
 impl RTSPThread {
-    pub fn new(type_: ::RTSPThreadType) -> Option<Self> {
+    pub fn new(type_: crate::RTSPThreadType) -> Option<Self> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_rtsp_server_sys::gst_rtsp_thread_new(type_.to_glib())) }
+        unsafe { from_glib_full(ffi::gst_rtsp_thread_new(type_.to_glib())) }
     }
 }
 
 impl RTSPThreadRef {
     pub fn reuse(&self) -> bool {
-        unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_thread_reuse(
-                self.as_mut_ptr(),
-            ))
-        }
+        unsafe { from_glib(ffi::gst_rtsp_thread_reuse(self.as_mut_ptr())) }
     }
 
     pub fn stop(&self) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_thread_stop(self.as_mut_ptr());
+            ffi::gst_rtsp_thread_stop(self.as_mut_ptr());
         }
     }
 
-    pub fn type_(&self) -> ::RTSPThreadType {
+    pub fn type_(&self) -> crate::RTSPThreadType {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 

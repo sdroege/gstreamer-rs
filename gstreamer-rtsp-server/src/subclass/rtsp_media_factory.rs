@@ -6,15 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_rtsp_server_sys;
-
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use gst_rtsp;
-
-use RTSPMediaFactory;
+use crate::RTSPMediaFactory;
 
 use std::mem::transmute;
 
@@ -31,23 +27,27 @@ pub trait RTSPMediaFactoryImpl: RTSPMediaFactoryImplExt + ObjectImpl + Send + Sy
         self.parent_create_element(factory, url)
     }
 
-    fn construct(&self, factory: &Self::Type, url: &gst_rtsp::RTSPUrl) -> Option<::RTSPMedia> {
+    fn construct(&self, factory: &Self::Type, url: &gst_rtsp::RTSPUrl) -> Option<crate::RTSPMedia> {
         self.parent_construct(factory, url)
     }
 
-    fn create_pipeline(&self, factory: &Self::Type, media: &::RTSPMedia) -> Option<gst::Pipeline> {
+    fn create_pipeline(
+        &self,
+        factory: &Self::Type,
+        media: &crate::RTSPMedia,
+    ) -> Option<gst::Pipeline> {
         self.parent_create_pipeline(factory, media)
     }
 
-    fn configure(&self, factory: &Self::Type, media: &::RTSPMedia) {
+    fn configure(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         self.parent_configure(factory, media)
     }
 
-    fn media_constructed(&self, factory: &Self::Type, media: &::RTSPMedia) {
+    fn media_constructed(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         self.parent_media_constructed(factory, media)
     }
 
-    fn media_configure(&self, factory: &Self::Type, media: &::RTSPMedia) {
+    fn media_configure(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         self.parent_media_configure(factory, media)
     }
 }
@@ -69,18 +69,18 @@ pub trait RTSPMediaFactoryImplExt: ObjectSubclass {
         &self,
         factory: &Self::Type,
         url: &gst_rtsp::RTSPUrl,
-    ) -> Option<::RTSPMedia>;
+    ) -> Option<crate::RTSPMedia>;
 
     fn parent_create_pipeline(
         &self,
         factory: &Self::Type,
-        media: &::RTSPMedia,
+        media: &crate::RTSPMedia,
     ) -> Option<gst::Pipeline>;
 
-    fn parent_configure(&self, factory: &Self::Type, media: &::RTSPMedia);
+    fn parent_configure(&self, factory: &Self::Type, media: &crate::RTSPMedia);
 
-    fn parent_media_constructed(&self, factory: &Self::Type, media: &::RTSPMedia);
-    fn parent_media_configure(&self, factory: &Self::Type, media: &::RTSPMedia);
+    fn parent_media_constructed(&self, factory: &Self::Type, media: &crate::RTSPMedia);
+    fn parent_media_configure(&self, factory: &Self::Type, media: &crate::RTSPMedia);
 }
 
 impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
@@ -91,8 +91,8 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
     ) -> Option<glib::GString> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class()
-                as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .gen_key
                 .map(|f| {
@@ -115,8 +115,8 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
     ) -> Option<gst::Element> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class()
-                as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .create_element
                 .map(|f| {
@@ -136,11 +136,11 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         &self,
         factory: &Self::Type,
         url: &gst_rtsp::RTSPUrl,
-    ) -> Option<::RTSPMedia> {
+    ) -> Option<crate::RTSPMedia> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class()
-                as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .construct
                 .map(|f| {
@@ -159,12 +159,12 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
     fn parent_create_pipeline(
         &self,
         factory: &Self::Type,
-        media: &::RTSPMedia,
+        media: &crate::RTSPMedia,
     ) -> Option<gst::Pipeline> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class()
-                as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .create_pipeline
                 .map(|f| {
@@ -174,11 +174,11 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
                             .to_glib_none()
                             .0,
                         media.to_glib_none().0,
-                    ) as *mut gst_sys::GstPipeline;
+                    ) as *mut gst::ffi::GstPipeline;
 
                     // See https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/merge_requests/109
-                    if gobject_sys::g_object_is_floating(ptr as *mut _) != glib_sys::GFALSE {
-                        gobject_sys::g_object_ref_sink(ptr as *mut _);
+                    if glib::gobject_ffi::g_object_is_floating(ptr as *mut _) != glib::ffi::GFALSE {
+                        glib::gobject_ffi::g_object_ref_sink(ptr as *mut _);
                     }
                     from_glib_none(ptr)
                 })
@@ -186,11 +186,11 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         }
     }
 
-    fn parent_configure(&self, factory: &Self::Type, media: &::RTSPMedia) {
+    fn parent_configure(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class()
-                as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).configure {
                 f(
                     factory
@@ -203,11 +203,11 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         }
     }
 
-    fn parent_media_constructed(&self, factory: &Self::Type, media: &::RTSPMedia) {
+    fn parent_media_constructed(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class()
-                as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).media_constructed {
                 f(
                     factory
@@ -220,11 +220,11 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         }
     }
 
-    fn parent_media_configure(&self, factory: &Self::Type, media: &::RTSPMedia) {
+    fn parent_media_configure(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class()
-                as *mut gst_rtsp_server_sys::GstRTSPMediaFactoryClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).media_configure {
                 f(
                     factory
@@ -252,8 +252,8 @@ unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
 }
 
 unsafe extern "C" fn factory_gen_key<T: RTSPMediaFactoryImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
-    url: *const gst_rtsp_sys::GstRTSPUrl,
+    ptr: *mut ffi::GstRTSPMediaFactory,
+    url: *const gst_rtsp::ffi::GstRTSPUrl,
 ) -> *mut std::os::raw::c_char {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -264,9 +264,9 @@ unsafe extern "C" fn factory_gen_key<T: RTSPMediaFactoryImpl>(
 }
 
 unsafe extern "C" fn factory_create_element<T: RTSPMediaFactoryImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
-    url: *const gst_rtsp_sys::GstRTSPUrl,
-) -> *mut gst_sys::GstElement {
+    ptr: *mut ffi::GstRTSPMediaFactory,
+    url: *const gst_rtsp::ffi::GstRTSPUrl,
+) -> *mut gst::ffi::GstElement {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
@@ -274,14 +274,14 @@ unsafe extern "C" fn factory_create_element<T: RTSPMediaFactoryImpl>(
     let element = imp
         .create_element(wrap.unsafe_cast_ref(), &from_glib_borrow(url))
         .to_glib_full();
-    gobject_sys::g_object_force_floating(element as *mut _);
+    glib::gobject_ffi::g_object_force_floating(element as *mut _);
     element
 }
 
 unsafe extern "C" fn factory_construct<T: RTSPMediaFactoryImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
-    url: *const gst_rtsp_sys::GstRTSPUrl,
-) -> *mut gst_rtsp_server_sys::GstRTSPMedia {
+    ptr: *mut ffi::GstRTSPMediaFactory,
+    url: *const gst_rtsp::ffi::GstRTSPUrl,
+) -> *mut ffi::GstRTSPMedia {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
@@ -291,9 +291,9 @@ unsafe extern "C" fn factory_construct<T: RTSPMediaFactoryImpl>(
 }
 
 unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
-    media: *mut gst_rtsp_server_sys::GstRTSPMedia,
-) -> *mut gst_sys::GstElement {
+    ptr: *mut ffi::GstRTSPMediaFactory,
+    media: *mut ffi::GstRTSPMedia,
+) -> *mut gst::ffi::GstElement {
     use once_cell::sync::Lazy;
 
     static PIPELINE_QUARK: Lazy<glib::Quark> =
@@ -303,17 +303,17 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPMediaFactory> = from_glib_borrow(ptr);
 
-    let pipeline: *mut gst_sys::GstPipeline = imp
+    let pipeline: *mut gst::ffi::GstPipeline = imp
         .create_pipeline(wrap.unsafe_cast_ref(), &from_glib_borrow(media))
         .to_glib_full();
 
     // FIXME We somehow need to ensure the pipeline actually stays alive...
-    gobject_sys::g_object_set_qdata_full(
+    glib::gobject_ffi::g_object_set_qdata_full(
         media as *mut _,
         PIPELINE_QUARK.to_glib(),
         pipeline as *mut _,
-        Some(transmute::<_, unsafe extern "C" fn(glib_sys::gpointer)>(
-            gobject_sys::g_object_unref as *const (),
+        Some(transmute::<_, unsafe extern "C" fn(glib::ffi::gpointer)>(
+            glib::gobject_ffi::g_object_unref as *const (),
         )),
     );
 
@@ -321,8 +321,8 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
 }
 
 unsafe extern "C" fn factory_configure<T: RTSPMediaFactoryImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
-    media: *mut gst_rtsp_server_sys::GstRTSPMedia,
+    ptr: *mut ffi::GstRTSPMediaFactory,
+    media: *mut ffi::GstRTSPMedia,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -332,8 +332,8 @@ unsafe extern "C" fn factory_configure<T: RTSPMediaFactoryImpl>(
 }
 
 unsafe extern "C" fn factory_media_constructed<T: RTSPMediaFactoryImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
-    media: *mut gst_rtsp_server_sys::GstRTSPMedia,
+    ptr: *mut ffi::GstRTSPMediaFactory,
+    media: *mut ffi::GstRTSPMedia,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -343,8 +343,8 @@ unsafe extern "C" fn factory_media_constructed<T: RTSPMediaFactoryImpl>(
 }
 
 unsafe extern "C" fn factory_media_configure<T: RTSPMediaFactoryImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPMediaFactory,
-    media: *mut gst_rtsp_server_sys::GstRTSPMedia,
+    ptr: *mut ffi::GstRTSPMediaFactory,
+    media: *mut ffi::GstRTSPMedia,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();

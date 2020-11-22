@@ -1,10 +1,9 @@
+use crate::RTSPAddress;
+use crate::RTSPAddressPool;
+use crate::RTSPAddressPoolResult;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_rtsp_server_sys;
 use std::ptr;
-use RTSPAddress;
-use RTSPAddressPool;
-use RTSPAddressPoolResult;
 
 pub trait RTSPAddressPoolExtManual: 'static {
     fn reserve_address(
@@ -26,7 +25,7 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExtManual for O {
     ) -> Result<RTSPAddress, RTSPAddressPoolResult> {
         unsafe {
             let mut address = ptr::null_mut();
-            let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_address_pool_reserve_address(
+            let ret = from_glib(ffi::gst_rtsp_address_pool_reserve_address(
                 self.as_ref().to_glib_none().0,
                 ip_address.to_glib_none().0,
                 port,

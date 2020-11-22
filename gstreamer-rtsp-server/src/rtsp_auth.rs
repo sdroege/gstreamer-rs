@@ -3,13 +3,12 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use gst_rtsp_server_sys;
 
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-use RTSPAuth;
-use RTSPToken;
+use crate::RTSPAuth;
+use crate::RTSPToken;
 
 pub trait RTSPAuthExtManual: 'static {
     fn set_default_token(&self, token: Option<&mut RTSPToken>);
@@ -33,7 +32,7 @@ pub trait RTSPAuthExtManual: 'static {
 impl<O: IsA<RTSPAuth>> RTSPAuthExtManual for O {
     fn set_default_token(&self, mut token: Option<&mut RTSPToken>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_auth_set_default_token(
+            ffi::gst_rtsp_auth_set_default_token(
                 self.as_ref().to_glib_none().0,
                 token.to_glib_none_mut().0,
             );
@@ -80,12 +79,12 @@ unsafe extern "C" fn accept_certificate_trampoline<
         + Sync
         + 'static,
 >(
-    this: *mut gst_rtsp_server_sys::GstRTSPAuth,
-    connection: *mut gio_sys::GTlsConnection,
-    peer_cert: *mut gio_sys::GTlsCertificate,
-    errors: gio_sys::GTlsCertificateFlags,
-    f: glib_sys::gpointer,
-) -> glib_sys::gboolean
+    this: *mut ffi::GstRTSPAuth,
+    connection: *mut gio::ffi::GTlsConnection,
+    peer_cert: *mut gio::ffi::GTlsCertificate,
+    errors: gio::ffi::GTlsCertificateFlags,
+    f: glib::ffi::gpointer,
+) -> glib::ffi::gboolean
 where
     P: IsA<RTSPAuth>,
 {

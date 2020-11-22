@@ -6,38 +6,40 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_rtsp_server_sys;
-
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use std::mem;
 
-use RTSPClient;
+use crate::RTSPClient;
 
 pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
-    fn create_sdp(&self, client: &Self::Type, media: &::RTSPMedia) -> Option<gst_sdp::SDPMessage> {
+    fn create_sdp(
+        &self,
+        client: &Self::Type,
+        media: &crate::RTSPMedia,
+    ) -> Option<gst_sdp::SDPMessage> {
         self.parent_create_sdp(client, media)
     }
 
     fn configure_client_media(
         &self,
         client: &Self::Type,
-        media: &::RTSPMedia,
-        stream: &::RTSPStream,
-        ctx: &::RTSPContext,
+        media: &crate::RTSPMedia,
+        stream: &crate::RTSPStream,
+        ctx: &crate::RTSPContext,
     ) -> Result<(), gst::LoggableError> {
         self.parent_configure_client_media(client, media, stream, ctx)
     }
 
     // TODO: configure_client_transport
 
-    fn params_set(&self, client: &Self::Type, ctx: &::RTSPContext) -> gst_rtsp::RTSPResult {
+    fn params_set(&self, client: &Self::Type, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPResult {
         self.parent_params_set(client, ctx)
     }
 
-    fn params_get(&self, client: &Self::Type, ctx: &::RTSPContext) -> gst_rtsp::RTSPResult {
+    fn params_get(&self, client: &Self::Type, ctx: &crate::RTSPContext) -> gst_rtsp::RTSPResult {
         self.parent_params_get(client, ctx)
     }
 
@@ -53,51 +55,51 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
         self.parent_closed(client);
     }
 
-    fn new_session(&self, client: &Self::Type, session: &::RTSPSession) {
+    fn new_session(&self, client: &Self::Type, session: &crate::RTSPSession) {
         self.parent_new_session(client, session);
     }
 
-    fn options_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn options_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_options_request(client, ctx);
     }
 
-    fn describe_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn describe_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_describe_request(client, ctx);
     }
 
-    fn setup_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn setup_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_setup_request(client, ctx);
     }
 
-    fn play_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn play_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_play_request(client, ctx);
     }
 
-    fn pause_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn pause_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_pause_request(client, ctx);
     }
 
-    fn teardown_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn teardown_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_teardown_request(client, ctx);
     }
 
-    fn set_parameter_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn set_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_set_parameter_request(client, ctx);
     }
 
-    fn get_parameter_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn get_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_get_parameter_request(client, ctx);
     }
 
-    fn announce_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn announce_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_announce_request(client, ctx);
     }
 
-    fn record_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn record_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_record_request(client, ctx);
     }
 
-    fn handle_response(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn handle_response(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         self.parent_handle_response(client, ctx);
     }
 
@@ -107,8 +109,8 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn handle_sdp(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
-        media: &::RTSPMedia,
+        ctx: &crate::RTSPContext,
+        media: &crate::RTSPMedia,
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError> {
         self.parent_handle_sdp(client, ctx, media, sdp)
@@ -117,7 +119,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn check_requirements(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
         arr: &[String],
     ) -> Option<glib::GString> {
         self.parent_check_requirements(client, ctx, arr)
@@ -126,7 +128,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_options_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_options_request(client, ctx)
     }
@@ -134,7 +136,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_describe_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_describe_request(client, ctx)
     }
@@ -142,7 +144,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_setup_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_setup_request(client, ctx)
     }
@@ -150,7 +152,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_play_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_play_request(client, ctx)
     }
@@ -158,7 +160,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_pause_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_pause_request(client, ctx)
     }
@@ -166,7 +168,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_teardown_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_teardown_request(client, ctx)
     }
@@ -174,7 +176,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_set_parameter_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_set_parameter_request(client, ctx)
     }
@@ -182,7 +184,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_get_parameter_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_get_parameter_request(client, ctx)
     }
@@ -190,7 +192,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_announce_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_announce_request(client, ctx)
     }
@@ -198,7 +200,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn pre_record_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         self.parent_pre_record_request(client, ctx)
     }
@@ -208,22 +210,30 @@ pub trait RTSPClientImplExt: ObjectSubclass {
     fn parent_create_sdp(
         &self,
         client: &Self::Type,
-        media: &::RTSPMedia,
+        media: &crate::RTSPMedia,
     ) -> Option<gst_sdp::SDPMessage>;
 
     fn parent_configure_client_media(
         &self,
         client: &Self::Type,
-        media: &::RTSPMedia,
-        stream: &::RTSPStream,
-        ctx: &::RTSPContext,
+        media: &crate::RTSPMedia,
+        stream: &crate::RTSPStream,
+        ctx: &crate::RTSPContext,
     ) -> Result<(), gst::LoggableError>;
 
     // TODO: configure_client_transport
 
-    fn parent_params_set(&self, client: &Self::Type, ctx: &::RTSPContext) -> gst_rtsp::RTSPResult;
+    fn parent_params_set(
+        &self,
+        client: &Self::Type,
+        ctx: &crate::RTSPContext,
+    ) -> gst_rtsp::RTSPResult;
 
-    fn parent_params_get(&self, client: &Self::Type, ctx: &::RTSPContext) -> gst_rtsp::RTSPResult;
+    fn parent_params_get(
+        &self,
+        client: &Self::Type,
+        ctx: &crate::RTSPContext,
+    ) -> gst_rtsp::RTSPResult;
 
     fn parent_make_path_from_uri(
         &self,
@@ -233,29 +243,29 @@ pub trait RTSPClientImplExt: ObjectSubclass {
 
     fn parent_closed(&self, client: &Self::Type);
 
-    fn parent_new_session(&self, client: &Self::Type, session: &::RTSPSession);
+    fn parent_new_session(&self, client: &Self::Type, session: &crate::RTSPSession);
 
-    fn parent_options_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_options_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_describe_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_describe_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_setup_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_setup_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_play_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_play_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_pause_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_pause_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_teardown_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_teardown_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_set_parameter_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_set_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_get_parameter_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_get_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_announce_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_announce_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_record_request(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_record_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_handle_response(&self, client: &Self::Type, ctx: &::RTSPContext);
+    fn parent_handle_response(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
     // TODO: tunnel_http_response
     // TODO: send_message
@@ -263,76 +273,76 @@ pub trait RTSPClientImplExt: ObjectSubclass {
     fn parent_handle_sdp(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
-        media: &::RTSPMedia,
+        ctx: &crate::RTSPContext,
+        media: &crate::RTSPMedia,
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError>;
 
     fn parent_check_requirements(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
         arr: &[String],
     ) -> Option<glib::GString>;
 
     fn parent_pre_options_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_describe_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_setup_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_play_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_pause_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_teardown_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_set_parameter_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_get_parameter_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_announce_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 
     fn parent_pre_record_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode;
 }
 
@@ -340,12 +350,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_create_sdp(
         &self,
         client: &Self::Type,
-        media: &::RTSPMedia,
+        media: &crate::RTSPMedia,
     ) -> Option<gst_sdp::SDPMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .create_sdp
                 .expect("No `create_rtpbin` virtual method implementation in parent class");
@@ -360,19 +369,18 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_configure_client_media(
         &self,
         client: &Self::Type,
-        media: &::RTSPMedia,
-        stream: &::RTSPStream,
-        ctx: &::RTSPContext,
+        media: &crate::RTSPMedia,
+        stream: &crate::RTSPStream,
+        ctx: &crate::RTSPContext,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class).configure_client_media.expect(
                 "No `configure_client_media` virtual method implementation in parent class",
             );
 
-            gst_result_from_gboolean!(
+            gst::gst_result_from_gboolean!(
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     media.to_glib_none().0,
@@ -387,11 +395,14 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     // TODO: configure_client_transport
 
-    fn parent_params_set(&self, client: &Self::Type, ctx: &::RTSPContext) -> gst_rtsp::RTSPResult {
+    fn parent_params_set(
+        &self,
+        client: &Self::Type,
+        ctx: &crate::RTSPContext,
+    ) -> gst_rtsp::RTSPResult {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .params_set
                 .expect("No `params_set` virtual method implementation in parent class");
@@ -403,11 +414,14 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_params_get(&self, client: &Self::Type, ctx: &::RTSPContext) -> gst_rtsp::RTSPResult {
+    fn parent_params_get(
+        &self,
+        client: &Self::Type,
+        ctx: &crate::RTSPContext,
+    ) -> gst_rtsp::RTSPResult {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .params_get
                 .expect("No `params_get` virtual method implementation in parent class");
@@ -426,8 +440,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     ) -> Option<glib::GString> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .make_path_from_uri
                 .expect("No `make_path_from_uri` virtual method implementation in parent class");
@@ -442,19 +455,17 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_closed(&self, client: &Self::Type) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).closed {
                 f(client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0);
             }
         }
     }
 
-    fn parent_new_session(&self, client: &Self::Type, session: &::RTSPSession) {
+    fn parent_new_session(&self, client: &Self::Type, session: &crate::RTSPSession) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).new_session {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -464,11 +475,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_options_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_options_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).options_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -478,11 +488,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_describe_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_describe_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).describe_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -492,11 +501,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_setup_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_setup_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).setup_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -506,11 +514,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_play_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_play_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).play_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -520,11 +527,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_pause_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_pause_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pause_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -534,11 +540,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_teardown_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_teardown_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).teardown_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -548,11 +553,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_set_parameter_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_set_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).set_parameter_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -562,11 +566,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_get_parameter_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_get_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).get_parameter_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -576,11 +579,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_announce_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_announce_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).announce_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -590,11 +592,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_record_request(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_record_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).record_request {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -604,11 +605,10 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_handle_response(&self, client: &Self::Type, ctx: &::RTSPContext) {
+    fn parent_handle_response(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).handle_response {
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -624,19 +624,18 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_handle_sdp(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
-        media: &::RTSPMedia,
+        ctx: &crate::RTSPContext,
+        media: &crate::RTSPMedia,
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .handle_sdp
                 .expect("No `handle_sdp` virtual method implementation in parent class");
 
-            gst_result_from_gboolean!(
+            gst::gst_result_from_gboolean!(
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,
@@ -652,13 +651,12 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_check_requirements(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
         arr: &[String],
     ) -> Option<glib::GString> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).check_requirements {
                 from_glib_full(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -674,12 +672,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_options_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_options_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -694,12 +691,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_describe_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_describe_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -714,12 +710,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_setup_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_setup_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -734,12 +729,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_play_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_play_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -754,12 +748,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_pause_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_pause_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -774,12 +767,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_teardown_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_teardown_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -794,12 +786,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_set_parameter_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_set_parameter_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -814,12 +805,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_get_parameter_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_get_parameter_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -834,12 +824,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_announce_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_announce_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -854,12 +843,11 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     fn parent_pre_record_request(
         &self,
         client: &Self::Type,
-        ctx: &::RTSPContext,
+        ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_rtsp_server_sys::GstRTSPClientClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_record_request {
                 from_glib(f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
@@ -909,9 +897,9 @@ unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
 }
 
 unsafe extern "C" fn client_create_sdp<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    media: *mut gst_rtsp_server_sys::GstRTSPMedia,
-) -> *mut gst_sdp_sys::GstSDPMessage {
+    ptr: *mut ffi::GstRTSPClient,
+    media: *mut ffi::GstRTSPMedia,
+) -> *mut gst_sdp::ffi::GstSDPMessage {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -924,11 +912,11 @@ unsafe extern "C" fn client_create_sdp<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_configure_client_media<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    media: *mut gst_rtsp_server_sys::GstRTSPMedia,
-    stream: *mut gst_rtsp_server_sys::GstRTSPStream,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> glib_sys::gboolean {
+    ptr: *mut ffi::GstRTSPClient,
+    media: *mut ffi::GstRTSPMedia,
+    stream: *mut ffi::GstRTSPStream,
+    ctx: *mut ffi::GstRTSPContext,
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -939,18 +927,18 @@ unsafe extern "C" fn client_configure_client_media<T: RTSPClientImpl>(
         &from_glib_borrow(stream),
         &from_glib_borrow(ctx),
     ) {
-        Ok(()) => glib_sys::GTRUE,
+        Ok(()) => glib::ffi::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);
-            glib_sys::GFALSE
+            glib::ffi::GFALSE
         }
     }
 }
 
 unsafe extern "C" fn client_params_set<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPResult {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPResult {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -960,9 +948,9 @@ unsafe extern "C" fn client_params_set<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_params_get<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPResult {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPResult {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -972,8 +960,8 @@ unsafe extern "C" fn client_params_get<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_make_path_from_uri<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    url: *const gst_rtsp_sys::GstRTSPUrl,
+    ptr: *mut ffi::GstRTSPClient,
+    url: *const gst_rtsp::ffi::GstRTSPUrl,
 ) -> *mut std::os::raw::c_char {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -983,9 +971,7 @@ unsafe extern "C" fn client_make_path_from_uri<T: RTSPClientImpl>(
         .to_glib_full()
 }
 
-unsafe extern "C" fn client_closed<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-) {
+unsafe extern "C" fn client_closed<T: RTSPClientImpl>(ptr: *mut ffi::GstRTSPClient) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -994,8 +980,8 @@ unsafe extern "C" fn client_closed<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_new_session<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    session: *mut gst_rtsp_server_sys::GstRTSPSession,
+    ptr: *mut ffi::GstRTSPClient,
+    session: *mut ffi::GstRTSPSession,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1005,8 +991,8 @@ unsafe extern "C" fn client_new_session<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_options_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1016,8 +1002,8 @@ unsafe extern "C" fn client_options_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_describe_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1027,8 +1013,8 @@ unsafe extern "C" fn client_describe_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_setup_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1038,8 +1024,8 @@ unsafe extern "C" fn client_setup_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_play_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1049,8 +1035,8 @@ unsafe extern "C" fn client_play_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pause_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1060,8 +1046,8 @@ unsafe extern "C" fn client_pause_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_teardown_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1071,8 +1057,8 @@ unsafe extern "C" fn client_teardown_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_set_parameter_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1082,8 +1068,8 @@ unsafe extern "C" fn client_set_parameter_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_get_parameter_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1093,8 +1079,8 @@ unsafe extern "C" fn client_get_parameter_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_announce_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1104,8 +1090,8 @@ unsafe extern "C" fn client_announce_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_record_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1115,8 +1101,8 @@ unsafe extern "C" fn client_record_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_handle_response<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
 ) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
@@ -1126,11 +1112,11 @@ unsafe extern "C" fn client_handle_response<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_handle_sdp<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-    media: *mut gst_rtsp_server_sys::GstRTSPMedia,
-    sdp: *mut gst_sdp_sys::GstSDPMessage,
-) -> glib_sys::gboolean {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+    media: *mut ffi::GstRTSPMedia,
+    sdp: *mut gst_sdp::ffi::GstSDPMessage,
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1141,17 +1127,17 @@ unsafe extern "C" fn client_handle_sdp<T: RTSPClientImpl>(
         &from_glib_borrow(media),
         &*(sdp as *mut _),
     ) {
-        Ok(()) => glib_sys::GTRUE,
+        Ok(()) => glib::ffi::GTRUE,
         Err(err) => {
             err.log_with_object(&*wrap);
-            glib_sys::GFALSE
+            glib::ffi::GFALSE
         }
     }
 }
 
 unsafe extern "C" fn client_check_requirements<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
     arr: *mut *mut std::os::raw::c_char,
 ) -> *mut std::os::raw::c_char {
     let instance = &*(ptr as *mut T::Instance);
@@ -1167,9 +1153,9 @@ unsafe extern "C" fn client_check_requirements<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_options_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1179,9 +1165,9 @@ unsafe extern "C" fn client_pre_options_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_describe_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1191,9 +1177,9 @@ unsafe extern "C" fn client_pre_describe_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_setup_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1203,9 +1189,9 @@ unsafe extern "C" fn client_pre_setup_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_play_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1215,9 +1201,9 @@ unsafe extern "C" fn client_pre_play_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_pause_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1227,9 +1213,9 @@ unsafe extern "C" fn client_pre_pause_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_teardown_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1239,9 +1225,9 @@ unsafe extern "C" fn client_pre_teardown_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_set_parameter_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1251,9 +1237,9 @@ unsafe extern "C" fn client_pre_set_parameter_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_get_parameter_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1263,9 +1249,9 @@ unsafe extern "C" fn client_pre_get_parameter_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_announce_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
@@ -1275,9 +1261,9 @@ unsafe extern "C" fn client_pre_announce_request<T: RTSPClientImpl>(
 }
 
 unsafe extern "C" fn client_pre_record_request<T: RTSPClientImpl>(
-    ptr: *mut gst_rtsp_server_sys::GstRTSPClient,
-    ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-) -> gst_rtsp_sys::GstRTSPStatusCode {
+    ptr: *mut ffi::GstRTSPClient,
+    ctx: *mut ffi::GstRTSPContext,
+) -> gst_rtsp::ffi::GstRTSPStatusCode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);

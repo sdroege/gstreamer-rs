@@ -11,39 +11,33 @@ homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_rtsp_server/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "build.rs"
+edition = "2018"
 
 [dependencies]
 bitflags = "1.0"
 libc = "0.2"
 once_cell = "1.0"
-glib-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
-gio-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
-gobject-sys = { git = "https://github.com/gtk-rs/gtk-rs" }
-gstreamer-sys = { path = "../gstreamer/sys", features = ["v1_8"] }
-gstreamer-sdp-sys = { path = "../gstreamer-sdp/sys", features = ["v1_8"] }
-gstreamer-rtsp-sys = { path = "../gstreamer-rtsp/sys", features = ["v1_8"] }
-gstreamer-rtsp-server-sys = { path = "../gstreamer-rtsp-server/sys", features = ["v1_8"] }
-gstreamer-net-sys = { path = "../gstreamer-net/sys", features = ["v1_8"] }
+ffi = { package = "gstreamer-rtsp-server-sys", path = "../gstreamer-rtsp-server/sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/gtk-rs" }
 gio = { git = "https://github.com/gtk-rs/gtk-rs" }
-gstreamer = { path = "../gstreamer" }
-gstreamer-sdp = { path = "../gstreamer-sdp" }
-gstreamer-rtsp = { path = "../gstreamer-rtsp" }
-gstreamer-net = { path = "../gstreamer-net" }
+gst = { package = "gstreamer", path = "../gstreamer" }
+gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp" }
+gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp" }
+gst-net = { package = "gstreamer-net", path = "../gstreamer-net" }
 
 [build-dependencies]
 gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [features]
 default = []
-v1_10 = ["gstreamer/v1_10", "gstreamer-sdp/v1_10", "gstreamer-rtsp/v1_10", "gstreamer-net/v1_10", "gstreamer-rtsp-server-sys/v1_10"]
-v1_12 = ["gstreamer/v1_12", "gstreamer-sdp/v1_12", "gstreamer-rtsp/v1_12", "gstreamer-net/v1_12", "gstreamer-rtsp-server-sys/v1_12", "v1_10"]
-v1_14 = ["gstreamer/v1_14", "gstreamer-sdp/v1_14", "gstreamer-rtsp/v1_14", "gstreamer-net/v1_14", "gstreamer-rtsp-server-sys/v1_14", "v1_12"]
-v1_16 = ["gstreamer/v1_16", "gstreamer-sdp/v1_16", "gstreamer-rtsp/v1_16", "gstreamer-net/v1_16", "gstreamer-rtsp-server-sys/v1_16", "v1_14"]
-v1_18 = ["gstreamer/v1_18", "gstreamer-sdp/v1_18", "gstreamer-rtsp/v1_18", "gstreamer-net/v1_18", "gstreamer-rtsp-server-sys/v1_18", "v1_16"]
+v1_10 = ["gst/v1_10", "gst-sdp/v1_10", "gst-rtsp/v1_10", "gst-net/v1_10", "ffi/v1_10"]
+v1_12 = ["gst/v1_12", "gst-sdp/v1_12", "gst-rtsp/v1_12", "gst-net/v1_12", "ffi/v1_12", "v1_10"]
+v1_14 = ["gst/v1_14", "gst-sdp/v1_14", "gst-rtsp/v1_14", "gst-net/v1_14", "ffi/v1_14", "v1_12"]
+v1_16 = ["gst/v1_16", "gst-sdp/v1_16", "gst-rtsp/v1_16", "gst-net/v1_16", "ffi/v1_16", "v1_14"]
+v1_18 = ["gst/v1_18", "gst-sdp/v1_18", "gst-rtsp/v1_18", "gst-net/v1_18", "ffi/v1_18", "v1_16"]
 embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-dox = ["v1_18", "gstreamer-rtsp-server-sys/dox", "glib/dox", "gio/dox", "gstreamer/dox", "gstreamer-sdp/dox", "gstreamer-rtsp/dox", "gstreamer-net/dox"]
+dox = ["v1_18", "ffi/dox", "glib/dox", "gio/dox", "gst/dox", "gst-sdp/dox", "gst-rtsp/dox", "gst-net/dox"]
 
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]

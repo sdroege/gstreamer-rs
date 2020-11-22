@@ -1,16 +1,13 @@
-use glib;
+use crate::RTSPSessionPool;
+use glib::ffi::{gboolean, gpointer};
 use glib::object::IsA;
 use glib::source::{Continue, Priority};
 use glib::translate::*;
-use glib_sys;
-use glib_sys::{gboolean, gpointer};
-use gst_rtsp_server_sys;
 use std::cell::RefCell;
 use std::mem::transmute;
-use RTSPSessionPool;
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(
-    pool: *mut gst_rtsp_server_sys::GstRTSPSessionPool,
+    pool: *mut ffi::GstRTSPSessionPool,
     func: gpointer,
 ) -> gboolean {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
@@ -44,22 +41,20 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
     {
         skip_assert_initialized!();
         unsafe {
-            let source = gst_rtsp_server_sys::gst_rtsp_session_pool_create_watch(
-                self.as_ref().to_glib_none().0,
-            );
-            glib_sys::g_source_set_callback(
+            let source = ffi::gst_rtsp_session_pool_create_watch(self.as_ref().to_glib_none().0);
+            glib::ffi::g_source_set_callback(
                 source,
                 Some(transmute::<
                     _,
-                    unsafe extern "C" fn(glib_sys::gpointer) -> i32,
+                    unsafe extern "C" fn(glib::ffi::gpointer) -> i32,
                 >(trampoline_watch::<F> as *const ())),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );
-            glib_sys::g_source_set_priority(source, priority.to_glib());
+            glib::ffi::g_source_set_priority(source, priority.to_glib());
 
             if let Some(name) = name {
-                glib_sys::g_source_set_name(source, name.to_glib_none().0);
+                glib::ffi::g_source_set_name(source, name.to_glib_none().0);
             }
 
             from_glib_full(source)

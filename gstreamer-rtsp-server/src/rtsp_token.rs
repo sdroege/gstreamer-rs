@@ -1,22 +1,16 @@
-use glib;
 use glib::translate::*;
 use glib::value::ToSendValue;
-use gst;
-use gst_rtsp_server_sys;
 
 use std::fmt;
 
-gst_define_mini_object_wrapper!(
-    RTSPToken,
-    RTSPTokenRef,
-    gst_rtsp_server_sys::GstRTSPToken,
-    || gst_rtsp_server_sys::gst_rtsp_token_get_type()
-);
+gst::gst_define_mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {
+    ffi::gst_rtsp_token_get_type()
+});
 
 impl RTSPToken {
     pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_rtsp_server_sys::gst_rtsp_token_new_empty()) }
+        unsafe { from_glib_full(ffi::gst_rtsp_token_new_empty()) }
     }
 
     pub fn new(values: &[(&str, &dyn ToSendValue)]) -> Self {
@@ -39,7 +33,7 @@ impl RTSPToken {
 impl RTSPTokenRef {
     pub fn get_string(&self, field: &str) -> Option<String> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_token_get_string(
+            from_glib_none(ffi::gst_rtsp_token_get_string(
                 self.as_mut_ptr(),
                 field.to_glib_none().0,
             ))
@@ -47,16 +41,12 @@ impl RTSPTokenRef {
     }
 
     pub fn get_structure(&self) -> Option<gst::Structure> {
-        unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_token_get_structure(
-                self.as_mut_ptr(),
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_rtsp_token_get_structure(self.as_mut_ptr())) }
     }
 
     pub fn is_allowed(&self, field: &str) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_token_is_allowed(
+            from_glib(ffi::gst_rtsp_token_is_allowed(
                 self.as_mut_ptr(),
                 field.to_glib_none().0,
             ))
@@ -65,8 +55,7 @@ impl RTSPTokenRef {
 
     pub fn get_mut_structure(&mut self) -> Option<&mut gst::StructureRef> {
         unsafe {
-            let structure =
-                gst_rtsp_server_sys::gst_rtsp_token_writable_structure(self.as_mut_ptr());
+            let structure = ffi::gst_rtsp_token_writable_structure(self.as_mut_ptr());
             if structure.is_null() {
                 None
             } else {
