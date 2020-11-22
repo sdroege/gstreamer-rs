@@ -2,31 +2,28 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::RTSPFilterResult;
+use crate::RTSPSession;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
-use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use RTSPFilterResult;
-use RTSPSession;
 
-glib_wrapper! {
-    pub struct RTSPSessionPool(Object<gst_rtsp_server_sys::GstRTSPSessionPool, gst_rtsp_server_sys::GstRTSPSessionPoolClass>);
+glib::glib_wrapper! {
+    pub struct RTSPSessionPool(Object<ffi::GstRTSPSessionPool, ffi::GstRTSPSessionPoolClass>);
 
     match fn {
-        get_type => || gst_rtsp_server_sys::gst_rtsp_session_pool_get_type(),
+        get_type => || ffi::gst_rtsp_session_pool_get_type(),
     }
 }
 
 impl RTSPSessionPool {
     pub fn new() -> RTSPSessionPool {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_new()) }
+        unsafe { from_glib_full(ffi::gst_rtsp_session_pool_new()) }
     }
 }
 
@@ -74,17 +71,15 @@ pub trait RTSPSessionPoolExt: 'static {
 
 impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
     fn cleanup(&self) -> u32 {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_session_pool_cleanup(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::gst_rtsp_session_pool_cleanup(self.as_ref().to_glib_none().0) }
     }
 
     fn create(&self) -> Result<RTSPSession, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_create(
+            Option::<_>::from_glib_full(ffi::gst_rtsp_session_pool_create(
                 self.as_ref().to_glib_none().0,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to create session pool"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to create session pool"))
         }
     }
 
@@ -96,10 +91,10 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             &mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult),
         > = func;
         unsafe extern "C" fn func_func(
-            pool: *mut gst_rtsp_server_sys::GstRTSPSessionPool,
-            session: *mut gst_rtsp_server_sys::GstRTSPSession,
-            user_data: glib_sys::gpointer,
-        ) -> gst_rtsp_server_sys::GstRTSPFilterResult {
+            pool: *mut ffi::GstRTSPSessionPool,
+            session: *mut ffi::GstRTSPSession,
+            user_data: glib::ffi::gpointer,
+        ) -> ffi::GstRTSPFilterResult {
             let pool = from_glib_borrow(pool);
             let session = from_glib_borrow(session);
             let callback: *mut Option<
@@ -124,7 +119,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             &mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult),
         > = &func_data;
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_filter(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_pool_filter(
                 self.as_ref().to_glib_none().0,
                 func,
                 super_callback0 as *const _ as usize as *mut _,
@@ -134,7 +129,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
 
     fn find(&self, sessionid: &str) -> Option<RTSPSession> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_find(
+            from_glib_full(ffi::gst_rtsp_session_pool_find(
                 self.as_ref().to_glib_none().0,
                 sessionid.to_glib_none().0,
             ))
@@ -142,25 +137,17 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
     }
 
     fn get_max_sessions(&self) -> u32 {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_session_pool_get_max_sessions(
-                self.as_ref().to_glib_none().0,
-            )
-        }
+        unsafe { ffi::gst_rtsp_session_pool_get_max_sessions(self.as_ref().to_glib_none().0) }
     }
 
     fn get_n_sessions(&self) -> u32 {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_session_pool_get_n_sessions(
-                self.as_ref().to_glib_none().0,
-            )
-        }
+        unsafe { ffi::gst_rtsp_session_pool_get_n_sessions(self.as_ref().to_glib_none().0) }
     }
 
     fn remove<P: IsA<RTSPSession>>(&self, sess: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_rtsp_server_sys::gst_rtsp_session_pool_remove(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_rtsp_session_pool_remove(
                     self.as_ref().to_glib_none().0,
                     sess.as_ref().to_glib_none().0
                 ),
@@ -171,10 +158,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
 
     fn set_max_sessions(&self, max: u32) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_session_pool_set_max_sessions(
-                self.as_ref().to_glib_none().0,
-                max,
-            );
+            ffi::gst_rtsp_session_pool_set_max_sessions(self.as_ref().to_glib_none().0, max);
         }
     }
 
@@ -186,9 +170,9 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             P,
             F: Fn(&P, &RTSPSession) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPSessionPool,
-            object: *mut gst_rtsp_server_sys::GstRTSPSession,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPSessionPool,
+            object: *mut ffi::GstRTSPSession,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPSessionPool>,
         {
@@ -216,9 +200,9 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPSessionPool,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPSessionPool,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPSessionPool>,
         {

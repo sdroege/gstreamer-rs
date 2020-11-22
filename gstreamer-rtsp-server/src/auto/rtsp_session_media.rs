@@ -2,21 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::RTSPMedia;
+use crate::RTSPStreamTransport;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
-use gst;
-use gst_rtsp_server_sys;
 use std::mem;
-use RTSPMedia;
-use RTSPStreamTransport;
 
-glib_wrapper! {
-    pub struct RTSPSessionMedia(Object<gst_rtsp_server_sys::GstRTSPSessionMedia, gst_rtsp_server_sys::GstRTSPSessionMediaClass>);
+glib::glib_wrapper! {
+    pub struct RTSPSessionMedia(Object<ffi::GstRTSPSessionMedia, ffi::GstRTSPSessionMediaClass>);
 
     match fn {
-        get_type => || gst_rtsp_server_sys::gst_rtsp_session_media_get_type(),
+        get_type => || ffi::gst_rtsp_session_media_get_type(),
     }
 }
 
@@ -24,7 +20,7 @@ impl RTSPSessionMedia {
     pub fn new<P: IsA<RTSPMedia>>(path: &str, media: &P) -> RTSPSessionMedia {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_media_new(
+            from_glib_full(ffi::gst_rtsp_session_media_new(
                 path.to_glib_none().0,
                 media.as_ref().to_glib_full(),
             ))
@@ -44,7 +40,7 @@ pub trait RTSPSessionMediaExt: 'static {
 
     fn get_media(&self) -> Option<RTSPMedia>;
 
-    fn get_rtpinfo(&self) -> Option<GString>;
+    fn get_rtpinfo(&self) -> Option<glib::GString>;
 
     //fn get_rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState;
 
@@ -65,12 +61,12 @@ pub trait RTSPSessionMediaExt: 'static {
 
 impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
     //fn alloc_channels(&self, range: /*Ignored*/gst_rtsp::RTSPRange) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_session_media_alloc_channels() }
+    //    unsafe { TODO: call ffi:gst_rtsp_session_media_alloc_channels() }
     //}
 
     fn get_base_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_session_media_get_base_time(
+            from_glib(ffi::gst_rtsp_session_media_get_base_time(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -78,27 +74,27 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     fn get_media(&self) -> Option<RTSPMedia> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_media_get_media(
+            from_glib_none(ffi::gst_rtsp_session_media_get_media(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_rtpinfo(&self) -> Option<GString> {
+    fn get_rtpinfo(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_media_get_rtpinfo(
+            from_glib_full(ffi::gst_rtsp_session_media_get_rtpinfo(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn get_rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_session_media_get_rtsp_state() }
+    //    unsafe { TODO: call ffi:gst_rtsp_session_media_get_rtsp_state() }
     //}
 
     fn get_transport(&self, idx: u32) -> Option<RTSPStreamTransport> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_media_get_transport(
+            from_glib_none(ffi::gst_rtsp_session_media_get_transport(
                 self.as_ref().to_glib_none().0,
                 idx,
             ))
@@ -109,18 +105,16 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_transports(&self) -> Vec<RTSPStreamTransport> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                gst_rtsp_server_sys::gst_rtsp_session_media_get_transports(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_media_get_transports(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn matches(&self, path: &str) -> Option<i32> {
         unsafe {
             let mut matched = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_session_media_matches(
+            let ret = from_glib(ffi::gst_rtsp_session_media_matches(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
                 matched.as_mut_ptr(),
@@ -135,13 +129,13 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
     }
 
     //fn set_rtsp_state(&self, state: /*Ignored*/gst_rtsp::RTSPState) {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_session_media_set_rtsp_state() }
+    //    unsafe { TODO: call ffi:gst_rtsp_session_media_set_rtsp_state() }
     //}
 
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_rtsp_server_sys::gst_rtsp_session_media_set_state(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_rtsp_session_media_set_state(
                     self.as_ref().to_glib_none().0,
                     state.to_glib()
                 ),
@@ -151,6 +145,6 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
     }
 
     //fn set_transport<P: IsA<RTSPStream>>(&self, stream: &P, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport> {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_session_media_set_transport() }
+    //    unsafe { TODO: call ffi:gst_rtsp_session_media_set_transport() }
     //}
 }

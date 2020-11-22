@@ -2,6 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::RTSPAuth;
+use crate::RTSPContext;
+use crate::RTSPFilterResult;
+use crate::RTSPMountPoints;
+use crate::RTSPSession;
+use crate::RTSPSessionPool;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::RTSPStreamTransport;
+use crate::RTSPThreadPool;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -9,40 +19,21 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-use gst_rtsp;
-use gst_rtsp_server_sys;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-use gst_rtsp_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use RTSPAuth;
-use RTSPContext;
-use RTSPFilterResult;
-use RTSPMountPoints;
-use RTSPSession;
-use RTSPSessionPool;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use RTSPStreamTransport;
-use RTSPThreadPool;
 
-glib_wrapper! {
-    pub struct RTSPClient(Object<gst_rtsp_server_sys::GstRTSPClient, gst_rtsp_server_sys::GstRTSPClientClass>);
+glib::glib_wrapper! {
+    pub struct RTSPClient(Object<ffi::GstRTSPClient, ffi::GstRTSPClientClass>);
 
     match fn {
-        get_type => || gst_rtsp_server_sys::gst_rtsp_client_get_type(),
+        get_type => || ffi::gst_rtsp_client_get_type(),
     }
 }
 
 impl RTSPClient {
     pub fn new() -> RTSPClient {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_new()) }
+        unsafe { from_glib_full(ffi::gst_rtsp_client_new()) }
     }
 }
 
@@ -295,35 +286,31 @@ pub trait RTSPClientExt: 'static {
 impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     fn close(&self) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_client_close(self.as_ref().to_glib_none().0);
+            ffi::gst_rtsp_client_close(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_auth(&self) -> Option<RTSPAuth> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_auth(
+            from_glib_full(ffi::gst_rtsp_client_get_auth(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn get_connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection> {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_get_connection() }
+    //    unsafe { TODO: call ffi:gst_rtsp_client_get_connection() }
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_content_length_limit(&self) -> u32 {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_client_get_content_length_limit(
-                self.as_ref().to_glib_none().0,
-            )
-        }
+        unsafe { ffi::gst_rtsp_client_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
 
     fn get_mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_mount_points(
+            from_glib_full(ffi::gst_rtsp_client_get_mount_points(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -331,7 +318,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     fn get_session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_session_pool(
+            from_glib_full(ffi::gst_rtsp_client_get_session_pool(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -341,7 +328,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_client_get_stream_transport(
+            from_glib_none(ffi::gst_rtsp_client_get_stream_transport(
                 self.as_ref().to_glib_none().0,
                 channel,
             ))
@@ -350,18 +337,18 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     fn get_thread_pool(&self) -> Option<RTSPThreadPool> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_thread_pool(
+            from_glib_full(ffi::gst_rtsp_client_get_thread_pool(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn handle_message(&self, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_handle_message() }
+    //    unsafe { TODO: call ffi:gst_rtsp_client_handle_message() }
     //}
 
     //fn send_message<P: IsA<RTSPSession>>(&self, session: Option<&P>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_send_message() }
+    //    unsafe { TODO: call ffi:gst_rtsp_client_send_message() }
     //}
 
     fn session_filter(
@@ -371,10 +358,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         let func_data: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> =
             func;
         unsafe extern "C" fn func_func(
-            client: *mut gst_rtsp_server_sys::GstRTSPClient,
-            sess: *mut gst_rtsp_server_sys::GstRTSPSession,
-            user_data: glib_sys::gpointer,
-        ) -> gst_rtsp_server_sys::GstRTSPFilterResult {
+            client: *mut ffi::GstRTSPClient,
+            sess: *mut ffi::GstRTSPSession,
+            user_data: glib::ffi::gpointer,
+        ) -> ffi::GstRTSPFilterResult {
             let client = from_glib_borrow(client);
             let sess = from_glib_borrow(sess);
             let callback: *mut Option<
@@ -397,19 +384,17 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             &mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult),
         > = &func_data;
         unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                gst_rtsp_server_sys::gst_rtsp_client_session_filter(
-                    self.as_ref().to_glib_none().0,
-                    func,
-                    super_callback0 as *const _ as usize as *mut _,
-                ),
-            )
+            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_client_session_filter(
+                self.as_ref().to_glib_none().0,
+                func,
+                super_callback0 as *const _ as usize as *mut _,
+            ))
         }
     }
 
     fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_client_set_auth(
+            ffi::gst_rtsp_client_set_auth(
                 self.as_ref().to_glib_none().0,
                 auth.map(|p| p.as_ref()).to_glib_none().0,
             );
@@ -417,23 +402,20 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     }
 
     //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_set_connection() }
+    //    unsafe { TODO: call ffi:gst_rtsp_client_set_connection() }
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_client_set_content_length_limit(
-                self.as_ref().to_glib_none().0,
-                limit,
-            );
+            ffi::gst_rtsp_client_set_content_length_limit(self.as_ref().to_glib_none().0, limit);
         }
     }
 
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_client_set_mount_points(
+            ffi::gst_rtsp_client_set_mount_points(
                 self.as_ref().to_glib_none().0,
                 mounts.map(|p| p.as_ref()).to_glib_none().0,
             );
@@ -441,18 +423,18 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     }
 
     //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_set_send_func() }
+    //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_func() }
     //}
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_set_send_messages_func() }
+    //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_messages_func() }
     //}
 
     fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_client_set_session_pool(
+            ffi::gst_rtsp_client_set_session_pool(
                 self.as_ref().to_glib_none().0,
                 pool.map(|p| p.as_ref()).to_glib_none().0,
             );
@@ -461,7 +443,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_client_set_thread_pool(
+            ffi::gst_rtsp_client_set_thread_pool(
                 self.as_ref().to_glib_none().0,
                 pool.map(|p| p.as_ref()).to_glib_none().0,
             );
@@ -471,8 +453,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     fn get_property_drop_backlog(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"drop-backlog\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -485,8 +467,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     fn set_property_drop_backlog(&self, drop_backlog: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"drop-backlog\0".as_ptr() as *const _,
                 Value::from(&drop_backlog).to_glib_none().0,
             );
@@ -496,8 +478,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     fn get_property_post_session_timeout(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"post-session-timeout\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -510,8 +492,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     fn set_property_post_session_timeout(&self, post_session_timeout: i32) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"post-session-timeout\0".as_ptr() as *const _,
                 Value::from(&post_session_timeout).to_glib_none().0,
             );
@@ -526,9 +508,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -557,8 +539,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     fn connect_closed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -586,9 +568,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -619,9 +601,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -652,9 +634,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -685,9 +667,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPSession) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            object: *mut gst_rtsp_server_sys::GstRTSPSession,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            object: *mut ffi::GstRTSPSession,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -718,9 +700,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -751,9 +733,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -784,9 +766,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -821,10 +803,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -860,10 +842,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -899,10 +881,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -938,10 +920,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -977,10 +959,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -1016,10 +998,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -1055,10 +1037,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -1094,10 +1076,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -1133,10 +1115,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -1172,10 +1154,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
-        ) -> gst_rtsp_sys::GstRTSPStatusCode
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
+        ) -> gst_rtsp::ffi::GstRTSPStatusCode
         where
             P: IsA<RTSPClient>,
         {
@@ -1207,9 +1189,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -1244,9 +1226,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -1277,9 +1259,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -1310,9 +1292,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P, &RTSPContext) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            ctx: *mut gst_rtsp_server_sys::GstRTSPContext,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            ctx: *mut ffi::GstRTSPContext,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -1340,9 +1322,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_drop_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -1367,9 +1349,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -1397,9 +1379,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {
@@ -1424,9 +1406,9 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPClient,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPClient,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPClient>,
         {

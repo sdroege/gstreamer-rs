@@ -2,51 +2,39 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::RTSPAddressPool;
+use crate::RTSPMediaStatus;
+use crate::RTSPPublishClockMode;
+use crate::RTSPStream;
+use crate::RTSPStreamTransport;
+use crate::RTSPSuspendMode;
+use crate::RTSPThread;
+use crate::RTSPTransportMode;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_rtsp;
-use gst_rtsp_server_sys;
-use libc;
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem;
 use std::mem::transmute;
-use RTSPAddressPool;
-use RTSPMediaStatus;
-use RTSPPublishClockMode;
-use RTSPStream;
-use RTSPStreamTransport;
-use RTSPSuspendMode;
-use RTSPThread;
-use RTSPTransportMode;
 
-glib_wrapper! {
-    pub struct RTSPMedia(Object<gst_rtsp_server_sys::GstRTSPMedia, gst_rtsp_server_sys::GstRTSPMediaClass>);
+glib::glib_wrapper! {
+    pub struct RTSPMedia(Object<ffi::GstRTSPMedia, ffi::GstRTSPMediaClass>);
 
     match fn {
-        get_type => || gst_rtsp_server_sys::gst_rtsp_media_get_type(),
+        get_type => || ffi::gst_rtsp_media_get_type(),
     }
 }
 
 impl RTSPMedia {
     pub fn new<P: IsA<gst::Element>>(element: &P) -> RTSPMedia {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_new(
-                element.as_ref().to_glib_full(),
-            ))
-        }
+        unsafe { from_glib_full(ffi::gst_rtsp_media_new(element.as_ref().to_glib_full())) }
     }
 }
 
@@ -94,7 +82,7 @@ pub trait RTSPMediaExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_max_mcast_ttl(&self) -> u32;
 
-    fn get_multicast_iface(&self) -> Option<GString>;
+    fn get_multicast_iface(&self) -> Option<glib::GString>;
 
     //fn get_permissions(&self) -> /*Ignored*/Option<RTSPPermissions>;
 
@@ -104,7 +92,7 @@ pub trait RTSPMediaExt: 'static {
 
     fn get_publish_clock_mode(&self) -> RTSPPublishClockMode;
 
-    fn get_range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<GString>;
+    fn get_range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -365,14 +353,14 @@ pub trait RTSPMediaExt: 'static {
 impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn collect_streams(&self) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_collect_streams(self.as_ref().to_glib_none().0);
+            ffi::gst_rtsp_media_collect_streams(self.as_ref().to_glib_none().0);
         }
     }
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn complete_pipeline(&self, transports: /*Ignored*/&[&gst_rtsp::RTSPTransport]) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_complete_pipeline() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_complete_pipeline() }
     //}
 
     fn create_stream<P: IsA<gst::Element>, Q: IsA<gst::Pad>>(
@@ -381,7 +369,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         pad: &Q,
     ) -> Option<RTSPStream> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_media_create_stream(
+            from_glib_none(ffi::gst_rtsp_media_create_stream(
                 self.as_ref().to_glib_none().0,
                 payloader.as_ref().to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
@@ -391,7 +379,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn find_stream(&self, control: &str) -> Option<RTSPStream> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_media_find_stream(
+            from_glib_none(ffi::gst_rtsp_media_find_stream(
                 self.as_ref().to_glib_none().0,
                 control.to_glib_none().0,
             ))
@@ -400,7 +388,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_address_pool(&self) -> Option<RTSPAddressPool> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_get_address_pool(
+            from_glib_full(ffi::gst_rtsp_media_get_address_pool(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -408,21 +396,19 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_base_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_base_time(
+            from_glib(ffi::gst_rtsp_media_get_base_time(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_buffer_size(&self) -> u32 {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_get_buffer_size(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::gst_rtsp_media_get_buffer_size(self.as_ref().to_glib_none().0) }
     }
 
     fn get_clock(&self) -> Option<gst::Clock> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_get_clock(
+            from_glib_full(ffi::gst_rtsp_media_get_clock(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -432,7 +418,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_do_retransmission(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_do_retransmission(
+            from_glib(ffi::gst_rtsp_media_get_do_retransmission(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -441,44 +427,42 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_dscp_qos(&self) -> i32 {
-        unsafe { gst_rtsp_server_sys::gst_rtsp_media_get_dscp_qos(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_rtsp_media_get_dscp_qos(self.as_ref().to_glib_none().0) }
     }
 
     fn get_element(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_get_element(
+            from_glib_full(ffi::gst_rtsp_media_get_element(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_latency(&self) -> u32 {
-        unsafe { gst_rtsp_server_sys::gst_rtsp_media_get_latency(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_rtsp_media_get_latency(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_max_mcast_ttl(&self) -> u32 {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_get_max_mcast_ttl(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::gst_rtsp_media_get_max_mcast_ttl(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_multicast_iface(&self) -> Option<GString> {
+    fn get_multicast_iface(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_get_multicast_iface(
+            from_glib_full(ffi::gst_rtsp_media_get_multicast_iface(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn get_permissions(&self) -> /*Ignored*/Option<RTSPPermissions> {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_get_permissions() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_get_permissions() }
     //}
 
     fn get_profiles(&self) -> gst_rtsp::RTSPProfile {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_profiles(
+            from_glib(ffi::gst_rtsp_media_get_profiles(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -486,7 +470,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_protocols(&self) -> gst_rtsp::RTSPLowerTrans {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_protocols(
+            from_glib(ffi::gst_rtsp_media_get_protocols(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -494,15 +478,15 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_publish_clock_mode(&self) -> RTSPPublishClockMode {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_publish_clock_mode(
+            from_glib(ffi::gst_rtsp_media_get_publish_clock_mode(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<GString> {
+    fn get_range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<glib::GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_get_range_string(
+            from_glib_full(ffi::gst_rtsp_media_get_range_string(
                 self.as_ref().to_glib_none().0,
                 play.to_glib(),
                 unit.to_glib(),
@@ -514,7 +498,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_rate_control(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_rate_control(
+            from_glib(ffi::gst_rtsp_media_get_rate_control(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -526,7 +510,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             let mut rate = mem::MaybeUninit::uninit();
             let mut applied_rate = mem::MaybeUninit::uninit();
-            let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_rates(
+            let ret = from_glib(ffi::gst_rtsp_media_get_rates(
                 self.as_ref().to_glib_none().0,
                 rate.as_mut_ptr(),
                 applied_rate.as_mut_ptr(),
@@ -543,7 +527,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_retransmission_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_retransmission_time(
+            from_glib(ffi::gst_rtsp_media_get_retransmission_time(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -551,7 +535,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_status(&self) -> RTSPMediaStatus {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_status(
+            from_glib(ffi::gst_rtsp_media_get_status(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -559,7 +543,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_stream(&self, idx: u32) -> Option<RTSPStream> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_media_get_stream(
+            from_glib_none(ffi::gst_rtsp_media_get_stream(
                 self.as_ref().to_glib_none().0,
                 idx,
             ))
@@ -568,33 +552,33 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn get_suspend_mode(&self) -> RTSPSuspendMode {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_suspend_mode(
+            from_glib(ffi::gst_rtsp_media_get_suspend_mode(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn get_time_provider(&self, address: Option<&str>, port: u16) -> /*Ignored*/Option<gst_net::NetTimeProvider> {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_get_time_provider() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_get_time_provider() }
     //}
 
     fn get_transport_mode(&self) -> RTSPTransportMode {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_transport_mode(
+            from_glib(ffi::gst_rtsp_media_get_transport_mode(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //fn handle_sdp(&self, sdp: /*Ignored*/&mut gst_sdp::SDPMessage) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_handle_sdp() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_handle_sdp() }
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn has_completed_sender(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_has_completed_sender(
+            from_glib(ffi::gst_rtsp_media_has_completed_sender(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -604,7 +588,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn is_bind_mcast_address(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_bind_mcast_address(
+            from_glib(ffi::gst_rtsp_media_is_bind_mcast_address(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -612,7 +596,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn is_eos_shutdown(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_eos_shutdown(
+            from_glib(ffi::gst_rtsp_media_is_eos_shutdown(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -622,7 +606,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn is_receive_only(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_receive_only(
+            from_glib(ffi::gst_rtsp_media_is_receive_only(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -630,7 +614,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn is_reusable(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_reusable(
+            from_glib(ffi::gst_rtsp_media_is_reusable(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -638,7 +622,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn is_shared(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_shared(
+            from_glib(ffi::gst_rtsp_media_is_shared(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -646,7 +630,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn is_stop_on_disconnect(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_stop_on_disconnect(
+            from_glib(ffi::gst_rtsp_media_is_stop_on_disconnect(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -654,7 +638,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn is_time_provider(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_time_provider(
+            from_glib(ffi::gst_rtsp_media_is_time_provider(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -664,51 +648,48 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn lock(&self) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_lock(self.as_ref().to_glib_none().0);
+            ffi::gst_rtsp_media_lock(self.as_ref().to_glib_none().0);
         }
     }
 
     fn n_streams(&self) -> u32 {
-        unsafe { gst_rtsp_server_sys::gst_rtsp_media_n_streams(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_rtsp_media_n_streams(self.as_ref().to_glib_none().0) }
     }
 
     fn prepare(&self, thread: Option<&RTSPThread>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_rtsp_server_sys::gst_rtsp_media_prepare(
-                    self.as_ref().to_glib_none().0,
-                    thread.to_glib_full()
-                ),
+            glib::glib_result_from_gboolean!(
+                ffi::gst_rtsp_media_prepare(self.as_ref().to_glib_none().0, thread.to_glib_full()),
                 "Failed to prepare media"
             )
         }
     }
 
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_seek() }
     //}
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn seek_full(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek_full() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_seek_full() }
     //}
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: gst::ClockTime) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek_trickmode() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_seek_trickmode() }
     //}
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn seekable(&self) -> /*Ignored*/gst::ClockTimeDiff {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seekable() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_seekable() }
     //}
 
     fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_address_pool(
+            ffi::gst_rtsp_media_set_address_pool(
                 self.as_ref().to_glib_none().0,
                 pool.map(|p| p.as_ref()).to_glib_none().0,
             );
@@ -719,7 +700,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_bind_mcast_address(
+            ffi::gst_rtsp_media_set_bind_mcast_address(
                 self.as_ref().to_glib_none().0,
                 bind_mcast_addr.to_glib(),
             );
@@ -728,16 +709,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_buffer_size(&self, size: u32) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_buffer_size(
-                self.as_ref().to_glib_none().0,
-                size,
-            );
+            ffi::gst_rtsp_media_set_buffer_size(self.as_ref().to_glib_none().0, size);
         }
     }
 
     fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_clock(
+            ffi::gst_rtsp_media_set_clock(
                 self.as_ref().to_glib_none().0,
                 clock.map(|p| p.as_ref()).to_glib_none().0,
             );
@@ -748,7 +726,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_do_retransmission(&self, do_retransmission: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_do_retransmission(
+            ffi::gst_rtsp_media_set_do_retransmission(
                 self.as_ref().to_glib_none().0,
                 do_retransmission.to_glib(),
             );
@@ -759,16 +737,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_dscp_qos(&self, dscp_qos: i32) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_dscp_qos(
-                self.as_ref().to_glib_none().0,
-                dscp_qos,
-            );
+            ffi::gst_rtsp_media_set_dscp_qos(self.as_ref().to_glib_none().0, dscp_qos);
         }
     }
 
     fn set_eos_shutdown(&self, eos_shutdown: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_eos_shutdown(
+            ffi::gst_rtsp_media_set_eos_shutdown(
                 self.as_ref().to_glib_none().0,
                 eos_shutdown.to_glib(),
             );
@@ -777,10 +752,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_latency(&self, latency: u32) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_latency(
-                self.as_ref().to_glib_none().0,
-                latency,
-            );
+            ffi::gst_rtsp_media_set_latency(self.as_ref().to_glib_none().0, latency);
         }
     }
 
@@ -788,7 +760,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_set_max_mcast_ttl(
+            from_glib(ffi::gst_rtsp_media_set_max_mcast_ttl(
                 self.as_ref().to_glib_none().0,
                 ttl,
             ))
@@ -797,7 +769,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_multicast_iface(&self, multicast_iface: Option<&str>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_multicast_iface(
+            ffi::gst_rtsp_media_set_multicast_iface(
                 self.as_ref().to_glib_none().0,
                 multicast_iface.to_glib_none().0,
             );
@@ -805,39 +777,30 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     //fn set_permissions(&self, permissions: /*Ignored*/Option<&mut RTSPPermissions>) {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_set_permissions() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_set_permissions() }
     //}
 
     fn set_pipeline_state(&self, state: gst::State) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_pipeline_state(
-                self.as_ref().to_glib_none().0,
-                state.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_pipeline_state(self.as_ref().to_glib_none().0, state.to_glib());
         }
     }
 
     fn set_profiles(&self, profiles: gst_rtsp::RTSPProfile) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_profiles(
-                self.as_ref().to_glib_none().0,
-                profiles.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_profiles(self.as_ref().to_glib_none().0, profiles.to_glib());
         }
     }
 
     fn set_protocols(&self, protocols: gst_rtsp::RTSPLowerTrans) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_protocols(
-                self.as_ref().to_glib_none().0,
-                protocols.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_protocols(self.as_ref().to_glib_none().0, protocols.to_glib());
         }
     }
 
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_publish_clock_mode(
+            ffi::gst_rtsp_media_set_publish_clock_mode(
                 self.as_ref().to_glib_none().0,
                 mode.to_glib(),
             );
@@ -848,16 +811,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_rate_control(&self, enabled: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_rate_control(
-                self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_rate_control(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_retransmission_time(&self, time: gst::ClockTime) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_retransmission_time(
+            ffi::gst_rtsp_media_set_retransmission_time(
                 self.as_ref().to_glib_none().0,
                 time.to_glib(),
             );
@@ -866,25 +826,19 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_reusable(&self, reusable: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_reusable(
-                self.as_ref().to_glib_none().0,
-                reusable.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_reusable(self.as_ref().to_glib_none().0, reusable.to_glib());
         }
     }
 
     fn set_shared(&self, shared: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_shared(
-                self.as_ref().to_glib_none().0,
-                shared.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_shared(self.as_ref().to_glib_none().0, shared.to_glib());
         }
     }
 
     fn set_state(&self, state: gst::State, transports: &[RTSPStreamTransport]) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_media_set_state(
+            from_glib(ffi::gst_rtsp_media_set_state(
                 self.as_ref().to_glib_none().0,
                 state.to_glib(),
                 transports.to_glib_none().0,
@@ -894,7 +848,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_stop_on_disconnect(&self, stop_on_disconnect: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_stop_on_disconnect(
+            ffi::gst_rtsp_media_set_stop_on_disconnect(
                 self.as_ref().to_glib_none().0,
                 stop_on_disconnect.to_glib(),
             );
@@ -903,30 +857,24 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_suspend_mode(&self, mode: RTSPSuspendMode) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_suspend_mode(
-                self.as_ref().to_glib_none().0,
-                mode.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_suspend_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
     fn set_transport_mode(&self, mode: RTSPTransportMode) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_set_transport_mode(
-                self.as_ref().to_glib_none().0,
-                mode.to_glib(),
-            );
+            ffi::gst_rtsp_media_set_transport_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
     //fn setup_sdp(&self, sdp: /*Ignored*/&mut gst_sdp::SDPMessage, info: /*Ignored*/&mut SDPInfo) -> bool {
-    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_setup_sdp() }
+    //    unsafe { TODO: call ffi:gst_rtsp_media_setup_sdp() }
     //}
 
     fn suspend(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_rtsp_server_sys::gst_rtsp_media_suspend(self.as_ref().to_glib_none().0),
+            glib::glib_result_from_gboolean!(
+                ffi::gst_rtsp_media_suspend(self.as_ref().to_glib_none().0),
                 "Failed to suspend media"
             )
         }
@@ -936,14 +884,14 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn unlock(&self) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_unlock(self.as_ref().to_glib_none().0);
+            ffi::gst_rtsp_media_unlock(self.as_ref().to_glib_none().0);
         }
     }
 
     fn unprepare(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_rtsp_server_sys::gst_rtsp_media_unprepare(self.as_ref().to_glib_none().0),
+            glib::glib_result_from_gboolean!(
+                ffi::gst_rtsp_media_unprepare(self.as_ref().to_glib_none().0),
                 "Failed to unprepare media"
             )
         }
@@ -951,8 +899,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn unsuspend(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_rtsp_server_sys::gst_rtsp_media_unsuspend(self.as_ref().to_glib_none().0),
+            glib::glib_result_from_gboolean!(
+                ffi::gst_rtsp_media_unsuspend(self.as_ref().to_glib_none().0),
                 "Failed to unsuspend media"
             )
         }
@@ -960,7 +908,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn use_time_provider(&self, time_provider: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_use_time_provider(
+            ffi::gst_rtsp_media_use_time_provider(
                 self.as_ref().to_glib_none().0,
                 time_provider.to_glib(),
             );
@@ -970,8 +918,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_property_bind_mcast_address(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"bind-mcast-address\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -984,8 +932,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_property_bind_mcast_address(&self, bind_mcast_address: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"bind-mcast-address\0".as_ptr() as *const _,
                 Value::from(&bind_mcast_address).to_glib_none().0,
             );
@@ -995,8 +943,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_property_dscp_qos(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"dscp-qos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -1009,8 +957,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_property_dscp_qos(&self, dscp_qos: i32) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"dscp-qos\0".as_ptr() as *const _,
                 Value::from(&dscp_qos).to_glib_none().0,
             );
@@ -1020,8 +968,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_property_eos_shutdown(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"eos-shutdown\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -1035,8 +983,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_property_max_mcast_ttl(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"max-mcast-ttl\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -1049,8 +997,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"max-mcast-ttl\0".as_ptr() as *const _,
                 Value::from(&max_mcast_ttl).to_glib_none().0,
             );
@@ -1060,8 +1008,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_property_reusable(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"reusable\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -1075,8 +1023,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_property_shared(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"shared\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -1090,8 +1038,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_property_stop_on_disconnect(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"stop-on-disconnect\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -1104,8 +1052,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_property_time_provider(&self, time_provider: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"time-provider\0".as_ptr() as *const _,
                 Value::from(&time_provider).to_glib_none().0,
             );
@@ -1117,9 +1065,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn new_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
+            this: *mut ffi::GstRTSPMedia,
             object: libc::c_int,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1147,9 +1095,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P,
             F: Fn(&P, &RTSPStream) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            object: *mut gst_rtsp_server_sys::GstRTSPStream,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            object: *mut ffi::GstRTSPStream,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1174,8 +1122,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn connect_prepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn prepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1203,9 +1151,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P,
             F: Fn(&P, &RTSPStream) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            object: *mut gst_rtsp_server_sys::GstRTSPStream,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            object: *mut ffi::GstRTSPStream,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1233,9 +1181,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn target_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
+            this: *mut ffi::GstRTSPMedia,
             object: libc::c_int,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1257,8 +1205,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn connect_unprepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn unprepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1286,9 +1234,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1313,9 +1261,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_buffer_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1340,9 +1288,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1367,9 +1315,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_dscp_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1394,9 +1342,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_eos_shutdown_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1421,9 +1369,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1448,9 +1396,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_max_mcast_ttl_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1475,9 +1423,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1502,9 +1450,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1529,9 +1477,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_reusable_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1556,9 +1504,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_shared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1586,9 +1534,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1613,9 +1561,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_suspend_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1640,9 +1588,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_time_provider_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {
@@ -1670,9 +1618,9 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_rtsp_server_sys::GstRTSPMedia,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMedia,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMedia>,
         {

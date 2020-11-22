@@ -2,33 +2,29 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::RTSPMediaFactory;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use RTSPMediaFactory;
 
-glib_wrapper! {
-    pub struct RTSPMediaFactoryURI(Object<gst_rtsp_server_sys::GstRTSPMediaFactoryURI, gst_rtsp_server_sys::GstRTSPMediaFactoryURIClass>) @extends RTSPMediaFactory;
+glib::glib_wrapper! {
+    pub struct RTSPMediaFactoryURI(Object<ffi::GstRTSPMediaFactoryURI, ffi::GstRTSPMediaFactoryURIClass>) @extends RTSPMediaFactory;
 
     match fn {
-        get_type => || gst_rtsp_server_sys::gst_rtsp_media_factory_uri_get_type(),
+        get_type => || ffi::gst_rtsp_media_factory_uri_get_type(),
     }
 }
 
 impl RTSPMediaFactoryURI {
     pub fn new() -> RTSPMediaFactoryURI {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_factory_uri_new()) }
+        unsafe { from_glib_full(ffi::gst_rtsp_media_factory_uri_new()) }
     }
 }
 
@@ -44,7 +40,7 @@ unsafe impl Sync for RTSPMediaFactoryURI {}
 pub const NONE_RTSP_MEDIA_FACTORY_URI: Option<&RTSPMediaFactoryURI> = None;
 
 pub trait RTSPMediaFactoryURIExt: 'static {
-    fn get_uri(&self) -> Option<GString>;
+    fn get_uri(&self) -> Option<glib::GString>;
 
     fn set_uri(&self, uri: &str);
 
@@ -64,9 +60,9 @@ pub trait RTSPMediaFactoryURIExt: 'static {
 }
 
 impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
-    fn get_uri(&self) -> Option<GString> {
+    fn get_uri(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_factory_uri_get_uri(
+            from_glib_full(ffi::gst_rtsp_media_factory_uri_get_uri(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -74,7 +70,7 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
 
     fn set_uri(&self, uri: &str) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_media_factory_uri_set_uri(
+            ffi::gst_rtsp_media_factory_uri_set_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
             );
@@ -84,8 +80,8 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
     fn get_property_use_gstpay(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"use-gstpay\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -98,8 +94,8 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
 
     fn set_property_use_gstpay(&self, use_gstpay: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"use-gstpay\0".as_ptr() as *const _,
                 Value::from(&use_gstpay).to_glib_none().0,
             );
@@ -111,9 +107,9 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMediaFactoryURI,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMediaFactoryURI,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMediaFactoryURI>,
         {
@@ -138,9 +134,9 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_use_gstpay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_rtsp_server_sys::GstRTSPMediaFactoryURI,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstRTSPMediaFactoryURI,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<RTSPMediaFactoryURI>,
         {

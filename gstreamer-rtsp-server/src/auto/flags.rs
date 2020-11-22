@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use bitflags::bitflags;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
@@ -9,8 +10,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_rtsp_server_sys;
 
 bitflags! {
     pub struct RTSPAddressFlags: u32 {
@@ -24,16 +23,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTSPAddressFlags {
-    type GlibType = gst_rtsp_server_sys::GstRTSPAddressFlags;
+    type GlibType = ffi::GstRTSPAddressFlags;
 
-    fn to_glib(&self) -> gst_rtsp_server_sys::GstRTSPAddressFlags {
+    fn to_glib(&self) -> ffi::GstRTSPAddressFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtsp_server_sys::GstRTSPAddressFlags> for RTSPAddressFlags {
-    fn from_glib(value: gst_rtsp_server_sys::GstRTSPAddressFlags) -> RTSPAddressFlags {
+impl FromGlib<ffi::GstRTSPAddressFlags> for RTSPAddressFlags {
+    fn from_glib(value: ffi::GstRTSPAddressFlags) -> RTSPAddressFlags {
         skip_assert_initialized!();
         RTSPAddressFlags::from_bits_truncate(value)
     }
@@ -48,16 +47,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTSPTransportMode {
-    type GlibType = gst_rtsp_server_sys::GstRTSPTransportMode;
+    type GlibType = ffi::GstRTSPTransportMode;
 
-    fn to_glib(&self) -> gst_rtsp_server_sys::GstRTSPTransportMode {
+    fn to_glib(&self) -> ffi::GstRTSPTransportMode {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtsp_server_sys::GstRTSPTransportMode> for RTSPTransportMode {
-    fn from_glib(value: gst_rtsp_server_sys::GstRTSPTransportMode) -> RTSPTransportMode {
+impl FromGlib<ffi::GstRTSPTransportMode> for RTSPTransportMode {
+    fn from_glib(value: ffi::GstRTSPTransportMode) -> RTSPTransportMode {
         skip_assert_initialized!();
         RTSPTransportMode::from_bits_truncate(value)
     }
@@ -65,7 +64,7 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPTransportMode> for RTSPTransportMode {
 
 impl StaticType for RTSPTransportMode {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtsp_server_sys::gst_rtsp_transport_mode_get_type()) }
+        unsafe { from_glib(ffi::gst_rtsp_transport_mode_get_type()) }
     }
 }
 
@@ -77,12 +76,12 @@ impl<'a> FromValueOptional<'a> for RTSPTransportMode {
 
 impl<'a> FromValue<'a> for RTSPTransportMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPTransportMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
