@@ -3,15 +3,12 @@
 // DO NOT EDIT
 
 use glib::translate::*;
-use gst;
-use gst_base;
-use gst_video_sys;
 
-glib_wrapper! {
-    pub struct VideoFilter(Object<gst_video_sys::GstVideoFilter, gst_video_sys::GstVideoFilterClass>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct VideoFilter(Object<ffi::GstVideoFilter, ffi::GstVideoFilterClass>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_video_sys::gst_video_filter_get_type(),
+        get_type => || ffi::gst_video_filter_get_type(),
     }
 }
 

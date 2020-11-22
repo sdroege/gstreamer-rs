@@ -4,24 +4,19 @@
 
 use glib::object::Cast;
 use glib::translate::*;
-use gst;
-use gst_video_sys;
 
-glib_wrapper! {
-    pub struct VideoBufferPool(Object<gst_video_sys::GstVideoBufferPool, gst_video_sys::GstVideoBufferPoolClass>) @extends gst::BufferPool, gst::Object;
+glib::glib_wrapper! {
+    pub struct VideoBufferPool(Object<ffi::GstVideoBufferPool, ffi::GstVideoBufferPoolClass>) @extends gst::BufferPool, gst::Object;
 
     match fn {
-        get_type => || gst_video_sys::gst_video_buffer_pool_get_type(),
+        get_type => || ffi::gst_video_buffer_pool_get_type(),
     }
 }
 
 impl VideoBufferPool {
     pub fn new() -> VideoBufferPool {
         assert_initialized_main_thread!();
-        unsafe {
-            gst::BufferPool::from_glib_full(gst_video_sys::gst_video_buffer_pool_new())
-                .unsafe_cast()
-        }
+        unsafe { gst::BufferPool::from_glib_full(ffi::gst_video_buffer_pool_new()).unsafe_cast() }
     }
 }
 

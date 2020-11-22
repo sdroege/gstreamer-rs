@@ -9,19 +9,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_base;
-use gst_video_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib_wrapper! {
-    pub struct VideoSink(Object<gst_video_sys::GstVideoSink, gst_video_sys::GstVideoSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct VideoSink(Object<ffi::GstVideoSink, ffi::GstVideoSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_video_sys::gst_video_sink_get_type(),
+        get_type => || ffi::gst_video_sink_get_type(),
     }
 }
 
@@ -45,8 +40,8 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
     fn get_property_show_preroll_frame(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"show-preroll-frame\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -59,8 +54,8 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
 
     fn set_property_show_preroll_frame(&self, show_preroll_frame: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"show-preroll-frame\0".as_ptr() as *const _,
                 Value::from(&show_preroll_frame).to_glib_none().0,
             );
@@ -75,9 +70,9 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_video_sys::GstVideoSink,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstVideoSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<VideoSink>,
         {

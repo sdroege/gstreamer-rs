@@ -2,7 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+use crate::VideoCodecFrame;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -10,21 +12,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_video_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-use VideoCodecFrame;
 
-glib_wrapper! {
-    pub struct VideoEncoder(Object<gst_video_sys::GstVideoEncoder, gst_video_sys::GstVideoEncoderClass>) @extends gst::Element, gst::Object;
+glib::glib_wrapper! {
+    pub struct VideoEncoder(Object<ffi::GstVideoEncoder, ffi::GstVideoEncoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || gst_video_sys::gst_video_encoder_get_type(),
+        get_type => || ffi::gst_video_encoder_get_type(),
     }
 }
 
@@ -84,11 +79,11 @@ pub trait VideoEncoderExt: 'static {
 impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_full(gst_video_sys::gst_video_encoder_allocate_output_buffer(
+            Option::<_>::from_glib_full(ffi::gst_video_encoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
                 size,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to allocate output buffer"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate output buffer"))
         }
     }
 
@@ -96,7 +91,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
         unsafe {
-            gst_video_sys::gst_video_encoder_get_max_encode_time(
+            ffi::gst_video_encoder_get_max_encode_time(
                 self.as_ref().to_glib_none().0,
                 frame.to_glib_none().0,
             )
@@ -107,11 +102,9 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_min_force_key_unit_interval(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(
-                gst_video_sys::gst_video_encoder_get_min_force_key_unit_interval(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::gst_video_encoder_get_min_force_key_unit_interval(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -119,7 +112,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_qos_enabled(&self) -> bool {
         unsafe {
-            from_glib(gst_video_sys::gst_video_encoder_is_qos_enabled(
+            from_glib(ffi::gst_video_encoder_is_qos_enabled(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -127,7 +120,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode) {
         unsafe {
-            gst_video_sys::gst_video_encoder_merge_tags(
+            ffi::gst_video_encoder_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
                 mode.to_glib(),
@@ -137,7 +130,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_encoder_proxy_getcaps(
+            from_glib_full(ffi::gst_video_encoder_proxy_getcaps(
                 self.as_ref().to_glib_none().0,
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
@@ -147,7 +140,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     fn set_headers(&self, headers: &[&gst::Buffer]) {
         unsafe {
-            gst_video_sys::gst_video_encoder_set_headers(
+            ffi::gst_video_encoder_set_headers(
                 self.as_ref().to_glib_none().0,
                 headers.to_glib_full(),
             );
@@ -158,7 +151,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime) {
         unsafe {
-            gst_video_sys::gst_video_encoder_set_min_force_key_unit_interval(
+            ffi::gst_video_encoder_set_min_force_key_unit_interval(
                 self.as_ref().to_glib_none().0,
                 interval.to_glib(),
             );
@@ -167,10 +160,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     fn set_min_pts(&self, min_pts: gst::ClockTime) {
         unsafe {
-            gst_video_sys::gst_video_encoder_set_min_pts(
-                self.as_ref().to_glib_none().0,
-                min_pts.to_glib(),
-            );
+            ffi::gst_video_encoder_set_min_pts(self.as_ref().to_glib_none().0, min_pts.to_glib());
         }
     }
 
@@ -178,7 +168,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
-            gst_video_sys::gst_video_encoder_set_qos_enabled(
+            ffi::gst_video_encoder_set_qos_enabled(
                 self.as_ref().to_glib_none().0,
                 enabled.to_glib(),
             );
@@ -188,8 +178,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
     fn get_property_qos(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -202,8 +192,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     fn set_property_qos(&self, qos: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
                 Value::from(&qos).to_glib_none().0,
             );
@@ -220,9 +210,9 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             P,
             F: Fn(&P) + Send + Sync + 'static,
         >(
-            this: *mut gst_video_sys::GstVideoEncoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstVideoEncoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<VideoEncoder>,
         {
@@ -247,9 +237,9 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_video_sys::GstVideoEncoder,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstVideoEncoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<VideoEncoder>,
         {
