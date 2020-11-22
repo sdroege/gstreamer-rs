@@ -2,29 +2,22 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ges_sys;
-use gio;
-use gio_sys;
-use glib;
+use crate::Extractable;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
-use glib_sys;
-use gobject_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::pin::Pin;
 use std::ptr;
-use Extractable;
 
-glib_wrapper! {
-    pub struct Asset(Object<ges_sys::GESAsset, ges_sys::GESAssetClass>);
+glib::glib_wrapper! {
+    pub struct Asset(Object<ffi::GESAsset, ffi::GESAssetClass>);
 
     match fn {
-        get_type => || ges_sys::ges_asset_get_type(),
+        get_type => || ffi::ges_asset_get_type(),
     }
 }
 
@@ -32,7 +25,7 @@ impl Asset {
     pub fn needs_reload(extractable_type: glib::types::Type, id: Option<&str>) -> bool {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib(ges_sys::ges_asset_needs_reload(
+            from_glib(ffi::ges_asset_needs_reload(
                 extractable_type.to_glib(),
                 id.to_glib_none().0,
             ))
@@ -46,11 +39,8 @@ impl Asset {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_asset_request(
-                extractable_type.to_glib(),
-                id.to_glib_none().0,
-                &mut error,
-            );
+            let ret =
+                ffi::ges_asset_request(extractable_type.to_glib(), id.to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
@@ -73,12 +63,12 @@ impl Asset {
         unsafe extern "C" fn request_async_trampoline<
             Q: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
         >(
-            _source_object: *mut gobject_sys::GObject,
-            res: *mut gio_sys::GAsyncResult,
-            user_data: glib_sys::gpointer,
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
         ) {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_asset_request_finish(res, &mut error);
+            let ret = ffi::ges_asset_request_finish(res, &mut error);
             let result = if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
@@ -89,7 +79,7 @@ impl Asset {
         }
         let callback = request_async_trampoline::<Q>;
         unsafe {
-            ges_sys::ges_asset_request_async(
+            ffi::ges_asset_request_async(
                 extractable_type.to_glib(),
                 id.to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
@@ -130,7 +120,7 @@ pub trait AssetExt: 'static {
 
     fn get_extractable_type(&self) -> glib::types::Type;
 
-    fn get_id(&self) -> Option<GString>;
+    fn get_id(&self) -> Option<glib::GString>;
 
     fn get_proxy(&self) -> Option<Asset>;
 
@@ -152,7 +142,7 @@ impl<O: IsA<Asset>> AssetExt for O {
     fn extract(&self) -> Result<Extractable, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_asset_extract(self.as_ref().to_glib_none().0, &mut error);
+            let ret = ffi::ges_asset_extract(self.as_ref().to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(from_glib_none(ret))
             } else {
@@ -162,28 +152,28 @@ impl<O: IsA<Asset>> AssetExt for O {
     }
 
     fn get_error(&self) -> Option<glib::Error> {
-        unsafe { from_glib_none(ges_sys::ges_asset_get_error(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::ges_asset_get_error(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_extractable_type(&self) -> glib::types::Type {
         unsafe {
-            from_glib(ges_sys::ges_asset_get_extractable_type(
+            from_glib(ffi::ges_asset_get_extractable_type(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_id(&self) -> Option<GString> {
-        unsafe { from_glib_none(ges_sys::ges_asset_get_id(self.as_ref().to_glib_none().0)) }
+    fn get_id(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::ges_asset_get_id(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_proxy(&self) -> Option<Asset> {
-        unsafe { from_glib_none(ges_sys::ges_asset_get_proxy(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::ges_asset_get_proxy(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_proxy_target(&self) -> Option<Asset> {
         unsafe {
-            from_glib_none(ges_sys::ges_asset_get_proxy_target(
+            from_glib_none(ffi::ges_asset_get_proxy_target(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -191,7 +181,7 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     fn list_proxies(&self) -> Vec<Asset> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ges_sys::ges_asset_list_proxies(
+            FromGlibPtrContainer::from_glib_none(ffi::ges_asset_list_proxies(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -199,8 +189,8 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     fn set_proxy<P: IsA<Asset>>(&self, proxy: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                ges_sys::ges_asset_set_proxy(
+            glib::glib_result_from_gboolean!(
+                ffi::ges_asset_set_proxy(
                     self.as_ref().to_glib_none().0,
                     proxy.map(|p| p.as_ref()).to_glib_none().0
                 ),
@@ -211,8 +201,8 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                ges_sys::ges_asset_unproxy(
+            glib::glib_result_from_gboolean!(
+                ffi::ges_asset_unproxy(
                     self.as_ref().to_glib_none().0,
                     proxy.as_ref().to_glib_none().0
                 ),
@@ -223,9 +213,9 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_proxy_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESAsset,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESAsset,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Asset>,
         {
@@ -250,9 +240,9 @@ impl<O: IsA<Asset>> AssetExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_proxy_target_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESAsset,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESAsset,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Asset>,
         {

@@ -2,41 +2,37 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ges_sys;
-use glib;
+use crate::Asset;
+use crate::Clip;
+use crate::Extractable;
+use crate::Timeline;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::Track;
+use crate::TrackType;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
-use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
-use Asset;
-use Clip;
-use Extractable;
-use Timeline;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use Track;
-use TrackType;
 
-glib_wrapper! {
-    pub struct Layer(Object<ges_sys::GESLayer, ges_sys::GESLayerClass>) @implements Extractable;
+glib::glib_wrapper! {
+    pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass>) @implements Extractable;
 
     match fn {
-        get_type => || ges_sys::ges_layer_get_type(),
+        get_type => || ffi::ges_layer_get_type(),
     }
 }
 
 impl Layer {
     pub fn new() -> Layer {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ges_sys::ges_layer_new()) }
+        unsafe { from_glib_none(ffi::ges_layer_new()) }
     }
 }
 
@@ -133,7 +129,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         track_types: TrackType,
     ) -> Result<Clip, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_none(ges_sys::ges_layer_add_asset(
+            Option::<_>::from_glib_none(ffi::ges_layer_add_asset(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
                 start.to_glib(),
@@ -141,7 +137,7 @@ impl<O: IsA<Layer>> LayerExt for O {
                 duration.to_glib(),
                 track_types.to_glib(),
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to add asset"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to add asset"))
         }
     }
 
@@ -157,7 +153,7 @@ impl<O: IsA<Layer>> LayerExt for O {
     ) -> Result<Clip, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_layer_add_asset_full(
+            let ret = ffi::ges_layer_add_asset_full(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
                 start.to_glib(),
@@ -176,8 +172,8 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                ges_sys::ges_layer_add_clip(
+            glib::glib_result_from_gboolean!(
+                ffi::ges_layer_add_clip(
                     self.as_ref().to_glib_none().0,
                     clip.as_ref().to_glib_none().0
                 ),
@@ -191,7 +187,7 @@ impl<O: IsA<Layer>> LayerExt for O {
     fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ges_sys::ges_layer_add_clip_full(
+            let _ = ffi::ges_layer_add_clip_full(
                 self.as_ref().to_glib_none().0,
                 clip.as_ref().to_glib_none().0,
                 &mut error,
@@ -208,7 +204,7 @@ impl<O: IsA<Layer>> LayerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_layer_get_active_for_track(
+            from_glib(ffi::ges_layer_get_active_for_track(
                 self.as_ref().to_glib_none().0,
                 track.as_ref().to_glib_none().0,
             ))
@@ -217,7 +213,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn get_auto_transition(&self) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_layer_get_auto_transition(
+            from_glib(ffi::ges_layer_get_auto_transition(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -225,7 +221,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn get_clips(&self) -> Vec<Clip> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips(
+            FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -233,7 +229,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn get_clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips_in_interval(
+            FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips_in_interval(
                 self.as_ref().to_glib_none().0,
                 start.to_glib(),
                 end.to_glib(),
@@ -242,33 +238,25 @@ impl<O: IsA<Layer>> LayerExt for O {
     }
 
     fn get_duration(&self) -> gst::ClockTime {
-        unsafe {
-            from_glib(ges_sys::ges_layer_get_duration(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::ges_layer_get_duration(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_priority(&self) -> u32 {
-        unsafe { ges_sys::ges_layer_get_priority(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::ges_layer_get_priority(self.as_ref().to_glib_none().0) }
     }
 
     fn get_timeline(&self) -> Option<Timeline> {
-        unsafe {
-            from_glib_none(ges_sys::ges_layer_get_timeline(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::ges_layer_get_timeline(self.as_ref().to_glib_none().0)) }
     }
 
     fn is_empty(&self) -> bool {
-        unsafe { from_glib(ges_sys::ges_layer_is_empty(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib(ffi::ges_layer_is_empty(self.as_ref().to_glib_none().0)) }
     }
 
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                ges_sys::ges_layer_remove_clip(
+            glib::glib_result_from_gboolean!(
+                ffi::ges_layer_remove_clip(
                     self.as_ref().to_glib_none().0,
                     clip.as_ref().to_glib_none().0
                 ),
@@ -281,7 +269,7 @@ impl<O: IsA<Layer>> LayerExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_layer_set_active_for_tracks(
+            from_glib(ffi::ges_layer_set_active_for_tracks(
                 self.as_ref().to_glib_none().0,
                 active.to_glib(),
                 tracks.to_glib_none().0,
@@ -291,7 +279,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
-            ges_sys::ges_layer_set_auto_transition(
+            ffi::ges_layer_set_auto_transition(
                 self.as_ref().to_glib_none().0,
                 auto_transition.to_glib(),
             );
@@ -300,13 +288,13 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn set_priority(&self, priority: u32) {
         unsafe {
-            ges_sys::ges_layer_set_priority(self.as_ref().to_glib_none().0, priority);
+            ffi::ges_layer_set_priority(self.as_ref().to_glib_none().0, priority);
         }
     }
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) {
         unsafe {
-            ges_sys::ges_layer_set_timeline(
+            ffi::ges_layer_set_timeline(
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
             );
@@ -321,9 +309,9 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(
-            this: *mut ges_sys::GESLayer,
-            clip: *mut ges_sys::GESClip,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESLayer,
+            clip: *mut ffi::GESClip,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Layer>,
         {
@@ -348,9 +336,9 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(
-            this: *mut ges_sys::GESLayer,
-            clip: *mut ges_sys::GESClip,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESLayer,
+            clip: *mut ffi::GESClip,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Layer>,
         {
@@ -378,9 +366,9 @@ impl<O: IsA<Layer>> LayerExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESLayer,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESLayer,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Layer>,
         {
@@ -402,9 +390,9 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESLayer,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESLayer,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Layer>,
         {

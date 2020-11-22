@@ -2,24 +2,20 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ges_sys;
-use glib;
+use crate::BaseEffect;
+use crate::Extractable;
+use crate::TimelineElement;
+use crate::TrackElement;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use gobject_sys;
-use BaseEffect;
-use Extractable;
-use TimelineElement;
-use TrackElement;
 
-glib_wrapper! {
-    pub struct Effect(Object<ges_sys::GESEffect, ges_sys::GESEffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
+glib::glib_wrapper! {
+    pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ges_sys::ges_effect_get_type(),
+        get_type => || ffi::ges_effect_get_type(),
     }
 }
 
@@ -27,8 +23,8 @@ impl Effect {
     pub fn new(bin_description: &str) -> Result<Effect, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<_>::from_glib_none(ges_sys::ges_effect_new(bin_description.to_glib_none().0))
-                .ok_or_else(|| glib_bool_error!("Failed to create effect from description"))
+            Option::<_>::from_glib_none(ffi::ges_effect_new(bin_description.to_glib_none().0))
+                .ok_or_else(|| glib::glib_bool_error!("Failed to create effect from description"))
         }
     }
 }
@@ -36,15 +32,15 @@ impl Effect {
 pub const NONE_EFFECT: Option<&Effect> = None;
 
 pub trait EffectExt: 'static {
-    fn get_property_bin_description(&self) -> Option<GString>;
+    fn get_property_bin_description(&self) -> Option<glib::GString>;
 }
 
 impl<O: IsA<Effect>> EffectExt for O {
-    fn get_property_bin_description(&self) -> Option<GString> {
+    fn get_property_bin_description(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"bin-description\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );

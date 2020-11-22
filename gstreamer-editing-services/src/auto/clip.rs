@@ -2,40 +2,34 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ges_sys;
-use glib;
+use crate::Asset;
+use crate::BaseEffect;
+use crate::Container;
+use crate::Extractable;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use crate::FrameNumber;
+use crate::Layer;
+use crate::TimelineElement;
+use crate::Track;
+use crate::TrackElement;
+use crate::TrackType;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_sys;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
-use Asset;
-use BaseEffect;
-use Container;
-use Extractable;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-use FrameNumber;
-use Layer;
-use TimelineElement;
-use Track;
-use TrackElement;
-use TrackType;
 
-glib_wrapper! {
-    pub struct Clip(Object<ges_sys::GESClip, ges_sys::GESClipClass>) @extends Container, TimelineElement, @implements Extractable;
+glib::glib_wrapper! {
+    pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ges_sys::ges_clip_get_type(),
+        get_type => || ffi::ges_clip_get_type(),
     }
 }
 
@@ -163,11 +157,11 @@ pub trait ClipExt: 'static {
 impl<O: IsA<Clip>> ClipExt for O {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_none(ges_sys::ges_clip_add_asset(
+            Option::<_>::from_glib_none(ffi::ges_clip_add_asset(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to add asset"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to add asset"))
         }
     }
 
@@ -180,7 +174,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     ) -> Result<TrackElement, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_clip_add_child_to_track(
+            let ret = ffi::ges_clip_add_child_to_track(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
                 track.as_ref().to_glib_none().0,
@@ -203,7 +197,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ges_sys::ges_clip_add_top_effect(
+            let _ = ffi::ges_clip_add_top_effect(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
                 index,
@@ -223,7 +217,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         type_: glib::types::Type,
     ) -> Option<TrackElement> {
         unsafe {
-            from_glib_full(ges_sys::ges_clip_find_track_element(
+            from_glib_full(ffi::ges_clip_find_track_element(
                 self.as_ref().to_glib_none().0,
                 track.map(|p| p.as_ref()).to_glib_none().0,
                 type_.to_glib(),
@@ -238,7 +232,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         type_: glib::types::Type,
     ) -> Vec<TrackElement> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_clip_find_track_elements(
+            FromGlibPtrContainer::from_glib_full(ffi::ges_clip_find_track_elements(
                 self.as_ref().to_glib_none().0,
                 track.map(|p| p.as_ref()).to_glib_none().0,
                 track_type.to_glib(),
@@ -251,7 +245,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_duration_limit(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ges_sys::ges_clip_get_duration_limit(
+            from_glib(ffi::ges_clip_get_duration_limit(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -266,7 +260,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     ) -> Result<gst::ClockTime, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_clip_get_internal_time_from_timeline_time(
+            let ret = ffi::ges_clip_get_internal_time_from_timeline_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
                 timeline_time.to_glib(),
@@ -281,12 +275,12 @@ impl<O: IsA<Clip>> ClipExt for O {
     }
 
     fn get_layer(&self) -> Option<Layer> {
-        unsafe { from_glib_full(ges_sys::ges_clip_get_layer(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::ges_clip_get_layer(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_supported_formats(&self) -> TrackType {
         unsafe {
-            from_glib(ges_sys::ges_clip_get_supported_formats(
+            from_glib(ffi::ges_clip_get_supported_formats(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -301,7 +295,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     ) -> Result<gst::ClockTime, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_clip_get_timeline_time_from_internal_time(
+            let ret = ffi::ges_clip_get_timeline_time_from_internal_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
                 internal_time.to_glib(),
@@ -323,7 +317,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     ) -> Result<gst::ClockTime, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ges_sys::ges_clip_get_timeline_time_from_source_frame(
+            let ret = ffi::ges_clip_get_timeline_time_from_source_frame(
                 self.as_ref().to_glib_none().0,
                 frame_number,
                 &mut error,
@@ -338,7 +332,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn get_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
         unsafe {
-            ges_sys::ges_clip_get_top_effect_index(
+            ffi::ges_clip_get_top_effect_index(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
             )
@@ -347,7 +341,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn get_top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
         unsafe {
-            ges_sys::ges_clip_get_top_effect_position(
+            ffi::ges_clip_get_top_effect_position(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
             )
@@ -356,7 +350,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn get_top_effects(&self) -> Vec<TrackElement> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_clip_get_top_effects(
+            FromGlibPtrContainer::from_glib_full(ffi::ges_clip_get_top_effects(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -364,8 +358,8 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                ges_sys::ges_clip_move_to_layer(
+            glib::glib_result_from_gboolean!(
+                ffi::ges_clip_move_to_layer(
                     self.as_ref().to_glib_none().0,
                     layer.as_ref().to_glib_none().0
                 ),
@@ -379,7 +373,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn move_to_layer_full<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ges_sys::ges_clip_move_to_layer_full(
+            let _ = ffi::ges_clip_move_to_layer_full(
                 self.as_ref().to_glib_none().0,
                 layer.as_ref().to_glib_none().0,
                 &mut error,
@@ -397,7 +391,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn remove_top_effect<P: IsA<BaseEffect>>(&self, effect: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ges_sys::ges_clip_remove_top_effect(
+            let _ = ffi::ges_clip_remove_top_effect(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
                 &mut error,
@@ -412,7 +406,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn set_supported_formats(&self, supportedformats: TrackType) {
         unsafe {
-            ges_sys::ges_clip_set_supported_formats(
+            ffi::ges_clip_set_supported_formats(
                 self.as_ref().to_glib_none().0,
                 supportedformats.to_glib(),
             );
@@ -425,8 +419,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         newindex: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                ges_sys::ges_clip_set_top_effect_index(
+            glib::glib_result_from_gboolean!(
+                ffi::ges_clip_set_top_effect_index(
                     self.as_ref().to_glib_none().0,
                     effect.as_ref().to_glib_none().0,
                     newindex
@@ -445,7 +439,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ges_sys::ges_clip_set_top_effect_index_full(
+            let _ = ffi::ges_clip_set_top_effect_index_full(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
                 newindex,
@@ -465,8 +459,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         newpriority: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                ges_sys::ges_clip_set_top_effect_priority(
+            glib::glib_result_from_gboolean!(
+                ffi::ges_clip_set_top_effect_priority(
                     self.as_ref().to_glib_none().0,
                     effect.as_ref().to_glib_none().0,
                     newpriority
@@ -478,11 +472,11 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn split(&self, position: u64) -> Result<Clip, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_none(ges_sys::ges_clip_split(
+            Option::<_>::from_glib_none(ffi::ges_clip_split(
                 self.as_ref().to_glib_none().0,
                 position,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to split clip"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to split clip"))
         }
     }
 
@@ -492,7 +486,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         unsafe {
             let mut error = ptr::null_mut();
             let ret =
-                ges_sys::ges_clip_split_full(self.as_ref().to_glib_none().0, position, &mut error);
+                ffi::ges_clip_split_full(self.as_ref().to_glib_none().0, position, &mut error);
             if error.is_null() {
                 Ok(from_glib_none(ret))
             } else {
@@ -508,9 +502,9 @@ impl<O: IsA<Clip>> ClipExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_duration_limit_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESClip,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESClip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Clip>,
         {
@@ -532,9 +526,9 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn connect_property_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_layer_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESClip,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESClip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Clip>,
         {
@@ -559,9 +553,9 @@ impl<O: IsA<Clip>> ClipExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESClip,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESClip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<Clip>,
         {

@@ -2,30 +2,25 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ges_sys;
-use glib;
+use crate::Clip;
+use crate::Container;
+use crate::Extractable;
+use crate::TimelineElement;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use Clip;
-use Container;
-use Extractable;
-use TimelineElement;
 
-glib_wrapper! {
-    pub struct UriClip(Object<ges_sys::GESUriClip, ges_sys::GESUriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
+glib::glib_wrapper! {
+    pub struct UriClip(Object<ffi::GESUriClip, ffi::GESUriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ges_sys::ges_uri_clip_get_type(),
+        get_type => || ffi::ges_uri_clip_get_type(),
     }
 }
 
@@ -33,8 +28,8 @@ impl UriClip {
     pub fn new(uri: &str) -> Result<UriClip, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<_>::from_glib_none(ges_sys::ges_uri_clip_new(uri.to_glib_none().0))
-                .ok_or_else(|| glib_bool_error!("Failed to create Uri clip from Uri"))
+            Option::<_>::from_glib_none(ffi::ges_uri_clip_new(uri.to_glib_none().0))
+                .ok_or_else(|| glib::glib_bool_error!("Failed to create Uri clip from Uri"))
         }
     }
 }
@@ -42,7 +37,7 @@ impl UriClip {
 pub const NONE_URI_CLIP: Option<&UriClip> = None;
 
 pub trait UriClipExt: 'static {
-    fn get_uri(&self) -> Option<GString>;
+    fn get_uri(&self) -> Option<glib::GString>;
 
     fn is_image(&self) -> bool;
 
@@ -67,47 +62,35 @@ pub trait UriClipExt: 'static {
 }
 
 impl<O: IsA<UriClip>> UriClipExt for O {
-    fn get_uri(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ges_sys::ges_uri_clip_get_uri(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+    fn get_uri(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::ges_uri_clip_get_uri(self.as_ref().to_glib_none().0)) }
     }
 
     fn is_image(&self) -> bool {
-        unsafe {
-            from_glib(ges_sys::ges_uri_clip_is_image(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::ges_uri_clip_is_image(self.as_ref().to_glib_none().0)) }
     }
 
     fn is_muted(&self) -> bool {
-        unsafe {
-            from_glib(ges_sys::ges_uri_clip_is_muted(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::ges_uri_clip_is_muted(self.as_ref().to_glib_none().0)) }
     }
 
     fn set_is_image(&self, is_image: bool) {
         unsafe {
-            ges_sys::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.to_glib());
+            ffi::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.to_glib());
         }
     }
 
     fn set_mute(&self, mute: bool) {
         unsafe {
-            ges_sys::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
+            ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
         }
     }
 
     fn get_property_is_image(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"is-image\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -121,8 +104,8 @@ impl<O: IsA<UriClip>> UriClipExt for O {
     fn get_property_mute(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"mute\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -135,9 +118,9 @@ impl<O: IsA<UriClip>> UriClipExt for O {
 
     fn connect_property_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_image_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESUriClip,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESUriClip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<UriClip>,
         {
@@ -159,9 +142,9 @@ impl<O: IsA<UriClip>> UriClipExt for O {
 
     fn connect_property_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESUriClip,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESUriClip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<UriClip>,
         {
@@ -186,9 +169,9 @@ impl<O: IsA<UriClip>> UriClipExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(
-            this: *mut ges_sys::GESUriClip,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GESUriClip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<UriClip>,
         {

@@ -2,19 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ges_sys;
+use crate::Asset;
+use crate::UriClipAsset;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
-use gst_pbutils;
-use Asset;
-use UriClipAsset;
 
-glib_wrapper! {
-    pub struct UriSourceAsset(Object<ges_sys::GESUriSourceAsset, ges_sys::GESUriSourceAssetClass>) @extends Asset;
+glib::glib_wrapper! {
+    pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass>) @extends Asset;
 
     match fn {
-        get_type => || ges_sys::ges_uri_source_asset_get_type(),
+        get_type => || ffi::ges_uri_source_asset_get_type(),
     }
 }
 
@@ -25,7 +22,7 @@ pub trait UriSourceAssetExt: 'static {
 
     fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo>;
 
-    fn get_stream_uri(&self) -> Option<GString>;
+    fn get_stream_uri(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -35,7 +32,7 @@ pub trait UriSourceAssetExt: 'static {
 impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
     fn get_filesource_asset(&self) -> Option<UriClipAsset> {
         unsafe {
-            from_glib_none(ges_sys::ges_uri_source_asset_get_filesource_asset(
+            from_glib_none(ffi::ges_uri_source_asset_get_filesource_asset(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -43,15 +40,15 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
 
     fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo> {
         unsafe {
-            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_info(
+            from_glib_none(ffi::ges_uri_source_asset_get_stream_info(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_stream_uri(&self) -> Option<GString> {
+    fn get_stream_uri(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_uri(
+            from_glib_none(ffi::ges_uri_source_asset_get_stream_uri(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -61,7 +58,7 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn is_image(&self) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_uri_source_asset_is_image(
+            from_glib(ffi::ges_uri_source_asset_is_image(
                 self.as_ref().to_glib_none().0,
             ))
         }

@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ges_sys;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
@@ -10,7 +9,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -24,21 +22,21 @@ pub enum Edge {
 
 #[doc(hidden)]
 impl ToGlib for Edge {
-    type GlibType = ges_sys::GESEdge;
+    type GlibType = ffi::GESEdge;
 
-    fn to_glib(&self) -> ges_sys::GESEdge {
+    fn to_glib(&self) -> ffi::GESEdge {
         match *self {
-            Edge::Start => ges_sys::GES_EDGE_START,
-            Edge::End => ges_sys::GES_EDGE_END,
-            Edge::None => ges_sys::GES_EDGE_NONE,
+            Edge::Start => ffi::GES_EDGE_START,
+            Edge::End => ffi::GES_EDGE_END,
+            Edge::None => ffi::GES_EDGE_NONE,
             Edge::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ges_sys::GESEdge> for Edge {
-    fn from_glib(value: ges_sys::GESEdge) -> Self {
+impl FromGlib<ffi::GESEdge> for Edge {
+    fn from_glib(value: ffi::GESEdge) -> Self {
         skip_assert_initialized!();
         match value {
             0 => Edge::Start,
@@ -51,7 +49,7 @@ impl FromGlib<ges_sys::GESEdge> for Edge {
 
 impl StaticType for Edge {
     fn static_type() -> Type {
-        unsafe { from_glib(ges_sys::ges_edge_get_type()) }
+        unsafe { from_glib(ffi::ges_edge_get_type()) }
     }
 }
 
@@ -63,13 +61,13 @@ impl<'a> FromValueOptional<'a> for Edge {
 
 impl<'a> FromValue<'a> for Edge {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for Edge {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -87,23 +85,23 @@ pub enum EditMode {
 
 #[doc(hidden)]
 impl ToGlib for EditMode {
-    type GlibType = ges_sys::GESEditMode;
+    type GlibType = ffi::GESEditMode;
 
-    fn to_glib(&self) -> ges_sys::GESEditMode {
+    fn to_glib(&self) -> ffi::GESEditMode {
         match *self {
-            EditMode::Normal => ges_sys::GES_EDIT_MODE_NORMAL,
-            EditMode::Ripple => ges_sys::GES_EDIT_MODE_RIPPLE,
-            EditMode::Roll => ges_sys::GES_EDIT_MODE_ROLL,
-            EditMode::Trim => ges_sys::GES_EDIT_MODE_TRIM,
-            EditMode::Slide => ges_sys::GES_EDIT_MODE_SLIDE,
+            EditMode::Normal => ffi::GES_EDIT_MODE_NORMAL,
+            EditMode::Ripple => ffi::GES_EDIT_MODE_RIPPLE,
+            EditMode::Roll => ffi::GES_EDIT_MODE_ROLL,
+            EditMode::Trim => ffi::GES_EDIT_MODE_TRIM,
+            EditMode::Slide => ffi::GES_EDIT_MODE_SLIDE,
             EditMode::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ges_sys::GESEditMode> for EditMode {
-    fn from_glib(value: ges_sys::GESEditMode) -> Self {
+impl FromGlib<ffi::GESEditMode> for EditMode {
+    fn from_glib(value: ffi::GESEditMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => EditMode::Normal,
@@ -118,7 +116,7 @@ impl FromGlib<ges_sys::GESEditMode> for EditMode {
 
 impl StaticType for EditMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ges_sys::ges_edit_mode_get_type()) }
+        unsafe { from_glib(ffi::ges_edit_mode_get_type()) }
     }
 }
 
@@ -130,12 +128,12 @@ impl<'a> FromValueOptional<'a> for EditMode {
 
 impl<'a> FromValue<'a> for EditMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for EditMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
