@@ -5,16 +5,15 @@
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use glib::translate::*;
-use gst_rtsp_sys;
 
-glib_wrapper! {
+glib::glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct RTSPAuthParam(Boxed<gst_rtsp_sys::GstRTSPAuthParam>);
+    pub struct RTSPAuthParam(Boxed<ffi::GstRTSPAuthParam>);
 
     match fn {
-        copy => |ptr| gst_rtsp_sys::gst_rtsp_auth_param_copy(mut_override(ptr)),
-        free => |ptr| gst_rtsp_sys::gst_rtsp_auth_param_free(ptr),
-        get_type => || gst_rtsp_sys::gst_rtsp_auth_param_get_type(),
+        copy => |ptr| ffi::gst_rtsp_auth_param_copy(mut_override(ptr)),
+        free => |ptr| ffi::gst_rtsp_auth_param_free(ptr),
+        get_type => || ffi::gst_rtsp_auth_param_get_type(),
     }
 }
 

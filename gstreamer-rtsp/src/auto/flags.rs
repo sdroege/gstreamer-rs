@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use bitflags::bitflags;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
@@ -9,8 +10,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_rtsp_sys;
 
 bitflags! {
     pub struct RTSPEvent: u32 {
@@ -21,16 +20,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTSPEvent {
-    type GlibType = gst_rtsp_sys::GstRTSPEvent;
+    type GlibType = ffi::GstRTSPEvent;
 
-    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPEvent {
+    fn to_glib(&self) -> ffi::GstRTSPEvent {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtsp_sys::GstRTSPEvent> for RTSPEvent {
-    fn from_glib(value: gst_rtsp_sys::GstRTSPEvent) -> RTSPEvent {
+impl FromGlib<ffi::GstRTSPEvent> for RTSPEvent {
+    fn from_glib(value: ffi::GstRTSPEvent) -> RTSPEvent {
         skip_assert_initialized!();
         RTSPEvent::from_bits_truncate(value)
     }
@@ -38,7 +37,7 @@ impl FromGlib<gst_rtsp_sys::GstRTSPEvent> for RTSPEvent {
 
 impl StaticType for RTSPEvent {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_event_get_type()) }
+        unsafe { from_glib(ffi::gst_rtsp_event_get_type()) }
     }
 }
 
@@ -50,13 +49,13 @@ impl<'a> FromValueOptional<'a> for RTSPEvent {
 
 impl<'a> FromValue<'a> for RTSPEvent {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPEvent {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -72,16 +71,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTSPLowerTrans {
-    type GlibType = gst_rtsp_sys::GstRTSPLowerTrans;
+    type GlibType = ffi::GstRTSPLowerTrans;
 
-    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPLowerTrans {
+    fn to_glib(&self) -> ffi::GstRTSPLowerTrans {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtsp_sys::GstRTSPLowerTrans> for RTSPLowerTrans {
-    fn from_glib(value: gst_rtsp_sys::GstRTSPLowerTrans) -> RTSPLowerTrans {
+impl FromGlib<ffi::GstRTSPLowerTrans> for RTSPLowerTrans {
+    fn from_glib(value: ffi::GstRTSPLowerTrans) -> RTSPLowerTrans {
         skip_assert_initialized!();
         RTSPLowerTrans::from_bits_truncate(value)
     }
@@ -89,7 +88,7 @@ impl FromGlib<gst_rtsp_sys::GstRTSPLowerTrans> for RTSPLowerTrans {
 
 impl StaticType for RTSPLowerTrans {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_lower_trans_get_type()) }
+        unsafe { from_glib(ffi::gst_rtsp_lower_trans_get_type()) }
     }
 }
 
@@ -101,13 +100,13 @@ impl<'a> FromValueOptional<'a> for RTSPLowerTrans {
 
 impl<'a> FromValue<'a> for RTSPLowerTrans {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPLowerTrans {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -131,16 +130,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTSPMethod {
-    type GlibType = gst_rtsp_sys::GstRTSPMethod;
+    type GlibType = ffi::GstRTSPMethod;
 
-    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPMethod {
+    fn to_glib(&self) -> ffi::GstRTSPMethod {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtsp_sys::GstRTSPMethod> for RTSPMethod {
-    fn from_glib(value: gst_rtsp_sys::GstRTSPMethod) -> RTSPMethod {
+impl FromGlib<ffi::GstRTSPMethod> for RTSPMethod {
+    fn from_glib(value: ffi::GstRTSPMethod) -> RTSPMethod {
         skip_assert_initialized!();
         RTSPMethod::from_bits_truncate(value)
     }
@@ -148,7 +147,7 @@ impl FromGlib<gst_rtsp_sys::GstRTSPMethod> for RTSPMethod {
 
 impl StaticType for RTSPMethod {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_method_get_type()) }
+        unsafe { from_glib(ffi::gst_rtsp_method_get_type()) }
     }
 }
 
@@ -160,13 +159,13 @@ impl<'a> FromValueOptional<'a> for RTSPMethod {
 
 impl<'a> FromValue<'a> for RTSPMethod {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPMethod {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -181,16 +180,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTSPProfile {
-    type GlibType = gst_rtsp_sys::GstRTSPProfile;
+    type GlibType = ffi::GstRTSPProfile;
 
-    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPProfile {
+    fn to_glib(&self) -> ffi::GstRTSPProfile {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtsp_sys::GstRTSPProfile> for RTSPProfile {
-    fn from_glib(value: gst_rtsp_sys::GstRTSPProfile) -> RTSPProfile {
+impl FromGlib<ffi::GstRTSPProfile> for RTSPProfile {
+    fn from_glib(value: ffi::GstRTSPProfile) -> RTSPProfile {
         skip_assert_initialized!();
         RTSPProfile::from_bits_truncate(value)
     }
@@ -198,7 +197,7 @@ impl FromGlib<gst_rtsp_sys::GstRTSPProfile> for RTSPProfile {
 
 impl StaticType for RTSPProfile {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_profile_get_type()) }
+        unsafe { from_glib(ffi::gst_rtsp_profile_get_type()) }
     }
 }
 
@@ -210,13 +209,13 @@ impl<'a> FromValueOptional<'a> for RTSPProfile {
 
 impl<'a> FromValue<'a> for RTSPProfile {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPProfile {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -229,16 +228,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTSPTransMode {
-    type GlibType = gst_rtsp_sys::GstRTSPTransMode;
+    type GlibType = ffi::GstRTSPTransMode;
 
-    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPTransMode {
+    fn to_glib(&self) -> ffi::GstRTSPTransMode {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtsp_sys::GstRTSPTransMode> for RTSPTransMode {
-    fn from_glib(value: gst_rtsp_sys::GstRTSPTransMode) -> RTSPTransMode {
+impl FromGlib<ffi::GstRTSPTransMode> for RTSPTransMode {
+    fn from_glib(value: ffi::GstRTSPTransMode) -> RTSPTransMode {
         skip_assert_initialized!();
         RTSPTransMode::from_bits_truncate(value)
     }
@@ -246,7 +245,7 @@ impl FromGlib<gst_rtsp_sys::GstRTSPTransMode> for RTSPTransMode {
 
 impl StaticType for RTSPTransMode {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_trans_mode_get_type()) }
+        unsafe { from_glib(ffi::gst_rtsp_trans_mode_get_type()) }
     }
 }
 
@@ -258,12 +257,12 @@ impl<'a> FromValueOptional<'a> for RTSPTransMode {
 
 impl<'a> FromValue<'a> for RTSPTransMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPTransMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
