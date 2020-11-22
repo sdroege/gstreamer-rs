@@ -6,12 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ges_sys;
-use glib;
+use crate::TimelineElement;
 use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
-use TimelineElement;
 
 pub trait TimelineElementExtManual: 'static {
     fn get_child_property(&self, name: &str) -> Option<glib::Value>;
@@ -25,7 +23,7 @@ pub trait TimelineElementExtManual: 'static {
 impl<O: IsA<TimelineElement>> TimelineElementExtManual for O {
     fn get_child_property(&self, name: &str) -> Option<glib::Value> {
         unsafe {
-            let found: bool = from_glib(ges_sys::ges_timeline_element_lookup_child(
+            let found: bool = from_glib(ffi::ges_timeline_element_lookup_child(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 ptr::null_mut(),
@@ -36,7 +34,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExtManual for O {
             }
 
             let mut value = glib::Value::uninitialized();
-            ges_sys::ges_timeline_element_get_child_property(
+            ffi::ges_timeline_element_get_child_property(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 value.to_glib_none_mut().0,
@@ -51,18 +49,18 @@ impl<O: IsA<TimelineElement>> TimelineElementExtManual for O {
         value: &dyn glib::ToValue,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            let found: bool = from_glib(ges_sys::ges_timeline_element_lookup_child(
+            let found: bool = from_glib(ffi::ges_timeline_element_lookup_child(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 ptr::null_mut(),
                 ptr::null_mut(),
             ));
             if !found {
-                return Err(glib_bool_error!("Child property not found"));
+                return Err(glib::glib_bool_error!("Child property not found"));
             }
 
             let value = value.to_value();
-            ges_sys::ges_timeline_element_set_child_property(
+            ffi::ges_timeline_element_set_child_property(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 value.to_glib_none().0,

@@ -8,52 +8,39 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-extern crate libc;
+pub use ffi;
 
 use std::sync::Once;
 
-extern crate gio_sys;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_base as gst_base;
-extern crate gstreamer_editing_services_sys as ges_sys;
-extern crate gstreamer_pbutils as gst_pbutils;
-extern crate gstreamer_sys as gst_sys;
-
 use glib::translate::from_glib;
-
-#[macro_use]
-extern crate glib;
-extern crate gio;
 
 static GES_INIT: Once = Once::new();
 
 pub fn init() -> Result<(), glib::BoolError> {
     if gst::init().is_err() {
-        return Err(glib_bool_error!("Could not initialize GStreamer."));
+        return Err(glib::glib_bool_error!("Could not initialize GStreamer."));
     }
 
     unsafe {
-        if from_glib(ges_sys::ges_init()) {
+        if from_glib(ffi::ges_init()) {
             Ok(())
         } else {
-            Err(glib_bool_error!("Could not initialize GES."))
+            Err(glib::glib_bool_error!("Could not initialize GES."))
         }
     }
 }
 
 pub unsafe fn deinit() {
-    ges_sys::ges_deinit();
+    ffi::ges_deinit();
 }
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
-        ::GES_INIT.call_once(|| {
-            unsafe { ::ges_sys::ges_init() };
+        crate::GES_INIT.call_once(|| {
+            unsafe { ffi::ges_init() };
         });
     };
 }
@@ -67,20 +54,17 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::match_same_arms)]
 #[allow(unused_imports)]
 mod auto;
-pub use auto::*;
-
-#[macro_use]
-extern crate bitflags;
+pub use crate::auto::*;
 
 mod timeline_element;
-pub use timeline_element::TimelineElementExtManual;
+pub use crate::timeline_element::TimelineElementExtManual;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
+    pub use crate::timeline_element::TimelineElementExtManual;
     pub use glib::prelude::*;
     pub use gst::prelude::*;
-    pub use timeline_element::TimelineElementExtManual;
 
-    pub use auto::traits::*;
+    pub use crate::auto::traits::*;
 }
