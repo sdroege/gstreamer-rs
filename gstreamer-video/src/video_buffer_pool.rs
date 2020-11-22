@@ -16,29 +16,29 @@ use once_cell::sync::Lazy;
 
 pub static BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: Lazy<&'static str> =
     Lazy::new(|| unsafe {
-        CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META)
+        CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META)
             .to_str()
             .unwrap()
     });
 pub static BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT)
+    CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT)
         .to_str()
         .unwrap()
 });
 pub static BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: Lazy<&'static str> =
     Lazy::new(|| unsafe {
-        CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META)
+        CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META)
             .to_str()
             .unwrap()
     });
 pub static BUFFER_POOL_OPTION_VIDEO_META: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(gst_video_sys::GST_BUFFER_POOL_OPTION_VIDEO_META)
+    CStr::from_ptr(ffi::GST_BUFFER_POOL_OPTION_VIDEO_META)
         .to_str()
         .unwrap()
 });
 
 #[derive(Debug, Clone)]
-pub struct VideoAlignment(pub(crate) gst_video_sys::GstVideoAlignment);
+pub struct VideoAlignment(pub(crate) ffi::GstVideoAlignment);
 
 impl VideoAlignment {
     pub fn get_padding_top(&self) -> u32 {
@@ -53,7 +53,7 @@ impl VideoAlignment {
     pub fn get_padding_right(&self) -> u32 {
         self.0.padding_right
     }
-    pub fn get_stride_align(&self) -> &[u32; gst_video_sys::GST_VIDEO_MAX_PLANES as usize] {
+    pub fn get_stride_align(&self) -> &[u32; ffi::GST_VIDEO_MAX_PLANES as usize] {
         &self.0.stride_align
     }
 
@@ -62,12 +62,12 @@ impl VideoAlignment {
         padding_bottom: u32,
         padding_left: u32,
         padding_right: u32,
-        stride_align: &[u32; gst_video_sys::GST_VIDEO_MAX_PLANES as usize],
+        stride_align: &[u32; ffi::GST_VIDEO_MAX_PLANES as usize],
     ) -> Self {
         assert_initialized_main_thread!();
 
         let videoalignment = unsafe {
-            let mut videoalignment: gst_video_sys::GstVideoAlignment = mem::zeroed();
+            let mut videoalignment: ffi::GstVideoAlignment = mem::zeroed();
 
             videoalignment.padding_top = padding_top;
             videoalignment.padding_bottom = padding_bottom;
@@ -92,7 +92,7 @@ impl VideoBufferPoolConfig for gst::BufferPoolConfig {
     fn get_video_alignment(&self) -> Option<VideoAlignment> {
         unsafe {
             let mut alignment = mem::MaybeUninit::zeroed();
-            let ret = from_glib(gst_video_sys::gst_buffer_pool_config_get_video_alignment(
+            let ret = from_glib(ffi::gst_buffer_pool_config_get_video_alignment(
                 self.as_ref().as_mut_ptr(),
                 alignment.as_mut_ptr(),
             ));
@@ -106,7 +106,7 @@ impl VideoBufferPoolConfig for gst::BufferPoolConfig {
 
     fn set_video_alignment(&mut self, align: &VideoAlignment) {
         unsafe {
-            gst_video_sys::gst_buffer_pool_config_set_video_alignment(
+            ffi::gst_buffer_pool_config_set_video_alignment(
                 self.as_mut().as_mut_ptr(),
                 &align.0 as *const _ as *mut _,
             )

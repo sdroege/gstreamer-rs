@@ -9,15 +9,11 @@
 use std::fmt;
 use std::ptr;
 
-use glib;
 use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
-use gst;
 use gst::prelude::*;
-use gst_sys;
-use gst_video_sys;
 
 #[repr(transparent)]
-pub struct VideoMeta(gst_video_sys::GstVideoMeta);
+pub struct VideoMeta(ffi::GstVideoMeta);
 
 unsafe impl Send for VideoMeta {}
 unsafe impl Sync for VideoMeta {}
@@ -25,25 +21,28 @@ unsafe impl Sync for VideoMeta {}
 impl VideoMeta {
     pub fn add(
         buffer: &mut gst::BufferRef,
-        flags: ::VideoFrameFlags,
-        format: ::VideoFormat,
+        flags: crate::VideoFrameFlags,
+        format: crate::VideoFormat,
         width: u32,
         height: u32,
     ) -> Result<gst::MetaRefMut<Self, gst::meta::Standalone>, glib::BoolError> {
         skip_assert_initialized!();
 
-        if format == ::VideoFormat::Unknown || format == ::VideoFormat::Encoded {
-            return Err(glib_bool_error!("Unsupported video format {}", format));
+        if format == crate::VideoFormat::Unknown || format == crate::VideoFormat::Encoded {
+            return Err(glib::glib_bool_error!(
+                "Unsupported video format {}",
+                format
+            ));
         }
 
-        let info = ::VideoInfo::builder(format, width, height).build()?;
+        let info = crate::VideoInfo::builder(format, width, height).build()?;
 
         if !info.is_valid() {
-            return Err(glib_bool_error!("Invalid video info"));
+            return Err(glib::glib_bool_error!("Invalid video info"));
         }
 
         if buffer.get_size() < info.size() {
-            return Err(glib_bool_error!(
+            return Err(glib::glib_bool_error!(
                 "Buffer smaller than required frame size ({} < {})",
                 buffer.get_size(),
                 info.size()
@@ -51,7 +50,7 @@ impl VideoMeta {
         }
 
         unsafe {
-            let meta = gst_video_sys::gst_buffer_add_video_meta(
+            let meta = ffi::gst_buffer_add_video_meta(
                 buffer.as_mut_ptr(),
                 flags.to_glib(),
                 format.to_glib(),
@@ -60,7 +59,7 @@ impl VideoMeta {
             );
 
             if meta.is_null() {
-                return Err(glib_bool_error!("Failed to add video meta"));
+                return Err(glib::glib_bool_error!("Failed to add video meta"));
             }
 
             Ok(Self::from_mut_ptr(buffer, meta))
@@ -69,8 +68,8 @@ impl VideoMeta {
 
     pub fn add_full<'a>(
         buffer: &'a mut gst::BufferRef,
-        flags: ::VideoFrameFlags,
-        format: ::VideoFormat,
+        flags: crate::VideoFrameFlags,
+        format: crate::VideoFormat,
         width: u32,
         height: u32,
         offset: &[usize],
@@ -78,22 +77,25 @@ impl VideoMeta {
     ) -> Result<gst::MetaRefMut<'a, Self, gst::meta::Standalone>, glib::BoolError> {
         skip_assert_initialized!();
 
-        if format == ::VideoFormat::Unknown || format == ::VideoFormat::Encoded {
-            return Err(glib_bool_error!("Unsupported video format {}", format));
+        if format == crate::VideoFormat::Unknown || format == crate::VideoFormat::Encoded {
+            return Err(glib::glib_bool_error!(
+                "Unsupported video format {}",
+                format
+            ));
         }
 
         let n_planes = offset.len() as u32;
-        let info = ::VideoInfo::builder(format, width, height)
+        let info = crate::VideoInfo::builder(format, width, height)
             .offset(offset)
             .stride(stride)
             .build()?;
 
         if !info.is_valid() {
-            return Err(glib_bool_error!("Invalid video info"));
+            return Err(glib::glib_bool_error!("Invalid video info"));
         }
 
         if buffer.get_size() < info.size() {
-            return Err(glib_bool_error!(
+            return Err(glib::glib_bool_error!(
                 "Buffer smaller than required frame size ({} < {})",
                 buffer.get_size(),
                 info.size()
@@ -101,7 +103,7 @@ impl VideoMeta {
         }
 
         unsafe {
-            let meta = gst_video_sys::gst_buffer_add_video_meta_full(
+            let meta = ffi::gst_buffer_add_video_meta_full(
                 buffer.as_mut_ptr(),
                 flags.to_glib(),
                 format.to_glib(),
@@ -113,18 +115,18 @@ impl VideoMeta {
             );
 
             if meta.is_null() {
-                return Err(glib_bool_error!("Failed to add video meta"));
+                return Err(glib::glib_bool_error!("Failed to add video meta"));
             }
 
             Ok(Self::from_mut_ptr(buffer, meta))
         }
     }
 
-    pub fn get_flags(&self) -> ::VideoFrameFlags {
+    pub fn get_flags(&self) -> crate::VideoFrameFlags {
         from_glib(self.0.flags)
     }
 
-    pub fn get_format(&self) -> ::VideoFormat {
+    pub fn get_format(&self) -> crate::VideoFormat {
         from_glib(self.0.format)
     }
 
@@ -154,10 +156,10 @@ impl VideoMeta {
 }
 
 unsafe impl MetaAPI for VideoMeta {
-    type GstType = gst_video_sys::GstVideoMeta;
+    type GstType = ffi::GstVideoMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_meta_api_get_type()) }
     }
 }
 
@@ -177,7 +179,7 @@ impl fmt::Debug for VideoMeta {
 }
 
 #[repr(transparent)]
-pub struct VideoCropMeta(gst_video_sys::GstVideoCropMeta);
+pub struct VideoCropMeta(ffi::GstVideoCropMeta);
 
 unsafe impl Send for VideoCropMeta {}
 unsafe impl Sync for VideoCropMeta {}
@@ -189,11 +191,11 @@ impl VideoCropMeta {
     ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
-            let meta = gst_sys::gst_buffer_add_meta(
+            let meta = gst::ffi::gst_buffer_add_meta(
                 buffer.as_mut_ptr(),
-                gst_video_sys::gst_video_crop_meta_get_info(),
+                ffi::gst_video_crop_meta_get_info(),
                 ptr::null_mut(),
-            ) as *mut gst_video_sys::GstVideoCropMeta;
+            ) as *mut ffi::GstVideoCropMeta;
 
             {
                 let meta = &mut *meta;
@@ -220,10 +222,10 @@ impl VideoCropMeta {
 }
 
 unsafe impl MetaAPI for VideoCropMeta {
-    type GstType = gst_video_sys::GstVideoCropMeta;
+    type GstType = ffi::GstVideoCropMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_crop_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_crop_meta_api_get_type()) }
     }
 }
 
@@ -236,7 +238,7 @@ impl fmt::Debug for VideoCropMeta {
 }
 
 #[repr(transparent)]
-pub struct VideoRegionOfInterestMeta(gst_video_sys::GstVideoRegionOfInterestMeta);
+pub struct VideoRegionOfInterestMeta(ffi::GstVideoRegionOfInterestMeta);
 
 unsafe impl Send for VideoRegionOfInterestMeta {}
 unsafe impl Sync for VideoRegionOfInterestMeta {}
@@ -249,7 +251,7 @@ impl VideoRegionOfInterestMeta {
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
-            let meta = gst_video_sys::gst_buffer_add_video_region_of_interest_meta(
+            let meta = ffi::gst_buffer_add_video_region_of_interest_meta(
                 buffer.as_mut_ptr(),
                 roi_type.to_glib_none().0,
                 rect.0,
@@ -309,7 +311,7 @@ impl VideoRegionOfInterestMeta {
     #[cfg(feature = "v1_14")]
     pub fn add_param(&mut self, s: gst::Structure) {
         unsafe {
-            gst_video_sys::gst_video_region_of_interest_meta_add_param(&mut self.0, s.into_ptr());
+            ffi::gst_video_region_of_interest_meta_add_param(&mut self.0, s.into_ptr());
         }
     }
 }
@@ -317,7 +319,7 @@ impl VideoRegionOfInterestMeta {
 #[cfg(feature = "v1_14")]
 pub struct ParamsIter<'a> {
     _meta: &'a VideoRegionOfInterestMeta,
-    list: *const glib_sys::GList,
+    list: *const glib::ffi::GList,
 }
 
 #[cfg(feature = "v1_14")]
@@ -334,7 +336,7 @@ impl<'a> Iterator for ParamsIter<'a> {
             assert!(!data.is_null());
             self.list = (*self.list).next;
 
-            let s = gst::StructureRef::from_glib_borrow(data as *const gst_sys::GstStructure);
+            let s = gst::StructureRef::from_glib_borrow(data as *const gst::ffi::GstStructure);
 
             Some(s)
         }
@@ -342,10 +344,10 @@ impl<'a> Iterator for ParamsIter<'a> {
 }
 
 unsafe impl MetaAPI for VideoRegionOfInterestMeta {
-    type GstType = gst_video_sys::GstVideoRegionOfInterestMeta;
+    type GstType = ffi::GstVideoRegionOfInterestMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_region_of_interest_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_region_of_interest_meta_api_get_type()) }
     }
 }
 
@@ -368,7 +370,7 @@ impl fmt::Debug for VideoRegionOfInterestMeta {
 }
 
 #[repr(transparent)]
-pub struct VideoAffineTransformationMeta(gst_video_sys::GstVideoAffineTransformationMeta);
+pub struct VideoAffineTransformationMeta(ffi::GstVideoAffineTransformationMeta);
 
 unsafe impl Send for VideoAffineTransformationMeta {}
 unsafe impl Sync for VideoAffineTransformationMeta {}
@@ -380,11 +382,11 @@ impl VideoAffineTransformationMeta {
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
-            let meta = gst_sys::gst_buffer_add_meta(
+            let meta = gst::ffi::gst_buffer_add_meta(
                 buffer.as_mut_ptr(),
-                gst_video_sys::gst_video_affine_transformation_meta_get_info(),
+                ffi::gst_video_affine_transformation_meta_get_info(),
                 ptr::null_mut(),
-            ) as *mut gst_video_sys::GstVideoAffineTransformationMeta;
+            ) as *mut ffi::GstVideoAffineTransformationMeta;
 
             if let Some(matrix) = matrix {
                 let meta = &mut *meta;
@@ -405,16 +407,16 @@ impl VideoAffineTransformationMeta {
 
     pub fn apply_matrix(&mut self, matrix: &[f32; 16]) {
         unsafe {
-            gst_video_sys::gst_video_affine_transformation_meta_apply_matrix(&mut self.0, matrix);
+            ffi::gst_video_affine_transformation_meta_apply_matrix(&mut self.0, matrix);
         }
     }
 }
 
 unsafe impl MetaAPI for VideoAffineTransformationMeta {
-    type GstType = gst_video_sys::GstVideoAffineTransformationMeta;
+    type GstType = ffi::GstVideoAffineTransformationMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_affine_transformation_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_affine_transformation_meta_api_get_type()) }
     }
 }
 
@@ -427,7 +429,7 @@ impl fmt::Debug for VideoAffineTransformationMeta {
 }
 
 #[repr(transparent)]
-pub struct VideoOverlayCompositionMeta(gst_video_sys::GstVideoOverlayCompositionMeta);
+pub struct VideoOverlayCompositionMeta(ffi::GstVideoOverlayCompositionMeta);
 
 unsafe impl Send for VideoOverlayCompositionMeta {}
 unsafe impl Sync for VideoOverlayCompositionMeta {}
@@ -435,11 +437,11 @@ unsafe impl Sync for VideoOverlayCompositionMeta {}
 impl VideoOverlayCompositionMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
-        overlay: &::VideoOverlayComposition,
+        overlay: &crate::VideoOverlayComposition,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
-            let meta = gst_video_sys::gst_buffer_add_video_overlay_composition_meta(
+            let meta = ffi::gst_buffer_add_video_overlay_composition_meta(
                 buffer.as_mut_ptr(),
                 overlay.as_mut_ptr(),
             );
@@ -448,28 +450,29 @@ impl VideoOverlayCompositionMeta {
         }
     }
 
-    pub fn get_overlay(&self) -> &::VideoOverlayCompositionRef {
-        unsafe { ::VideoOverlayCompositionRef::from_ptr(self.0.overlay) }
+    pub fn get_overlay(&self) -> &crate::VideoOverlayCompositionRef {
+        unsafe { crate::VideoOverlayCompositionRef::from_ptr(self.0.overlay) }
     }
 
-    pub fn get_overlay_owned(&self) -> ::VideoOverlayComposition {
+    pub fn get_overlay_owned(&self) -> crate::VideoOverlayComposition {
         unsafe { from_glib_none(self.get_overlay().as_ptr()) }
     }
 
-    pub fn set_overlay(&mut self, overlay: &::VideoOverlayComposition) {
+    pub fn set_overlay(&mut self, overlay: &crate::VideoOverlayComposition) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
-            gst_sys::gst_mini_object_unref(self.0.overlay as *mut _);
-            self.0.overlay = gst_sys::gst_mini_object_ref(overlay.as_mut_ptr() as *mut _) as *mut _;
+            gst::ffi::gst_mini_object_unref(self.0.overlay as *mut _);
+            self.0.overlay =
+                gst::ffi::gst_mini_object_ref(overlay.as_mut_ptr() as *mut _) as *mut _;
         }
     }
 }
 
 unsafe impl MetaAPI for VideoOverlayCompositionMeta {
-    type GstType = gst_video_sys::GstVideoOverlayCompositionMeta;
+    type GstType = ffi::GstVideoOverlayCompositionMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_overlay_composition_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_overlay_composition_meta_api_get_type()) }
     }
 }
 
@@ -484,7 +487,7 @@ impl fmt::Debug for VideoOverlayCompositionMeta {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[repr(transparent)]
-pub struct VideoCaptionMeta(gst_video_sys::GstVideoCaptionMeta);
+pub struct VideoCaptionMeta(ffi::GstVideoCaptionMeta);
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -498,13 +501,13 @@ unsafe impl Sync for VideoCaptionMeta {}
 impl VideoCaptionMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
-        caption_type: ::VideoCaptionType,
+        caption_type: crate::VideoCaptionType,
         data: &[u8],
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         assert!(!data.is_empty());
         unsafe {
-            let meta = gst_video_sys::gst_buffer_add_video_caption_meta(
+            let meta = ffi::gst_buffer_add_video_caption_meta(
                 buffer.as_mut_ptr(),
                 caption_type.to_glib(),
                 data.as_ptr(),
@@ -515,7 +518,7 @@ impl VideoCaptionMeta {
         }
     }
 
-    pub fn get_caption_type(&self) -> ::VideoCaptionType {
+    pub fn get_caption_type(&self) -> crate::VideoCaptionType {
         from_glib(self.0.caption_type)
     }
 
@@ -531,10 +534,10 @@ impl VideoCaptionMeta {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 unsafe impl MetaAPI for VideoCaptionMeta {
-    type GstType = gst_video_sys::GstVideoCaptionMeta;
+    type GstType = ffi::GstVideoCaptionMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_caption_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_caption_meta_api_get_type()) }
     }
 }
 
@@ -552,7 +555,7 @@ impl fmt::Debug for VideoCaptionMeta {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[repr(transparent)]
-pub struct VideoAFDMeta(gst_video_sys::GstVideoAFDMeta);
+pub struct VideoAFDMeta(ffi::GstVideoAFDMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -567,13 +570,13 @@ impl VideoAFDMeta {
     pub fn add(
         buffer: &mut gst::BufferRef,
         field: u8,
-        spec: ::VideoAFDSpec,
-        afd: ::VideoAFDValue,
+        spec: crate::VideoAFDSpec,
+        afd: crate::VideoAFDValue,
     ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
         skip_assert_initialized!();
 
         unsafe {
-            let meta = gst_video_sys::gst_buffer_add_video_afd_meta(
+            let meta = ffi::gst_buffer_add_video_afd_meta(
                 buffer.as_mut_ptr(),
                 field,
                 spec.to_glib(),
@@ -588,11 +591,11 @@ impl VideoAFDMeta {
         self.0.field
     }
 
-    pub fn get_spec(&self) -> ::VideoAFDSpec {
+    pub fn get_spec(&self) -> crate::VideoAFDSpec {
         from_glib(self.0.spec)
     }
 
-    pub fn get_afd(&self) -> ::VideoAFDValue {
+    pub fn get_afd(&self) -> crate::VideoAFDValue {
         from_glib(self.0.afd)
     }
 }
@@ -600,10 +603,10 @@ impl VideoAFDMeta {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl MetaAPI for VideoAFDMeta {
-    type GstType = gst_video_sys::GstVideoAFDMeta;
+    type GstType = ffi::GstVideoAFDMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_afd_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_afd_meta_api_get_type()) }
     }
 }
 
@@ -622,7 +625,7 @@ impl fmt::Debug for VideoAFDMeta {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[repr(transparent)]
-pub struct VideoBarMeta(gst_video_sys::GstVideoBarMeta);
+pub struct VideoBarMeta(ffi::GstVideoBarMeta);
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -644,7 +647,7 @@ impl VideoBarMeta {
         skip_assert_initialized!();
 
         unsafe {
-            let meta = gst_video_sys::gst_buffer_add_video_bar_meta(
+            let meta = ffi::gst_buffer_add_video_bar_meta(
                 buffer.as_mut_ptr(),
                 field,
                 is_letterbox.to_glib(),
@@ -676,10 +679,10 @@ impl VideoBarMeta {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe impl MetaAPI for VideoBarMeta {
-    type GstType = gst_video_sys::GstVideoBarMeta;
+    type GstType = ffi::GstVideoBarMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_bar_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_video_bar_meta_api_get_type()) }
     }
 }
 
@@ -708,15 +711,15 @@ mod tests {
         {
             let meta = VideoMeta::add(
                 buffer.get_mut().unwrap(),
-                ::VideoFrameFlags::empty(),
-                ::VideoFormat::Argb,
+                crate::VideoFrameFlags::empty(),
+                crate::VideoFormat::Argb,
                 320,
                 240,
             )
             .unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), ::VideoFormat::Argb);
+            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);
             assert_eq!(meta.get_n_planes(), 1);
@@ -727,8 +730,8 @@ mod tests {
         {
             let meta = buffer.get_meta::<VideoMeta>().unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), ::VideoFormat::Argb);
+            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);
             assert_eq!(meta.get_n_planes(), 1);
@@ -745,8 +748,8 @@ mod tests {
         {
             let meta = VideoMeta::add_full(
                 buffer.get_mut().unwrap(),
-                ::VideoFrameFlags::empty(),
-                ::VideoFormat::Argb,
+                crate::VideoFrameFlags::empty(),
+                crate::VideoFormat::Argb,
                 320,
                 240,
                 &[0],
@@ -754,8 +757,8 @@ mod tests {
             )
             .unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), ::VideoFormat::Argb);
+            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);
             assert_eq!(meta.get_n_planes(), 1);
@@ -766,8 +769,8 @@ mod tests {
         {
             let meta = buffer.get_meta::<VideoMeta>().unwrap();
             assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), ::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), ::VideoFormat::Argb);
+            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
             assert_eq!(meta.get_width(), 320);
             assert_eq!(meta.get_height(), 240);
             assert_eq!(meta.get_n_planes(), 1);

@@ -7,21 +7,17 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::utils::HasStreamLock;
 use glib::translate::*;
-use gst_sys;
-use gst_video_sys;
 use std::fmt;
 use std::marker::PhantomData;
 use std::ptr;
-use utils::HasStreamLock;
 
-use gst;
-
-use video_info::VideoInfo;
+use crate::video_info::VideoInfo;
 
 pub trait VideoCodecStateContext<'a> {
     fn get_element(&self) -> Option<&'a dyn HasStreamLock>;
-    fn get_element_as_ptr(&self) -> *const gst_sys::GstElement;
+    fn get_element_as_ptr(&self) -> *const gst::ffi::GstElement;
 }
 
 pub struct InNegotiation<'a> {
@@ -36,7 +32,7 @@ impl<'a> VideoCodecStateContext<'a> for InNegotiation<'a> {
         Some(self.element)
     }
 
-    fn get_element_as_ptr(&self) -> *const gst_sys::GstElement {
+    fn get_element_as_ptr(&self) -> *const gst::ffi::GstElement {
         self.element.get_element_as_ptr()
     }
 }
@@ -46,13 +42,13 @@ impl<'a> VideoCodecStateContext<'a> for Readable {
         None
     }
 
-    fn get_element_as_ptr(&self) -> *const gst_sys::GstElement {
+    fn get_element_as_ptr(&self) -> *const gst::ffi::GstElement {
         ptr::null()
     }
 }
 
 pub struct VideoCodecState<'a, T: VideoCodecStateContext<'a>> {
-    state: *mut gst_video_sys::GstVideoCodecState,
+    state: *mut ffi::GstVideoCodecState,
     pub(crate) context: T,
     phantom: PhantomData<&'a T>,
 }
@@ -70,7 +66,7 @@ impl<'a, T: VideoCodecStateContext<'a>> fmt::Debug for VideoCodecState<'a, T> {
 
 impl<'a> VideoCodecState<'a, Readable> {
     // Take ownership of @state
-    pub(crate) unsafe fn new(state: *mut gst_video_sys::GstVideoCodecState) -> Self {
+    pub(crate) unsafe fn new(state: *mut ffi::GstVideoCodecState) -> Self {
         skip_assert_initialized!();
         Self {
             state,
@@ -83,12 +79,12 @@ impl<'a> VideoCodecState<'a, Readable> {
 impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
     // Take ownership of @state
     pub(crate) unsafe fn new<T: HasStreamLock>(
-        state: *mut gst_video_sys::GstVideoCodecState,
+        state: *mut ffi::GstVideoCodecState,
         element: &'a T,
     ) -> Self {
         skip_assert_initialized!();
         let stream_lock = element.get_stream_lock();
-        glib_sys::g_rec_mutex_lock(stream_lock);
+        glib::ffi::g_rec_mutex_lock(stream_lock);
         Self {
             state,
             context: InNegotiation { element },
@@ -141,7 +137,7 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
         }
     }
     #[doc(hidden)]
-    pub fn as_mut_ptr(&self) -> *mut gst_video_sys::GstVideoCodecState {
+    pub fn as_mut_ptr(&self) -> *mut ffi::GstVideoCodecState {
         self.state
     }
 }
@@ -151,9 +147,9 @@ impl<'a, T: VideoCodecStateContext<'a>> Drop for VideoCodecState<'a, T> {
         unsafe {
             if let Some(element) = self.context.get_element() {
                 let stream_lock = element.get_stream_lock();
-                glib_sys::g_rec_mutex_unlock(stream_lock);
+                glib::ffi::g_rec_mutex_unlock(stream_lock);
             }
-            gst_video_sys::gst_video_codec_state_unref(self.state);
+            ffi::gst_video_codec_state_unref(self.state);
         }
     }
 }
@@ -170,12 +166,12 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
             let prev = (*self.as_mut_ptr()).caps;
 
             if !prev.is_null() {
-                gst_sys::gst_mini_object_unref(prev as *mut gst_sys::GstMiniObject)
+                gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject)
             }
 
             ptr::write(
                 &mut (*self.as_mut_ptr()).caps,
-                gst_sys::gst_mini_object_ref(caps.as_mut_ptr() as *mut _) as *mut _,
+                gst::ffi::gst_mini_object_ref(caps.as_mut_ptr() as *mut _) as *mut _,
             );
         }
     }
@@ -185,12 +181,12 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
             let prev = (*self.as_mut_ptr()).codec_data;
 
             if !prev.is_null() {
-                gst_sys::gst_mini_object_unref(prev as *mut gst_sys::GstMiniObject)
+                gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject)
             }
 
             ptr::write(
                 &mut (*self.as_mut_ptr()).codec_data,
-                gst_sys::gst_mini_object_ref(codec_data.as_mut_ptr() as *mut _) as *mut _,
+                gst::ffi::gst_mini_object_ref(codec_data.as_mut_ptr() as *mut _) as *mut _,
             );
         }
     }
@@ -200,12 +196,12 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
             let prev = (*self.as_mut_ptr()).allocation_caps;
 
             if !prev.is_null() {
-                gst_sys::gst_mini_object_unref(prev as *mut gst_sys::GstMiniObject)
+                gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject)
             }
 
             ptr::write(
                 &mut (*self.as_mut_ptr()).allocation_caps,
-                gst_sys::gst_mini_object_ref(allocation_caps.as_mut_ptr() as *mut _) as *mut _,
+                gst::ffi::gst_mini_object_ref(allocation_caps.as_mut_ptr() as *mut _) as *mut _,
             );
         }
     }
@@ -214,7 +210,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
 impl<'a> Clone for VideoCodecState<'a, Readable> {
     fn clone(&self) -> Self {
         unsafe {
-            let state = gst_video_sys::gst_video_codec_state_ref(self.state);
+            let state = ffi::gst_video_codec_state_ref(self.state);
             Self::new(state)
         }
     }

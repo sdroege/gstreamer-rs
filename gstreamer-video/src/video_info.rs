@@ -6,16 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gobject_sys;
-use gst_video_sys;
-
-use glib;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrFull, FromGlibPtrNone, ToGlib,
     ToGlibPtr, ToGlibPtrMut,
 };
-use gst;
 use gst::prelude::*;
 
 use std::ffi::CStr;
@@ -24,7 +18,7 @@ use std::mem;
 use std::ptr;
 use std::str;
 
-pub const VIDEO_MAX_PLANES: usize = gst_video_sys::GST_VIDEO_MAX_PLANES as usize;
+pub const VIDEO_MAX_PLANES: usize = ffi::GST_VIDEO_MAX_PLANES as usize;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum VideoColorRange {
@@ -37,21 +31,21 @@ pub enum VideoColorRange {
 
 #[doc(hidden)]
 impl ToGlib for VideoColorRange {
-    type GlibType = gst_video_sys::GstVideoColorRange;
+    type GlibType = ffi::GstVideoColorRange;
 
-    fn to_glib(&self) -> gst_video_sys::GstVideoColorRange {
+    fn to_glib(&self) -> ffi::GstVideoColorRange {
         match *self {
-            VideoColorRange::Unknown => gst_video_sys::GST_VIDEO_COLOR_RANGE_UNKNOWN,
-            VideoColorRange::Range0255 => gst_video_sys::GST_VIDEO_COLOR_RANGE_0_255,
-            VideoColorRange::Range16235 => gst_video_sys::GST_VIDEO_COLOR_RANGE_16_235,
+            VideoColorRange::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
+            VideoColorRange::Range0255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
+            VideoColorRange::Range16235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
             VideoColorRange::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_video_sys::GstVideoColorRange> for VideoColorRange {
-    fn from_glib(value: gst_video_sys::GstVideoColorRange) -> Self {
+impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
+    fn from_glib(value: ffi::GstVideoColorRange) -> Self {
         skip_assert_initialized!();
         match value as i32 {
             0 => VideoColorRange::Unknown,
@@ -64,7 +58,7 @@ impl FromGlib<gst_video_sys::GstVideoColorRange> for VideoColorRange {
 
 impl glib::StaticType for VideoColorRange {
     fn static_type() -> glib::Type {
-        unsafe { from_glib(gst_video_sys::gst_video_color_range_get_type()) }
+        unsafe { from_glib(ffi::gst_video_color_range_get_type()) }
     }
 }
 
@@ -76,29 +70,29 @@ impl<'a> glib::value::FromValueOptional<'a> for VideoColorRange {
 
 impl<'a> glib::value::FromValue<'a> for VideoColorRange {
     unsafe fn from_value(value: &glib::value::Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl glib::value::SetValue for VideoColorRange {
     unsafe fn set_value(value: &mut glib::value::Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
     }
 }
 
-pub struct VideoColorimetry(gst_video_sys::GstVideoColorimetry);
+pub struct VideoColorimetry(ffi::GstVideoColorimetry);
 
 impl VideoColorimetry {
     pub fn new(
         range: VideoColorRange,
-        matrix: ::VideoColorMatrix,
-        transfer: ::VideoTransferFunction,
-        primaries: ::VideoColorPrimaries,
+        matrix: crate::VideoColorMatrix,
+        transfer: crate::VideoTransferFunction,
+        primaries: crate::VideoColorPrimaries,
     ) -> Self {
         assert_initialized_main_thread!();
 
         let colorimetry = unsafe {
-            let mut colorimetry: gst_video_sys::GstVideoColorimetry = mem::zeroed();
+            let mut colorimetry: ffi::GstVideoColorimetry = mem::zeroed();
 
             colorimetry.range = range.to_glib();
             colorimetry.matrix = matrix.to_glib();
@@ -111,19 +105,19 @@ impl VideoColorimetry {
         VideoColorimetry(colorimetry)
     }
 
-    pub fn range(&self) -> ::VideoColorRange {
+    pub fn range(&self) -> crate::VideoColorRange {
         from_glib(self.0.range)
     }
 
-    pub fn matrix(&self) -> ::VideoColorMatrix {
+    pub fn matrix(&self) -> crate::VideoColorMatrix {
         from_glib(self.0.matrix)
     }
 
-    pub fn transfer(&self) -> ::VideoTransferFunction {
+    pub fn transfer(&self) -> crate::VideoTransferFunction {
         from_glib(self.0.transfer)
     }
 
-    pub fn primaries(&self) -> ::VideoColorPrimaries {
+    pub fn primaries(&self) -> crate::VideoColorPrimaries {
         from_glib(self.0.primaries)
     }
 }
@@ -136,17 +130,13 @@ impl Clone for VideoColorimetry {
 
 impl PartialEq for VideoColorimetry {
     fn eq(&self, other: &Self) -> bool {
-        unsafe {
-            from_glib(gst_video_sys::gst_video_colorimetry_is_equal(
-                &self.0, &other.0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_video_colorimetry_is_equal(&self.0, &other.0)) }
     }
 }
 
 impl Eq for VideoColorimetry {}
 
-impl str::FromStr for ::VideoColorimetry {
+impl str::FromStr for crate::VideoColorimetry {
     type Err = glib::error::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
@@ -154,20 +144,20 @@ impl str::FromStr for ::VideoColorimetry {
 
         unsafe {
             let mut colorimetry = mem::MaybeUninit::zeroed();
-            let valid: bool = from_glib(gst_video_sys::gst_video_colorimetry_from_string(
+            let valid: bool = from_glib(ffi::gst_video_colorimetry_from_string(
                 colorimetry.as_mut_ptr(),
                 s.to_glib_none().0,
             ));
             if valid {
                 Ok(VideoColorimetry(colorimetry.assume_init()))
             } else {
-                Err(glib_bool_error!("Invalid colorimetry info"))
+                Err(glib::glib_bool_error!("Invalid colorimetry info"))
             }
         }
     }
 }
 
-impl fmt::Debug for ::VideoColorimetry {
+impl fmt::Debug for crate::VideoColorimetry {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.debug_struct("VideoColorimetry")
             .field("range", &self.0.range)
@@ -178,27 +168,24 @@ impl fmt::Debug for ::VideoColorimetry {
     }
 }
 
-impl fmt::Display for ::VideoColorimetry {
+impl fmt::Display for crate::VideoColorimetry {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        let s = unsafe {
-            glib::GString::from_glib_full(gst_video_sys::gst_video_colorimetry_to_string(&self.0))
-        };
+        let s =
+            unsafe { glib::GString::from_glib_full(ffi::gst_video_colorimetry_to_string(&self.0)) };
         f.write_str(&s)
     }
 }
 
-impl str::FromStr for ::VideoChromaSite {
+impl str::FromStr for crate::VideoChromaSite {
     type Err = glib::error::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let chroma_site = from_glib(gst_video_sys::gst_video_chroma_from_string(
-                s.to_glib_none().0,
-            ));
-            if chroma_site == ::VideoChromaSite::empty() {
-                Err(glib_bool_error!("Invalid chroma site"))
+            let chroma_site = from_glib(ffi::gst_video_chroma_from_string(s.to_glib_none().0));
+            if chroma_site == crate::VideoChromaSite::empty() {
+                Err(glib::glib_bool_error!("Invalid chroma site"))
             } else {
                 Ok(chroma_site)
             }
@@ -206,25 +193,27 @@ impl str::FromStr for ::VideoChromaSite {
     }
 }
 
-impl fmt::Display for ::VideoChromaSite {
+impl fmt::Display for crate::VideoChromaSite {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         let s = unsafe {
-            glib::GString::from_glib_full(gst_video_sys::gst_video_chroma_to_string(self.to_glib()))
+            glib::GString::from_glib_full(ffi::gst_video_chroma_to_string(self.to_glib()))
         };
         f.write_str(&s)
     }
 }
 
-impl ::VideoTransferFunction {
+impl crate::VideoTransferFunction {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn from_iso(iso: u32) -> Result<::VideoTransferFunction, glib::BoolError> {
+    pub fn from_iso(iso: u32) -> Result<crate::VideoTransferFunction, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let value = from_glib(gst_video_sys::gst_video_transfer_function_from_iso(iso));
+            let value = from_glib(ffi::gst_video_transfer_function_from_iso(iso));
             match value {
-                ::VideoTransferFunction::__Unknown(_) => Err(glib_bool_error!("Invalid ISO value")),
+                crate::VideoTransferFunction::__Unknown(_) => {
+                    Err(glib::glib_bool_error!("Invalid ISO value"))
+                }
                 _ => Ok(value),
             }
         }
@@ -233,7 +222,7 @@ impl ::VideoTransferFunction {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn to_iso(&self) -> u32 {
-        unsafe { gst_video_sys::gst_video_transfer_function_to_iso(self.to_glib()) }
+        unsafe { ffi::gst_video_transfer_function_to_iso(self.to_glib()) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -241,11 +230,11 @@ impl ::VideoTransferFunction {
     pub fn is_equivalent(
         &self,
         from_bpp: u32,
-        to_func: ::VideoTransferFunction,
+        to_func: crate::VideoTransferFunction,
         to_bpp: u32,
     ) -> bool {
         unsafe {
-            from_glib(gst_video_sys::gst_video_transfer_function_is_equivalent(
+            from_glib(ffi::gst_video_transfer_function_is_equivalent(
                 self.to_glib(),
                 from_bpp,
                 to_func.to_glib(),
@@ -255,16 +244,18 @@ impl ::VideoTransferFunction {
     }
 }
 
-impl ::VideoColorMatrix {
+impl crate::VideoColorMatrix {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn from_iso(iso: u32) -> Result<::VideoColorMatrix, glib::BoolError> {
+    pub fn from_iso(iso: u32) -> Result<crate::VideoColorMatrix, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let value = from_glib(gst_video_sys::gst_video_color_matrix_from_iso(iso));
+            let value = from_glib(ffi::gst_video_color_matrix_from_iso(iso));
             match value {
-                ::VideoColorMatrix::__Unknown(_) => Err(glib_bool_error!("Invalid ISO value")),
+                crate::VideoColorMatrix::__Unknown(_) => {
+                    Err(glib::glib_bool_error!("Invalid ISO value"))
+                }
                 _ => Ok(value),
             }
         }
@@ -273,20 +264,22 @@ impl ::VideoColorMatrix {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn to_iso(&self) -> u32 {
-        unsafe { gst_video_sys::gst_video_color_matrix_to_iso(self.to_glib()) }
+        unsafe { ffi::gst_video_color_matrix_to_iso(self.to_glib()) }
     }
 }
 
-impl ::VideoColorPrimaries {
+impl crate::VideoColorPrimaries {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn from_iso(iso: u32) -> Result<::VideoColorPrimaries, glib::BoolError> {
+    pub fn from_iso(iso: u32) -> Result<crate::VideoColorPrimaries, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let value = from_glib(gst_video_sys::gst_video_color_primaries_from_iso(iso));
+            let value = from_glib(ffi::gst_video_color_primaries_from_iso(iso));
             match value {
-                ::VideoColorPrimaries::__Unknown(_) => Err(glib_bool_error!("Invalid ISO value")),
+                crate::VideoColorPrimaries::__Unknown(_) => {
+                    Err(glib::glib_bool_error!("Invalid ISO value"))
+                }
                 _ => Ok(value),
             }
         }
@@ -295,34 +288,36 @@ impl ::VideoColorPrimaries {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn to_iso(&self) -> u32 {
-        unsafe { gst_video_sys::gst_video_color_primaries_to_iso(self.to_glib()) }
+        unsafe { ffi::gst_video_color_primaries_to_iso(self.to_glib()) }
     }
 }
 
-impl From<::VideoMultiviewFramePacking> for ::VideoMultiviewMode {
-    fn from(v: ::VideoMultiviewFramePacking) -> Self {
+impl From<crate::VideoMultiviewFramePacking> for crate::VideoMultiviewMode {
+    fn from(v: crate::VideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
         from_glib(v.to_glib())
     }
 }
 
-impl std::convert::TryFrom<::VideoMultiviewMode> for ::VideoMultiviewFramePacking {
+impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewFramePacking {
     type Error = glib::BoolError;
 
-    fn try_from(v: ::VideoMultiviewMode) -> Result<::VideoMultiviewFramePacking, glib::BoolError> {
+    fn try_from(
+        v: crate::VideoMultiviewMode,
+    ) -> Result<crate::VideoMultiviewFramePacking, glib::BoolError> {
         skip_assert_initialized!();
 
         let v2 = from_glib(v.to_glib());
 
-        if let ::VideoMultiviewFramePacking::__Unknown(_) = v2 {
-            Err(glib_bool_error!("Invalid frame packing mode"))
+        if let crate::VideoMultiviewFramePacking::__Unknown(_) = v2 {
+            Err(glib::glib_bool_error!("Invalid frame packing mode"))
         } else {
             Ok(v2)
         }
     }
 }
 
-pub struct VideoInfo(pub(crate) gst_video_sys::GstVideoInfo);
+pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
@@ -354,24 +349,24 @@ impl fmt::Debug for VideoInfo {
 
 #[derive(Debug)]
 pub struct VideoInfoBuilder<'a> {
-    format: ::VideoFormat,
+    format: crate::VideoFormat,
     width: u32,
     height: u32,
-    interlace_mode: Option<::VideoInterlaceMode>,
-    flags: Option<::VideoFlags>,
+    interlace_mode: Option<crate::VideoInterlaceMode>,
+    flags: Option<crate::VideoFlags>,
     size: Option<usize>,
     views: Option<u32>,
-    chroma_site: Option<::VideoChromaSite>,
-    colorimetry: Option<&'a ::VideoColorimetry>,
+    chroma_site: Option<crate::VideoChromaSite>,
+    colorimetry: Option<&'a crate::VideoColorimetry>,
     par: Option<gst::Fraction>,
     fps: Option<gst::Fraction>,
     offset: Option<&'a [usize]>,
     stride: Option<&'a [i32]>,
-    multiview_mode: Option<::VideoMultiviewMode>,
-    multiview_flags: Option<::VideoMultiviewFlags>,
+    multiview_mode: Option<crate::VideoMultiviewMode>,
+    multiview_flags: Option<crate::VideoMultiviewFlags>,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    field_order: Option<::VideoFieldOrder>,
+    field_order: Option<crate::VideoFieldOrder>,
 }
 
 impl<'a> VideoInfoBuilder<'a> {
@@ -379,11 +374,11 @@ impl<'a> VideoInfoBuilder<'a> {
         unsafe {
             let mut info = mem::MaybeUninit::uninit();
 
-            cfg_if! {
+            cfg_if::cfg_if! {
                 if #[cfg(feature = "v1_16")] {
                     let res: bool = {
                         from_glib(if let Some(interlace_mode) = self.interlace_mode {
-                            gst_video_sys::gst_video_info_set_interlaced_format(
+                            ffi::gst_video_info_set_interlaced_format(
                                 info.as_mut_ptr(),
                                 self.format.to_glib(),
                                 interlace_mode.to_glib(),
@@ -391,7 +386,7 @@ impl<'a> VideoInfoBuilder<'a> {
                                 self.height,
                             )
                         } else {
-                            gst_video_sys::gst_video_info_set_format(
+                            ffi::gst_video_info_set_format(
                                 info.as_mut_ptr(),
                                 self.format.to_glib(),
                                 self.width,
@@ -401,7 +396,7 @@ impl<'a> VideoInfoBuilder<'a> {
                     };
                 } else if #[cfg(feature = "v1_12")] {
                     let res: bool = {
-                        let res = from_glib(gst_video_sys::gst_video_info_set_format(
+                        let res = from_glib(ffi::gst_video_info_set_format(
                             info.as_mut_ptr(),
                             self.format.to_glib(),
                             self.width,
@@ -422,7 +417,7 @@ impl<'a> VideoInfoBuilder<'a> {
                         // The bool return value is new with 1.11.1, see
                         // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
                         let res = if gst::version() < (1, 11, 1, 0) {
-                            gst_video_sys::gst_video_info_set_format(
+                            ffi::gst_video_info_set_format(
                                 info.as_mut_ptr(),
                                 self.format.to_glib(),
                                 self.width,
@@ -431,7 +426,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
                             true
                         } else {
-                            from_glib(gst_video_sys::gst_video_info_set_format(
+                            from_glib(ffi::gst_video_info_set_format(
                                 info.as_mut_ptr(),
                                 self.format.to_glib(),
                                 self.width,
@@ -452,13 +447,13 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if !res {
-                return Err(glib_bool_error!("Failed to build VideoInfo"));
+                return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
             }
 
             let mut info = info.assume_init();
 
             if info.finfo.is_null() || info.width <= 0 || info.height <= 0 {
-                return Err(glib_bool_error!("Failed to build VideoInfo"));
+                return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
             }
 
             if let Some(flags) = self.flags {
@@ -493,7 +488,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(offset) = self.offset {
                 if offset.len() != ((*info.finfo).n_planes as usize) {
-                    return Err(glib_bool_error!("Failed to build VideoInfo"));
+                    return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
                 }
 
                 let n_planes = (*info.finfo).n_planes as usize;
@@ -502,7 +497,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(stride) = self.stride {
                 if stride.len() != ((*info.finfo).n_planes as usize) {
-                    return Err(glib_bool_error!("Failed to build VideoInfo"));
+                    return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
                 }
 
                 let n_planes = (*info.finfo).n_planes as usize;
@@ -529,14 +524,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    pub fn interlace_mode(self, interlace_mode: ::VideoInterlaceMode) -> VideoInfoBuilder<'a> {
+    pub fn interlace_mode(self, interlace_mode: crate::VideoInterlaceMode) -> VideoInfoBuilder<'a> {
         Self {
             interlace_mode: Some(interlace_mode),
             ..self
         }
     }
 
-    pub fn flags(self, flags: ::VideoFlags) -> Self {
+    pub fn flags(self, flags: crate::VideoFlags) -> Self {
         Self {
             flags: Some(flags),
             ..self
@@ -557,14 +552,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    pub fn chroma_site(self, chroma_site: ::VideoChromaSite) -> Self {
+    pub fn chroma_site(self, chroma_site: crate::VideoChromaSite) -> Self {
         Self {
             chroma_site: Some(chroma_site),
             ..self
         }
     }
 
-    pub fn colorimetry(self, colorimetry: &'a ::VideoColorimetry) -> VideoInfoBuilder<'a> {
+    pub fn colorimetry(self, colorimetry: &'a crate::VideoColorimetry) -> VideoInfoBuilder<'a> {
         Self {
             colorimetry: Some(colorimetry),
             ..self
@@ -599,14 +594,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    pub fn multiview_mode(self, multiview_mode: ::VideoMultiviewMode) -> Self {
+    pub fn multiview_mode(self, multiview_mode: crate::VideoMultiviewMode) -> Self {
         Self {
             multiview_mode: Some(multiview_mode),
             ..self
         }
     }
 
-    pub fn multiview_flags(self, multiview_flags: ::VideoMultiviewFlags) -> Self {
+    pub fn multiview_flags(self, multiview_flags: crate::VideoMultiviewFlags) -> Self {
         Self {
             multiview_flags: Some(multiview_flags),
             ..self
@@ -615,7 +610,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    pub fn field_order(self, field_order: ::VideoFieldOrder) -> Self {
+    pub fn field_order(self, field_order: crate::VideoFieldOrder) -> Self {
         Self {
             field_order: Some(field_order),
             ..self
@@ -624,10 +619,14 @@ impl<'a> VideoInfoBuilder<'a> {
 }
 
 impl VideoInfo {
-    pub fn builder<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
+    pub fn builder<'a>(
+        format: crate::VideoFormat,
+        width: u32,
+        height: u32,
+    ) -> VideoInfoBuilder<'a> {
         assert_initialized_main_thread!();
 
-        cfg_if! {
+        cfg_if::cfg_if! {
             if #[cfg(any(feature = "v1_12", feature = "dox"))] {
                 VideoInfoBuilder {
                     format,
@@ -678,39 +677,41 @@ impl VideoInfo {
 
         unsafe {
             let mut info = mem::MaybeUninit::uninit();
-            if from_glib(gst_video_sys::gst_video_info_from_caps(
+            if from_glib(ffi::gst_video_info_from_caps(
                 info.as_mut_ptr(),
                 caps.as_ptr(),
             )) {
                 Ok(VideoInfo(info.assume_init()))
             } else {
-                Err(glib_bool_error!("Failed to create VideoInfo from caps"))
+                Err(glib::glib_bool_error!(
+                    "Failed to create VideoInfo from caps"
+                ))
             }
         }
     }
 
     pub fn to_caps(&self) -> Result<gst::Caps, glib::error::BoolError> {
         unsafe {
-            let result = from_glib_full(gst_video_sys::gst_video_info_to_caps(
-                &self.0 as *const _ as *mut _,
-            ));
+            let result = from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _));
             match result {
                 Some(c) => Ok(c),
-                None => Err(glib_bool_error!("Failed to create caps from VideoInfo")),
+                None => Err(glib::glib_bool_error!(
+                    "Failed to create caps from VideoInfo"
+                )),
             }
         }
     }
 
-    pub fn format(&self) -> ::VideoFormat {
+    pub fn format(&self) -> crate::VideoFormat {
         if self.0.finfo.is_null() {
-            return ::VideoFormat::Unknown;
+            return crate::VideoFormat::Unknown;
         }
 
         unsafe { from_glib((*self.0.finfo).format) }
     }
 
-    pub fn format_info(&self) -> ::VideoFormatInfo {
-        ::VideoFormatInfo::from_format(self.format())
+    pub fn format_info(&self) -> crate::VideoFormatInfo {
+        crate::VideoFormatInfo::from_format(self.format())
     }
 
     pub fn width(&self) -> u32 {
@@ -724,18 +725,18 @@ impl VideoInfo {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn field_height(&self) -> u32 {
-        if self.0.interlace_mode == gst_video_sys::GST_VIDEO_INTERLACE_MODE_ALTERNATE {
+        if self.0.interlace_mode == ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE {
             (self.0.height as u32 + 1) / 2
         } else {
             self.0.height as u32
         }
     }
 
-    pub fn interlace_mode(&self) -> ::VideoInterlaceMode {
+    pub fn interlace_mode(&self) -> crate::VideoInterlaceMode {
         from_glib(self.0.interlace_mode)
     }
 
-    pub fn flags(&self) -> ::VideoFlags {
+    pub fn flags(&self) -> crate::VideoFlags {
         from_glib(self.0.flags)
     }
 
@@ -747,7 +748,7 @@ impl VideoInfo {
         self.0.views as u32
     }
 
-    pub fn chroma_site(&self) -> ::VideoChromaSite {
+    pub fn chroma_site(&self) -> crate::VideoChromaSite {
         from_glib(self.0.chroma_site)
     }
 
@@ -771,14 +772,14 @@ impl VideoInfo {
         &self.0.stride[0..(self.format_info().n_planes() as usize)]
     }
 
-    pub fn multiview_mode(&self) -> ::VideoMultiviewMode {
+    pub fn multiview_mode(&self) -> crate::VideoMultiviewMode {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
             from_glib(ptr::read(ptr.offset(0)))
         }
     }
 
-    pub fn multiview_flags(&self) -> ::VideoMultiviewFlags {
+    pub fn multiview_flags(&self) -> crate::VideoMultiviewFlags {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const u32;
             from_glib(ptr::read(ptr.offset(1)))
@@ -787,7 +788,7 @@ impl VideoInfo {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    pub fn field_order(&self) -> ::VideoFieldOrder {
+    pub fn field_order(&self) -> crate::VideoFieldOrder {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
             from_glib(ptr::read(ptr.offset(2)))
@@ -811,7 +812,7 @@ impl VideoInfo {
     }
 
     pub fn is_interlaced(&self) -> bool {
-        self.interlace_mode() != ::VideoInterlaceMode::Progressive
+        self.interlace_mode() != crate::VideoInterlaceMode::Progressive
     }
 
     pub fn n_planes(&self) -> u32 {
@@ -831,7 +832,7 @@ impl VideoInfo {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
-            if from_glib(gst_video_sys::gst_video_info_convert(
+            if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
@@ -855,7 +856,7 @@ impl VideoInfo {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
-            if from_glib(gst_video_sys::gst_video_info_convert(
+            if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
@@ -872,11 +873,11 @@ impl VideoInfo {
         }
     }
 
-    pub fn align(&mut self, align: &mut ::VideoAlignment) -> bool {
-        cfg_if! {
+    pub fn align(&mut self, align: &mut crate::VideoAlignment) -> bool {
+        cfg_if::cfg_if! {
             if #[cfg(feature = "v1_12")] {
                 unsafe {
-                    from_glib(gst_video_sys::gst_video_info_align(
+                    from_glib(ffi::gst_video_info_align(
                         &mut self.0,
                         &mut align.0,
                     ))
@@ -886,11 +887,11 @@ impl VideoInfo {
                     // The bool return value is new with 1.11.1, see
                     // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/17cdd369e6f2f73329d27dfceb50011f40f1ceb0
                     if gst::version() < (1, 11, 1, 0) {
-                        gst_video_sys::gst_video_info_align(&mut self.0, &mut align.0);
+                        ffi::gst_video_info_align(&mut self.0, &mut align.0);
 
                         true
                     } else {
-                        from_glib(gst_video_sys::gst_video_info_align(
+                        from_glib(ffi::gst_video_info_align(
                             &mut self.0,
                             &mut align.0,
                         ))
@@ -909,7 +910,7 @@ impl Clone for VideoInfo {
 
 impl PartialEq for VideoInfo {
     fn eq(&self, other: &Self) -> bool {
-        unsafe { from_glib(gst_video_sys::gst_video_info_is_equal(&self.0, &other.0)) }
+        unsafe { from_glib(ffi::gst_video_info_is_equal(&self.0, &other.0)) }
     }
 }
 
@@ -920,25 +921,26 @@ unsafe impl Sync for VideoInfo {}
 
 impl glib::types::StaticType for VideoInfo {
     fn static_type() -> glib::types::Type {
-        unsafe { glib::translate::from_glib(gst_video_sys::gst_video_info_get_type()) }
+        unsafe { glib::translate::from_glib(ffi::gst_video_info_get_type()) }
     }
 }
 
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for VideoInfo {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<VideoInfo>::from_glib_none(gobject_sys::g_value_get_boxed(value.to_glib_none().0)
-            as *mut gst_video_sys::GstVideoInfo)
+        Option::<VideoInfo>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
+            value.to_glib_none().0,
+        ) as *mut ffi::GstVideoInfo)
     }
 }
 
 #[doc(hidden)]
 impl glib::value::SetValue for VideoInfo {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_video_sys::GstVideoInfo>::to_glib_none(this).0
-                as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstVideoInfo>::to_glib_none(this).0
+                as glib::ffi::gpointer,
         )
     }
 }
@@ -946,10 +948,10 @@ impl glib::value::SetValue for VideoInfo {
 #[doc(hidden)]
 impl glib::value::SetValueOptional for VideoInfo {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_sys::g_value_set_boxed(
+        glib::gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const gst_video_sys::GstVideoInfo>::to_glib_none(&this).0
-                as glib_sys::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstVideoInfo>::to_glib_none(&this).0
+                as glib::ffi::gpointer,
         )
     }
 }
@@ -963,66 +965,62 @@ impl glib::translate::Uninitialized for VideoInfo {
 
 #[doc(hidden)]
 impl glib::translate::GlibPtrDefault for VideoInfo {
-    type GlibType = *mut gst_video_sys::GstVideoInfo;
+    type GlibType = *mut ffi::GstVideoInfo;
 }
 
 #[doc(hidden)]
-impl<'a> glib::translate::ToGlibPtr<'a, *const gst_video_sys::GstVideoInfo> for VideoInfo {
+impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfo> for VideoInfo {
     type Storage = &'a VideoInfo;
 
-    fn to_glib_none(
-        &'a self,
-    ) -> glib::translate::Stash<'a, *const gst_video_sys::GstVideoInfo, Self> {
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoInfo, Self> {
         glib::translate::Stash(&self.0, self)
     }
 
-    fn to_glib_full(&self) -> *const gst_video_sys::GstVideoInfo {
+    fn to_glib_full(&self) -> *const ffi::GstVideoInfo {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*mut gst_video_sys::GstVideoInfo> for VideoInfo {
+impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoInfo> for VideoInfo {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut gst_video_sys::GstVideoInfo) -> Self {
+    unsafe fn from_glib_none(ptr: *mut ffi::GstVideoInfo) -> Self {
         VideoInfo(ptr::read(ptr))
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrFull<*mut gst_video_sys::GstVideoInfo> for VideoInfo {
+impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut gst_video_sys::GstVideoInfo) -> Self {
+    unsafe fn from_glib_full(ptr: *mut ffi::GstVideoInfo) -> Self {
         let info = from_glib_none(ptr);
-        glib_sys::g_free(ptr as *mut _);
+        glib::ffi::g_free(ptr as *mut _);
         info
     }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-impl ::VideoFieldOrder {
+impl crate::VideoFieldOrder {
     pub fn to_str<'a>(self) -> &'a str {
         unsafe {
-            CStr::from_ptr(gst_video_sys::gst_video_field_order_to_string(
-                self.to_glib(),
-            ))
-            .to_str()
-            .unwrap()
+            CStr::from_ptr(ffi::gst_video_field_order_to_string(self.to_glib()))
+                .to_str()
+                .unwrap()
         }
     }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-impl str::FromStr for ::VideoFieldOrder {
+impl str::FromStr for crate::VideoFieldOrder {
     type Err = glib::error::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            Ok(from_glib(gst_video_sys::gst_video_field_order_from_string(
+            Ok(from_glib(ffi::gst_video_field_order_from_string(
                 s.to_glib_none().0,
             )))
         }
@@ -1031,39 +1029,37 @@ impl str::FromStr for ::VideoFieldOrder {
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-impl fmt::Display for ::VideoFieldOrder {
+impl fmt::Display for crate::VideoFieldOrder {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.write_str((*self).to_str())
     }
 }
 
-impl ::VideoInterlaceMode {
+impl crate::VideoInterlaceMode {
     pub fn to_str<'a>(self) -> &'a str {
         unsafe {
-            CStr::from_ptr(gst_video_sys::gst_video_interlace_mode_to_string(
-                self.to_glib(),
-            ))
-            .to_str()
-            .unwrap()
+            CStr::from_ptr(ffi::gst_video_interlace_mode_to_string(self.to_glib()))
+                .to_str()
+                .unwrap()
         }
     }
 }
 
-impl str::FromStr for ::VideoInterlaceMode {
+impl str::FromStr for crate::VideoInterlaceMode {
     type Err = glib::error::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            Ok(from_glib(
-                gst_video_sys::gst_video_interlace_mode_from_string(s.to_glib_none().0),
-            ))
+            Ok(from_glib(ffi::gst_video_interlace_mode_from_string(
+                s.to_glib_none().0,
+            )))
         }
     }
 }
 
-impl fmt::Display for ::VideoInterlaceMode {
+impl fmt::Display for crate::VideoInterlaceMode {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.write_str((*self).to_str())
     }
@@ -1072,40 +1068,39 @@ impl fmt::Display for ::VideoInterlaceMode {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gst;
 
     #[test]
     fn test_new() {
         gst::init().unwrap();
 
-        let info = VideoInfo::builder(::VideoFormat::I420, 320, 240)
+        let info = VideoInfo::builder(crate::VideoFormat::I420, 320, 240)
             .build()
             .unwrap();
-        assert_eq!(info.format(), ::VideoFormat::I420);
+        assert_eq!(info.format(), crate::VideoFormat::I420);
         assert_eq!(info.width(), 320);
         assert_eq!(info.height(), 240);
         assert_eq!(info.size(), 320 * 240 + 2 * 160 * 120);
-        assert_eq!(info.multiview_mode(), ::VideoMultiviewMode::None);
+        assert_eq!(info.multiview_mode(), crate::VideoMultiviewMode::None);
         assert_eq!(&info.offset(), &[0, 320 * 240, 320 * 240 + 160 * 120]);
         assert_eq!(&info.stride(), &[320, 160, 160]);
 
         let offsets = [0, 640 * 240 + 16, 640 * 240 + 16 + 320 * 120 + 16];
         let strides = [640, 320, 320];
-        let info = VideoInfo::builder(::VideoFormat::I420, 320, 240)
+        let info = VideoInfo::builder(crate::VideoFormat::I420, 320, 240)
             .offset(&offsets)
             .stride(&strides)
             .size(640 * 240 + 16 + 320 * 120 + 16 + 320 * 120 + 16)
-            .multiview_mode(::VideoMultiviewMode::SideBySide)
+            .multiview_mode(crate::VideoMultiviewMode::SideBySide)
             .build()
             .unwrap();
-        assert_eq!(info.format(), ::VideoFormat::I420);
+        assert_eq!(info.format(), crate::VideoFormat::I420);
         assert_eq!(info.width(), 320);
         assert_eq!(info.height(), 240);
         assert_eq!(
             info.size(),
             640 * 240 + 16 + 320 * 120 + 16 + 320 * 120 + 16
         );
-        assert_eq!(info.multiview_mode(), ::VideoMultiviewMode::SideBySide);
+        assert_eq!(info.multiview_mode(), crate::VideoMultiviewMode::SideBySide);
         assert_eq!(
             &info.offset(),
             &[0, 640 * 240 + 16, 640 * 240 + 16 + 320 * 120 + 16]
@@ -1131,12 +1126,15 @@ mod tests {
             ],
         );
         let info = VideoInfo::from_caps(&caps).unwrap();
-        assert_eq!(info.format(), ::VideoFormat::I420);
+        assert_eq!(info.format(), crate::VideoFormat::I420);
         assert_eq!(info.width(), 320);
         assert_eq!(info.height(), 240);
         assert_eq!(info.fps(), gst::Fraction::new(30, 1));
-        assert_eq!(info.interlace_mode(), ::VideoInterlaceMode::Progressive);
-        assert_eq!(info.chroma_site(), ::VideoChromaSite::MPEG2);
+        assert_eq!(
+            info.interlace_mode(),
+            crate::VideoInterlaceMode::Progressive
+        );
+        assert_eq!(info.chroma_site(), crate::VideoChromaSite::MPEG2);
         assert_eq!(info.colorimetry(), "bt709".parse().unwrap());
 
         let caps2 = info.to_caps().unwrap();
@@ -1152,14 +1150,14 @@ mod tests {
     fn test_video_align() {
         gst::init().unwrap();
 
-        let mut info = ::VideoInfo::builder(::VideoFormat::Nv16, 1920, 1080)
+        let mut info = crate::VideoInfo::builder(crate::VideoFormat::Nv16, 1920, 1080)
             .build()
             .expect("Failed to create VideoInfo");
 
         assert_eq!(info.stride(), [1920, 1920]);
         assert_eq!(info.offset(), [0, 2_073_600]);
 
-        let mut align = ::VideoAlignment::new(0, 0, 0, 8, &[0; VIDEO_MAX_PLANES]);
+        let mut align = crate::VideoAlignment::new(0, 0, 0, 8, &[0; VIDEO_MAX_PLANES]);
         assert!(info.align(&mut align));
 
         assert_eq!(info.stride(), [1928, 1928]);
@@ -1174,8 +1172,8 @@ mod tests {
 
         gst::init().unwrap();
 
-        format!("{}", ::VideoColorimetry::from_str("sRGB").unwrap());
-        format!("{}", ::VideoFieldOrder::TopFieldFirst);
-        format!("{}", ::VideoInterlaceMode::Progressive);
+        format!("{}", crate::VideoColorimetry::from_str("sRGB").unwrap());
+        format!("{}", crate::VideoFieldOrder::TopFieldFirst);
+        format!("{}", crate::VideoInterlaceMode::Progressive);
     }
 }

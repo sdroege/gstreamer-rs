@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use gst::CapsFeatures;
-use gst_video_sys;
 use std::ffi::CStr;
 
 use once_cell::sync::Lazy;
@@ -15,7 +14,7 @@ use once_cell::sync::Lazy;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub static CAPS_FEATURE_FORMAT_INTERLACED: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(gst_video_sys::GST_CAPS_FEATURE_FORMAT_INTERLACED)
+    CStr::from_ptr(ffi::GST_CAPS_FEATURE_FORMAT_INTERLACED)
         .to_str()
         .unwrap()
 });
@@ -26,7 +25,7 @@ pub static CAPS_FEATURES_FORMAT_INTERLACED: Lazy<CapsFeatures> =
 
 pub static CAPS_FEATURE_META_GST_VIDEO_AFFINE_TRANSFORMATION_META: Lazy<&'static str> =
     Lazy::new(|| unsafe {
-        CStr::from_ptr(gst_video_sys::GST_CAPS_FEATURE_META_GST_VIDEO_AFFINE_TRANSFORMATION_META)
+        CStr::from_ptr(ffi::GST_CAPS_FEATURE_META_GST_VIDEO_AFFINE_TRANSFORMATION_META)
             .to_str()
             .unwrap()
     });
@@ -35,7 +34,7 @@ pub static CAPS_FEATURES_META_GST_VIDEO_AFFINE_TRANSFORMATION_META: Lazy<CapsFea
 
 pub static CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META: Lazy<&'static str> =
     Lazy::new(|| unsafe {
-        CStr::from_ptr(gst_video_sys::GST_CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META)
+        CStr::from_ptr(ffi::GST_CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META)
             .to_str()
             .unwrap()
     });
@@ -43,7 +42,7 @@ pub static CAPS_FEATURES_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META: Lazy<CapsFeature
     Lazy::new(|| CapsFeatures::new(&[*CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META]));
 
 pub static CAPS_FEATURE_META_GST_VIDEO_META: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(gst_video_sys::GST_CAPS_FEATURE_META_GST_VIDEO_META)
+    CStr::from_ptr(ffi::GST_CAPS_FEATURE_META_GST_VIDEO_META)
         .to_str()
         .unwrap()
 });
@@ -52,7 +51,7 @@ pub static CAPS_FEATURES_META_GST_VIDEO_META: Lazy<CapsFeatures> =
 
 pub static CAPS_FEATURE_META_GST_VIDEO_OVERLAY_COMPOSITION: Lazy<&'static str> =
     Lazy::new(|| unsafe {
-        CStr::from_ptr(gst_video_sys::GST_CAPS_FEATURE_META_GST_VIDEO_OVERLAY_COMPOSITION)
+        CStr::from_ptr(ffi::GST_CAPS_FEATURE_META_GST_VIDEO_OVERLAY_COMPOSITION)
             .to_str()
             .unwrap()
     });

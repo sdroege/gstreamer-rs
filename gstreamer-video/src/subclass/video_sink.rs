@@ -6,18 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-use gst_video_sys;
-
 use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use gst;
 use gst::subclass::prelude::*;
 use gst_base::subclass::prelude::*;
 
-use VideoSink;
+use crate::VideoSink;
 
 pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
     fn show_frame(
@@ -45,8 +41,7 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class =
-                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoSinkClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstVideoSinkClass;
             (*parent_class)
                 .show_frame
                 .map(|f| {
@@ -73,9 +68,9 @@ where
 }
 
 unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(
-    ptr: *mut gst_video_sys::GstVideoSink,
-    buffer: *mut gst_sys::GstBuffer,
-) -> gst_sys::GstFlowReturn
+    ptr: *mut ffi::GstVideoSink,
+    buffer: *mut gst::ffi::GstBuffer,
+) -> gst::ffi::GstFlowReturn
 where
     T::Instance: PanicPoison,
 {
@@ -84,7 +79,7 @@ where
     let wrap: Borrowed<VideoSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.show_frame(wrap.unsafe_cast_ref(), &buffer).into()
     })
     .to_glib()

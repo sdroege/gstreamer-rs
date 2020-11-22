@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use glib::translate::ToGlib;
-use gst_video_sys;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct VideoRectangle {
@@ -30,26 +29,26 @@ pub fn center_video_rectangle(
     scale: bool,
 ) -> VideoRectangle {
     skip_assert_initialized!();
-    let mut result = gst_video_sys::GstVideoRectangle {
+    let mut result = ffi::GstVideoRectangle {
         x: 0,
         y: 0,
         w: 0,
         h: 0,
     };
-    let src_rect = gst_video_sys::GstVideoRectangle {
+    let src_rect = ffi::GstVideoRectangle {
         x: src.x,
         y: src.y,
         w: src.w,
         h: src.h,
     };
-    let dst_rect = gst_video_sys::GstVideoRectangle {
+    let dst_rect = ffi::GstVideoRectangle {
         x: dst.x,
         y: dst.y,
         w: dst.w,
         h: dst.h,
     };
     unsafe {
-        gst_video_sys::gst_video_sink_center_rect(src_rect, dst_rect, &mut result, scale.to_glib());
+        ffi::gst_video_sink_center_rect(src_rect, dst_rect, &mut result, scale.to_glib());
     }
     VideoRectangle::new(result.x, result.y, result.w, result.h)
 }

@@ -6,8 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_video_sys;
-
 use once_cell::sync::Lazy;
 use std::ffi::CStr;
 use std::fmt;
@@ -16,10 +14,10 @@ use std::str;
 use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
 
 #[cfg(feature = "v1_18")]
-pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| unsafe {
+pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| unsafe {
     let mut len: u32 = 0;
     let mut res = Vec::with_capacity(len as usize);
-    let formats = gst_video_sys::gst_video_formats_raw(&mut len);
+    let formats = ffi::gst_video_formats_raw(&mut len);
     for i in 0..len {
         let format = formats.offset(i as isize);
         res.push(from_glib(*format));
@@ -28,233 +26,233 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| unsafe {
 });
 
 #[cfg(not(feature = "v1_18"))]
-pub static VIDEO_FORMATS_ALL: Lazy<Box<[::VideoFormat]>> = Lazy::new(|| {
+pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
     #[cfg(target_endian = "little")]
     {
         Box::new([
-            ::VideoFormat::Ayuv64,
-            ::VideoFormat::Argb64,
+            crate::VideoFormat::Ayuv64,
+            crate::VideoFormat::Argb64,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra12le,
+            crate::VideoFormat::Gbra12le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra12be,
-            ::VideoFormat::A44410le,
+            crate::VideoFormat::Gbra12be,
+            crate::VideoFormat::A44410le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra10le,
-            ::VideoFormat::A44410be,
+            crate::VideoFormat::Gbra10le,
+            crate::VideoFormat::A44410be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra10be,
-            ::VideoFormat::A42210le,
-            ::VideoFormat::A42210be,
-            ::VideoFormat::A42010le,
-            ::VideoFormat::A42010be,
+            crate::VideoFormat::Gbra10be,
+            crate::VideoFormat::A42210le,
+            crate::VideoFormat::A42210be,
+            crate::VideoFormat::A42010le,
+            crate::VideoFormat::A42010be,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Bgr10a2Le,
+            crate::VideoFormat::Bgr10a2Le,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Y410,
+            crate::VideoFormat::Y410,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra,
-            ::VideoFormat::Abgr,
+            crate::VideoFormat::Gbra,
+            crate::VideoFormat::Abgr,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Vuya,
-            ::VideoFormat::Bgra,
-            ::VideoFormat::Ayuv,
-            ::VideoFormat::Argb,
-            ::VideoFormat::Rgba,
-            ::VideoFormat::A420,
-            ::VideoFormat::V216,
+            crate::VideoFormat::Vuya,
+            crate::VideoFormat::Bgra,
+            crate::VideoFormat::Ayuv,
+            crate::VideoFormat::Argb,
+            crate::VideoFormat::Rgba,
+            crate::VideoFormat::A420,
+            crate::VideoFormat::V216,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Y44412le,
+            crate::VideoFormat::Y44412le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbr12le,
+            crate::VideoFormat::Gbr12le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Y44412be,
+            crate::VideoFormat::Y44412be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbr12be,
+            crate::VideoFormat::Gbr12be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42212le,
+            crate::VideoFormat::I42212le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42212be,
+            crate::VideoFormat::I42212be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42012le,
+            crate::VideoFormat::I42012le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42012be,
-            ::VideoFormat::Y44410le,
-            ::VideoFormat::Gbr10le,
-            ::VideoFormat::Y44410be,
-            ::VideoFormat::Gbr10be,
-            ::VideoFormat::R210,
-            ::VideoFormat::I42210le,
-            ::VideoFormat::I42210be,
+            crate::VideoFormat::I42012be,
+            crate::VideoFormat::Y44410le,
+            crate::VideoFormat::Gbr10le,
+            crate::VideoFormat::Y44410be,
+            crate::VideoFormat::Gbr10be,
+            crate::VideoFormat::R210,
+            crate::VideoFormat::I42210le,
+            crate::VideoFormat::I42210be,
             #[cfg(feature = "v1_14")]
-            ::VideoFormat::Nv1610le32,
+            crate::VideoFormat::Nv1610le32,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Y210,
-            ::VideoFormat::V210,
-            ::VideoFormat::Uyvp,
-            ::VideoFormat::I42010le,
-            ::VideoFormat::I42010be,
+            crate::VideoFormat::Y210,
+            crate::VideoFormat::V210,
+            crate::VideoFormat::Uyvp,
+            crate::VideoFormat::I42010le,
+            crate::VideoFormat::I42010be,
             #[cfg(feature = "v1_10")]
-            ::VideoFormat::P01010le,
+            crate::VideoFormat::P01010le,
             #[cfg(feature = "v1_14")]
-            ::VideoFormat::Nv1210le32,
+            crate::VideoFormat::Nv1210le32,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Nv1210le40,
+            crate::VideoFormat::Nv1210le40,
             #[cfg(feature = "v1_10")]
-            ::VideoFormat::P01010be,
-            ::VideoFormat::Y444,
-            ::VideoFormat::Gbr,
-            ::VideoFormat::Nv24,
-            ::VideoFormat::Xbgr,
-            ::VideoFormat::Bgrx,
-            ::VideoFormat::Xrgb,
-            ::VideoFormat::Rgbx,
-            ::VideoFormat::Bgr,
+            crate::VideoFormat::P01010be,
+            crate::VideoFormat::Y444,
+            crate::VideoFormat::Gbr,
+            crate::VideoFormat::Nv24,
+            crate::VideoFormat::Xbgr,
+            crate::VideoFormat::Bgrx,
+            crate::VideoFormat::Xrgb,
+            crate::VideoFormat::Rgbx,
+            crate::VideoFormat::Bgr,
             #[cfg(feature = "v1_10")]
-            ::VideoFormat::Iyu2,
-            ::VideoFormat::V308,
-            ::VideoFormat::Rgb,
-            ::VideoFormat::Y42b,
-            ::VideoFormat::Nv61,
-            ::VideoFormat::Nv16,
+            crate::VideoFormat::Iyu2,
+            crate::VideoFormat::V308,
+            crate::VideoFormat::Rgb,
+            crate::VideoFormat::Y42b,
+            crate::VideoFormat::Nv61,
+            crate::VideoFormat::Nv16,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Vyuy,
-            ::VideoFormat::Uyvy,
-            ::VideoFormat::Yvyu,
-            ::VideoFormat::Yuy2,
-            ::VideoFormat::I420,
-            ::VideoFormat::Yv12,
-            ::VideoFormat::Nv21,
-            ::VideoFormat::Nv12,
-            ::VideoFormat::Nv1264z32,
-            ::VideoFormat::Y41b,
-            ::VideoFormat::Iyu1,
-            ::VideoFormat::Yvu9,
-            ::VideoFormat::Yuv9,
-            ::VideoFormat::Rgb16,
-            ::VideoFormat::Bgr16,
-            ::VideoFormat::Rgb15,
-            ::VideoFormat::Bgr15,
-            ::VideoFormat::Rgb8p,
-            ::VideoFormat::Gray16Le,
-            ::VideoFormat::Gray16Be,
+            crate::VideoFormat::Vyuy,
+            crate::VideoFormat::Uyvy,
+            crate::VideoFormat::Yvyu,
+            crate::VideoFormat::Yuy2,
+            crate::VideoFormat::I420,
+            crate::VideoFormat::Yv12,
+            crate::VideoFormat::Nv21,
+            crate::VideoFormat::Nv12,
+            crate::VideoFormat::Nv1264z32,
+            crate::VideoFormat::Y41b,
+            crate::VideoFormat::Iyu1,
+            crate::VideoFormat::Yvu9,
+            crate::VideoFormat::Yuv9,
+            crate::VideoFormat::Rgb16,
+            crate::VideoFormat::Bgr16,
+            crate::VideoFormat::Rgb15,
+            crate::VideoFormat::Bgr15,
+            crate::VideoFormat::Rgb8p,
+            crate::VideoFormat::Gray16Le,
+            crate::VideoFormat::Gray16Be,
             #[cfg(feature = "v1_14")]
-            ::VideoFormat::Gray10Le32,
-            ::VideoFormat::Gray8,
+            crate::VideoFormat::Gray10Le32,
+            crate::VideoFormat::Gray8,
         ])
     }
     #[cfg(target_endian = "big")]
     {
         Box::new([
-            ::VideoFormat::Ayuv64,
-            ::VideoFormat::Argb64,
+            crate::VideoFormat::Ayuv64,
+            crate::VideoFormat::Argb64,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra12be,
+            crate::VideoFormat::Gbra12be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra12le,
-            ::VideoFormat::A44410be,
+            crate::VideoFormat::Gbra12le,
+            crate::VideoFormat::A44410be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra10be,
-            ::VideoFormat::A44410le,
+            crate::VideoFormat::Gbra10be,
+            crate::VideoFormat::A44410le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra10le,
-            ::VideoFormat::A42210be,
-            ::VideoFormat::A42210le,
-            ::VideoFormat::A42010be,
-            ::VideoFormat::A42010le,
+            crate::VideoFormat::Gbra10le,
+            crate::VideoFormat::A42210be,
+            crate::VideoFormat::A42210le,
+            crate::VideoFormat::A42010be,
+            crate::VideoFormat::A42010le,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Y410,
+            crate::VideoFormat::Y410,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Bgr10a2Le,
+            crate::VideoFormat::Bgr10a2Le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbra,
-            ::VideoFormat::Abgr,
+            crate::VideoFormat::Gbra,
+            crate::VideoFormat::Abgr,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Vuya,
-            ::VideoFormat::Bgra,
-            ::VideoFormat::Ayuv,
-            ::VideoFormat::Argb,
-            ::VideoFormat::Rgba,
-            ::VideoFormat::A420,
-            ::VideoFormat::V216,
+            crate::VideoFormat::Vuya,
+            crate::VideoFormat::Bgra,
+            crate::VideoFormat::Ayuv,
+            crate::VideoFormat::Argb,
+            crate::VideoFormat::Rgba,
+            crate::VideoFormat::A420,
+            crate::VideoFormat::V216,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Y44412be,
+            crate::VideoFormat::Y44412be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbr12be,
+            crate::VideoFormat::Gbr12be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Y44412le,
+            crate::VideoFormat::Y44412le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Gbr12le,
+            crate::VideoFormat::Gbr12le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42212be,
+            crate::VideoFormat::I42212be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42212le,
+            crate::VideoFormat::I42212le,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42012be,
+            crate::VideoFormat::I42012be,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::I42012le,
-            ::VideoFormat::Y44410be,
-            ::VideoFormat::Gbr10be,
-            ::VideoFormat::Y44410le,
-            ::VideoFormat::Gbr10le,
-            ::VideoFormat::R210,
-            ::VideoFormat::I42210be,
-            ::VideoFormat::I42210le,
+            crate::VideoFormat::I42012le,
+            crate::VideoFormat::Y44410be,
+            crate::VideoFormat::Gbr10be,
+            crate::VideoFormat::Y44410le,
+            crate::VideoFormat::Gbr10le,
+            crate::VideoFormat::R210,
+            crate::VideoFormat::I42210be,
+            crate::VideoFormat::I42210le,
             #[cfg(feature = "v1_14")]
-            ::VideoFormat::Nv1610le32,
+            crate::VideoFormat::Nv1610le32,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Y210,
-            ::VideoFormat::V210,
-            ::VideoFormat::Uyvp,
-            ::VideoFormat::I42010be,
-            ::VideoFormat::I42010le,
+            crate::VideoFormat::Y210,
+            crate::VideoFormat::V210,
+            crate::VideoFormat::Uyvp,
+            crate::VideoFormat::I42010be,
+            crate::VideoFormat::I42010le,
             #[cfg(feature = "v1_10")]
-            ::VideoFormat::P01010be,
+            crate::VideoFormat::P01010be,
             #[cfg(feature = "v1_10")]
-            ::VideoFormat::P01010le,
+            crate::VideoFormat::P01010le,
             #[cfg(feature = "v1_14")]
-            ::VideoFormat::Nv1210le32,
+            crate::VideoFormat::Nv1210le32,
             #[cfg(feature = "v1_16")]
-            ::VideoFormat::Nv1210le40,
-            ::VideoFormat::Y444,
-            ::VideoFormat::Gbr,
-            ::VideoFormat::Nv24,
-            ::VideoFormat::Xbgr,
-            ::VideoFormat::Bgrx,
-            ::VideoFormat::Xrgb,
-            ::VideoFormat::Rgbx,
-            ::VideoFormat::Bgr,
+            crate::VideoFormat::Nv1210le40,
+            crate::VideoFormat::Y444,
+            crate::VideoFormat::Gbr,
+            crate::VideoFormat::Nv24,
+            crate::VideoFormat::Xbgr,
+            crate::VideoFormat::Bgrx,
+            crate::VideoFormat::Xrgb,
+            crate::VideoFormat::Rgbx,
+            crate::VideoFormat::Bgr,
             #[cfg(feature = "v1_10")]
-            ::VideoFormat::Iyu2,
-            ::VideoFormat::V308,
-            ::VideoFormat::Rgb,
-            ::VideoFormat::Y42b,
-            ::VideoFormat::Nv61,
-            ::VideoFormat::Nv16,
+            crate::VideoFormat::Iyu2,
+            crate::VideoFormat::V308,
+            crate::VideoFormat::Rgb,
+            crate::VideoFormat::Y42b,
+            crate::VideoFormat::Nv61,
+            crate::VideoFormat::Nv16,
             #[cfg(feature = "v1_12")]
-            ::VideoFormat::Vyuy,
-            ::VideoFormat::Uyvy,
-            ::VideoFormat::Yvyu,
-            ::VideoFormat::Yuy2,
-            ::VideoFormat::I420,
-            ::VideoFormat::Yv12,
-            ::VideoFormat::Nv21,
-            ::VideoFormat::Nv12,
-            ::VideoFormat::Nv1264z32,
-            ::VideoFormat::Y41b,
-            ::VideoFormat::Iyu1,
-            ::VideoFormat::Yvu9,
-            ::VideoFormat::Yuv9,
-            ::VideoFormat::Rgb16,
-            ::VideoFormat::Bgr16,
-            ::VideoFormat::Rgb15,
-            ::VideoFormat::Bgr15,
-            ::VideoFormat::Rgb8p,
-            ::VideoFormat::Gray16Be,
-            ::VideoFormat::Gray16Le,
+            crate::VideoFormat::Vyuy,
+            crate::VideoFormat::Uyvy,
+            crate::VideoFormat::Yvyu,
+            crate::VideoFormat::Yuy2,
+            crate::VideoFormat::I420,
+            crate::VideoFormat::Yv12,
+            crate::VideoFormat::Nv21,
+            crate::VideoFormat::Nv12,
+            crate::VideoFormat::Nv1264z32,
+            crate::VideoFormat::Y41b,
+            crate::VideoFormat::Iyu1,
+            crate::VideoFormat::Yvu9,
+            crate::VideoFormat::Yuv9,
+            crate::VideoFormat::Rgb16,
+            crate::VideoFormat::Bgr16,
+            crate::VideoFormat::Rgb15,
+            crate::VideoFormat::Bgr15,
+            crate::VideoFormat::Rgb8p,
+            crate::VideoFormat::Gray16Be,
+            crate::VideoFormat::Gray16Le,
             #[cfg(feature = "v1_14")]
-            ::VideoFormat::Gray10Le32,
-            ::VideoFormat::Gray8,
+            crate::VideoFormat::Gray10Le32,
+            crate::VideoFormat::Gray8,
         ])
     }
 });
@@ -290,26 +288,26 @@ impl ToGlib for VideoEndianness {
     }
 }
 
-impl ::VideoFormat {
-    pub fn from_fourcc(fourcc: u32) -> ::VideoFormat {
+impl crate::VideoFormat {
+    pub fn from_fourcc(fourcc: u32) -> crate::VideoFormat {
         assert_initialized_main_thread!();
 
-        unsafe { from_glib(gst_video_sys::gst_video_format_from_fourcc(fourcc)) }
+        unsafe { from_glib(ffi::gst_video_format_from_fourcc(fourcc)) }
     }
 
     pub fn from_masks(
         depth: u32,
         bpp: u32,
-        endianness: ::VideoEndianness,
+        endianness: crate::VideoEndianness,
         red_mask: u32,
         blue_mask: u32,
         green_mask: u32,
         alpha_mask: u32,
-    ) -> ::VideoFormat {
+    ) -> crate::VideoFormat {
         assert_initialized_main_thread!();
 
         unsafe {
-            from_glib(gst_video_sys::gst_video_format_from_masks(
+            from_glib(ffi::gst_video_format_from_masks(
                 depth as i32,
                 bpp as i32,
                 endianness.to_glib(),
@@ -322,12 +320,12 @@ impl ::VideoFormat {
     }
 
     pub fn to_str<'a>(self) -> &'a str {
-        if self == ::VideoFormat::Unknown {
+        if self == crate::VideoFormat::Unknown {
             return "UNKNOWN";
         }
 
         unsafe {
-            CStr::from_ptr(gst_video_sys::gst_video_format_to_string(self.to_glib()))
+            CStr::from_ptr(ffi::gst_video_format_to_string(self.to_glib()))
                 .to_str()
                 .unwrap()
         }
@@ -338,19 +336,21 @@ impl ::VideoFormat {
     }
 }
 
-impl str::FromStr for ::VideoFormat {
+impl str::FromStr for crate::VideoFormat {
     type Err = glib::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let fmt = ::VideoFormat::from_glib(gst_video_sys::gst_video_format_from_string(
+            let fmt = crate::VideoFormat::from_glib(ffi::gst_video_format_from_string(
                 s.to_glib_none().0,
             ));
 
-            if fmt == ::VideoFormat::Unknown {
-                Err(glib_bool_error!("Failed to parse video format from string"))
+            if fmt == crate::VideoFormat::Unknown {
+                Err(glib::glib_bool_error!(
+                    "Failed to parse video format from string"
+                ))
             } else {
                 Ok(fmt)
             }
@@ -358,21 +358,22 @@ impl str::FromStr for ::VideoFormat {
     }
 }
 
-impl fmt::Display for ::VideoFormat {
+impl fmt::Display for crate::VideoFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.write_str((*self).to_str())
     }
 }
 
-impl PartialOrd for ::VideoFormat {
-    fn partial_cmp(&self, other: &::VideoFormat) -> Option<std::cmp::Ordering> {
-        ::VideoFormatInfo::from_format(*self).partial_cmp(&::VideoFormatInfo::from_format(*other))
+impl PartialOrd for crate::VideoFormat {
+    fn partial_cmp(&self, other: &crate::VideoFormat) -> Option<std::cmp::Ordering> {
+        crate::VideoFormatInfo::from_format(*self)
+            .partial_cmp(&crate::VideoFormatInfo::from_format(*other))
     }
 }
 
-impl Ord for ::VideoFormat {
-    fn cmp(&self, other: &::VideoFormat) -> std::cmp::Ordering {
-        ::VideoFormatInfo::from_format(*self).cmp(&::VideoFormatInfo::from_format(*other))
+impl Ord for crate::VideoFormat {
+    fn cmp(&self, other: &crate::VideoFormat) -> std::cmp::Ordering {
+        crate::VideoFormatInfo::from_format(*self).cmp(&crate::VideoFormatInfo::from_format(*other))
     }
 }
 
@@ -391,7 +392,7 @@ impl Default for VideoFormatIterator {
 }
 
 impl Iterator for VideoFormatIterator {
-    type Item = ::VideoFormat;
+    type Item = crate::VideoFormat;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.len {
@@ -433,12 +434,12 @@ pub trait VideoFormatIteratorExt {
 
 impl<T> VideoFormatIteratorExt for T
 where
-    T: Iterator<Item = ::VideoFormat>,
+    T: Iterator<Item = crate::VideoFormat>,
 {
     fn into_video_caps(self) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
-        let formats: Vec<::VideoFormat> = self.collect();
+        let formats: Vec<crate::VideoFormat> = self.collect();
         if !formats.is_empty() {
-            Some(::functions::video_make_raw_caps(&formats))
+            Some(crate::functions::video_make_raw_caps(&formats))
         } else {
             None
         }
@@ -451,12 +452,12 @@ pub trait VideoFormatIteratorExtRef {
 
 impl<'a, T> VideoFormatIteratorExtRef for T
 where
-    T: Iterator<Item = &'a ::VideoFormat>,
+    T: Iterator<Item = &'a crate::VideoFormat>,
 {
     fn into_video_caps(self) -> Option<gst::caps::Builder<gst::caps::NoFeature>> {
-        let formats: Vec<::VideoFormat> = self.copied().collect();
+        let formats: Vec<crate::VideoFormat> = self.copied().collect();
         if !formats.is_empty() {
-            Some(::functions::video_make_raw_caps(&formats))
+            Some(crate::functions::video_make_raw_caps(&formats))
         } else {
             None
         }
@@ -465,13 +466,12 @@ where
 
 #[cfg(test)]
 mod tests {
-    use gst;
 
     #[test]
     fn test_display() {
         gst::init().unwrap();
 
-        format!("{}", ::VideoFormat::Nv16);
+        format!("{}", crate::VideoFormat::Nv16);
     }
 
     #[test]
@@ -479,13 +479,13 @@ mod tests {
         use super::*;
         gst::init().unwrap();
 
-        assert!(::VideoFormat::iter_raw().count() > 0);
+        assert!(crate::VideoFormat::iter_raw().count() > 0);
         assert_eq!(
-            ::VideoFormat::iter_raw().count(),
-            ::VideoFormat::iter_raw().len()
+            crate::VideoFormat::iter_raw().count(),
+            crate::VideoFormat::iter_raw().len()
         );
 
-        let mut i = ::VideoFormat::iter_raw();
+        let mut i = crate::VideoFormat::iter_raw();
         let mut count = 0;
         loop {
             if i.next().is_none() {
@@ -497,25 +497,25 @@ mod tests {
             }
             count += 1;
         }
-        assert_eq!(count, ::VideoFormat::iter_raw().len());
+        assert_eq!(count, crate::VideoFormat::iter_raw().len());
 
-        assert!(::VideoFormat::iter_raw().any(|f| f == ::VideoFormat::Nv12));
-        assert!(::VideoFormat::iter_raw()
-            .find(|f| *f == ::VideoFormat::Encoded)
+        assert!(crate::VideoFormat::iter_raw().any(|f| f == crate::VideoFormat::Nv12));
+        assert!(crate::VideoFormat::iter_raw()
+            .find(|f| *f == crate::VideoFormat::Encoded)
             .is_none());
 
-        let caps = ::VideoFormat::iter_raw().into_video_caps();
+        let caps = crate::VideoFormat::iter_raw().into_video_caps();
         assert!(caps.is_some());
 
-        let caps = ::VideoFormat::iter_raw()
-            .filter(|f| ::VideoFormatInfo::from_format(*f).is_gray())
+        let caps = crate::VideoFormat::iter_raw()
+            .filter(|f| crate::VideoFormatInfo::from_format(*f).is_gray())
             .into_video_caps();
         assert!(caps.is_some());
 
-        let caps = ::VideoFormat::iter_raw().skip(1000).into_video_caps();
+        let caps = crate::VideoFormat::iter_raw().skip(1000).into_video_caps();
         assert!(caps.is_none());
 
-        let caps = [::VideoFormat::Nv12, ::VideoFormat::Nv16]
+        let caps = [crate::VideoFormat::Nv12, crate::VideoFormat::Nv16]
             .iter()
             .into_video_caps()
             .unwrap()
@@ -531,16 +531,17 @@ mod tests {
         gst::init().unwrap();
 
         assert!(
-            ::VideoFormatInfo::from_format(::VideoFormat::Nv16)
-                > ::VideoFormatInfo::from_format(::VideoFormat::Nv12)
+            crate::VideoFormatInfo::from_format(crate::VideoFormat::Nv16)
+                > crate::VideoFormatInfo::from_format(crate::VideoFormat::Nv12)
         );
-        assert!(::VideoFormat::I420 > ::VideoFormat::Yv12);
+        assert!(crate::VideoFormat::I420 > crate::VideoFormat::Yv12);
 
-        let sorted: Vec<::VideoFormat> = ::VideoFormat::iter_raw().sorted().rev().collect();
+        let sorted: Vec<crate::VideoFormat> =
+            crate::VideoFormat::iter_raw().sorted().rev().collect();
         // FIXME: use is_sorted_by() once API is in stable
         assert_eq!(
             sorted,
-            ::VideoFormat::iter_raw().collect::<Vec<::VideoFormat>>()
+            crate::VideoFormat::iter_raw().collect::<Vec<crate::VideoFormat>>()
         );
     }
 }

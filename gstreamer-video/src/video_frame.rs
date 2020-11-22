@@ -6,12 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-use gst_video_sys;
-
-use glib;
 use glib::translate::{from_glib, from_glib_none, Borrowed, ToGlibPtr};
-use gst;
 
 use std::fmt;
 use std::marker::PhantomData;
@@ -24,9 +19,9 @@ pub enum Readable {}
 pub enum Writable {}
 
 pub struct VideoFrame<T> {
-    frame: gst_video_sys::GstVideoFrame,
+    frame: ffi::GstVideoFrame,
     buffer: Option<gst::Buffer>,
-    info: ::VideoInfo,
+    info: crate::VideoInfo,
     phantom: PhantomData<T>,
 }
 
@@ -45,11 +40,11 @@ impl<T> fmt::Debug for VideoFrame<T> {
 }
 
 impl<T> VideoFrame<T> {
-    pub fn info(&self) -> &::VideoInfo {
+    pub fn info(&self) -> &crate::VideoInfo {
         &self.info
     }
 
-    pub fn flags(&self) -> ::VideoFrameFlags {
+    pub fn flags(&self) -> crate::VideoFrameFlags {
         from_glib(self.frame.flags)
     }
 
@@ -63,14 +58,11 @@ impl<T> VideoFrame<T> {
 
     pub fn copy(&self, dest: &mut VideoFrame<Writable>) -> Result<(), glib::BoolError> {
         unsafe {
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(
-                &mut dest.frame,
-                &self.frame,
-            ));
+            let res: bool = from_glib(ffi::gst_video_frame_copy(&mut dest.frame, &self.frame));
             if res {
                 Ok(())
             } else {
-                Err(glib_bool_error!("Failed to copy video frame"))
+                Err(glib::glib_bool_error!("Failed to copy video frame"))
             }
         }
     }
@@ -83,7 +75,7 @@ impl<T> VideoFrame<T> {
         skip_assert_initialized!();
 
         unsafe {
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy_plane(
+            let res: bool = from_glib(ffi::gst_video_frame_copy_plane(
                 &mut dest.frame,
                 &self.frame,
                 plane,
@@ -91,16 +83,16 @@ impl<T> VideoFrame<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib_bool_error!("Failed to copy video frame plane"))
+                Err(glib::glib_bool_error!("Failed to copy video frame plane"))
             }
         }
     }
 
-    pub fn format(&self) -> ::VideoFormat {
+    pub fn format(&self) -> crate::VideoFormat {
         self.info().format()
     }
 
-    pub fn format_info(&self) -> ::VideoFormatInfo {
+    pub fn format_info(&self) -> crate::VideoFormatInfo {
         self.info().format_info()
     }
 
@@ -117,19 +109,19 @@ impl<T> VideoFrame<T> {
     }
 
     pub fn is_interlaced(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::INTERLACED)
+        self.flags().contains(crate::VideoFrameFlags::INTERLACED)
     }
 
     pub fn is_tff(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::TFF)
+        self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
     pub fn is_rff(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::RFF)
+        self.flags().contains(crate::VideoFrameFlags::RFF)
     }
 
     pub fn is_onefield(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::ONEFIELD)
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
     }
 
     pub fn n_planes(&self) -> u32 {
@@ -154,7 +146,9 @@ impl<T> VideoFrame<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         let format_info = self.format_info();
@@ -182,8 +176,8 @@ impl<T> VideoFrame<T> {
         }
     }
 
-    pub unsafe fn from_glib_full(frame: gst_video_sys::GstVideoFrame) -> Self {
-        let info = ::VideoInfo(ptr::read(&frame.info));
+    pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
+        let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
         VideoFrame {
             frame,
@@ -204,7 +198,7 @@ impl<T> VideoFrame<T> {
         }
     }
 
-    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
+    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
         &self.frame
     }
 }
@@ -212,7 +206,7 @@ impl<T> VideoFrame<T> {
 impl<T> Drop for VideoFrame<T> {
     fn drop(&mut self) {
         unsafe {
-            gst_video_sys::gst_video_frame_unmap(&mut self.frame);
+            ffi::gst_video_frame_unmap(&mut self.frame);
         }
     }
 }
@@ -220,7 +214,7 @@ impl<T> Drop for VideoFrame<T> {
 impl VideoFrame<Readable> {
     pub fn from_buffer_readable(
         buffer: gst::Buffer,
-        info: &::VideoInfo,
+        info: &crate::VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
         skip_assert_initialized!();
 
@@ -228,18 +222,18 @@ impl VideoFrame<Readable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
+            let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame {
                     frame,
                     buffer: Some(buffer),
@@ -253,7 +247,7 @@ impl VideoFrame<Readable> {
     pub fn from_buffer_id_readable(
         buffer: gst::Buffer,
         id: i32,
-        info: &::VideoInfo,
+        info: &crate::VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
         skip_assert_initialized!();
 
@@ -261,19 +255,19 @@ impl VideoFrame<Readable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
+            let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame {
                     frame,
                     buffer: Some(buffer),
@@ -292,7 +286,7 @@ impl VideoFrame<Readable> {
 impl VideoFrame<Writable> {
     pub fn from_buffer_writable(
         buffer: gst::Buffer,
-        info: &::VideoInfo,
+        info: &crate::VideoInfo,
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
         skip_assert_initialized!();
 
@@ -300,20 +294,20 @@ impl VideoFrame<Writable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
+            let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_sys::GST_MAP_READ
-                    | gst_sys::GST_MAP_WRITE,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst::ffi::GST_MAP_READ
+                    | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame {
                     frame,
                     buffer: Some(buffer),
@@ -327,7 +321,7 @@ impl VideoFrame<Writable> {
     pub fn from_buffer_id_writable(
         buffer: gst::Buffer,
         id: i32,
-        info: &::VideoInfo,
+        info: &crate::VideoInfo,
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
         skip_assert_initialized!();
 
@@ -335,21 +329,21 @@ impl VideoFrame<Writable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
+            let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_sys::GST_MAP_READ
-                    | gst_sys::GST_MAP_WRITE,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst::ffi::GST_MAP_READ
+                    | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
                 Err(buffer)
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame {
                     frame,
                     buffer: Some(buffer),
@@ -366,7 +360,9 @@ impl VideoFrame<Writable> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         let format_info = self.format_info();
@@ -405,25 +401,25 @@ impl VideoFrame<Writable> {
         }
     }
 
-    pub fn as_mut_ptr(&mut self) -> *mut gst_video_sys::GstVideoFrame {
+    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
         &mut self.frame
     }
 }
 
 #[derive(Debug)]
 pub struct VideoFrameRef<T> {
-    frame: gst_video_sys::GstVideoFrame,
+    frame: ffi::GstVideoFrame,
     buffer: Option<T>,
-    info: ::VideoInfo,
+    info: crate::VideoInfo,
     unmap: bool,
 }
 
 impl<T> VideoFrameRef<T> {
-    pub fn info(&self) -> &::VideoInfo {
+    pub fn info(&self) -> &crate::VideoInfo {
         &self.info
     }
 
-    pub fn flags(&self) -> ::VideoFrameFlags {
+    pub fn flags(&self) -> crate::VideoFrameFlags {
         from_glib(self.frame.flags)
     }
 
@@ -436,14 +432,11 @@ impl<T> VideoFrameRef<T> {
         dest: &mut VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(
-                &mut dest.frame,
-                &self.frame,
-            ));
+            let res: bool = from_glib(ffi::gst_video_frame_copy(&mut dest.frame, &self.frame));
             if res {
                 Ok(())
             } else {
-                Err(glib_bool_error!("Failed to copy video frame"))
+                Err(glib::glib_bool_error!("Failed to copy video frame"))
             }
         }
     }
@@ -456,7 +449,7 @@ impl<T> VideoFrameRef<T> {
         skip_assert_initialized!();
 
         unsafe {
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy_plane(
+            let res: bool = from_glib(ffi::gst_video_frame_copy_plane(
                 &mut dest.frame,
                 &self.frame,
                 plane,
@@ -464,16 +457,16 @@ impl<T> VideoFrameRef<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib_bool_error!("Failed to copy video frame plane"))
+                Err(glib::glib_bool_error!("Failed to copy video frame plane"))
             }
         }
     }
 
-    pub fn format(&self) -> ::VideoFormat {
+    pub fn format(&self) -> crate::VideoFormat {
         self.info().format()
     }
 
-    pub fn format_info(&self) -> ::VideoFormatInfo {
+    pub fn format_info(&self) -> crate::VideoFormatInfo {
         self.info().format_info()
     }
 
@@ -490,19 +483,19 @@ impl<T> VideoFrameRef<T> {
     }
 
     pub fn is_interlaced(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::INTERLACED)
+        self.flags().contains(crate::VideoFrameFlags::INTERLACED)
     }
 
     pub fn is_tff(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::TFF)
+        self.flags().contains(crate::VideoFrameFlags::TFF)
     }
 
     pub fn is_rff(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::RFF)
+        self.flags().contains(crate::VideoFrameFlags::RFF)
     }
 
     pub fn is_onefield(&self) -> bool {
-        self.flags().contains(::VideoFrameFlags::ONEFIELD)
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
     }
 
     pub fn n_planes(&self) -> u32 {
@@ -523,7 +516,9 @@ impl<T> VideoFrameRef<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         let format_info = self.format_info();
@@ -551,17 +546,17 @@ impl<T> VideoFrameRef<T> {
         }
     }
 
-    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
+    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
         &self.frame
     }
 }
 
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {
-    pub unsafe fn from_glib_borrow(frame: *const gst_video_sys::GstVideoFrame) -> Borrowed<Self> {
+    pub unsafe fn from_glib_borrow(frame: *const ffi::GstVideoFrame) -> Borrowed<Self> {
         assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
-        let info = ::VideoInfo(ptr::read(&frame.info));
+        let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_ptr(frame.buffer);
         Borrowed::new(VideoFrameRef {
             frame,
@@ -571,8 +566,8 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         })
     }
 
-    pub unsafe fn from_glib_full(frame: gst_video_sys::GstVideoFrame) -> Self {
-        let info = ::VideoInfo(ptr::read(&frame.info));
+    pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
+        let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_ptr(frame.buffer);
         VideoFrameRef {
             frame,
@@ -584,7 +579,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
-        info: &'b ::VideoInfo,
+        info: &'b crate::VideoInfo,
     ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
@@ -592,18 +587,18 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
+            let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
-                Err(glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrameRef {
                     frame,
                     buffer: Some(buffer),
@@ -617,7 +612,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     pub fn from_buffer_ref_id_readable<'b>(
         buffer: &'a gst::BufferRef,
         id: i32,
-        info: &'b ::VideoInfo,
+        info: &'b crate::VideoInfo,
     ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
@@ -625,19 +620,19 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
+            let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
-                Err(glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrameRef {
                     frame,
                     buffer: Some(buffer),
@@ -654,11 +649,11 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 }
 
 impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
-    pub unsafe fn from_glib_borrow_mut(frame: *mut gst_video_sys::GstVideoFrame) -> Borrowed<Self> {
+    pub unsafe fn from_glib_borrow_mut(frame: *mut ffi::GstVideoFrame) -> Borrowed<Self> {
         assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
-        let info = ::VideoInfo(ptr::read(&frame.info));
+        let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
         Borrowed::new(VideoFrameRef {
             frame,
@@ -668,8 +663,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         })
     }
 
-    pub unsafe fn from_glib_full_mut(frame: gst_video_sys::GstVideoFrame) -> Self {
-        let info = ::VideoInfo(ptr::read(&frame.info));
+    pub unsafe fn from_glib_full_mut(frame: ffi::GstVideoFrame) -> Self {
+        let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
         VideoFrameRef {
             frame,
@@ -681,7 +676,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
-        info: &'b ::VideoInfo,
+        info: &'b crate::VideoInfo,
     ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
@@ -689,20 +684,20 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
+            let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_sys::GST_MAP_READ
-                    | gst_sys::GST_MAP_WRITE,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst::ffi::GST_MAP_READ
+                    | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
-                Err(glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrameRef {
                     frame,
                     buffer: Some(buffer),
@@ -716,7 +711,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
     pub fn from_buffer_ref_id_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         id: i32,
-        info: &'b ::VideoInfo,
+        info: &'b crate::VideoInfo,
     ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
         skip_assert_initialized!();
 
@@ -724,21 +719,21 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
+            let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
-                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_sys::GST_MAP_READ
-                    | gst_sys::GST_MAP_WRITE,
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst::ffi::GST_MAP_READ
+                    | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
-                Err(glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
-                let info = ::VideoInfo(ptr::read(&frame.info));
+                let info = crate::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrameRef {
                     frame,
                     buffer: Some(buffer),
@@ -755,7 +750,9 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib_bool_error!("Plane index higher than number of planes"));
+            return Err(glib::glib_bool_error!(
+                "Plane index higher than number of planes"
+            ));
         }
 
         let format_info = self.format_info();
@@ -783,7 +780,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         }
     }
 
-    pub fn as_mut_ptr(&mut self) -> *mut gst_video_sys::GstVideoFrame {
+    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
         &mut self.frame
     }
 }
@@ -806,34 +803,34 @@ impl<T> Drop for VideoFrameRef<T> {
     fn drop(&mut self) {
         unsafe {
             if self.unmap {
-                gst_video_sys::gst_video_frame_unmap(&mut self.frame);
+                ffi::gst_video_frame_unmap(&mut self.frame);
             }
         }
     }
 }
 
 pub trait VideoBufferExt {
-    fn get_video_flags(&self) -> ::VideoBufferFlags;
-    fn set_video_flags(&mut self, flags: ::VideoBufferFlags);
-    fn unset_video_flags(&mut self, flags: ::VideoBufferFlags);
+    fn get_video_flags(&self) -> crate::VideoBufferFlags;
+    fn set_video_flags(&mut self, flags: crate::VideoBufferFlags);
+    fn unset_video_flags(&mut self, flags: crate::VideoBufferFlags);
 }
 
 impl VideoBufferExt for gst::BufferRef {
-    fn get_video_flags(&self) -> ::VideoBufferFlags {
+    fn get_video_flags(&self) -> crate::VideoBufferFlags {
         unsafe {
             let ptr = self.as_mut_ptr();
-            ::VideoBufferFlags::from_bits_truncate((*ptr).mini_object.flags)
+            crate::VideoBufferFlags::from_bits_truncate((*ptr).mini_object.flags)
         }
     }
 
-    fn set_video_flags(&mut self, flags: ::VideoBufferFlags) {
+    fn set_video_flags(&mut self, flags: crate::VideoBufferFlags) {
         unsafe {
             let ptr = self.as_mut_ptr();
             (*ptr).mini_object.flags |= flags.bits();
         }
     }
 
-    fn unset_video_flags(&mut self, flags: ::VideoBufferFlags) {
+    fn unset_video_flags(&mut self, flags: crate::VideoBufferFlags) {
         unsafe {
             let ptr = self.as_mut_ptr();
             (*ptr).mini_object.flags &= !flags.bits();
@@ -844,13 +841,12 @@ impl VideoBufferExt for gst::BufferRef {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gst;
 
     #[test]
     fn test_map_read() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
+        let info = crate::VideoInfo::builder(crate::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
@@ -880,7 +876,7 @@ mod tests {
     fn test_map_write() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
+        let info = crate::VideoInfo::builder(crate::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
@@ -910,7 +906,7 @@ mod tests {
     fn test_map_ref_read() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
+        let info = crate::VideoInfo::builder(crate::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let buffer = gst::Buffer::with_size(info.size()).unwrap();
@@ -926,7 +922,7 @@ mod tests {
     fn test_map_ref_write() {
         gst::init().unwrap();
 
-        let info = ::VideoInfo::builder(::VideoFormat::Gray8, 320, 240)
+        let info = crate::VideoInfo::builder(crate::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
         let mut buffer = gst::Buffer::with_size(info.size()).unwrap();

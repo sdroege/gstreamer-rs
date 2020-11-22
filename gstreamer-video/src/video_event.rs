@@ -6,12 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_sys;
-use gst_video_sys;
-
 use glib::translate::{from_glib, from_glib_full, ToGlib};
 use glib::ToSendValue;
-use gst;
 use std::mem;
 
 // FIXME: Copy from gstreamer/src/event.rs
@@ -48,16 +44,16 @@ macro_rules! event_builder_generic_impl {
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.seqnum {
-                    gst_sys::gst_event_set_seqnum(event, seqnum.to_glib());
+                    gst::ffi::gst_event_set_seqnum(event, seqnum.to_glib());
                 }
 
                 if let Some(running_time_offset) = self.running_time_offset {
-                    gst_sys::gst_event_set_running_time_offset(event, running_time_offset);
+                    gst::ffi::gst_event_set_running_time_offset(event, running_time_offset);
                 }
 
                 {
                     let s = gst::StructureRef::from_glib_borrow_mut(
-                        gst_sys::gst_event_writable_structure(event),
+                        gst::ffi::gst_event_writable_structure(event),
                     );
 
                     for (k, v) in self.other_fields {
@@ -127,7 +123,7 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        gst_video_sys::gst_video_event_new_downstream_force_key_unit(
+        ffi::gst_video_event_new_downstream_force_key_unit(
             s.timestamp.to_glib(),
             s.stream_time.to_glib(),
             s.running_time.to_glib(),
@@ -162,16 +158,14 @@ impl DownstreamForceKeyUnitEvent {
             let mut all_headers = mem::MaybeUninit::uninit();
             let mut count = mem::MaybeUninit::uninit();
 
-            let res: bool = from_glib(
-                gst_video_sys::gst_video_event_parse_downstream_force_key_unit(
-                    event.as_mut_ptr(),
-                    timestamp.as_mut_ptr(),
-                    stream_time.as_mut_ptr(),
-                    running_time.as_mut_ptr(),
-                    all_headers.as_mut_ptr(),
-                    count.as_mut_ptr(),
-                ),
-            );
+            let res: bool = from_glib(ffi::gst_video_event_parse_downstream_force_key_unit(
+                event.as_mut_ptr(),
+                timestamp.as_mut_ptr(),
+                stream_time.as_mut_ptr(),
+                running_time.as_mut_ptr(),
+                all_headers.as_mut_ptr(),
+                count.as_mut_ptr(),
+            ));
             if res {
                 Ok(DownstreamForceKeyUnitEvent {
                     timestamp: from_glib(timestamp.assume_init()),
@@ -181,7 +175,7 @@ impl DownstreamForceKeyUnitEvent {
                     count: count.assume_init(),
                 })
             } else {
-                Err(glib_bool_error!("Failed to parse GstEvent"))
+                Err(glib::glib_bool_error!("Failed to parse GstEvent"))
             }
         }
     }
@@ -228,7 +222,7 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        gst_video_sys::gst_video_event_new_upstream_force_key_unit(
+        ffi::gst_video_event_new_upstream_force_key_unit(
             s.running_time.to_glib(),
             s.all_headers.to_glib(),
             s.count,
@@ -257,14 +251,12 @@ impl UpstreamForceKeyUnitEvent {
             let mut all_headers = mem::MaybeUninit::uninit();
             let mut count = mem::MaybeUninit::uninit();
 
-            let res: bool = from_glib(
-                gst_video_sys::gst_video_event_parse_upstream_force_key_unit(
-                    event.as_mut_ptr(),
-                    running_time.as_mut_ptr(),
-                    all_headers.as_mut_ptr(),
-                    count.as_mut_ptr(),
-                ),
-            );
+            let res: bool = from_glib(ffi::gst_video_event_parse_upstream_force_key_unit(
+                event.as_mut_ptr(),
+                running_time.as_mut_ptr(),
+                all_headers.as_mut_ptr(),
+                count.as_mut_ptr(),
+            ));
             if res {
                 Ok(UpstreamForceKeyUnitEvent {
                     running_time: from_glib(running_time.assume_init()),
@@ -272,7 +264,7 @@ impl UpstreamForceKeyUnitEvent {
                     count: count.assume_init(),
                 })
             } else {
-                Err(glib_bool_error!("Failed to parse GstEvent"))
+                Err(glib::glib_bool_error!("Failed to parse GstEvent"))
             }
         }
     }
@@ -287,11 +279,7 @@ pub enum ForceKeyUnitEvent {
 impl ForceKeyUnitEvent {
     pub fn is(event: &gst::EventRef) -> bool {
         skip_assert_initialized!();
-        unsafe {
-            from_glib(gst_video_sys::gst_video_event_is_force_key_unit(
-                event.as_mut_ptr(),
-            ))
-        }
+        unsafe { from_glib(ffi::gst_video_event_is_force_key_unit(event.as_mut_ptr())) }
     }
 
     pub fn parse(event: &gst::EventRef) -> Result<ForceKeyUnitEvent, glib::error::BoolError> {
@@ -322,9 +310,9 @@ impl<'a> StillFrameEventBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(
-        |s: &mut Self| gst_video_sys::gst_video_event_new_still_frame(s.in_still.to_glib())
-    );
+    event_builder_generic_impl!(|s: &mut Self| ffi::gst_video_event_new_still_frame(
+        s.in_still.to_glib()
+    ));
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -343,7 +331,7 @@ impl StillFrameEvent {
         unsafe {
             let mut in_still = mem::MaybeUninit::uninit();
 
-            let res: bool = from_glib(gst_video_sys::gst_video_event_parse_still_frame(
+            let res: bool = from_glib(ffi::gst_video_event_parse_still_frame(
                 event.as_mut_ptr(),
                 in_still.as_mut_ptr(),
             ));
@@ -352,7 +340,7 @@ impl StillFrameEvent {
                     in_still: from_glib(in_still.assume_init()),
                 })
             } else {
-                Err(glib_bool_error!("Invalid still-frame event"))
+                Err(glib::glib_bool_error!("Invalid still-frame event"))
             }
         }
     }

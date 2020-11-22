@@ -6,31 +6,28 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_video_sys;
-
 use std::cmp::Ordering;
 use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-use glib;
 use glib::translate::{from_glib, ToGlib};
 
-pub struct VideoFormatInfo(&'static gst_video_sys::GstVideoFormatInfo);
+pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
 impl VideoFormatInfo {
-    pub fn from_format(format: ::VideoFormat) -> VideoFormatInfo {
+    pub fn from_format(format: crate::VideoFormat) -> VideoFormatInfo {
         assert_initialized_main_thread!();
 
         unsafe {
-            let info = gst_video_sys::gst_video_format_get_info(format.to_glib());
+            let info = ffi::gst_video_format_get_info(format.to_glib());
             assert!(!info.is_null());
 
             VideoFormatInfo(&*info)
         }
     }
 
-    pub fn format(&self) -> ::VideoFormat {
+    pub fn format(&self) -> crate::VideoFormat {
         from_glib(self.0.format)
     }
 
@@ -42,7 +39,7 @@ impl VideoFormatInfo {
         unsafe { CStr::from_ptr(self.0.description).to_str().unwrap() }
     }
 
-    pub fn flags(&self) -> ::VideoFormatFlags {
+    pub fn flags(&self) -> crate::VideoFormatFlags {
         from_glib(self.0.flags)
     }
 
@@ -86,7 +83,7 @@ impl VideoFormatInfo {
         &self.0.h_sub[0..(self.0.n_components as usize)]
     }
 
-    pub fn tile_mode(&self) -> ::VideoTileMode {
+    pub fn tile_mode(&self) -> crate::VideoTileMode {
         from_glib(self.0.tile_mode)
     }
 
@@ -98,7 +95,7 @@ impl VideoFormatInfo {
         self.0.tile_hs
     }
 
-    pub fn unpack_format(&self) -> ::VideoFormat {
+    pub fn unpack_format(&self) -> crate::VideoFormat {
         from_glib(self.0.unpack_format)
     }
 
@@ -107,35 +104,35 @@ impl VideoFormatInfo {
     }
 
     pub fn has_alpha(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_ALPHA != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_ALPHA != 0
     }
 
     pub fn has_palette(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
     }
 
     pub fn is_complex(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
     }
 
     pub fn is_gray(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_GRAY != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_GRAY != 0
     }
 
     pub fn is_le(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_LE != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_LE != 0
     }
 
     pub fn is_rgb(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_RGB != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_RGB != 0
     }
 
     pub fn is_tiled(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_TILED != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_TILED != 0
     }
 
     pub fn is_yuv(&self) -> bool {
-        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_YUV != 0
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_YUV != 0
     }
 
     pub fn scale_width(&self, component: u8, width: u32) -> u32 {
@@ -149,7 +146,7 @@ impl VideoFormatInfo {
     #[allow(clippy::too_many_arguments)]
     pub fn unpack(
         &self,
-        flags: ::VideoPackFlags,
+        flags: crate::VideoPackFlags,
         dest: &mut [u8],
         src: &[&[u8]],
         stride: &[i32],
@@ -203,8 +200,7 @@ impl VideoFormatInfo {
         unsafe {
             use std::ptr;
 
-            let mut src_ptr =
-                [ptr::null() as *const u8; gst_video_sys::GST_VIDEO_MAX_PLANES as usize];
+            let mut src_ptr = [ptr::null() as *const u8; ffi::GST_VIDEO_MAX_PLANES as usize];
             for plane in 0..(self.n_planes()) {
                 src_ptr[plane as usize] = src[plane as usize].as_ptr();
             }
@@ -225,12 +221,12 @@ impl VideoFormatInfo {
     #[allow(clippy::too_many_arguments)]
     pub fn pack(
         &self,
-        flags: ::VideoPackFlags,
+        flags: crate::VideoPackFlags,
         src: &[u8],
         src_stride: i32,
         dest: &mut [&mut [u8]],
         dest_stride: &[i32],
-        chroma_site: ::VideoChromaSite,
+        chroma_site: crate::VideoChromaSite,
         y: i32,
         width: i32,
     ) {
@@ -280,8 +276,7 @@ impl VideoFormatInfo {
         unsafe {
             use std::ptr;
 
-            let mut dest_ptr =
-                [ptr::null_mut() as *mut u8; gst_video_sys::GST_VIDEO_MAX_PLANES as usize];
+            let mut dest_ptr = [ptr::null_mut() as *mut u8; ffi::GST_VIDEO_MAX_PLANES as usize];
             for plane in 0..(self.n_planes()) {
                 dest_ptr[plane as usize] = dest[plane as usize].as_mut_ptr();
             }
@@ -330,8 +325,8 @@ impl Ord for VideoFormatInfo {
             .then_with(|| {
                 // Format using native endianess is considered as bigger
                 match (
-                    self.flags().contains(::VideoFormatFlags::LE),
-                    other.flags().contains(::VideoFormatFlags::LE),
+                    self.flags().contains(crate::VideoFormatFlags::LE),
+                    other.flags().contains(crate::VideoFormatFlags::LE),
                 ) {
                     (true, false) => {
                         // a LE, b BE
@@ -363,8 +358,8 @@ impl Ord for VideoFormatInfo {
             .then_with(|| {
                 // Prefer non-complex formats
                 match (
-                    self.flags().contains(::VideoFormatFlags::COMPLEX),
-                    other.flags().contains(::VideoFormatFlags::COMPLEX),
+                    self.flags().contains(crate::VideoFormatFlags::COMPLEX),
+                    other.flags().contains(crate::VideoFormatFlags::COMPLEX),
                 ) {
                     (true, false) => Ordering::Less,
                     (false, true) => Ordering::Greater,
@@ -373,12 +368,12 @@ impl Ord for VideoFormatInfo {
             })
             .then_with(|| {
                 // tiebreaker: YUV > RGB
-                if self.flags().contains(::VideoFormatFlags::RGB)
-                    && other.flags().contains(::VideoFormatFlags::YUV)
+                if self.flags().contains(crate::VideoFormatFlags::RGB)
+                    && other.flags().contains(crate::VideoFormatFlags::YUV)
                 {
                     Ordering::Less
-                } else if self.flags().contains(::VideoFormatFlags::YUV)
-                    && other.flags().contains(::VideoFormatFlags::RGB)
+                } else if self.flags().contains(crate::VideoFormatFlags::YUV)
+                    && other.flags().contains(crate::VideoFormatFlags::RGB)
                 {
                     Ordering::Greater
                 } else {
@@ -389,8 +384,8 @@ impl Ord for VideoFormatInfo {
                 // Manual tiebreaker
                 match (self.format(), other.format()) {
                     // I420 is more commonly used in GStreamer
-                    (::VideoFormat::I420, ::VideoFormat::Yv12) => Ordering::Greater,
-                    (::VideoFormat::Yv12, ::VideoFormat::I420) => Ordering::Less,
+                    (crate::VideoFormat::I420, crate::VideoFormat::Yv12) => Ordering::Greater,
+                    (crate::VideoFormat::Yv12, crate::VideoFormat::I420) => Ordering::Less,
                     _ => Ordering::Equal,
                 }
             })
@@ -433,7 +428,7 @@ impl fmt::Display for VideoFormatInfo {
     }
 }
 
-impl str::FromStr for ::VideoFormatInfo {
+impl str::FromStr for crate::VideoFormatInfo {
     type Err = glib::BoolError;
 
     fn from_str(s: &str) -> Result<Self, glib::BoolError> {
@@ -443,8 +438,8 @@ impl str::FromStr for ::VideoFormatInfo {
     }
 }
 
-impl From<::VideoFormat> for VideoFormatInfo {
-    fn from(f: ::VideoFormat) -> Self {
+impl From<crate::VideoFormat> for VideoFormatInfo {
+    fn from(f: crate::VideoFormat) -> Self {
         skip_assert_initialized!();
         Self::from_format(f)
     }
@@ -452,30 +447,26 @@ impl From<::VideoFormat> for VideoFormatInfo {
 
 #[doc(hidden)]
 impl glib::translate::GlibPtrDefault for VideoFormatInfo {
-    type GlibType = *mut gst_video_sys::GstVideoFormatInfo;
+    type GlibType = *mut ffi::GstVideoFormatInfo;
 }
 
 #[doc(hidden)]
-impl<'a> glib::translate::ToGlibPtr<'a, *const gst_video_sys::GstVideoFormatInfo>
-    for VideoFormatInfo
-{
+impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoFormatInfo> for VideoFormatInfo {
     type Storage = &'a VideoFormatInfo;
 
-    fn to_glib_none(
-        &'a self,
-    ) -> glib::translate::Stash<'a, *const gst_video_sys::GstVideoFormatInfo, Self> {
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoFormatInfo, Self> {
         glib::translate::Stash(self.0, self)
     }
 
-    fn to_glib_full(&self) -> *const gst_video_sys::GstVideoFormatInfo {
+    fn to_glib_full(&self) -> *const ffi::GstVideoFormatInfo {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*mut gst_video_sys::GstVideoFormatInfo> for VideoFormatInfo {
+impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoFormatInfo> for VideoFormatInfo {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut gst_video_sys::GstVideoFormatInfo) -> Self {
+    unsafe fn from_glib_none(ptr: *mut ffi::GstVideoFormatInfo) -> Self {
         VideoFormatInfo(&*ptr)
     }
 }
@@ -483,13 +474,12 @@ impl glib::translate::FromGlibPtrNone<*mut gst_video_sys::GstVideoFormatInfo> fo
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gst;
 
     #[test]
     fn test_get() {
         gst::init().unwrap();
 
-        let info = VideoFormatInfo::from_format(::VideoFormat::I420);
+        let info = VideoFormatInfo::from_format(crate::VideoFormat::I420);
         assert_eq!(info.name(), "I420");
 
         let other_info = "I420".parse().unwrap();
@@ -511,10 +501,10 @@ mod tests {
         // One line of 320 pixel I420
         let output = &mut [&mut [0; 320][..], &mut [0; 160][..], &mut [0; 160][..]];
 
-        let info = VideoFormatInfo::from_format(::VideoFormat::I420);
-        assert_eq!(info.unpack_format(), ::VideoFormat::Ayuv);
+        let info = VideoFormatInfo::from_format(crate::VideoFormat::I420);
+        assert_eq!(info.unpack_format(), crate::VideoFormat::Ayuv);
         info.unpack(
-            ::VideoPackFlags::empty(),
+            crate::VideoPackFlags::empty(),
             intermediate,
             input,
             &[320, 160, 160][..],
@@ -528,12 +518,12 @@ mod tests {
         }
 
         info.pack(
-            ::VideoPackFlags::empty(),
+            crate::VideoPackFlags::empty(),
             &intermediate[..(4 * 320)],
             4 * 320,
             output,
             &[320, 160, 160][..],
-            ::VideoChromaSite::NONE,
+            crate::VideoChromaSite::NONE,
             0,
             320,
         );

@@ -7,33 +7,31 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib::object::IsA;
-use glib::translate::*;
-use gst;
-use gst_video_sys;
-use std::mem;
-use std::ptr;
-use utils::HasStreamLock;
-use video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext};
-use VideoCodecFrame;
-use VideoDecoder;
-use VideoFormat;
+use crate::utils::HasStreamLock;
+use crate::video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext};
+use crate::VideoCodecFrame;
+use crate::VideoDecoder;
+use crate::VideoFormat;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-use VideoInterlaceMode;
+use crate::VideoInterlaceMode;
+use glib::object::IsA;
+use glib::translate::*;
+use std::mem;
+use std::ptr;
 
 extern "C" {
     fn _gst_video_decoder_error(
-        dec: *mut gst_video_sys::GstVideoDecoder,
+        dec: *mut ffi::GstVideoDecoder,
         weight: i32,
-        domain: glib_sys::GQuark,
+        domain: glib::ffi::GQuark,
         code: i32,
         txt: *mut libc::c_char,
         debug: *mut libc::c_char,
         file: *const libc::c_char,
         function: *const libc::c_char,
         line: i32,
-    ) -> gst_sys::GstFlowReturn;
+    ) -> gst::ffi::GstFlowReturn;
 }
 
 pub trait VideoDecoderExtManual: 'static {
@@ -106,13 +104,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
             let params_ptr = params.to_glib_none().0 as *mut _;
-            from_glib(
-                gst_video_sys::gst_video_decoder_allocate_output_frame_with_params(
-                    self.as_ref().to_glib_none().0,
-                    frame.to_glib_none().0,
-                    params_ptr,
-                ),
-            )
+            from_glib(ffi::gst_video_decoder_allocate_output_frame_with_params(
+                self.as_ref().to_glib_none().0,
+                frame.to_glib_none().0,
+                params_ptr,
+            ))
         };
         ret.into_result()
     }
@@ -121,7 +117,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
-            gst_video_sys::gst_video_decoder_get_allocator(
+            ffi::gst_video_decoder_get_allocator(
                 self.as_ref().to_glib_none().0,
                 &mut allocator,
                 &mut params,
@@ -132,7 +128,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 
     fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_video_sys::gst_video_decoder_have_frame(
+            from_glib(ffi::gst_video_decoder_have_frame(
                 self.as_ref().to_glib_none().0,
             ))
         };
@@ -141,7 +137,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_video_sys::gst_video_decoder_finish_frame(
+            from_glib(ffi::gst_video_decoder_finish_frame(
                 self.as_ref().to_glib_none().0,
                 frame.into_ptr(),
             ))
@@ -151,16 +147,13 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 
     fn release_frame(&self, frame: VideoCodecFrame) {
         unsafe {
-            gst_video_sys::gst_video_decoder_release_frame(
-                self.as_ref().to_glib_none().0,
-                frame.into_ptr(),
-            )
+            ffi::gst_video_decoder_release_frame(self.as_ref().to_glib_none().0, frame.into_ptr())
         }
     }
 
     fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(gst_video_sys::gst_video_decoder_drop_frame(
+            from_glib(ffi::gst_video_decoder_drop_frame(
                 self.as_ref().to_glib_none().0,
                 frame.into_ptr(),
             ))
@@ -169,11 +162,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     }
 
     fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
-        let mut min_latency = gst_sys::GST_CLOCK_TIME_NONE;
-        let mut max_latency = gst_sys::GST_CLOCK_TIME_NONE;
+        let mut min_latency = gst::ffi::GST_CLOCK_TIME_NONE;
+        let mut max_latency = gst::ffi::GST_CLOCK_TIME_NONE;
 
         unsafe {
-            gst_video_sys::gst_video_decoder_get_latency(
+            ffi::gst_video_decoder_get_latency(
                 self.as_ref().to_glib_none().0,
                 &mut min_latency,
                 &mut max_latency,
@@ -185,7 +178,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
         unsafe {
-            gst_video_sys::gst_video_decoder_set_latency(
+            ffi::gst_video_decoder_set_latency(
                 self.as_ref().to_glib_none().0,
                 min_latency.to_glib(),
                 max_latency.to_glib(),
@@ -195,7 +188,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 
     fn get_frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
         let frame = unsafe {
-            gst_video_sys::gst_video_decoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
+            ffi::gst_video_decoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
         };
 
         if frame.is_null() {
@@ -207,9 +200,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 
     fn get_frames(&self) -> Vec<VideoCodecFrame> {
         unsafe {
-            let frames =
-                gst_video_sys::gst_video_decoder_get_frames(self.as_ref().to_glib_none().0);
-            let mut iter: *const glib_sys::GList = frames;
+            let frames = ffi::gst_video_decoder_get_frames(self.as_ref().to_glib_none().0);
+            let mut iter: *const glib::ffi::GList = frames;
             let mut vec = Vec::new();
 
             while !iter.is_null() {
@@ -220,15 +212,14 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
                 iter = (*iter).next;
             }
 
-            glib_sys::g_list_free(frames);
+            glib::ffi::g_list_free(frames);
             vec
         }
     }
 
     fn get_oldest_frame(&self) -> Option<VideoCodecFrame> {
-        let frame = unsafe {
-            gst_video_sys::gst_video_decoder_get_oldest_frame(self.as_ref().to_glib_none().0)
-        };
+        let frame =
+            unsafe { ffi::gst_video_decoder_get_oldest_frame(self.as_ref().to_glib_none().0) };
 
         if frame.is_null() {
             None
@@ -238,9 +229,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     }
 
     fn get_output_state(&self) -> Option<VideoCodecState<'static, Readable>> {
-        let state = unsafe {
-            gst_video_sys::gst_video_decoder_get_output_state(self.as_ref().to_glib_none().0)
-        };
+        let state =
+            unsafe { ffi::gst_video_decoder_get_output_state(self.as_ref().to_glib_none().0) };
 
         if state.is_null() {
             None
@@ -261,7 +251,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
                 Some(reference) => reference.as_mut_ptr(),
                 None => ptr::null_mut(),
             };
-            gst_video_sys::gst_video_decoder_set_output_state(
+            ffi::gst_video_decoder_set_output_state(
                 self.as_ref().to_glib_none().0,
                 fmt.to_glib(),
                 width,
@@ -292,7 +282,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
                 Some(reference) => reference.as_mut_ptr(),
                 None => ptr::null_mut(),
             };
-            gst_video_sys::gst_video_decoder_set_interlaced_output_state(
+            ffi::gst_video_decoder_set_interlaced_output_state(
                 self.as_ref().to_glib_none().0,
                 fmt.to_glib(),
                 mode.to_glib(),
@@ -314,11 +304,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         output_state: VideoCodecState<'a, InNegotiation<'a>>,
     ) -> Result<(), gst::FlowError> {
         // Consume output_state so user won't be able to modify it anymore
-        let self_ptr = self.to_glib_none().0 as *const gst_sys::GstElement;
+        let self_ptr = self.to_glib_none().0 as *const gst::ffi::GstElement;
         assert_eq!(output_state.context.get_element_as_ptr(), self_ptr);
 
         let ret = unsafe {
-            from_glib(gst_video_sys::gst_video_decoder_negotiate(
+            from_glib(ffi::gst_video_decoder_negotiate(
                 self.as_ref().to_glib_none().0,
             ))
         };
@@ -356,14 +346,14 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 }
 
 impl HasStreamLock for VideoDecoder {
-    fn get_stream_lock(&self) -> *mut glib_sys::GRecMutex {
-        let decoder_sys: *const gstreamer_video_sys::GstVideoDecoder = self.to_glib_none().0;
+    fn get_stream_lock(&self) -> *mut glib::ffi::GRecMutex {
+        let decoder_sys: *const ffi::GstVideoDecoder = self.to_glib_none().0;
         unsafe { &(*decoder_sys).stream_lock as *const _ as usize as *mut _ }
     }
 
-    fn get_element_as_ptr(&self) -> *const gst_sys::GstElement {
-        let decoder_sys: *const gstreamer_video_sys::GstVideoDecoder = self.to_glib_none().0;
-        decoder_sys as *const gst_sys::GstElement
+    fn get_element_as_ptr(&self) -> *const gst::ffi::GstElement {
+        let decoder_sys: *const ffi::GstVideoDecoder = self.to_glib_none().0;
+        decoder_sys as *const gst::ffi::GstElement
     }
 }
 

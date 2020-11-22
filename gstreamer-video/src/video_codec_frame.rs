@@ -7,34 +7,28 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::utils::HasStreamLock;
+use crate::VideoCodecFrameFlags;
 use glib::translate::*;
-use gst;
-use gst_video_sys;
 use std::fmt;
 use std::mem;
-use utils::HasStreamLock;
-use VideoCodecFrameFlags;
 
 pub struct VideoCodecFrame<'a> {
-    frame: *mut gst_video_sys::GstVideoCodecFrame,
+    frame: *mut ffi::GstVideoCodecFrame,
     /* GstVideoCodecFrame API isn't safe so protect the frame using the
      * element (decoder or encoder) stream lock */
     element: &'a dyn HasStreamLock,
 }
 
 #[doc(hidden)]
-impl<'a> ::glib::translate::ToGlibPtr<'a, *mut gst_video_sys::GstVideoCodecFrame>
-    for VideoCodecFrame<'a>
-{
+impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstVideoCodecFrame> for VideoCodecFrame<'a> {
     type Storage = &'a Self;
 
-    fn to_glib_none(
-        &'a self,
-    ) -> ::glib::translate::Stash<'a, *mut gst_video_sys::GstVideoCodecFrame, Self> {
+    fn to_glib_none(&'a self) -> ::glib::translate::Stash<'a, *mut ffi::GstVideoCodecFrame, Self> {
         Stash(self.frame, self)
     }
 
-    fn to_glib_full(&self) -> *mut gst_video_sys::GstVideoCodecFrame {
+    fn to_glib_full(&self) -> *mut ffi::GstVideoCodecFrame {
         unimplemented!()
     }
 }
@@ -65,12 +59,12 @@ impl<'a> fmt::Debug for VideoCodecFrame<'a> {
 impl<'a> VideoCodecFrame<'a> {
     // Take ownership of @frame
     pub(crate) unsafe fn new<T: HasStreamLock>(
-        frame: *mut gst_video_sys::GstVideoCodecFrame,
+        frame: *mut ffi::GstVideoCodecFrame,
         element: &'a T,
     ) -> Self {
         skip_assert_initialized!();
         let stream_lock = element.get_stream_lock();
-        glib_sys::g_rec_mutex_lock(stream_lock);
+        glib::ffi::g_rec_mutex_lock(stream_lock);
         Self { frame, element }
     }
 
@@ -161,8 +155,8 @@ impl<'a> VideoCodecFrame<'a> {
             if ptr.is_null() {
                 None
             } else {
-                let writable: bool = from_glib(gst_sys::gst_mini_object_is_writable(
-                    ptr as *const gst_sys::GstMiniObject,
+                let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
+                    ptr as *const gst::ffi::GstMiniObject,
                 ));
                 assert!(writable);
 
@@ -176,12 +170,12 @@ impl<'a> VideoCodecFrame<'a> {
             let prev = (*self.to_glib_none().0).output_buffer;
 
             if !prev.is_null() {
-                gst_sys::gst_mini_object_unref(prev as *mut gst_sys::GstMiniObject);
+                gst::ffi::gst_mini_object_unref(prev as *mut gst::ffi::GstMiniObject);
             }
 
             let ptr = output_buffer.into_ptr();
-            let writable: bool = from_glib(gst_sys::gst_mini_object_is_writable(
-                ptr as *const gst_sys::GstMiniObject,
+            let writable: bool = from_glib(gst::ffi::gst_mini_object_is_writable(
+                ptr as *const gst::ffi::GstMiniObject,
             ));
             assert!(writable);
 
@@ -194,9 +188,9 @@ impl<'a> VideoCodecFrame<'a> {
     }
 
     #[doc(hidden)]
-    pub unsafe fn into_ptr(self) -> *mut gst_video_sys::GstVideoCodecFrame {
+    pub unsafe fn into_ptr(self) -> *mut ffi::GstVideoCodecFrame {
         let stream_lock = self.element.get_stream_lock();
-        glib_sys::g_rec_mutex_unlock(stream_lock);
+        glib::ffi::g_rec_mutex_unlock(stream_lock);
 
         let s = mem::ManuallyDrop::new(self);
         s.to_glib_none().0
@@ -207,9 +201,9 @@ impl<'a> Drop for VideoCodecFrame<'a> {
     fn drop(&mut self) {
         unsafe {
             let stream_lock = self.element.get_stream_lock();
-            glib_sys::g_rec_mutex_unlock(stream_lock);
+            glib::ffi::g_rec_mutex_unlock(stream_lock);
 
-            gst_video_sys::gst_video_codec_frame_unref(self.frame);
+            ffi::gst_video_codec_frame_unref(self.frame);
         }
     }
 }

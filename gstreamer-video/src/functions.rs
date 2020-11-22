@@ -6,14 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib_sys;
-use gst_sys;
-use gst_video_sys;
-
-use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 use glib::ToSendValue;
-use gst;
 
 use std::i32;
 use std::mem;
@@ -27,7 +21,7 @@ pub fn convert_sample(
     skip_assert_initialized!();
     unsafe {
         let mut error = ptr::null_mut();
-        let ret = gst_video_sys::gst_video_convert_sample(
+        let ret = ffi::gst_video_convert_sample(
             sample.to_glib_none().0,
             caps.to_glib_none().0,
             timeout.to_glib(),
@@ -78,9 +72,9 @@ unsafe fn convert_sample_async_unsafe<F>(
     F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
 {
     unsafe extern "C" fn convert_sample_async_trampoline<F>(
-        sample: *mut gst_sys::GstSample,
-        error: *mut glib_sys::GError,
-        user_data: glib_sys::gpointer,
+        sample: *mut gst::ffi::GstSample,
+        error: *mut glib::ffi::GError,
+        user_data: glib::ffi::gpointer,
     ) where
         F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
     {
@@ -93,7 +87,7 @@ unsafe fn convert_sample_async_unsafe<F>(
             callback(Err(from_glib_full(error)))
         }
     }
-    unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib_sys::gpointer)
+    unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib::ffi::gpointer)
     where
         F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
     {
@@ -102,12 +96,12 @@ unsafe fn convert_sample_async_unsafe<F>(
 
     let user_data: Box<Option<F>> = Box::new(Some(func));
 
-    gst_video_sys::gst_video_convert_sample_async(
+    ffi::gst_video_convert_sample_async(
         sample.to_glib_none().0,
         caps.to_glib_none().0,
         timeout.to_glib(),
         Some(convert_sample_async_trampoline::<F>),
-        Box::into_raw(user_data) as glib_sys::gpointer,
+        Box::into_raw(user_data) as glib::ffi::gpointer,
         Some(convert_sample_async_free::<F>),
     );
 }
@@ -155,7 +149,7 @@ pub fn calculate_display_ratio(
         let mut dar_n = mem::MaybeUninit::uninit();
         let mut dar_d = mem::MaybeUninit::uninit();
 
-        let res: bool = from_glib(gst_video_sys::gst_video_calculate_display_ratio(
+        let res: bool = from_glib(ffi::gst_video_calculate_display_ratio(
             dar_n.as_mut_ptr(),
             dar_d.as_mut_ptr(),
             video_width,
@@ -182,7 +176,7 @@ pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
     unsafe {
         let mut dest_n = mem::MaybeUninit::uninit();
         let mut dest_d = mem::MaybeUninit::uninit();
-        let res: bool = from_glib(gst_video_sys::gst_video_guess_framerate(
+        let res: bool = from_glib(ffi::gst_video_guess_framerate(
             duration.to_glib(),
             dest_n.as_mut_ptr(),
             dest_d.as_mut_ptr(),
@@ -198,14 +192,16 @@ pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
     }
 }
 
-pub fn video_make_raw_caps(formats: &[::VideoFormat]) -> gst::caps::Builder<gst::caps::NoFeature> {
+pub fn video_make_raw_caps(
+    formats: &[crate::VideoFormat],
+) -> gst::caps::Builder<gst::caps::NoFeature> {
     assert_initialized_main_thread!();
 
     let formats: Vec<glib::SendValue> = formats
         .iter()
         .map(|f| match f {
-            ::VideoFormat::Encoded => panic!("Invalid encoded format"),
-            ::VideoFormat::Unknown => panic!("Invalid unknown format"),
+            crate::VideoFormat::Encoded => panic!("Invalid encoded format"),
+            crate::VideoFormat::Unknown => panic!("Invalid unknown format"),
             _ => f.to_string().to_send_value(),
         })
         .collect();
@@ -223,8 +219,6 @@ pub fn video_make_raw_caps(formats: &[::VideoFormat]) -> gst::caps::Builder<gst:
 #[cfg(test)]
 mod tests {
     use super::*;
-    use glib;
-    use gst;
     use std::sync::{Arc, Mutex};
 
     #[test]
@@ -245,7 +239,7 @@ mod tests {
                 p[3] = 255;
             }
         }
-        let in_caps = ::VideoInfo::builder(::VideoFormat::Rgba, 320, 240)
+        let in_caps = crate::VideoInfo::builder(crate::VideoFormat::Rgba, 320, 240)
             .build()
             .unwrap()
             .to_caps()
@@ -255,7 +249,7 @@ mod tests {
             .caps(&in_caps)
             .build();
 
-        let out_caps = ::VideoInfo::builder(::VideoFormat::Abgr, 320, 240)
+        let out_caps = crate::VideoInfo::builder(crate::VideoFormat::Abgr, 320, 240)
             .build()
             .unwrap()
             .to_caps()
@@ -290,26 +284,26 @@ mod tests {
     fn video_caps() {
         gst::init().unwrap();
 
-        let caps = video_make_raw_caps(&[::VideoFormat::Nv12, ::VideoFormat::Nv16]).build();
+        let caps =
+            video_make_raw_caps(&[crate::VideoFormat::Nv12, crate::VideoFormat::Nv16]).build();
         assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]");
 
         #[cfg(feature = "v1_18")]
         {
             /* video_make_raw_caps() is a re-implementation so ensure it returns the same caps as the C API */
             let c_caps = unsafe {
-                let formats: Vec<gst_video_sys::GstVideoFormat> =
-                    [::VideoFormat::Nv12, ::VideoFormat::Nv16]
+                let formats: Vec<ffi::GstVideoFormat> =
+                    [crate::VideoFormat::Nv12, crate::VideoFormat::Nv16]
                         .iter()
                         .map(|f| f.to_glib())
                         .collect();
-                let caps =
-                    gst_video_sys::gst_video_make_raw_caps(formats.as_ptr(), formats.len() as u32);
+                let caps = ffi::gst_video_make_raw_caps(formats.as_ptr(), formats.len() as u32);
                 from_glib_full(caps)
             };
             assert_eq!(caps, c_caps);
         }
 
-        let caps = video_make_raw_caps(&[::VideoFormat::Nv12, ::VideoFormat::Nv16])
+        let caps = video_make_raw_caps(&[crate::VideoFormat::Nv12, crate::VideoFormat::Nv16])
             .field("width", &800)
             .field("height", &600)
             .field("framerate", &gst::Fraction::new(30, 1))
@@ -321,13 +315,13 @@ mod tests {
     #[should_panic(expected = "Invalid encoded format")]
     fn video_caps_encoded() {
         gst::init().unwrap();
-        video_make_raw_caps(&[::VideoFormat::Encoded]);
+        video_make_raw_caps(&[crate::VideoFormat::Encoded]);
     }
 
     #[test]
     #[should_panic(expected = "Invalid unknown format")]
     fn video_caps_unknown() {
         gst::init().unwrap();
-        video_make_raw_caps(&[::VideoFormat::Unknown]);
+        video_make_raw_caps(&[crate::VideoFormat::Unknown]);
     }
 }
