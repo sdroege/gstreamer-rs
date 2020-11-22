@@ -7,13 +7,12 @@
 // except according to those terms.
 
 use gst::CapsFeatures;
-use gst_gl_sys;
 use std::ffi::CStr;
 
 use once_cell::sync::Lazy;
 
 pub static CAPS_FEATURE_MEMORY_GL_MEMORY: Lazy<&'static str> = Lazy::new(|| unsafe {
-    CStr::from_ptr(gst_gl_sys::GST_CAPS_FEATURE_MEMORY_GL_MEMORY)
+    CStr::from_ptr(ffi::GST_CAPS_FEATURE_MEMORY_GL_MEMORY)
         .to_str()
         .unwrap()
 });

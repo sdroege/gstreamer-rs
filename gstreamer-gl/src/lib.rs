@@ -9,24 +9,11 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-#[macro_use]
-extern crate bitflags;
-extern crate byteorder;
-extern crate libc;
-extern crate once_cell;
-#[macro_use]
-extern crate glib;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_gl_sys as gst_gl_sys;
-extern crate gstreamer_sys as gst_sys;
-extern crate gstreamer_video as gst_video;
-extern crate gstreamer_video_sys as gst_video_sys;
+pub use ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -40,16 +27,16 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
 mod auto;
-pub use auto::*;
+pub use crate::auto::*;
 
 mod caps_features;
-pub use caps_features::{CAPS_FEATURES_MEMORY_GL_MEMORY, CAPS_FEATURE_MEMORY_GL_MEMORY};
+pub use crate::caps_features::{CAPS_FEATURES_MEMORY_GL_MEMORY, CAPS_FEATURE_MEMORY_GL_MEMORY};
 mod context;
-pub use context::ContextGLExt;
+pub use crate::context::ContextGLExt;
 mod gl_context;
-pub use gl_context::GLContextExtManual;
+pub use crate::gl_context::GLContextExtManual;
 mod gl_display;
-pub use gl_display::GL_DISPLAY_CONTEXT_TYPE;
+pub use crate::gl_display::GL_DISPLAY_CONTEXT_TYPE;
 #[cfg(any(feature = "egl", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
 mod gl_display_egl;
@@ -60,9 +47,9 @@ mod gl_display_wayland;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
 mod gl_display_x11;
 mod gl_video_frame;
-pub use gl_video_frame::VideoFrameGLExt;
+pub use crate::gl_video_frame::VideoFrameGLExt;
 mod gl_sync_meta;
-pub use gl_sync_meta::*;
+pub use crate::gl_sync_meta::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -70,9 +57,9 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use auto::traits::*;
+    pub use crate::auto::traits::*;
 
-    pub use context::ContextGLExt;
-    pub use gl_context::GLContextExtManual;
-    pub use gl_video_frame::VideoFrameGLExt;
+    pub use crate::context::ContextGLExt;
+    pub use crate::gl_context::GLContextExtManual;
+    pub use crate::gl_video_frame::VideoFrameGLExt;
 }

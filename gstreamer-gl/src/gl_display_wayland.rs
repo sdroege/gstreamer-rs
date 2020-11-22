@@ -6,22 +6,23 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::GLDisplayWayland;
+use glib::ffi::gpointer;
 use glib::translate::*;
-use glib_sys::gpointer;
-use gst_gl_sys;
 use libc::uintptr_t;
-use GLDisplayWayland;
 
 impl GLDisplayWayland {
     pub unsafe fn with_display(
         display: uintptr_t,
     ) -> Result<GLDisplayWayland, glib::error::BoolError> {
-        let result = from_glib_full(gst_gl_sys::gst_gl_display_wayland_new_with_display(
+        let result = from_glib_full(ffi::gst_gl_display_wayland_new_with_display(
             display as gpointer,
         ));
         match result {
             Some(d) => Ok(d),
-            None => Err(glib_bool_error!("Failed to create new Wayland GL display")),
+            None => Err(glib::glib_bool_error!(
+                "Failed to create new Wayland GL display"
+            )),
         }
     }
 }
