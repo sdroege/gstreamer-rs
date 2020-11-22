@@ -2,16 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::NetClientClock;
 use glib::translate::*;
-use gst;
-use gst_net_sys;
-use NetClientClock;
 
-glib_wrapper! {
-    pub struct NtpClock(Object<gst_net_sys::GstNtpClock, gst_net_sys::GstNtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;
+glib::glib_wrapper! {
+    pub struct NtpClock(Object<ffi::GstNtpClock, ffi::GstNtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;
 
     match fn {
-        get_type => || gst_net_sys::gst_ntp_clock_get_type(),
+        get_type => || ffi::gst_ntp_clock_get_type(),
     }
 }
 
