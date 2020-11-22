@@ -2,58 +2,53 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::EncodingTarget;
 use glib::translate::*;
-use glib::GString;
-use gst_pbutils_sys;
 use std::mem;
-use EncodingTarget;
 
 pub fn encoding_list_all_targets(categoryname: Option<&str>) -> Vec<EncodingTarget> {
     assert_initialized_main_thread!();
     unsafe {
-        FromGlibPtrContainer::from_glib_full(gst_pbutils_sys::gst_encoding_list_all_targets(
+        FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_all_targets(
             categoryname.to_glib_none().0,
         ))
     }
 }
 
-pub fn encoding_list_available_categories() -> Vec<GString> {
+pub fn encoding_list_available_categories() -> Vec<glib::GString> {
     assert_initialized_main_thread!();
-    unsafe {
-        FromGlibPtrContainer::from_glib_full(
-            gst_pbutils_sys::gst_encoding_list_available_categories(),
-        )
-    }
+    unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_available_categories()) }
 }
 
-pub fn pb_utils_get_element_description(factory_name: &str) -> Result<GString, glib::BoolError> {
+pub fn pb_utils_get_element_description(
+    factory_name: &str,
+) -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        Option::<_>::from_glib_full(gst_pbutils_sys::gst_pb_utils_get_element_description(
+        Option::<_>::from_glib_full(ffi::gst_pb_utils_get_element_description(
             factory_name.to_glib_none().0,
         ))
-        .ok_or_else(|| glib_bool_error!("Failed to get element description"))
+        .ok_or_else(|| glib::glib_bool_error!("Failed to get element description"))
     }
 }
 
-pub fn pb_utils_get_sink_description(protocol: &str) -> Result<GString, glib::BoolError> {
+pub fn pb_utils_get_sink_description(protocol: &str) -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        Option::<_>::from_glib_full(gst_pbutils_sys::gst_pb_utils_get_sink_description(
+        Option::<_>::from_glib_full(ffi::gst_pb_utils_get_sink_description(
             protocol.to_glib_none().0,
         ))
-        .ok_or_else(|| glib_bool_error!("Failed to get sink description"))
+        .ok_or_else(|| glib::glib_bool_error!("Failed to get sink description"))
     }
 }
 
-pub fn pb_utils_get_source_description(protocol: &str) -> Result<GString, glib::BoolError> {
+pub fn pb_utils_get_source_description(protocol: &str) -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        Option::<_>::from_glib_full(gst_pbutils_sys::gst_pb_utils_get_source_description(
+        Option::<_>::from_glib_full(ffi::gst_pb_utils_get_source_description(
             protocol.to_glib_none().0,
         ))
-        .ok_or_else(|| glib_bool_error!("Failed to get source description"))
+        .ok_or_else(|| glib::glib_bool_error!("Failed to get source description"))
     }
 }
 
@@ -64,7 +59,7 @@ pub fn plugins_base_version() -> (u32, u32, u32, u32) {
         let mut minor = mem::MaybeUninit::uninit();
         let mut micro = mem::MaybeUninit::uninit();
         let mut nano = mem::MaybeUninit::uninit();
-        gst_pbutils_sys::gst_plugins_base_version(
+        ffi::gst_plugins_base_version(
             major.as_mut_ptr(),
             minor.as_mut_ptr(),
             micro.as_mut_ptr(),
@@ -78,7 +73,7 @@ pub fn plugins_base_version() -> (u32, u32, u32, u32) {
     }
 }
 
-pub fn plugins_base_version_string() -> GString {
+pub fn plugins_base_version_string() -> glib::GString {
     skip_assert_initialized!();
-    unsafe { from_glib_full(gst_pbutils_sys::gst_plugins_base_version_string()) }
+    unsafe { from_glib_full(ffi::gst_plugins_base_version_string()) }
 }

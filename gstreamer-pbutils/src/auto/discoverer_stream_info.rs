@@ -4,15 +4,12 @@
 
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
-use gst;
-use gst_pbutils_sys;
 
-glib_wrapper! {
-    pub struct DiscovererStreamInfo(Object<gst_pbutils_sys::GstDiscovererStreamInfo>);
+glib::glib_wrapper! {
+    pub struct DiscovererStreamInfo(Object<ffi::GstDiscovererStreamInfo>);
 
     match fn {
-        get_type => || gst_pbutils_sys::gst_discoverer_stream_info_get_type(),
+        get_type => || ffi::gst_discoverer_stream_info_get_type(),
     }
 }
 
@@ -30,9 +27,9 @@ pub trait DiscovererStreamInfoExt: 'static {
 
     fn get_previous(&self) -> Option<DiscovererStreamInfo>;
 
-    fn get_stream_id(&self) -> Option<GString>;
+    fn get_stream_id(&self) -> Option<glib::GString>;
 
-    fn get_stream_type_nick(&self) -> GString;
+    fn get_stream_type_nick(&self) -> glib::GString;
 
     fn get_tags(&self) -> Option<gst::TagList>;
 
@@ -42,7 +39,7 @@ pub trait DiscovererStreamInfoExt: 'static {
 impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
     fn get_caps(&self) -> Option<gst::Caps> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_caps(
+            from_glib_full(ffi::gst_discoverer_stream_info_get_caps(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -50,7 +47,7 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
 
     fn get_misc(&self) -> Option<gst::Structure> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_misc(
+            from_glib_none(ffi::gst_discoverer_stream_info_get_misc(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -58,7 +55,7 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
 
     fn get_next(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_next(
+            from_glib_full(ffi::gst_discoverer_stream_info_get_next(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -66,33 +63,31 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
 
     fn get_previous(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_previous(
+            from_glib_full(ffi::gst_discoverer_stream_info_get_previous(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_stream_id(&self) -> Option<GString> {
+    fn get_stream_id(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_stream_id(
+            from_glib_none(ffi::gst_discoverer_stream_info_get_stream_id(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_stream_type_nick(&self) -> GString {
+    fn get_stream_type_nick(&self) -> glib::GString {
         unsafe {
-            from_glib_none(
-                gst_pbutils_sys::gst_discoverer_stream_info_get_stream_type_nick(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib_none(ffi::gst_discoverer_stream_info_get_stream_type_nick(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_tags(&self) -> Option<gst::TagList> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_tags(
+            from_glib_none(ffi::gst_discoverer_stream_info_get_tags(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -100,7 +95,7 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
 
     fn get_toc(&self) -> Option<gst::Toc> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_toc(
+            from_glib_none(ffi::gst_discoverer_stream_info_get_toc(
                 self.as_ref().to_glib_none().0,
             ))
         }

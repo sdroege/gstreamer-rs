@@ -2,36 +2,33 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::EncodingProfile;
 use glib::object::IsA;
 use glib::translate::*;
-use gst_pbutils_sys;
-use EncodingProfile;
 
-glib_wrapper! {
-    pub struct EncodingContainerProfile(Object<gst_pbutils_sys::GstEncodingContainerProfile, gst_pbutils_sys::GstEncodingContainerProfileClass>) @extends EncodingProfile;
+glib::glib_wrapper! {
+    pub struct EncodingContainerProfile(Object<ffi::GstEncodingContainerProfile, ffi::GstEncodingContainerProfileClass>) @extends EncodingProfile;
 
     match fn {
-        get_type => || gst_pbutils_sys::gst_encoding_container_profile_get_type(),
+        get_type => || ffi::gst_encoding_container_profile_get_type(),
     }
 }
 
 impl EncodingContainerProfile {
     pub fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool {
         unsafe {
-            from_glib(
-                gst_pbutils_sys::gst_encoding_container_profile_contains_profile(
-                    self.to_glib_none().0,
-                    profile.as_ref().to_glib_none().0,
-                ),
-            )
+            from_glib(ffi::gst_encoding_container_profile_contains_profile(
+                self.to_glib_none().0,
+                profile.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                gst_pbutils_sys::gst_encoding_container_profile_get_profiles(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_container_profile_get_profiles(
+                self.to_glib_none().0,
+            ))
         }
     }
 }

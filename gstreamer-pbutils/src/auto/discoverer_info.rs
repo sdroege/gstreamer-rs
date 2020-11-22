@@ -2,78 +2,58 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::DiscovererResult;
+use crate::DiscovererSerializeFlags;
+use crate::DiscovererStreamInfo;
 use glib::translate::*;
-use glib::GString;
-use gst;
-use gst_pbutils_sys;
-use DiscovererResult;
-use DiscovererSerializeFlags;
-use DiscovererStreamInfo;
 
-glib_wrapper! {
-    pub struct DiscovererInfo(Object<gst_pbutils_sys::GstDiscovererInfo>);
+glib::glib_wrapper! {
+    pub struct DiscovererInfo(Object<ffi::GstDiscovererInfo>);
 
     match fn {
-        get_type => || gst_pbutils_sys::gst_discoverer_info_get_type(),
+        get_type => || ffi::gst_discoverer_info_get_type(),
     }
 }
 
 impl DiscovererInfo {
     pub fn copy(&self) -> DiscovererInfo {
-        unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_info_copy(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_full(ffi::gst_discoverer_info_copy(self.to_glib_none().0)) }
     }
 
     pub fn get_audio_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                gst_pbutils_sys::gst_discoverer_info_get_audio_streams(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_audio_streams(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_container_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                gst_pbutils_sys::gst_discoverer_info_get_container_streams(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_container_streams(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_duration(&self) -> gst::ClockTime {
-        unsafe {
-            from_glib(gst_pbutils_sys::gst_discoverer_info_get_duration(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_discoverer_info_get_duration(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn get_live(&self) -> bool {
-        unsafe {
-            from_glib(gst_pbutils_sys::gst_discoverer_info_get_live(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_discoverer_info_get_live(self.to_glib_none().0)) }
     }
 
     pub fn get_misc(&self) -> Option<gst::Structure> {
-        unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_info_get_misc(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_discoverer_info_get_misc(self.to_glib_none().0)) }
     }
 
-    pub fn get_missing_elements_installer_details(&self) -> Vec<GString> {
+    pub fn get_missing_elements_installer_details(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(
-                gst_pbutils_sys::gst_discoverer_info_get_missing_elements_installer_details(
+                ffi::gst_discoverer_info_get_missing_elements_installer_details(
                     self.to_glib_none().0,
                 ),
             )
@@ -81,24 +61,16 @@ impl DiscovererInfo {
     }
 
     pub fn get_result(&self) -> DiscovererResult {
-        unsafe {
-            from_glib(gst_pbutils_sys::gst_discoverer_info_get_result(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_discoverer_info_get_result(self.to_glib_none().0)) }
     }
 
     pub fn get_seekable(&self) -> bool {
-        unsafe {
-            from_glib(gst_pbutils_sys::gst_discoverer_info_get_seekable(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_discoverer_info_get_seekable(self.to_glib_none().0)) }
     }
 
     pub fn get_stream_info(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_info_get_stream_info(
+            from_glib_full(ffi::gst_discoverer_info_get_stream_info(
                 self.to_glib_none().0,
             ))
         }
@@ -106,15 +78,15 @@ impl DiscovererInfo {
 
     pub fn get_stream_list(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                gst_pbutils_sys::gst_discoverer_info_get_stream_list(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_stream_list(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_streams(&self, streamtype: glib::types::Type) -> Vec<DiscovererStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_pbutils_sys::gst_discoverer_info_get_streams(
+            FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_streams(
                 self.to_glib_none().0,
                 streamtype.to_glib(),
             ))
@@ -123,41 +95,29 @@ impl DiscovererInfo {
 
     pub fn get_subtitle_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                gst_pbutils_sys::gst_discoverer_info_get_subtitle_streams(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_subtitle_streams(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_tags(&self) -> Option<gst::TagList> {
-        unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_info_get_tags(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_discoverer_info_get_tags(self.to_glib_none().0)) }
     }
 
     pub fn get_toc(&self) -> Option<gst::Toc> {
-        unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_info_get_toc(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_discoverer_info_get_toc(self.to_glib_none().0)) }
     }
 
-    pub fn get_uri(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_info_get_uri(
-                self.to_glib_none().0,
-            ))
-        }
+    pub fn get_uri(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::gst_discoverer_info_get_uri(self.to_glib_none().0)) }
     }
 
     pub fn get_video_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(
-                gst_pbutils_sys::gst_discoverer_info_get_video_streams(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_video_streams(
+                self.to_glib_none().0,
+            ))
         }
     }
 
@@ -166,21 +126,23 @@ impl DiscovererInfo {
         flags: DiscovererSerializeFlags,
     ) -> Result<glib::Variant, glib::BoolError> {
         unsafe {
-            Option::<_>::from_glib_full(gst_pbutils_sys::gst_discoverer_info_to_variant(
+            Option::<_>::from_glib_full(ffi::gst_discoverer_info_to_variant(
                 self.to_glib_none().0,
                 flags.to_glib(),
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to serialize DiscovererInfo to Variant"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to serialize DiscovererInfo to Variant"))
         }
     }
 
     pub fn from_variant(variant: &glib::Variant) -> Result<DiscovererInfo, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<_>::from_glib_full(gst_pbutils_sys::gst_discoverer_info_from_variant(
+            Option::<_>::from_glib_full(ffi::gst_discoverer_info_from_variant(
                 variant.to_glib_none().0,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to deserialize DiscovererInfo from Variant"))
+            .ok_or_else(|| {
+                glib::glib_bool_error!("Failed to deserialize DiscovererInfo from Variant")
+            })
         }
     }
 }

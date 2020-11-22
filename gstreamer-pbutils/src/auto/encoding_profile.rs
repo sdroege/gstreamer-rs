@@ -2,19 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::DiscovererInfo;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
-use gst;
-use gst_pbutils_sys;
-use DiscovererInfo;
 
-glib_wrapper! {
-    pub struct EncodingProfile(Object<gst_pbutils_sys::GstEncodingProfile, gst_pbutils_sys::GstEncodingProfileClass>);
+glib::glib_wrapper! {
+    pub struct EncodingProfile(Object<ffi::GstEncodingProfile, ffi::GstEncodingProfileClass>);
 
     match fn {
-        get_type => || gst_pbutils_sys::gst_encoding_profile_get_type(),
+        get_type => || ffi::gst_encoding_profile_get_type(),
     }
 }
 
@@ -26,7 +22,7 @@ impl EncodingProfile {
     ) -> Option<EncodingProfile> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_profile_find(
+            from_glib_full(ffi::gst_encoding_profile_find(
                 targetname.to_glib_none().0,
                 profilename.to_glib_none().0,
                 category.to_glib_none().0,
@@ -37,10 +33,12 @@ impl EncodingProfile {
     pub fn from_discoverer(info: &DiscovererInfo) -> Result<EncodingProfile, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            Option::<_>::from_glib_full(gst_pbutils_sys::gst_encoding_profile_from_discoverer(
+            Option::<_>::from_glib_full(ffi::gst_encoding_profile_from_discoverer(
                 info.to_glib_none().0,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to create EncodingProfile from DiscovererInfo"))
+            .ok_or_else(|| {
+                glib::glib_bool_error!("Failed to create EncodingProfile from DiscovererInfo")
+            })
         }
     }
 }
@@ -57,27 +55,27 @@ pub trait EncodingProfileExt: 'static {
 
     fn get_allow_dynamic_output(&self) -> bool;
 
-    fn get_description(&self) -> Option<GString>;
+    fn get_description(&self) -> Option<glib::GString>;
 
-    fn get_file_extension(&self) -> Option<GString>;
+    fn get_file_extension(&self) -> Option<glib::GString>;
 
     fn get_format(&self) -> gst::Caps;
 
     fn get_input_caps(&self) -> gst::Caps;
 
-    fn get_name(&self) -> Option<GString>;
+    fn get_name(&self) -> Option<glib::GString>;
 
     fn get_presence(&self) -> u32;
 
-    fn get_preset(&self) -> Option<GString>;
+    fn get_preset(&self) -> Option<glib::GString>;
 
-    fn get_preset_name(&self) -> Option<GString>;
+    fn get_preset_name(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_single_segment(&self) -> bool;
 
-    fn get_type_nick(&self) -> Option<GString>;
+    fn get_type_nick(&self) -> Option<glib::GString>;
 
     fn is_enabled(&self) -> bool;
 
@@ -89,7 +87,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn copy(&self) -> EncodingProfile {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_profile_copy(
+            from_glib_full(ffi::gst_encoding_profile_copy(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -97,25 +95,23 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
 
     fn get_allow_dynamic_output(&self) -> bool {
         unsafe {
-            from_glib(
-                gst_pbutils_sys::gst_encoding_profile_get_allow_dynamic_output(
-                    self.as_ref().to_glib_none().0,
-                ),
-            )
-        }
-    }
-
-    fn get_description(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_description(
+            from_glib(ffi::gst_encoding_profile_get_allow_dynamic_output(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_file_extension(&self) -> Option<GString> {
+    fn get_description(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_file_extension(
+            from_glib_none(ffi::gst_encoding_profile_get_description(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn get_file_extension(&self) -> Option<glib::GString> {
+        unsafe {
+            from_glib_none(ffi::gst_encoding_profile_get_file_extension(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -123,7 +119,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
 
     fn get_format(&self) -> gst::Caps {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_profile_get_format(
+            from_glib_full(ffi::gst_encoding_profile_get_format(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -131,37 +127,35 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
 
     fn get_input_caps(&self) -> gst::Caps {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_profile_get_input_caps(
+            from_glib_full(ffi::gst_encoding_profile_get_input_caps(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_name(&self) -> Option<GString> {
+    fn get_name(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_name(
+            from_glib_none(ffi::gst_encoding_profile_get_name(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn get_presence(&self) -> u32 {
-        unsafe {
-            gst_pbutils_sys::gst_encoding_profile_get_presence(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ffi::gst_encoding_profile_get_presence(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_preset(&self) -> Option<GString> {
+    fn get_preset(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_preset(
+            from_glib_none(ffi::gst_encoding_profile_get_preset(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_preset_name(&self) -> Option<GString> {
+    fn get_preset_name(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_preset_name(
+            from_glib_none(ffi::gst_encoding_profile_get_preset_name(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -171,15 +165,15 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_single_segment(&self) -> bool {
         unsafe {
-            from_glib(gst_pbutils_sys::gst_encoding_profile_get_single_segment(
+            from_glib(ffi::gst_encoding_profile_get_single_segment(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
-    fn get_type_nick(&self) -> Option<GString> {
+    fn get_type_nick(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_profile_get_type_nick(
+            from_glib_none(ffi::gst_encoding_profile_get_type_nick(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -187,7 +181,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
 
     fn is_enabled(&self) -> bool {
         unsafe {
-            from_glib(gst_pbutils_sys::gst_encoding_profile_is_enabled(
+            from_glib(ffi::gst_encoding_profile_is_enabled(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -195,7 +189,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
 
     fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool {
         unsafe {
-            from_glib(gst_pbutils_sys::gst_encoding_profile_is_equal(
+            from_glib(ffi::gst_encoding_profile_is_equal(
                 self.as_ref().to_glib_none().0,
                 b.as_ref().to_glib_none().0,
             ))

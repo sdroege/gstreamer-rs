@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use bitflags::bitflags;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
@@ -9,8 +10,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_pbutils_sys;
 
 bitflags! {
     pub struct DiscovererSerializeFlags: u32 {
@@ -22,16 +21,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for DiscovererSerializeFlags {
-    type GlibType = gst_pbutils_sys::GstDiscovererSerializeFlags;
+    type GlibType = ffi::GstDiscovererSerializeFlags;
 
-    fn to_glib(&self) -> gst_pbutils_sys::GstDiscovererSerializeFlags {
+    fn to_glib(&self) -> ffi::GstDiscovererSerializeFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_pbutils_sys::GstDiscovererSerializeFlags> for DiscovererSerializeFlags {
-    fn from_glib(value: gst_pbutils_sys::GstDiscovererSerializeFlags) -> DiscovererSerializeFlags {
+impl FromGlib<ffi::GstDiscovererSerializeFlags> for DiscovererSerializeFlags {
+    fn from_glib(value: ffi::GstDiscovererSerializeFlags) -> DiscovererSerializeFlags {
         skip_assert_initialized!();
         DiscovererSerializeFlags::from_bits_truncate(value)
     }
@@ -39,7 +38,7 @@ impl FromGlib<gst_pbutils_sys::GstDiscovererSerializeFlags> for DiscovererSerial
 
 impl StaticType for DiscovererSerializeFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_pbutils_sys::gst_discoverer_serialize_flags_get_type()) }
+        unsafe { from_glib(ffi::gst_discoverer_serialize_flags_get_type()) }
     }
 }
 
@@ -51,12 +50,12 @@ impl<'a> FromValueOptional<'a> for DiscovererSerializeFlags {
 
 impl<'a> FromValue<'a> for DiscovererSerializeFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DiscovererSerializeFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

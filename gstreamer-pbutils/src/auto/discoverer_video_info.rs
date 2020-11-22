@@ -2,42 +2,41 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::DiscovererStreamInfo;
 use glib::translate::*;
-use gst_pbutils_sys;
-use DiscovererStreamInfo;
 
-glib_wrapper! {
-    pub struct DiscovererVideoInfo(Object<gst_pbutils_sys::GstDiscovererVideoInfo>) @extends DiscovererStreamInfo;
+glib::glib_wrapper! {
+    pub struct DiscovererVideoInfo(Object<ffi::GstDiscovererVideoInfo>) @extends DiscovererStreamInfo;
 
     match fn {
-        get_type => || gst_pbutils_sys::gst_discoverer_video_info_get_type(),
+        get_type => || ffi::gst_discoverer_video_info_get_type(),
     }
 }
 
 impl DiscovererVideoInfo {
     pub fn get_bitrate(&self) -> u32 {
-        unsafe { gst_pbutils_sys::gst_discoverer_video_info_get_bitrate(self.to_glib_none().0) }
+        unsafe { ffi::gst_discoverer_video_info_get_bitrate(self.to_glib_none().0) }
     }
 
     pub fn get_depth(&self) -> u32 {
-        unsafe { gst_pbutils_sys::gst_discoverer_video_info_get_depth(self.to_glib_none().0) }
+        unsafe { ffi::gst_discoverer_video_info_get_depth(self.to_glib_none().0) }
     }
 
     pub fn get_height(&self) -> u32 {
-        unsafe { gst_pbutils_sys::gst_discoverer_video_info_get_height(self.to_glib_none().0) }
+        unsafe { ffi::gst_discoverer_video_info_get_height(self.to_glib_none().0) }
     }
 
     pub fn get_max_bitrate(&self) -> u32 {
-        unsafe { gst_pbutils_sys::gst_discoverer_video_info_get_max_bitrate(self.to_glib_none().0) }
+        unsafe { ffi::gst_discoverer_video_info_get_max_bitrate(self.to_glib_none().0) }
     }
 
     pub fn get_width(&self) -> u32 {
-        unsafe { gst_pbutils_sys::gst_discoverer_video_info_get_width(self.to_glib_none().0) }
+        unsafe { ffi::gst_discoverer_video_info_get_width(self.to_glib_none().0) }
     }
 
     pub fn is_image(&self) -> bool {
         unsafe {
-            from_glib(gst_pbutils_sys::gst_discoverer_video_info_is_image(
+            from_glib(ffi::gst_discoverer_video_info_is_image(
                 self.to_glib_none().0,
             ))
         }
@@ -45,7 +44,7 @@ impl DiscovererVideoInfo {
 
     pub fn is_interlaced(&self) -> bool {
         unsafe {
-            from_glib(gst_pbutils_sys::gst_discoverer_video_info_is_interlaced(
+            from_glib(ffi::gst_discoverer_video_info_is_interlaced(
                 self.to_glib_none().0,
             ))
         }
