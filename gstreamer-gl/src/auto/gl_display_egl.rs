@@ -2,41 +2,39 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::GLDisplay;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_gl_sys;
-use GLDisplay;
 
-glib_wrapper! {
-    pub struct GLDisplayEGL(Object<gst_gl_sys::GstGLDisplayEGL, gst_gl_sys::GstGLDisplayEGLClass>) @extends GLDisplay, gst::Object;
+glib::glib_wrapper! {
+    pub struct GLDisplayEGL(Object<ffi::GstGLDisplayEGL, ffi::GstGLDisplayEGLClass>) @extends GLDisplay, gst::Object;
 
     match fn {
-        get_type => || gst_gl_sys::gst_gl_display_egl_get_type(),
+        get_type => || ffi::gst_gl_display_egl_get_type(),
     }
 }
 
 impl GLDisplayEGL {
     pub fn new() -> GLDisplayEGL {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_gl_sys::gst_gl_display_egl_new()) }
+        unsafe { from_glib_full(ffi::gst_gl_display_egl_new()) }
     }
 
     //pub fn with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {
-    //    unsafe { TODO: call gst_gl_sys:gst_gl_display_egl_new_with_egl_display() }
+    //    unsafe { TODO: call ffi:gst_gl_display_egl_new_with_egl_display() }
     //}
 
     pub fn from_gl_display<P: IsA<GLDisplay>>(display: &P) -> Option<GLDisplayEGL> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_display_egl_from_gl_display(
+            from_glib_full(ffi::gst_gl_display_egl_from_gl_display(
                 display.as_ref().to_glib_none().0,
             ))
         }
     }
 
     //pub fn get_from_native(type_: GLDisplayType, display: /*Unimplemented*/Fundamental: UIntPtr) -> /*Unimplemented*/Option<Fundamental: Pointer> {
-    //    unsafe { TODO: call gst_gl_sys:gst_gl_display_egl_get_from_native() }
+    //    unsafe { TODO: call ffi:gst_gl_display_egl_get_from_native() }
     //}
 }
 

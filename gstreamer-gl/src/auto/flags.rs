@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use bitflags::bitflags;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
@@ -9,8 +10,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_gl_sys;
 
 bitflags! {
     pub struct GLAPI: u32 {
@@ -23,16 +22,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLAPI {
-    type GlibType = gst_gl_sys::GstGLAPI;
+    type GlibType = ffi::GstGLAPI;
 
-    fn to_glib(&self) -> gst_gl_sys::GstGLAPI {
+    fn to_glib(&self) -> ffi::GstGLAPI {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_gl_sys::GstGLAPI> for GLAPI {
-    fn from_glib(value: gst_gl_sys::GstGLAPI) -> GLAPI {
+impl FromGlib<ffi::GstGLAPI> for GLAPI {
+    fn from_glib(value: ffi::GstGLAPI) -> GLAPI {
         skip_assert_initialized!();
         GLAPI::from_bits_truncate(value)
     }
@@ -40,7 +39,7 @@ impl FromGlib<gst_gl_sys::GstGLAPI> for GLAPI {
 
 impl StaticType for GLAPI {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_gl_sys::gst_gl_api_get_type()) }
+        unsafe { from_glib(ffi::gst_gl_api_get_type()) }
     }
 }
 
@@ -52,13 +51,13 @@ impl<'a> FromValueOptional<'a> for GLAPI {
 
 impl<'a> FromValue<'a> for GLAPI {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLAPI {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -80,16 +79,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLDisplayType {
-    type GlibType = gst_gl_sys::GstGLDisplayType;
+    type GlibType = ffi::GstGLDisplayType;
 
-    fn to_glib(&self) -> gst_gl_sys::GstGLDisplayType {
+    fn to_glib(&self) -> ffi::GstGLDisplayType {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_gl_sys::GstGLDisplayType> for GLDisplayType {
-    fn from_glib(value: gst_gl_sys::GstGLDisplayType) -> GLDisplayType {
+impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
+    fn from_glib(value: ffi::GstGLDisplayType) -> GLDisplayType {
         skip_assert_initialized!();
         GLDisplayType::from_bits_truncate(value)
     }
@@ -97,7 +96,7 @@ impl FromGlib<gst_gl_sys::GstGLDisplayType> for GLDisplayType {
 
 impl StaticType for GLDisplayType {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_gl_sys::gst_gl_display_type_get_type()) }
+        unsafe { from_glib(ffi::gst_gl_display_type_get_type()) }
     }
 }
 
@@ -109,13 +108,13 @@ impl<'a> FromValueOptional<'a> for GLDisplayType {
 
 impl<'a> FromValue<'a> for GLDisplayType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLDisplayType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -131,16 +130,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLPlatform {
-    type GlibType = gst_gl_sys::GstGLPlatform;
+    type GlibType = ffi::GstGLPlatform;
 
-    fn to_glib(&self) -> gst_gl_sys::GstGLPlatform {
+    fn to_glib(&self) -> ffi::GstGLPlatform {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_gl_sys::GstGLPlatform> for GLPlatform {
-    fn from_glib(value: gst_gl_sys::GstGLPlatform) -> GLPlatform {
+impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
+    fn from_glib(value: ffi::GstGLPlatform) -> GLPlatform {
         skip_assert_initialized!();
         GLPlatform::from_bits_truncate(value)
     }
@@ -148,7 +147,7 @@ impl FromGlib<gst_gl_sys::GstGLPlatform> for GLPlatform {
 
 impl StaticType for GLPlatform {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_gl_sys::gst_gl_platform_get_type()) }
+        unsafe { from_glib(ffi::gst_gl_platform_get_type()) }
     }
 }
 
@@ -160,13 +159,13 @@ impl<'a> FromValueOptional<'a> for GLPlatform {
 
 impl<'a> FromValue<'a> for GLPlatform {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLPlatform {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -180,16 +179,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLSLProfile {
-    type GlibType = gst_gl_sys::GstGLSLProfile;
+    type GlibType = ffi::GstGLSLProfile;
 
-    fn to_glib(&self) -> gst_gl_sys::GstGLSLProfile {
+    fn to_glib(&self) -> ffi::GstGLSLProfile {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_gl_sys::GstGLSLProfile> for GLSLProfile {
-    fn from_glib(value: gst_gl_sys::GstGLSLProfile) -> GLSLProfile {
+impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
+    fn from_glib(value: ffi::GstGLSLProfile) -> GLSLProfile {
         skip_assert_initialized!();
         GLSLProfile::from_bits_truncate(value)
     }
@@ -197,7 +196,7 @@ impl FromGlib<gst_gl_sys::GstGLSLProfile> for GLSLProfile {
 
 impl StaticType for GLSLProfile {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_gl_sys::gst_glsl_profile_get_type()) }
+        unsafe { from_glib(ffi::gst_glsl_profile_get_type()) }
     }
 }
 
@@ -209,12 +208,12 @@ impl<'a> FromValueOptional<'a> for GLSLProfile {
 
 impl<'a> FromValue<'a> for GLSLProfile {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLSLProfile {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

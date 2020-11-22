@@ -2,27 +2,25 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::GLDisplay;
 use glib::translate::*;
-use gst;
-use gst_gl_sys;
-use GLDisplay;
 
-glib_wrapper! {
-    pub struct GLDisplayX11(Object<gst_gl_sys::GstGLDisplayX11, gst_gl_sys::GstGLDisplayX11Class>) @extends GLDisplay, gst::Object;
+glib::glib_wrapper! {
+    pub struct GLDisplayX11(Object<ffi::GstGLDisplayX11, ffi::GstGLDisplayX11Class>) @extends GLDisplay, gst::Object;
 
     match fn {
-        get_type => || gst_gl_sys::gst_gl_display_x11_get_type(),
+        get_type => || ffi::gst_gl_display_x11_get_type(),
     }
 }
 
 impl GLDisplayX11 {
     pub fn new(name: Option<&str>) -> GLDisplayX11 {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_gl_sys::gst_gl_display_x11_new(name.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_gl_display_x11_new(name.to_glib_none().0)) }
     }
 
     //pub fn with_display(display: /*Unimplemented*/Fundamental: Pointer) -> GLDisplayX11 {
-    //    unsafe { TODO: call gst_gl_sys:gst_gl_display_x11_new_with_display() }
+    //    unsafe { TODO: call ffi:gst_gl_display_x11_new_with_display() }
     //}
 }
 

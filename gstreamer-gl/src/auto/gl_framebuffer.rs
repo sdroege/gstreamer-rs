@@ -2,18 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::GLContext;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_gl_sys;
 use std::mem;
-use GLContext;
 
-glib_wrapper! {
-    pub struct GLFramebuffer(Object<gst_gl_sys::GstGLFramebuffer, gst_gl_sys::GstGLFramebufferClass>) @extends gst::Object;
+glib::glib_wrapper! {
+    pub struct GLFramebuffer(Object<ffi::GstGLFramebuffer, ffi::GstGLFramebufferClass>) @extends gst::Object;
 
     match fn {
-        get_type => || gst_gl_sys::gst_gl_framebuffer_get_type(),
+        get_type => || ffi::gst_gl_framebuffer_get_type(),
     }
 }
 
@@ -21,7 +19,7 @@ impl GLFramebuffer {
     pub fn new<P: IsA<GLContext>>(context: &P) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_framebuffer_new(
+            from_glib_full(ffi::gst_gl_framebuffer_new(
                 context.as_ref().to_glib_none().0,
             ))
         }
@@ -34,7 +32,7 @@ impl GLFramebuffer {
     ) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_gl_framebuffer_new_with_default_depth(
+            from_glib_none(ffi::gst_gl_framebuffer_new_with_default_depth(
                 context.as_ref().to_glib_none().0,
                 width,
                 height,
@@ -62,24 +60,24 @@ pub trait GLFramebufferExt: 'static {
 
 impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
     //fn attach(&self, attachment_point: u32, mem: /*Ignored*/&mut GLBaseMemory) {
-    //    unsafe { TODO: call gst_gl_sys:gst_gl_framebuffer_attach() }
+    //    unsafe { TODO: call ffi:gst_gl_framebuffer_attach() }
     //}
 
     fn bind(&self) {
         unsafe {
-            gst_gl_sys::gst_gl_framebuffer_bind(self.as_ref().to_glib_none().0);
+            ffi::gst_gl_framebuffer_bind(self.as_ref().to_glib_none().0);
         }
     }
 
     //fn draw_to_texture(&self, mem: /*Ignored*/&mut GLMemory, func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
-    //    unsafe { TODO: call gst_gl_sys:gst_gl_framebuffer_draw_to_texture() }
+    //    unsafe { TODO: call ffi:gst_gl_framebuffer_draw_to_texture() }
     //}
 
     fn get_effective_dimensions(&self) -> (u32, u32) {
         unsafe {
             let mut width = mem::MaybeUninit::uninit();
             let mut height = mem::MaybeUninit::uninit();
-            gst_gl_sys::gst_gl_framebuffer_get_effective_dimensions(
+            ffi::gst_gl_framebuffer_get_effective_dimensions(
                 self.as_ref().to_glib_none().0,
                 width.as_mut_ptr(),
                 height.as_mut_ptr(),
@@ -91,6 +89,6 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
     }
 
     fn get_id(&self) -> u32 {
-        unsafe { gst_gl_sys::gst_gl_framebuffer_get_id(self.as_ref().to_glib_none().0) }
+        unsafe { ffi::gst_gl_framebuffer_get_id(self.as_ref().to_glib_none().0) }
     }
 }

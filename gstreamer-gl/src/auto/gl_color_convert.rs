@@ -2,18 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::GLContext;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_gl_sys;
-use GLContext;
 
-glib_wrapper! {
-    pub struct GLColorConvert(Object<gst_gl_sys::GstGLColorConvert, gst_gl_sys::GstGLColorConvertClass>) @extends gst::Object;
+glib::glib_wrapper! {
+    pub struct GLColorConvert(Object<ffi::GstGLColorConvert, ffi::GstGLColorConvertClass>) @extends gst::Object;
 
     match fn {
-        get_type => || gst_gl_sys::gst_gl_color_convert_get_type(),
+        get_type => || ffi::gst_gl_color_convert_get_type(),
     }
 }
 
@@ -21,7 +18,7 @@ impl GLColorConvert {
     pub fn new<P: IsA<GLContext>>(context: &P) -> GLColorConvert {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_color_convert_new(
+            from_glib_full(ffi::gst_gl_color_convert_new(
                 context.as_ref().to_glib_none().0,
             ))
         }
@@ -33,8 +30,8 @@ impl GLColorConvert {
         out_caps: &gst::Caps,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(
-                gst_gl_sys::gst_gl_color_convert_set_caps(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_gl_color_convert_set_caps(
                     self.to_glib_none().0,
                     in_caps.to_glib_none().0,
                     out_caps.to_glib_none().0
@@ -52,7 +49,7 @@ impl GLColorConvert {
     ) -> Option<gst::Caps> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_color_convert_transform_caps(
+            from_glib_full(ffi::gst_gl_color_convert_transform_caps(
                 context.as_ref().to_glib_none().0,
                 direction.to_glib(),
                 caps.to_glib_none().0,

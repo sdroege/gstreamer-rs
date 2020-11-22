@@ -2,21 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::GLContext;
+use crate::GLSLProfile;
+use crate::GLSLVersion;
 use glib::object::IsA;
 use glib::translate::*;
-use gst;
-use gst_gl_sys;
 use std::ptr;
-use GLContext;
-use GLSLProfile;
-use GLSLVersion;
 
-glib_wrapper! {
-    pub struct GLSLStage(Object<gst_gl_sys::GstGLSLStage, gst_gl_sys::GstGLSLStageClass>) @extends gst::Object;
+glib::glib_wrapper! {
+    pub struct GLSLStage(Object<ffi::GstGLSLStage, ffi::GstGLSLStageClass>) @extends gst::Object;
 
     match fn {
-        get_type => || gst_gl_sys::gst_glsl_stage_get_type(),
+        get_type => || ffi::gst_glsl_stage_get_type(),
     }
 }
 
@@ -24,7 +21,7 @@ impl GLSLStage {
     pub fn new<P: IsA<GLContext>>(context: &P, type_: u32) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new(
+            from_glib_none(ffi::gst_glsl_stage_new(
                 context.as_ref().to_glib_none().0,
                 type_,
             ))
@@ -34,7 +31,7 @@ impl GLSLStage {
     pub fn new_default_fragment<P: IsA<GLContext>>(context: &P) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_default_fragment(
+            from_glib_none(ffi::gst_glsl_stage_new_default_fragment(
                 context.as_ref().to_glib_none().0,
             ))
         }
@@ -43,7 +40,7 @@ impl GLSLStage {
     pub fn new_default_vertex<P: IsA<GLContext>>(context: &P) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_default_vertex(
+            from_glib_none(ffi::gst_glsl_stage_new_default_vertex(
                 context.as_ref().to_glib_none().0,
             ))
         }
@@ -58,7 +55,7 @@ impl GLSLStage {
     ) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_with_string(
+            from_glib_none(ffi::gst_glsl_stage_new_with_string(
                 context.as_ref().to_glib_none().0,
                 type_,
                 version.to_glib(),
@@ -78,7 +75,7 @@ impl GLSLStage {
         skip_assert_initialized!();
         let n_strings = str.len() as i32;
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_with_strings(
+            from_glib_none(ffi::gst_glsl_stage_new_with_strings(
                 context.as_ref().to_glib_none().0,
                 type_,
                 version.to_glib(),
@@ -92,7 +89,7 @@ impl GLSLStage {
     pub fn compile(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = gst_gl_sys::gst_glsl_stage_compile(self.to_glib_none().0, &mut error);
+            let _ = ffi::gst_glsl_stage_compile(self.to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(())
             } else {
@@ -102,27 +99,19 @@ impl GLSLStage {
     }
 
     pub fn get_handle(&self) -> u32 {
-        unsafe { gst_gl_sys::gst_glsl_stage_get_handle(self.to_glib_none().0) }
+        unsafe { ffi::gst_glsl_stage_get_handle(self.to_glib_none().0) }
     }
 
     pub fn get_profile(&self) -> GLSLProfile {
-        unsafe {
-            from_glib(gst_gl_sys::gst_glsl_stage_get_profile(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_glsl_stage_get_profile(self.to_glib_none().0)) }
     }
 
     pub fn get_shader_type(&self) -> u32 {
-        unsafe { gst_gl_sys::gst_glsl_stage_get_shader_type(self.to_glib_none().0) }
+        unsafe { ffi::gst_glsl_stage_get_shader_type(self.to_glib_none().0) }
     }
 
     pub fn get_version(&self) -> GLSLVersion {
-        unsafe {
-            from_glib(gst_gl_sys::gst_glsl_stage_get_version(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib(ffi::gst_glsl_stage_get_version(self.to_glib_none().0)) }
     }
 
     pub fn set_strings(
@@ -133,8 +122,8 @@ impl GLSLStage {
     ) -> Result<(), glib::error::BoolError> {
         let n_strings = str.len() as i32;
         unsafe {
-            glib_result_from_gboolean!(
-                gst_gl_sys::gst_glsl_stage_set_strings(
+            glib::glib_result_from_gboolean!(
+                ffi::gst_glsl_stage_set_strings(
                     self.to_glib_none().0,
                     version.to_glib(),
                     profile.to_glib(),

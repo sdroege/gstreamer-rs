@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::GLContext;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -9,19 +10,14 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib_sys;
-use gobject_sys;
-use gst;
-use gst_gl_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use GLContext;
 
-glib_wrapper! {
-    pub struct GLBaseFilter(Object<gst_gl_sys::GstGLBaseFilter, gst_gl_sys::GstGLBaseFilterClass>) @extends gst::Object;
+glib::glib_wrapper! {
+    pub struct GLBaseFilter(Object<ffi::GstGLBaseFilter, ffi::GstGLBaseFilterClass>) @extends gst::Object;
 
     match fn {
-        get_type => || gst_gl_sys::gst_gl_base_filter_get_type(),
+        get_type => || ffi::gst_gl_base_filter_get_type(),
     }
 }
 
@@ -52,7 +48,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_base_filter_find_gl_context(
+            from_glib(ffi::gst_gl_base_filter_find_gl_context(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -62,7 +58,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_gl_context(&self) -> Option<GLContext> {
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_base_filter_get_gl_context(
+            from_glib_full(ffi::gst_gl_base_filter_get_gl_context(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -71,8 +67,8 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     fn get_property_context(&self) -> Option<GLContext> {
         unsafe {
             let mut value = Value::from_type(<GLContext as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"context\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
@@ -87,9 +83,9 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
-            this: *mut gst_gl_sys::GstGLBaseFilter,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::GstGLBaseFilter,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<GLBaseFilter>,
         {
