@@ -242,7 +242,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 drop(cr);
                 unsafe {
                     assert_eq!(
-                        cairo_sys::cairo_surface_get_reference_count(surface.to_raw_none()),
+                        cairo::ffi::cairo_surface_get_reference_count(surface.to_raw_none()),
                         1
                     );
                     let buffer = glib::translate::from_glib_none(buffer_ptr);

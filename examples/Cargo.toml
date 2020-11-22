@@ -19,7 +19,6 @@ ges = { package = "gstreamer-editing-services", path = "../gstreamer-editing-ser
 gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", optional = true }
 gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp", optional = true }
 gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "../gstreamer-rtsp-server", optional = true }
-gst-rtsp-server-sys = { package = "gstreamer-rtsp-server-sys", path = "../gstreamer-rtsp-server/sys", features = ["v1_8"], optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gio = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
@@ -28,7 +27,6 @@ derive_more = "0.99.5"
 futures = "0.3"
 byte-slice-cast = "1"
 cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs", features=["use_glib"], optional = true }
-cairo-sys-rs = { git = "https://github.com/gtk-rs/gtk-rs", features=["use_glib"], optional = true }
 pango = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 glutin = { version = "0.21", optional = true }
@@ -46,11 +44,11 @@ gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
 rtsp-server = ["gst-rtsp-server", "gst-rtsp", "gst-sdp"]
-rtsp-server-record = ["gst-rtsp-server-sys", "gst-rtsp-server", "gst-rtsp", "gio"]
+rtsp-server-record = ["gst-rtsp-server", "gst-rtsp", "gio"]
 v1_10 = ["gst/v1_10"]
 v1_14 = ["gst/v1_14"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
-overlay-composition = ["pango", "pangocairo", "cairo-rs", "cairo-sys-rs" ]
+overlay-composition = ["pango", "pangocairo", "cairo-rs"]
 gl = ["gst-gl", "gl_generator", "glutin"]
 gl-egl = ["gst-gl/egl"]
 gl-x11 = ["gst-gl/x11"]

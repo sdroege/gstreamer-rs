@@ -10,7 +10,6 @@ use gst::prelude::*;
 mod examples_common;
 
 mod custom_meta {
-    use gst::gst_sys;
     use gst::prelude::*;
     use std::fmt;
     use std::ptr;
@@ -31,7 +30,7 @@ mod custom_meta {
         ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
             unsafe {
                 // First add it: this will store an empty label via custom_meta_init().
-                let meta = gst_sys::gst_buffer_add_meta(
+                let meta = gst::ffi::gst_buffer_add_meta(
                     buffer.as_mut_ptr(),
                     imp::custom_meta_get_info(),
                     ptr::null_mut(),
@@ -72,9 +71,7 @@ mod custom_meta {
 
     // Actual unsafe implementation of the meta.
     mod imp {
-        use glib::glib_sys;
         use glib::translate::*;
-        use gst::gst_sys;
         use once_cell::sync::Lazy;
         use std::mem;
         use std::ptr;
@@ -82,14 +79,14 @@ mod custom_meta {
         // This is the C type that is actually stored as meta inside the buffers.
         #[repr(C)]
         pub struct CustomMeta {
-            parent: gst_sys::GstMeta,
+            parent: gst::ffi::GstMeta,
             pub(super) label: String,
         }
 
         // Function to register the meta API and get a type back.
         pub(super) fn custom_meta_api_get_type() -> glib::Type {
             static TYPE: Lazy<glib::Type> = Lazy::new(|| unsafe {
-                let t = from_glib(gst_sys::gst_meta_api_type_register(
+                let t = from_glib(gst::ffi::gst_meta_api_type_register(
                     b"MyCustomMetaAPI\0".as_ptr() as *const _,
                     // We provide no tags here as our meta is just a label and does
                     // not refer to any specific aspect of the buffer
@@ -107,10 +104,10 @@ mod custom_meta {
         // Initialization function for our meta. This needs to ensure all fields are correctly
         // initialized. They will contain random memory before.
         unsafe extern "C" fn custom_meta_init(
-            meta: *mut gst_sys::GstMeta,
-            _params: glib_sys::gpointer,
-            _buffer: *mut gst_sys::GstBuffer,
-        ) -> glib_sys::gboolean {
+            meta: *mut gst::ffi::GstMeta,
+            _params: glib::ffi::gpointer,
+            _buffer: *mut gst::ffi::GstBuffer,
+        ) -> glib::ffi::gboolean {
             let meta = &mut *(meta as *mut CustomMeta);
 
             // Need to initialize all our fields correctly here
@@ -121,8 +118,8 @@ mod custom_meta {
 
         // Free function for our meta. This needs to free/drop all memory we allocated.
         unsafe extern "C" fn custom_meta_free(
-            meta: *mut gst_sys::GstMeta,
-            _buffer: *mut gst_sys::GstBuffer,
+            meta: *mut gst::ffi::GstMeta,
+            _buffer: *mut gst::ffi::GstBuffer,
         ) {
             let meta = &mut *(meta as *mut CustomMeta);
 
@@ -134,12 +131,12 @@ mod custom_meta {
         // in a way that is compatible with the transformation type. In this case we just always
         // copy it over.
         unsafe extern "C" fn custom_meta_transform(
-            dest: *mut gst_sys::GstBuffer,
-            meta: *mut gst_sys::GstMeta,
-            _buffer: *mut gst_sys::GstBuffer,
-            _type_: glib_sys::GQuark,
-            _data: glib_sys::gpointer,
-        ) -> glib_sys::gboolean {
+            dest: *mut gst::ffi::GstBuffer,
+            meta: *mut gst::ffi::GstMeta,
+            _buffer: *mut gst::ffi::GstBuffer,
+            _type_: glib::ffi::GQuark,
+            _data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
             let meta = &mut *(meta as *mut CustomMeta);
 
             // We simply copy over our meta here. Other metas might have to look at the type
@@ -150,21 +147,21 @@ mod custom_meta {
         }
 
         // Register the meta itself with its functions.
-        pub(super) fn custom_meta_get_info() -> *const gst_sys::GstMetaInfo {
-            struct MetaInfo(ptr::NonNull<gst_sys::GstMetaInfo>);
+        pub(super) fn custom_meta_get_info() -> *const gst::ffi::GstMetaInfo {
+            struct MetaInfo(ptr::NonNull<gst::ffi::GstMetaInfo>);
             unsafe impl Send for MetaInfo {}
             unsafe impl Sync for MetaInfo {}
 
             static META_INFO: Lazy<MetaInfo> = Lazy::new(|| unsafe {
                 MetaInfo(
-                    ptr::NonNull::new(gst_sys::gst_meta_register(
+                    ptr::NonNull::new(gst::ffi::gst_meta_register(
                         custom_meta_api_get_type().to_glib(),
                         b"MyCustomMeta\0".as_ptr() as *const _,
                         mem::size_of::<CustomMeta>(),
                         Some(custom_meta_init),
                         Some(custom_meta_free),
                         Some(custom_meta_transform),
-                    ) as *mut gst_sys::GstMetaInfo)
+                    ) as *mut gst::ffi::GstMetaInfo)
                     .expect("Failed to register meta API"),
                 )
             });

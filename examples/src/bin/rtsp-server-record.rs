@@ -84,7 +84,7 @@ fn main_loop() -> Result<(), Error> {
     // This declares that the user "user" (once authenticated) has a role that
     // allows them to access and construct media factories.
     unsafe {
-        gst_rtsp_server_sys::gst_rtsp_media_factory_add_role(
+        gst_rtsp_server::ffi::gst_rtsp_media_factory_add_role(
             factory.to_glib_none().0,
             "user".to_glib_none().0,
             gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_ACCESS
