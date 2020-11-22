@@ -5,13 +5,11 @@ use std::mem;
 use std::ptr;
 use std::slice;
 
-use gst_rtp_sys;
-
 pub enum Readable {}
 pub enum Writable {}
 
 pub struct RTPBuffer<'a, T> {
-    rtp_buffer: gst_rtp_sys::GstRTPBuffer,
+    rtp_buffer: ffi::GstRTPBuffer,
     buffer: &'a gst::Buffer,
     phantom: PhantomData<T>,
 }
@@ -36,9 +34,9 @@ impl<'a> RTPBuffer<'a, Readable> {
         skip_assert_initialized!();
         unsafe {
             let mut rtp_buffer = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_rtp_sys::gst_rtp_buffer_map(
+            let res: bool = from_glib(ffi::gst_rtp_buffer_map(
                 buffer.as_mut_ptr(),
-                gst_sys::GST_MAP_READ,
+                gst::ffi::GST_MAP_READ,
                 rtp_buffer.as_mut_ptr(),
             ));
 
@@ -49,7 +47,7 @@ impl<'a> RTPBuffer<'a, Readable> {
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib_bool_error!("Failed to map RTP buffer readable"))
+                Err(glib::glib_bool_error!("Failed to map RTP buffer readable"))
             }
         }
     }
@@ -62,9 +60,9 @@ impl<'a> RTPBuffer<'a, Writable> {
         skip_assert_initialized!();
         unsafe {
             let mut rtp_buffer = mem::MaybeUninit::zeroed();
-            let res: bool = from_glib(gst_rtp_sys::gst_rtp_buffer_map(
+            let res: bool = from_glib(ffi::gst_rtp_buffer_map(
                 buffer.as_mut_ptr(),
-                gst_sys::GST_MAP_READWRITE,
+                gst::ffi::GST_MAP_READWRITE,
                 rtp_buffer.as_mut_ptr(),
             ));
 
@@ -75,47 +73,45 @@ impl<'a> RTPBuffer<'a, Writable> {
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib_bool_error!("Failed to map RTP buffer writable"))
+                Err(glib::glib_bool_error!("Failed to map RTP buffer writable"))
             }
         }
     }
 
     pub fn set_seq(&mut self, seq: u16) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_seq(&mut self.rtp_buffer, seq);
+            ffi::gst_rtp_buffer_set_seq(&mut self.rtp_buffer, seq);
         }
     }
 
     pub fn set_marker(&mut self, m: bool) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_marker(&mut self.rtp_buffer, m.to_glib());
+            ffi::gst_rtp_buffer_set_marker(&mut self.rtp_buffer, m.to_glib());
         }
     }
 
     pub fn set_payload_type(&mut self, pt: u8) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_payload_type(&mut self.rtp_buffer, pt);
+            ffi::gst_rtp_buffer_set_payload_type(&mut self.rtp_buffer, pt);
         }
     }
 
     pub fn set_ssrc(&mut self, ssrc: u32) {
-        unsafe { gst_rtp_sys::gst_rtp_buffer_set_ssrc(&mut self.rtp_buffer, ssrc) }
+        unsafe { ffi::gst_rtp_buffer_set_ssrc(&mut self.rtp_buffer, ssrc) }
     }
 
     pub fn set_csrc(&mut self, idx: u8, ssrc: u32) {
-        unsafe { gst_rtp_sys::gst_rtp_buffer_set_csrc(&mut self.rtp_buffer, idx, ssrc) }
+        unsafe { ffi::gst_rtp_buffer_set_csrc(&mut self.rtp_buffer, idx, ssrc) }
     }
 
     pub fn set_timestamp(&mut self, rtptime: u32) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_timestamp(&mut self.rtp_buffer, rtptime);
+            ffi::gst_rtp_buffer_set_timestamp(&mut self.rtp_buffer, rtptime);
         }
     }
 
     pub fn set_extension(&mut self, extension: bool) {
-        unsafe {
-            gst_rtp_sys::gst_rtp_buffer_set_extension(&mut self.rtp_buffer, extension.to_glib())
-        }
+        unsafe { ffi::gst_rtp_buffer_set_extension(&mut self.rtp_buffer, extension.to_glib()) }
     }
 
     pub fn add_extension_onebyte_header(
@@ -132,16 +128,18 @@ impl<'a> RTPBuffer<'a, Writable> {
             "data size should be between 1 and 16 (inclusive"
         );
         unsafe {
-            let result: bool = from_glib(gst_rtp_sys::gst_rtp_buffer_add_extension_onebyte_header(
+            let result: bool = from_glib(ffi::gst_rtp_buffer_add_extension_onebyte_header(
                 &mut self.rtp_buffer,
                 id,
-                data.as_ptr() as glib_sys::gconstpointer,
+                data.as_ptr() as glib::ffi::gconstpointer,
                 data.len() as u32,
             ));
             if result {
                 Ok(())
             } else {
-                Err(glib_bool_error!("Failed to add onebyte header extension"))
+                Err(glib::glib_bool_error!(
+                    "Failed to add onebyte header extension"
+                ))
             }
         }
     }
@@ -159,18 +157,19 @@ impl<'a> RTPBuffer<'a, Writable> {
         );
         assert!(data.len() < 256, "data size should be smaller than 256");
         unsafe {
-            let result: bool =
-                from_glib(gst_rtp_sys::gst_rtp_buffer_add_extension_twobytes_header(
-                    &mut self.rtp_buffer,
-                    appbits,
-                    id,
-                    data.as_ptr() as glib_sys::gconstpointer,
-                    data.len() as u32,
-                ));
+            let result: bool = from_glib(ffi::gst_rtp_buffer_add_extension_twobytes_header(
+                &mut self.rtp_buffer,
+                appbits,
+                id,
+                data.as_ptr() as glib::ffi::gconstpointer,
+                data.len() as u32,
+            ));
             if result {
                 Ok(())
             } else {
-                Err(glib_bool_error!("Failed to add twobytes header extension"))
+                Err(glib::glib_bool_error!(
+                    "Failed to add twobytes header extension"
+                ))
             }
         }
     }
@@ -178,37 +177,29 @@ impl<'a> RTPBuffer<'a, Writable> {
 
 impl<'a, T> RTPBuffer<'a, T> {
     pub fn get_seq(&self) -> u16 {
-        unsafe {
-            gst_rtp_sys::gst_rtp_buffer_get_seq(glib::translate::mut_override(&self.rtp_buffer))
-        }
+        unsafe { ffi::gst_rtp_buffer_get_seq(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
     pub fn get_payload_type(&self) -> u8 {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_get_payload_type(glib::translate::mut_override(
-                &self.rtp_buffer,
-            ))
+            ffi::gst_rtp_buffer_get_payload_type(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
     pub fn get_ssrc(&self) -> u32 {
-        unsafe {
-            gst_rtp_sys::gst_rtp_buffer_get_ssrc(glib::translate::mut_override(&self.rtp_buffer))
-        }
+        unsafe { ffi::gst_rtp_buffer_get_ssrc(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
     pub fn get_timestamp(&self) -> u32 {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_get_timestamp(glib::translate::mut_override(
-                &self.rtp_buffer,
-            ))
+            ffi::gst_rtp_buffer_get_timestamp(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
     pub fn get_csrc(&self, idx: u8) -> Option<u32> {
         if idx < self.get_csrc_count() {
             unsafe {
-                Some(gst_rtp_sys::gst_rtp_buffer_get_csrc(
+                Some(ffi::gst_rtp_buffer_get_csrc(
                     glib::translate::mut_override(&self.rtp_buffer),
                     idx,
                 ))
@@ -220,15 +211,13 @@ impl<'a, T> RTPBuffer<'a, T> {
 
     pub fn get_csrc_count(&self) -> u8 {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_get_csrc_count(glib::translate::mut_override(
-                &self.rtp_buffer,
-            ))
+            ffi::gst_rtp_buffer_get_csrc_count(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
     pub fn get_marker(&self) -> bool {
         unsafe {
-            from_glib(gst_rtp_sys::gst_rtp_buffer_get_marker(
+            from_glib(ffi::gst_rtp_buffer_get_marker(
                 glib::translate::mut_override(&self.rtp_buffer),
             ))
         }
@@ -236,9 +225,8 @@ impl<'a, T> RTPBuffer<'a, T> {
 
     pub fn get_payload_size(&self) -> u32 {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_get_payload_len(glib::translate::mut_override(
-                &self.rtp_buffer,
-            )) as u32
+            ffi::gst_rtp_buffer_get_payload_len(glib::translate::mut_override(&self.rtp_buffer))
+                as u32
         }
     }
 
@@ -248,11 +236,10 @@ impl<'a, T> RTPBuffer<'a, T> {
             return Ok(&[]);
         }
         unsafe {
-            let pointer = gst_rtp_sys::gst_rtp_buffer_get_payload(glib::translate::mut_override(
-                &self.rtp_buffer,
-            ));
+            let pointer =
+                ffi::gst_rtp_buffer_get_payload(glib::translate::mut_override(&self.rtp_buffer));
             if pointer.is_null() {
-                Err(glib_bool_error!("Failed to get payload data"))
+                Err(glib::glib_bool_error!("Failed to get payload data"))
             } else {
                 Ok(slice::from_raw_parts(pointer as *const u8, size as usize))
             }
@@ -261,7 +248,7 @@ impl<'a, T> RTPBuffer<'a, T> {
 
     pub fn get_extension(&self) -> bool {
         unsafe {
-            from_glib(gst_rtp_sys::gst_rtp_buffer_get_extension(
+            from_glib(ffi::gst_rtp_buffer_get_extension(
                 glib::translate::mut_override(&self.rtp_buffer),
             ))
         }
@@ -270,7 +257,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     pub fn get_extension_bytes(&self) -> Option<(u16, glib::Bytes)> {
         unsafe {
             let mut bits: u16 = 0;
-            match from_glib_full(gst_rtp_sys::gst_rtp_buffer_get_extension_bytes(
+            match from_glib_full(ffi::gst_rtp_buffer_get_extension_bytes(
                 glib::translate::mut_override(&self.rtp_buffer),
                 &mut bits,
             )) {
@@ -286,7 +273,7 @@ impl<'a, T> RTPBuffer<'a, T> {
             // FIXME: Workaround for gstreamer-rtp-sys having the wrong type for this parameter
             let data_ptr = &mut data as *mut *mut u8 as *mut u8;
             let mut size: u32 = 0;
-            let result: bool = from_glib(gst_rtp_sys::gst_rtp_buffer_get_extension_onebyte_header(
+            let result: bool = from_glib(ffi::gst_rtp_buffer_get_extension_onebyte_header(
                 glib::translate::mut_override(&self.rtp_buffer),
                 id,
                 nth,
@@ -308,15 +295,14 @@ impl<'a, T> RTPBuffer<'a, T> {
             let data_ptr = &mut data as *mut *mut u8 as *mut u8;
             let mut size: u32 = 0;
             let mut appbits = 0;
-            let result: bool =
-                from_glib(gst_rtp_sys::gst_rtp_buffer_get_extension_twobytes_header(
-                    glib::translate::mut_override(&self.rtp_buffer),
-                    &mut appbits,
-                    id,
-                    nth,
-                    data_ptr,
-                    &mut size,
-                ));
+            let result: bool = from_glib(ffi::gst_rtp_buffer_get_extension_twobytes_header(
+                glib::translate::mut_override(&self.rtp_buffer),
+                &mut appbits,
+                id,
+                nth,
+                data_ptr,
+                &mut size,
+            ));
             if result {
                 Some((
                     appbits,
@@ -332,7 +318,7 @@ impl<'a, T> RTPBuffer<'a, T> {
 impl<'a, T> Drop for RTPBuffer<'a, T> {
     fn drop(&mut self) {
         unsafe {
-            gst_rtp_sys::gst_rtp_buffer_unmap(&mut self.rtp_buffer);
+            ffi::gst_rtp_buffer_unmap(&mut self.rtp_buffer);
         }
     }
 }
@@ -353,19 +339,19 @@ impl RTPBufferExt for gst::Buffer {
     ) -> Result<gst::Buffer, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<_>::from_glib_full(gst_rtp_sys::gst_rtp_buffer_new_allocate(
+            Option::<_>::from_glib_full(ffi::gst_rtp_buffer_new_allocate(
                 payload_len,
                 pad_len,
                 csrc_count,
             ))
-            .ok_or_else(|| glib_bool_error!("Failed to allocate new RTP buffer"))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate new RTP buffer"))
         }
     }
 }
 
 pub fn compare_seqnum(seqnum1: u16, seqnum2: u16) -> i32 {
     skip_assert_initialized!();
-    unsafe { gst_rtp_sys::gst_rtp_buffer_compare_seqnum(seqnum1, seqnum2) }
+    unsafe { ffi::gst_rtp_buffer_compare_seqnum(seqnum1, seqnum2) }
 }
 
 #[cfg(test)]

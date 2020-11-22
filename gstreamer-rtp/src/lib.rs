@@ -8,22 +8,11 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-#[macro_use]
-extern crate bitflags;
-extern crate once_cell;
-
-#[allow(unused_imports)]
-#[macro_use]
-extern crate glib;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_rtp_sys as gst_rtp_sys;
-extern crate gstreamer_sys as gst_sys;
+pub use ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -38,10 +27,10 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::match_same_arms)]
 #[allow(non_snake_case)]
 mod auto;
-pub use auto::*;
+pub use crate::auto::*;
 
 pub mod rtp_buffer;
-pub use rtp_buffer::{compare_seqnum, RTPBuffer, RTPBufferExt};
+pub use crate::rtp_buffer::{compare_seqnum, RTPBuffer, RTPBufferExt};
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -49,7 +38,7 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use auto::traits::*;
+    pub use crate::auto::traits::*;
 
-    pub use rtp_buffer::RTPBufferExt;
+    pub use crate::rtp_buffer::RTPBufferExt;
 }
