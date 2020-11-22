@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use bitflags::bitflags;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
@@ -9,8 +10,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_rtp_sys;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -25,9 +24,9 @@ bitflags! {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl ToGlib for RTPBufferFlags {
-    type GlibType = gst_rtp_sys::GstRTPBufferFlags;
+    type GlibType = ffi::GstRTPBufferFlags;
 
-    fn to_glib(&self) -> gst_rtp_sys::GstRTPBufferFlags {
+    fn to_glib(&self) -> ffi::GstRTPBufferFlags {
         self.bits()
     }
 }
@@ -35,8 +34,8 @@ impl ToGlib for RTPBufferFlags {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
-impl FromGlib<gst_rtp_sys::GstRTPBufferFlags> for RTPBufferFlags {
-    fn from_glib(value: gst_rtp_sys::GstRTPBufferFlags) -> RTPBufferFlags {
+impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
+    fn from_glib(value: ffi::GstRTPBufferFlags) -> RTPBufferFlags {
         skip_assert_initialized!();
         RTPBufferFlags::from_bits_truncate(value)
     }
@@ -46,7 +45,7 @@ impl FromGlib<gst_rtp_sys::GstRTPBufferFlags> for RTPBufferFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StaticType for RTPBufferFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtp_sys::gst_rtp_buffer_flags_get_type()) }
+        unsafe { from_glib(ffi::gst_rtp_buffer_flags_get_type()) }
     }
 }
 
@@ -62,7 +61,7 @@ impl<'a> FromValueOptional<'a> for RTPBufferFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> FromValue<'a> for RTPBufferFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
@@ -70,7 +69,7 @@ impl<'a> FromValue<'a> for RTPBufferFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SetValue for RTPBufferFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -82,16 +81,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for RTPBufferMapFlags {
-    type GlibType = gst_rtp_sys::GstRTPBufferMapFlags;
+    type GlibType = ffi::GstRTPBufferMapFlags;
 
-    fn to_glib(&self) -> gst_rtp_sys::GstRTPBufferMapFlags {
+    fn to_glib(&self) -> ffi::GstRTPBufferMapFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_rtp_sys::GstRTPBufferMapFlags> for RTPBufferMapFlags {
-    fn from_glib(value: gst_rtp_sys::GstRTPBufferMapFlags) -> RTPBufferMapFlags {
+impl FromGlib<ffi::GstRTPBufferMapFlags> for RTPBufferMapFlags {
+    fn from_glib(value: ffi::GstRTPBufferMapFlags) -> RTPBufferMapFlags {
         skip_assert_initialized!();
         RTPBufferMapFlags::from_bits_truncate(value)
     }
@@ -99,7 +98,7 @@ impl FromGlib<gst_rtp_sys::GstRTPBufferMapFlags> for RTPBufferMapFlags {
 
 impl StaticType for RTPBufferMapFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_rtp_sys::gst_rtp_buffer_map_flags_get_type()) }
+        unsafe { from_glib(ffi::gst_rtp_buffer_map_flags_get_type()) }
     }
 }
 
@@ -111,12 +110,12 @@ impl<'a> FromValueOptional<'a> for RTPBufferMapFlags {
 
 impl<'a> FromValue<'a> for RTPBufferMapFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTPBufferMapFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
