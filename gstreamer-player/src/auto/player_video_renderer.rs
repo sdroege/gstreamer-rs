@@ -4,13 +4,12 @@
 
 use glib::object::IsA;
 use glib::translate::*;
-use gst_player_sys;
 
-glib_wrapper! {
-    pub struct PlayerVideoRenderer(Interface<gst_player_sys::GstPlayerVideoRenderer>);
+glib::glib_wrapper! {
+    pub struct PlayerVideoRenderer(Interface<ffi::GstPlayerVideoRenderer>);
 
     match fn {
-        get_type => || gst_player_sys::gst_player_video_renderer_get_type(),
+        get_type => || ffi::gst_player_video_renderer_get_type(),
     }
 }
 

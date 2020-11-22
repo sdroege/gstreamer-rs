@@ -4,15 +4,12 @@
 
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
-use gst;
-use gst_player_sys;
 
-glib_wrapper! {
-    pub struct PlayerStreamInfo(Object<gst_player_sys::GstPlayerStreamInfo, gst_player_sys::GstPlayerStreamInfoClass>);
+glib::glib_wrapper! {
+    pub struct PlayerStreamInfo(Object<ffi::GstPlayerStreamInfo, ffi::GstPlayerStreamInfoClass>);
 
     match fn {
-        get_type => || gst_player_sys::gst_player_stream_info_get_type(),
+        get_type => || ffi::gst_player_stream_info_get_type(),
     }
 }
 
@@ -24,11 +21,11 @@ pub const NONE_PLAYER_STREAM_INFO: Option<&PlayerStreamInfo> = None;
 pub trait PlayerStreamInfoExt: 'static {
     fn get_caps(&self) -> Option<gst::Caps>;
 
-    fn get_codec(&self) -> Option<GString>;
+    fn get_codec(&self) -> Option<glib::GString>;
 
     fn get_index(&self) -> i32;
 
-    fn get_stream_type(&self) -> GString;
+    fn get_stream_type(&self) -> glib::GString;
 
     fn get_tags(&self) -> Option<gst::TagList>;
 }
@@ -36,41 +33,39 @@ pub trait PlayerStreamInfoExt: 'static {
 impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
     fn get_caps(&self) -> Option<gst::Caps> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_caps(
-                const_override(self.as_ref().to_glib_none().0),
-            ))
+            from_glib_none(ffi::gst_player_stream_info_get_caps(const_override(
+                self.as_ref().to_glib_none().0,
+            )))
         }
     }
 
-    fn get_codec(&self) -> Option<GString> {
+    fn get_codec(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_codec(
-                const_override(self.as_ref().to_glib_none().0),
-            ))
+            from_glib_none(ffi::gst_player_stream_info_get_codec(const_override(
+                self.as_ref().to_glib_none().0,
+            )))
         }
     }
 
     fn get_index(&self) -> i32 {
         unsafe {
-            gst_player_sys::gst_player_stream_info_get_index(const_override(
-                self.as_ref().to_glib_none().0,
-            ))
+            ffi::gst_player_stream_info_get_index(const_override(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_stream_type(&self) -> GString {
+    fn get_stream_type(&self) -> glib::GString {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_stream_type(
-                const_override(self.as_ref().to_glib_none().0),
-            ))
+            from_glib_none(ffi::gst_player_stream_info_get_stream_type(const_override(
+                self.as_ref().to_glib_none().0,
+            )))
         }
     }
 
     fn get_tags(&self) -> Option<gst::TagList> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_tags(
-                const_override(self.as_ref().to_glib_none().0),
-            ))
+            from_glib_none(ffi::gst_player_stream_info_get_tags(const_override(
+                self.as_ref().to_glib_none().0,
+            )))
         }
     }
 }

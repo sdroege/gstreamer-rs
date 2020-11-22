@@ -2,23 +2,21 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::PlayerStreamInfo;
 use glib::translate::*;
-use glib::GString;
-use gst_player_sys;
-use PlayerStreamInfo;
 
-glib_wrapper! {
-    pub struct PlayerSubtitleInfo(Object<gst_player_sys::GstPlayerSubtitleInfo, gst_player_sys::GstPlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
+glib::glib_wrapper! {
+    pub struct PlayerSubtitleInfo(Object<ffi::GstPlayerSubtitleInfo, ffi::GstPlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
-        get_type => || gst_player_sys::gst_player_subtitle_info_get_type(),
+        get_type => || ffi::gst_player_subtitle_info_get_type(),
     }
 }
 
 impl PlayerSubtitleInfo {
-    pub fn get_language(&self) -> Option<GString> {
+    pub fn get_language(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_subtitle_info_get_language(
+            from_glib_none(ffi::gst_player_subtitle_info_get_language(
                 self.to_glib_none().0,
             ))
         }

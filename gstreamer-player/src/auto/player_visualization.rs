@@ -3,16 +3,15 @@
 // DO NOT EDIT
 
 use glib::translate::*;
-use gst_player_sys;
 
-glib_wrapper! {
+glib::glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct PlayerVisualization(Boxed<gst_player_sys::GstPlayerVisualization>);
+    pub struct PlayerVisualization(Boxed<ffi::GstPlayerVisualization>);
 
     match fn {
-        copy => |ptr| gst_player_sys::gst_player_visualization_copy(mut_override(ptr)),
-        free => |ptr| gst_player_sys::gst_player_visualization_free(ptr),
-        get_type => || gst_player_sys::gst_player_visualization_get_type(),
+        copy => |ptr| ffi::gst_player_visualization_copy(mut_override(ptr)),
+        free => |ptr| ffi::gst_player_visualization_free(ptr),
+        get_type => || ffi::gst_player_visualization_get_type(),
     }
 }
 

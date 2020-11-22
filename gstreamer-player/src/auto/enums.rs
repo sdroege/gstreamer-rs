@@ -11,8 +11,6 @@ use glib::value::Value;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use gst_player_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -27,26 +25,22 @@ pub enum PlayerColorBalanceType {
 
 #[doc(hidden)]
 impl ToGlib for PlayerColorBalanceType {
-    type GlibType = gst_player_sys::GstPlayerColorBalanceType;
+    type GlibType = ffi::GstPlayerColorBalanceType;
 
-    fn to_glib(&self) -> gst_player_sys::GstPlayerColorBalanceType {
+    fn to_glib(&self) -> ffi::GstPlayerColorBalanceType {
         match *self {
-            PlayerColorBalanceType::Hue => gst_player_sys::GST_PLAYER_COLOR_BALANCE_HUE,
-            PlayerColorBalanceType::Brightness => {
-                gst_player_sys::GST_PLAYER_COLOR_BALANCE_BRIGHTNESS
-            }
-            PlayerColorBalanceType::Saturation => {
-                gst_player_sys::GST_PLAYER_COLOR_BALANCE_SATURATION
-            }
-            PlayerColorBalanceType::Contrast => gst_player_sys::GST_PLAYER_COLOR_BALANCE_CONTRAST,
+            PlayerColorBalanceType::Hue => ffi::GST_PLAYER_COLOR_BALANCE_HUE,
+            PlayerColorBalanceType::Brightness => ffi::GST_PLAYER_COLOR_BALANCE_BRIGHTNESS,
+            PlayerColorBalanceType::Saturation => ffi::GST_PLAYER_COLOR_BALANCE_SATURATION,
+            PlayerColorBalanceType::Contrast => ffi::GST_PLAYER_COLOR_BALANCE_CONTRAST,
             PlayerColorBalanceType::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_player_sys::GstPlayerColorBalanceType> for PlayerColorBalanceType {
-    fn from_glib(value: gst_player_sys::GstPlayerColorBalanceType) -> Self {
+impl FromGlib<ffi::GstPlayerColorBalanceType> for PlayerColorBalanceType {
+    fn from_glib(value: ffi::GstPlayerColorBalanceType) -> Self {
         skip_assert_initialized!();
         match value {
             3 => PlayerColorBalanceType::Hue,
@@ -60,7 +54,7 @@ impl FromGlib<gst_player_sys::GstPlayerColorBalanceType> for PlayerColorBalanceT
 
 impl StaticType for PlayerColorBalanceType {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_player_sys::gst_player_color_balance_type_get_type()) }
+        unsafe { from_glib(ffi::gst_player_color_balance_type_get_type()) }
     }
 }
 
@@ -72,13 +66,13 @@ impl<'a> FromValueOptional<'a> for PlayerColorBalanceType {
 
 impl<'a> FromValue<'a> for PlayerColorBalanceType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PlayerColorBalanceType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -92,19 +86,19 @@ pub enum PlayerError {
 
 #[doc(hidden)]
 impl ToGlib for PlayerError {
-    type GlibType = gst_player_sys::GstPlayerError;
+    type GlibType = ffi::GstPlayerError;
 
-    fn to_glib(&self) -> gst_player_sys::GstPlayerError {
+    fn to_glib(&self) -> ffi::GstPlayerError {
         match *self {
-            PlayerError::Failed => gst_player_sys::GST_PLAYER_ERROR_FAILED,
+            PlayerError::Failed => ffi::GST_PLAYER_ERROR_FAILED,
             PlayerError::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_player_sys::GstPlayerError> for PlayerError {
-    fn from_glib(value: gst_player_sys::GstPlayerError) -> Self {
+impl FromGlib<ffi::GstPlayerError> for PlayerError {
+    fn from_glib(value: ffi::GstPlayerError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PlayerError::Failed,
@@ -117,7 +111,7 @@ impl ErrorDomain for PlayerError {
     fn domain() -> Quark {
         skip_assert_initialized!();
 
-        unsafe { from_glib(gst_player_sys::gst_player_error_quark()) }
+        unsafe { from_glib(ffi::gst_player_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -135,7 +129,7 @@ impl ErrorDomain for PlayerError {
 
 impl StaticType for PlayerError {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_player_sys::gst_player_error_get_type()) }
+        unsafe { from_glib(ffi::gst_player_error_get_type()) }
     }
 }
 
@@ -147,13 +141,13 @@ impl<'a> FromValueOptional<'a> for PlayerError {
 
 impl<'a> FromValue<'a> for PlayerError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PlayerError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -171,23 +165,23 @@ pub enum PlayerSnapshotFormat {
 
 #[doc(hidden)]
 impl ToGlib for PlayerSnapshotFormat {
-    type GlibType = gst_player_sys::GstPlayerSnapshotFormat;
+    type GlibType = ffi::GstPlayerSnapshotFormat;
 
-    fn to_glib(&self) -> gst_player_sys::GstPlayerSnapshotFormat {
+    fn to_glib(&self) -> ffi::GstPlayerSnapshotFormat {
         match *self {
-            PlayerSnapshotFormat::RawNative => gst_player_sys::GST_PLAYER_THUMBNAIL_RAW_NATIVE,
-            PlayerSnapshotFormat::RawXrgb => gst_player_sys::GST_PLAYER_THUMBNAIL_RAW_xRGB,
-            PlayerSnapshotFormat::RawBgrx => gst_player_sys::GST_PLAYER_THUMBNAIL_RAW_BGRx,
-            PlayerSnapshotFormat::Jpg => gst_player_sys::GST_PLAYER_THUMBNAIL_JPG,
-            PlayerSnapshotFormat::Png => gst_player_sys::GST_PLAYER_THUMBNAIL_PNG,
+            PlayerSnapshotFormat::RawNative => ffi::GST_PLAYER_THUMBNAIL_RAW_NATIVE,
+            PlayerSnapshotFormat::RawXrgb => ffi::GST_PLAYER_THUMBNAIL_RAW_xRGB,
+            PlayerSnapshotFormat::RawBgrx => ffi::GST_PLAYER_THUMBNAIL_RAW_BGRx,
+            PlayerSnapshotFormat::Jpg => ffi::GST_PLAYER_THUMBNAIL_JPG,
+            PlayerSnapshotFormat::Png => ffi::GST_PLAYER_THUMBNAIL_PNG,
             PlayerSnapshotFormat::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_player_sys::GstPlayerSnapshotFormat> for PlayerSnapshotFormat {
-    fn from_glib(value: gst_player_sys::GstPlayerSnapshotFormat) -> Self {
+impl FromGlib<ffi::GstPlayerSnapshotFormat> for PlayerSnapshotFormat {
+    fn from_glib(value: ffi::GstPlayerSnapshotFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PlayerSnapshotFormat::RawNative,
@@ -213,22 +207,22 @@ pub enum PlayerState {
 
 #[doc(hidden)]
 impl ToGlib for PlayerState {
-    type GlibType = gst_player_sys::GstPlayerState;
+    type GlibType = ffi::GstPlayerState;
 
-    fn to_glib(&self) -> gst_player_sys::GstPlayerState {
+    fn to_glib(&self) -> ffi::GstPlayerState {
         match *self {
-            PlayerState::Stopped => gst_player_sys::GST_PLAYER_STATE_STOPPED,
-            PlayerState::Buffering => gst_player_sys::GST_PLAYER_STATE_BUFFERING,
-            PlayerState::Paused => gst_player_sys::GST_PLAYER_STATE_PAUSED,
-            PlayerState::Playing => gst_player_sys::GST_PLAYER_STATE_PLAYING,
+            PlayerState::Stopped => ffi::GST_PLAYER_STATE_STOPPED,
+            PlayerState::Buffering => ffi::GST_PLAYER_STATE_BUFFERING,
+            PlayerState::Paused => ffi::GST_PLAYER_STATE_PAUSED,
+            PlayerState::Playing => ffi::GST_PLAYER_STATE_PLAYING,
             PlayerState::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<gst_player_sys::GstPlayerState> for PlayerState {
-    fn from_glib(value: gst_player_sys::GstPlayerState) -> Self {
+impl FromGlib<ffi::GstPlayerState> for PlayerState {
+    fn from_glib(value: ffi::GstPlayerState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PlayerState::Stopped,
@@ -242,7 +236,7 @@ impl FromGlib<gst_player_sys::GstPlayerState> for PlayerState {
 
 impl StaticType for PlayerState {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_player_sys::gst_player_state_get_type()) }
+        unsafe { from_glib(ffi::gst_player_state_get_type()) }
     }
 }
 
@@ -254,12 +248,12 @@ impl<'a> FromValueOptional<'a> for PlayerState {
 
 impl<'a> FromValue<'a> for PlayerState {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PlayerState {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

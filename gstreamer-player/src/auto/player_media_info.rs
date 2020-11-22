@@ -2,35 +2,32 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::PlayerAudioInfo;
+use crate::PlayerStreamInfo;
+use crate::PlayerSubtitleInfo;
+use crate::PlayerVideoInfo;
 use glib::translate::*;
-use glib::GString;
-use gst;
-use gst_player_sys;
-use PlayerAudioInfo;
-use PlayerStreamInfo;
-use PlayerSubtitleInfo;
-use PlayerVideoInfo;
 
-glib_wrapper! {
-    pub struct PlayerMediaInfo(Object<gst_player_sys::GstPlayerMediaInfo, gst_player_sys::GstPlayerMediaInfoClass>);
+glib::glib_wrapper! {
+    pub struct PlayerMediaInfo(Object<ffi::GstPlayerMediaInfo, ffi::GstPlayerMediaInfoClass>);
 
     match fn {
-        get_type => || gst_player_sys::gst_player_media_info_get_type(),
+        get_type => || ffi::gst_player_media_info_get_type(),
     }
 }
 
 impl PlayerMediaInfo {
     pub fn get_audio_streams(&self) -> Vec<PlayerAudioInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                gst_player_sys::gst_player_media_info_get_audio_streams(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::gst_player_media_info_get_audio_streams(
+                self.to_glib_none().0,
+            ))
         }
     }
 
-    pub fn get_container_format(&self) -> Option<GString> {
+    pub fn get_container_format(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_media_info_get_container_format(
+            from_glib_none(ffi::gst_player_media_info_get_container_format(
                 self.to_glib_none().0,
             ))
         }
@@ -38,7 +35,7 @@ impl PlayerMediaInfo {
 
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_player_sys::gst_player_media_info_get_duration(
+            from_glib(ffi::gst_player_media_info_get_duration(
                 self.to_glib_none().0,
             ))
         }
@@ -46,97 +43,71 @@ impl PlayerMediaInfo {
 
     pub fn get_image_sample(&self) -> Option<gst::Sample> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_media_info_get_image_sample(
+            from_glib_none(ffi::gst_player_media_info_get_image_sample(
                 self.to_glib_none().0,
             ))
         }
     }
 
     pub fn get_number_of_audio_streams(&self) -> u32 {
-        unsafe {
-            gst_player_sys::gst_player_media_info_get_number_of_audio_streams(self.to_glib_none().0)
-        }
+        unsafe { ffi::gst_player_media_info_get_number_of_audio_streams(self.to_glib_none().0) }
     }
 
     pub fn get_number_of_streams(&self) -> u32 {
-        unsafe {
-            gst_player_sys::gst_player_media_info_get_number_of_streams(self.to_glib_none().0)
-        }
+        unsafe { ffi::gst_player_media_info_get_number_of_streams(self.to_glib_none().0) }
     }
 
     pub fn get_number_of_subtitle_streams(&self) -> u32 {
-        unsafe {
-            gst_player_sys::gst_player_media_info_get_number_of_subtitle_streams(
-                self.to_glib_none().0,
-            )
-        }
+        unsafe { ffi::gst_player_media_info_get_number_of_subtitle_streams(self.to_glib_none().0) }
     }
 
     pub fn get_number_of_video_streams(&self) -> u32 {
-        unsafe {
-            gst_player_sys::gst_player_media_info_get_number_of_video_streams(self.to_glib_none().0)
-        }
+        unsafe { ffi::gst_player_media_info_get_number_of_video_streams(self.to_glib_none().0) }
     }
 
     pub fn get_stream_list(&self) -> Vec<PlayerStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                gst_player_sys::gst_player_media_info_get_stream_list(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::gst_player_media_info_get_stream_list(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_subtitle_streams(&self) -> Vec<PlayerSubtitleInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                gst_player_sys::gst_player_media_info_get_subtitle_streams(self.to_glib_none().0),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::gst_player_media_info_get_subtitle_streams(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_tags(&self) -> Option<gst::TagList> {
-        unsafe {
-            from_glib_none(gst_player_sys::gst_player_media_info_get_tags(
-                self.to_glib_none().0,
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_player_media_info_get_tags(self.to_glib_none().0)) }
     }
 
-    pub fn get_title(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(gst_player_sys::gst_player_media_info_get_title(
-                self.to_glib_none().0,
-            ))
-        }
+    pub fn get_title(&self) -> Option<glib::GString> {
+        unsafe { from_glib_none(ffi::gst_player_media_info_get_title(self.to_glib_none().0)) }
     }
 
-    pub fn get_uri(&self) -> GString {
-        unsafe {
-            from_glib_none(gst_player_sys::gst_player_media_info_get_uri(
-                self.to_glib_none().0,
-            ))
-        }
+    pub fn get_uri(&self) -> glib::GString {
+        unsafe { from_glib_none(ffi::gst_player_media_info_get_uri(self.to_glib_none().0)) }
     }
 
     pub fn get_video_streams(&self) -> Vec<PlayerVideoInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(
-                gst_player_sys::gst_player_media_info_get_video_streams(self.to_glib_none().0),
-            )
-        }
-    }
-
-    pub fn is_live(&self) -> bool {
-        unsafe {
-            from_glib(gst_player_sys::gst_player_media_info_is_live(
+            FromGlibPtrContainer::from_glib_none(ffi::gst_player_media_info_get_video_streams(
                 self.to_glib_none().0,
             ))
         }
     }
 
+    pub fn is_live(&self) -> bool {
+        unsafe { from_glib(ffi::gst_player_media_info_is_live(self.to_glib_none().0)) }
+    }
+
     pub fn is_seekable(&self) -> bool {
         unsafe {
-            from_glib(gst_player_sys::gst_player_media_info_is_seekable(
+            from_glib(ffi::gst_player_media_info_is_seekable(
                 self.to_glib_none().0,
             ))
         }

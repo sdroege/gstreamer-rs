@@ -4,13 +4,12 @@
 
 use glib::object::IsA;
 use glib::translate::*;
-use gst_player_sys;
 
-glib_wrapper! {
-    pub struct PlayerSignalDispatcher(Interface<gst_player_sys::GstPlayerSignalDispatcher>);
+glib::glib_wrapper! {
+    pub struct PlayerSignalDispatcher(Interface<ffi::GstPlayerSignalDispatcher>);
 
     match fn {
-        get_type => || gst_player_sys::gst_player_signal_dispatcher_get_type(),
+        get_type => || ffi::gst_player_signal_dispatcher_get_type(),
     }
 }
 

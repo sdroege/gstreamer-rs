@@ -2,42 +2,40 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::PlayerStreamInfo;
 use glib::translate::*;
-use glib::GString;
-use gst_player_sys;
-use PlayerStreamInfo;
 
-glib_wrapper! {
-    pub struct PlayerAudioInfo(Object<gst_player_sys::GstPlayerAudioInfo, gst_player_sys::GstPlayerAudioInfoClass>) @extends PlayerStreamInfo;
+glib::glib_wrapper! {
+    pub struct PlayerAudioInfo(Object<ffi::GstPlayerAudioInfo, ffi::GstPlayerAudioInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
-        get_type => || gst_player_sys::gst_player_audio_info_get_type(),
+        get_type => || ffi::gst_player_audio_info_get_type(),
     }
 }
 
 impl PlayerAudioInfo {
     pub fn get_bitrate(&self) -> i32 {
-        unsafe { gst_player_sys::gst_player_audio_info_get_bitrate(self.to_glib_none().0) }
+        unsafe { ffi::gst_player_audio_info_get_bitrate(self.to_glib_none().0) }
     }
 
     pub fn get_channels(&self) -> i32 {
-        unsafe { gst_player_sys::gst_player_audio_info_get_channels(self.to_glib_none().0) }
+        unsafe { ffi::gst_player_audio_info_get_channels(self.to_glib_none().0) }
     }
 
-    pub fn get_language(&self) -> Option<GString> {
+    pub fn get_language(&self) -> Option<glib::GString> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_audio_info_get_language(
+            from_glib_none(ffi::gst_player_audio_info_get_language(
                 self.to_glib_none().0,
             ))
         }
     }
 
     pub fn get_max_bitrate(&self) -> i32 {
-        unsafe { gst_player_sys::gst_player_audio_info_get_max_bitrate(self.to_glib_none().0) }
+        unsafe { ffi::gst_player_audio_info_get_max_bitrate(self.to_glib_none().0) }
     }
 
     pub fn get_sample_rate(&self) -> i32 {
-        unsafe { gst_player_sys::gst_player_audio_info_get_sample_rate(self.to_glib_none().0) }
+        unsafe { ffi::gst_player_audio_info_get_sample_rate(self.to_glib_none().0) }
     }
 }
 
