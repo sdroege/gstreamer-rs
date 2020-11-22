@@ -1,14 +1,10 @@
 use std::fmt;
 
-use gio;
-use glib;
 use glib::translate::*;
-use gst;
 use gst::prelude::*;
-use gst_net_sys;
 
 #[repr(transparent)]
-pub struct NetAddressMeta(gst_net_sys::GstNetAddressMeta);
+pub struct NetAddressMeta(ffi::GstNetAddressMeta);
 
 unsafe impl Send for NetAddressMeta {}
 unsafe impl Sync for NetAddressMeta {}
@@ -20,7 +16,7 @@ impl NetAddressMeta {
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
-            let meta = gst_net_sys::gst_buffer_add_net_address_meta(
+            let meta = ffi::gst_buffer_add_net_address_meta(
                 buffer.as_mut_ptr(),
                 addr.as_ref().to_glib_none().0,
             );
@@ -35,17 +31,17 @@ impl NetAddressMeta {
     pub fn set_addr<T: IsA<gio::SocketAddress>>(&mut self, addr: &T) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
-            gobject_sys::g_object_unref(self.0.addr as *mut _);
+            glib::gobject_ffi::g_object_unref(self.0.addr as *mut _);
             self.0.addr = addr.as_ref().to_glib_full();
         }
     }
 }
 
 unsafe impl MetaAPI for NetAddressMeta {
-    type GstType = gst_net_sys::GstNetAddressMeta;
+    type GstType = ffi::GstNetAddressMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(gst_net_sys::gst_net_address_meta_api_get_type()) }
+        unsafe { from_glib(ffi::gst_net_address_meta_api_get_type()) }
     }
 }
 

@@ -8,19 +8,11 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-extern crate gio;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_net_sys as gst_net_sys;
-extern crate gstreamer_sys as gst_sys;
-
-#[macro_use]
-extern crate glib;
+pub use ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
+        if unsafe { gst::ffi::gst_is_initialized() } != glib::ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -35,13 +27,13 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::match_same_arms)]
 #[allow(unused_imports)]
 mod auto;
-pub use auto::*;
+pub use crate::auto::*;
 mod net_client_clock;
 mod net_time_provider;
 mod ntp_clock;
 mod ptp_clock;
 
-pub use net_address_meta::*;
+pub use crate::net_address_meta::*;
 mod net_address_meta;
 
 // Re-export all the traits in a prelude module, so that applications
@@ -50,5 +42,5 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use auto::traits::*;
+    pub use crate::auto::traits::*;
 }

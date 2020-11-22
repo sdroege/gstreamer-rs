@@ -6,12 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use gst_net_sys;
-use NetClientClock;
+use crate::NetClientClock;
 
 use glib::object::Cast;
 use glib::translate::*;
-use gst;
 
 impl NetClientClock {
     pub fn new(
@@ -25,7 +23,7 @@ impl NetClientClock {
         let (major, minor, _, _) = gst::version();
         if (major, minor) > (1, 12) {
             unsafe {
-                gst::Clock::from_glib_full(gst_net_sys::gst_net_client_clock_new(
+                gst::Clock::from_glib_full(ffi::gst_net_client_clock_new(
                     name.0,
                     remote_address.to_glib_none().0,
                     remote_port,
@@ -36,7 +34,7 @@ impl NetClientClock {
         } else {
             // Workaround for bad floating reference handling in 1.12. This issue was fixed for 1.13
             unsafe {
-                gst::Clock::from_glib_none(gst_net_sys::gst_net_client_clock_new(
+                gst::Clock::from_glib_none(ffi::gst_net_client_clock_new(
                     name.0,
                     remote_address.to_glib_none().0,
                     remote_port,
