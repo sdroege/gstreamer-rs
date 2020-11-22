@@ -8,17 +8,7 @@
 
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
-extern crate libc;
-
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate gstreamer as gst;
-extern crate gstreamer_player_sys as gst_player_sys;
-extern crate gstreamer_sys as gst_sys;
-extern crate gstreamer_video as gst_video;
-
-#[macro_use]
-extern crate glib;
+pub use ffi;
 
 macro_rules! skip_assert_initialized {
     () => {};
@@ -35,11 +25,11 @@ macro_rules! assert_initialized_main_thread {
 #[allow(clippy::cast_ptr_alignment)]
 #[allow(unused_imports)]
 mod auto;
-pub use auto::*;
+pub use crate::auto::*;
 
 mod config;
 mod player;
-pub use config::*;
+pub use crate::config::*;
 
 mod player_video_info;
 
@@ -53,5 +43,5 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use auto::traits::*;
+    pub use crate::auto::traits::*;
 }

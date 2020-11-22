@@ -7,9 +7,6 @@
 // except according to those terms.
 
 use glib::translate::*;
-use gst;
-use gst_player_sys;
-use gst_sys;
 
 use std::mem;
 use std::ops;
@@ -46,15 +43,13 @@ impl AsMut<gst::StructureRef> for PlayerConfig {
 impl PlayerConfig {
     pub fn get_position_update_interval(&self) -> u32 {
         assert_initialized_main_thread!();
-        unsafe {
-            gst_player_sys::gst_player_config_get_position_update_interval(self.0.to_glib_none().0)
-        }
+        unsafe { ffi::gst_player_config_get_position_update_interval(self.0.to_glib_none().0) }
     }
 
     pub fn get_seek_accurate(&self) -> bool {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib(gst_player_sys::gst_player_config_get_seek_accurate(
+            from_glib(ffi::gst_player_config_get_seek_accurate(
                 self.0.to_glib_none().0,
             ))
         }
@@ -63,7 +58,7 @@ impl PlayerConfig {
     pub fn get_user_agent(&self) -> Option<String> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_player_sys::gst_player_config_get_user_agent(
+            from_glib_full(ffi::gst_player_config_get_user_agent(
                 self.0.to_glib_none().0,
             ))
         }
@@ -72,7 +67,7 @@ impl PlayerConfig {
     pub fn set_position_update_interval(&mut self, interval: u32) {
         assert_initialized_main_thread!();
         unsafe {
-            gst_player_sys::gst_player_config_set_position_update_interval(
+            ffi::gst_player_config_set_position_update_interval(
                 self.0.to_glib_none_mut().0,
                 interval,
             );
@@ -89,21 +84,21 @@ impl PlayerConfig {
     pub fn set_user_agent(&mut self, agent: &str) {
         assert_initialized_main_thread!();
         unsafe {
-            gst_player_sys::gst_player_config_set_user_agent(
+            ffi::gst_player_config_set_user_agent(
                 self.0.to_glib_none_mut().0,
                 agent.to_glib_none().0,
             );
         }
     }
 
-    pub unsafe fn into_ptr(self) -> *mut gst_sys::GstStructure {
+    pub unsafe fn into_ptr(self) -> *mut gst::ffi::GstStructure {
         let mut s = mem::ManuallyDrop::new(self);
         s.0.to_glib_none_mut().0
     }
 }
 
-impl FromGlibPtrFull<*mut gst_sys::GstStructure> for PlayerConfig {
-    unsafe fn from_glib_full(ptr: *mut gst_sys::GstStructure) -> Self {
+impl FromGlibPtrFull<*mut gst::ffi::GstStructure> for PlayerConfig {
+    unsafe fn from_glib_full(ptr: *mut gst::ffi::GstStructure) -> Self {
         PlayerConfig(from_glib_full(ptr))
     }
 }

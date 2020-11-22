@@ -6,18 +6,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use crate::PlayerVideoInfo;
 use glib::translate::*;
-use gst;
-use gst_player_sys;
 use std::mem;
-use PlayerVideoInfo;
 
 impl PlayerVideoInfo {
     pub fn get_framerate(&self) -> gst::Fraction {
         unsafe {
             let mut fps_n = mem::MaybeUninit::uninit();
             let mut fps_d = mem::MaybeUninit::uninit();
-            gst_player_sys::gst_player_video_info_get_framerate(
+            ffi::gst_player_video_info_get_framerate(
                 self.to_glib_none().0,
                 fps_n.as_mut_ptr(),
                 fps_d.as_mut_ptr(),
@@ -30,7 +28,7 @@ impl PlayerVideoInfo {
         unsafe {
             let mut par_n = mem::MaybeUninit::uninit();
             let mut par_d = mem::MaybeUninit::uninit();
-            gst_player_sys::gst_player_video_info_get_pixel_aspect_ratio(
+            ffi::gst_player_video_info_get_pixel_aspect_ratio(
                 self.to_glib_none().0,
                 par_n.as_mut_ptr(),
                 par_d.as_mut_ptr(),

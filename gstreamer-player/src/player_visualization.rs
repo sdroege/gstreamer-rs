@@ -9,7 +9,7 @@
 use glib::translate::*;
 use std::ffi::CStr;
 
-use PlayerVisualization;
+use crate::PlayerVisualization;
 
 impl PlayerVisualization {
     pub fn name(&self) -> &str {
