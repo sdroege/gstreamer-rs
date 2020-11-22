@@ -11,10 +11,9 @@ use std::fmt;
 use std::mem;
 
 use glib::translate::*;
-use gst_sdp_sys;
 
 #[repr(transparent)]
-pub struct SDPAttribute(pub(crate) gst_sdp_sys::GstSDPAttribute);
+pub struct SDPAttribute(pub(crate) ffi::GstSDPAttribute);
 
 unsafe impl Send for SDPAttribute {}
 unsafe impl Sync for SDPAttribute {}
@@ -24,7 +23,7 @@ impl SDPAttribute {
         assert_initialized_main_thread!();
         unsafe {
             let mut attr = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_attribute_set(
+            ffi::gst_sdp_attribute_set(
                 attr.as_mut_ptr(),
                 key.to_glib_none().0,
                 value.to_glib_none().0,
@@ -59,7 +58,7 @@ impl Clone for SDPAttribute {
 impl Drop for SDPAttribute {
     fn drop(&mut self) {
         unsafe {
-            gst_sdp_sys::gst_sdp_attribute_clear(&mut self.0);
+            ffi::gst_sdp_attribute_clear(&mut self.0);
         }
     }
 }

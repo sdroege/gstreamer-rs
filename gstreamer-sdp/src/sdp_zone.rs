@@ -11,10 +11,9 @@ use std::fmt;
 use std::mem;
 
 use glib::translate::*;
-use gst_sdp_sys;
 
 #[repr(transparent)]
-pub struct SDPZone(pub(crate) gst_sdp_sys::GstSDPZone);
+pub struct SDPZone(pub(crate) ffi::GstSDPZone);
 
 unsafe impl Send for SDPZone {}
 unsafe impl Sync for SDPZone {}
@@ -24,7 +23,7 @@ impl SDPZone {
         assert_initialized_main_thread!();
         unsafe {
             let mut zone = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_zone_set(
+            ffi::gst_sdp_zone_set(
                 zone.as_mut_ptr(),
                 time.to_glib_none().0,
                 typed_time.to_glib_none().0,
@@ -59,7 +58,7 @@ impl Clone for SDPZone {
         assert_initialized_main_thread!();
         unsafe {
             let mut zone = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_zone_set(zone.as_mut_ptr(), self.0.time, self.0.typed_time);
+            ffi::gst_sdp_zone_set(zone.as_mut_ptr(), self.0.time, self.0.typed_time);
             SDPZone(zone.assume_init())
         }
     }
@@ -68,7 +67,7 @@ impl Clone for SDPZone {
 impl Drop for SDPZone {
     fn drop(&mut self) {
         unsafe {
-            gst_sdp_sys::gst_sdp_zone_clear(&mut self.0);
+            ffi::gst_sdp_zone_clear(&mut self.0);
         }
     }
 }

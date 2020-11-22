@@ -11,10 +11,9 @@ use std::fmt;
 use std::mem;
 
 use glib::translate::*;
-use gst_sdp_sys;
 
 #[repr(transparent)]
-pub struct SDPBandwidth(pub(crate) gst_sdp_sys::GstSDPBandwidth);
+pub struct SDPBandwidth(pub(crate) ffi::GstSDPBandwidth);
 
 unsafe impl Send for SDPBandwidth {}
 unsafe impl Sync for SDPBandwidth {}
@@ -24,7 +23,7 @@ impl SDPBandwidth {
         assert_initialized_main_thread!();
         unsafe {
             let mut bw = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_bandwidth_set(bw.as_mut_ptr(), bwtype.to_glib_none().0, bandwidth);
+            ffi::gst_sdp_bandwidth_set(bw.as_mut_ptr(), bwtype.to_glib_none().0, bandwidth);
             SDPBandwidth(bw.assume_init())
         }
     }
@@ -49,7 +48,7 @@ impl Clone for SDPBandwidth {
         assert_initialized_main_thread!();
         unsafe {
             let mut bw = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_bandwidth_set(bw.as_mut_ptr(), self.0.bwtype, self.0.bandwidth);
+            ffi::gst_sdp_bandwidth_set(bw.as_mut_ptr(), self.0.bwtype, self.0.bandwidth);
             SDPBandwidth(bw.assume_init())
         }
     }
@@ -58,7 +57,7 @@ impl Clone for SDPBandwidth {
 impl Drop for SDPBandwidth {
     fn drop(&mut self) {
         unsafe {
-            gst_sdp_sys::gst_sdp_bandwidth_clear(&mut self.0);
+            ffi::gst_sdp_bandwidth_clear(&mut self.0);
         }
     }
 }

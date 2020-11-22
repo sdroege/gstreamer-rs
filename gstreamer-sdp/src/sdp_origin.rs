@@ -9,10 +9,8 @@
 use std::ffi::CStr;
 use std::fmt;
 
-use gst_sdp_sys;
-
 #[repr(transparent)]
-pub struct SDPOrigin(pub(crate) gst_sdp_sys::GstSDPOrigin);
+pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
 
 unsafe impl Send for SDPOrigin {}
 unsafe impl Sync for SDPOrigin {}

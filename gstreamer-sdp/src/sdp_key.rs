@@ -9,10 +9,8 @@
 use std::ffi::CStr;
 use std::fmt;
 
-use gst_sdp_sys;
-
 #[repr(transparent)]
-pub struct SDPKey(gst_sdp_sys::GstSDPKey);
+pub struct SDPKey(ffi::GstSDPKey);
 
 unsafe impl Send for SDPKey {}
 unsafe impl Sync for SDPKey {}

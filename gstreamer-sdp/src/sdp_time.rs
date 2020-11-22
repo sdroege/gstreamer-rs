@@ -13,10 +13,9 @@ use std::os::raw::c_char;
 use std::ptr;
 
 use glib::translate::*;
-use gst_sdp_sys;
 
 #[repr(transparent)]
-pub struct SDPTime(pub(crate) gst_sdp_sys::GstSDPTime);
+pub struct SDPTime(pub(crate) ffi::GstSDPTime);
 
 unsafe impl Send for SDPTime {}
 unsafe impl Sync for SDPTime {}
@@ -26,7 +25,7 @@ impl SDPTime {
         assert_initialized_main_thread!();
         unsafe {
             let mut time = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_time_set(
+            ffi::gst_sdp_time_set(
                 time.as_mut_ptr(),
                 start.to_glib_none().0,
                 stop.to_glib_none().0,
@@ -80,7 +79,7 @@ impl Clone for SDPTime {
         #[allow(clippy::cast_ptr_alignment)]
         unsafe {
             let mut time = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_time_set(
+            ffi::gst_sdp_time_set(
                 time.as_mut_ptr(),
                 self.0.start,
                 self.0.stop,
@@ -98,7 +97,7 @@ impl Clone for SDPTime {
 impl Drop for SDPTime {
     fn drop(&mut self) {
         unsafe {
-            gst_sdp_sys::gst_sdp_time_clear(&mut self.0);
+            ffi::gst_sdp_time_clear(&mut self.0);
         }
     }
 }

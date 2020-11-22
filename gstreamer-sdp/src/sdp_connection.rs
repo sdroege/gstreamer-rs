@@ -11,10 +11,9 @@ use std::fmt;
 use std::mem;
 
 use glib::translate::*;
-use gst_sdp_sys;
 
 #[repr(transparent)]
-pub struct SDPConnection(pub(crate) gst_sdp_sys::GstSDPConnection);
+pub struct SDPConnection(pub(crate) ffi::GstSDPConnection);
 
 unsafe impl Send for SDPConnection {}
 unsafe impl Sync for SDPConnection {}
@@ -24,7 +23,7 @@ impl SDPConnection {
         assert_initialized_main_thread!();
         unsafe {
             let mut conn = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_connection_set(
+            ffi::gst_sdp_connection_set(
                 conn.as_mut_ptr(),
                 nettype.to_glib_none().0,
                 addrtype.to_glib_none().0,
@@ -80,7 +79,7 @@ impl Clone for SDPConnection {
         assert_initialized_main_thread!();
         unsafe {
             let mut conn = mem::MaybeUninit::zeroed();
-            gst_sdp_sys::gst_sdp_connection_set(
+            ffi::gst_sdp_connection_set(
                 conn.as_mut_ptr(),
                 self.0.nettype,
                 self.0.addrtype,
@@ -96,7 +95,7 @@ impl Clone for SDPConnection {
 impl Drop for SDPConnection {
     fn drop(&mut self) {
         unsafe {
-            gst_sdp_sys::gst_sdp_connection_clear(&mut self.0);
+            ffi::gst_sdp_connection_clear(&mut self.0);
         }
     }
 }
