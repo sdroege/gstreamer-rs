@@ -5,6 +5,29 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.5] - 2020-11-23
+### Fixed
+- Make sure to use `$crate` in more macros to allow them to work without
+  anything special in scope already.
+- Update documentation location.
+- Don't panic if C code stores invalid seqnums in events and the seqnum is
+  used directly or via the `Display` impl.
+- Fix docs build for some crates on docs.rs.
+- Fix `Debug` impl for `gst_video::VideoTimeCode` to print the correct type
+  name.
+- Fix plugin version to be 1.18 instead of 1.17 when compiling a plugin with
+  `v1_18`.
+
+### Added
+- Event handling support in pad probes, that is returning
+  `PadProbeReturn::Handled` for events.
+- `EventRef::get_structure_mut()` getter that allows changing the events'
+  structures.
+
+### Changed
+- Remove unnecessary `PhantomData` markers and use `repr(transparent)` instead
+  of `repr(C)` where it is more correct.
+
 ## [0.16.4] - 2020-10-09
 ### Fixed
 - Correctly implement `ExactSizeIterator` on the `AudioFormat` and
@@ -888,7 +911,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.3...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.5...HEAD
+[0.16.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.4...0.16.5
+[0.16.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.3...0.16.4
 [0.16.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.2...0.16.3
 [0.16.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.1...0.16.2
 [0.16.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.0...0.16.1
