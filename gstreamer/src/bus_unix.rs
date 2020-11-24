@@ -6,7 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#[macro_use]
 cfg_if::cfg_if! {
     if #[cfg(unix)] {
         use glib::translate::ToGlibPtr;
