@@ -34,10 +34,7 @@ def ask_yes_no_question(question, conf):
     if conf.yes:
         print(question + 'y')
         return True
-    if sys.version_info[0] < 3:
-        line = raw_input(question)
-    else:
-        line = input(question)
+    line = input(question)
     return line.strip().lower() == 'y'
 
 
