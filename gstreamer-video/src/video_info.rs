@@ -12,10 +12,6 @@ use glib::translate::{
 };
 use gst::prelude::*;
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-use std::ffi::CStr;
-
 use std::fmt;
 use std::mem;
 use std::ptr;
@@ -183,16 +179,22 @@ impl str::FromStr for crate::VideoChromaSite {
     type Err = glib::error::BoolError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
-        unsafe {
-            let chroma_site: Self =
-                from_glib(ffi::gst_video_chroma_from_string(s.to_glib_none().0));
-            if chroma_site.is_empty() {
-                Err(glib::glib_bool_error!("Invalid chroma site"))
+        cfg_if::cfg_if! {
+            if #[cfg(any(feature = "v1_20", all(not(doctest), doc)))] {
+                let chroma_site = Self::from_string(s);
             } else {
-                Ok(chroma_site)
+                assert_initialized_main_thread!();
+                let chroma_site: Self =
+                    unsafe { from_glib(ffi::gst_video_chroma_from_string(s.to_glib_none().0)) };
             }
+        };
+
+        if chroma_site.is_empty() {
+            Err(glib::glib_bool_error!("Invalid chroma site"))
+        } else {
+            Ok(chroma_site)
         }
     }
 }
@@ -935,6 +937,8 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl crate::VideoFieldOrder {
     pub fn to_str<'a>(self) -> &'a str {
+        use std::ffi::CStr;
+
         if self == Self::Unknown {
             return "UNKNOWN";
         }

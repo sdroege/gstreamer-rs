@@ -15,6 +15,7 @@ edition = "2018"
 
 [dependencies]
 libc = "0.2"
+cfg-if = "1.0"
 bitflags = "1.0"
 ffi = { package = "gstreamer-audio-sys", path = "sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/gtk-rs" }

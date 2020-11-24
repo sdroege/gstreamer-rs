@@ -175,7 +175,13 @@ impl AudioFormatInfo {
         }
 
         unsafe {
-            ffi::gst_audio_format_fill_silence(self.0, dest.as_mut_ptr() as *mut _, dest.len())
+            cfg_if::cfg_if! {
+                if #[cfg(any(feature = "v1_20", all(not(doctest), doc)))] {
+                    ffi::gst_audio_format_info_fill_silence(self.0, dest.as_mut_ptr() as *mut _, dest.len())
+                } else {
+                    ffi::gst_audio_format_fill_silence(self.0, dest.as_mut_ptr() as *mut _, dest.len())
+                }
+            }
         }
     }
 
