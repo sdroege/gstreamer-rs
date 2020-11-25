@@ -4337,6 +4337,7 @@ They can conflict with other extended buffer flags.</doc>
                                     GST_VIDEO_BUFFER_FLAG_ONEFIELD (Since: 1.16).
                                     Use GST_VIDEO_BUFFER_IS_TOP_FIELD() to check for this flag.</doc>
       </member>
+      
       <member name="bottom_field" value="8388608" c:identifier="GST_VIDEO_BUFFER_FLAG_BOTTOM_FIELD" glib:nick="bottom-field">
         <doc xml:space="preserve">The video frame has the bottom field only. This is
                                     the same as GST_VIDEO_BUFFER_FLAG_ONEFIELD
@@ -8677,11 +8678,11 @@ for details about the layout and packing of these formats in memory.</doc>
       <member name="y412_le" value="96" c:identifier="GST_VIDEO_FORMAT_Y412_LE" glib:nick="y412-le">
         <doc xml:space="preserve">packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)</doc>
       </member>
-      <member name="nv12_4l4" value="97" c:identifier="GST_VIDEO_FORMAT_NV12_4L4" glib:nick="nv12-4l4">
-        <doc xml:space="preserve">NV12 with 4x4 tiles in linear order (Since: 1.18)</doc>
+      <member name="nv12_4l4" value="97" c:identifier="GST_VIDEO_FORMAT_NV12_4L4" version="1.18" glib:nick="nv12-4l4">
+        <doc xml:space="preserve">NV12 with 4x4 tiles in linear order.</doc>
       </member>
-      <member name="nv12_32l32" value="98" c:identifier="GST_VIDEO_FORMAT_NV12_32L32" glib:nick="nv12-32l32">
-        <doc xml:space="preserve">NV12 with 32x32 tiles in linear order (Since: 1.18)</doc>
+      <member name="nv12_32l32" value="98" c:identifier="GST_VIDEO_FORMAT_NV12_32L32" version="1.18" glib:nick="nv12-32l32">
+        <doc xml:space="preserve">NV12 with 32x32 tiles in linear order.</doc>
       </member>
       <function name="from_fourcc" c:identifier="gst_video_format_from_fourcc">
         <doc xml:space="preserve">Converts a FOURCC value into the corresponding #GstVideoFormat.
@@ -9352,6 +9353,7 @@ All video planes of @buffer will be mapped and the pointers will be set in
     is the same as GST_VIDEO_FRAME_FLAG_TFF | GST_VIDEO_FRAME_FLAG_ONEFIELD
     (Since: 1.16).</doc>
       </member>
+      
       <member name="bottom_field" value="8" c:identifier="GST_VIDEO_FRAME_FLAG_BOTTOM_FIELD" glib:nick="bottom-field">
         <doc xml:space="preserve">The video frame has the bottom field
     only. This is the same as GST_VIDEO_FRAME_FLAG_ONEFIELD
@@ -12842,8 +12844,8 @@ frames will only be rendered in PLAYING state.</doc>
    in memory in Z or flipped Z order. In case of odd rows, the last row
    of blocks is arranged in linear order.</doc>
       </member>
-      <member name="linear" value="131072" c:identifier="GST_VIDEO_TILE_MODE_LINEAR" glib:nick="linear">
-        <doc xml:space="preserve">Tiles are in row order. (Since: 1.18)</doc>
+      <member name="linear" value="131072" c:identifier="GST_VIDEO_TILE_MODE_LINEAR" version="1.18" glib:nick="linear">
+        <doc xml:space="preserve">Tiles are in row order.</doc>
       </member>
     </enumeration>
     <enumeration name="VideoTileType" glib:type-name="GstVideoTileType" glib:get-type="gst_video_tile_type_get_type" c:type="GstVideoTileType">
@@ -13601,11 +13603,8 @@ non-linear RGB (R'G'B') and linear RGB</doc>
                                   STD-B67 and Rec. ITU-R BT.2100-1 hybrid loggamma (HLG) system
                                   Since: 1.18</doc>
       </member>
-      <member name="bt601" value="16" c:identifier="GST_VIDEO_TRANSFER_BT601" glib:nick="bt601">
-        <doc xml:space="preserve">also known as SMPTE170M / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC
-                           Functionally the same as the values
-                           GST_VIDEO_TRANSFER_BT709, and GST_VIDEO_TRANSFER_BT2020_10.
-                           Since: 1.18</doc>
+      <member name="bt601" value="16" c:identifier="GST_VIDEO_TRANSFER_BT601" version="1.18" glib:nick="bt601">
+        <doc xml:space="preserve">also known as SMPTE170M / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC</doc>
       </member>
       <function name="from_iso" c:identifier="gst_video_transfer_function_from_iso" version="1.18">
         <doc xml:space="preserve">Converts the @value to the #GstVideoTransferFunction
@@ -14467,6 +14466,28 @@ in @align</doc>
         </parameter>
       </parameters>
     </function-macro>
+    <docsection name="gstvideo">
+      <doc xml:space="preserve">This library contains some helper functions and includes the
+videosink and videofilter base classes.</doc>
+    </docsection>
+    <docsection name="gstvideoanc">
+      <doc xml:space="preserve">A collection of objects and methods to assist with handling Ancillary Data
+present in Vertical Blanking Interval as well as Closed Caption.</doc>
+    </docsection>
+    <docsection name="gstvideochroma">
+      <doc xml:space="preserve">The functions gst_video_chroma_from_string() and gst_video_chroma_to_string() convert
+between #GstVideoChromaSite and string descriptions.
+
+#GstVideoChromaResample is a utility object for resampling chroma planes
+and converting between different chroma sampling sitings.</doc>
+    </docsection>
+    <docsection name="gstvideopool">
+      <doc xml:space="preserve">Special GstBufferPool subclass for raw video buffers.
+
+Allows configuration of video-specific requirements such as
+stride alignments or pixel padding, and can also be configured
+to automatically add #GstVideoMeta to the buffers.</doc>
+    </docsection>
     <function name="is_video_overlay_prepare_window_handle_message" c:identifier="gst_is_video_overlay_prepare_window_handle_message">
       <doc xml:space="preserve">Convenience function to check if the given message is a
 "prepare-window-handle" message from a #GstVideoOverlay.</doc>
@@ -16488,5 +16509,14 @@ and "ITU-T H.273 Table 3".
         </parameter>
       </parameters>
     </function>
+    <docsection name="videoconverter">
+      <doc xml:space="preserve">This object is used to convert video frames from one format to another.
+The object can perform conversion of:
+
+ * video format
+ * video colorspace
+ * chroma-siting
+ * video size</doc>
+    </docsection>
   </namespace>
 </repository>
