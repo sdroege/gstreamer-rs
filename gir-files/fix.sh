@@ -77,6 +77,12 @@ xmlstarlet ed --pf --inplace \
     --insert '//_:record[@name="VideoAncillary"]/_:field[@name="data"]/_:array' \
     --type attr --name 'fixed-size' --value '256' \
      GstVideo-1.0.gir
+
+xmlstarlet ed --pf --inplace \
+    --delete "//_:member[@c:identifier=\"GST_VIDEO_BUFFER_FLAG_ONEFIELD\"][2]" \
+    --delete "//_:member[@c:identifier=\"GST_VIDEO_FRAME_FLAG_ONEFIELD\"][2]" \
+    GstVideo-1.0.gir
+
 xmlstarlet ed --pf --inplace \
     --delete '//_:record[@name="ISO639LanguageDescriptor"]/_:field[@name="language"]/_:array/@c:type' \
     --insert '//_:record[@name="ISO639LanguageDescriptor"]/_:field[@name="language"]/_:array' \
