@@ -22,24 +22,24 @@ pub enum Library {
     Gst,
 }
 
-fn docs(lib: Library) -> Option<&'static str> {
+fn docs(lib: Library) -> &'static str {
     match lib {
-        Library::GstWebRTC => Some(include_str!("../gstreamer-webrtc/docs.md")),
-        Library::GstVideo => Some(include_str!("../gstreamer-video/docs.md")),
-        Library::GstSdp => Some(include_str!("../gstreamer-sdp/docs.md")),
-        Library::GstRtspServer => Some(include_str!("../gstreamer-rtsp-server/docs.md")),
-        Library::GstRtsp => Some(include_str!("../gstreamer-rtsp/docs.md")),
-        Library::GstRtp => Some(include_str!("../gstreamer-rtp/docs.md")),
-        Library::GstPlayer => Some(include_str!("../gstreamer-player/docs.md")),
-        Library::GstNet => Some(include_str!("../gstreamer-net/docs.md")),
-        Library::GstGL => Some(include_str!("../gstreamer-gl/docs.md")),
-        Library::GES => Some(include_str!("../gstreamer-editing-services/docs.md")),
-        Library::GstCheck => Some(include_str!("../gstreamer-check/docs.md")),
-        Library::GstPbutils => Some(include_str!("../gstreamer-pbutils/docs.md")),
-        Library::GstBase => Some(include_str!("../gstreamer-base/docs.md")),
-        Library::GstAudio => Some(include_str!("../gstreamer-audio/docs.md")),
-        Library::GstApp => Some(include_str!("../gstreamer-app/docs.md")),
-        Library::Gst => Some(include_str!("../gstreamer/docs.md")),
+        Library::GstWebRTC => include_str!("../gstreamer-webrtc/docs.md"),
+        Library::GstVideo => include_str!("../gstreamer-video/docs.md"),
+        Library::GstSdp => include_str!("../gstreamer-sdp/docs.md"),
+        Library::GstRtspServer => include_str!("../gstreamer-rtsp-server/docs.md"),
+        Library::GstRtsp => include_str!("../gstreamer-rtsp/docs.md"),
+        Library::GstRtp => include_str!("../gstreamer-rtp/docs.md"),
+        Library::GstPlayer => include_str!("../gstreamer-player/docs.md"),
+        Library::GstNet => include_str!("../gstreamer-net/docs.md"),
+        Library::GstGL => include_str!("../gstreamer-gl/docs.md"),
+        Library::GES => include_str!("../gstreamer-editing-services/docs.md"),
+        Library::GstCheck => include_str!("../gstreamer-check/docs.md"),
+        Library::GstPbutils => include_str!("../gstreamer-pbutils/docs.md"),
+        Library::GstBase => include_str!("../gstreamer-base/docs.md"),
+        Library::GstAudio => include_str!("../gstreamer-audio/docs.md"),
+        Library::GstApp => include_str!("../gstreamer-app/docs.md"),
+        Library::Gst => include_str!("../gstreamer/docs.md"),
     }
 }
 
@@ -53,9 +53,9 @@ fn vendor_docs(_lib: Library) -> Option<&'static str> {
 ///
 /// `ignores` is the list of files to skip (relative to `path`).
 pub fn embed<P: AsRef<Path>>(library: Library, path: P, ignores: &[&str]) {
-    if let Some(docs) = docs(library) {
-        do_embed(docs, path.as_ref(), ignores);
-    }
+    let docs = docs(library);
+    do_embed(docs, path.as_ref(), ignores);
+
     if let Some(docs) = vendor_docs(library) {
         do_embed(docs, path.as_ref(), ignores);
     }
