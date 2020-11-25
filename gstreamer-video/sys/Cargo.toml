@@ -32,7 +32,6 @@ v1_12 = ["v1_10"]
 v1_14 = ["v1_12"]
 v1_16 = ["v1_14"]
 v1_18 = ["v1_16"]
-dox = []
 
 [lib]
 name = "gstreamer_video_sys"

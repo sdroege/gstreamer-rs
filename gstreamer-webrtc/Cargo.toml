@@ -27,9 +27,8 @@ gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 default = []
 embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-dox = ["v1_18", "ffi/dox", "glib/dox", "gst/dox", "gst-sdp/dox"]
 v1_16 = ["gst/v1_16", "gst-sdp/v1_16", "ffi/v1_16"]
 v1_18 = ["gst/v1_18", "gst-sdp/v1_18", "ffi/v1_18", "v1_16"]
 
 [package.metadata.docs.rs]
-features = ["dox", "embed-lgpl-docs"]
+features = ["embed-lgpl-docs"]

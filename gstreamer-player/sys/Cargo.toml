@@ -26,7 +26,6 @@ tempfile = "3"
 v1_14 = []
 v1_16 = ["v1_14"]
 v1_18 = ["v1_16"]
-dox = []
 
 [lib]
 name = "gstreamer_player_sys"
