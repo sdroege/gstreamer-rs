@@ -1303,8 +1303,8 @@ impl<T: AsMutPtr> Context<T> {
 
 declare_concrete_query!(Bitrate, T);
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 impl Bitrate<Query> {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
@@ -1312,8 +1312,8 @@ impl Bitrate<Query> {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 impl Default for Bitrate<Query> {
     fn default() -> Self {
         Self::new()
@@ -1321,8 +1321,8 @@ impl Default for Bitrate<Query> {
 }
 
 impl<T: AsPtr> Bitrate<T> {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     pub fn get_bitrate(&self) -> u32 {
         unsafe {
             let mut bitrate = mem::MaybeUninit::uninit();
@@ -1333,8 +1333,8 @@ impl<T: AsPtr> Bitrate<T> {
 }
 
 impl<T: AsMutPtr> Bitrate<T> {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     pub fn set_bitrate(&mut self, bitrate: u32) {
         unsafe {
             ffi::gst_query_set_bitrate(self.0.as_mut_ptr(), bitrate);

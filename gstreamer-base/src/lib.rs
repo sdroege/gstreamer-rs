@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
 
 pub use ffi;
 
@@ -38,17 +38,17 @@ mod adapter;
 pub use crate::adapter::*;
 mod flow_combiner;
 pub use crate::flow_combiner::*;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 mod aggregator;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 pub use aggregator::AggregatorExtManual;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 pub use aggregator_pad::AggregatorPadExtManual;
 mod base_parse;
 pub use crate::base_parse::BaseParseExtManual;
@@ -72,11 +72,11 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     pub use crate::aggregator::AggregatorExtManual;
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     pub use crate::aggregator_pad::AggregatorPadExtManual;
     pub use crate::auto::traits::*;
     pub use crate::base_parse::BaseParseExtManual;

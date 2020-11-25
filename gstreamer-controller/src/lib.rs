@@ -1,4 +1,4 @@
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
 
 pub use ffi;
 

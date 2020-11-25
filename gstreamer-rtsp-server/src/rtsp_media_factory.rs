@@ -8,20 +8,20 @@
 
 use crate::RTSPMediaFactory;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 use glib::IsA;
 
 pub trait RTSPMediaFactoryExtManual: 'static {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn add_role_from_structure(&self, structure: &gst::StructureRef);
 }
 
 impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn add_role_from_structure(&self, structure: &gst::StructureRef) {
         unsafe {
             ffi::gst_rtsp_media_factory_add_role_from_structure(

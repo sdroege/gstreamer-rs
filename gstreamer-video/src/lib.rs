@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
 
 pub use ffi;
 
@@ -30,8 +30,8 @@ mod auto;
 pub use crate::auto::*;
 
 mod caps_features;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 pub use crate::caps_features::{CAPS_FEATURES_FORMAT_INTERLACED, CAPS_FEATURE_FORMAT_INTERLACED};
 pub use crate::caps_features::{
     CAPS_FEATURES_META_GST_VIDEO_AFFINE_TRANSFORMATION_META,
@@ -64,27 +64,27 @@ pub use crate::video_rectangle::*;
 mod video_overlay_composition;
 pub use crate::video_overlay_composition::*;
 pub mod video_meta;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 pub use crate::video_meta::VideoCaptionMeta;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 pub use crate::video_meta::{VideoAFDMeta, VideoBarMeta};
 pub use crate::video_meta::{
     VideoAffineTransformationMeta, VideoCropMeta, VideoMeta, VideoOverlayCompositionMeta,
     VideoRegionOfInterestMeta,
 };
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 mod video_time_code;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 pub use crate::video_time_code::{ValidVideoTimeCode, VideoTimeCode, VideoTimeCodeMeta};
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
 mod video_time_code_interval;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
 pub use crate::video_time_code_interval::VideoTimeCodeInterval;
 mod video_buffer_pool;
 pub use crate::video_buffer_pool::{

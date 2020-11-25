@@ -18,8 +18,8 @@ use std::mem;
 use std::ptr;
 
 pub trait VideoEncoderExtManual: 'static {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -37,8 +37,8 @@ pub trait VideoEncoderExtManual: 'static {
         frame: Option<VideoCodecFrame>,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime);
@@ -58,8 +58,8 @@ pub trait VideoEncoderExtManual: 'static {
 }
 
 impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -101,8 +101,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         ret.into_result()
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_video_encoder_finish_subframe(

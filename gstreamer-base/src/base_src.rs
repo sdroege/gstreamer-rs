@@ -26,8 +26,8 @@ pub trait BaseSrcExtManual: 'static {
 
     fn query_latency(&self) -> Result<(bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError>;
 }
 
@@ -101,8 +101,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn new_segment(&self, segment: &gst::Segment) -> Result<(), glib::BoolError> {
         unsafe {
             let ret = from_glib(ffi::gst_base_src_new_segment(
