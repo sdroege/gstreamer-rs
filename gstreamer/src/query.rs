@@ -1412,19 +1412,13 @@ mod tests {
         assert!(query.is_writable());
 
         let query = query.make_mut();
-        match query.view_mut() {
-            QueryView::Duration(ref mut d) => {
-                d.set(2 * crate::SECOND);
-            }
-            _ => (),
+        if let QueryView::Duration(d) = &mut query.view_mut() {
+            d.set(2 * crate::SECOND);
         }
 
-        match query.view() {
-            QueryView::Duration(ref d) => {
-                let duration = d.get_result();
-                assert_eq!(duration.try_into(), Ok(2 * crate::SECOND));
-            }
-            _ => (),
+        if let QueryView::Duration(d) = &query.view() {
+            let duration = d.get_result();
+            assert_eq!(duration.try_into(), Ok(2 * crate::SECOND));
         }
     }
 
