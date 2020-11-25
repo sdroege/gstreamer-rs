@@ -1,9 +1,8 @@
 [package]
+build = "build.rs"
+edition = "2018"
 name = "gst-glx11-sys"
 version = "0.0.1"
-links = "\"gstgl-1.0\""
-edition = "2018"
-build = "build.rs"
 [package.metadata.system-deps.gstreamer_gl_x11_1_0]
 name = "gstreamer-gl-x11-1.0"
 version = "1.14"
@@ -23,10 +22,10 @@ name = "gst_glx11_sys"
 libc = "0.2"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/sys"
+git = "https://github.com/gtk-rs/gtk-rs"
 
 [dependencies.gstreamer-gl-sys]
-git = "https://github.com/gtk-rs/sys"
+path = "../../sys"
 
 [build-dependencies]
 system-deps = "2.0"
