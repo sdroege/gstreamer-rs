@@ -37,15 +37,6 @@ mod gl_context;
 pub use crate::gl_context::GLContextExtManual;
 mod gl_display;
 pub use crate::gl_display::GL_DISPLAY_CONTEXT_TYPE;
-#[cfg(any(feature = "egl", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-mod gl_display_egl;
-#[cfg(any(feature = "wayland", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-mod gl_display_wayland;
-#[cfg(any(feature = "x11", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-mod gl_display_x11;
 mod gl_video_frame;
 pub use crate::gl_video_frame::VideoFrameGLExt;
 mod gl_sync_meta;

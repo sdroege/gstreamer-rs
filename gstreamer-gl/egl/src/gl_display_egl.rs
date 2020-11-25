@@ -7,24 +7,19 @@
 // except according to those terms.
 
 use crate::GLDisplayEGL;
-use crate::GLDisplayType;
 use glib::ffi::gpointer;
 use glib::translate::*;
+use gst_gl::GLDisplayType;
 use libc::uintptr_t;
 
 impl GLDisplayEGL {
     pub unsafe fn with_egl_display(
         display: uintptr_t,
     ) -> Result<GLDisplayEGL, glib::error::BoolError> {
-        let result = from_glib_full(ffi::gst_gl_display_egl_new_with_egl_display(
+        from_glib_full::<_, Option<GLDisplayEGL>>(ffi::gst_gl_display_egl_new_with_egl_display(
             display as gpointer,
-        ));
-        match result {
-            Some(d) => Ok(d),
-            None => Err(glib::glib_bool_error!(
-                "Failed to create new EGL GL display"
-            )),
-        }
+        ))
+        .ok_or_else(|| glib::glib_bool_error!("Failed to create new EGL GL display"))
     }
 
     pub unsafe fn get_from_native(display_type: GLDisplayType, display: uintptr_t) -> gpointer {
