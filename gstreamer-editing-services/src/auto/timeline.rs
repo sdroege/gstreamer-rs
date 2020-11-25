@@ -3,12 +3,12 @@
 // DO NOT EDIT
 
 use crate::Asset;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use crate::Clip;
 use crate::Extractable;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use crate::FrameNumber;
 use crate::Group;
 use crate::Layer;
@@ -83,12 +83,12 @@ pub trait TimelineExt: 'static {
 
     fn get_element(&self, name: &str) -> Option<TimelineElement>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
 
     fn get_groups(&self) -> Vec<Group>;
@@ -109,8 +109,8 @@ pub trait TimelineExt: 'static {
 
     fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn move_layer<P: IsA<Layer>>(
         &self,
         layer: &P,
@@ -149,8 +149,8 @@ pub trait TimelineExt: 'static {
 
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
         &self,
         f: F,
@@ -255,16 +255,16 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
         unsafe {
             ffi::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.to_glib())
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_get_frame_time(
@@ -353,8 +353,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn move_layer<P: IsA<Layer>>(
         &self,
         layer: &P,
@@ -561,8 +561,8 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_select_element_track<F: Fn(&Self, &Clip, &TrackElement) -> Track + 'static>(
         &self,
         f: F,

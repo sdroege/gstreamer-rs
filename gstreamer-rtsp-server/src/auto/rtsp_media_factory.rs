@@ -56,20 +56,20 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     fn get_clock(&self) -> Option<gst::Clock>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn get_do_retransmission(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_dscp_qos(&self) -> i32;
 
     fn get_latency(&self) -> u32;
 
     fn get_launch(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn get_max_mcast_ttl(&self) -> u32;
 
     fn get_media_gtype(&self) -> glib::types::Type;
@@ -90,8 +90,8 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     fn get_transport_mode(&self) -> RTSPTransportMode;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn is_bind_mcast_address(&self) -> bool;
 
     fn is_eos_shutdown(&self) -> bool;
@@ -102,20 +102,20 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool);
 
     fn set_buffer_size(&self, size: u32);
 
     fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_do_retransmission(&self, do_retransmission: bool);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_dscp_qos(&self, dscp_qos: i32);
 
     fn set_eos_shutdown(&self, eos_shutdown: bool);
@@ -124,8 +124,8 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     fn set_launch(&self, launch: &str);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool;
 
     fn set_media_gtype(&self, media_gtype: glib::types::Type);
@@ -294,8 +294,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn get_do_retransmission(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_get_do_retransmission(
@@ -304,8 +304,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_dscp_qos(&self) -> i32 {
         unsafe { ffi::gst_rtsp_media_factory_get_dscp_qos(self.as_ref().to_glib_none().0) }
     }
@@ -322,8 +322,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn get_max_mcast_ttl(&self) -> u32 {
         unsafe { ffi::gst_rtsp_media_factory_get_max_mcast_ttl(self.as_ref().to_glib_none().0) }
     }
@@ -396,8 +396,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn is_bind_mcast_address(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_is_bind_mcast_address(
@@ -439,8 +439,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool) {
         unsafe {
             ffi::gst_rtsp_media_factory_set_bind_mcast_address(
@@ -465,8 +465,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_do_retransmission(&self, do_retransmission: bool) {
         unsafe {
             ffi::gst_rtsp_media_factory_set_do_retransmission(
@@ -476,8 +476,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_dscp_qos(&self, dscp_qos: i32) {
         unsafe {
             ffi::gst_rtsp_media_factory_set_dscp_qos(self.as_ref().to_glib_none().0, dscp_qos);
@@ -508,8 +508,8 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_set_max_mcast_ttl(

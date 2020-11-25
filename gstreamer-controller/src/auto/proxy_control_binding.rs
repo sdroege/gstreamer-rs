@@ -2,11 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
 use glib::object::Cast;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
 use glib::object::IsA;
 use glib::translate::*;
 
@@ -19,8 +19,8 @@ glib::glib_wrapper! {
 }
 
 impl ProxyControlBinding {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     pub fn new<P: IsA<gst::Object>, Q: IsA<gst::Object>>(
         object: &P,
         property_name: &str,

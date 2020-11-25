@@ -19,14 +19,14 @@ bitflags! {
         const ONEFIELD = 8388608;
         const MULTIPLE_VIEW = 16777216;
         const FIRST_IN_BUNDLE = 33554432;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+        #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
         const TOP_FIELD = 10485760;
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+        #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
         const BOTTOM_FIELD = 8388608;
-        #[cfg(any(feature = "v1_18", feature = "dox"))]
-        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+        #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
         const MARKER = 512;
     }
 }
@@ -386,32 +386,32 @@ impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoOverlayFormatFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_overlay_format_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for VideoOverlayFormatFlags {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 impl SetValue for VideoOverlayFormatFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
@@ -466,8 +466,8 @@ impl SetValue for VideoPackFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 bitflags! {
     pub struct VideoTimeCodeFlags: u32 {
         const DROP_FRAME = 1;
@@ -475,8 +475,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl ToGlib for VideoTimeCodeFlags {
     type GlibType = ffi::GstVideoTimeCodeFlags;
@@ -486,8 +486,8 @@ impl ToGlib for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
     fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
@@ -496,32 +496,32 @@ impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoTimeCodeFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_time_code_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 impl<'a> FromValueOptional<'a> for VideoTimeCodeFlags {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for VideoTimeCodeFlags {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 impl SetValue for VideoTimeCodeFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())

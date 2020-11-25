@@ -4,8 +4,8 @@
 
 use crate::ChildProxy;
 use crate::Element;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 use crate::ElementFlags;
 use crate::Object;
 use crate::Pad;
@@ -53,12 +53,12 @@ pub trait GstBinExt: 'static {
 
     fn get_by_name_recurse_up(&self, name: &str) -> Option<Element>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn get_suppressed_flags(&self) -> ElementFlags;
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     //fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> /*Ignored*/Option<Iterator>;
 
     //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator>;
@@ -79,8 +79,8 @@ pub trait GstBinExt: 'static {
 
     //fn remove_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn set_suppressed_flags(&self, flags: ElementFlags);
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
@@ -93,15 +93,15 @@ pub trait GstBinExt: 'static {
 
     fn set_property_message_forward(&self, message_forward: bool);
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -181,8 +181,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn get_suppressed_flags(&self) -> ElementFlags {
         unsafe {
             from_glib(ffi::gst_bin_get_suppressed_flags(
@@ -191,8 +191,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     //fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call ffi:gst_bin_iterate_all_by_element_factory_name() }
     //}
@@ -246,8 +246,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
     //    unsafe { TODO: call ffi:gst_bin_remove_many() }
     //}
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn set_suppressed_flags(&self, flags: ElementFlags) {
         unsafe {
             ffi::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.to_glib());
@@ -313,8 +313,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -350,8 +350,8 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
         &self,
         f: F,

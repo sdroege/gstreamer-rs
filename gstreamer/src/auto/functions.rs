@@ -7,19 +7,19 @@ use crate::ClockTime;
 use crate::DebugGraphDetails;
 use crate::DebugLevel;
 use crate::Element;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use crate::PluginAPIFlags;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
 use crate::StackTraceFlags;
 use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 use std::ptr;
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
     skip_assert_initialized!();
     unsafe {
@@ -72,8 +72,8 @@ pub fn debug_get_default_threshold() -> DebugLevel {
     unsafe { from_glib(ffi::gst_debug_get_default_threshold()) }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
 pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<glib::GString, glib::BoolError> {
     skip_assert_initialized!();
     unsafe {
@@ -99,8 +99,8 @@ pub fn debug_print_stack_trace() {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 pub fn debug_remove_ring_buffer_logger() {
     skip_assert_initialized!();
     unsafe {
@@ -108,8 +108,8 @@ pub fn debug_remove_ring_buffer_logger() {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 pub fn debug_ring_buffer_logger_get_logs() -> Vec<glib::GString> {
     skip_assert_initialized!();
     unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_debug_ring_buffer_logger_get_logs()) }
@@ -157,8 +157,8 @@ pub fn debug_unset_threshold_for_name(name: &str) {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 pub fn get_main_executable_path() -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
@@ -213,8 +213,8 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
     }
 }
 
-//#[cfg(any(feature = "v1_18", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+//#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+//#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 //pub fn tracing_get_active_tracers() -> /*Ignored*/Vec<Tracer> {
 //    unsafe { TODO: call ffi:gst_tracing_get_active_tracers() }
 //}
@@ -223,8 +223,8 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 //    unsafe { TODO: call ffi:gst_tracing_register_hook() }
 //}
 
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) {
     assert_initialized_main_thread!();
     unsafe {

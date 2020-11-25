@@ -20,8 +20,8 @@ glib::glib_wrapper! {
 }
 
 impl AppSink {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     pub fn get_buffer_list_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_app_sink_get_buffer_list_support(
@@ -68,8 +68,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     pub fn set_buffer_list_support(&self, enable_lists: bool) {
         unsafe {
             ffi::gst_app_sink_set_buffer_list_support(
@@ -113,8 +113,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     pub fn try_pull_preroll(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_preroll(
@@ -124,8 +124,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     pub fn try_pull_sample(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_sample(

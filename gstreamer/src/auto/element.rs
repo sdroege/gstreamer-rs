@@ -66,16 +66,16 @@ pub trait ElementExt: 'static {
 
     fn create_all_pads(&self);
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
     fn get_base_time(&self) -> ClockTime;
@@ -145,8 +145,8 @@ pub trait ElementExt: 'static {
 
     //fn message_full(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32);
 
-    //#[cfg(any(feature = "v1_10", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    //#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure);
 
     fn no_more_pads(&self);
@@ -222,8 +222,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -248,8 +248,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -274,8 +274,8 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
@@ -506,8 +506,8 @@ impl<O: IsA<Element>> ElementExt for O {
     //    unsafe { TODO: call ffi:gst_element_message_full() }
     //}
 
-    //#[cfg(any(feature = "v1_10", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    //#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure) {
     //    unsafe { TODO: call ffi:gst_element_message_full_with_details() }
     //}

@@ -6,8 +6,8 @@ use crate::Asset;
 use crate::BaseEffect;
 use crate::Container;
 use crate::Extractable;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use crate::FrameNumber;
 use crate::Layer;
 use crate::TimelineElement;
@@ -21,8 +21,8 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
 glib::glib_wrapper! {
@@ -38,16 +38,16 @@ pub const NONE_CLIP: Option<&Clip> = None;
 pub trait ClipExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<TrackElement, glib::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
         &self,
         child: &P,
         track: &Q,
     ) -> Result<TrackElement, glib::Error>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_top_effect<P: IsA<BaseEffect>>(&self, effect: &P, index: i32)
         -> Result<(), glib::Error>;
 
@@ -64,12 +64,12 @@ pub trait ClipExt: 'static {
         type_: glib::types::Type,
     ) -> Vec<TrackElement>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_duration_limit(&self) -> gst::ClockTime;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_internal_time_from_timeline_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
@@ -80,16 +80,16 @@ pub trait ClipExt: 'static {
 
     fn get_supported_formats(&self) -> TrackType;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
         internal_time: gst::ClockTime,
     ) -> Result<gst::ClockTime, glib::Error>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
@@ -103,12 +103,12 @@ pub trait ClipExt: 'static {
 
     fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn move_to_layer_full<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::Error>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn remove_top_effect<P: IsA<BaseEffect>>(&self, effect: &P) -> Result<(), glib::Error>;
 
     fn set_supported_formats(&self, supportedformats: TrackType);
@@ -119,8 +119,8 @@ pub trait ClipExt: 'static {
         newindex: u32,
     ) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_top_effect_index_full<P: IsA<BaseEffect>>(
         &self,
         effect: &P,
@@ -135,12 +135,12 @@ pub trait ClipExt: 'static {
 
     fn split(&self, position: u64) -> Result<Clip, glib::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -165,8 +165,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_child_to_track<P: IsA<TrackElement>, Q: IsA<Track>>(
         &self,
         child: &P,
@@ -188,8 +188,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_top_effect<P: IsA<BaseEffect>>(
         &self,
         effect: &P,
@@ -241,8 +241,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_duration_limit(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_clip_get_duration_limit(
@@ -251,8 +251,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_internal_time_from_timeline_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
@@ -286,8 +286,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
@@ -309,8 +309,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
@@ -368,8 +368,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn move_to_layer_full<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -386,8 +386,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn remove_top_effect<P: IsA<BaseEffect>>(&self, effect: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -430,8 +430,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_top_effect_index_full<P: IsA<BaseEffect>>(
         &self,
         effect: &P,
@@ -480,8 +480,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -495,8 +495,8 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_duration_limit_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,

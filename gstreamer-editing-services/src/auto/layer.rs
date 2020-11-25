@@ -6,8 +6,8 @@ use crate::Asset;
 use crate::Clip;
 use crate::Extractable;
 use crate::Timeline;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use crate::Track;
 use crate::TrackType;
 use glib::object::Cast;
@@ -17,8 +17,8 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
 glib::glib_wrapper! {
@@ -54,8 +54,8 @@ pub trait LayerExt: 'static {
         track_types: TrackType,
     ) -> Result<Clip, glib::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_asset_full<P: IsA<Asset>>(
         &self,
         asset: &P,
@@ -67,12 +67,12 @@ pub trait LayerExt: 'static {
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
     fn get_auto_transition(&self) -> bool;
@@ -91,8 +91,8 @@ pub trait LayerExt: 'static {
 
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool;
 
     fn set_auto_transition(&self, auto_transition: bool);
@@ -102,8 +102,8 @@ pub trait LayerExt: 'static {
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P);
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -141,8 +141,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_asset_full<P: IsA<Asset>>(
         &self,
         asset: &P,
@@ -182,8 +182,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -200,8 +200,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_get_active_for_track(
@@ -265,8 +265,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_set_active_for_tracks(
@@ -301,8 +301,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_18", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 17 }
     //}

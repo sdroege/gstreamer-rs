@@ -9,8 +9,8 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use glib::StaticType;
 use glib::Value;
 use std::boxed::Box as Box_;
@@ -26,8 +26,8 @@ glib::glib_wrapper! {
 }
 
 impl UriClipAsset {
-    //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     //pub fn finish(res: /*Ignored*/&gio::AsyncResult) -> Result<UriClipAsset, glib::Error> {
     //    unsafe { TODO: call ffi:ges_uri_clip_asset_finish() }
     //}
@@ -57,26 +57,26 @@ pub trait UriClipAssetExt: 'static {
 
     fn get_info(&self) -> Option<gst_pbutils::DiscovererInfo>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_max_duration(&self) -> gst::ClockTime;
 
     fn get_stream_assets(&self) -> Vec<UriSourceAsset>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn is_image(&self) -> bool;
 
     fn set_property_duration(&self, duration: u64);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_property_is_nested_timeline(&self) -> bool;
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_is_nested_timeline_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
@@ -100,8 +100,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_max_duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_max_duration(
@@ -118,8 +118,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn is_image(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_is_image(
@@ -138,8 +138,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_property_is_nested_timeline(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -179,8 +179,8 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_is_nested_timeline_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,

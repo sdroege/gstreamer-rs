@@ -30,8 +30,8 @@ pub trait BaseSinkExt: 'static {
 
     fn get_blocksize(&self) -> u32;
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn get_drop_out_of_segment(&self) -> bool;
 
     fn get_last_sample(&self) -> Option<gst::Sample>;
@@ -42,14 +42,14 @@ pub trait BaseSinkExt: 'static {
 
     fn get_max_lateness(&self) -> i64;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn get_processing_deadline(&self) -> gst::ClockTime;
 
     fn get_render_delay(&self) -> gst::ClockTime;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_stats(&self) -> Option<gst::Structure>;
 
     fn get_sync(&self) -> bool;
@@ -68,8 +68,8 @@ pub trait BaseSinkExt: 'static {
 
     fn set_blocksize(&self, blocksize: u32);
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool);
 
     fn set_last_sample_enabled(&self, enabled: bool);
@@ -78,8 +78,8 @@ pub trait BaseSinkExt: 'static {
 
     fn set_max_lateness(&self, max_lateness: i64);
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime);
 
     fn set_qos_enabled(&self, enabled: bool);
@@ -134,8 +134,8 @@ pub trait BaseSinkExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn connect_property_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -151,8 +151,8 @@ pub trait BaseSinkExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -183,8 +183,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe { ffi::gst_base_sink_get_blocksize(self.as_ref().to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn get_drop_out_of_segment(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_sink_get_drop_out_of_segment(
@@ -217,8 +217,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe { ffi::gst_base_sink_get_max_lateness(self.as_ref().to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn get_processing_deadline(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_base_sink_get_processing_deadline(
@@ -235,8 +235,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_stats(&self) -> Option<gst::Structure> {
         unsafe { from_glib_full(ffi::gst_base_sink_get_stats(self.as_ref().to_glib_none().0)) }
     }
@@ -289,8 +289,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool) {
         unsafe {
             ffi::gst_base_sink_set_drop_out_of_segment(
@@ -321,8 +321,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime) {
         unsafe {
             ffi::gst_base_sink_set_processing_deadline(
@@ -602,8 +602,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     fn connect_property_processing_deadline_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -688,8 +688,8 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_stats_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

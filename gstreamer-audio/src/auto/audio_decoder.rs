@@ -56,8 +56,8 @@ pub trait AudioDecoderExt: 'static {
 
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>);
 
     fn set_drainable(&self, enabled: bool);
@@ -80,8 +80,8 @@ pub trait AudioDecoderExt: 'static {
 
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -228,8 +228,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>) {
         unsafe {
             ffi::gst_audio_decoder_set_allocation_caps(
@@ -315,8 +315,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

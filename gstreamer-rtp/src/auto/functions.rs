@@ -5,14 +5,14 @@
 use crate::RTCPSDESType;
 use glib::translate::*;
 
-//#[cfg(any(feature = "v1_16", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+//#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+//#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 //pub fn buffer_add_rtp_source_meta(buffer: &gst::Buffer, ssrc: u32, csrc: u32, csrc_count: u32) -> /*Ignored*/Option<RTPSourceMeta> {
 //    unsafe { TODO: call ffi:gst_buffer_add_rtp_source_meta() }
 //}
 
-//#[cfg(any(feature = "v1_16", feature = "dox"))]
-//#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+//#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+//#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 //pub fn buffer_get_rtp_source_meta(buffer: &gst::Buffer) -> /*Ignored*/Option<RTPSourceMeta> {
 //    unsafe { TODO: call ffi:gst_buffer_get_rtp_source_meta() }
 //}

@@ -388,14 +388,14 @@ pub enum AudioRingBufferFormatType {
     Dts,
     Mpeg2Aac,
     Mpeg4Aac,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     Mpeg2AacRaw,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     Mpeg4AacRaw,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     Flac,
     #[doc(hidden)]
     __Unknown(i32),
@@ -419,15 +419,15 @@ impl ToGlib for AudioRingBufferFormatType {
             AudioRingBufferFormatType::Dts => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS,
             AudioRingBufferFormatType::Mpeg2Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC,
             AudioRingBufferFormatType::Mpeg4Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
+            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
             AudioRingBufferFormatType::Mpeg2AacRaw => {
                 ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW
             }
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
+            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
             AudioRingBufferFormatType::Mpeg4AacRaw => {
                 ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW
             }
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
+            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
             AudioRingBufferFormatType::Flac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC,
             AudioRingBufferFormatType::__Unknown(value) => value,
         }
@@ -451,11 +451,11 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
             9 => AudioRingBufferFormatType::Dts,
             10 => AudioRingBufferFormatType::Mpeg2Aac,
             11 => AudioRingBufferFormatType::Mpeg4Aac,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
+            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
             12 => AudioRingBufferFormatType::Mpeg2AacRaw,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
+            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
             13 => AudioRingBufferFormatType::Mpeg4AacRaw,
-            #[cfg(any(feature = "v1_12", feature = "dox"))]
+            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
             14 => AudioRingBufferFormatType::Flac,
             value => AudioRingBufferFormatType::__Unknown(value),
         }

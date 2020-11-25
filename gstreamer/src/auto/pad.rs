@@ -8,16 +8,16 @@ use crate::Event;
 use crate::EventType;
 use crate::Object;
 use crate::PadDirection;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 use crate::PadLinkCheck;
 use crate::PadMode;
 use crate::PadTemplate;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
 use crate::Stream;
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
 use crate::TaskState;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -79,20 +79,20 @@ pub trait PadExt: 'static {
 
     fn get_peer(&self) -> Option<Pad>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_single_internal_link(&self) -> Option<Pad>;
 
     fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn get_stream(&self) -> Option<Stream>;
 
     fn get_stream_id(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn get_task_state(&self) -> TaskState;
 
     fn has_current_caps(&self) -> bool;
@@ -109,12 +109,12 @@ pub trait PadExt: 'static {
 
     //fn iterate_internal_links_default<P: IsA<Object>>(&self, parent: Option<&P>) -> /*Ignored*/Option<Iterator>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn link_maybe_ghosting_full<P: IsA<Pad>>(
         &self,
         sink: &P,
@@ -296,8 +296,8 @@ impl<O: IsA<Pad>> PadExt for O {
         unsafe { from_glib_full(ffi::gst_pad_get_peer(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_single_internal_link(&self) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_single_internal_link(
@@ -316,8 +316,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn get_stream(&self) -> Option<Stream> {
         unsafe { from_glib_full(ffi::gst_pad_get_stream(self.as_ref().to_glib_none().0)) }
     }
@@ -326,8 +326,8 @@ impl<O: IsA<Pad>> PadExt for O {
         unsafe { from_glib_full(ffi::gst_pad_get_stream_id(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn get_task_state(&self) -> TaskState {
         unsafe { from_glib(ffi::gst_pad_get_task_state(self.as_ref().to_glib_none().0)) }
     }
@@ -364,8 +364,8 @@ impl<O: IsA<Pad>> PadExt for O {
     //    unsafe { TODO: call ffi:gst_pad_iterate_internal_links_default() }
     //}
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -378,8 +378,8 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     fn link_maybe_ghosting_full<P: IsA<Pad>>(
         &self,
         sink: &P,

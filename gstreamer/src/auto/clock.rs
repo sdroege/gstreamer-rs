@@ -28,8 +28,8 @@ impl Clock {
     //    unsafe { TODO: call ffi:gst_clock_id_compare_func() }
     //}
 
-    //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     //pub fn id_get_clock(id: /*Unimplemented*/ClockID) -> Option<Clock> {
     //    unsafe { TODO: call ffi:gst_clock_id_get_clock() }
     //}
@@ -50,8 +50,8 @@ impl Clock {
     //    unsafe { TODO: call ffi:gst_clock_id_unschedule() }
     //}
 
-    //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     //pub fn id_uses_clock<P: IsA<Clock>>(id: /*Unimplemented*/ClockID, clock: &P) -> bool {
     //    unsafe { TODO: call ffi:gst_clock_id_uses_clock() }
     //}

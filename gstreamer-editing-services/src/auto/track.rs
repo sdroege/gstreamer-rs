@@ -14,8 +14,8 @@ use glib::StaticType;
 use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-#[cfg(any(feature = "v1_18", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
 glib::glib_wrapper! {
@@ -38,8 +38,8 @@ pub const NONE_TRACK: Option<&Track> = None;
 pub trait GESTrackExt: 'static {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
 
     fn commit(&self) -> bool;
@@ -50,8 +50,8 @@ pub trait GESTrackExt: 'static {
 
     fn get_mixing(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_restriction_caps(&self) -> Option<gst::Caps>;
 
     fn get_timeline(&self) -> Option<Timeline>;
@@ -61,8 +61,8 @@ pub trait GESTrackExt: 'static {
         object: &P,
     ) -> Result<(), glib::error::BoolError>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn remove_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
 
     //fn set_create_element_for_gap_func<P: Fn(&Track) -> gst::Element + 'static>(&self, func: P);
@@ -77,12 +77,12 @@ pub trait GESTrackExt: 'static {
 
     fn get_property_duration(&self) -> u64;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_property_id(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_property_id(&self, id: Option<&str>);
 
     fn get_property_restriction_caps(&self) -> Option<gst::Caps>;
@@ -103,8 +103,8 @@ pub trait GESTrackExt: 'static {
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -128,8 +128,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn add_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -166,8 +166,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         unsafe { from_glib(ffi::ges_track_get_mixing(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_restriction_caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::ges_track_get_restriction_caps(
@@ -195,8 +195,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn remove_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -265,8 +265,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn get_property_id(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
@@ -279,8 +279,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn set_property_id(&self, id: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
@@ -430,8 +430,8 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn connect_property_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_id_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut ffi::GESTrack,

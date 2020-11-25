@@ -3,12 +3,12 @@
 // DO NOT EDIT
 
 use crate::GLContext;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 use crate::GLSLProfile;
 use crate::GLSLStage;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
 use crate::GLSLVersion;
 use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
@@ -351,8 +351,8 @@ impl GLShader {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     pub fn string_fragment_external_oes_get_default<P: IsA<GLContext>>(
         context: &P,
         version: GLSLVersion,
@@ -368,8 +368,8 @@ impl GLShader {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     pub fn string_fragment_get_default<P: IsA<GLContext>>(
         context: &P,
         version: GLSLVersion,
@@ -385,8 +385,8 @@ impl GLShader {
         }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
     pub fn string_get_highest_precision<P: IsA<GLContext>>(
         context: &P,
         version: GLSLVersion,

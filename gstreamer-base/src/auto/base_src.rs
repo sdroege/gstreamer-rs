@@ -38,8 +38,8 @@ pub trait BaseSrcExt: 'static {
 
     fn is_live(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool;
 
     #[cfg_attr(feature = "v1_18", deprecated)]
@@ -123,8 +123,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         unsafe { from_glib(ffi::gst_base_src_is_live(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool {
         unsafe { from_glib(ffi::gst_base_src_negotiate(self.as_ref().to_glib_none().0)) }
     }

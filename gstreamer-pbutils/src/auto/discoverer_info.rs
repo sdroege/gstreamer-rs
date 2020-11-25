@@ -40,8 +40,8 @@ impl DiscovererInfo {
         unsafe { from_glib(ffi::gst_discoverer_info_get_duration(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     pub fn get_live(&self) -> bool {
         unsafe { from_glib(ffi::gst_discoverer_info_get_live(self.to_glib_none().0)) }
     }

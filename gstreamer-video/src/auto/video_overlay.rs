@@ -14,14 +14,14 @@ glib::glib_wrapper! {
 }
 
 impl VideoOverlay {
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    //#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     //pub fn install_properties(oclass: /*Ignored*/&mut glib::ObjectClass, last_prop_id: i32) {
     //    unsafe { TODO: call ffi:gst_video_overlay_install_properties() }
     //}
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    //#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
     //pub fn set_property<P: IsA<glib::Object>>(object: &P, last_prop_id: i32, property_id: u32, value: /*Ignored*/&glib::Value) -> bool {
     //    unsafe { TODO: call ffi:gst_video_overlay_set_property() }
     //}

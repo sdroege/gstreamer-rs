@@ -28,8 +28,8 @@ pub const NONE_BASE_PARSE: Option<&BaseParse> = None;
 pub trait BaseParseExt: 'static {
     fn add_index_entry(&self, offset: u64, ts: gst::ClockTime, key: bool, force: bool) -> bool;
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn drain(&self);
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
@@ -75,8 +75,8 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
     fn drain(&self) {
         unsafe {
             ffi::gst_base_parse_drain(self.as_ref().to_glib_none().0);

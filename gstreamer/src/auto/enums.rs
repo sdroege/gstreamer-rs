@@ -336,8 +336,8 @@ pub enum ClockType {
     Realtime,
     Monotonic,
     Other,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     Tai,
     #[doc(hidden)]
     __Unknown(i32),
@@ -352,7 +352,7 @@ impl ToGlib for ClockType {
             ClockType::Realtime => ffi::GST_CLOCK_TYPE_REALTIME,
             ClockType::Monotonic => ffi::GST_CLOCK_TYPE_MONOTONIC,
             ClockType::Other => ffi::GST_CLOCK_TYPE_OTHER,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
             ClockType::Tai => ffi::GST_CLOCK_TYPE_TAI,
             ClockType::__Unknown(value) => value,
         }
@@ -367,7 +367,7 @@ impl FromGlib<ffi::GstClockType> for ClockType {
             0 => ClockType::Realtime,
             1 => ClockType::Monotonic,
             2 => ClockType::Other,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
             3 => ClockType::Tai,
             value => ClockType::__Unknown(value),
         }
@@ -624,16 +624,16 @@ pub enum EventType {
     Tag,
     Buffersize,
     SinkMessage,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     StreamGroupDone,
     Eos,
     Toc,
     Protection,
     SegmentDone,
     Gap,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     InstantRateChange,
     Qos,
     Seek,
@@ -642,11 +642,11 @@ pub enum EventType {
     Step,
     Reconfigure,
     TocSelect,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
     SelectStreams,
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
     InstantRateSyncTime,
     CustomUpstream,
     CustomDownstream,
@@ -674,14 +674,14 @@ impl ToGlib for EventType {
             EventType::Tag => ffi::GST_EVENT_TAG,
             EventType::Buffersize => ffi::GST_EVENT_BUFFERSIZE,
             EventType::SinkMessage => ffi::GST_EVENT_SINK_MESSAGE,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
+            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
             EventType::StreamGroupDone => ffi::GST_EVENT_STREAM_GROUP_DONE,
             EventType::Eos => ffi::GST_EVENT_EOS,
             EventType::Toc => ffi::GST_EVENT_TOC,
             EventType::Protection => ffi::GST_EVENT_PROTECTION,
             EventType::SegmentDone => ffi::GST_EVENT_SEGMENT_DONE,
             EventType::Gap => ffi::GST_EVENT_GAP,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
             EventType::InstantRateChange => ffi::GST_EVENT_INSTANT_RATE_CHANGE,
             EventType::Qos => ffi::GST_EVENT_QOS,
             EventType::Seek => ffi::GST_EVENT_SEEK,
@@ -690,9 +690,9 @@ impl ToGlib for EventType {
             EventType::Step => ffi::GST_EVENT_STEP,
             EventType::Reconfigure => ffi::GST_EVENT_RECONFIGURE,
             EventType::TocSelect => ffi::GST_EVENT_TOC_SELECT,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
+            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
             EventType::SelectStreams => ffi::GST_EVENT_SELECT_STREAMS,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
             EventType::InstantRateSyncTime => ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME,
             EventType::CustomUpstream => ffi::GST_EVENT_CUSTOM_UPSTREAM,
             EventType::CustomDownstream => ffi::GST_EVENT_CUSTOM_DOWNSTREAM,
@@ -720,14 +720,14 @@ impl FromGlib<ffi::GstEventType> for EventType {
             20510 => EventType::Tag,
             23054 => EventType::Buffersize,
             25630 => EventType::SinkMessage,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
+            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
             26894 => EventType::StreamGroupDone,
             28174 => EventType::Eos,
             30750 => EventType::Toc,
             33310 => EventType::Protection,
             38406 => EventType::SegmentDone,
             40966 => EventType::Gap,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
             46090 => EventType::InstantRateChange,
             48641 => EventType::Qos,
             51201 => EventType::Seek,
@@ -736,9 +736,9 @@ impl FromGlib<ffi::GstEventType> for EventType {
             58881 => EventType::Step,
             61441 => EventType::Reconfigure,
             64001 => EventType::TocSelect,
-            #[cfg(any(feature = "v1_10", feature = "dox"))]
+            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
             66561 => EventType::SelectStreams,
-            #[cfg(any(feature = "v1_18", feature = "dox"))]
+            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
             66817 => EventType::InstantRateSyncTime,
             69121 => EventType::CustomUpstream,
             71686 => EventType::CustomDownstream,
@@ -1614,8 +1614,8 @@ impl SetValue for ProgressType {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum PromiseResult {
@@ -1627,8 +1627,8 @@ pub enum PromiseResult {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl ToGlib for PromiseResult {
     type GlibType = ffi::GstPromiseResult;
@@ -1644,8 +1644,8 @@ impl ToGlib for PromiseResult {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
     fn from_glib(value: ffi::GstPromiseResult) -> Self {
@@ -1660,32 +1660,32 @@ impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 impl StaticType for PromiseResult {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_promise_result_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 impl<'a> FromValueOptional<'a> for PromiseResult {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 impl<'a> FromValue<'a> for PromiseResult {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
+#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
 impl SetValue for PromiseResult {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())

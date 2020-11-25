@@ -47,7 +47,7 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.17.0"
 edition = "2018"
 [package.metadata.docs.rs]
-features = ["dox"]
+features = []
 [package.metadata.system-deps.gstreamer_net_1_0]
 name = "gstreamer-net-1.0"
 version = "1.8"
