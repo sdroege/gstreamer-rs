@@ -11,7 +11,6 @@
 #![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
 
 use glib_sys as glib;
-use gobject_sys as gobject;
 use gstreamer_sys as gst;
 
 #[allow(unused_imports)]

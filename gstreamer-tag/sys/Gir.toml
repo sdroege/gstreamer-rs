@@ -25,4 +25,3 @@ external_libraries = [
 
 [external_libraries]
 gstreamer="Gst"
-gstreamer_base="GstBase"

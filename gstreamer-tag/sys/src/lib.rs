@@ -12,7 +12,6 @@
 
 use glib_sys as glib;
 use gobject_sys as gobject;
-use gstreamer_base_sys as gst_base;
 use gstreamer_sys as gst;
 
 #[allow(unused_imports)]

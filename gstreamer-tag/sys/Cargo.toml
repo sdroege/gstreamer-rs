@@ -10,9 +10,6 @@ git = "https://github.com/gtk-rs/gtk-rs"
 [dependencies.gobject-sys]
 git = "https://github.com/gtk-rs/gtk-rs"
 
-[dependencies.gstreamer-base-sys]
-path = "../../gstreamer-base/sys"
-
 [dependencies.gstreamer-sys]
 path = "../../gstreamer/sys"
 
