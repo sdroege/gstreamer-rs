@@ -1,0 +1,53 @@
+[options]
+girs_dir = "../../gir-files"
+library = "GstGLX11"
+version = "1.0"
+min_cfg_version = "1.14"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+    "GstBase",
+    "GstVideo",
+    "GstGL",
+]
+
+generate = [
+    "GstGLX11.GLDisplayX11",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.Thread",
+    "GObject.Object",
+    "Gst.Object",
+    "Gst.FlowReturn",
+    "Gst.PadDirection",
+    "GstGL.GLDisplay",
+]
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"

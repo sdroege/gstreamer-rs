@@ -187,24 +187,6 @@ status = "generate"
         nullable_return_is_error = "Failed to create window"
 
 [[object]]
-name = "GstGL.GLDisplayEGL"
-status = "generate"
-final_type = true
-cfg_condition = "feature = \"egl\""
-
-[[object]]
-name = "GstGL.GLDisplayX11"
-status = "generate"
-final_type = true
-cfg_condition = "feature = \"x11\""
-
-[[object]]
-name = "GstGL.GLDisplayWayland"
-status = "generate"
-final_type = true
-cfg_condition = "feature = \"wayland\""
-
-[[object]]
 name = "GstGL.GLWindow"
 status = "generate"
 

@@ -1,0 +1,22 @@
+[options]
+girs_dir = "../../../gir-files"
+library = "GstGLX11"
+min_cfg_version = "1.14"
+version = "1.0"
+work_mode = "sys"
+
+extra_versions = [
+    "1.18",
+    "1.16",
+]
+
+external_libraries = [
+    "GLib",
+]
+
+generate = [
+    "GstGLX11.GLDisplayX11",
+]
+
+[external_libraries]
+gstreamer-gl = "GstGL"
