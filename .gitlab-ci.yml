@@ -201,17 +201,17 @@ plugins-update-nightly:
       get_features() {
         crate=$1
         if [ "$crate" = "gstreamer" ]; then
-          echo "ser_de,v1_18"
-        elif [ "$crate" = "gstreamer-gl" ]; then
-          echo "egl,x11,wayland,v1_18"
+          echo "--features=ser_de,v1_18"
+        elif [[ "$crate" = gstreamer-gl/* ]]; then
+          echo ""
         else
-          echo "v1_18"
+          echo "--features=v1_18"
         fi
       }
-      for crate in gstreamer*; do
+      for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         if [ -e $crate/Cargo.toml ]; then
           if [ -n "$ALL_FEATURES" ]; then
-            FEATURES="--features=$(get_features $crate)"
+            FEATURES="$(get_features $crate)"
           else
             FEATURES=""
           fi
@@ -269,18 +269,18 @@ test nightly all-features:
     - |
       get_features() {
         module=${1%%/sys}
-        if [ "$module" = "gstreamer-gl" ]; then
-          echo "egl,x11,wayland,v1_18"
+        if [[ "$module" = gstreamer-gl/* ]]; then
+          echo ""
         else
-          echo "v1_18"
+          echo "--features=v1_18"
         fi
       }
       # First build and test all the crates with their relevant features
       # Keep features in sync with below
-      for crate in gstreamer*/sys; do
+      for crate in gstreamer*/sys gstreamer-gl/*/sys; do
         if [ -e $crate/Cargo.toml ]; then
           echo "Building $crate with $(get_features $crate)"
-          cargo build --locked --color=always --manifest-path $crate/Cargo.toml --features $(get_features $crate)
+          cargo build --locked --color=always --manifest-path $crate/Cargo.toml $(get_features $crate)
         fi
       done
       # Run tests for crates we can currently run.
@@ -291,6 +291,10 @@ test nightly all-features:
                    gstreamer-base/sys \
                    gstreamer-check/sys \
                    gstreamer-controller/sys \
+                   gstreamer-gl/sys \
+                   gstreamer-gl/egl/sys \
+                   gstreamer-gl/wayland/sys \
+                   gstreamer-gl/x11/sys \
                    gstreamer-mpegts/sys \
                    gstreamer-net/sys \
                    gstreamer-pbutils/sys \
@@ -302,7 +306,7 @@ test nightly all-features:
                    gstreamer-video/sys \
                    gstreamer-webrtc/sys; do
         echo "Testing $crate with $(get_features $crate)"
-        cargo test --locked --color=always --manifest-path $crate/Cargo.toml --features $(get_features $crate)
+        cargo test --locked --color=always --manifest-path $crate/Cargo.toml $(get_features $crate)
       done
 
 test stable sys:
@@ -343,20 +347,20 @@ clippy:
       get_features() {
         crate=$1
         if [ "$crate" = "gstreamer" ]; then
-          echo "ser_de,v1_18"
-        elif [ "$crate" = "gstreamer-gl" ]; then
-          echo "egl,x11,wayland,v1_18"
+          echo "--features=ser_de,v1_18"
+        elif [[ "$crate" = gstreamer-gl/* ]]; then
+          echo ""
         else
-          echo "v1_18"
+          echo "--features=v1_18"
         fi
       }
-      for crate in gstreamer*; do
+      for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         if [ -e $crate/Cargo.toml ]; then
           FEATURES=$(get_features $crate)
 
           echo "Running clippy on $crate with $FEATURES"
 
-          cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
+          cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml $FEATURES --all-targets -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless -A clippy::missing_safety_doc -D warnings
         fi
       done
     # And also run over all the examples/tutorials
@@ -389,6 +393,9 @@ gir-checks:
         --gir-file ../Gir_GstController.toml ../gstreamer-controller/ \
         --gir-file ../Gir_GstEditingServices.toml ../gstreamer-editing-services/ \
         --gir-file ../Gir_GstGL.toml ../gstreamer-gl/ \
+        --gir-file ../Gir_GstGLEGL.toml ../gstreamer-gl/egl \
+        --gir-file ../Gir_GstGLWayland.toml ../gstreamer-gl/wayland \
+        --gir-file ../Gir_GstGLX11.toml ../gstreamer-gl/x11 \
         --gir-file ../Gir_GstNet.toml ../gstreamer-net/ \
         --gir-file ../Gir_GstPbutils.toml ../gstreamer-pbutils/ \
         --gir-file ../Gir_GstPlayer.toml ../gstreamer-player/ \
@@ -400,9 +407,9 @@ gir-checks:
         --gir-file ../Gir_GstWebRTC.toml ../gstreamer-webrtc/
     - cd ..
     - |
-      for crate in gstreamer*; do
+      for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         echo '-->' $crate
-        (cd $crate && ../checker/check_init_asserts)
+        ./checker/check_init_asserts $crate
       done
 
 outdated:
@@ -419,9 +426,9 @@ pages:
   stage: 'deploy'
   script:
     - |
-      for crate in gstreamer*; do
+      for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         cd $crate
-        cargo +nightly doc --color=always --features --features=dox,embed-lgpl-docs
+        cargo +nightly doc --color=always --features=dox,embed-lgpl-docs
         cd ..
       done
     - mv target/doc public/
