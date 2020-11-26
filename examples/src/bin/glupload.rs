@@ -340,13 +340,13 @@ impl App {
 
         let windowed_context = unsafe { windowed_context.make_current().map_err(|(_, err)| err)? };
 
-        #[cfg(any(feature = "gl-x11", feature = "gl-wayland"))]
+        #[cfg(any(feature = "gst-gl-x11", feature = "gst-gl-wayland"))]
         let inner_window = windowed_context.window();
 
         let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
             use glutin::os::unix::RawHandle;
-            #[cfg(any(feature = "gl-x11", feature = "gl-wayland"))]
+            #[cfg(any(feature = "gst-gl-x11", feature = "gst-gl-wayland"))]
             use glutin::os::unix::WindowExt;
             use glutin::os::ContextTraitExt;
 
@@ -354,23 +354,25 @@ impl App {
 
             let (gl_context, gl_display, platform) = match unsafe { windowed_context.raw_handle() }
             {
-                #[cfg(any(feature = "gl-egl", feature = "gl-wayland"))]
+                #[cfg(any(feature = "gst-gl-egl", feature = "gst-gl-wayland"))]
                 RawHandle::Egl(egl_context) => {
-                    #[cfg(feature = "gl-egl")]
-                    let gl_display = if let Some(display) =
-                        unsafe { windowed_context.get_egl_display() }
-                    {
-                        unsafe { gst_gl::GLDisplayEGL::with_egl_display(display as usize) }.unwrap()
-                    } else {
-                        panic!("EGL context without EGL display");
-                    };
-
-                    #[cfg(not(feature = "gl-egl"))]
-                    let gl_display = if let Some(display) = inner_window.get_wayland_display() {
-                        unsafe { gst_gl::GLDisplayWayland::with_display(display as usize) }.unwrap()
-                    } else {
-                        panic!("Wayland window without Wayland display");
-                    };
+                    cfg_if::cfg_if! {
+                        if #[cfg(feature = "gst-gl-egl")] {
+                            let gl_display = if let Some(display) =
+                                unsafe { windowed_context.get_egl_display() }
+                            {
+                                unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }.unwrap()
+                            } else {
+                                panic!("EGL context without EGL display");
+                            };
+                        } else if #[cfg(feature = "gst-gl-wayland")] {
+                            let gl_display = if let Some(display) = inner_window.get_wayland_display() {
+                                unsafe { gst_gl_wayland::GLDisplayWayland::with_display(display as usize) }.unwrap()
+                            } else {
+                                panic!("Wayland window without Wayland display");
+                            };
+                        }
+                    }
 
                     (
                         egl_context as usize,
@@ -378,10 +380,10 @@ impl App {
                         gst_gl::GLPlatform::EGL,
                     )
                 }
-                #[cfg(feature = "gl-x11")]
+                #[cfg(feature = "gst-gl-x11")]
                 RawHandle::Glx(glx_context) => {
                     let gl_display = if let Some(display) = inner_window.get_xlib_display() {
-                        unsafe { gst_gl::GLDisplayX11::with_display(display as usize) }.unwrap()
+                        unsafe { gst_gl_x11::GLDisplayX11::with_display(display as usize) }.unwrap()
                     } else {
                         panic!("X11 window without X Display");
                     };

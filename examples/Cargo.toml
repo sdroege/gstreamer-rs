@@ -9,6 +9,9 @@ edition = "2018"
 glib = { git = "https://github.com/gtk-rs/gtk-rs" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-gl = { package = "gstreamer-gl", path = "../gstreamer-gl", optional = true }
+gst-gl-egl = { package = "gstreamer-gl-egl", path = "../gstreamer-gl/egl", optional = true }
+gst-gl-wayland = { package = "gstreamer-gl-wayland", path = "../gstreamer-gl/wayland", optional = true }
+gst-gl-x11 = { package = "gstreamer-gl-x11", path = "../gstreamer-gl/x11", optional = true }
 gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
 gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base" }
@@ -23,6 +26,7 @@ gtk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gio = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 anyhow = "1.0"
+cfg-if = "1.0"
 derive_more = "0.99.5"
 futures = "0.3"
 byte-slice-cast = "1"
@@ -50,9 +54,6 @@ v1_14 = ["gst/v1_14"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 overlay-composition = ["pango", "pangocairo", "cairo-rs"]
 gl = ["gst-gl", "gl_generator", "glutin"]
-gl-egl = ["gst-gl/egl"]
-gl-x11 = ["gst-gl/x11"]
-gl-wayland = ["gst-gl/wayland"]
 
 [[bin]]
 name = "appsink"
@@ -161,7 +162,7 @@ required-features = ["ges"]
 [[bin]]
 name = "glupload"
 required-features = ["gl"]
-features = ["gl-egl", "gl-x11", "gl-wayland"]
+features = ["gst-gl-egl", "gst-gl-wayland", "gst-gl-x11"]
 
 [[bin]]
 name = "subclass"
