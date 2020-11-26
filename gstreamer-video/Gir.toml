@@ -21,7 +21,6 @@ generate = [
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoColorMatrix",
     "GstVideo.VideoMultiviewMode",
-    "GstVideo.VideoFieldOrder",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
     "GstVideo.VideoCaptionType",
@@ -389,6 +388,11 @@ status = "generate"
     name = "nv12_32l32"
     version = "1.18"
 
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false
+
 [[object]]
 name = "GstVideo.VideoSink"
 status = "generate"
@@ -451,12 +455,22 @@ status = "generate"
     name = "alternate"
     version = "1.16"
 
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false
+
 [[object]]
 name = "GstVideo.VideoChromaSite"
 status = "generate"
     [[object.member]]
     name = "unknown"
     ignore = true
+
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "GstVideo.VideoFlags"
@@ -524,3 +538,12 @@ status = "generate"
     [[object.member]]
     name = "linear"
     version = "1.18"
+
+[[object]]
+name = "GstVideo.VideoFieldOrder"
+status = "generate"
+
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false

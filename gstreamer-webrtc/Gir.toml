@@ -22,7 +22,6 @@ generate = [
     "GstWebRTC.WebRTCICEConnectionState",
     "GstWebRTC.WebRTCICERole",
     "GstWebRTC.WebRTCICEComponent",
-    "GstWebRTC.WebRTCSDPType",
     "GstWebRTC.WebRTCDTLSSetup",
     "GstWebRTC.WebRTCPeerConnectionState",
     "GstWebRTC.WebRTCRTPTransceiverDirection",
@@ -88,3 +87,12 @@ final_type = true
     name = "on_error"
     # takes ownership of SDP message
     manual = true
+
+[[object]]
+name = "GstWebRTC.WebRTCSDPType"
+status = "generate"
+
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false

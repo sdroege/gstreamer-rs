@@ -134,6 +134,11 @@ status = "generate"
     # Platform dependant
     manual = true
 
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false
+
 [[object]]
 name = "GstAudio.AudioStreamAlign"
 status = "generate"

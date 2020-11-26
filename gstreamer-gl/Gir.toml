@@ -426,6 +426,11 @@ status = "generate"
     name = "any"
     ignore = true
 
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false
+
 [[object]]
 name = "GstGL.GLPlatform"
 status = "generate"
@@ -435,6 +440,11 @@ status = "generate"
     [[object.member]]
     name = "any"
     ignore = true
+
+    [[object.function]]
+    name = "to_string"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "GstGL.GLSLProfile"
