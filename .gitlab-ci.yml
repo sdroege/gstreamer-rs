@@ -385,26 +385,26 @@ gir-checks:
     - cargo build --locked --color=always --release
     - |
       cargo run --color=always --release -- \
-        --gir-file ../Gir_Gst.toml ../gstreamer/ \
-        --gir-file ../Gir_GstApp.toml ../gstreamer-app \
-        --gir-file ../Gir_GstAudio.toml ../gstreamer-audio/ \
-        --gir-file ../Gir_GstBase.toml ../gstreamer-base \
-        --gir-file ../Gir_GstCheck.toml ../gstreamer-check/ \
-        --gir-file ../Gir_GstController.toml ../gstreamer-controller/ \
-        --gir-file ../Gir_GstEditingServices.toml ../gstreamer-editing-services/ \
-        --gir-file ../Gir_GstGL.toml ../gstreamer-gl/ \
-        --gir-file ../Gir_GstGLEGL.toml ../gstreamer-gl/egl \
-        --gir-file ../Gir_GstGLWayland.toml ../gstreamer-gl/wayland \
-        --gir-file ../Gir_GstGLX11.toml ../gstreamer-gl/x11 \
-        --gir-file ../Gir_GstNet.toml ../gstreamer-net/ \
-        --gir-file ../Gir_GstPbutils.toml ../gstreamer-pbutils/ \
-        --gir-file ../Gir_GstPlayer.toml ../gstreamer-player/ \
-        --gir-file ../Gir_GstRtp.toml ../gstreamer-rtp/ \
-        --gir-file ../Gir_GstRtspServer.toml ../gstreamer-rtsp-server/ \
-        --gir-file ../Gir_GstRtsp.toml ../gstreamer-rtsp/ \
-        --gir-file ../Gir_GstSdp.toml ../gstreamer-sdp/ \
-        --gir-file ../Gir_GstVideo.toml ../gstreamer-video/ \
-        --gir-file ../Gir_GstWebRTC.toml ../gstreamer-webrtc/
+        ../gstreamer/ \
+        ../gstreamer-app \
+        ../gstreamer-audio/ \
+        ../gstreamer-base \
+        ../gstreamer-check/ \
+        ../gstreamer-controller/ \
+        ../gstreamer-editing-services/ \
+        ../gstreamer-gl/ \
+        ../gstreamer-gl/egl \
+        ../gstreamer-gl/wayland \
+        ../gstreamer-gl/x11 \
+        ../gstreamer-net/ \
+        ../gstreamer-pbutils/ \
+        ../gstreamer-player/ \
+        ../gstreamer-rtp/ \
+        ../gstreamer-rtsp-server/ \
+        ../gstreamer-rtsp/ \
+        ../gstreamer-sdp/ \
+        ../gstreamer-video/ \
+        ../gstreamer-webrtc/
     - cd ..
     - |
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
