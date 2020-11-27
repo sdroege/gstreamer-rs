@@ -38,6 +38,7 @@ v1_16 = ["gst/v1_16", "gst-base/v1_16", "ffi/v1_16", "v1_14"]
 v1_18 = ["gst/v1_18", "gst-base/v1_18", "ffi/v1_18", "v1_16"]
 embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
+dox = ["v1_18", "ffi/dox", "glib/dox", "gst/dox", "gst-base/dox"]
 
 [package.metadata.docs.rs]
-features = ["embed-lgpl-docs"]
+features = ["dox", "embed-lgpl-docs"]

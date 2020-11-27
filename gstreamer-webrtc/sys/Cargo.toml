@@ -23,6 +23,7 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
+dox = []
 v1_16 = ["v1_14_1"]
 v1_18 = ["v1_16"]
 v1_14_1 = []
