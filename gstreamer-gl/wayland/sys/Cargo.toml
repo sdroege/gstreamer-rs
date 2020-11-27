@@ -1,7 +1,7 @@
 [package]
 build = "build.rs"
 edition = "2018"
-name = "gst-gl-wayland-sys"
+name = "gstreamer-gl-wayland-sys"
 version = "0.0.1"
 [package.metadata.system-deps.gstreamer_gl_wayland_1_0]
 name = "gstreamer-gl-wayland-1.0"
@@ -16,7 +16,7 @@ version = "1.18"
 features = ["dox"]
 
 [lib]
-name = "gst_gl_wayland_sys"
+name = "gstreamer_gl_wayland_sys"
 
 [dependencies]
 libc = "0.2"
