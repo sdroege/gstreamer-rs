@@ -35,4 +35,4 @@ purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 dox = ["v1_18", "ffi/dox", "glib/dox", "gst/dox"]
 
 [package.metadata.docs.rs]
-dox = ["v1_18", "ffi/dox", "glib/dox", "gst/dox"]
+features = ["dox", "embed-lgpl-docs"]

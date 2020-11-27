@@ -28,7 +28,6 @@ v1_16 = ["v1_14"]
 v1_18 = ["v1_16"]
 dox = []
 v1_12_1 = ["v1_12"]
-dox = []
 
 [lib]
 name = "gstreamer_sys"
