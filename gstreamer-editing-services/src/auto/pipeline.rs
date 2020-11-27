@@ -10,7 +10,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
@@ -227,7 +226,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     fn get_property_audio_filter(&self) -> Option<gst::Element> {
         unsafe {
-            let mut value = Value::from_type(<gst::Element as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"audio-filter\0".as_ptr() as *const _,
@@ -244,14 +243,14 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"audio-filter\0".as_ptr() as *const _,
-                Value::from(audio_filter).to_glib_none().0,
+                glib::Value::from(audio_filter).to_glib_none().0,
             );
         }
     }
 
     fn get_property_audio_sink(&self) -> Option<gst::Element> {
         unsafe {
-            let mut value = Value::from_type(<gst::Element as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"audio-sink\0".as_ptr() as *const _,
@@ -268,14 +267,14 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"audio-sink\0".as_ptr() as *const _,
-                Value::from(audio_sink).to_glib_none().0,
+                glib::Value::from(audio_sink).to_glib_none().0,
             );
         }
     }
 
     fn get_property_timeline(&self) -> Option<Timeline> {
         unsafe {
-            let mut value = Value::from_type(<Timeline as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<Timeline as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"timeline\0".as_ptr() as *const _,
@@ -289,7 +288,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     fn get_property_video_filter(&self) -> Option<gst::Element> {
         unsafe {
-            let mut value = Value::from_type(<gst::Element as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"video-filter\0".as_ptr() as *const _,
@@ -306,14 +305,14 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"video-filter\0".as_ptr() as *const _,
-                Value::from(video_filter).to_glib_none().0,
+                glib::Value::from(video_filter).to_glib_none().0,
             );
         }
     }
 
     fn get_property_video_sink(&self) -> Option<gst::Element> {
         unsafe {
-            let mut value = Value::from_type(<gst::Element as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"video-sink\0".as_ptr() as *const _,
@@ -330,7 +329,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"video-sink\0".as_ptr() as *const _,
-                Value::from(video_sink).to_glib_none().0,
+                glib::Value::from(video_sink).to_glib_none().0,
             );
         }
     }

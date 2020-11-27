@@ -30,8 +30,8 @@ impl RTSPUrl {
         unsafe { from_glib_full(ffi::gst_rtsp_url_get_request_uri(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_request_uri_with_control(&self, control_path: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_url_get_request_uri_with_control(

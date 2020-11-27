@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -66,8 +65,8 @@ impl TestClock {
     //    unsafe { TODO: call ffi:gst_test_clock_peek_next_pending_id() }
     //}
 
-    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //pub fn process_id(&self, pending_id: /*Ignored*/gst::ClockID) -> bool {
     //    unsafe { TODO: call ffi:gst_test_clock_process_id() }
     //}
@@ -86,8 +85,8 @@ impl TestClock {
         }
     }
 
-    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //pub fn timed_wait_for_multiple_pending_ids(&self, count: u32, timeout_ms: u32, pending_list: /*Unimplemented*/Vec<gst::ClockID>) -> bool {
     //    unsafe { TODO: call ffi:gst_test_clock_timed_wait_for_multiple_pending_ids() }
     //}
@@ -108,7 +107,7 @@ impl TestClock {
 
     pub fn get_property_clock_type(&self) -> gst::ClockType {
         unsafe {
-            let mut value = Value::from_type(<gst::ClockType as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::ClockType as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"clock-type\0".as_ptr() as *const _,
@@ -126,14 +125,14 @@ impl TestClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"clock-type\0".as_ptr() as *const _,
-                Value::from(&clock_type).to_glib_none().0,
+                glib::Value::from(&clock_type).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_start_time(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"start-time\0".as_ptr() as *const _,

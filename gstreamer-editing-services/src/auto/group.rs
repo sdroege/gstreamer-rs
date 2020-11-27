@@ -11,7 +11,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -74,7 +73,7 @@ pub trait GroupExt: 'static {
 impl<O: IsA<Group>> GroupExt for O {
     fn get_property_duration(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"duration\0".as_ptr() as *const _,
@@ -92,14 +91,14 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"duration\0".as_ptr() as *const _,
-                Value::from(&duration).to_glib_none().0,
+                glib::Value::from(&duration).to_glib_none().0,
             );
         }
     }
 
     fn get_property_in_point(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"in-point\0".as_ptr() as *const _,
@@ -117,14 +116,14 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"in-point\0".as_ptr() as *const _,
-                Value::from(&in_point).to_glib_none().0,
+                glib::Value::from(&in_point).to_glib_none().0,
             );
         }
     }
 
     fn get_property_max_duration(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"max-duration\0".as_ptr() as *const _,
@@ -142,14 +141,14 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"max-duration\0".as_ptr() as *const _,
-                Value::from(&max_duration).to_glib_none().0,
+                glib::Value::from(&max_duration).to_glib_none().0,
             );
         }
     }
 
     fn get_property_priority(&self) -> u32 {
         unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"priority\0".as_ptr() as *const _,
@@ -167,14 +166,14 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"priority\0".as_ptr() as *const _,
-                Value::from(&priority).to_glib_none().0,
+                glib::Value::from(&priority).to_glib_none().0,
             );
         }
     }
 
     fn get_property_start(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"start\0".as_ptr() as *const _,
@@ -192,7 +191,7 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"start\0".as_ptr() as *const _,
-                Value::from(&start).to_glib_none().0,
+                glib::Value::from(&start).to_glib_none().0,
             );
         }
     }

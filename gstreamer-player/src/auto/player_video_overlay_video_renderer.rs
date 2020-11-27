@@ -9,7 +9,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -72,7 +71,7 @@ impl PlayerVideoOverlayVideoRenderer {
 
     pub fn get_property_video_sink(&self) -> Option<gst::Element> {
         unsafe {
-            let mut value = Value::from_type(<gst::Element as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-sink\0".as_ptr() as *const _,
@@ -89,7 +88,7 @@ impl PlayerVideoOverlayVideoRenderer {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-sink\0".as_ptr() as *const _,
-                Value::from(video_sink).to_glib_none().0,
+                glib::Value::from(video_sink).to_glib_none().0,
             );
         }
     }

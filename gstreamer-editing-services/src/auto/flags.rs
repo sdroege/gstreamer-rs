@@ -7,7 +7,6 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
@@ -45,19 +44,19 @@ impl StaticType for PipelineFlags {
 }
 
 impl<'a> FromValueOptional<'a> for PipelineFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PipelineFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PipelineFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -96,19 +95,19 @@ impl StaticType for TrackType {
 }
 
 impl<'a> FromValueOptional<'a> for TrackType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TrackType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TrackType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

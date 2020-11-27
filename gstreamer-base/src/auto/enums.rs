@@ -6,12 +6,11 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum AggregatorStartTimeSelection {
@@ -22,8 +21,8 @@ pub enum AggregatorStartTimeSelection {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl ToGlib for AggregatorStartTimeSelection {
     type GlibType = ffi::GstAggregatorStartTimeSelection;
@@ -38,8 +37,8 @@ impl ToGlib for AggregatorStartTimeSelection {
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelection {
     fn from_glib(value: ffi::GstAggregatorStartTimeSelection) -> Self {
@@ -53,34 +52,34 @@ impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelec
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for AggregatorStartTimeSelection {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_aggregator_start_time_selection_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValueOptional<'a> for AggregatorStartTimeSelection {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl SetValue for AggregatorStartTimeSelection {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

@@ -7,7 +7,6 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
@@ -59,19 +58,19 @@ impl StaticType for BufferingMode {
 }
 
 impl<'a> FromValueOptional<'a> for BufferingMode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for BufferingMode {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferingMode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -120,19 +119,19 @@ impl StaticType for BusSyncReply {
 }
 
 impl<'a> FromValueOptional<'a> for BusSyncReply {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for BusSyncReply {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BusSyncReply {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -178,19 +177,19 @@ impl StaticType for CapsIntersectMode {
 }
 
 impl<'a> FromValueOptional<'a> for CapsIntersectMode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for CapsIntersectMode {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for CapsIntersectMode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -236,19 +235,19 @@ impl StaticType for ClockEntryType {
 }
 
 impl<'a> FromValueOptional<'a> for ClockEntryType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ClockEntryType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ClockEntryType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -313,19 +312,19 @@ impl StaticType for ClockReturn {
 }
 
 impl<'a> FromValueOptional<'a> for ClockReturn {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ClockReturn {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ClockReturn {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -336,8 +335,8 @@ pub enum ClockType {
     Realtime,
     Monotonic,
     Other,
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     Tai,
     #[doc(hidden)]
     __Unknown(i32),
@@ -352,7 +351,7 @@ impl ToGlib for ClockType {
             ClockType::Realtime => ffi::GST_CLOCK_TYPE_REALTIME,
             ClockType::Monotonic => ffi::GST_CLOCK_TYPE_MONOTONIC,
             ClockType::Other => ffi::GST_CLOCK_TYPE_OTHER,
-            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             ClockType::Tai => ffi::GST_CLOCK_TYPE_TAI,
             ClockType::__Unknown(value) => value,
         }
@@ -367,7 +366,7 @@ impl FromGlib<ffi::GstClockType> for ClockType {
             0 => ClockType::Realtime,
             1 => ClockType::Monotonic,
             2 => ClockType::Other,
-            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             3 => ClockType::Tai,
             value => ClockType::__Unknown(value),
         }
@@ -381,19 +380,19 @@ impl StaticType for ClockType {
 }
 
 impl<'a> FromValueOptional<'a> for ClockType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ClockType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ClockType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -512,19 +511,19 @@ impl StaticType for CoreError {
 }
 
 impl<'a> FromValueOptional<'a> for CoreError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for CoreError {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for CoreError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -594,19 +593,19 @@ impl StaticType for DebugLevel {
 }
 
 impl<'a> FromValueOptional<'a> for DebugLevel {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for DebugLevel {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DebugLevel {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -624,16 +623,16 @@ pub enum EventType {
     Tag,
     Buffersize,
     SinkMessage,
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     StreamGroupDone,
     Eos,
     Toc,
     Protection,
     SegmentDone,
     Gap,
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     InstantRateChange,
     Qos,
     Seek,
@@ -642,11 +641,11 @@ pub enum EventType {
     Step,
     Reconfigure,
     TocSelect,
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     SelectStreams,
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     InstantRateSyncTime,
     CustomUpstream,
     CustomDownstream,
@@ -674,14 +673,14 @@ impl ToGlib for EventType {
             EventType::Tag => ffi::GST_EVENT_TAG,
             EventType::Buffersize => ffi::GST_EVENT_BUFFERSIZE,
             EventType::SinkMessage => ffi::GST_EVENT_SINK_MESSAGE,
-            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             EventType::StreamGroupDone => ffi::GST_EVENT_STREAM_GROUP_DONE,
             EventType::Eos => ffi::GST_EVENT_EOS,
             EventType::Toc => ffi::GST_EVENT_TOC,
             EventType::Protection => ffi::GST_EVENT_PROTECTION,
             EventType::SegmentDone => ffi::GST_EVENT_SEGMENT_DONE,
             EventType::Gap => ffi::GST_EVENT_GAP,
-            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             EventType::InstantRateChange => ffi::GST_EVENT_INSTANT_RATE_CHANGE,
             EventType::Qos => ffi::GST_EVENT_QOS,
             EventType::Seek => ffi::GST_EVENT_SEEK,
@@ -690,9 +689,9 @@ impl ToGlib for EventType {
             EventType::Step => ffi::GST_EVENT_STEP,
             EventType::Reconfigure => ffi::GST_EVENT_RECONFIGURE,
             EventType::TocSelect => ffi::GST_EVENT_TOC_SELECT,
-            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             EventType::SelectStreams => ffi::GST_EVENT_SELECT_STREAMS,
-            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             EventType::InstantRateSyncTime => ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME,
             EventType::CustomUpstream => ffi::GST_EVENT_CUSTOM_UPSTREAM,
             EventType::CustomDownstream => ffi::GST_EVENT_CUSTOM_DOWNSTREAM,
@@ -720,14 +719,14 @@ impl FromGlib<ffi::GstEventType> for EventType {
             20510 => EventType::Tag,
             23054 => EventType::Buffersize,
             25630 => EventType::SinkMessage,
-            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             26894 => EventType::StreamGroupDone,
             28174 => EventType::Eos,
             30750 => EventType::Toc,
             33310 => EventType::Protection,
             38406 => EventType::SegmentDone,
             40966 => EventType::Gap,
-            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             46090 => EventType::InstantRateChange,
             48641 => EventType::Qos,
             51201 => EventType::Seek,
@@ -736,9 +735,9 @@ impl FromGlib<ffi::GstEventType> for EventType {
             58881 => EventType::Step,
             61441 => EventType::Reconfigure,
             64001 => EventType::TocSelect,
-            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
             66561 => EventType::SelectStreams,
-            #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_18", feature = "dox"))]
             66817 => EventType::InstantRateSyncTime,
             69121 => EventType::CustomUpstream,
             71686 => EventType::CustomDownstream,
@@ -758,19 +757,19 @@ impl StaticType for EventType {
 }
 
 impl<'a> FromValueOptional<'a> for EventType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for EventType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for EventType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -850,19 +849,19 @@ impl StaticType for FlowReturn {
 }
 
 impl<'a> FromValueOptional<'a> for FlowReturn {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for FlowReturn {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for FlowReturn {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -921,19 +920,19 @@ impl StaticType for Format {
 }
 
 impl<'a> FromValueOptional<'a> for Format {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for Format {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for Format {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1020,19 +1019,19 @@ impl StaticType for LibraryError {
 }
 
 impl<'a> FromValueOptional<'a> for LibraryError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for LibraryError {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for LibraryError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1081,19 +1080,19 @@ impl StaticType for PadDirection {
 }
 
 impl<'a> FromValueOptional<'a> for PadDirection {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadDirection {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadDirection {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1155,19 +1154,19 @@ impl StaticType for PadLinkReturn {
 }
 
 impl<'a> FromValueOptional<'a> for PadLinkReturn {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadLinkReturn {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadLinkReturn {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1216,19 +1215,19 @@ impl StaticType for PadMode {
 }
 
 impl<'a> FromValueOptional<'a> for PadMode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadMode {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadMode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1277,19 +1276,19 @@ impl StaticType for PadPresence {
 }
 
 impl<'a> FromValueOptional<'a> for PadPresence {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadPresence {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadPresence {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1344,19 +1343,19 @@ impl StaticType for PadProbeReturn {
 }
 
 impl<'a> FromValueOptional<'a> for PadProbeReturn {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadProbeReturn {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadProbeReturn {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1447,19 +1446,19 @@ impl StaticType for ParseError {
 }
 
 impl<'a> FromValueOptional<'a> for ParseError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ParseError {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ParseError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1530,19 +1529,19 @@ impl StaticType for PluginError {
 }
 
 impl<'a> FromValueOptional<'a> for PluginError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PluginError {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PluginError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1597,25 +1596,25 @@ impl StaticType for ProgressType {
 }
 
 impl<'a> FromValueOptional<'a> for ProgressType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ProgressType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ProgressType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum PromiseResult {
@@ -1627,8 +1626,8 @@ pub enum PromiseResult {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl ToGlib for PromiseResult {
     type GlibType = ffi::GstPromiseResult;
@@ -1644,8 +1643,8 @@ impl ToGlib for PromiseResult {
     }
 }
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
     fn from_glib(value: ffi::GstPromiseResult) -> Self {
@@ -1660,34 +1659,34 @@ impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
     }
 }
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl StaticType for PromiseResult {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_promise_result_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl<'a> FromValueOptional<'a> for PromiseResult {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl<'a> FromValue<'a> for PromiseResult {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 impl SetValue for PromiseResult {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1736,19 +1735,19 @@ impl StaticType for QOSType {
 }
 
 impl<'a> FromValueOptional<'a> for QOSType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for QOSType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for QOSType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1800,19 +1799,19 @@ impl StaticType for Rank {
 }
 
 impl<'a> FromValueOptional<'a> for Rank {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for Rank {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for Rank {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1935,19 +1934,19 @@ impl StaticType for ResourceError {
 }
 
 impl<'a> FromValueOptional<'a> for ResourceError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ResourceError {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ResourceError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1996,19 +1995,19 @@ impl StaticType for SeekType {
 }
 
 impl<'a> FromValueOptional<'a> for SeekType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for SeekType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SeekType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2063,19 +2062,19 @@ impl StaticType for State {
 }
 
 impl<'a> FromValueOptional<'a> for State {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for State {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for State {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2145,19 +2144,19 @@ impl StaticType for StateChange {
 }
 
 impl<'a> FromValueOptional<'a> for StateChange {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for StateChange {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StateChange {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2210,19 +2209,19 @@ impl StaticType for StateChangeReturn {
 }
 
 impl<'a> FromValueOptional<'a> for StateChangeReturn {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for StateChangeReturn {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StateChangeReturn {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2337,19 +2336,19 @@ impl StaticType for StreamError {
 }
 
 impl<'a> FromValueOptional<'a> for StreamError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for StreamError {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StreamError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2410,19 +2409,19 @@ impl StaticType for StreamStatusType {
 }
 
 impl<'a> FromValueOptional<'a> for StreamStatusType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for StreamStatusType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StreamStatusType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2468,19 +2467,19 @@ impl StaticType for StructureChangeType {
 }
 
 impl<'a> FromValueOptional<'a> for StructureChangeType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for StructureChangeType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StructureChangeType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2535,19 +2534,19 @@ impl StaticType for TagFlag {
 }
 
 impl<'a> FromValueOptional<'a> for TagFlag {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TagFlag {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TagFlag {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2611,19 +2610,19 @@ impl StaticType for TagMergeMode {
 }
 
 impl<'a> FromValueOptional<'a> for TagMergeMode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TagMergeMode {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TagMergeMode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2670,19 +2669,19 @@ impl StaticType for TagScope {
 }
 
 impl<'a> FromValueOptional<'a> for TagScope {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TagScope {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TagScope {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2731,19 +2730,19 @@ impl StaticType for TaskState {
 }
 
 impl<'a> FromValueOptional<'a> for TaskState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TaskState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TaskState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2805,19 +2804,19 @@ impl StaticType for TocEntryType {
 }
 
 impl<'a> FromValueOptional<'a> for TocEntryType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TocEntryType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TocEntryType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2870,19 +2869,19 @@ impl StaticType for TocLoopType {
 }
 
 impl<'a> FromValueOptional<'a> for TocLoopType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TocLoopType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TocLoopType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2929,19 +2928,19 @@ impl StaticType for TocScope {
 }
 
 impl<'a> FromValueOptional<'a> for TocScope {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TocScope {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TocScope {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -2999,19 +2998,19 @@ impl StaticType for TypeFindProbability {
 }
 
 impl<'a> FromValueOptional<'a> for TypeFindProbability {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for TypeFindProbability {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TypeFindProbability {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -3086,19 +3085,19 @@ impl StaticType for URIError {
 }
 
 impl<'a> FromValueOptional<'a> for URIError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for URIError {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for URIError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -3147,19 +3146,19 @@ impl StaticType for URIType {
 }
 
 impl<'a> FromValueOptional<'a> for URIType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for URIType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for URIType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

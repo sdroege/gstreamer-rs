@@ -7,7 +7,6 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
@@ -44,19 +43,19 @@ impl StaticType for GLAPI {
 }
 
 impl<'a> FromValueOptional<'a> for GLAPI {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for GLAPI {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLAPI {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -71,8 +70,8 @@ bitflags! {
         const EGL = 32;
         const VIV_FB = 64;
         const GBM = 128;
-        #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         const EGL_DEVICE = 256;
     }
 }
@@ -101,19 +100,19 @@ impl StaticType for GLDisplayType {
 }
 
 impl<'a> FromValueOptional<'a> for GLDisplayType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for GLDisplayType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLDisplayType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -152,19 +151,19 @@ impl StaticType for GLPlatform {
 }
 
 impl<'a> FromValueOptional<'a> for GLPlatform {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for GLPlatform {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLPlatform {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -201,19 +200,19 @@ impl StaticType for GLSLProfile {
 }
 
 impl<'a> FromValueOptional<'a> for GLSLProfile {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for GLSLProfile {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for GLSLProfile {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

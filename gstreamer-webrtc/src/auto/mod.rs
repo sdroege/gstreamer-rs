@@ -5,11 +5,11 @@
 mod web_rtcdtls_transport;
 pub use self::web_rtcdtls_transport::WebRTCDTLSTransport;
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 mod web_rtc_data_channel;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 pub use self::web_rtc_data_channel::WebRTCDataChannel;
 
 mod web_rtcice_transport;
@@ -28,31 +28,31 @@ mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;
 
 mod enums;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCBundlePolicy;
 pub use self::enums::WebRTCDTLSSetup;
 pub use self::enums::WebRTCDTLSTransportState;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCDataChannelState;
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 pub use self::enums::WebRTCFECType;
 pub use self::enums::WebRTCICEComponent;
 pub use self::enums::WebRTCICEConnectionState;
 pub use self::enums::WebRTCICEGatheringState;
 pub use self::enums::WebRTCICERole;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCICETransportPolicy;
 pub use self::enums::WebRTCPeerConnectionState;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCPriorityType;
 pub use self::enums::WebRTCRTPTransceiverDirection;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCSCTPTransportState;
 pub use self::enums::WebRTCSDPType;
 pub use self::enums::WebRTCSignalingState;

@@ -7,7 +7,6 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
@@ -19,14 +18,14 @@ bitflags! {
         const ONEFIELD = 8388608;
         const MULTIPLE_VIEW = 16777216;
         const FIRST_IN_BUNDLE = 33554432;
-        #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         const TOP_FIELD = 10485760;
-        #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
         const BOTTOM_FIELD = 8388608;
-        #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         const MARKER = 512;
     }
 }
@@ -55,19 +54,19 @@ impl StaticType for VideoBufferFlags {
 }
 
 impl<'a> FromValueOptional<'a> for VideoBufferFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for VideoBufferFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoBufferFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -109,19 +108,19 @@ impl StaticType for VideoChromaSite {
 }
 
 impl<'a> FromValueOptional<'a> for VideoChromaSite {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for VideoChromaSite {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoChromaSite {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -183,19 +182,19 @@ impl StaticType for VideoFlags {
 }
 
 impl<'a> FromValueOptional<'a> for VideoFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for VideoFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -238,19 +237,19 @@ impl StaticType for VideoFormatFlags {
 }
 
 impl<'a> FromValueOptional<'a> for VideoFormatFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for VideoFormatFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoFormatFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -292,19 +291,19 @@ impl StaticType for VideoFrameFlags {
 }
 
 impl<'a> FromValueOptional<'a> for VideoFrameFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for VideoFrameFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoFrameFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -345,19 +344,19 @@ impl StaticType for VideoMultiviewFlags {
 }
 
 impl<'a> FromValueOptional<'a> for VideoMultiviewFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for VideoMultiviewFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoMultiviewFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -386,34 +385,34 @@ impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoOverlayFormatFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_overlay_format_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for VideoOverlayFormatFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for VideoOverlayFormatFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -449,25 +448,25 @@ impl StaticType for VideoPackFlags {
 }
 
 impl<'a> FromValueOptional<'a> for VideoPackFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for VideoPackFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoPackFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 bitflags! {
     pub struct VideoTimeCodeFlags: u32 {
         const DROP_FRAME = 1;
@@ -475,8 +474,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl ToGlib for VideoTimeCodeFlags {
     type GlibType = ffi::GstVideoTimeCodeFlags;
@@ -486,8 +485,8 @@ impl ToGlib for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
     fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
@@ -496,34 +495,34 @@ impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoTimeCodeFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_video_time_code_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValueOptional<'a> for VideoTimeCodeFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for VideoTimeCodeFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl SetValue for VideoTimeCodeFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

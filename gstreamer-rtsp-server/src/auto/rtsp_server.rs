@@ -14,7 +14,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
@@ -87,8 +86,8 @@ pub trait RTSPServerExt: 'static {
 
     fn get_bound_port(&self) -> i32;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_content_length_limit(&self) -> u32;
 
     fn get_mount_points(&self) -> Option<RTSPMountPoints>;
@@ -105,8 +104,8 @@ pub trait RTSPServerExt: 'static {
 
     fn set_backlog(&self, backlog: i32);
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32);
 
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
@@ -274,8 +273,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         unsafe { ffi::gst_rtsp_server_get_bound_port(self.as_ref().to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_content_length_limit(&self) -> u32 {
         unsafe { ffi::gst_rtsp_server_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
@@ -336,8 +335,8 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32) {
         unsafe {
             ffi::gst_rtsp_server_set_content_length_limit(self.as_ref().to_glib_none().0, limit);
@@ -403,7 +402,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
 
     fn get_property_content_length_limit(&self) -> u32 {
         unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"content-length-limit\0".as_ptr() as *const _,
@@ -421,7 +420,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"content-length-limit\0".as_ptr() as *const _,
-                Value::from(&content_length_limit).to_glib_none().0,
+                glib::Value::from(&content_length_limit).to_glib_none().0,
             );
         }
     }

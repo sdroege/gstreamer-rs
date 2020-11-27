@@ -3,28 +3,25 @@
 // DO NOT EDIT
 
 use crate::VideoCodecFrame;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::signal::connect_raw;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::StaticType;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
-use glib::Value;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::boxed::Box as Box_;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem::transmute;
 
 glib::glib_wrapper! {
@@ -75,23 +72,23 @@ pub trait VideoDecoderExt: 'static {
 
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_property_qos(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_property_qos(&self, qos: bool);
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -225,11 +222,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_property_qos(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
@@ -242,20 +239,20 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_property_qos(&self, qos: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
-                Value::from(&qos).to_glib_none().0,
+                glib::Value::from(&qos).to_glib_none().0,
             );
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -283,8 +280,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,

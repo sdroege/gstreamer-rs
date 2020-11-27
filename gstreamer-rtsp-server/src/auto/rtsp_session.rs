@@ -11,7 +11,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -247,7 +246,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
 
     fn get_property_extra_timeout(&self) -> u32 {
         unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"extra-timeout\0".as_ptr() as *const _,
@@ -265,14 +264,14 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"extra-timeout\0".as_ptr() as *const _,
-                Value::from(&extra_timeout).to_glib_none().0,
+                glib::Value::from(&extra_timeout).to_glib_none().0,
             );
         }
     }
 
     fn get_property_timeout_always_visible(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"timeout-always-visible\0".as_ptr() as *const _,
@@ -290,7 +289,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"timeout-always-visible\0".as_ptr() as *const _,
-                Value::from(&timeout_always_visible).to_glib_none().0,
+                glib::Value::from(&timeout_always_visible).to_glib_none().0,
             );
         }
     }

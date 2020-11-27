@@ -7,7 +7,6 @@ use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 
 glib::glib_wrapper! {
     pub struct ControlBinding(Object<ffi::GstControlBinding, ffi::GstControlBindingClass>) @extends Object;
@@ -90,7 +89,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
 
     fn get_property_object(&self) -> Option<Object> {
         unsafe {
-            let mut value = Value::from_type(<Object as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<Object as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"object\0".as_ptr() as *const _,

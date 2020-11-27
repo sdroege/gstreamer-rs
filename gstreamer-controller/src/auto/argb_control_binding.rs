@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -108,7 +107,8 @@ pub trait ARGBControlBindingExt: 'static {
 impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
     fn get_property_control_source_a(&self) -> Option<gst::ControlSource> {
         unsafe {
-            let mut value = Value::from_type(<gst::ControlSource as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-a\0".as_ptr() as *const _,
@@ -128,14 +128,15 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-a\0".as_ptr() as *const _,
-                Value::from(control_source_a).to_glib_none().0,
+                glib::Value::from(control_source_a).to_glib_none().0,
             );
         }
     }
 
     fn get_property_control_source_b(&self) -> Option<gst::ControlSource> {
         unsafe {
-            let mut value = Value::from_type(<gst::ControlSource as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-b\0".as_ptr() as *const _,
@@ -155,14 +156,15 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-b\0".as_ptr() as *const _,
-                Value::from(control_source_b).to_glib_none().0,
+                glib::Value::from(control_source_b).to_glib_none().0,
             );
         }
     }
 
     fn get_property_control_source_g(&self) -> Option<gst::ControlSource> {
         unsafe {
-            let mut value = Value::from_type(<gst::ControlSource as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-g\0".as_ptr() as *const _,
@@ -182,14 +184,15 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-g\0".as_ptr() as *const _,
-                Value::from(control_source_g).to_glib_none().0,
+                glib::Value::from(control_source_g).to_glib_none().0,
             );
         }
     }
 
     fn get_property_control_source_r(&self) -> Option<gst::ControlSource> {
         unsafe {
-            let mut value = Value::from_type(<gst::ControlSource as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-r\0".as_ptr() as *const _,
@@ -209,7 +212,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-r\0".as_ptr() as *const _,
-                Value::from(control_source_r).to_glib_none().0,
+                glib::Value::from(control_source_r).to_glib_none().0,
             );
         }
     }

@@ -6,7 +6,6 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
@@ -72,19 +71,19 @@ impl StaticType for RTCPFBType {
 }
 
 impl<'a> FromValueOptional<'a> for RTCPFBType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTCPFBType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTCPFBType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -154,19 +153,19 @@ impl StaticType for RTCPSDESType {
 }
 
 impl<'a> FromValueOptional<'a> for RTCPSDESType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTCPSDESType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTCPSDESType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -233,25 +232,25 @@ impl StaticType for RTCPType {
 }
 
 impl<'a> FromValueOptional<'a> for RTCPType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTCPType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTCPType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum RTCPXRType {
@@ -267,8 +266,8 @@ pub enum RTCPXRType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for RTCPXRType {
     type GlibType = ffi::GstRTCPXRType;
@@ -288,8 +287,8 @@ impl ToGlib for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
     fn from_glib(value: ffi::GstRTCPXRType) -> Self {
@@ -308,34 +307,34 @@ impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for RTCPXRType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_rtcpxr_type_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for RTCPXRType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for RTCPXRType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for RTCPXRType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -453,19 +452,19 @@ impl StaticType for RTPPayload {
 }
 
 impl<'a> FromValueOptional<'a> for RTPPayload {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTPPayload {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTPPayload {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -520,19 +519,19 @@ impl StaticType for RTPProfile {
 }
 
 impl<'a> FromValueOptional<'a> for RTPProfile {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTPProfile {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTPProfile {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -38,8 +37,8 @@ pub trait BaseSrcExt: 'static {
 
     fn is_live(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool;
 
     #[cfg_attr(feature = "v1_18", deprecated)]
@@ -123,8 +122,8 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         unsafe { from_glib(ffi::gst_base_src_is_live(self.as_ref().to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool {
         unsafe { from_glib(ffi::gst_base_src_negotiate(self.as_ref().to_glib_none().0)) }
     }
@@ -196,7 +195,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn get_property_num_buffers(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"num-buffers\0".as_ptr() as *const _,
@@ -214,14 +213,14 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"num-buffers\0".as_ptr() as *const _,
-                Value::from(&num_buffers).to_glib_none().0,
+                glib::Value::from(&num_buffers).to_glib_none().0,
             );
         }
     }
 
     fn get_property_typefind(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"typefind\0".as_ptr() as *const _,
@@ -239,7 +238,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"typefind\0".as_ptr() as *const _,
-                Value::from(&typefind).to_glib_none().0,
+                glib::Value::from(&typefind).to_glib_none().0,
             );
         }
     }

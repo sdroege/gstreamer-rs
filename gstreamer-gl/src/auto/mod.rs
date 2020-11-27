@@ -2,14 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 mod gl_base_filter;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::gl_base_filter::GLBaseFilterExt;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::gl_base_filter::{GLBaseFilter, NONE_GL_BASE_FILTER};
 
 mod gl_color_convert;
@@ -23,25 +23,25 @@ mod gl_display;
 pub use self::gl_display::GLDisplayExt;
 pub use self::gl_display::{GLDisplay, NONE_GL_DISPLAY};
 
-#[cfg(any(feature = "egl", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "egl")))]
+#[cfg(any(feature = "egl", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
 mod gl_display_egl;
-#[cfg(any(feature = "egl", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "egl")))]
+#[cfg(any(feature = "egl", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
 pub use self::gl_display_egl::GLDisplayEGL;
 
-#[cfg(any(feature = "wayland", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "wayland")))]
+#[cfg(any(feature = "wayland", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
 mod gl_display_wayland;
-#[cfg(any(feature = "wayland", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "wayland")))]
+#[cfg(any(feature = "wayland", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
 pub use self::gl_display_wayland::GLDisplayWayland;
 
-#[cfg(any(feature = "x11", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "x11")))]
+#[cfg(any(feature = "x11", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
 mod gl_display_x11;
-#[cfg(any(feature = "x11", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "x11")))]
+#[cfg(any(feature = "x11", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
 pub use self::gl_display_x11::GLDisplayX11;
 
 mod gl_framebuffer;
@@ -86,8 +86,8 @@ pub use self::flags::GLAPI;
 
 #[doc(hidden)]
 pub mod traits {
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use super::GLBaseFilterExt;
     pub use super::GLContextExt;
     pub use super::GLDisplayExt;

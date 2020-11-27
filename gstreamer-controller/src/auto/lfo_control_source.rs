@@ -9,7 +9,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -91,7 +90,7 @@ pub trait LFOControlSourceExt: 'static {
 impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
     fn get_property_amplitude(&self) -> f64 {
         unsafe {
-            let mut value = Value::from_type(<f64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"amplitude\0".as_ptr() as *const _,
@@ -109,14 +108,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"amplitude\0".as_ptr() as *const _,
-                Value::from(&amplitude).to_glib_none().0,
+                glib::Value::from(&amplitude).to_glib_none().0,
             );
         }
     }
 
     fn get_property_frequency(&self) -> f64 {
         unsafe {
-            let mut value = Value::from_type(<f64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"frequency\0".as_ptr() as *const _,
@@ -134,14 +133,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"frequency\0".as_ptr() as *const _,
-                Value::from(&frequency).to_glib_none().0,
+                glib::Value::from(&frequency).to_glib_none().0,
             );
         }
     }
 
     fn get_property_offset(&self) -> f64 {
         unsafe {
-            let mut value = Value::from_type(<f64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"offset\0".as_ptr() as *const _,
@@ -159,14 +158,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"offset\0".as_ptr() as *const _,
-                Value::from(&offset).to_glib_none().0,
+                glib::Value::from(&offset).to_glib_none().0,
             );
         }
     }
 
     fn get_property_timeshift(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"timeshift\0".as_ptr() as *const _,
@@ -184,14 +183,14 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"timeshift\0".as_ptr() as *const _,
-                Value::from(&timeshift).to_glib_none().0,
+                glib::Value::from(&timeshift).to_glib_none().0,
             );
         }
     }
 
     fn get_property_waveform(&self) -> LFOWaveform {
         unsafe {
-            let mut value = Value::from_type(<LFOWaveform as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<LFOWaveform as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"waveform\0".as_ptr() as *const _,
@@ -209,7 +208,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"waveform\0".as_ptr() as *const _,
-                Value::from(&waveform).to_glib_none().0,
+                glib::Value::from(&waveform).to_glib_none().0,
             );
         }
     }

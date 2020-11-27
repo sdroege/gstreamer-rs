@@ -6,7 +6,6 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
@@ -150,19 +149,19 @@ impl StaticType for AudioChannelPosition {
 }
 
 impl<'a> FromValueOptional<'a> for AudioChannelPosition {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for AudioChannelPosition {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioChannelPosition {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -298,19 +297,19 @@ impl StaticType for AudioFormat {
 }
 
 impl<'a> FromValueOptional<'a> for AudioFormat {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for AudioFormat {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioFormat {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -356,19 +355,19 @@ impl StaticType for AudioLayout {
 }
 
 impl<'a> FromValueOptional<'a> for AudioLayout {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for AudioLayout {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioLayout {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -388,14 +387,14 @@ pub enum AudioRingBufferFormatType {
     Dts,
     Mpeg2Aac,
     Mpeg4Aac,
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Mpeg2AacRaw,
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Mpeg4AacRaw,
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     Flac,
     #[doc(hidden)]
     __Unknown(i32),
@@ -419,15 +418,15 @@ impl ToGlib for AudioRingBufferFormatType {
             AudioRingBufferFormatType::Dts => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS,
             AudioRingBufferFormatType::Mpeg2Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC,
             AudioRingBufferFormatType::Mpeg4Aac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC,
-            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Mpeg2AacRaw => {
                 ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW
             }
-            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Mpeg4AacRaw => {
                 ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW
             }
-            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             AudioRingBufferFormatType::Flac => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC,
             AudioRingBufferFormatType::__Unknown(value) => value,
         }
@@ -451,11 +450,11 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
             9 => AudioRingBufferFormatType::Dts,
             10 => AudioRingBufferFormatType::Mpeg2Aac,
             11 => AudioRingBufferFormatType::Mpeg4Aac,
-            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             12 => AudioRingBufferFormatType::Mpeg2AacRaw,
-            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             13 => AudioRingBufferFormatType::Mpeg4AacRaw,
-            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             14 => AudioRingBufferFormatType::Flac,
             value => AudioRingBufferFormatType::__Unknown(value),
         }
@@ -469,19 +468,19 @@ impl StaticType for AudioRingBufferFormatType {
 }
 
 impl<'a> FromValueOptional<'a> for AudioRingBufferFormatType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for AudioRingBufferFormatType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AudioRingBufferFormatType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

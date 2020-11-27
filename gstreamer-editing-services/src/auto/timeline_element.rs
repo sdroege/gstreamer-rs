@@ -2,15 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::Edge;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::EditMode;
 use crate::Extractable;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::Layer;
 use crate::Timeline;
 use crate::TrackType;
@@ -20,14 +20,13 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem;
 use std::mem::transmute;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
 glib::glib_wrapper! {
@@ -45,8 +44,8 @@ pub trait TimelineElementExt: 'static {
 
     fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError>;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn edit(
         &self,
         layers: &[Layer],
@@ -56,8 +55,8 @@ pub trait TimelineElementExt: 'static {
         position: u64,
     ) -> bool;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn edit_full(
         &self,
         new_layer_priority: i64,
@@ -78,16 +77,16 @@ pub trait TimelineElementExt: 'static {
 
     fn get_inpoint(&self) -> gst::ClockTime;
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_layer_priority(&self) -> u32;
 
     fn get_max_duration(&self) -> gst::ClockTime;
 
     fn get_name(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_natural_framerate(&self) -> Option<(i32, i32)>;
 
     fn get_parent(&self) -> Option<TimelineElement>;
@@ -124,8 +123,8 @@ pub trait TimelineElementExt: 'static {
 
     //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value);
 
-    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn set_child_property_full(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> Result<(), glib::Error>;
 
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
@@ -158,12 +157,12 @@ pub trait TimelineElementExt: 'static {
 
     fn set_property_serialize(&self, serialize: bool);
 
-    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
@@ -204,8 +203,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn edit(
         &self,
         layers: &[Layer],
@@ -226,8 +225,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn edit_full(
         &self,
         new_layer_priority: i64,
@@ -285,8 +284,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn get_layer_priority(&self) -> u32 {
         unsafe { ffi::ges_timeline_element_get_layer_priority(self.as_ref().to_glib_none().0) }
     }
@@ -307,8 +306,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();
@@ -445,8 +444,8 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_by_pspec() }
     //}
 
-    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn set_child_property_full(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> Result<(), glib::Error> {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_full() }
     //}
@@ -550,7 +549,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn get_property_in_point(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"in-point\0".as_ptr() as *const _,
@@ -568,14 +567,14 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"in-point\0".as_ptr() as *const _,
-                Value::from(&in_point).to_glib_none().0,
+                glib::Value::from(&in_point).to_glib_none().0,
             );
         }
     }
 
     fn get_property_serialize(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"serialize\0".as_ptr() as *const _,
@@ -593,19 +592,19 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"serialize\0".as_ptr() as *const _,
-                Value::from(&serialize).to_glib_none().0,
+                glib::Value::from(&serialize).to_glib_none().0,
             );
         }
     }
 
-    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn connect_child_property_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
-    //#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    //#[cfg(any(feature = "v1_18", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //fn connect_child_property_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}

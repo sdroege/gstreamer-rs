@@ -10,7 +10,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -28,8 +27,8 @@ impl Clock {
     //    unsafe { TODO: call ffi:gst_clock_id_compare_func() }
     //}
 
-    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //pub fn id_get_clock(id: /*Unimplemented*/ClockID) -> Option<Clock> {
     //    unsafe { TODO: call ffi:gst_clock_id_get_clock() }
     //}
@@ -50,8 +49,8 @@ impl Clock {
     //    unsafe { TODO: call ffi:gst_clock_id_unschedule() }
     //}
 
-    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //pub fn id_uses_clock<P: IsA<Clock>>(id: /*Unimplemented*/ClockID, clock: &P) -> bool {
     //    unsafe { TODO: call ffi:gst_clock_id_uses_clock() }
     //}
@@ -362,7 +361,7 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn get_property_window_size(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"window-size\0".as_ptr() as *const _,
@@ -380,14 +379,14 @@ impl<O: IsA<Clock>> ClockExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"window-size\0".as_ptr() as *const _,
-                Value::from(&window_size).to_glib_none().0,
+                glib::Value::from(&window_size).to_glib_none().0,
             );
         }
     }
 
     fn get_property_window_threshold(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"window-threshold\0".as_ptr() as *const _,
@@ -405,7 +404,7 @@ impl<O: IsA<Clock>> ClockExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"window-threshold\0".as_ptr() as *const _,
-                Value::from(&window_threshold).to_glib_none().0,
+                glib::Value::from(&window_threshold).to_glib_none().0,
             );
         }
     }

@@ -7,7 +7,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -20,8 +19,8 @@ glib::glib_wrapper! {
 }
 
 impl AppSink {
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn get_buffer_list_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_app_sink_get_buffer_list_support(
@@ -68,8 +67,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn set_buffer_list_support(&self, enable_lists: bool) {
         unsafe {
             ffi::gst_app_sink_set_buffer_list_support(
@@ -113,8 +112,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn try_pull_preroll(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_preroll(
@@ -124,8 +123,8 @@ impl AppSink {
         }
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn try_pull_sample(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_sample(
@@ -137,7 +136,7 @@ impl AppSink {
 
     pub fn get_property_buffer_list(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffer-list\0".as_ptr() as *const _,
@@ -155,14 +154,14 @@ impl AppSink {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffer-list\0".as_ptr() as *const _,
-                Value::from(&buffer_list).to_glib_none().0,
+                glib::Value::from(&buffer_list).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_eos(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"eos\0".as_ptr() as *const _,

@@ -7,7 +7,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -22,7 +21,7 @@ glib::glib_wrapper! {
 impl PtpClock {
     pub fn get_property_domain(&self) -> u32 {
         unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"domain\0".as_ptr() as *const _,
@@ -37,7 +36,7 @@ impl PtpClock {
 
     pub fn get_property_grandmaster_clock_id(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"grandmaster-clock-id\0".as_ptr() as *const _,
@@ -52,7 +51,7 @@ impl PtpClock {
 
     pub fn get_property_internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
-            let mut value = Value::from_type(<gst::Clock as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"internal-clock\0".as_ptr() as *const _,
@@ -66,7 +65,7 @@ impl PtpClock {
 
     pub fn get_property_master_clock_id(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"master-clock-id\0".as_ptr() as *const _,

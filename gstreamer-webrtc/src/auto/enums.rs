@@ -6,12 +6,11 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum WebRTCBundlePolicy {
@@ -23,8 +22,8 @@ pub enum WebRTCBundlePolicy {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for WebRTCBundlePolicy {
     type GlibType = ffi::GstWebRTCBundlePolicy;
@@ -40,8 +39,8 @@ impl ToGlib for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
     fn from_glib(value: ffi::GstWebRTCBundlePolicy) -> Self {
@@ -56,34 +55,34 @@ impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCBundlePolicy {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_bundle_policy_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for WebRTCBundlePolicy {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for WebRTCBundlePolicy {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for WebRTCBundlePolicy {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -135,19 +134,19 @@ impl StaticType for WebRTCDTLSSetup {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCDTLSSetup {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCDTLSSetup {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCDTLSSetup {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -202,25 +201,25 @@ impl StaticType for WebRTCDTLSTransportState {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCDTLSTransportState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCDTLSTransportState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCDTLSTransportState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum WebRTCDataChannelState {
@@ -233,8 +232,8 @@ pub enum WebRTCDataChannelState {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for WebRTCDataChannelState {
     type GlibType = ffi::GstWebRTCDataChannelState;
@@ -251,8 +250,8 @@ impl ToGlib for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
     fn from_glib(value: ffi::GstWebRTCDataChannelState) -> Self {
@@ -268,40 +267,40 @@ impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCDataChannelState {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_data_channel_state_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for WebRTCDataChannelState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for WebRTCDataChannelState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for WebRTCDataChannelState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum WebRTCFECType {
@@ -311,8 +310,8 @@ pub enum WebRTCFECType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 #[doc(hidden)]
 impl ToGlib for WebRTCFECType {
     type GlibType = ffi::GstWebRTCFECType;
@@ -326,8 +325,8 @@ impl ToGlib for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
     fn from_glib(value: ffi::GstWebRTCFECType) -> Self {
@@ -340,34 +339,34 @@ impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
     }
 }
 
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 impl StaticType for WebRTCFECType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_fec_type_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 impl<'a> FromValueOptional<'a> for WebRTCFECType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 impl<'a> FromValue<'a> for WebRTCFECType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_14_1", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14_1")))]
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 impl SetValue for WebRTCFECType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -413,19 +412,19 @@ impl StaticType for WebRTCICEComponent {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCICEComponent {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCICEComponent {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCICEComponent {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -488,19 +487,19 @@ impl StaticType for WebRTCICEConnectionState {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCICEConnectionState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCICEConnectionState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCICEConnectionState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -549,19 +548,19 @@ impl StaticType for WebRTCICEGatheringState {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCICEGatheringState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCICEGatheringState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCICEGatheringState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -607,25 +606,25 @@ impl StaticType for WebRTCICERole {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCICERole {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCICERole {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCICERole {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum WebRTCICETransportPolicy {
@@ -635,8 +634,8 @@ pub enum WebRTCICETransportPolicy {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for WebRTCICETransportPolicy {
     type GlibType = ffi::GstWebRTCICETransportPolicy;
@@ -650,8 +649,8 @@ impl ToGlib for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
     fn from_glib(value: ffi::GstWebRTCICETransportPolicy) -> Self {
@@ -664,34 +663,34 @@ impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCICETransportPolicy {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_transport_policy_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for WebRTCICETransportPolicy {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for WebRTCICETransportPolicy {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for WebRTCICETransportPolicy {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -753,25 +752,25 @@ impl StaticType for WebRTCPeerConnectionState {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCPeerConnectionState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCPeerConnectionState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCPeerConnectionState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum WebRTCPriorityType {
@@ -783,8 +782,8 @@ pub enum WebRTCPriorityType {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for WebRTCPriorityType {
     type GlibType = ffi::GstWebRTCPriorityType;
@@ -800,8 +799,8 @@ impl ToGlib for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
     fn from_glib(value: ffi::GstWebRTCPriorityType) -> Self {
@@ -816,34 +815,34 @@ impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCPriorityType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_priority_type_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for WebRTCPriorityType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for WebRTCPriorityType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for WebRTCPriorityType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -906,25 +905,25 @@ impl StaticType for WebRTCRTPTransceiverDirection {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCRTPTransceiverDirection {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCRTPTransceiverDirection {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCRTPTransceiverDirection {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum WebRTCSCTPTransportState {
@@ -936,8 +935,8 @@ pub enum WebRTCSCTPTransportState {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for WebRTCSCTPTransportState {
     type GlibType = ffi::GstWebRTCSCTPTransportState;
@@ -953,8 +952,8 @@ impl ToGlib for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
     fn from_glib(value: ffi::GstWebRTCSCTPTransportState) -> Self {
@@ -969,34 +968,34 @@ impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCSCTPTransportState {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_webrtc_sctp_transport_state_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValueOptional<'a> for WebRTCSCTPTransportState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl<'a> FromValue<'a> for WebRTCSCTPTransportState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl SetValue for WebRTCSCTPTransportState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1048,19 +1047,19 @@ impl StaticType for WebRTCSDPType {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCSDPType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCSDPType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCSDPType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1126,19 +1125,19 @@ impl StaticType for WebRTCSignalingState {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCSignalingState {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCSignalingState {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCSignalingState {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1220,19 +1219,19 @@ impl StaticType for WebRTCStatsType {
 }
 
 impl<'a> FromValueOptional<'a> for WebRTCStatsType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for WebRTCStatsType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for WebRTCStatsType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }

@@ -6,7 +6,6 @@ use crate::PlayerSignalDispatcher;
 use glib::object::ObjectType as ObjectType_;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 
 glib::glib_wrapper! {
     pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;
@@ -19,7 +18,8 @@ glib::glib_wrapper! {
 impl PlayerGMainContextSignalDispatcher {
     pub fn get_property_application_context(&self) -> Option<glib::MainContext> {
         unsafe {
-            let mut value = Value::from_type(<glib::MainContext as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<glib::MainContext as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"application-context\0".as_ptr() as *const _,

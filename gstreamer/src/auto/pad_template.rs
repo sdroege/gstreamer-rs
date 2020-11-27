@@ -13,7 +13,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -44,8 +43,8 @@ impl PadTemplate {
         }
     }
 
-    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn with_gtype(
         name_template: &str,
         direction: PadDirection,
@@ -70,8 +69,8 @@ impl PadTemplate {
         unsafe { from_glib_full(ffi::gst_pad_template_get_caps(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_documentation_caps(&self) -> Option<Caps> {
         unsafe {
             from_glib_full(ffi::gst_pad_template_get_documentation_caps(
@@ -86,8 +85,8 @@ impl PadTemplate {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_documentation_caps(&self, caps: &Caps) {
         unsafe {
             ffi::gst_pad_template_set_documentation_caps(
@@ -99,7 +98,7 @@ impl PadTemplate {
 
     pub fn get_property_direction(&self) -> PadDirection {
         unsafe {
-            let mut value = Value::from_type(<PadDirection as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<PadDirection as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"direction\0".as_ptr() as *const _,
@@ -112,11 +111,12 @@ impl PadTemplate {
         }
     }
 
-    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn get_property_gtype(&self) -> glib::types::Type {
         unsafe {
-            let mut value = Value::from_type(<glib::types::Type as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<glib::types::Type as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"gtype\0".as_ptr() as *const _,
@@ -131,7 +131,7 @@ impl PadTemplate {
 
     pub fn get_property_name_template(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"name-template\0".as_ptr() as *const _,
@@ -145,7 +145,7 @@ impl PadTemplate {
 
     pub fn get_property_presence(&self) -> PadPresence {
         unsafe {
-            let mut value = Value::from_type(<PadPresence as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<PadPresence as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"presence\0".as_ptr() as *const _,

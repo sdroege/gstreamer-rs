@@ -9,7 +9,6 @@ use crate::TrackElement;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 
 glib::glib_wrapper! {
     pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
@@ -38,7 +37,7 @@ pub trait EffectExt: 'static {
 impl<O: IsA<Effect>> EffectExt for O {
     fn get_property_bin_description(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"bin-description\0".as_ptr() as *const _,

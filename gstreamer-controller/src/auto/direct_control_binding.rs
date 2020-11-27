@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -75,7 +74,7 @@ pub trait DirectControlBindingExt: 'static {
 impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
     fn get_property_absolute(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"absolute\0".as_ptr() as *const _,
@@ -90,7 +89,8 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
 
     fn get_property_control_source(&self) -> Option<gst::ControlSource> {
         unsafe {
-            let mut value = Value::from_type(<gst::ControlSource as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source\0".as_ptr() as *const _,
@@ -107,7 +107,7 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source\0".as_ptr() as *const _,
-                Value::from(control_source).to_glib_none().0,
+                glib::Value::from(control_source).to_glib_none().0,
             );
         }
     }

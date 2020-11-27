@@ -32,6 +32,7 @@ x11 = []
 wayland = []
 v1_16 = []
 v1_18 = ["v1_16"]
+dox = []
 
 [lib]
 name = "gstreamer_gl_sys"
@@ -51,7 +52,7 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.17.0"
 edition = "2018"
 [package.metadata.docs.rs]
-features = []
+features = ["dox"]
 [package.metadata.system-deps.gstreamer_gl_1_0]
 name = "gstreamer-gl-1.0"
 version = "1.14"

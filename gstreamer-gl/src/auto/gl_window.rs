@@ -34,8 +34,8 @@ unsafe impl Sync for GLWindow {}
 pub const NONE_GL_WINDOW: Option<&GLWindow> = None;
 
 pub trait GLWindowExt: 'static {
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn controls_viewport(&self) -> bool;
 
     fn draw(&self);
@@ -46,8 +46,8 @@ pub trait GLWindowExt: 'static {
 
     fn handle_events(&self, handle_events: bool);
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn has_output_surface(&self) -> bool;
 
     fn queue_resize(&self);
@@ -62,8 +62,8 @@ pub trait GLWindowExt: 'static {
 
     fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64);
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64);
 
     fn set_preferred_size(&self, width: i32, height: i32);
@@ -88,8 +88,8 @@ pub trait GLWindowExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -97,8 +97,8 @@ pub trait GLWindowExt: 'static {
 }
 
 impl<O: IsA<GLWindow>> GLWindowExt for O {
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn controls_viewport(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_window_controls_viewport(
@@ -145,8 +145,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn has_output_surface(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_window_has_output_surface(
@@ -201,8 +201,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64) {
         unsafe {
             ffi::gst_gl_window_send_scroll_event(
@@ -322,8 +322,8 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn connect_scroll_event<F: Fn(&Self, f64, f64, f64, f64) + Send + Sync + 'static>(
         &self,
         f: F,

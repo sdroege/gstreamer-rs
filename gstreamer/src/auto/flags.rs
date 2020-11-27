@@ -7,15 +7,14 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
 bitflags! {
     pub struct BinFlags: u32 {
         const NO_RESYNC = 16384;
-        #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         const STREAMS_AWARE = 32768;
     }
 }
@@ -44,19 +43,19 @@ impl StaticType for BinFlags {
 }
 
 impl<'a> FromValueOptional<'a> for BinFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for BinFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BinFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -96,19 +95,19 @@ impl StaticType for BufferCopyFlags {
 }
 
 impl<'a> FromValueOptional<'a> for BufferCopyFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for BufferCopyFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferCopyFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -128,8 +127,8 @@ bitflags! {
         const DELTA_UNIT = 8192;
         const TAG_MEMORY = 16384;
         const SYNC_AFTER = 32768;
-        #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+        #[cfg(any(feature = "v1_14", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
         const NON_DROPPABLE = 65536;
     }
 }
@@ -158,19 +157,19 @@ impl StaticType for BufferFlags {
 }
 
 impl<'a> FromValueOptional<'a> for BufferFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for BufferFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -207,19 +206,19 @@ impl StaticType for BufferPoolAcquireFlags {
 }
 
 impl<'a> FromValueOptional<'a> for BufferPoolAcquireFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for BufferPoolAcquireFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferPoolAcquireFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -260,19 +259,19 @@ impl StaticType for ClockFlags {
 }
 
 impl<'a> FromValueOptional<'a> for ClockFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ClockFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ClockFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -324,19 +323,19 @@ impl StaticType for DebugColorFlags {
 }
 
 impl<'a> FromValueOptional<'a> for DebugColorFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for DebugColorFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DebugColorFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -377,19 +376,19 @@ impl StaticType for DebugGraphDetails {
 }
 
 impl<'a> FromValueOptional<'a> for DebugGraphDetails {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for DebugGraphDetails {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DebugGraphDetails {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -429,19 +428,19 @@ impl StaticType for ElementFlags {
 }
 
 impl<'a> FromValueOptional<'a> for ElementFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ElementFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ElementFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -481,27 +480,27 @@ impl StaticType for MemoryFlags {
 }
 
 impl<'a> FromValueOptional<'a> for MemoryFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for MemoryFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for MemoryFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
 bitflags! {
     pub struct ObjectFlags: u32 {
-        #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         const MAY_BE_LEAKED = 1;
     }
 }
@@ -530,19 +529,19 @@ impl StaticType for ObjectFlags {
 }
 
 impl<'a> FromValueOptional<'a> for ObjectFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ObjectFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ObjectFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -589,19 +588,19 @@ impl StaticType for PadFlags {
 }
 
 impl<'a> FromValueOptional<'a> for PadFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -640,19 +639,19 @@ impl StaticType for PadLinkCheck {
 }
 
 impl<'a> FromValueOptional<'a> for PadLinkCheck {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadLinkCheck {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadLinkCheck {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -707,19 +706,19 @@ impl StaticType for PadProbeType {
 }
 
 impl<'a> FromValueOptional<'a> for PadProbeType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PadProbeType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadProbeType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -728,8 +727,8 @@ bitflags! {
     pub struct ParseFlags: u32 {
         const FATAL_ERRORS = 1;
         const NO_SINGLE_ELEMENT_BINS = 2;
-        #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
         const PLACE_IN_BIN = 4;
     }
 }
@@ -758,19 +757,19 @@ impl StaticType for ParseFlags {
 }
 
 impl<'a> FromValueOptional<'a> for ParseFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for ParseFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ParseFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -805,33 +804,33 @@ impl StaticType for PipelineFlags {
 }
 
 impl<'a> FromValueOptional<'a> for PipelineFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PipelineFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PipelineFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 bitflags! {
     pub struct PluginAPIFlags: u32 {
         const MEMBERS = 1;
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl ToGlib for PluginAPIFlags {
     type GlibType = ffi::GstPluginAPIFlags;
@@ -841,8 +840,8 @@ impl ToGlib for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginAPIFlags> for PluginAPIFlags {
     fn from_glib(value: ffi::GstPluginAPIFlags) -> PluginAPIFlags {
@@ -851,34 +850,34 @@ impl FromGlib<ffi::GstPluginAPIFlags> for PluginAPIFlags {
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl StaticType for PluginAPIFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_plugin_api_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValueOptional<'a> for PluginAPIFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl<'a> FromValue<'a> for PluginAPIFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl SetValue for PluginAPIFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -917,19 +916,19 @@ impl StaticType for PluginDependencyFlags {
 }
 
 impl<'a> FromValueOptional<'a> for PluginDependencyFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PluginDependencyFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PluginDependencyFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -965,19 +964,19 @@ impl StaticType for PluginFlags {
 }
 
 impl<'a> FromValueOptional<'a> for PluginFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for PluginFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PluginFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1014,19 +1013,19 @@ impl StaticType for SchedulingFlags {
 }
 
 impl<'a> FromValueOptional<'a> for SchedulingFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for SchedulingFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SchedulingFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1044,11 +1043,11 @@ bitflags! {
         const SNAP_NEAREST = 96;
         const TRICKMODE_KEY_UNITS = 128;
         const TRICKMODE_NO_AUDIO = 256;
-        #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         const TRICKMODE_FORWARD_PREDICTED = 512;
-        #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         const INSTANT_RATE_CHANGE = 1024;
     }
 }
@@ -1077,19 +1076,19 @@ impl StaticType for SeekFlags {
 }
 
 impl<'a> FromValueOptional<'a> for SeekFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for SeekFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SeekFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1102,8 +1101,8 @@ bitflags! {
         const SKIP = 16;
         const SEGMENT = 8;
         const TRICKMODE_KEY_UNITS = 128;
-        #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-        #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+        #[cfg(any(feature = "v1_18", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         const TRICKMODE_FORWARD_PREDICTED = 512;
         const TRICKMODE_NO_AUDIO = 256;
     }
@@ -1133,33 +1132,33 @@ impl StaticType for SegmentFlags {
 }
 
 impl<'a> FromValueOptional<'a> for SegmentFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for SegmentFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SegmentFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 bitflags! {
     pub struct StackTraceFlags: u32 {
         const FULL = 1;
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl ToGlib for StackTraceFlags {
     type GlibType = ffi::GstStackTraceFlags;
@@ -1169,8 +1168,8 @@ impl ToGlib for StackTraceFlags {
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
     fn from_glib(value: ffi::GstStackTraceFlags) -> StackTraceFlags {
@@ -1179,34 +1178,34 @@ impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl StaticType for StackTraceFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stack_trace_flags_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl<'a> FromValueOptional<'a> for StackTraceFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl<'a> FromValue<'a> for StackTraceFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl SetValue for StackTraceFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -1243,25 +1242,25 @@ impl StaticType for StreamFlags {
 }
 
 impl<'a> FromValueOptional<'a> for StreamFlags {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for StreamFlags {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StreamFlags {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 bitflags! {
     pub struct StreamType: u32 {
         const UNKNOWN = 1;
@@ -1272,8 +1271,8 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl ToGlib for StreamType {
     type GlibType = ffi::GstStreamType;
@@ -1283,8 +1282,8 @@ impl ToGlib for StreamType {
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamType> for StreamType {
     fn from_glib(value: ffi::GstStreamType) -> StreamType {
@@ -1293,34 +1292,34 @@ impl FromGlib<ffi::GstStreamType> for StreamType {
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StaticType for StreamType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stream_type_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> FromValueOptional<'a> for StreamType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> FromValue<'a> for StreamType {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl SetValue for StreamType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

@@ -8,8 +8,8 @@ use crate::RTSPFilterResult;
 use crate::RTSPMountPoints;
 use crate::RTSPSession;
 use crate::RTSPSessionPool;
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use crate::RTSPStreamTransport;
 use crate::RTSPThreadPool;
 use glib::object::Cast;
@@ -18,7 +18,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -55,16 +54,16 @@ pub trait RTSPClientExt: 'static {
 
     //fn get_connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection>;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_content_length_limit(&self) -> u32;
 
     fn get_mount_points(&self) -> Option<RTSPMountPoints>;
 
     fn get_session_pool(&self) -> Option<RTSPSessionPool>;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport>;
 
     fn get_thread_pool(&self) -> Option<RTSPThreadPool>;
@@ -82,16 +81,16 @@ pub trait RTSPClientExt: 'static {
 
     //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32);
 
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
 
     //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>);
@@ -150,8 +149,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_announce_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -159,8 +158,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_describe_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -168,8 +167,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_get_parameter_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -177,8 +176,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_options_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -186,8 +185,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_pause_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -195,8 +194,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_play_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -204,8 +203,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_record_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -213,8 +212,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_set_parameter_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -222,8 +221,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_setup_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -231,8 +230,8 @@ pub trait RTSPClientExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_teardown_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -302,8 +301,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_client_get_connection() }
     //}
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_content_length_limit(&self) -> u32 {
         unsafe { ffi::gst_rtsp_client_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
@@ -324,8 +323,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_client_get_stream_transport(
@@ -405,8 +404,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_connection() }
     //}
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_content_length_limit(&self, limit: u32) {
         unsafe {
             ffi::gst_rtsp_client_set_content_length_limit(self.as_ref().to_glib_none().0, limit);
@@ -426,8 +425,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_func() }
     //}
 
-    //#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    //#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi:gst_rtsp_client_set_send_messages_func() }
     //}
@@ -452,7 +451,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     fn get_property_drop_backlog(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"drop-backlog\0".as_ptr() as *const _,
@@ -470,14 +469,14 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"drop-backlog\0".as_ptr() as *const _,
-                Value::from(&drop_backlog).to_glib_none().0,
+                glib::Value::from(&drop_backlog).to_glib_none().0,
             );
         }
     }
 
     fn get_property_post_session_timeout(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"post-session-timeout\0".as_ptr() as *const _,
@@ -495,7 +494,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"post-session-timeout\0".as_ptr() as *const _,
-                Value::from(&post_session_timeout).to_glib_none().0,
+                glib::Value::from(&post_session_timeout).to_glib_none().0,
             );
         }
     }
@@ -791,8 +790,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_announce_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -830,8 +829,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_describe_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -869,8 +868,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_get_parameter_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -908,8 +907,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_options_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -947,8 +946,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_pause_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -986,8 +985,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_play_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1025,8 +1024,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_record_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1064,8 +1063,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_set_parameter_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1103,8 +1102,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_setup_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(
@@ -1142,8 +1141,8 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn connect_pre_teardown_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,
     >(

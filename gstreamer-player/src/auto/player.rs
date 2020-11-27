@@ -15,7 +15,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -104,8 +103,8 @@ impl Player {
         unsafe { from_glib_full(ffi::gst_player_get_subtitle_uri(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn get_subtitle_video_offset(&self) -> i64 {
         unsafe { ffi::gst_player_get_subtitle_video_offset(self.to_glib_none().0) }
     }
@@ -226,8 +225,8 @@ impl Player {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_subtitle_video_offset(&self, offset: i64) {
         unsafe {
             ffi::gst_player_set_subtitle_video_offset(self.to_glib_none().0, offset);
@@ -284,7 +283,7 @@ impl Player {
 
     pub fn get_property_suburi(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"suburi\0".as_ptr() as *const _,
@@ -301,15 +300,16 @@ impl Player {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"suburi\0".as_ptr() as *const _,
-                Value::from(suburi).to_glib_none().0,
+                glib::Value::from(suburi).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
-            let mut value =
-                Value::from_type(<gst_video::VideoMultiviewFlags as StaticType>::static_type());
+            let mut value = glib::Value::from_type(
+                <gst_video::VideoMultiviewFlags as StaticType>::static_type(),
+            );
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-multiview-flags\0".as_ptr() as *const _,
@@ -330,14 +330,14 @@ impl Player {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-multiview-flags\0".as_ptr() as *const _,
-                Value::from(&video_multiview_flags).to_glib_none().0,
+                glib::Value::from(&video_multiview_flags).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe {
-            let mut value = Value::from_type(
+            let mut value = glib::Value::from_type(
                 <gst_video::VideoMultiviewFramePacking as StaticType>::static_type(),
             );
             glib::gobject_ffi::g_object_get_property(
@@ -360,7 +360,7 @@ impl Player {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-multiview-mode\0".as_ptr() as *const _,
-                Value::from(&video_multiview_mode).to_glib_none().0,
+                glib::Value::from(&video_multiview_mode).to_glib_none().0,
             );
         }
     }
@@ -904,8 +904,8 @@ impl Player {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn connect_property_subtitle_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(
         &self,
         f: F,

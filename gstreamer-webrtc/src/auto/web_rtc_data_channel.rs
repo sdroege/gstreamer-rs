@@ -10,7 +10,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -23,32 +22,32 @@ glib::glib_wrapper! {
 }
 
 impl WebRTCDataChannel {
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn close(&self) {
         unsafe {
             ffi::gst_webrtc_data_channel_close(self.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_buffered_amount_low(&self) {
         unsafe {
             ffi::gst_webrtc_data_channel_on_buffered_amount_low(self.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_close(&self) {
         unsafe {
             ffi::gst_webrtc_data_channel_on_close(self.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_message_data(&self, data: Option<&glib::Bytes>) {
         unsafe {
             ffi::gst_webrtc_data_channel_on_message_data(
@@ -58,8 +57,8 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_message_string(&self, str: Option<&str>) {
         unsafe {
             ffi::gst_webrtc_data_channel_on_message_string(
@@ -69,24 +68,24 @@ impl WebRTCDataChannel {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn on_open(&self) {
         unsafe {
             ffi::gst_webrtc_data_channel_on_open(self.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn send_data(&self, data: Option<&glib::Bytes>) {
         unsafe {
             ffi::gst_webrtc_data_channel_send_data(self.to_glib_none().0, data.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn send_string(&self, str: Option<&str>) {
         unsafe {
             ffi::gst_webrtc_data_channel_send_string(self.to_glib_none().0, str.to_glib_none().0);
@@ -95,7 +94,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_buffered_amount(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffered-amount\0".as_ptr() as *const _,
@@ -110,7 +109,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_buffered_amount_low_threshold(&self) -> u64 {
         unsafe {
-            let mut value = Value::from_type(<u64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffered-amount-low-threshold\0".as_ptr() as *const _,
@@ -128,14 +127,16 @@ impl WebRTCDataChannel {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffered-amount-low-threshold\0".as_ptr() as *const _,
-                Value::from(&buffered_amount_low_threshold).to_glib_none().0,
+                glib::Value::from(&buffered_amount_low_threshold)
+                    .to_glib_none()
+                    .0,
             );
         }
     }
 
     pub fn get_property_id(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"id\0".as_ptr() as *const _,
@@ -150,7 +151,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_label(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"label\0".as_ptr() as *const _,
@@ -164,7 +165,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_max_packet_lifetime(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"max-packet-lifetime\0".as_ptr() as *const _,
@@ -179,7 +180,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_max_retransmits(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"max-retransmits\0".as_ptr() as *const _,
@@ -194,7 +195,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_negotiated(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"negotiated\0".as_ptr() as *const _,
@@ -209,7 +210,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_ordered(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"ordered\0".as_ptr() as *const _,
@@ -224,7 +225,8 @@ impl WebRTCDataChannel {
 
     pub fn get_property_priority(&self) -> WebRTCPriorityType {
         unsafe {
-            let mut value = Value::from_type(<WebRTCPriorityType as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<WebRTCPriorityType as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"priority\0".as_ptr() as *const _,
@@ -239,7 +241,7 @@ impl WebRTCDataChannel {
 
     pub fn get_property_protocol(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"protocol\0".as_ptr() as *const _,
@@ -253,7 +255,8 @@ impl WebRTCDataChannel {
 
     pub fn get_property_ready_state(&self) -> WebRTCDataChannelState {
         unsafe {
-            let mut value = Value::from_type(<WebRTCDataChannelState as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<WebRTCDataChannelState as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"ready-state\0".as_ptr() as *const _,

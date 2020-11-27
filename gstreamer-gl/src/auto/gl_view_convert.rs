@@ -10,7 +10,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -87,7 +86,7 @@ impl GLViewConvert {
 
     pub fn get_property_downmix_mode(&self) -> GLStereoDownmix {
         unsafe {
-            let mut value = Value::from_type(<GLStereoDownmix as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<GLStereoDownmix as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"downmix-mode\0".as_ptr() as *const _,
@@ -105,15 +104,16 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"downmix-mode\0".as_ptr() as *const _,
-                Value::from(&downmix_mode).to_glib_none().0,
+                glib::Value::from(&downmix_mode).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_input_flags_override(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
-            let mut value =
-                Value::from_type(<gst_video::VideoMultiviewFlags as StaticType>::static_type());
+            let mut value = glib::Value::from_type(
+                <gst_video::VideoMultiviewFlags as StaticType>::static_type(),
+            );
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"input-flags-override\0".as_ptr() as *const _,
@@ -134,15 +134,16 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"input-flags-override\0".as_ptr() as *const _,
-                Value::from(&input_flags_override).to_glib_none().0,
+                glib::Value::from(&input_flags_override).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_input_mode_override(&self) -> gst_video::VideoMultiviewMode {
         unsafe {
-            let mut value =
-                Value::from_type(<gst_video::VideoMultiviewMode as StaticType>::static_type());
+            let mut value = glib::Value::from_type(
+                <gst_video::VideoMultiviewMode as StaticType>::static_type(),
+            );
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"input-mode-override\0".as_ptr() as *const _,
@@ -163,15 +164,16 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"input-mode-override\0".as_ptr() as *const _,
-                Value::from(&input_mode_override).to_glib_none().0,
+                glib::Value::from(&input_mode_override).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_output_flags_override(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
-            let mut value =
-                Value::from_type(<gst_video::VideoMultiviewFlags as StaticType>::static_type());
+            let mut value = glib::Value::from_type(
+                <gst_video::VideoMultiviewFlags as StaticType>::static_type(),
+            );
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"output-flags-override\0".as_ptr() as *const _,
@@ -192,15 +194,16 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"output-flags-override\0".as_ptr() as *const _,
-                Value::from(&output_flags_override).to_glib_none().0,
+                glib::Value::from(&output_flags_override).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_output_mode_override(&self) -> gst_video::VideoMultiviewMode {
         unsafe {
-            let mut value =
-                Value::from_type(<gst_video::VideoMultiviewMode as StaticType>::static_type());
+            let mut value = glib::Value::from_type(
+                <gst_video::VideoMultiviewMode as StaticType>::static_type(),
+            );
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"output-mode-override\0".as_ptr() as *const _,
@@ -221,7 +224,7 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"output-mode-override\0".as_ptr() as *const _,
-                Value::from(&output_mode_override).to_glib_none().0,
+                glib::Value::from(&output_mode_override).to_glib_none().0,
             );
         }
     }

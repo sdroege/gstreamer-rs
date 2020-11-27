@@ -7,7 +7,6 @@ use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
-use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
@@ -42,19 +41,19 @@ impl StaticType for RTSPEvent {
 }
 
 impl<'a> FromValueOptional<'a> for RTSPEvent {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTSPEvent {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPEvent {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -93,19 +92,19 @@ impl StaticType for RTSPLowerTrans {
 }
 
 impl<'a> FromValueOptional<'a> for RTSPLowerTrans {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTSPLowerTrans {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPLowerTrans {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -152,19 +151,19 @@ impl StaticType for RTSPMethod {
 }
 
 impl<'a> FromValueOptional<'a> for RTSPMethod {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTSPMethod {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPMethod {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -202,19 +201,19 @@ impl StaticType for RTSPProfile {
 }
 
 impl<'a> FromValueOptional<'a> for RTSPProfile {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTSPProfile {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPProfile {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
@@ -250,19 +249,19 @@ impl StaticType for RTSPTransMode {
 }
 
 impl<'a> FromValueOptional<'a> for RTSPTransMode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
 impl<'a> FromValue<'a> for RTSPTransMode {
-    unsafe fn from_value(value: &Value) -> Self {
+    unsafe fn from_value(value: &glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPTransMode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -36,8 +35,8 @@ pub trait BaseTransformExt: 'static {
 
     fn is_qos_enabled(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn reconfigure(&self) -> bool;
 
     fn reconfigure_sink(&self);
@@ -105,8 +104,8 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn reconfigure(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_transform_reconfigure(
@@ -197,7 +196,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
 
     fn get_property_qos(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
@@ -215,7 +214,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
-                Value::from(&qos).to_glib_none().0,
+                glib::Value::from(&qos).to_glib_none().0,
             );
         }
     }

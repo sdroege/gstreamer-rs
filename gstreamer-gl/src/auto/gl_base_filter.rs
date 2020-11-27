@@ -9,7 +9,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -27,12 +26,12 @@ unsafe impl Sync for GLBaseFilter {}
 pub const NONE_GL_BASE_FILTER: Option<&GLBaseFilter> = None;
 
 pub trait GLBaseFilterExt: 'static {
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_gl_context(&self) -> Option<GLContext>;
 
     fn get_property_context(&self) -> Option<GLContext>;
@@ -44,8 +43,8 @@ pub trait GLBaseFilterExt: 'static {
 }
 
 impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_base_filter_find_gl_context(
@@ -54,8 +53,8 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_gl_context(&self) -> Option<GLContext> {
         unsafe {
             from_glib_full(ffi::gst_gl_base_filter_get_gl_context(
@@ -66,7 +65,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
 
     fn get_property_context(&self) -> Option<GLContext> {
         unsafe {
-            let mut value = Value::from_type(<GLContext as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<GLContext as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"context\0".as_ptr() as *const _,

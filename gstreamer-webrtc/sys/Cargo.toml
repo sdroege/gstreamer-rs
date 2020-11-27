@@ -26,6 +26,7 @@ tempfile = "3"
 v1_16 = ["v1_14_1"]
 v1_18 = ["v1_16"]
 v1_14_1 = []
+dox = []
 
 [lib]
 name = "gstreamer_webrtc_sys"
@@ -45,7 +46,7 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.17.0"
 edition = "2018"
 [package.metadata.docs.rs]
-features = []
+features = ["dox"]
 [package.metadata.system-deps.gstreamer_webrtc_1_0]
 name = "gstreamer-webrtc-1.0"
 version = "1.14"

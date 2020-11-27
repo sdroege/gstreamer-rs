@@ -7,7 +7,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -22,7 +21,7 @@ glib::glib_wrapper! {
 impl NetTimeProvider {
     pub fn get_property_active(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"active\0".as_ptr() as *const _,
@@ -40,14 +39,14 @@ impl NetTimeProvider {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"active\0".as_ptr() as *const _,
-                Value::from(&active).to_glib_none().0,
+                glib::Value::from(&active).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_address(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"address\0".as_ptr() as *const _,
@@ -61,7 +60,7 @@ impl NetTimeProvider {
 
     pub fn get_property_clock(&self) -> Option<gst::Clock> {
         unsafe {
-            let mut value = Value::from_type(<gst::Clock as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"clock\0".as_ptr() as *const _,
@@ -75,7 +74,7 @@ impl NetTimeProvider {
 
     pub fn get_property_port(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"port\0".as_ptr() as *const _,
@@ -90,7 +89,7 @@ impl NetTimeProvider {
 
     pub fn get_property_qos_dscp(&self) -> i32 {
         unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"qos-dscp\0".as_ptr() as *const _,
@@ -108,7 +107,7 @@ impl NetTimeProvider {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"qos-dscp\0".as_ptr() as *const _,
-                Value::from(&qos_dscp).to_glib_none().0,
+                glib::Value::from(&qos_dscp).to_glib_none().0,
             );
         }
     }

@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -39,7 +38,7 @@ pub trait VideoSinkExt: 'static {
 impl<O: IsA<VideoSink>> VideoSinkExt for O {
     fn get_property_show_preroll_frame(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"show-preroll-frame\0".as_ptr() as *const _,
@@ -57,7 +56,7 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"show-preroll-frame\0".as_ptr() as *const _,
-                Value::from(&show_preroll_frame).to_glib_none().0,
+                glib::Value::from(&show_preroll_frame).to_glib_none().0,
             );
         }
     }

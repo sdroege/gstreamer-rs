@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -28,8 +27,8 @@ pub const NONE_BASE_PARSE: Option<&BaseParse> = None;
 pub trait BaseParseExt: 'static {
     fn add_index_entry(&self, offset: u64, ts: gst::ClockTime, key: bool, force: bool) -> bool;
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn drain(&self);
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
@@ -75,8 +74,8 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn drain(&self) {
         unsafe {
             ffi::gst_base_parse_drain(self.as_ref().to_glib_none().0);
@@ -162,7 +161,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
 
     fn get_property_disable_passthrough(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"disable-passthrough\0".as_ptr() as *const _,
@@ -180,7 +179,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"disable-passthrough\0".as_ptr() as *const _,
-                Value::from(&disable_passthrough).to_glib_none().0,
+                glib::Value::from(&disable_passthrough).to_glib_none().0,
             );
         }
     }

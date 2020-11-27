@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -194,7 +193,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
 
     fn get_property_buffer_time(&self) -> i64 {
         unsafe {
-            let mut value = Value::from_type(<i64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"buffer-time\0".as_ptr() as *const _,
@@ -212,14 +211,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"buffer-time\0".as_ptr() as *const _,
-                Value::from(&buffer_time).to_glib_none().0,
+                glib::Value::from(&buffer_time).to_glib_none().0,
             );
         }
     }
 
     fn get_property_can_activate_pull(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"can-activate-pull\0".as_ptr() as *const _,
@@ -237,14 +236,14 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"can-activate-pull\0".as_ptr() as *const _,
-                Value::from(&can_activate_pull).to_glib_none().0,
+                glib::Value::from(&can_activate_pull).to_glib_none().0,
             );
         }
     }
 
     fn get_property_latency_time(&self) -> i64 {
         unsafe {
-            let mut value = Value::from_type(<i64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"latency-time\0".as_ptr() as *const _,
@@ -262,7 +261,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"latency-time\0".as_ptr() as *const _,
-                Value::from(&latency_time).to_glib_none().0,
+                glib::Value::from(&latency_time).to_glib_none().0,
             );
         }
     }

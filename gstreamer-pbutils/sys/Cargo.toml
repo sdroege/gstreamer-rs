@@ -34,6 +34,7 @@ v1_14 = ["v1_12_1"]
 v1_16 = ["v1_14"]
 v1_18 = ["v1_16"]
 v1_12_1 = ["v1_12"]
+dox = []
 
 [lib]
 name = "gstreamer_pbutils_sys"
@@ -53,7 +54,7 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 version = "0.17.0"
 edition = "2018"
 [package.metadata.docs.rs]
-features = []
+features = ["dox"]
 [package.metadata.system-deps.gstreamer_pbutils_1_0]
 name = "gstreamer-pbutils-1.0"
 version = "1.8"

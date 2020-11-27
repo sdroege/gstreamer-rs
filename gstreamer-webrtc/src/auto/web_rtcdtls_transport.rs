@@ -9,7 +9,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -43,7 +42,7 @@ impl WebRTCDTLSTransport {
 
     pub fn get_property_certificate(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"certificate\0".as_ptr() as *const _,
@@ -60,14 +59,14 @@ impl WebRTCDTLSTransport {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"certificate\0".as_ptr() as *const _,
-                Value::from(certificate).to_glib_none().0,
+                glib::Value::from(certificate).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_client(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"client\0".as_ptr() as *const _,
@@ -85,14 +84,14 @@ impl WebRTCDTLSTransport {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"client\0".as_ptr() as *const _,
-                Value::from(&client).to_glib_none().0,
+                glib::Value::from(&client).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_remote_certificate(&self) -> Option<glib::GString> {
         unsafe {
-            let mut value = Value::from_type(<glib::GString as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"remote-certificate\0".as_ptr() as *const _,
@@ -106,7 +105,7 @@ impl WebRTCDTLSTransport {
 
     pub fn get_property_rtcp(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"rtcp\0".as_ptr() as *const _,
@@ -121,7 +120,7 @@ impl WebRTCDTLSTransport {
 
     pub fn get_property_session_id(&self) -> u32 {
         unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"session-id\0".as_ptr() as *const _,
@@ -137,7 +136,7 @@ impl WebRTCDTLSTransport {
     pub fn get_property_state(&self) -> WebRTCDTLSTransportState {
         unsafe {
             let mut value =
-                Value::from_type(<WebRTCDTLSTransportState as StaticType>::static_type());
+                glib::Value::from_type(<WebRTCDTLSTransportState as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"state\0".as_ptr() as *const _,
@@ -152,7 +151,8 @@ impl WebRTCDTLSTransport {
 
     pub fn get_property_transport(&self) -> Option<WebRTCICETransport> {
         unsafe {
-            let mut value = Value::from_type(<WebRTCICETransport as StaticType>::static_type());
+            let mut value =
+                glib::Value::from_type(<WebRTCICETransport as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"transport\0".as_ptr() as *const _,

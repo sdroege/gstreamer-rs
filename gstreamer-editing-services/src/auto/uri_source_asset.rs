@@ -24,8 +24,8 @@ pub trait UriSourceAssetExt: 'static {
 
     fn get_stream_uri(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn is_image(&self) -> bool;
 }
 
@@ -54,8 +54,8 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn is_image(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_uri_source_asset_is_image(

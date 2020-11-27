@@ -8,7 +8,6 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
-use glib::Value;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -29,8 +28,8 @@ impl AppSrc {
         unsafe { ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0) }
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
@@ -61,8 +60,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn set_duration(&self, duration: gst::ClockTime) {
         unsafe {
             ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.to_glib());
@@ -95,7 +94,7 @@ impl AppSrc {
 
     pub fn get_property_block(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"block\0".as_ptr() as *const _,
@@ -113,14 +112,14 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"block\0".as_ptr() as *const _,
-                Value::from(&block).to_glib_none().0,
+                glib::Value::from(&block).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_format(&self) -> gst::Format {
         unsafe {
-            let mut value = Value::from_type(<gst::Format as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<gst::Format as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"format\0".as_ptr() as *const _,
@@ -138,16 +137,16 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"format\0".as_ptr() as *const _,
-                Value::from(&format).to_glib_none().0,
+                glib::Value::from(&format).to_glib_none().0,
             );
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_property_handle_segment_change(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"handle-segment-change\0".as_ptr() as *const _,
@@ -160,21 +159,21 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn set_property_handle_segment_change(&self, handle_segment_change: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"handle-segment-change\0".as_ptr() as *const _,
-                Value::from(&handle_segment_change).to_glib_none().0,
+                glib::Value::from(&handle_segment_change).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_is_live(&self) -> bool {
         unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"is-live\0".as_ptr() as *const _,
@@ -192,14 +191,14 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"is-live\0".as_ptr() as *const _,
-                Value::from(&is_live).to_glib_none().0,
+                glib::Value::from(&is_live).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_max_latency(&self) -> i64 {
         unsafe {
-            let mut value = Value::from_type(<i64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"max-latency\0".as_ptr() as *const _,
@@ -217,14 +216,14 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"max-latency\0".as_ptr() as *const _,
-                Value::from(&max_latency).to_glib_none().0,
+                glib::Value::from(&max_latency).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_min_latency(&self) -> i64 {
         unsafe {
-            let mut value = Value::from_type(<i64 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"min-latency\0".as_ptr() as *const _,
@@ -242,14 +241,14 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"min-latency\0".as_ptr() as *const _,
-                Value::from(&min_latency).to_glib_none().0,
+                glib::Value::from(&min_latency).to_glib_none().0,
             );
         }
     }
 
     pub fn get_property_min_percent(&self) -> u32 {
         unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"min-percent\0".as_ptr() as *const _,
@@ -267,7 +266,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"min-percent\0".as_ptr() as *const _,
-                Value::from(&min_percent).to_glib_none().0,
+                glib::Value::from(&min_percent).to_glib_none().0,
             );
         }
     }
@@ -425,8 +424,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn connect_property_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,
@@ -504,8 +503,8 @@ impl AppSrc {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn connect_property_handle_segment_change_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(
         &self,
         f: F,

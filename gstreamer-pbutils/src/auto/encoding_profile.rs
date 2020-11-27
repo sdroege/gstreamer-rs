@@ -49,8 +49,8 @@ unsafe impl Sync for EncodingProfile {}
 pub const NONE_ENCODING_PROFILE: Option<&EncodingProfile> = None;
 
 pub trait EncodingProfileExt: 'static {
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn copy(&self) -> EncodingProfile;
 
     fn get_allow_dynamic_output(&self) -> bool;
@@ -71,8 +71,8 @@ pub trait EncodingProfileExt: 'static {
 
     fn get_preset_name(&self) -> Option<glib::GString>;
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_single_segment(&self) -> bool;
 
     fn get_type_nick(&self) -> Option<glib::GString>;
@@ -83,8 +83,8 @@ pub trait EncodingProfileExt: 'static {
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn copy(&self) -> EncodingProfile {
         unsafe {
             from_glib_full(ffi::gst_encoding_profile_copy(
@@ -161,8 +161,8 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn get_single_segment(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_profile_get_single_segment(
