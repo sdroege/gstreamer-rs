@@ -4,13 +4,14 @@ edition = "2018"
 name = "gstreamer-gl-wayland-sys"
 version = "0.0.1"
 [package.metadata.system-deps.gstreamer_gl_wayland_1_0]
-name = "gstreamer-gl-wayland-1.0"
+name = "gstreamer-gl-1.0"
 version = "1.14"
 
 [package.metadata.system-deps.gstreamer_gl_wayland_1_0.v1_16]
 version = "1.16"
 
 [package.metadata.system-deps.gstreamer_gl_wayland_1_0.v1_18]
+name = "gstreamer-gl-wayland-1.0"
 version = "1.18"
 [package.metadata.docs.rs]
 features = ["dox"]
