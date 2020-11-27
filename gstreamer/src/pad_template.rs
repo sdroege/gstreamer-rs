@@ -7,16 +7,16 @@
 // except according to those terms.
 
 use crate::PadTemplate;
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::StaticPadTemplate;
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
 
 impl PadTemplate {
-    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn from_static_pad_template_with_gtype(
         pad_template: &StaticPadTemplate,
         pad_type: glib::types::Type,

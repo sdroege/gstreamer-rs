@@ -20,8 +20,8 @@ use std::ptr;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use glib::translate::FromGlibPtrContainer;
 
 use crate::EventType;
@@ -394,8 +394,8 @@ impl<'a> StreamStart<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream(&self) -> Option<crate::Stream> {
         unsafe {
             let mut stream = ptr::null_mut();
@@ -459,23 +459,23 @@ impl<'a> Segment<'a> {
 
 declare_concrete_event!(StreamCollection);
 impl<'a> StreamCollection<'a> {
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(stream_collection: &crate::StreamCollection) -> Event {
         skip_assert_initialized!();
         Self::builder(stream_collection).build()
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(stream_collection: &crate::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(stream_collection)
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
@@ -582,23 +582,23 @@ impl<'a> SinkMessage<'a> {
 
 declare_concrete_event!(StreamGroupDone);
 impl<'a> StreamGroupDone<'a> {
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(group_id: GroupId) -> Event {
         skip_assert_initialized!();
         Self::builder(group_id).build()
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(group_id: GroupId) -> StreamGroupDoneBuilder<'a> {
         assert_initialized_main_thread!();
         StreamGroupDoneBuilder::new(group_id)
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_group_id(&self) -> GroupId {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
@@ -890,8 +890,8 @@ impl<'a> Seek<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn get_trickmode_interval(&self) -> crate::ClockTime {
         unsafe {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
@@ -1037,23 +1037,23 @@ impl<'a> TocSelect<'a> {
 
 declare_concrete_event!(SelectStreams);
 impl<'a> SelectStreams<'a> {
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[allow(clippy::new_ret_no_self)]
     pub fn new(streams: &'a [&'a str]) -> Event {
         skip_assert_initialized!();
         Self::builder(streams).build()
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn builder(streams: &'a [&'a str]) -> SelectStreamsBuilder {
         assert_initialized_main_thread!();
         SelectStreamsBuilder::new(streams)
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn get_streams(&self) -> Vec<String> {
         unsafe {
             let mut streams = ptr::null_mut();
@@ -1281,8 +1281,8 @@ pub struct StreamStartBuilder<'a> {
     stream_id: &'a str,
     flags: Option<crate::StreamFlags>,
     group_id: Option<GroupId>,
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     stream: Option<crate::Stream>,
 }
 
@@ -1294,8 +1294,8 @@ impl<'a> StreamStartBuilder<'a> {
             stream_id,
             flags: None,
             group_id: None,
-            #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-            #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+            #[cfg(any(feature = "v1_10", feature = "dox"))]
+            #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
             stream: None,
         }
     }
@@ -1314,8 +1314,8 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn stream(self, stream: crate::Stream) -> Self {
         Self {
             stream: Some(stream),
@@ -1332,7 +1332,7 @@ impl<'a> StreamStartBuilder<'a> {
             ffi::gst_event_set_group_id(ev, group_id.0.get());
         }
 
-        #[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
         if let Some(ref stream) = s.stream {
             ffi::gst_event_set_stream(ev, stream.to_glib_none().0);
         }
@@ -1375,15 +1375,15 @@ impl<'a> SegmentBuilder<'a> {
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment(s.segment.to_glib_none().0));
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct StreamCollectionBuilder<'a> {
     builder: EventBuilder<'a>,
     stream_collection: &'a crate::StreamCollection,
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(stream_collection: &'a crate::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -1466,15 +1466,15 @@ impl<'a> SinkMessageBuilder<'a> {
     ));
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct StreamGroupDoneBuilder<'a> {
     builder: EventBuilder<'a>,
     group_id: GroupId,
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> StreamGroupDoneBuilder<'a> {
     fn new(group_id: GroupId) -> Self {
         skip_assert_initialized!();
@@ -1675,7 +1675,7 @@ impl<'a> SeekBuilder<'a> {
                 s.stop.get_value(),
             );
 
-            #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
             if let Some(trickmode_interval) = s.trickmode_interval {
                 ffi::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.to_glib());
             }
@@ -1783,15 +1783,15 @@ impl<'a> TocSelectBuilder<'a> {
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc_select(s.uid.to_glib_none().0));
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub struct SelectStreamsBuilder<'a> {
     builder: EventBuilder<'a>,
     streams: &'a [&'a str],
 }
 
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl<'a> SelectStreamsBuilder<'a> {
     fn new(streams: &'a [&'a str]) -> Self {
         skip_assert_initialized!();

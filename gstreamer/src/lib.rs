@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
 #![recursion_limit = "256"]
 
 // Re-exported for the subclass gst_plugin_define! macro
@@ -83,11 +83,11 @@ pub use crate::tags::{
 mod tags_serde;
 
 pub mod meta;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use crate::meta::MetaSeqnum;
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use crate::meta::ReferenceTimestampMeta;
 pub use crate::meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta, ProtectionMeta};
 pub mod buffer;
@@ -122,11 +122,11 @@ pub use crate::static_caps::*;
 mod static_pad_template;
 pub use crate::static_pad_template::*;
 
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub mod promise;
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use promise::{Promise, PromiseError};
 
 pub mod bus;
@@ -143,16 +143,16 @@ mod allocation_params;
 pub use self::allocation_params::AllocationParams;
 
 // OS dependent Bus extensions (also import the other plateform mod for doc)
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 cfg_if::cfg_if! {
     if #[cfg(unix)] {
         mod bus_unix;
-        #[cfg(all(not(doctest), doc))]
+        #[cfg(feature = "dox")]
         mod bus_windows;
     } else {
         mod bus_windows;
-        #[cfg(all(not(doctest), doc))]
+        #[cfg(feature = "dox")]
         mod bus_unix;
     }
 }
@@ -190,16 +190,16 @@ pub use crate::element::{
 pub use crate::object::GstObjectExtManual;
 
 // OS dependent Bus extensions (also import the other plateform trait for doc)
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 cfg_if::cfg_if! {
     if #[cfg(unix)] {
         pub use bus_unix::UnixBusExtManual;
-        #[cfg(all(not(doctest), doc))]
+        #[cfg(feature = "dox")]
         pub use bus_windows::WindowsBusExtManual;
     } else {
         pub use bus_windows::WindowsBusExtManual;
-        #[cfg(all(not(doctest), doc))]
+        #[cfg(feature = "dox")]
         pub use bus_unix::UnixBusExtManual;
     }
 }
@@ -222,11 +222,11 @@ pub use crate::tag_setter::TagSetterExtManual;
 
 mod plugin;
 pub use crate::plugin::GstPluginExtManual;
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub mod stream;
-#[cfg(any(feature = "v1_10", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_10")))]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub mod stream_collection;
 
 mod typefind;
@@ -320,16 +320,16 @@ pub mod prelude {
     pub use crate::element::{ElementClassExt, ElementExtManual};
 
     // OS dependent Bus extensions (also import the other plateform trait for doc)
-    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     cfg_if::cfg_if! {
         if #[cfg(unix)] {
             pub use crate::bus_unix::UnixBusExtManual;
-            #[cfg(all(not(doctest), doc))]
+            #[cfg(feature = "dox")]
             pub use crate::bus_windows::WindowsBusExtManual;
         } else {
             pub use crate::bus_windows::WindowsBusExtManual;
-            #[cfg(all(not(doctest), doc))]
+            #[cfg(feature = "dox")]
             pub use crate::bus_unix::UnixBusExtManual;
         }
     }

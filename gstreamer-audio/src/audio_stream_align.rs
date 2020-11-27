@@ -12,8 +12,8 @@ use glib::translate::*;
 use std::mem;
 
 impl AudioStreamAlign {
-    #[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn process(
         &mut self,
         discont: bool,

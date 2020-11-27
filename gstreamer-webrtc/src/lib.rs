@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
 
@@ -28,8 +28,8 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
-#[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 mod web_rtc_data_channel;
 mod web_rtc_session_description;
 

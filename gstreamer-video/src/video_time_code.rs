@@ -15,13 +15,13 @@ use std::convert::{TryFrom, TryInto};
 use std::fmt;
 use std::mem;
 use std::ptr;
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use std::str;
 
 use crate::VideoTimeCodeFlags;
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use crate::VideoTimeCodeInterval;
 
 pub struct VideoTimeCode(ffi::GstVideoTimeCode);
@@ -68,8 +68,8 @@ impl VideoTimeCode {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn from_date_time(
         fps: gst::Fraction,
         dt: &glib::DateTime,
@@ -178,8 +178,8 @@ impl ValidVideoTimeCode {
         }
     }
 
-    //    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    //    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //    pub fn from_date_time(
     //        fps: gst::Fraction,
     //        dt: &glib::DateTime,
@@ -197,8 +197,8 @@ impl ValidVideoTimeCode {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn add_interval(
         &self,
         tc_inter: &VideoTimeCodeInterval,
@@ -470,8 +470,8 @@ macro_rules! generic_impl {
 generic_impl!(VideoTimeCode);
 generic_impl!(ValidVideoTimeCode);
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl str::FromStr for VideoTimeCode {
     type Err = glib::error::BoolError;
 

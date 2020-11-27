@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
 
@@ -41,16 +41,16 @@ mod audio_meta;
 pub use crate::audio_meta::*;
 mod audio_channel_position;
 pub use crate::audio_channel_position::*;
-#[cfg(any(feature = "v1_14", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_14")))]
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod audio_stream_align;
 mod functions;
 pub use crate::functions::*;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub mod audio_buffer;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use audio_buffer::{AudioBuffer, AudioBufferRef};
 
 mod audio_decoder;

@@ -12,8 +12,8 @@ use crate::video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCo
 use crate::VideoCodecFrame;
 use crate::VideoDecoder;
 use crate::VideoFormat;
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use crate::VideoInterlaceMode;
 use glib::object::IsA;
 use glib::translate::*;
@@ -35,8 +35,8 @@ extern "C" {
 }
 
 pub trait VideoDecoderExtManual: 'static {
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -65,8 +65,8 @@ pub trait VideoDecoderExtManual: 'static {
         height: u32,
         reference: Option<&VideoCodecState<Readable>>,
     ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError>;
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_interlaced_output_state(
         &self,
         fmt: VideoFormat,
@@ -95,8 +95,8 @@ pub trait VideoDecoderExtManual: 'static {
 }
 
 impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     fn allocate_output_frame(
         &self,
         frame: &mut VideoCodecFrame,
@@ -267,8 +267,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn set_interlaced_output_state(
         &self,
         fmt: VideoFormat,

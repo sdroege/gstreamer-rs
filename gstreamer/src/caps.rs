@@ -249,8 +249,8 @@ impl CapsRef {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn set_features_simple(&mut self, features: Option<CapsFeatures>) {
         unsafe {
             ffi::gst_caps_set_features_simple(

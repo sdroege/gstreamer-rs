@@ -15,8 +15,8 @@ use crate::ClockSuccess;
 use crate::ClockTime;
 use crate::ClockTimeDiff;
 use glib::ffi::{gboolean, gpointer};
-#[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::prelude::*;
 use glib::translate::*;
 use glib::IsA;
@@ -66,14 +66,14 @@ impl ClockId {
         }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn get_clock(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_clock_id_get_clock(self.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn uses_clock<P: IsA<Clock>>(&self, clock: &P) -> bool {
         unsafe {
             from_glib(ffi::gst_clock_id_uses_clock(

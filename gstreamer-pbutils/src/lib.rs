@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
 

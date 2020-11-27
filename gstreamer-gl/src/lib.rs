@@ -7,7 +7,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
 
@@ -37,14 +37,14 @@ mod gl_context;
 pub use crate::gl_context::GLContextExtManual;
 mod gl_display;
 pub use crate::gl_display::GL_DISPLAY_CONTEXT_TYPE;
-#[cfg(any(feature = "egl", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "egl")))]
+#[cfg(any(feature = "egl", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
 mod gl_display_egl;
-#[cfg(any(feature = "wayland", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "wayland")))]
+#[cfg(any(feature = "wayland", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
 mod gl_display_wayland;
-#[cfg(any(feature = "x11", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "x11")))]
+#[cfg(any(feature = "x11", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
 mod gl_display_x11;
 mod gl_video_frame;
 pub use crate::gl_video_frame::VideoFrameGLExt;

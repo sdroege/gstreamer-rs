@@ -203,8 +203,8 @@ impl fmt::Display for crate::VideoChromaSite {
 }
 
 impl crate::VideoTransferFunction {
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn from_iso(iso: u32) -> Result<crate::VideoTransferFunction, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -219,14 +219,14 @@ impl crate::VideoTransferFunction {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn to_iso(&self) -> u32 {
         unsafe { ffi::gst_video_transfer_function_to_iso(self.to_glib()) }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn is_equivalent(
         &self,
         from_bpp: u32,
@@ -245,8 +245,8 @@ impl crate::VideoTransferFunction {
 }
 
 impl crate::VideoColorMatrix {
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn from_iso(iso: u32) -> Result<crate::VideoColorMatrix, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -261,16 +261,16 @@ impl crate::VideoColorMatrix {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn to_iso(&self) -> u32 {
         unsafe { ffi::gst_video_color_matrix_to_iso(self.to_glib()) }
     }
 }
 
 impl crate::VideoColorPrimaries {
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn from_iso(iso: u32) -> Result<crate::VideoColorPrimaries, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -285,8 +285,8 @@ impl crate::VideoColorPrimaries {
         }
     }
 
-    #[cfg(any(feature = "v1_18", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_18")))]
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn to_iso(&self) -> u32 {
         unsafe { ffi::gst_video_color_primaries_to_iso(self.to_glib()) }
     }
@@ -340,7 +340,7 @@ impl fmt::Debug for VideoInfo {
             .field("multiview_mode", &self.multiview_mode())
             .field("multiview_flags", &self.multiview_flags());
 
-        #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+        #[cfg(any(feature = "v1_12", feature = "dox"))]
         b.field("field_order", &self.field_order());
 
         b.finish()
@@ -364,8 +364,8 @@ pub struct VideoInfoBuilder<'a> {
     stride: Option<&'a [i32]>,
     multiview_mode: Option<crate::VideoMultiviewMode>,
     multiview_flags: Option<crate::VideoMultiviewFlags>,
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     field_order: Option<crate::VideoFieldOrder>,
 }
 
@@ -514,7 +514,7 @@ impl<'a> VideoInfoBuilder<'a> {
                 ptr::write(ptr.offset(1), multiview_flags.to_glib());
             }
 
-            #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             if let Some(field_order) = self.field_order {
                 let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
                 ptr::write(ptr.offset(2), field_order.to_glib());
@@ -608,8 +608,8 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn field_order(self, field_order: crate::VideoFieldOrder) -> Self {
         Self {
             field_order: Some(field_order),
@@ -627,7 +627,7 @@ impl VideoInfo {
         assert_initialized_main_thread!();
 
         cfg_if::cfg_if! {
-            if #[cfg(any(feature = "v1_12", all(not(doctest), doc)))] {
+            if #[cfg(any(feature = "v1_12", feature = "dox"))] {
                 VideoInfoBuilder {
                     format,
                     width,
@@ -722,8 +722,8 @@ impl VideoInfo {
         self.0.height as u32
     }
 
-    #[cfg(any(feature = "v1_16", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_16")))]
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn field_height(&self) -> u32 {
         if self.0.interlace_mode == ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE {
             (self.0.height as u32 + 1) / 2
@@ -786,8 +786,8 @@ impl VideoInfo {
         }
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     pub fn field_order(&self) -> crate::VideoFieldOrder {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
@@ -999,8 +999,8 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl crate::VideoFieldOrder {
     pub fn to_str<'a>(self) -> &'a str {
         unsafe {
@@ -1011,8 +1011,8 @@ impl crate::VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl str::FromStr for crate::VideoFieldOrder {
     type Err = glib::error::BoolError;
 
@@ -1027,8 +1027,8 @@ impl str::FromStr for crate::VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-#[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl fmt::Display for crate::VideoFieldOrder {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.write_str((*self).to_str())
@@ -1144,8 +1144,8 @@ mod tests {
         assert!(info == info2);
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[test]
     fn test_video_align() {
         gst::init().unwrap();
@@ -1164,8 +1164,8 @@ mod tests {
         assert_eq!(info.offset(), [0, 2_082_240]);
     }
 
-    #[cfg(any(feature = "v1_12", all(not(doctest), doc)))]
-    #[cfg_attr(all(not(doctest), doc), doc(cfg(feature = "v1_12")))]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[test]
     fn test_display() {
         use std::str::FromStr;
