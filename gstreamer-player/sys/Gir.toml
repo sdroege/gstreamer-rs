@@ -6,6 +6,7 @@ min_cfg_version = "1.12"
 work_mode = "sys"
 
 extra_versions = [
+    "1.20",
     "1.18",
     "1.16",
     "1.14",
