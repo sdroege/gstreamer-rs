@@ -2,11 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::GLDisplay;
 use glib::translate::*;
 
 glib::glib_wrapper! {
-    pub struct GLDisplayWayland(Object<ffi::GstGLDisplayWayland, ffi::GstGLDisplayWaylandClass>) @extends GLDisplay, gst::Object;
+    pub struct GLDisplayWayland(Object<ffi::GstGLDisplayWayland, ffi::GstGLDisplayWaylandClass>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_display_wayland_get_type(),
@@ -26,3 +25,5 @@ impl GLDisplayWayland {
 
 unsafe impl Send for GLDisplayWayland {}
 unsafe impl Sync for GLDisplayWayland {}
+
+pub const NONE_GL_DISPLAY_WAYLAND: Option<&GLDisplayWayland> = None;

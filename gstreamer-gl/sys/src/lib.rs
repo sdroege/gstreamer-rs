@@ -599,73 +599,10 @@ impl ::std::fmt::Debug for GstGLDisplayClass {
     }
 }
 
-#[cfg(any(feature = "egl", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct GstGLDisplayEGLClass {
-    pub object_class: GstGLDisplayClass,
-    pub _padding: [gpointer; 4],
-}
-
-#[cfg(any(feature = "egl", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-impl ::std::fmt::Debug for GstGLDisplayEGLClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayEGLClass @ {:?}", self as *const _))
-            .field("object_class", &self.object_class)
-            .field("_padding", &self._padding)
-            .finish()
-    }
-}
-
 #[repr(C)]
 pub struct _GstGLDisplayPrivate(c_void);
 
 pub type GstGLDisplayPrivate = *mut _GstGLDisplayPrivate;
-
-#[cfg(any(feature = "wayland", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct GstGLDisplayWaylandClass {
-    pub object_class: GstGLDisplayClass,
-    pub _padding: [gpointer; 4],
-}
-
-#[cfg(any(feature = "wayland", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-impl ::std::fmt::Debug for GstGLDisplayWaylandClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstGLDisplayWaylandClass @ {:?}",
-            self as *const _
-        ))
-        .field("object_class", &self.object_class)
-        .field("_padding", &self._padding)
-        .finish()
-    }
-}
-
-#[cfg(any(feature = "x11", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct GstGLDisplayX11Class {
-    pub object_class: GstGLDisplayClass,
-    pub _padding: [gpointer; 4],
-}
-
-#[cfg(any(feature = "x11", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-impl ::std::fmt::Debug for GstGLDisplayX11Class {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayX11Class @ {:?}", self as *const _))
-            .field("object_class", &self.object_class)
-            .field("_padding", &self._padding)
-            .finish()
-    }
-}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1294,79 +1231,6 @@ impl ::std::fmt::Debug for GstGLDisplay {
     }
 }
 
-#[cfg(any(feature = "egl", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct GstGLDisplayEGL {
-    pub parent: GstGLDisplay,
-    pub display: gpointer,
-    pub foreign_display: gboolean,
-    pub _padding: [gpointer; 4],
-}
-
-#[cfg(any(feature = "egl", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-impl ::std::fmt::Debug for GstGLDisplayEGL {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayEGL @ {:?}", self as *const _))
-            .field("parent", &self.parent)
-            .finish()
-    }
-}
-
-#[cfg(any(feature = "wayland", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct GstGLDisplayWayland {
-    pub parent: GstGLDisplay,
-    pub display: gpointer,
-    pub registry: gpointer,
-    pub compositor: gpointer,
-    pub subcompositor: gpointer,
-    pub shell: gpointer,
-    pub foreign_display: gboolean,
-    pub _padding: [gpointer; 4],
-}
-
-#[cfg(any(feature = "wayland", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-impl ::std::fmt::Debug for GstGLDisplayWayland {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayWayland @ {:?}", self as *const _))
-            .field("parent", &self.parent)
-            .field("display", &self.display)
-            .field("registry", &self.registry)
-            .field("compositor", &self.compositor)
-            .field("subcompositor", &self.subcompositor)
-            .field("shell", &self.shell)
-            .finish()
-    }
-}
-
-#[cfg(any(feature = "x11", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct GstGLDisplayX11 {
-    pub parent: GstGLDisplay,
-    pub name: *mut c_char,
-    pub display: gpointer,
-    pub xcb_connection: gpointer,
-    pub foreign_display: gboolean,
-    pub _padding: [gpointer; 4],
-}
-
-#[cfg(any(feature = "x11", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-impl ::std::fmt::Debug for GstGLDisplayX11 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayX11 @ {:?}", self as *const _))
-            .finish()
-    }
-}
-
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct GstGLFilter {
@@ -1872,7 +1736,8 @@ extern "C" {
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     );
-    pub fn gst_gl_memory_read_pixels(gl_mem: *mut GstGLMemory, read_pointer: gpointer) -> gboolean;
+    pub fn gst_gl_memory_read_pixels(gl_mem: *mut GstGLMemory, write_pointer: gpointer)
+        -> gboolean;
     pub fn gst_gl_memory_texsubimage(gl_mem: *mut GstGLMemory, read_pointer: gpointer);
     pub fn gst_gl_memory_init_once();
     pub fn gst_gl_memory_setup_buffer(
@@ -2259,54 +2124,6 @@ extern "C" {
         data: gpointer,
         compare_func: glib::GCompareFunc,
     ) -> *mut GstGLWindow;
-
-    //=========================================================================
-    // GstGLDisplayEGL
-    //=========================================================================
-    #[cfg(any(feature = "egl", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-    pub fn gst_gl_display_egl_get_type() -> GType;
-    #[cfg(any(feature = "egl", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-    pub fn gst_gl_display_egl_new() -> *mut GstGLDisplayEGL;
-    #[cfg(any(feature = "egl", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-    pub fn gst_gl_display_egl_new_with_egl_display(display: gpointer) -> *mut GstGLDisplayEGL;
-    #[cfg(any(feature = "egl", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-    pub fn gst_gl_display_egl_from_gl_display(display: *mut GstGLDisplay) -> *mut GstGLDisplayEGL;
-    #[cfg(any(feature = "egl", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-    pub fn gst_gl_display_egl_get_from_native(
-        type_: GstGLDisplayType,
-        display: uintptr_t,
-    ) -> gpointer;
-
-    //=========================================================================
-    // GstGLDisplayWayland
-    //=========================================================================
-    #[cfg(any(feature = "wayland", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-    pub fn gst_gl_display_wayland_get_type() -> GType;
-    #[cfg(any(feature = "wayland", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-    pub fn gst_gl_display_wayland_new(name: *const c_char) -> *mut GstGLDisplayWayland;
-    #[cfg(any(feature = "wayland", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-    pub fn gst_gl_display_wayland_new_with_display(display: gpointer) -> *mut GstGLDisplayWayland;
-
-    //=========================================================================
-    // GstGLDisplayX11
-    //=========================================================================
-    #[cfg(any(feature = "x11", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-    pub fn gst_gl_display_x11_get_type() -> GType;
-    #[cfg(any(feature = "x11", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-    pub fn gst_gl_display_x11_new(name: *const c_char) -> *mut GstGLDisplayX11;
-    #[cfg(any(feature = "x11", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-    pub fn gst_gl_display_x11_new_with_display(display: gpointer) -> *mut GstGLDisplayX11;
 
     //=========================================================================
     // GstGLFilter

@@ -23,27 +23,6 @@ mod gl_display;
 pub use self::gl_display::GLDisplayExt;
 pub use self::gl_display::{GLDisplay, NONE_GL_DISPLAY};
 
-#[cfg(any(feature = "egl", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-mod gl_display_egl;
-#[cfg(any(feature = "egl", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-pub use self::gl_display_egl::GLDisplayEGL;
-
-#[cfg(any(feature = "wayland", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-mod gl_display_wayland;
-#[cfg(any(feature = "wayland", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-pub use self::gl_display_wayland::GLDisplayWayland;
-
-#[cfg(any(feature = "x11", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-mod gl_display_x11;
-#[cfg(any(feature = "x11", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-pub use self::gl_display_x11::GLDisplayX11;
-
 mod gl_framebuffer;
 pub use self::gl_framebuffer::GLFramebufferExt;
 pub use self::gl_framebuffer::{GLFramebuffer, NONE_GL_FRAMEBUFFER};

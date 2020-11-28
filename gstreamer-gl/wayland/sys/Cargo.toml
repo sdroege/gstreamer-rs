@@ -1,0 +1,41 @@
+[package]
+name = "gst-gl-wayland-sys"
+version = "0.0.1"
+links = "\"gstgl-1.0\""
+edition = "2018"
+build = "build.rs"
+[package.metadata.system-deps.gstreamer_gl_wayland_1_0]
+name = "gstreamer-gl-wayland-1.0"
+version = "1.14"
+
+[package.metadata.system-deps.gstreamer_gl_wayland_1_0.v1_16]
+version = "1.16"
+
+[package.metadata.system-deps.gstreamer_gl_wayland_1_0.v1_18]
+version = "1.18"
+[package.metadata.docs.rs]
+features = ["dox"]
+
+[lib]
+name = "gst_gl_wayland_sys"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gstreamer-gl-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[build-dependencies]
+system-deps = "2.0"
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[features]
+dox = []
+v1_16 = []
+v1_18 = ["v1_16"]

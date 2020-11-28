@@ -2,11 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::GLDisplay;
 use glib::translate::*;
 
 glib::glib_wrapper! {
-    pub struct GLDisplayX11(Object<ffi::GstGLDisplayX11, ffi::GstGLDisplayX11Class>) @extends GLDisplay, gst::Object;
+    pub struct GLDisplayX11(Object<ffi::GstGLDisplayX11, ffi::GstGLDisplayX11Class>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_display_x11_get_type(),
@@ -26,3 +25,5 @@ impl GLDisplayX11 {
 
 unsafe impl Send for GLDisplayX11 {}
 unsafe impl Sync for GLDisplayX11 {}
+
+pub const NONE_GL_DISPLAY_X11: Option<&GLDisplayX11> = None;

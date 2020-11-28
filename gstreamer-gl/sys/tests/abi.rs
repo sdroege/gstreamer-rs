@@ -424,65 +424,11 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
             alignment: align_of::<GstGLDisplayClass>(),
         },
     ),
-    #[cfg(any(feature = "egl", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-    (
-        "GstGLDisplayEGL",
-        Layout {
-            size: size_of::<GstGLDisplayEGL>(),
-            alignment: align_of::<GstGLDisplayEGL>(),
-        },
-    ),
-    #[cfg(any(feature = "egl", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "egl")))]
-    (
-        "GstGLDisplayEGLClass",
-        Layout {
-            size: size_of::<GstGLDisplayEGLClass>(),
-            alignment: align_of::<GstGLDisplayEGLClass>(),
-        },
-    ),
     (
         "GstGLDisplayType",
         Layout {
             size: size_of::<GstGLDisplayType>(),
             alignment: align_of::<GstGLDisplayType>(),
-        },
-    ),
-    #[cfg(any(feature = "wayland", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-    (
-        "GstGLDisplayWayland",
-        Layout {
-            size: size_of::<GstGLDisplayWayland>(),
-            alignment: align_of::<GstGLDisplayWayland>(),
-        },
-    ),
-    #[cfg(any(feature = "wayland", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "wayland")))]
-    (
-        "GstGLDisplayWaylandClass",
-        Layout {
-            size: size_of::<GstGLDisplayWaylandClass>(),
-            alignment: align_of::<GstGLDisplayWaylandClass>(),
-        },
-    ),
-    #[cfg(any(feature = "x11", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-    (
-        "GstGLDisplayX11",
-        Layout {
-            size: size_of::<GstGLDisplayX11>(),
-            alignment: align_of::<GstGLDisplayX11>(),
-        },
-    ),
-    #[cfg(any(feature = "x11", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "x11")))]
-    (
-        "GstGLDisplayX11Class",
-        Layout {
-            size: size_of::<GstGLDisplayX11Class>(),
-            alignment: align_of::<GstGLDisplayX11Class>(),
         },
     ),
     (
