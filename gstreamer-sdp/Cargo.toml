@@ -14,7 +14,7 @@ build = "build.rs"
 edition = "2018"
 
 [dependencies]
-ffi = { package = "gstreamer-sdp-sys", path = "../gstreamer-sdp/sys", features = ["v1_8"] }
+ffi = { package = "gstreamer-sdp-sys", path = "sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/gtk-rs" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 
