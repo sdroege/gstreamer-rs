@@ -17,12 +17,9 @@ glib::glib_wrapper! {
 
 impl DateTime {
     #[doc(alias = "gst_date_time_new_from_g_date_time")]
-    pub fn from_g_date_time(dt: &glib::DateTime) -> Result<DateTime, glib::BoolError> {
+    pub fn from_g_date_time(dt: &glib::DateTime) -> DateTime {
         assert_initialized_main_thread!();
-        unsafe {
-            Option::<_>::from_glib_full(ffi::gst_date_time_new_from_g_date_time(dt.to_glib_full()))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from glib::DateTime"))
-        }
+        unsafe { from_glib_full(ffi::gst_date_time_new_from_g_date_time(dt.to_glib_full())) }
     }
 
     #[doc(alias = "gst_date_time_new_from_iso8601_string")]

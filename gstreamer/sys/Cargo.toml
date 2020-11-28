@@ -28,6 +28,7 @@ v1_16 = ["v1_14"]
 v1_18 = ["v1_16"]
 dox = []
 v1_12_1 = ["v1_12"]
+v1_20 = ["v1_18"]
 
 [lib]
 name = "gstreamer_sys"
@@ -69,3 +70,6 @@ version = "1.16"
 
 [package.metadata.system-deps.gstreamer_1_0.v1_18]
 version = "1.18"
+
+[package.metadata.system-deps.gstreamer_1_0.v1_20]
+version = "1.20"

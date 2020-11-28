@@ -34,6 +34,7 @@ v1_16 = ["v1_14"]
 v1_18 = ["v1_16"]
 v1_2 = []
 v1_4 = ["v1_2"]
+v1_20 = ["v1_18"]
 
 [lib]
 name = "gstreamer_editing_services_sys"
@@ -72,3 +73,6 @@ version = "1.16"
 
 [package.metadata.system-deps.gst_editing_services_1_0.v1_18]
 version = "1.18"
+
+[package.metadata.system-deps.gst_editing_services_1_0.v1_20]
+version = "1.20"
