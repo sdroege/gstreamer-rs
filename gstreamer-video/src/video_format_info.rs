@@ -431,10 +431,10 @@ impl fmt::Display for VideoFormatInfo {
 impl str::FromStr for crate::VideoFormatInfo {
     type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         skip_assert_initialized!();
         let format = s.parse()?;
-        Ok(VideoFormatInfo::from_format(format))
+        Ok(Self::from_format(format))
     }
 }
 

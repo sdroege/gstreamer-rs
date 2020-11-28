@@ -475,10 +475,10 @@ generic_impl!(ValidVideoTimeCode);
 impl str::FromStr for VideoTimeCode {
     type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<VideoTimeCode>::from_glib_full(ffi::gst_video_time_code_new_from_string(
+            Option::<Self>::from_glib_full(ffi::gst_video_time_code_new_from_string(
                 s.to_glib_none().0,
             ))
             .ok_or_else(|| glib::glib_bool_error!("Failed to create VideoTimeCode from string"))

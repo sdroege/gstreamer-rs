@@ -181,7 +181,7 @@ impl Eq for Structure {}
 impl str::FromStr for Structure {
     type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
             let structure = ffi::gst_structure_from_string(s.to_glib_none().0, ptr::null_mut());
@@ -190,7 +190,7 @@ impl str::FromStr for Structure {
                     "Failed to parse structure from string"
                 ))
             } else {
-                Ok(Structure(ptr::NonNull::new_unchecked(
+                Ok(Self(ptr::NonNull::new_unchecked(
                     structure as *mut StructureRef,
                 )))
             }

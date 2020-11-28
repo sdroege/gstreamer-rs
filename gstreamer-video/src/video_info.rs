@@ -139,7 +139,7 @@ impl Eq for VideoColorimetry {}
 impl str::FromStr for crate::VideoColorimetry {
     type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -149,7 +149,7 @@ impl str::FromStr for crate::VideoColorimetry {
                 s.to_glib_none().0,
             ));
             if valid {
-                Ok(VideoColorimetry(colorimetry.assume_init()))
+                Ok(Self(colorimetry.assume_init()))
             } else {
                 Err(glib::glib_bool_error!("Invalid colorimetry info"))
             }
@@ -179,12 +179,13 @@ impl fmt::Display for crate::VideoColorimetry {
 impl str::FromStr for crate::VideoChromaSite {
     type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let chroma_site = from_glib(ffi::gst_video_chroma_from_string(s.to_glib_none().0));
-            if chroma_site == crate::VideoChromaSite::empty() {
+            let chroma_site: Self =
+                from_glib(ffi::gst_video_chroma_from_string(s.to_glib_none().0));
+            if chroma_site.is_empty() {
                 Err(glib::glib_bool_error!("Invalid chroma site"))
             } else {
                 Ok(chroma_site)
@@ -1034,7 +1035,7 @@ impl crate::VideoFieldOrder {
 impl str::FromStr for crate::VideoFieldOrder {
     type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -1066,7 +1067,7 @@ impl crate::VideoInterlaceMode {
 impl str::FromStr for crate::VideoInterlaceMode {
     type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
 
         unsafe {

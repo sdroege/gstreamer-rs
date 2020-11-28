@@ -339,15 +339,13 @@ impl crate::VideoFormat {
 impl str::FromStr for crate::VideoFormat {
     type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
 
         unsafe {
-            let fmt = crate::VideoFormat::from_glib(ffi::gst_video_format_from_string(
-                s.to_glib_none().0,
-            ));
+            let fmt = Self::from_glib(ffi::gst_video_format_from_string(s.to_glib_none().0));
 
-            if fmt == crate::VideoFormat::Unknown {
+            if fmt == Self::Unknown {
                 Err(glib::glib_bool_error!(
                     "Failed to parse video format from string"
                 ))

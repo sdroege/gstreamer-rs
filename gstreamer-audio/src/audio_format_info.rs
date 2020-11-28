@@ -292,10 +292,10 @@ impl fmt::Display for AudioFormatInfo {
 impl str::FromStr for crate::AudioFormatInfo {
     type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         skip_assert_initialized!();
         let format = s.parse()?;
-        Ok(AudioFormatInfo::from_format(format))
+        Ok(Self::from_format(format))
     }
 }
 

@@ -120,12 +120,12 @@ impl fmt::Display for VideoTimeCodeInterval {
 impl str::FromStr for VideoTimeCodeInterval {
     type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
-            Option::<VideoTimeCodeInterval>::from_glib_full(
-                ffi::gst_video_time_code_interval_new_from_string(s.to_glib_none().0),
-            )
+            Option::<Self>::from_glib_full(ffi::gst_video_time_code_interval_new_from_string(
+                s.to_glib_none().0,
+            ))
             .ok_or_else(|| {
                 glib::glib_bool_error!("Failed to create VideoTimeCodeInterval from string")
             })

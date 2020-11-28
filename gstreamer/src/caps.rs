@@ -161,7 +161,7 @@ impl Caps {
 impl str::FromStr for Caps {
     type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_caps_from_string(s.to_glib_none().0))

@@ -123,7 +123,7 @@ impl fmt::Display for CapsFeatures {
 impl str::FromStr for CapsFeatures {
     type Err = glib::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, glib::BoolError> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         assert_initialized_main_thread!();
         unsafe {
             let ptr = ffi::gst_caps_features_from_string(s.to_glib_none().0);
@@ -133,7 +133,7 @@ impl str::FromStr for CapsFeatures {
                 ));
             }
 
-            Ok(CapsFeatures(ptr::NonNull::new_unchecked(
+            Ok(Self(ptr::NonNull::new_unchecked(
                 ptr as *mut CapsFeaturesRef,
             )))
         }
