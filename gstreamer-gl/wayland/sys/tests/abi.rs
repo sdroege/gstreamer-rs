@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files @ d2591d00)
 // DO NOT EDIT
 
-use gst_gl_wayland_sys::*;
+use gstreamer_gl_wayland_sys::*;
 use std::env;
 use std::error::Error;
 use std::mem::{align_of, size_of};
