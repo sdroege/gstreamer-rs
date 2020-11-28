@@ -3809,7 +3809,7 @@ Data is uploaded or downloaded from the GPU as is necessary.</doc>
         </array>
       </field>
       <method name="copy_into" c:identifier="gst_gl_memory_copy_into" version="1.8">
-        <doc xml:space="preserve">Copies @gl_mem into the texture specfified by @tex_id.  The format of @tex_id
+        <doc xml:space="preserve">Copies @gl_mem into the texture specified by @tex_id.  The format of @tex_id
 is specified by @tex_format, @width and @height.</doc>
         
         <return-value transfer-ownership="none">
@@ -4002,8 +4002,8 @@ already have been modified with gst_video_info_align().</doc>
         </parameters>
       </method>
       <method name="read_pixels" c:identifier="gst_gl_memory_read_pixels" version="1.8">
-        <doc xml:space="preserve">Reads the texture in #GstGLMemory into @read_pointer if no buffer is bound
-to `GL_PIXEL_PACK_BUFFER`.  Otherwise @read_pointer is the byte offset into
+        <doc xml:space="preserve">Reads the texture in #GstGLMemory into @write_pointer if no buffer is bound
+to `GL_PIXEL_PACK_BUFFER`.  Otherwise @write_pointer is the byte offset into
 the currently bound `GL_PIXEL_PACK_BUFFER` buffer to store the result of
 glReadPixels.  See the OpenGL specification for glReadPixels for more
 details.</doc>
@@ -4017,14 +4017,16 @@ details.</doc>
             <doc xml:space="preserve">a #GstGLMemory</doc>
             <type name="GLMemory" c:type="GstGLMemory*"/>
           </instance-parameter>
-          <parameter name="read_pointer" transfer-ownership="none" nullable="1" allow-none="1">
+          <parameter name="write_pointer" transfer-ownership="none" nullable="1" allow-none="1">
             <doc xml:space="preserve">the data pointer to pass to glReadPixels</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
       </method>
       <method name="texsubimage" c:identifier="gst_gl_memory_texsubimage" version="1.8">
-        <doc xml:space="preserve">See gst_gl_memory_read_pixels() for what @read_pointer signifies.</doc>
+        <doc xml:space="preserve">Reads the texture in @read_pointer into @gl_mem.
+
+See gst_gl_memory_read_pixels() for what @read_pointer signifies.</doc>
         
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -4155,7 +4157,7 @@ Data is uploaded or downloaded from the GPU as is necessary.</doc>
         </array>
       </field>
       <method name="copy_into_texture" c:identifier="gst_gl_memory_pbo_copy_into_texture" version="1.8">
-        <doc xml:space="preserve">Copies @gl_mem into the texture specfified by @tex_id.  The format of @tex_id
+        <doc xml:space="preserve">Copies @gl_mem into the texture specified by @tex_id.  The format of @tex_id
 is specified by @tex_format, @width and @height.
 
 If @respecify is %TRUE, then the copy is performed in terms of the texture

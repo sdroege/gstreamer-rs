@@ -6384,7 +6384,6 @@ the interlacing mode.</doc>
             <type name="VideoFormat" c:type="GstVideoFormat"/>
           </parameter>
           <parameter name="mode" transfer-ownership="none">
-            <doc xml:space="preserve">A #GstVideoInterlaceMode</doc>
             <type name="VideoInterlaceMode" c:type="GstVideoInterlaceMode"/>
           </parameter>
           <parameter name="width" transfer-ownership="none">
@@ -9867,7 +9866,7 @@ mode of the stream.</doc>
         <doc xml:space="preserve">1 field is stored in one buffer,
     @GST_VIDEO_BUFFER_FLAG_TF or @GST_VIDEO_BUFFER_FLAG_BF indicates if
     the buffer is carrying the top or bottom field, respectively. The top and
-    bottom buffers are expected to alternate in the pipeline, with this mode
+    bottom buffers must alternate in the pipeline, with this mode
     (Since: 1.16).</doc>
       </member>
       <function name="from_string" c:identifier="gst_video_interlace_mode_from_string" version="1.6">
@@ -15416,7 +15415,7 @@ Depending on @func, different formulas might be applied. Some formulas
 encode a linear segment in the lower range.</doc>
       
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the gamme decoded value of @val</doc>
+        <doc xml:space="preserve">the gamma decoded value of @val</doc>
         <type name="gdouble" c:type="gdouble"/>
       </return-value>
       <parameters>
@@ -15444,7 +15443,7 @@ Depending on @func, different formulas might be applied. Some formulas
 encode a linear segment in the lower range.</doc>
       
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the gamme encoded value of @val</doc>
+        <doc xml:space="preserve">the gamma encoded value of @val</doc>
         <type name="gdouble" c:type="gdouble"/>
       </return-value>
       <parameters>
