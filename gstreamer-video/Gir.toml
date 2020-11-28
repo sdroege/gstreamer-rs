@@ -390,6 +390,8 @@ status = "generate"
 
     [[object.function]]
     name = "to_string"
+    # This has an Unknown field that may return NULL or "UNKNOWN"
+    manual = true
         [object.function.return]
         nullable = false
 
@@ -545,5 +547,7 @@ status = "generate"
 
     [[object.function]]
     name = "to_string"
+    # This has an Unknown field that may return NULL or "UNKNOWN"
+    manual = true
         [object.function.return]
         nullable = false
