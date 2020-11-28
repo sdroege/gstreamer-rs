@@ -3,7 +3,6 @@ girs_dir = "../../gir-files"
 library = "GstAudio"
 version = "1.0"
 min_cfg_version = "1.8"
-target_path = "."
 work_mode = "sys"
 
 extra_versions = [

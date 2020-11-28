@@ -3,7 +3,6 @@ girs_dir = "../gir-files"
 library = "GstRtspServer"
 version = "1.0"
 min_cfg_version = "1.8"
-target_path = "."
 work_mode = "normal"
 concurrency = "send+sync"
 generate_safety_asserts = true
@@ -151,7 +150,7 @@ manual_traits = ["RTSPStreamExtManual"]
     [[object.function]]
     name = "query_position"
     ignore = true
-    
+
     [[object.function]]
     name = "query_stop"
     ignore = true
