@@ -314,7 +314,7 @@ macro_rules! generic_impl {
         }
 
         impl fmt::Debug for $name {
-            fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 f.debug_struct(stringify!($name))
                     .field("fps", &self.get_fps())
                     .field("flags", &self.get_flags())

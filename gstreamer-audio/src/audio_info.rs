@@ -18,7 +18,7 @@ use std::ptr;
 pub struct AudioInfo(ffi::GstAudioInfo, [crate::AudioChannelPosition; 64]);
 
 impl fmt::Debug for AudioInfo {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("AudioInfo")
             .field("format-info", &self.format_info())
             .field("rate", &self.rate())

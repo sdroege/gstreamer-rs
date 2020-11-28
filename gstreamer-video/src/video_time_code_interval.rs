@@ -97,7 +97,7 @@ impl Ord for VideoTimeCodeInterval {
 }
 
 impl fmt::Debug for VideoTimeCodeInterval {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoTimeCodeInterval")
             .field("hours", &self.0.hours)
             .field("minutes", &self.0.minutes)
@@ -108,7 +108,7 @@ impl fmt::Debug for VideoTimeCodeInterval {
 }
 
 impl fmt::Display for VideoTimeCodeInterval {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
             "{:02}:{:02}:{:02}:{:02}",

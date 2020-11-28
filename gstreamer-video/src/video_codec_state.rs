@@ -54,7 +54,7 @@ pub struct VideoCodecState<'a, T: VideoCodecStateContext<'a>> {
 }
 
 impl<'a, T: VideoCodecStateContext<'a>> fmt::Debug for VideoCodecState<'a, T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoCodecState")
             .field("info", &self.get_info())
             .field("caps", &self.get_caps())

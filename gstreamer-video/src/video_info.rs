@@ -158,7 +158,7 @@ impl str::FromStr for crate::VideoColorimetry {
 }
 
 impl fmt::Debug for crate::VideoColorimetry {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoColorimetry")
             .field("range", &self.0.range)
             .field("matrix", &self.0.matrix)
@@ -169,7 +169,7 @@ impl fmt::Debug for crate::VideoColorimetry {
 }
 
 impl fmt::Display for crate::VideoColorimetry {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let s =
             unsafe { glib::GString::from_glib_full(ffi::gst_video_colorimetry_to_string(&self.0)) };
         f.write_str(&s)
@@ -194,7 +194,7 @@ impl str::FromStr for crate::VideoChromaSite {
 }
 
 impl fmt::Display for crate::VideoChromaSite {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let s = unsafe {
             glib::GString::from_glib_full(ffi::gst_video_chroma_to_string(self.to_glib()))
         };
@@ -320,7 +320,7 @@ impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewF
 pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut b = f.debug_struct("VideoInfo");
 
         b.field("format", &self.format())
@@ -1048,7 +1048,7 @@ impl str::FromStr for crate::VideoFieldOrder {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl fmt::Display for crate::VideoFieldOrder {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str((*self).to_str())
     }
 }
@@ -1078,7 +1078,7 @@ impl str::FromStr for crate::VideoInterlaceMode {
 }
 
 impl fmt::Display for crate::VideoInterlaceMode {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str((*self).to_str())
     }
 }

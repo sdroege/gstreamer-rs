@@ -397,7 +397,7 @@ impl Ord for VideoFormatInfo {
 }
 
 impl fmt::Debug for VideoFormatInfo {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoFormatInfo")
             .field("format", &self.format())
             .field("name", &self.name())
@@ -423,7 +423,7 @@ impl fmt::Debug for VideoFormatInfo {
 }
 
 impl fmt::Display for VideoFormatInfo {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(self.name())
     }
 }

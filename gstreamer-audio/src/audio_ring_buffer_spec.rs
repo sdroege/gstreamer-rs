@@ -91,7 +91,7 @@ unsafe impl Send for AudioRingBufferSpec {}
 unsafe impl Sync for AudioRingBufferSpec {}
 
 impl fmt::Debug for AudioRingBufferSpec {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("AudioRingBufferSpec")
             .field("type", &self.get_type())
             .field("caps", &self.get_caps())

@@ -70,7 +70,7 @@ impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstBaseParseFrame> for BaseP
 }
 
 impl<'a> fmt::Debug for BaseParseFrame<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut b = f.debug_struct("BaseParseFrame");
 
         b.field("buffer", &self.get_buffer())

@@ -157,7 +157,7 @@ impl str::FromStr for crate::AudioFormat {
 }
 
 impl fmt::Display for crate::AudioFormat {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str((*self).to_str())
     }
 }

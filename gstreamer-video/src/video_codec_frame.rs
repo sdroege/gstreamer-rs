@@ -34,7 +34,7 @@ impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstVideoCodecFrame> for Vide
 }
 
 impl<'a> fmt::Debug for VideoCodecFrame<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut b = f.debug_struct("VideoCodecFrame");
 
         b.field("flags", &self.get_flags())

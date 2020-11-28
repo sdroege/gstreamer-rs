@@ -139,7 +139,7 @@ impl_common_ops_for_opt_int!(ClockTime);
 
 impl fmt::Display for ClockTime {
     #[allow(clippy::many_single_char_names)]
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let precision = f.precision().unwrap_or(9);
         // TODO: Could also check width and pad the hours as needed
 
