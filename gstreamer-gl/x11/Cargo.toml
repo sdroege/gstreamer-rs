@@ -4,12 +4,12 @@ version = "0.17.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>",
            "Víctor M. Jáquez L. <vjaquez@igalia.com>"]
 categories = ["api-bindings", "multimedia"]
-description = "Rust bindings for GStreamer GL X11 library"
+description = "Rust bindings for GStreamer GL library (X11 support)"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 license = "MIT/Apache-2.0"
 readme = "README.md"
 homepage = "https://gstreamer.freedesktop.org"
-documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_gl/"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_gl_x11/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "../build.rs"
 edition = "2018"
