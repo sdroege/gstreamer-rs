@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use std::ffi::CStr;
-use std::fmt;
 use std::str;
 
 use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
@@ -151,12 +150,6 @@ impl str::FromStr for crate::AudioFormat {
                 Ok(fmt)
             }
         }
-    }
-}
-
-impl fmt::Display for crate::AudioFormat {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str((*self).to_str())
     }
 }
 

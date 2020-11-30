@@ -12,7 +12,10 @@ use glib::translate::{
 };
 use gst::prelude::*;
 
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use std::ffi::CStr;
+
 use std::fmt;
 use std::mem;
 use std::ptr;
@@ -956,24 +959,6 @@ impl str::FromStr for crate::VideoFieldOrder {
     }
 }
 
-#[cfg(any(feature = "v1_12", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-impl fmt::Display for crate::VideoFieldOrder {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str((*self).to_str())
-    }
-}
-
-impl crate::VideoInterlaceMode {
-    pub fn to_str<'a>(self) -> &'a str {
-        unsafe {
-            CStr::from_ptr(ffi::gst_video_interlace_mode_to_string(self.to_glib()))
-                .to_str()
-                .unwrap()
-        }
-    }
-}
-
 impl str::FromStr for crate::VideoInterlaceMode {
     type Err = glib::error::BoolError;
 
@@ -985,12 +970,6 @@ impl str::FromStr for crate::VideoInterlaceMode {
                 s.to_glib_none().0,
             )))
         }
-    }
-}
-
-impl fmt::Display for crate::VideoInterlaceMode {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str((*self).to_str())
     }
 }
 
