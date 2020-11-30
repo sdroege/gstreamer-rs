@@ -935,10 +935,17 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl crate::VideoFieldOrder {
     pub fn to_str<'a>(self) -> &'a str {
+        if self == Self::Unknown {
+            return "UNKNOWN";
+        }
         unsafe {
-            CStr::from_ptr(ffi::gst_video_field_order_to_string(self.to_glib()))
-                .to_str()
-                .unwrap()
+            CStr::from_ptr(
+                ffi::gst_video_field_order_to_string(self.to_glib())
+                    .as_ref()
+                    .expect("gst_video_field_order_to_string returned NULL"),
+            )
+            .to_str()
+            .expect("gst_video_field_order_to_string returned an invalid string")
         }
     }
 }
