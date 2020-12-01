@@ -6383,7 +6383,8 @@ the interlacing mode.</doc>
             <doc xml:space="preserve">a #GstVideoFormat</doc>
             <type name="VideoFormat" c:type="GstVideoFormat"/>
           </parameter>
-          <parameter name="mode" transfer-ownership="none">
+          <parameter name="interlace_mode" transfer-ownership="none">
+            <doc xml:space="preserve">A #GstVideoInterlaceMode</doc>
             <type name="VideoInterlaceMode" c:type="GstVideoInterlaceMode"/>
           </parameter>
           <parameter name="width" transfer-ownership="none">
@@ -10197,9 +10198,11 @@ updated, %FALSE otherwise</doc>
             <doc xml:space="preserve">a #GstVideoMeta</doc>
             <type name="VideoMeta" c:type="GstVideoMeta*"/>
           </instance-parameter>
-          <parameter name="plane_height" direction="out" caller-allocates="0" transfer-ownership="full">
+          <parameter name="plane_height" direction="out" caller-allocates="1" transfer-ownership="none">
             <doc xml:space="preserve">array used to store the plane height</doc>
-            <type name="guint" c:type="guint*"/>
+            <array zero-terminated="0" c:type="guint*" fixed-size="4">
+              <type name="guint" c:type="guint"/>
+            </array>
           </parameter>
         </parameters>
       </method>
@@ -10217,9 +10220,11 @@ updated, %FALSE otherwise</doc>
             <doc xml:space="preserve">a #GstVideoMeta</doc>
             <type name="VideoMeta" c:type="GstVideoMeta*"/>
           </instance-parameter>
-          <parameter name="plane_size" direction="out" caller-allocates="0" transfer-ownership="full">
+          <parameter name="plane_size" direction="out" caller-allocates="1" transfer-ownership="none">
             <doc xml:space="preserve">array used to store the plane sizes</doc>
-            <type name="gsize" c:type="gsize*"/>
+            <array zero-terminated="0" c:type="gsize*" fixed-size="4">
+              <type name="gsize" c:type="gsize"/>
+            </array>
           </parameter>
         </parameters>
       </method>
