@@ -16,44 +16,45 @@ external_libraries = [
 ]
 
 generate = [
-    "Gst.ClockTimeDiff",
-    "Gst.State",
-    "Gst.StateChange",
-    "Gst.SeekType",
-    "Gst.PadDirection",
-    "Gst.PadPresence",
-    "Gst.URIHandler",
-    "Gst.URIType",
-    "Gst.ElementFactoryListType",
     "Gst.BufferingMode",
-    "Gst.CoreError",
-    "Gst.ResourceError",
-    "Gst.LibraryError",
-    "Gst.StreamError",
-    "Gst.PluginError",
-    "Gst.ParseError",
-    "Gst.URIError",
-    "Gst.StructureChangeType",
-    "Gst.StreamStatusType",
-    "Gst.StreamType",
-    "Gst.ProgressType",
     "Gst.BusSyncReply",
-    "Gst.TagFlag",
-    "Gst.TagMergeMode",
-    "Gst.PadProbeReturn",
     "Gst.CapsIntersectMode",
-    "Gst.PadMode",
-    "Gst.SchedulingFlags",
-    "Gst.QOSType",
-    "Gst.TocSetter",
-    "Gst.PluginFlags",
-    "Gst.DebugLevel",
+    "Gst.ClockEntryType",
+    "Gst.ClockTimeDiff",
+    "Gst.CoreError",
     "Gst.DebugColorFlags",
     "Gst.DebugGraphDetails",
-    "Gst.TaskState",
-    "Gst.PromiseResult",
-    "Gst.ClockEntryType",
+    "Gst.DebugLevel",
+    "Gst.ElementFactoryListType",
+    "Gst.LibraryError",
+    "Gst.PadDirection",
+    "Gst.PadMode",
+    "Gst.PadPresence",
+    "Gst.PadProbeReturn",
+    "Gst.ParseError",
     "Gst.PluginAPIFlags",
+    "Gst.PluginError",
+    "Gst.PluginFlags",
+    "Gst.ProgressType",
+    "Gst.PromiseResult",
+    "Gst.QOSType",
+    "Gst.ResourceError",
+    "Gst.SchedulingFlags",
+    "Gst.SeekType",
+    "Gst.State",
+    "Gst.StateChange",
+    "Gst.StreamError",
+    "Gst.StreamStatusType",
+    "Gst.StreamType",
+    "Gst.StructureChangeType",
+    "Gst.SystemClock",
+    "Gst.TagFlag",
+    "Gst.TagMergeMode",
+    "Gst.TaskState",
+    "Gst.TocSetter",
+    "Gst.URIError",
+    "Gst.URIHandler",
+    "Gst.URIType",
 ]
 
 manual = [
@@ -477,14 +478,6 @@ status = "generate"
     version = "1.18"
 
 [[object]]
-name = "Gst.SystemClock"
-status = "generate"
-    [[object.function]]
-    name = "obtain"
-        [object.function.return]
-        nullable = false
-
-[[object]]
 name = "Gst.ElementFlags"
 status = "generate"
     [[object.member]]
@@ -502,11 +495,6 @@ status = "generate"
 name = "Gst.Element"
 status = "generate"
 manual_traits = ["ElementExtManual"]
-    [[object.function]]
-    name = "make_from_uri"
-        [object.function.return]
-        # It is already a Result
-        nullable = false
 
     [[object.function]]
     name = "call_async"
@@ -721,11 +709,6 @@ name = "Gst.DeviceProvider"
 status = "generate"
 manual_traits = ["DeviceProviderExtManual"]
     [[object.function]]
-    name = "get_bus"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
     name = "start"
         [object.function.return]
         bool_return_is_error = "Failed to start"
@@ -754,11 +737,6 @@ manual_traits = ["DeviceMonitorExtManual"]
     manual = true
 
     [[object.function]]
-    name = "get_bus"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
     name = "start"
         [object.function.return]
         bool_return_is_error = "Failed to start"
@@ -771,16 +749,6 @@ manual_traits = ["DeviceMonitorExtManual"]
 [[object]]
 name = "Gst.Device"
 status = "generate"
-    [[object.function]]
-    name = "get_display_name"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_device_class"
-        [object.function.return]
-        nullable = false
-
     [[object.function]]
     name = "reconfigure_element"
         [object.function.return]
@@ -809,11 +777,8 @@ trait_name = "GstObjectExt"
     [[object.function]]
     name = "get_name"
         [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_path_string"
-        [object.function.return]
+        # Nullable state only occurs during instance init and finalize
+        # which cannot be observed from Rust
         nullable = false
 
     [[object.function]]
@@ -1226,41 +1191,6 @@ final_type = true
     manual = true
 
     [[object.function]]
-    name = "get_description"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_name"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_license"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_origin"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_package"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_source"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_version"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
     name = "load"
         [object.function.return]
         nullable_return_is_error = "Failed to load plugin"
@@ -1303,11 +1233,6 @@ final_type = true
     [[object.function]]
     pattern = "fork_.*"
     ignore = true
-
-    [[object.function]]
-    name = "get"
-        [object.function.return]
-        nullable = false
 
     [[object.function]]
     name = "add_feature"
@@ -1599,33 +1524,6 @@ status = "generate"
     pattern = "clear_.*"
     # C memory management
     ignore = true
-
-    [[object.function]]
-    name = "debug_bin_to_dot_data"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "version_string"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "parse_bin_from_description"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "parse_launch"
-        [object.function.return]
-        # Already a Result
-        nullable = false
-
-    [[object.function]]
-    name = "parse_launchv"
-        [object.function.return]
-        # Already a Result
-        nullable = false
 
     [[object.function]]
     name = "debug_get_stack_trace"
