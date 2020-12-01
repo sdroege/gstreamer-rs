@@ -2866,13 +2866,13 @@ extern "C" {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn gst_video_meta_get_plane_height(
         meta: *mut GstVideoMeta,
-        plane_height: *mut c_uint,
+        plane_height: *mut [c_uint; 4],
     ) -> gboolean;
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn gst_video_meta_get_plane_size(
         meta: *mut GstVideoMeta,
-        plane_size: *mut size_t,
+        plane_size: *mut [size_t; 4],
     ) -> gboolean;
     pub fn gst_video_meta_map(
         meta: *mut GstVideoMeta,
@@ -3461,7 +3461,7 @@ extern "C" {
     pub fn gst_video_decoder_set_interlaced_output_state(
         decoder: *mut GstVideoDecoder,
         fmt: GstVideoFormat,
-        mode: GstVideoInterlaceMode,
+        interlace_mode: GstVideoInterlaceMode,
         width: c_uint,
         height: c_uint,
         reference: *mut GstVideoCodecState,

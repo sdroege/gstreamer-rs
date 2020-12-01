@@ -52,14 +52,14 @@ impl DateTime {
         }
     }
 
-    pub fn from_unix_epoch_local_time(secs: i64) -> DateTime {
+    pub fn from_unix_epoch_local_time(secs: i64) -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time(secs)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> DateTime {
+    pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time_usecs(
@@ -68,14 +68,14 @@ impl DateTime {
         }
     }
 
-    pub fn from_unix_epoch_utc(secs: i64) -> DateTime {
+    pub fn from_unix_epoch_utc(secs: i64) -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc(secs)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn from_unix_epoch_utc_usecs(usecs: i64) -> DateTime {
+    pub fn from_unix_epoch_utc_usecs(usecs: i64) -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc_usecs(usecs)) }
     }
@@ -87,7 +87,7 @@ impl DateTime {
         hour: i32,
         minute: i32,
         seconds: f64,
-    ) -> DateTime {
+    ) -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_date_time_new_local_time(

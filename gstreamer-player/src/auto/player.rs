@@ -45,7 +45,7 @@ impl Player {
 
     pub fn get_current_subtitle_track(&self) -> Option<PlayerSubtitleInfo> {
         unsafe {
-            from_glib_none(ffi::gst_player_get_current_subtitle_track(
+            from_glib_full(ffi::gst_player_get_current_subtitle_track(
                 self.to_glib_none().0,
             ))
         }

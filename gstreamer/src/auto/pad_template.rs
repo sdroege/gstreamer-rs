@@ -91,7 +91,7 @@ impl PadTemplate {
         unsafe {
             ffi::gst_pad_template_set_documentation_caps(
                 self.to_glib_none().0,
-                caps.to_glib_none().0,
+                caps.to_glib_full(),
             );
         }
     }
