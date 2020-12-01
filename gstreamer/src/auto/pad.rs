@@ -52,11 +52,11 @@ pub trait PadExt: 'static {
         &self,
         parent: &P,
         stream_id: Option<&str>,
-    ) -> Option<glib::GString>;
+    ) -> glib::GString;
 
-    //fn create_stream_id_printf<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<glib::GString>;
+    //fn create_stream_id_printf<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString;
 
-    //fn create_stream_id_printf_valist<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<glib::GString>;
+    //fn create_stream_id_printf_valist<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString;
 
     fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool;
 
@@ -72,7 +72,7 @@ pub trait PadExt: 'static {
 
     fn get_pad_template(&self) -> Option<PadTemplate>;
 
-    fn get_pad_template_caps(&self) -> Option<Caps>;
+    fn get_pad_template_caps(&self) -> Caps;
 
     fn get_parent_element(&self) -> Option<Element>;
 
@@ -128,11 +128,11 @@ pub trait PadExt: 'static {
 
     fn peer_query_accept_caps(&self, caps: &Caps) -> bool;
 
-    fn peer_query_caps(&self, filter: Option<&Caps>) -> Option<Caps>;
+    fn peer_query_caps(&self, filter: Option<&Caps>) -> Caps;
 
     fn query_accept_caps(&self, caps: &Caps) -> bool;
 
-    fn query_caps(&self, filter: Option<&Caps>) -> Option<Caps>;
+    fn query_caps(&self, filter: Option<&Caps>) -> Caps;
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
@@ -199,7 +199,7 @@ impl<O: IsA<Pad>> PadExt for O {
         &self,
         parent: &P,
         stream_id: Option<&str>,
-    ) -> Option<glib::GString> {
+    ) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_pad_create_stream_id(
                 self.as_ref().to_glib_none().0,
@@ -209,11 +209,11 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    //fn create_stream_id_printf<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<glib::GString> {
+    //fn create_stream_id_printf<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString {
     //    unsafe { TODO: call ffi:gst_pad_create_stream_id_printf() }
     //}
 
-    //fn create_stream_id_printf_valist<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<glib::GString> {
+    //fn create_stream_id_printf_valist<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString {
     //    unsafe { TODO: call ffi:gst_pad_create_stream_id_printf_valist() }
     //}
 
@@ -275,7 +275,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_pad_template_caps(&self) -> Option<Caps> {
+    fn get_pad_template_caps(&self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_get_pad_template_caps(
                 self.as_ref().to_glib_none().0,
@@ -428,7 +428,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn peer_query_caps(&self, filter: Option<&Caps>) -> Option<Caps> {
+    fn peer_query_caps(&self, filter: Option<&Caps>) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_peer_query_caps(
                 self.as_ref().to_glib_none().0,
@@ -446,7 +446,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn query_caps(&self, filter: Option<&Caps>) -> Option<Caps> {
+    fn query_caps(&self, filter: Option<&Caps>) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_query_caps(
                 self.as_ref().to_glib_none().0,

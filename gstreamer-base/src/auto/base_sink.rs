@@ -49,7 +49,7 @@ pub trait BaseSinkExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_stats(&self) -> Option<gst::Structure>;
+    fn get_stats(&self) -> gst::Structure;
 
     fn get_sync(&self) -> bool;
 
@@ -236,7 +236,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_stats(&self) -> Option<gst::Structure> {
+    fn get_stats(&self) -> gst::Structure {
         unsafe { from_glib_full(ffi::gst_base_sink_get_stats(self.as_ref().to_glib_none().0)) }
     }
 

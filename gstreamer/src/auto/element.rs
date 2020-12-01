@@ -102,11 +102,11 @@ pub trait ElementExt: 'static {
 
     fn is_locked_state(&self) -> bool;
 
-    //fn iterate_pads(&self) -> /*Ignored*/Option<Iterator>;
+    //fn iterate_pads(&self) -> /*Ignored*/Iterator;
 
-    //fn iterate_sink_pads(&self) -> /*Ignored*/Option<Iterator>;
+    //fn iterate_sink_pads(&self) -> /*Ignored*/Iterator;
 
-    //fn iterate_src_pads(&self) -> /*Ignored*/Option<Iterator>;
+    //fn iterate_src_pads(&self) -> /*Ignored*/Iterator;
 
     fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError>;
 
@@ -390,15 +390,15 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    //fn iterate_pads(&self) -> /*Ignored*/Option<Iterator> {
+    //fn iterate_pads(&self) -> /*Ignored*/Iterator {
     //    unsafe { TODO: call ffi:gst_element_iterate_pads() }
     //}
 
-    //fn iterate_sink_pads(&self) -> /*Ignored*/Option<Iterator> {
+    //fn iterate_sink_pads(&self) -> /*Ignored*/Iterator {
     //    unsafe { TODO: call ffi:gst_element_iterate_sink_pads() }
     //}
 
-    //fn iterate_src_pads(&self) -> /*Ignored*/Option<Iterator> {
+    //fn iterate_src_pads(&self) -> /*Ignored*/Iterator {
     //    unsafe { TODO: call ffi:gst_element_iterate_src_pads() }
     //}
 

@@ -47,7 +47,7 @@ pub trait PipelineExt: 'static {
 
     fn get_latency(&self) -> ClockTime;
 
-    fn get_pipeline_clock(&self) -> Option<Clock>;
+    fn get_pipeline_clock(&self) -> Clock;
 
     fn set_auto_flush_bus(&self, auto_flush: bool);
 
@@ -100,7 +100,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn get_pipeline_clock(&self) -> Option<Clock> {
+    fn get_pipeline_clock(&self) -> Clock {
         unsafe {
             from_glib_full(ffi::gst_pipeline_get_pipeline_clock(
                 self.as_ref().to_glib_none().0,

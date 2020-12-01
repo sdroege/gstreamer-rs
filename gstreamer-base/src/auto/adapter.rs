@@ -34,14 +34,13 @@ impl Adapter {
         }
     }
 
-    pub fn copy_bytes(&self, offset: usize, size: usize) -> Result<glib::Bytes, glib::BoolError> {
+    pub fn copy_bytes(&self, offset: usize, size: usize) -> glib::Bytes {
         unsafe {
-            Option::<_>::from_glib_full(ffi::gst_adapter_copy_bytes(
+            from_glib_full(ffi::gst_adapter_copy_bytes(
                 self.to_glib_none().0,
                 offset,
                 size,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to copy bytes"))
         }
     }
 

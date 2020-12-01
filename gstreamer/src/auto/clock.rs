@@ -37,7 +37,7 @@ impl Clock {
     //    unsafe { TODO: call ffi:gst_clock_id_get_time() }
     //}
 
-    //pub fn id_ref(id: /*Unimplemented*/ClockID) -> /*Unimplemented*/Option<ClockID> {
+    //pub fn id_ref(id: /*Unimplemented*/ClockID) -> /*Unimplemented*/ClockID {
     //    unsafe { TODO: call ffi:gst_clock_id_ref() }
     //}
 
@@ -94,9 +94,9 @@ pub trait ClockExt: 'static {
 
     fn is_synced(&self) -> bool;
 
-    //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/Option<ClockID>;
+    //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/ClockID;
 
-    //fn new_single_shot_id(&self, time: ClockTime) -> /*Unimplemented*/Option<ClockID>;
+    //fn new_single_shot_id(&self, time: ClockTime) -> /*Unimplemented*/ClockID;
 
     //fn periodic_id_reinit(&self, id: /*Unimplemented*/ClockID, start_time: ClockTime, interval: ClockTime) -> bool;
 
@@ -274,11 +274,11 @@ impl<O: IsA<Clock>> ClockExt for O {
         unsafe { from_glib(ffi::gst_clock_is_synced(self.as_ref().to_glib_none().0)) }
     }
 
-    //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/Option<ClockID> {
+    //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/ClockID {
     //    unsafe { TODO: call ffi:gst_clock_new_periodic_id() }
     //}
 
-    //fn new_single_shot_id(&self, time: ClockTime) -> /*Unimplemented*/Option<ClockID> {
+    //fn new_single_shot_id(&self, time: ClockTime) -> /*Unimplemented*/ClockID {
     //    unsafe { TODO: call ffi:gst_clock_new_single_shot_id() }
     //}
 

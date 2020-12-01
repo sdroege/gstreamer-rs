@@ -65,13 +65,13 @@ impl PadTemplate {
         }
     }
 
-    pub fn get_caps(&self) -> Option<Caps> {
+    pub fn get_caps(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_pad_template_get_caps(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn get_documentation_caps(&self) -> Option<Caps> {
+    pub fn get_documentation_caps(&self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_template_get_documentation_caps(
                 self.to_glib_none().0,
