@@ -8,6 +8,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 generate_display_trait = false
+trust_return_value_nullability = true
 
 external_libraries = [
     "GLib",
@@ -18,9 +19,11 @@ external_libraries = [
 generate = [
     "GstPlayer.PlayerColorBalanceType",
     "GstPlayer.PlayerError",
+    "GstPlayer.PlayerMediaInfo",
     "GstPlayer.PlayerSignalDispatcher",
     "GstPlayer.PlayerSnapshotFormat",
     "GstPlayer.PlayerState",
+    "GstPlayer.PlayerStreamInfo",
     "GstPlayer.PlayerVideoRenderer",
     "GstPlayer.PlayerVisualization",
 ]
@@ -86,11 +89,6 @@ final_type = true
     ignore = true
 
     [[object.function]]
-    name = "get_pipeline"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
     name = "seek"
         [[object.function.parameter]]
         name = "position"
@@ -113,10 +111,6 @@ final_type = true
 
     [[object.function]]
     name = "set_visualization"
-        [[object.function.parameter]]
-        name = "name"
-        nullable = true
-
         [object.function.return]
         bool_return_is_error = "Failed to set visualization"
 
@@ -183,15 +177,6 @@ final_type = true
     version = "1.16"
 
 [[object]]
-name = "GstPlayer.PlayerStreamInfo"
-status = "generate"
-
-    [[object.function]]
-    name = "get_stream_type"
-    [object.function.return]
-    nullable = false
-
-[[object]]
 name = "GstPlayer.PlayerAudioInfo"
 status = "generate"
 final_type = true
@@ -215,16 +200,6 @@ final_type = true
 name = "GstPlayer.PlayerSubtitleInfo"
 status = "generate"
 final_type = true
-
-[[object]]
-name = "GstPlayer.PlayerMediaInfo"
-status = "generate"
-final_type = true
-
-    [[object.function]]
-    name = "get_uri"
-        [object.function.return]
-        nullable = false
 
 [[object]]
 name = "GstPlayer.PlayerVideoOverlayVideoRenderer"
