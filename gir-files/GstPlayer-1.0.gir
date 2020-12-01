@@ -598,7 +598,7 @@ The caller should free it with g_object_unref()</doc>
       <method name="get_current_subtitle_track" c:identifier="gst_player_get_current_subtitle_track">
         <doc xml:space="preserve">A Function to get current subtitle #GstPlayerSubtitleInfo instance.</doc>
         
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">current subtitle track.
 
 The caller should free it with g_object_unref()</doc>
