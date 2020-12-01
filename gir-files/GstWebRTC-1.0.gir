@@ -1413,6 +1413,27 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcsctptransportstate&gt;</doc>
         <doc xml:space="preserve">certificate</doc>
       </member>
     </enumeration>
+    <docsection name="gstwebrtc-datachannel">
+      <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcdatachannel&gt;</doc>
+    </docsection>
+    <docsection name="gstwebrtc-dtlstransport">
+      <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcdtlstransport&gt;</doc>
+    </docsection>
+    <docsection name="gstwebrtc-icetransport">
+      <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcicetransport&gt;</doc>
+    </docsection>
+    <docsection name="gstwebrtc-receiver">
+      <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcrtpreceiver-interface&gt;</doc>
+    </docsection>
+    <docsection name="gstwebrtc-sender">
+      <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcrtpsender-interface&gt;</doc>
+    </docsection>
+    <docsection name="gstwebrtc-sessiondescription">
+      <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcsessiondescription-class&gt;</doc>
+    </docsection>
+    <docsection name="gstwebrtc-transceiver">
+      <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcrtptransceiver-interface&gt;</doc>
+    </docsection>
     <function name="webrtc_sdp_type_to_string" c:identifier="gst_webrtc_sdp_type_to_string" moved-to="WebRTCSDPType.to_string">
       
       <return-value transfer-ownership="none">
