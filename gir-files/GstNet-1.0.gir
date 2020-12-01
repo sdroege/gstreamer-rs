@@ -755,6 +755,10 @@ is no such metadata on @buffer.</doc>
         </parameter>
       </parameters>
     </function-macro>
+    <docsection name="gstnetutils">
+      <doc xml:space="preserve">GstNetUtils gathers network utility functions, enabling use for all
+gstreamer plugins.</doc>
+    </docsection>
     <function name="net_address_meta_api_get_type" c:identifier="gst_net_address_meta_api_get_type">
       
       <return-value transfer-ownership="none">

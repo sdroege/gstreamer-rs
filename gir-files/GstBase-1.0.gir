@@ -987,6 +987,24 @@ Control is given to the subclass when all pads have data.
    has been taken with pop_buffer (), a new buffer can be queued
    on that pad.
 
+ * When gst_aggregator_pad_peek_buffer() or gst_aggregator_pad_has_buffer()
+   are called, a reference is taken to the returned buffer, which stays
+   valid until either:
+
+     - gst_aggregator_pad_pop_buffer() is called, in which case the caller
+       is guaranteed that the buffer they receive is the same as the peeked
+       buffer.
+     - gst_aggregator_pad_drop_buffer() is called, in which case the caller
+       is guaranteed that the dropped buffer is the one that was peeked.
+     - the subclass implementation of #GstAggregatorClass.aggregate returns.
+
+   Subsequent calls to gst_aggregator_pad_peek_buffer() or
+   gst_aggregator_pad_has_buffer() return / check the same buffer that was
+   returned / checked, until one of the conditions listed above is met.
+
+   Subclasses are only allowed to call these methods from the aggregate
+   thread.
+
  * If the subclass wishes to push a buffer downstream in its aggregate
    implementation, it should do so through the
    gst_aggregator_finish_buffer() method. This method will take care
@@ -13510,6 +13528,12 @@ ISO-8859-1).</doc>
         </parameter>
       </parameters>
     </function-macro>
+    <docsection name="gsttypefindhelper">
+      <doc xml:space="preserve">Utility functions for elements doing typefinding:
+gst_type_find_helper() does typefinding in pull mode, while
+gst_type_find_helper_for_buffer() is useful for elements needing to do
+typefinding in push mode from a chain function.</doc>
+    </docsection>
     <function name="queue_array_new" c:identifier="gst_queue_array_new" moved-to="QueueArray.new" version="1.2" introspectable="0">
       <doc xml:space="preserve">Allocates a new #GstQueueArray object with an initial
 queue size of @initial_size.</doc>

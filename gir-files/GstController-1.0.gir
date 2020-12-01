@@ -166,12 +166,15 @@ GstTimedValue.</doc>
         </field>
       </union>
       <method name="copy" c:identifier="gst_control_point_copy">
+        <doc xml:space="preserve">Copies a #GstControlPoint</doc>
         
         <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A copy of @cp</doc>
           <type name="ControlPoint" c:type="GstControlPoint*"/>
         </return-value>
         <parameters>
           <instance-parameter name="cp" transfer-ownership="none">
+            <doc xml:space="preserve">The control point to copy</doc>
             <type name="ControlPoint" c:type="GstControlPoint*"/>
           </instance-parameter>
         </parameters>
@@ -685,7 +688,7 @@ To get a n nanosecond shift to the left use
       <doc xml:space="preserve">A #GstControlBinding that forwards requests to another #GstControlBinding</doc>
       
       <constructor name="new" c:identifier="gst_proxy_control_binding_new" version="1.12">
-        <doc xml:space="preserve">#GstProxyControlBinding forwards all access to data or sync_values()
+        <doc xml:space="preserve">#GstProxyControlBinding forwards all access to data or `sync_values()`
 requests from @property_name on @object to the control binding at
 @ref_property_name on @ref_object.</doc>
         
