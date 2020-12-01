@@ -3881,7 +3881,7 @@ The supported options by @pool can be retrieved with gst_buffer_pool_get_options
             <doc xml:space="preserve">a #GstBufferPool configuration</doc>
             <type name="Structure" c:type="GstStructure*"/>
           </parameter>
-          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="none" optional="1" allow-none="1">
+          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="none" nullable="1" optional="1" allow-none="1">
             <doc xml:space="preserve">a #GstAllocator, or %NULL</doc>
             <type name="Allocator" c:type="GstAllocator**"/>
           </parameter>
@@ -3895,7 +3895,7 @@ The supported options by @pool can be retrieved with gst_buffer_pool_get_options
         <doc xml:space="preserve">Parse an available @config and get the option at @index of the options API
 array.</doc>
         
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a #gchar of the option at @index.</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
@@ -3922,7 +3922,7 @@ array.</doc>
             <doc xml:space="preserve">a #GstBufferPool configuration</doc>
             <type name="Structure" c:type="GstStructure*"/>
           </parameter>
-          <parameter name="caps" direction="out" caller-allocates="0" transfer-ownership="none" optional="1" allow-none="1">
+          <parameter name="caps" direction="out" caller-allocates="0" transfer-ownership="none" nullable="1" optional="1" allow-none="1">
             <doc xml:space="preserve">the caps of buffers</doc>
             <type name="Caps" c:type="GstCaps**"/>
           </parameter>
@@ -4016,7 +4016,7 @@ used values.</doc>
             <doc xml:space="preserve">a #GstBufferPool configuration</doc>
             <type name="Structure" c:type="GstStructure*"/>
           </parameter>
-          <parameter name="caps" transfer-ownership="none">
+          <parameter name="caps" transfer-ownership="none" nullable="1" allow-none="1">
             <doc xml:space="preserve">caps for the buffers</doc>
             <type name="Caps" c:type="GstCaps*"/>
           </parameter>
@@ -4053,7 +4053,7 @@ padding.</doc>
             <doc xml:space="preserve">a #GstBufferPool configuration</doc>
             <type name="Structure" c:type="GstStructure*"/>
           </parameter>
-          <parameter name="caps" transfer-ownership="none">
+          <parameter name="caps" transfer-ownership="none" nullable="1" allow-none="1">
             <doc xml:space="preserve">the excepted caps of buffers</doc>
             <type name="Caps" c:type="GstCaps*"/>
           </parameter>
@@ -10591,7 +10591,7 @@ so on.
 
 Free-function: gst_date_time_unref</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10673,7 +10673,7 @@ or %NULL on error</doc>
 
 Free-function: gst_date_time_unref</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10688,7 +10688,7 @@ Free-function: gst_date_time_unref</doc>
         <doc xml:space="preserve">Creates a new #GstDateTime using the time since Jan 1, 1970 specified by
 @usecs. The #GstDateTime is in the local timezone.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10705,7 +10705,7 @@ Free-function: gst_date_time_unref</doc>
 
 Free-function: gst_date_time_unref</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10720,7 +10720,7 @@ Free-function: gst_date_time_unref</doc>
         <doc xml:space="preserve">Creates a new #GstDateTime using the time since Jan 1, 1970 specified by
 @usecs. The #GstDateTime is in UTC.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10750,7 +10750,7 @@ case @minute and @seconds should also be -1.
 
 Free-function: gst_date_time_unref</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10812,7 +10812,7 @@ in the local timezone.
 
 Free-function: gst_date_time_unref</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10834,7 +10834,7 @@ if @month == -1, then #GstDateTime will created only for @year.
 
 Free-function: gst_date_time_unref</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -10863,7 +10863,7 @@ so on.
 
 Free-function: gst_date_time_unref</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -12229,7 +12229,7 @@ objedcts that have been returned by the #GST_MESSAGE_DEVICE_ADDED messages.</doc
       <method name="get_factory" c:identifier="gst_device_provider_get_factory" version="1.4">
         <doc xml:space="preserve">Retrieves the factory that was used to create this device provider.</doc>
         
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the #GstDeviceProviderFactory used for
     creating this device provider. no refcounting is needed.</doc>
           <type name="DeviceProviderFactory" c:type="GstDeviceProviderFactory*"/>
@@ -13527,7 +13527,7 @@ specific situations.</doc>
       <function name="make_from_uri" c:identifier="gst_element_make_from_uri" throws="1">
         <doc xml:space="preserve">Creates an element for handling the given URI.</doc>
         
-        <return-value transfer-ownership="none" nullable="1">
+        <return-value transfer-ownership="none">
           <doc xml:space="preserve">a new element or %NULL if none
 could be created</doc>
           <type name="Element" c:type="GstElement*"/>
@@ -14377,7 +14377,7 @@ Pads from compatible templates can be linked together.</doc>
 
 MT safe.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">A #GstContext or NULL</doc>
           <type name="Context" c:type="GstContext*"/>
         </return-value>
@@ -31898,7 +31898,7 @@ stored. This is the case when the registry is getting rebuilt.</doc>
       <method name="get_filename" c:identifier="gst_plugin_get_filename">
         <doc xml:space="preserve">get the filename of the plugin</doc>
         
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the filename of the plugin</doc>
           <type name="filename" c:type="const gchar*"/>
         </return-value>
@@ -36713,7 +36713,7 @@ If found, plugin is reffed.</doc>
       <method name="lookup_feature" c:identifier="gst_registry_lookup_feature">
         <doc xml:space="preserve">Find a #GstPluginFeature with @name in @registry.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstPluginFeature with its refcount incremented,
     use gst_object_unref() after usage.
 
@@ -39050,7 +39050,7 @@ The caller should not modify the returned #GstStream</doc>
       <method name="get_upstream_id" c:identifier="gst_stream_collection_get_upstream_id" version="1.10">
         <doc xml:space="preserve">Returns the upstream id of the @collection.</doc>
         
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">The upstream id</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
@@ -39264,7 +39264,7 @@ whether a stream is of a certain type.</doc>
       <function name="get_name" c:identifier="gst_stream_type_get_name" version="1.10">
         <doc xml:space="preserve">Get a descriptive string for a given #GstStreamType</doc>
         
-        <return-value transfer-ownership="none" nullable="1">
+        <return-value transfer-ownership="none">
           <doc xml:space="preserve">A string describing the stream type</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
@@ -45461,7 +45461,7 @@ This function is typically called during an element's plugin initialization.</do
     that could belong to this type</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
-          <parameter name="possible_caps" transfer-ownership="none">
+          <parameter name="possible_caps" transfer-ownership="none" nullable="1" allow-none="1">
             <doc xml:space="preserve">Optionally the caps that could be returned when typefinding
                 succeeds</doc>
             <type name="Caps" c:type="GstCaps*"/>
@@ -45568,7 +45568,7 @@ Free-function: gst_plugin_feature_list_free</doc>
       <method name="get_caps" c:identifier="gst_type_find_factory_get_caps">
         <doc xml:space="preserve">Gets the #GstCaps associated with a typefind factory.</doc>
         
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the #GstCaps associated with this factory</doc>
           <type name="Caps" c:type="GstCaps*"/>
         </return-value>
@@ -47060,7 +47060,7 @@ determine a order for the two provided values.</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_NANO" value="0" c:type="GST_VERSION_NANO">
+    <constant name="VERSION_NANO" value="1" c:type="GST_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer at compile time:
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       
@@ -50017,7 +50017,7 @@ multiple unlinked source pads or multiple unlinked sink pads
 and want them all ghosted, you will have to create the ghost pads
 yourself).</doc>
       
-      <return-value transfer-ownership="none" nullable="1">
+      <return-value transfer-ownership="none">
         <doc xml:space="preserve">a
   newly-created bin, or %NULL if an error occurred.</doc>
         <type name="Bin" c:type="GstElement*"/>
@@ -50045,7 +50045,7 @@ multiple unlinked source pads or multiple unlinked sink pads
 and want them all ghosted, you will have to create the ghost pads
 yourself).</doc>
       
-      <return-value transfer-ownership="none" nullable="1">
+      <return-value transfer-ownership="none">
         <doc xml:space="preserve">a newly-created
   element, which is guaranteed to be a bin unless
   #GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS was passed, or %NULL if an error
@@ -50089,7 +50089,7 @@ can try to play the pipeline.
 To create a sub-pipeline (bin) for embedding into an existing pipeline
 use gst_parse_bin_from_description().</doc>
       
-      <return-value transfer-ownership="none" nullable="1">
+      <return-value transfer-ownership="none">
         <doc xml:space="preserve">a new element on success, %NULL on
   failure. If more than one toplevel element is specified by the
   @pipeline_description, all elements are put into a #GstPipeline, which
@@ -50112,7 +50112,7 @@ can try to play the pipeline.
 To create a sub-pipeline (bin) for embedding into an existing pipeline
 use gst_parse_bin_from_description_full().</doc>
       
-      <return-value transfer-ownership="none" nullable="1">
+      <return-value transfer-ownership="none">
         <doc xml:space="preserve">a new element on success, %NULL on
    failure. If more than one toplevel element is specified by the
    @pipeline_description, all elements are put into a #GstPipeline, which
@@ -50141,7 +50141,7 @@ use gst_parse_bin_from_description_full().</doc>
 @error will contain an error message if an erroneous pipeline is specified.
 An error does not mean that the pipeline could not be constructed.</doc>
       
-      <return-value transfer-ownership="none" nullable="1">
+      <return-value transfer-ownership="none">
         <doc xml:space="preserve">a new element on success and %NULL
 on failure.</doc>
         <type name="Element" c:type="GstElement*"/>
@@ -50160,7 +50160,7 @@ on failure.</doc>
 @error will contain an error message if an erroneous pipeline is specified.
 An error does not mean that the pipeline could not be constructed.</doc>
       
-      <return-value transfer-ownership="none" nullable="1">
+      <return-value transfer-ownership="none">
         <doc xml:space="preserve">a new element on success; on
   failure, either %NULL or a partially-constructed bin or element will be
   returned and @error will be set (unless you passed
@@ -50656,7 +50656,7 @@ the GStreamer core. See gst_segtrap_is_enabled() for more information.</doc>
     <function name="stream_type_get_name" c:identifier="gst_stream_type_get_name" moved-to="StreamType.get_name" version="1.10">
       <doc xml:space="preserve">Get a descriptive string for a given #GstStreamType</doc>
       
-      <return-value transfer-ownership="none" nullable="1">
+      <return-value transfer-ownership="none">
         <doc xml:space="preserve">A string describing the stream type</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
@@ -51119,7 +51119,7 @@ This function is typically called during an element's plugin initialization.</do
     that could belong to this type</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
-        <parameter name="possible_caps" transfer-ownership="none">
+        <parameter name="possible_caps" transfer-ownership="none" nullable="1" allow-none="1">
           <doc xml:space="preserve">Optionally the caps that could be returned when typefinding
                 succeeds</doc>
           <type name="Caps" c:type="GstCaps*"/>

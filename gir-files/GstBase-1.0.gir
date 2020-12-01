@@ -1202,7 +1202,7 @@ to produce the next output buffer. This should only be called from
 a #GstAggregator::samples-selected handler, and can be used to precisely
 control aggregating parameters for a given set of input samples.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">The sample that is about to be aggregated. It may hold a #GstBuffer
   or a #GstBufferList. The contents of its info structure is subclass-dependent,
   and documented on a subclass basis. The buffers held by the sample are
@@ -1442,12 +1442,12 @@ Unref the @allocator after use it.</doc>
             <doc xml:space="preserve">a #GstAggregator</doc>
             <type name="Aggregator" c:type="GstAggregator*"/>
           </instance-parameter>
-          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="full" optional="1" allow-none="1">
+          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="full" nullable="1" optional="1" allow-none="1">
             <doc xml:space="preserve">the #GstAllocator
 used</doc>
             <type name="Gst.Allocator" c:type="GstAllocator**"/>
           </parameter>
-          <parameter name="params" direction="out" caller-allocates="1" transfer-ownership="full" optional="1" allow-none="1">
+          <parameter name="params" direction="out" caller-allocates="1" transfer-ownership="none" optional="1" allow-none="1">
             <doc xml:space="preserve">the
 #GstAllocationParams of @allocator</doc>
             <type name="Gst.AllocationParams" c:type="GstAllocationParams*"/>
@@ -1456,7 +1456,7 @@ used</doc>
       </method>
       <method name="get_buffer_pool" c:identifier="gst_aggregator_get_buffer_pool">
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the instance of the #GstBufferPool used
 by @trans; free it after use it</doc>
           <type name="Gst.BufferPool" c:type="GstBufferPool*"/>
@@ -1508,7 +1508,7 @@ to produce the next output buffer. This should only be called from
 a #GstAggregator::samples-selected handler, and can be used to precisely
 control aggregating parameters for a given set of input samples.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">The sample that is about to be aggregated. It may hold a #GstBuffer
   or a #GstBufferList. The contents of its info structure is subclass-dependent,
   and documented on a subclass basis. The buffers held by the sample are
@@ -2101,7 +2101,7 @@ _finish_buffer from inside that function.</doc>
       <field name="peek_next_sample">
         <callback name="peek_next_sample">
           
-          <return-value transfer-ownership="full">
+          <return-value transfer-ownership="full" nullable="1">
             <doc xml:space="preserve">The sample that is about to be aggregated. It may hold a #GstBuffer
   or a #GstBufferList. The contents of its info structure is subclass-dependent,
   and documented on a subclass basis. The buffers held by the sample are
@@ -2205,7 +2205,7 @@ gst_aggregator_pad_pop_buffer().</doc>
       </method>
       <method name="peek_buffer" c:identifier="gst_aggregator_pad_peek_buffer">
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">A reference to the buffer in @pad or
 NULL if no buffer was queued. You should unref the buffer after
 usage.</doc>
@@ -2221,7 +2221,7 @@ usage.</doc>
       <method name="pop_buffer" c:identifier="gst_aggregator_pad_pop_buffer">
         <doc xml:space="preserve">Steal the ref to the buffer currently queued in @pad.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">The buffer in @pad or NULL if no buffer was
   queued. You should unref the buffer after usage.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -5661,14 +5661,13 @@ Unref the @allocator after usage.</doc>
             <doc xml:space="preserve">a #GstBaseSrc</doc>
             <type name="BaseSrc" c:type="GstBaseSrc*"/>
           </instance-parameter>
-          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="full" optional="1" allow-none="1">
+          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="full" nullable="1" optional="1" allow-none="1">
             <doc xml:space="preserve">the #GstAllocator
 used</doc>
             <type name="Gst.Allocator" c:type="GstAllocator**"/>
           </parameter>
-          <parameter name="params" direction="out" caller-allocates="1" transfer-ownership="full" optional="1" allow-none="1">
-            <doc xml:space="preserve">the
-#GstAllocationParams of @allocator</doc>
+          <parameter name="params" direction="out" caller-allocates="1" transfer-ownership="none" optional="1" allow-none="1">
+            <doc xml:space="preserve">the #GstAllocationParams of @allocator</doc>
             <type name="Gst.AllocationParams" c:type="GstAllocationParams*"/>
           </parameter>
         </parameters>
@@ -5689,7 +5688,7 @@ used</doc>
       </method>
       <method name="get_buffer_pool" c:identifier="gst_base_src_get_buffer_pool">
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the instance of the #GstBufferPool used
 by the src; unref it after usage.</doc>
           <type name="Gst.BufferPool" c:type="GstBufferPool*"/>
@@ -7013,21 +7012,20 @@ Unref the @allocator after use.</doc>
             <doc xml:space="preserve">a #GstBaseTransform</doc>
             <type name="BaseTransform" c:type="GstBaseTransform*"/>
           </instance-parameter>
-          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="full" optional="1" allow-none="1">
+          <parameter name="allocator" direction="out" caller-allocates="0" transfer-ownership="full" nullable="1" optional="1" allow-none="1">
             <doc xml:space="preserve">the #GstAllocator
 used</doc>
             <type name="Gst.Allocator" c:type="GstAllocator**"/>
           </parameter>
-          <parameter name="params" direction="out" caller-allocates="1" transfer-ownership="full" optional="1" allow-none="1">
-            <doc xml:space="preserve">the
-#GstAllocationParams of @allocator</doc>
+          <parameter name="params" direction="out" caller-allocates="1" transfer-ownership="none" optional="1" allow-none="1">
+            <doc xml:space="preserve">the #GstAllocationParams of @allocator</doc>
             <type name="Gst.AllocationParams" c:type="GstAllocationParams*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_buffer_pool" c:identifier="gst_base_transform_get_buffer_pool">
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the instance of the #GstBufferPool used
 by @trans; free it after use</doc>
           <type name="Gst.BufferPool" c:type="GstBufferPool*"/>

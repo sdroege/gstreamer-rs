@@ -2473,7 +2473,7 @@ MT safe.</doc>
       <method name="process_next_clock_id" c:identifier="gst_test_clock_process_next_clock_id" version="1.2">
         <doc xml:space="preserve">MT safe.</doc>
         
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstClockID containing the next pending clock
 notification.</doc>
           <type name="Gst.ClockID" c:type="GstClockID"/>
