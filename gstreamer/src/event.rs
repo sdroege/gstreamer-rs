@@ -249,10 +249,7 @@ impl fmt::Debug for EventRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Event")
             .field("ptr", unsafe { &self.as_ptr() })
-            .field("type", &unsafe {
-                let type_ = ffi::gst_event_type_get_name((*self.as_ptr()).type_);
-                CStr::from_ptr(type_).to_str().unwrap()
-            })
+            .field("type", &self.get_type().get_name())
             .field("seqnum", &self.get_seqnum())
             .field("structure", &self.get_structure())
             .finish()
