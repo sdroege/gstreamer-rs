@@ -80,7 +80,8 @@ impl UniqueAdapter {
     }
 
     pub fn copy_bytes(&self, offset: usize, size: usize) -> Result<glib::Bytes, glib::BoolError> {
-        self.0.copy_bytes(offset, size)
+        // TBD: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/issues/298
+        Ok(self.0.copy_bytes(offset, size))
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]

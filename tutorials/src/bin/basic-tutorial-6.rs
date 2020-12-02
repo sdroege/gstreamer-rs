@@ -70,15 +70,10 @@ fn print_pad_capabilities(element: &gst::Element, pad_name: &str) {
         .expect("Could not retrieve pad");
 
     println!("Caps for the {} pad:", pad_name);
-    match pad.get_current_caps() {
-        Some(caps) => {
-            print_caps(&caps, "      ");
-        }
-        None => {
-            let caps = pad.query_caps(None).expect("Failed to query caps on pad");
-            print_caps(&caps, "      ");
-        }
-    }
+    let caps = pad
+        .get_current_caps()
+        .unwrap_or_else(|| pad.query_caps(None));
+    print_caps(&caps, "      ");
 }
 
 fn tutorial_main() {
