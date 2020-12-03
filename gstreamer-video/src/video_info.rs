@@ -873,14 +873,14 @@ impl VideoInfo {
         }
     }
 
-    pub fn align(&mut self, align: &mut crate::VideoAlignment) -> bool {
+    pub fn align(&mut self, align: &mut crate::VideoAlignment) -> Result<(), glib::BoolError> {
         cfg_if::cfg_if! {
             if #[cfg(feature = "v1_12")] {
                 unsafe {
-                    from_glib(ffi::gst_video_info_align(
+                    glib::glib_result_from_gboolean!(ffi::gst_video_info_align(
                         &mut self.0,
                         &mut align.0,
-                    ))
+                    ), "Failed to align VideoInfo")
                 }
             } else {
                 unsafe {
@@ -889,12 +889,12 @@ impl VideoInfo {
                     if gst::version() < (1, 11, 1, 0) {
                         ffi::gst_video_info_align(&mut self.0, &mut align.0);
 
-                        true
+                        Ok(())
                     } else {
-                        from_glib(ffi::gst_video_info_align(
+                        glib::glib_result_from_gboolean!(ffi::gst_video_info_align(
                             &mut self.0,
                             &mut align.0,
-                        ))
+                        ), "Failed to align VideoInfo")
                     }
                 }
             }
@@ -1158,7 +1158,7 @@ mod tests {
         assert_eq!(info.offset(), [0, 2_073_600]);
 
         let mut align = crate::VideoAlignment::new(0, 0, 0, 8, &[0; VIDEO_MAX_PLANES]);
-        assert!(info.align(&mut align));
+        info.align(&mut align).unwrap();
 
         assert_eq!(info.stride(), [1928, 1928]);
         assert_eq!(info.offset(), [0, 2_082_240]);
