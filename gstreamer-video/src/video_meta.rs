@@ -156,6 +156,18 @@ impl VideoMeta {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn get_alignment(&self) -> crate::VideoAlignment {
+        crate::VideoAlignment::new(
+            self.0.alignment.padding_top,
+            self.0.alignment.padding_bottom,
+            self.0.alignment.padding_left,
+            self.0.alignment.padding_right,
+            &self.0.alignment.stride_align,
+        )
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn get_plane_size(&self) -> Result<[usize; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
 
@@ -188,6 +200,20 @@ impl VideoMeta {
         }
 
         Ok(plane_height)
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn set_alignment(
+        &mut self,
+        alignment: &crate::VideoAlignment,
+    ) -> Result<(), glib::BoolError> {
+        unsafe {
+            glib::glib_result_from_gboolean!(
+                ffi::gst_video_meta_set_alignment(&mut self.0, alignment.0),
+                "Failed to set alignment on VideoMeta"
+            )
+        }
     }
 }
 
@@ -830,7 +856,60 @@ mod tests {
         )
         .unwrap();
 
+        let alig = meta.get_alignment();
+        assert_eq!(alig, crate::VideoAlignment::new(0, 0, 0, 0, &[0, 0, 0, 0]));
+
         assert_eq!(meta.get_plane_size().unwrap(), [76800, 38400, 0, 0]);
         assert_eq!(meta.get_plane_height().unwrap(), [240, 120, 0, 0]);
+
+        /* horizontal padding */
+        let mut info = crate::VideoInfo::builder(crate::VideoFormat::Nv12, 320, 240)
+            .build()
+            .expect("Failed to create VideoInfo");
+        let mut alig = crate::VideoAlignment::new(0, 0, 2, 6, &[0, 0, 0, 0]);
+        info.align(&mut alig).unwrap();
+
+        let mut meta = VideoMeta::add_full(
+            buffer.get_mut().unwrap(),
+            crate::VideoFrameFlags::empty(),
+            crate::VideoFormat::Nv12,
+            info.width(),
+            info.height(),
+            info.offset(),
+            info.stride(),
+        )
+        .unwrap();
+        meta.set_alignment(&alig).unwrap();
+
+        let alig = meta.get_alignment();
+        assert_eq!(alig, crate::VideoAlignment::new(0, 0, 2, 6, &[0, 0, 0, 0]));
+
+        assert_eq!(meta.get_plane_size().unwrap(), [78720, 39360, 0, 0]);
+        assert_eq!(meta.get_plane_height().unwrap(), [240, 120, 0, 0]);
+
+        /* vertical alignment */
+        let mut info = crate::VideoInfo::builder(crate::VideoFormat::Nv12, 320, 240)
+            .build()
+            .expect("Failed to create VideoInfo");
+        let mut alig = crate::VideoAlignment::new(2, 6, 0, 0, &[0, 0, 0, 0]);
+        info.align(&mut alig).unwrap();
+
+        let mut meta = VideoMeta::add_full(
+            buffer.get_mut().unwrap(),
+            crate::VideoFrameFlags::empty(),
+            crate::VideoFormat::Nv12,
+            info.width(),
+            info.height(),
+            info.offset(),
+            info.stride(),
+        )
+        .unwrap();
+        meta.set_alignment(&alig).unwrap();
+
+        let alig = meta.get_alignment();
+        assert_eq!(alig, crate::VideoAlignment::new(2, 6, 0, 0, &[0, 0, 0, 0]));
+
+        assert_eq!(meta.get_plane_size().unwrap(), [79360, 39680, 0, 0]);
+        assert_eq!(meta.get_plane_height().unwrap(), [248, 124, 0, 0]);
     }
 }
