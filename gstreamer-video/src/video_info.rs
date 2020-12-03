@@ -900,6 +900,24 @@ impl VideoInfo {
             }
         }
     }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn align_full(
+        &mut self,
+        align: &mut crate::VideoAlignment,
+    ) -> Result<([usize; crate::VIDEO_MAX_PLANES]), glib::BoolError> {
+        let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
+
+        unsafe {
+            glib::glib_result_from_gboolean!(
+                ffi::gst_video_info_align_full(&mut self.0, &mut align.0, plane_size.as_mut_ptr()),
+                "Failed to align VideoInfo"
+            )?;
+        }
+
+        Ok(plane_size)
+    }
 }
 
 impl Clone for VideoInfo {
@@ -1162,6 +1180,17 @@ mod tests {
 
         assert_eq!(info.stride(), [1928, 1928]);
         assert_eq!(info.offset(), [0, 2_082_240]);
+
+        #[cfg(feature = "v1_18")]
+        {
+            let mut info = crate::VideoInfo::builder(crate::VideoFormat::Nv16, 1920, 1080)
+                .build()
+                .expect("Failed to create VideoInfo");
+
+            let mut align = crate::VideoAlignment::new(0, 0, 0, 8, &[0; VIDEO_MAX_PLANES]);
+            let plane_size = info.align_full(&mut align).unwrap();
+            assert_eq!(plane_size, [2082240, 2082240, 0, 0]);
+        }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
