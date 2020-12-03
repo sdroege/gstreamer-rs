@@ -175,7 +175,7 @@ impl VideoMeta {
             glib::glib_result_from_gboolean!(
                 ffi::gst_video_meta_get_plane_size(
                     &self.0 as *const _ as usize as *mut _,
-                    plane_size.as_mut_ptr(),
+                    &mut plane_size,
                 ),
                 "Failed to get plane size"
             )?;
@@ -193,7 +193,7 @@ impl VideoMeta {
             glib::glib_result_from_gboolean!(
                 ffi::gst_video_meta_get_plane_height(
                     &self.0 as *const _ as usize as *mut _,
-                    plane_height.as_mut_ptr(),
+                    &mut plane_height,
                 ),
                 "Failed to get plane height"
             )?;
