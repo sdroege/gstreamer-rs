@@ -82,6 +82,18 @@ impl VideoAlignment {
     }
 }
 
+impl PartialEq for VideoAlignment {
+    fn eq(&self, other: &VideoAlignment) -> bool {
+        self.get_padding_top() == other.get_padding_top()
+            && self.get_padding_bottom() == other.get_padding_bottom()
+            && self.get_padding_left() == other.get_padding_left()
+            && self.get_padding_right() == other.get_padding_right()
+            && self.get_stride_align() == other.get_stride_align()
+    }
+}
+
+impl Eq for VideoAlignment {}
+
 pub trait VideoBufferPoolConfig {
     fn get_video_alignment(&self) -> Option<VideoAlignment>;
 
