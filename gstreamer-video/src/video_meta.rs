@@ -153,6 +153,42 @@ impl VideoMeta {
     pub fn get_stride(&self) -> &[i32] {
         &self.0.stride[0..(self.0.n_planes as usize)]
     }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn get_plane_size(&self) -> Result<[usize; crate::VIDEO_MAX_PLANES], glib::BoolError> {
+        let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
+
+        unsafe {
+            glib::glib_result_from_gboolean!(
+                ffi::gst_video_meta_get_plane_size(
+                    &self.0 as *const _ as usize as *mut _,
+                    plane_size.as_mut_ptr(),
+                ),
+                "Failed to get plane size"
+            )?;
+        }
+
+        Ok(plane_size)
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn get_plane_height(&self) -> Result<[u32; crate::VIDEO_MAX_PLANES], glib::BoolError> {
+        let mut plane_height = [0; crate::VIDEO_MAX_PLANES];
+
+        unsafe {
+            glib::glib_result_from_gboolean!(
+                ffi::gst_video_meta_get_plane_height(
+                    &self.0 as *const _ as usize as *mut _,
+                    plane_height.as_mut_ptr(),
+                ),
+                "Failed to get plane height"
+            )?;
+        }
+
+        Ok(plane_height)
+    }
 }
 
 unsafe impl MetaAPI for VideoMeta {
@@ -777,5 +813,24 @@ mod tests {
             assert_eq!(meta.get_offset(), &[0]);
             assert_eq!(meta.get_stride(), &[320 * 4]);
         }
+    }
+
+    #[test]
+    #[cfg(feature = "v1_18")]
+    fn test_vide_meta_alignment() {
+        gst::init().unwrap();
+
+        let mut buffer = gst::Buffer::with_size(115200).unwrap();
+        let meta = VideoMeta::add(
+            buffer.get_mut().unwrap(),
+            crate::VideoFrameFlags::empty(),
+            crate::VideoFormat::Nv12,
+            320,
+            240,
+        )
+        .unwrap();
+
+        assert_eq!(meta.get_plane_size().unwrap(), [76800, 38400, 0, 0]);
+        assert_eq!(meta.get_plane_height().unwrap(), [240, 120, 0, 0]);
     }
 }
