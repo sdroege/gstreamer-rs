@@ -232,6 +232,10 @@ status = "generate"
     cfg_condition = "feature = \"ser_de\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+    [[object.function]]
+    name = "register"
+    # Needs manual work
+    ignore = true
 
 [[object]]
 name = "Gst.SeekFlags"
