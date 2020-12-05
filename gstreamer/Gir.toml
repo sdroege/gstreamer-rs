@@ -58,14 +58,15 @@ generate = [
 ]
 
 manual = [
-    "GLib.Error",
-    "GLib.Source",
     "GLib.DateTime",
+    "GLib.Error",
+    "GLib.Quark",
+    "GLib.Source",
     "GObject.Object",
+    "GObject.Value",
     "Gst.Segment",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
-    "GObject.Value",
 ]
 
 [[object]]
