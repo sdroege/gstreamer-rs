@@ -43,7 +43,6 @@ generate = [
     "Gst.SchedulingFlags",
     "Gst.SeekType",
     "Gst.State",
-    "Gst.StateChange",
     "Gst.StreamError",
     "Gst.StreamStatusType",
     "Gst.StreamType",
@@ -1630,6 +1629,16 @@ status = "generate"
     name = "type_is_plugin_api"
     # confusing return type
     ignore = true
+
+[[object]]
+name = "Gst.StateChange"
+status = "generate"
+    [[object.function]]
+    name = "get_name"
+    # Manual function for < v1_14:
+    manual = true
+    # Always generate the trait, without version constraint:
+    version = "1.8"
 
 [[object]]
 name = "Gst.StateChangeReturn"
