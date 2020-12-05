@@ -36,11 +36,8 @@ manual = [
 ]
 
 generate = [
-    "GES.EditMode",
     "GES.PipelineFlags",
-    "GES.Edge",
     "GES.FrameNumber",
-    "GES.TrackType",
     "GES.Group",
     "GES.UriClipAsset",
     "GES.UriSourceAsset",
@@ -242,6 +239,21 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to set asset"
 
+[[object]]
+name = "GES.Edge"
+status = "generate"
+    [[object.function]]
+    name = "name"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GES.EditMode"
+status = "generate"
+    [[object.function]]
+    name = "name"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "GES.Layer"
@@ -340,3 +352,11 @@ status = "generate"
     name = "remove_control_binding"
         [object.function.return]
         bool_return_is_error = "Failed to remove control binding"
+
+[[object]]
+name = "GES.TrackType"
+status = "generate"
+    [[object.function]]
+    name = "name"
+        [object.function.return]
+        nullable = false
