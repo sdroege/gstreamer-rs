@@ -148,6 +148,12 @@ status = "generate"
     # is broken.
     manual = true
 
+    [[object.function]]
+    name = "get_info"
+    # Result is not nullable, function does effectively the same
+    # as AudioFormatInfo::from_format()
+    ignore = true
+
 [[object]]
 name = "GstAudio.AudioStreamAlign"
 status = "generate"

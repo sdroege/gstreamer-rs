@@ -394,6 +394,12 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "get_info"
+    # Result is not nullable, function does effectively the same
+    # as VideoFormatInfo::from_format()
+    ignore = true
+
 [[object]]
 name = "GstVideo.VideoSink"
 status = "generate"
