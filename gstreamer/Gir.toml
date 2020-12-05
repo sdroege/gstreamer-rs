@@ -26,6 +26,7 @@ generate = [
     "Gst.DebugGraphDetails",
     "Gst.DebugLevel",
     "Gst.ElementFactoryListType",
+    "Gst.EventTypeFlags",
     "Gst.LibraryError",
     "Gst.PadDirection",
     "Gst.PadMode",
