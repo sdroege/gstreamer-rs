@@ -73,26 +73,31 @@ impl<'a> Serialize for DateTime {
         let variant = if self.has_second() {
             DateTimeVariants::YMDhmsTz(
                 self.get_year(),
-                self.get_month(),
-                self.get_day(),
-                self.get_hour(),
-                self.get_minute(),
-                f64::from(self.get_second()) + f64::from(self.get_microsecond()) / 1_000_000f64,
-                self.get_time_zone_offset(),
+                self.get_month().unwrap(),
+                self.get_day().unwrap(),
+                self.get_hour().unwrap(),
+                self.get_minute().unwrap(),
+                f64::from(self.get_second().unwrap())
+                    + f64::from(self.get_microsecond().unwrap()) / 1_000_000f64,
+                self.get_time_zone_offset().unwrap(),
             )
         } else if self.has_time() {
             DateTimeVariants::YMDhmTz(
                 self.get_year(),
-                self.get_month(),
-                self.get_day(),
-                self.get_hour(),
-                self.get_minute(),
-                self.get_time_zone_offset(),
+                self.get_month().unwrap(),
+                self.get_day().unwrap(),
+                self.get_hour().unwrap(),
+                self.get_minute().unwrap(),
+                self.get_time_zone_offset().unwrap(),
             )
         } else if self.has_day() {
-            DateTimeVariants::YMD(self.get_year(), self.get_month(), self.get_day())
+            DateTimeVariants::YMD(
+                self.get_year(),
+                self.get_month().unwrap(),
+                self.get_day().unwrap(),
+            )
         } else if self.has_month() {
-            DateTimeVariants::YM(self.get_year(), self.get_month())
+            DateTimeVariants::YM(self.get_year(), self.get_month().unwrap())
         } else if self.has_year() {
             DateTimeVariants::Y(self.get_year())
         } else {
@@ -152,7 +157,7 @@ impl TryFrom<DateTimeVariants> for DateTime {
             DateTimeVariants::YM(y, m) => DateTime::new_ym(y, m),
             DateTimeVariants::YMD(y, m, d) => DateTime::new_ymd(y, m, d),
             DateTimeVariants::YMDhmTz(y, m, d, h, mn, tz) => {
-                DateTime::new(tz, y, m, d, h, mn, -1f64)
+                DateTime::new(tz, y, m, d, h, mn, None)
             }
             DateTimeVariants::YMDhmsTz(y, m, d, h, mn, s, tz) => {
                 DateTime::new(tz, y, m, d, h, mn, s)
@@ -193,7 +198,7 @@ mod tests {
             res
         );
 
-        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap();
+        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap();
         let res = ron::ser::to_string_pretty(&datetime, pretty_config.clone());
         assert_eq!(Ok("YMDhmTz(2018, 5, 28, 16, 6, 2)".to_owned()), res,);
 
@@ -232,7 +237,7 @@ mod tests {
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
         assert_eq!(
             datetime_de,
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap()
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap()
         );
 
         let datetime_ron = "YMD(2018, 5, 28)";
@@ -257,7 +262,7 @@ mod tests {
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
         assert_eq!(datetime_de, datetime);
 
-        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap();
+        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap();
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
         assert_eq!(datetime_de, datetime);

@@ -6,13 +6,291 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use glib::translate::*;
 use std::cmp;
 use std::convert;
 use std::fmt;
 
 use crate::DateTime;
 
+// Validate that the given values result in a valid DateTime
+fn validate(
+    tzoffset: Option<f32>,
+    year: i32,
+    month: Option<i32>,
+    day: Option<i32>,
+    hour: Option<i32>,
+    minute: Option<i32>,
+    seconds: Option<f64>,
+) -> Result<(), glib::BoolError> {
+    skip_assert_initialized!();
+
+    // Check for valid ranges
+    if year <= 0 || year > 9999 {
+        return Err(glib::glib_bool_error!(
+            "Can't create DateTime: Year out of range"
+        ));
+    }
+
+    if let Some(month) = month {
+        if month <= 0 || month > 12 {
+            return Err(glib::glib_bool_error!(
+                "Can't create DateTime: Month out of range"
+            ));
+        }
+    }
+
+    if let Some(day) = day {
+        if day <= 0 || day > 31 {
+            return Err(glib::glib_bool_error!(
+                "Can't create DateTime: Day out of range"
+            ));
+        }
+    }
+
+    if let Some(hour) = hour {
+        if hour < 0 || hour >= 24 {
+            return Err(glib::glib_bool_error!(
+                "Can't create DateTime: Hour out of range"
+            ));
+        }
+    }
+
+    if let Some(minute) = minute {
+        if minute < 0 || minute >= 60 {
+            return Err(glib::glib_bool_error!(
+                "Can't create DateTime: Minute out of range"
+            ));
+        }
+    }
+
+    if let Some(seconds) = seconds {
+        if seconds < 0.0 || seconds >= 60.0 {
+            return Err(glib::glib_bool_error!(
+                "Can't create DateTime: Seconds out of range"
+            ));
+        }
+    }
+
+    if let Some(tzoffset) = tzoffset {
+        if tzoffset < -12.0 || tzoffset > 12.0 {
+            return Err(glib::glib_bool_error!(
+                "Can't create DateTime: Timezone offset out of range"
+            ));
+        }
+    }
+
+    // If day is provided, month also has to be provided
+    if day.is_some() && month.is_none() {
+        return Err(glib::glib_bool_error!(
+            "Can't create DateTime: Need to provide month if providing day"
+        ));
+    }
+
+    // If hour is provided, day also has to be provided
+    if hour.is_some() && day.is_none() {
+        return Err(glib::glib_bool_error!(
+            "Can't create DateTime: Need to provide day if providing hour"
+        ));
+    }
+
+    // If minutes are provided, hours also need to be provided and the other way around
+    if hour.is_none() && minute.is_some() {
+        return Err(glib::glib_bool_error!(
+            "Can't create DateTime: Need to provide both hour and minute or neither"
+        ));
+    }
+
+    if minute.is_some() && hour.is_none() {
+        return Err(glib::glib_bool_error!(
+            "Can't create DateTime: Need to provide both hour and minute or neither"
+        ));
+    }
+
+    // If seconds or tzoffset are provided then also hours and minutes must be provided
+    if (seconds.is_some() || tzoffset.is_some()) && (hour.is_none() || minute.is_none()) {
+        return Err(glib::glib_bool_error!("Can't create DateTime: Need to provide hour and minute if providing seconds or timezone offset"));
+    }
+
+    Ok(())
+}
+
 impl DateTime {
+    pub fn new<
+        TZ: Into<Option<f32>>,
+        Y: Into<i32>,
+        MO: Into<Option<i32>>,
+        D: Into<Option<i32>>,
+        H: Into<Option<i32>>,
+        MI: Into<Option<i32>>,
+        S: Into<Option<f64>>,
+    >(
+        tzoffset: TZ,
+        year: Y,
+        month: MO,
+        day: D,
+        hour: H,
+        minute: MI,
+        seconds: S,
+    ) -> Result<DateTime, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        let tzoffset = tzoffset.into();
+        let year = year.into();
+        let month = month.into();
+        let day = day.into();
+        let hour = hour.into();
+        let minute = minute.into();
+        let seconds = seconds.into();
+
+        validate(tzoffset, year, month, day, hour, minute, seconds)?;
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_date_time_new(
+                tzoffset.unwrap_or(0.0),
+                year,
+                month.unwrap_or(-1),
+                day.unwrap_or(-1),
+                hour.unwrap_or(-1),
+                minute.unwrap_or(-1),
+                seconds.unwrap_or(-1.0),
+            ))
+            .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+        }
+    }
+
+    pub fn new_local_time<
+        Y: Into<i32>,
+        MO: Into<Option<i32>>,
+        D: Into<Option<i32>>,
+        H: Into<Option<i32>>,
+        MI: Into<Option<i32>>,
+        S: Into<Option<f64>>,
+    >(
+        year: Y,
+        month: MO,
+        day: D,
+        hour: H,
+        minute: MI,
+        seconds: S,
+    ) -> Result<DateTime, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        let year = year.into();
+        let month = month.into();
+        let day = day.into();
+        let hour = hour.into();
+        let minute = minute.into();
+        let seconds = seconds.into();
+
+        validate(None, year, month, day, hour, minute, seconds)?;
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_local_time(
+                year,
+                month.unwrap_or(-1),
+                day.unwrap_or(-1),
+                hour.unwrap_or(-1),
+                minute.unwrap_or(-1),
+                seconds.unwrap_or(-1.0),
+            ))
+            .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+        }
+    }
+
+    pub fn new_y(year: i32) -> Result<DateTime, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        validate(None, year, None, None, None, None, None)?;
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_y(year))
+                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+        }
+    }
+
+    pub fn new_ym(year: i32, month: i32) -> Result<DateTime, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        validate(None, year, Some(month), None, None, None, None)?;
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_ym(year, month))
+                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+        }
+    }
+
+    pub fn new_ymd(year: i32, month: i32, day: i32) -> Result<DateTime, glib::BoolError> {
+        assert_initialized_main_thread!();
+
+        validate(None, year, Some(month), Some(day), None, None, None)?;
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_ymd(year, month, day))
+                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+        }
+    }
+
+    pub fn get_day(&self) -> Option<i32> {
+        if !self.has_day() {
+            return None;
+        }
+
+        unsafe { Some(ffi::gst_date_time_get_day(self.to_glib_none().0)) }
+    }
+
+    pub fn get_hour(&self) -> Option<i32> {
+        if !self.has_time() {
+            return None;
+        }
+
+        unsafe { Some(ffi::gst_date_time_get_hour(self.to_glib_none().0)) }
+    }
+
+    pub fn get_microsecond(&self) -> Option<i32> {
+        if !self.has_second() {
+            return None;
+        }
+
+        unsafe { Some(ffi::gst_date_time_get_microsecond(self.to_glib_none().0)) }
+    }
+
+    pub fn get_minute(&self) -> Option<i32> {
+        if !self.has_time() {
+            return None;
+        }
+
+        unsafe { Some(ffi::gst_date_time_get_minute(self.to_glib_none().0)) }
+    }
+
+    pub fn get_month(&self) -> Option<i32> {
+        if !self.has_month() {
+            return None;
+        }
+
+        unsafe { Some(ffi::gst_date_time_get_month(self.to_glib_none().0)) }
+    }
+
+    pub fn get_second(&self) -> Option<i32> {
+        if !self.has_second() {
+            return None;
+        }
+
+        unsafe { Some(ffi::gst_date_time_get_second(self.to_glib_none().0)) }
+    }
+
+    pub fn get_time_zone_offset(&self) -> Option<f32> {
+        if !self.has_time() {
+            return None;
+        }
+
+        unsafe {
+            Some(ffi::gst_date_time_get_time_zone_offset(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
     pub fn to_utc(&self) -> Result<DateTime, glib::BoolError> {
         if !self.has_time() {
             // No time => no TZ offset
@@ -43,7 +321,7 @@ impl DateTime {
                 self.get_day(),
                 self.get_hour(),
                 self.get_minute(),
-                0f64,
+                Some(0.0),
             )
             .and_then(|d| d.to_g_date_time())
             .and_then(|d| {
@@ -52,13 +330,13 @@ impl DateTime {
             })
             .and_then(|d| {
                 DateTime::new(
-                    0f32, // UTC TZ offset
+                    None, // UTC TZ offset
                     d.get_year(),
-                    d.get_month(),
-                    d.get_day_of_month(),
-                    d.get_hour(),
-                    d.get_minute(),
-                    -1f64, // No second
+                    Some(d.get_month()),
+                    Some(d.get_day_of_month()),
+                    Some(d.get_hour()),
+                    Some(d.get_minute()),
+                    None, // No second
                 )
             })
         }
@@ -121,7 +399,7 @@ impl cmp::PartialOrd for DateTime {
             return None;
         }
 
-        let month_delta = self_norm.get_month() - other_norm.get_month();
+        let month_delta = self_norm.get_month().unwrap() - other_norm.get_month().unwrap();
         if month_delta != 0 {
             return get_cmp(month_delta);
         }
@@ -138,7 +416,7 @@ impl cmp::PartialOrd for DateTime {
             return None;
         }
 
-        let day_delta = self_norm.get_day() - other_norm.get_day();
+        let day_delta = self_norm.get_day().unwrap() - other_norm.get_day().unwrap();
         if day_delta != 0 {
             return get_cmp(day_delta);
         }
@@ -155,12 +433,12 @@ impl cmp::PartialOrd for DateTime {
             return None;
         }
 
-        let hour_delta = self_norm.get_hour() - other_norm.get_hour();
+        let hour_delta = self_norm.get_hour().unwrap() - other_norm.get_hour().unwrap();
         if hour_delta != 0 {
             return get_cmp(hour_delta);
         }
 
-        let minute_delta = self_norm.get_minute() - other_norm.get_minute();
+        let minute_delta = self_norm.get_minute().unwrap() - other_norm.get_minute().unwrap();
         if minute_delta != 0 {
             return get_cmp(minute_delta);
         }
@@ -176,12 +454,12 @@ impl cmp::PartialOrd for DateTime {
             // One has second, the other doesn't => can't compare (note 1)
             return None;
         }
-        let second_delta = self_norm.get_second() - other_norm.get_second();
+        let second_delta = self_norm.get_second().unwrap() - other_norm.get_second().unwrap();
         if second_delta != 0 {
             return get_cmp(second_delta);
         }
 
-        get_cmp(self_norm.get_microsecond() - other_norm.get_microsecond())
+        get_cmp(self_norm.get_microsecond().unwrap() - other_norm.get_microsecond().unwrap())
     }
 }
 
@@ -281,12 +559,12 @@ mod tests {
             .to_utc()
             .unwrap();
         assert_eq!(utc_date_time.get_year(), 2019);
-        assert_eq!(utc_date_time.get_month(), 8);
-        assert_eq!(utc_date_time.get_day(), 20);
-        assert_eq!(utc_date_time.get_hour(), 18);
-        assert_eq!(utc_date_time.get_minute(), 9);
-        assert_eq!(utc_date_time.get_second(), 42);
-        assert_eq!(utc_date_time.get_microsecond(), 123_456);
+        assert_eq!(utc_date_time.get_month().unwrap(), 8);
+        assert_eq!(utc_date_time.get_day().unwrap(), 20);
+        assert_eq!(utc_date_time.get_hour().unwrap(), 18);
+        assert_eq!(utc_date_time.get_minute().unwrap(), 9);
+        assert_eq!(utc_date_time.get_second().unwrap(), 42);
+        assert_eq!(utc_date_time.get_microsecond().unwrap(), 123_456);
 
         // Year, month, day and hour offset
         let utc_date_time = DateTime::new(2f32, 2019, 1, 1, 0, 0, 42.123_456f64)
@@ -294,31 +572,31 @@ mod tests {
             .to_utc()
             .unwrap();
         assert_eq!(utc_date_time.get_year(), 2018);
-        assert_eq!(utc_date_time.get_month(), 12);
-        assert_eq!(utc_date_time.get_day(), 31);
-        assert_eq!(utc_date_time.get_hour(), 22);
-        assert_eq!(utc_date_time.get_minute(), 0);
-        assert_eq!(utc_date_time.get_second(), 42);
-        assert_eq!(utc_date_time.get_microsecond(), 123_456);
+        assert_eq!(utc_date_time.get_month().unwrap(), 12);
+        assert_eq!(utc_date_time.get_day().unwrap(), 31);
+        assert_eq!(utc_date_time.get_hour().unwrap(), 22);
+        assert_eq!(utc_date_time.get_minute().unwrap(), 0);
+        assert_eq!(utc_date_time.get_second().unwrap(), 42);
+        assert_eq!(utc_date_time.get_microsecond().unwrap(), 123_456);
 
         // Date without an hour (which implies no TZ)
         let utc_date_time = DateTime::new_ymd(2019, 1, 1).unwrap().to_utc().unwrap();
         assert_eq!(utc_date_time.get_year(), 2019);
-        assert_eq!(utc_date_time.get_month(), 1);
-        assert_eq!(utc_date_time.get_day(), 1);
+        assert_eq!(utc_date_time.get_month().unwrap(), 1);
+        assert_eq!(utc_date_time.get_day().unwrap(), 1);
         assert!(!utc_date_time.has_time());
         assert!(!utc_date_time.has_second());
 
         // Date without seconds
-        let utc_date_time = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64)
+        let utc_date_time = DateTime::new(2f32, 2018, 5, 28, 16, 6, None)
             .unwrap()
             .to_utc()
             .unwrap();
         assert_eq!(utc_date_time.get_year(), 2018);
-        assert_eq!(utc_date_time.get_month(), 5);
-        assert_eq!(utc_date_time.get_day(), 28);
-        assert_eq!(utc_date_time.get_hour(), 14);
-        assert_eq!(utc_date_time.get_minute(), 6);
+        assert_eq!(utc_date_time.get_month().unwrap(), 5);
+        assert_eq!(utc_date_time.get_day().unwrap(), 28);
+        assert_eq!(utc_date_time.get_hour().unwrap(), 14);
+        assert_eq!(utc_date_time.get_minute().unwrap(), 6);
         assert!(!utc_date_time.has_second());
     }
 
@@ -442,8 +720,8 @@ mod tests {
         );
 
         assert_eq!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap(),
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap()
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap(),
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap()
         );
 
         assert_eq!(
@@ -456,16 +734,16 @@ mod tests {
         // but they are not equal (note 1)
         assert_ne!(
             DateTime::new_ymd(2018, 5, 28).unwrap(),
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap()
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap()
         );
 
         assert_ne!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap(),
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap(),
             DateTime::new_ym(2018, 5).unwrap()
         );
 
         assert_ne!(
-            DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64).unwrap(),
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, None).unwrap(),
             DateTime::new_y(2018).unwrap()
         );
     }

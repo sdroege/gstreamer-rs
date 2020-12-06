@@ -16,24 +16,6 @@ glib::glib_wrapper! {
 }
 
 impl DateTime {
-    pub fn new(
-        tzoffset: f32,
-        year: i32,
-        month: i32,
-        day: i32,
-        hour: i32,
-        minute: i32,
-        seconds: f64,
-    ) -> Result<DateTime, glib::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            Option::<_>::from_glib_full(ffi::gst_date_time_new(
-                tzoffset, year, month, day, hour, minute, seconds,
-            ))
-            .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
-        }
-    }
-
     pub fn from_g_date_time(dt: &glib::DateTime) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -52,47 +34,41 @@ impl DateTime {
         }
     }
 
-    pub fn from_unix_epoch_local_time(secs: i64) -> Option<DateTime> {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time(secs)) }
-    }
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> Option<DateTime> {
+    pub fn from_unix_epoch_local_time(secs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time_usecs(
-                usecs,
-            ))
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time(secs))
+                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
         }
     }
 
-    pub fn from_unix_epoch_utc(secs: i64) -> Option<DateTime> {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc(secs)) }
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time_usecs(
+                usecs,
+            ))
+            .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
+        }
+    }
+
+    pub fn from_unix_epoch_utc(secs: i64) -> Result<DateTime, glib::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc(secs))
+                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
+        }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn from_unix_epoch_utc_usecs(usecs: i64) -> Option<DateTime> {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc_usecs(usecs)) }
-    }
-
-    pub fn new_local_time(
-        year: i32,
-        month: i32,
-        day: i32,
-        hour: i32,
-        minute: i32,
-        seconds: f64,
-    ) -> Option<DateTime> {
+    pub fn from_unix_epoch_utc_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_date_time_new_local_time(
-                year, month, day, hour, minute, seconds,
-            ))
+            Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc_usecs(usecs))
+                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
         }
     }
 
@@ -104,58 +80,6 @@ impl DateTime {
     pub fn new_now_utc() -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_now_utc()) }
-    }
-
-    pub fn new_y(year: i32) -> Result<DateTime, glib::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            Option::<_>::from_glib_full(ffi::gst_date_time_new_y(year))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
-        }
-    }
-
-    pub fn new_ym(year: i32, month: i32) -> Result<DateTime, glib::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            Option::<_>::from_glib_full(ffi::gst_date_time_new_ym(year, month))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
-        }
-    }
-
-    pub fn new_ymd(year: i32, month: i32, day: i32) -> Result<DateTime, glib::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            Option::<_>::from_glib_full(ffi::gst_date_time_new_ymd(year, month, day))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
-        }
-    }
-
-    pub fn get_day(&self) -> i32 {
-        unsafe { ffi::gst_date_time_get_day(self.to_glib_none().0) }
-    }
-
-    pub fn get_hour(&self) -> i32 {
-        unsafe { ffi::gst_date_time_get_hour(self.to_glib_none().0) }
-    }
-
-    pub fn get_microsecond(&self) -> i32 {
-        unsafe { ffi::gst_date_time_get_microsecond(self.to_glib_none().0) }
-    }
-
-    pub fn get_minute(&self) -> i32 {
-        unsafe { ffi::gst_date_time_get_minute(self.to_glib_none().0) }
-    }
-
-    pub fn get_month(&self) -> i32 {
-        unsafe { ffi::gst_date_time_get_month(self.to_glib_none().0) }
-    }
-
-    pub fn get_second(&self) -> i32 {
-        unsafe { ffi::gst_date_time_get_second(self.to_glib_none().0) }
-    }
-
-    pub fn get_time_zone_offset(&self) -> f32 {
-        unsafe { ffi::gst_date_time_get_time_zone_offset(self.to_glib_none().0) }
     }
 
     pub fn get_year(&self) -> i32 {

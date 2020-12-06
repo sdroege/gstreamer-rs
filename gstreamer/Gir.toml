@@ -1654,9 +1654,63 @@ status = "generate"
 
     [[object.function]]
     name = "new"
-        [object.function.return]
-        nullable = true
-        nullable_return_is_error = "Can't create DateTime"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "new_local_time"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "new_y"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "new_ym"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "new_ymd"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "get_month"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "get_day"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "get_hour"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "get_minute"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "get_second"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "get_microsecond"
+    # Needs manual checking of invariants
+    manual = true
+
+    [[object.function]]
+    name = "get_time_zone_offset"
+    # Needs manual checking of invariants
+    manual = true
 
     [[object.function]]
     name = "new_y"
@@ -1695,6 +1749,26 @@ status = "generate"
     name = "to_iso8601_string"
         [object.function.return]
         nullable_return_is_error = "Failed to create ISO-8601 string from DateTime"
+
+    [[object.function]]
+    name = "new_from_unix_epoch_local_time"
+        [object.function.return]
+        nullable_return_is_error = "Can't create DateTime from UNIX epoch"
+
+    [[object.function]]
+    name = "new_from_unix_epoch_local_time_usecs"
+        [object.function.return]
+        nullable_return_is_error = "Can't create DateTime from UNIX epoch"
+
+    [[object.function]]
+    name = "new_from_unix_epoch_utc"
+        [object.function.return]
+        nullable_return_is_error = "Can't create DateTime from UNIX epoch"
+
+    [[object.function]]
+    name = "new_from_unix_epoch_utc_usecs"
+        [object.function.return]
+        nullable_return_is_error = "Can't create DateTime from UNIX epoch"
 
 [[object]]
 name = "Gst.ControlSource"
