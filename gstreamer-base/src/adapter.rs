@@ -9,10 +9,23 @@
 use crate::Adapter;
 use glib::translate::*;
 use std::io;
+use std::mem;
 use std::ops;
 
 impl Adapter {
-    pub fn copy(&self, offset: usize, dest: &mut [u8]) {
+    pub fn copy(&self, offset: usize, dest: &mut [u8]) -> Result<(), glib::BoolError> {
+        if offset
+            .checked_add(dest.len())
+            .map(|end| end <= self.available())
+            != Some(true)
+        {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if dest.is_empty() {
+            return Ok(());
+        }
+
         unsafe {
             let size = dest.len();
             ffi::gst_adapter_copy(
@@ -21,6 +34,240 @@ impl Adapter {
                 offset,
                 size,
             );
+        }
+
+        Ok(())
+    }
+
+    pub fn copy_bytes(&self, offset: usize, size: usize) -> Result<glib::Bytes, glib::BoolError> {
+        if offset.checked_add(size).map(|end| end <= self.available()) != Some(true) {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if size == 0 {
+            return Ok(glib::Bytes::from_static(&[]));
+        }
+
+        unsafe {
+            Ok(from_glib_full(ffi::gst_adapter_copy_bytes(
+                self.to_glib_none().0,
+                offset,
+                size,
+            )))
+        }
+    }
+
+    pub fn flush(&self, flush: usize) -> Result<(), glib::BoolError> {
+        if flush > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        unsafe {
+            ffi::gst_adapter_flush(self.to_glib_none().0, flush);
+        }
+
+        Ok(())
+    }
+
+    pub fn get_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(gst::Buffer::new());
+        }
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_adapter_get_buffer(self.to_glib_none().0, nbytes))
+                .ok_or_else(|| glib::glib_bool_error!("Failed to get buffer"))
+        }
+    }
+
+    pub fn get_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(gst::Buffer::new());
+        }
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_adapter_get_buffer_fast(
+                self.to_glib_none().0,
+                nbytes,
+            ))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to get buffer"))
+        }
+    }
+
+    pub fn get_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(gst::BufferList::new());
+        }
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_adapter_get_buffer_list(
+                self.to_glib_none().0,
+                nbytes,
+            ))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to get buffer list"))
+        }
+    }
+
+    pub fn get_list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(Vec::new());
+        }
+
+        unsafe {
+            Ok(FromGlibPtrContainer::from_glib_full(
+                ffi::gst_adapter_get_list(self.to_glib_none().0, nbytes),
+            ))
+        }
+    }
+
+    pub fn masked_scan_uint32(
+        &self,
+        mask: u32,
+        pattern: u32,
+        offset: usize,
+        size: usize,
+    ) -> Result<Option<usize>, glib::BoolError> {
+        if offset.checked_add(size).map(|end| end <= self.available()) != Some(true) {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if size == 0 || ((!mask) & pattern) != 0 {
+            return Ok(None);
+        }
+
+        unsafe {
+            let ret = ffi::gst_adapter_masked_scan_uint32(
+                self.to_glib_none().0,
+                mask,
+                pattern,
+                offset,
+                size,
+            );
+            if ret == -1 {
+                Ok(None)
+            } else {
+                assert!(ret >= 0);
+                Ok(Some(ret as usize))
+            }
+        }
+    }
+
+    pub fn masked_scan_uint32_peek(
+        &self,
+        mask: u32,
+        pattern: u32,
+        offset: usize,
+        size: usize,
+    ) -> Result<Option<(usize, u32)>, glib::BoolError> {
+        if offset.checked_add(size).map(|end| end <= self.available()) != Some(true) {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if size == 0 || ((!mask) & pattern) != 0 {
+            return Ok(None);
+        }
+
+        unsafe {
+            let mut value = mem::MaybeUninit::uninit();
+            let ret = ffi::gst_adapter_masked_scan_uint32_peek(
+                self.to_glib_none().0,
+                mask,
+                pattern,
+                offset,
+                size,
+                value.as_mut_ptr(),
+            );
+
+            if ret == -1 {
+                Ok(None)
+            } else {
+                assert!(ret >= 0);
+                let value = value.assume_init();
+                Ok(Some((ret as usize, value)))
+            }
+        }
+    }
+
+    pub fn take_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(gst::Buffer::new());
+        }
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_adapter_take_buffer(self.to_glib_none().0, nbytes))
+                .ok_or_else(|| glib::glib_bool_error!("Failed to take buffer"))
+        }
+    }
+
+    pub fn take_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(gst::Buffer::new());
+        }
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_adapter_take_buffer_fast(
+                self.to_glib_none().0,
+                nbytes,
+            ))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to take buffer"))
+        }
+    }
+
+    pub fn take_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(gst::BufferList::new());
+        }
+
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_adapter_take_buffer_list(
+                self.to_glib_none().0,
+                nbytes,
+            ))
+            .ok_or_else(|| glib::glib_bool_error!("Failed to take buffer list"))
+        }
+    }
+
+    pub fn take_list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(Vec::new());
+        }
+
+        unsafe {
+            Ok(FromGlibPtrContainer::from_glib_full(
+                ffi::gst_adapter_take_list(self.to_glib_none().0, nbytes),
+            ))
         }
     }
 
@@ -50,8 +297,11 @@ impl io::Read for Adapter {
             len = buf.len();
         }
 
-        self.copy(0, &mut buf[0..len]);
-        self.flush(len);
+        self.copy(0, &mut buf[0..len])
+            .map_err(|err| io::Error::new(io::ErrorKind::Other, err))?;
+
+        // Can't happen because we checked the size first
+        self.flush(len).expect("Failed to flush");
         Ok(len)
     }
 }
@@ -80,8 +330,7 @@ impl UniqueAdapter {
     }
 
     pub fn copy_bytes(&self, offset: usize, size: usize) -> Result<glib::Bytes, glib::BoolError> {
-        // TBD: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/issues/298
-        Ok(self.0.copy_bytes(offset, size))
+        self.0.copy_bytes(offset, size)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -96,8 +345,8 @@ impl UniqueAdapter {
         self.0.dts_at_discont()
     }
 
-    pub fn flush(&mut self, flush: usize) {
-        self.0.flush(flush);
+    pub fn flush(&mut self, flush: usize) -> Result<(), glib::BoolError> {
+        self.0.flush(flush)
     }
 
     pub fn get_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
@@ -112,11 +361,17 @@ impl UniqueAdapter {
         self.0.get_buffer_list(nbytes)
     }
 
-    pub fn get_list(&self, nbytes: usize) -> Vec<gst::Buffer> {
+    pub fn get_list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
         self.0.get_list(nbytes)
     }
 
-    pub fn masked_scan_uint32(&self, mask: u32, pattern: u32, offset: usize, size: usize) -> isize {
+    pub fn masked_scan_uint32(
+        &self,
+        mask: u32,
+        pattern: u32,
+        offset: usize,
+        size: usize,
+    ) -> Result<Option<usize>, glib::BoolError> {
         self.0.masked_scan_uint32(mask, pattern, offset, size)
     }
 
@@ -126,7 +381,7 @@ impl UniqueAdapter {
         pattern: u32,
         offset: usize,
         size: usize,
-    ) -> (isize, u32) {
+    ) -> Result<Option<(usize, u32)>, glib::BoolError> {
         self.0.masked_scan_uint32_peek(mask, pattern, offset, size)
     }
 
@@ -176,12 +431,12 @@ impl UniqueAdapter {
         self.0.take_buffer_list(nbytes)
     }
 
-    pub fn take_list(&mut self, nbytes: usize) -> Vec<gst::Buffer> {
+    pub fn take_list(&mut self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
         self.0.take_list(nbytes)
     }
 
-    pub fn copy(&self, offset: usize, dest: &mut [u8]) {
-        self.0.copy(offset, dest);
+    pub fn copy(&self, offset: usize, dest: &mut [u8]) -> Result<(), glib::BoolError> {
+        self.0.copy(offset, dest)
     }
 
     pub fn push(&mut self, buf: gst::Buffer) {
@@ -191,13 +446,21 @@ impl UniqueAdapter {
     pub fn map(&mut self, nbytes: usize) -> Result<UniqueAdapterMap, glib::error::BoolError> {
         use std::slice;
 
+        if nbytes > self.available() {
+            return Err(glib::glib_bool_error!("Not enough data available"));
+        }
+
+        if nbytes == 0 {
+            return Ok(UniqueAdapterMap(None, &[]));
+        }
+
         unsafe {
             let ptr = ffi::gst_adapter_map(self.0.to_glib_none().0, nbytes);
             if ptr.is_null() {
                 Err(glib::glib_bool_error!("size bytes are not available"))
             } else {
                 Ok(UniqueAdapterMap(
-                    self,
+                    Some(self),
                     slice::from_raw_parts(ptr as *const u8, nbytes),
                 ))
             }
@@ -206,12 +469,14 @@ impl UniqueAdapter {
 }
 
 #[derive(Debug)]
-pub struct UniqueAdapterMap<'a>(&'a UniqueAdapter, &'a [u8]);
+pub struct UniqueAdapterMap<'a>(Option<&'a UniqueAdapter>, &'a [u8]);
 
 impl<'a> Drop for UniqueAdapterMap<'a> {
     fn drop(&mut self) {
-        unsafe {
-            ffi::gst_adapter_unmap((self.0).0.to_glib_none().0);
+        if let Some(adapter) = self.0 {
+            unsafe {
+                ffi::gst_adapter_unmap(adapter.0.to_glib_none().0);
+            }
         }
     }
 }

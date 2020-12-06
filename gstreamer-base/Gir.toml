@@ -42,7 +42,6 @@ name = "GstBase.Adapter"
 status = "generate"
 final_type = true
 concurrency = "send-unique"
-
     [[object.function]]
     name = "map"
     # Unsafe
@@ -54,7 +53,7 @@ concurrency = "send-unique"
     ignore = true
 
     [[object.function]]
-    name = "copy"
+    pattern = "copy.*"
     # Unsafe
     manual = true
 
@@ -64,44 +63,24 @@ concurrency = "send-unique"
     manual = true
 
     [[object.function]]
-    name = "take"
-    # Useless copying of data
+    pattern = "take.*"
+    # Unsafe
     ignore = true
 
     [[object.function]]
-    name = "copy_bytes"
-        [object.function.return]
-        nullable_return_is_error = "Failed to copy bytes"
+    pattern = "get.*"
+    # Unsafe
+    ignore = true
 
     [[object.function]]
-    name = "get_buffer"
-        [object.function.return]
-        nullable_return_is_error = "Failed to get buffer"
+    pattern = "masked.*"
+    # Unsafe
+    ignore = true
 
     [[object.function]]
-    name = "get_buffer_fast"
-        [object.function.return]
-        nullable_return_is_error = "Failed to get buffer"
-
-    [[object.function]]
-    name = "get_buffer_list"
-        [object.function.return]
-        nullable_return_is_error = "Failed to get buffer list"
-
-    [[object.function]]
-    name = "take_buffer"
-        [object.function.return]
-        nullable_return_is_error = "Failed to take buffer"
-
-    [[object.function]]
-    name = "take_buffer_fast"
-        [object.function.return]
-        nullable_return_is_error = "Failed to take buffer"
-
-    [[object.function]]
-    name = "take_buffer_list"
-        [object.function.return]
-        nullable_return_is_error = "Failed to take buffer list"
+    name = "flush"
+    # Unsafe Buffer
+    manual = true
 
 [[object]]
 name = "GstBase.FlowCombiner"
