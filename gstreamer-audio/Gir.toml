@@ -154,6 +154,11 @@ status = "generate"
     # as AudioFormatInfo::from_format()
     ignore = true
 
+    [[object.function]]
+    name = "build_integer"
+    # Use custom AudioEndianness enum
+    manual = true
+
 [[object]]
 name = "GstAudio.AudioStreamAlign"
 status = "generate"

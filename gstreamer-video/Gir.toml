@@ -400,6 +400,11 @@ status = "generate"
     # as VideoFormatInfo::from_format()
     ignore = true
 
+    [[object.function]]
+    name = "from_masks"
+    # Use custom VideoEndianness enum
+    manual = true
+
 [[object]]
 name = "GstVideo.VideoSink"
 status = "generate"
