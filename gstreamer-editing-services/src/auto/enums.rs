@@ -8,6 +8,12 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::StaticType;
 use glib::Type;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use std::ffi::CStr;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -17,6 +23,31 @@ pub enum Edge {
     None,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl Edge {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub fn name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::ges_edge_name(self.to_glib())
+                    .as_ref()
+                    .expect("ges_edge_name returned NULL"),
+            )
+            .to_str()
+            .expect("ges_edge_name returned an invalid string")
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl fmt::Display for Edge {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.name())
+    }
 }
 
 #[doc(hidden)]
@@ -80,6 +111,31 @@ pub enum EditMode {
     Slide,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl EditMode {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::ges_edit_mode_name(self.to_glib())
+                    .as_ref()
+                    .expect("ges_edit_mode_name returned NULL"),
+            )
+            .to_str()
+            .expect("ges_edit_mode_name returned an invalid string")
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+impl fmt::Display for EditMode {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.name())
+    }
 }
 
 #[doc(hidden)]

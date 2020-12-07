@@ -2,7 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use crate::GLContext;
+use crate::GLSLProfile;
 use glib::error::ErrorDomain;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use glib::object::IsA;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
@@ -10,6 +17,7 @@ use glib::value::SetValue;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
+use std::mem;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -130,6 +138,47 @@ pub enum GLFormat {
     Rg16,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl GLFormat {
+    //pub fn from_video_info<P: IsA<GLContext>>(context: &P, vinfo: /*Ignored*/&mut gst_video::VideoInfo, plane: u32) -> GLFormat {
+    //    unsafe { TODO: call ffi:gst_gl_format_from_video_info() }
+    //}
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub fn is_supported<P: IsA<GLContext>>(context: &P, format: GLFormat) -> bool {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib(ffi::gst_gl_format_is_supported(
+                context.as_ref().to_glib_none().0,
+                format.to_glib(),
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub fn type_from_sized_gl_format(self) -> (GLFormat, u32) {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut unsized_format = mem::MaybeUninit::uninit();
+            let mut gl_type = mem::MaybeUninit::uninit();
+            ffi::gst_gl_format_type_from_sized_gl_format(
+                self.to_glib(),
+                unsized_format.as_mut_ptr(),
+                gl_type.as_mut_ptr(),
+            );
+            let unsized_format = unsized_format.assume_init();
+            let gl_type = gl_type.assume_init();
+            (from_glib(unsized_format), gl_type)
+        }
+    }
+
+    pub fn type_n_bytes(format: u32, type_: u32) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_gl_format_type_n_bytes(format, type_) }
+    }
 }
 
 #[doc(hidden)]
@@ -383,6 +432,48 @@ pub enum GLSLVersion {
     __Unknown(i32),
 }
 
+impl GLSLVersion {
+    pub fn from_string(string: &str) -> GLSLVersion {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_glsl_version_from_string(string.to_glib_none().0)) }
+    }
+
+    pub fn profile_from_string(string: &str) -> Option<(GLSLVersion, GLSLProfile)> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut version_ret = mem::MaybeUninit::uninit();
+            let mut profile_ret = mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_glsl_version_profile_from_string(
+                string.to_glib_none().0,
+                version_ret.as_mut_ptr(),
+                profile_ret.as_mut_ptr(),
+            ));
+            let version_ret = version_ret.assume_init();
+            let profile_ret = profile_ret.assume_init();
+            if ret {
+                Some((from_glib(version_ret), from_glib(profile_ret)))
+            } else {
+                None
+            }
+        }
+    }
+
+    pub fn profile_to_string(self, profile: GLSLProfile) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::gst_glsl_version_profile_to_string(
+                self.to_glib(),
+                profile.to_glib(),
+            ))
+        }
+    }
+
+    pub fn to_str(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_glsl_version_to_string(self.to_glib())) }
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for GLSLVersion {
     type GlibType = ffi::GstGLSLVersion;
@@ -536,6 +627,37 @@ pub enum GLTextureTarget {
     ExternalOes,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl GLTextureTarget {
+    pub fn from_gl(target: u32) -> GLTextureTarget {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_gl_texture_target_from_gl(target)) }
+    }
+
+    pub fn from_string(str: &str) -> GLTextureTarget {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_gl_texture_target_from_string(str.to_glib_none().0)) }
+    }
+
+    pub fn to_buffer_pool_option(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_gl_texture_target_to_buffer_pool_option(
+                self.to_glib(),
+            ))
+        }
+    }
+
+    pub fn to_gl(self) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_gl_texture_target_to_gl(self.to_glib()) }
+    }
+
+    pub fn to_str(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_gl_texture_target_to_string(self.to_glib())) }
+    }
 }
 
 #[doc(hidden)]

@@ -9,6 +9,7 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::StaticType;
 use glib::Type;
+use std::fmt;
 
 bitflags! {
     pub struct GLAPI: u32 {
@@ -16,6 +17,25 @@ bitflags! {
         const OPENGL3 = 2;
         const GLES1 = 32768;
         const GLES2 = 65536;
+    }
+}
+
+impl GLAPI {
+    pub fn from_string(api_s: &str) -> GLAPI {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_gl_api_from_string(api_s.to_glib_none().0)) }
+    }
+
+    pub fn to_str(self) -> glib::GString {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(ffi::gst_gl_api_to_string(self.to_glib())) }
+    }
+}
+
+impl fmt::Display for GLAPI {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
     }
 }
 
@@ -127,6 +147,29 @@ bitflags! {
     }
 }
 
+impl GLPlatform {
+    pub fn from_string(platform_s: &str) -> GLPlatform {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_gl_platform_from_string(
+                platform_s.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn to_str(self) -> glib::GString {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(ffi::gst_gl_platform_to_string(self.to_glib())) }
+    }
+}
+
+impl fmt::Display for GLPlatform {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for GLPlatform {
     type GlibType = ffi::GstGLPlatform;
@@ -173,6 +216,18 @@ bitflags! {
         const ES = 1;
         const CORE = 2;
         const COMPATIBILITY = 4;
+    }
+}
+
+impl GLSLProfile {
+    pub fn from_string(string: &str) -> GLSLProfile {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_glsl_profile_from_string(string.to_glib_none().0)) }
+    }
+
+    pub fn to_str(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_glsl_profile_to_string(self.to_glib())) }
     }
 }
 

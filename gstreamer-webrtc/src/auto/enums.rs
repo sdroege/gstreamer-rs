@@ -8,6 +8,8 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::StaticType;
 use glib::Type;
+use std::ffi::CStr;
+use std::fmt;
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -1009,6 +1011,27 @@ pub enum WebRTCSDPType {
     Rollback,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl WebRTCSDPType {
+    pub fn to_str<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_webrtc_sdp_type_to_string(self.to_glib())
+                    .as_ref()
+                    .expect("gst_webrtc_sdp_type_to_string returned NULL"),
+            )
+            .to_str()
+            .expect("gst_webrtc_sdp_type_to_string returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for WebRTCSDPType {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
+    }
 }
 
 #[doc(hidden)]

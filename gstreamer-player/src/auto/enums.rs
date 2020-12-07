@@ -22,6 +22,13 @@ pub enum PlayerColorBalanceType {
     __Unknown(i32),
 }
 
+impl PlayerColorBalanceType {
+    pub fn get_name(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_player_color_balance_type_get_name(self.to_glib())) }
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for PlayerColorBalanceType {
     type GlibType = ffi::GstPlayerColorBalanceType;
@@ -81,6 +88,13 @@ pub enum PlayerError {
     Failed,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl PlayerError {
+    pub fn get_name(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_player_error_get_name(self.to_glib())) }
+    }
 }
 
 #[doc(hidden)]
@@ -202,6 +216,13 @@ pub enum PlayerState {
     Playing,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl PlayerState {
+    pub fn get_name(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_player_state_get_name(self.to_glib())) }
+    }
 }
 
 #[doc(hidden)]

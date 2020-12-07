@@ -127,6 +127,13 @@ bitflags! {
     }
 }
 
+impl RTSPMethod {
+    pub fn as_text(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_rtsp_method_as_text(self.to_glib())) }
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for RTSPMethod {
     type GlibType = ffi::GstRTSPMethod;

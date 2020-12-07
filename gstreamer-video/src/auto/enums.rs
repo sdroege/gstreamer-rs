@@ -8,6 +8,8 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::StaticType;
 use glib::Type;
+use std::ffi::CStr;
+use std::fmt;
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -260,6 +262,24 @@ pub enum VideoCaptionType {
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+impl VideoCaptionType {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub fn from_caps(caps: &gst::Caps) -> VideoCaptionType {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_video_caption_type_from_caps(caps.to_glib_none().0)) }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    pub fn to_caps(self) -> Option<gst::Caps> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(ffi::gst_video_caption_type_to_caps(self.to_glib())) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl ToGlib for VideoCaptionType {
     type GlibType = ffi::GstVideoCaptionType;
@@ -403,6 +423,22 @@ pub enum VideoColorMatrix {
     __Unknown(i32),
 }
 
+impl VideoColorMatrix {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn from_iso(value: u32) -> VideoColorMatrix {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_video_color_matrix_from_iso(value)) }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn to_iso(self) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_video_color_matrix_to_iso(self.to_glib()) }
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for VideoColorMatrix {
     type GlibType = ffi::GstVideoColorMatrix;
@@ -488,6 +524,26 @@ pub enum VideoColorPrimaries {
     Ebu3213,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl VideoColorPrimaries {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn from_iso(value: u32) -> VideoColorPrimaries {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_video_color_primaries_from_iso(value)) }
+    }
+
+    //pub fn get_info(self) -> /*Ignored*/Option<VideoColorPrimariesInfo> {
+    //    unsafe { TODO: call ffi:gst_video_color_primaries_get_info() }
+    //}
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn to_iso(self) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_video_color_primaries_to_iso(self.to_glib()) }
+    }
 }
 
 #[doc(hidden)]
@@ -646,6 +702,30 @@ pub enum VideoFieldOrder {
     BottomFieldFirst,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+impl VideoFieldOrder {
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    pub fn from_string(order: &str) -> VideoFieldOrder {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_video_field_order_from_string(
+                order.to_glib_none().0,
+            ))
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+impl fmt::Display for VideoFieldOrder {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
+    }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
@@ -891,6 +971,34 @@ pub enum VideoFormat {
     Nv1232l32,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl VideoFormat {
+    pub fn from_fourcc(fourcc: u32) -> VideoFormat {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_video_format_from_fourcc(fourcc)) }
+    }
+
+    pub fn from_string(format: &str) -> VideoFormat {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_video_format_from_string(format.to_glib_none().0)) }
+    }
+
+    //pub fn get_palette(self) -> (/*Unimplemented*/Option<Fundamental: Pointer>, usize) {
+    //    unsafe { TODO: call ffi:gst_video_format_get_palette() }
+    //}
+
+    pub fn to_fourcc(self) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_video_format_to_fourcc(self.to_glib()) }
+    }
+}
+
+impl fmt::Display for VideoFormat {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
+    }
 }
 
 #[doc(hidden)]
@@ -1284,6 +1392,36 @@ pub enum VideoInterlaceMode {
     __Unknown(i32),
 }
 
+impl VideoInterlaceMode {
+    pub fn from_string(mode: &str) -> VideoInterlaceMode {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_video_interlace_mode_from_string(
+                mode.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn to_str<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_video_interlace_mode_to_string(self.to_glib())
+                    .as_ref()
+                    .expect("gst_video_interlace_mode_to_string returned NULL"),
+            )
+            .to_str()
+            .expect("gst_video_interlace_mode_to_string returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for VideoInterlaceMode {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for VideoInterlaceMode {
     type GlibType = ffi::GstVideoInterlaceMode;
@@ -1517,6 +1655,22 @@ pub enum VideoMultiviewMode {
     Separated,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl VideoMultiviewMode {
+    pub fn from_caps_string(caps_mview_mode: &str) -> VideoMultiviewMode {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_video_multiview_mode_from_caps_string(
+                caps_mview_mode.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn to_caps_string(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_video_multiview_mode_to_caps_string(self.to_glib())) }
+    }
 }
 
 #[doc(hidden)]
@@ -1819,6 +1973,36 @@ pub enum VideoTransferFunction {
     Bt601,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl VideoTransferFunction {
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn from_iso(value: u32) -> VideoTransferFunction {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_video_transfer_function_from_iso(value)) }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn is_equivalent(self, from_bpp: u32, to_func: VideoTransferFunction, to_bpp: u32) -> bool {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_video_transfer_function_is_equivalent(
+                self.to_glib(),
+                from_bpp,
+                to_func.to_glib(),
+                to_bpp,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn to_iso(self) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_video_transfer_function_to_iso(self.to_glib()) }
+    }
 }
 
 #[doc(hidden)]

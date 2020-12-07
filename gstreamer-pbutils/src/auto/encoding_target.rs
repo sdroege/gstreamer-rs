@@ -4,6 +4,7 @@
 
 use crate::EncodingProfile;
 use glib::translate::*;
+use std::fmt;
 use std::ptr;
 
 glib::glib_wrapper! {
@@ -132,6 +133,13 @@ impl EncodingTarget {
                 Err(from_glib_full(error))
             }
         }
+    }
+}
+
+impl fmt::Display for EncodingTarget {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.get_name())
     }
 }
 

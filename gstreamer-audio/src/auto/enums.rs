@@ -8,6 +8,7 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::StaticType;
 use glib::Type;
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -203,6 +204,20 @@ pub enum AudioFormat {
     F64be,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl AudioFormat {
+    pub fn from_string(format: &str) -> AudioFormat {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_audio_format_from_string(format.to_glib_none().0)) }
+    }
+}
+
+impl fmt::Display for AudioFormat {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
+    }
 }
 
 #[doc(hidden)]

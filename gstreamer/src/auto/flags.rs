@@ -9,6 +9,12 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::StaticType;
 use glib::Type;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+use std::ffi::CStr;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+use std::fmt;
 
 bitflags! {
     pub struct BinFlags: u32 {
@@ -440,6 +446,57 @@ impl<'a> FromValue<'a> for ElementFlags {
 }
 
 impl SetValue for ElementFlags {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
+    pub struct EventTypeFlags: u32 {
+        const UPSTREAM = 1;
+        const DOWNSTREAM = 2;
+        const SERIALIZED = 4;
+        const STICKY = 8;
+        const STICKY_MULTI = 16;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for EventTypeFlags {
+    type GlibType = ffi::GstEventTypeFlags;
+
+    fn to_glib(&self) -> ffi::GstEventTypeFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstEventTypeFlags> for EventTypeFlags {
+    fn from_glib(value: ffi::GstEventTypeFlags) -> EventTypeFlags {
+        skip_assert_initialized!();
+        EventTypeFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for EventTypeFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_event_type_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for EventTypeFlags {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for EventTypeFlags {
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for EventTypeFlags {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
@@ -1268,6 +1325,33 @@ bitflags! {
         const VIDEO = 4;
         const CONTAINER = 8;
         const TEXT = 16;
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl StreamType {
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    pub fn get_name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_stream_type_get_name(self.to_glib())
+                    .as_ref()
+                    .expect("gst_stream_type_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_stream_type_get_name returned an invalid string")
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl fmt::Display for StreamType {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.get_name())
     }
 }
 

@@ -182,6 +182,7 @@ pub use self::flags::ClockFlags;
 pub use self::flags::DebugColorFlags;
 pub use self::flags::DebugGraphDetails;
 pub use self::flags::ElementFlags;
+pub use self::flags::EventTypeFlags;
 pub use self::flags::MemoryFlags;
 pub use self::flags::ObjectFlags;
 pub use self::flags::PadFlags;

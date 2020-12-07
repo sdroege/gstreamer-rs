@@ -143,11 +143,11 @@ pub trait ElementExt: 'static {
 
     fn lost_state(&self);
 
-    //fn message_full(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32);
+    //fn message_full(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32);
 
     //#[cfg(any(feature = "v1_10", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure);
+    //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure);
 
     fn no_more_pads(&self);
 
@@ -502,13 +502,13 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    //fn message_full(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32) {
+    //fn message_full(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32) {
     //    unsafe { TODO: call ffi:gst_element_message_full() }
     //}
 
     //#[cfg(any(feature = "v1_10", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure) {
+    //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure) {
     //    unsafe { TODO: call ffi:gst_element_message_full_with_details() }
     //}
 

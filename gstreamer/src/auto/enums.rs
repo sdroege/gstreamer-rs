@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::EventTypeFlags;
 use glib::error::ErrorDomain;
 use glib::translate::*;
 use glib::value::FromValue;
@@ -10,6 +11,8 @@ use glib::value::SetValue;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
+use std::ffi::CStr;
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -545,6 +548,27 @@ pub enum DebugLevel {
     __Unknown(i32),
 }
 
+impl DebugLevel {
+    pub fn get_name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_debug_level_get_name(self.to_glib())
+                    .as_ref()
+                    .expect("gst_debug_level_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_debug_level_get_name returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for DebugLevel {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.get_name())
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for DebugLevel {
     type GlibType = ffi::GstDebugLevel;
@@ -655,6 +679,37 @@ pub enum EventType {
     CustomBothOob,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl EventType {
+    pub fn get_flags(self) -> EventTypeFlags {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_event_type_get_flags(self.to_glib())) }
+    }
+
+    pub fn get_name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_event_type_get_name(self.to_glib())
+                    .as_ref()
+                    .expect("gst_event_type_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_event_type_get_name returned an invalid string")
+        }
+    }
+
+    pub fn to_quark(self) -> glib::Quark {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_event_type_to_quark(self.to_glib())) }
+    }
+}
+
+impl fmt::Display for EventType {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.get_name())
+    }
 }
 
 #[doc(hidden)]
@@ -878,6 +933,31 @@ pub enum Format {
     Percent,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl Format {
+    pub fn get_by_nick(nick: &str) -> Format {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_format_get_by_nick(nick.to_glib_none().0)) }
+    }
+
+    //pub fn get_details(self) -> /*Ignored*/Option<FormatDefinition> {
+    //    unsafe { TODO: call ffi:gst_format_get_details() }
+    //}
+
+    pub fn get_name(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_format_get_name(self.to_glib())) }
+    }
+
+    //pub fn iterate_definitions() -> /*Ignored*/Iterator {
+    //    unsafe { TODO: call ffi:gst_format_iterate_definitions() }
+    //}
+
+    pub fn to_quark(self) -> glib::Quark {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_format_to_quark(self.to_glib())) }
+    }
 }
 
 #[doc(hidden)]
@@ -1179,6 +1259,27 @@ pub enum PadMode {
     Pull,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl PadMode {
+    pub fn get_name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_pad_mode_get_name(self.to_glib())
+                    .as_ref()
+                    .expect("gst_pad_mode_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_pad_mode_get_name returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for PadMode {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.get_name())
+    }
 }
 
 #[doc(hidden)]
@@ -2096,6 +2197,13 @@ pub enum StateChange {
     __Unknown(i32),
 }
 
+impl fmt::Display for StateChange {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.get_name())
+    }
+}
+
 #[doc(hidden)]
 impl ToGlib for StateChange {
     type GlibType = ffi::GstStateChange;
@@ -2760,6 +2868,20 @@ pub enum TocEntryType {
     Chapter,
     #[doc(hidden)]
     __Unknown(i32),
+}
+
+impl TocEntryType {
+    pub fn get_nick<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_toc_entry_type_get_nick(self.to_glib())
+                    .as_ref()
+                    .expect("gst_toc_entry_type_get_nick returned NULL"),
+            )
+            .to_str()
+            .expect("gst_toc_entry_type_get_nick returned an invalid string")
+        }
+    }
 }
 
 #[doc(hidden)]

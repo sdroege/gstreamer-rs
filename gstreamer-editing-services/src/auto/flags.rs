@@ -9,6 +9,8 @@ use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::StaticType;
 use glib::Type;
+use std::ffi::CStr;
+use std::fmt;
 
 bitflags! {
     pub struct PipelineFlags: u32 {
@@ -68,6 +70,27 @@ bitflags! {
         const VIDEO = 4;
         const TEXT = 8;
         const CUSTOM = 16;
+    }
+}
+
+impl TrackType {
+    pub fn name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::ges_track_type_name(self.to_glib())
+                    .as_ref()
+                    .expect("ges_track_type_name returned NULL"),
+            )
+            .to_str()
+            .expect("ges_track_type_name returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for TrackType {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.name())
     }
 }
 
