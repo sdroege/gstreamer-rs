@@ -10,6 +10,8 @@ use glib::value::ToValue;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
+use std::ffi::CStr;
+use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -28,15 +30,23 @@ pub enum PlayerColorBalanceType {
 }
 
 impl PlayerColorBalanceType {
-    #[doc(alias = "gst_player_color_balance_type_get_name")]
-    #[doc(alias = "get_name")]
-    pub fn name(self) -> Option<glib::GString> {
-        assert_initialized_main_thread!();
+    pub fn name<'a>(self) -> &'a str {
         unsafe {
-            from_glib_none(ffi::gst_player_color_balance_type_get_name(
-                self.into_glib(),
-            ))
+            CStr::from_ptr(
+                ffi::gst_player_color_balance_type_get_name(self.into_glib())
+                    .as_ref()
+                    .expect("gst_player_color_balance_type_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_player_color_balance_type_get_name returned an invalid string")
         }
+    }
+}
+
+impl fmt::Display for PlayerColorBalanceType {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.name())
     }
 }
 
@@ -113,11 +123,23 @@ pub enum PlayerError {
 }
 
 impl PlayerError {
-    #[doc(alias = "gst_player_error_get_name")]
-    #[doc(alias = "get_name")]
-    pub fn name(self) -> Option<glib::GString> {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_player_error_get_name(self.into_glib())) }
+    pub fn name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_player_error_get_name(self.into_glib())
+                    .as_ref()
+                    .expect("gst_player_error_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_player_error_get_name returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for PlayerError {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.name())
     }
 }
 
@@ -263,11 +285,23 @@ pub enum PlayerState {
 }
 
 impl PlayerState {
-    #[doc(alias = "gst_player_state_get_name")]
-    #[doc(alias = "get_name")]
-    pub fn name(self) -> Option<glib::GString> {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_player_state_get_name(self.into_glib())) }
+    pub fn name<'a>(self) -> &'a str {
+        unsafe {
+            CStr::from_ptr(
+                ffi::gst_player_state_get_name(self.into_glib())
+                    .as_ref()
+                    .expect("gst_player_state_get_name returned NULL"),
+            )
+            .to_str()
+            .expect("gst_player_state_get_name returned an invalid string")
+        }
+    }
+}
+
+impl fmt::Display for PlayerState {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.name())
     }
 }
 

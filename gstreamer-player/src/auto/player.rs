@@ -276,7 +276,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_set_subtitle_uri")]
-    pub fn set_subtitle_uri(&self, uri: &str) {
+    pub fn set_subtitle_uri(&self, uri: Option<&str>) {
         unsafe {
             ffi::gst_player_set_subtitle_uri(self.to_glib_none().0, uri.to_glib_none().0);
         }
@@ -292,7 +292,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_set_uri")]
-    pub fn set_uri(&self, uri: &str) {
+    pub fn set_uri(&self, uri: Option<&str>) {
         unsafe {
             ffi::gst_player_set_uri(self.to_glib_none().0, uri.to_glib_none().0);
         }
