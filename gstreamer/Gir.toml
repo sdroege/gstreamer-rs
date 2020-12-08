@@ -1747,8 +1747,12 @@ status = "generate"
 
     [[object.function]]
     name = "new_from_g_date_time"
+        # Function only ever returns NULL if the argument is NULL
+        [[object.function.parameter]]
+        name = "dt"
+        nullable = false
         [object.function.return]
-        nullable_return_is_error = "Can't create DateTime from glib::DateTime"
+        nullable = false
 
     [[object.function]]
     name = "to_g_date_time"
