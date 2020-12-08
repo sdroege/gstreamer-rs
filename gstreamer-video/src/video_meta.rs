@@ -123,11 +123,11 @@ impl VideoMeta {
     }
 
     pub fn get_flags(&self) -> crate::VideoFrameFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn get_format(&self) -> crate::VideoFormat {
-        from_glib(self.0.format)
+        unsafe { from_glib(self.0.format) }
     }
 
     pub fn get_id(&self) -> i32 {
@@ -339,7 +339,7 @@ impl VideoRegionOfInterestMeta {
     }
 
     pub fn get_roi_type<'a>(&self) -> &'a str {
-        glib::Quark::from_glib(self.0.roi_type).to_string()
+        unsafe { glib::Quark::from_glib(self.0.roi_type).to_string() }
     }
 
     #[cfg(feature = "v1_14")]
@@ -581,7 +581,7 @@ impl VideoCaptionMeta {
     }
 
     pub fn get_caption_type(&self) -> crate::VideoCaptionType {
-        from_glib(self.0.caption_type)
+        unsafe { from_glib(self.0.caption_type) }
     }
 
     pub fn get_data(&self) -> &[u8] {
@@ -654,11 +654,11 @@ impl VideoAFDMeta {
     }
 
     pub fn get_spec(&self) -> crate::VideoAFDSpec {
-        from_glib(self.0.spec)
+        unsafe { from_glib(self.0.spec) }
     }
 
     pub fn get_afd(&self) -> crate::VideoAFDValue {
-        from_glib(self.0.afd)
+        unsafe { from_glib(self.0.afd) }
     }
 }
 
@@ -726,7 +726,7 @@ impl VideoBarMeta {
     }
 
     pub fn is_letterbox(&self) -> bool {
-        from_glib(self.0.is_letterbox)
+        unsafe { from_glib(self.0.is_letterbox) }
     }
 
     pub fn get_bar_data1(&self) -> u32 {

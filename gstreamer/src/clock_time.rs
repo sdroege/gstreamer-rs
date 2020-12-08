@@ -192,7 +192,7 @@ impl ToGlib for ClockTime {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockTime> for ClockTime {
-    fn from_glib(value: ffi::GstClockTime) -> Self {
+    unsafe fn from_glib(value: ffi::GstClockTime) -> Self {
         skip_assert_initialized!();
         match value {
             ffi::GST_CLOCK_TIME_NONE => ClockTime(None),
@@ -205,7 +205,7 @@ impl FromGlib<ffi::GstClockTime> for ClockTime {
 impl<'a> glib::value::FromValueOptional<'a> for ClockTime {
     unsafe fn from_value_optional(value: &'a glib::Value) -> Option<Self> {
         <u64 as glib::value::FromValueOptional>::from_value_optional(value)
-            .map(ClockTime::from_glib)
+            .map(|x| ClockTime::from_glib(x))
     }
 }
 

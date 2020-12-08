@@ -82,7 +82,7 @@ impl AudioChannelPosition {
 
         if valid {
             for (d, s) in positions.iter_mut().zip(positions_raw.iter()) {
-                *d = from_glib(*s);
+                *d = unsafe { from_glib(*s) };
             }
             Ok(())
         } else {
@@ -119,7 +119,7 @@ impl AudioChannelPosition {
 
         if valid {
             for (d, s) in positions.iter_mut().zip(positions_raw.iter()) {
-                *d = from_glib(*s);
+                *d = unsafe { from_glib(*s) };
             }
             Ok(())
         } else {

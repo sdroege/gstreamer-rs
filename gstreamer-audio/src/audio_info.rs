@@ -243,11 +243,11 @@ impl AudioInfo {
     }
 
     pub fn layout(&self) -> crate::AudioLayout {
-        from_glib(self.0.layout)
+        unsafe { from_glib(self.0.layout) }
     }
 
     pub fn flags(&self) -> crate::AudioFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn rate(&self) -> u32 {

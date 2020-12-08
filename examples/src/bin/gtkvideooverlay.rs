@@ -25,8 +25,6 @@ use gio::prelude::*;
 
 use gtk::prelude::*;
 
-use gdk::prelude::*;
-
 use std::env;
 
 use std::os::raw::c_void;

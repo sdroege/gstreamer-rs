@@ -264,7 +264,7 @@ pub enum VideoEndianness {
 }
 
 impl FromGlib<i32> for VideoEndianness {
-    fn from_glib(value: i32) -> Self {
+    unsafe fn from_glib(value: i32) -> Self {
         skip_assert_initialized!();
 
         match value {

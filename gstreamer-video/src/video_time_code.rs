@@ -272,7 +272,7 @@ macro_rules! generic_impl {
             }
 
             pub fn get_flags(&self) -> VideoTimeCodeFlags {
-                from_glib(self.0.config.flags)
+                unsafe { from_glib(self.0.config.flags) }
             }
 
             pub fn get_latest_daily_jam(&self) -> Option<glib::DateTime> {

@@ -50,11 +50,11 @@ impl AudioClippingMeta {
     }
 
     pub fn get_start(&self) -> gst::GenericFormattedValue {
-        gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.start as i64)
+        unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.start as i64) }
     }
 
     pub fn get_end(&self) -> gst::GenericFormattedValue {
-        gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.end as i64)
+        unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.end as i64) }
     }
 }
 

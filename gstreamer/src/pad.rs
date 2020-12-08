@@ -53,10 +53,10 @@ impl ToGlib for PadProbeId {
 }
 
 impl FromGlib<libc::c_ulong> for PadProbeId {
-    fn from_glib(val: libc::c_ulong) -> PadProbeId {
+    unsafe fn from_glib(val: libc::c_ulong) -> PadProbeId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
-        PadProbeId(unsafe { NonZeroU64::new_unchecked(val as u64) })
+        PadProbeId(NonZeroU64::new_unchecked(val as u64))
     }
 }
 

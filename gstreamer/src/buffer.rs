@@ -346,7 +346,7 @@ impl BufferRef {
     }
 
     pub fn get_pts(&self) -> ClockTime {
-        from_glib(self.0.pts)
+        unsafe { from_glib(self.0.pts) }
     }
 
     pub fn set_pts(&mut self, pts: ClockTime) {
@@ -354,7 +354,7 @@ impl BufferRef {
     }
 
     pub fn get_dts(&self) -> ClockTime {
-        from_glib(self.0.dts)
+        unsafe { from_glib(self.0.dts) }
     }
 
     pub fn set_dts(&mut self, dts: ClockTime) {
@@ -371,7 +371,7 @@ impl BufferRef {
     }
 
     pub fn get_duration(&self) -> ClockTime {
-        from_glib(self.0.duration)
+        unsafe { from_glib(self.0.duration) }
     }
 
     pub fn set_duration(&mut self, duration: ClockTime) {

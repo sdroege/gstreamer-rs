@@ -45,7 +45,7 @@ impl<T> VideoFrame<T> {
     }
 
     pub fn flags(&self) -> crate::VideoFrameFlags {
-        from_glib(self.frame.flags)
+        unsafe { from_glib(self.frame.flags) }
     }
 
     pub fn id(&self) -> i32 {
@@ -420,7 +420,7 @@ impl<T> VideoFrameRef<T> {
     }
 
     pub fn flags(&self) -> crate::VideoFrameFlags {
-        from_glib(self.frame.flags)
+        unsafe { from_glib(self.frame.flags) }
     }
 
     pub fn id(&self) -> i32 {

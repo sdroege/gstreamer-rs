@@ -48,7 +48,7 @@ impl ToGlib for VideoColorRange {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
-    fn from_glib(value: ffi::GstVideoColorRange) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoColorRange) -> Self {
         skip_assert_initialized!();
         match value as i32 {
             0 => VideoColorRange::Unknown,
@@ -109,19 +109,19 @@ impl VideoColorimetry {
     }
 
     pub fn range(&self) -> crate::VideoColorRange {
-        from_glib(self.0.range)
+        unsafe { from_glib(self.0.range) }
     }
 
     pub fn matrix(&self) -> crate::VideoColorMatrix {
-        from_glib(self.0.matrix)
+        unsafe { from_glib(self.0.matrix) }
     }
 
     pub fn transfer(&self) -> crate::VideoTransferFunction {
-        from_glib(self.0.transfer)
+        unsafe { from_glib(self.0.transfer) }
     }
 
     pub fn primaries(&self) -> crate::VideoColorPrimaries {
-        from_glib(self.0.primaries)
+        unsafe { from_glib(self.0.primaries) }
     }
 }
 
@@ -209,7 +209,7 @@ impl fmt::Display for crate::VideoChromaSite {
 impl From<crate::VideoMultiviewFramePacking> for crate::VideoMultiviewMode {
     fn from(v: crate::VideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
-        from_glib(v.to_glib())
+        unsafe { from_glib(v.to_glib()) }
     }
 }
 
@@ -221,7 +221,7 @@ impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewF
     ) -> Result<crate::VideoMultiviewFramePacking, glib::BoolError> {
         skip_assert_initialized!();
 
-        let v2 = from_glib(v.to_glib());
+        let v2 = unsafe { from_glib(v.to_glib()) };
 
         if let crate::VideoMultiviewFramePacking::__Unknown(_) = v2 {
             Err(glib::glib_bool_error!("Invalid frame packing mode"))
@@ -647,11 +647,11 @@ impl VideoInfo {
     }
 
     pub fn interlace_mode(&self) -> crate::VideoInterlaceMode {
-        from_glib(self.0.interlace_mode)
+        unsafe { from_glib(self.0.interlace_mode) }
     }
 
     pub fn flags(&self) -> crate::VideoFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn size(&self) -> usize {
@@ -663,7 +663,7 @@ impl VideoInfo {
     }
 
     pub fn chroma_site(&self) -> crate::VideoChromaSite {
-        from_glib(self.0.chroma_site)
+        unsafe { from_glib(self.0.chroma_site) }
     }
 
     pub fn colorimetry(&self) -> VideoColorimetry {

@@ -45,10 +45,10 @@ impl ToGlib for DeviceMonitorFilterId {
 }
 
 impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
-    fn from_glib(val: libc::c_uint) -> DeviceMonitorFilterId {
+    unsafe fn from_glib(val: libc::c_uint) -> DeviceMonitorFilterId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
-        DeviceMonitorFilterId(unsafe { NonZeroU32::new_unchecked(val) })
+        DeviceMonitorFilterId(NonZeroU32::new_unchecked(val))
     }
 }
 
@@ -80,7 +80,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         if id == 0 {
             None
         } else {
-            Some(from_glib(id))
+            Some(unsafe { from_glib(id) })
         }
     }
 

@@ -377,14 +377,14 @@ impl ops::Add<u32> for crate::TypeFindProbability {
 
     fn add(self, rhs: u32) -> crate::TypeFindProbability {
         let res = (self.to_glib() as u32).saturating_add(rhs);
-        from_glib(res as i32)
+        unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::AddAssign<u32> for crate::TypeFindProbability {
     fn add_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_add(rhs);
-        *self = from_glib(res as i32);
+        *self = unsafe { from_glib(res as i32) };
     }
 }
 
@@ -393,14 +393,14 @@ impl ops::Sub<u32> for crate::TypeFindProbability {
 
     fn sub(self, rhs: u32) -> crate::TypeFindProbability {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
-        from_glib(res as i32)
+        unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::SubAssign<u32> for crate::TypeFindProbability {
     fn sub_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
-        *self = from_glib(res as i32);
+        *self = unsafe { from_glib(res as i32) };
     }
 }
 
@@ -429,14 +429,14 @@ impl ops::Add<u32> for crate::Rank {
 
     fn add(self, rhs: u32) -> crate::Rank {
         let res = (self.to_glib() as u32).saturating_add(rhs);
-        from_glib(res as i32)
+        unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::AddAssign<u32> for crate::Rank {
     fn add_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_add(rhs);
-        *self = from_glib(res as i32);
+        *self = unsafe { from_glib(res as i32) };
     }
 }
 
@@ -445,14 +445,14 @@ impl ops::Sub<u32> for crate::Rank {
 
     fn sub(self, rhs: u32) -> crate::Rank {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
-        from_glib(res as i32)
+        unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::SubAssign<u32> for crate::Rank {
     fn sub_assign(&mut self, rhs: u32) {
         let res = (self.to_glib() as u32).saturating_sub(rhs);
-        *self = from_glib(res as i32);
+        *self = unsafe { from_glib(res as i32) };
     }
 }
 
@@ -563,7 +563,7 @@ impl ToGlib for MessageType {
 #[doc(hidden)]
 impl FromGlib<ffi::GstMessageType> for MessageType {
     #[allow(clippy::unreadable_literal)]
-    fn from_glib(value: ffi::GstMessageType) -> Self {
+    unsafe fn from_glib(value: ffi::GstMessageType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => MessageType::Unknown,
@@ -641,7 +641,7 @@ impl State {
 
         let sign = (pending - current).signum();
 
-        from_glib(current + sign)
+        unsafe { from_glib(current + sign) }
     }
 }
 
@@ -650,7 +650,7 @@ impl StateChange {
         skip_assert_initialized!();
         let current = current.to_glib();
         let next = next.to_glib();
-        from_glib((current << 3) | next)
+        unsafe { from_glib((current << 3) | next) }
     }
 
     pub fn current(self) -> State {

@@ -387,11 +387,11 @@ impl ReferenceTimestampMeta {
     }
 
     pub fn get_timestamp(&self) -> ClockTime {
-        from_glib(self.0.timestamp)
+        unsafe { from_glib(self.0.timestamp) }
     }
 
     pub fn get_duration(&self) -> ClockTime {
-        from_glib(self.0.duration)
+        unsafe { from_glib(self.0.duration) }
     }
 }
 

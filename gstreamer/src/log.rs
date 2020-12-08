@@ -91,7 +91,7 @@ impl DebugCategory {
     }
 
     pub fn get_threshold(self) -> crate::DebugLevel {
-        from_glib(unsafe { ffi::gst_debug_category_get_threshold(self.0.as_ptr()) })
+        unsafe { from_glib(ffi::gst_debug_category_get_threshold(self.0.as_ptr())) }
     }
 
     pub fn set_threshold(self, threshold: crate::DebugLevel) {

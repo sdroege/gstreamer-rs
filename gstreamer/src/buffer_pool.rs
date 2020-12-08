@@ -217,19 +217,19 @@ impl BufferPoolAcquireParams {
     }
 
     pub fn flags(&self) -> crate::BufferPoolAcquireFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn format(&self) -> crate::Format {
-        from_glib(self.0.format)
+        unsafe { from_glib(self.0.format) }
     }
 
     pub fn start(&self) -> crate::GenericFormattedValue {
-        crate::GenericFormattedValue::new(from_glib(self.0.format), self.0.start)
+        unsafe { crate::GenericFormattedValue::new(from_glib(self.0.format), self.0.start) }
     }
 
     pub fn stop(&self) -> crate::GenericFormattedValue {
-        crate::GenericFormattedValue::new(from_glib(self.0.format), self.0.stop)
+        unsafe { crate::GenericFormattedValue::new(from_glib(self.0.format), self.0.stop) }
     }
 }
 

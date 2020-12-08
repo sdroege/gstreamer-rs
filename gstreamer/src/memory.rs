@@ -203,7 +203,7 @@ impl MemoryRef {
     }
 
     pub fn get_flags(&self) -> MemoryFlags {
-        from_glib(self.0.mini_object.flags)
+        unsafe { from_glib(self.0.mini_object.flags) }
     }
 
     pub fn copy_part(&self, offset: isize, size: Option<usize>) -> Memory {

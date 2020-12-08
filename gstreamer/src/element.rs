@@ -121,10 +121,10 @@ impl ToGlib for NotifyWatchId {
 }
 
 impl FromGlib<libc::c_ulong> for NotifyWatchId {
-    fn from_glib(val: libc::c_ulong) -> NotifyWatchId {
+    unsafe fn from_glib(val: libc::c_ulong) -> NotifyWatchId {
         skip_assert_initialized!();
         assert_ne!(val, 0);
-        NotifyWatchId(unsafe { NonZeroU64::new_unchecked(val as u64) })
+        NotifyWatchId(NonZeroU64::new_unchecked(val as u64))
     }
 }
 

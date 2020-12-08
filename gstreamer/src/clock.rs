@@ -313,7 +313,7 @@ pub struct AtomicClockReturn(AtomicI32);
 
 impl AtomicClockReturn {
     pub fn load(&self) -> ClockReturn {
-        from_glib(self.0.load(atomic::Ordering::SeqCst))
+        unsafe { from_glib(self.0.load(atomic::Ordering::SeqCst)) }
     }
 
     pub fn store(&self, val: ClockReturn) {
@@ -321,15 +321,17 @@ impl AtomicClockReturn {
     }
 
     pub fn swap(&self, val: ClockReturn) -> ClockReturn {
-        from_glib(self.0.swap(val.to_glib(), atomic::Ordering::SeqCst))
+        unsafe { from_glib(self.0.swap(val.to_glib(), atomic::Ordering::SeqCst)) }
     }
 
     pub fn compare_and_swap(&self, current: ClockReturn, new: ClockReturn) -> ClockReturn {
-        from_glib(self.0.compare_and_swap(
-            current.to_glib(),
-            new.to_glib(),
-            atomic::Ordering::SeqCst,
-        ))
+        unsafe {
+            from_glib(self.0.compare_and_swap(
+                current.to_glib(),
+                new.to_glib(),
+                atomic::Ordering::SeqCst,
+            ))
+        }
     }
 }
 

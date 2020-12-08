@@ -364,7 +364,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     }
 
     pub fn get_flags(&self) -> crate::SegmentFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn set_flags(&mut self, flags: crate::SegmentFlags) {
@@ -392,7 +392,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     }
 
     pub fn get_format(&self) -> Format {
-        from_glib(self.0.format)
+        unsafe { from_glib(self.0.format) }
     }
 
     pub fn get_base(&self) -> T {

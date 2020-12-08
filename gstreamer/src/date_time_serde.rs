@@ -118,7 +118,7 @@ impl TryFrom<DateTimeVariants> for Date {
         skip_assert_initialized!();
         match dt_variant {
             DateTimeVariants::YMD(y, m, d) => {
-                let month = glib::DateMonth::from_glib(m);
+                let month = unsafe { glib::DateMonth::from_glib(m) };
                 if let glib::DateMonth::__Unknown(_) = month {
                     return Err(glib::glib_bool_error!("Out of range `month` for `Date`"));
                 }

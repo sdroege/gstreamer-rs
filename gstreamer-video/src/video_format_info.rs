@@ -28,7 +28,7 @@ impl VideoFormatInfo {
     }
 
     pub fn format(&self) -> crate::VideoFormat {
-        from_glib(self.0.format)
+        unsafe { from_glib(self.0.format) }
     }
 
     pub fn name<'a>(&self) -> &'a str {
@@ -40,7 +40,7 @@ impl VideoFormatInfo {
     }
 
     pub fn flags(&self) -> crate::VideoFormatFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn bits(&self) -> u32 {
@@ -84,7 +84,7 @@ impl VideoFormatInfo {
     }
 
     pub fn tile_mode(&self) -> crate::VideoTileMode {
-        from_glib(self.0.tile_mode)
+        unsafe { from_glib(self.0.tile_mode) }
     }
 
     pub fn tile_ws(&self) -> u32 {
@@ -96,7 +96,7 @@ impl VideoFormatInfo {
     }
 
     pub fn unpack_format(&self) -> crate::VideoFormat {
-        from_glib(self.0.unpack_format)
+        unsafe { from_glib(self.0.unpack_format) }
     }
 
     pub fn pack_lines(&self) -> i32 {

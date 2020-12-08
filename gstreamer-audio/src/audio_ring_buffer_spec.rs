@@ -12,7 +12,7 @@ pub struct AudioRingBufferSpec(pub(crate) GstAudioRingBufferSpec);
 
 impl AudioRingBufferSpec {
     pub fn get_type(&self) -> AudioRingBufferFormatType {
-        AudioRingBufferFormatType::from_glib(self.0.type_)
+        unsafe { AudioRingBufferFormatType::from_glib(self.0.type_) }
     }
 
     pub fn set_type(&mut self, value: AudioRingBufferFormatType) {

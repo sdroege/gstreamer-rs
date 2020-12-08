@@ -21,7 +21,8 @@ pub enum AudioEndianness {
 }
 
 impl FromGlib<i32> for AudioEndianness {
-    fn from_glib(value: i32) -> Self {
+    #[allow(unused_unsafe)]
+    unsafe fn from_glib(value: i32) -> Self {
         assert_initialized_main_thread!();
 
         match value {
@@ -59,7 +60,7 @@ impl AudioFormatInfo {
     }
 
     pub fn format(&self) -> crate::AudioFormat {
-        from_glib(self.0.format)
+        unsafe { from_glib(self.0.format) }
     }
 
     pub fn name<'a>(&self) -> &'a str {
@@ -71,11 +72,11 @@ impl AudioFormatInfo {
     }
 
     pub fn flags(&self) -> crate::AudioFormatFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn endianness(&self) -> AudioEndianness {
-        from_glib(self.0.endianness)
+        unsafe { from_glib(self.0.endianness) }
     }
 
     pub fn width(&self) -> u32 {
@@ -87,7 +88,7 @@ impl AudioFormatInfo {
     }
 
     pub fn unpack_format(&self) -> crate::AudioFormat {
-        from_glib(self.0.unpack_format)
+        unsafe { from_glib(self.0.unpack_format) }
     }
 
     pub fn silence<'a>(&self) -> &'a [u8] {

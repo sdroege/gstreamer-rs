@@ -20,7 +20,7 @@ unsafe impl Sync for AllocationParams {}
 
 impl AllocationParams {
     pub fn get_flags(&self) -> MemoryFlags {
-        from_glib(self.0.flags)
+        unsafe { from_glib(self.0.flags) }
     }
 
     pub fn get_align(&self) -> usize {

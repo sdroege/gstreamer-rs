@@ -45,7 +45,7 @@ impl ToGlib for Overhead {
 
 impl FromGlib<i32> for Overhead {
     #[inline]
-    fn from_glib(val: i32) -> Overhead {
+    unsafe fn from_glib(val: i32) -> Overhead {
         skip_assert_initialized!();
         match val {
             0 => Overhead::None,
