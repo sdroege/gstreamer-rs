@@ -41,7 +41,7 @@ impl ToGlib for AggregatorStartTimeSelection {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelection {
-    fn from_glib(value: ffi::GstAggregatorStartTimeSelection) -> Self {
+    unsafe fn from_glib(value: ffi::GstAggregatorStartTimeSelection) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AggregatorStartTimeSelection::Zero,

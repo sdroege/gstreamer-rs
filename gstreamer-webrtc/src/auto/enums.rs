@@ -45,7 +45,7 @@ impl ToGlib for WebRTCBundlePolicy {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
-    fn from_glib(value: ffi::GstWebRTCBundlePolicy) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCBundlePolicy) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCBundlePolicy::None,
@@ -117,7 +117,7 @@ impl ToGlib for WebRTCDTLSSetup {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCDTLSSetup> for WebRTCDTLSSetup {
-    fn from_glib(value: ffi::GstWebRTCDTLSSetup) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCDTLSSetup) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCDTLSSetup::None,
@@ -183,7 +183,7 @@ impl ToGlib for WebRTCDTLSTransportState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCDTLSTransportState> for WebRTCDTLSTransportState {
-    fn from_glib(value: ffi::GstWebRTCDTLSTransportState) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCDTLSTransportState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCDTLSTransportState::New,
@@ -256,7 +256,7 @@ impl ToGlib for WebRTCDataChannelState {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
-    fn from_glib(value: ffi::GstWebRTCDataChannelState) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCDataChannelState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCDataChannelState::New,
@@ -331,7 +331,7 @@ impl ToGlib for WebRTCFECType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
-    fn from_glib(value: ffi::GstWebRTCFECType) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCFECType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCFECType::None,
@@ -397,7 +397,7 @@ impl ToGlib for WebRTCICEComponent {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCICEComponent> for WebRTCICEComponent {
-    fn from_glib(value: ffi::GstWebRTCICEComponent) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCICEComponent) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCICEComponent::Rtp,
@@ -467,7 +467,7 @@ impl ToGlib for WebRTCICEConnectionState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCICEConnectionState> for WebRTCICEConnectionState {
-    fn from_glib(value: ffi::GstWebRTCICEConnectionState) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCICEConnectionState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCICEConnectionState::New,
@@ -532,7 +532,7 @@ impl ToGlib for WebRTCICEGatheringState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCICEGatheringState> for WebRTCICEGatheringState {
-    fn from_glib(value: ffi::GstWebRTCICEGatheringState) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCICEGatheringState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCICEGatheringState::New,
@@ -591,7 +591,7 @@ impl ToGlib for WebRTCICERole {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCICERole> for WebRTCICERole {
-    fn from_glib(value: ffi::GstWebRTCICERole) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCICERole) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCICERole::Controlled,
@@ -655,7 +655,7 @@ impl ToGlib for WebRTCICETransportPolicy {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
-    fn from_glib(value: ffi::GstWebRTCICETransportPolicy) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCICETransportPolicy) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCICETransportPolicy::All,
@@ -733,7 +733,7 @@ impl ToGlib for WebRTCPeerConnectionState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCPeerConnectionState> for WebRTCPeerConnectionState {
-    fn from_glib(value: ffi::GstWebRTCPeerConnectionState) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCPeerConnectionState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCPeerConnectionState::New,
@@ -805,7 +805,7 @@ impl ToGlib for WebRTCPriorityType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
-    fn from_glib(value: ffi::GstWebRTCPriorityType) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCPriorityType) -> Self {
         skip_assert_initialized!();
         match value {
             1 => WebRTCPriorityType::VeryLow,
@@ -887,7 +887,7 @@ impl ToGlib for WebRTCRTPTransceiverDirection {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCRTPTransceiverDirection> for WebRTCRTPTransceiverDirection {
-    fn from_glib(value: ffi::GstWebRTCRTPTransceiverDirection) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCRTPTransceiverDirection) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCRTPTransceiverDirection::None,
@@ -958,7 +958,7 @@ impl ToGlib for WebRTCSCTPTransportState {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
-    fn from_glib(value: ffi::GstWebRTCSCTPTransportState) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCSCTPTransportState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCSCTPTransportState::New,
@@ -1051,7 +1051,7 @@ impl ToGlib for WebRTCSDPType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCSDPType> for WebRTCSDPType {
-    fn from_glib(value: ffi::GstWebRTCSDPType) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCSDPType) -> Self {
         skip_assert_initialized!();
         match value {
             1 => WebRTCSDPType::Offer,
@@ -1127,7 +1127,7 @@ impl ToGlib for WebRTCSignalingState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCSignalingState> for WebRTCSignalingState {
-    fn from_glib(value: ffi::GstWebRTCSignalingState) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCSignalingState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => WebRTCSignalingState::Stable,
@@ -1213,7 +1213,7 @@ impl ToGlib for WebRTCStatsType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstWebRTCStatsType> for WebRTCStatsType {
-    fn from_glib(value: ffi::GstWebRTCStatsType) -> Self {
+    unsafe fn from_glib(value: ffi::GstWebRTCStatsType) -> Self {
         skip_assert_initialized!();
         match value {
             1 => WebRTCStatsType::Codec,

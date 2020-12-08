@@ -42,7 +42,7 @@ impl ToGlib for BufferingMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
-    fn from_glib(value: ffi::GstBufferingMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstBufferingMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => BufferingMode::Stream,
@@ -104,7 +104,7 @@ impl ToGlib for BusSyncReply {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
-    fn from_glib(value: ffi::GstBusSyncReply) -> Self {
+    unsafe fn from_glib(value: ffi::GstBusSyncReply) -> Self {
         skip_assert_initialized!();
         match value {
             0 => BusSyncReply::Drop,
@@ -163,7 +163,7 @@ impl ToGlib for CapsIntersectMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstCapsIntersectMode> for CapsIntersectMode {
-    fn from_glib(value: ffi::GstCapsIntersectMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstCapsIntersectMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => CapsIntersectMode::ZigZag,
@@ -221,7 +221,7 @@ impl ToGlib for ClockEntryType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockEntryType> for ClockEntryType {
-    fn from_glib(value: ffi::GstClockEntryType) -> Self {
+    unsafe fn from_glib(value: ffi::GstClockEntryType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ClockEntryType::Single,
@@ -292,7 +292,7 @@ impl ToGlib for ClockReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockReturn> for ClockReturn {
-    fn from_glib(value: ffi::GstClockReturn) -> Self {
+    unsafe fn from_glib(value: ffi::GstClockReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ClockReturn::Ok,
@@ -363,7 +363,7 @@ impl ToGlib for ClockType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockType> for ClockType {
-    fn from_glib(value: ffi::GstClockType) -> Self {
+    unsafe fn from_glib(value: ffi::GstClockType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ClockType::Realtime,
@@ -450,7 +450,7 @@ impl ToGlib for CoreError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstCoreError> for CoreError {
-    fn from_glib(value: ffi::GstCoreError) -> Self {
+    unsafe fn from_glib(value: ffi::GstCoreError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => CoreError::Failed,
@@ -592,7 +592,7 @@ impl ToGlib for DebugLevel {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
-    fn from_glib(value: ffi::GstDebugLevel) -> Self {
+    unsafe fn from_glib(value: ffi::GstDebugLevel) -> Self {
         skip_assert_initialized!();
         match value {
             0 => DebugLevel::None,
@@ -682,6 +682,7 @@ pub enum EventType {
 }
 
 impl EventType {
+    #[doc(alias = "gst_event_type_get_flags")]
     pub fn get_flags(self) -> EventTypeFlags {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_event_type_get_flags(self.to_glib())) }
@@ -699,6 +700,7 @@ impl EventType {
         }
     }
 
+    #[doc(alias = "gst_event_type_to_quark")]
     pub fn to_quark(self) -> glib::Quark {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_event_type_to_quark(self.to_glib())) }
@@ -761,7 +763,7 @@ impl ToGlib for EventType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstEventType> for EventType {
-    fn from_glib(value: ffi::GstEventType) -> Self {
+    unsafe fn from_glib(value: ffi::GstEventType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => EventType::Unknown,
@@ -876,7 +878,7 @@ impl ToGlib for FlowReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
-    fn from_glib(value: ffi::GstFlowReturn) -> Self {
+    unsafe fn from_glib(value: ffi::GstFlowReturn) -> Self {
         skip_assert_initialized!();
         match value {
             102 => FlowReturn::CustomSuccess2,
@@ -936,24 +938,29 @@ pub enum Format {
 }
 
 impl Format {
+    #[doc(alias = "gst_format_get_by_nick")]
     pub fn get_by_nick(nick: &str) -> Format {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_format_get_by_nick(nick.to_glib_none().0)) }
     }
 
+    //#[doc(alias = "gst_format_get_details")]
     //pub fn get_details(self) -> /*Ignored*/Option<FormatDefinition> {
     //    unsafe { TODO: call ffi:gst_format_get_details() }
     //}
 
+    #[doc(alias = "gst_format_get_name")]
     pub fn get_name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_format_get_name(self.to_glib())) }
     }
 
+    //#[doc(alias = "gst_format_iterate_definitions")]
     //pub fn iterate_definitions() -> /*Ignored*/Iterator {
     //    unsafe { TODO: call ffi:gst_format_iterate_definitions() }
     //}
 
+    #[doc(alias = "gst_format_to_quark")]
     pub fn to_quark(self) -> glib::Quark {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_format_to_quark(self.to_glib())) }
@@ -979,7 +986,7 @@ impl ToGlib for Format {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstFormat> for Format {
-    fn from_glib(value: ffi::GstFormat) -> Self {
+    unsafe fn from_glib(value: ffi::GstFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => Format::Undefined,
@@ -1051,7 +1058,7 @@ impl ToGlib for LibraryError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstLibraryError> for LibraryError {
-    fn from_glib(value: ffi::GstLibraryError) -> Self {
+    unsafe fn from_glib(value: ffi::GstLibraryError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => LibraryError::Failed,
@@ -1142,7 +1149,7 @@ impl ToGlib for PadDirection {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadDirection> for PadDirection {
-    fn from_glib(value: ffi::GstPadDirection) -> Self {
+    unsafe fn from_glib(value: ffi::GstPadDirection) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadDirection::Unknown,
@@ -1212,7 +1219,7 @@ impl ToGlib for PadLinkReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
-    fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
+    unsafe fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadLinkReturn::Ok,
@@ -1298,7 +1305,7 @@ impl ToGlib for PadMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadMode> for PadMode {
-    fn from_glib(value: ffi::GstPadMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstPadMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadMode::None,
@@ -1359,7 +1366,7 @@ impl ToGlib for PadPresence {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadPresence> for PadPresence {
-    fn from_glib(value: ffi::GstPadPresence) -> Self {
+    unsafe fn from_glib(value: ffi::GstPadPresence) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadPresence::Always,
@@ -1424,7 +1431,7 @@ impl ToGlib for PadProbeReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
-    fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
+    unsafe fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadProbeReturn::Drop,
@@ -1497,7 +1504,7 @@ impl ToGlib for ParseError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstParseError> for ParseError {
-    fn from_glib(value: ffi::GstParseError) -> Self {
+    unsafe fn from_glib(value: ffi::GstParseError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ParseError::Syntax,
@@ -1590,7 +1597,7 @@ impl ToGlib for PluginError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginError> for PluginError {
-    fn from_glib(value: ffi::GstPluginError) -> Self {
+    unsafe fn from_glib(value: ffi::GstPluginError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PluginError::Module,
@@ -1677,7 +1684,7 @@ impl ToGlib for ProgressType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstProgressType> for ProgressType {
-    fn from_glib(value: ffi::GstProgressType) -> Self {
+    unsafe fn from_glib(value: ffi::GstProgressType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ProgressType::Start,
@@ -1748,7 +1755,7 @@ impl ToGlib for PromiseResult {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
-    fn from_glib(value: ffi::GstPromiseResult) -> Self {
+    unsafe fn from_glib(value: ffi::GstPromiseResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PromiseResult::Pending,
@@ -1818,7 +1825,7 @@ impl ToGlib for QOSType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstQOSType> for QOSType {
-    fn from_glib(value: ffi::GstQOSType) -> Self {
+    unsafe fn from_glib(value: ffi::GstQOSType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => QOSType::Overflow,
@@ -1881,7 +1888,7 @@ impl ToGlib for Rank {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRank> for Rank {
-    fn from_glib(value: ffi::GstRank) -> Self {
+    unsafe fn from_glib(value: ffi::GstRank) -> Self {
         skip_assert_initialized!();
         match value {
             0 => Rank::None,
@@ -1969,7 +1976,7 @@ impl ToGlib for ResourceError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstResourceError> for ResourceError {
-    fn from_glib(value: ffi::GstResourceError) -> Self {
+    unsafe fn from_glib(value: ffi::GstResourceError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => ResourceError::Failed,
@@ -2078,7 +2085,7 @@ impl ToGlib for SeekType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstSeekType> for SeekType {
-    fn from_glib(value: ffi::GstSeekType) -> Self {
+    unsafe fn from_glib(value: ffi::GstSeekType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => SeekType::None,
@@ -2143,7 +2150,7 @@ impl ToGlib for State {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstState> for State {
-    fn from_glib(value: ffi::GstState) -> Self {
+    unsafe fn from_glib(value: ffi::GstState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => State::VoidPending,
@@ -2227,7 +2234,7 @@ impl ToGlib for StateChange {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStateChange> for StateChange {
-    fn from_glib(value: ffi::GstStateChange) -> Self {
+    unsafe fn from_glib(value: ffi::GstStateChange) -> Self {
         skip_assert_initialized!();
         match value {
             10 => StateChange::NullToReady,
@@ -2298,7 +2305,7 @@ impl ToGlib for StateChangeReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
-    fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
+    unsafe fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StateChangeReturn::Failure,
@@ -2382,7 +2389,7 @@ impl ToGlib for StreamError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamError> for StreamError {
-    fn from_glib(value: ffi::GstStreamError) -> Self {
+    unsafe fn from_glib(value: ffi::GstStreamError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => StreamError::Failed,
@@ -2495,7 +2502,7 @@ impl ToGlib for StreamStatusType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
-    fn from_glib(value: ffi::GstStreamStatusType) -> Self {
+    unsafe fn from_glib(value: ffi::GstStreamStatusType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StreamStatusType::Create,
@@ -2558,7 +2565,7 @@ impl ToGlib for StructureChangeType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
-    fn from_glib(value: ffi::GstStructureChangeType) -> Self {
+    unsafe fn from_glib(value: ffi::GstStructureChangeType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StructureChangeType::Link,
@@ -2622,7 +2629,7 @@ impl ToGlib for TagFlag {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTagFlag> for TagFlag {
-    fn from_glib(value: ffi::GstTagFlag) -> Self {
+    unsafe fn from_glib(value: ffi::GstTagFlag) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TagFlag::Undefined,
@@ -2695,7 +2702,7 @@ impl ToGlib for TagMergeMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
-    fn from_glib(value: ffi::GstTagMergeMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstTagMergeMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TagMergeMode::Undefined,
@@ -2760,7 +2767,7 @@ impl ToGlib for TagScope {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTagScope> for TagScope {
-    fn from_glib(value: ffi::GstTagScope) -> Self {
+    unsafe fn from_glib(value: ffi::GstTagScope) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TagScope::Stream,
@@ -2820,7 +2827,7 @@ impl ToGlib for TaskState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTaskState> for TaskState {
-    fn from_glib(value: ffi::GstTaskState) -> Self {
+    unsafe fn from_glib(value: ffi::GstTaskState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TaskState::Started,
@@ -2904,7 +2911,7 @@ impl ToGlib for TocEntryType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
-    fn from_glib(value: ffi::GstTocEntryType) -> Self {
+    unsafe fn from_glib(value: ffi::GstTocEntryType) -> Self {
         skip_assert_initialized!();
         match value {
             -3 => TocEntryType::Angle,
@@ -2972,7 +2979,7 @@ impl ToGlib for TocLoopType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
-    fn from_glib(value: ffi::GstTocLoopType) -> Self {
+    unsafe fn from_glib(value: ffi::GstTocLoopType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TocLoopType::None,
@@ -3033,7 +3040,7 @@ impl ToGlib for TocScope {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTocScope> for TocScope {
-    fn from_glib(value: ffi::GstTocScope) -> Self {
+    unsafe fn from_glib(value: ffi::GstTocScope) -> Self {
         skip_assert_initialized!();
         match value {
             1 => TocScope::Global,
@@ -3099,7 +3106,7 @@ impl ToGlib for TypeFindProbability {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
-    fn from_glib(value: ffi::GstTypeFindProbability) -> Self {
+    unsafe fn from_glib(value: ffi::GstTypeFindProbability) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TypeFindProbability::None,
@@ -3165,7 +3172,7 @@ impl ToGlib for URIError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstURIError> for URIError {
-    fn from_glib(value: ffi::GstURIError) -> Self {
+    unsafe fn from_glib(value: ffi::GstURIError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => URIError::UnsupportedProtocol,
@@ -3250,7 +3257,7 @@ impl ToGlib for URIType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstURIType> for URIType {
-    fn from_glib(value: ffi::GstURIType) -> Self {
+    unsafe fn from_glib(value: ffi::GstURIType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => URIType::Unknown,

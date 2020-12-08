@@ -13,11 +13,13 @@ glib::glib_wrapper! {
 }
 
 impl GLDisplayX11 {
+    #[doc(alias = "gst_gl_display_x11_new")]
     pub fn new(name: Option<&str>) -> GLDisplayX11 {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_display_x11_new(name.to_glib_none().0)) }
     }
 
+    //#[doc(alias = "gst_gl_display_x11_new_with_display")]
     //pub fn with_display(display: /*Unimplemented*/Fundamental: Pointer) -> GLDisplayX11 {
     //    unsafe { TODO: call ffi:gst_gl_display_x11_new_with_display() }
     //}

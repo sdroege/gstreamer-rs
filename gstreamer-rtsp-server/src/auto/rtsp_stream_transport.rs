@@ -16,6 +16,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPStreamTransport {
+    //#[doc(alias = "gst_rtsp_stream_transport_new")]
     //pub fn new<P: IsA<RTSPStream>>(stream: &P, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_new() }
     //}
@@ -24,54 +25,74 @@ impl RTSPStreamTransport {
 pub const NONE_RTSP_STREAM_TRANSPORT: Option<&RTSPStreamTransport> = None;
 
 pub trait RTSPStreamTransportExt: 'static {
+    #[doc(alias = "gst_rtsp_stream_transport_get_rtpinfo")]
     fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_rtsp_stream_transport_get_stream")]
     fn get_stream(&self) -> Option<RTSPStream>;
 
+    //#[doc(alias = "gst_rtsp_stream_transport_get_transport")]
     //fn get_transport(&self) -> /*Ignored*/Option<gst_rtsp::RTSPTransport>;
 
+    #[doc(alias = "gst_rtsp_stream_transport_get_url")]
     fn get_url(&self) -> Option<gst_rtsp::RTSPUrl>;
 
+    #[doc(alias = "gst_rtsp_stream_transport_is_timed_out")]
     fn is_timed_out(&self) -> bool;
 
+    #[doc(alias = "gst_rtsp_stream_transport_keep_alive")]
     fn keep_alive(&self);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_stream_transport_message_sent")]
     fn message_sent(&self);
 
+    #[doc(alias = "gst_rtsp_stream_transport_send_rtcp")]
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[doc(alias = "gst_rtsp_stream_transport_send_rtcp_list")]
     //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool;
 
+    #[doc(alias = "gst_rtsp_stream_transport_send_rtp")]
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[doc(alias = "gst_rtsp_stream_transport_send_rtp_list")]
     //fn send_rtp_list(&self, buffer_list: /*Ignored*/&gst::BufferList) -> bool;
 
+    #[doc(alias = "gst_rtsp_stream_transport_set_active")]
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "gst_rtsp_stream_transport_set_callbacks")]
     //fn set_callbacks<P: Fn(&gst::Buffer, u8) -> bool + 'static, Q: Fn(&gst::Buffer, u8) -> bool + 'static>(&self, send_rtp: P, send_rtcp: Q);
 
+    #[doc(alias = "gst_rtsp_stream_transport_set_keepalive")]
     fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P);
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[doc(alias = "gst_rtsp_stream_transport_set_list_callbacks")]
     //fn set_list_callbacks(&self, send_rtp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, send_rtcp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
+    #[doc(alias = "gst_rtsp_stream_transport_set_message_sent")]
     fn set_message_sent<P: Fn() + 'static>(&self, message_sent: P);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_stream_transport_set_message_sent_full")]
     fn set_message_sent_full<P: Fn(&RTSPStreamTransport) + 'static>(&self, message_sent: P);
 
+    #[doc(alias = "gst_rtsp_stream_transport_set_timed_out")]
     fn set_timed_out(&self, timedout: bool);
 
+    //#[doc(alias = "gst_rtsp_stream_transport_set_transport")]
     //fn set_transport(&self, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport);
 
+    #[doc(alias = "gst_rtsp_stream_transport_set_url")]
     fn set_url(&self, url: Option<&gst_rtsp::RTSPUrl>);
 }
 

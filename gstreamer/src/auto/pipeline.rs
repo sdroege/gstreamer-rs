@@ -25,6 +25,7 @@ glib::glib_wrapper! {
 }
 
 impl Pipeline {
+    #[doc(alias = "gst_pipeline_new")]
     pub fn new(name: Option<&str>) -> Pipeline {
         assert_initialized_main_thread!();
         unsafe {
@@ -39,22 +40,31 @@ unsafe impl Sync for Pipeline {}
 pub const NONE_PIPELINE: Option<&Pipeline> = None;
 
 pub trait PipelineExt: 'static {
+    #[doc(alias = "gst_pipeline_auto_clock")]
     fn auto_clock(&self);
 
+    #[doc(alias = "gst_pipeline_get_auto_flush_bus")]
     fn get_auto_flush_bus(&self) -> bool;
 
+    #[doc(alias = "gst_pipeline_get_delay")]
     fn get_delay(&self) -> ClockTime;
 
+    #[doc(alias = "gst_pipeline_get_latency")]
     fn get_latency(&self) -> ClockTime;
 
+    #[doc(alias = "gst_pipeline_get_pipeline_clock")]
     fn get_pipeline_clock(&self) -> Clock;
 
+    #[doc(alias = "gst_pipeline_set_auto_flush_bus")]
     fn set_auto_flush_bus(&self, auto_flush: bool);
 
+    #[doc(alias = "gst_pipeline_set_delay")]
     fn set_delay(&self, delay: ClockTime);
 
+    #[doc(alias = "gst_pipeline_set_latency")]
     fn set_latency(&self, latency: ClockTime);
 
+    #[doc(alias = "gst_pipeline_use_clock")]
     fn use_clock<P: IsA<Clock>>(&self, clock: Option<&P>);
 
     fn connect_property_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(

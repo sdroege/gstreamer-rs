@@ -27,7 +27,7 @@ impl ToGlib for AudioFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioFlags> for AudioFlags {
-    fn from_glib(value: ffi::GstAudioFlags) -> AudioFlags {
+    unsafe fn from_glib(value: ffi::GstAudioFlags) -> AudioFlags {
         skip_assert_initialized!();
         AudioFlags::from_bits_truncate(value)
     }
@@ -78,7 +78,7 @@ impl ToGlib for AudioFormatFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioFormatFlags> for AudioFormatFlags {
-    fn from_glib(value: ffi::GstAudioFormatFlags) -> AudioFormatFlags {
+    unsafe fn from_glib(value: ffi::GstAudioFormatFlags) -> AudioFormatFlags {
         skip_assert_initialized!();
         AudioFormatFlags::from_bits_truncate(value)
     }
@@ -125,7 +125,7 @@ impl ToGlib for AudioPackFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioPackFlags> for AudioPackFlags {
-    fn from_glib(value: ffi::GstAudioPackFlags) -> AudioPackFlags {
+    unsafe fn from_glib(value: ffi::GstAudioPackFlags) -> AudioPackFlags {
         skip_assert_initialized!();
         AudioPackFlags::from_bits_truncate(value)
     }

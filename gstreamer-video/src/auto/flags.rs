@@ -41,7 +41,7 @@ impl ToGlib for VideoBufferFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoBufferFlags> for VideoBufferFlags {
-    fn from_glib(value: ffi::GstVideoBufferFlags) -> VideoBufferFlags {
+    unsafe fn from_glib(value: ffi::GstVideoBufferFlags) -> VideoBufferFlags {
         skip_assert_initialized!();
         VideoBufferFlags::from_bits_truncate(value)
     }
@@ -95,7 +95,7 @@ impl ToGlib for VideoChromaSite {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoChromaSite> for VideoChromaSite {
-    fn from_glib(value: ffi::GstVideoChromaSite) -> VideoChromaSite {
+    unsafe fn from_glib(value: ffi::GstVideoChromaSite) -> VideoChromaSite {
         skip_assert_initialized!();
         VideoChromaSite::from_bits_truncate(value)
     }
@@ -145,7 +145,7 @@ impl ToGlib for VideoCodecFrameFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
-    fn from_glib(value: ffi::GstVideoCodecFrameFlags) -> VideoCodecFrameFlags {
+    unsafe fn from_glib(value: ffi::GstVideoCodecFrameFlags) -> VideoCodecFrameFlags {
         skip_assert_initialized!();
         VideoCodecFrameFlags::from_bits_truncate(value)
     }
@@ -169,7 +169,7 @@ impl ToGlib for VideoFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFlags> for VideoFlags {
-    fn from_glib(value: ffi::GstVideoFlags) -> VideoFlags {
+    unsafe fn from_glib(value: ffi::GstVideoFlags) -> VideoFlags {
         skip_assert_initialized!();
         VideoFlags::from_bits_truncate(value)
     }
@@ -224,7 +224,7 @@ impl ToGlib for VideoFormatFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFormatFlags> for VideoFormatFlags {
-    fn from_glib(value: ffi::GstVideoFormatFlags) -> VideoFormatFlags {
+    unsafe fn from_glib(value: ffi::GstVideoFormatFlags) -> VideoFormatFlags {
         skip_assert_initialized!();
         VideoFormatFlags::from_bits_truncate(value)
     }
@@ -278,7 +278,7 @@ impl ToGlib for VideoFrameFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFrameFlags> for VideoFrameFlags {
-    fn from_glib(value: ffi::GstVideoFrameFlags) -> VideoFrameFlags {
+    unsafe fn from_glib(value: ffi::GstVideoFrameFlags) -> VideoFrameFlags {
         skip_assert_initialized!();
         VideoFrameFlags::from_bits_truncate(value)
     }
@@ -331,7 +331,7 @@ impl ToGlib for VideoMultiviewFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoMultiviewFlags> for VideoMultiviewFlags {
-    fn from_glib(value: ffi::GstVideoMultiviewFlags) -> VideoMultiviewFlags {
+    unsafe fn from_glib(value: ffi::GstVideoMultiviewFlags) -> VideoMultiviewFlags {
         skip_assert_initialized!();
         VideoMultiviewFlags::from_bits_truncate(value)
     }
@@ -379,7 +379,7 @@ impl ToGlib for VideoOverlayFormatFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
-    fn from_glib(value: ffi::GstVideoOverlayFormatFlags) -> VideoOverlayFormatFlags {
+    unsafe fn from_glib(value: ffi::GstVideoOverlayFormatFlags) -> VideoOverlayFormatFlags {
         skip_assert_initialized!();
         VideoOverlayFormatFlags::from_bits_truncate(value)
     }
@@ -435,7 +435,7 @@ impl ToGlib for VideoPackFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoPackFlags> for VideoPackFlags {
-    fn from_glib(value: ffi::GstVideoPackFlags) -> VideoPackFlags {
+    unsafe fn from_glib(value: ffi::GstVideoPackFlags) -> VideoPackFlags {
         skip_assert_initialized!();
         VideoPackFlags::from_bits_truncate(value)
     }
@@ -489,7 +489,7 @@ impl ToGlib for VideoTimeCodeFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
-    fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
+    unsafe fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
         skip_assert_initialized!();
         VideoTimeCodeFlags::from_bits_truncate(value)
     }

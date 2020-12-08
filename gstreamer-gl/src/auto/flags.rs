@@ -21,11 +21,13 @@ bitflags! {
 }
 
 impl GLAPI {
+    #[doc(alias = "gst_gl_api_from_string")]
     pub fn from_string(api_s: &str) -> GLAPI {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_gl_api_from_string(api_s.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_gl_api_to_string")]
     pub fn to_str(self) -> glib::GString {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_api_to_string(self.to_glib())) }
@@ -50,7 +52,7 @@ impl ToGlib for GLAPI {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLAPI> for GLAPI {
-    fn from_glib(value: ffi::GstGLAPI) -> GLAPI {
+    unsafe fn from_glib(value: ffi::GstGLAPI) -> GLAPI {
         skip_assert_initialized!();
         GLAPI::from_bits_truncate(value)
     }
@@ -107,7 +109,7 @@ impl ToGlib for GLDisplayType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
-    fn from_glib(value: ffi::GstGLDisplayType) -> GLDisplayType {
+    unsafe fn from_glib(value: ffi::GstGLDisplayType) -> GLDisplayType {
         skip_assert_initialized!();
         GLDisplayType::from_bits_truncate(value)
     }
@@ -148,6 +150,7 @@ bitflags! {
 }
 
 impl GLPlatform {
+    #[doc(alias = "gst_gl_platform_from_string")]
     pub fn from_string(platform_s: &str) -> GLPlatform {
         assert_initialized_main_thread!();
         unsafe {
@@ -157,6 +160,7 @@ impl GLPlatform {
         }
     }
 
+    #[doc(alias = "gst_gl_platform_to_string")]
     pub fn to_str(self) -> glib::GString {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_platform_to_string(self.to_glib())) }
@@ -181,7 +185,7 @@ impl ToGlib for GLPlatform {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
-    fn from_glib(value: ffi::GstGLPlatform) -> GLPlatform {
+    unsafe fn from_glib(value: ffi::GstGLPlatform) -> GLPlatform {
         skip_assert_initialized!();
         GLPlatform::from_bits_truncate(value)
     }
@@ -220,11 +224,13 @@ bitflags! {
 }
 
 impl GLSLProfile {
+    #[doc(alias = "gst_glsl_profile_from_string")]
     pub fn from_string(string: &str) -> GLSLProfile {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_glsl_profile_from_string(string.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_glsl_profile_to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_glsl_profile_to_string(self.to_glib())) }
@@ -242,7 +248,7 @@ impl ToGlib for GLSLProfile {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
-    fn from_glib(value: ffi::GstGLSLProfile) -> GLSLProfile {
+    unsafe fn from_glib(value: ffi::GstGLSLProfile) -> GLSLProfile {
         skip_assert_initialized!();
         GLSLProfile::from_bits_truncate(value)
     }

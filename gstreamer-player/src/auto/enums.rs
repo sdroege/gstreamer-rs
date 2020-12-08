@@ -23,6 +23,7 @@ pub enum PlayerColorBalanceType {
 }
 
 impl PlayerColorBalanceType {
+    #[doc(alias = "gst_player_color_balance_type_get_name")]
     pub fn get_name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_player_color_balance_type_get_name(self.to_glib())) }
@@ -46,7 +47,7 @@ impl ToGlib for PlayerColorBalanceType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlayerColorBalanceType> for PlayerColorBalanceType {
-    fn from_glib(value: ffi::GstPlayerColorBalanceType) -> Self {
+    unsafe fn from_glib(value: ffi::GstPlayerColorBalanceType) -> Self {
         skip_assert_initialized!();
         match value {
             3 => PlayerColorBalanceType::Hue,
@@ -91,6 +92,7 @@ pub enum PlayerError {
 }
 
 impl PlayerError {
+    #[doc(alias = "gst_player_error_get_name")]
     pub fn get_name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_player_error_get_name(self.to_glib())) }
@@ -111,7 +113,7 @@ impl ToGlib for PlayerError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlayerError> for PlayerError {
-    fn from_glib(value: ffi::GstPlayerError) -> Self {
+    unsafe fn from_glib(value: ffi::GstPlayerError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PlayerError::Failed,
@@ -194,7 +196,7 @@ impl ToGlib for PlayerSnapshotFormat {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlayerSnapshotFormat> for PlayerSnapshotFormat {
-    fn from_glib(value: ffi::GstPlayerSnapshotFormat) -> Self {
+    unsafe fn from_glib(value: ffi::GstPlayerSnapshotFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PlayerSnapshotFormat::RawNative,
@@ -219,6 +221,7 @@ pub enum PlayerState {
 }
 
 impl PlayerState {
+    #[doc(alias = "gst_player_state_get_name")]
     pub fn get_name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_player_state_get_name(self.to_glib())) }
@@ -242,7 +245,7 @@ impl ToGlib for PlayerState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPlayerState> for PlayerState {
-    fn from_glib(value: ffi::GstPlayerState) -> Self {
+    unsafe fn from_glib(value: ffi::GstPlayerState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PlayerState::Stopped,

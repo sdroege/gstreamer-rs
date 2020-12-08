@@ -29,6 +29,7 @@ glib::glib_wrapper! {
 pub const NONE_TRACK_ELEMENT: Option<&TrackElement> = None;
 
 pub trait TrackElementExt: 'static {
+    #[doc(alias = "ges_track_element_add_children_props")]
     fn add_children_props<P: IsA<gst::Element>>(
         &self,
         element: &P,
@@ -39,9 +40,11 @@ pub trait TrackElementExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_clamp_control_source")]
     fn clamp_control_source(&self, property_name: &str);
 
     #[cfg_attr(feature = "v1_18", deprecated)]
+    #[doc(alias = "ges_track_element_edit")]
     fn edit(
         &self,
         layers: &[Layer],
@@ -50,50 +53,68 @@ pub trait TrackElementExt: 'static {
         position: u64,
     ) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "ges_track_element_get_all_control_bindings")]
     //fn get_all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 };
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_get_auto_clamp_control_sources")]
     fn get_auto_clamp_control_sources(&self) -> bool;
 
+    //#[doc(alias = "ges_track_element_get_control_binding")]
     //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding>;
 
+    #[doc(alias = "ges_track_element_get_element")]
     fn get_element(&self) -> Option<gst::Element>;
 
+    #[doc(alias = "ges_track_element_get_gnlobject")]
     fn get_gnlobject(&self) -> Option<gst::Element>;
 
+    #[doc(alias = "ges_track_element_get_nleobject")]
     fn get_nleobject(&self) -> Option<gst::Element>;
 
+    #[doc(alias = "ges_track_element_get_track")]
     fn get_track(&self) -> Option<Track>;
 
+    #[doc(alias = "ges_track_element_get_track_type")]
     fn get_track_type(&self) -> TrackType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_has_internal_source")]
     fn has_internal_source(&self) -> bool;
 
+    #[doc(alias = "ges_track_element_is_active")]
     fn is_active(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_is_core")]
     fn is_core(&self) -> bool;
 
+    //#[doc(alias = "ges_track_element_lookup_child")]
     //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<gst::Element>;
 
+    #[doc(alias = "ges_track_element_remove_control_binding")]
     fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_track_element_set_active")]
     fn set_active(&self, active: bool) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_set_auto_clamp_control_sources")]
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool);
 
+    //#[doc(alias = "ges_track_element_set_control_source")]
     //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_element_set_has_internal_source")]
     fn set_has_internal_source(&self, has_internal_source: bool) -> bool;
 
+    #[doc(alias = "ges_track_element_set_track_type")]
     fn set_track_type(&self, type_: TrackType);
 
     fn get_property_active(&self) -> bool;

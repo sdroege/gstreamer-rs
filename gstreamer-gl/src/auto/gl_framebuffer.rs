@@ -16,6 +16,7 @@ glib::glib_wrapper! {
 }
 
 impl GLFramebuffer {
+    #[doc(alias = "gst_gl_framebuffer_new")]
     pub fn new<P: IsA<GLContext>>(context: &P) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
@@ -25,6 +26,7 @@ impl GLFramebuffer {
         }
     }
 
+    #[doc(alias = "gst_gl_framebuffer_new_with_default_depth")]
     pub fn with_default_depth<P: IsA<GLContext>>(
         context: &P,
         width: u32,
@@ -47,14 +49,19 @@ unsafe impl Sync for GLFramebuffer {}
 pub const NONE_GL_FRAMEBUFFER: Option<&GLFramebuffer> = None;
 
 pub trait GLFramebufferExt: 'static {
+    //#[doc(alias = "gst_gl_framebuffer_attach")]
     //fn attach(&self, attachment_point: u32, mem: /*Ignored*/&mut GLBaseMemory);
 
+    #[doc(alias = "gst_gl_framebuffer_bind")]
     fn bind(&self);
 
+    //#[doc(alias = "gst_gl_framebuffer_draw_to_texture")]
     //fn draw_to_texture(&self, mem: /*Ignored*/&mut GLMemory, func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
+    #[doc(alias = "gst_gl_framebuffer_get_effective_dimensions")]
     fn get_effective_dimensions(&self) -> (u32, u32);
 
+    #[doc(alias = "gst_gl_framebuffer_get_id")]
     fn get_id(&self) -> u32;
 }
 

@@ -15,11 +15,13 @@ glib::glib_wrapper! {
 }
 
 impl Preset {
+    #[doc(alias = "gst_preset_get_app_dir")]
     pub fn get_app_dir() -> Option<std::path::PathBuf> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_preset_get_app_dir()) }
     }
 
+    #[doc(alias = "gst_preset_set_app_dir")]
     pub fn set_app_dir<P: AsRef<std::path::Path>>(
         app_dir: P,
     ) -> Result<(), glib::error::BoolError> {
@@ -39,22 +41,31 @@ unsafe impl Sync for Preset {}
 pub const NONE_PRESET: Option<&Preset> = None;
 
 pub trait PresetExt: 'static {
+    #[doc(alias = "gst_preset_delete_preset")]
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_preset_get_meta")]
     fn get_meta(&self, name: &str, tag: &str) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_preset_get_preset_names")]
     fn get_preset_names(&self) -> Vec<glib::GString>;
 
+    #[doc(alias = "gst_preset_get_property_names")]
     fn get_property_names(&self) -> Vec<glib::GString>;
 
+    #[doc(alias = "gst_preset_is_editable")]
     fn is_editable(&self) -> bool;
 
+    #[doc(alias = "gst_preset_load_preset")]
     fn load_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_preset_rename_preset")]
     fn rename_preset(&self, old_name: &str, new_name: &str) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_preset_save_preset")]
     fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_preset_set_meta")]
     fn set_meta(
         &self,
         name: &str,

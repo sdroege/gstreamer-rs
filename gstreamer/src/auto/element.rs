@@ -31,6 +31,7 @@ glib::glib_wrapper! {
 }
 
 impl Element {
+    #[doc(alias = "gst_element_make_from_uri")]
     pub fn make_from_uri(
         type_: URIType,
         uri: &str,
@@ -60,64 +61,89 @@ unsafe impl Sync for Element {}
 pub const NONE_ELEMENT: Option<&Element> = None;
 
 pub trait ElementExt: 'static {
+    #[doc(alias = "gst_element_abort_state")]
     fn abort_state(&self);
 
+    #[doc(alias = "gst_element_add_pad")]
     fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_create_all_pads")]
     fn create_all_pads(&self);
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_element_foreach_pad")]
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_element_foreach_sink_pad")]
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_element_foreach_src_pad")]
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
+    #[doc(alias = "gst_element_get_base_time")]
     fn get_base_time(&self) -> ClockTime;
 
+    #[doc(alias = "gst_element_get_bus")]
     fn get_bus(&self) -> Option<Bus>;
 
+    #[doc(alias = "gst_element_get_clock")]
     fn get_clock(&self) -> Option<Clock>;
 
+    #[doc(alias = "gst_element_get_compatible_pad")]
     fn get_compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad>;
 
+    #[doc(alias = "gst_element_get_compatible_pad_template")]
     fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
 
+    #[doc(alias = "gst_element_get_context")]
     fn get_context(&self, context_type: &str) -> Option<Context>;
 
+    #[doc(alias = "gst_element_get_contexts")]
     fn get_contexts(&self) -> Vec<Context>;
 
+    #[doc(alias = "gst_element_get_factory")]
     fn get_factory(&self) -> Option<ElementFactory>;
 
+    #[doc(alias = "gst_element_get_request_pad")]
     fn get_request_pad(&self, name: &str) -> Option<Pad>;
 
+    #[doc(alias = "gst_element_get_start_time")]
     fn get_start_time(&self) -> ClockTime;
 
+    #[doc(alias = "gst_element_get_static_pad")]
     fn get_static_pad(&self, name: &str) -> Option<Pad>;
 
+    #[doc(alias = "gst_element_is_locked_state")]
     fn is_locked_state(&self) -> bool;
 
+    //#[doc(alias = "gst_element_iterate_pads")]
     //fn iterate_pads(&self) -> /*Ignored*/Iterator;
 
+    //#[doc(alias = "gst_element_iterate_sink_pads")]
     //fn iterate_sink_pads(&self) -> /*Ignored*/Iterator;
 
+    //#[doc(alias = "gst_element_iterate_src_pads")]
     //fn iterate_src_pads(&self) -> /*Ignored*/Iterator;
 
+    #[doc(alias = "gst_element_link")]
     fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_link_filtered")]
     fn link_filtered<P: IsA<Element>>(
         &self,
         dest: &P,
         filter: Option<&Caps>,
     ) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "gst_element_link_many")]
     //fn link_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> bool;
 
+    #[doc(alias = "gst_element_link_pads")]
     fn link_pads<P: IsA<Element>>(
         &self,
         srcpadname: Option<&str>,
@@ -125,6 +151,7 @@ pub trait ElementExt: 'static {
         destpadname: Option<&str>,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_link_pads_filtered")]
     fn link_pads_filtered<P: IsA<Element>>(
         &self,
         srcpadname: Option<&str>,
@@ -133,6 +160,7 @@ pub trait ElementExt: 'static {
         filter: Option<&Caps>,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_link_pads_full")]
     fn link_pads_full<P: IsA<Element>>(
         &self,
         srcpadname: Option<&str>,
@@ -141,22 +169,30 @@ pub trait ElementExt: 'static {
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_lost_state")]
     fn lost_state(&self);
 
+    //#[doc(alias = "gst_element_message_full")]
     //fn message_full(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32);
 
     //#[cfg(any(feature = "v1_10", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    //#[doc(alias = "gst_element_message_full_with_details")]
     //fn message_full_with_details(&self, type_: /*Ignored*/MessageType, domain: glib::Quark, code: i32, text: Option<&str>, debug: Option<&str>, file: &str, function: &str, line: i32, structure: &mut Structure);
 
+    #[doc(alias = "gst_element_no_more_pads")]
     fn no_more_pads(&self);
 
+    #[doc(alias = "gst_element_provide_clock")]
     fn provide_clock(&self) -> Option<Clock>;
 
+    #[doc(alias = "gst_element_release_request_pad")]
     fn release_request_pad<P: IsA<Pad>>(&self, pad: &P);
 
+    #[doc(alias = "gst_element_remove_pad")]
     fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_request_pad")]
     fn request_pad(
         &self,
         templ: &PadTemplate,
@@ -164,24 +200,34 @@ pub trait ElementExt: 'static {
         caps: Option<&Caps>,
     ) -> Option<Pad>;
 
+    #[doc(alias = "gst_element_set_base_time")]
     fn set_base_time(&self, time: ClockTime);
 
+    #[doc(alias = "gst_element_set_bus")]
     fn set_bus(&self, bus: Option<&Bus>);
 
+    #[doc(alias = "gst_element_set_clock")]
     fn set_clock<P: IsA<Clock>>(&self, clock: Option<&P>) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_set_context")]
     fn set_context(&self, context: &Context);
 
+    #[doc(alias = "gst_element_set_locked_state")]
     fn set_locked_state(&self, locked_state: bool) -> bool;
 
+    #[doc(alias = "gst_element_set_start_time")]
     fn set_start_time(&self, time: ClockTime);
 
+    #[doc(alias = "gst_element_sync_state_with_parent")]
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_element_unlink")]
     fn unlink<P: IsA<Element>>(&self, dest: &P);
 
+    //#[doc(alias = "gst_element_unlink_many")]
     //fn unlink_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    #[doc(alias = "gst_element_unlink_pads")]
     fn unlink_pads<P: IsA<Element>>(&self, srcpadname: &str, dest: &P, destpadname: &str);
 
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;

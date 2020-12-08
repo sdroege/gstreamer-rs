@@ -25,30 +25,43 @@ unsafe impl Sync for AudioBaseSink {}
 pub const NONE_AUDIO_BASE_SINK: Option<&AudioBaseSink> = None;
 
 pub trait AudioBaseSinkExt: 'static {
+    //#[doc(alias = "gst_audio_base_sink_create_ringbuffer")]
     //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer>;
 
+    #[doc(alias = "gst_audio_base_sink_get_alignment_threshold")]
     fn get_alignment_threshold(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_audio_base_sink_get_discont_wait")]
     fn get_discont_wait(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_audio_base_sink_get_drift_tolerance")]
     fn get_drift_tolerance(&self) -> i64;
 
+    #[doc(alias = "gst_audio_base_sink_get_provide_clock")]
     fn get_provide_clock(&self) -> bool;
 
+    //#[doc(alias = "gst_audio_base_sink_get_slave_method")]
     //fn get_slave_method(&self) -> /*Ignored*/AudioBaseSinkSlaveMethod;
 
+    #[doc(alias = "gst_audio_base_sink_report_device_failure")]
     fn report_device_failure(&self);
 
+    #[doc(alias = "gst_audio_base_sink_set_alignment_threshold")]
     fn set_alignment_threshold(&self, alignment_threshold: gst::ClockTime);
 
+    //#[doc(alias = "gst_audio_base_sink_set_custom_slaving_callback")]
     //fn set_custom_slaving_callback(&self, callback: /*Unimplemented*/Fn(&AudioBaseSink, gst::ClockTime, gst::ClockTime, /*Ignored*/gst::ClockTimeDiff, /*Ignored*/AudioBaseSinkDiscontReason), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
+    #[doc(alias = "gst_audio_base_sink_set_discont_wait")]
     fn set_discont_wait(&self, discont_wait: gst::ClockTime);
 
+    #[doc(alias = "gst_audio_base_sink_set_drift_tolerance")]
     fn set_drift_tolerance(&self, drift_tolerance: i64);
 
+    #[doc(alias = "gst_audio_base_sink_set_provide_clock")]
     fn set_provide_clock(&self, provide: bool);
 
+    //#[doc(alias = "gst_audio_base_sink_set_slave_method")]
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSinkSlaveMethod);
 
     fn get_property_buffer_time(&self) -> i64;

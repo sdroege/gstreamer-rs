@@ -29,7 +29,7 @@ impl ToGlib for DiscovererSerializeFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDiscovererSerializeFlags> for DiscovererSerializeFlags {
-    fn from_glib(value: ffi::GstDiscovererSerializeFlags) -> DiscovererSerializeFlags {
+    unsafe fn from_glib(value: ffi::GstDiscovererSerializeFlags) -> DiscovererSerializeFlags {
         skip_assert_initialized!();
         DiscovererSerializeFlags::from_bits_truncate(value)
     }

@@ -28,10 +28,12 @@ pub const NONE_GL_BASE_FILTER: Option<&GLBaseFilter> = None;
 pub trait GLBaseFilterExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_base_filter_find_gl_context")]
     fn find_gl_context(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_gl_base_filter_get_gl_context")]
     fn get_gl_context(&self) -> Option<GLContext>;
 
     fn get_property_context(&self) -> Option<GLContext>;

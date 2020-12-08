@@ -43,7 +43,7 @@ impl ToGlib for VideoAFDSpec {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
-    fn from_glib(value: ffi::GstVideoAFDSpec) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoAFDSpec) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoAFDSpec::DvbEtsi,
@@ -134,7 +134,7 @@ impl ToGlib for VideoAFDValue {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
-    fn from_glib(value: ffi::GstVideoAFDValue) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoAFDValue) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoAFDValue::Unavailable,
@@ -211,7 +211,7 @@ impl ToGlib for VideoAlphaMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoAlphaMode> for VideoAlphaMode {
-    fn from_glib(value: ffi::GstVideoAlphaMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoAlphaMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoAlphaMode::Copy,
@@ -265,6 +265,7 @@ pub enum VideoCaptionType {
 impl VideoCaptionType {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_video_caption_type_from_caps")]
     pub fn from_caps(caps: &gst::Caps) -> VideoCaptionType {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_caption_type_from_caps(caps.to_glib_none().0)) }
@@ -272,6 +273,7 @@ impl VideoCaptionType {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_video_caption_type_to_caps")]
     pub fn to_caps(self) -> Option<gst::Caps> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_video_caption_type_to_caps(self.to_glib())) }
@@ -300,7 +302,7 @@ impl ToGlib for VideoCaptionType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
-    fn from_glib(value: ffi::GstVideoCaptionType) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoCaptionType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoCaptionType::Unknown,
@@ -373,7 +375,7 @@ impl ToGlib for VideoChromaMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoChromaMode> for VideoChromaMode {
-    fn from_glib(value: ffi::GstVideoChromaMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoChromaMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoChromaMode::Full,
@@ -426,6 +428,7 @@ pub enum VideoColorMatrix {
 impl VideoColorMatrix {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_color_matrix_from_iso")]
     pub fn from_iso(value: u32) -> VideoColorMatrix {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_color_matrix_from_iso(value)) }
@@ -433,6 +436,7 @@ impl VideoColorMatrix {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_color_matrix_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_video_color_matrix_to_iso(self.to_glib()) }
@@ -459,7 +463,7 @@ impl ToGlib for VideoColorMatrix {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
-    fn from_glib(value: ffi::GstVideoColorMatrix) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoColorMatrix) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoColorMatrix::Unknown,
@@ -529,17 +533,20 @@ pub enum VideoColorPrimaries {
 impl VideoColorPrimaries {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_color_primaries_from_iso")]
     pub fn from_iso(value: u32) -> VideoColorPrimaries {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_color_primaries_from_iso(value)) }
     }
 
+    //#[doc(alias = "gst_video_color_primaries_get_info")]
     //pub fn get_info(self) -> /*Ignored*/Option<VideoColorPrimariesInfo> {
     //    unsafe { TODO: call ffi:gst_video_color_primaries_get_info() }
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_color_primaries_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_video_color_primaries_to_iso(self.to_glib()) }
@@ -576,7 +583,7 @@ impl ToGlib for VideoColorPrimaries {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
-    fn from_glib(value: ffi::GstVideoColorPrimaries) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoColorPrimaries) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoColorPrimaries::Unknown,
@@ -655,7 +662,7 @@ impl ToGlib for VideoDitherMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoDitherMethod> for VideoDitherMethod {
-    fn from_glib(value: ffi::GstVideoDitherMethod) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoDitherMethod) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoDitherMethod::None,
@@ -709,6 +716,7 @@ pub enum VideoFieldOrder {
 impl VideoFieldOrder {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_video_field_order_from_string")]
     pub fn from_string(order: &str) -> VideoFieldOrder {
         assert_initialized_main_thread!();
         unsafe {
@@ -748,7 +756,7 @@ impl ToGlib for VideoFieldOrder {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
-    fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoFieldOrder::Unknown,
@@ -974,20 +982,24 @@ pub enum VideoFormat {
 }
 
 impl VideoFormat {
+    #[doc(alias = "gst_video_format_from_fourcc")]
     pub fn from_fourcc(fourcc: u32) -> VideoFormat {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_format_from_fourcc(fourcc)) }
     }
 
+    #[doc(alias = "gst_video_format_from_string")]
     pub fn from_string(format: &str) -> VideoFormat {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_format_from_string(format.to_glib_none().0)) }
     }
 
+    //#[doc(alias = "gst_video_format_get_palette")]
     //pub fn get_palette(self) -> (/*Unimplemented*/Option<Fundamental: Pointer>, usize) {
     //    unsafe { TODO: call ffi:gst_video_format_get_palette() }
     //}
 
+    #[doc(alias = "gst_video_format_to_fourcc")]
     pub fn to_fourcc(self) -> u32 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_video_format_to_fourcc(self.to_glib()) }
@@ -1151,7 +1163,7 @@ impl ToGlib for VideoFormat {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
-    fn from_glib(value: ffi::GstVideoFormat) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoFormat::Unknown,
@@ -1344,7 +1356,7 @@ impl ToGlib for VideoGammaMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoGammaMode> for VideoGammaMode {
-    fn from_glib(value: ffi::GstVideoGammaMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoGammaMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoGammaMode::None,
@@ -1393,6 +1405,7 @@ pub enum VideoInterlaceMode {
 }
 
 impl VideoInterlaceMode {
+    #[doc(alias = "gst_video_interlace_mode_from_string")]
     pub fn from_string(mode: &str) -> VideoInterlaceMode {
         assert_initialized_main_thread!();
         unsafe {
@@ -1441,7 +1454,7 @@ impl ToGlib for VideoInterlaceMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
-    fn from_glib(value: ffi::GstVideoInterlaceMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoInterlaceMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoInterlaceMode::Progressive,
@@ -1507,7 +1520,7 @@ impl ToGlib for VideoMatrixMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoMatrixMode> for VideoMatrixMode {
-    fn from_glib(value: ffi::GstVideoMatrixMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoMatrixMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoMatrixMode::Full,
@@ -1595,7 +1608,7 @@ impl ToGlib for VideoMultiviewFramePacking {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking {
-    fn from_glib(value: ffi::GstVideoMultiviewFramePacking) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
         match value {
             -1 => VideoMultiviewFramePacking::None,
@@ -1658,6 +1671,7 @@ pub enum VideoMultiviewMode {
 }
 
 impl VideoMultiviewMode {
+    #[doc(alias = "gst_video_multiview_mode_from_caps_string")]
     pub fn from_caps_string(caps_mview_mode: &str) -> VideoMultiviewMode {
         assert_initialized_main_thread!();
         unsafe {
@@ -1667,6 +1681,7 @@ impl VideoMultiviewMode {
         }
     }
 
+    #[doc(alias = "gst_video_multiview_mode_to_caps_string")]
     pub fn to_caps_string(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_video_multiview_mode_to_caps_string(self.to_glib())) }
@@ -1705,7 +1720,7 @@ impl ToGlib for VideoMultiviewMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
-    fn from_glib(value: ffi::GstVideoMultiviewMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoMultiviewMode) -> Self {
         skip_assert_initialized!();
         match value {
             -1 => VideoMultiviewMode::None,
@@ -1776,7 +1791,7 @@ impl ToGlib for VideoPrimariesMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoPrimariesMode> for VideoPrimariesMode {
-    fn from_glib(value: ffi::GstVideoPrimariesMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoPrimariesMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoPrimariesMode::None,
@@ -1841,7 +1856,7 @@ impl ToGlib for VideoResamplerMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoResamplerMethod> for VideoResamplerMethod {
-    fn from_glib(value: ffi::GstVideoResamplerMethod) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoResamplerMethod) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoResamplerMethod::Nearest,
@@ -1907,7 +1922,7 @@ impl ToGlib for VideoTileMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
-    fn from_glib(value: ffi::GstVideoTileMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoTileMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoTileMode::Unknown,
@@ -1978,6 +1993,7 @@ pub enum VideoTransferFunction {
 impl VideoTransferFunction {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_transfer_function_from_iso")]
     pub fn from_iso(value: u32) -> VideoTransferFunction {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_transfer_function_from_iso(value)) }
@@ -1985,6 +2001,7 @@ impl VideoTransferFunction {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_transfer_function_is_equivalent")]
     pub fn is_equivalent(self, from_bpp: u32, to_func: VideoTransferFunction, to_bpp: u32) -> bool {
         assert_initialized_main_thread!();
         unsafe {
@@ -1999,6 +2016,7 @@ impl VideoTransferFunction {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_transfer_function_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_video_transfer_function_to_iso(self.to_glib()) }
@@ -2039,7 +2057,7 @@ impl ToGlib for VideoTransferFunction {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
-    fn from_glib(value: ffi::GstVideoTransferFunction) -> Self {
+    unsafe fn from_glib(value: ffi::GstVideoTransferFunction) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoTransferFunction::Unknown,

@@ -47,7 +47,7 @@ impl ToGlib for RTCPFBType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTCPFBType> for RTCPFBType {
-    fn from_glib(value: ffi::GstRTCPFBType) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTCPFBType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTCPFBType::FbTypeInvalid,
@@ -128,7 +128,7 @@ impl ToGlib for RTCPSDESType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTCPSDESType> for RTCPSDESType {
-    fn from_glib(value: ffi::GstRTCPSDESType) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTCPSDESType) -> Self {
         skip_assert_initialized!();
         match value {
             -1 => RTCPSDESType::Invalid,
@@ -208,7 +208,7 @@ impl ToGlib for RTCPType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTCPType> for RTCPType {
-    fn from_glib(value: ffi::GstRTCPType) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTCPType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTCPType::Invalid,
@@ -291,7 +291,7 @@ impl ToGlib for RTCPXRType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
-    fn from_glib(value: ffi::GstRTCPXRType) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTCPXRType) -> Self {
         skip_assert_initialized!();
         match value {
             -1 => RTCPXRType::Invalid,
@@ -411,7 +411,7 @@ impl ToGlib for RTPPayload {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPPayload> for RTPPayload {
-    fn from_glib(value: ffi::GstRTPPayload) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTPPayload) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTPPayload::Pcmu,
@@ -499,7 +499,7 @@ impl ToGlib for RTPProfile {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPProfile> for RTPProfile {
-    fn from_glib(value: ffi::GstRTPProfile) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTPProfile) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTPProfile::Unknown,

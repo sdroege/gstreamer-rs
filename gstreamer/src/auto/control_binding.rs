@@ -22,14 +22,19 @@ unsafe impl Sync for ControlBinding {}
 pub const NONE_CONTROL_BINDING: Option<&ControlBinding> = None;
 
 pub trait ControlBindingExt: 'static {
+    #[doc(alias = "gst_control_binding_get_value")]
     fn get_value(&self, timestamp: ClockTime) -> Option<glib::Value>;
 
+    //#[doc(alias = "gst_control_binding_get_value_array")]
     //fn get_value_array(&self, timestamp: ClockTime, interval: ClockTime, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool;
 
+    #[doc(alias = "gst_control_binding_is_disabled")]
     fn is_disabled(&self) -> bool;
 
+    #[doc(alias = "gst_control_binding_set_disabled")]
     fn set_disabled(&self, disabled: bool);
 
+    #[doc(alias = "gst_control_binding_sync_values")]
     fn sync_values<P: IsA<Object>>(
         &self,
         object: &P,

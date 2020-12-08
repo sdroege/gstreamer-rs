@@ -22,6 +22,7 @@ glib::glib_wrapper! {
 }
 
 impl InterpolationControlSource {
+    #[doc(alias = "gst_interpolation_control_source_new")]
     pub fn new() -> InterpolationControlSource {
         assert_initialized_main_thread!();
         unsafe {

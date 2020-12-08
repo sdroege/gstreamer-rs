@@ -16,6 +16,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPAddressPool {
+    #[doc(alias = "gst_rtsp_address_pool_new")]
     pub fn new() -> RTSPAddressPool {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_address_pool_new()) }
@@ -34,12 +35,14 @@ unsafe impl Sync for RTSPAddressPool {}
 pub const NONE_RTSP_ADDRESS_POOL: Option<&RTSPAddressPool> = None;
 
 pub trait RTSPAddressPoolExt: 'static {
+    #[doc(alias = "gst_rtsp_address_pool_acquire_address")]
     fn acquire_address(
         &self,
         flags: RTSPAddressFlags,
         n_ports: i32,
     ) -> Result<RTSPAddress, glib::BoolError>;
 
+    #[doc(alias = "gst_rtsp_address_pool_add_range")]
     fn add_range(
         &self,
         min_address: &str,
@@ -49,10 +52,13 @@ pub trait RTSPAddressPoolExt: 'static {
         ttl: u8,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_rtsp_address_pool_clear")]
     fn clear(&self);
 
+    #[doc(alias = "gst_rtsp_address_pool_dump")]
     fn dump(&self);
 
+    #[doc(alias = "gst_rtsp_address_pool_has_unicast_addresses")]
     fn has_unicast_addresses(&self) -> bool;
 }
 

@@ -24,6 +24,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPSession {
+    #[doc(alias = "gst_rtsp_session_new")]
     pub fn new(sessionid: &str) -> RTSPSession {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_session_new(sessionid.to_glib_none().0)) }
@@ -36,41 +37,56 @@ unsafe impl Sync for RTSPSession {}
 pub const NONE_RTSP_SESSION: Option<&RTSPSession> = None;
 
 pub trait RTSPSessionExt: 'static {
+    #[doc(alias = "gst_rtsp_session_allow_expire")]
     fn allow_expire(&self);
 
+    #[doc(alias = "gst_rtsp_session_filter")]
     fn filter(
         &self,
         func: Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)>,
     ) -> Vec<RTSPSessionMedia>;
 
+    #[doc(alias = "gst_rtsp_session_get_header")]
     fn get_header(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_rtsp_session_get_media")]
     fn get_media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
 
+    #[doc(alias = "gst_rtsp_session_get_sessionid")]
     fn get_sessionid(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_rtsp_session_get_timeout")]
     fn get_timeout(&self) -> u32;
 
+    //#[doc(alias = "gst_rtsp_session_is_expired")]
     //fn is_expired(&self, now: /*Ignored*/&mut glib::TimeVal) -> bool;
 
+    #[doc(alias = "gst_rtsp_session_is_expired_usec")]
     fn is_expired_usec(&self, now: i64) -> bool;
 
+    #[doc(alias = "gst_rtsp_session_manage_media")]
     fn manage_media<P: IsA<RTSPMedia>>(
         &self,
         path: &str,
         media: &P,
     ) -> Result<RTSPSessionMedia, glib::BoolError>;
 
+    //#[doc(alias = "gst_rtsp_session_next_timeout")]
     //fn next_timeout(&self, now: /*Ignored*/&mut glib::TimeVal) -> i32;
 
+    #[doc(alias = "gst_rtsp_session_next_timeout_usec")]
     fn next_timeout_usec(&self, now: i64) -> i32;
 
+    #[doc(alias = "gst_rtsp_session_prevent_expire")]
     fn prevent_expire(&self);
 
+    #[doc(alias = "gst_rtsp_session_release_media")]
     fn release_media<P: IsA<RTSPSessionMedia>>(&self, media: &P) -> bool;
 
+    #[doc(alias = "gst_rtsp_session_set_timeout")]
     fn set_timeout(&self, timeout: u32);
 
+    #[doc(alias = "gst_rtsp_session_touch")]
     fn touch(&self);
 
     fn get_property_extra_timeout(&self) -> u32;

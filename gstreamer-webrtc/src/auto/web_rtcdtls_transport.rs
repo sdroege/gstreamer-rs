@@ -21,6 +21,7 @@ glib::glib_wrapper! {
 }
 
 impl WebRTCDTLSTransport {
+    #[doc(alias = "gst_webrtc_dtls_transport_new")]
     pub fn new(session_id: u32, rtcp: bool) -> WebRTCDTLSTransport {
         assert_initialized_main_thread!();
         unsafe {
@@ -31,6 +32,7 @@ impl WebRTCDTLSTransport {
         }
     }
 
+    #[doc(alias = "gst_webrtc_dtls_transport_set_transport")]
     pub fn set_transport(&self, ice: &WebRTCICETransport) {
         unsafe {
             ffi::gst_webrtc_dtls_transport_set_transport(

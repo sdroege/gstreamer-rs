@@ -25,18 +25,25 @@ unsafe impl Sync for TimedValueControlSource {}
 pub const NONE_TIMED_VALUE_CONTROL_SOURCE: Option<&TimedValueControlSource> = None;
 
 pub trait TimedValueControlSourceExt: 'static {
+    //#[doc(alias = "gst_timed_value_control_source_find_control_point_iter")]
     //fn find_control_point_iter(&self, timestamp: gst::ClockTime) -> /*Ignored*/Option<glib::SequenceIter>;
 
+    //#[doc(alias = "gst_timed_value_control_source_get_all")]
     //fn get_all(&self) -> /*Ignored*/Vec<gst::TimedValue>;
 
+    #[doc(alias = "gst_timed_value_control_source_get_count")]
     fn get_count(&self) -> i32;
 
+    #[doc(alias = "gst_timed_value_control_source_set")]
     fn set(&self, timestamp: gst::ClockTime, value: f64) -> bool;
 
+    //#[doc(alias = "gst_timed_value_control_source_set_from_list")]
     //fn set_from_list(&self, timedvalues: /*Ignored*/&[&gst::TimedValue]) -> bool;
 
+    #[doc(alias = "gst_timed_value_control_source_unset")]
     fn unset(&self, timestamp: gst::ClockTime) -> bool;
 
+    #[doc(alias = "gst_timed_value_control_source_unset_all")]
     fn unset_all(&self);
 
     fn connect_value_added<F: Fn(&Self, &ControlPoint) + Send + Sync + 'static>(

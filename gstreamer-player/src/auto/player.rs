@@ -27,14 +27,17 @@ glib::glib_wrapper! {
 }
 
 impl Player {
+    #[doc(alias = "gst_player_get_audio_video_offset")]
     pub fn get_audio_video_offset(&self) -> i64 {
         unsafe { ffi::gst_player_get_audio_video_offset(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_player_get_color_balance")]
     pub fn get_color_balance(&self, type_: PlayerColorBalanceType) -> f64 {
         unsafe { ffi::gst_player_get_color_balance(self.to_glib_none().0, type_.to_glib()) }
     }
 
+    #[doc(alias = "gst_player_get_current_audio_track")]
     pub fn get_current_audio_track(&self) -> Option<PlayerAudioInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_audio_track(
@@ -43,6 +46,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_current_subtitle_track")]
     pub fn get_current_subtitle_track(&self) -> Option<PlayerSubtitleInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_subtitle_track(
@@ -51,6 +55,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_current_video_track")]
     pub fn get_current_video_track(&self) -> Option<PlayerVideoInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_video_track(
@@ -59,6 +64,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_current_visualization")]
     pub fn get_current_visualization(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_visualization(
@@ -67,52 +73,64 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_duration")]
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_player_get_duration(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_media_info")]
     pub fn get_media_info(&self) -> Option<PlayerMediaInfo> {
         unsafe { from_glib_full(ffi::gst_player_get_media_info(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_multiview_flags")]
     pub fn get_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe { from_glib(ffi::gst_player_get_multiview_flags(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_multiview_mode")]
     pub fn get_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe { from_glib(ffi::gst_player_get_multiview_mode(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_mute")]
     pub fn get_mute(&self) -> bool {
         unsafe { from_glib(ffi::gst_player_get_mute(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_pipeline")]
     pub fn get_pipeline(&self) -> gst::Element {
         unsafe { from_glib_full(ffi::gst_player_get_pipeline(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_position")]
     pub fn get_position(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_player_get_position(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_rate")]
     pub fn get_rate(&self) -> f64 {
         unsafe { ffi::gst_player_get_rate(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_player_get_subtitle_uri")]
     pub fn get_subtitle_uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_player_get_subtitle_uri(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_player_get_subtitle_video_offset")]
     pub fn get_subtitle_video_offset(&self) -> i64 {
         unsafe { ffi::gst_player_get_subtitle_video_offset(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_player_get_uri")]
     pub fn get_uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_player_get_uri(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_get_video_snapshot")]
     pub fn get_video_snapshot(
         &self,
         format: PlayerSnapshotFormat,
@@ -127,32 +145,38 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_volume")]
     pub fn get_volume(&self) -> f64 {
         unsafe { ffi::gst_player_get_volume(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_player_has_color_balance")]
     pub fn has_color_balance(&self) -> bool {
         unsafe { from_glib(ffi::gst_player_has_color_balance(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_player_pause")]
     pub fn pause(&self) {
         unsafe {
             ffi::gst_player_pause(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_player_play")]
     pub fn play(&self) {
         unsafe {
             ffi::gst_player_play(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_player_seek")]
     pub fn seek(&self, position: gst::ClockTime) {
         unsafe {
             ffi::gst_player_seek(self.to_glib_none().0, position.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_audio_track")]
     pub fn set_audio_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -162,48 +186,56 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_set_audio_track_enabled")]
     pub fn set_audio_track_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_player_set_audio_track_enabled(self.to_glib_none().0, enabled.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_audio_video_offset")]
     pub fn set_audio_video_offset(&self, offset: i64) {
         unsafe {
             ffi::gst_player_set_audio_video_offset(self.to_glib_none().0, offset);
         }
     }
 
+    #[doc(alias = "gst_player_set_color_balance")]
     pub fn set_color_balance(&self, type_: PlayerColorBalanceType, value: f64) {
         unsafe {
             ffi::gst_player_set_color_balance(self.to_glib_none().0, type_.to_glib(), value);
         }
     }
 
+    #[doc(alias = "gst_player_set_multiview_flags")]
     pub fn set_multiview_flags(&self, flags: gst_video::VideoMultiviewFlags) {
         unsafe {
             ffi::gst_player_set_multiview_flags(self.to_glib_none().0, flags.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_multiview_mode")]
     pub fn set_multiview_mode(&self, mode: gst_video::VideoMultiviewFramePacking) {
         unsafe {
             ffi::gst_player_set_multiview_mode(self.to_glib_none().0, mode.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_mute")]
     pub fn set_mute(&self, val: bool) {
         unsafe {
             ffi::gst_player_set_mute(self.to_glib_none().0, val.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_rate")]
     pub fn set_rate(&self, rate: f64) {
         unsafe {
             ffi::gst_player_set_rate(self.to_glib_none().0, rate);
         }
     }
 
+    #[doc(alias = "gst_player_set_subtitle_track")]
     pub fn set_subtitle_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -213,12 +245,14 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_set_subtitle_track_enabled")]
     pub fn set_subtitle_track_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_player_set_subtitle_track_enabled(self.to_glib_none().0, enabled.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_subtitle_uri")]
     pub fn set_subtitle_uri(&self, uri: &str) {
         unsafe {
             ffi::gst_player_set_subtitle_uri(self.to_glib_none().0, uri.to_glib_none().0);
@@ -227,18 +261,21 @@ impl Player {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_player_set_subtitle_video_offset")]
     pub fn set_subtitle_video_offset(&self, offset: i64) {
         unsafe {
             ffi::gst_player_set_subtitle_video_offset(self.to_glib_none().0, offset);
         }
     }
 
+    #[doc(alias = "gst_player_set_uri")]
     pub fn set_uri(&self, uri: &str) {
         unsafe {
             ffi::gst_player_set_uri(self.to_glib_none().0, uri.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_player_set_video_track")]
     pub fn set_video_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -248,12 +285,14 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_set_video_track_enabled")]
     pub fn set_video_track_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_player_set_video_track_enabled(self.to_glib_none().0, enabled.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_visualization")]
     pub fn set_visualization(&self, name: Option<&str>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -263,18 +302,21 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_set_visualization_enabled")]
     pub fn set_visualization_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_player_set_visualization_enabled(self.to_glib_none().0, enabled.to_glib());
         }
     }
 
+    #[doc(alias = "gst_player_set_volume")]
     pub fn set_volume(&self, val: f64) {
         unsafe {
             ffi::gst_player_set_volume(self.to_glib_none().0, val);
         }
     }
 
+    #[doc(alias = "gst_player_stop")]
     pub fn stop(&self) {
         unsafe {
             ffi::gst_player_stop(self.to_glib_none().0);
@@ -365,6 +407,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_audio_streams")]
     pub fn get_audio_streams(info: &PlayerMediaInfo) -> Vec<PlayerAudioInfo> {
         skip_assert_initialized!();
         unsafe {
@@ -374,6 +417,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_subtitle_streams")]
     pub fn get_subtitle_streams(info: &PlayerMediaInfo) -> Vec<PlayerSubtitleInfo> {
         skip_assert_initialized!();
         unsafe {
@@ -383,6 +427,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_get_video_streams")]
     pub fn get_video_streams(info: &PlayerMediaInfo) -> Vec<PlayerVideoInfo> {
         skip_assert_initialized!();
         unsafe {
@@ -392,6 +437,7 @@ impl Player {
         }
     }
 
+    #[doc(alias = "gst_player_visualizations_get")]
     pub fn visualizations_get() -> Vec<PlayerVisualization> {
         assert_initialized_main_thread!();
         unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_player_visualizations_get()) }

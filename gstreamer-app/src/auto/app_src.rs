@@ -20,40 +20,49 @@ glib::glib_wrapper! {
 }
 
 impl AppSrc {
+    #[doc(alias = "gst_app_src_get_caps")]
     pub fn get_caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_app_src_get_caps(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_src_get_current_level_bytes")]
     pub fn get_current_level_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_app_src_get_duration")]
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_src_get_emit_signals")]
     pub fn get_emit_signals(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_src_get_emit_signals(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_src_get_max_bytes")]
     pub fn get_max_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_max_bytes(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_app_src_get_size")]
     pub fn get_size(&self) -> i64 {
         unsafe { ffi::gst_app_src_get_size(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_app_src_get_stream_type")]
     pub fn get_stream_type(&self) -> AppStreamType {
         unsafe { from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0)) }
     }
 
+    //#[doc(alias = "gst_app_src_set_callbacks")]
     //pub fn set_callbacks(&self, callbacks: /*Ignored*/&mut AppSrcCallbacks, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi:gst_app_src_set_callbacks() }
     //}
 
+    #[doc(alias = "gst_app_src_set_caps")]
     pub fn set_caps(&self, caps: Option<&gst::Caps>) {
         unsafe {
             ffi::gst_app_src_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
@@ -62,30 +71,35 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_app_src_set_duration")]
     pub fn set_duration(&self, duration: gst::ClockTime) {
         unsafe {
             ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.to_glib());
         }
     }
 
+    #[doc(alias = "gst_app_src_set_emit_signals")]
     pub fn set_emit_signals(&self, emit: bool) {
         unsafe {
             ffi::gst_app_src_set_emit_signals(self.to_glib_none().0, emit.to_glib());
         }
     }
 
+    #[doc(alias = "gst_app_src_set_max_bytes")]
     pub fn set_max_bytes(&self, max: u64) {
         unsafe {
             ffi::gst_app_src_set_max_bytes(self.to_glib_none().0, max);
         }
     }
 
+    #[doc(alias = "gst_app_src_set_size")]
     pub fn set_size(&self, size: i64) {
         unsafe {
             ffi::gst_app_src_set_size(self.to_glib_none().0, size);
         }
     }
 
+    #[doc(alias = "gst_app_src_set_stream_type")]
     pub fn set_stream_type(&self, type_: AppStreamType) {
         unsafe {
             ffi::gst_app_src_set_stream_type(self.to_glib_none().0, type_.to_glib());

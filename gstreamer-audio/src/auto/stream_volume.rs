@@ -20,6 +20,7 @@ glib::glib_wrapper! {
 }
 
 impl StreamVolume {
+    #[doc(alias = "gst_stream_volume_convert_volume")]
     pub fn convert_volume(from: StreamVolumeFormat, to: StreamVolumeFormat, val: f64) -> f64 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_stream_volume_convert_volume(from.to_glib(), to.to_glib(), val) }
@@ -32,12 +33,16 @@ unsafe impl Sync for StreamVolume {}
 pub const NONE_STREAM_VOLUME: Option<&StreamVolume> = None;
 
 pub trait StreamVolumeExt: 'static {
+    #[doc(alias = "gst_stream_volume_get_mute")]
     fn get_mute(&self) -> bool;
 
+    #[doc(alias = "gst_stream_volume_get_volume")]
     fn get_volume(&self, format: StreamVolumeFormat) -> f64;
 
+    #[doc(alias = "gst_stream_volume_set_mute")]
     fn set_mute(&self, mute: bool);
 
+    #[doc(alias = "gst_stream_volume_set_volume")]
     fn set_volume(&self, format: StreamVolumeFormat, val: f64);
 
     fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(

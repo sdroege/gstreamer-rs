@@ -27,14 +27,17 @@ glib::glib_wrapper! {
 impl UriClipAsset {
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[doc(alias = "ges_uri_clip_asset_finish")]
     //pub fn finish(res: /*Ignored*/&gio::AsyncResult) -> Result<UriClipAsset, glib::Error> {
     //    unsafe { TODO: call ffi:ges_uri_clip_asset_finish() }
     //}
 
+    //#[doc(alias = "ges_uri_clip_asset_new")]
     //pub fn new<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + 'static>(uri: &str, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call ffi:ges_uri_clip_asset_new() }
     //}
 
+    #[doc(alias = "ges_uri_clip_asset_request_sync")]
     pub fn request_sync(uri: &str) -> Result<UriClipAsset, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
@@ -52,18 +55,23 @@ impl UriClipAsset {
 pub const NONE_URI_CLIP_ASSET: Option<&UriClipAsset> = None;
 
 pub trait UriClipAssetExt: 'static {
+    #[doc(alias = "ges_uri_clip_asset_get_duration")]
     fn get_duration(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_uri_clip_asset_get_info")]
     fn get_info(&self) -> Option<gst_pbutils::DiscovererInfo>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_uri_clip_asset_get_max_duration")]
     fn get_max_duration(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_uri_clip_asset_get_stream_assets")]
     fn get_stream_assets(&self) -> Vec<UriSourceAsset>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_uri_clip_asset_is_image")]
     fn is_image(&self) -> bool;
 
     fn set_property_duration(&self, duration: u64);

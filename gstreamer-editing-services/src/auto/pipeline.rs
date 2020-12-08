@@ -23,6 +23,7 @@ glib::glib_wrapper! {
 }
 
 impl Pipeline {
+    #[doc(alias = "ges_pipeline_new")]
     pub fn new() -> Pipeline {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_pipeline_new()) }
@@ -38,20 +39,28 @@ impl Default for Pipeline {
 pub const NONE_PIPELINE: Option<&Pipeline> = None;
 
 pub trait GESPipelineExt: 'static {
+    #[doc(alias = "ges_pipeline_get_mode")]
     fn get_mode(&self) -> PipelineFlags;
 
+    #[doc(alias = "ges_pipeline_get_thumbnail")]
     fn get_thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample>;
 
+    #[doc(alias = "ges_pipeline_get_thumbnail_rgb24")]
     fn get_thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample>;
 
+    #[doc(alias = "ges_pipeline_preview_get_audio_sink")]
     fn preview_get_audio_sink(&self) -> Option<gst::Element>;
 
+    #[doc(alias = "ges_pipeline_preview_get_video_sink")]
     fn preview_get_video_sink(&self) -> Option<gst::Element>;
 
+    #[doc(alias = "ges_pipeline_preview_set_audio_sink")]
     fn preview_set_audio_sink<P: IsA<gst::Element>>(&self, sink: &P);
 
+    #[doc(alias = "ges_pipeline_preview_set_video_sink")]
     fn preview_set_video_sink<P: IsA<gst::Element>>(&self, sink: &P);
 
+    #[doc(alias = "ges_pipeline_save_thumbnail")]
     fn save_thumbnail(
         &self,
         width: i32,
@@ -60,14 +69,17 @@ pub trait GESPipelineExt: 'static {
         location: &str,
     ) -> Result<(), glib::Error>;
 
+    #[doc(alias = "ges_pipeline_set_mode")]
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_pipeline_set_render_settings")]
     fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(
         &self,
         output_uri: &str,
         profile: &P,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_pipeline_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
 
     fn get_property_audio_filter(&self) -> Option<gst::Element>;

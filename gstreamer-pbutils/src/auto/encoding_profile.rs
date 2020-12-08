@@ -15,6 +15,7 @@ glib::glib_wrapper! {
 }
 
 impl EncodingProfile {
+    #[doc(alias = "gst_encoding_profile_find")]
     pub fn find(
         targetname: &str,
         profilename: Option<&str>,
@@ -30,6 +31,7 @@ impl EncodingProfile {
         }
     }
 
+    #[doc(alias = "gst_encoding_profile_from_discoverer")]
     pub fn from_discoverer(info: &DiscovererInfo) -> Result<EncodingProfile, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
@@ -51,34 +53,48 @@ pub const NONE_ENCODING_PROFILE: Option<&EncodingProfile> = None;
 pub trait EncodingProfileExt: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_encoding_profile_copy")]
     fn copy(&self) -> EncodingProfile;
 
+    #[doc(alias = "gst_encoding_profile_get_allow_dynamic_output")]
     fn get_allow_dynamic_output(&self) -> bool;
 
+    #[doc(alias = "gst_encoding_profile_get_description")]
     fn get_description(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_encoding_profile_get_file_extension")]
     fn get_file_extension(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_encoding_profile_get_format")]
     fn get_format(&self) -> gst::Caps;
 
+    #[doc(alias = "gst_encoding_profile_get_input_caps")]
     fn get_input_caps(&self) -> gst::Caps;
 
+    #[doc(alias = "gst_encoding_profile_get_name")]
     fn get_name(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_encoding_profile_get_presence")]
     fn get_presence(&self) -> u32;
 
+    #[doc(alias = "gst_encoding_profile_get_preset")]
     fn get_preset(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_encoding_profile_get_preset_name")]
     fn get_preset_name(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_encoding_profile_get_single_segment")]
     fn get_single_segment(&self) -> bool;
 
+    #[doc(alias = "gst_encoding_profile_get_type_nick")]
     fn get_type_nick(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_encoding_profile_is_enabled")]
     fn is_enabled(&self) -> bool;
 
+    #[doc(alias = "gst_encoding_profile_is_equal")]
     fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool;
 }
 

@@ -22,6 +22,7 @@ glib::glib_wrapper! {
 }
 
 impl Object {
+    #[doc(alias = "gst_object_check_uniqueness")]
     pub fn check_uniqueness(list: &[Object], name: &str) -> bool {
         assert_initialized_main_thread!();
         unsafe {
@@ -32,14 +33,17 @@ impl Object {
         }
     }
 
+    //#[doc(alias = "gst_object_default_deep_notify")]
     //pub fn default_deep_notify<P: IsA<glib::Object>, Q: IsA<Object>>(object: &P, orig: &Q, pspec: /*Ignored*/&glib::ParamSpec, excluded_props: &[&str]) {
     //    unsafe { TODO: call ffi:gst_object_default_deep_notify() }
     //}
 
+    //#[doc(alias = "gst_object_ref_sink")]
     //pub fn ref_sink(object: /*Unimplemented*/Option<Fundamental: Pointer>) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_object_ref_sink() }
     //}
 
+    //#[doc(alias = "gst_object_replace")]
     //pub fn replace<P: IsA<Object>, Q: IsA<Object>>(oldobj: Option<P>, newobj: Option<&Q>) -> bool {
     //    unsafe { TODO: call ffi:gst_object_replace() }
     //}
@@ -58,49 +62,70 @@ unsafe impl Sync for Object {}
 pub const NONE_OBJECT: Option<&Object> = None;
 
 pub trait GstObjectExt: 'static {
+    #[doc(alias = "gst_object_add_control_binding")]
     fn add_control_binding<P: IsA<ControlBinding>>(
         &self,
         binding: &P,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_object_default_error")]
     fn default_error(&self, error: &glib::Error, debug: Option<&str>);
 
+    #[doc(alias = "gst_object_get_control_binding")]
     fn get_control_binding(&self, property_name: &str) -> Option<ControlBinding>;
 
+    #[doc(alias = "gst_object_get_control_rate")]
     fn get_control_rate(&self) -> ClockTime;
 
+    #[doc(alias = "gst_object_get_name")]
     fn get_name(&self) -> glib::GString;
 
+    #[doc(alias = "gst_object_get_parent")]
     fn get_parent(&self) -> Option<Object>;
 
+    #[doc(alias = "gst_object_get_path_string")]
     fn get_path_string(&self) -> glib::GString;
 
+    #[doc(alias = "gst_object_get_value")]
     fn get_value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value>;
 
+    //#[doc(alias = "gst_object_get_value_array")]
     //fn get_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
+    #[doc(alias = "gst_object_has_active_control_bindings")]
     fn has_active_control_bindings(&self) -> bool;
 
+    #[doc(alias = "gst_object_has_ancestor")]
     fn has_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool;
 
+    #[doc(alias = "gst_object_has_as_ancestor")]
     fn has_as_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool;
 
+    #[doc(alias = "gst_object_has_as_parent")]
     fn has_as_parent<P: IsA<Object>>(&self, parent: &P) -> bool;
 
+    #[doc(alias = "gst_object_remove_control_binding")]
     fn remove_control_binding<P: IsA<ControlBinding>>(&self, binding: &P) -> bool;
 
+    #[doc(alias = "gst_object_set_control_binding_disabled")]
     fn set_control_binding_disabled(&self, property_name: &str, disabled: bool);
 
+    #[doc(alias = "gst_object_set_control_bindings_disabled")]
     fn set_control_bindings_disabled(&self, disabled: bool);
 
+    #[doc(alias = "gst_object_set_control_rate")]
     fn set_control_rate(&self, control_rate: ClockTime);
 
+    #[doc(alias = "gst_object_set_parent")]
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_object_suggest_next_sync")]
     fn suggest_next_sync(&self) -> ClockTime;
 
+    #[doc(alias = "gst_object_sync_values")]
     fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_object_unparent")]
     fn unparent(&self);
 
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;

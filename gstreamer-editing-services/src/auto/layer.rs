@@ -30,6 +30,7 @@ glib::glib_wrapper! {
 }
 
 impl Layer {
+    #[doc(alias = "ges_layer_new")]
     pub fn new() -> Layer {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_layer_new()) }
@@ -45,6 +46,7 @@ impl Default for Layer {
 pub const NONE_LAYER: Option<&Layer> = None;
 
 pub trait LayerExt: 'static {
+    #[doc(alias = "ges_layer_add_asset")]
     fn add_asset<P: IsA<Asset>>(
         &self,
         asset: &P,
@@ -56,6 +58,7 @@ pub trait LayerExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_layer_add_asset_full")]
     fn add_asset_full<P: IsA<Asset>>(
         &self,
         asset: &P,
@@ -65,41 +68,56 @@ pub trait LayerExt: 'static {
         track_types: TrackType,
     ) -> Result<Clip, glib::Error>;
 
+    #[doc(alias = "ges_layer_add_clip")]
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_layer_add_clip_full")]
     fn add_clip_full<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::Error>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_layer_get_active_for_track")]
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
+    #[doc(alias = "ges_layer_get_auto_transition")]
     fn get_auto_transition(&self) -> bool;
 
+    #[doc(alias = "ges_layer_get_clips")]
     fn get_clips(&self) -> Vec<Clip>;
 
+    #[doc(alias = "ges_layer_get_clips_in_interval")]
     fn get_clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip>;
 
+    #[doc(alias = "ges_layer_get_duration")]
     fn get_duration(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_layer_get_priority")]
     fn get_priority(&self) -> u32;
 
+    #[doc(alias = "ges_layer_get_timeline")]
     fn get_timeline(&self) -> Option<Timeline>;
 
+    #[doc(alias = "ges_layer_is_empty")]
     fn is_empty(&self) -> bool;
 
+    #[doc(alias = "ges_layer_remove_clip")]
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_layer_set_active_for_tracks")]
     fn set_active_for_tracks(&self, active: bool, tracks: &[Track]) -> bool;
 
+    #[doc(alias = "ges_layer_set_auto_transition")]
     fn set_auto_transition(&self, auto_transition: bool);
 
     #[cfg_attr(feature = "v1_16", deprecated)]
+    #[doc(alias = "ges_layer_set_priority")]
     fn set_priority(&self, priority: u32);
 
+    #[doc(alias = "ges_layer_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P);
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]

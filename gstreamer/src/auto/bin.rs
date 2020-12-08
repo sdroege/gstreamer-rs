@@ -28,6 +28,7 @@ glib::glib_wrapper! {
 }
 
 impl Bin {
+    #[doc(alias = "gst_bin_new")]
     pub fn new(name: Option<&str>) -> Bin {
         assert_initialized_main_thread!();
         unsafe { Element::from_glib_none(ffi::gst_bin_new(name.to_glib_none().0)).unsafe_cast() }
@@ -40,48 +41,67 @@ unsafe impl Sync for Bin {}
 pub const NONE_BIN: Option<&Bin> = None;
 
 pub trait GstBinExt: 'static {
+    #[doc(alias = "gst_bin_add")]
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "gst_bin_add_many")]
     //fn add_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    #[doc(alias = "gst_bin_find_unlinked_pad")]
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad>;
 
+    #[doc(alias = "gst_bin_get_by_interface")]
     fn get_by_interface(&self, iface: glib::types::Type) -> Option<Element>;
 
+    #[doc(alias = "gst_bin_get_by_name")]
     fn get_by_name(&self, name: &str) -> Option<Element>;
 
+    #[doc(alias = "gst_bin_get_by_name_recurse_up")]
     fn get_by_name_recurse_up(&self, name: &str) -> Option<Element>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_bin_get_suppressed_flags")]
     fn get_suppressed_flags(&self) -> ElementFlags;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "gst_bin_iterate_all_by_element_factory_name")]
     //fn iterate_all_by_element_factory_name(&self, factory_name: &str) -> /*Ignored*/Option<Iterator>;
 
+    //#[doc(alias = "gst_bin_iterate_all_by_interface")]
     //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator>;
 
+    //#[doc(alias = "gst_bin_iterate_elements")]
     //fn iterate_elements(&self) -> /*Ignored*/Option<Iterator>;
 
+    //#[doc(alias = "gst_bin_iterate_recurse")]
     //fn iterate_recurse(&self) -> /*Ignored*/Option<Iterator>;
 
+    //#[doc(alias = "gst_bin_iterate_sinks")]
     //fn iterate_sinks(&self) -> /*Ignored*/Option<Iterator>;
 
+    //#[doc(alias = "gst_bin_iterate_sorted")]
     //fn iterate_sorted(&self) -> /*Ignored*/Option<Iterator>;
 
+    //#[doc(alias = "gst_bin_iterate_sources")]
     //fn iterate_sources(&self) -> /*Ignored*/Option<Iterator>;
 
+    #[doc(alias = "gst_bin_recalculate_latency")]
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_bin_remove")]
     fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "gst_bin_remove_many")]
     //fn remove_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_bin_set_suppressed_flags")]
     fn set_suppressed_flags(&self, flags: ElementFlags);
 
+    #[doc(alias = "gst_bin_sync_children_states")]
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
 
     fn get_property_async_handling(&self) -> bool;

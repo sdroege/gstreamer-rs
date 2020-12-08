@@ -22,6 +22,7 @@ glib::glib_wrapper! {
 }
 
 impl Project {
+    #[doc(alias = "ges_project_new")]
     pub fn new(uri: Option<&str>) -> Project {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::ges_project_new(uri.to_glib_none().0)) }
@@ -31,8 +32,10 @@ impl Project {
 pub const NONE_PROJECT: Option<&Project> = None;
 
 pub trait ProjectExt: 'static {
+    #[doc(alias = "ges_project_add_asset")]
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> bool;
 
+    #[doc(alias = "ges_project_add_encoding_profile")]
     fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(
         &self,
         profile: &P,
@@ -40,30 +43,41 @@ pub trait ProjectExt: 'static {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "ges_project_add_formatter")]
     //fn add_formatter(&self, formatter: /*Ignored*/&Formatter);
 
+    #[doc(alias = "ges_project_create_asset")]
     fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool;
 
+    #[doc(alias = "ges_project_create_asset_sync")]
     fn create_asset_sync(
         &self,
         id: Option<&str>,
         extractable_type: glib::types::Type,
     ) -> Result<Option<Asset>, glib::Error>;
 
+    #[doc(alias = "ges_project_get_asset")]
     fn get_asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
 
+    #[doc(alias = "ges_project_get_loading_assets")]
     fn get_loading_assets(&self) -> Vec<Asset>;
 
+    #[doc(alias = "ges_project_get_uri")]
     fn get_uri(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "ges_project_list_assets")]
     fn list_assets(&self, filter: glib::types::Type) -> Vec<Asset>;
 
+    #[doc(alias = "ges_project_list_encoding_profiles")]
     fn list_encoding_profiles(&self) -> Vec<gst_pbutils::EncodingProfile>;
 
+    #[doc(alias = "ges_project_load")]
     fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::Error>;
 
+    #[doc(alias = "ges_project_remove_asset")]
     fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_project_save")]
     fn save<P: IsA<Timeline>, Q: IsA<Asset>>(
         &self,
         timeline: &P,

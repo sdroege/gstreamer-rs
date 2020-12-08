@@ -23,22 +23,31 @@ unsafe impl Sync for TagSetter {}
 pub const NONE_TAG_SETTER: Option<&TagSetter> = None;
 
 pub trait TagSetterExt: 'static {
+    //#[doc(alias = "gst_tag_setter_add_tag_valist")]
     //fn add_tag_valist(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
+    //#[doc(alias = "gst_tag_setter_add_tag_valist_values")]
     //fn add_tag_valist_values(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
+    //#[doc(alias = "gst_tag_setter_add_tag_values")]
     //fn add_tag_values(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    //#[doc(alias = "gst_tag_setter_add_tags")]
     //fn add_tags(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    #[doc(alias = "gst_tag_setter_get_tag_list")]
     fn get_tag_list(&self) -> Option<TagList>;
 
+    #[doc(alias = "gst_tag_setter_get_tag_merge_mode")]
     fn get_tag_merge_mode(&self) -> TagMergeMode;
 
+    #[doc(alias = "gst_tag_setter_merge_tags")]
     fn merge_tags(&self, list: &TagList, mode: TagMergeMode);
 
+    #[doc(alias = "gst_tag_setter_reset_tags")]
     fn reset_tags(&self);
 
+    #[doc(alias = "gst_tag_setter_set_tag_merge_mode")]
     fn set_tag_merge_mode(&self, mode: TagMergeMode);
 }
 

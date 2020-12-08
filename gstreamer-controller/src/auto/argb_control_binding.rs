@@ -20,6 +20,7 @@ glib::glib_wrapper! {
 }
 
 impl ARGBControlBinding {
+    #[doc(alias = "gst_argb_control_binding_new")]
     pub fn new<
         P: IsA<gst::Object>,
         Q: IsA<gst::ControlSource>,

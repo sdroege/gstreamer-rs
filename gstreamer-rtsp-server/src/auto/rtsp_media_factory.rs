@@ -25,6 +25,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPMediaFactory {
+    #[doc(alias = "gst_rtsp_media_factory_new")]
     pub fn new() -> RTSPMediaFactory {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_media_factory_new()) }
@@ -43,110 +44,155 @@ unsafe impl Sync for RTSPMediaFactory {}
 pub const NONE_RTSP_MEDIA_FACTORY: Option<&RTSPMediaFactory> = None;
 
 pub trait RTSPMediaFactoryExt: 'static {
+    //#[doc(alias = "gst_rtsp_media_factory_add_role")]
     //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    #[doc(alias = "gst_rtsp_media_factory_construct")]
     fn construct(&self, url: &gst_rtsp::RTSPUrl) -> Result<RTSPMedia, glib::BoolError>;
 
+    #[doc(alias = "gst_rtsp_media_factory_create_element")]
     fn create_element(&self, url: &gst_rtsp::RTSPUrl) -> Result<gst::Element, glib::BoolError>;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_address_pool")]
     fn get_address_pool(&self) -> Option<RTSPAddressPool>;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_buffer_size")]
     fn get_buffer_size(&self) -> u32;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_clock")]
     fn get_clock(&self) -> Option<gst::Clock>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_media_factory_get_do_retransmission")]
     fn get_do_retransmission(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_media_factory_get_dscp_qos")]
     fn get_dscp_qos(&self) -> i32;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_latency")]
     fn get_latency(&self) -> u32;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_launch")]
     fn get_launch(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_media_factory_get_max_mcast_ttl")]
     fn get_max_mcast_ttl(&self) -> u32;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_media_gtype")]
     fn get_media_gtype(&self) -> glib::types::Type;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_multicast_iface")]
     fn get_multicast_iface(&self) -> Option<glib::GString>;
 
+    //#[doc(alias = "gst_rtsp_media_factory_get_permissions")]
     //fn get_permissions(&self) -> /*Ignored*/Option<RTSPPermissions>;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_profiles")]
     fn get_profiles(&self) -> gst_rtsp::RTSPProfile;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_protocols")]
     fn get_protocols(&self) -> gst_rtsp::RTSPLowerTrans;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_publish_clock_mode")]
     fn get_publish_clock_mode(&self) -> RTSPPublishClockMode;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_retransmission_time")]
     fn get_retransmission_time(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_suspend_mode")]
     fn get_suspend_mode(&self) -> RTSPSuspendMode;
 
+    #[doc(alias = "gst_rtsp_media_factory_get_transport_mode")]
     fn get_transport_mode(&self) -> RTSPTransportMode;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_media_factory_is_bind_mcast_address")]
     fn is_bind_mcast_address(&self) -> bool;
 
+    #[doc(alias = "gst_rtsp_media_factory_is_eos_shutdown")]
     fn is_eos_shutdown(&self) -> bool;
 
+    #[doc(alias = "gst_rtsp_media_factory_is_shared")]
     fn is_shared(&self) -> bool;
 
+    #[doc(alias = "gst_rtsp_media_factory_is_stop_on_disonnect")]
     fn is_stop_on_disonnect(&self) -> bool;
 
+    #[doc(alias = "gst_rtsp_media_factory_set_address_pool")]
     fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_media_factory_set_bind_mcast_address")]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_buffer_size")]
     fn set_buffer_size(&self, size: u32);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_clock")]
     fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_media_factory_set_do_retransmission")]
     fn set_do_retransmission(&self, do_retransmission: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_media_factory_set_dscp_qos")]
     fn set_dscp_qos(&self, dscp_qos: i32);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_eos_shutdown")]
     fn set_eos_shutdown(&self, eos_shutdown: bool);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_latency")]
     fn set_latency(&self, latency: u32);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_launch")]
     fn set_launch(&self, launch: &str);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_media_factory_set_max_mcast_ttl")]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool;
 
+    #[doc(alias = "gst_rtsp_media_factory_set_media_gtype")]
     fn set_media_gtype(&self, media_gtype: glib::types::Type);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_multicast_iface")]
     fn set_multicast_iface(&self, multicast_iface: Option<&str>);
 
+    //#[doc(alias = "gst_rtsp_media_factory_set_permissions")]
     //fn set_permissions(&self, permissions: /*Ignored*/Option<&mut RTSPPermissions>);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_profiles")]
     fn set_profiles(&self, profiles: gst_rtsp::RTSPProfile);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_protocols")]
     fn set_protocols(&self, protocols: gst_rtsp::RTSPLowerTrans);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_publish_clock_mode")]
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_retransmission_time")]
     fn set_retransmission_time(&self, time: gst::ClockTime);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_shared")]
     fn set_shared(&self, shared: bool);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_stop_on_disconnect")]
     fn set_stop_on_disconnect(&self, stop_on_disconnect: bool);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_suspend_mode")]
     fn set_suspend_mode(&self, mode: RTSPSuspendMode);
 
+    #[doc(alias = "gst_rtsp_media_factory_set_transport_mode")]
     fn set_transport_mode(&self, mode: RTSPTransportMode);
 
     fn get_property_bind_mcast_address(&self) -> bool;

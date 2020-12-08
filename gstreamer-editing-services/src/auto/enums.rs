@@ -66,7 +66,7 @@ impl ToGlib for Edge {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESEdge> for Edge {
-    fn from_glib(value: ffi::GESEdge) -> Self {
+    unsafe fn from_glib(value: ffi::GESEdge) -> Self {
         skip_assert_initialized!();
         match value {
             0 => Edge::Start,
@@ -156,7 +156,7 @@ impl ToGlib for EditMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESEditMode> for EditMode {
-    fn from_glib(value: ffi::GESEditMode) -> Self {
+    unsafe fn from_glib(value: ffi::GESEditMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => EditMode::Normal,

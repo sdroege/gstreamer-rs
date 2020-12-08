@@ -14,15 +14,18 @@ glib::glib_wrapper! {
 }
 
 impl GLDisplayEGL {
+    #[doc(alias = "gst_gl_display_egl_new")]
     pub fn new() -> GLDisplayEGL {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_display_egl_new()) }
     }
 
+    //#[doc(alias = "gst_gl_display_egl_new_with_egl_display")]
     //pub fn with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {
     //    unsafe { TODO: call ffi:gst_gl_display_egl_new_with_egl_display() }
     //}
 
+    #[doc(alias = "gst_gl_display_egl_from_gl_display")]
     pub fn from_gl_display<P: IsA<gst_gl::GLDisplay>>(display: &P) -> Option<GLDisplayEGL> {
         assert_initialized_main_thread!();
         unsafe {
@@ -32,6 +35,7 @@ impl GLDisplayEGL {
         }
     }
 
+    //#[doc(alias = "gst_gl_display_egl_get_from_native")]
     //pub fn get_from_native(type_: /*Ignored*/gst_gl::GLDisplayType, display: /*Unimplemented*/Fundamental: UIntPtr) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_gl_display_egl_get_from_native() }
     //}

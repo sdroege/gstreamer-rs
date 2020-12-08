@@ -28,18 +28,25 @@ unsafe impl Sync for DeviceMonitor {}
 pub const NONE_DEVICE_MONITOR: Option<&DeviceMonitor> = None;
 
 pub trait DeviceMonitorExt: 'static {
+    #[doc(alias = "gst_device_monitor_get_bus")]
     fn get_bus(&self) -> Bus;
 
+    #[doc(alias = "gst_device_monitor_get_devices")]
     fn get_devices(&self) -> Vec<Device>;
 
+    #[doc(alias = "gst_device_monitor_get_providers")]
     fn get_providers(&self) -> Vec<glib::GString>;
 
+    #[doc(alias = "gst_device_monitor_get_show_all_devices")]
     fn get_show_all_devices(&self) -> bool;
 
+    #[doc(alias = "gst_device_monitor_set_show_all_devices")]
     fn set_show_all_devices(&self, show_all: bool);
 
+    #[doc(alias = "gst_device_monitor_start")]
     fn start(&self) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_device_monitor_stop")]
     fn stop(&self);
 
     fn get_property_show_all(&self) -> bool;

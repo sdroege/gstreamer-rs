@@ -21,6 +21,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPMediaFactoryURI {
+    #[doc(alias = "gst_rtsp_media_factory_uri_new")]
     pub fn new() -> RTSPMediaFactoryURI {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_media_factory_uri_new()) }
@@ -39,8 +40,10 @@ unsafe impl Sync for RTSPMediaFactoryURI {}
 pub const NONE_RTSP_MEDIA_FACTORY_URI: Option<&RTSPMediaFactoryURI> = None;
 
 pub trait RTSPMediaFactoryURIExt: 'static {
+    #[doc(alias = "gst_rtsp_media_factory_uri_get_uri")]
     fn get_uri(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_rtsp_media_factory_uri_set_uri")]
     fn set_uri(&self, uri: &str);
 
     fn get_property_use_gstpay(&self) -> bool;

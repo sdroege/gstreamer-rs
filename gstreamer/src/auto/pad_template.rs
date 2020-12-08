@@ -25,6 +25,7 @@ glib::glib_wrapper! {
 }
 
 impl PadTemplate {
+    #[doc(alias = "gst_pad_template_new")]
     pub fn new(
         name_template: &str,
         direction: PadDirection,
@@ -45,6 +46,7 @@ impl PadTemplate {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_pad_template_new_with_gtype")]
     pub fn with_gtype(
         name_template: &str,
         direction: PadDirection,
@@ -65,12 +67,14 @@ impl PadTemplate {
         }
     }
 
+    #[doc(alias = "gst_pad_template_get_caps")]
     pub fn get_caps(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_pad_template_get_caps(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_pad_template_get_documentation_caps")]
     pub fn get_documentation_caps(&self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_template_get_documentation_caps(
@@ -79,6 +83,7 @@ impl PadTemplate {
         }
     }
 
+    #[doc(alias = "gst_pad_template_pad_created")]
     pub fn pad_created<P: IsA<Pad>>(&self, pad: &P) {
         unsafe {
             ffi::gst_pad_template_pad_created(self.to_glib_none().0, pad.as_ref().to_glib_none().0);
@@ -87,6 +92,7 @@ impl PadTemplate {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_pad_template_set_documentation_caps")]
     pub fn set_documentation_caps(&self, caps: &Caps) {
         unsafe {
             ffi::gst_pad_template_set_documentation_caps(

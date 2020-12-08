@@ -16,6 +16,7 @@ glib::glib_wrapper! {
 }
 
 impl EncodingTarget {
+    #[doc(alias = "gst_encoding_target_new")]
     pub fn new(
         name: &str,
         category: &str,
@@ -33,10 +34,12 @@ impl EncodingTarget {
         }
     }
 
+    #[doc(alias = "gst_encoding_target_get_category")]
     pub fn get_category(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_category(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_encoding_target_get_description")]
     pub fn get_description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gst_encoding_target_get_description(
@@ -45,16 +48,19 @@ impl EncodingTarget {
         }
     }
 
+    #[doc(alias = "gst_encoding_target_get_name")]
     pub fn get_name(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_name(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_encoding_target_get_path")]
     pub fn get_path(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_path(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_encoding_target_get_profile")]
     pub fn get_profile(&self, name: &str) -> Option<EncodingProfile> {
         unsafe {
             from_glib_full(ffi::gst_encoding_target_get_profile(
@@ -64,6 +70,7 @@ impl EncodingTarget {
         }
     }
 
+    #[doc(alias = "gst_encoding_target_get_profiles")]
     pub fn get_profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_target_get_profiles(
@@ -72,6 +79,7 @@ impl EncodingTarget {
         }
     }
 
+    #[doc(alias = "gst_encoding_target_save")]
     pub fn save(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -84,6 +92,7 @@ impl EncodingTarget {
         }
     }
 
+    #[doc(alias = "gst_encoding_target_save_to_file")]
     pub fn save_to_file<P: AsRef<std::path::Path>>(&self, filepath: P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -100,6 +109,7 @@ impl EncodingTarget {
         }
     }
 
+    #[doc(alias = "gst_encoding_target_load")]
     pub fn load(name: &str, category: Option<&str>) -> Result<EncodingTarget, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
@@ -117,6 +127,7 @@ impl EncodingTarget {
         }
     }
 
+    #[doc(alias = "gst_encoding_target_load_from_file")]
     pub fn load_from_file<P: AsRef<std::path::Path>>(
         filepath: P,
     ) -> Result<EncodingTarget, glib::Error> {

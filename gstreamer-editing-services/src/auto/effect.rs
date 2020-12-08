@@ -19,6 +19,7 @@ glib::glib_wrapper! {
 }
 
 impl Effect {
+    #[doc(alias = "ges_effect_new")]
     pub fn new(bin_description: &str) -> Result<Effect, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {

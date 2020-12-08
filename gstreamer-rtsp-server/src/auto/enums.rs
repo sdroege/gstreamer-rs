@@ -39,7 +39,7 @@ impl ToGlib for RTSPAddressPoolResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
-    fn from_glib(value: ffi::GstRTSPAddressPoolResult) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPAddressPoolResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPAddressPoolResult::Ok,
@@ -78,7 +78,7 @@ impl ToGlib for RTSPFilterResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPFilterResult> for RTSPFilterResult {
-    fn from_glib(value: ffi::GstRTSPFilterResult) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPFilterResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPFilterResult::Remove,
@@ -121,7 +121,7 @@ impl ToGlib for RTSPMediaStatus {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPMediaStatus> for RTSPMediaStatus {
-    fn from_glib(value: ffi::GstRTSPMediaStatus) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPMediaStatus) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPMediaStatus::Unprepared,
@@ -163,7 +163,7 @@ impl ToGlib for RTSPPublishClockMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
-    fn from_glib(value: ffi::GstRTSPPublishClockMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPPublishClockMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPPublishClockMode::None,
@@ -224,7 +224,7 @@ impl ToGlib for RTSPSuspendMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
-    fn from_glib(value: ffi::GstRTSPSuspendMode) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPSuspendMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPSuspendMode::None,
@@ -283,7 +283,7 @@ impl ToGlib for RTSPThreadType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPThreadType> for RTSPThreadType {
-    fn from_glib(value: ffi::GstRTSPThreadType) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPThreadType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPThreadType::Client,

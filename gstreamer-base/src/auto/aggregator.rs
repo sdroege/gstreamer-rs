@@ -33,38 +33,47 @@ pub const NONE_AGGREGATOR: Option<&Aggregator> = None;
 pub trait AggregatorExt: 'static {
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    //#[doc(alias = "gst_aggregator_get_allocator")]
     //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_get_buffer_pool")]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_get_latency")]
     fn get_latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_negotiate")]
     fn negotiate(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_aggregator_peek_next_sample")]
     fn peek_next_sample<P: IsA<AggregatorPad>>(&self, pad: &P) -> Option<gst::Sample>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_set_latency")]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_set_src_caps")]
     fn set_src_caps(&self, caps: &gst::Caps);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_aggregator_simple_get_next_time")]
     fn simple_get_next_time(&self) -> gst::ClockTime;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "gst_aggregator_update_segment")]
     //fn update_segment(&self, segment: /*Ignored*/&gst::Segment);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

@@ -41,7 +41,7 @@ impl ToGlib for DiscovererResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
-    fn from_glib(value: ffi::GstDiscovererResult) -> Self {
+    unsafe fn from_glib(value: ffi::GstDiscovererResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => DiscovererResult::Ok,

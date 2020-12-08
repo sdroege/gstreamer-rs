@@ -17,10 +17,13 @@ glib::glib_wrapper! {
 pub const NONE_EXTRACTABLE: Option<&Extractable> = None;
 
 pub trait ExtractableExt: 'static {
+    #[doc(alias = "ges_extractable_get_asset")]
     fn get_asset(&self) -> Option<Asset>;
 
+    #[doc(alias = "ges_extractable_get_id")]
     fn get_id(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "ges_extractable_set_asset")]
     fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
 }
 

@@ -34,7 +34,7 @@ impl ToGlib for RTPBufferFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
-    fn from_glib(value: ffi::GstRTPBufferFlags) -> RTPBufferFlags {
+    unsafe fn from_glib(value: ffi::GstRTPBufferFlags) -> RTPBufferFlags {
         skip_assert_initialized!();
         RTPBufferFlags::from_bits_truncate(value)
     }
@@ -89,7 +89,7 @@ impl ToGlib for RTPBufferMapFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPBufferMapFlags> for RTPBufferMapFlags {
-    fn from_glib(value: ffi::GstRTPBufferMapFlags) -> RTPBufferMapFlags {
+    unsafe fn from_glib(value: ffi::GstRTPBufferMapFlags) -> RTPBufferMapFlags {
         skip_assert_initialized!();
         RTPBufferMapFlags::from_bits_truncate(value)
     }

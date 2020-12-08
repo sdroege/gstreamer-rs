@@ -33,6 +33,7 @@ glib::glib_wrapper! {
 }
 
 impl GLOverlayCompositor {
+    #[doc(alias = "gst_gl_overlay_compositor_new")]
     pub fn new<P: IsA<GLContext>>(context: &P) -> GLOverlayCompositor {
         skip_assert_initialized!();
         unsafe {
@@ -42,12 +43,14 @@ impl GLOverlayCompositor {
         }
     }
 
+    #[doc(alias = "gst_gl_overlay_compositor_draw_overlays")]
     pub fn draw_overlays(&self) {
         unsafe {
             ffi::gst_gl_overlay_compositor_draw_overlays(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_overlay_compositor_free_overlays")]
     pub fn free_overlays(&self) {
         unsafe {
             ffi::gst_gl_overlay_compositor_free_overlays(self.to_glib_none().0);
@@ -83,6 +86,7 @@ impl GLOverlayCompositor {
         }
     }
 
+    #[doc(alias = "gst_gl_overlay_compositor_add_caps")]
     pub fn add_caps(caps: &gst::Caps) -> Option<gst::Caps> {
         assert_initialized_main_thread!();
         unsafe {

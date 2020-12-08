@@ -33,7 +33,7 @@ impl ToGlib for PipelineFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESPipelineFlags> for PipelineFlags {
-    fn from_glib(value: ffi::GESPipelineFlags) -> PipelineFlags {
+    unsafe fn from_glib(value: ffi::GESPipelineFlags) -> PipelineFlags {
         skip_assert_initialized!();
         PipelineFlags::from_bits_truncate(value)
     }
@@ -105,7 +105,7 @@ impl ToGlib for TrackType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESTrackType> for TrackType {
-    fn from_glib(value: ffi::GESTrackType) -> TrackType {
+    unsafe fn from_glib(value: ffi::GESTrackType) -> TrackType {
         skip_assert_initialized!();
         TrackType::from_bits_truncate(value)
     }

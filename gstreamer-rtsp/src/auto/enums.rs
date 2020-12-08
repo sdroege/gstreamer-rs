@@ -35,7 +35,7 @@ impl ToGlib for RTSPAuthMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
-    fn from_glib(value: ffi::GstRTSPAuthMethod) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPAuthMethod) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPAuthMethod::None,
@@ -96,7 +96,7 @@ impl ToGlib for RTSPFamily {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
-    fn from_glib(value: ffi::GstRTSPFamily) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPFamily) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPFamily::None,
@@ -331,7 +331,7 @@ impl ToGlib for RTSPHeaderField {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPHeaderField> for RTSPHeaderField {
-    fn from_glib(value: ffi::GstRTSPHeaderField) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPHeaderField) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPHeaderField::Invalid,
@@ -485,7 +485,7 @@ impl ToGlib for RTSPMsgType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
-    fn from_glib(value: ffi::GstRTSPMsgType) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPMsgType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPMsgType::Invalid,
@@ -553,7 +553,7 @@ impl ToGlib for RTSPRangeUnit {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
-    fn from_glib(value: ffi::GstRTSPRangeUnit) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPRangeUnit) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPRangeUnit::Smpte,
@@ -646,7 +646,7 @@ impl ToGlib for RTSPResult {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
-    fn from_glib(value: ffi::GstRTSPResult) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPResult::Ok,
@@ -728,7 +728,7 @@ impl ToGlib for RTSPState {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPState> for RTSPState {
-    fn from_glib(value: ffi::GstRTSPState) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPState::Invalid,
@@ -886,7 +886,7 @@ impl ToGlib for RTSPStatusCode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
-    fn from_glib(value: ffi::GstRTSPStatusCode) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPStatusCode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPStatusCode::Invalid,
@@ -994,7 +994,7 @@ impl ToGlib for RTSPTimeType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
-    fn from_glib(value: ffi::GstRTSPTimeType) -> Self {
+    unsafe fn from_glib(value: ffi::GstRTSPTimeType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPTimeType::Seconds,

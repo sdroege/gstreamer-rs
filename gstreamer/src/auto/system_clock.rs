@@ -23,11 +23,13 @@ glib::glib_wrapper! {
 }
 
 impl SystemClock {
+    #[doc(alias = "gst_system_clock_obtain")]
     pub fn obtain() -> Clock {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_system_clock_obtain()) }
     }
 
+    #[doc(alias = "gst_system_clock_set_default")]
     pub fn set_default<P: IsA<Clock>>(new_clock: Option<&P>) {
         assert_initialized_main_thread!();
         unsafe {

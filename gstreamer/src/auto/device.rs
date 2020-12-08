@@ -28,20 +28,28 @@ unsafe impl Sync for Device {}
 pub const NONE_DEVICE: Option<&Device> = None;
 
 pub trait DeviceExt: 'static {
+    #[doc(alias = "gst_device_create_element")]
     fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError>;
 
+    #[doc(alias = "gst_device_get_caps")]
     fn get_caps(&self) -> Option<Caps>;
 
+    #[doc(alias = "gst_device_get_device_class")]
     fn get_device_class(&self) -> glib::GString;
 
+    #[doc(alias = "gst_device_get_display_name")]
     fn get_display_name(&self) -> glib::GString;
 
+    #[doc(alias = "gst_device_get_properties")]
     fn get_properties(&self) -> Option<Structure>;
 
+    #[doc(alias = "gst_device_has_classes")]
     fn has_classes(&self, classes: &str) -> bool;
 
+    #[doc(alias = "gst_device_has_classesv")]
     fn has_classesv(&self, classes: &[&str]) -> bool;
 
+    #[doc(alias = "gst_device_reconfigure_element")]
     fn reconfigure_element<P: IsA<Element>>(
         &self,
         element: &P,

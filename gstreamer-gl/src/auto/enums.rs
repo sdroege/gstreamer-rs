@@ -51,7 +51,7 @@ impl ToGlib for GLContextError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLContextError> for GLContextError {
-    fn from_glib(value: ffi::GstGLContextError) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLContextError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => GLContextError::Failed,
@@ -141,12 +141,14 @@ pub enum GLFormat {
 }
 
 impl GLFormat {
+    //#[doc(alias = "gst_gl_format_from_video_info")]
     //pub fn from_video_info<P: IsA<GLContext>>(context: &P, vinfo: /*Ignored*/&mut gst_video::VideoInfo, plane: u32) -> GLFormat {
     //    unsafe { TODO: call ffi:gst_gl_format_from_video_info() }
     //}
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_format_is_supported")]
     pub fn is_supported<P: IsA<GLContext>>(context: &P, format: GLFormat) -> bool {
         skip_assert_initialized!();
         unsafe {
@@ -159,6 +161,7 @@ impl GLFormat {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_format_type_from_sized_gl_format")]
     pub fn type_from_sized_gl_format(self) -> (GLFormat, u32) {
         assert_initialized_main_thread!();
         unsafe {
@@ -175,6 +178,7 @@ impl GLFormat {
         }
     }
 
+    #[doc(alias = "gst_gl_format_type_n_bytes")]
     pub fn type_n_bytes(format: u32, type_: u32) -> u32 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_gl_format_type_n_bytes(format, type_) }
@@ -213,7 +217,7 @@ impl ToGlib for GLFormat {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLFormat> for GLFormat {
-    fn from_glib(value: ffi::GstGLFormat) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLFormat) -> Self {
         skip_assert_initialized!();
         match value {
             6409 => GLFormat::Luminance,
@@ -290,7 +294,7 @@ impl ToGlib for GLQueryType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLQueryType> for GLQueryType {
-    fn from_glib(value: ffi::GstGLQueryType) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLQueryType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => GLQueryType::None,
@@ -351,7 +355,7 @@ impl ToGlib for GLSLError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLSLError> for GLSLError {
-    fn from_glib(value: ffi::GstGLSLError) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLSLError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => GLSLError::Compile,
@@ -433,11 +437,13 @@ pub enum GLSLVersion {
 }
 
 impl GLSLVersion {
+    #[doc(alias = "gst_glsl_version_from_string")]
     pub fn from_string(string: &str) -> GLSLVersion {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_glsl_version_from_string(string.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_glsl_version_profile_from_string")]
     pub fn profile_from_string(string: &str) -> Option<(GLSLVersion, GLSLProfile)> {
         assert_initialized_main_thread!();
         unsafe {
@@ -458,6 +464,7 @@ impl GLSLVersion {
         }
     }
 
+    #[doc(alias = "gst_glsl_version_profile_to_string")]
     pub fn profile_to_string(self, profile: GLSLProfile) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe {
@@ -468,6 +475,7 @@ impl GLSLVersion {
         }
     }
 
+    #[doc(alias = "gst_glsl_version_to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_glsl_version_to_string(self.to_glib())) }
@@ -504,7 +512,7 @@ impl ToGlib for GLSLVersion {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLSLVersion> for GLSLVersion {
-    fn from_glib(value: ffi::GstGLSLVersion) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLSLVersion) -> Self {
         skip_assert_initialized!();
         match value {
             0 => GLSLVersion::None,
@@ -583,7 +591,7 @@ impl ToGlib for GLStereoDownmix {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLStereoDownmix> for GLStereoDownmix {
-    fn from_glib(value: ffi::GstGLStereoDownmix) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLStereoDownmix) -> Self {
         skip_assert_initialized!();
         match value {
             0 => GLStereoDownmix::GreenMagentaDubois,
@@ -630,16 +638,19 @@ pub enum GLTextureTarget {
 }
 
 impl GLTextureTarget {
+    #[doc(alias = "gst_gl_texture_target_from_gl")]
     pub fn from_gl(target: u32) -> GLTextureTarget {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_gl_texture_target_from_gl(target)) }
     }
 
+    #[doc(alias = "gst_gl_texture_target_from_string")]
     pub fn from_string(str: &str) -> GLTextureTarget {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_gl_texture_target_from_string(str.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_gl_texture_target_to_buffer_pool_option")]
     pub fn to_buffer_pool_option(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe {
@@ -649,11 +660,13 @@ impl GLTextureTarget {
         }
     }
 
+    #[doc(alias = "gst_gl_texture_target_to_gl")]
     pub fn to_gl(self) -> u32 {
         assert_initialized_main_thread!();
         unsafe { ffi::gst_gl_texture_target_to_gl(self.to_glib()) }
     }
 
+    #[doc(alias = "gst_gl_texture_target_to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_gl_texture_target_to_string(self.to_glib())) }
@@ -677,7 +690,7 @@ impl ToGlib for GLTextureTarget {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLTextureTarget> for GLTextureTarget {
-    fn from_glib(value: ffi::GstGLTextureTarget) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLTextureTarget) -> Self {
         skip_assert_initialized!();
         match value {
             0 => GLTextureTarget::None,
@@ -743,7 +756,7 @@ impl ToGlib for GLUploadReturn {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLUploadReturn> for GLUploadReturn {
-    fn from_glib(value: ffi::GstGLUploadReturn) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLUploadReturn) -> Self {
         skip_assert_initialized!();
         match value {
             1 => GLUploadReturn::Done,
@@ -806,7 +819,7 @@ impl ToGlib for GLWindowError {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLWindowError> for GLWindowError {
-    fn from_glib(value: ffi::GstGLWindowError) -> Self {
+    unsafe fn from_glib(value: ffi::GstGLWindowError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => GLWindowError::Failed,

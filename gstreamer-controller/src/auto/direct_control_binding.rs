@@ -20,6 +20,7 @@ glib::glib_wrapper! {
 }
 
 impl DirectControlBinding {
+    #[doc(alias = "gst_direct_control_binding_new")]
     pub fn new<P: IsA<gst::Object>, Q: IsA<gst::ControlSource>>(
         object: &P,
         property_name: &str,
@@ -36,6 +37,7 @@ impl DirectControlBinding {
         }
     }
 
+    #[doc(alias = "gst_direct_control_binding_new_absolute")]
     pub fn new_absolute<P: IsA<gst::Object>, Q: IsA<gst::ControlSource>>(
         object: &P,
         property_name: &str,

@@ -31,7 +31,7 @@ impl ToGlib for RTSPAddressFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPAddressFlags> for RTSPAddressFlags {
-    fn from_glib(value: ffi::GstRTSPAddressFlags) -> RTSPAddressFlags {
+    unsafe fn from_glib(value: ffi::GstRTSPAddressFlags) -> RTSPAddressFlags {
         skip_assert_initialized!();
         RTSPAddressFlags::from_bits_truncate(value)
     }
@@ -55,7 +55,7 @@ impl ToGlib for RTSPTransportMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPTransportMode> for RTSPTransportMode {
-    fn from_glib(value: ffi::GstRTSPTransportMode) -> RTSPTransportMode {
+    unsafe fn from_glib(value: ffi::GstRTSPTransportMode) -> RTSPTransportMode {
         skip_assert_initialized!();
         RTSPTransportMode::from_bits_truncate(value)
     }

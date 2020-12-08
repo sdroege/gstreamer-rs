@@ -15,11 +15,13 @@ glib::glib_wrapper! {
 }
 
 impl Allocator {
+    #[doc(alias = "gst_allocator_find")]
     pub fn find(name: Option<&str>) -> Option<Allocator> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_allocator_find(name.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_allocator_register")]
     pub fn register<P: IsA<Allocator>>(name: &str, allocator: &P) {
         skip_assert_initialized!();
         unsafe {
@@ -34,10 +36,13 @@ unsafe impl Sync for Allocator {}
 pub const NONE_ALLOCATOR: Option<&Allocator> = None;
 
 pub trait AllocatorExt: 'static {
+    //#[doc(alias = "gst_allocator_alloc")]
     //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory>;
 
+    //#[doc(alias = "gst_allocator_free")]
     //fn free(&self, memory: /*Ignored*/&Memory);
 
+    #[doc(alias = "gst_allocator_set_default")]
     fn set_default(&self);
 }
 

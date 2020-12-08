@@ -19,20 +19,28 @@ unsafe impl Sync for DiscovererStreamInfo {}
 pub const NONE_DISCOVERER_STREAM_INFO: Option<&DiscovererStreamInfo> = None;
 
 pub trait DiscovererStreamInfoExt: 'static {
+    #[doc(alias = "gst_discoverer_stream_info_get_caps")]
     fn get_caps(&self) -> Option<gst::Caps>;
 
+    #[doc(alias = "gst_discoverer_stream_info_get_misc")]
     fn get_misc(&self) -> Option<gst::Structure>;
 
+    #[doc(alias = "gst_discoverer_stream_info_get_next")]
     fn get_next(&self) -> Option<DiscovererStreamInfo>;
 
+    #[doc(alias = "gst_discoverer_stream_info_get_previous")]
     fn get_previous(&self) -> Option<DiscovererStreamInfo>;
 
+    #[doc(alias = "gst_discoverer_stream_info_get_stream_id")]
     fn get_stream_id(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_discoverer_stream_info_get_stream_type_nick")]
     fn get_stream_type_nick(&self) -> glib::GString;
 
+    #[doc(alias = "gst_discoverer_stream_info_get_tags")]
     fn get_tags(&self) -> Option<gst::TagList>;
 
+    #[doc(alias = "gst_discoverer_stream_info_get_toc")]
     fn get_toc(&self) -> Option<gst::Toc>;
 }
 

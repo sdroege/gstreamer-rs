@@ -28,30 +28,42 @@ unsafe impl Sync for DeviceProvider {}
 pub const NONE_DEVICE_PROVIDER: Option<&DeviceProvider> = None;
 
 pub trait DeviceProviderExt: 'static {
+    #[doc(alias = "gst_device_provider_can_monitor")]
     fn can_monitor(&self) -> bool;
 
+    #[doc(alias = "gst_device_provider_device_add")]
     fn device_add<P: IsA<Device>>(&self, device: &P);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_device_provider_device_changed")]
     fn device_changed<P: IsA<Device>, Q: IsA<Device>>(&self, device: &P, changed_device: &Q);
 
+    #[doc(alias = "gst_device_provider_device_remove")]
     fn device_remove<P: IsA<Device>>(&self, device: &P);
 
+    #[doc(alias = "gst_device_provider_get_bus")]
     fn get_bus(&self) -> Bus;
 
+    #[doc(alias = "gst_device_provider_get_devices")]
     fn get_devices(&self) -> Vec<Device>;
 
+    #[doc(alias = "gst_device_provider_get_factory")]
     fn get_factory(&self) -> Option<DeviceProviderFactory>;
 
+    #[doc(alias = "gst_device_provider_get_hidden_providers")]
     fn get_hidden_providers(&self) -> Vec<glib::GString>;
 
+    #[doc(alias = "gst_device_provider_hide_provider")]
     fn hide_provider(&self, name: &str);
 
+    #[doc(alias = "gst_device_provider_start")]
     fn start(&self) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_device_provider_stop")]
     fn stop(&self);
 
+    #[doc(alias = "gst_device_provider_unhide_provider")]
     fn unhide_provider(&self, name: &str);
 
     fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(

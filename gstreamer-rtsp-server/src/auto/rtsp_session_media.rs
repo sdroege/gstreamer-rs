@@ -17,6 +17,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPSessionMedia {
+    #[doc(alias = "gst_rtsp_session_media_new")]
     pub fn new<P: IsA<RTSPMedia>>(path: &str, media: &P) -> RTSPSessionMedia {
         skip_assert_initialized!();
         unsafe {
@@ -34,28 +35,39 @@ unsafe impl Sync for RTSPSessionMedia {}
 pub const NONE_RTSP_SESSION_MEDIA: Option<&RTSPSessionMedia> = None;
 
 pub trait RTSPSessionMediaExt: 'static {
+    //#[doc(alias = "gst_rtsp_session_media_alloc_channels")]
     //fn alloc_channels(&self, range: /*Ignored*/gst_rtsp::RTSPRange) -> bool;
 
+    #[doc(alias = "gst_rtsp_session_media_get_base_time")]
     fn get_base_time(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_rtsp_session_media_get_media")]
     fn get_media(&self) -> Option<RTSPMedia>;
 
+    #[doc(alias = "gst_rtsp_session_media_get_rtpinfo")]
     fn get_rtpinfo(&self) -> Option<glib::GString>;
 
+    //#[doc(alias = "gst_rtsp_session_media_get_rtsp_state")]
     //fn get_rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState;
 
+    #[doc(alias = "gst_rtsp_session_media_get_transport")]
     fn get_transport(&self, idx: u32) -> Option<RTSPStreamTransport>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_rtsp_session_media_get_transports")]
     fn get_transports(&self) -> Vec<RTSPStreamTransport>;
 
+    #[doc(alias = "gst_rtsp_session_media_matches")]
     fn matches(&self, path: &str) -> Option<i32>;
 
+    //#[doc(alias = "gst_rtsp_session_media_set_rtsp_state")]
     //fn set_rtsp_state(&self, state: /*Ignored*/gst_rtsp::RTSPState);
 
+    #[doc(alias = "gst_rtsp_session_media_set_state")]
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "gst_rtsp_session_media_set_transport")]
     //fn set_transport<P: IsA<RTSPStream>>(&self, stream: &P, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> Option<RTSPStreamTransport>;
 }
 

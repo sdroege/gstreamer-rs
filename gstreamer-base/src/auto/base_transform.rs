@@ -25,36 +25,51 @@ unsafe impl Sync for BaseTransform {}
 pub const NONE_BASE_TRANSFORM: Option<&BaseTransform> = None;
 
 pub trait BaseTransformExt: 'static {
+    //#[doc(alias = "gst_base_transform_get_allocator")]
     //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
+    #[doc(alias = "gst_base_transform_get_buffer_pool")]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
+    #[doc(alias = "gst_base_transform_is_in_place")]
     fn is_in_place(&self) -> bool;
 
+    #[doc(alias = "gst_base_transform_is_passthrough")]
     fn is_passthrough(&self) -> bool;
 
+    #[doc(alias = "gst_base_transform_is_qos_enabled")]
     fn is_qos_enabled(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_transform_reconfigure")]
     fn reconfigure(&self) -> bool;
 
+    #[doc(alias = "gst_base_transform_reconfigure_sink")]
     fn reconfigure_sink(&self);
 
+    #[doc(alias = "gst_base_transform_reconfigure_src")]
     fn reconfigure_src(&self);
 
+    #[doc(alias = "gst_base_transform_set_gap_aware")]
     fn set_gap_aware(&self, gap_aware: bool);
 
+    #[doc(alias = "gst_base_transform_set_in_place")]
     fn set_in_place(&self, in_place: bool);
 
+    #[doc(alias = "gst_base_transform_set_passthrough")]
     fn set_passthrough(&self, passthrough: bool);
 
+    #[doc(alias = "gst_base_transform_set_prefer_passthrough")]
     fn set_prefer_passthrough(&self, prefer_passthrough: bool);
 
+    #[doc(alias = "gst_base_transform_set_qos_enabled")]
     fn set_qos_enabled(&self, enabled: bool);
 
+    #[doc(alias = "gst_base_transform_update_qos")]
     fn update_qos(&self, proportion: f64, diff: gst::ClockTimeDiff, timestamp: gst::ClockTime);
 
+    #[doc(alias = "gst_base_transform_update_src_caps")]
     fn update_src_caps(&self, updated_caps: &gst::Caps) -> Result<(), glib::error::BoolError>;
 
     fn get_property_qos(&self) -> bool;

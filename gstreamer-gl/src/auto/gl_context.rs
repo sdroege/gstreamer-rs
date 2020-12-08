@@ -22,16 +22,19 @@ glib::glib_wrapper! {
 }
 
 impl GLContext {
+    #[doc(alias = "gst_gl_context_new")]
     pub fn new<P: IsA<GLDisplay>>(display: &P) -> GLContext {
         skip_assert_initialized!();
         unsafe { from_glib_none(ffi::gst_gl_context_new(display.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_gl_context_get_current")]
     pub fn get_current() -> Option<GLContext> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_gl_context_get_current()) }
     }
 
+    #[doc(alias = "gst_gl_context_get_current_gl_api")]
     pub fn get_current_gl_api(platform: GLPlatform) -> (GLAPI, u32, u32) {
         assert_initialized_main_thread!();
         unsafe {
@@ -55,54 +58,77 @@ unsafe impl Sync for GLContext {}
 pub const NONE_GL_CONTEXT: Option<&GLContext> = None;
 
 pub trait GLContextExt: 'static {
+    #[doc(alias = "gst_gl_context_activate")]
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_gl_context_can_share")]
     fn can_share<P: IsA<GLContext>>(&self, other_context: &P) -> bool;
 
+    #[doc(alias = "gst_gl_context_check_feature")]
     fn check_feature(&self, feature: &str) -> bool;
 
+    #[doc(alias = "gst_gl_context_check_framebuffer_status")]
     fn check_framebuffer_status(&self, fbo_target: u32) -> bool;
 
+    #[doc(alias = "gst_gl_context_check_gl_version")]
     fn check_gl_version(&self, api: GLAPI, maj: i32, min: i32) -> bool;
 
+    #[doc(alias = "gst_gl_context_clear_framebuffer")]
     fn clear_framebuffer(&self);
 
+    #[doc(alias = "gst_gl_context_clear_shader")]
     fn clear_shader(&self);
 
+    #[doc(alias = "gst_gl_context_create")]
     fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), glib::Error>;
 
+    #[doc(alias = "gst_gl_context_destroy")]
     fn destroy(&self);
 
+    #[doc(alias = "gst_gl_context_fill_info")]
     fn fill_info(&self) -> Result<(), glib::Error>;
 
+    #[doc(alias = "gst_gl_context_get_display")]
     fn get_display(&self) -> GLDisplay;
 
+    #[doc(alias = "gst_gl_context_get_gl_api")]
     fn get_gl_api(&self) -> GLAPI;
 
+    #[doc(alias = "gst_gl_context_get_gl_platform")]
     fn get_gl_platform(&self) -> GLPlatform;
 
+    #[doc(alias = "gst_gl_context_get_gl_platform_version")]
     fn get_gl_platform_version(&self) -> (i32, i32);
 
+    #[doc(alias = "gst_gl_context_get_gl_version")]
     fn get_gl_version(&self) -> (i32, i32);
 
+    #[doc(alias = "gst_gl_context_get_window")]
     fn get_window(&self) -> Option<GLWindow>;
 
+    #[doc(alias = "gst_gl_context_is_shared")]
     fn is_shared(&self) -> bool;
 
+    #[doc(alias = "gst_gl_context_set_shared_with")]
     fn set_shared_with<P: IsA<GLContext>>(&self, share: &P);
 
+    #[doc(alias = "gst_gl_context_set_window")]
     fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_gl_context_supports_glsl_profile_version")]
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_context_supports_precision")]
     fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_context_supports_precision_highp")]
     fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
+    #[doc(alias = "gst_gl_context_swap_buffers")]
     fn swap_buffers(&self);
 }
 

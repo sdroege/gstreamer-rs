@@ -16,6 +16,7 @@ glib::glib_wrapper! {
 }
 
 impl DateTime {
+    #[doc(alias = "gst_date_time_new_from_g_date_time")]
     pub fn from_g_date_time(dt: &glib::DateTime) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -24,6 +25,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_from_iso8601_string")]
     pub fn from_iso8601_string(string: &str) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -34,6 +36,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_from_unix_epoch_local_time")]
     pub fn from_unix_epoch_local_time(secs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -44,6 +47,7 @@ impl DateTime {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_date_time_new_from_unix_epoch_local_time_usecs")]
     pub fn from_unix_epoch_local_time_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -54,6 +58,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_from_unix_epoch_utc")]
     pub fn from_unix_epoch_utc(secs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -64,6 +69,7 @@ impl DateTime {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_date_time_new_from_unix_epoch_utc_usecs")]
     pub fn from_unix_epoch_utc_usecs(usecs: i64) -> Result<DateTime, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -72,40 +78,49 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_new_now_local_time")]
     pub fn new_now_local_time() -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_now_local_time()) }
     }
 
+    #[doc(alias = "gst_date_time_new_now_utc")]
     pub fn new_now_utc() -> DateTime {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_now_utc()) }
     }
 
+    #[doc(alias = "gst_date_time_get_year")]
     pub fn get_year(&self) -> i32 {
         unsafe { ffi::gst_date_time_get_year(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_date_time_has_day")]
     pub fn has_day(&self) -> bool {
         unsafe { from_glib(ffi::gst_date_time_has_day(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_date_time_has_month")]
     pub fn has_month(&self) -> bool {
         unsafe { from_glib(ffi::gst_date_time_has_month(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_date_time_has_second")]
     pub fn has_second(&self) -> bool {
         unsafe { from_glib(ffi::gst_date_time_has_second(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_date_time_has_time")]
     pub fn has_time(&self) -> bool {
         unsafe { from_glib(ffi::gst_date_time_has_time(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_date_time_has_year")]
     pub fn has_year(&self) -> bool {
         unsafe { from_glib(ffi::gst_date_time_has_year(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_date_time_to_g_date_time")]
     pub fn to_g_date_time(&self) -> Result<glib::DateTime, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_to_g_date_time(self.to_glib_none().0))
@@ -113,6 +128,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "gst_date_time_to_iso8601_string")]
     pub fn to_iso8601_string(&self) -> Result<glib::GString, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_to_iso8601_string(self.to_glib_none().0))

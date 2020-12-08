@@ -17,10 +17,12 @@ glib::glib_wrapper! {
 }
 
 impl DeviceProviderFactory {
+    #[doc(alias = "gst_device_provider_factory_get")]
     pub fn get(&self) -> Option<DeviceProvider> {
         unsafe { from_glib_full(ffi::gst_device_provider_factory_get(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_device_provider_factory_get_device_provider_type")]
     pub fn get_device_provider_type(&self) -> glib::types::Type {
         unsafe {
             from_glib(ffi::gst_device_provider_factory_get_device_provider_type(
@@ -29,6 +31,7 @@ impl DeviceProviderFactory {
         }
     }
 
+    #[doc(alias = "gst_device_provider_factory_get_metadata")]
     pub fn get_metadata(&self, key: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_device_provider_factory_get_metadata(
@@ -38,6 +41,7 @@ impl DeviceProviderFactory {
         }
     }
 
+    #[doc(alias = "gst_device_provider_factory_get_metadata_keys")]
     pub fn get_metadata_keys(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(
@@ -46,6 +50,7 @@ impl DeviceProviderFactory {
         }
     }
 
+    #[doc(alias = "gst_device_provider_factory_has_classes")]
     pub fn has_classes(&self, classes: Option<&str>) -> bool {
         unsafe {
             from_glib(ffi::gst_device_provider_factory_has_classes(
@@ -55,6 +60,7 @@ impl DeviceProviderFactory {
         }
     }
 
+    #[doc(alias = "gst_device_provider_factory_has_classesv")]
     pub fn has_classesv(&self, classes: &[&str]) -> bool {
         unsafe {
             from_glib(ffi::gst_device_provider_factory_has_classesv(
@@ -64,11 +70,13 @@ impl DeviceProviderFactory {
         }
     }
 
+    #[doc(alias = "gst_device_provider_factory_find")]
     pub fn find(name: &str) -> Option<DeviceProviderFactory> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_device_provider_factory_find(name.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_device_provider_factory_get_by_name")]
     pub fn get_by_name(factoryname: &str) -> Option<DeviceProvider> {
         assert_initialized_main_thread!();
         unsafe {
@@ -78,6 +86,7 @@ impl DeviceProviderFactory {
         }
     }
 
+    #[doc(alias = "gst_device_provider_factory_list_get_device_providers")]
     pub fn list_get_device_providers(minrank: Rank) -> Vec<DeviceProviderFactory> {
         assert_initialized_main_thread!();
         unsafe {

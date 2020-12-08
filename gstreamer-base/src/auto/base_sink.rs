@@ -25,70 +25,98 @@ unsafe impl Sync for BaseSink {}
 pub const NONE_BASE_SINK: Option<&BaseSink> = None;
 
 pub trait BaseSinkExt: 'static {
+    //#[doc(alias = "gst_base_sink_do_preroll")]
     //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> gst::FlowReturn;
 
+    #[doc(alias = "gst_base_sink_get_blocksize")]
     fn get_blocksize(&self) -> u32;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_base_sink_get_drop_out_of_segment")]
     fn get_drop_out_of_segment(&self) -> bool;
 
+    #[doc(alias = "gst_base_sink_get_last_sample")]
     fn get_last_sample(&self) -> Option<gst::Sample>;
 
+    #[doc(alias = "gst_base_sink_get_latency")]
     fn get_latency(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_base_sink_get_max_bitrate")]
     fn get_max_bitrate(&self) -> u64;
 
+    #[doc(alias = "gst_base_sink_get_max_lateness")]
     fn get_max_lateness(&self) -> i64;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_base_sink_get_processing_deadline")]
     fn get_processing_deadline(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_base_sink_get_render_delay")]
     fn get_render_delay(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_sink_get_stats")]
     fn get_stats(&self) -> gst::Structure;
 
+    #[doc(alias = "gst_base_sink_get_sync")]
     fn get_sync(&self) -> bool;
 
+    #[doc(alias = "gst_base_sink_get_throttle_time")]
     fn get_throttle_time(&self) -> u64;
 
+    #[doc(alias = "gst_base_sink_get_ts_offset")]
     fn get_ts_offset(&self) -> gst::ClockTimeDiff;
 
+    #[doc(alias = "gst_base_sink_is_async_enabled")]
     fn is_async_enabled(&self) -> bool;
 
+    #[doc(alias = "gst_base_sink_is_last_sample_enabled")]
     fn is_last_sample_enabled(&self) -> bool;
 
+    #[doc(alias = "gst_base_sink_is_qos_enabled")]
     fn is_qos_enabled(&self) -> bool;
 
+    #[doc(alias = "gst_base_sink_set_async_enabled")]
     fn set_async_enabled(&self, enabled: bool);
 
+    #[doc(alias = "gst_base_sink_set_blocksize")]
     fn set_blocksize(&self, blocksize: u32);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_base_sink_set_drop_out_of_segment")]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool);
 
+    #[doc(alias = "gst_base_sink_set_last_sample_enabled")]
     fn set_last_sample_enabled(&self, enabled: bool);
 
+    #[doc(alias = "gst_base_sink_set_max_bitrate")]
     fn set_max_bitrate(&self, max_bitrate: u64);
 
+    #[doc(alias = "gst_base_sink_set_max_lateness")]
     fn set_max_lateness(&self, max_lateness: i64);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_base_sink_set_processing_deadline")]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime);
 
+    #[doc(alias = "gst_base_sink_set_qos_enabled")]
     fn set_qos_enabled(&self, enabled: bool);
 
+    #[doc(alias = "gst_base_sink_set_render_delay")]
     fn set_render_delay(&self, delay: gst::ClockTime);
 
+    #[doc(alias = "gst_base_sink_set_sync")]
     fn set_sync(&self, sync: bool);
 
+    #[doc(alias = "gst_base_sink_set_throttle_time")]
     fn set_throttle_time(&self, throttle: u64);
 
+    #[doc(alias = "gst_base_sink_set_ts_offset")]
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff);
 
     fn get_property_async(&self) -> bool;

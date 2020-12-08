@@ -22,10 +22,13 @@ unsafe impl Sync for TocSetter {}
 pub const NONE_TOC_SETTER: Option<&TocSetter> = None;
 
 pub trait TocSetterExt: 'static {
+    #[doc(alias = "gst_toc_setter_get_toc")]
     fn get_toc(&self) -> Option<Toc>;
 
+    #[doc(alias = "gst_toc_setter_reset")]
     fn reset(&self);
 
+    #[doc(alias = "gst_toc_setter_set_toc")]
     fn set_toc(&self, toc: Option<&Toc>);
 }
 

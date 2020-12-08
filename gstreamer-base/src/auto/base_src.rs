@@ -25,39 +25,55 @@ unsafe impl Sync for BaseSrc {}
 pub const NONE_BASE_SRC: Option<&BaseSrc> = None;
 
 pub trait BaseSrcExt: 'static {
+    //#[doc(alias = "gst_base_src_get_allocator")]
     //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
+    #[doc(alias = "gst_base_src_get_blocksize")]
     fn get_blocksize(&self) -> u32;
 
+    #[doc(alias = "gst_base_src_get_buffer_pool")]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
+    #[doc(alias = "gst_base_src_get_do_timestamp")]
     fn get_do_timestamp(&self) -> bool;
 
+    #[doc(alias = "gst_base_src_is_async")]
     fn is_async(&self) -> bool;
 
+    #[doc(alias = "gst_base_src_is_live")]
     fn is_live(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_base_src_negotiate")]
     fn negotiate(&self) -> bool;
 
     #[cfg_attr(feature = "v1_18", deprecated)]
+    #[doc(alias = "gst_base_src_new_seamless_segment")]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
 
+    #[doc(alias = "gst_base_src_set_async")]
     fn set_async(&self, async_: bool);
 
+    #[doc(alias = "gst_base_src_set_automatic_eos")]
     fn set_automatic_eos(&self, automatic_eos: bool);
 
+    #[doc(alias = "gst_base_src_set_blocksize")]
     fn set_blocksize(&self, blocksize: u32);
 
+    #[doc(alias = "gst_base_src_set_caps")]
     fn set_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_base_src_set_do_timestamp")]
     fn set_do_timestamp(&self, timestamp: bool);
 
+    #[doc(alias = "gst_base_src_set_dynamic_size")]
     fn set_dynamic_size(&self, dynamic: bool);
 
+    #[doc(alias = "gst_base_src_set_format")]
     fn set_format(&self, format: gst::Format);
 
+    #[doc(alias = "gst_base_src_set_live")]
     fn set_live(&self, live: bool);
 
     fn get_property_num_buffers(&self) -> i32;

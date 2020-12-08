@@ -38,38 +38,55 @@ unsafe impl Sync for VideoDecoder {}
 pub const NONE_VIDEO_DECODER: Option<&VideoDecoder> = None;
 
 pub trait VideoDecoderExt: 'static {
+    #[doc(alias = "gst_video_decoder_add_to_frame")]
     fn add_to_frame(&self, n_bytes: i32);
 
+    #[doc(alias = "gst_video_decoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self) -> Result<gst::Buffer, glib::BoolError>;
 
+    #[doc(alias = "gst_video_decoder_get_buffer_pool")]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
+    #[doc(alias = "gst_video_decoder_get_estimate_rate")]
     fn get_estimate_rate(&self) -> i32;
 
+    #[doc(alias = "gst_video_decoder_get_max_decode_time")]
     fn get_max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
+    #[doc(alias = "gst_video_decoder_get_max_errors")]
     fn get_max_errors(&self) -> i32;
 
+    #[doc(alias = "gst_video_decoder_get_needs_format")]
     fn get_needs_format(&self) -> bool;
 
+    #[doc(alias = "gst_video_decoder_get_packetized")]
     fn get_packetized(&self) -> bool;
 
+    #[doc(alias = "gst_video_decoder_get_pending_frame_size")]
     fn get_pending_frame_size(&self) -> usize;
 
+    #[doc(alias = "gst_video_decoder_get_qos_proportion")]
     fn get_qos_proportion(&self) -> f64;
 
+    #[doc(alias = "gst_video_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
+    #[doc(alias = "gst_video_decoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
+    #[doc(alias = "gst_video_decoder_set_estimate_rate")]
     fn set_estimate_rate(&self, enabled: bool);
 
+    #[doc(alias = "gst_video_decoder_set_max_errors")]
     fn set_max_errors(&self, num: i32);
 
+    #[doc(alias = "gst_video_decoder_set_needs_format")]
     fn set_needs_format(&self, enabled: bool);
 
+    #[doc(alias = "gst_video_decoder_set_packetized")]
     fn set_packetized(&self, packetized: bool);
 
+    #[doc(alias = "gst_video_decoder_set_use_default_pad_acceptcaps")]
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

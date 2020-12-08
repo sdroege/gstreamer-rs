@@ -35,7 +35,7 @@ impl ToGlib for AppStreamType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
-    fn from_glib(value: ffi::GstAppStreamType) -> Self {
+    unsafe fn from_glib(value: ffi::GstAppStreamType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AppStreamType::Stream,

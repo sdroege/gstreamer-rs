@@ -19,12 +19,14 @@ glib::glib_wrapper! {
 impl StreamCollection {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_stream_collection_get_size")]
     pub fn get_size(&self) -> u32 {
         unsafe { ffi::gst_stream_collection_get_size(self.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_stream_collection_get_stream")]
     pub fn get_stream(&self, index: u32) -> Option<Stream> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_stream(
@@ -36,6 +38,7 @@ impl StreamCollection {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_stream_collection_get_upstream_id")]
     pub fn get_upstream_id(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_upstream_id(

@@ -24,24 +24,34 @@ unsafe impl Sync for ChildProxy {}
 pub const NONE_CHILD_PROXY: Option<&ChildProxy> = None;
 
 pub trait ChildProxyExt: 'static {
+    #[doc(alias = "gst_child_proxy_child_added")]
     fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str);
 
+    #[doc(alias = "gst_child_proxy_child_removed")]
     fn child_removed<P: IsA<glib::Object>>(&self, child: &P, name: &str);
 
+    //#[doc(alias = "gst_child_proxy_get")]
     //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    #[doc(alias = "gst_child_proxy_get_child_by_index")]
     fn get_child_by_index(&self, index: u32) -> Option<glib::Object>;
 
+    #[doc(alias = "gst_child_proxy_get_child_by_name")]
     fn get_child_by_name(&self, name: &str) -> Option<glib::Object>;
 
+    #[doc(alias = "gst_child_proxy_get_children_count")]
     fn get_children_count(&self) -> u32;
 
+    //#[doc(alias = "gst_child_proxy_get_valist")]
     //fn get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
+    //#[doc(alias = "gst_child_proxy_lookup")]
     //fn lookup(&self, name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object>;
 
+    //#[doc(alias = "gst_child_proxy_set")]
     //fn set(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    //#[doc(alias = "gst_child_proxy_set_valist")]
     //fn set_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(

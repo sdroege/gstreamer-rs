@@ -25,60 +25,87 @@ unsafe impl Sync for AudioEncoder {}
 pub const NONE_AUDIO_ENCODER: Option<&AudioEncoder> = None;
 
 pub trait AudioEncoderExt: 'static {
+    #[doc(alias = "gst_audio_encoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
+    #[doc(alias = "gst_audio_encoder_get_audio_info")]
     fn get_audio_info(&self) -> Option<AudioInfo>;
 
+    #[doc(alias = "gst_audio_encoder_get_drainable")]
     fn get_drainable(&self) -> bool;
 
+    #[doc(alias = "gst_audio_encoder_get_frame_max")]
     fn get_frame_max(&self) -> i32;
 
+    #[doc(alias = "gst_audio_encoder_get_frame_samples_max")]
     fn get_frame_samples_max(&self) -> i32;
 
+    #[doc(alias = "gst_audio_encoder_get_frame_samples_min")]
     fn get_frame_samples_min(&self) -> i32;
 
+    #[doc(alias = "gst_audio_encoder_get_hard_min")]
     fn get_hard_min(&self) -> bool;
 
+    #[doc(alias = "gst_audio_encoder_get_hard_resync")]
     fn get_hard_resync(&self) -> bool;
 
+    #[doc(alias = "gst_audio_encoder_get_lookahead")]
     fn get_lookahead(&self) -> i32;
 
+    #[doc(alias = "gst_audio_encoder_get_mark_granule")]
     fn get_mark_granule(&self) -> bool;
 
+    #[doc(alias = "gst_audio_encoder_get_perfect_timestamp")]
     fn get_perfect_timestamp(&self) -> bool;
 
+    #[doc(alias = "gst_audio_encoder_get_tolerance")]
     fn get_tolerance(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_audio_encoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
+    #[doc(alias = "gst_audio_encoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_audio_encoder_set_allocation_caps")]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>);
 
+    #[doc(alias = "gst_audio_encoder_set_drainable")]
     fn set_drainable(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_encoder_set_frame_max")]
     fn set_frame_max(&self, num: i32);
 
+    #[doc(alias = "gst_audio_encoder_set_frame_samples_max")]
     fn set_frame_samples_max(&self, num: i32);
 
+    #[doc(alias = "gst_audio_encoder_set_frame_samples_min")]
     fn set_frame_samples_min(&self, num: i32);
 
+    #[doc(alias = "gst_audio_encoder_set_hard_min")]
     fn set_hard_min(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_encoder_set_hard_resync")]
     fn set_hard_resync(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_encoder_set_headers")]
     fn set_headers(&self, headers: &[&gst::Buffer]);
 
+    #[doc(alias = "gst_audio_encoder_set_latency")]
     fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime);
 
+    #[doc(alias = "gst_audio_encoder_set_lookahead")]
     fn set_lookahead(&self, num: i32);
 
+    #[doc(alias = "gst_audio_encoder_set_mark_granule")]
     fn set_mark_granule(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_encoder_set_perfect_timestamp")]
     fn set_perfect_timestamp(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_encoder_set_tolerance")]
     fn set_tolerance(&self, tolerance: gst::ClockTime);
 
     fn connect_property_hard_resync_notify<F: Fn(&Self) + Send + Sync + 'static>(

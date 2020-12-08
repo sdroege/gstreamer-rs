@@ -40,12 +40,15 @@ glib::glib_wrapper! {
 pub const NONE_TIMELINE_ELEMENT: Option<&TimelineElement> = None;
 
 pub trait TimelineElementExt: 'static {
+    //#[doc(alias = "ges_timeline_element_add_child_property")]
     //fn add_child_property<P: IsA<glib::Object>>(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &P) -> bool;
 
+    #[doc(alias = "ges_timeline_element_copy")]
     fn copy(&self, deep: bool) -> Result<TimelineElement, glib::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_edit")]
     fn edit(
         &self,
         layers: &[Layer],
@@ -57,6 +60,7 @@ pub trait TimelineElementExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_edit_full")]
     fn edit_full(
         &self,
         new_layer_priority: i64,
@@ -65,88 +69,126 @@ pub trait TimelineElementExt: 'static {
         position: u64,
     ) -> Result<(), glib::Error>;
 
+    //#[doc(alias = "ges_timeline_element_get_child_properties")]
     //fn get_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    //#[doc(alias = "ges_timeline_element_get_child_property")]
     //fn get_child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool;
 
+    //#[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
     //fn get_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value);
 
+    //#[doc(alias = "ges_timeline_element_get_child_property_valist")]
     //fn get_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
+    #[doc(alias = "ges_timeline_element_get_duration")]
     fn get_duration(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_timeline_element_get_inpoint")]
     fn get_inpoint(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "ges_timeline_element_get_layer_priority")]
     fn get_layer_priority(&self) -> u32;
 
+    #[doc(alias = "ges_timeline_element_get_max_duration")]
     fn get_max_duration(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_timeline_element_get_name")]
     fn get_name(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_element_get_natural_framerate")]
     fn get_natural_framerate(&self) -> Option<(i32, i32)>;
 
+    #[doc(alias = "ges_timeline_element_get_parent")]
     fn get_parent(&self) -> Option<TimelineElement>;
 
+    #[doc(alias = "ges_timeline_element_get_priority")]
     fn get_priority(&self) -> u32;
 
+    #[doc(alias = "ges_timeline_element_get_start")]
     fn get_start(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_timeline_element_get_timeline")]
     fn get_timeline(&self) -> Option<Timeline>;
 
+    #[doc(alias = "ges_timeline_element_get_toplevel_parent")]
     fn get_toplevel_parent(&self) -> Option<TimelineElement>;
 
+    #[doc(alias = "ges_timeline_element_get_track_types")]
     fn get_track_types(&self) -> TrackType;
 
+    //#[doc(alias = "ges_timeline_element_list_children_properties")]
     //fn list_children_properties(&self) -> /*Ignored*/Vec<glib::ParamSpec>;
 
+    //#[doc(alias = "ges_timeline_element_lookup_child")]
     //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object>;
 
+    #[doc(alias = "ges_timeline_element_paste")]
     fn paste(&self, paste_position: gst::ClockTime) -> Result<TimelineElement, glib::BoolError>;
 
+    //#[doc(alias = "ges_timeline_element_remove_child_property")]
     //fn remove_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec) -> bool;
 
+    #[doc(alias = "ges_timeline_element_ripple")]
     fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_element_ripple_end")]
     fn ripple_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_element_roll_end")]
     fn roll_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_element_roll_start")]
     fn roll_start(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "ges_timeline_element_set_child_properties")]
     //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    //#[doc(alias = "ges_timeline_element_set_child_property")]
     //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> bool;
 
+    //#[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
     //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value);
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "ges_timeline_element_set_child_property_full")]
     //fn set_child_property_full(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> Result<(), glib::Error>;
 
+    //#[doc(alias = "ges_timeline_element_set_child_property_valist")]
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
+    #[doc(alias = "ges_timeline_element_set_duration")]
     fn set_duration(&self, duration: gst::ClockTime) -> bool;
 
+    #[doc(alias = "ges_timeline_element_set_inpoint")]
     fn set_inpoint(&self, inpoint: gst::ClockTime) -> bool;
 
+    #[doc(alias = "ges_timeline_element_set_max_duration")]
     fn set_max_duration(&self, maxduration: gst::ClockTime) -> bool;
 
+    #[doc(alias = "ges_timeline_element_set_name")]
     fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_element_set_parent")]
     fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P)
         -> Result<(), glib::error::BoolError>;
 
     #[cfg_attr(feature = "v1_10", deprecated)]
+    #[doc(alias = "ges_timeline_element_set_priority")]
     fn set_priority(&self, priority: u32) -> bool;
 
+    #[doc(alias = "ges_timeline_element_set_start")]
     fn set_start(&self, start: gst::ClockTime) -> bool;
 
+    #[doc(alias = "ges_timeline_element_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_element_trim")]
     fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
     fn get_property_in_point(&self) -> u64;

@@ -33,16 +33,19 @@ glib::glib_wrapper! {
 }
 
 impl Timeline {
+    #[doc(alias = "ges_timeline_new")]
     pub fn new() -> Timeline {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_timeline_new()) }
     }
 
+    #[doc(alias = "ges_timeline_new_audio_video")]
     pub fn new_audio_video() -> Timeline {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_timeline_new_audio_video()) }
     }
 
+    #[doc(alias = "ges_timeline_new_from_uri")]
     pub fn from_uri(uri: &str) -> Result<Option<Timeline>, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
@@ -67,56 +70,77 @@ pub const NONE_TIMELINE: Option<&Timeline> = None;
 
 pub trait TimelineExt: 'static {
     #[cfg_attr(feature = "v1_18", deprecated)]
+    #[doc(alias = "ges_timeline_add_layer")]
     fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_add_track")]
     fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_append_layer")]
     fn append_layer(&self) -> Layer;
 
+    #[doc(alias = "ges_timeline_commit")]
     fn commit(&self) -> bool;
 
+    #[doc(alias = "ges_timeline_commit_sync")]
     fn commit_sync(&self) -> bool;
 
+    #[doc(alias = "ges_timeline_get_auto_transition")]
     fn get_auto_transition(&self) -> bool;
 
+    #[doc(alias = "ges_timeline_get_duration")]
     fn get_duration(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_timeline_get_element")]
     fn get_element(&self, name: &str) -> Option<TimelineElement>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_get_frame_at")]
     fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_timeline_get_frame_time")]
     fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
 
+    #[doc(alias = "ges_timeline_get_groups")]
     fn get_groups(&self) -> Vec<Group>;
 
+    #[doc(alias = "ges_timeline_get_layer")]
     fn get_layer(&self, priority: u32) -> Option<Layer>;
 
+    #[doc(alias = "ges_timeline_get_layers")]
     fn get_layers(&self) -> Vec<Layer>;
 
+    #[doc(alias = "ges_timeline_get_pad_for_track")]
     fn get_pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad>;
 
+    #[doc(alias = "ges_timeline_get_snapping_distance")]
     fn get_snapping_distance(&self) -> gst::ClockTime;
 
+    #[doc(alias = "ges_timeline_get_track_for_pad")]
     fn get_track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track>;
 
+    #[doc(alias = "ges_timeline_get_tracks")]
     fn get_tracks(&self) -> Vec<Track>;
 
+    #[doc(alias = "ges_timeline_is_empty")]
     fn is_empty(&self) -> bool;
 
+    #[doc(alias = "ges_timeline_load_from_uri")]
     fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "ges_timeline_move_layer")]
     fn move_layer<P: IsA<Layer>>(
         &self,
         layer: &P,
         new_layer_priority: u32,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_paste_element")]
     fn paste_element<P: IsA<TimelineElement>>(
         &self,
         element: &P,
@@ -124,10 +148,13 @@ pub trait TimelineExt: 'static {
         layer_priority: i32,
     ) -> Option<TimelineElement>;
 
+    #[doc(alias = "ges_timeline_remove_layer")]
     fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_remove_track")]
     fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_timeline_save_to_uri")]
     fn save_to_uri<P: IsA<Asset>>(
         &self,
         uri: &str,
@@ -135,8 +162,10 @@ pub trait TimelineExt: 'static {
         overwrite: bool,
     ) -> Result<(), glib::Error>;
 
+    #[doc(alias = "ges_timeline_set_auto_transition")]
     fn set_auto_transition(&self, auto_transition: bool);
 
+    #[doc(alias = "ges_timeline_set_snapping_distance")]
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime);
 
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;

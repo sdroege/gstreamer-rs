@@ -28,7 +28,7 @@ impl ToGlib for RTSPEvent {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPEvent> for RTSPEvent {
-    fn from_glib(value: ffi::GstRTSPEvent) -> RTSPEvent {
+    unsafe fn from_glib(value: ffi::GstRTSPEvent) -> RTSPEvent {
         skip_assert_initialized!();
         RTSPEvent::from_bits_truncate(value)
     }
@@ -79,7 +79,7 @@ impl ToGlib for RTSPLowerTrans {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPLowerTrans> for RTSPLowerTrans {
-    fn from_glib(value: ffi::GstRTSPLowerTrans) -> RTSPLowerTrans {
+    unsafe fn from_glib(value: ffi::GstRTSPLowerTrans) -> RTSPLowerTrans {
         skip_assert_initialized!();
         RTSPLowerTrans::from_bits_truncate(value)
     }
@@ -128,6 +128,7 @@ bitflags! {
 }
 
 impl RTSPMethod {
+    #[doc(alias = "gst_rtsp_method_as_text")]
     pub fn as_text(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_rtsp_method_as_text(self.to_glib())) }
@@ -145,7 +146,7 @@ impl ToGlib for RTSPMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPMethod> for RTSPMethod {
-    fn from_glib(value: ffi::GstRTSPMethod) -> RTSPMethod {
+    unsafe fn from_glib(value: ffi::GstRTSPMethod) -> RTSPMethod {
         skip_assert_initialized!();
         RTSPMethod::from_bits_truncate(value)
     }
@@ -195,7 +196,7 @@ impl ToGlib for RTSPProfile {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPProfile> for RTSPProfile {
-    fn from_glib(value: ffi::GstRTSPProfile) -> RTSPProfile {
+    unsafe fn from_glib(value: ffi::GstRTSPProfile) -> RTSPProfile {
         skip_assert_initialized!();
         RTSPProfile::from_bits_truncate(value)
     }
@@ -243,7 +244,7 @@ impl ToGlib for RTSPTransMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPTransMode> for RTSPTransMode {
-    fn from_glib(value: ffi::GstRTSPTransMode) -> RTSPTransMode {
+    unsafe fn from_glib(value: ffi::GstRTSPTransMode) -> RTSPTransMode {
         skip_assert_initialized!();
         RTSPTransMode::from_bits_truncate(value)
     }

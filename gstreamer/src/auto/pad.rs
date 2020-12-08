@@ -42,108 +42,151 @@ unsafe impl Sync for Pad {}
 pub const NONE_PAD: Option<&Pad> = None;
 
 pub trait PadExt: 'static {
+    #[doc(alias = "gst_pad_activate_mode")]
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_pad_can_link")]
     fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool;
 
+    #[doc(alias = "gst_pad_check_reconfigure")]
     fn check_reconfigure(&self) -> bool;
 
+    #[doc(alias = "gst_pad_create_stream_id")]
     fn create_stream_id<P: IsA<Element>>(
         &self,
         parent: &P,
         stream_id: Option<&str>,
     ) -> glib::GString;
 
+    //#[doc(alias = "gst_pad_create_stream_id_printf")]
     //fn create_stream_id_printf<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> glib::GString;
 
+    //#[doc(alias = "gst_pad_create_stream_id_printf_valist")]
     //fn create_stream_id_printf_valist<P: IsA<Element>>(&self, parent: &P, stream_id: Option<&str>, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> glib::GString;
 
+    #[doc(alias = "gst_pad_forward")]
     fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool;
 
+    #[doc(alias = "gst_pad_get_allowed_caps")]
     fn get_allowed_caps(&self) -> Option<Caps>;
 
+    #[doc(alias = "gst_pad_get_current_caps")]
     fn get_current_caps(&self) -> Option<Caps>;
 
+    #[doc(alias = "gst_pad_get_direction")]
     fn get_direction(&self) -> PadDirection;
 
+    //#[doc(alias = "gst_pad_get_element_private")]
     //fn get_element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer>;
 
+    #[doc(alias = "gst_pad_get_offset")]
     fn get_offset(&self) -> i64;
 
+    #[doc(alias = "gst_pad_get_pad_template")]
     fn get_pad_template(&self) -> Option<PadTemplate>;
 
+    #[doc(alias = "gst_pad_get_pad_template_caps")]
     fn get_pad_template_caps(&self) -> Caps;
 
+    #[doc(alias = "gst_pad_get_parent_element")]
     fn get_parent_element(&self) -> Option<Element>;
 
+    #[doc(alias = "gst_pad_get_peer")]
     fn get_peer(&self) -> Option<Pad>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_pad_get_single_internal_link")]
     fn get_single_internal_link(&self) -> Option<Pad>;
 
+    #[doc(alias = "gst_pad_get_sticky_event")]
     fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_pad_get_stream")]
     fn get_stream(&self) -> Option<Stream>;
 
+    #[doc(alias = "gst_pad_get_stream_id")]
     fn get_stream_id(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_pad_get_task_state")]
     fn get_task_state(&self) -> TaskState;
 
+    #[doc(alias = "gst_pad_has_current_caps")]
     fn has_current_caps(&self) -> bool;
 
+    #[doc(alias = "gst_pad_is_active")]
     fn is_active(&self) -> bool;
 
+    #[doc(alias = "gst_pad_is_blocked")]
     fn is_blocked(&self) -> bool;
 
+    #[doc(alias = "gst_pad_is_blocking")]
     fn is_blocking(&self) -> bool;
 
+    #[doc(alias = "gst_pad_is_linked")]
     fn is_linked(&self) -> bool;
 
+    //#[doc(alias = "gst_pad_iterate_internal_links")]
     //fn iterate_internal_links(&self) -> /*Ignored*/Option<Iterator>;
 
+    //#[doc(alias = "gst_pad_iterate_internal_links_default")]
     //fn iterate_internal_links_default<P: IsA<Object>>(&self, parent: Option<&P>) -> /*Ignored*/Option<Iterator>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_pad_link_maybe_ghosting")]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_pad_link_maybe_ghosting_full")]
     fn link_maybe_ghosting_full<P: IsA<Pad>>(
         &self,
         sink: &P,
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_pad_mark_reconfigure")]
     fn mark_reconfigure(&self);
 
+    #[doc(alias = "gst_pad_needs_reconfigure")]
     fn needs_reconfigure(&self) -> bool;
 
+    #[doc(alias = "gst_pad_pause_task")]
     fn pause_task(&self) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_pad_peer_query_accept_caps")]
     fn peer_query_accept_caps(&self, caps: &Caps) -> bool;
 
+    #[doc(alias = "gst_pad_peer_query_caps")]
     fn peer_query_caps(&self, filter: Option<&Caps>) -> Caps;
 
+    #[doc(alias = "gst_pad_query_accept_caps")]
     fn query_accept_caps(&self, caps: &Caps) -> bool;
 
+    #[doc(alias = "gst_pad_query_caps")]
     fn query_caps(&self, filter: Option<&Caps>) -> Caps;
 
+    #[doc(alias = "gst_pad_set_active")]
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
+    //#[doc(alias = "gst_pad_set_element_private")]
     //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Fundamental: Pointer>);
 
+    #[doc(alias = "gst_pad_set_offset")]
     fn set_offset(&self, offset: i64);
 
+    #[doc(alias = "gst_pad_stop_task")]
     fn stop_task(&self) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_pad_unlink")]
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_pad_use_fixed_caps")]
     fn use_fixed_caps(&self);
 
     fn get_property_caps(&self) -> Option<Caps>;

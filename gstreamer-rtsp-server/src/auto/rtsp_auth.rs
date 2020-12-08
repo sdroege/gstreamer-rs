@@ -20,11 +20,13 @@ glib::glib_wrapper! {
 }
 
 impl RTSPAuth {
+    #[doc(alias = "gst_rtsp_auth_new")]
     pub fn new() -> RTSPAuth {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_auth_new()) }
     }
 
+    #[doc(alias = "gst_rtsp_auth_check")]
     pub fn check(check: &str) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -35,6 +37,7 @@ impl RTSPAuth {
         }
     }
 
+    #[doc(alias = "gst_rtsp_auth_make_basic")]
     pub fn make_basic(user: &str, pass: &str) -> glib::GString {
         assert_initialized_main_thread!();
         unsafe {
@@ -58,50 +61,66 @@ unsafe impl Sync for RTSPAuth {}
 pub const NONE_RTSP_AUTH: Option<&RTSPAuth> = None;
 
 pub trait RTSPAuthExt: 'static {
+    #[doc(alias = "gst_rtsp_auth_add_basic")]
     fn add_basic(&self, basic: &str, token: &RTSPToken);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_rtsp_auth_add_digest")]
     fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken);
 
+    #[doc(alias = "gst_rtsp_auth_get_default_token")]
     fn get_default_token(&self) -> Option<RTSPToken>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_auth_get_realm")]
     fn get_realm(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_rtsp_auth_get_supported_methods")]
     fn get_supported_methods(&self) -> gst_rtsp::RTSPAuthMethod;
 
+    #[doc(alias = "gst_rtsp_auth_get_tls_authentication_mode")]
     fn get_tls_authentication_mode(&self) -> gio::TlsAuthenticationMode;
 
+    #[doc(alias = "gst_rtsp_auth_get_tls_certificate")]
     fn get_tls_certificate(&self) -> Option<gio::TlsCertificate>;
 
+    #[doc(alias = "gst_rtsp_auth_get_tls_database")]
     fn get_tls_database(&self) -> Option<gio::TlsDatabase>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_auth_parse_htdigest")]
     fn parse_htdigest<P: AsRef<std::path::Path>>(&self, path: P, token: &RTSPToken) -> bool;
 
+    #[doc(alias = "gst_rtsp_auth_remove_basic")]
     fn remove_basic(&self, basic: &str);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_rtsp_auth_remove_digest")]
     fn remove_digest(&self, user: &str);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_rtsp_auth_set_realm")]
     fn set_realm(&self, realm: &str);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_rtsp_auth_set_supported_methods")]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod);
 
+    #[doc(alias = "gst_rtsp_auth_set_tls_authentication_mode")]
     fn set_tls_authentication_mode(&self, mode: gio::TlsAuthenticationMode);
 
+    #[doc(alias = "gst_rtsp_auth_set_tls_certificate")]
     fn set_tls_certificate<P: IsA<gio::TlsCertificate>>(&self, cert: Option<&P>);
 
+    #[doc(alias = "gst_rtsp_auth_set_tls_database")]
     fn set_tls_database<P: IsA<gio::TlsDatabase>>(&self, database: Option<&P>);
 
     fn connect_accept_certificate<

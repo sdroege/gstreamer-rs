@@ -23,6 +23,7 @@ glib::glib_wrapper! {
 }
 
 impl Discoverer {
+    #[doc(alias = "gst_discoverer_new")]
     pub fn new(timeout: gst::ClockTime) -> Result<Discoverer, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
@@ -36,6 +37,7 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "gst_discoverer_discover_uri")]
     pub fn discover_uri(&self, uri: &str) -> Result<DiscovererInfo, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -52,6 +54,7 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "gst_discoverer_discover_uri_async")]
     pub fn discover_uri_async(&self, uri: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -61,12 +64,14 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "gst_discoverer_start")]
     pub fn start(&self) {
         unsafe {
             ffi::gst_discoverer_start(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_discoverer_stop")]
     pub fn stop(&self) {
         unsafe {
             ffi::gst_discoverer_stop(self.to_glib_none().0);

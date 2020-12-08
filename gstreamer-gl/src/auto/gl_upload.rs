@@ -16,11 +16,13 @@ glib::glib_wrapper! {
 }
 
 impl GLUpload {
+    #[doc(alias = "gst_gl_upload_new")]
     pub fn new<P: IsA<GLContext>>(context: &P) -> GLUpload {
         skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_gl_upload_new(context.as_ref().to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_gl_upload_get_caps")]
     pub fn get_caps(&self) -> (gst::Caps, gst::Caps) {
         unsafe {
             let mut in_caps = ptr::null_mut();
@@ -30,6 +32,7 @@ impl GLUpload {
         }
     }
 
+    #[doc(alias = "gst_gl_upload_set_caps")]
     pub fn set_caps(
         &self,
         in_caps: &gst::Caps,
@@ -47,6 +50,7 @@ impl GLUpload {
         }
     }
 
+    #[doc(alias = "gst_gl_upload_set_context")]
     pub fn set_context<P: IsA<GLContext>>(&self, context: &P) {
         unsafe {
             ffi::gst_gl_upload_set_context(
@@ -56,6 +60,7 @@ impl GLUpload {
         }
     }
 
+    #[doc(alias = "gst_gl_upload_transform_caps")]
     pub fn transform_caps<P: IsA<GLContext>>(
         &self,
         context: &P,
@@ -74,6 +79,7 @@ impl GLUpload {
         }
     }
 
+    #[doc(alias = "gst_gl_upload_get_input_template_caps")]
     pub fn get_input_template_caps() -> gst::Caps {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_upload_get_input_template_caps()) }

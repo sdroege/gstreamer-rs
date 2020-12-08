@@ -21,12 +21,16 @@ unsafe impl Sync for PluginFeature {}
 pub const NONE_PLUGIN_FEATURE: Option<&PluginFeature> = None;
 
 pub trait PluginFeatureExt: 'static {
+    #[doc(alias = "gst_plugin_feature_check_version")]
     fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool;
 
+    #[doc(alias = "gst_plugin_feature_get_plugin")]
     fn get_plugin(&self) -> Option<Plugin>;
 
+    #[doc(alias = "gst_plugin_feature_get_plugin_name")]
     fn get_plugin_name(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "gst_plugin_feature_load")]
     fn load(&self) -> Result<PluginFeature, glib::BoolError>;
 }
 

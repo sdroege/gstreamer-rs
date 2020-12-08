@@ -28,34 +28,44 @@ unsafe impl Sync for VideoEncoder {}
 pub const NONE_VIDEO_ENCODER: Option<&VideoEncoder> = None;
 
 pub trait VideoEncoderExt: 'static {
+    #[doc(alias = "gst_video_encoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_video_encoder_get_max_encode_time")]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
     fn get_min_force_key_unit_interval(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_video_encoder_is_qos_enabled")]
     fn is_qos_enabled(&self) -> bool;
 
+    #[doc(alias = "gst_video_encoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
+    #[doc(alias = "gst_video_encoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
+    #[doc(alias = "gst_video_encoder_set_headers")]
     fn set_headers(&self, headers: &[&gst::Buffer]);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_encoder_set_min_force_key_unit_interval")]
     fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime);
 
+    #[doc(alias = "gst_video_encoder_set_min_pts")]
     fn set_min_pts(&self, min_pts: gst::ClockTime);
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_video_encoder_set_qos_enabled")]
     fn set_qos_enabled(&self, enabled: bool);
 
     fn get_property_qos(&self) -> bool;

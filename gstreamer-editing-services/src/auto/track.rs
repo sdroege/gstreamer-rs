@@ -26,6 +26,7 @@ glib::glib_wrapper! {
 }
 
 impl Track {
+    #[doc(alias = "ges_track_new")]
     pub fn new(type_: TrackType, caps: &gst::Caps) -> Track {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_track_new(type_.to_glib(), caps.to_glib_full())) }
@@ -35,26 +36,35 @@ impl Track {
 pub const NONE_TRACK: Option<&Track> = None;
 
 pub trait GESTrackExt: 'static {
+    #[doc(alias = "ges_track_add_element")]
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_add_element_full")]
     fn add_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
 
+    #[doc(alias = "ges_track_commit")]
     fn commit(&self) -> bool;
 
+    #[doc(alias = "ges_track_get_caps")]
     fn get_caps(&self) -> Option<gst::Caps>;
 
+    #[doc(alias = "ges_track_get_elements")]
     fn get_elements(&self) -> Vec<TrackElement>;
 
+    #[doc(alias = "ges_track_get_mixing")]
     fn get_mixing(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_get_restriction_caps")]
     fn get_restriction_caps(&self) -> Option<gst::Caps>;
 
+    #[doc(alias = "ges_track_get_timeline")]
     fn get_timeline(&self) -> Option<Timeline>;
 
+    #[doc(alias = "ges_track_remove_element")]
     fn remove_element<P: IsA<TrackElement>>(
         &self,
         object: &P,
@@ -62,16 +72,22 @@ pub trait GESTrackExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_track_remove_element_full")]
     fn remove_element_full<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::Error>;
 
+    //#[doc(alias = "ges_track_set_create_element_for_gap_func")]
     //fn set_create_element_for_gap_func<P: Fn(&Track) -> gst::Element + 'static>(&self, func: P);
 
+    #[doc(alias = "ges_track_set_mixing")]
     fn set_mixing(&self, mixing: bool);
 
+    #[doc(alias = "ges_track_set_restriction_caps")]
     fn set_restriction_caps(&self, caps: &gst::Caps);
 
+    #[doc(alias = "ges_track_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P);
 
+    #[doc(alias = "ges_track_update_restriction_caps")]
     fn update_restriction_caps(&self, caps: &gst::Caps);
 
     fn get_property_duration(&self) -> u64;

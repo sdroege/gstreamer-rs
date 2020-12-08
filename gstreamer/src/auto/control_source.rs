@@ -22,6 +22,7 @@ unsafe impl Sync for ControlSource {}
 pub const NONE_CONTROL_SOURCE: Option<&ControlSource> = None;
 
 pub trait ControlSourceExt: 'static {
+    #[doc(alias = "gst_control_source_get_value")]
     fn get_value(&self, timestamp: ClockTime) -> Option<f64>;
 }
 

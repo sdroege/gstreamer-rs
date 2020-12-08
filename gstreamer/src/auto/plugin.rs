@@ -16,6 +16,7 @@ glib::glib_wrapper! {
 }
 
 impl Plugin {
+    #[doc(alias = "gst_plugin_add_dependency")]
     pub fn add_dependency(
         &self,
         env_vars: &[&str],
@@ -34,6 +35,7 @@ impl Plugin {
         }
     }
 
+    #[doc(alias = "gst_plugin_add_dependency_simple")]
     pub fn add_dependency_simple(
         &self,
         env_vars: Option<&str>,
@@ -52,26 +54,32 @@ impl Plugin {
         }
     }
 
+    #[doc(alias = "gst_plugin_get_description")]
     pub fn get_description(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_description(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_get_filename")]
     pub fn get_filename(&self) -> Option<std::path::PathBuf> {
         unsafe { from_glib_none(ffi::gst_plugin_get_filename(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_get_license")]
     pub fn get_license(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_license(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_get_origin")]
     pub fn get_origin(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_origin(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_get_package")]
     pub fn get_package(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_package(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_get_release_date_string")]
     pub fn get_release_date_string(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_release_date_string(
@@ -80,18 +88,22 @@ impl Plugin {
         }
     }
 
+    #[doc(alias = "gst_plugin_get_source")]
     pub fn get_source(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_source(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_get_version")]
     pub fn get_version(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_version(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_is_loaded")]
     pub fn is_loaded(&self) -> bool {
         unsafe { from_glib(ffi::gst_plugin_is_loaded(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_plugin_load")]
     pub fn load(&self) -> Result<Plugin, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_plugin_load(self.to_glib_none().0))
@@ -99,6 +111,7 @@ impl Plugin {
         }
     }
 
+    #[doc(alias = "gst_plugin_load_by_name")]
     pub fn load_by_name(name: &str) -> Result<Plugin, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -107,6 +120,7 @@ impl Plugin {
         }
     }
 
+    #[doc(alias = "gst_plugin_load_file")]
     pub fn load_file<P: AsRef<std::path::Path>>(filename: P) -> Result<Plugin, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {

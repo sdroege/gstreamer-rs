@@ -29,22 +29,27 @@ pub const NONE_AGGREGATOR_PAD: Option<&AggregatorPad> = None;
 pub trait AggregatorPadExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_pad_drop_buffer")]
     fn drop_buffer(&self) -> bool;
 
     #[cfg(any(feature = "v1_14_1", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
+    #[doc(alias = "gst_aggregator_pad_has_buffer")]
     fn has_buffer(&self) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_pad_is_eos")]
     fn is_eos(&self) -> bool;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_pad_peek_buffer")]
     fn peek_buffer(&self) -> Option<gst::Buffer>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "gst_aggregator_pad_pop_buffer")]
     fn pop_buffer(&self) -> Option<gst::Buffer>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]

@@ -16,6 +16,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPMountPoints {
+    #[doc(alias = "gst_rtsp_mount_points_new")]
     pub fn new() -> RTSPMountPoints {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_mount_points_new()) }
@@ -34,12 +35,16 @@ unsafe impl Sync for RTSPMountPoints {}
 pub const NONE_RTSP_MOUNT_POINTS: Option<&RTSPMountPoints> = None;
 
 pub trait RTSPMountPointsExt: 'static {
+    #[doc(alias = "gst_rtsp_mount_points_add_factory")]
     fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P);
 
+    #[doc(alias = "gst_rtsp_mount_points_make_path")]
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Result<glib::GString, glib::BoolError>;
 
+    #[doc(alias = "gst_rtsp_mount_points_match")]
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32);
 
+    #[doc(alias = "gst_rtsp_mount_points_remove_factory")]
     fn remove_factory(&self, path: &str);
 }
 

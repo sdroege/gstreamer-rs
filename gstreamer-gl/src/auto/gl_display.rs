@@ -24,6 +24,7 @@ glib::glib_wrapper! {
 }
 
 impl GLDisplay {
+    #[doc(alias = "gst_gl_display_new")]
     pub fn new() -> GLDisplay {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_display_new()) }
@@ -42,31 +43,41 @@ unsafe impl Sync for GLDisplay {}
 pub const NONE_GL_DISPLAY: Option<&GLDisplay> = None;
 
 pub trait GLDisplayExt: 'static {
+    #[doc(alias = "gst_gl_display_add_context")]
     fn add_context<P: IsA<GLContext>>(&self, context: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_gl_display_create_context")]
     fn create_context<P: IsA<GLContext>>(
         &self,
         other_context: &P,
     ) -> Result<GLContext, glib::Error>;
 
+    #[doc(alias = "gst_gl_display_create_window")]
     fn create_window(&self) -> Result<GLWindow, glib::BoolError>;
 
+    #[doc(alias = "gst_gl_display_filter_gl_api")]
     fn filter_gl_api(&self, gl_api: GLAPI);
 
+    #[doc(alias = "gst_gl_display_get_gl_api")]
     fn get_gl_api(&self) -> GLAPI;
 
+    #[doc(alias = "gst_gl_display_get_gl_api_unlocked")]
     fn get_gl_api_unlocked(&self) -> GLAPI;
 
+    #[doc(alias = "gst_gl_display_get_handle_type")]
     fn get_handle_type(&self) -> GLDisplayType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_gl_display_remove_context")]
     fn remove_context<P: IsA<GLContext>>(&self, context: &P);
 
+    #[doc(alias = "gst_gl_display_remove_window")]
     fn remove_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    //#[doc(alias = "gst_gl_display_retrieve_window")]
     //fn retrieve_window(&self, data: /*Unimplemented*/Option<Fundamental: Pointer>, compare_func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>, /*Unimplemented*/Option<Fundamental: Pointer>) -> i32) -> Option<GLWindow>;
 
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(

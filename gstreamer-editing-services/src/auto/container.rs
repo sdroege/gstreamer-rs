@@ -25,6 +25,7 @@ glib::glib_wrapper! {
 }
 
 impl Container {
+    #[doc(alias = "ges_container_group")]
     pub fn group(containers: &[Container]) -> Option<Container> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_container_group(containers.to_glib_none().0)) }
@@ -34,9 +35,11 @@ impl Container {
 pub const NONE_CONTAINER: Option<&Container> = None;
 
 pub trait GESContainerExt: 'static {
+    #[doc(alias = "ges_container_add")]
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg_attr(feature = "v1_18", deprecated)]
+    #[doc(alias = "ges_container_edit")]
     fn edit(
         &self,
         layers: &[Layer],
@@ -46,10 +49,13 @@ pub trait GESContainerExt: 'static {
         position: u64,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_container_get_children")]
     fn get_children(&self, recursive: bool) -> Vec<TimelineElement>;
 
+    #[doc(alias = "ges_container_remove")]
     fn remove<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_container_ungroup")]
     fn ungroup(&self, recursive: bool) -> Vec<Container>;
 
     fn get_property_height(&self) -> u32;

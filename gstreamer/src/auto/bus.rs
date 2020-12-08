@@ -21,27 +21,32 @@ glib::glib_wrapper! {
 }
 
 impl Bus {
+    #[doc(alias = "gst_bus_new")]
     pub fn new() -> Bus {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_bus_new()) }
     }
 
+    #[doc(alias = "gst_bus_add_signal_watch")]
     pub fn add_signal_watch(&self) {
         unsafe {
             ffi::gst_bus_add_signal_watch(self.to_glib_none().0);
         }
     }
 
+    //#[doc(alias = "gst_bus_async_signal_func")]
     //pub fn async_signal_func(&self, message: &Message, data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi:gst_bus_async_signal_func() }
     //}
 
+    #[doc(alias = "gst_bus_disable_sync_message_emission")]
     pub fn disable_sync_message_emission(&self) {
         unsafe {
             ffi::gst_bus_disable_sync_message_emission(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_bus_enable_sync_message_emission")]
     pub fn enable_sync_message_emission(&self) {
         unsafe {
             ffi::gst_bus_enable_sync_message_emission(self.to_glib_none().0);
@@ -50,22 +55,27 @@ impl Bus {
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    //#[doc(alias = "gst_bus_get_pollfd")]
     //pub fn get_pollfd(&self, fd: /*Ignored*/glib::PollFD) {
     //    unsafe { TODO: call ffi:gst_bus_get_pollfd() }
     //}
 
+    #[doc(alias = "gst_bus_have_pending")]
     pub fn have_pending(&self) -> bool {
         unsafe { from_glib(ffi::gst_bus_have_pending(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_bus_peek")]
     pub fn peek(&self) -> Option<Message> {
         unsafe { from_glib_full(ffi::gst_bus_peek(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_bus_pop")]
     pub fn pop(&self) -> Option<Message> {
         unsafe { from_glib_full(ffi::gst_bus_pop(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_bus_post")]
     pub fn post(&self, message: &Message) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -75,12 +85,14 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_remove_signal_watch")]
     pub fn remove_signal_watch(&self) {
         unsafe {
             ffi::gst_bus_remove_signal_watch(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_bus_remove_watch")]
     pub fn remove_watch(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -90,16 +102,19 @@ impl Bus {
         }
     }
 
+    #[doc(alias = "gst_bus_set_flushing")]
     pub fn set_flushing(&self, flushing: bool) {
         unsafe {
             ffi::gst_bus_set_flushing(self.to_glib_none().0, flushing.to_glib());
         }
     }
 
+    //#[doc(alias = "gst_bus_sync_signal_handler")]
     //pub fn sync_signal_handler(&self, message: &Message, data: /*Unimplemented*/Option<Fundamental: Pointer>) -> BusSyncReply {
     //    unsafe { TODO: call ffi:gst_bus_sync_signal_handler() }
     //}
 
+    #[doc(alias = "gst_bus_timed_pop")]
     pub fn timed_pop(&self, timeout: ClockTime) -> Option<Message> {
         unsafe {
             from_glib_full(ffi::gst_bus_timed_pop(

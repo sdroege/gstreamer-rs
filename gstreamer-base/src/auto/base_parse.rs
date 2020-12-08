@@ -25,30 +25,42 @@ unsafe impl Sync for BaseParse {}
 pub const NONE_BASE_PARSE: Option<&BaseParse> = None;
 
 pub trait BaseParseExt: 'static {
+    #[doc(alias = "gst_base_parse_add_index_entry")]
     fn add_index_entry(&self, offset: u64, ts: gst::ClockTime, key: bool, force: bool) -> bool;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_base_parse_drain")]
     fn drain(&self);
 
+    #[doc(alias = "gst_base_parse_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
+    #[doc(alias = "gst_base_parse_set_average_bitrate")]
     fn set_average_bitrate(&self, bitrate: u32);
 
+    #[doc(alias = "gst_base_parse_set_has_timing_info")]
     fn set_has_timing_info(&self, has_timing: bool);
 
+    #[doc(alias = "gst_base_parse_set_infer_ts")]
     fn set_infer_ts(&self, infer_ts: bool);
 
+    #[doc(alias = "gst_base_parse_set_latency")]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
+    #[doc(alias = "gst_base_parse_set_min_frame_size")]
     fn set_min_frame_size(&self, min_size: u32);
 
+    #[doc(alias = "gst_base_parse_set_passthrough")]
     fn set_passthrough(&self, passthrough: bool);
 
+    #[doc(alias = "gst_base_parse_set_pts_interpolation")]
     fn set_pts_interpolation(&self, pts_interpolate: bool);
 
+    #[doc(alias = "gst_base_parse_set_syncable")]
     fn set_syncable(&self, syncable: bool);
 
+    #[doc(alias = "gst_base_parse_set_ts_at_offset")]
     fn set_ts_at_offset(&self, offset: usize);
 
     fn get_property_disable_passthrough(&self) -> bool;

@@ -21,6 +21,7 @@ glib::glib_wrapper! {
 }
 
 impl TriggerControlSource {
+    #[doc(alias = "gst_trigger_control_source_new")]
     pub fn new() -> TriggerControlSource {
         assert_initialized_main_thread!();
         unsafe {

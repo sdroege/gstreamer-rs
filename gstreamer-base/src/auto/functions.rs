@@ -5,6 +5,7 @@
 use glib::object::IsA;
 use glib::translate::*;
 
+#[doc(alias = "gst_type_find_helper")]
 pub fn type_find_helper<P: IsA<gst::Pad>>(
     src: &P,
     size: u64,
@@ -19,6 +20,7 @@ pub fn type_find_helper<P: IsA<gst::Pad>>(
     }
 }
 
+#[doc(alias = "gst_type_find_helper_for_extension")]
 pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(
     obj: Option<&P>,
     extension: &str,
@@ -33,12 +35,14 @@ pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(
     }
 }
 
+//#[doc(alias = "gst_type_find_helper_get_range")]
 //pub fn type_find_helper_get_range<P: IsA<gst::Object>, Q: IsA<gst::Object>, R: FnMut(&gst::Object, Option<&gst::Object>, u64, u32, &gst::Buffer) -> gst::FlowReturn>(obj: &P, parent: Option<&Q>, func: R, size: u64, extension: Option<&str>) -> (Option<gst::Caps>, gst::TypeFindProbability) {
 //    unsafe { TODO: call ffi:gst_type_find_helper_get_range() }
 //}
 
 //#[cfg(any(feature = "v1_14_3", feature = "dox"))]
 //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_3")))]
+//#[doc(alias = "gst_type_find_helper_get_range_full")]
 //pub fn type_find_helper_get_range_full<P: IsA<gst::Object>, Q: IsA<gst::Object>, R: FnMut(&gst::Object, Option<&gst::Object>, u64, u32, &gst::Buffer) -> gst::FlowReturn>(obj: &P, parent: Option<&Q>, func: R, size: u64, extension: Option<&str>) -> (gst::FlowReturn, gst::Caps, gst::TypeFindProbability) {
 //    unsafe { TODO: call ffi:gst_type_find_helper_get_range_full() }
 //}

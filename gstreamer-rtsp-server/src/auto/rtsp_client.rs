@@ -30,6 +30,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPClient {
+    #[doc(alias = "gst_rtsp_client_new")]
     pub fn new() -> RTSPClient {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_client_new()) }
@@ -48,53 +49,72 @@ unsafe impl Sync for RTSPClient {}
 pub const NONE_RTSP_CLIENT: Option<&RTSPClient> = None;
 
 pub trait RTSPClientExt: 'static {
+    #[doc(alias = "gst_rtsp_client_close")]
     fn close(&self);
 
+    #[doc(alias = "gst_rtsp_client_get_auth")]
     fn get_auth(&self) -> Option<RTSPAuth>;
 
+    //#[doc(alias = "gst_rtsp_client_get_connection")]
     //fn get_connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_client_get_content_length_limit")]
     fn get_content_length_limit(&self) -> u32;
 
+    #[doc(alias = "gst_rtsp_client_get_mount_points")]
     fn get_mount_points(&self) -> Option<RTSPMountPoints>;
 
+    #[doc(alias = "gst_rtsp_client_get_session_pool")]
     fn get_session_pool(&self) -> Option<RTSPSessionPool>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_client_get_stream_transport")]
     fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport>;
 
+    #[doc(alias = "gst_rtsp_client_get_thread_pool")]
     fn get_thread_pool(&self) -> Option<RTSPThreadPool>;
 
+    //#[doc(alias = "gst_rtsp_client_handle_message")]
     //fn handle_message(&self, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
 
+    //#[doc(alias = "gst_rtsp_client_send_message")]
     //fn send_message<P: IsA<RTSPSession>>(&self, session: Option<&P>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
 
+    #[doc(alias = "gst_rtsp_client_session_filter")]
     fn session_filter(
         &self,
         func: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>,
     ) -> Vec<RTSPSession>;
 
+    #[doc(alias = "gst_rtsp_client_set_auth")]
     fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>);
 
+    //#[doc(alias = "gst_rtsp_client_set_connection")]
     //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_rtsp_client_set_content_length_limit")]
     fn set_content_length_limit(&self, limit: u32);
 
+    #[doc(alias = "gst_rtsp_client_set_mount_points")]
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
 
+    //#[doc(alias = "gst_rtsp_client_set_send_func")]
     //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[doc(alias = "gst_rtsp_client_set_send_messages_func")]
     //fn set_send_messages_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, u32, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
+    #[doc(alias = "gst_rtsp_client_set_session_pool")]
     fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>);
 
+    #[doc(alias = "gst_rtsp_client_set_thread_pool")]
     fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>);
 
     fn get_property_drop_backlog(&self) -> bool;

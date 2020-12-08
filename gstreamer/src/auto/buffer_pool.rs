@@ -20,14 +20,19 @@ unsafe impl Sync for BufferPool {}
 pub const NONE_BUFFER_POOL: Option<&BufferPool> = None;
 
 pub trait BufferPoolExt: 'static {
+    #[doc(alias = "gst_buffer_pool_get_options")]
     fn get_options(&self) -> Vec<glib::GString>;
 
+    #[doc(alias = "gst_buffer_pool_has_option")]
     fn has_option(&self, option: &str) -> bool;
 
+    #[doc(alias = "gst_buffer_pool_is_active")]
     fn is_active(&self) -> bool;
 
+    #[doc(alias = "gst_buffer_pool_set_active")]
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_buffer_pool_set_flushing")]
     fn set_flushing(&self, flushing: bool);
 }
 

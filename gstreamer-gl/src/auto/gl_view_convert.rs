@@ -22,11 +22,13 @@ glib::glib_wrapper! {
 }
 
 impl GLViewConvert {
+    #[doc(alias = "gst_gl_view_convert_new")]
     pub fn new() -> GLViewConvert {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_view_convert_new()) }
     }
 
+    #[doc(alias = "gst_gl_view_convert_perform")]
     pub fn perform(&self, inbuf: &gst::Buffer) -> Option<gst::Buffer> {
         unsafe {
             from_glib_full(ffi::gst_gl_view_convert_perform(
@@ -36,12 +38,14 @@ impl GLViewConvert {
         }
     }
 
+    #[doc(alias = "gst_gl_view_convert_reset")]
     pub fn reset(&self) {
         unsafe {
             ffi::gst_gl_view_convert_reset(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_gl_view_convert_set_caps")]
     pub fn set_caps(
         &self,
         in_caps: &gst::Caps,
@@ -59,6 +63,7 @@ impl GLViewConvert {
         }
     }
 
+    #[doc(alias = "gst_gl_view_convert_set_context")]
     pub fn set_context<P: IsA<GLContext>>(&self, context: &P) {
         unsafe {
             ffi::gst_gl_view_convert_set_context(
@@ -68,6 +73,7 @@ impl GLViewConvert {
         }
     }
 
+    #[doc(alias = "gst_gl_view_convert_transform_caps")]
     pub fn transform_caps(
         &self,
         direction: gst::PadDirection,

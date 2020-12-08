@@ -21,6 +21,7 @@ glib::glib_wrapper! {
 impl AppSink {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_app_sink_get_buffer_list_support")]
     pub fn get_buffer_list_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_app_sink_get_buffer_list_support(
@@ -29,30 +30,37 @@ impl AppSink {
         }
     }
 
+    #[doc(alias = "gst_app_sink_get_caps")]
     pub fn get_caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_app_sink_get_caps(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_sink_get_drop")]
     pub fn get_drop(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_drop(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_sink_get_emit_signals")]
     pub fn get_emit_signals(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_emit_signals(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_sink_get_max_buffers")]
     pub fn get_max_buffers(&self) -> u32 {
         unsafe { ffi::gst_app_sink_get_max_buffers(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_app_sink_get_wait_on_eos")]
     pub fn get_wait_on_eos(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_wait_on_eos(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_sink_is_eos")]
     pub fn is_eos(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_is_eos(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "gst_app_sink_pull_preroll")]
     pub fn pull_preroll(&self) -> Result<gst::Sample, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_app_sink_pull_preroll(self.to_glib_none().0))
@@ -60,6 +68,7 @@ impl AppSink {
         }
     }
 
+    #[doc(alias = "gst_app_sink_pull_sample")]
     pub fn pull_sample(&self) -> Result<gst::Sample, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_app_sink_pull_sample(self.to_glib_none().0))
@@ -69,6 +78,7 @@ impl AppSink {
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_app_sink_set_buffer_list_support")]
     pub fn set_buffer_list_support(&self, enable_lists: bool) {
         unsafe {
             ffi::gst_app_sink_set_buffer_list_support(
@@ -78,34 +88,40 @@ impl AppSink {
         }
     }
 
+    //#[doc(alias = "gst_app_sink_set_callbacks")]
     //pub fn set_callbacks(&self, callbacks: /*Ignored*/&mut AppSinkCallbacks, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi:gst_app_sink_set_callbacks() }
     //}
 
+    #[doc(alias = "gst_app_sink_set_caps")]
     pub fn set_caps(&self, caps: Option<&gst::Caps>) {
         unsafe {
             ffi::gst_app_sink_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_app_sink_set_drop")]
     pub fn set_drop(&self, drop: bool) {
         unsafe {
             ffi::gst_app_sink_set_drop(self.to_glib_none().0, drop.to_glib());
         }
     }
 
+    #[doc(alias = "gst_app_sink_set_emit_signals")]
     pub fn set_emit_signals(&self, emit: bool) {
         unsafe {
             ffi::gst_app_sink_set_emit_signals(self.to_glib_none().0, emit.to_glib());
         }
     }
 
+    #[doc(alias = "gst_app_sink_set_max_buffers")]
     pub fn set_max_buffers(&self, max: u32) {
         unsafe {
             ffi::gst_app_sink_set_max_buffers(self.to_glib_none().0, max);
         }
     }
 
+    #[doc(alias = "gst_app_sink_set_wait_on_eos")]
     pub fn set_wait_on_eos(&self, wait: bool) {
         unsafe {
             ffi::gst_app_sink_set_wait_on_eos(self.to_glib_none().0, wait.to_glib());
@@ -114,6 +130,7 @@ impl AppSink {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_app_sink_try_pull_preroll")]
     pub fn try_pull_preroll(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_preroll(
@@ -125,6 +142,7 @@ impl AppSink {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_app_sink_try_pull_sample")]
     pub fn try_pull_sample(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_sample(

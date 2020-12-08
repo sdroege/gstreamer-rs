@@ -21,6 +21,7 @@ glib::glib_wrapper! {
 }
 
 impl RTSPSessionPool {
+    #[doc(alias = "gst_rtsp_session_pool_new")]
     pub fn new() -> RTSPSessionPool {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_session_pool_new()) }
@@ -39,23 +40,31 @@ unsafe impl Sync for RTSPSessionPool {}
 pub const NONE_RTSP_SESSION_POOL: Option<&RTSPSessionPool> = None;
 
 pub trait RTSPSessionPoolExt: 'static {
+    #[doc(alias = "gst_rtsp_session_pool_cleanup")]
     fn cleanup(&self) -> u32;
 
+    #[doc(alias = "gst_rtsp_session_pool_create")]
     fn create(&self) -> Result<RTSPSession, glib::BoolError>;
 
+    #[doc(alias = "gst_rtsp_session_pool_filter")]
     fn filter(
         &self,
         func: Option<&mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult)>,
     ) -> Vec<RTSPSession>;
 
+    #[doc(alias = "gst_rtsp_session_pool_find")]
     fn find(&self, sessionid: &str) -> Option<RTSPSession>;
 
+    #[doc(alias = "gst_rtsp_session_pool_get_max_sessions")]
     fn get_max_sessions(&self) -> u32;
 
+    #[doc(alias = "gst_rtsp_session_pool_get_n_sessions")]
     fn get_n_sessions(&self) -> u32;
 
+    #[doc(alias = "gst_rtsp_session_pool_remove")]
     fn remove<P: IsA<RTSPSession>>(&self, sess: &P) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_rtsp_session_pool_set_max_sessions")]
     fn set_max_sessions(&self, max: u32);
 
     fn connect_session_removed<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(

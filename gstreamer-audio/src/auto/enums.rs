@@ -104,7 +104,7 @@ impl ToGlib for AudioChannelPosition {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioChannelPosition> for AudioChannelPosition {
-    fn from_glib(value: ffi::GstAudioChannelPosition) -> Self {
+    unsafe fn from_glib(value: ffi::GstAudioChannelPosition) -> Self {
         skip_assert_initialized!();
         match value {
             -3 => AudioChannelPosition::None,
@@ -207,6 +207,7 @@ pub enum AudioFormat {
 }
 
 impl AudioFormat {
+    #[doc(alias = "gst_audio_format_from_string")]
     pub fn from_string(format: &str) -> AudioFormat {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_audio_format_from_string(format.to_glib_none().0)) }
@@ -265,7 +266,7 @@ impl ToGlib for AudioFormat {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
-    fn from_glib(value: ffi::GstAudioFormat) -> Self {
+    unsafe fn from_glib(value: ffi::GstAudioFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AudioFormat::Unknown,
@@ -353,7 +354,7 @@ impl ToGlib for AudioLayout {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
-    fn from_glib(value: ffi::GstAudioLayout) -> Self {
+    unsafe fn from_glib(value: ffi::GstAudioLayout) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AudioLayout::Interleaved,
@@ -450,7 +451,7 @@ impl ToGlib for AudioRingBufferFormatType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
-    fn from_glib(value: ffi::GstAudioRingBufferFormatType) -> Self {
+    unsafe fn from_glib(value: ffi::GstAudioRingBufferFormatType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AudioRingBufferFormatType::Raw,
@@ -526,7 +527,7 @@ impl ToGlib for StreamVolumeFormat {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamVolumeFormat> for StreamVolumeFormat {
-    fn from_glib(value: ffi::GstStreamVolumeFormat) -> Self {
+    unsafe fn from_glib(value: ffi::GstStreamVolumeFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StreamVolumeFormat::Linear,

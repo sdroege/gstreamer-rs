@@ -26,58 +26,84 @@ unsafe impl Sync for AudioDecoder {}
 pub const NONE_AUDIO_DECODER: Option<&AudioDecoder> = None;
 
 pub trait AudioDecoderExt: 'static {
+    #[doc(alias = "gst_audio_decoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
+    #[doc(alias = "gst_audio_decoder_get_audio_info")]
     fn get_audio_info(&self) -> Option<AudioInfo>;
 
+    #[doc(alias = "gst_audio_decoder_get_delay")]
     fn get_delay(&self) -> i32;
 
+    #[doc(alias = "gst_audio_decoder_get_drainable")]
     fn get_drainable(&self) -> bool;
 
+    #[doc(alias = "gst_audio_decoder_get_estimate_rate")]
     fn get_estimate_rate(&self) -> i32;
 
+    #[doc(alias = "gst_audio_decoder_get_latency")]
     fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime);
 
+    #[doc(alias = "gst_audio_decoder_get_max_errors")]
     fn get_max_errors(&self) -> i32;
 
+    #[doc(alias = "gst_audio_decoder_get_min_latency")]
     fn get_min_latency(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_audio_decoder_get_needs_format")]
     fn get_needs_format(&self) -> bool;
 
+    #[doc(alias = "gst_audio_decoder_get_parse_state")]
     fn get_parse_state(&self) -> (bool, bool);
 
+    #[doc(alias = "gst_audio_decoder_get_plc")]
     fn get_plc(&self) -> bool;
 
+    #[doc(alias = "gst_audio_decoder_get_plc_aware")]
     fn get_plc_aware(&self) -> i32;
 
+    #[doc(alias = "gst_audio_decoder_get_tolerance")]
     fn get_tolerance(&self) -> gst::ClockTime;
 
+    #[doc(alias = "gst_audio_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
+    #[doc(alias = "gst_audio_decoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "gst_audio_decoder_set_allocation_caps")]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>);
 
+    #[doc(alias = "gst_audio_decoder_set_drainable")]
     fn set_drainable(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_decoder_set_estimate_rate")]
     fn set_estimate_rate(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_decoder_set_latency")]
     fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime);
 
+    #[doc(alias = "gst_audio_decoder_set_max_errors")]
     fn set_max_errors(&self, num: i32);
 
+    #[doc(alias = "gst_audio_decoder_set_min_latency")]
     fn set_min_latency(&self, num: gst::ClockTime);
 
+    #[doc(alias = "gst_audio_decoder_set_needs_format")]
     fn set_needs_format(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_decoder_set_plc")]
     fn set_plc(&self, enabled: bool);
 
+    #[doc(alias = "gst_audio_decoder_set_plc_aware")]
     fn set_plc_aware(&self, plc: bool);
 
+    #[doc(alias = "gst_audio_decoder_set_tolerance")]
     fn set_tolerance(&self, tolerance: gst::ClockTime);
 
+    #[doc(alias = "gst_audio_decoder_set_use_default_pad_acceptcaps")]
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]

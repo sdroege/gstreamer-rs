@@ -20,6 +20,7 @@ use std::ptr;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[doc(alias = "gst_debug_add_ring_buffer_logger")]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
     skip_assert_initialized!();
     unsafe {
@@ -27,6 +28,7 @@ pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u3
     }
 }
 
+#[doc(alias = "gst_debug_bin_to_dot_data")]
 pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -> glib::GString {
     skip_assert_initialized!();
     unsafe {
@@ -37,6 +39,7 @@ pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -
     }
 }
 
+#[doc(alias = "gst_debug_bin_to_dot_file")]
 pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
     bin: &P,
     details: DebugGraphDetails,
@@ -52,6 +55,7 @@ pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
     }
 }
 
+#[doc(alias = "gst_debug_bin_to_dot_file_with_ts")]
 pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
     bin: &P,
     details: DebugGraphDetails,
@@ -67,6 +71,7 @@ pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
     }
 }
 
+#[doc(alias = "gst_debug_get_default_threshold")]
 pub fn debug_get_default_threshold() -> DebugLevel {
     skip_assert_initialized!();
     unsafe { from_glib(ffi::gst_debug_get_default_threshold()) }
@@ -74,6 +79,7 @@ pub fn debug_get_default_threshold() -> DebugLevel {
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+#[doc(alias = "gst_debug_get_stack_trace")]
 pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<glib::GString, glib::BoolError> {
     skip_assert_initialized!();
     unsafe {
@@ -82,16 +88,19 @@ pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<glib::GString, gl
     }
 }
 
+#[doc(alias = "gst_debug_is_active")]
 pub fn debug_is_active() -> bool {
     skip_assert_initialized!();
     unsafe { from_glib(ffi::gst_debug_is_active()) }
 }
 
+#[doc(alias = "gst_debug_is_colored")]
 pub fn debug_is_colored() -> bool {
     skip_assert_initialized!();
     unsafe { from_glib(ffi::gst_debug_is_colored()) }
 }
 
+#[doc(alias = "gst_debug_print_stack_trace")]
 pub fn debug_print_stack_trace() {
     skip_assert_initialized!();
     unsafe {
@@ -101,6 +110,7 @@ pub fn debug_print_stack_trace() {
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[doc(alias = "gst_debug_remove_ring_buffer_logger")]
 pub fn debug_remove_ring_buffer_logger() {
     skip_assert_initialized!();
     unsafe {
@@ -110,11 +120,13 @@ pub fn debug_remove_ring_buffer_logger() {
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[doc(alias = "gst_debug_ring_buffer_logger_get_logs")]
 pub fn debug_ring_buffer_logger_get_logs() -> Vec<glib::GString> {
     skip_assert_initialized!();
     unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_debug_ring_buffer_logger_get_logs()) }
 }
 
+#[doc(alias = "gst_debug_set_active")]
 pub fn debug_set_active(active: bool) {
     skip_assert_initialized!();
     unsafe {
@@ -122,6 +134,7 @@ pub fn debug_set_active(active: bool) {
     }
 }
 
+#[doc(alias = "gst_debug_set_colored")]
 pub fn debug_set_colored(colored: bool) {
     skip_assert_initialized!();
     unsafe {
@@ -129,6 +142,7 @@ pub fn debug_set_colored(colored: bool) {
     }
 }
 
+#[doc(alias = "gst_debug_set_default_threshold")]
 pub fn debug_set_default_threshold(level: DebugLevel) {
     skip_assert_initialized!();
     unsafe {
@@ -136,6 +150,7 @@ pub fn debug_set_default_threshold(level: DebugLevel) {
     }
 }
 
+#[doc(alias = "gst_debug_set_threshold_for_name")]
 pub fn debug_set_threshold_for_name(name: &str, level: DebugLevel) {
     skip_assert_initialized!();
     unsafe {
@@ -143,6 +158,7 @@ pub fn debug_set_threshold_for_name(name: &str, level: DebugLevel) {
     }
 }
 
+#[doc(alias = "gst_debug_set_threshold_from_string")]
 pub fn debug_set_threshold_from_string(list: &str, reset: bool) {
     skip_assert_initialized!();
     unsafe {
@@ -150,6 +166,7 @@ pub fn debug_set_threshold_from_string(list: &str, reset: bool) {
     }
 }
 
+#[doc(alias = "gst_debug_unset_threshold_for_name")]
 pub fn debug_unset_threshold_for_name(name: &str) {
     skip_assert_initialized!();
     unsafe {
@@ -159,6 +176,7 @@ pub fn debug_unset_threshold_for_name(name: &str) {
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+#[doc(alias = "gst_get_main_executable_path")]
 pub fn get_main_executable_path() -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
@@ -167,6 +185,7 @@ pub fn get_main_executable_path() -> Result<glib::GString, glib::BoolError> {
     }
 }
 
+#[doc(alias = "gst_parse_bin_from_description")]
 pub fn parse_bin_from_description(
     bin_description: &str,
     ghost_unlinked_pads: bool,
@@ -187,6 +206,7 @@ pub fn parse_bin_from_description(
     }
 }
 
+#[doc(alias = "gst_parse_launch")]
 pub fn parse_launch(pipeline_description: &str) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
@@ -200,6 +220,7 @@ pub fn parse_launch(pipeline_description: &str) -> Result<Element, glib::Error> 
     }
 }
 
+#[doc(alias = "gst_parse_launchv")]
 pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
@@ -215,16 +236,19 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 
 //#[cfg(any(feature = "v1_18", feature = "dox"))]
 //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+//#[doc(alias = "gst_tracing_get_active_tracers")]
 //pub fn tracing_get_active_tracers() -> /*Ignored*/Vec<Tracer> {
 //    unsafe { TODO: call ffi:gst_tracing_get_active_tracers() }
 //}
 
+//#[doc(alias = "gst_tracing_register_hook")]
 //pub fn tracing_register_hook<P: FnOnce() + Send + Sync + 'static>(tracer: /*Ignored*/&Tracer, detail: &str, func: P) {
 //    unsafe { TODO: call ffi:gst_tracing_register_hook() }
 //}
 
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+#[doc(alias = "gst_type_mark_as_plugin_api")]
 pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) {
     assert_initialized_main_thread!();
     unsafe {
@@ -232,6 +256,7 @@ pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) 
     }
 }
 
+#[doc(alias = "gst_update_registry")]
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
@@ -242,11 +267,13 @@ pub fn update_registry() -> Result<(), glib::error::BoolError> {
     }
 }
 
+#[doc(alias = "gst_util_get_timestamp")]
 pub fn util_get_timestamp() -> ClockTime {
     skip_assert_initialized!();
     unsafe { from_glib(ffi::gst_util_get_timestamp()) }
 }
 
+#[doc(alias = "gst_version")]
 pub fn version() -> (u32, u32, u32, u32) {
     skip_assert_initialized!();
     unsafe {
@@ -268,6 +295,7 @@ pub fn version() -> (u32, u32, u32, u32) {
     }
 }
 
+#[doc(alias = "gst_version_string")]
 pub fn version_string() -> glib::GString {
     skip_assert_initialized!();
     unsafe { from_glib_full(ffi::gst_version_string()) }

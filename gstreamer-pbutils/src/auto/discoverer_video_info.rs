@@ -14,26 +14,32 @@ glib::glib_wrapper! {
 }
 
 impl DiscovererVideoInfo {
+    #[doc(alias = "gst_discoverer_video_info_get_bitrate")]
     pub fn get_bitrate(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_bitrate(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_discoverer_video_info_get_depth")]
     pub fn get_depth(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_depth(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_discoverer_video_info_get_height")]
     pub fn get_height(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_height(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_discoverer_video_info_get_max_bitrate")]
     pub fn get_max_bitrate(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_max_bitrate(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_discoverer_video_info_get_width")]
     pub fn get_width(&self) -> u32 {
         unsafe { ffi::gst_discoverer_video_info_get_width(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_discoverer_video_info_is_image")]
     pub fn is_image(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_discoverer_video_info_is_image(
@@ -42,6 +48,7 @@ impl DiscovererVideoInfo {
         }
     }
 
+    #[doc(alias = "gst_discoverer_video_info_is_interlaced")]
     pub fn is_interlaced(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_discoverer_video_info_is_interlaced(

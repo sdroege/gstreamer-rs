@@ -15,6 +15,7 @@ glib::glib_wrapper! {
 }
 
 impl EncodingContainerProfile {
+    #[doc(alias = "gst_encoding_container_profile_contains_profile")]
     pub fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_container_profile_contains_profile(
@@ -24,6 +25,7 @@ impl EncodingContainerProfile {
         }
     }
 
+    #[doc(alias = "gst_encoding_container_profile_get_profiles")]
     pub fn get_profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_container_profile_get_profiles(

@@ -23,6 +23,7 @@ glib::glib_wrapper! {
 }
 
 impl Group {
+    #[doc(alias = "ges_group_new")]
     pub fn new() -> Group {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_group_new()) }

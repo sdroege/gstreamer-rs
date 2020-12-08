@@ -14,11 +14,13 @@ glib::glib_wrapper! {
 }
 
 impl WebRTCRTPReceiver {
+    #[doc(alias = "gst_webrtc_rtp_receiver_new")]
     pub fn new() -> WebRTCRTPReceiver {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_webrtc_rtp_receiver_new()) }
     }
 
+    #[doc(alias = "gst_webrtc_rtp_receiver_set_rtcp_transport")]
     pub fn set_rtcp_transport(&self, transport: &WebRTCDTLSTransport) {
         unsafe {
             ffi::gst_webrtc_rtp_receiver_set_rtcp_transport(
@@ -28,6 +30,7 @@ impl WebRTCRTPReceiver {
         }
     }
 
+    #[doc(alias = "gst_webrtc_rtp_receiver_set_transport")]
     pub fn set_transport(&self, transport: &WebRTCDTLSTransport) {
         unsafe {
             ffi::gst_webrtc_rtp_receiver_set_transport(

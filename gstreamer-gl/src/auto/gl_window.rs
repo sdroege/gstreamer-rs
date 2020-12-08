@@ -22,6 +22,7 @@ glib::glib_wrapper! {
 }
 
 impl GLWindow {
+    #[doc(alias = "gst_gl_window_new")]
     pub fn new<P: IsA<GLDisplay>>(display: &P) -> GLWindow {
         skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_gl_window_new(display.as_ref().to_glib_none().0)) }
@@ -36,38 +37,53 @@ pub const NONE_GL_WINDOW: Option<&GLWindow> = None;
 pub trait GLWindowExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "gst_gl_window_controls_viewport")]
     fn controls_viewport(&self) -> bool;
 
+    #[doc(alias = "gst_gl_window_draw")]
     fn draw(&self);
 
+    #[doc(alias = "gst_gl_window_get_context")]
     fn get_context(&self) -> Option<GLContext>;
 
+    #[doc(alias = "gst_gl_window_get_surface_dimensions")]
     fn get_surface_dimensions(&self) -> (u32, u32);
 
+    #[doc(alias = "gst_gl_window_handle_events")]
     fn handle_events(&self, handle_events: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_gl_window_has_output_surface")]
     fn has_output_surface(&self) -> bool;
 
+    #[doc(alias = "gst_gl_window_queue_resize")]
     fn queue_resize(&self);
 
+    #[doc(alias = "gst_gl_window_quit")]
     fn quit(&self);
 
+    #[doc(alias = "gst_gl_window_resize")]
     fn resize(&self, width: u32, height: u32);
 
+    #[doc(alias = "gst_gl_window_run")]
     fn run(&self);
 
+    #[doc(alias = "gst_gl_window_send_key_event")]
     fn send_key_event(&self, event_type: &str, key_str: &str);
 
+    #[doc(alias = "gst_gl_window_send_mouse_event")]
     fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_gl_window_send_scroll_event")]
     fn send_scroll_event(&self, posx: f64, posy: f64, delta_x: f64, delta_y: f64);
 
+    #[doc(alias = "gst_gl_window_set_preferred_size")]
     fn set_preferred_size(&self, width: i32, height: i32);
 
+    #[doc(alias = "gst_gl_window_set_render_rectangle")]
     fn set_render_rectangle(
         &self,
         x: i32,
@@ -76,6 +92,7 @@ pub trait GLWindowExt: 'static {
         height: i32,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_gl_window_show")]
     fn show(&self);
 
     fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(

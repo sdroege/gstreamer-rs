@@ -22,6 +22,7 @@ glib::glib_wrapper! {
 }
 
 impl Asset {
+    #[doc(alias = "ges_asset_needs_reload")]
     pub fn needs_reload(extractable_type: glib::types::Type, id: Option<&str>) -> bool {
         assert_initialized_main_thread!();
         unsafe {
@@ -32,6 +33,7 @@ impl Asset {
         }
     }
 
+    #[doc(alias = "ges_asset_request")]
     pub fn request(
         extractable_type: glib::types::Type,
         id: Option<&str>,
@@ -49,6 +51,7 @@ impl Asset {
         }
     }
 
+    #[doc(alias = "ges_asset_request_async")]
     pub fn request_async<
         P: IsA<gio::Cancellable>,
         Q: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
@@ -114,22 +117,31 @@ impl Asset {
 pub const NONE_ASSET: Option<&Asset> = None;
 
 pub trait AssetExt: 'static {
+    #[doc(alias = "ges_asset_extract")]
     fn extract(&self) -> Result<Extractable, glib::Error>;
 
+    #[doc(alias = "ges_asset_get_error")]
     fn get_error(&self) -> Option<glib::Error>;
 
+    #[doc(alias = "ges_asset_get_extractable_type")]
     fn get_extractable_type(&self) -> glib::types::Type;
 
+    #[doc(alias = "ges_asset_get_id")]
     fn get_id(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "ges_asset_get_proxy")]
     fn get_proxy(&self) -> Option<Asset>;
 
+    #[doc(alias = "ges_asset_get_proxy_target")]
     fn get_proxy_target(&self) -> Option<Asset>;
 
+    #[doc(alias = "ges_asset_list_proxies")]
     fn list_proxies(&self) -> Vec<Asset>;
 
+    #[doc(alias = "ges_asset_set_proxy")]
     fn set_proxy<P: IsA<Asset>>(&self, proxy: Option<&P>) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "ges_asset_unproxy")]
     fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError>;
 
     fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;

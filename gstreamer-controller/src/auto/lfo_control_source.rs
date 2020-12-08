@@ -21,6 +21,7 @@ glib::glib_wrapper! {
 }
 
 impl LFOControlSource {
+    #[doc(alias = "gst_lfo_control_source_new")]
     pub fn new() -> LFOControlSource {
         assert_initialized_main_thread!();
         unsafe {

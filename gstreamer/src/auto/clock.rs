@@ -23,42 +23,51 @@ glib::glib_wrapper! {
 }
 
 impl Clock {
+    //#[doc(alias = "gst_clock_id_compare_func")]
     //pub fn id_compare_func(id1: /*Unimplemented*/Option<Fundamental: Pointer>, id2: /*Unimplemented*/Option<Fundamental: Pointer>) -> i32 {
     //    unsafe { TODO: call ffi:gst_clock_id_compare_func() }
     //}
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[doc(alias = "gst_clock_id_get_clock")]
     //pub fn id_get_clock(id: /*Unimplemented*/ClockID) -> Option<Clock> {
     //    unsafe { TODO: call ffi:gst_clock_id_get_clock() }
     //}
 
+    //#[doc(alias = "gst_clock_id_get_time")]
     //pub fn id_get_time(id: /*Unimplemented*/ClockID) -> ClockTime {
     //    unsafe { TODO: call ffi:gst_clock_id_get_time() }
     //}
 
+    //#[doc(alias = "gst_clock_id_ref")]
     //pub fn id_ref(id: /*Unimplemented*/ClockID) -> /*Unimplemented*/ClockID {
     //    unsafe { TODO: call ffi:gst_clock_id_ref() }
     //}
 
+    //#[doc(alias = "gst_clock_id_unref")]
     //pub fn id_unref(id: /*Unimplemented*/ClockID) {
     //    unsafe { TODO: call ffi:gst_clock_id_unref() }
     //}
 
+    //#[doc(alias = "gst_clock_id_unschedule")]
     //pub fn id_unschedule(id: /*Unimplemented*/ClockID) {
     //    unsafe { TODO: call ffi:gst_clock_id_unschedule() }
     //}
 
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //#[doc(alias = "gst_clock_id_uses_clock")]
     //pub fn id_uses_clock<P: IsA<Clock>>(id: /*Unimplemented*/ClockID, clock: &P) -> bool {
     //    unsafe { TODO: call ffi:gst_clock_id_uses_clock() }
     //}
 
+    //#[doc(alias = "gst_clock_id_wait")]
     //pub fn id_wait(id: /*Unimplemented*/ClockID) -> (ClockReturn, ClockTimeDiff) {
     //    unsafe { TODO: call ffi:gst_clock_id_wait() }
     //}
 
+    //#[doc(alias = "gst_clock_id_wait_async")]
     //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, ClockTime, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> ClockReturn {
     //    unsafe { TODO: call ffi:gst_clock_id_wait_async() }
     //}
@@ -70,36 +79,50 @@ unsafe impl Sync for Clock {}
 pub const NONE_CLOCK: Option<&Clock> = None;
 
 pub trait ClockExt: 'static {
+    #[doc(alias = "gst_clock_add_observation")]
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64>;
 
+    #[doc(alias = "gst_clock_add_observation_unapplied")]
     fn add_observation_unapplied(
         &self,
         slave: ClockTime,
         master: ClockTime,
     ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)>;
 
+    #[doc(alias = "gst_clock_adjust_unlocked")]
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime;
 
+    #[doc(alias = "gst_clock_get_calibration")]
     fn get_calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime);
 
+    #[doc(alias = "gst_clock_get_internal_time")]
     fn get_internal_time(&self) -> ClockTime;
 
+    #[doc(alias = "gst_clock_get_master")]
     fn get_master(&self) -> Option<Clock>;
 
+    #[doc(alias = "gst_clock_get_resolution")]
     fn get_resolution(&self) -> ClockTime;
 
+    #[doc(alias = "gst_clock_get_time")]
     fn get_time(&self) -> ClockTime;
 
+    #[doc(alias = "gst_clock_get_timeout")]
     fn get_timeout(&self) -> ClockTime;
 
+    #[doc(alias = "gst_clock_is_synced")]
     fn is_synced(&self) -> bool;
 
+    //#[doc(alias = "gst_clock_new_periodic_id")]
     //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/ClockID;
 
+    //#[doc(alias = "gst_clock_new_single_shot_id")]
     //fn new_single_shot_id(&self, time: ClockTime) -> /*Unimplemented*/ClockID;
 
+    //#[doc(alias = "gst_clock_periodic_id_reinit")]
     //fn periodic_id_reinit(&self, id: /*Unimplemented*/ClockID, start_time: ClockTime, interval: ClockTime) -> bool;
 
+    #[doc(alias = "gst_clock_set_calibration")]
     fn set_calibration(
         &self,
         internal: ClockTime,
@@ -108,18 +131,25 @@ pub trait ClockExt: 'static {
         rate_denom: ClockTime,
     );
 
+    #[doc(alias = "gst_clock_set_master")]
     fn set_master<P: IsA<Clock>>(&self, master: Option<&P>) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_clock_set_resolution")]
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime;
 
+    #[doc(alias = "gst_clock_set_synced")]
     fn set_synced(&self, synced: bool);
 
+    #[doc(alias = "gst_clock_set_timeout")]
     fn set_timeout(&self, timeout: ClockTime);
 
+    //#[doc(alias = "gst_clock_single_shot_id_reinit")]
     //fn single_shot_id_reinit(&self, id: /*Unimplemented*/ClockID, time: ClockTime) -> bool;
 
+    #[doc(alias = "gst_clock_unadjust_unlocked")]
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime;
 
+    #[doc(alias = "gst_clock_wait_for_sync")]
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError>;
 
     fn get_property_window_size(&self) -> i32;

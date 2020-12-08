@@ -22,12 +22,14 @@ glib::glib_wrapper! {
 }
 
 impl PlayerVideoOverlayVideoRenderer {
+    #[doc(alias = "gst_player_video_overlay_video_renderer_expose")]
     pub fn expose(&self) {
         unsafe {
             ffi::gst_player_video_overlay_video_renderer_expose(self.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_player_video_overlay_video_renderer_get_render_rectangle")]
     pub fn get_render_rectangle(&self) -> (i32, i32, i32, i32) {
         unsafe {
             let mut x = mem::MaybeUninit::uninit();
@@ -49,10 +51,12 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
+    //#[doc(alias = "gst_player_video_overlay_video_renderer_get_window_handle")]
     //pub fn get_window_handle(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_get_window_handle() }
     //}
 
+    #[doc(alias = "gst_player_video_overlay_video_renderer_set_render_rectangle")]
     pub fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) {
         unsafe {
             ffi::gst_player_video_overlay_video_renderer_set_render_rectangle(
@@ -65,6 +69,7 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
+    //#[doc(alias = "gst_player_video_overlay_video_renderer_set_window_handle")]
     //pub fn set_window_handle(&self, window_handle: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_set_window_handle() }
     //}
@@ -93,10 +98,12 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
+    //#[doc(alias = "gst_player_video_overlay_video_renderer_new")]
     //pub fn new(window_handle: /*Unimplemented*/Option<Fundamental: Pointer>) -> Option<PlayerVideoRenderer> {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_new() }
     //}
 
+    //#[doc(alias = "gst_player_video_overlay_video_renderer_new_with_sink")]
     //pub fn new_with_sink<P: IsA<gst::Element>>(window_handle: /*Unimplemented*/Option<Fundamental: Pointer>, video_sink: &P) -> Option<PlayerVideoRenderer> {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_new_with_sink() }
     //}

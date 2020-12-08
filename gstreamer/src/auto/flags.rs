@@ -36,7 +36,7 @@ impl ToGlib for BinFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBinFlags> for BinFlags {
-    fn from_glib(value: ffi::GstBinFlags) -> BinFlags {
+    unsafe fn from_glib(value: ffi::GstBinFlags) -> BinFlags {
         skip_assert_initialized!();
         BinFlags::from_bits_truncate(value)
     }
@@ -88,7 +88,7 @@ impl ToGlib for BufferCopyFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBufferCopyFlags> for BufferCopyFlags {
-    fn from_glib(value: ffi::GstBufferCopyFlags) -> BufferCopyFlags {
+    unsafe fn from_glib(value: ffi::GstBufferCopyFlags) -> BufferCopyFlags {
         skip_assert_initialized!();
         BufferCopyFlags::from_bits_truncate(value)
     }
@@ -150,7 +150,7 @@ impl ToGlib for BufferFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBufferFlags> for BufferFlags {
-    fn from_glib(value: ffi::GstBufferFlags) -> BufferFlags {
+    unsafe fn from_glib(value: ffi::GstBufferFlags) -> BufferFlags {
         skip_assert_initialized!();
         BufferFlags::from_bits_truncate(value)
     }
@@ -199,7 +199,7 @@ impl ToGlib for BufferPoolAcquireFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBufferPoolAcquireFlags> for BufferPoolAcquireFlags {
-    fn from_glib(value: ffi::GstBufferPoolAcquireFlags) -> BufferPoolAcquireFlags {
+    unsafe fn from_glib(value: ffi::GstBufferPoolAcquireFlags) -> BufferPoolAcquireFlags {
         skip_assert_initialized!();
         BufferPoolAcquireFlags::from_bits_truncate(value)
     }
@@ -252,7 +252,7 @@ impl ToGlib for ClockFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstClockFlags> for ClockFlags {
-    fn from_glib(value: ffi::GstClockFlags) -> ClockFlags {
+    unsafe fn from_glib(value: ffi::GstClockFlags) -> ClockFlags {
         skip_assert_initialized!();
         ClockFlags::from_bits_truncate(value)
     }
@@ -316,7 +316,7 @@ impl ToGlib for DebugColorFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDebugColorFlags> for DebugColorFlags {
-    fn from_glib(value: ffi::GstDebugColorFlags) -> DebugColorFlags {
+    unsafe fn from_glib(value: ffi::GstDebugColorFlags) -> DebugColorFlags {
         skip_assert_initialized!();
         DebugColorFlags::from_bits_truncate(value)
     }
@@ -369,7 +369,7 @@ impl ToGlib for DebugGraphDetails {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDebugGraphDetails> for DebugGraphDetails {
-    fn from_glib(value: ffi::GstDebugGraphDetails) -> DebugGraphDetails {
+    unsafe fn from_glib(value: ffi::GstDebugGraphDetails) -> DebugGraphDetails {
         skip_assert_initialized!();
         DebugGraphDetails::from_bits_truncate(value)
     }
@@ -421,7 +421,7 @@ impl ToGlib for ElementFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstElementFlags> for ElementFlags {
-    fn from_glib(value: ffi::GstElementFlags) -> ElementFlags {
+    unsafe fn from_glib(value: ffi::GstElementFlags) -> ElementFlags {
         skip_assert_initialized!();
         ElementFlags::from_bits_truncate(value)
     }
@@ -472,7 +472,7 @@ impl ToGlib for EventTypeFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstEventTypeFlags> for EventTypeFlags {
-    fn from_glib(value: ffi::GstEventTypeFlags) -> EventTypeFlags {
+    unsafe fn from_glib(value: ffi::GstEventTypeFlags) -> EventTypeFlags {
         skip_assert_initialized!();
         EventTypeFlags::from_bits_truncate(value)
     }
@@ -524,7 +524,7 @@ impl ToGlib for MemoryFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstMemoryFlags> for MemoryFlags {
-    fn from_glib(value: ffi::GstMemoryFlags) -> MemoryFlags {
+    unsafe fn from_glib(value: ffi::GstMemoryFlags) -> MemoryFlags {
         skip_assert_initialized!();
         MemoryFlags::from_bits_truncate(value)
     }
@@ -573,7 +573,7 @@ impl ToGlib for ObjectFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstObjectFlags> for ObjectFlags {
-    fn from_glib(value: ffi::GstObjectFlags) -> ObjectFlags {
+    unsafe fn from_glib(value: ffi::GstObjectFlags) -> ObjectFlags {
         skip_assert_initialized!();
         ObjectFlags::from_bits_truncate(value)
     }
@@ -632,7 +632,7 @@ impl ToGlib for PadFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadFlags> for PadFlags {
-    fn from_glib(value: ffi::GstPadFlags) -> PadFlags {
+    unsafe fn from_glib(value: ffi::GstPadFlags) -> PadFlags {
         skip_assert_initialized!();
         PadFlags::from_bits_truncate(value)
     }
@@ -683,7 +683,7 @@ impl ToGlib for PadLinkCheck {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadLinkCheck> for PadLinkCheck {
-    fn from_glib(value: ffi::GstPadLinkCheck) -> PadLinkCheck {
+    unsafe fn from_glib(value: ffi::GstPadLinkCheck) -> PadLinkCheck {
         skip_assert_initialized!();
         PadLinkCheck::from_bits_truncate(value)
     }
@@ -750,7 +750,7 @@ impl ToGlib for PadProbeType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadProbeType> for PadProbeType {
-    fn from_glib(value: ffi::GstPadProbeType) -> PadProbeType {
+    unsafe fn from_glib(value: ffi::GstPadProbeType) -> PadProbeType {
         skip_assert_initialized!();
         PadProbeType::from_bits_truncate(value)
     }
@@ -801,7 +801,7 @@ impl ToGlib for ParseFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstParseFlags> for ParseFlags {
-    fn from_glib(value: ffi::GstParseFlags) -> ParseFlags {
+    unsafe fn from_glib(value: ffi::GstParseFlags) -> ParseFlags {
         skip_assert_initialized!();
         ParseFlags::from_bits_truncate(value)
     }
@@ -848,7 +848,7 @@ impl ToGlib for PipelineFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPipelineFlags> for PipelineFlags {
-    fn from_glib(value: ffi::GstPipelineFlags) -> PipelineFlags {
+    unsafe fn from_glib(value: ffi::GstPipelineFlags) -> PipelineFlags {
         skip_assert_initialized!();
         PipelineFlags::from_bits_truncate(value)
     }
@@ -901,7 +901,7 @@ impl ToGlib for PluginAPIFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginAPIFlags> for PluginAPIFlags {
-    fn from_glib(value: ffi::GstPluginAPIFlags) -> PluginAPIFlags {
+    unsafe fn from_glib(value: ffi::GstPluginAPIFlags) -> PluginAPIFlags {
         skip_assert_initialized!();
         PluginAPIFlags::from_bits_truncate(value)
     }
@@ -960,7 +960,7 @@ impl ToGlib for PluginDependencyFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginDependencyFlags> for PluginDependencyFlags {
-    fn from_glib(value: ffi::GstPluginDependencyFlags) -> PluginDependencyFlags {
+    unsafe fn from_glib(value: ffi::GstPluginDependencyFlags) -> PluginDependencyFlags {
         skip_assert_initialized!();
         PluginDependencyFlags::from_bits_truncate(value)
     }
@@ -1008,7 +1008,7 @@ impl ToGlib for PluginFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginFlags> for PluginFlags {
-    fn from_glib(value: ffi::GstPluginFlags) -> PluginFlags {
+    unsafe fn from_glib(value: ffi::GstPluginFlags) -> PluginFlags {
         skip_assert_initialized!();
         PluginFlags::from_bits_truncate(value)
     }
@@ -1057,7 +1057,7 @@ impl ToGlib for SchedulingFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstSchedulingFlags> for SchedulingFlags {
-    fn from_glib(value: ffi::GstSchedulingFlags) -> SchedulingFlags {
+    unsafe fn from_glib(value: ffi::GstSchedulingFlags) -> SchedulingFlags {
         skip_assert_initialized!();
         SchedulingFlags::from_bits_truncate(value)
     }
@@ -1120,7 +1120,7 @@ impl ToGlib for SeekFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstSeekFlags> for SeekFlags {
-    fn from_glib(value: ffi::GstSeekFlags) -> SeekFlags {
+    unsafe fn from_glib(value: ffi::GstSeekFlags) -> SeekFlags {
         skip_assert_initialized!();
         SeekFlags::from_bits_truncate(value)
     }
@@ -1176,7 +1176,7 @@ impl ToGlib for SegmentFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstSegmentFlags> for SegmentFlags {
-    fn from_glib(value: ffi::GstSegmentFlags) -> SegmentFlags {
+    unsafe fn from_glib(value: ffi::GstSegmentFlags) -> SegmentFlags {
         skip_assert_initialized!();
         SegmentFlags::from_bits_truncate(value)
     }
@@ -1229,7 +1229,7 @@ impl ToGlib for StackTraceFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
-    fn from_glib(value: ffi::GstStackTraceFlags) -> StackTraceFlags {
+    unsafe fn from_glib(value: ffi::GstStackTraceFlags) -> StackTraceFlags {
         skip_assert_initialized!();
         StackTraceFlags::from_bits_truncate(value)
     }
@@ -1286,7 +1286,7 @@ impl ToGlib for StreamFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamFlags> for StreamFlags {
-    fn from_glib(value: ffi::GstStreamFlags) -> StreamFlags {
+    unsafe fn from_glib(value: ffi::GstStreamFlags) -> StreamFlags {
         skip_assert_initialized!();
         StreamFlags::from_bits_truncate(value)
     }
@@ -1370,7 +1370,7 @@ impl ToGlib for StreamType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamType> for StreamType {
-    fn from_glib(value: ffi::GstStreamType) -> StreamType {
+    unsafe fn from_glib(value: ffi::GstStreamType) -> StreamType {
         skip_assert_initialized!();
         StreamType::from_bits_truncate(value)
     }

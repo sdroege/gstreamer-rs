@@ -14,6 +14,7 @@ glib::glib_wrapper! {
 }
 
 impl VideoBufferPool {
+    #[doc(alias = "gst_video_buffer_pool_new")]
     pub fn new() -> VideoBufferPool {
         assert_initialized_main_thread!();
         unsafe { gst::BufferPool::from_glib_full(ffi::gst_video_buffer_pool_new()).unsafe_cast() }

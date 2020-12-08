@@ -25,14 +25,19 @@ unsafe impl Sync for AudioBaseSrc {}
 pub const NONE_AUDIO_BASE_SRC: Option<&AudioBaseSrc> = None;
 
 pub trait AudioBaseSrcExt: 'static {
+    //#[doc(alias = "gst_audio_base_src_create_ringbuffer")]
     //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer>;
 
+    #[doc(alias = "gst_audio_base_src_get_provide_clock")]
     fn get_provide_clock(&self) -> bool;
 
+    //#[doc(alias = "gst_audio_base_src_get_slave_method")]
     //fn get_slave_method(&self) -> /*Ignored*/AudioBaseSrcSlaveMethod;
 
+    #[doc(alias = "gst_audio_base_src_set_provide_clock")]
     fn set_provide_clock(&self, provide: bool);
 
+    //#[doc(alias = "gst_audio_base_src_set_slave_method")]
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSrcSlaveMethod);
 
     fn get_property_actual_buffer_time(&self) -> i64;

@@ -21,6 +21,7 @@ glib::glib_wrapper! {
 impl ProxyControlBinding {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "gst_proxy_control_binding_new")]
     pub fn new<P: IsA<gst::Object>, Q: IsA<gst::Object>>(
         object: &P,
         property_name: &str,

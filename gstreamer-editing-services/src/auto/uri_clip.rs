@@ -24,6 +24,7 @@ glib::glib_wrapper! {
 }
 
 impl UriClip {
+    #[doc(alias = "ges_uri_clip_new")]
     pub fn new(uri: &str) -> Result<UriClip, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
@@ -36,14 +37,19 @@ impl UriClip {
 pub const NONE_URI_CLIP: Option<&UriClip> = None;
 
 pub trait UriClipExt: 'static {
+    #[doc(alias = "ges_uri_clip_get_uri")]
     fn get_uri(&self) -> Option<glib::GString>;
 
+    #[doc(alias = "ges_uri_clip_is_image")]
     fn is_image(&self) -> bool;
 
+    #[doc(alias = "ges_uri_clip_is_muted")]
     fn is_muted(&self) -> bool;
 
+    #[doc(alias = "ges_uri_clip_set_is_image")]
     fn set_is_image(&self, is_image: bool);
 
+    #[doc(alias = "ges_uri_clip_set_mute")]
     fn set_mute(&self, mute: bool);
 
     fn get_property_is_image(&self) -> bool;

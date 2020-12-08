@@ -18,14 +18,18 @@ glib::glib_wrapper! {
 pub const NONE_URI_SOURCE_ASSET: Option<&UriSourceAsset> = None;
 
 pub trait UriSourceAssetExt: 'static {
+    #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]
     fn get_filesource_asset(&self) -> Option<UriClipAsset>;
 
+    #[doc(alias = "ges_uri_source_asset_get_stream_info")]
     fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo>;
 
+    #[doc(alias = "ges_uri_source_asset_get_stream_uri")]
     fn get_stream_uri(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "ges_uri_source_asset_is_image")]
     fn is_image(&self) -> bool;
 }
 

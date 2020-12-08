@@ -26,7 +26,7 @@ impl ToGlib for BaseParseFrameFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBaseParseFrameFlags> for BaseParseFrameFlags {
-    fn from_glib(value: ffi::GstBaseParseFrameFlags) -> BaseParseFrameFlags {
+    unsafe fn from_glib(value: ffi::GstBaseParseFrameFlags) -> BaseParseFrameFlags {
         skip_assert_initialized!();
         BaseParseFrameFlags::from_bits_truncate(value)
     }

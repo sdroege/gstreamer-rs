@@ -22,11 +22,13 @@ glib::glib_wrapper! {
 }
 
 impl RTSPThreadPool {
+    #[doc(alias = "gst_rtsp_thread_pool_new")]
     pub fn new() -> RTSPThreadPool {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_thread_pool_new()) }
     }
 
+    #[doc(alias = "gst_rtsp_thread_pool_cleanup")]
     pub fn cleanup() {
         assert_initialized_main_thread!();
         unsafe {
@@ -47,10 +49,13 @@ unsafe impl Sync for RTSPThreadPool {}
 pub const NONE_RTSP_THREAD_POOL: Option<&RTSPThreadPool> = None;
 
 pub trait RTSPThreadPoolExt: 'static {
+    #[doc(alias = "gst_rtsp_thread_pool_get_max_threads")]
     fn get_max_threads(&self) -> i32;
 
+    #[doc(alias = "gst_rtsp_thread_pool_get_thread")]
     fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread>;
 
+    #[doc(alias = "gst_rtsp_thread_pool_set_max_threads")]
     fn set_max_threads(&self, max_threads: i32);
 
     fn connect_property_max_threads_notify<F: Fn(&Self) + Send + Sync + 'static>(

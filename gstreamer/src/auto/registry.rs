@@ -22,6 +22,7 @@ glib::glib_wrapper! {
 }
 
 impl Registry {
+    #[doc(alias = "gst_registry_add_feature")]
     pub fn add_feature<P: IsA<PluginFeature>>(
         &self,
         feature: &P,
@@ -37,6 +38,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_add_plugin")]
     pub fn add_plugin(&self, plugin: &Plugin) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::glib_result_from_gboolean!(
@@ -46,6 +48,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_check_feature_version")]
     pub fn check_feature_version(
         &self,
         feature_name: &str,
@@ -64,6 +67,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_feature_filter")]
     pub fn feature_filter<P: FnMut(&PluginFeature) -> bool>(
         &self,
         filter: P,
@@ -91,6 +95,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_find_feature")]
     pub fn find_feature(&self, name: &str, type_: glib::types::Type) -> Option<PluginFeature> {
         unsafe {
             from_glib_full(ffi::gst_registry_find_feature(
@@ -101,6 +106,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_find_plugin")]
     pub fn find_plugin(&self, name: &str) -> Option<Plugin> {
         unsafe {
             from_glib_full(ffi::gst_registry_find_plugin(
@@ -110,6 +116,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_get_feature_list")]
     pub fn get_feature_list(&self, type_: glib::types::Type) -> Vec<PluginFeature> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list(
@@ -119,6 +126,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_get_feature_list_by_plugin")]
     pub fn get_feature_list_by_plugin(&self, name: &str) -> Vec<PluginFeature> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list_by_plugin(
@@ -128,10 +136,12 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_get_feature_list_cookie")]
     pub fn get_feature_list_cookie(&self) -> u32 {
         unsafe { ffi::gst_registry_get_feature_list_cookie(self.to_glib_none().0) }
     }
 
+    #[doc(alias = "gst_registry_get_plugin_list")]
     pub fn get_plugin_list(&self) -> Vec<Plugin> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_plugin_list(
@@ -140,6 +150,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_lookup")]
     pub fn lookup(&self, filename: &str) -> Option<Plugin> {
         unsafe {
             from_glib_full(ffi::gst_registry_lookup(
@@ -149,6 +160,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_lookup_feature")]
     pub fn lookup_feature(&self, name: &str) -> Option<PluginFeature> {
         unsafe {
             from_glib_full(ffi::gst_registry_lookup_feature(
@@ -158,6 +170,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_plugin_filter")]
     pub fn plugin_filter<P: FnMut(&Plugin) -> bool>(&self, filter: P, first: bool) -> Vec<Plugin> {
         let filter_data: P = filter;
         unsafe extern "C" fn filter_func<P: FnMut(&Plugin) -> bool>(
@@ -181,6 +194,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_remove_feature")]
     pub fn remove_feature<P: IsA<PluginFeature>>(&self, feature: &P) {
         unsafe {
             ffi::gst_registry_remove_feature(
@@ -190,12 +204,14 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_remove_plugin")]
     pub fn remove_plugin(&self, plugin: &Plugin) {
         unsafe {
             ffi::gst_registry_remove_plugin(self.to_glib_none().0, plugin.to_glib_none().0);
         }
     }
 
+    #[doc(alias = "gst_registry_scan_path")]
     pub fn scan_path<P: AsRef<std::path::Path>>(&self, path: P) -> bool {
         unsafe {
             from_glib(ffi::gst_registry_scan_path(
@@ -205,6 +221,7 @@ impl Registry {
         }
     }
 
+    #[doc(alias = "gst_registry_get")]
     pub fn get() -> Registry {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_registry_get()) }
