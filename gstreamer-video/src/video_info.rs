@@ -175,6 +175,22 @@ impl fmt::Display for crate::VideoColorimetry {
     }
 }
 
+impl crate::VideoChromaSite {
+    pub fn to_str(self) -> glib::GString {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            cfg_if::cfg_if! {
+                if #[cfg(feature = "v1_20")] {
+                    from_glib_full(ffi::gst_video_chroma_site_to_string(self.to_glib()))
+                } else {
+                    from_glib_none(ffi::gst_video_chroma_to_string(self.to_glib()))
+                }
+            }
+        }
+    }
+}
+
 impl str::FromStr for crate::VideoChromaSite {
     type Err = glib::error::BoolError;
 
@@ -201,10 +217,7 @@ impl str::FromStr for crate::VideoChromaSite {
 
 impl fmt::Display for crate::VideoChromaSite {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let s = unsafe {
-            glib::GString::from_glib_full(ffi::gst_video_chroma_to_string(self.to_glib()))
-        };
-        f.write_str(&s)
+        f.write_str(&self.to_str())
     }
 }
 

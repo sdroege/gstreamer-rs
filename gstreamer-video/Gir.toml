@@ -481,6 +481,11 @@ status = "generate"
 
     [[object.function]]
     name = "to_string"
+    rename = "to_str"
+    # Manual function for < v1_20:
+    manual = true
+    # Always generate the trait, without version constraint:
+    version = "1.8"
         [object.function.return]
         nullable = false
 
