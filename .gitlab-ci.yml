@@ -202,8 +202,6 @@ plugins-update-nightly:
         crate=$1
         if [ "$crate" = "gstreamer" ]; then
           echo "--features=ser_de,v1_18"
-        elif [[ "$crate" = gstreamer-gl/* ]]; then
-          echo ""
         else
           echo "--features=v1_18"
         fi
@@ -269,11 +267,7 @@ test nightly all-features:
     - |
       get_features() {
         module=${1%%/sys}
-        if [[ "$module" = gstreamer-gl/* ]]; then
-          echo ""
-        else
-          echo "--features=v1_18"
-        fi
+        echo "--features=v1_18"
       }
       # First build and test all the crates with their relevant features
       # Keep features in sync with below
@@ -348,8 +342,6 @@ clippy:
         crate=$1
         if [ "$crate" = "gstreamer" ]; then
           echo "--features=ser_de,v1_18"
-        elif [[ "$crate" = gstreamer-gl/* ]]; then
-          echo ""
         else
           echo "--features=v1_18"
         fi
