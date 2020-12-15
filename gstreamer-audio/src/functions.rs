@@ -1,11 +1,4 @@
-// Copyright (C) 2017-2020 Sebastian Dröge <sebastian@centricular.com>
-// Copyright (C) 2020 Guillaume Desmottes <guillaume.desmottes@collabora.com>
-//
-// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
-// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
-// option. This file may not be copied, modified, or distributed
-// except according to those terms.
+// Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::{from_glib_full, ToGlibPtr};
 use glib::ToSendValue;
