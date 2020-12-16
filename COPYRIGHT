@@ -1,0 +1,23 @@
+The gstreamer-rs project is dual-licensed under Apache 2.0 and MIT terms, with
+the exception of the sys crates which are licensed only under the terms of the
+MIT license.
+
+Copyrights in the gstreamer-rs project are retained by their contributors. No
+copyright assignment is required to contribute to the gstreamer-rs project.
+
+Some files include explicit copyright notices and/or license notices. For full
+authorship information, see the version control history.
+
+Except as otherwise noted (below and/or in individual files), gstreamer-rs is
+licensed under the Apache License, Version 2.0 <LICENSE-APACHE> or
+<http://www.apache.org/licenses/LICENSE-2.0> or the MIT license <LICENSE-MIT>
+or <http://opensource.org/licenses/MIT>, at your option.
+
+All the sys crates (e.g. gstreamer/sys and gstreamer-base/sys) are licensed
+only under the terms of the MIT license.
+
+This project provides interoperability with various GStreamer libraries but
+doesn't distribute any parts of them. Distributing compiled libraries and
+executables that link to those libraries may be subject to terms of the GNU
+LGPL or other licenses. For more information check the license of each
+GStreamer library.
