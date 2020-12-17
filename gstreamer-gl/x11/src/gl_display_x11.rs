@@ -16,6 +16,6 @@ impl GLDisplayX11 {
         from_glib_full::<_, Option<GLDisplayX11>>(ffi::gst_gl_display_x11_new_with_display(
             display as gpointer,
         ))
-        .ok_or_else(|| glib::glib_bool_error!("Failed to create new X11 GL display"))
+        .ok_or_else(|| glib::bool_error!("Failed to create new X11 GL display"))
     }
 }

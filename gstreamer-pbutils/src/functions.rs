@@ -18,7 +18,7 @@ pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     assert_initialized_main_thread!();
     let codec_tag = T::tag_name();
     unsafe {
-        glib::glib_result_from_gboolean!(
+        glib::result_from_gboolean!(
             ffi::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 codec_tag.to_glib_none().0,
@@ -35,7 +35,7 @@ pub fn pb_utils_add_codec_description_to_tag_list(
 ) -> Result<(), glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        glib::glib_result_from_gboolean!(
+        glib::result_from_gboolean!(
             ffi::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 ptr::null_mut(),
@@ -53,7 +53,7 @@ pub fn pb_utils_get_encoder_description(
     unsafe {
         match from_glib_full(ffi::gst_pb_utils_get_encoder_description(caps.as_ptr())) {
             Some(s) => Ok(s),
-            None => Err(glib::glib_bool_error!("Failed to get encoder description")),
+            None => Err(glib::bool_error!("Failed to get encoder description")),
         }
     }
 }
@@ -65,7 +65,7 @@ pub fn pb_utils_get_decoder_description(
     unsafe {
         match from_glib_full(ffi::gst_pb_utils_get_decoder_description(caps.as_ptr())) {
             Some(s) => Ok(s),
-            None => Err(glib::glib_bool_error!("Failed to get decoder description")),
+            None => Err(glib::bool_error!("Failed to get decoder description")),
         }
     }
 }
@@ -77,7 +77,7 @@ pub fn pb_utils_get_codec_description(
     unsafe {
         match from_glib_full(ffi::gst_pb_utils_get_codec_description(caps.as_ptr())) {
             Some(s) => Ok(s),
-            None => Err(glib::glib_bool_error!("Failed to get codec description")),
+            None => Err(glib::bool_error!("Failed to get codec description")),
         }
     }
 }

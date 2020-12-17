@@ -9,9 +9,6 @@
 
 use gst_rtsp_server::prelude::*;
 
-use glib::glib_object_subclass;
-use glib::glib_wrapper;
-
 use anyhow::Error;
 use derive_more::{Display, Error};
 
@@ -104,7 +101,7 @@ mod media_factory {
             type Class = subclass::simple::ClassStruct<Self>;
 
             // This macro provides some boilerplate
-            glib_object_subclass!();
+            glib::object_subclass!();
 
             // Called when a new instance is to be created. We need to return an instance
             // of our struct here.
@@ -156,7 +153,7 @@ mod media_factory {
 
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPMediaFactory
-    glib_wrapper! {
+    glib::wrapper! {
         pub struct Factory(ObjectSubclass<imp::Factory>) @extends gst_rtsp_server::RTSPMediaFactory;
     }
 
@@ -174,8 +171,6 @@ mod media_factory {
 
 // Our custom media subclass that adds a custom attribute to the SDP returned by DESCRIBE
 mod media {
-    use super::*;
-
     use glib::subclass;
     use glib::subclass::prelude::*;
 
@@ -199,7 +194,7 @@ mod media {
             type Class = subclass::simple::ClassStruct<Self>;
 
             // This macro provides some boilerplate
-            glib_object_subclass!();
+            glib::object_subclass!();
 
             // Called when a new instance is to be created. We need to return an instance
             // of our struct here.
@@ -230,7 +225,7 @@ mod media {
 
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPMedia
-    glib_wrapper! {
+    glib::wrapper! {
         pub struct Media(ObjectSubclass<imp::Media>) @extends gst_rtsp_server::RTSPMedia;
     }
 
@@ -267,7 +262,7 @@ mod server {
             type Class = subclass::simple::ClassStruct<Self>;
 
             // This macro provides some boilerplate
-            glib_object_subclass!();
+            glib::object_subclass!();
 
             // Called when a new instance is to be created. We need to return an instance
             // of our struct here.
@@ -302,7 +297,7 @@ mod server {
 
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPServer
-    glib_wrapper! {
+    glib::wrapper! {
         pub struct Server(ObjectSubclass<imp::Server>) @extends gst_rtsp_server::RTSPServer;
     }
 
@@ -320,8 +315,6 @@ mod server {
 
 // Our custom RTSP client subclass.
 mod client {
-    use super::*;
-
     use glib::subclass;
     use glib::subclass::prelude::*;
 
@@ -345,7 +338,7 @@ mod client {
             type Class = subclass::simple::ClassStruct<Self>;
 
             // This macro provides some boilerplate
-            glib_object_subclass!();
+            glib::object_subclass!();
 
             // Called when a new instance is to be created. We need to return an instance
             // of our struct here.
@@ -368,7 +361,7 @@ mod client {
 
     // This here defines the public interface of our factory and implements
     // the corresponding traits so that it behaves like any other RTSPClient
-    glib_wrapper! {
+    glib::wrapper! {
         pub struct Client(ObjectSubclass<imp::Client>) @extends gst_rtsp_server::RTSPClient;
     }
 

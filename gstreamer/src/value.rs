@@ -882,7 +882,7 @@ impl GstValueExt for glib::Value {
     fn serialize(&self) -> Result<glib::GString, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_value_serialize(self.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to serialize value"))
+                .ok_or_else(|| glib::bool_error!("Failed to serialize value"))
         }
     }
 
@@ -900,7 +900,7 @@ impl GstValueExt for glib::Value {
             if ret {
                 Ok(value)
             } else {
-                Err(glib::glib_bool_error!("Failed to deserialize value"))
+                Err(glib::bool_error!("Failed to deserialize value"))
             }
         }
     }

@@ -90,7 +90,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
                     from_glib(max_latency),
                 ))
             } else {
-                Err(glib::glib_bool_error!("Failed to query latency"))
+                Err(glib::bool_error!("Failed to query latency"))
             }
         }
     }
@@ -107,7 +107,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             if ret {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!("Failed to configure new segment"))
+                Err(glib::bool_error!("Failed to configure new segment"))
             }
         }
     }

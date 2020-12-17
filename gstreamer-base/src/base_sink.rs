@@ -105,7 +105,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
                     from_glib(max_latency),
                 ))
             } else {
-                Err(glib::glib_bool_error!("Failed to query latency"))
+                Err(glib::bool_error!("Failed to query latency"))
             }
         }
     }

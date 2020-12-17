@@ -14,7 +14,7 @@ use crate::sdp_bandwidth::SDPBandwidth;
 use crate::sdp_connection::SDPConnection;
 use crate::sdp_key::SDPKey;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct SDPMedia(Boxed<ffi::GstSDPMedia>);
 
@@ -160,7 +160,7 @@ impl SDPMediaRef {
         unsafe {
             match from_glib_full(ffi::gst_sdp_media_as_text(&self.0)) {
                 Some(s) => Ok(s),
-                None => Err(glib::glib_bool_error!(
+                None => Err(glib::bool_error!(
                     "Failed to convert the contents of media to a text string"
                 )),
             }

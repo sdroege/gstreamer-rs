@@ -66,7 +66,7 @@ impl Adapter {
 
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_adapter_get_buffer(self.to_glib_none().0, nbytes))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to get buffer"))
+                .ok_or_else(|| glib::bool_error!("Failed to get buffer"))
         }
     }
 
@@ -79,7 +79,7 @@ impl Adapter {
                 self.to_glib_none().0,
                 nbytes,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to get buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to get buffer"))
         }
     }
 
@@ -92,7 +92,7 @@ impl Adapter {
                 self.to_glib_none().0,
                 nbytes,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to get buffer list"))
+            .ok_or_else(|| glib::bool_error!("Failed to get buffer list"))
         }
     }
 
@@ -173,7 +173,7 @@ impl Adapter {
 
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_adapter_take_buffer(self.to_glib_none().0, nbytes))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to take buffer"))
+                .ok_or_else(|| glib::bool_error!("Failed to take buffer"))
         }
     }
 
@@ -186,7 +186,7 @@ impl Adapter {
                 self.to_glib_none().0,
                 nbytes,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to take buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to take buffer"))
         }
     }
 
@@ -199,7 +199,7 @@ impl Adapter {
                 self.to_glib_none().0,
                 nbytes,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to take buffer list"))
+            .ok_or_else(|| glib::bool_error!("Failed to take buffer list"))
         }
     }
 
@@ -395,7 +395,7 @@ impl UniqueAdapter {
         unsafe {
             let ptr = ffi::gst_adapter_map(self.0.to_glib_none().0, nbytes);
             if ptr.is_null() {
-                Err(glib::glib_bool_error!("size bytes are not available"))
+                Err(glib::bool_error!("size bytes are not available"))
             } else {
                 Ok(UniqueAdapterMap(
                     self,

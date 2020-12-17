@@ -23,7 +23,7 @@ impl PadTemplate {
                     pad_type.to_glib(),
                 ),
             )
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create PadTemplate"))
+            .ok_or_else(|| glib::bool_error!("Failed to create PadTemplate"))
         }
     }
 }

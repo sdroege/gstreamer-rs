@@ -59,7 +59,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
-                glib::glib_result_from_gboolean!(
+                glib::result_from_gboolean!(
                     ffi::gst_bin_add(self.as_ref().to_glib_none().0, e.as_ref().to_glib_none().0),
                     "Failed to add elements"
                 )?;
@@ -72,7 +72,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
-                glib::glib_result_from_gboolean!(
+                glib::result_from_gboolean!(
                     ffi::gst_bin_remove(
                         self.as_ref().to_glib_none().0,
                         e.as_ref().to_glib_none().0,

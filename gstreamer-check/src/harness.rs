@@ -157,7 +157,7 @@ impl Harness {
 
     pub fn crank_multiple_clock_waits(&mut self, waits: u32) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_harness_crank_multiple_clock_waits(self.0.as_ptr(), waits),
                 "Failed to crank multiple clock waits",
             )
@@ -166,7 +166,7 @@ impl Harness {
 
     pub fn crank_single_clock_wait(&mut self) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_harness_crank_single_clock_wait(self.0.as_ptr()),
                 "Failed to crank single clock wait",
             )
@@ -176,7 +176,7 @@ impl Harness {
     pub fn create_buffer(&mut self, size: usize) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_create_buffer(self.0.as_ptr(), size))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to create new buffer"))
+                .ok_or_else(|| glib::bool_error!("Failed to create new buffer"))
         }
     }
 
@@ -238,21 +238,21 @@ impl Harness {
     pub fn pull(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_pull(self.0.as_ptr()))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to pull buffer"))
+                .ok_or_else(|| glib::bool_error!("Failed to pull buffer"))
         }
     }
 
     pub fn pull_event(&mut self) -> Result<gst::Event, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_pull_event(self.0.as_ptr()))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to pull event"))
+                .ok_or_else(|| glib::bool_error!("Failed to pull event"))
         }
     }
 
     pub fn pull_upstream_event(&mut self) -> Result<gst::Event, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_pull_upstream_event(self.0.as_ptr()))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to pull event"))
+                .ok_or_else(|| glib::bool_error!("Failed to pull event"))
         }
     }
 
@@ -268,7 +268,7 @@ impl Harness {
                 self.0.as_ptr(),
                 buffer.into_ptr(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to push and pull buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to push and pull buffer"))
         }
     }
 
@@ -374,7 +374,7 @@ impl Harness {
 
     pub fn set_time(&mut self, time: gst::ClockTime) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_harness_set_time(self.0.as_ptr(), time.to_glib()),
                 "Failed to set time",
             )
@@ -461,7 +461,7 @@ impl Harness {
     pub fn take_all_data_as_buffer(&mut self) -> Result<gst::Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_take_all_data_as_buffer(self.0.as_ptr()))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to take all data as buffer"))
+                .ok_or_else(|| glib::bool_error!("Failed to take all data as buffer"))
         }
     }
 
@@ -470,7 +470,7 @@ impl Harness {
     pub fn take_all_data_as_bytes(&mut self) -> Result<glib::Bytes, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_take_all_data_as_bytes(self.0.as_ptr()))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to take all data as bytes"))
+                .ok_or_else(|| glib::bool_error!("Failed to take all data as bytes"))
         }
     }
 
@@ -512,7 +512,7 @@ impl Harness {
         timeout: u32,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_harness_wait_for_clock_id_waits(self.0.as_ptr(), waits, timeout),
                 "Failed to wait for clock id waits",
             )

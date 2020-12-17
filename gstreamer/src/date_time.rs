@@ -21,14 +21,14 @@ fn validate(
 
     // Check for valid ranges
     if year <= 0 || year > 9999 {
-        return Err(glib::glib_bool_error!(
+        return Err(glib::bool_error!(
             "Can't create DateTime: Year out of range"
         ));
     }
 
     if let Some(month) = month {
         if month <= 0 || month > 12 {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Can't create DateTime: Month out of range"
             ));
         }
@@ -36,15 +36,13 @@ fn validate(
 
     if let Some(day) = day {
         if day <= 0 || day > 31 {
-            return Err(glib::glib_bool_error!(
-                "Can't create DateTime: Day out of range"
-            ));
+            return Err(glib::bool_error!("Can't create DateTime: Day out of range"));
         }
     }
 
     if let Some(hour) = hour {
         if hour < 0 || hour >= 24 {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Can't create DateTime: Hour out of range"
             ));
         }
@@ -52,7 +50,7 @@ fn validate(
 
     if let Some(minute) = minute {
         if minute < 0 || minute >= 60 {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Can't create DateTime: Minute out of range"
             ));
         }
@@ -60,7 +58,7 @@ fn validate(
 
     if let Some(seconds) = seconds {
         if seconds < 0.0 || seconds >= 60.0 {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Can't create DateTime: Seconds out of range"
             ));
         }
@@ -68,7 +66,7 @@ fn validate(
 
     if let Some(tzoffset) = tzoffset {
         if tzoffset < -12.0 || tzoffset > 12.0 {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Can't create DateTime: Timezone offset out of range"
             ));
         }
@@ -76,34 +74,34 @@ fn validate(
 
     // If day is provided, month also has to be provided
     if day.is_some() && month.is_none() {
-        return Err(glib::glib_bool_error!(
+        return Err(glib::bool_error!(
             "Can't create DateTime: Need to provide month if providing day"
         ));
     }
 
     // If hour is provided, day also has to be provided
     if hour.is_some() && day.is_none() {
-        return Err(glib::glib_bool_error!(
+        return Err(glib::bool_error!(
             "Can't create DateTime: Need to provide day if providing hour"
         ));
     }
 
     // If minutes are provided, hours also need to be provided and the other way around
     if hour.is_none() && minute.is_some() {
-        return Err(glib::glib_bool_error!(
+        return Err(glib::bool_error!(
             "Can't create DateTime: Need to provide both hour and minute or neither"
         ));
     }
 
     if minute.is_some() && hour.is_none() {
-        return Err(glib::glib_bool_error!(
+        return Err(glib::bool_error!(
             "Can't create DateTime: Need to provide both hour and minute or neither"
         ));
     }
 
     // If seconds or tzoffset are provided then also hours and minutes must be provided
     if (seconds.is_some() || tzoffset.is_some()) && (hour.is_none() || minute.is_none()) {
-        return Err(glib::glib_bool_error!("Can't create DateTime: Need to provide hour and minute if providing seconds or timezone offset"));
+        return Err(glib::bool_error!("Can't create DateTime: Need to provide hour and minute if providing seconds or timezone offset"));
     }
 
     Ok(())
@@ -149,7 +147,7 @@ impl DateTime {
                 minute.unwrap_or(-1),
                 seconds.unwrap_or(-1.0),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+            .ok_or_else(|| glib::bool_error!("Can't create DateTime"))
         }
     }
 
@@ -188,7 +186,7 @@ impl DateTime {
                 minute.unwrap_or(-1),
                 seconds.unwrap_or(-1.0),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+            .ok_or_else(|| glib::bool_error!("Can't create DateTime"))
         }
     }
 
@@ -199,7 +197,7 @@ impl DateTime {
 
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_y(year))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+                .ok_or_else(|| glib::bool_error!("Can't create DateTime"))
         }
     }
 
@@ -210,7 +208,7 @@ impl DateTime {
 
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_ym(year, month))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+                .ok_or_else(|| glib::bool_error!("Can't create DateTime"))
         }
     }
 
@@ -221,7 +219,7 @@ impl DateTime {
 
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_ymd(year, month, day))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime"))
+                .ok_or_else(|| glib::bool_error!("Can't create DateTime"))
         }
     }
 
@@ -300,7 +298,7 @@ impl DateTime {
             self.to_g_date_time()
                 .and_then(|d| {
                     d.to_utc()
-                        .ok_or_else(|| glib::glib_bool_error!("Can't convert datetime to UTC"))
+                        .ok_or_else(|| glib::bool_error!("Can't convert datetime to UTC"))
                 })
                 .map(|d| d.into())
         } else {
@@ -320,7 +318,7 @@ impl DateTime {
             .and_then(|d| d.to_g_date_time())
             .and_then(|d| {
                 d.to_utc()
-                    .ok_or_else(|| glib::glib_bool_error!("Can't convert datetime to UTC"))
+                    .ok_or_else(|| glib::bool_error!("Can't convert datetime to UTC"))
             })
             .and_then(|d| {
                 DateTime::new(

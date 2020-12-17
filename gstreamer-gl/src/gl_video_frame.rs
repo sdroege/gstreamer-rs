@@ -88,14 +88,14 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
 
         let n_mem = match buffer_n_gl_memory(buffer) {
             Some(n) => n,
-            None => return Err(glib::glib_bool_error!("Memory is not a GstGLMemory")),
+            None => return Err(glib::bool_error!("Memory is not a GstGLMemory")),
         };
 
         // FIXME: planes are not memories, in multiview use case,
         // number of memories = planes * views, but the raw memory is
         // not exposed in videoframe
         if n_mem != info.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Number of planes and memories is not matching"
             ));
         }
@@ -112,7 +112,7 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
             ));
 
             if !res {
-                Err(glib::glib_bool_error!(
+                Err(glib::bool_error!(
                     "Failed to fill in the values of GstVideoFrame"
                 ))
             } else {

@@ -122,7 +122,7 @@ impl str::FromStr for CapsFeatures {
         unsafe {
             let ptr = ffi::gst_caps_features_from_string(s.to_glib_none().0);
             if ptr.is_null() {
-                return Err(glib::glib_bool_error!(
+                return Err(glib::bool_error!(
                     "Failed to parse caps features from string"
                 ));
             }

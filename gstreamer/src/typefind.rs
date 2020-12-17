@@ -50,7 +50,7 @@ impl TypeFind {
                 Some(type_find_closure_drop::<F>),
             );
 
-            glib::glib_result_from_gboolean!(res, "Failed to register typefind factory")
+            glib::result_from_gboolean!(res, "Failed to register typefind factory")
         }
     }
 

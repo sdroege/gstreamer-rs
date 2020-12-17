@@ -163,7 +163,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
     pub fn offset_running_time(&mut self, offset: i64) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_segment_offset_running_time(
                     &mut self.0,
                     self.get_format().to_glib(),
@@ -264,7 +264,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_segment_set_running_time(
                     &mut self.0,
                     self.get_format().to_glib(),

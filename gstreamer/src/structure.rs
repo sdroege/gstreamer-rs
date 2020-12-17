@@ -180,9 +180,7 @@ impl str::FromStr for Structure {
         unsafe {
             let structure = ffi::gst_structure_from_string(s.to_glib_none().0, ptr::null_mut());
             if structure.is_null() {
-                Err(glib::glib_bool_error!(
-                    "Failed to parse structure from string"
-                ))
+                Err(glib::bool_error!("Failed to parse structure from string"))
             } else {
                 Ok(Self(ptr::NonNull::new_unchecked(
                     structure as *mut StructureRef,

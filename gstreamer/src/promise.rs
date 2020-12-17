@@ -10,7 +10,7 @@ use std::pin::Pin;
 use std::ptr;
 use std::task::{Context, Poll};
 
-glib::glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct Promise(Shared<ffi::GstPromise>);
 

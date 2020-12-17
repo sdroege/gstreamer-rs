@@ -10,7 +10,7 @@ impl crate::VideoColorMatrix {
         unsafe {
             let mut kr = mem::MaybeUninit::uninit();
             let mut kb = mem::MaybeUninit::uninit();
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_video_color_matrix_get_Kr_Kb(
                     self.to_glib(),
                     kr.as_mut_ptr(),

@@ -23,7 +23,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExtManual for O {
     ) -> Result<(), glib::error::BoolError> {
         let n_values = values.len() as u32;
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_control_binding_get_g_value_array(
                     self.as_ref().to_glib_none().0,
                     timestamp.to_glib(),

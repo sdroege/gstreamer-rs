@@ -12,14 +12,14 @@ static GES_INIT: Once = Once::new();
 
 pub fn init() -> Result<(), glib::BoolError> {
     if gst::init().is_err() {
-        return Err(glib::glib_bool_error!("Could not initialize GStreamer."));
+        return Err(glib::bool_error!("Could not initialize GStreamer."));
     }
 
     unsafe {
         if from_glib(ffi::ges_init()) {
             Ok(())
         } else {
-            Err(glib::glib_bool_error!("Could not initialize GES."))
+            Err(glib::bool_error!("Could not initialize GES."))
         }
     }
 }

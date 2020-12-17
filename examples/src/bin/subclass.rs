@@ -6,9 +6,6 @@
 // Our filter can only handle F32 mono and acts as a FIR filter. The filter impulse response /
 // coefficients are provided via Rust API on the filter as a Vec<f32>.
 
-use glib::glib_object_subclass;
-use glib::glib_wrapper;
-
 use gst::gst_element_error;
 use gst::gst_info;
 use gst::gst_trace;
@@ -68,7 +65,7 @@ mod fir_filter {
             type Class = subclass::simple::ClassStruct<Self>;
 
             // This macro provides some boilerplate
-            glib_object_subclass!();
+            glib::object_subclass!();
 
             // Called when a new instance is to be created. We need to return an instance
             // of our struct here.
@@ -245,7 +242,7 @@ mod fir_filter {
 
     // This here defines the public interface of our element and implements
     // the corresponding traits so that it behaves like any other gst::Element
-    glib_wrapper! {
+    glib::wrapper! {
         pub struct FirFilter(ObjectSubclass<imp::FirFilter>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
     }
 

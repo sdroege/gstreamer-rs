@@ -159,7 +159,7 @@ impl str::FromStr for Caps {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_caps_from_string(s.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to parse caps from string"))
+                .ok_or_else(|| glib::bool_error!("Failed to parse caps from string"))
         }
     }
 }

@@ -129,7 +129,7 @@ impl BufferPoolConfig {
         max_buffers: u32,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_buffer_pool_config_validate_params(
                     self.0.to_glib_none().0,
                     caps.to_glib_none().0,
@@ -301,7 +301,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_buffer_pool_set_config(
                     self.as_ref().to_glib_none().0,
                     config.0.into_ptr()

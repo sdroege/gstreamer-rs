@@ -199,7 +199,7 @@ impl VideoOverlayComposition {
 
             let first = match iter.next() {
                 None => {
-                    return Err(glib::glib_bool_error!(
+                    return Err(glib::bool_error!(
                         "Failed to create VideoOverlayComposition"
                     ))
                 }
@@ -228,7 +228,7 @@ impl VideoOverlayCompositionRef {
 
     pub fn get_rectangle(&self, idx: u32) -> Result<VideoOverlayRectangle, glib::error::BoolError> {
         if idx >= self.n_rectangles() {
-            return Err(glib::glib_bool_error!("Invalid index"));
+            return Err(glib::bool_error!("Invalid index"));
         }
 
         unsafe {
@@ -237,7 +237,7 @@ impl VideoOverlayCompositionRef {
                 idx,
             )) {
                 Some(r) => Ok(r),
-                None => Err(glib::glib_bool_error!("Failed to get rectangle")),
+                None => Err(glib::bool_error!("Failed to get rectangle")),
             }
         }
     }
@@ -251,7 +251,7 @@ impl VideoOverlayCompositionRef {
         frame: &mut crate::VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_video_overlay_composition_blend(self.as_mut_ptr(), frame.as_mut_ptr()),
                 "Failed to blend overlay composition",
             )

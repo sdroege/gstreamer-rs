@@ -50,7 +50,7 @@ impl Element {
         skip_assert_initialized!();
         for e in elements.windows(2) {
             unsafe {
-                glib::glib_result_from_gboolean!(
+                glib::result_from_gboolean!(
                     ffi::gst_element_link(
                         e[0].as_ref().to_glib_none().0,
                         e[1].as_ref().to_glib_none().0,
@@ -83,7 +83,7 @@ impl Element {
     ) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_register(
                     plugin.to_glib_none().0,
                     name.to_glib_none().0,
@@ -454,7 +454,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn post_message(&self, message: crate::Message) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_post_message(self.as_ref().to_glib_none().0, message.into_ptr()),
                 "Failed to post message"
             )
@@ -731,7 +731,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         assert_eq!(stop.get_format(), start.get_format());
 
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_seek(
                     self.as_ref().to_glib_none().0,
                     rate,
@@ -754,7 +754,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) -> Result<(), glib::error::BoolError> {
         let seek_pos = seek_pos.into();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_seek_simple(
                     self.as_ref().to_glib_none().0,
                     seek_pos.get_format().to_glib(),

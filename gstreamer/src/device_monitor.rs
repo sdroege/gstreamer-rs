@@ -83,7 +83,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         filter_id: DeviceMonitorFilterId,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_device_monitor_remove_filter(
                     self.as_ref().to_glib_none().0,
                     filter_id.to_glib()

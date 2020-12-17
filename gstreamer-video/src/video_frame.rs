@@ -56,7 +56,7 @@ impl<T> VideoFrame<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!("Failed to copy video frame"))
+                Err(glib::bool_error!("Failed to copy video frame"))
             }
         }
     }
@@ -77,7 +77,7 @@ impl<T> VideoFrame<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!("Failed to copy video frame plane"))
+                Err(glib::bool_error!("Failed to copy video frame plane"))
             }
         }
     }
@@ -140,7 +140,7 @@ impl<T> VideoFrame<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }
@@ -354,7 +354,7 @@ impl VideoFrame<Writable> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }
@@ -430,7 +430,7 @@ impl<T> VideoFrameRef<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!("Failed to copy video frame"))
+                Err(glib::bool_error!("Failed to copy video frame"))
             }
         }
     }
@@ -451,7 +451,7 @@ impl<T> VideoFrameRef<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!("Failed to copy video frame plane"))
+                Err(glib::bool_error!("Failed to copy video frame plane"))
             }
         }
     }
@@ -510,7 +510,7 @@ impl<T> VideoFrameRef<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }
@@ -589,7 +589,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             ));
 
             if !res {
-                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
@@ -623,7 +623,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             ));
 
             if !res {
-                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
@@ -688,7 +688,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             ));
 
             if !res {
-                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
@@ -724,7 +724,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             ));
 
             if !res {
-                Err(glib::glib_bool_error!("Failed to map VideoFrame"))
+                Err(glib::bool_error!("Failed to map VideoFrame"))
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
@@ -744,7 +744,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }

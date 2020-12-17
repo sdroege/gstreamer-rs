@@ -25,7 +25,7 @@ impl GhostPad {
     ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_ghost_pad_activate_mode_default(
                     pad.to_glib_none().0 as *mut ffi::GstPad,
                     parent.map(|p| p.as_ref()).to_glib_none().0,
@@ -45,7 +45,7 @@ impl GhostPad {
     ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_ghost_pad_internal_activate_mode_default(
                     pad.to_glib_none().0 as *mut ffi::GstPad,
                     parent.map(|p| p.as_ref()).to_glib_none().0,
@@ -112,7 +112,7 @@ impl GhostPad {
         skip_assert_initialized!();
 
         if target.get_direction() != templ.get_property_direction() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Template and target have different directions"
             ));
         }

@@ -33,7 +33,7 @@ impl<O: IsA<Allocator>> AllocatorExtManual for O {
                 },
             );
             if ret.is_null() {
-                Err(glib::glib_bool_error!("Failed to allocate memory"))
+                Err(glib::bool_error!("Failed to allocate memory"))
             } else {
                 Ok(from_glib_full(ret))
             }

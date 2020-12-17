@@ -19,7 +19,7 @@ use crate::sdp_origin::SDPOrigin;
 use crate::sdp_time::SDPTime;
 use crate::sdp_zone::SDPZone;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct SDPMessage(Boxed<ffi::GstSDPMessage>);
 
@@ -210,7 +210,7 @@ impl SDPMessageRef {
         unsafe {
             match from_glib_full(ffi::gst_sdp_message_as_text(&self.0)) {
                 Some(s) => Ok(s),
-                None => Err(glib::glib_bool_error!(
+                None => Err(glib::bool_error!(
                     "Failed to convert the contents of message to a text string"
                 )),
             }
@@ -830,9 +830,7 @@ impl SDPMessageRef {
                 &self.0,
             )) {
                 Some(s) => Ok(s),
-                None => Err(glib::glib_bool_error!(
-                    "Failed to create an URI from message"
-                )),
+                None => Err(glib::bool_error!("Failed to create an URI from message")),
             }
         }
     }

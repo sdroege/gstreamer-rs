@@ -92,7 +92,7 @@ impl AudioMeta {
         skip_assert_initialized!();
 
         if !info.is_valid() {
-            return Err(glib::glib_bool_error!("Invalid audio info"));
+            return Err(glib::bool_error!("Invalid audio info"));
         }
 
         if info.rate() == 0
@@ -100,20 +100,17 @@ impl AudioMeta {
             || info.format() == crate::AudioFormat::Unknown
             || info.format() == crate::AudioFormat::Encoded
         {
-            return Err(glib::glib_bool_error!(
-                "Unsupported audio format {:?}",
-                info
-            ));
+            return Err(glib::bool_error!("Unsupported audio format {:?}", info));
         }
 
         if !offsets.is_empty() && info.layout() != crate::AudioLayout::NonInterleaved {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Channel offsets only supported for non-interleaved audio"
             ));
         }
 
         if !offsets.is_empty() && offsets.len() != info.channels() as usize {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Number of channel offsets different than number of channels ({} != {})",
                 offsets.len(),
                 info.channels()
@@ -139,7 +136,7 @@ impl AudioMeta {
                             && !(other_offset + plane_size <= offset
                                 || offset + plane_size <= other_offset)
                         {
-                            return Err(glib::glib_bool_error!("Overlapping audio channel offsets: offset {} for channel {} and offset {} for channel {} with a plane size of {}", offset, i, other_offset, j, plane_size));
+                            return Err(glib::bool_error!("Overlapping audio channel offsets: offset {} for channel {} and offset {} for channel {} with a plane size of {}", offset, i, other_offset, j, plane_size));
                         }
                     }
                 }
@@ -148,7 +145,7 @@ impl AudioMeta {
             };
 
             if max_offset + plane_size > buffer.get_size() {
-                return Err(glib::glib_bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.get_size()));
+                return Err(glib::bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.get_size()));
             }
         }
 
@@ -165,7 +162,7 @@ impl AudioMeta {
             );
 
             if meta.is_null() {
-                return Err(glib::glib_bool_error!("Failed to add audio meta"));
+                return Err(glib::bool_error!("Failed to add audio meta"));
             }
 
             Ok(Self::from_mut_ptr(buffer, meta))

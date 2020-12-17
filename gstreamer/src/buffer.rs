@@ -54,7 +54,7 @@ impl Buffer {
                 size,
                 ptr::null_mut(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate buffer"))
         }
     }
 
@@ -183,7 +183,7 @@ impl BufferRef {
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib::glib_bool_error!("Failed to map buffer readable"))
+                Err(glib::bool_error!("Failed to map buffer readable"))
             }
         }
     }
@@ -203,7 +203,7 @@ impl BufferRef {
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib::glib_bool_error!("Failed to map buffer writable"))
+                Err(glib::bool_error!("Failed to map buffer writable"))
             }
         }
     }
@@ -222,7 +222,7 @@ impl BufferRef {
                 offset,
                 size_real,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to copy region of buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to copy region of buffer"))
         }
     }
 
@@ -235,7 +235,7 @@ impl BufferRef {
     ) -> Result<(), glib::BoolError> {
         let size_real = size.unwrap_or(usize::MAX);
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_buffer_copy_into(
                     dest.as_mut_ptr(),
                     self.as_mut_ptr(),
@@ -292,7 +292,7 @@ impl BufferRef {
     pub fn copy_deep(&self) -> Result<Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_buffer_copy_deep(self.as_ptr()))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to deep copy buffer"))
+                .ok_or_else(|| glib::bool_error!("Failed to deep copy buffer"))
         }
     }
 
@@ -593,7 +593,7 @@ impl BufferRef {
         unsafe {
             let mem = ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx);
             if ffi::gst_mini_object_is_writable(mem as *mut _) == glib::ffi::GFALSE {
-                Err(glib::glib_bool_error!("Memory not writable"))
+                Err(glib::bool_error!("Memory not writable"))
             } else {
                 Ok(MemoryRef::from_mut_ptr(ffi::gst_buffer_peek_memory(
                     self.as_mut_ptr(),
@@ -660,7 +660,7 @@ impl BufferRef {
 
     pub fn iter_memories_mut(&mut self) -> Result<IterMut, glib::BoolError> {
         if !self.is_all_memory_writable() {
-            Err(glib::glib_bool_error!("Not all memory are writable"))
+            Err(glib::bool_error!("Not all memory are writable"))
         } else {
             Ok(IterMut::new(self))
         }

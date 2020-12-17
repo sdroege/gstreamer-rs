@@ -41,7 +41,7 @@ impl<'a> AudioInfoBuilder<'a> {
 
             let positions = if let Some(p) = self.positions {
                 if p.len() != self.channels as usize || p.len() > 64 {
-                    return Err(glib::glib_bool_error!("Invalid positions length"));
+                    return Err(glib::bool_error!("Invalid positions length"));
                 }
 
                 let positions: [ffi::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
@@ -58,7 +58,7 @@ impl<'a> AudioInfoBuilder<'a> {
                     true.to_glib(),
                 ));
                 if !valid {
-                    return Err(glib::glib_bool_error!("channel positions are invalid"));
+                    return Err(glib::bool_error!("channel positions are invalid"));
                 }
 
                 Some(positions)
@@ -82,7 +82,7 @@ impl<'a> AudioInfoBuilder<'a> {
             let mut info = info.assume_init();
 
             if info.finfo.is_null() || info.rate <= 0 || info.channels <= 0 {
-                return Err(glib::glib_bool_error!("Failed to build AudioInfo"));
+                return Err(glib::bool_error!("Failed to build AudioInfo"));
             }
 
             if let Some(flags) = self.flags {
@@ -155,9 +155,7 @@ impl AudioInfo {
                 let positions = array_init::array_init(|i| from_glib(info.position[i]));
                 Ok(AudioInfo(info, positions))
             } else {
-                Err(glib::glib_bool_error!(
-                    "Failed to create AudioInfo from caps"
-                ))
+                Err(glib::bool_error!("Failed to create AudioInfo from caps"))
             }
         }
     }
@@ -167,9 +165,7 @@ impl AudioInfo {
             let result = from_glib_full(ffi::gst_audio_info_to_caps(&self.0));
             match result {
                 Some(c) => Ok(c),
-                None => Err(glib::glib_bool_error!(
-                    "Failed to create caps from AudioInfo"
-                )),
+                None => Err(glib::bool_error!("Failed to create caps from AudioInfo")),
             }
         }
     }

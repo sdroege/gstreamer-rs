@@ -169,7 +169,7 @@ impl DownstreamForceKeyUnitEvent {
                     count: count.assume_init(),
                 })
             } else {
-                Err(glib::glib_bool_error!("Failed to parse GstEvent"))
+                Err(glib::bool_error!("Failed to parse GstEvent"))
             }
         }
     }
@@ -258,7 +258,7 @@ impl UpstreamForceKeyUnitEvent {
                     count: count.assume_init(),
                 })
             } else {
-                Err(glib::glib_bool_error!("Failed to parse GstEvent"))
+                Err(glib::bool_error!("Failed to parse GstEvent"))
             }
         }
     }
@@ -334,7 +334,7 @@ impl StillFrameEvent {
                     in_still: from_glib(in_still.assume_init()),
                 })
             } else {
-                Err(glib::glib_bool_error!("Invalid still-frame event"))
+                Err(glib::bool_error!("Invalid still-frame event"))
             }
         }
     }

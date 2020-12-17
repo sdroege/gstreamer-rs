@@ -23,20 +23,17 @@ impl VideoMeta {
         skip_assert_initialized!();
 
         if format == crate::VideoFormat::Unknown || format == crate::VideoFormat::Encoded {
-            return Err(glib::glib_bool_error!(
-                "Unsupported video format {}",
-                format
-            ));
+            return Err(glib::bool_error!("Unsupported video format {}", format));
         }
 
         let info = crate::VideoInfo::builder(format, width, height).build()?;
 
         if !info.is_valid() {
-            return Err(glib::glib_bool_error!("Invalid video info"));
+            return Err(glib::bool_error!("Invalid video info"));
         }
 
         if buffer.get_size() < info.size() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Buffer smaller than required frame size ({} < {})",
                 buffer.get_size(),
                 info.size()
@@ -53,7 +50,7 @@ impl VideoMeta {
             );
 
             if meta.is_null() {
-                return Err(glib::glib_bool_error!("Failed to add video meta"));
+                return Err(glib::bool_error!("Failed to add video meta"));
             }
 
             Ok(Self::from_mut_ptr(buffer, meta))
@@ -72,10 +69,7 @@ impl VideoMeta {
         skip_assert_initialized!();
 
         if format == crate::VideoFormat::Unknown || format == crate::VideoFormat::Encoded {
-            return Err(glib::glib_bool_error!(
-                "Unsupported video format {}",
-                format
-            ));
+            return Err(glib::bool_error!("Unsupported video format {}", format));
         }
 
         let n_planes = offset.len() as u32;
@@ -85,11 +79,11 @@ impl VideoMeta {
             .build()?;
 
         if !info.is_valid() {
-            return Err(glib::glib_bool_error!("Invalid video info"));
+            return Err(glib::bool_error!("Invalid video info"));
         }
 
         if buffer.get_size() < info.size() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Buffer smaller than required frame size ({} < {})",
                 buffer.get_size(),
                 info.size()
@@ -109,7 +103,7 @@ impl VideoMeta {
             );
 
             if meta.is_null() {
-                return Err(glib::glib_bool_error!("Failed to add video meta"));
+                return Err(glib::bool_error!("Failed to add video meta"));
             }
 
             Ok(Self::from_mut_ptr(buffer, meta))
@@ -166,7 +160,7 @@ impl VideoMeta {
         let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
 
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_video_meta_get_plane_size(
                     &self.0 as *const _ as usize as *mut _,
                     &mut plane_size,
@@ -184,7 +178,7 @@ impl VideoMeta {
         let mut plane_height = [0; crate::VIDEO_MAX_PLANES];
 
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_video_meta_get_plane_height(
                     &self.0 as *const _ as usize as *mut _,
                     &mut plane_height,
@@ -203,7 +197,7 @@ impl VideoMeta {
         alignment: &crate::VideoAlignment,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_video_meta_set_alignment(&mut self.0, alignment.0),
                 "Failed to set alignment on VideoMeta"
             )

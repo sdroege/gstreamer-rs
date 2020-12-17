@@ -334,7 +334,7 @@ impl str::FromStr for crate::VideoFormat {
 
         let fmt = Self::from_string(s);
         if fmt == Self::Unknown {
-            Err(glib::glib_bool_error!(
+            Err(glib::bool_error!(
                 "Failed to parse video format from string"
             ))
         } else {

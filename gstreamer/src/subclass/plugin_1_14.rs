@@ -44,7 +44,7 @@ macro_rules! gst_plugin_define(
 
             pub fn plugin_register_static() -> Result<(), $crate::glib::BoolError> {
                 unsafe {
-                    $crate::glib::glib_result_from_gboolean!(
+                    $crate::glib::result_from_gboolean!(
                         $crate::ffi::gst_plugin_register_static(
                             $crate::subclass::MAJOR_VERSION,
                             $crate::subclass::MINOR_VERSION,

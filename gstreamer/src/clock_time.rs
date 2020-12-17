@@ -246,7 +246,7 @@ impl convert::TryFrom<ClockTime> for Duration {
 
         t.nanoseconds()
             .map(Duration::from_nanos)
-            .ok_or_else(|| glib::glib_bool_error!("Can't convert ClockTime::NONE to Duration"))
+            .ok_or_else(|| glib::bool_error!("Can't convert ClockTime::NONE to Duration"))
     }
 }
 

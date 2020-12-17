@@ -84,7 +84,7 @@ impl VideoTimeCode {
             );
 
             if res == glib::ffi::GFALSE {
-                Err(glib::glib_bool_error!("Failed to init video time code"))
+                Err(glib::bool_error!("Failed to init video time code"))
             } else {
                 Ok(VideoTimeCode(v.assume_init()))
             }
@@ -166,9 +166,7 @@ impl ValidVideoTimeCode {
         );
         match tc.try_into() {
             Ok(v) => Ok(v),
-            Err(_) => Err(glib::glib_bool_error!(
-                "Failed to create new ValidVideoTimeCode"
-            )),
+            Err(_) => Err(glib::bool_error!("Failed to create new ValidVideoTimeCode")),
         }
     }
 
@@ -203,7 +201,7 @@ impl ValidVideoTimeCode {
                 tc_inter.to_glib_none().0,
             )) {
                 Some(i) => Ok(i),
-                None => Err(glib::glib_bool_error!("Failed to add interval")),
+                None => Err(glib::bool_error!("Failed to add interval")),
             }
         }
     }
@@ -230,7 +228,7 @@ impl ValidVideoTimeCode {
         unsafe {
             match from_glib_full(ffi::gst_video_time_code_to_date_time(self.to_glib_none().0)) {
                 Some(d) => Ok(d),
-                None => Err(glib::glib_bool_error!(
+                None => Err(glib::bool_error!(
                     "Failed to convert VideoTimeCode to date time"
                 )),
             }
@@ -475,7 +473,7 @@ impl str::FromStr for VideoTimeCode {
             Option::<Self>::from_glib_full(ffi::gst_video_time_code_new_from_string(
                 s.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create VideoTimeCode from string"))
+            .ok_or_else(|| glib::bool_error!("Failed to create VideoTimeCode from string"))
         }
     }
 }

@@ -114,18 +114,18 @@ impl TryFrom<DateTimeVariants> for Date {
             DateTimeVariants::YMD(y, m, d) => {
                 let month = unsafe { glib::DateMonth::from_glib(m) };
                 if let glib::DateMonth::__Unknown(_) = month {
-                    return Err(glib::glib_bool_error!("Out of range `month` for `Date`"));
+                    return Err(glib::bool_error!("Out of range `month` for `Date`"));
                 }
 
                 Ok(Date(glib::Date::new_dmy(
                     d.try_into()
-                        .map_err(|_| glib::glib_bool_error!("Out of range `day` for `Date`"))?,
+                        .map_err(|_| glib::bool_error!("Out of range `day` for `Date`"))?,
                     month,
                     y.try_into()
-                        .map_err(|_| glib::glib_bool_error!("Out of range `year` for `Date`"))?,
+                        .map_err(|_| glib::bool_error!("Out of range `year` for `Date`"))?,
                 )))
             }
-            _ => Err(glib::glib_bool_error!(
+            _ => Err(glib::bool_error!(
                 "Incompatible variant for `Date` (expecting \"YMD\")"
             )),
         }

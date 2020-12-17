@@ -18,6 +18,6 @@ impl GLDisplayWayland {
         from_glib_full::<_, Option<GLDisplayWayland>>(ffi::gst_gl_display_wayland_new_with_display(
             display as gpointer,
         ))
-        .ok_or_else(|| glib::glib_bool_error!("Failed to create new Wayland GL display"))
+        .ok_or_else(|| glib::bool_error!("Failed to create new Wayland GL display"))
     }
 }

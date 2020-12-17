@@ -102,7 +102,7 @@ impl<T> AudioBuffer<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }
@@ -213,7 +213,7 @@ impl AudioBuffer<Writable> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }
@@ -336,7 +336,7 @@ impl<T> AudioBufferRef<T> {
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }
@@ -390,7 +390,7 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
             ));
 
             if !res {
-                Err(glib::glib_bool_error!("Failed to map AudioBuffer"))
+                Err(glib::bool_error!("Failed to map AudioBuffer"))
             } else {
                 let info = crate::AudioInfo::from_glib_none(
                     &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
@@ -444,7 +444,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
             ));
 
             if !res {
-                Err(glib::glib_bool_error!("Failed to map AudioBuffer"))
+                Err(glib::bool_error!("Failed to map AudioBuffer"))
             } else {
                 let info = crate::AudioInfo::from_glib_none(
                     &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
@@ -465,7 +465,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
-            return Err(glib::glib_bool_error!(
+            return Err(glib::bool_error!(
                 "Plane index higher than number of planes"
             ));
         }

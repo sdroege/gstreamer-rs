@@ -117,7 +117,7 @@ impl Bus {
             );
 
             if res == 0 {
-                Err(glib::glib_bool_error!("Bus already has a watch"))
+                Err(glib::bool_error!("Bus already has a watch"))
             } else {
                 Ok(from_glib(res))
             }
@@ -140,7 +140,7 @@ impl Bus {
             );
 
             if res == 0 {
-                Err(glib::glib_bool_error!("Bus already has a watch"))
+                Err(glib::bool_error!("Bus already has a watch"))
             } else {
                 Ok(from_glib(res))
             }

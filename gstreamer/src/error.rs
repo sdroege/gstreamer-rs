@@ -83,12 +83,12 @@ impl ErrorMessage {
 macro_rules! gst_loggable_error(
 // Plain strings
     ($cat:expr, $msg:expr) => {
-        $crate::LoggableError::new($cat.clone(), $crate::glib::glib_bool_error!($msg))
+        $crate::LoggableError::new($cat.clone(), $crate::glib::bool_error!($msg))
     };
 
 // Format strings
     ($cat:expr, $($msg:tt)*) =>  { {
-        $crate::LoggableError::new($cat.clone(), $crate::glib::glib_bool_error!($($msg)*))
+        $crate::LoggableError::new($cat.clone(), $crate::glib::bool_error!($($msg)*))
     }};
 );
 
@@ -96,13 +96,13 @@ macro_rules! gst_loggable_error(
 macro_rules! gst_result_from_gboolean(
 // Plain strings
     ($ffi_bool:expr, $cat:expr, $msg:expr) =>  {
-        $crate::glib::glib_result_from_gboolean!($ffi_bool, $msg)
+        $crate::glib::result_from_gboolean!($ffi_bool, $msg)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     };
 
 // Format strings
     ($ffi_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
-        $crate::glib::glib_result_from_gboolean!($ffi_bool, $($msg)*)
+        $crate::glib::result_from_gboolean!($ffi_bool, $($msg)*)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     }};
 );

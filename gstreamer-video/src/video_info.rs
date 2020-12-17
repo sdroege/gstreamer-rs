@@ -144,7 +144,7 @@ impl str::FromStr for crate::VideoColorimetry {
             if valid {
                 Ok(Self(colorimetry.assume_init()))
             } else {
-                Err(glib::glib_bool_error!("Invalid colorimetry info"))
+                Err(glib::bool_error!("Invalid colorimetry info"))
             }
         }
     }
@@ -202,7 +202,7 @@ impl str::FromStr for crate::VideoChromaSite {
         };
 
         if chroma_site.is_empty() {
-            Err(glib::glib_bool_error!("Invalid chroma site"))
+            Err(glib::bool_error!("Invalid chroma site"))
         } else {
             Ok(chroma_site)
         }
@@ -233,7 +233,7 @@ impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewF
         let v2 = unsafe { from_glib(v.to_glib()) };
 
         if let crate::VideoMultiviewFramePacking::__Unknown(_) = v2 {
-            Err(glib::glib_bool_error!("Invalid frame packing mode"))
+            Err(glib::bool_error!("Invalid frame packing mode"))
         } else {
             Ok(v2)
         }
@@ -370,13 +370,13 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if !res {
-                return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
+                return Err(glib::bool_error!("Failed to build VideoInfo"));
             }
 
             let mut info = info.assume_init();
 
             if info.finfo.is_null() || info.width <= 0 || info.height <= 0 {
-                return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
+                return Err(glib::bool_error!("Failed to build VideoInfo"));
             }
 
             if let Some(flags) = self.flags {
@@ -411,7 +411,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(offset) = self.offset {
                 if offset.len() != ((*info.finfo).n_planes as usize) {
-                    return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
+                    return Err(glib::bool_error!("Failed to build VideoInfo"));
                 }
 
                 let n_planes = (*info.finfo).n_planes as usize;
@@ -420,7 +420,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(stride) = self.stride {
                 if stride.len() != ((*info.finfo).n_planes as usize) {
-                    return Err(glib::glib_bool_error!("Failed to build VideoInfo"));
+                    return Err(glib::bool_error!("Failed to build VideoInfo"));
                 }
 
                 let n_planes = (*info.finfo).n_planes as usize;
@@ -606,9 +606,7 @@ impl VideoInfo {
             )) {
                 Ok(VideoInfo(info.assume_init()))
             } else {
-                Err(glib::glib_bool_error!(
-                    "Failed to create VideoInfo from caps"
-                ))
+                Err(glib::bool_error!("Failed to create VideoInfo from caps"))
             }
         }
     }
@@ -618,9 +616,7 @@ impl VideoInfo {
             let result = from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _));
             match result {
                 Some(c) => Ok(c),
-                None => Err(glib::glib_bool_error!(
-                    "Failed to create caps from VideoInfo"
-                )),
+                None => Err(glib::bool_error!("Failed to create caps from VideoInfo")),
             }
         }
     }
@@ -800,7 +796,7 @@ impl VideoInfo {
         cfg_if::cfg_if! {
             if #[cfg(feature = "v1_12")] {
                 unsafe {
-                    glib::glib_result_from_gboolean!(ffi::gst_video_info_align(
+                    glib::result_from_gboolean!(ffi::gst_video_info_align(
                         &mut self.0,
                         &mut align.0,
                     ), "Failed to align VideoInfo")
@@ -814,7 +810,7 @@ impl VideoInfo {
 
                         Ok(())
                     } else {
-                        glib::glib_result_from_gboolean!(ffi::gst_video_info_align(
+                        glib::result_from_gboolean!(ffi::gst_video_info_align(
                             &mut self.0,
                             &mut align.0,
                         ), "Failed to align VideoInfo")
@@ -833,7 +829,7 @@ impl VideoInfo {
         let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
 
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_video_info_align_full(&mut self.0, &mut align.0, plane_size.as_mut_ptr()),
                 "Failed to align VideoInfo"
             )?;
@@ -971,7 +967,7 @@ impl str::FromStr for crate::VideoFieldOrder {
 
         let fmt = Self::from_string(s);
         if fmt == Self::Unknown {
-            Err(glib::glib_bool_error!(
+            Err(glib::bool_error!(
                 "Failed to parse video field order from string"
             ))
         } else {

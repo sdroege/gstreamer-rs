@@ -28,11 +28,11 @@ impl VideoConverter {
     ) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         if in_info.fps() != out_info.fps() {
-            return Err(glib::glib_bool_error!("Can't do framerate conversion"));
+            return Err(glib::bool_error!("Can't do framerate conversion"));
         }
 
         if in_info.interlace_mode() != out_info.interlace_mode() {
-            return Err(glib::glib_bool_error!("Can't do interlacing conversion"));
+            return Err(glib::bool_error!("Can't do interlacing conversion"));
         }
 
         unsafe {
@@ -42,7 +42,7 @@ impl VideoConverter {
                 config.map(|s| s.0.into_ptr()).unwrap_or(ptr::null_mut()),
             );
             if ptr.is_null() {
-                Err(glib::glib_bool_error!("Failed to create video converter"))
+                Err(glib::bool_error!("Failed to create video converter"))
             } else {
                 Ok(VideoConverter(ptr::NonNull::new_unchecked(ptr)))
             }
@@ -130,9 +130,7 @@ impl convert::TryFrom<gst::Structure> for VideoConverterConfig {
         if v.get_name() == "GstVideoConverter" {
             Ok(VideoConverterConfig(v))
         } else {
-            Err(glib::glib_bool_error!(
-                "Structure is no VideoConverterConfig"
-            ))
+            Err(glib::bool_error!("Structure is no VideoConverterConfig"))
         }
     }
 }

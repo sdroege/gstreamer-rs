@@ -20,7 +20,7 @@ pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib::glib_bool_error!("No type could be found"))
+            Err(glib::bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
@@ -47,7 +47,7 @@ pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib::glib_bool_error!("No type could be found"))
+            Err(glib::bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
@@ -67,7 +67,7 @@ pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib::glib_bool_error!("No type could be found"))
+            Err(glib::bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
@@ -91,7 +91,7 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            Err(glib::glib_bool_error!("No type could be found"))
+            Err(glib::bool_error!("No type could be found"))
         } else {
             Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }

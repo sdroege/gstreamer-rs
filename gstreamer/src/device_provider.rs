@@ -19,7 +19,7 @@ impl DeviceProvider {
     ) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_device_provider_register(
                     plugin.to_glib_none().0,
                     name.to_glib_none().0,

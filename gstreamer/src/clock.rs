@@ -25,7 +25,7 @@ use std::pin::Pin;
 use std::sync::atomic;
 use std::sync::atomic::AtomicI32;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub struct ClockId(Shared<c_void>);
 
@@ -117,7 +117,7 @@ impl convert::TryFrom<ClockId> for SingleShotClockId {
         skip_assert_initialized!();
         match id.get_type() {
             ClockEntryType::Single => Ok(SingleShotClockId(id)),
-            _ => Err(glib::glib_bool_error!("Not a single-shot clock id")),
+            _ => Err(glib::bool_error!("Not a single-shot clock id")),
         }
     }
 }
@@ -225,7 +225,7 @@ impl convert::TryFrom<ClockId> for PeriodicClockId {
         skip_assert_initialized!();
         match id.get_type() {
             ClockEntryType::Periodic => Ok(PeriodicClockId(id)),
-            _ => Err(glib::glib_bool_error!("Not a periodic clock id")),
+            _ => Err(glib::bool_error!("Not a periodic clock id")),
         }
     }
 }
@@ -431,7 +431,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
             if res {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!("Failed to reinit periodic clock id"))
+                Err(glib::bool_error!("Failed to reinit periodic clock id"))
             }
         }
     }
@@ -461,9 +461,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
             if res {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!(
-                    "Failed to reinit single shot clock id"
-                ))
+                Err(glib::bool_error!("Failed to reinit single shot clock id"))
             }
         }
     }

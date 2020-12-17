@@ -120,9 +120,7 @@ impl str::FromStr for VideoTimeCodeInterval {
             Option::<Self>::from_glib_full(ffi::gst_video_time_code_interval_new_from_string(
                 s.to_glib_none().0,
             ))
-            .ok_or_else(|| {
-                glib::glib_bool_error!("Failed to create VideoTimeCodeInterval from string")
-            })
+            .ok_or_else(|| glib::bool_error!("Failed to create VideoTimeCodeInterval from string"))
         }
     }
 }

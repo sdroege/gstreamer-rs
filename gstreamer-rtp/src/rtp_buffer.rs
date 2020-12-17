@@ -49,7 +49,7 @@ impl<'a> RTPBuffer<'a, Readable> {
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib::glib_bool_error!("Failed to map RTP buffer readable"))
+                Err(glib::bool_error!("Failed to map RTP buffer readable"))
             }
         }
     }
@@ -75,7 +75,7 @@ impl<'a> RTPBuffer<'a, Writable> {
                     phantom: PhantomData,
                 })
             } else {
-                Err(glib::glib_bool_error!("Failed to map RTP buffer writable"))
+                Err(glib::bool_error!("Failed to map RTP buffer writable"))
             }
         }
     }
@@ -139,9 +139,7 @@ impl<'a> RTPBuffer<'a, Writable> {
             if result {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!(
-                    "Failed to add onebyte header extension"
-                ))
+                Err(glib::bool_error!("Failed to add onebyte header extension"))
             }
         }
     }
@@ -169,9 +167,7 @@ impl<'a> RTPBuffer<'a, Writable> {
             if result {
                 Ok(())
             } else {
-                Err(glib::glib_bool_error!(
-                    "Failed to add twobytes header extension"
-                ))
+                Err(glib::bool_error!("Failed to add twobytes header extension"))
             }
         }
     }
@@ -241,7 +237,7 @@ impl<'a, T> RTPBuffer<'a, T> {
             let pointer =
                 ffi::gst_rtp_buffer_get_payload(glib::translate::mut_override(&self.rtp_buffer));
             if pointer.is_null() {
-                Err(glib::glib_bool_error!("Failed to get payload data"))
+                Err(glib::bool_error!("Failed to get payload data"))
             } else {
                 Ok(slice::from_raw_parts(pointer as *const u8, size as usize))
             }
@@ -346,7 +342,7 @@ impl RTPBufferExt for gst::Buffer {
                 pad_len,
                 csrc_count,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate new RTP buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate new RTP buffer"))
         }
     }
 }

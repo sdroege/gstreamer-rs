@@ -24,7 +24,7 @@ impl AudioChannelPosition {
 
         let len = positions.len();
         if len > 64 {
-            return Err(glib::glib_bool_error!("Invalid number of channels"));
+            return Err(glib::bool_error!("Invalid number of channels"));
         }
 
         let positions_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
@@ -46,7 +46,7 @@ impl AudioChannelPosition {
             if valid {
                 Ok(mask.assume_init())
             } else {
-                Err(glib::glib_bool_error!(
+                Err(glib::bool_error!(
                     "Couldn't convert channel positions to mask"
                 ))
             }
@@ -60,7 +60,7 @@ impl AudioChannelPosition {
         assert_initialized_main_thread!();
 
         if positions.len() > 64 {
-            return Err(glib::glib_bool_error!("Invalid number of channels"));
+            return Err(glib::bool_error!("Invalid number of channels"));
         }
 
         let len = positions.len();
@@ -80,7 +80,7 @@ impl AudioChannelPosition {
             }
             Ok(())
         } else {
-            Err(glib::glib_bool_error!(
+            Err(glib::bool_error!(
                 "Couldn't convert channel positions to mask",
             ))
         }
@@ -92,7 +92,7 @@ impl AudioChannelPosition {
         assert_initialized_main_thread!();
 
         if positions.len() > 64 {
-            return Err(glib::glib_bool_error!("Invalid number of channels"));
+            return Err(glib::bool_error!("Invalid number of channels"));
         }
 
         let len = positions.len();
@@ -117,7 +117,7 @@ impl AudioChannelPosition {
             }
             Ok(())
         } else {
-            Err(glib::glib_bool_error!(
+            Err(glib::bool_error!(
                 "Couldn't convert channel positions to mask",
             ))
         }
@@ -168,7 +168,7 @@ pub fn buffer_reorder_channels(
     assert_initialized_main_thread!();
 
     if from.len() != to.len() || from.len() > 64 {
-        return Err(glib::glib_bool_error!("Invalid number of channels"));
+        return Err(glib::bool_error!("Invalid number of channels"));
     }
 
     let from_len = from.len();
@@ -203,7 +203,7 @@ pub fn buffer_reorder_channels(
     if valid {
         Ok(())
     } else {
-        Err(glib::glib_bool_error!("Failed to reorder channels"))
+        Err(glib::bool_error!("Failed to reorder channels"))
     }
 }
 
@@ -217,7 +217,7 @@ pub fn reorder_channels(
     assert_initialized_main_thread!();
 
     if from.len() != to.len() || from.len() > 64 {
-        return Err(glib::glib_bool_error!("Invalid number of channels"));
+        return Err(glib::bool_error!("Invalid number of channels"));
     }
 
     let from_len = from.len();
@@ -253,7 +253,7 @@ pub fn reorder_channels(
     if valid {
         Ok(())
     } else {
-        Err(glib::glib_bool_error!("Failed to reorder channels"))
+        Err(glib::bool_error!("Failed to reorder channels"))
     }
 }
 
@@ -265,7 +265,7 @@ pub fn get_channel_reorder_map(
     assert_initialized_main_thread!();
 
     if from.len() != to.len() || from.len() != reorder_map.len() || from.len() > 64 {
-        return Err(glib::glib_bool_error!("Invalid number of channels"));
+        return Err(glib::bool_error!("Invalid number of channels"));
     }
 
     let from_len = from.len();
@@ -303,6 +303,6 @@ pub fn get_channel_reorder_map(
         }
         Ok(())
     } else {
-        Err(glib::glib_bool_error!("Failed to reorder channels"))
+        Err(glib::bool_error!("Failed to reorder channels"))
     }
 }
