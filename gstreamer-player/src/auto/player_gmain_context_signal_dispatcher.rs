@@ -7,7 +7,7 @@ use glib::object::ObjectType as ObjectType_;
 use glib::translate::*;
 use glib::StaticType;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;
 
     match fn {

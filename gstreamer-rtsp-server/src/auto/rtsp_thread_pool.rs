@@ -13,7 +13,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPThreadPool(Object<ffi::GstRTSPThreadPool, ffi::GstRTSPThreadPoolClass>);
 
     match fn {

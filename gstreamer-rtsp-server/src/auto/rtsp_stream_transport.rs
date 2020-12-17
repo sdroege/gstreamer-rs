@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::boxed::Box as Box_;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPStreamTransport(Object<ffi::GstRTSPStreamTransport, ffi::GstRTSPStreamTransportClass>);
 
     match fn {
@@ -150,7 +150,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_stream_transport_send_rtcp(
                     self.as_ref().to_glib_none().0,
                     buffer.to_glib_none().0
@@ -168,7 +168,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_stream_transport_send_rtp(
                     self.as_ref().to_glib_none().0,
                     buffer.to_glib_none().0
@@ -186,7 +186,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_stream_transport_set_active(
                     self.as_ref().to_glib_none().0,
                     active.to_glib()

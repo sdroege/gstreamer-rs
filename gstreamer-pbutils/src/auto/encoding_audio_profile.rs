@@ -5,7 +5,7 @@
 use crate::EncodingProfile;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct EncodingAudioProfile(Object<ffi::GstEncodingAudioProfile, ffi::GstEncodingAudioProfileClass>) @extends EncodingProfile;
 
     match fn {

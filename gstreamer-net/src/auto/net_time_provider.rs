@@ -10,7 +10,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct NetTimeProvider(Object<ffi::GstNetTimeProvider, ffi::GstNetTimeProviderClass>) @extends gst::Object;
 
     match fn {

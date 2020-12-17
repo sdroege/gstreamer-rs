@@ -16,7 +16,7 @@ pub fn type_find_helper<P: IsA<gst::Pad>>(
             src.as_ref().to_glib_none().0,
             size,
         ))
-        .ok_or_else(|| glib::glib_bool_error!("Could not find type"))
+        .ok_or_else(|| glib::bool_error!("Could not find type"))
     }
 }
 
@@ -31,7 +31,7 @@ pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(
             obj.map(|p| p.as_ref()).to_glib_none().0,
             extension.to_glib_none().0,
         ))
-        .ok_or_else(|| glib::glib_bool_error!("Could not find type"))
+        .ok_or_else(|| glib::bool_error!("Could not find type"))
     }
 }
 

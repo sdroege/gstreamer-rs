@@ -14,7 +14,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Device(Object<ffi::GstDevice, ffi::GstDeviceClass>) @extends Object;
 
     match fn {
@@ -65,7 +65,7 @@ impl<O: IsA<Device>> DeviceExt for O {
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create element for device"))
+            .ok_or_else(|| glib::bool_error!("Failed to create element for device"))
         }
     }
 
@@ -120,7 +120,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         element: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_device_reconfigure_element(
                     self.as_ref().to_glib_none().0,
                     element.as_ref().to_glib_none().0

@@ -19,7 +19,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass>) @extends Element, Object, @implements ChildProxy;
 
     match fn {
@@ -150,7 +150,7 @@ pub trait GstBinExt: 'static {
 impl<O: IsA<Bin>> GstBinExt for O {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_bin_add(
                     self.as_ref().to_glib_none().0,
                     element.as_ref().to_glib_none().0
@@ -242,7 +242,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_bin_recalculate_latency(self.as_ref().to_glib_none().0),
                 "Failed to recalculate latency"
             )
@@ -251,7 +251,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_bin_remove(
                     self.as_ref().to_glib_none().0,
                     element.as_ref().to_glib_none().0
@@ -275,7 +275,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_bin_sync_children_states(self.as_ref().to_glib_none().0),
                 "Failed to sync children states"
             )

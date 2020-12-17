@@ -5,7 +5,7 @@
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct VideoOverlay(Interface<ffi::GstVideoOverlay>);
 
     match fn {
@@ -94,7 +94,7 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
         height: i32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_video_overlay_set_render_rectangle(
                     self.as_ref().to_glib_none().0,
                     x,

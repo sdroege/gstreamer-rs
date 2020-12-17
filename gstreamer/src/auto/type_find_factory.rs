@@ -7,7 +7,7 @@ use crate::Object;
 use crate::PluginFeature;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct TypeFindFactory(Object<ffi::GstTypeFindFactory, ffi::GstTypeFindFactoryClass>) @extends PluginFeature, Object;
 
     match fn {

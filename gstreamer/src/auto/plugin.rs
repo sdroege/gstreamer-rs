@@ -7,7 +7,7 @@ use crate::PluginDependencyFlags;
 use glib::translate::*;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Plugin(Object<ffi::GstPlugin, ffi::GstPluginClass>) @extends Object;
 
     match fn {
@@ -107,7 +107,7 @@ impl Plugin {
     pub fn load(&self) -> Result<Plugin, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_plugin_load(self.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to load plugin"))
+                .ok_or_else(|| glib::bool_error!("Failed to load plugin"))
         }
     }
 
@@ -116,7 +116,7 @@ impl Plugin {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_plugin_load_by_name(name.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to load plugin"))
+                .ok_or_else(|| glib::bool_error!("Failed to load plugin"))
         }
     }
 

@@ -8,7 +8,7 @@ use crate::Object;
 use crate::Stream;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct StreamCollection(Object<ffi::GstStreamCollection, ffi::GstStreamCollectionClass>) @extends Object;
 
     match fn {

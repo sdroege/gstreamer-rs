@@ -7,7 +7,7 @@ use crate::DiscovererSerializeFlags;
 use crate::DiscovererStreamInfo;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct DiscovererInfo(Object<ffi::GstDiscovererInfo>);
 
     match fn {
@@ -148,7 +148,7 @@ impl DiscovererInfo {
                 self.to_glib_none().0,
                 flags.to_glib(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to serialize DiscovererInfo to Variant"))
+            .ok_or_else(|| glib::bool_error!("Failed to serialize DiscovererInfo to Variant"))
         }
     }
 
@@ -159,9 +159,7 @@ impl DiscovererInfo {
             Option::<_>::from_glib_full(ffi::gst_discoverer_info_from_variant(
                 variant.to_glib_none().0,
             ))
-            .ok_or_else(|| {
-                glib::glib_bool_error!("Failed to deserialize DiscovererInfo from Variant")
-            })
+            .ok_or_else(|| glib::bool_error!("Failed to deserialize DiscovererInfo from Variant"))
         }
     }
 }

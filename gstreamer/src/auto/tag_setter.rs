@@ -9,7 +9,7 @@ use crate::TagMergeMode;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct TagSetter(Interface<ffi::GstTagSetter>) @requires Element, Object;
 
     match fn {

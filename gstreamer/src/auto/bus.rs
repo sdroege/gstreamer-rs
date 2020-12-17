@@ -12,7 +12,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Bus(Object<ffi::GstBus, ffi::GstBusClass>) @extends Object;
 
     match fn {
@@ -78,7 +78,7 @@ impl Bus {
     #[doc(alias = "gst_bus_post")]
     pub fn post(&self, message: &Message) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_bus_post(self.to_glib_none().0, message.to_glib_full()),
                 "Failed to post message"
             )
@@ -95,7 +95,7 @@ impl Bus {
     #[doc(alias = "gst_bus_remove_watch")]
     pub fn remove_watch(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_bus_remove_watch(self.to_glib_none().0),
                 "Bus has no event source"
             )

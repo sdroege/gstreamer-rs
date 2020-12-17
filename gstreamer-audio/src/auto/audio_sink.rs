@@ -5,7 +5,7 @@
 use crate::AudioBaseSink;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct AudioSink(Object<ffi::GstAudioSink, ffi::GstAudioSinkClass>) @extends AudioBaseSink, gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {

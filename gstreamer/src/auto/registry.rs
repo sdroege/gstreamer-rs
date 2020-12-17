@@ -13,7 +13,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Registry(Object<ffi::GstRegistry, ffi::GstRegistryClass>) @extends Object;
 
     match fn {
@@ -28,7 +28,7 @@ impl Registry {
         feature: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_registry_add_feature(
                     self.to_glib_none().0,
                     feature.as_ref().to_glib_none().0
@@ -41,7 +41,7 @@ impl Registry {
     #[doc(alias = "gst_registry_add_plugin")]
     pub fn add_plugin(&self, plugin: &Plugin) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_registry_add_plugin(self.to_glib_none().0, plugin.to_glib_none().0),
                 "Failed to add plugin"
             )

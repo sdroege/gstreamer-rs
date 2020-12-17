@@ -84,7 +84,7 @@ pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<glib::GString, gl
     skip_assert_initialized!();
     unsafe {
         Option::<_>::from_glib_full(ffi::gst_debug_get_stack_trace(flags.to_glib()))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to get stack trace"))
+            .ok_or_else(|| glib::bool_error!("Failed to get stack trace"))
     }
 }
 
@@ -181,7 +181,7 @@ pub fn get_main_executable_path() -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
         Option::<_>::from_glib_none(ffi::gst_get_main_executable_path())
-            .ok_or_else(|| glib::glib_bool_error!("Failed to get main executable path"))
+            .ok_or_else(|| glib::bool_error!("Failed to get main executable path"))
     }
 }
 
@@ -260,10 +260,7 @@ pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) 
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        glib::glib_result_from_gboolean!(
-            ffi::gst_update_registry(),
-            "Failed to update the registry"
-        )
+        glib::result_from_gboolean!(ffi::gst_update_registry(), "Failed to update the registry")
     }
 }
 

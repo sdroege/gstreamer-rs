@@ -16,7 +16,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Container(Object<ffi::GESContainer, ffi::GESContainerClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
@@ -76,7 +76,7 @@ pub trait GESContainerExt: 'static {
 impl<O: IsA<Container>> GESContainerExt for O {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_container_add(
                     self.as_ref().to_glib_none().0,
                     child.as_ref().to_glib_none().0
@@ -95,7 +95,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         position: u64,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_container_edit(
                     self.as_ref().to_glib_none().0,
                     layers.to_glib_none().0,
@@ -120,7 +120,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
 
     fn remove<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_container_remove(
                     self.as_ref().to_glib_none().0,
                     child.as_ref().to_glib_none().0

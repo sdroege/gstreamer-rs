@@ -7,7 +7,7 @@ use crate::Pad;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct ProxyPad(Object<ffi::GstProxyPad, ffi::GstProxyPadClass>) @extends Pad, Object;
 
     match fn {

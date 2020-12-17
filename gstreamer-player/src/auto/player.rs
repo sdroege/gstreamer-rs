@@ -18,7 +18,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Player(Object<ffi::GstPlayer, ffi::GstPlayerClass>) @extends gst::Object;
 
     match fn {
@@ -179,7 +179,7 @@ impl Player {
     #[doc(alias = "gst_player_set_audio_track")]
     pub fn set_audio_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_player_set_audio_track(self.to_glib_none().0, stream_index),
                 "Failed to set audio track"
             )
@@ -238,7 +238,7 @@ impl Player {
     #[doc(alias = "gst_player_set_subtitle_track")]
     pub fn set_subtitle_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_player_set_subtitle_track(self.to_glib_none().0, stream_index),
                 "Failed to set subtitle track"
             )
@@ -278,7 +278,7 @@ impl Player {
     #[doc(alias = "gst_player_set_video_track")]
     pub fn set_video_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_player_set_video_track(self.to_glib_none().0, stream_index),
                 "Failed to set video track"
             )
@@ -295,7 +295,7 @@ impl Player {
     #[doc(alias = "gst_player_set_visualization")]
     pub fn set_visualization(&self, name: Option<&str>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_player_set_visualization(self.to_glib_none().0, name.to_glib_none().0),
                 "Failed to set visualization"
             )

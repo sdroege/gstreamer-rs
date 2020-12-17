@@ -5,7 +5,7 @@
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PlayerSignalDispatcher(Interface<ffi::GstPlayerSignalDispatcher>);
 
     match fn {

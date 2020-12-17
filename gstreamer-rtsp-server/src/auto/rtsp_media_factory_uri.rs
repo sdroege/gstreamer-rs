@@ -12,7 +12,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPMediaFactoryURI(Object<ffi::GstRTSPMediaFactoryURI, ffi::GstRTSPMediaFactoryURIClass>) @extends RTSPMediaFactory;
 
     match fn {

@@ -12,7 +12,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct LFOControlSource(Object<ffi::GstLFOControlSource, ffi::GstLFOControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {

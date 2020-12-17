@@ -8,7 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct ControlSource(Object<ffi::GstControlSource, ffi::GstControlSourceClass>) @extends Object;
 
     match fn {

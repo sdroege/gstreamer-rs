@@ -22,7 +22,7 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPMedia(Object<ffi::GstRTSPMedia, ffi::GstRTSPMediaClass>);
 
     match fn {
@@ -730,7 +730,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn prepare(&self, thread: Option<&RTSPThread>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_media_prepare(self.as_ref().to_glib_none().0, thread.to_glib_full()),
                 "Failed to prepare media"
             )
@@ -945,7 +945,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn suspend(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_media_suspend(self.as_ref().to_glib_none().0),
                 "Failed to suspend media"
             )
@@ -962,7 +962,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn unprepare(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_media_unprepare(self.as_ref().to_glib_none().0),
                 "Failed to unprepare media"
             )
@@ -971,7 +971,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn unsuspend(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_media_unsuspend(self.as_ref().to_glib_none().0),
                 "Failed to unsuspend media"
             )

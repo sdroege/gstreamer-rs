@@ -13,7 +13,7 @@ use std::mem::transmute;
 use std::pin::Pin;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Asset(Object<ffi::GESAsset, ffi::GESAssetClass>);
 
     match fn {
@@ -201,7 +201,7 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     fn set_proxy<P: IsA<Asset>>(&self, proxy: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_asset_set_proxy(
                     self.as_ref().to_glib_none().0,
                     proxy.map(|p| p.as_ref()).to_glib_none().0
@@ -213,7 +213,7 @@ impl<O: IsA<Asset>> AssetExt for O {
 
     fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_asset_unproxy(
                     self.as_ref().to_glib_none().0,
                     proxy.as_ref().to_glib_none().0

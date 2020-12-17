@@ -6,7 +6,7 @@ use crate::RTSPResult;
 use glib::translate::*;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct RTSPUrl(Boxed<ffi::GstRTSPUrl>);
 

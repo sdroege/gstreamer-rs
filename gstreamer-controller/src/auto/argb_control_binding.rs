@@ -11,7 +11,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct ARGBControlBinding(Object<ffi::GstARGBControlBinding, ffi::GstARGBControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {

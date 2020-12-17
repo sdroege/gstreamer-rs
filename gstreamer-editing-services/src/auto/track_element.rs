@@ -18,7 +18,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
@@ -186,7 +186,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         position: u64,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_track_element_edit(
                     self.as_ref().to_glib_none().0,
                     layers.to_glib_none().0,
@@ -291,7 +291,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_track_element_remove_control_binding(
                     self.as_ref().to_glib_none().0,
                     property_name.to_glib_none().0

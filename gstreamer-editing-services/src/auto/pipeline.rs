@@ -14,7 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass>) @extends gst::Pipeline, gst::Element, gst::Object;
 
     match fn {
@@ -200,7 +200,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_pipeline_set_mode(self.as_ref().to_glib_none().0, mode.to_glib()),
                 "Failed to set mode"
             )
@@ -213,7 +213,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         profile: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_pipeline_set_render_settings(
                     self.as_ref().to_glib_none().0,
                     output_uri.to_glib_none().0,
@@ -226,7 +226,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_pipeline_set_timeline(
                     self.as_ref().to_glib_none().0,
                     timeline.as_ref().to_glib_full()

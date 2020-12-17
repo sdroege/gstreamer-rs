@@ -6,7 +6,7 @@ use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Allocator(Object<ffi::GstAllocator, ffi::GstAllocatorClass>) @extends Object;
 
     match fn {

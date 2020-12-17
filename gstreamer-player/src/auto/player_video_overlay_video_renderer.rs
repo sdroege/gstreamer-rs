@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PlayerVideoOverlayVideoRenderer(Object<ffi::GstPlayerVideoOverlayVideoRenderer, ffi::GstPlayerVideoOverlayVideoRendererClass>) @implements PlayerVideoRenderer;
 
     match fn {

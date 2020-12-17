@@ -6,7 +6,7 @@ use crate::EncodingProfile;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct EncodingContainerProfile(Object<ffi::GstEncodingContainerProfile, ffi::GstEncodingContainerProfileClass>) @extends EncodingProfile;
 
     match fn {

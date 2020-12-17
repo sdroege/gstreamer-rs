@@ -10,7 +10,7 @@ use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct ProxyControlBinding(Object<ffi::GstProxyControlBinding, ffi::GstProxyControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {

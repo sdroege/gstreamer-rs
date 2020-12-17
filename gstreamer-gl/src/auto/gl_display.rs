@@ -15,7 +15,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLDisplay(Object<ffi::GstGLDisplay, ffi::GstGLDisplayClass>) @extends gst::Object;
 
     match fn {
@@ -89,7 +89,7 @@ pub trait GLDisplayExt: 'static {
 impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     fn add_context<P: IsA<GLContext>>(&self, context: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_display_add_context(
                     self.as_ref().to_glib_none().0,
                     context.as_ref().to_glib_none().0
@@ -125,7 +125,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
             Option::<_>::from_glib_full(ffi::gst_gl_display_create_window(
                 self.as_ref().to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create window"))
+            .ok_or_else(|| glib::bool_error!("Failed to create window"))
         }
     }
 
@@ -172,7 +172,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
     fn remove_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_display_remove_window(
                     self.as_ref().to_glib_none().0,
                     window.as_ref().to_glib_none().0

@@ -10,7 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
@@ -24,7 +24,7 @@ impl Effect {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_none(ffi::ges_effect_new(bin_description.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to create effect from description"))
+                .ok_or_else(|| glib::bool_error!("Failed to create effect from description"))
         }
     }
 }

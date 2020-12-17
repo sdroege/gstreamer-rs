@@ -8,7 +8,7 @@ use crate::ProxyPad;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass>) @extends ProxyPad, Pad, Object;
 
     match fn {
@@ -40,7 +40,7 @@ impl<O: IsA<GhostPad>> GhostPadExt for O {
 
     fn set_target<P: IsA<Pad>>(&self, newtarget: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_ghost_pad_set_target(
                     self.as_ref().to_glib_none().0,
                     newtarget.map(|p| p.as_ref()).to_glib_none().0

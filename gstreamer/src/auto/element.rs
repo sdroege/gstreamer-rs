@@ -22,7 +22,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Element(Object<ffi::GstElement, ffi::GstElementClass>) @extends Object;
 
     match fn {
@@ -252,7 +252,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_add_pad(
                     self.as_ref().to_glib_none().0,
                     pad.as_ref().to_glib_none().0
@@ -450,7 +450,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_link(
                     self.as_ref().to_glib_none().0,
                     dest.as_ref().to_glib_none().0
@@ -466,7 +466,7 @@ impl<O: IsA<Element>> ElementExt for O {
         filter: Option<&Caps>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_link_filtered(
                     self.as_ref().to_glib_none().0,
                     dest.as_ref().to_glib_none().0,
@@ -488,7 +488,7 @@ impl<O: IsA<Element>> ElementExt for O {
         destpadname: Option<&str>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_link_pads(
                     self.as_ref().to_glib_none().0,
                     srcpadname.to_glib_none().0,
@@ -508,7 +508,7 @@ impl<O: IsA<Element>> ElementExt for O {
         filter: Option<&Caps>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_link_pads_filtered(
                     self.as_ref().to_glib_none().0,
                     srcpadname.to_glib_none().0,
@@ -529,7 +529,7 @@ impl<O: IsA<Element>> ElementExt for O {
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_link_pads_full(
                     self.as_ref().to_glib_none().0,
                     srcpadname.to_glib_none().0,
@@ -583,7 +583,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_remove_pad(
                     self.as_ref().to_glib_none().0,
                     pad.as_ref().to_glib_none().0
@@ -623,7 +623,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn set_clock<P: IsA<Clock>>(&self, clock: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_set_clock(
                     self.as_ref().to_glib_none().0,
                     clock.map(|p| p.as_ref()).to_glib_none().0
@@ -656,7 +656,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_element_sync_state_with_parent(self.as_ref().to_glib_none().0),
                 "Failed to sync state with parent"
             )

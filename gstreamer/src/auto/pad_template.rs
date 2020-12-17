@@ -16,7 +16,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PadTemplate(Object<ffi::GstPadTemplate, ffi::GstPadTemplateClass>) @extends Object;
 
     match fn {
@@ -40,7 +40,7 @@ impl PadTemplate {
                 presence.to_glib(),
                 caps.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create pad template"))
+            .ok_or_else(|| glib::bool_error!("Failed to create pad template"))
         }
     }
 
@@ -63,7 +63,7 @@ impl PadTemplate {
                 caps.to_glib_none().0,
                 pad_type.to_glib(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create pad template"))
+            .ok_or_else(|| glib::bool_error!("Failed to create pad template"))
         }
     }
 

@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Object(Object<ffi::GstObject, ffi::GstObjectClass>);
 
     match fn {
@@ -142,7 +142,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         binding: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_object_add_control_binding(
                     self.as_ref().to_glib_none().0,
                     binding.as_ref().to_glib_none().0
@@ -283,7 +283,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
 
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_object_set_parent(
                     self.as_ref().to_glib_none().0,
                     parent.as_ref().to_glib_none().0
@@ -303,7 +303,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
 
     fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_object_sync_values(self.as_ref().to_glib_none().0, timestamp.to_glib()),
                 "Failed to sync values"
             )

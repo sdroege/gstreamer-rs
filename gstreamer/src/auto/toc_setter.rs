@@ -8,7 +8,7 @@ use crate::Toc;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct TocSetter(Interface<ffi::GstTocSetter>) @requires Element, Object;
 
     match fn {

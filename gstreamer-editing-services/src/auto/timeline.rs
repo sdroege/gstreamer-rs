@@ -24,7 +24,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>) @extends gst::Element, gst::Object, @implements Extractable;
 
     match fn {
@@ -217,7 +217,7 @@ pub trait TimelineExt: 'static {
 impl<O: IsA<Timeline>> TimelineExt for O {
     fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_add_layer(
                     self.as_ref().to_glib_none().0,
                     layer.as_ref().to_glib_none().0
@@ -229,7 +229,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_add_track(
                     self.as_ref().to_glib_none().0,
                     track.as_ref().to_glib_full()
@@ -390,7 +390,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         new_layer_priority: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_move_layer(
                     self.as_ref().to_glib_none().0,
                     layer.as_ref().to_glib_none().0,
@@ -419,7 +419,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_remove_layer(
                     self.as_ref().to_glib_none().0,
                     layer.as_ref().to_glib_none().0
@@ -431,7 +431,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_remove_track(
                     self.as_ref().to_glib_none().0,
                     track.as_ref().to_glib_none().0

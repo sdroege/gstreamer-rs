@@ -6,7 +6,7 @@ use crate::Asset;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Extractable(Interface<ffi::GESExtractable>);
 
     match fn {
@@ -42,7 +42,7 @@ impl<O: IsA<Extractable>> ExtractableExt for O {
 
     fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_extractable_set_asset(
                     self.as_ref().to_glib_none().0,
                     asset.as_ref().to_glib_none().0

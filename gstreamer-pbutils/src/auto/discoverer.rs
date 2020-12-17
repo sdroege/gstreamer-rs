@@ -14,7 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Discoverer(Object<ffi::GstDiscoverer, ffi::GstDiscovererClass>);
 
     match fn {
@@ -57,7 +57,7 @@ impl Discoverer {
     #[doc(alias = "gst_discoverer_discover_uri_async")]
     pub fn discover_uri_async(&self, uri: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_discoverer_discover_uri_async(self.to_glib_none().0, uri.to_glib_none().0),
                 "Failed to add URI to list of discovers"
             )

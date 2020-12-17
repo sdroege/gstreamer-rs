@@ -8,7 +8,7 @@ use crate::TrackElement;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
 
     match fn {

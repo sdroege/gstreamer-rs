@@ -12,7 +12,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPSessionPool(Object<ffi::GstRTSPSessionPool, ffi::GstRTSPSessionPoolClass>);
 
     match fn {
@@ -88,7 +88,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             Option::<_>::from_glib_full(ffi::gst_rtsp_session_pool_create(
                 self.as_ref().to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create session pool"))
+            .ok_or_else(|| glib::bool_error!("Failed to create session pool"))
         }
     }
 
@@ -155,7 +155,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
 
     fn remove<P: IsA<RTSPSession>>(&self, sess: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_session_pool_remove(
                     self.as_ref().to_glib_none().0,
                     sess.as_ref().to_glib_none().0

@@ -7,7 +7,7 @@ use crate::RTSPAddressFlags;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPAddressPool(Object<ffi::GstRTSPAddressPool, ffi::GstRTSPAddressPoolClass>);
 
     match fn {
@@ -74,7 +74,7 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExt for O {
                 flags.to_glib(),
                 n_ports,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to acquire address"))
+            .ok_or_else(|| glib::bool_error!("Failed to acquire address"))
         }
     }
 
@@ -87,7 +87,7 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExt for O {
         ttl: u8,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_address_pool_add_range(
                     self.as_ref().to_glib_none().0,
                     min_address.to_glib_none().0,

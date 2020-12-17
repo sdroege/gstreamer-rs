@@ -5,7 +5,7 @@
 use crate::PlayerStreamInfo;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PlayerAudioInfo(Object<ffi::GstPlayerAudioInfo, ffi::GstPlayerAudioInfoClass>) @extends PlayerStreamInfo;
 
     match fn {

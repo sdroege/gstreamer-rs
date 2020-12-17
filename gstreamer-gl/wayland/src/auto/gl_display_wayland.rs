@@ -4,7 +4,7 @@
 
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLDisplayWayland(Object<ffi::GstGLDisplayWayland, ffi::GstGLDisplayWaylandClass>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {

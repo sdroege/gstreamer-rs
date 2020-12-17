@@ -8,7 +8,7 @@ use crate::PluginFeature;
 use crate::Rank;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass>) @extends PluginFeature, Object;
 
     match fn {

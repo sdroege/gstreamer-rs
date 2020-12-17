@@ -5,7 +5,7 @@
 use crate::WebRTCDTLSTransport;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct WebRTCRTPSender(Object<ffi::GstWebRTCRTPSender, ffi::GstWebRTCRTPSenderClass>);
 
     match fn {

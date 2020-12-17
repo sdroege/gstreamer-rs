@@ -11,7 +11,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct BaseSink(Object<ffi::GstBaseSink, ffi::GstBaseSinkClass>) @extends gst::Element, gst::Object;
 
     match fn {

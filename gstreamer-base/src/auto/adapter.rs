@@ -6,7 +6,7 @@ use glib::translate::*;
 use glib::ObjectExt;
 use std::mem;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Adapter(Object<ffi::GstAdapter, ffi::GstAdapterClass>);
 
     match fn {

@@ -15,7 +15,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct UriClip(Object<ffi::GESUriClip, ffi::GESUriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {
@@ -29,7 +29,7 @@ impl UriClip {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_none(ffi::ges_uri_clip_new(uri.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to create Uri clip from Uri"))
+                .ok_or_else(|| glib::bool_error!("Failed to create Uri clip from Uri"))
         }
     }
 }

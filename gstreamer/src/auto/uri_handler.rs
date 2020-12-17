@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct URIHandler(Interface<ffi::GstURIHandler>);
 
     match fn {

@@ -13,7 +13,7 @@ use crate::StaticPadTemplate;
 use crate::URIType;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
@@ -69,7 +69,7 @@ impl ElementFactory {
                 self.to_glib_none().0,
                 name.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create element from factory"))
+            .ok_or_else(|| glib::bool_error!("Failed to create element from factory"))
         }
     }
 
@@ -192,7 +192,7 @@ impl ElementFactory {
                 factoryname.to_glib_none().0,
                 name.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create element from factory name"))
+            .ok_or_else(|| glib::bool_error!("Failed to create element from factory name"))
         }
     }
 }

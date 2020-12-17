@@ -25,7 +25,7 @@ use std::mem::transmute;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {
@@ -184,7 +184,7 @@ impl<O: IsA<Clip>> ClipExt for O {
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to add asset"))
+            .ok_or_else(|| glib::bool_error!("Failed to add asset"))
         }
     }
 
@@ -381,7 +381,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_clip_move_to_layer(
                     self.as_ref().to_glib_none().0,
                     layer.as_ref().to_glib_none().0
@@ -442,7 +442,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         newindex: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_clip_set_top_effect_index(
                     self.as_ref().to_glib_none().0,
                     effect.as_ref().to_glib_none().0,
@@ -482,7 +482,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         newpriority: u32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_clip_set_top_effect_priority(
                     self.as_ref().to_glib_none().0,
                     effect.as_ref().to_glib_none().0,
@@ -499,7 +499,7 @@ impl<O: IsA<Clip>> ClipExt for O {
                 self.as_ref().to_glib_none().0,
                 position,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to split clip"))
+            .ok_or_else(|| glib::bool_error!("Failed to split clip"))
         }
     }
 

@@ -21,7 +21,7 @@ use std::mem::transmute;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass>) @implements Extractable;
 
     match fn {
@@ -155,7 +155,7 @@ impl<O: IsA<Layer>> LayerExt for O {
                 duration.to_glib(),
                 track_types.to_glib(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to add asset"))
+            .ok_or_else(|| glib::bool_error!("Failed to add asset"))
         }
     }
 
@@ -190,7 +190,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_layer_add_clip(
                     self.as_ref().to_glib_none().0,
                     clip.as_ref().to_glib_none().0
@@ -273,7 +273,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_layer_remove_clip(
                     self.as_ref().to_glib_none().0,
                     clip.as_ref().to_glib_none().0

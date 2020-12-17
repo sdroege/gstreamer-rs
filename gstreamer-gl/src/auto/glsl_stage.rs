@@ -9,7 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLSLStage(Object<ffi::GstGLSLStage, ffi::GstGLSLStageClass>) @extends gst::Object;
 
     match fn {
@@ -133,7 +133,7 @@ impl GLSLStage {
     ) -> Result<(), glib::error::BoolError> {
         let n_strings = str.len() as i32;
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_glsl_stage_set_strings(
                     self.to_glib_none().0,
                     version.to_glib(),

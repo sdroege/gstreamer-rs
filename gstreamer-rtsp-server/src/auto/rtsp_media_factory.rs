@@ -16,7 +16,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPMediaFactory(Object<ffi::GstRTSPMediaFactory, ffi::GstRTSPMediaFactoryClass>);
 
     match fn {
@@ -305,7 +305,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 self.as_ref().to_glib_none().0,
                 url.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to construct media"))
+            .ok_or_else(|| glib::bool_error!("Failed to construct media"))
         }
     }
 
@@ -315,7 +315,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 self.as_ref().to_glib_none().0,
                 url.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create media element"))
+            .ok_or_else(|| glib::bool_error!("Failed to create media element"))
         }
     }
 

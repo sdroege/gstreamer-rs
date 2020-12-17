@@ -5,7 +5,7 @@
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PlayerVideoRenderer(Interface<ffi::GstPlayerVideoRenderer>);
 
     match fn {

@@ -10,7 +10,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct ChildProxy(Interface<ffi::GstChildProxy>);
 
     match fn {

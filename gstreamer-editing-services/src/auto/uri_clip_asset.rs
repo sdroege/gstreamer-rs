@@ -16,7 +16,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends Asset;
 
     match fn {

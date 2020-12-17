@@ -8,7 +8,7 @@ use crate::PlayerSubtitleInfo;
 use crate::PlayerVideoInfo;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PlayerMediaInfo(Object<ffi::GstPlayerMediaInfo, ffi::GstPlayerMediaInfoClass>);
 
     match fn {

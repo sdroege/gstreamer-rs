@@ -13,7 +13,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct WebRTCDataChannel(Object<ffi::GstWebRTCDataChannel, ffi::GstWebRTCDataChannelClass>);
 
     match fn {

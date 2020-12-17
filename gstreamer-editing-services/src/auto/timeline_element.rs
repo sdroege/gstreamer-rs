@@ -29,7 +29,7 @@ use std::mem::transmute;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct TimelineElement(Object<ffi::GESTimelineElement, ffi::GESTimelineElementClass>) @implements Extractable;
 
     match fn {
@@ -241,7 +241,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 self.as_ref().to_glib_none().0,
                 deep.to_glib(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to copy timeline element"))
+            .ok_or_else(|| glib::bool_error!("Failed to copy timeline element"))
         }
     }
 
@@ -427,7 +427,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 self.as_ref().to_glib_none().0,
                 paste_position.to_glib(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to paste timeline element"))
+            .ok_or_else(|| glib::bool_error!("Failed to paste timeline element"))
         }
     }
 
@@ -437,7 +437,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_ripple(self.as_ref().to_glib_none().0, start.to_glib()),
                 "Failed to ripple"
             )
@@ -446,7 +446,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn ripple_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_ripple_end(self.as_ref().to_glib_none().0, end.to_glib()),
                 "Failed to ripple"
             )
@@ -455,7 +455,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn roll_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_roll_end(self.as_ref().to_glib_none().0, end.to_glib()),
                 "Failed to roll"
             )
@@ -464,7 +464,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn roll_start(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_roll_start(
                     self.as_ref().to_glib_none().0,
                     start.to_glib()
@@ -525,7 +525,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_set_name(
                     self.as_ref().to_glib_none().0,
                     name.to_glib_none().0
@@ -540,7 +540,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         parent: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_set_parent(
                     self.as_ref().to_glib_none().0,
                     parent.as_ref().to_glib_none().0
@@ -570,7 +570,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_set_timeline(
                     self.as_ref().to_glib_none().0,
                     timeline.as_ref().to_glib_none().0
@@ -582,7 +582,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_timeline_element_trim(self.as_ref().to_glib_none().0, start.to_glib()),
                 "Failed to trim"
             )

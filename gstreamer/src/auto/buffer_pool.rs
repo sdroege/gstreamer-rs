@@ -6,7 +6,7 @@ use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct BufferPool(Object<ffi::GstBufferPool, ffi::GstBufferPoolClass>) @extends Object;
 
     match fn {
@@ -64,7 +64,7 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_buffer_pool_set_active(self.as_ref().to_glib_none().0, active.to_glib()),
                 "Failed to activate buffer pool"
             )

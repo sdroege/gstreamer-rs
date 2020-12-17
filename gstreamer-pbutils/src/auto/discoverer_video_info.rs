@@ -5,7 +5,7 @@
 use crate::DiscovererStreamInfo;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct DiscovererVideoInfo(Object<ffi::GstDiscovererVideoInfo>) @extends DiscovererStreamInfo;
 
     match fn {

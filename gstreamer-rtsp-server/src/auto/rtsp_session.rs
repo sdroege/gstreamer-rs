@@ -15,7 +15,7 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPSession(Object<ffi::GstRTSPSession, ffi::GstRTSPSessionClass>);
 
     match fn {
@@ -221,7 +221,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
                 path.to_glib_none().0,
                 media.as_ref().to_glib_full(),
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to manage media"))
+            .ok_or_else(|| glib::bool_error!("Failed to manage media"))
         }
     }
 

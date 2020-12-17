@@ -5,7 +5,7 @@
 use crate::AudioBaseSrc;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct AudioSrc(Object<ffi::GstAudioSrc, ffi::GstAudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {

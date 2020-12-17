@@ -5,7 +5,7 @@
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLDisplayEGL(Object<ffi::GstGLDisplayEGL, ffi::GstGLDisplayEGLClass>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {

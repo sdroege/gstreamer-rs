@@ -13,7 +13,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct InterpolationControlSource(Object<ffi::GstInterpolationControlSource, ffi::GstInterpolationControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
 
     match fn {

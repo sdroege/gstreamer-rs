@@ -5,7 +5,7 @@
 use crate::PlayerStreamInfo;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PlayerSubtitleInfo(Object<ffi::GstPlayerSubtitleInfo, ffi::GstPlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
 
     match fn {

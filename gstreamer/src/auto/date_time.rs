@@ -4,7 +4,7 @@
 
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     #[derive()]
     pub struct DateTime(Shared<ffi::GstDateTime>);
 
@@ -29,7 +29,7 @@ impl DateTime {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_from_iso8601_string(
                 string.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to create DateTime from ISO-8601 string"))
+            .ok_or_else(|| glib::bool_error!("Failed to create DateTime from ISO-8601 string"))
         }
     }
 
@@ -38,7 +38,7 @@ impl DateTime {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time(secs))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
+                .ok_or_else(|| glib::bool_error!("Can't create DateTime from UNIX epoch"))
         }
     }
 
@@ -51,7 +51,7 @@ impl DateTime {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_local_time_usecs(
                 usecs,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
+            .ok_or_else(|| glib::bool_error!("Can't create DateTime from UNIX epoch"))
         }
     }
 
@@ -60,7 +60,7 @@ impl DateTime {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc(secs))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
+                .ok_or_else(|| glib::bool_error!("Can't create DateTime from UNIX epoch"))
         }
     }
 
@@ -71,7 +71,7 @@ impl DateTime {
         assert_initialized_main_thread!();
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_new_from_unix_epoch_utc_usecs(usecs))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create DateTime from UNIX epoch"))
+                .ok_or_else(|| glib::bool_error!("Can't create DateTime from UNIX epoch"))
         }
     }
 
@@ -121,7 +121,7 @@ impl DateTime {
     pub fn to_g_date_time(&self) -> Result<glib::DateTime, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_to_g_date_time(self.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Can't create glib::DateTime from DateTime"))
+                .ok_or_else(|| glib::bool_error!("Can't create glib::DateTime from DateTime"))
         }
     }
 
@@ -129,9 +129,7 @@ impl DateTime {
     pub fn to_iso8601_string(&self) -> Result<glib::GString, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_date_time_to_iso8601_string(self.to_glib_none().0))
-                .ok_or_else(|| {
-                    glib::glib_bool_error!("Failed to create ISO-8601 string from DateTime")
-                })
+                .ok_or_else(|| glib::bool_error!("Failed to create ISO-8601 string from DateTime"))
         }
     }
 }

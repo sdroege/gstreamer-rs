@@ -8,7 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPSessionMedia(Object<ffi::GstRTSPSessionMedia, ffi::GstRTSPSessionMediaClass>);
 
     match fn {
@@ -146,7 +146,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_session_media_set_state(
                     self.as_ref().to_glib_none().0,
                     state.to_glib()

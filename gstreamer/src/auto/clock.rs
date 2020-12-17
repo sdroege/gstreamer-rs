@@ -14,7 +14,7 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Clock(Object<ffi::GstClock, ffi::GstClockClass>) @extends Object;
 
     match fn {
@@ -336,7 +336,7 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn set_master<P: IsA<Clock>>(&self, master: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_clock_set_master(
                     self.as_ref().to_glib_none().0,
                     master.map(|p| p.as_ref()).to_glib_none().0
@@ -382,7 +382,7 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_clock_wait_for_sync(self.as_ref().to_glib_none().0, timeout.to_glib()),
                 "Timed out waiting for sync"
             )

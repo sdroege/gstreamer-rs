@@ -7,7 +7,7 @@ use crate::Plugin;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PluginFeature(Object<ffi::GstPluginFeature, ffi::GstPluginFeatureClass>) @extends Object;
 
     match fn {
@@ -67,7 +67,7 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
             Option::<_>::from_glib_full(ffi::gst_plugin_feature_load(
                 self.as_ref().to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to load plugin feature"))
+            .ok_or_else(|| glib::bool_error!("Failed to load plugin feature"))
         }
     }
 }

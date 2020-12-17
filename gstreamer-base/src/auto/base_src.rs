@@ -11,7 +11,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass>) @extends gst::Element, gst::Object;
 
     match fn {
@@ -178,7 +178,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn set_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_base_src_set_caps(self.as_ref().to_glib_none().0, caps.to_glib_none().0),
                 "Failed to set caps"
             )

@@ -7,7 +7,7 @@ use crate::UriClipAsset;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass>) @extends Asset;
 
     match fn {

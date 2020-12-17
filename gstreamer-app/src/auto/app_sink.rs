@@ -10,7 +10,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct AppSink(Object<ffi::GstAppSink, ffi::GstAppSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {
@@ -64,7 +64,7 @@ impl AppSink {
     pub fn pull_preroll(&self) -> Result<gst::Sample, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_app_sink_pull_preroll(self.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to pull preroll sample"))
+                .ok_or_else(|| glib::bool_error!("Failed to pull preroll sample"))
         }
     }
 
@@ -72,7 +72,7 @@ impl AppSink {
     pub fn pull_sample(&self) -> Result<gst::Sample, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_app_sink_pull_sample(self.to_glib_none().0))
-                .ok_or_else(|| glib::glib_bool_error!("Failed to pull sample"))
+                .ok_or_else(|| glib::bool_error!("Failed to pull sample"))
         }
     }
 

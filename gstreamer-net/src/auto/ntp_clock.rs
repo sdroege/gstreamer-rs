@@ -5,7 +5,7 @@
 use crate::NetClientClock;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct NtpClock(Object<ffi::GstNtpClock, ffi::GstNtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;
 
     match fn {

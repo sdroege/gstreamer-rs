@@ -8,7 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct ControlBinding(Object<ffi::GstControlBinding, ffi::GstControlBindingClass>) @extends Object;
 
     match fn {

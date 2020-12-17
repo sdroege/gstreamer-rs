@@ -14,7 +14,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct DeviceMonitor(Object<ffi::GstDeviceMonitor, ffi::GstDeviceMonitorClass>) @extends Object;
 
     match fn {
@@ -103,7 +103,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_device_monitor_start(self.as_ref().to_glib_none().0),
                 "Failed to start"
             )

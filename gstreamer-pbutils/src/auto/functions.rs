@@ -31,7 +31,7 @@ pub fn pb_utils_get_element_description(
         Option::<_>::from_glib_full(ffi::gst_pb_utils_get_element_description(
             factory_name.to_glib_none().0,
         ))
-        .ok_or_else(|| glib::glib_bool_error!("Failed to get element description"))
+        .ok_or_else(|| glib::bool_error!("Failed to get element description"))
     }
 }
 
@@ -42,7 +42,7 @@ pub fn pb_utils_get_sink_description(protocol: &str) -> Result<glib::GString, gl
         Option::<_>::from_glib_full(ffi::gst_pb_utils_get_sink_description(
             protocol.to_glib_none().0,
         ))
-        .ok_or_else(|| glib::glib_bool_error!("Failed to get sink description"))
+        .ok_or_else(|| glib::bool_error!("Failed to get sink description"))
     }
 }
 
@@ -53,7 +53,7 @@ pub fn pb_utils_get_source_description(protocol: &str) -> Result<glib::GString, 
         Option::<_>::from_glib_full(ffi::gst_pb_utils_get_source_description(
             protocol.to_glib_none().0,
         ))
-        .ok_or_else(|| glib::glib_bool_error!("Failed to get source description"))
+        .ok_or_else(|| glib::bool_error!("Failed to get source description"))
     }
 }
 

@@ -24,7 +24,7 @@ use std::boxed::Box as Box_;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLOverlayCompositor(Object<ffi::GstGLOverlayCompositor, ffi::GstGLOverlayCompositorClass>) @extends gst::Object;
 
     match fn {

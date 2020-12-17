@@ -14,7 +14,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Group(Object<ffi::GESGroup, ffi::GESGroupClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {

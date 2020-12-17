@@ -11,7 +11,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct AppSrc(Object<ffi::GstAppSrc, ffi::GstAppSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {

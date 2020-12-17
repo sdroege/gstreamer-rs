@@ -20,7 +20,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLShader(Object<ffi::GstGLShader, ffi::GstGLShaderClass>) @extends gst::Object;
 
     match fn {
@@ -62,7 +62,7 @@ impl GLShader {
     #[doc(alias = "gst_gl_shader_attach")]
     pub fn attach(&self, stage: &GLSLStage) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_shader_attach(self.to_glib_none().0, stage.to_glib_none().0),
                 "Failed to attach stage to shader"
             )
@@ -72,7 +72,7 @@ impl GLShader {
     #[doc(alias = "gst_gl_shader_attach_unlocked")]
     pub fn attach_unlocked(&self, stage: &GLSLStage) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_shader_attach_unlocked(self.to_glib_none().0, stage.to_glib_none().0),
                 "Failed to attach stage to shader"
             )

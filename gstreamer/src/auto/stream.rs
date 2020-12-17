@@ -32,7 +32,7 @@ use std::boxed::Box as Box_;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Stream(Object<ffi::GstStream, ffi::GstStreamClass>) @extends Object;
 
     match fn {

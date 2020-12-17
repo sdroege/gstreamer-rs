@@ -24,7 +24,7 @@ use std::boxed::Box as Box_;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct VideoDecoder(Object<ffi::GstVideoDecoder, ffi::GstVideoDecoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
@@ -124,7 +124,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
             Option::<_>::from_glib_full(ffi::gst_video_decoder_allocate_output_buffer(
                 self.as_ref().to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate output buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate output buffer"))
         }
     }
 

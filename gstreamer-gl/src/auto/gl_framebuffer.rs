@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLFramebuffer(Object<ffi::GstGLFramebuffer, ffi::GstGLFramebufferClass>) @extends gst::Object;
 
     match fn {

@@ -11,7 +11,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPAuth(Object<ffi::GstRTSPAuth, ffi::GstRTSPAuthClass>);
 
     match fn {
@@ -30,7 +30,7 @@ impl RTSPAuth {
     pub fn check(check: &str) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_auth_check(check.to_glib_none().0),
                 "Check failed"
             )

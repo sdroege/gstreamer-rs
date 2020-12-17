@@ -14,7 +14,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct VideoEncoder(Object<ffi::GstVideoEncoder, ffi::GstVideoEncoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
@@ -92,7 +92,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
                 self.as_ref().to_glib_none().0,
                 size,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to allocate output buffer"))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate output buffer"))
         }
     }
 

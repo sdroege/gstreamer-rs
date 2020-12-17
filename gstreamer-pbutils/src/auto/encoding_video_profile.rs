@@ -5,7 +5,7 @@
 use crate::EncodingProfile;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct EncodingVideoProfile(Object<ffi::GstEncodingVideoProfile, ffi::GstEncodingVideoProfileClass>) @extends EncodingProfile;
 
     match fn {

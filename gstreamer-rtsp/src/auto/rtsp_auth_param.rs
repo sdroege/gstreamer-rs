@@ -6,7 +6,7 @@
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct RTSPAuthParam(Boxed<ffi::GstRTSPAuthParam>);
 

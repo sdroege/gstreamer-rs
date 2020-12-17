@@ -13,7 +13,7 @@ use glib::translate::*;
 use std::mem;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLContext(Object<ffi::GstGLContext, ffi::GstGLContextClass>) @extends gst::Object;
 
     match fn {
@@ -135,7 +135,7 @@ pub trait GLContextExt: 'static {
 impl<O: IsA<GLContext>> GLContextExt for O {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_context_activate(self.as_ref().to_glib_none().0, activate.to_glib()),
                 "Failed to activate OpenGL context"
             )
@@ -307,7 +307,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
 
     fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_context_set_window(
                     self.as_ref().to_glib_none().0,
                     window.as_ref().to_glib_full()

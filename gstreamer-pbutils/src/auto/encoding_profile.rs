@@ -6,7 +6,7 @@ use crate::DiscovererInfo;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct EncodingProfile(Object<ffi::GstEncodingProfile, ffi::GstEncodingProfileClass>);
 
     match fn {
@@ -39,7 +39,7 @@ impl EncodingProfile {
                 info.to_glib_none().0,
             ))
             .ok_or_else(|| {
-                glib::glib_bool_error!("Failed to create EncodingProfile from DiscovererInfo")
+                glib::bool_error!("Failed to create EncodingProfile from DiscovererInfo")
             })
         }
     }

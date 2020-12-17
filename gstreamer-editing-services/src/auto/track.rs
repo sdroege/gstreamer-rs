@@ -17,7 +17,7 @@ use std::mem::transmute;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Track(Object<ffi::GESTrack, ffi::GESTrackClass>) @extends gst::Element, gst::Object;
 
     match fn {
@@ -133,7 +133,7 @@ pub trait GESTrackExt: 'static {
 impl<O: IsA<Track>> GESTrackExt for O {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_track_add_element(
                     self.as_ref().to_glib_none().0,
                     object.as_ref().to_glib_none().0
@@ -200,7 +200,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         object: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_track_remove_element(
                     self.as_ref().to_glib_none().0,
                     object.as_ref().to_glib_none().0

@@ -11,7 +11,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct TestClock(Object<ffi::GstTestClock, ffi::GstTestClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {

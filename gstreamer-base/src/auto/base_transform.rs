@@ -11,7 +11,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct BaseTransform(Object<ffi::GstBaseTransform, ffi::GstBaseTransformClass>) @extends gst::Element, gst::Object;
 
     match fn {
@@ -199,7 +199,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
 
     fn update_src_caps(&self, updated_caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_base_transform_update_src_caps(
                     self.as_ref().to_glib_none().0,
                     updated_caps.to_glib_none().0

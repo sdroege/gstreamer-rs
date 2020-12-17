@@ -12,7 +12,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLBaseFilter(Object<ffi::GstGLBaseFilter, ffi::GstGLBaseFilterClass>) @extends gst::Object;
 
     match fn {

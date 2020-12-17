@@ -28,7 +28,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Pad(Object<ffi::GstPad, ffi::GstPadClass>) @extends Object;
 
     match fn {
@@ -210,7 +210,7 @@ pub trait PadExt: 'static {
 impl<O: IsA<Pad>> PadExt for O {
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_pad_activate_mode(
                     self.as_ref().to_glib_none().0,
                     mode.to_glib(),
@@ -410,7 +410,7 @@ impl<O: IsA<Pad>> PadExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_pad_link_maybe_ghosting(
                     self.as_ref().to_glib_none().0,
                     sink.as_ref().to_glib_none().0
@@ -428,7 +428,7 @@ impl<O: IsA<Pad>> PadExt for O {
         flags: PadLinkCheck,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_pad_link_maybe_ghosting_full(
                     self.as_ref().to_glib_none().0,
                     sink.as_ref().to_glib_none().0,
@@ -455,7 +455,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn pause_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_pad_pause_task(self.as_ref().to_glib_none().0),
                 "Failed to pause pad task"
             )
@@ -500,7 +500,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_pad_set_active(self.as_ref().to_glib_none().0, active.to_glib()),
                 "Failed to activate pad"
             )
@@ -519,7 +519,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn stop_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_pad_stop_task(self.as_ref().to_glib_none().0),
                 "Failed to stop pad task"
             )
@@ -528,7 +528,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_pad_unlink(
                     self.as_ref().to_glib_none().0,
                     sinkpad.as_ref().to_glib_none().0

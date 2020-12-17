@@ -5,7 +5,7 @@
 use crate::BaseSrc;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
 
     match fn {

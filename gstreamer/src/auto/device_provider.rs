@@ -14,7 +14,7 @@ use glib::translate::*;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct DeviceProvider(Object<ffi::GstDeviceProvider, ffi::GstDeviceProviderClass>) @extends Object;
 
     match fn {
@@ -159,7 +159,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
 
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_device_provider_start(self.as_ref().to_glib_none().0),
                 "Failed to start"
             )

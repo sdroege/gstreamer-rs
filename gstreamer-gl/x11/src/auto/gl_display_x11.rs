@@ -4,7 +4,7 @@
 
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLDisplayX11(Object<ffi::GstGLDisplayX11, ffi::GstGLDisplayX11Class>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {

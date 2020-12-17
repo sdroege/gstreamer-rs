@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPMountPoints(Object<ffi::GstRTSPMountPoints, ffi::GstRTSPMountPointsClass>);
 
     match fn {
@@ -65,7 +65,7 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
                 self.as_ref().to_glib_none().0,
                 url.to_glib_none().0,
             ))
-            .ok_or_else(|| glib::glib_bool_error!("Failed to make path"))
+            .ok_or_else(|| glib::bool_error!("Failed to make path"))
         }
     }
 

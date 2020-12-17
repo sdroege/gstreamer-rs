@@ -4,7 +4,7 @@
 
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct VideoFilter(Object<ffi::GstVideoFilter, ffi::GstVideoFilterClass>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
 
     match fn {

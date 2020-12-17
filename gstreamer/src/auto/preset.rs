@@ -6,7 +6,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Preset(Interface<ffi::GstPreset>);
 
     match fn {
@@ -27,7 +27,7 @@ impl Preset {
     ) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_preset_set_app_dir(app_dir.as_ref().to_glib_none().0),
                 "Failed to set app preset directory"
             )
@@ -77,7 +77,7 @@ pub trait PresetExt: 'static {
 impl<O: IsA<Preset>> PresetExt for O {
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_preset_delete_preset(
                     self.as_ref().to_glib_none().0,
                     name.to_glib_none().0
@@ -126,7 +126,7 @@ impl<O: IsA<Preset>> PresetExt for O {
 
     fn load_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_preset_load_preset(self.as_ref().to_glib_none().0, name.to_glib_none().0),
                 "Failed to load preset"
             )
@@ -135,7 +135,7 @@ impl<O: IsA<Preset>> PresetExt for O {
 
     fn rename_preset(&self, old_name: &str, new_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_preset_rename_preset(
                     self.as_ref().to_glib_none().0,
                     old_name.to_glib_none().0,
@@ -148,7 +148,7 @@ impl<O: IsA<Preset>> PresetExt for O {
 
     fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_preset_save_preset(self.as_ref().to_glib_none().0, name.to_glib_none().0),
                 "Failed to save preset"
             )
@@ -162,7 +162,7 @@ impl<O: IsA<Preset>> PresetExt for O {
         value: Option<&str>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_preset_set_meta(
                     self.as_ref().to_glib_none().0,
                     name.to_glib_none().0,

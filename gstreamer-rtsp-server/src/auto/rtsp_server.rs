@@ -18,7 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct RTSPServer(Object<ffi::GstRTSPServer, ffi::GstRTSPServerClass>);
 
     match fn {
@@ -41,7 +41,7 @@ impl RTSPServer {
     ) -> Result<(), glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_server_io_func(
                     socket.as_ref().to_glib_none().0,
                     condition.to_glib(),
@@ -410,7 +410,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         initial_buffer: Option<&str>,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_rtsp_server_transfer_connection(
                     self.as_ref().to_glib_none().0,
                     socket.as_ref().to_glib_full(),

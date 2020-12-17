@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct Project(Object<ffi::GESProject, ffi::GESProjectClass>) @extends Asset;
 
     match fn {
@@ -131,7 +131,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         profile: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_project_add_encoding_profile(
                     self.as_ref().to_glib_none().0,
                     profile.as_ref().to_glib_none().0
@@ -235,7 +235,7 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::ges_project_remove_asset(
                     self.as_ref().to_glib_none().0,
                     asset.as_ref().to_glib_none().0

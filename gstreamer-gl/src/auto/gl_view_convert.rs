@@ -13,7 +13,7 @@ use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLViewConvert(Object<ffi::GstGLViewConvert, ffi::GstGLViewConvertClass>) @extends gst::Object;
 
     match fn {
@@ -52,7 +52,7 @@ impl GLViewConvert {
         out_caps: &gst::Caps,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_view_convert_set_caps(
                     self.to_glib_none().0,
                     in_caps.to_glib_none().0,

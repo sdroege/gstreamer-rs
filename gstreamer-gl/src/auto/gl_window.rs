@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLWindow(Object<ffi::GstGLWindow, ffi::GstGLWindowClass>) @extends gst::Object;
 
     match fn {
@@ -246,7 +246,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         height: i32,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_window_set_render_rectangle(
                     self.as_ref().to_glib_none().0,
                     x,

@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLUpload(Object<ffi::GstGLUpload, ffi::GstGLUploadClass>) @extends gst::Object;
 
     match fn {
@@ -39,7 +39,7 @@ impl GLUpload {
         out_caps: &gst::Caps,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_upload_set_caps(
                     self.to_glib_none().0,
                     in_caps.to_glib_none().0,

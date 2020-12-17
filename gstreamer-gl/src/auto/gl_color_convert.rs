@@ -6,7 +6,7 @@ use crate::GLContext;
 use glib::object::IsA;
 use glib::translate::*;
 
-glib::glib_wrapper! {
+glib::wrapper! {
     pub struct GLColorConvert(Object<ffi::GstGLColorConvert, ffi::GstGLColorConvertClass>) @extends gst::Object;
 
     match fn {
@@ -32,7 +32,7 @@ impl GLColorConvert {
         out_caps: &gst::Caps,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::glib_result_from_gboolean!(
+            glib::result_from_gboolean!(
                 ffi::gst_gl_color_convert_set_caps(
                     self.to_glib_none().0,
                     in_caps.to_glib_none().0,
