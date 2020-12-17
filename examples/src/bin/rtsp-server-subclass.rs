@@ -167,10 +167,7 @@ mod media_factory {
     impl Default for Factory {
         // Creates a new instance of our factory
         fn default() -> Factory {
-            glib::Object::new(Self::static_type(), &[])
-                .expect("Failed to create factory")
-                .downcast()
-                .expect("Created factory is of wrong type")
+            glib::Object::new(&[]).expect("Failed to create factory")
         }
     }
 }
@@ -316,10 +313,7 @@ mod server {
     impl Default for Server {
         // Creates a new instance of our factory
         fn default() -> Server {
-            glib::Object::new(Self::static_type(), &[])
-                .expect("Failed to create server")
-                .downcast()
-                .expect("Created server is of wrong type")
+            glib::Object::new(&[]).expect("Failed to create server")
         }
     }
 }
@@ -385,10 +379,7 @@ mod client {
     impl Default for Client {
         // Creates a new instance of our factory
         fn default() -> Client {
-            glib::Object::new(Self::static_type(), &[])
-                .expect("Failed to create client")
-                .downcast()
-                .expect("Created client is of wrong type")
+            glib::Object::new(&[]).expect("Failed to create client")
         }
     }
 }

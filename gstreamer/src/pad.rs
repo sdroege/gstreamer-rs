@@ -1628,13 +1628,8 @@ impl<T: IsA<Pad> + IsA<glib::Object>> PadBuilder<T> {
     pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
         assert_initialized_main_thread!();
 
-        let pad = glib::Object::new(
-            T::static_type(),
-            &[("name", &name), ("direction", &direction)],
-        )
-        .expect("Failed to create pad")
-        .downcast::<T>()
-        .unwrap();
+        let pad = glib::Object::new::<T>(&[("name", &name), ("direction", &direction)])
+            .expect("Failed to create pad");
 
         // Ghost pads are a bit special
         if let Some(pad) = pad.dynamic_cast_ref::<crate::GhostPad>() {
@@ -1683,7 +1678,7 @@ impl<T: IsA<Pad> + IsA<glib::Object>> PadBuilder<T> {
             }
         }
 
-        let pad = glib::Object::new(
+        let pad = glib::Object::with_type(
             type_,
             &[
                 ("name", &name),

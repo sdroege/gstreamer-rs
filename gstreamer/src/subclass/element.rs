@@ -744,10 +744,7 @@ mod tests {
 
     impl TestElement {
         pub fn new(name: Option<&str>) -> Self {
-            glib::Object::new(TestElement::static_type(), &[("name", &name)])
-                .unwrap()
-                .downcast::<Self>()
-                .unwrap()
+            glib::Object::new(&[("name", &name)]).unwrap()
         }
     }
 

@@ -141,13 +141,7 @@ mod tests {
 
     impl TestPad {
         pub fn new(name: &str, direction: PadDirection) -> Self {
-            glib::Object::new(
-                TestPad::static_type(),
-                &[("name", &name), ("direction", &direction)],
-            )
-            .unwrap()
-            .downcast::<Self>()
-            .unwrap()
+            glib::Object::new(&[("name", &name), ("direction", &direction)]).unwrap()
         }
     }
 
