@@ -98,7 +98,7 @@ macro_rules! impl_common_ops_for_opt_int(
                 }
             }
 
-            pub fn zero() -> Self {
+            pub const fn zero() -> Self {
                 Self(Some(0))
             }
 
@@ -106,7 +106,7 @@ macro_rules! impl_common_ops_for_opt_int(
                 matches!(self.0, Some(0))
             }
 
-            pub fn none() -> Self {
+            pub const fn none() -> Self {
                 Self(None)
             }
         }
