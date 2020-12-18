@@ -102,14 +102,8 @@ macro_rules! impl_common_ops_for_opt_int(
                 Self(Some(0))
             }
 
-            // FIXME `matches!` was introduced in rustc 1.42.0, current MSRV is 1.41.0
-            // FIXME uncomment when CI can upgrade to 1.47.1
-            //#[allow(clippy::match_like_matches_macro)]
             pub fn is_zero(&self) -> bool {
-                match self.0 {
-                    Some(0) => true,
-                    _ => false,
-                }
+                matches!(self.0, Some(0))
             }
 
             pub fn none() -> Self {
