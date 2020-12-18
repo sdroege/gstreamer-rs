@@ -11,11 +11,17 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPAddressPoolResult")]
 pub enum RTSPAddressPoolResult {
+    #[doc(alias = "GST_RTSP_ADDRESS_POOL_OK")]
     Ok,
+    #[doc(alias = "GST_RTSP_ADDRESS_POOL_EINVAL")]
     Einval,
+    #[doc(alias = "GST_RTSP_ADDRESS_POOL_ERESERVED")]
     Ereserved,
+    #[doc(alias = "GST_RTSP_ADDRESS_POOL_ERANGE")]
     Erange,
+    #[doc(alias = "GST_RTSP_ADDRESS_POOL_ELAST")]
     Elast,
     #[doc(hidden)]
     __Unknown(i32),
@@ -54,9 +60,13 @@ impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPFilterResult")]
 pub enum RTSPFilterResult {
+    #[doc(alias = "GST_RTSP_FILTER_REMOVE")]
     Remove,
+    #[doc(alias = "GST_RTSP_FILTER_KEEP")]
     Keep,
+    #[doc(alias = "GST_RTSP_FILTER_REF")]
     Ref,
     #[doc(hidden)]
     __Unknown(i32),
@@ -91,12 +101,19 @@ impl FromGlib<ffi::GstRTSPFilterResult> for RTSPFilterResult {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPMediaStatus")]
 pub enum RTSPMediaStatus {
+    #[doc(alias = "GST_RTSP_MEDIA_STATUS_UNPREPARED")]
     Unprepared,
+    #[doc(alias = "GST_RTSP_MEDIA_STATUS_UNPREPARING")]
     Unpreparing,
+    #[doc(alias = "GST_RTSP_MEDIA_STATUS_PREPARING")]
     Preparing,
+    #[doc(alias = "GST_RTSP_MEDIA_STATUS_PREPARED")]
     Prepared,
+    #[doc(alias = "GST_RTSP_MEDIA_STATUS_SUSPENDED")]
     Suspended,
+    #[doc(alias = "GST_RTSP_MEDIA_STATUS_ERROR")]
     Error,
     #[doc(hidden)]
     __Unknown(i32),
@@ -137,9 +154,13 @@ impl FromGlib<ffi::GstRTSPMediaStatus> for RTSPMediaStatus {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPPublishClockMode")]
 pub enum RTSPPublishClockMode {
+    #[doc(alias = "GST_RTSP_PUBLISH_CLOCK_MODE_NONE")]
     None,
+    #[doc(alias = "GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK")]
     Clock,
+    #[doc(alias = "GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK_AND_OFFSET")]
     ClockAndOffset,
     #[doc(hidden)]
     __Unknown(i32),
@@ -200,9 +221,13 @@ impl SetValue for RTSPPublishClockMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPSuspendMode")]
 pub enum RTSPSuspendMode {
+    #[doc(alias = "GST_RTSP_SUSPEND_MODE_NONE")]
     None,
+    #[doc(alias = "GST_RTSP_SUSPEND_MODE_PAUSE")]
     Pause,
+    #[doc(alias = "GST_RTSP_SUSPEND_MODE_RESET")]
     Reset,
     #[doc(hidden)]
     __Unknown(i32),
@@ -261,8 +286,11 @@ impl SetValue for RTSPSuspendMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPThreadType")]
 pub enum RTSPThreadType {
+    #[doc(alias = "GST_RTSP_THREAD_TYPE_CLIENT")]
     Client,
+    #[doc(alias = "GST_RTSP_THREAD_TYPE_MEDIA")]
     Media,
     #[doc(hidden)]
     __Unknown(i32),

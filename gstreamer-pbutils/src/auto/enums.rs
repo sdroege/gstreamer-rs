@@ -11,12 +11,19 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstDiscovererResult")]
 pub enum DiscovererResult {
+    #[doc(alias = "GST_DISCOVERER_OK")]
     Ok,
+    #[doc(alias = "GST_DISCOVERER_URI_INVALID")]
     UriInvalid,
+    #[doc(alias = "GST_DISCOVERER_ERROR")]
     Error,
+    #[doc(alias = "GST_DISCOVERER_TIMEOUT")]
     Timeout,
+    #[doc(alias = "GST_DISCOVERER_BUSY")]
     Busy,
+    #[doc(alias = "GST_DISCOVERER_MISSING_PLUGINS")]
     MissingPlugins,
     #[doc(hidden)]
     __Unknown(i32),

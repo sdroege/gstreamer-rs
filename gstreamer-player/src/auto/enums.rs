@@ -13,10 +13,15 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPlayerColorBalanceType")]
 pub enum PlayerColorBalanceType {
+    #[doc(alias = "GST_PLAYER_COLOR_BALANCE_HUE")]
     Hue,
+    #[doc(alias = "GST_PLAYER_COLOR_BALANCE_BRIGHTNESS")]
     Brightness,
+    #[doc(alias = "GST_PLAYER_COLOR_BALANCE_SATURATION")]
     Saturation,
+    #[doc(alias = "GST_PLAYER_COLOR_BALANCE_CONTRAST")]
     Contrast,
     #[doc(hidden)]
     __Unknown(i32),
@@ -85,7 +90,9 @@ impl SetValue for PlayerColorBalanceType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPlayerError")]
 pub enum PlayerError {
+    #[doc(alias = "GST_PLAYER_ERROR_FAILED")]
     Failed,
     #[doc(hidden)]
     __Unknown(i32),
@@ -168,11 +175,17 @@ impl SetValue for PlayerError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPlayerSnapshotFormat")]
 pub enum PlayerSnapshotFormat {
+    #[doc(alias = "GST_PLAYER_THUMBNAIL_RAW_NATIVE")]
     RawNative,
+    #[doc(alias = "GST_PLAYER_THUMBNAIL_RAW_xRGB")]
     RawXrgb,
+    #[doc(alias = "GST_PLAYER_THUMBNAIL_RAW_BGRx")]
     RawBgrx,
+    #[doc(alias = "GST_PLAYER_THUMBNAIL_JPG")]
     Jpg,
+    #[doc(alias = "GST_PLAYER_THUMBNAIL_PNG")]
     Png,
     #[doc(hidden)]
     __Unknown(i32),
@@ -211,10 +224,15 @@ impl FromGlib<ffi::GstPlayerSnapshotFormat> for PlayerSnapshotFormat {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPlayerState")]
 pub enum PlayerState {
+    #[doc(alias = "GST_PLAYER_STATE_STOPPED")]
     Stopped,
+    #[doc(alias = "GST_PLAYER_STATE_BUFFERING")]
     Buffering,
+    #[doc(alias = "GST_PLAYER_STATE_PAUSED")]
     Paused,
+    #[doc(alias = "GST_PLAYER_STATE_PLAYING")]
     Playing,
     #[doc(hidden)]
     __Unknown(i32),

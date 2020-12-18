@@ -15,9 +15,13 @@ use std::fmt;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoAFDSpec")]
 pub enum VideoAFDSpec {
+    #[doc(alias = "GST_VIDEO_AFD_SPEC_DVB_ETSI")]
     DvbEtsi,
+    #[doc(alias = "GST_VIDEO_AFD_SPEC_ATSC_A53")]
     AtscA53,
+    #[doc(alias = "GST_VIDEO_AFD_SPEC_SMPTE_ST2016_1")]
     SmpteSt20161,
     #[doc(hidden)]
     __Unknown(i32),
@@ -90,17 +94,29 @@ impl SetValue for VideoAFDSpec {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoAFDValue")]
 pub enum VideoAFDValue {
+    #[doc(alias = "GST_VIDEO_AFD_UNAVAILABLE")]
     Unavailable,
+    #[doc(alias = "GST_VIDEO_AFD_16_9_TOP_ALIGNED")]
     _169TopAligned,
+    #[doc(alias = "GST_VIDEO_AFD_14_9_TOP_ALIGNED")]
     _149TopAligned,
+    #[doc(alias = "GST_VIDEO_AFD_GREATER_THAN_16_9")]
     GreaterThan169,
+    #[doc(alias = "GST_VIDEO_AFD_4_3_FULL_16_9_FULL")]
     _43Full169Full,
+    #[doc(alias = "GST_VIDEO_AFD_4_3_FULL_4_3_PILLAR")]
     _43Full43Pillar,
+    #[doc(alias = "GST_VIDEO_AFD_16_9_LETTER_16_9_FULL")]
     _169Letter169Full,
+    #[doc(alias = "GST_VIDEO_AFD_14_9_LETTER_14_9_PILLAR")]
     _149Letter149Pillar,
+    #[doc(alias = "GST_VIDEO_AFD_4_3_FULL_14_9_CENTER")]
     _43Full149Center,
+    #[doc(alias = "GST_VIDEO_AFD_16_9_LETTER_14_9_CENTER")]
     _169Letter149Center,
+    #[doc(alias = "GST_VIDEO_AFD_16_9_LETTER_4_3_CENTER")]
     _169Letter43Center,
     #[doc(hidden)]
     __Unknown(i32),
@@ -187,9 +203,13 @@ impl SetValue for VideoAFDValue {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoAlphaMode")]
 pub enum VideoAlphaMode {
+    #[doc(alias = "GST_VIDEO_ALPHA_MODE_COPY")]
     Copy,
+    #[doc(alias = "GST_VIDEO_ALPHA_MODE_SET")]
     Set,
+    #[doc(alias = "GST_VIDEO_ALPHA_MODE_MULT")]
     Mult,
     #[doc(hidden)]
     __Unknown(i32),
@@ -250,11 +270,17 @@ impl SetValue for VideoAlphaMode {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoCaptionType")]
 pub enum VideoCaptionType {
+    #[doc(alias = "GST_VIDEO_CAPTION_TYPE_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_VIDEO_CAPTION_TYPE_CEA608_RAW")]
     Cea608Raw,
+    #[doc(alias = "GST_VIDEO_CAPTION_TYPE_CEA608_S334_1A")]
     Cea608S3341a,
+    #[doc(alias = "GST_VIDEO_CAPTION_TYPE_CEA708_RAW")]
     Cea708Raw,
+    #[doc(alias = "GST_VIDEO_CAPTION_TYPE_CEA708_CDP")]
     Cea708Cdp,
     #[doc(hidden)]
     __Unknown(i32),
@@ -349,10 +375,15 @@ impl SetValue for VideoCaptionType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoChromaMode")]
 pub enum VideoChromaMode {
+    #[doc(alias = "GST_VIDEO_CHROMA_MODE_FULL")]
     Full,
+    #[doc(alias = "GST_VIDEO_CHROMA_MODE_UPSAMPLE_ONLY")]
     UpsampleOnly,
+    #[doc(alias = "GST_VIDEO_CHROMA_MODE_DOWNSAMPLE_ONLY")]
     DownsampleOnly,
+    #[doc(alias = "GST_VIDEO_CHROMA_MODE_NONE")]
     None,
     #[doc(hidden)]
     __Unknown(i32),
@@ -413,13 +444,21 @@ impl SetValue for VideoChromaMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoColorMatrix")]
 pub enum VideoColorMatrix {
+    #[doc(alias = "GST_VIDEO_COLOR_MATRIX_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_VIDEO_COLOR_MATRIX_RGB")]
     Rgb,
+    #[doc(alias = "GST_VIDEO_COLOR_MATRIX_FCC")]
     Fcc,
+    #[doc(alias = "GST_VIDEO_COLOR_MATRIX_BT709")]
     Bt709,
+    #[doc(alias = "GST_VIDEO_COLOR_MATRIX_BT601")]
     Bt601,
+    #[doc(alias = "GST_VIDEO_COLOR_MATRIX_SMPTE240M")]
     Smpte240m,
+    #[doc(alias = "GST_VIDEO_COLOR_MATRIX_BT2020")]
     Bt2020,
     #[doc(hidden)]
     __Unknown(i32),
@@ -504,27 +543,41 @@ impl SetValue for VideoColorMatrix {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoColorPrimaries")]
 pub enum VideoColorPrimaries {
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_BT709")]
     Bt709,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_BT470M")]
     Bt470m,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_BT470BG")]
     Bt470bg,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTE170M")]
     Smpte170m,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTE240M")]
     Smpte240m,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_FILM")]
     Film,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_BT2020")]
     Bt2020,
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_ADOBERGB")]
     Adobergb,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTEST428")]
     Smptest428,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTERP431")]
     Smpterp431,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432")]
     Smpteeg432,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_COLOR_PRIMARIES_EBU3213")]
     Ebu3213,
     #[doc(hidden)]
     __Unknown(i32),
@@ -634,11 +687,17 @@ impl SetValue for VideoColorPrimaries {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoDitherMethod")]
 pub enum VideoDitherMethod {
+    #[doc(alias = "GST_VIDEO_DITHER_NONE")]
     None,
+    #[doc(alias = "GST_VIDEO_DITHER_VERTERR")]
     Verterr,
+    #[doc(alias = "GST_VIDEO_DITHER_FLOYD_STEINBERG")]
     FloydSteinberg,
+    #[doc(alias = "GST_VIDEO_DITHER_SIERRA_LITE")]
     SierraLite,
+    #[doc(alias = "GST_VIDEO_DITHER_BAYER")]
     Bayer,
     #[doc(hidden)]
     __Unknown(i32),
@@ -703,9 +762,13 @@ impl SetValue for VideoDitherMethod {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoFieldOrder")]
 pub enum VideoFieldOrder {
+    #[doc(alias = "GST_VIDEO_FIELD_ORDER_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST")]
     TopFieldFirst,
+    #[doc(alias = "GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST")]
     BottomFieldFirst,
     #[doc(hidden)]
     __Unknown(i32),
@@ -801,181 +864,281 @@ impl SetValue for VideoFieldOrder {
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoFormat")]
 pub enum VideoFormat {
+    #[doc(alias = "GST_VIDEO_FORMAT_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_VIDEO_FORMAT_ENCODED")]
     Encoded,
+    #[doc(alias = "GST_VIDEO_FORMAT_I420")]
     I420,
+    #[doc(alias = "GST_VIDEO_FORMAT_YV12")]
     Yv12,
+    #[doc(alias = "GST_VIDEO_FORMAT_YUY2")]
     Yuy2,
+    #[doc(alias = "GST_VIDEO_FORMAT_UYVY")]
     Uyvy,
+    #[doc(alias = "GST_VIDEO_FORMAT_AYUV")]
     Ayuv,
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBx")]
     Rgbx,
+    #[doc(alias = "GST_VIDEO_FORMAT_BGRx")]
     Bgrx,
+    #[doc(alias = "GST_VIDEO_FORMAT_xRGB")]
     Xrgb,
+    #[doc(alias = "GST_VIDEO_FORMAT_xBGR")]
     Xbgr,
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBA")]
     Rgba,
+    #[doc(alias = "GST_VIDEO_FORMAT_BGRA")]
     Bgra,
+    #[doc(alias = "GST_VIDEO_FORMAT_ARGB")]
     Argb,
+    #[doc(alias = "GST_VIDEO_FORMAT_ABGR")]
     Abgr,
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB")]
     Rgb,
+    #[doc(alias = "GST_VIDEO_FORMAT_BGR")]
     Bgr,
+    #[doc(alias = "GST_VIDEO_FORMAT_Y41B")]
     Y41b,
+    #[doc(alias = "GST_VIDEO_FORMAT_Y42B")]
     Y42b,
+    #[doc(alias = "GST_VIDEO_FORMAT_YVYU")]
     Yvyu,
+    #[doc(alias = "GST_VIDEO_FORMAT_Y444")]
     Y444,
+    #[doc(alias = "GST_VIDEO_FORMAT_v210")]
     V210,
+    #[doc(alias = "GST_VIDEO_FORMAT_v216")]
     V216,
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12")]
     Nv12,
+    #[doc(alias = "GST_VIDEO_FORMAT_NV21")]
     Nv21,
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY8")]
     Gray8,
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY16_BE")]
     Gray16Be,
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY16_LE")]
     Gray16Le,
+    #[doc(alias = "GST_VIDEO_FORMAT_v308")]
     V308,
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB16")]
     Rgb16,
+    #[doc(alias = "GST_VIDEO_FORMAT_BGR16")]
     Bgr16,
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB15")]
     Rgb15,
+    #[doc(alias = "GST_VIDEO_FORMAT_BGR15")]
     Bgr15,
+    #[doc(alias = "GST_VIDEO_FORMAT_UYVP")]
     Uyvp,
+    #[doc(alias = "GST_VIDEO_FORMAT_A420")]
     A420,
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB8P")]
     Rgb8p,
+    #[doc(alias = "GST_VIDEO_FORMAT_YUV9")]
     Yuv9,
+    #[doc(alias = "GST_VIDEO_FORMAT_YVU9")]
     Yvu9,
+    #[doc(alias = "GST_VIDEO_FORMAT_IYU1")]
     Iyu1,
+    #[doc(alias = "GST_VIDEO_FORMAT_ARGB64")]
     Argb64,
+    #[doc(alias = "GST_VIDEO_FORMAT_AYUV64")]
     Ayuv64,
+    #[doc(alias = "GST_VIDEO_FORMAT_r210")]
     R210,
+    #[doc(alias = "GST_VIDEO_FORMAT_I420_10BE")]
     I42010be,
+    #[doc(alias = "GST_VIDEO_FORMAT_I420_10LE")]
     I42010le,
+    #[doc(alias = "GST_VIDEO_FORMAT_I422_10BE")]
     I42210be,
+    #[doc(alias = "GST_VIDEO_FORMAT_I422_10LE")]
     I42210le,
+    #[doc(alias = "GST_VIDEO_FORMAT_Y444_10BE")]
     Y44410be,
+    #[doc(alias = "GST_VIDEO_FORMAT_Y444_10LE")]
     Y44410le,
+    #[doc(alias = "GST_VIDEO_FORMAT_GBR")]
     Gbr,
+    #[doc(alias = "GST_VIDEO_FORMAT_GBR_10BE")]
     Gbr10be,
+    #[doc(alias = "GST_VIDEO_FORMAT_GBR_10LE")]
     Gbr10le,
+    #[doc(alias = "GST_VIDEO_FORMAT_NV16")]
     Nv16,
+    #[doc(alias = "GST_VIDEO_FORMAT_NV24")]
     Nv24,
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_64Z32")]
     Nv1264z32,
+    #[doc(alias = "GST_VIDEO_FORMAT_A420_10BE")]
     A42010be,
+    #[doc(alias = "GST_VIDEO_FORMAT_A420_10LE")]
     A42010le,
+    #[doc(alias = "GST_VIDEO_FORMAT_A422_10BE")]
     A42210be,
+    #[doc(alias = "GST_VIDEO_FORMAT_A422_10LE")]
     A42210le,
+    #[doc(alias = "GST_VIDEO_FORMAT_A444_10BE")]
     A44410be,
+    #[doc(alias = "GST_VIDEO_FORMAT_A444_10LE")]
     A44410le,
+    #[doc(alias = "GST_VIDEO_FORMAT_NV61")]
     Nv61,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_P010_10BE")]
     P01010be,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_P010_10LE")]
     P01010le,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_IYU2")]
     Iyu2,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_VYUY")]
     Vyuy,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GBRA")]
     Gbra,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GBRA_10BE")]
     Gbra10be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GBRA_10LE")]
     Gbra10le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GBR_12BE")]
     Gbr12be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GBR_12LE")]
     Gbr12le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GBRA_12BE")]
     Gbra12be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GBRA_12LE")]
     Gbra12le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_I420_12BE")]
     I42012be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_I420_12LE")]
     I42012le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_I422_12BE")]
     I42212be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_I422_12LE")]
     I42212le,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y444_12BE")]
     Y44412be,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y444_12LE")]
     Y44412le,
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY10_LE32")]
     Gray10Le32,
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_10LE32")]
     Nv1210le32,
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV16_10LE32")]
     Nv1610le32,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_10LE40")]
     Nv1210le40,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y210")]
     Y210,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y410")]
     Y410,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_VUYA")]
     Vuya,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_BGR10A2_LE")]
     Bgr10a2Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB10A2_LE")]
     Rgb10a2Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y444_16BE")]
     Y44416be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y444_16LE")]
     Y44416le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_P016_BE")]
     P016Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_P016_LE")]
     P016Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_P012_BE")]
     P012Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_P012_LE")]
     P012Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y212_BE")]
     Y212Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y212_LE")]
     Y212Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y412_BE")]
     Y412Be,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y412_LE")]
     Y412Le,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_4L4")]
     Nv124l4,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_NV12_32L32")]
     Nv1232l32,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1334,8 +1497,11 @@ impl SetValue for VideoFormat {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoGammaMode")]
 pub enum VideoGammaMode {
+    #[doc(alias = "GST_VIDEO_GAMMA_MODE_NONE")]
     None,
+    #[doc(alias = "GST_VIDEO_GAMMA_MODE_REMAP")]
     Remap,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1392,13 +1558,19 @@ impl SetValue for VideoGammaMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoInterlaceMode")]
 pub enum VideoInterlaceMode {
+    #[doc(alias = "GST_VIDEO_INTERLACE_MODE_PROGRESSIVE")]
     Progressive,
+    #[doc(alias = "GST_VIDEO_INTERLACE_MODE_INTERLEAVED")]
     Interleaved,
+    #[doc(alias = "GST_VIDEO_INTERLACE_MODE_MIXED")]
     Mixed,
+    #[doc(alias = "GST_VIDEO_INTERLACE_MODE_FIELDS")]
     Fields,
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "GST_VIDEO_INTERLACE_MODE_ALTERNATE")]
     Alternate,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1494,10 +1666,15 @@ impl SetValue for VideoInterlaceMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoMatrixMode")]
 pub enum VideoMatrixMode {
+    #[doc(alias = "GST_VIDEO_MATRIX_MODE_FULL")]
     Full,
+    #[doc(alias = "GST_VIDEO_MATRIX_MODE_INPUT_ONLY")]
     InputOnly,
+    #[doc(alias = "GST_VIDEO_MATRIX_MODE_OUTPUT_ONLY")]
     OutputOnly,
+    #[doc(alias = "GST_VIDEO_MATRIX_MODE_NONE")]
     None,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1558,16 +1735,27 @@ impl SetValue for VideoMatrixMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoMultiviewFramePacking")]
 pub enum VideoMultiviewFramePacking {
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE")]
     None,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO")]
     Mono,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT")]
     Left,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_RIGHT")]
     Right,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE")]
     SideBySide,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE_QUINCUNX")]
     SideBySideQuincunx,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_COLUMN_INTERLEAVED")]
     ColumnInterleaved,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_ROW_INTERLEAVED")]
     RowInterleaved,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_TOP_BOTTOM")]
     TopBottom,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_FRAME_PACKING_CHECKERBOARD")]
     Checkerboard,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1652,19 +1840,33 @@ impl SetValue for VideoMultiviewFramePacking {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoMultiviewMode")]
 pub enum VideoMultiviewMode {
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_NONE")]
     None,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_MONO")]
     Mono,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_LEFT")]
     Left,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_RIGHT")]
     Right,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE")]
     SideBySide,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE_QUINCUNX")]
     SideBySideQuincunx,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_COLUMN_INTERLEAVED")]
     ColumnInterleaved,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_ROW_INTERLEAVED")]
     RowInterleaved,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_TOP_BOTTOM")]
     TopBottom,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_CHECKERBOARD")]
     Checkerboard,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_FRAME_BY_FRAME")]
     FrameByFrame,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_MULTIVIEW_FRAME_BY_FRAME")]
     MultiviewFrameByFrame,
+    #[doc(alias = "GST_VIDEO_MULTIVIEW_MODE_SEPARATED")]
     Separated,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1767,9 +1969,13 @@ impl SetValue for VideoMultiviewMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoPrimariesMode")]
 pub enum VideoPrimariesMode {
+    #[doc(alias = "GST_VIDEO_PRIMARIES_MODE_NONE")]
     None,
+    #[doc(alias = "GST_VIDEO_PRIMARIES_MODE_MERGE_ONLY")]
     MergeOnly,
+    #[doc(alias = "GST_VIDEO_PRIMARIES_MODE_FAST")]
     Fast,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1828,11 +2034,17 @@ impl SetValue for VideoPrimariesMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoResamplerMethod")]
 pub enum VideoResamplerMethod {
+    #[doc(alias = "GST_VIDEO_RESAMPLER_METHOD_NEAREST")]
     Nearest,
+    #[doc(alias = "GST_VIDEO_RESAMPLER_METHOD_LINEAR")]
     Linear,
+    #[doc(alias = "GST_VIDEO_RESAMPLER_METHOD_CUBIC")]
     Cubic,
+    #[doc(alias = "GST_VIDEO_RESAMPLER_METHOD_SINC")]
     Sinc,
+    #[doc(alias = "GST_VIDEO_RESAMPLER_METHOD_LANCZOS")]
     Lanczos,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1895,11 +2107,15 @@ impl SetValue for VideoResamplerMethod {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoTileMode")]
 pub enum VideoTileMode {
+    #[doc(alias = "GST_VIDEO_TILE_MODE_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_VIDEO_TILE_MODE_ZFLIPZ_2X2")]
     Zflipz2x2,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_TILE_MODE_LINEAR")]
     Linear,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1960,31 +2176,49 @@ impl SetValue for VideoTileMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoTransferFunction")]
 pub enum VideoTransferFunction {
+    #[doc(alias = "GST_VIDEO_TRANSFER_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_VIDEO_TRANSFER_GAMMA10")]
     Gamma10,
+    #[doc(alias = "GST_VIDEO_TRANSFER_GAMMA18")]
     Gamma18,
+    #[doc(alias = "GST_VIDEO_TRANSFER_GAMMA20")]
     Gamma20,
+    #[doc(alias = "GST_VIDEO_TRANSFER_GAMMA22")]
     Gamma22,
+    #[doc(alias = "GST_VIDEO_TRANSFER_BT709")]
     Bt709,
+    #[doc(alias = "GST_VIDEO_TRANSFER_SMPTE240M")]
     Smpte240m,
+    #[doc(alias = "GST_VIDEO_TRANSFER_SRGB")]
     Srgb,
+    #[doc(alias = "GST_VIDEO_TRANSFER_GAMMA28")]
     Gamma28,
+    #[doc(alias = "GST_VIDEO_TRANSFER_LOG100")]
     Log100,
+    #[doc(alias = "GST_VIDEO_TRANSFER_LOG316")]
     Log316,
+    #[doc(alias = "GST_VIDEO_TRANSFER_BT2020_12")]
     Bt202012,
+    #[doc(alias = "GST_VIDEO_TRANSFER_ADOBERGB")]
     Adobergb,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_TRANSFER_BT2020_10")]
     Bt202010,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_TRANSFER_SMPTE2084")]
     Smpte2084,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_TRANSFER_ARIB_STD_B67")]
     AribStdB67,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_VIDEO_TRANSFER_BT601")]
     Bt601,
     #[doc(hidden)]
     __Unknown(i32),

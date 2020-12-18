@@ -11,9 +11,13 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPAuthMethod")]
 pub enum RTSPAuthMethod {
+    #[doc(alias = "GST_RTSP_AUTH_NONE")]
     None,
+    #[doc(alias = "GST_RTSP_AUTH_BASIC")]
     Basic,
+    #[doc(alias = "GST_RTSP_AUTH_DIGEST")]
     Digest,
     #[doc(hidden)]
     __Unknown(i32),
@@ -72,9 +76,13 @@ impl SetValue for RTSPAuthMethod {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPFamily")]
 pub enum RTSPFamily {
+    #[doc(alias = "GST_RTSP_FAM_NONE")]
     None,
+    #[doc(alias = "GST_RTSP_FAM_INET")]
     Inet,
+    #[doc(alias = "GST_RTSP_FAM_INET6")]
     Inet6,
     #[doc(hidden)]
     __Unknown(i32),
@@ -133,96 +141,187 @@ impl SetValue for RTSPFamily {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPHeaderField")]
 pub enum RTSPHeaderField {
+    #[doc(alias = "GST_RTSP_HDR_INVALID")]
     Invalid,
+    #[doc(alias = "GST_RTSP_HDR_ACCEPT")]
     Accept,
+    #[doc(alias = "GST_RTSP_HDR_ACCEPT_ENCODING")]
     AcceptEncoding,
+    #[doc(alias = "GST_RTSP_HDR_ACCEPT_LANGUAGE")]
     AcceptLanguage,
+    #[doc(alias = "GST_RTSP_HDR_ALLOW")]
     Allow,
+    #[doc(alias = "GST_RTSP_HDR_AUTHORIZATION")]
     Authorization,
+    #[doc(alias = "GST_RTSP_HDR_BANDWIDTH")]
     Bandwidth,
+    #[doc(alias = "GST_RTSP_HDR_BLOCKSIZE")]
     Blocksize,
+    #[doc(alias = "GST_RTSP_HDR_CACHE_CONTROL")]
     CacheControl,
+    #[doc(alias = "GST_RTSP_HDR_CONFERENCE")]
     Conference,
+    #[doc(alias = "GST_RTSP_HDR_CONNECTION")]
     Connection,
+    #[doc(alias = "GST_RTSP_HDR_CONTENT_BASE")]
     ContentBase,
+    #[doc(alias = "GST_RTSP_HDR_CONTENT_ENCODING")]
     ContentEncoding,
+    #[doc(alias = "GST_RTSP_HDR_CONTENT_LANGUAGE")]
     ContentLanguage,
+    #[doc(alias = "GST_RTSP_HDR_CONTENT_LENGTH")]
     ContentLength,
+    #[doc(alias = "GST_RTSP_HDR_CONTENT_LOCATION")]
     ContentLocation,
+    #[doc(alias = "GST_RTSP_HDR_CONTENT_TYPE")]
     ContentType,
+    #[doc(alias = "GST_RTSP_HDR_CSEQ")]
     Cseq,
+    #[doc(alias = "GST_RTSP_HDR_DATE")]
     Date,
+    #[doc(alias = "GST_RTSP_HDR_EXPIRES")]
     Expires,
+    #[doc(alias = "GST_RTSP_HDR_FROM")]
     From,
+    #[doc(alias = "GST_RTSP_HDR_IF_MODIFIED_SINCE")]
     IfModifiedSince,
+    #[doc(alias = "GST_RTSP_HDR_LAST_MODIFIED")]
     LastModified,
+    #[doc(alias = "GST_RTSP_HDR_PROXY_AUTHENTICATE")]
     ProxyAuthenticate,
+    #[doc(alias = "GST_RTSP_HDR_PROXY_REQUIRE")]
     ProxyRequire,
+    #[doc(alias = "GST_RTSP_HDR_PUBLIC")]
     Public,
+    #[doc(alias = "GST_RTSP_HDR_RANGE")]
     Range,
+    #[doc(alias = "GST_RTSP_HDR_REFERER")]
     Referer,
+    #[doc(alias = "GST_RTSP_HDR_REQUIRE")]
     Require,
+    #[doc(alias = "GST_RTSP_HDR_RETRY_AFTER")]
     RetryAfter,
+    #[doc(alias = "GST_RTSP_HDR_RTP_INFO")]
     RtpInfo,
+    #[doc(alias = "GST_RTSP_HDR_SCALE")]
     Scale,
+    #[doc(alias = "GST_RTSP_HDR_SESSION")]
     Session,
+    #[doc(alias = "GST_RTSP_HDR_SERVER")]
     Server,
+    #[doc(alias = "GST_RTSP_HDR_SPEED")]
     Speed,
+    #[doc(alias = "GST_RTSP_HDR_TRANSPORT")]
     Transport,
+    #[doc(alias = "GST_RTSP_HDR_UNSUPPORTED")]
     Unsupported,
+    #[doc(alias = "GST_RTSP_HDR_USER_AGENT")]
     UserAgent,
+    #[doc(alias = "GST_RTSP_HDR_VIA")]
     Via,
+    #[doc(alias = "GST_RTSP_HDR_WWW_AUTHENTICATE")]
     WwwAuthenticate,
+    #[doc(alias = "GST_RTSP_HDR_CLIENT_CHALLENGE")]
     ClientChallenge,
+    #[doc(alias = "GST_RTSP_HDR_REAL_CHALLENGE1")]
     RealChallenge1,
+    #[doc(alias = "GST_RTSP_HDR_REAL_CHALLENGE2")]
     RealChallenge2,
+    #[doc(alias = "GST_RTSP_HDR_REAL_CHALLENGE3")]
     RealChallenge3,
+    #[doc(alias = "GST_RTSP_HDR_SUBSCRIBE")]
     Subscribe,
+    #[doc(alias = "GST_RTSP_HDR_ALERT")]
     Alert,
+    #[doc(alias = "GST_RTSP_HDR_CLIENT_ID")]
     ClientId,
+    #[doc(alias = "GST_RTSP_HDR_COMPANY_ID")]
     CompanyId,
+    #[doc(alias = "GST_RTSP_HDR_GUID")]
     Guid,
+    #[doc(alias = "GST_RTSP_HDR_REGION_DATA")]
     RegionData,
+    #[doc(alias = "GST_RTSP_HDR_MAX_ASM_WIDTH")]
     MaxAsmWidth,
+    #[doc(alias = "GST_RTSP_HDR_LANGUAGE")]
     Language,
+    #[doc(alias = "GST_RTSP_HDR_PLAYER_START_TIME")]
     PlayerStartTime,
+    #[doc(alias = "GST_RTSP_HDR_LOCATION")]
     Location,
+    #[doc(alias = "GST_RTSP_HDR_ETAG")]
     Etag,
+    #[doc(alias = "GST_RTSP_HDR_IF_MATCH")]
     IfMatch,
+    #[doc(alias = "GST_RTSP_HDR_ACCEPT_CHARSET")]
     AcceptCharset,
+    #[doc(alias = "GST_RTSP_HDR_SUPPORTED")]
     Supported,
+    #[doc(alias = "GST_RTSP_HDR_VARY")]
     Vary,
+    #[doc(alias = "GST_RTSP_HDR_X_ACCELERATE_STREAMING")]
     XAccelerateStreaming,
+    #[doc(alias = "GST_RTSP_HDR_X_ACCEPT_AUTHENT")]
     XAcceptAuthent,
+    #[doc(alias = "GST_RTSP_HDR_X_ACCEPT_PROXY_AUTHENT")]
     XAcceptProxyAuthent,
+    #[doc(alias = "GST_RTSP_HDR_X_BROADCAST_ID")]
     XBroadcastId,
+    #[doc(alias = "GST_RTSP_HDR_X_BURST_STREAMING")]
     XBurstStreaming,
+    #[doc(alias = "GST_RTSP_HDR_X_NOTICE")]
     XNotice,
+    #[doc(alias = "GST_RTSP_HDR_X_PLAYER_LAG_TIME")]
     XPlayerLagTime,
+    #[doc(alias = "GST_RTSP_HDR_X_PLAYLIST")]
     XPlaylist,
+    #[doc(alias = "GST_RTSP_HDR_X_PLAYLIST_CHANGE_NOTICE")]
     XPlaylistChangeNotice,
+    #[doc(alias = "GST_RTSP_HDR_X_PLAYLIST_GEN_ID")]
     XPlaylistGenId,
+    #[doc(alias = "GST_RTSP_HDR_X_PLAYLIST_SEEK_ID")]
     XPlaylistSeekId,
+    #[doc(alias = "GST_RTSP_HDR_X_PROXY_CLIENT_AGENT")]
     XProxyClientAgent,
+    #[doc(alias = "GST_RTSP_HDR_X_PROXY_CLIENT_VERB")]
     XProxyClientVerb,
+    #[doc(alias = "GST_RTSP_HDR_X_RECEDING_PLAYLISTCHANGE")]
     XRecedingPlaylistchange,
+    #[doc(alias = "GST_RTSP_HDR_X_RTP_INFO")]
     XRtpInfo,
+    #[doc(alias = "GST_RTSP_HDR_X_STARTUPPROFILE")]
     XStartupprofile,
+    #[doc(alias = "GST_RTSP_HDR_TIMESTAMP")]
     Timestamp,
+    #[doc(alias = "GST_RTSP_HDR_AUTHENTICATION_INFO")]
     AuthenticationInfo,
+    #[doc(alias = "GST_RTSP_HDR_HOST")]
     Host,
+    #[doc(alias = "GST_RTSP_HDR_PRAGMA")]
     Pragma,
+    #[doc(alias = "GST_RTSP_HDR_X_SERVER_IP_ADDRESS")]
     XServerIpAddress,
+    #[doc(alias = "GST_RTSP_HDR_X_SESSIONCOOKIE")]
     XSessioncookie,
+    #[doc(alias = "GST_RTSP_HDR_RTCP_INTERVAL")]
     RtcpInterval,
+    #[doc(alias = "GST_RTSP_HDR_KEYMGMT")]
     Keymgmt,
+    #[doc(alias = "GST_RTSP_HDR_PIPELINED_REQUESTS")]
     PipelinedRequests,
+    #[doc(alias = "GST_RTSP_HDR_MEDIA_PROPERTIES")]
     MediaProperties,
+    #[doc(alias = "GST_RTSP_HDR_SEEK_STYLE")]
     SeekStyle,
+    #[doc(alias = "GST_RTSP_HDR_ACCEPT_RANGES")]
     AcceptRanges,
+    #[doc(alias = "GST_RTSP_HDR_FRAMES")]
     Frames,
+    #[doc(alias = "GST_RTSP_HDR_RATE_CONTROL")]
     RateControl,
+    #[doc(alias = "GST_RTSP_HDR_LAST")]
     Last,
     #[doc(hidden)]
     __Unknown(i32),
@@ -455,12 +554,19 @@ impl SetValue for RTSPHeaderField {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPMsgType")]
 pub enum RTSPMsgType {
+    #[doc(alias = "GST_RTSP_MESSAGE_INVALID")]
     Invalid,
+    #[doc(alias = "GST_RTSP_MESSAGE_REQUEST")]
     Request,
+    #[doc(alias = "GST_RTSP_MESSAGE_RESPONSE")]
     Response,
+    #[doc(alias = "GST_RTSP_MESSAGE_HTTP_REQUEST")]
     HttpRequest,
+    #[doc(alias = "GST_RTSP_MESSAGE_HTTP_RESPONSE")]
     HttpResponse,
+    #[doc(alias = "GST_RTSP_MESSAGE_DATA")]
     Data,
     #[doc(hidden)]
     __Unknown(i32),
@@ -525,11 +631,17 @@ impl SetValue for RTSPMsgType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPRangeUnit")]
 pub enum RTSPRangeUnit {
+    #[doc(alias = "GST_RTSP_RANGE_SMPTE")]
     Smpte,
+    #[doc(alias = "GST_RTSP_RANGE_SMPTE_30_DROP")]
     Smpte30Drop,
+    #[doc(alias = "GST_RTSP_RANGE_SMPTE_25")]
     Smpte25,
+    #[doc(alias = "GST_RTSP_RANGE_NPT")]
     Npt,
+    #[doc(alias = "GST_RTSP_RANGE_CLOCK")]
     Clock,
     #[doc(hidden)]
     __Unknown(i32),
@@ -592,24 +704,43 @@ impl SetValue for RTSPRangeUnit {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPResult")]
 pub enum RTSPResult {
+    #[doc(alias = "GST_RTSP_OK")]
     Ok,
+    #[doc(alias = "GST_RTSP_ERROR")]
     Error,
+    #[doc(alias = "GST_RTSP_EINVAL")]
     Einval,
+    #[doc(alias = "GST_RTSP_EINTR")]
     Eintr,
+    #[doc(alias = "GST_RTSP_ENOMEM")]
     Enomem,
+    #[doc(alias = "GST_RTSP_ERESOLV")]
     Eresolv,
+    #[doc(alias = "GST_RTSP_ENOTIMPL")]
     Enotimpl,
+    #[doc(alias = "GST_RTSP_ESYS")]
     Esys,
+    #[doc(alias = "GST_RTSP_EPARSE")]
     Eparse,
+    #[doc(alias = "GST_RTSP_EWSASTART")]
     Ewsastart,
+    #[doc(alias = "GST_RTSP_EWSAVERSION")]
     Ewsaversion,
+    #[doc(alias = "GST_RTSP_EEOF")]
     Eeof,
+    #[doc(alias = "GST_RTSP_ENET")]
     Enet,
+    #[doc(alias = "GST_RTSP_ENOTIP")]
     Enotip,
+    #[doc(alias = "GST_RTSP_ETIMEOUT")]
     Etimeout,
+    #[doc(alias = "GST_RTSP_ETGET")]
     Etget,
+    #[doc(alias = "GST_RTSP_ETPOST")]
     Etpost,
+    #[doc(alias = "GST_RTSP_ELAST")]
     Elast,
     #[doc(hidden)]
     __Unknown(i32),
@@ -698,12 +829,19 @@ impl SetValue for RTSPResult {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPState")]
 pub enum RTSPState {
+    #[doc(alias = "GST_RTSP_STATE_INVALID")]
     Invalid,
+    #[doc(alias = "GST_RTSP_STATE_INIT")]
     Init,
+    #[doc(alias = "GST_RTSP_STATE_READY")]
     Ready,
+    #[doc(alias = "GST_RTSP_STATE_SEEKING")]
     Seeking,
+    #[doc(alias = "GST_RTSP_STATE_PLAYING")]
     Playing,
+    #[doc(alias = "GST_RTSP_STATE_RECORDING")]
     Recording,
     #[doc(hidden)]
     __Unknown(i32),
@@ -768,52 +906,99 @@ impl SetValue for RTSPState {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPStatusCode")]
 pub enum RTSPStatusCode {
+    #[doc(alias = "GST_RTSP_STS_INVALID")]
     Invalid,
+    #[doc(alias = "GST_RTSP_STS_CONTINUE")]
     Continue,
+    #[doc(alias = "GST_RTSP_STS_OK")]
     Ok,
+    #[doc(alias = "GST_RTSP_STS_CREATED")]
     Created,
+    #[doc(alias = "GST_RTSP_STS_LOW_ON_STORAGE")]
     LowOnStorage,
+    #[doc(alias = "GST_RTSP_STS_MULTIPLE_CHOICES")]
     MultipleChoices,
+    #[doc(alias = "GST_RTSP_STS_MOVED_PERMANENTLY")]
     MovedPermanently,
+    #[doc(alias = "GST_RTSP_STS_MOVE_TEMPORARILY")]
     MoveTemporarily,
+    #[doc(alias = "GST_RTSP_STS_SEE_OTHER")]
     SeeOther,
+    #[doc(alias = "GST_RTSP_STS_NOT_MODIFIED")]
     NotModified,
+    #[doc(alias = "GST_RTSP_STS_USE_PROXY")]
     UseProxy,
+    #[doc(alias = "GST_RTSP_STS_BAD_REQUEST")]
     BadRequest,
+    #[doc(alias = "GST_RTSP_STS_UNAUTHORIZED")]
     Unauthorized,
+    #[doc(alias = "GST_RTSP_STS_PAYMENT_REQUIRED")]
     PaymentRequired,
+    #[doc(alias = "GST_RTSP_STS_FORBIDDEN")]
     Forbidden,
+    #[doc(alias = "GST_RTSP_STS_NOT_FOUND")]
     NotFound,
+    #[doc(alias = "GST_RTSP_STS_METHOD_NOT_ALLOWED")]
     MethodNotAllowed,
+    #[doc(alias = "GST_RTSP_STS_NOT_ACCEPTABLE")]
     NotAcceptable,
+    #[doc(alias = "GST_RTSP_STS_PROXY_AUTH_REQUIRED")]
     ProxyAuthRequired,
+    #[doc(alias = "GST_RTSP_STS_REQUEST_TIMEOUT")]
     RequestTimeout,
+    #[doc(alias = "GST_RTSP_STS_GONE")]
     Gone,
+    #[doc(alias = "GST_RTSP_STS_LENGTH_REQUIRED")]
     LengthRequired,
+    #[doc(alias = "GST_RTSP_STS_PRECONDITION_FAILED")]
     PreconditionFailed,
+    #[doc(alias = "GST_RTSP_STS_REQUEST_ENTITY_TOO_LARGE")]
     RequestEntityTooLarge,
+    #[doc(alias = "GST_RTSP_STS_REQUEST_URI_TOO_LARGE")]
     RequestUriTooLarge,
+    #[doc(alias = "GST_RTSP_STS_UNSUPPORTED_MEDIA_TYPE")]
     UnsupportedMediaType,
+    #[doc(alias = "GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD")]
     ParameterNotUnderstood,
+    #[doc(alias = "GST_RTSP_STS_CONFERENCE_NOT_FOUND")]
     ConferenceNotFound,
+    #[doc(alias = "GST_RTSP_STS_NOT_ENOUGH_BANDWIDTH")]
     NotEnoughBandwidth,
+    #[doc(alias = "GST_RTSP_STS_SESSION_NOT_FOUND")]
     SessionNotFound,
+    #[doc(alias = "GST_RTSP_STS_METHOD_NOT_VALID_IN_THIS_STATE")]
     MethodNotValidInThisState,
+    #[doc(alias = "GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE")]
     HeaderFieldNotValidForResource,
+    #[doc(alias = "GST_RTSP_STS_INVALID_RANGE")]
     InvalidRange,
+    #[doc(alias = "GST_RTSP_STS_PARAMETER_IS_READONLY")]
     ParameterIsReadonly,
+    #[doc(alias = "GST_RTSP_STS_AGGREGATE_OPERATION_NOT_ALLOWED")]
     AggregateOperationNotAllowed,
+    #[doc(alias = "GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED")]
     OnlyAggregateOperationAllowed,
+    #[doc(alias = "GST_RTSP_STS_UNSUPPORTED_TRANSPORT")]
     UnsupportedTransport,
+    #[doc(alias = "GST_RTSP_STS_DESTINATION_UNREACHABLE")]
     DestinationUnreachable,
+    #[doc(alias = "GST_RTSP_STS_KEY_MANAGEMENT_FAILURE")]
     KeyManagementFailure,
+    #[doc(alias = "GST_RTSP_STS_INTERNAL_SERVER_ERROR")]
     InternalServerError,
+    #[doc(alias = "GST_RTSP_STS_NOT_IMPLEMENTED")]
     NotImplemented,
+    #[doc(alias = "GST_RTSP_STS_BAD_GATEWAY")]
     BadGateway,
+    #[doc(alias = "GST_RTSP_STS_SERVICE_UNAVAILABLE")]
     ServiceUnavailable,
+    #[doc(alias = "GST_RTSP_STS_GATEWAY_TIMEOUT")]
     GatewayTimeout,
+    #[doc(alias = "GST_RTSP_STS_RTSP_VERSION_NOT_SUPPORTED")]
     RtspVersionNotSupported,
+    #[doc(alias = "GST_RTSP_STS_OPTION_NOT_SUPPORTED")]
     OptionNotSupported,
     #[doc(hidden)]
     __Unknown(i32),
@@ -966,11 +1151,17 @@ impl SetValue for RTSPStatusCode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTSPTimeType")]
 pub enum RTSPTimeType {
+    #[doc(alias = "GST_RTSP_TIME_SECONDS")]
     Seconds,
+    #[doc(alias = "GST_RTSP_TIME_NOW")]
     Now,
+    #[doc(alias = "GST_RTSP_TIME_END")]
     End,
+    #[doc(alias = "GST_RTSP_TIME_FRAMES")]
     Frames,
+    #[doc(alias = "GST_RTSP_TIME_UTC")]
     Utc,
     #[doc(hidden)]
     __Unknown(i32),

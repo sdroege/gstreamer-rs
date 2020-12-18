@@ -11,10 +11,15 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstInterpolationMode")]
 pub enum InterpolationMode {
+    #[doc(alias = "GST_INTERPOLATION_MODE_NONE")]
     None,
+    #[doc(alias = "GST_INTERPOLATION_MODE_LINEAR")]
     Linear,
+    #[doc(alias = "GST_INTERPOLATION_MODE_CUBIC")]
     Cubic,
+    #[doc(alias = "GST_INTERPOLATION_MODE_CUBIC_MONOTONIC")]
     CubicMonotonic,
     #[doc(hidden)]
     __Unknown(i32),
@@ -75,11 +80,17 @@ impl SetValue for InterpolationMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstLFOWaveform")]
 pub enum LFOWaveform {
+    #[doc(alias = "GST_LFO_WAVEFORM_SINE")]
     Sine,
+    #[doc(alias = "GST_LFO_WAVEFORM_SQUARE")]
     Square,
+    #[doc(alias = "GST_LFO_WAVEFORM_SAW")]
     Saw,
+    #[doc(alias = "GST_LFO_WAVEFORM_REVERSE_SAW")]
     ReverseSaw,
+    #[doc(alias = "GST_LFO_WAVEFORM_TRIANGLE")]
     Triangle,
     #[doc(hidden)]
     __Unknown(i32),

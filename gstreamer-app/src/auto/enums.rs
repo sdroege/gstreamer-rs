@@ -11,9 +11,13 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstAppStreamType")]
 pub enum AppStreamType {
+    #[doc(alias = "GST_APP_STREAM_TYPE_STREAM")]
     Stream,
+    #[doc(alias = "GST_APP_STREAM_TYPE_SEEKABLE")]
     Seekable,
+    #[doc(alias = "GST_APP_STREAM_TYPE_RANDOM_ACCESS")]
     RandomAccess,
     #[doc(hidden)]
     __Unknown(i32),

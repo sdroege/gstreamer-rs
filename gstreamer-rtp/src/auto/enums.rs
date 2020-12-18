@@ -11,15 +11,25 @@ use glib::Type;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTCPFBType")]
 pub enum RTCPFBType {
+    #[doc(alias = "GST_RTCP_FB_TYPE_INVALID")]
     FbTypeInvalid,
+    #[doc(alias = "GST_RTCP_RTPFB_TYPE_NACK")]
     RtpfbTypeNack,
+    #[doc(alias = "GST_RTCP_RTPFB_TYPE_TMMBR")]
     RtpfbTypeTmmbr,
+    #[doc(alias = "GST_RTCP_RTPFB_TYPE_TMMBN")]
     RtpfbTypeTmmbn,
+    #[doc(alias = "GST_RTCP_RTPFB_TYPE_RTCP_SR_REQ")]
     RtpfbTypeRtcpSrReq,
+    #[doc(alias = "GST_RTCP_RTPFB_TYPE_TWCC")]
     RtpfbTypeTwcc,
+    #[doc(alias = "GST_RTCP_PSFB_TYPE_SLI")]
     PsfbTypeSli,
+    #[doc(alias = "GST_RTCP_PSFB_TYPE_TSTN")]
     PsfbTypeTstn,
+    #[doc(alias = "GST_RTCP_PSFB_TYPE_VBCN")]
     PsfbTypeVbcn,
     #[doc(hidden)]
     __Unknown(i32),
@@ -90,16 +100,27 @@ impl SetValue for RTCPFBType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTCPSDESType")]
 pub enum RTCPSDESType {
+    #[doc(alias = "GST_RTCP_SDES_INVALID")]
     Invalid,
+    #[doc(alias = "GST_RTCP_SDES_END")]
     End,
+    #[doc(alias = "GST_RTCP_SDES_CNAME")]
     Cname,
+    #[doc(alias = "GST_RTCP_SDES_NAME")]
     Name,
+    #[doc(alias = "GST_RTCP_SDES_EMAIL")]
     Email,
+    #[doc(alias = "GST_RTCP_SDES_PHONE")]
     Phone,
+    #[doc(alias = "GST_RTCP_SDES_LOC")]
     Loc,
+    #[doc(alias = "GST_RTCP_SDES_TOOL")]
     Tool,
+    #[doc(alias = "GST_RTCP_SDES_NOTE")]
     Note,
+    #[doc(alias = "GST_RTCP_SDES_PRIV")]
     Priv,
     #[doc(hidden)]
     __Unknown(i32),
@@ -172,15 +193,25 @@ impl SetValue for RTCPSDESType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTCPType")]
 pub enum RTCPType {
+    #[doc(alias = "GST_RTCP_TYPE_INVALID")]
     Invalid,
+    #[doc(alias = "GST_RTCP_TYPE_SR")]
     Sr,
+    #[doc(alias = "GST_RTCP_TYPE_RR")]
     Rr,
+    #[doc(alias = "GST_RTCP_TYPE_SDES")]
     Sdes,
+    #[doc(alias = "GST_RTCP_TYPE_BYE")]
     Bye,
+    #[doc(alias = "GST_RTCP_TYPE_APP")]
     App,
+    #[doc(alias = "GST_RTCP_TYPE_RTPFB")]
     Rtpfb,
+    #[doc(alias = "GST_RTCP_TYPE_PSFB")]
     Psfb,
+    #[doc(alias = "GST_RTCP_TYPE_XR")]
     Xr,
     #[doc(hidden)]
     __Unknown(i32),
@@ -253,14 +284,23 @@ impl SetValue for RTCPType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTCPXRType")]
 pub enum RTCPXRType {
+    #[doc(alias = "GST_RTCP_XR_TYPE_INVALID")]
     Invalid,
+    #[doc(alias = "GST_RTCP_XR_TYPE_LRLE")]
     Lrle,
+    #[doc(alias = "GST_RTCP_XR_TYPE_DRLE")]
     Drle,
+    #[doc(alias = "GST_RTCP_XR_TYPE_PRT")]
     Prt,
+    #[doc(alias = "GST_RTCP_XR_TYPE_RRT")]
     Rrt,
+    #[doc(alias = "GST_RTCP_XR_TYPE_DLRR")]
     Dlrr,
+    #[doc(alias = "GST_RTCP_XR_TYPE_SSUMM")]
     Ssumm,
+    #[doc(alias = "GST_RTCP_XR_TYPE_VOIP_METRICS")]
     VoipMetrics,
     #[doc(hidden)]
     __Unknown(i32),
@@ -341,32 +381,59 @@ impl SetValue for RTCPXRType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTPPayload")]
 pub enum RTPPayload {
+    #[doc(alias = "GST_RTP_PAYLOAD_PCMU")]
     Pcmu,
+    #[doc(alias = "GST_RTP_PAYLOAD_1016")]
     _1016,
+    #[doc(alias = "GST_RTP_PAYLOAD_G721")]
     G721,
+    #[doc(alias = "GST_RTP_PAYLOAD_GSM")]
     Gsm,
+    #[doc(alias = "GST_RTP_PAYLOAD_G723")]
     G723,
+    #[doc(alias = "GST_RTP_PAYLOAD_DVI4_8000")]
     Dvi48000,
+    #[doc(alias = "GST_RTP_PAYLOAD_DVI4_16000")]
     Dvi416000,
+    #[doc(alias = "GST_RTP_PAYLOAD_LPC")]
     Lpc,
+    #[doc(alias = "GST_RTP_PAYLOAD_PCMA")]
     Pcma,
+    #[doc(alias = "GST_RTP_PAYLOAD_G722")]
     G722,
+    #[doc(alias = "GST_RTP_PAYLOAD_L16_STEREO")]
     L16Stereo,
+    #[doc(alias = "GST_RTP_PAYLOAD_L16_MONO")]
     L16Mono,
+    #[doc(alias = "GST_RTP_PAYLOAD_QCELP")]
     Qcelp,
+    #[doc(alias = "GST_RTP_PAYLOAD_CN")]
     Cn,
+    #[doc(alias = "GST_RTP_PAYLOAD_MPA")]
     Mpa,
+    #[doc(alias = "GST_RTP_PAYLOAD_G728")]
     G728,
+    #[doc(alias = "GST_RTP_PAYLOAD_DVI4_11025")]
     Dvi411025,
+    #[doc(alias = "GST_RTP_PAYLOAD_DVI4_22050")]
     Dvi422050,
+    #[doc(alias = "GST_RTP_PAYLOAD_G729")]
     G729,
+    #[doc(alias = "GST_RTP_PAYLOAD_CELLB")]
     Cellb,
+    #[doc(alias = "GST_RTP_PAYLOAD_JPEG")]
     Jpeg,
+    #[doc(alias = "GST_RTP_PAYLOAD_NV")]
     Nv,
+    #[doc(alias = "GST_RTP_PAYLOAD_H261")]
     H261,
+    #[doc(alias = "GST_RTP_PAYLOAD_MPV")]
     Mpv,
+    #[doc(alias = "GST_RTP_PAYLOAD_MP2T")]
     Mp2t,
+    #[doc(alias = "GST_RTP_PAYLOAD_H263")]
     H263,
     #[doc(hidden)]
     __Unknown(i32),
@@ -471,11 +538,17 @@ impl SetValue for RTPPayload {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRTPProfile")]
 pub enum RTPProfile {
+    #[doc(alias = "GST_RTP_PROFILE_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_RTP_PROFILE_AVP")]
     Avp,
+    #[doc(alias = "GST_RTP_PROFILE_SAVP")]
     Savp,
+    #[doc(alias = "GST_RTP_PROFILE_AVPF")]
     Avpf,
+    #[doc(alias = "GST_RTP_PROFILE_SAVPF")]
     Savpf,
     #[doc(hidden)]
     __Unknown(i32),

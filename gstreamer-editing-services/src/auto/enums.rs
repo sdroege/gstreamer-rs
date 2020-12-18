@@ -17,9 +17,13 @@ use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GESEdge")]
 pub enum Edge {
+    #[doc(alias = "GES_EDGE_START")]
     Start,
+    #[doc(alias = "GES_EDGE_END")]
     End,
+    #[doc(alias = "GES_EDGE_NONE")]
     None,
     #[doc(hidden)]
     __Unknown(i32),
@@ -103,11 +107,17 @@ impl SetValue for Edge {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GESEditMode")]
 pub enum EditMode {
+    #[doc(alias = "GES_EDIT_MODE_NORMAL")]
     Normal,
+    #[doc(alias = "GES_EDIT_MODE_RIPPLE")]
     Ripple,
+    #[doc(alias = "GES_EDIT_MODE_ROLL")]
     Roll,
+    #[doc(alias = "GES_EDIT_MODE_TRIM")]
     Trim,
+    #[doc(alias = "GES_EDIT_MODE_SLIDE")]
     Slide,
     #[doc(hidden)]
     __Unknown(i32),

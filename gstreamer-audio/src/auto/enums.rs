@@ -12,37 +12,69 @@ use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstAudioChannelPosition")]
 pub enum AudioChannelPosition {
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_NONE")]
     None,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_MONO")]
     Mono,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_INVALID")]
     Invalid,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT")]
     FrontLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT")]
     FrontRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER")]
     FrontCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_LFE1")]
     Lfe1,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_REAR_LEFT")]
     RearLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_REAR_RIGHT")]
     RearRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER")]
     FrontLeftOfCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER")]
     FrontRightOfCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_REAR_CENTER")]
     RearCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_LFE2")]
     Lfe2,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_SIDE_LEFT")]
     SideLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_SIDE_RIGHT")]
     SideRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_LEFT")]
     TopFrontLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_RIGHT")]
     TopFrontRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_CENTER")]
     TopFrontCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_CENTER")]
     TopCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_REAR_LEFT")]
     TopRearLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_REAR_RIGHT")]
     TopRearRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_LEFT")]
     TopSideLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_RIGHT")]
     TopSideRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_REAR_CENTER")]
     TopRearCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_CENTER")]
     BottomFrontCenter,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_LEFT")]
     BottomFrontLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_RIGHT")]
     BottomFrontRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_WIDE_LEFT")]
     WideLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_WIDE_RIGHT")]
     WideRight,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_SURROUND_LEFT")]
     SurroundLeft,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT")]
     SurroundRight,
     #[doc(hidden)]
     __Unknown(i32),
@@ -169,38 +201,71 @@ impl SetValue for AudioChannelPosition {
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstAudioFormat")]
 pub enum AudioFormat {
+    #[doc(alias = "GST_AUDIO_FORMAT_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_AUDIO_FORMAT_ENCODED")]
     Encoded,
+    #[doc(alias = "GST_AUDIO_FORMAT_S8")]
     S8,
+    #[doc(alias = "GST_AUDIO_FORMAT_U8")]
     U8,
+    #[doc(alias = "GST_AUDIO_FORMAT_S16LE")]
     S16le,
+    #[doc(alias = "GST_AUDIO_FORMAT_S16BE")]
     S16be,
+    #[doc(alias = "GST_AUDIO_FORMAT_U16LE")]
     U16le,
+    #[doc(alias = "GST_AUDIO_FORMAT_U16BE")]
     U16be,
+    #[doc(alias = "GST_AUDIO_FORMAT_S24_32LE")]
     S2432le,
+    #[doc(alias = "GST_AUDIO_FORMAT_S24_32BE")]
     S2432be,
+    #[doc(alias = "GST_AUDIO_FORMAT_U24_32LE")]
     U2432le,
+    #[doc(alias = "GST_AUDIO_FORMAT_U24_32BE")]
     U2432be,
+    #[doc(alias = "GST_AUDIO_FORMAT_S32LE")]
     S32le,
+    #[doc(alias = "GST_AUDIO_FORMAT_S32BE")]
     S32be,
+    #[doc(alias = "GST_AUDIO_FORMAT_U32LE")]
     U32le,
+    #[doc(alias = "GST_AUDIO_FORMAT_U32BE")]
     U32be,
+    #[doc(alias = "GST_AUDIO_FORMAT_S24LE")]
     S24le,
+    #[doc(alias = "GST_AUDIO_FORMAT_S24BE")]
     S24be,
+    #[doc(alias = "GST_AUDIO_FORMAT_U24LE")]
     U24le,
+    #[doc(alias = "GST_AUDIO_FORMAT_U24BE")]
     U24be,
+    #[doc(alias = "GST_AUDIO_FORMAT_S20LE")]
     S20le,
+    #[doc(alias = "GST_AUDIO_FORMAT_S20BE")]
     S20be,
+    #[doc(alias = "GST_AUDIO_FORMAT_U20LE")]
     U20le,
+    #[doc(alias = "GST_AUDIO_FORMAT_U20BE")]
     U20be,
+    #[doc(alias = "GST_AUDIO_FORMAT_S18LE")]
     S18le,
+    #[doc(alias = "GST_AUDIO_FORMAT_S18BE")]
     S18be,
+    #[doc(alias = "GST_AUDIO_FORMAT_U18LE")]
     U18le,
+    #[doc(alias = "GST_AUDIO_FORMAT_U18BE")]
     U18be,
+    #[doc(alias = "GST_AUDIO_FORMAT_F32LE")]
     F32le,
+    #[doc(alias = "GST_AUDIO_FORMAT_F32BE")]
     F32be,
+    #[doc(alias = "GST_AUDIO_FORMAT_F64LE")]
     F64le,
+    #[doc(alias = "GST_AUDIO_FORMAT_F64BE")]
     F64be,
     #[doc(hidden)]
     __Unknown(i32),
@@ -332,8 +397,11 @@ impl SetValue for AudioFormat {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstAudioLayout")]
 pub enum AudioLayout {
+    #[doc(alias = "GST_AUDIO_LAYOUT_INTERLEAVED")]
     Interleaved,
+    #[doc(alias = "GST_AUDIO_LAYOUT_NON_INTERLEAVED")]
     NonInterleaved,
     #[doc(hidden)]
     __Unknown(i32),
@@ -390,27 +458,43 @@ impl SetValue for AudioLayout {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstAudioRingBufferFormatType")]
 pub enum AudioRingBufferFormatType {
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_RAW")]
     Raw,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MU_LAW")]
     MuLaw,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_A_LAW")]
     ALaw,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IMA_ADPCM")]
     ImaAdpcm,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG")]
     Mpeg,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_GSM")]
     Gsm,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IEC958")]
     Iec958,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_AC3")]
     Ac3,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_EAC3")]
     Eac3,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS")]
     Dts,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC")]
     Mpeg2Aac,
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC")]
     Mpeg4Aac,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW")]
     Mpeg2AacRaw,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW")]
     Mpeg4AacRaw,
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
+    #[doc(alias = "GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC")]
     Flac,
     #[doc(hidden)]
     __Unknown(i32),
@@ -503,9 +587,13 @@ impl SetValue for AudioRingBufferFormatType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstStreamVolumeFormat")]
 pub enum StreamVolumeFormat {
+    #[doc(alias = "GST_STREAM_VOLUME_FORMAT_LINEAR")]
     Linear,
+    #[doc(alias = "GST_STREAM_VOLUME_FORMAT_CUBIC")]
     Cubic,
+    #[doc(alias = "GST_STREAM_VOLUME_FORMAT_DB")]
     Db,
     #[doc(hidden)]
     __Unknown(i32),

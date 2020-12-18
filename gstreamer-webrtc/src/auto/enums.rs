@@ -15,10 +15,15 @@ use std::fmt;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCBundlePolicy")]
 pub enum WebRTCBundlePolicy {
+    #[doc(alias = "GST_WEBRTC_BUNDLE_POLICY_NONE")]
     None,
+    #[doc(alias = "GST_WEBRTC_BUNDLE_POLICY_BALANCED")]
     Balanced,
+    #[doc(alias = "GST_WEBRTC_BUNDLE_POLICY_MAX_COMPAT")]
     MaxCompat,
+    #[doc(alias = "GST_WEBRTC_BUNDLE_POLICY_MAX_BUNDLE")]
     MaxBundle,
     #[doc(hidden)]
     __Unknown(i32),
@@ -91,10 +96,15 @@ impl SetValue for WebRTCBundlePolicy {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCDTLSSetup")]
 pub enum WebRTCDTLSSetup {
+    #[doc(alias = "GST_WEBRTC_DTLS_SETUP_NONE")]
     None,
+    #[doc(alias = "GST_WEBRTC_DTLS_SETUP_ACTPASS")]
     Actpass,
+    #[doc(alias = "GST_WEBRTC_DTLS_SETUP_ACTIVE")]
     Active,
+    #[doc(alias = "GST_WEBRTC_DTLS_SETUP_PASSIVE")]
     Passive,
     #[doc(hidden)]
     __Unknown(i32),
@@ -155,11 +165,17 @@ impl SetValue for WebRTCDTLSSetup {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCDTLSTransportState")]
 pub enum WebRTCDTLSTransportState {
+    #[doc(alias = "GST_WEBRTC_DTLS_TRANSPORT_STATE_NEW")]
     New,
+    #[doc(alias = "GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED")]
     Closed,
+    #[doc(alias = "GST_WEBRTC_DTLS_TRANSPORT_STATE_FAILED")]
     Failed,
+    #[doc(alias = "GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING")]
     Connecting,
+    #[doc(alias = "GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED")]
     Connected,
     #[doc(hidden)]
     __Unknown(i32),
@@ -224,11 +240,17 @@ impl SetValue for WebRTCDTLSTransportState {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCDataChannelState")]
 pub enum WebRTCDataChannelState {
+    #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_NEW")]
     New,
+    #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING")]
     Connecting,
+    #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_OPEN")]
     Open,
+    #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_CLOSING")]
     Closing,
+    #[doc(alias = "GST_WEBRTC_DATA_CHANNEL_STATE_CLOSED")]
     Closed,
     #[doc(hidden)]
     __Unknown(i32),
@@ -305,8 +327,11 @@ impl SetValue for WebRTCDataChannelState {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14_1")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCFECType")]
 pub enum WebRTCFECType {
+    #[doc(alias = "GST_WEBRTC_FEC_TYPE_NONE")]
     None,
+    #[doc(alias = "GST_WEBRTC_FEC_TYPE_ULP_RED")]
     UlpRed,
     #[doc(hidden)]
     __Unknown(i32),
@@ -375,8 +400,11 @@ impl SetValue for WebRTCFECType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCICEComponent")]
 pub enum WebRTCICEComponent {
+    #[doc(alias = "GST_WEBRTC_ICE_COMPONENT_RTP")]
     Rtp,
+    #[doc(alias = "GST_WEBRTC_ICE_COMPONENT_RTCP")]
     Rtcp,
     #[doc(hidden)]
     __Unknown(i32),
@@ -433,13 +461,21 @@ impl SetValue for WebRTCICEComponent {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCICEConnectionState")]
 pub enum WebRTCICEConnectionState {
+    #[doc(alias = "GST_WEBRTC_ICE_CONNECTION_STATE_NEW")]
     New,
+    #[doc(alias = "GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING")]
     Checking,
+    #[doc(alias = "GST_WEBRTC_ICE_CONNECTION_STATE_CONNECTED")]
     Connected,
+    #[doc(alias = "GST_WEBRTC_ICE_CONNECTION_STATE_COMPLETED")]
     Completed,
+    #[doc(alias = "GST_WEBRTC_ICE_CONNECTION_STATE_FAILED")]
     Failed,
+    #[doc(alias = "GST_WEBRTC_ICE_CONNECTION_STATE_DISCONNECTED")]
     Disconnected,
+    #[doc(alias = "GST_WEBRTC_ICE_CONNECTION_STATE_CLOSED")]
     Closed,
     #[doc(hidden)]
     __Unknown(i32),
@@ -508,9 +544,13 @@ impl SetValue for WebRTCICEConnectionState {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCICEGatheringState")]
 pub enum WebRTCICEGatheringState {
+    #[doc(alias = "GST_WEBRTC_ICE_GATHERING_STATE_NEW")]
     New,
+    #[doc(alias = "GST_WEBRTC_ICE_GATHERING_STATE_GATHERING")]
     Gathering,
+    #[doc(alias = "GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE")]
     Complete,
     #[doc(hidden)]
     __Unknown(i32),
@@ -569,8 +609,11 @@ impl SetValue for WebRTCICEGatheringState {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCICERole")]
 pub enum WebRTCICERole {
+    #[doc(alias = "GST_WEBRTC_ICE_ROLE_CONTROLLED")]
     Controlled,
+    #[doc(alias = "GST_WEBRTC_ICE_ROLE_CONTROLLING")]
     Controlling,
     #[doc(hidden)]
     __Unknown(i32),
@@ -629,8 +672,11 @@ impl SetValue for WebRTCICERole {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCICETransportPolicy")]
 pub enum WebRTCICETransportPolicy {
+    #[doc(alias = "GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL")]
     All,
+    #[doc(alias = "GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY")]
     Relay,
     #[doc(hidden)]
     __Unknown(i32),
@@ -699,12 +745,19 @@ impl SetValue for WebRTCICETransportPolicy {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCPeerConnectionState")]
 pub enum WebRTCPeerConnectionState {
+    #[doc(alias = "GST_WEBRTC_PEER_CONNECTION_STATE_NEW")]
     New,
+    #[doc(alias = "GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING")]
     Connecting,
+    #[doc(alias = "GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTED")]
     Connected,
+    #[doc(alias = "GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED")]
     Disconnected,
+    #[doc(alias = "GST_WEBRTC_PEER_CONNECTION_STATE_FAILED")]
     Failed,
+    #[doc(alias = "GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED")]
     Closed,
     #[doc(hidden)]
     __Unknown(i32),
@@ -775,10 +828,15 @@ impl SetValue for WebRTCPeerConnectionState {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCPriorityType")]
 pub enum WebRTCPriorityType {
+    #[doc(alias = "GST_WEBRTC_PRIORITY_TYPE_VERY_LOW")]
     VeryLow,
+    #[doc(alias = "GST_WEBRTC_PRIORITY_TYPE_LOW")]
     Low,
+    #[doc(alias = "GST_WEBRTC_PRIORITY_TYPE_MEDIUM")]
     Medium,
+    #[doc(alias = "GST_WEBRTC_PRIORITY_TYPE_HIGH")]
     High,
     #[doc(hidden)]
     __Unknown(i32),
@@ -851,11 +909,17 @@ impl SetValue for WebRTCPriorityType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCRTPTransceiverDirection")]
 pub enum WebRTCRTPTransceiverDirection {
+    #[doc(alias = "GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE")]
     None,
+    #[doc(alias = "GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE")]
     Inactive,
+    #[doc(alias = "GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY")]
     Sendonly,
+    #[doc(alias = "GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_RECVONLY")]
     Recvonly,
+    #[doc(alias = "GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV")]
     Sendrecv,
     #[doc(hidden)]
     __Unknown(i32),
@@ -928,10 +992,15 @@ impl SetValue for WebRTCRTPTransceiverDirection {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCSCTPTransportState")]
 pub enum WebRTCSCTPTransportState {
+    #[doc(alias = "GST_WEBRTC_SCTP_TRANSPORT_STATE_NEW")]
     New,
+    #[doc(alias = "GST_WEBRTC_SCTP_TRANSPORT_STATE_CONNECTING")]
     Connecting,
+    #[doc(alias = "GST_WEBRTC_SCTP_TRANSPORT_STATE_CONNECTED")]
     Connected,
+    #[doc(alias = "GST_WEBRTC_SCTP_TRANSPORT_STATE_CLOSED")]
     Closed,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1004,10 +1073,15 @@ impl SetValue for WebRTCSCTPTransportState {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCSDPType")]
 pub enum WebRTCSDPType {
+    #[doc(alias = "GST_WEBRTC_SDP_TYPE_OFFER")]
     Offer,
+    #[doc(alias = "GST_WEBRTC_SDP_TYPE_PRANSWER")]
     Pranswer,
+    #[doc(alias = "GST_WEBRTC_SDP_TYPE_ANSWER")]
     Answer,
+    #[doc(alias = "GST_WEBRTC_SDP_TYPE_ROLLBACK")]
     Rollback,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1089,12 +1163,19 @@ impl SetValue for WebRTCSDPType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCSignalingState")]
 pub enum WebRTCSignalingState {
+    #[doc(alias = "GST_WEBRTC_SIGNALING_STATE_STABLE")]
     Stable,
+    #[doc(alias = "GST_WEBRTC_SIGNALING_STATE_CLOSED")]
     Closed,
+    #[doc(alias = "GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER")]
     HaveLocalOffer,
+    #[doc(alias = "GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER")]
     HaveRemoteOffer,
+    #[doc(alias = "GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER")]
     HaveLocalPranswer,
+    #[doc(alias = "GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER")]
     HaveRemotePranswer,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1167,20 +1248,35 @@ impl SetValue for WebRTCSignalingState {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstWebRTCStatsType")]
 pub enum WebRTCStatsType {
+    #[doc(alias = "GST_WEBRTC_STATS_CODEC")]
     Codec,
+    #[doc(alias = "GST_WEBRTC_STATS_INBOUND_RTP")]
     InboundRtp,
+    #[doc(alias = "GST_WEBRTC_STATS_OUTBOUND_RTP")]
     OutboundRtp,
+    #[doc(alias = "GST_WEBRTC_STATS_REMOTE_INBOUND_RTP")]
     RemoteInboundRtp,
+    #[doc(alias = "GST_WEBRTC_STATS_REMOTE_OUTBOUND_RTP")]
     RemoteOutboundRtp,
+    #[doc(alias = "GST_WEBRTC_STATS_CSRC")]
     Csrc,
+    #[doc(alias = "GST_WEBRTC_STATS_PEER_CONNECTION")]
     PeerConnection,
+    #[doc(alias = "GST_WEBRTC_STATS_DATA_CHANNEL")]
     DataChannel,
+    #[doc(alias = "GST_WEBRTC_STATS_STREAM")]
     Stream,
+    #[doc(alias = "GST_WEBRTC_STATS_TRANSPORT")]
     Transport,
+    #[doc(alias = "GST_WEBRTC_STATS_CANDIDATE_PAIR")]
     CandidatePair,
+    #[doc(alias = "GST_WEBRTC_STATS_LOCAL_CANDIDATE")]
     LocalCandidate,
+    #[doc(alias = "GST_WEBRTC_STATS_REMOTE_CANDIDATE")]
     RemoteCandidate,
+    #[doc(alias = "GST_WEBRTC_STATS_CERTIFICATE")]
     Certificate,
     #[doc(hidden)]
     __Unknown(i32),

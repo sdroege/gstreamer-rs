@@ -16,10 +16,15 @@ use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstBufferingMode")]
 pub enum BufferingMode {
+    #[doc(alias = "GST_BUFFERING_STREAM")]
     Stream,
+    #[doc(alias = "GST_BUFFERING_DOWNLOAD")]
     Download,
+    #[doc(alias = "GST_BUFFERING_TIMESHIFT")]
     Timeshift,
+    #[doc(alias = "GST_BUFFERING_LIVE")]
     Live,
     #[doc(hidden)]
     __Unknown(i32),
@@ -80,9 +85,13 @@ impl SetValue for BufferingMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstBusSyncReply")]
 pub enum BusSyncReply {
+    #[doc(alias = "GST_BUS_DROP")]
     Drop,
+    #[doc(alias = "GST_BUS_PASS")]
     Pass,
+    #[doc(alias = "GST_BUS_ASYNC")]
     Async,
     #[doc(hidden)]
     __Unknown(i32),
@@ -141,8 +150,11 @@ impl SetValue for BusSyncReply {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstCapsIntersectMode")]
 pub enum CapsIntersectMode {
+    #[doc(alias = "GST_CAPS_INTERSECT_ZIG_ZAG")]
     ZigZag,
+    #[doc(alias = "GST_CAPS_INTERSECT_FIRST")]
     First,
     #[doc(hidden)]
     __Unknown(i32),
@@ -199,8 +211,11 @@ impl SetValue for CapsIntersectMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstClockEntryType")]
 pub enum ClockEntryType {
+    #[doc(alias = "GST_CLOCK_ENTRY_SINGLE")]
     Single,
+    #[doc(alias = "GST_CLOCK_ENTRY_PERIODIC")]
     Periodic,
     #[doc(hidden)]
     __Unknown(i32),
@@ -258,14 +273,23 @@ impl SetValue for ClockEntryType {
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstClockReturn")]
 pub enum ClockReturn {
+    #[doc(alias = "GST_CLOCK_OK")]
     Ok,
+    #[doc(alias = "GST_CLOCK_EARLY")]
     Early,
+    #[doc(alias = "GST_CLOCK_UNSCHEDULED")]
     Unscheduled,
+    #[doc(alias = "GST_CLOCK_BUSY")]
     Busy,
+    #[doc(alias = "GST_CLOCK_BADTIME")]
     Badtime,
+    #[doc(alias = "GST_CLOCK_ERROR")]
     Error,
+    #[doc(alias = "GST_CLOCK_UNSUPPORTED")]
     Unsupported,
+    #[doc(alias = "GST_CLOCK_DONE")]
     Done,
     #[doc(hidden)]
     __Unknown(i32),
@@ -334,12 +358,17 @@ impl SetValue for ClockReturn {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstClockType")]
 pub enum ClockType {
+    #[doc(alias = "GST_CLOCK_TYPE_REALTIME")]
     Realtime,
+    #[doc(alias = "GST_CLOCK_TYPE_MONOTONIC")]
     Monotonic,
+    #[doc(alias = "GST_CLOCK_TYPE_OTHER")]
     Other,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_CLOCK_TYPE_TAI")]
     Tai,
     #[doc(hidden)]
     __Unknown(i32),
@@ -402,21 +431,37 @@ impl SetValue for ClockType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstCoreError")]
 pub enum CoreError {
+    #[doc(alias = "GST_CORE_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "GST_CORE_ERROR_TOO_LAZY")]
     TooLazy,
+    #[doc(alias = "GST_CORE_ERROR_NOT_IMPLEMENTED")]
     NotImplemented,
+    #[doc(alias = "GST_CORE_ERROR_STATE_CHANGE")]
     StateChange,
+    #[doc(alias = "GST_CORE_ERROR_PAD")]
     Pad,
+    #[doc(alias = "GST_CORE_ERROR_THREAD")]
     Thread,
+    #[doc(alias = "GST_CORE_ERROR_NEGOTIATION")]
     Negotiation,
+    #[doc(alias = "GST_CORE_ERROR_EVENT")]
     Event,
+    #[doc(alias = "GST_CORE_ERROR_SEEK")]
     Seek,
+    #[doc(alias = "GST_CORE_ERROR_CAPS")]
     Caps,
+    #[doc(alias = "GST_CORE_ERROR_TAG")]
     Tag,
+    #[doc(alias = "GST_CORE_ERROR_MISSING_PLUGIN")]
     MissingPlugin,
+    #[doc(alias = "GST_CORE_ERROR_CLOCK")]
     Clock,
+    #[doc(alias = "GST_CORE_ERROR_DISABLED")]
     Disabled,
+    #[doc(alias = "GST_CORE_ERROR_NUM_ERRORS")]
     NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
@@ -533,16 +578,27 @@ impl SetValue for CoreError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstDebugLevel")]
 pub enum DebugLevel {
+    #[doc(alias = "GST_LEVEL_NONE")]
     None,
+    #[doc(alias = "GST_LEVEL_ERROR")]
     Error,
+    #[doc(alias = "GST_LEVEL_WARNING")]
     Warning,
+    #[doc(alias = "GST_LEVEL_FIXME")]
     Fixme,
+    #[doc(alias = "GST_LEVEL_INFO")]
     Info,
+    #[doc(alias = "GST_LEVEL_DEBUG")]
     Debug,
+    #[doc(alias = "GST_LEVEL_LOG")]
     Log,
+    #[doc(alias = "GST_LEVEL_TRACE")]
     Trace,
+    #[doc(alias = "GST_LEVEL_MEMDUMP")]
     Memdump,
+    #[doc(alias = "GST_LEVEL_COUNT")]
     Count,
     #[doc(hidden)]
     __Unknown(i32),
@@ -636,46 +692,79 @@ impl SetValue for DebugLevel {
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstEventType")]
 pub enum EventType {
+    #[doc(alias = "GST_EVENT_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_EVENT_FLUSH_START")]
     FlushStart,
+    #[doc(alias = "GST_EVENT_FLUSH_STOP")]
     FlushStop,
+    #[doc(alias = "GST_EVENT_STREAM_START")]
     StreamStart,
+    #[doc(alias = "GST_EVENT_CAPS")]
     Caps,
+    #[doc(alias = "GST_EVENT_SEGMENT")]
     Segment,
+    #[doc(alias = "GST_EVENT_STREAM_COLLECTION")]
     StreamCollection,
+    #[doc(alias = "GST_EVENT_TAG")]
     Tag,
+    #[doc(alias = "GST_EVENT_BUFFERSIZE")]
     Buffersize,
+    #[doc(alias = "GST_EVENT_SINK_MESSAGE")]
     SinkMessage,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "GST_EVENT_STREAM_GROUP_DONE")]
     StreamGroupDone,
+    #[doc(alias = "GST_EVENT_EOS")]
     Eos,
+    #[doc(alias = "GST_EVENT_TOC")]
     Toc,
+    #[doc(alias = "GST_EVENT_PROTECTION")]
     Protection,
+    #[doc(alias = "GST_EVENT_SEGMENT_DONE")]
     SegmentDone,
+    #[doc(alias = "GST_EVENT_GAP")]
     Gap,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_EVENT_INSTANT_RATE_CHANGE")]
     InstantRateChange,
+    #[doc(alias = "GST_EVENT_QOS")]
     Qos,
+    #[doc(alias = "GST_EVENT_SEEK")]
     Seek,
+    #[doc(alias = "GST_EVENT_NAVIGATION")]
     Navigation,
+    #[doc(alias = "GST_EVENT_LATENCY")]
     Latency,
+    #[doc(alias = "GST_EVENT_STEP")]
     Step,
+    #[doc(alias = "GST_EVENT_RECONFIGURE")]
     Reconfigure,
+    #[doc(alias = "GST_EVENT_TOC_SELECT")]
     TocSelect,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "GST_EVENT_SELECT_STREAMS")]
     SelectStreams,
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "GST_EVENT_INSTANT_RATE_SYNC_TIME")]
     InstantRateSyncTime,
+    #[doc(alias = "GST_EVENT_CUSTOM_UPSTREAM")]
     CustomUpstream,
+    #[doc(alias = "GST_EVENT_CUSTOM_DOWNSTREAM")]
     CustomDownstream,
+    #[doc(alias = "GST_EVENT_CUSTOM_DOWNSTREAM_OOB")]
     CustomDownstreamOob,
+    #[doc(alias = "GST_EVENT_CUSTOM_DOWNSTREAM_STICKY")]
     CustomDownstreamSticky,
+    #[doc(alias = "GST_EVENT_CUSTOM_BOTH")]
     CustomBoth,
+    #[doc(alias = "GST_EVENT_CUSTOM_BOTH_OOB")]
     CustomBothOob,
     #[doc(hidden)]
     __Unknown(i32),
@@ -834,19 +923,33 @@ impl SetValue for EventType {
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstFlowReturn")]
 pub enum FlowReturn {
+    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS_2")]
     CustomSuccess2,
+    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS_1")]
     CustomSuccess1,
+    #[doc(alias = "GST_FLOW_CUSTOM_SUCCESS")]
     CustomSuccess,
+    #[doc(alias = "GST_FLOW_OK")]
     Ok,
+    #[doc(alias = "GST_FLOW_NOT_LINKED")]
     NotLinked,
+    #[doc(alias = "GST_FLOW_FLUSHING")]
     Flushing,
+    #[doc(alias = "GST_FLOW_EOS")]
     Eos,
+    #[doc(alias = "GST_FLOW_NOT_NEGOTIATED")]
     NotNegotiated,
+    #[doc(alias = "GST_FLOW_ERROR")]
     Error,
+    #[doc(alias = "GST_FLOW_NOT_SUPPORTED")]
     NotSupported,
+    #[doc(alias = "GST_FLOW_CUSTOM_ERROR")]
     CustomError,
+    #[doc(alias = "GST_FLOW_CUSTOM_ERROR_1")]
     CustomError1,
+    #[doc(alias = "GST_FLOW_CUSTOM_ERROR_2")]
     CustomError2,
     #[doc(hidden)]
     __Unknown(i32),
@@ -926,12 +1029,19 @@ impl SetValue for FlowReturn {
 #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstFormat")]
 pub enum Format {
+    #[doc(alias = "GST_FORMAT_UNDEFINED")]
     Undefined,
+    #[doc(alias = "GST_FORMAT_DEFAULT")]
     Default,
+    #[doc(alias = "GST_FORMAT_BYTES")]
     Bytes,
+    #[doc(alias = "GST_FORMAT_TIME")]
     Time,
+    #[doc(alias = "GST_FORMAT_BUFFERS")]
     Buffers,
+    #[doc(alias = "GST_FORMAT_PERCENT")]
     Percent,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1026,13 +1136,21 @@ impl SetValue for Format {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstLibraryError")]
 pub enum LibraryError {
+    #[doc(alias = "GST_LIBRARY_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "GST_LIBRARY_ERROR_TOO_LAZY")]
     TooLazy,
+    #[doc(alias = "GST_LIBRARY_ERROR_INIT")]
     Init,
+    #[doc(alias = "GST_LIBRARY_ERROR_SHUTDOWN")]
     Shutdown,
+    #[doc(alias = "GST_LIBRARY_ERROR_SETTINGS")]
     Settings,
+    #[doc(alias = "GST_LIBRARY_ERROR_ENCODE")]
     Encode,
+    #[doc(alias = "GST_LIBRARY_ERROR_NUM_ERRORS")]
     NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1125,9 +1243,13 @@ impl SetValue for LibraryError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPadDirection")]
 pub enum PadDirection {
+    #[doc(alias = "GST_PAD_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_PAD_SRC")]
     Src,
+    #[doc(alias = "GST_PAD_SINK")]
     Sink,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1187,13 +1309,21 @@ impl SetValue for PadDirection {
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPadLinkReturn")]
 pub enum PadLinkReturn {
+    #[doc(alias = "GST_PAD_LINK_OK")]
     Ok,
+    #[doc(alias = "GST_PAD_LINK_WRONG_HIERARCHY")]
     WrongHierarchy,
+    #[doc(alias = "GST_PAD_LINK_WAS_LINKED")]
     WasLinked,
+    #[doc(alias = "GST_PAD_LINK_WRONG_DIRECTION")]
     WrongDirection,
+    #[doc(alias = "GST_PAD_LINK_NOFORMAT")]
     Noformat,
+    #[doc(alias = "GST_PAD_LINK_NOSCHED")]
     Nosched,
+    #[doc(alias = "GST_PAD_LINK_REFUSED")]
     Refused,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1260,9 +1390,13 @@ impl SetValue for PadLinkReturn {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPadMode")]
 pub enum PadMode {
+    #[doc(alias = "GST_PAD_MODE_NONE")]
     None,
+    #[doc(alias = "GST_PAD_MODE_PUSH")]
     Push,
+    #[doc(alias = "GST_PAD_MODE_PULL")]
     Pull,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1342,9 +1476,13 @@ impl SetValue for PadMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPadPresence")]
 pub enum PadPresence {
+    #[doc(alias = "GST_PAD_ALWAYS")]
     Always,
+    #[doc(alias = "GST_PAD_SOMETIMES")]
     Sometimes,
+    #[doc(alias = "GST_PAD_REQUEST")]
     Request,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1403,11 +1541,17 @@ impl SetValue for PadPresence {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPadProbeReturn")]
 pub enum PadProbeReturn {
+    #[doc(alias = "GST_PAD_PROBE_DROP")]
     Drop,
+    #[doc(alias = "GST_PAD_PROBE_OK")]
     Ok,
+    #[doc(alias = "GST_PAD_PROBE_REMOVE")]
     Remove,
+    #[doc(alias = "GST_PAD_PROBE_PASS")]
     Pass,
+    #[doc(alias = "GST_PAD_PROBE_HANDLED")]
     Handled,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1470,14 +1614,23 @@ impl SetValue for PadProbeReturn {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstParseError")]
 pub enum ParseError {
+    #[doc(alias = "GST_PARSE_ERROR_SYNTAX")]
     Syntax,
+    #[doc(alias = "GST_PARSE_ERROR_NO_SUCH_ELEMENT")]
     NoSuchElement,
+    #[doc(alias = "GST_PARSE_ERROR_NO_SUCH_PROPERTY")]
     NoSuchProperty,
+    #[doc(alias = "GST_PARSE_ERROR_LINK")]
     Link,
+    #[doc(alias = "GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY")]
     CouldNotSetProperty,
+    #[doc(alias = "GST_PARSE_ERROR_EMPTY_BIN")]
     EmptyBin,
+    #[doc(alias = "GST_PARSE_ERROR_EMPTY")]
     Empty,
+    #[doc(alias = "GST_PARSE_ERROR_DELAYED_LINK")]
     DelayedLink,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1573,9 +1726,13 @@ impl SetValue for ParseError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPluginError")]
 pub enum PluginError {
+    #[doc(alias = "GST_PLUGIN_ERROR_MODULE")]
     Module,
+    #[doc(alias = "GST_PLUGIN_ERROR_DEPENDENCIES")]
     Dependencies,
+    #[doc(alias = "GST_PLUGIN_ERROR_NAME_MISMATCH")]
     NameMismatch,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1656,11 +1813,17 @@ impl SetValue for PluginError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstProgressType")]
 pub enum ProgressType {
+    #[doc(alias = "GST_PROGRESS_TYPE_START")]
     Start,
+    #[doc(alias = "GST_PROGRESS_TYPE_CONTINUE")]
     Continue,
+    #[doc(alias = "GST_PROGRESS_TYPE_COMPLETE")]
     Complete,
+    #[doc(alias = "GST_PROGRESS_TYPE_CANCELED")]
     Canceled,
+    #[doc(alias = "GST_PROGRESS_TYPE_ERROR")]
     Error,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1725,10 +1888,15 @@ impl SetValue for ProgressType {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstPromiseResult")]
 pub enum PromiseResult {
+    #[doc(alias = "GST_PROMISE_RESULT_PENDING")]
     Pending,
+    #[doc(alias = "GST_PROMISE_RESULT_INTERRUPTED")]
     Interrupted,
+    #[doc(alias = "GST_PROMISE_RESULT_REPLIED")]
     Replied,
+    #[doc(alias = "GST_PROMISE_RESULT_EXPIRED")]
     Expired,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1801,9 +1969,13 @@ impl SetValue for PromiseResult {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstQOSType")]
 pub enum QOSType {
+    #[doc(alias = "GST_QOS_TYPE_OVERFLOW")]
     Overflow,
+    #[doc(alias = "GST_QOS_TYPE_UNDERFLOW")]
     Underflow,
+    #[doc(alias = "GST_QOS_TYPE_THROTTLE")]
     Throttle,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1862,10 +2034,15 @@ impl SetValue for QOSType {
 
 #[derive(Debug, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstRank")]
 pub enum Rank {
+    #[doc(alias = "GST_RANK_NONE")]
     None,
+    #[doc(alias = "GST_RANK_MARGINAL")]
     Marginal,
+    #[doc(alias = "GST_RANK_SECONDARY")]
     Secondary,
+    #[doc(alias = "GST_RANK_PRIMARY")]
     Primary,
     #[doc(hidden)]
     __Unknown(i32),
@@ -1926,22 +2103,39 @@ impl SetValue for Rank {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstResourceError")]
 pub enum ResourceError {
+    #[doc(alias = "GST_RESOURCE_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "GST_RESOURCE_ERROR_TOO_LAZY")]
     TooLazy,
+    #[doc(alias = "GST_RESOURCE_ERROR_NOT_FOUND")]
     NotFound,
+    #[doc(alias = "GST_RESOURCE_ERROR_BUSY")]
     Busy,
+    #[doc(alias = "GST_RESOURCE_ERROR_OPEN_READ")]
     OpenRead,
+    #[doc(alias = "GST_RESOURCE_ERROR_OPEN_WRITE")]
     OpenWrite,
+    #[doc(alias = "GST_RESOURCE_ERROR_OPEN_READ_WRITE")]
     OpenReadWrite,
+    #[doc(alias = "GST_RESOURCE_ERROR_CLOSE")]
     Close,
+    #[doc(alias = "GST_RESOURCE_ERROR_READ")]
     Read,
+    #[doc(alias = "GST_RESOURCE_ERROR_WRITE")]
     Write,
+    #[doc(alias = "GST_RESOURCE_ERROR_SEEK")]
     Seek,
+    #[doc(alias = "GST_RESOURCE_ERROR_SYNC")]
     Sync,
+    #[doc(alias = "GST_RESOURCE_ERROR_SETTINGS")]
     Settings,
+    #[doc(alias = "GST_RESOURCE_ERROR_NO_SPACE_LEFT")]
     NoSpaceLeft,
+    #[doc(alias = "GST_RESOURCE_ERROR_NOT_AUTHORIZED")]
     NotAuthorized,
+    #[doc(alias = "GST_RESOURCE_ERROR_NUM_ERRORS")]
     NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2061,9 +2255,13 @@ impl SetValue for ResourceError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstSeekType")]
 pub enum SeekType {
+    #[doc(alias = "GST_SEEK_TYPE_NONE")]
     None,
+    #[doc(alias = "GST_SEEK_TYPE_SET")]
     Set,
+    #[doc(alias = "GST_SEEK_TYPE_END")]
     End,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2122,11 +2320,17 @@ impl SetValue for SeekType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstState")]
 pub enum State {
+    #[doc(alias = "GST_STATE_VOID_PENDING")]
     VoidPending,
+    #[doc(alias = "GST_STATE_NULL")]
     Null,
+    #[doc(alias = "GST_STATE_READY")]
     Ready,
+    #[doc(alias = "GST_STATE_PAUSED")]
     Paused,
+    #[doc(alias = "GST_STATE_PLAYING")]
     Playing,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2189,16 +2393,27 @@ impl SetValue for State {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstStateChange")]
 pub enum StateChange {
+    #[doc(alias = "GST_STATE_CHANGE_NULL_TO_READY")]
     NullToReady,
+    #[doc(alias = "GST_STATE_CHANGE_READY_TO_PAUSED")]
     ReadyToPaused,
+    #[doc(alias = "GST_STATE_CHANGE_PAUSED_TO_PLAYING")]
     PausedToPlaying,
+    #[doc(alias = "GST_STATE_CHANGE_PLAYING_TO_PAUSED")]
     PlayingToPaused,
+    #[doc(alias = "GST_STATE_CHANGE_PAUSED_TO_READY")]
     PausedToReady,
+    #[doc(alias = "GST_STATE_CHANGE_READY_TO_NULL")]
     ReadyToNull,
+    #[doc(alias = "GST_STATE_CHANGE_NULL_TO_NULL")]
     NullToNull,
+    #[doc(alias = "GST_STATE_CHANGE_READY_TO_READY")]
     ReadyToReady,
+    #[doc(alias = "GST_STATE_CHANGE_PAUSED_TO_PAUSED")]
     PausedToPaused,
+    #[doc(alias = "GST_STATE_CHANGE_PLAYING_TO_PLAYING")]
     PlayingToPlaying,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2279,10 +2494,15 @@ impl SetValue for StateChange {
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstStateChangeReturn")]
 pub enum StateChangeReturn {
+    #[doc(alias = "GST_STATE_CHANGE_FAILURE")]
     Failure,
+    #[doc(alias = "GST_STATE_CHANGE_SUCCESS")]
     Success,
+    #[doc(alias = "GST_STATE_CHANGE_ASYNC")]
     Async,
+    #[doc(alias = "GST_STATE_CHANGE_NO_PREROLL")]
     NoPreroll,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2343,20 +2563,35 @@ impl SetValue for StateChangeReturn {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstStreamError")]
 pub enum StreamError {
+    #[doc(alias = "GST_STREAM_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "GST_STREAM_ERROR_TOO_LAZY")]
     TooLazy,
+    #[doc(alias = "GST_STREAM_ERROR_NOT_IMPLEMENTED")]
     NotImplemented,
+    #[doc(alias = "GST_STREAM_ERROR_TYPE_NOT_FOUND")]
     TypeNotFound,
+    #[doc(alias = "GST_STREAM_ERROR_WRONG_TYPE")]
     WrongType,
+    #[doc(alias = "GST_STREAM_ERROR_CODEC_NOT_FOUND")]
     CodecNotFound,
+    #[doc(alias = "GST_STREAM_ERROR_DECODE")]
     Decode,
+    #[doc(alias = "GST_STREAM_ERROR_ENCODE")]
     Encode,
+    #[doc(alias = "GST_STREAM_ERROR_DEMUX")]
     Demux,
+    #[doc(alias = "GST_STREAM_ERROR_MUX")]
     Mux,
+    #[doc(alias = "GST_STREAM_ERROR_FORMAT")]
     Format,
+    #[doc(alias = "GST_STREAM_ERROR_DECRYPT")]
     Decrypt,
+    #[doc(alias = "GST_STREAM_ERROR_DECRYPT_NOKEY")]
     DecryptNokey,
+    #[doc(alias = "GST_STREAM_ERROR_NUM_ERRORS")]
     NumErrors,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2470,13 +2705,21 @@ impl SetValue for StreamError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstStreamStatusType")]
 pub enum StreamStatusType {
+    #[doc(alias = "GST_STREAM_STATUS_TYPE_CREATE")]
     Create,
+    #[doc(alias = "GST_STREAM_STATUS_TYPE_ENTER")]
     Enter,
+    #[doc(alias = "GST_STREAM_STATUS_TYPE_LEAVE")]
     Leave,
+    #[doc(alias = "GST_STREAM_STATUS_TYPE_DESTROY")]
     Destroy,
+    #[doc(alias = "GST_STREAM_STATUS_TYPE_START")]
     Start,
+    #[doc(alias = "GST_STREAM_STATUS_TYPE_PAUSE")]
     Pause,
+    #[doc(alias = "GST_STREAM_STATUS_TYPE_STOP")]
     Stop,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2543,8 +2786,11 @@ impl SetValue for StreamStatusType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstStructureChangeType")]
 pub enum StructureChangeType {
+    #[doc(alias = "GST_STRUCTURE_CHANGE_TYPE_PAD_LINK")]
     Link,
+    #[doc(alias = "GST_STRUCTURE_CHANGE_TYPE_PAD_UNLINK")]
     Unlink,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2601,11 +2847,17 @@ impl SetValue for StructureChangeType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTagFlag")]
 pub enum TagFlag {
+    #[doc(alias = "GST_TAG_FLAG_UNDEFINED")]
     Undefined,
+    #[doc(alias = "GST_TAG_FLAG_META")]
     Meta,
+    #[doc(alias = "GST_TAG_FLAG_ENCODED")]
     Encoded,
+    #[doc(alias = "GST_TAG_FLAG_DECODED")]
     Decoded,
+    #[doc(alias = "GST_TAG_FLAG_COUNT")]
     Count,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2668,14 +2920,23 @@ impl SetValue for TagFlag {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTagMergeMode")]
 pub enum TagMergeMode {
+    #[doc(alias = "GST_TAG_MERGE_UNDEFINED")]
     Undefined,
+    #[doc(alias = "GST_TAG_MERGE_REPLACE_ALL")]
     ReplaceAll,
+    #[doc(alias = "GST_TAG_MERGE_REPLACE")]
     Replace,
+    #[doc(alias = "GST_TAG_MERGE_APPEND")]
     Append,
+    #[doc(alias = "GST_TAG_MERGE_PREPEND")]
     Prepend,
+    #[doc(alias = "GST_TAG_MERGE_KEEP")]
     Keep,
+    #[doc(alias = "GST_TAG_MERGE_KEEP_ALL")]
     KeepAll,
+    #[doc(alias = "GST_TAG_MERGE_COUNT")]
     Count,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2745,8 +3006,11 @@ impl SetValue for TagMergeMode {
 #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTagScope")]
 pub enum TagScope {
+    #[doc(alias = "GST_TAG_SCOPE_STREAM")]
     Stream,
+    #[doc(alias = "GST_TAG_SCOPE_GLOBAL")]
     Global,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2803,9 +3067,13 @@ impl SetValue for TagScope {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTaskState")]
 pub enum TaskState {
+    #[doc(alias = "GST_TASK_STARTED")]
     Started,
+    #[doc(alias = "GST_TASK_STOPPED")]
     Stopped,
+    #[doc(alias = "GST_TASK_PAUSED")]
     Paused,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2865,13 +3133,21 @@ impl SetValue for TaskState {
 #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTocEntryType")]
 pub enum TocEntryType {
+    #[doc(alias = "GST_TOC_ENTRY_TYPE_ANGLE")]
     Angle,
+    #[doc(alias = "GST_TOC_ENTRY_TYPE_VERSION")]
     Version,
+    #[doc(alias = "GST_TOC_ENTRY_TYPE_EDITION")]
     Edition,
+    #[doc(alias = "GST_TOC_ENTRY_TYPE_INVALID")]
     Invalid,
+    #[doc(alias = "GST_TOC_ENTRY_TYPE_TITLE")]
     Title,
+    #[doc(alias = "GST_TOC_ENTRY_TYPE_TRACK")]
     Track,
+    #[doc(alias = "GST_TOC_ENTRY_TYPE_CHAPTER")]
     Chapter,
     #[doc(hidden)]
     __Unknown(i32),
@@ -2953,10 +3229,15 @@ impl SetValue for TocEntryType {
 #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTocLoopType")]
 pub enum TocLoopType {
+    #[doc(alias = "GST_TOC_LOOP_NONE")]
     None,
+    #[doc(alias = "GST_TOC_LOOP_FORWARD")]
     Forward,
+    #[doc(alias = "GST_TOC_LOOP_REVERSE")]
     Reverse,
+    #[doc(alias = "GST_TOC_LOOP_PING_PONG")]
     PingPong,
     #[doc(hidden)]
     __Unknown(i32),
@@ -3018,8 +3299,11 @@ impl SetValue for TocLoopType {
 #[cfg_attr(feature = "ser_de", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTocScope")]
 pub enum TocScope {
+    #[doc(alias = "GST_TOC_SCOPE_GLOBAL")]
     Global,
+    #[doc(alias = "GST_TOC_SCOPE_CURRENT")]
     Current,
     #[doc(hidden)]
     __Unknown(i32),
@@ -3076,12 +3360,19 @@ impl SetValue for TocScope {
 
 #[derive(Debug, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstTypeFindProbability")]
 pub enum TypeFindProbability {
+    #[doc(alias = "GST_TYPE_FIND_NONE")]
     None,
+    #[doc(alias = "GST_TYPE_FIND_MINIMUM")]
     Minimum,
+    #[doc(alias = "GST_TYPE_FIND_POSSIBLE")]
     Possible,
+    #[doc(alias = "GST_TYPE_FIND_LIKELY")]
     Likely,
+    #[doc(alias = "GST_TYPE_FIND_NEARLY_CERTAIN")]
     NearlyCertain,
+    #[doc(alias = "GST_TYPE_FIND_MAXIMUM")]
     Maximum,
     #[doc(hidden)]
     __Unknown(i32),
@@ -3146,10 +3437,15 @@ impl SetValue for TypeFindProbability {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstURIError")]
 pub enum URIError {
+    #[doc(alias = "GST_URI_ERROR_UNSUPPORTED_PROTOCOL")]
     UnsupportedProtocol,
+    #[doc(alias = "GST_URI_ERROR_BAD_URI")]
     BadUri,
+    #[doc(alias = "GST_URI_ERROR_BAD_STATE")]
     BadState,
+    #[doc(alias = "GST_URI_ERROR_BAD_REFERENCE")]
     BadReference,
     #[doc(hidden)]
     __Unknown(i32),
@@ -3233,9 +3529,13 @@ impl SetValue for URIError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstURIType")]
 pub enum URIType {
+    #[doc(alias = "GST_URI_UNKNOWN")]
     Unknown,
+    #[doc(alias = "GST_URI_SINK")]
     Sink,
+    #[doc(alias = "GST_URI_SRC")]
     Src,
     #[doc(hidden)]
     __Unknown(i32),

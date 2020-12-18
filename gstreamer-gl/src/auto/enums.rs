@@ -21,12 +21,19 @@ use std::mem;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLContextError")]
 pub enum GLContextError {
+    #[doc(alias = "GST_GL_CONTEXT_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "GST_GL_CONTEXT_ERROR_WRONG_CONFIG")]
     WrongConfig,
+    #[doc(alias = "GST_GL_CONTEXT_ERROR_WRONG_API")]
     WrongApi,
+    #[doc(alias = "GST_GL_CONTEXT_ERROR_OLD_LIBS")]
     OldLibs,
+    #[doc(alias = "GST_GL_CONTEXT_ERROR_CREATE_CONTEXT")]
     CreateContext,
+    #[doc(alias = "GST_GL_CONTEXT_ERROR_RESOURCE_UNAVAILABLE")]
     ResourceUnavailable,
     #[doc(hidden)]
     __Unknown(i32),
@@ -116,25 +123,45 @@ impl SetValue for GLContextError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLFormat")]
 pub enum GLFormat {
+    #[doc(alias = "GST_GL_LUMINANCE")]
     Luminance,
+    #[doc(alias = "GST_GL_ALPHA")]
     Alpha,
+    #[doc(alias = "GST_GL_LUMINANCE_ALPHA")]
     LuminanceAlpha,
+    #[doc(alias = "GST_GL_RED")]
     Red,
+    #[doc(alias = "GST_GL_R8")]
     R8,
+    #[doc(alias = "GST_GL_RG")]
     Rg,
+    #[doc(alias = "GST_GL_RG8")]
     Rg8,
+    #[doc(alias = "GST_GL_RGB")]
     Rgb,
+    #[doc(alias = "GST_GL_RGB8")]
     Rgb8,
+    #[doc(alias = "GST_GL_RGB565")]
     Rgb565,
+    #[doc(alias = "GST_GL_RGB16")]
     Rgb16,
+    #[doc(alias = "GST_GL_RGBA")]
     Rgba,
+    #[doc(alias = "GST_GL_RGBA8")]
     Rgba8,
+    #[doc(alias = "GST_GL_RGBA16")]
     Rgba16,
+    #[doc(alias = "GST_GL_DEPTH_COMPONENT16")]
     DepthComponent16,
+    #[doc(alias = "GST_GL_DEPTH24_STENCIL8")]
     Depth24Stencil8,
+    #[doc(alias = "GST_GL_RGB10_A2")]
     Rgb10A2,
+    #[doc(alias = "GST_GL_R16")]
     R16,
+    #[doc(alias = "GST_GL_RG16")]
     Rg16,
     #[doc(hidden)]
     __Unknown(i32),
@@ -270,9 +297,13 @@ impl SetValue for GLFormat {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLQueryType")]
 pub enum GLQueryType {
+    #[doc(alias = "GST_GL_QUERY_NONE")]
     None,
+    #[doc(alias = "GST_GL_QUERY_TIME_ELAPSED")]
     TimeElapsed,
+    #[doc(alias = "GST_GL_QUERY_TIMESTAMP")]
     Timestamp,
     #[doc(hidden)]
     __Unknown(i32),
@@ -331,9 +362,13 @@ impl SetValue for GLQueryType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLSLError")]
 pub enum GLSLError {
+    #[doc(alias = "GST_GLSL_ERROR_COMPILE")]
     Compile,
+    #[doc(alias = "GST_GLSL_ERROR_LINK")]
     Link,
+    #[doc(alias = "GST_GLSL_ERROR_PROGRAM")]
     Program,
     #[doc(hidden)]
     __Unknown(i32),
@@ -414,23 +449,41 @@ impl SetValue for GLSLError {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLSLVersion")]
 pub enum GLSLVersion {
+    #[doc(alias = "GST_GLSL_VERSION_NONE")]
     None,
+    #[doc(alias = "GST_GLSL_VERSION_100")]
     _100,
+    #[doc(alias = "GST_GLSL_VERSION_110")]
     _110,
+    #[doc(alias = "GST_GLSL_VERSION_120")]
     _120,
+    #[doc(alias = "GST_GLSL_VERSION_130")]
     _130,
+    #[doc(alias = "GST_GLSL_VERSION_140")]
     _140,
+    #[doc(alias = "GST_GLSL_VERSION_150")]
     _150,
+    #[doc(alias = "GST_GLSL_VERSION_300")]
     _300,
+    #[doc(alias = "GST_GLSL_VERSION_310")]
     _310,
+    #[doc(alias = "GST_GLSL_VERSION_320")]
     _320,
+    #[doc(alias = "GST_GLSL_VERSION_330")]
     _330,
+    #[doc(alias = "GST_GLSL_VERSION_400")]
     _400,
+    #[doc(alias = "GST_GLSL_VERSION_410")]
     _410,
+    #[doc(alias = "GST_GLSL_VERSION_420")]
     _420,
+    #[doc(alias = "GST_GLSL_VERSION_430")]
     _430,
+    #[doc(alias = "GST_GLSL_VERSION_440")]
     _440,
+    #[doc(alias = "GST_GLSL_VERSION_450")]
     _450,
     #[doc(hidden)]
     __Unknown(i32),
@@ -563,9 +616,13 @@ impl SetValue for GLSLVersion {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLStereoDownmix")]
 pub enum GLStereoDownmix {
+    #[doc(alias = "GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS")]
     GreenMagentaDubois,
+    #[doc(alias = "GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS")]
     RedCyanDubois,
+    #[doc(alias = "GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS")]
     AmberBlueDubois,
     #[doc(hidden)]
     __Unknown(i32),
@@ -628,10 +685,15 @@ impl SetValue for GLStereoDownmix {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLTextureTarget")]
 pub enum GLTextureTarget {
+    #[doc(alias = "GST_GL_TEXTURE_TARGET_NONE")]
     None,
+    #[doc(alias = "GST_GL_TEXTURE_TARGET_2D")]
     _2d,
+    #[doc(alias = "GST_GL_TEXTURE_TARGET_RECTANGLE")]
     Rectangle,
+    #[doc(alias = "GST_GL_TEXTURE_TARGET_EXTERNAL_OES")]
     ExternalOes,
     #[doc(hidden)]
     __Unknown(i32),
@@ -728,11 +790,17 @@ impl SetValue for GLTextureTarget {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLUploadReturn")]
 pub enum GLUploadReturn {
+    #[doc(alias = "GST_GL_UPLOAD_DONE")]
     Done,
+    #[doc(alias = "GST_GL_UPLOAD_ERROR")]
     Error,
+    #[doc(alias = "GST_GL_UPLOAD_UNSUPPORTED")]
     Unsupported,
+    #[doc(alias = "GST_GL_UPLOAD_RECONFIGURE")]
     Reconfigure,
+    #[doc(alias = "GST_GL_UPLOAD_UNSHARED_GL_CONTEXT")]
     UnsharedGlContext,
     #[doc(hidden)]
     __Unknown(i32),
@@ -795,9 +863,13 @@ impl SetValue for GLUploadReturn {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstGLWindowError")]
 pub enum GLWindowError {
+    #[doc(alias = "GST_GL_WINDOW_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "GST_GL_WINDOW_ERROR_OLD_LIBS")]
     OldLibs,
+    #[doc(alias = "GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE")]
     ResourceUnavailable,
     #[doc(hidden)]
     __Unknown(i32),

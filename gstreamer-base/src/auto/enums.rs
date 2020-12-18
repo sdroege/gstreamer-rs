@@ -13,9 +13,13 @@ use glib::Type;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstAggregatorStartTimeSelection")]
 pub enum AggregatorStartTimeSelection {
+    #[doc(alias = "GST_AGGREGATOR_START_TIME_SELECTION_ZERO")]
     Zero,
+    #[doc(alias = "GST_AGGREGATOR_START_TIME_SELECTION_FIRST")]
     First,
+    #[doc(alias = "GST_AGGREGATOR_START_TIME_SELECTION_SET")]
     Set,
     #[doc(hidden)]
     __Unknown(i32),
