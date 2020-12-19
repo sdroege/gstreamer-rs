@@ -63,7 +63,7 @@ unsafe impl Sync for VideoTimeCodeInterval {}
 impl PartialEq for VideoTimeCodeInterval {
     fn eq(&self, other: &Self) -> bool {
         self.0.hours == other.0.hours
-            && self.0.minutes == other.0.hours
+            && self.0.minutes == other.0.minutes
             && self.0.seconds == other.0.seconds
             && self.0.frames == other.0.frames
     }
