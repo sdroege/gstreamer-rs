@@ -84,7 +84,7 @@ impl Ord for VideoTimeCodeInterval {
         self.0
             .hours
             .cmp(&other.0.hours)
-            .then_with(|| self.0.minutes.cmp(&other.0.hours))
+            .then_with(|| self.0.minutes.cmp(&other.0.minutes))
             .then_with(|| self.0.seconds.cmp(&other.0.seconds))
             .then_with(|| self.0.frames.cmp(&other.0.frames))
     }
