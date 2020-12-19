@@ -68,8 +68,8 @@ impl VideoTimeCodeInterval {
         self.0.frames
     }
 
-    pub fn set_frames(&mut self, hours: u32) {
-        self.0.frames = hours
+    pub fn set_frames(&mut self, frames: u32) {
+        self.0.frames = frames
     }
 }
 
