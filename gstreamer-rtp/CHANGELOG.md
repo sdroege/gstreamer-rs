@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.6] - 2020-12-20
+### Fixed
+- `VideoTimeCodeInterval`'s `Ord` and `PartialEq` implementations compare
+  against the correct fields now.
+- `SDPMessage::medias_mut()` iterator does not crash any longer.
+
+### Added
+- `PartialEq` and `Eq` implementations on `VideoAlignment`.
+- Alignment API for `VideoMeta` and `get_plane_height()` / `get_plane_size()`.
+- `VideoInfo::align_full()`.
+
 ## [0.16.5] - 2020-11-23
 ### Fixed
 - Make sure to use `$crate` in more macros to allow them to work without
@@ -911,7 +922,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.5...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.6...HEAD
+[0.16.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.5...0.16.6
 [0.16.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.4...0.16.5
 [0.16.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.3...0.16.4
 [0.16.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.16.2...0.16.3
