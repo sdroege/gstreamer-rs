@@ -1064,7 +1064,7 @@ macro_rules! define_iter_mut(
             // example removes the message that was returned here at an earlier time. The compiler
             // would be correct to complain in that case, but we don't provide such a function.
             let message = unsafe {
-                &mut *(&mut self.message as *mut &'a mut SDPMessageRef as *mut SDPMessageRef)
+                &mut *(self.message as *mut SDPMessageRef)
             };
             if self.idx >= self.len {
                 return None;
@@ -1089,7 +1089,7 @@ macro_rules! define_iter_mut(
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             let message = unsafe {
-                &mut *(&mut self.message as *mut &'a mut SDPMessageRef as *mut SDPMessageRef)
+                &mut *(self.message as *mut SDPMessageRef)
             };
             if self.idx == self.len {
                 return None;
@@ -1133,7 +1133,7 @@ define_iter_mut!(
     MediasIterMut,
     &'a mut SDPMediaRef,
     |message: &'a mut SDPMessageRef, idx| message.get_media_mut(idx),
-    |message: &mut SDPMessageRef| message.medias_len()
+    |message: &SDPMessageRef| message.medias_len()
 );
 define_iter!(
     PhonesIter,
