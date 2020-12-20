@@ -5,9 +5,7 @@
 
 // Re-exported for the subclass gst_plugin_define! macro
 pub use ffi;
-#[doc(hidden)]
 pub use glib;
-#[doc(hidden)]
 pub use paste;
 
 use glib::translate::{from_glib, from_glib_full};
@@ -303,6 +301,7 @@ pub const FORMAT_PERCENT_SCALE: u32 = ffi::GST_FORMAT_PERCENT_SCALE as u32;
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
+    #[doc(hidden)]
     pub use glib::prelude::*;
 
     pub use crate::auto::traits::*;

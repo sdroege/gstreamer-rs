@@ -3,6 +3,9 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
+pub use glib;
+pub use gst;
+pub use gst_base;
 
 macro_rules! assert_initialized_main_thread {
     () => {
@@ -107,8 +110,12 @@ pub const VIDEO_DECODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::Cus
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
+    #[doc(hidden)]
     pub use glib::prelude::*;
+    #[doc(hidden)]
     pub use gst::prelude::*;
+    #[doc(hidden)]
+    pub use gst_base::prelude::*;
 
     pub use crate::auto::traits::*;
     pub use crate::video_buffer_pool::VideoBufferPoolConfig;

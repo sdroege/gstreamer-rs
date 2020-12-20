@@ -3,6 +3,11 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
+pub use gio;
+pub use glib;
+pub use gst;
+pub use gst_base;
+pub use gst_pbutils;
 
 use std::sync::Once;
 
@@ -56,9 +61,18 @@ pub use crate::timeline_element::TimelineElementExtManual;
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
-    pub use crate::timeline_element::TimelineElementExtManual;
+    #[doc(hidden)]
+    pub use gio::prelude::*;
+    #[doc(hidden)]
     pub use glib::prelude::*;
+    #[doc(hidden)]
     pub use gst::prelude::*;
+    #[doc(hidden)]
+    pub use gst_base::prelude::*;
+    #[doc(hidden)]
+    pub use gst_pbutils::prelude::*;
+
+    pub use crate::timeline_element::TimelineElementExtManual;
 
     pub use crate::auto::traits::*;
 }

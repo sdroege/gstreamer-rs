@@ -3,6 +3,9 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
+pub use glib;
+pub use gst;
+pub use gst_base;
 
 macro_rules! assert_initialized_main_thread {
     () => {
@@ -55,8 +58,12 @@ pub use crate::audio_encoder::AudioEncoderExtManual;
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
+    #[doc(hidden)]
     pub use glib::prelude::*;
+    #[doc(hidden)]
     pub use gst::prelude::*;
+    #[doc(hidden)]
+    pub use gst_base::prelude::*;
 
     pub use super::audio_decoder::AudioDecoderExtManual;
     pub use super::audio_encoder::AudioEncoderExtManual;

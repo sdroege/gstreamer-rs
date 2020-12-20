@@ -3,6 +3,8 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
+pub use gst;
+pub use gst_video;
 
 macro_rules! skip_assert_initialized {
     () => {};
@@ -34,8 +36,12 @@ mod player_visualization;
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
+    #[doc(hidden)]
     pub use glib::prelude::*;
+    #[doc(hidden)]
     pub use gst::prelude::*;
+    #[doc(hidden)]
+    pub use gst_video::prelude::*;
 
     pub use crate::auto::traits::*;
 }

@@ -36,6 +36,9 @@ pub use self::error::FlowError;
 pub use self::plugin::{MAJOR_VERSION, MINOR_VERSION};
 
 pub mod prelude {
+    #[doc(hidden)]
+    pub use glib::subclass::prelude::*;
+
     pub use super::bin::{BinImpl, BinImplExt};
     pub use super::child_proxy::ChildProxyImpl;
     pub use super::clock::{ClockImpl, ClockImplExt};
@@ -52,7 +55,6 @@ pub mod prelude {
     pub use super::tag_setter::TagSetterImpl;
     pub use super::uri_handler::URIHandlerImpl;
     pub use super::PanicPoison;
-    pub use glib::subclass::prelude::*;
 }
 
 use self::prelude::*;

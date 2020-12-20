@@ -20,6 +20,11 @@ mod aggregator;
 mod aggregator_pad;
 
 pub mod prelude {
+    #[doc(hidden)]
+    pub use glib::subclass::prelude::*;
+    #[doc(hidden)]
+    pub use gst::subclass::prelude::*;
+
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub use super::aggregator::{AggregatorImpl, AggregatorImplExt};

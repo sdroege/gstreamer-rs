@@ -3,6 +3,12 @@
 #![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 pub use ffi;
+pub use gio;
+pub use glib;
+pub use gst;
+pub use gst_net;
+pub use gst_rtsp;
+pub use gst_sdp;
 
 macro_rules! assert_initialized_main_thread {
     () => {
@@ -116,8 +122,18 @@ pub static RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: Lazy<&'static str> = Lazy::new(
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
+    #[doc(hidden)]
+    pub use gio::prelude::*;
+    #[doc(hidden)]
     pub use glib::prelude::*;
+    #[doc(hidden)]
     pub use gst::prelude::*;
+    #[doc(hidden)]
+    pub use gst_net::prelude::*;
+    #[doc(hidden)]
+    pub use gst_rtsp::prelude::*;
+    #[doc(hidden)]
+    pub use gst_sdp::prelude::*;
 
     pub use crate::auto::traits::*;
 
