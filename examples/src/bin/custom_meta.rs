@@ -3,7 +3,7 @@
 // It simply attaches a GstMeta with a Rust String to buffers that are passed into
 // an appsrc and retrieves them again from an appsink.
 
-use gst::gst_element_error;
+use gst::element_error;
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
@@ -227,7 +227,7 @@ fn example_main() {
                 // Pull the sample in question out of the appsink's buffer.
                 let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
                 let buffer = sample.get_buffer().ok_or_else(|| {
-                    gst_element_error!(
+                    element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to get buffer from appsink")

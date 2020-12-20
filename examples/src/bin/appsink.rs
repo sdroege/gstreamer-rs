@@ -10,7 +10,7 @@
 // This is the format we request:
 // Audio / Signed 16bit / 1 channel / arbitrary sample rate
 
-use gst::gst_element_error;
+use gst::element_error;
 use gst::prelude::*;
 
 use byte_slice_cast::*;
@@ -75,7 +75,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // Pull the sample in question out of the appsink's buffer.
                 let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
                 let buffer = sample.get_buffer().ok_or_else(|| {
-                    gst_element_error!(
+                    element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to get buffer from appsink")
@@ -92,7 +92,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // So mapping the buffer makes the underlying memory region accessible to us.
                 // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
                 let map = buffer.map_readable().map_err(|_| {
-                    gst_element_error!(
+                    element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to map buffer readable")
@@ -105,7 +105,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // it by setting the appsink's caps. So what we do here is interpret the
                 // memory region we mapped as an array of signed 16 bit integers.
                 let samples = map.as_slice_of::<i16>().map_err(|_| {
-                    gst_element_error!(
+                    element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to interprete buffer as S16 PCM")

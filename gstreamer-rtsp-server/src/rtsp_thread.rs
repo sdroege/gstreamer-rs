@@ -2,7 +2,7 @@
 
 use glib::translate::*;
 
-gst::gst_define_mini_object_wrapper!(RTSPThread, RTSPThreadRef, ffi::GstRTSPThread, || {
+gst::mini_object_wrapper!(RTSPThread, RTSPThreadRef, ffi::GstRTSPThread, || {
     ffi::gst_rtsp_thread_get_type()
 });
 

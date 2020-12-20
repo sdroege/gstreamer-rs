@@ -5,7 +5,7 @@ use glib::value::ToSendValue;
 
 use std::fmt;
 
-gst::gst_define_mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {
+gst::mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {
     ffi::gst_rtsp_token_get_type()
 });
 

@@ -5,6 +5,7 @@ use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use gst::subclass::prelude::*;
+use gst::{gst_debug, gst_error};
 
 use std::mem;
 use std::ptr;
@@ -184,7 +185,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `start` failed"]
                         ))
@@ -204,7 +205,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `stop` failed"]
                         ))
@@ -365,7 +366,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                         if buffer_ptr != orig_buffer_ptr {
                             let new_buffer = gst::BufferRef::from_ptr(buffer_ptr);
 
-                            gst::gst_debug!(
+                            gst_debug!(
                                 gst::CAT_PERFORMANCE,
                                 obj: element.unsafe_cast_ref::<BaseSrc>(),
                                 "Returned new buffer from parent create function, copying into passed buffer"
@@ -374,7 +375,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                             let mut map = match passed_buffer.map_writable() {
                                 Ok(map) => map,
                                 Err(_) => {
-                                    gst::gst_error!(
+                                    gst_error!(
                                         gst::CAT_RUST,
                                         obj: element.unsafe_cast_ref::<BaseSrc>(),
                                         "Failed to map passed buffer writable"
@@ -393,7 +394,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                             match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, 0, None) {
                                 Ok(_) => Ok(CreateSuccess::FilledBuffer),
                                 Err(_) => {
-                                    gst::gst_error!(
+                                    gst_error!(
                                         gst::CAT_RUST,
                                         obj: element.unsafe_cast_ref::<BaseSrc>(),
                                         "Failed to copy buffer metadata"
@@ -489,7 +490,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .negotiate
                 .map(|f| {
-                    gst::gst_result_from_gboolean!(
+                    gst::result_from_gboolean!(
                         f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiate` failed"
@@ -510,7 +511,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .set_caps
                 .map(|f| {
-                    gst::gst_result_from_gboolean!(
+                    gst::result_from_gboolean!(
                         f(
                             element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                             caps.to_glib_none().0
@@ -548,7 +549,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::Failed,
                             ["Parent function `unlock` failed"]
                         ))
@@ -568,7 +569,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::Failed,
                             ["Parent function `unlock_stop` failed"]
                         ))
@@ -616,7 +617,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -636,7 +637,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -658,7 +659,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.is_seekable(wrap.unsafe_cast_ref())
     })
     .to_glib()
@@ -675,7 +676,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.get_size(wrap.unsafe_cast_ref()) {
             Some(s) => {
                 *size = s;
@@ -703,7 +704,7 @@ unsafe extern "C" fn base_src_get_times<T: BaseSrcImpl>(
     *start = gst::ffi::GST_CLOCK_TIME_NONE;
     *stop = gst::ffi::GST_CLOCK_TIME_NONE;
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+    gst::panic_to_error!(&wrap, &instance.panicked(), (), {
         let (start_, stop_) = imp.get_times(wrap.unsafe_cast_ref(), buffer);
         *start = start_.to_glib();
         *stop = stop_.to_glib();
@@ -724,7 +725,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.fill(wrap.unsafe_cast_ref(), offset, length, buffer)
             .into()
     })
@@ -747,7 +748,7 @@ where
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.alloc(wrap.unsafe_cast_ref(), offset, length) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();
@@ -781,7 +782,7 @@ where
         Some(gst::BufferRef::from_mut_ptr(*buffer_ptr))
     };
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.create(
             wrap.unsafe_cast_ref(),
             offset,
@@ -791,7 +792,7 @@ where
             Ok(CreateSuccess::NewBuffer(new_buffer)) => {
                 if let Some(passed_buffer) = buffer {
                     if passed_buffer.as_ptr() != new_buffer.as_ptr() {
-                        gst::gst_debug!(
+                        gst_debug!(
                             gst::CAT_PERFORMANCE,
                             obj: &*wrap,
                             "Returned new buffer from create function, copying into passed buffer"
@@ -800,7 +801,7 @@ where
                         let mut map = match passed_buffer.map_writable() {
                             Ok(map) => map,
                             Err(_) => {
-                                gst::gst_error!(
+                                gst_error!(
                                     gst::CAT_RUST,
                                     obj: &*wrap,
                                     "Failed to map passed buffer writable"
@@ -824,7 +825,7 @@ where
                         ) {
                             Ok(_) => gst::FlowReturn::Ok,
                             Err(_) => {
-                                gst::gst_error!(
+                                gst_error!(
                                     gst::CAT_RUST,
                                     obj: &*wrap,
                                     "Failed to copy buffer metadata"
@@ -859,7 +860,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         let mut s = from_glib_none(segment);
         let res = imp.do_seek(wrap.unsafe_cast_ref(), &mut s);
         ptr::write(segment, *(s.to_glib_none().0));
@@ -881,7 +882,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         BaseSrcImpl::query(imp, wrap.unsafe_cast_ref(), query)
     })
     .to_glib()
@@ -898,7 +899,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.event(wrap.unsafe_cast_ref(), &from_glib_borrow(event_ptr))
     })
     .to_glib()
@@ -916,7 +917,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), None, {
         imp.get_caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
     })
     .map(|caps| caps.into_ptr())
@@ -933,7 +934,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -957,7 +958,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let caps = from_glib_borrow(caps);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
@@ -981,7 +982,7 @@ where
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
     let caps = from_glib_full(caps);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         imp.fixate(wrap.unsafe_cast_ref(), caps)
     })
     .into_ptr()
@@ -997,7 +998,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unlock(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -1019,7 +1020,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unlock_stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {

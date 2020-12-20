@@ -914,7 +914,7 @@ pub static ELEMENT_METADATA_LONGNAME: Lazy<&'static str> = Lazy::new(|| unsafe {
 });
 
 #[macro_export]
-macro_rules! gst_element_error(
+macro_rules! element_error(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
         use $crate::ElementExtManual;
         $obj.message_full(
@@ -1069,7 +1069,7 @@ macro_rules! gst_element_error(
 );
 
 #[macro_export]
-macro_rules! gst_element_warning(
+macro_rules! element_warning(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
         use $crate::ElementExtManual;
         $obj.message_full(
@@ -1224,7 +1224,7 @@ macro_rules! gst_element_warning(
 );
 
 #[macro_export]
-macro_rules! gst_element_info(
+macro_rules! element_info(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
         use $crate::ElementExtManual;
         $obj.message_full(

@@ -15,7 +15,7 @@ cfg_if::cfg_if! {
 }
 
 #[macro_export]
-macro_rules! gst_plugin_define(
+macro_rules! plugin_define(
     ($name:ident, $description:expr, $plugin_init:ident,
      $version:expr, $license:expr, $source:expr,
      $package:expr, $origin:expr, $release_datetime:expr) => {

@@ -17,7 +17,7 @@
 // {src} - {typefind} - {demuxer} -|           {multiqueue} - {matroskamux} - {filesink}
 //                                  \-[video]-/
 
-use gst::gst_element_error;
+use gst::element_error;
 use gst::prelude::*;
 
 use std::env;
@@ -221,7 +221,7 @@ fn handle_demux_pad_added(
     };
 
     if let Err(err) = link_to_muxer() {
-        gst_element_error!(
+        element_error!(
             demuxer,
             gst::LibraryError::Failed,
             ("Failed to insert sink"),

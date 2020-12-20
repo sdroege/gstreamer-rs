@@ -29,8 +29,8 @@
 // Especially Windows APIs tend to be quite picky about samplerate and sample-format.
 // The same applies to videostreams.
 
-use gst::gst_element_error;
-use gst::gst_element_warning;
+use gst::element_error;
+use gst::element_warning;
 use gst::prelude::*;
 
 #[cfg(feature = "v1_10")]
@@ -122,7 +122,7 @@ fn example_main() -> Result<(), Error> {
 
             match media_type {
                 None => {
-                    gst_element_warning!(
+                    element_warning!(
                         dbin,
                         gst::CoreError::Negotiation,
                         ("Failed to get media type from pad {}", src_pad.get_name())
@@ -208,7 +208,7 @@ fn example_main() -> Result<(), Error> {
             // The following sends a message of type Error on the bus, containing our detailed
             // error information.
             #[cfg(feature = "v1_10")]
-            gst_element_error!(
+            element_error!(
                 dbin,
                 gst::LibraryError::Failed,
                 ("Failed to insert sink"),
@@ -219,7 +219,7 @@ fn example_main() -> Result<(), Error> {
             );
 
             #[cfg(not(feature = "v1_10"))]
-            gst_element_error!(
+            element_error!(
                 dbin,
                 gst::LibraryError::Failed,
                 ("Failed to insert sink"),

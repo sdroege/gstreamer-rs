@@ -43,12 +43,12 @@ impl<T: BinImpl> BinImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).add_element.ok_or_else(|| {
-                gst_loggable_error!(
+                loggable_error!(
                     crate::CAT_RUST,
                     "Parent function `add_element` is not defined"
                 )
             })?;
-            gst_result_from_gboolean!(
+            result_from_gboolean!(
                 f(
                     bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     element.to_glib_none().0
@@ -68,12 +68,12 @@ impl<T: BinImpl> BinImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).remove_element.ok_or_else(|| {
-                gst_loggable_error!(
+                loggable_error!(
                     crate::CAT_RUST,
                     "Parent function `remove_element` is not defined"
                 )
             })?;
-            gst_result_from_gboolean!(
+            result_from_gboolean!(
                 f(
                     bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
                     element.to_glib_none().0
@@ -122,7 +122,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.add_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
@@ -154,7 +154,7 @@ where
         return glib::ffi::GFALSE;
     }
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.remove_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
@@ -176,7 +176,7 @@ unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+    panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.handle_message(wrap.unsafe_cast_ref(), from_glib_full(message))
     });
 }

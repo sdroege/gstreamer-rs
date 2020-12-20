@@ -279,7 +279,7 @@ where
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
 
-            gst_panic_to_error!(element, &instance.panicked(), fallback(), { f(&imp) })
+            panic_to_error!(element, &instance.panicked(), fallback(), { f(&imp) })
         }
     }
 
@@ -295,7 +295,7 @@ where
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
 
-            gst_panic_to_error!(wrap, &instance.panicked(), fallback(), {
+            panic_to_error!(wrap, &instance.panicked(), fallback(), {
                 f(&imp, wrap.unsafe_cast_ref())
             })
         }
@@ -383,7 +383,7 @@ where
         _ => StateChangeReturn::Failure,
     };
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), fallback, {
+    panic_to_error!(&wrap, &instance.panicked(), fallback, {
         imp.change_state(wrap.unsafe_cast_ref(), transition).into()
     })
     .to_glib()
@@ -406,7 +406,7 @@ where
 
     // XXX: This is effectively unsafe but the best we can do
     // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
-    let pad = gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+    let pad = panic_to_error!(&wrap, &instance.panicked(), None, {
         imp.request_new_pad(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(templ),
@@ -446,7 +446,7 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
         return;
     }
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+    panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.release_pad(wrap.unsafe_cast_ref(), &from_glib_none(pad))
     })
 }
@@ -462,7 +462,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.send_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
@@ -480,7 +480,7 @@ where
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
     let query = QueryRef::from_mut_ptr(query);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.query(wrap.unsafe_cast_ref(), query)
     })
     .to_glib()
@@ -496,7 +496,7 @@ unsafe extern "C" fn element_set_context<T: ElementImpl>(
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+    panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.set_context(wrap.unsafe_cast_ref(), &from_glib_borrow(context))
     })
 }
@@ -514,7 +514,7 @@ where
 
     let clock = Option::<crate::Clock>::from_glib_borrow(clock);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.set_clock(wrap.unsafe_cast_ref(), clock.as_ref().as_ref())
     })
     .to_glib()
@@ -530,7 +530,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+    panic_to_error!(&wrap, &instance.panicked(), None, {
         imp.provide_clock(wrap.unsafe_cast_ref())
     })
     .to_glib_full()

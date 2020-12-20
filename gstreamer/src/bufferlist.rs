@@ -7,7 +7,7 @@ use std::ptr;
 use crate::Buffer;
 use crate::BufferRef;
 
-gst_define_mini_object_wrapper!(BufferList, BufferListRef, ffi::GstBufferList, || {
+mini_object_wrapper!(BufferList, BufferListRef, ffi::GstBufferList, || {
     ffi::gst_buffer_list_get_type()
 });
 

@@ -12,8 +12,8 @@
 // {uridecodebin} -|                                          {encodebin}-{filesink}
 //                  \-{queue}-{videoconvert}-{videoscale}----/
 
-use gst::gst_element_error;
-use gst::gst_element_warning;
+use gst::element_error;
+use gst::element_warning;
 use gst::prelude::*;
 
 use gst_pbutils::prelude::*;
@@ -156,7 +156,7 @@ fn example_main() -> Result<(), Error> {
 
             match media_type {
                 None => {
-                    gst_element_warning!(
+                    element_warning!(
                         dbin,
                         gst::CoreError::Negotiation,
                         (
@@ -245,7 +245,7 @@ fn example_main() -> Result<(), Error> {
 
         if let Err(err) = link_to_encodebin(is_audio, is_video) {
             #[cfg(feature = "v1_10")]
-            gst_element_error!(
+            element_error!(
                 dbin,
                 gst::LibraryError::Failed,
                 ("Failed to insert sink"),
@@ -256,7 +256,7 @@ fn example_main() -> Result<(), Error> {
             );
 
             #[cfg(not(feature = "v1_10"))]
-            gst_element_error!(
+            element_error!(
                 dbin,
                 gst::LibraryError::Failed,
                 ("Failed to insert sink"),

@@ -6,7 +6,7 @@ use crate::ErrorMessage;
 use crate::FlowReturn;
 
 #[macro_export]
-macro_rules! gst_panic_to_error(
+macro_rules! panic_to_error(
     ($element:expr, $panicked:expr, $ret:expr, $code:block) => {{
         use std::panic::{self, AssertUnwindSafe};
         use std::sync::atomic::Ordering;
@@ -15,7 +15,7 @@ macro_rules! gst_panic_to_error(
         #[allow(clippy::unused_unit)]
         {
             if $panicked.load(Ordering::Relaxed) {
-                $element.post_error_message($crate::gst_error_msg!($crate::LibraryError::Failed, ["Panicked"]));
+                $element.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked"]));
                 $ret
             } else {
                 let result = panic::catch_unwind(AssertUnwindSafe(|| $code));
@@ -25,11 +25,11 @@ macro_rules! gst_panic_to_error(
                     Err(err) => {
                         $panicked.store(true, Ordering::Relaxed);
                         if let Some(cause) = err.downcast_ref::<&str>() {
-                            $element.post_error_message($crate::gst_error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
+                            $element.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
                         } else if let Some(cause) = err.downcast_ref::<String>() {
-                            $element.post_error_message($crate::gst_error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
+                            $element.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
                         } else {
-                            $element.post_error_message($crate::gst_error_msg!($crate::LibraryError::Failed, ["Panicked"]));
+                            $element.post_error_message($crate::error_msg!($crate::LibraryError::Failed, ["Panicked"]));
                         }
                         $ret
                     }

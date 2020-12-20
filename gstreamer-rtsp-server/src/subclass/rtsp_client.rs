@@ -374,7 +374,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
                 "No `configure_client_media` virtual method implementation in parent class",
             );
 
-            gst::gst_result_from_gboolean!(
+            gst::result_from_gboolean!(
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     media.to_glib_none().0,
@@ -629,7 +629,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
                 .handle_sdp
                 .expect("No `handle_sdp` virtual method implementation in parent class");
 
-            gst::gst_result_from_gboolean!(
+            gst::result_from_gboolean!(
                 f(
                     client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0,
                     ctx.to_glib_none().0,

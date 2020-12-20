@@ -17,7 +17,7 @@ use crate::Segment;
 use crate::Structure;
 use crate::StructureRef;
 
-gst_define_mini_object_wrapper!(Sample, SampleRef, ffi::GstSample, || {
+mini_object_wrapper!(Sample, SampleRef, ffi::GstSample, || {
     ffi::gst_sample_get_type()
 });
 

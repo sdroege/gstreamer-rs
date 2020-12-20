@@ -5,7 +5,7 @@ use thiserror::Error;
 use glib::IsA;
 
 #[macro_export]
-macro_rules! gst_error_msg(
+macro_rules! error_msg(
 // Plain strings
     ($err:expr, ($msg:expr), [$dbg:expr]) =>  {
         $crate::ErrorMessage::new(&$err, Some($msg),
@@ -80,7 +80,7 @@ impl ErrorMessage {
 }
 
 #[macro_export]
-macro_rules! gst_loggable_error(
+macro_rules! loggable_error(
 // Plain strings
     ($cat:expr, $msg:expr) => {
         $crate::LoggableError::new($cat.clone(), $crate::glib::bool_error!($msg))
@@ -93,7 +93,7 @@ macro_rules! gst_loggable_error(
 );
 
 #[macro_export]
-macro_rules! gst_result_from_gboolean(
+macro_rules! result_from_gboolean(
 // Plain strings
     ($ffi_bool:expr, $cat:expr, $msg:expr) =>  {
         $crate::glib::result_from_gboolean!($ffi_bool, $msg)

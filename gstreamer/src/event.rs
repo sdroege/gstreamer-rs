@@ -129,7 +129,7 @@ impl PartialOrd for EventType {
     }
 }
 
-gst_define_mini_object_wrapper!(Event, EventRef, ffi::GstEvent, || {
+mini_object_wrapper!(Event, EventRef, ffi::GstEvent, || {
     ffi::gst_event_get_type()
 });
 

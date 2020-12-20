@@ -22,7 +22,7 @@ use glib::translate::{from_glib, from_glib_full, FromGlib, FromGlibPtrFull, ToGl
 pub enum Readable {}
 pub enum Writable {}
 
-gst_define_mini_object_wrapper!(Buffer, BufferRef, ffi::GstBuffer, || {
+mini_object_wrapper!(Buffer, BufferRef, ffi::GstBuffer, || {
     ffi::gst_buffer_get_type()
 });
 

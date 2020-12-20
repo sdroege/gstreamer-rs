@@ -351,7 +351,7 @@ impl HasStreamLock for VideoDecoder {
 }
 
 #[macro_export]
-macro_rules! gst_video_decoder_error(
+macro_rules! video_decoder_error(
     ($obj:expr, $weight:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
         use $crate::VideoDecoderExtManual;
         $obj.error(

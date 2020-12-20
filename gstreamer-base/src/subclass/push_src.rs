@@ -135,7 +135,7 @@ where
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         PushSrcImpl::fill(imp, wrap.unsafe_cast_ref(), buffer).into()
     })
     .to_glib()
@@ -155,7 +155,7 @@ where
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match PushSrcImpl::alloc(imp, wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();
@@ -181,7 +181,7 @@ where
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match PushSrcImpl::create(imp, wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();

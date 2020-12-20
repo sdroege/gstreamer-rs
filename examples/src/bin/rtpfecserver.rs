@@ -1,4 +1,4 @@
-use gst::gst_element_error;
+use gst::element_error;
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
@@ -115,7 +115,7 @@ fn example_main() -> Result<(), Error> {
         match make_fec_encoder(fec_percentage) {
             Ok(elem) => Some(elem.to_value()),
             Err(err) => {
-                gst_element_error!(
+                element_error!(
                     rtpbin,
                     gst::LibraryError::Failed,
                     ("Failed to make FEC encoder"),
@@ -138,7 +138,7 @@ fn example_main() -> Result<(), Error> {
         move |decodebin, src_pad| match connect_decodebin_pad(&src_pad, &conv) {
             Ok(_) => (),
             Err(err) => {
-                gst_element_error!(
+                element_error!(
                     decodebin,
                     gst::LibraryError::Failed,
                     ("Failed to link decodebin srcpad"),

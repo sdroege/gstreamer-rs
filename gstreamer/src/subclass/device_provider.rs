@@ -51,9 +51,9 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstDeviceProviderClass;
             let f = (*parent_class).start.ok_or_else(|| {
-                gst_loggable_error!(crate::CAT_RUST, "Parent function `start` is not defined")
+                loggable_error!(crate::CAT_RUST, "Parent function `start` is not defined")
             })?;
-            gst_result_from_gboolean!(
+            result_from_gboolean!(
                 f(device_provider
                     .unsafe_cast_ref::<DeviceProvider>()
                     .to_glib_none()

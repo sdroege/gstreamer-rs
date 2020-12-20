@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 #[macro_export]
-macro_rules! gst_define_mini_object_wrapper(
+macro_rules! mini_object_wrapper(
     ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr) => {
         pub struct $name {
             obj: std::ptr::NonNull<$ref_name>,

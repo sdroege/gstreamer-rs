@@ -1,4 +1,4 @@
-use gst::gst_element_error;
+use gst::element_error;
 use gst::prelude::*;
 
 use std::env;
@@ -195,7 +195,7 @@ fn example_main() -> Result<(), Error> {
         match make_fec_decoder(&rtpbin, sess_id) {
             Ok(elem) => Some(elem.to_value()),
             Err(err) => {
-                gst_element_error!(
+                element_error!(
                     rtpbin,
                     gst::LibraryError::Failed,
                     ("Failed to make FEC decoder"),
@@ -220,7 +220,7 @@ fn example_main() -> Result<(), Error> {
         match connect_rtpbin_srcpad(&src_pad, &depay) {
             Ok(_) => (),
             Err(err) => {
-                gst_element_error!(
+                element_error!(
                     rtpbin,
                     gst::LibraryError::Failed,
                     ("Failed to link srcpad"),

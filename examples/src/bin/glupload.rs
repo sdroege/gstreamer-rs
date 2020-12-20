@@ -4,7 +4,7 @@
 
 // {videotestsrc} - { glsinkbin }
 
-use gst::gst_element_error;
+use gst::element_error;
 use gst::prelude::*;
 
 use gst_gl::prelude::*;
@@ -474,7 +474,7 @@ impl App {
 
                     {
                         let _buffer = sample.get_buffer().ok_or_else(|| {
-                            gst_element_error!(
+                            element_error!(
                                 appsink,
                                 gst::ResourceError::Failed,
                                 ("Failed to get buffer from appsink")
@@ -487,7 +487,7 @@ impl App {
                             .get_caps()
                             .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
                             .ok_or_else(|| {
-                                gst_element_error!(
+                                element_error!(
                                     appsink,
                                     gst::ResourceError::Failed,
                                     ("Failed to get video info from sample")

@@ -158,7 +158,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `open` failed"]
                         ))
@@ -182,7 +182,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `close` failed"]
                         ))
@@ -206,7 +206,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `start` failed"]
                         ))
@@ -230,7 +230,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `stop` failed"]
                         ))
@@ -268,7 +268,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .set_format
                 .map(|f| {
-                    gst::gst_result_from_gboolean!(
+                    gst::result_from_gboolean!(
                         f(
                             element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
                             state.as_mut_ptr()
@@ -325,7 +325,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .negotiate
                 .map(|f| {
-                    gst::gst_result_from_gboolean!(
+                    gst::result_from_gboolean!(
                         f(element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiate` failed"
@@ -428,7 +428,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                     )) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `propose_allocation` failed"]
                         ))
@@ -455,7 +455,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
                     )) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `decide_allocation` failed"]
                         ))
@@ -502,7 +502,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -524,7 +524,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -546,7 +546,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -568,7 +568,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -590,7 +590,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.finish(wrap.unsafe_cast_ref()).into()
     })
     .to_glib()
@@ -609,7 +609,7 @@ where
     ffi::gst_video_codec_state_ref(state);
     let wrap_state = VideoCodecState::<Readable>::new(state);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_format(wrap.unsafe_cast_ref(), &wrap_state) {
             Ok(()) => true,
             Err(err) => {
@@ -633,7 +633,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let wrap_frame = VideoCodecFrame::new(frame, &*wrap);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(wrap.unsafe_cast_ref(), wrap_frame).into()
     })
     .to_glib()
@@ -649,7 +649,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         VideoEncoderImpl::flush(imp, wrap.unsafe_cast_ref())
     })
     .to_glib()
@@ -665,7 +665,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -688,7 +688,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         VideoEncoderImpl::get_caps(
             imp,
             wrap.unsafe_cast_ref(),
@@ -711,7 +711,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
@@ -728,7 +728,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
@@ -745,7 +745,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
@@ -762,7 +762,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
@@ -780,7 +780,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
@@ -804,7 +804,7 @@ where
     let wrap: Borrowed<VideoEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {

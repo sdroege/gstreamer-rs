@@ -12,7 +12,7 @@ use crate::CapsIntersectMode;
 use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
-gst_define_mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
+mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
 
 impl Caps {
     pub fn builder(name: &str) -> Builder<NoFeature> {

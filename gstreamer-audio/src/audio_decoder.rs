@@ -173,7 +173,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
 }
 
 #[macro_export]
-macro_rules! gst_audio_decoder_error(
+macro_rules! audio_decoder_error(
     ($obj:expr, $weight:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
         use $crate::AudioDecoderExtManual;
         $obj.error(

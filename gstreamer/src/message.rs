@@ -21,7 +21,7 @@ use glib::value::ToSendValue;
 use glib::Cast;
 use glib::IsA;
 
-gst_define_mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
+mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
     ffi::gst_message_get_type()
 });
 

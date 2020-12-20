@@ -11,7 +11,7 @@ use std::ptr;
 
 use glib::translate::*;
 
-gst_define_mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
+mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
     ffi::gst_query_get_type()
 });
 

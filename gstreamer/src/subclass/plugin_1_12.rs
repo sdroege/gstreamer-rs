@@ -10,7 +10,7 @@ pub const MINOR_VERSION: i32 = 10;
 pub const MINOR_VERSION: i32 = 12;
 
 #[macro_export]
-macro_rules! gst_plugin_define(
+macro_rules! plugin_define(
     ($name:ident, $description:expr, $plugin_init:ident,
      $version:expr, $license:expr, $source:expr,
      $package:expr, $origin:expr, $release_datetime:expr) => {

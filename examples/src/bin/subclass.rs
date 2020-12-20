@@ -6,10 +6,8 @@
 // Our filter can only handle F32 mono and acts as a FIR filter. The filter impulse response /
 // coefficients are provided via Rust API on the filter as a Vec<f32>.
 
-use gst::gst_element_error;
-use gst::gst_info;
-use gst::gst_trace;
 use gst::prelude::*;
+use gst::{element_error, gst_info, gst_trace};
 
 use anyhow::Error;
 use derive_more::{Display, Error};
@@ -192,7 +190,7 @@ mod fir_filter {
 
                 // Try mapping the input buffer as writable
                 let mut data = buf.map_writable().map_err(|_| {
-                    gst_element_error!(
+                    element_error!(
                         element,
                         gst::CoreError::Failed,
                         ["Failed to map input buffer readable"]
@@ -202,7 +200,7 @@ mod fir_filter {
 
                 // And reinterprete it as a slice of f32
                 let samples = data.as_mut_slice_of::<f32>().map_err(|err| {
-                    gst_element_error!(
+                    element_error!(
                         element,
                         gst::CoreError::Failed,
                         ["Failed to cast input buffer as f32 slice: {}", err]

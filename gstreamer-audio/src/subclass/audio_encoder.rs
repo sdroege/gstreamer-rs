@@ -163,7 +163,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `open` failed"]
                         ))
@@ -187,7 +187,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `close` failed"]
                         ))
@@ -211,7 +211,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `start` failed"]
                         ))
@@ -235,7 +235,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                     {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `stop` failed"]
                         ))
@@ -256,7 +256,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
             (*parent_class)
                 .set_format
                 .map(|f| {
-                    gst::gst_result_from_gboolean!(
+                    gst::result_from_gboolean!(
                         f(
                             element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0,
                             info.to_glib_none().0 as *mut _
@@ -335,7 +335,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
             (*parent_class)
                 .negotiate
                 .map(|f| {
-                    gst::gst_result_from_gboolean!(
+                    gst::result_from_gboolean!(
                         f(element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiate` failed"
@@ -438,7 +438,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                     )) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `propose_allocation` failed"]
                         ))
@@ -465,7 +465,7 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
                     )) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `decide_allocation` failed"]
                         ))
@@ -512,7 +512,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -534,7 +534,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -556,7 +556,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -578,7 +578,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -601,7 +601,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_format(wrap.unsafe_cast_ref(), &from_glib_none(info)) {
             Ok(()) => true,
             Err(err) => {
@@ -626,7 +626,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(
             wrap.unsafe_cast_ref(),
             Option::<gst::Buffer>::from_glib_none(buffer).as_ref(),
@@ -647,7 +647,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.pre_push(wrap.unsafe_cast_ref(), from_glib_full(*buffer)) {
             Ok(Some(new_buffer)) => {
                 *buffer = new_buffer.into_ptr();
@@ -672,7 +672,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+    gst::panic_to_error!(&wrap, &instance.panicked(), (), {
         AudioEncoderImpl::flush(imp, wrap.unsafe_cast_ref())
     })
 }
@@ -687,7 +687,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.negotiate(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -710,7 +710,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         AudioEncoderImpl::get_caps(
             imp,
             wrap.unsafe_cast_ref(),
@@ -733,7 +733,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
@@ -750,7 +750,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
@@ -767,7 +767,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
@@ -784,7 +784,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
@@ -802,7 +802,7 @@ where
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.propose_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {
@@ -826,7 +826,7 @@ where
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.decide_allocation(wrap.unsafe_cast_ref(), query) {
             Ok(()) => true,
             Err(err) => {

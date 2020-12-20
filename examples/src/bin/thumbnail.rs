@@ -6,7 +6,7 @@
 // The appsink enforces RGBA so that the image crate can use it. The image crate also requires
 // tightly packed pixels, which is the case for RGBA by default in GStreamer.
 
-use gst::gst_element_error;
+use gst::element_error;
 use gst::prelude::*;
 
 use anyhow::Error;
@@ -69,7 +69,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
                 // Pull the sample in question out of the appsink's buffer.
                 let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
                 let buffer = sample.get_buffer().ok_or_else(|| {
-                    gst_element_error!(
+                    element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to get buffer from appsink")
@@ -95,7 +95,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
                 // So mapping the buffer makes the underlying memory region accessible to us.
                 // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
                 let map = buffer.map_readable().map_err(|_| {
-                    gst_element_error!(
+                    element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to map buffer readable")
@@ -129,7 +129,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
                 // Save it at the specific location. This automatically detects the file type
                 // based on the filename.
                 scaled_img.save(&out_path).map_err(|err| {
-                    gst_element_error!(
+                    element_error!(
                         appsink,
                         gst::ResourceError::Write,
                         (

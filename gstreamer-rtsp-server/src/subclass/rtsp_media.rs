@@ -174,7 +174,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).prepare {
-                gst::gst_result_from_gboolean!(
+                gst::result_from_gboolean!(
                     f(
                         media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
                         thread.to_glib_none().0
@@ -193,7 +193,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unprepare {
-                gst::gst_result_from_gboolean!(
+                gst::result_from_gboolean!(
                     f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0),
                     gst::CAT_RUST,
                     "Parent function `unprepare` failed"
@@ -209,7 +209,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).suspend {
-                gst::gst_result_from_gboolean!(
+                gst::result_from_gboolean!(
                     f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0),
                     gst::CAT_RUST,
                     "Parent function `suspend` failed"
@@ -225,7 +225,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstRTSPMediaClass;
             if let Some(f) = (*parent_class).unsuspend {
-                gst::gst_result_from_gboolean!(
+                gst::result_from_gboolean!(
                     f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0),
                     gst::CAT_RUST,
                     "Parent function `unsuspend` failed"
@@ -310,7 +310,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 // The C code assumes to pass a floating reference around so let's make sure we do
                 glib::gobject_ffi::g_object_force_floating(ptr as *mut _);
 
-                let res = gst::gst_result_from_gboolean!(
+                let res = gst::result_from_gboolean!(
                     f(media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0, ptr),
                     gst::CAT_RUST,
                     "Parent function `setup_sdp` failed"
@@ -343,7 +343,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 .setup_sdp
                 .expect("No `setup_sdp` virtual method implementation in parent class");
 
-            gst::gst_result_from_gboolean!(
+            gst::result_from_gboolean!(
                 f(
                     media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
                     sdp as *mut _ as *mut gst_sdp::ffi::GstSDPMessage,
@@ -439,7 +439,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 .handle_sdp
                 .expect("No `handle_sdp` virtual method implementation in parent class");
 
-            gst::gst_result_from_gboolean!(
+            gst::result_from_gboolean!(
                 f(
                     media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
                     sdp as *const _ as *mut gst_sdp::ffi::GstSDPMessage

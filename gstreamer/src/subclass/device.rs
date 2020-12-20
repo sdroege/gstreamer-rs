@@ -59,13 +59,13 @@ impl<T: DeviceImpl> DeviceImplExt for T {
 
                 // Don't steal floating reference here but pass it further to the caller
                 Option::<_>::from_glib_full(ptr).ok_or_else(|| {
-                    gst_loggable_error!(
+                    loggable_error!(
                         crate::CAT_RUST,
                         "Failed to create element using the parent function"
                     )
                 })
             } else {
-                Err(gst_loggable_error!(
+                Err(loggable_error!(
                     crate::CAT_RUST,
                     "Parent function `create_element` is not defined"
                 ))
@@ -82,12 +82,12 @@ impl<T: DeviceImpl> DeviceImplExt for T {
             let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstDeviceClass;
             let f = (*parent_class).reconfigure_element.ok_or_else(|| {
-                gst_loggable_error!(
+                loggable_error!(
                     crate::CAT_RUST,
                     "Parent function `reconfigure_element` is not defined"
                 )
             })?;
-            gst_result_from_gboolean!(
+            result_from_gboolean!(
                 f(
                     device.unsafe_cast_ref::<Device>().to_glib_none().0,
                     element.to_glib_none().0

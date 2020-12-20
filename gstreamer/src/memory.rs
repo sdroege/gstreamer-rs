@@ -13,7 +13,7 @@ use crate::AllocationParams;
 use crate::Allocator;
 use crate::MemoryFlags;
 
-gst_define_mini_object_wrapper!(Memory, MemoryRef, ffi::GstMemory, || {
+mini_object_wrapper!(Memory, MemoryRef, ffi::GstMemory, || {
     ffi::gst_memory_get_type()
 });
 

@@ -111,11 +111,11 @@ impl AppSrcCallbacksBuilder {
 fn post_panic_error_message(element: &AppSrc, err: &dyn std::any::Any) {
     skip_assert_initialized!();
     if let Some(cause) = err.downcast_ref::<&str>() {
-        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else if let Some(cause) = err.downcast_ref::<String>() {
-        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
+        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked: {}", cause]);
     } else {
-        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
     }
 }
 
@@ -129,7 +129,7 @@ unsafe extern "C" fn trampoline_need_data(
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
@@ -153,7 +153,7 @@ unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbac
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return;
     }
 
@@ -179,7 +179,7 @@ unsafe extern "C" fn trampoline_seek_data(
 
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst::gst_element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
+        gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
         return false.to_glib();
     }
 

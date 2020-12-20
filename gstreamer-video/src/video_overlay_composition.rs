@@ -5,7 +5,7 @@ use std::mem;
 
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 
-gst::gst_define_mini_object_wrapper!(
+gst::mini_object_wrapper!(
     VideoOverlayRectangle,
     VideoOverlayRectangleRef,
     ffi::GstVideoOverlayRectangle,
@@ -170,7 +170,7 @@ impl VideoOverlayRectangleRef {
     }
 }
 
-gst::gst_define_mini_object_wrapper!(
+gst::mini_object_wrapper!(
     VideoOverlayComposition,
     VideoOverlayCompositionRef,
     ffi::GstVideoOverlayComposition,

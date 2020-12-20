@@ -335,7 +335,7 @@ impl_tag!(
 );
 impl_tag!(PrivateData, Sample, TAG_PRIVATE_DATA, GST_TAG_PRIVATE_DATA);
 
-gst_define_mini_object_wrapper!(TagList, TagListRef, ffi::GstTagList, || {
+mini_object_wrapper!(TagList, TagListRef, ffi::GstTagList, || {
     ffi::gst_tag_list_get_type()
 });
 

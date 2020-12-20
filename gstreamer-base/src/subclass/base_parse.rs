@@ -84,7 +84,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseParse>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `start` failed"]
                         ))
@@ -104,7 +104,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseParse>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `stop` failed"]
                         ))
@@ -131,7 +131,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                     )) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `set_sink_caps` failed"]
                         ))
@@ -228,7 +228,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -250,7 +250,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -274,7 +274,7 @@ where
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_sink_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
@@ -299,7 +299,7 @@ where
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let wrap_frame = BaseParseFrame::new(frame, &wrap);
 
-    let res = gst::gst_panic_to_error!(&wrap, &instance.panicked(), Err(gst::FlowError::Error), {
+    let res = gst::panic_to_error!(&wrap, &instance.panicked(), Err(gst::FlowError::Error), {
         imp.handle_frame(&wrap.unsafe_cast_ref(), wrap_frame)
     });
 
@@ -328,7 +328,7 @@ where
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
-    let res = gst::gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+    let res = gst::panic_to_error!(&wrap, &instance.panicked(), None, {
         imp.convert(wrap.unsafe_cast_ref(), source, from_glib(dest_format))
     });
 

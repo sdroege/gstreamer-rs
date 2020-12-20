@@ -7,7 +7,7 @@ use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 
 use crate::StructureRef;
 
-gst_define_mini_object_wrapper!(Context, ContextRef, ffi::GstContext, || {
+mini_object_wrapper!(Context, ContextRef, ffi::GstContext, || {
     ffi::gst_context_get_type()
 });
 

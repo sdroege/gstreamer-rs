@@ -14,7 +14,7 @@ use crate::TocEntryType;
 use crate::TocLoopType;
 use crate::TocScope;
 
-gst_define_mini_object_wrapper!(Toc, TocRef, ffi::GstToc, || { ffi::gst_toc_get_type() });
+mini_object_wrapper!(Toc, TocRef, ffi::GstToc, || { ffi::gst_toc_get_type() });
 
 impl Toc {
     pub fn new(scope: TocScope) -> Self {
@@ -81,7 +81,7 @@ impl fmt::Debug for TocRef {
     }
 }
 
-gst_define_mini_object_wrapper!(TocEntry, TocEntryRef, ffi::GstTocEntry, || {
+mini_object_wrapper!(TocEntry, TocEntryRef, ffi::GstTocEntry, || {
     ffi::gst_toc_entry_get_type()
 });
 

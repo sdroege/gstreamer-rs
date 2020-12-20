@@ -143,7 +143,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `start` failed"]
                         ))
@@ -163,7 +163,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::StateChange,
                             ["Parent function `stop` failed"]
                         ))
@@ -331,7 +331,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .set_caps
                 .map(|f| {
-                    gst::gst_result_from_gboolean!(
+                    gst::result_from_gboolean!(
                         f(
                             element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                             caps.to_glib_none().0
@@ -369,7 +369,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::Failed,
                             ["Parent function `unlock` failed"]
                         ))
@@ -389,7 +389,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
                     if from_glib(f(element.unsafe_cast_ref::<BaseSink>().to_glib_none().0)) {
                         Ok(())
                     } else {
-                        Err(gst::gst_error_msg!(
+                        Err(gst::error_msg!(
                             gst::CoreError::Failed,
                             ["Parent function `unlock_stop` failed"]
                         ))
@@ -433,7 +433,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -455,7 +455,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -479,7 +479,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.render(wrap.unsafe_cast_ref(), &buffer).into()
     })
     .to_glib()
@@ -497,7 +497,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.prepare(wrap.unsafe_cast_ref(), &buffer).into()
     })
     .to_glib()
@@ -515,7 +515,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let list = from_glib_borrow(list);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.render_list(wrap.unsafe_cast_ref(), &list).into()
     })
     .to_glib()
@@ -533,7 +533,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let list = from_glib_borrow(list);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         imp.prepare_list(wrap.unsafe_cast_ref(), &list).into()
     })
     .to_glib()
@@ -551,7 +551,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         BaseSinkImpl::query(imp, wrap.unsafe_cast_ref(), query)
     })
     .to_glib()
@@ -568,7 +568,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         imp.event(wrap.unsafe_cast_ref(), from_glib_full(event_ptr))
     })
     .to_glib()
@@ -586,7 +586,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), None, {
         imp.get_caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
     })
     .map(|caps| caps.into_ptr())
@@ -605,7 +605,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let caps = from_glib_borrow(caps);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.set_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
@@ -629,7 +629,7 @@ where
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
     let caps = from_glib_full(caps);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
+    gst::panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         imp.fixate(wrap.unsafe_cast_ref(), caps)
     })
     .into_ptr()
@@ -645,7 +645,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unlock(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -667,7 +667,7 @@ where
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseSink> = from_glib_borrow(ptr);
 
-    gst::gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
         match imp.unlock_stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
