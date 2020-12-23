@@ -364,7 +364,7 @@ mod tests {
         let value_12 = Fraction::new(1, 2);
         let value_str = "test str";
         let value_str_none: Option<&str> = None;
-        let value_date = Date::new_dmy(19, DateMonth::August, 2019);
+        let value_date = Date::new_dmy(19, DateMonth::August, 2019).unwrap();
         let value_date_none: Option<Date> = None;
 
         let array = Array::new(&[
@@ -555,7 +555,7 @@ mod tests {
         assert!(slice[3].get::<String>().expect("slice[3]").is_none());
 
         assert_eq!(
-            Date::new_dmy(19, DateMonth::August, 2019),
+            Date::new_dmy(19, DateMonth::August, 2019).unwrap(),
             slice[4].get::<Date>().expect("slice[4]").unwrap()
         );
 
@@ -582,7 +582,7 @@ mod tests {
         assert!(slice[3].get::<String>().expect("slice[3]").is_none());
 
         assert_eq!(
-            Date::new_dmy(19, DateMonth::August, 2019),
+            Date::new_dmy(19, DateMonth::August, 2019).unwrap(),
             slice[4].get::<Date>().expect("slice[4]").unwrap()
         );
 
@@ -628,7 +628,7 @@ mod tests {
         let value_12 = Fraction::new(1, 2);
         let value_str = "test str";
         let value_str_none: Option<&str> = None;
-        let value_date = Date::new_dmy(19, DateMonth::August, 2019);
+        let value_date = Date::new_dmy(19, DateMonth::August, 2019).unwrap();
         let value_date_none: Option<Date> = None;
 
         let array = Array::new(&[

@@ -123,7 +123,7 @@ impl TryFrom<DateTimeVariants> for Date {
                     month,
                     y.try_into()
                         .map_err(|_| glib::bool_error!("Out of range `year` for `Date`"))?,
-                )))
+                )?))
             }
             _ => Err(glib::bool_error!(
                 "Incompatible variant for `Date` (expecting \"YMD\")"
