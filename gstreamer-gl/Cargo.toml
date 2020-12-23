@@ -1,8 +1,10 @@
 [package]
 name = "gstreamer-gl"
 version = "0.17.0"
-authors = ["Sebastian Dröge <sebastian@centricular.com>",
-           "Víctor M. Jáquez L. <vjaquez@igalia.com>"]
+authors = [
+    "Sebastian Dröge <sebastian@centricular.com>",
+    "Víctor M. Jáquez L. <vjaquez@igalia.com>"
+]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer GL library"
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"

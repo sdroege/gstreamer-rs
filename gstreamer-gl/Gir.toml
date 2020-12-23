@@ -139,13 +139,13 @@ manual_traits = ["GLContextExtManual"]
 
     [[object.function]]
     name = "activate"
-       [object.function.return]
-       bool_return_is_error = "Failed to activate OpenGL context"
+        [object.function.return]
+        bool_return_is_error = "Failed to activate OpenGL context"
 
     [[object.function]]
     name = "get_display"
-       [object.function.return]
-       nullable = false
+        [object.function.return]
+        nullable = false
 
     [[object.function]]
     name = "set_window"
@@ -173,13 +173,13 @@ status = "generate"
 
     [[object.function]]
     name = "add_context"
-       [object.function.return]
-       bool_return_is_error = "Failed to add OpenGL context"
+        [object.function.return]
+        bool_return_is_error = "Failed to add OpenGL context"
 
     [[object.function]]
     name = "remove_window"
-       [object.function.return]
-       bool_return_is_error = "Failed to remove window"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove window"
 
     [[object.function]]
     name = "create_window"
@@ -370,8 +370,8 @@ final_type = true
 
     [[object.function]]
     name = "get_input_template_caps"
-       [object.function.return]
-       nullable = false
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "GstGL.GLViewConvert"
@@ -395,8 +395,8 @@ final_type = true
 
     [[object.function]]
     name = "tranform_caps"
-       [object.function.return]
-       nullable = false
+        [object.function.return]
+        nullable = false
 
     [[object.function]]
     name = "submit_input_buffer"

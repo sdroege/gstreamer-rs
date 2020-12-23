@@ -17,12 +17,12 @@ external_libraries = [
 ]
 
 generate = [
-  "GstRtp.RTCPFBType",
-  "GstRtp.RTCPSDESType",
-  "GstRtp.RTCPType",
-  "GstRtp.RTCPXRType",
-  "GstRtp.RTPPayload",
-  "GstRtp.RTPProfile",
+    "GstRtp.RTCPFBType",
+    "GstRtp.RTCPSDESType",
+    "GstRtp.RTCPType",
+    "GstRtp.RTCPXRType",
+    "GstRtp.RTPPayload",
+    "GstRtp.RTPProfile",
 ]
 
 [[object]]
@@ -33,20 +33,20 @@ ref_mode = "ref"
 [[object]]
 name = "GstRtp.*"
 status = "generate"
-  # expected enum `std::ffi::c_void`, found u8
-  [[object.function]]
-  name = "rtp_hdrext_get_ntp_56"
-  ignore = true
+    # expected enum `std::ffi::c_void`, found u8
+    [[object.function]]
+    name = "rtp_hdrext_get_ntp_56"
+    ignore = true
 
-  # expected enum `std::ffi::c_void`, found u8
-  [[object.function]]
-  name = "rtp_hdrext_get_ntp_64"
-  ignore = true
+    # expected enum `std::ffi::c_void`, found u8
+    [[object.function]]
+    name = "rtp_hdrext_get_ntp_64"
+    ignore = true
 
-  # manual bindings are needed for GstMeta
-  [[object.function]]
-  name = "rtp_source_meta_api_get_type"
-  ignore = true
+    # manual bindings are needed for GstMeta
+    [[object.function]]
+    name = "rtp_source_meta_api_get_type"
+    ignore = true
 
 [[object]]
 name = "GstRtp.RTPBufferFlags"
