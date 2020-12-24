@@ -296,10 +296,7 @@ impl DateTime {
         // however, the resulting instance can't be translated to `glib::DateTime`
         if self.has_second() {
             self.to_g_date_time()
-                .and_then(|d| {
-                    d.to_utc()
-                        .ok_or_else(|| glib::bool_error!("Can't convert datetime to UTC"))
-                })
+                .and_then(|d| d.to_utc())
                 .map(|d| d.into())
         } else {
             // It would be cheaper to build a `glib::DateTime` direcly, unfortunetaly
@@ -316,10 +313,7 @@ impl DateTime {
                 Some(0.0),
             )
             .and_then(|d| d.to_g_date_time())
-            .and_then(|d| {
-                d.to_utc()
-                    .ok_or_else(|| glib::bool_error!("Can't convert datetime to UTC"))
-            })
+            .and_then(|d| d.to_utc())
             .and_then(|d| {
                 DateTime::new(
                     None, // UTC TZ offset
