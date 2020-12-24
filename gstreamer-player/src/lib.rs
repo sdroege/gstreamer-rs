@@ -23,6 +23,8 @@ macro_rules! assert_initialized_main_thread {
 mod auto;
 pub use crate::auto::*;
 
+pub mod subclass;
+
 mod config;
 mod player;
 pub use crate::config::*;
