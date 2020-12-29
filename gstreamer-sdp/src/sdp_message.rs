@@ -75,7 +75,7 @@ impl SDPMessage {
         }
     }
 
-    pub fn parse_buffer(data: &[u8]) -> Result<Self, ()> {
+    pub fn parse_buffer(data: &[u8]) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             let size = data.len() as u32;
@@ -86,13 +86,13 @@ impl SDPMessage {
                 ffi::GST_SDP_OK => Ok(from_glib_full(msg)),
                 _ => {
                     ffi::gst_sdp_message_uninit(msg);
-                    Err(())
+                    Err(glib::bool_error!("Failed to parse buffer"))
                 }
             }
         }
     }
 
-    pub fn parse_uri(uri: &str) -> Result<Self, ()> {
+    pub fn parse_uri(uri: &str) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             let mut msg = ptr::null_mut();
@@ -102,7 +102,7 @@ impl SDPMessage {
                 ffi::GST_SDP_OK => Ok(from_glib_full(msg)),
                 _ => {
                     ffi::gst_sdp_message_uninit(msg);
-                    Err(())
+                    Err(glib::bool_error!("Failed to parse URI"))
                 }
             }
         }
@@ -221,11 +221,11 @@ impl SDPMessageRef {
         unsafe { ffi::gst_sdp_message_attributes_len(&self.0) }
     }
 
-    pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), ()> {
+    pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), glib::BoolError> {
         let result = unsafe { ffi::gst_sdp_message_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to store attributes in caps")),
         }
     }
 
@@ -492,10 +492,14 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_attribute(&mut self, idx: Option<u32>, attr: SDPAttribute) -> Result<(), ()> {
+    pub fn insert_attribute(
+        &mut self,
+        idx: Option<u32>,
+        attr: SDPAttribute,
+    ) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.attributes_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert attribute"));
             }
         }
 
@@ -505,14 +509,18 @@ impl SDPMessageRef {
             unsafe { ffi::gst_sdp_message_insert_attribute(&mut self.0, idx, &mut attr.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert attribute")),
         }
     }
 
-    pub fn insert_bandwidth(&mut self, idx: Option<u32>, bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn insert_bandwidth(
+        &mut self,
+        idx: Option<u32>,
+        bw: SDPBandwidth,
+    ) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.bandwidths_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert bandwidth"));
             }
         }
 
@@ -521,14 +529,14 @@ impl SDPMessageRef {
         let result = unsafe { ffi::gst_sdp_message_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert bandwidth")),
         }
     }
 
-    pub fn insert_email(&mut self, idx: Option<u32>, email: &str) -> Result<(), ()> {
+    pub fn insert_email(&mut self, idx: Option<u32>, email: &str) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.emails_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert email"));
             }
         }
 
@@ -537,14 +545,14 @@ impl SDPMessageRef {
             unsafe { ffi::gst_sdp_message_insert_email(&mut self.0, idx, email.to_glib_none().0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert email")),
         }
     }
 
-    pub fn insert_phone(&mut self, idx: Option<u32>, phone: &str) -> Result<(), ()> {
+    pub fn insert_phone(&mut self, idx: Option<u32>, phone: &str) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.phones_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert phone"));
             }
         }
 
@@ -553,14 +561,14 @@ impl SDPMessageRef {
             unsafe { ffi::gst_sdp_message_insert_phone(&mut self.0, idx, phone.to_glib_none().0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert phone")),
         }
     }
 
-    pub fn insert_time(&mut self, idx: Option<u32>, time: SDPTime) -> Result<(), ()> {
+    pub fn insert_time(&mut self, idx: Option<u32>, time: SDPTime) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.times_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert time"));
             }
         }
 
@@ -569,14 +577,14 @@ impl SDPMessageRef {
         let result = unsafe { ffi::gst_sdp_message_insert_time(&mut self.0, idx, &mut time.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert time")),
         }
     }
 
-    pub fn insert_zone(&mut self, idx: Option<u32>, zone: SDPZone) -> Result<(), ()> {
+    pub fn insert_zone(&mut self, idx: Option<u32>, zone: SDPZone) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.zones_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert zone"));
             }
         }
 
@@ -585,7 +593,7 @@ impl SDPMessageRef {
         let result = unsafe { ffi::gst_sdp_message_insert_zone(&mut self.0, idx, &mut zone.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert zone")),
         }
     }
 
@@ -597,81 +605,85 @@ impl SDPMessageRef {
         unsafe { ffi::gst_sdp_message_phones_len(&self.0) }
     }
 
-    pub fn remove_attribute(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_attribute(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.attributes_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove attribute"));
         }
 
         let result = unsafe { ffi::gst_sdp_message_remove_attribute(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove attribute")),
         }
     }
 
-    pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove bandwidth"));
         }
 
         let result = unsafe { ffi::gst_sdp_message_remove_bandwidth(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove bandwidth")),
         }
     }
 
-    pub fn remove_email(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_email(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.emails_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove email"));
         }
 
         let result = unsafe { ffi::gst_sdp_message_remove_email(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove email")),
         }
     }
 
-    pub fn remove_phone(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_phone(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.phones_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove phone"));
         }
 
         let result = unsafe { ffi::gst_sdp_message_remove_phone(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove phone")),
         }
     }
 
-    pub fn remove_time(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_time(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.times_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove time"));
         }
 
         let result = unsafe { ffi::gst_sdp_message_remove_time(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove time")),
         }
     }
 
-    pub fn remove_zone(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_zone(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.zones_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove zone"));
         }
 
         let result = unsafe { ffi::gst_sdp_message_remove_zone(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove zone")),
         }
     }
 
-    pub fn replace_attribute(&mut self, idx: u32, attr: SDPAttribute) -> Result<(), ()> {
+    pub fn replace_attribute(
+        &mut self,
+        idx: u32,
+        attr: SDPAttribute,
+    ) -> Result<(), glib::BoolError> {
         if idx >= self.attributes_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace attribute"));
         }
 
         let mut attr = mem::ManuallyDrop::new(attr);
@@ -679,72 +691,72 @@ impl SDPMessageRef {
             unsafe { ffi::gst_sdp_message_replace_attribute(&mut self.0, idx, &mut attr.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace attribute")),
         }
     }
 
-    pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace bandwidth"));
         }
 
         let mut bw = mem::ManuallyDrop::new(bw);
         let result = unsafe { ffi::gst_sdp_message_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace bandwidth")),
         }
     }
 
-    pub fn replace_email(&mut self, idx: u32, email: &str) -> Result<(), ()> {
+    pub fn replace_email(&mut self, idx: u32, email: &str) -> Result<(), glib::BoolError> {
         if idx >= self.emails_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace email"));
         }
 
         let result =
             unsafe { ffi::gst_sdp_message_replace_email(&mut self.0, idx, email.to_glib_none().0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace email")),
         }
     }
 
-    pub fn replace_phone(&mut self, idx: u32, phone: &str) -> Result<(), ()> {
+    pub fn replace_phone(&mut self, idx: u32, phone: &str) -> Result<(), glib::BoolError> {
         if idx >= self.phones_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace phone"));
         }
 
         let result =
             unsafe { ffi::gst_sdp_message_replace_phone(&mut self.0, idx, phone.to_glib_none().0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace phone")),
         }
     }
 
-    pub fn replace_time(&mut self, idx: u32, time: SDPTime) -> Result<(), ()> {
+    pub fn replace_time(&mut self, idx: u32, time: SDPTime) -> Result<(), glib::BoolError> {
         if idx >= self.times_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace time"));
         }
 
         let mut time = mem::ManuallyDrop::new(time);
         let result = unsafe { ffi::gst_sdp_message_replace_time(&mut self.0, idx, &mut time.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace time")),
         }
     }
 
-    pub fn replace_zone(&mut self, idx: u32, zone: SDPZone) -> Result<(), ()> {
+    pub fn replace_zone(&mut self, idx: u32, zone: SDPZone) -> Result<(), glib::BoolError> {
         if idx >= self.zones_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace zone"));
         }
 
         let mut zone = mem::ManuallyDrop::new(zone);
         let result = unsafe { ffi::gst_sdp_message_replace_zone(&mut self.0, idx, &mut zone.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace zone")),
         }
     }
 

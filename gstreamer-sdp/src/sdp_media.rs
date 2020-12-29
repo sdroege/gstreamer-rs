@@ -187,11 +187,11 @@ impl SDPMediaRef {
         unsafe { ffi::gst_sdp_media_attributes_len(&self.0) }
     }
 
-    pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), ()> {
+    pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), glib::BoolError> {
         let result = unsafe { ffi::gst_sdp_media_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to store attributes in caps")),
         }
     }
 
@@ -369,10 +369,14 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn insert_attribute(&mut self, idx: Option<u32>, attr: SDPAttribute) -> Result<(), ()> {
+    pub fn insert_attribute(
+        &mut self,
+        idx: Option<u32>,
+        attr: SDPAttribute,
+    ) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.attributes_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert attribute"));
             }
         }
 
@@ -381,14 +385,18 @@ impl SDPMediaRef {
         let result = unsafe { ffi::gst_sdp_media_insert_attribute(&mut self.0, idx, &mut attr.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert attribute")),
         }
     }
 
-    pub fn insert_bandwidth(&mut self, idx: Option<u32>, bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn insert_bandwidth(
+        &mut self,
+        idx: Option<u32>,
+        bw: SDPBandwidth,
+    ) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.bandwidths_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert bandwidth"));
             }
         }
 
@@ -397,14 +405,18 @@ impl SDPMediaRef {
         let result = unsafe { ffi::gst_sdp_media_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert attribute")),
         }
     }
 
-    pub fn insert_connection(&mut self, idx: Option<u32>, conn: SDPConnection) -> Result<(), ()> {
+    pub fn insert_connection(
+        &mut self,
+        idx: Option<u32>,
+        conn: SDPConnection,
+    ) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.connections_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert connection"));
             }
         }
 
@@ -413,14 +425,14 @@ impl SDPMediaRef {
         let result = unsafe { ffi::gst_sdp_media_insert_connection(&mut self.0, idx, &mut conn.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert connection")),
         }
     }
 
-    pub fn insert_format(&mut self, idx: Option<u32>, format: &str) -> Result<(), ()> {
+    pub fn insert_format(&mut self, idx: Option<u32>, format: &str) -> Result<(), glib::BoolError> {
         if let Some(idx) = idx {
             if idx >= self.formats_len() {
-                return Err(());
+                return Err(glib::bool_error!("Failed to insert format"));
             }
         }
 
@@ -429,87 +441,95 @@ impl SDPMediaRef {
             unsafe { ffi::gst_sdp_media_insert_format(&mut self.0, idx, format.to_glib_none().0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to insert format")),
         }
     }
 
-    pub fn remove_attribute(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_attribute(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.attributes_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove attribute"));
         }
 
         let result = unsafe { ffi::gst_sdp_media_remove_attribute(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove attribute")),
         }
     }
 
-    pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove bandwidth"));
         }
 
         let result = unsafe { ffi::gst_sdp_media_remove_bandwidth(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove bandwidth")),
         }
     }
 
-    pub fn remove_connection(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_connection(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.connections_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove connection"));
         }
 
         let result = unsafe { ffi::gst_sdp_media_remove_connection(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove connection")),
         }
     }
 
-    pub fn remove_format(&mut self, idx: u32) -> Result<(), ()> {
+    pub fn remove_format(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.formats_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to remove format"));
         }
 
         let result = unsafe { ffi::gst_sdp_media_remove_format(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to remove format")),
         }
     }
 
-    pub fn replace_attribute(&mut self, idx: u32, attr: SDPAttribute) -> Result<(), ()> {
+    pub fn replace_attribute(
+        &mut self,
+        idx: u32,
+        attr: SDPAttribute,
+    ) -> Result<(), glib::BoolError> {
         if idx >= self.attributes_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace attribute"));
         }
 
         let mut attr = mem::ManuallyDrop::new(attr);
         let result = unsafe { ffi::gst_sdp_media_replace_attribute(&mut self.0, idx, &mut attr.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace attribute")),
         }
     }
 
-    pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn replace_bandwidth(&mut self, idx: u32, bw: SDPBandwidth) -> Result<(), glib::BoolError> {
         if idx >= self.bandwidths_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace bandwidth"));
         }
 
         let mut bw = mem::ManuallyDrop::new(bw);
         let result = unsafe { ffi::gst_sdp_media_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace bandwidth")),
         }
     }
 
-    pub fn replace_connection(&mut self, idx: u32, conn: SDPConnection) -> Result<(), ()> {
+    pub fn replace_connection(
+        &mut self,
+        idx: u32,
+        conn: SDPConnection,
+    ) -> Result<(), glib::BoolError> {
         if idx >= self.connections_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace connection"));
         }
 
         let mut conn = mem::ManuallyDrop::new(conn);
@@ -517,20 +537,20 @@ impl SDPMediaRef {
             unsafe { ffi::gst_sdp_media_replace_connection(&mut self.0, idx, &mut conn.0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace connection")),
         }
     }
 
-    pub fn replace_format(&mut self, idx: u32, format: &str) -> Result<(), ()> {
+    pub fn replace_format(&mut self, idx: u32, format: &str) -> Result<(), glib::BoolError> {
         if idx >= self.formats_len() {
-            return Err(());
+            return Err(glib::bool_error!("Failed to replace format"));
         }
 
         let result =
             unsafe { ffi::gst_sdp_media_replace_format(&mut self.0, idx, format.to_glib_none().0) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to replace format")),
         }
     }
 
@@ -556,7 +576,10 @@ impl SDPMediaRef {
         unsafe { ffi::gst_sdp_media_set_proto(&mut self.0, proto.to_glib_none().0) };
     }
 
-    pub fn set_media_from_caps(caps: &gst::Caps, media: &mut SDPMedia) -> Result<(), ()> {
+    pub fn set_media_from_caps(
+        caps: &gst::Caps,
+        media: &mut SDPMedia,
+    ) -> Result<(), glib::BoolError> {
         assert_initialized_main_thread!();
         let result = unsafe {
             ffi::gst_sdp_media_set_media_from_caps(
@@ -566,7 +589,7 @@ impl SDPMediaRef {
         };
         match result {
             ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            _ => Err(glib::bool_error!("Failed to set media from caps")),
         }
     }
 }
