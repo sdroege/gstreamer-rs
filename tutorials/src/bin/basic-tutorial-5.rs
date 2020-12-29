@@ -134,12 +134,7 @@ mod tutorial5 {
                 .expect("Unable to set the pipeline to the `Ready` state");
         });
 
-        let slider = gtk::Scale::with_range(
-            gtk::Orientation::Horizontal,
-            0.0 as f64,
-            100.0 as f64,
-            1.0 as f64,
-        );
+        let slider = gtk::Scale::with_range(gtk::Orientation::Horizontal, 0.0, 100.0, 1.0);
         let pipeline = playbin.clone();
         let slider_update_signal_id = slider.connect_value_changed(move |slider| {
             let pipeline = &pipeline;
