@@ -92,8 +92,7 @@ mod tests {
             buffer.set_flags(BufferFlags::LIVE | BufferFlags::DISCONT);
         }
 
-        let mut pretty_config = ron::ser::PrettyConfig::default();
-        pretty_config.new_line = "".to_string();
+        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&buffer, pretty_config);
         assert_eq!(

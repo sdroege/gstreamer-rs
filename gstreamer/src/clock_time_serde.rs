@@ -55,8 +55,7 @@ mod tests {
         // Some
         let clocktime = ClockTime::from_nseconds(42_123_456_789);
 
-        let mut pretty_config = ron::ser::PrettyConfig::default();
-        pretty_config.new_line = "".to_string();
+        let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
 
         let res = ron::ser::to_string_pretty(&clocktime, pretty_config.clone());
         assert_eq!(Ok("Some(42123456789)".to_owned()), res);
