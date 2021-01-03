@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::IntoGlib;
+use std::mem;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct VideoRectangle {
@@ -45,4 +46,11 @@ pub fn center_video_rectangle(
         ffi::gst_video_sink_center_rect(src_rect, dst_rect, &mut result, scale.into_glib());
     }
     VideoRectangle::new(result.x, result.y, result.w, result.h)
+}
+
+#[doc(hidden)]
+impl glib::translate::Uninitialized for VideoRectangle {
+    unsafe fn uninitialized() -> Self {
+        mem::zeroed()
+    }
 }
