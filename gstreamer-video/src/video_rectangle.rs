@@ -54,3 +54,14 @@ impl glib::translate::Uninitialized for VideoRectangle {
         mem::zeroed()
     }
 }
+
+#[doc(hidden)]
+impl<'a> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstVideoRectangle> for VideoRectangle {
+    type Storage = &'a mut Self;
+
+    fn to_glib_none_mut(
+        &'a mut self,
+    ) -> glib::translate::StashMut<*mut ffi::GstVideoRectangle, Self> {
+        glib::translate::StashMut(self as *mut _ as *mut _, self)
+    }
+}
