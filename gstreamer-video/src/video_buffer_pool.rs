@@ -83,6 +83,15 @@ impl PartialEq for VideoAlignment {
 
 impl Eq for VideoAlignment {}
 
+#[doc(hidden)]
+impl<'a> ToGlibPtr<'a, *const ffi::GstVideoAlignment> for VideoAlignment {
+    type Storage = &'a Self;
+
+    fn to_glib_none(&'a self) -> Stash<*const ffi::GstVideoAlignment, Self> {
+        Stash(&self.0, self)
+    }
+}
+
 pub trait VideoBufferPoolConfig {
     fn video_alignment(&self) -> Option<VideoAlignment>;
 
