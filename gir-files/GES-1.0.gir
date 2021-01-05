@@ -14992,7 +14992,7 @@ contains one frame)</doc>
       
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="0" c:type="GES_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="2" c:type="GES_VERSION_MICRO">
       
       <type name="gint" c:type="gint"/>
     </constant>
@@ -15831,6 +15831,37 @@ formatter asset.</doc>
         </parameter>
       </parameters>
     </function>
+    <docsection name="ges.h">
+      <doc xml:space="preserve">GES needs to be initialized after GStreamer itself. This section
+contains the various functions to do so.</doc>
+    </docsection>
+    <docsection name="gestimeoverlayclip">
+      <doc xml:space="preserve">A #GESSourceClip that overlays timing information on top.
+
+## Asset
+
+The default asset ID is "time-overlay" (of type #GES_TYPE_SOURCE_CLIP),
+but the framerate and video size can be overridden using an ID of the form:
+
+```
+time-overlay, framerate=60/1, width=1920, height=1080, max-duration=5.0
+```
+
+## Children properties
+
+{{ libs/GESTimeOverlayClip-children-props.md }}
+
+## Symbols</doc>
+    </docsection>
+    <docsection name="gestypes">
+      <doc xml:space="preserve">GStreamer Editing Services data types</doc>
+    </docsection>
+    <docsection name="gesuriasset">
+      <doc xml:space="preserve">The #GESUriClipAsset is a special #GESAsset that lets you handle
+the media file to use inside the GStreamer Editing Services. It has APIs that
+let you get information about the medias. Also, the tags found in the media file are
+set as Metadata of the Asset.</doc>
+    </docsection>
     <function name="init" c:identifier="ges_init">
       <doc xml:space="preserve">Initialize the GStreamer Editing Service. Call this before any usage of
 GES. You should take care of initilizing GStreamer before calling this
