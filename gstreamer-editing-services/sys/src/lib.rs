@@ -193,7 +193,7 @@ pub const GES_PADDING: c_int = 4;
 pub const GES_PADDING_LARGE: c_int = 20;
 pub const GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY: u32 = 4294967295;
 pub const GES_VERSION_MAJOR: c_int = 1;
-pub const GES_VERSION_MICRO: c_int = 0;
+pub const GES_VERSION_MICRO: c_int = 2;
 pub const GES_VERSION_MINOR: c_int = 18;
 pub const GES_VERSION_NANO: c_int = 0;
 
