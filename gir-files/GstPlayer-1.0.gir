@@ -13,322 +13,276 @@ and/or use gtk-doc annotations.  -->
   <c:include name="gst/player/player.h"/>
   <namespace name="GstPlayer" version="1.0" shared-library="libgstplayer-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
     <function-macro name="IS_PLAYER" c:identifier="GST_IS_PLAYER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_AUDIO_INFO" c:identifier="GST_IS_PLAYER_AUDIO_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_AUDIO_INFO_CLASS" c:identifier="GST_IS_PLAYER_AUDIO_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_CLASS" c:identifier="GST_IS_PLAYER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER" c:identifier="GST_IS_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_CLASS" c:identifier="GST_IS_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_MEDIA_INFO" c:identifier="GST_IS_PLAYER_MEDIA_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_MEDIA_INFO_CLASS" c:identifier="GST_IS_PLAYER_MEDIA_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_SIGNAL_DISPATCHER" c:identifier="GST_IS_PLAYER_SIGNAL_DISPATCHER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_STREAM_INFO" c:identifier="GST_IS_PLAYER_STREAM_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_STREAM_INFO_CLASS" c:identifier="GST_IS_PLAYER_STREAM_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_SUBTITLE_INFO" c:identifier="GST_IS_PLAYER_SUBTITLE_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_SUBTITLE_INFO_CLASS" c:identifier="GST_IS_PLAYER_SUBTITLE_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_VIDEO_INFO" c:identifier="GST_IS_PLAYER_VIDEO_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_VIDEO_INFO_CLASS" c:identifier="GST_IS_PLAYER_VIDEO_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER" c:identifier="GST_IS_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_CLASS" c:identifier="GST_IS_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PLAYER_VIDEO_RENDERER" c:identifier="GST_IS_PLAYER_VIDEO_RENDERER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER" c:identifier="GST_PLAYER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_AUDIO_INFO" c:identifier="GST_PLAYER_AUDIO_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_AUDIO_INFO_CLASS" c:identifier="GST_PLAYER_AUDIO_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_CAST" c:identifier="GST_PLAYER_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_CLASS" c:identifier="GST_PLAYER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_DEPRECATED_FOR" c:identifier="GST_PLAYER_DEPRECATED_FOR" introspectable="0">
-      
       <parameters>
         <parameter name="f">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_GET_CLASS" c:identifier="GST_PLAYER_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER" c:identifier="GST_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_CAST" c:identifier="GST_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_CLASS" c:identifier="GST_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_GET_CLASS" c:identifier="GST_PLAYER_G_MAIN_CONTEXT_SIGNAL_DISPATCHER_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_MEDIA_INFO" c:identifier="GST_PLAYER_MEDIA_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_MEDIA_INFO_CLASS" c:identifier="GST_PLAYER_MEDIA_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_SIGNAL_DISPATCHER" c:identifier="GST_PLAYER_SIGNAL_DISPATCHER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_SIGNAL_DISPATCHER_GET_INTERFACE" c:identifier="GST_PLAYER_SIGNAL_DISPATCHER_GET_INTERFACE" introspectable="0">
-      
       <parameters>
         <parameter name="inst">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_STREAM_INFO" c:identifier="GST_PLAYER_STREAM_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_STREAM_INFO_CLASS" c:identifier="GST_PLAYER_STREAM_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_SUBTITLE_INFO" c:identifier="GST_PLAYER_SUBTITLE_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_SUBTITLE_INFO_CLASS" c:identifier="GST_PLAYER_SUBTITLE_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_INFO" c:identifier="GST_PLAYER_VIDEO_INFO" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_INFO_CLASS" c:identifier="GST_PLAYER_VIDEO_INFO_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER" c:identifier="GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_CAST" c:identifier="GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_CLASS" c:identifier="GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_GET_CLASS" c:identifier="GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_RENDERER" c:identifier="GST_PLAYER_VIDEO_RENDERER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PLAYER_VIDEO_RENDERER_GET_INTERFACE" c:identifier="GST_PLAYER_VIDEO_RENDERER_GET_INTERFACE" introspectable="0">
-      
       <parameters>
         <parameter name="inst">
         </parameter>
       </parameters>
     </function-macro>
     <class name="Player" c:symbol-prefix="player" c:type="GstPlayer" parent="Gst.Object" glib:type-name="GstPlayer" glib:get-type="gst_player_get_type" glib:type-struct="PlayerClass">
-      
       <constructor name="new" c:identifier="gst_player_new">
         <doc xml:space="preserve">Creates a new #GstPlayer instance that uses @signal_dispatcher to dispatch
 signals to some event loop system, or emits signals directly if NULL is
@@ -337,7 +291,6 @@ passed. See gst_player_g_main_context_signal_dispatcher_new().
 Video is going to be rendered by @video_renderer, or if %NULL is provided
 no special video set up will be done and some default handling will be
 performed.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstPlayer instance</doc>
           <type name="Player" c:type="GstPlayer*"/>
@@ -354,7 +307,6 @@ performed.</doc>
         </parameters>
       </constructor>
       <function name="config_get_position_update_interval" c:identifier="gst_player_config_get_position_update_interval" version="1.10">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">current position update interval in milliseconds</doc>
           <type name="guint" c:type="guint"/>
@@ -367,7 +319,6 @@ performed.</doc>
         </parameters>
       </function>
       <function name="config_get_seek_accurate" c:identifier="gst_player_config_get_seek_accurate" version="1.12">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if accurate seeking is enabled</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -382,7 +333,6 @@ performed.</doc>
       <function name="config_get_user_agent" c:identifier="gst_player_config_get_user_agent" version="1.10">
         <doc xml:space="preserve">Return the user agent which has been configured using
 gst_player_config_set_user_agent() if any.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the configured agent, or %NULL</doc>
           <type name="utf8" c:type="gchar*"/>
@@ -397,7 +347,6 @@ gst_player_config_set_user_agent() if any.</doc>
       <function name="config_set_position_update_interval" c:identifier="gst_player_config_set_position_update_interval" version="1.10">
         <doc xml:space="preserve">set interval in milliseconds between two position-updated signals.
 pass 0 to stop updating the position.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -422,7 +371,6 @@ If accurate seeking is disabled, elements will seek as close as the request
 position without slowing down seeking too much.
 
 Accurate seeking is disabled by default.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -441,7 +389,6 @@ Accurate seeking is disabled by default.</doc>
         <doc xml:space="preserve">Set the user agent to pass to the server if @player needs to connect
 to a server during playback. This is typically used when playing HTTP
 or RTSP streams.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -457,7 +404,6 @@ or RTSP streams.</doc>
         </parameters>
       </function>
       <function name="get_audio_streams" c:identifier="gst_player_get_audio_streams">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A #GList of
 matching #GstPlayerAudioInfo.</doc>
@@ -473,7 +419,6 @@ matching #GstPlayerAudioInfo.</doc>
         </parameters>
       </function>
       <function name="get_subtitle_streams" c:identifier="gst_player_get_subtitle_streams">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A #GList of
 matching #GstPlayerSubtitleInfo.</doc>
@@ -489,7 +434,6 @@ matching #GstPlayerSubtitleInfo.</doc>
         </parameters>
       </function>
       <function name="get_video_streams" c:identifier="gst_player_get_video_streams">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A #GList of
 matching #GstPlayerVideoInfo.</doc>
@@ -506,7 +450,6 @@ matching #GstPlayerVideoInfo.</doc>
       </function>
       <function name="visualizations_free" c:identifier="gst_player_visualizations_free">
         <doc xml:space="preserve">Frees a %NULL terminated array of #GstPlayerVisualization.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -518,7 +461,6 @@ matching #GstPlayerVideoInfo.</doc>
         </parameters>
       </function>
       <function name="visualizations_get" c:identifier="gst_player_visualizations_get">
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">
  a %NULL terminated array containing all available
@@ -531,7 +473,6 @@ matching #GstPlayerVideoInfo.</doc>
       </function>
       <method name="get_audio_video_offset" c:identifier="gst_player_get_audio_video_offset" version="1.10">
         <doc xml:space="preserve">Retrieve the current value of audio-video-offset property</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The current value of audio-video-offset in nanoseconds</doc>
           <type name="gint64" c:type="gint64"/>
@@ -545,7 +486,6 @@ matching #GstPlayerVideoInfo.</doc>
       </method>
       <method name="get_color_balance" c:identifier="gst_player_get_color_balance">
         <doc xml:space="preserve">Retrieve the current value of the indicated @type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The current value of @type, between [0,1]. In case of
   error -1 is returned.</doc>
@@ -566,7 +506,6 @@ matching #GstPlayerVideoInfo.</doc>
         <doc xml:space="preserve">Get a copy of the current configuration of the player. This configuration
 can either be modified and used for the gst_player_set_config() call
 or it must be freed after usage.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a copy of the current configuration of @player. Use
 gst_structure_free() after usage or gst_player_set_config().</doc>
@@ -581,7 +520,6 @@ gst_structure_free() after usage or gst_player_set_config().</doc>
       </method>
       <method name="get_current_audio_track" c:identifier="gst_player_get_current_audio_track">
         <doc xml:space="preserve">A Function to get current audio #GstPlayerAudioInfo instance.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">current audio track.
 
@@ -597,7 +535,6 @@ The caller should free it with g_object_unref()</doc>
       </method>
       <method name="get_current_subtitle_track" c:identifier="gst_player_get_current_subtitle_track">
         <doc xml:space="preserve">A Function to get current subtitle #GstPlayerSubtitleInfo instance.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">current subtitle track.
 
@@ -613,7 +550,6 @@ The caller should free it with g_object_unref()</doc>
       </method>
       <method name="get_current_video_track" c:identifier="gst_player_get_current_video_track">
         <doc xml:space="preserve">A Function to get current video #GstPlayerVideoInfo instance.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">current video track.
 
@@ -628,7 +564,6 @@ The caller should free it with g_object_unref()</doc>
         </parameters>
       </method>
       <method name="get_current_visualization" c:identifier="gst_player_get_current_visualization">
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">Name of the currently enabled visualization.
   g_free() after usage.</doc>
@@ -643,7 +578,6 @@ The caller should free it with g_object_unref()</doc>
       </method>
       <method name="get_duration" c:identifier="gst_player_get_duration">
         <doc xml:space="preserve">Retrieves the duration of the media stream that self represents.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the duration of the currently-playing media stream, in
 nanoseconds.</doc>
@@ -658,7 +592,6 @@ nanoseconds.</doc>
       </method>
       <method name="get_media_info" c:identifier="gst_player_get_media_info">
         <doc xml:space="preserve">A Function to get the current media info #GstPlayerMediaInfo instance.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">media info instance.
 
@@ -674,7 +607,6 @@ The caller should free it with g_object_unref()</doc>
       </method>
       <method name="get_multiview_flags" c:identifier="gst_player_get_multiview_flags" version="1.10">
         <doc xml:space="preserve">Retrieve the current value of the indicated @type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The current value of @type, Default: 0x00000000 "none</doc>
           <type name="GstVideo.VideoMultiviewFlags" c:type="GstVideoMultiviewFlags"/>
@@ -688,7 +620,6 @@ The caller should free it with g_object_unref()</doc>
       </method>
       <method name="get_multiview_mode" c:identifier="gst_player_get_multiview_mode" version="1.10">
         <doc xml:space="preserve">Retrieve the current value of the indicated @type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The current value of @type, Default: -1 "none"</doc>
           <type name="GstVideo.VideoMultiviewFramePacking" c:type="GstVideoMultiviewFramePacking"/>
@@ -701,7 +632,6 @@ The caller should free it with g_object_unref()</doc>
         </parameters>
       </method>
       <method name="get_mute" c:identifier="gst_player_get_mute">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the currently-playing stream is muted.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -714,7 +644,6 @@ The caller should free it with g_object_unref()</doc>
         </parameters>
       </method>
       <method name="get_pipeline" c:identifier="gst_player_get_pipeline">
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">The internal playbin instance</doc>
           <type name="Gst.Element" c:type="GstElement*"/>
@@ -727,7 +656,6 @@ The caller should free it with g_object_unref()</doc>
         </parameters>
       </method>
       <method name="get_position" c:identifier="gst_player_get_position">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the absolute position time, in nanoseconds, of the
 currently-playing stream.</doc>
@@ -741,7 +669,6 @@ currently-playing stream.</doc>
         </parameters>
       </method>
       <method name="get_rate" c:identifier="gst_player_get_rate">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">current playback rate</doc>
           <type name="gdouble" c:type="gdouble"/>
@@ -755,7 +682,6 @@ currently-playing stream.</doc>
       </method>
       <method name="get_subtitle_uri" c:identifier="gst_player_get_subtitle_uri">
         <doc xml:space="preserve">current subtitle URI</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">URI of the current external subtitle.
   g_free() after usage.</doc>
@@ -770,7 +696,6 @@ currently-playing stream.</doc>
       </method>
       <method name="get_subtitle_video_offset" c:identifier="gst_player_get_subtitle_video_offset" version="1.16">
         <doc xml:space="preserve">Retrieve the current value of subtitle-video-offset property</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The current value of subtitle-video-offset in nanoseconds</doc>
           <type name="gint64" c:type="gint64"/>
@@ -784,7 +709,6 @@ currently-playing stream.</doc>
       </method>
       <method name="get_uri" c:identifier="gst_player_get_uri">
         <doc xml:space="preserve">Gets the URI of the currently-playing stream.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a string containing the URI of the
 currently-playing stream. g_free() after usage.</doc>
@@ -804,7 +728,6 @@ Currently supported settings are:
 - width, height of type G_TYPE_INT
 - pixel-aspect-ratio of type GST_TYPE_FRACTION
  Except for GST_PLAYER_THUMBNAIL_RAW_NATIVE format, if no config is set, pixel-aspect-ratio would be 1/1</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">Current video snapshot sample or %NULL on failure</doc>
           <type name="Gst.Sample" c:type="GstSample*"/>
@@ -826,7 +749,6 @@ Currently supported settings are:
       </method>
       <method name="get_volume" c:identifier="gst_player_get_volume">
         <doc xml:space="preserve">Returns the current volume level, as a percentage between 0 and 1.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the volume as percentage between 0 and 1.</doc>
           <type name="gdouble" c:type="gdouble"/>
@@ -840,7 +762,6 @@ Currently supported settings are:
       </method>
       <method name="has_color_balance" c:identifier="gst_player_has_color_balance">
         <doc xml:space="preserve">Checks whether the @player has color balance support available.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @player has color balance support. Otherwise,
   %FALSE.</doc>
@@ -855,7 +776,6 @@ Currently supported settings are:
       </method>
       <method name="pause" c:identifier="gst_player_pause">
         <doc xml:space="preserve">Pauses the current stream.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -868,7 +788,6 @@ Currently supported settings are:
       </method>
       <method name="play" c:identifier="gst_player_play">
         <doc xml:space="preserve">Request to play the loaded stream.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -882,7 +801,6 @@ Currently supported settings are:
       <method name="seek" c:identifier="gst_player_seek">
         <doc xml:space="preserve">Seeks the currently-playing stream to the absolute @position time
 in nanoseconds.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -898,7 +816,6 @@ in nanoseconds.</doc>
         </parameters>
       </method>
       <method name="set_audio_track" c:identifier="gst_player_set_audio_track">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE or %FALSE
 
@@ -918,7 +835,6 @@ Sets the audio track @stream_idex.</doc>
       </method>
       <method name="set_audio_track_enabled" c:identifier="gst_player_set_audio_track_enabled">
         <doc xml:space="preserve">Enable or disable the current audio track.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -935,7 +851,6 @@ Sets the audio track @stream_idex.</doc>
       </method>
       <method name="set_audio_video_offset" c:identifier="gst_player_set_audio_video_offset" version="1.10">
         <doc xml:space="preserve">Sets audio-video-offset property by value of @offset</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -953,7 +868,6 @@ Sets the audio track @stream_idex.</doc>
       <method name="set_color_balance" c:identifier="gst_player_set_color_balance">
         <doc xml:space="preserve">Sets the current value of the indicated channel @type to the passed
 value.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -982,7 +896,6 @@ and active configuration will remain.
 the player.
 
 This function takes ownership of @config.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE when the configuration could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1001,7 +914,6 @@ This function takes ownership of @config.</doc>
       <method name="set_multiview_flags" c:identifier="gst_player_set_multiview_flags" version="1.10">
         <doc xml:space="preserve">Sets the current value of the indicated mode @type to the passed
 value.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1019,7 +931,6 @@ value.</doc>
       <method name="set_multiview_mode" c:identifier="gst_player_set_multiview_mode" version="1.10">
         <doc xml:space="preserve">Sets the current value of the indicated mode @type to the passed
 value.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1036,7 +947,6 @@ value.</doc>
       </method>
       <method name="set_mute" c:identifier="gst_player_set_mute">
         <doc xml:space="preserve">%TRUE if the currently-playing stream should be muted.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1053,7 +963,6 @@ value.</doc>
       </method>
       <method name="set_rate" c:identifier="gst_player_set_rate">
         <doc xml:space="preserve">Playback at specified rate</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1069,7 +978,6 @@ value.</doc>
         </parameters>
       </method>
       <method name="set_subtitle_track" c:identifier="gst_player_set_subtitle_track">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE or %FALSE
 
@@ -1089,7 +997,6 @@ Sets the subtitle stack @stream_index.</doc>
       </method>
       <method name="set_subtitle_track_enabled" c:identifier="gst_player_set_subtitle_track_enabled">
         <doc xml:space="preserve">Enable or disable the current subtitle track.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1108,7 +1015,6 @@ Sets the subtitle stack @stream_index.</doc>
         <doc xml:space="preserve">Sets the external subtitle URI. This should be combined with a call to
 gst_player_set_subtitle_track_enabled(@player, TRUE) so the subtitles are actually
 rendered.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1125,7 +1031,6 @@ rendered.</doc>
       </method>
       <method name="set_subtitle_video_offset" c:identifier="gst_player_set_subtitle_video_offset" version="1.16">
         <doc xml:space="preserve">Sets subtitle-video-offset property by value of @offset</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1142,7 +1047,6 @@ rendered.</doc>
       </method>
       <method name="set_uri" c:identifier="gst_player_set_uri">
         <doc xml:space="preserve">Sets the next URI to play.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1158,7 +1062,6 @@ rendered.</doc>
         </parameters>
       </method>
       <method name="set_video_track" c:identifier="gst_player_set_video_track">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE or %FALSE
 
@@ -1178,7 +1081,6 @@ Sets the video track @stream_index.</doc>
       </method>
       <method name="set_video_track_enabled" c:identifier="gst_player_set_video_track_enabled">
         <doc xml:space="preserve">Enable or disable the current video track.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1194,7 +1096,6 @@ Sets the video track @stream_index.</doc>
         </parameters>
       </method>
       <method name="set_visualization" c:identifier="gst_player_set_visualization">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the visualizations was set correctly. Otherwise,
 %FALSE.</doc>
@@ -1214,7 +1115,6 @@ Sets the video track @stream_index.</doc>
       </method>
       <method name="set_visualization_enabled" c:identifier="gst_player_set_visualization_enabled">
         <doc xml:space="preserve">Enable or disable the visualization.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1231,7 +1131,6 @@ Sets the video track @stream_index.</doc>
       </method>
       <method name="set_volume" c:identifier="gst_player_set_volume">
         <doc xml:space="preserve">Sets the volume level of the stream as a percentage between 0 and 1.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1249,7 +1148,6 @@ Sets the video track @stream_index.</doc>
       <method name="stop" c:identifier="gst_player_stop">
         <doc xml:space="preserve">Stops playing the current stream and resets to the first position
 in the stream.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1435,9 +1333,7 @@ in the stream.</doc>
     </class>
     <class name="PlayerAudioInfo" c:symbol-prefix="player_audio_info" c:type="GstPlayerAudioInfo" parent="PlayerStreamInfo" glib:type-name="GstPlayerAudioInfo" glib:get-type="gst_player_audio_info_get_type" glib:type-struct="PlayerAudioInfoClass">
       <doc xml:space="preserve">#GstPlayerStreamInfo specific to audio streams.</doc>
-      
       <method name="get_bitrate" c:identifier="gst_player_audio_info_get_bitrate">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the audio bitrate in #GstPlayerAudioInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -1450,7 +1346,6 @@ in the stream.</doc>
         </parameters>
       </method>
       <method name="get_channels" c:identifier="gst_player_audio_info_get_channels">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the number of audio channels in #GstPlayerAudioInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -1463,7 +1358,6 @@ in the stream.</doc>
         </parameters>
       </method>
       <method name="get_language" c:identifier="gst_player_audio_info_get_language">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the language of the stream, or NULL if unknown.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1476,7 +1370,6 @@ in the stream.</doc>
         </parameters>
       </method>
       <method name="get_max_bitrate" c:identifier="gst_player_audio_info_get_max_bitrate">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the audio maximum bitrate in #GstPlayerAudioInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -1489,7 +1382,6 @@ in the stream.</doc>
         </parameters>
       </method>
       <method name="get_sample_rate" c:identifier="gst_player_audio_info_get_sample_rate">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the audio sample rate in #GstPlayerAudioInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -1502,12 +1394,8 @@ in the stream.</doc>
         </parameters>
       </method>
     </class>
-    <record name="PlayerAudioInfoClass" c:type="GstPlayerAudioInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerAudioInfo">
-      
-    </record>
-    <record name="PlayerClass" c:type="GstPlayerClass" disguised="1" glib:is-gtype-struct-for="Player">
-      
-    </record>
+    <record name="PlayerAudioInfoClass" c:type="GstPlayerAudioInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerAudioInfo"/>
+    <record name="PlayerClass" c:type="GstPlayerClass" disguised="1" glib:is-gtype-struct-for="Player"/>
     <enumeration name="PlayerColorBalanceType" glib:type-name="GstPlayerColorBalanceType" glib:get-type="gst_player_color_balance_type_get_type" c:type="GstPlayerColorBalanceType">
       <member name="hue" value="3" c:identifier="GST_PLAYER_COLOR_BALANCE_HUE" glib:nick="hue">
         <doc xml:space="preserve">hue or color balance.</doc>
@@ -1524,7 +1412,6 @@ gain.</doc>
       </member>
       <function name="get_name" c:identifier="gst_player_color_balance_type_get_name">
         <doc xml:space="preserve">Gets a string representing the given color balance type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a string with the name of the color
   balance type.</doc>
@@ -1544,7 +1431,6 @@ gain.</doc>
       </member>
       <function name="get_name" c:identifier="gst_player_error_get_name">
         <doc xml:space="preserve">Gets a string representing the given error.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a string with the given error.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1563,12 +1449,10 @@ gain.</doc>
       </function>
     </enumeration>
     <class name="PlayerGMainContextSignalDispatcher" c:symbol-prefix="player_g_main_context_signal_dispatcher" c:type="GstPlayerGMainContextSignalDispatcher" parent="GObject.Object" glib:type-name="GstPlayerGMainContextSignalDispatcher" glib:get-type="gst_player_g_main_context_signal_dispatcher_get_type" glib:type-struct="PlayerGMainContextSignalDispatcherClass">
-      
       <implements name="PlayerSignalDispatcher"/>
       <function name="new" c:identifier="gst_player_g_main_context_signal_dispatcher_new">
         <doc xml:space="preserve">Creates a new GstPlayerSignalDispatcher that uses @application_context,
 or the thread default one if %NULL is used. See gst_player_new().</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the new GstPlayerSignalDispatcher</doc>
           <type name="PlayerSignalDispatcher" c:type="GstPlayerSignalDispatcher*"/>
@@ -1584,14 +1468,10 @@ or the thread default one if %NULL is used. See gst_player_new().</doc>
         <type name="GLib.MainContext"/>
       </property>
     </class>
-    <record name="PlayerGMainContextSignalDispatcherClass" c:type="GstPlayerGMainContextSignalDispatcherClass" disguised="1" glib:is-gtype-struct-for="PlayerGMainContextSignalDispatcher">
-      
-    </record>
+    <record name="PlayerGMainContextSignalDispatcherClass" c:type="GstPlayerGMainContextSignalDispatcherClass" disguised="1" glib:is-gtype-struct-for="PlayerGMainContextSignalDispatcher"/>
     <class name="PlayerMediaInfo" c:symbol-prefix="player_media_info" c:type="GstPlayerMediaInfo" parent="GObject.Object" glib:type-name="GstPlayerMediaInfo" glib:get-type="gst_player_media_info_get_type" glib:type-struct="PlayerMediaInfoClass">
       <doc xml:space="preserve">Structure containing the media information of a URI.</doc>
-      
       <method name="get_audio_streams" c:identifier="gst_player_media_info_get_audio_streams">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A #GList of
 matching #GstPlayerAudioInfo.</doc>
@@ -1607,7 +1487,6 @@ matching #GstPlayerAudioInfo.</doc>
         </parameters>
       </method>
       <method name="get_container_format" c:identifier="gst_player_media_info_get_container_format">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the container format.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1620,7 +1499,6 @@ matching #GstPlayerAudioInfo.</doc>
         </parameters>
       </method>
       <method name="get_duration" c:identifier="gst_player_media_info_get_duration">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">duration of the media.</doc>
           <type name="Gst.ClockTime" c:type="GstClockTime"/>
@@ -1635,7 +1513,6 @@ matching #GstPlayerAudioInfo.</doc>
       <method name="get_image_sample" c:identifier="gst_player_media_info_get_image_sample">
         <doc xml:space="preserve">Function to get the image (or preview-image) stored in taglist.
 Application can use `gst_sample_*_()` API's to get caps, buffer etc.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">GstSample or NULL.</doc>
           <type name="Gst.Sample" c:type="GstSample*"/>
@@ -1648,7 +1525,6 @@ Application can use `gst_sample_*_()` API's to get caps, buffer etc.</doc>
         </parameters>
       </method>
       <method name="get_number_of_audio_streams" c:identifier="gst_player_media_info_get_number_of_audio_streams" version="1.12">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">number of audio streams.</doc>
           <type name="guint" c:type="guint"/>
@@ -1661,7 +1537,6 @@ Application can use `gst_sample_*_()` API's to get caps, buffer etc.</doc>
         </parameters>
       </method>
       <method name="get_number_of_streams" c:identifier="gst_player_media_info_get_number_of_streams" version="1.12">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">number of total streams.</doc>
           <type name="guint" c:type="guint"/>
@@ -1674,7 +1549,6 @@ Application can use `gst_sample_*_()` API's to get caps, buffer etc.</doc>
         </parameters>
       </method>
       <method name="get_number_of_subtitle_streams" c:identifier="gst_player_media_info_get_number_of_subtitle_streams" version="1.12">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">number of subtitle streams.</doc>
           <type name="guint" c:type="guint"/>
@@ -1687,7 +1561,6 @@ Application can use `gst_sample_*_()` API's to get caps, buffer etc.</doc>
         </parameters>
       </method>
       <method name="get_number_of_video_streams" c:identifier="gst_player_media_info_get_number_of_video_streams" version="1.12">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">number of video streams.</doc>
           <type name="guint" c:type="guint"/>
@@ -1700,7 +1573,6 @@ Application can use `gst_sample_*_()` API's to get caps, buffer etc.</doc>
         </parameters>
       </method>
       <method name="get_stream_list" c:identifier="gst_player_media_info_get_stream_list">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A #GList of
 matching #GstPlayerStreamInfo.</doc>
@@ -1716,7 +1588,6 @@ matching #GstPlayerStreamInfo.</doc>
         </parameters>
       </method>
       <method name="get_subtitle_streams" c:identifier="gst_player_media_info_get_subtitle_streams">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A #GList of
 matching #GstPlayerSubtitleInfo.</doc>
@@ -1732,7 +1603,6 @@ matching #GstPlayerSubtitleInfo.</doc>
         </parameters>
       </method>
       <method name="get_tags" c:identifier="gst_player_media_info_get_tags">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the tags contained in media info.</doc>
           <type name="Gst.TagList" c:type="GstTagList*"/>
@@ -1745,7 +1615,6 @@ matching #GstPlayerSubtitleInfo.</doc>
         </parameters>
       </method>
       <method name="get_title" c:identifier="gst_player_media_info_get_title">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the media title.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1758,7 +1627,6 @@ matching #GstPlayerSubtitleInfo.</doc>
         </parameters>
       </method>
       <method name="get_uri" c:identifier="gst_player_media_info_get_uri">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the URI associated with #GstPlayerMediaInfo.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1771,7 +1639,6 @@ matching #GstPlayerSubtitleInfo.</doc>
         </parameters>
       </method>
       <method name="get_video_streams" c:identifier="gst_player_media_info_get_video_streams">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A #GList of
 matching #GstPlayerVideoInfo.</doc>
@@ -1787,7 +1654,6 @@ matching #GstPlayerVideoInfo.</doc>
         </parameters>
       </method>
       <method name="is_live" c:identifier="gst_player_media_info_is_live">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the media is live.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1800,7 +1666,6 @@ matching #GstPlayerVideoInfo.</doc>
         </parameters>
       </method>
       <method name="is_seekable" c:identifier="gst_player_media_info_is_seekable">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the media is seekable.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1813,13 +1678,9 @@ matching #GstPlayerVideoInfo.</doc>
         </parameters>
       </method>
     </class>
-    <record name="PlayerMediaInfoClass" c:type="GstPlayerMediaInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerMediaInfo">
-      
-    </record>
+    <record name="PlayerMediaInfoClass" c:type="GstPlayerMediaInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerMediaInfo"/>
     <interface name="PlayerSignalDispatcher" c:symbol-prefix="player_signal_dispatcher" c:type="GstPlayerSignalDispatcher" glib:type-name="GstPlayerSignalDispatcher" glib:get-type="gst_player_signal_dispatcher_get_type" glib:type-struct="PlayerSignalDispatcherInterface">
-      
       <virtual-method name="dispatch">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1843,7 +1704,6 @@ matching #GstPlayerVideoInfo.</doc>
       </virtual-method>
     </interface>
     <callback name="PlayerSignalDispatcherFunc" c:type="GstPlayerSignalDispatcherFunc">
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -1854,13 +1714,11 @@ matching #GstPlayerVideoInfo.</doc>
       </parameters>
     </callback>
     <record name="PlayerSignalDispatcherInterface" c:type="GstPlayerSignalDispatcherInterface" glib:is-gtype-struct-for="PlayerSignalDispatcher">
-      
       <field name="parent_iface">
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
       <field name="dispatch">
         <callback name="dispatch">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -1885,7 +1743,6 @@ matching #GstPlayerVideoInfo.</doc>
       </field>
     </record>
     <enumeration name="PlayerSnapshotFormat" c:type="GstPlayerSnapshotFormat">
-      
       <member name="raw_native" value="0" c:identifier="GST_PLAYER_THUMBNAIL_RAW_NATIVE">
       </member>
       <member name="raw_xrgb" value="1" c:identifier="GST_PLAYER_THUMBNAIL_RAW_xRGB">
@@ -1913,7 +1770,6 @@ stream.</doc>
       </member>
       <function name="get_name" c:identifier="gst_player_state_get_name">
         <doc xml:space="preserve">Gets a string representing the given state.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a string with the name of the state.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1930,9 +1786,7 @@ stream.</doc>
       <doc xml:space="preserve">Base structure for information concerning a media stream. Depending on
 the stream type, one can find more media-specific information in
 #GstPlayerVideoInfo, #GstPlayerAudioInfo, #GstPlayerSubtitleInfo.</doc>
-      
       <method name="get_caps" c:identifier="gst_player_stream_info_get_caps">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the #GstCaps of the stream.</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
@@ -1946,7 +1800,6 @@ the stream type, one can find more media-specific information in
       </method>
       <method name="get_codec" c:identifier="gst_player_stream_info_get_codec">
         <doc xml:space="preserve">A string describing codec used in #GstPlayerStreamInfo.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">codec string or NULL on unknown.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1960,7 +1813,6 @@ the stream type, one can find more media-specific information in
       </method>
       <method name="get_index" c:identifier="gst_player_stream_info_get_index">
         <doc xml:space="preserve">Function to get stream index from #GstPlayerStreamInfo instance.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the stream index of this stream.</doc>
           <type name="gint" c:type="gint"/>
@@ -1975,7 +1827,6 @@ the stream type, one can find more media-specific information in
       <method name="get_stream_type" c:identifier="gst_player_stream_info_get_stream_type">
         <doc xml:space="preserve">Function to return human readable name for the stream type
 of the given @info (ex: "audio", "video", "subtitle")</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a human readable name</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -1988,7 +1839,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
       <method name="get_tags" c:identifier="gst_player_stream_info_get_tags">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the tags contained in this stream.</doc>
           <type name="Gst.TagList" c:type="GstTagList*"/>
@@ -2001,14 +1851,10 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
     </class>
-    <record name="PlayerStreamInfoClass" c:type="GstPlayerStreamInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerStreamInfo">
-      
-    </record>
+    <record name="PlayerStreamInfoClass" c:type="GstPlayerStreamInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerStreamInfo"/>
     <class name="PlayerSubtitleInfo" c:symbol-prefix="player_subtitle_info" c:type="GstPlayerSubtitleInfo" parent="PlayerStreamInfo" glib:type-name="GstPlayerSubtitleInfo" glib:get-type="gst_player_subtitle_info_get_type" glib:type-struct="PlayerSubtitleInfoClass">
       <doc xml:space="preserve">#GstPlayerStreamInfo specific to subtitle streams.</doc>
-      
       <method name="get_language" c:identifier="gst_player_subtitle_info_get_language">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the language of the stream, or NULL if unknown.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -2021,14 +1867,10 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
     </class>
-    <record name="PlayerSubtitleInfoClass" c:type="GstPlayerSubtitleInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerSubtitleInfo">
-      
-    </record>
+    <record name="PlayerSubtitleInfoClass" c:type="GstPlayerSubtitleInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerSubtitleInfo"/>
     <class name="PlayerVideoInfo" c:symbol-prefix="player_video_info" c:type="GstPlayerVideoInfo" parent="PlayerStreamInfo" glib:type-name="GstPlayerVideoInfo" glib:get-type="gst_player_video_info_get_type" glib:type-struct="PlayerVideoInfoClass">
       <doc xml:space="preserve">#GstPlayerStreamInfo specific to video streams.</doc>
-      
       <method name="get_bitrate" c:identifier="gst_player_video_info_get_bitrate">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the current bitrate of video in #GstPlayerVideoInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -2041,7 +1883,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
       <method name="get_framerate" c:identifier="gst_player_video_info_get_framerate">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2061,7 +1902,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
       <method name="get_height" c:identifier="gst_player_video_info_get_height">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the height of video in #GstPlayerVideoInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -2074,7 +1914,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
       <method name="get_max_bitrate" c:identifier="gst_player_video_info_get_max_bitrate">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the maximum bitrate of video in #GstPlayerVideoInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -2088,7 +1927,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
       </method>
       <method name="get_pixel_aspect_ratio" c:identifier="gst_player_video_info_get_pixel_aspect_ratio">
         <doc xml:space="preserve">Returns the pixel aspect ratio in @par_n and @par_d</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2108,7 +1946,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
       <method name="get_width" c:identifier="gst_player_video_info_get_width">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the width of video in #GstPlayerVideoInfo.</doc>
           <type name="gint" c:type="gint"/>
@@ -2121,14 +1958,10 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </method>
     </class>
-    <record name="PlayerVideoInfoClass" c:type="GstPlayerVideoInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerVideoInfo">
-      
-    </record>
+    <record name="PlayerVideoInfoClass" c:type="GstPlayerVideoInfoClass" disguised="1" glib:is-gtype-struct-for="PlayerVideoInfo"/>
     <class name="PlayerVideoOverlayVideoRenderer" c:symbol-prefix="player_video_overlay_video_renderer" c:type="GstPlayerVideoOverlayVideoRenderer" parent="GObject.Object" glib:type-name="GstPlayerVideoOverlayVideoRenderer" glib:get-type="gst_player_video_overlay_video_renderer_get_type" glib:type-struct="PlayerVideoOverlayVideoRendererClass">
-      
       <implements name="PlayerVideoRenderer"/>
       <function name="new" c:identifier="gst_player_video_overlay_video_renderer_new">
-        
         <return-value transfer-ownership="full">
           <type name="PlayerVideoRenderer" c:type="GstPlayerVideoRenderer*"/>
         </return-value>
@@ -2140,7 +1973,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
         </parameters>
       </function>
       <function name="new_with_sink" c:identifier="gst_player_video_overlay_video_renderer_new_with_sink" version="1.12">
-        
         <return-value transfer-ownership="full">
           <type name="PlayerVideoRenderer" c:type="GstPlayerVideoRenderer*"/>
         </return-value>
@@ -2158,7 +1990,6 @@ of the given @info (ex: "audio", "video", "subtitle")</doc>
       <method name="expose" c:identifier="gst_player_video_overlay_video_renderer_expose">
         <doc xml:space="preserve">Tell an overlay that it has been exposed. This will redraw the current frame
 in the drawable even if the pipeline is PAUSED.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2172,7 +2003,6 @@ in the drawable even if the pipeline is PAUSED.</doc>
       <method name="get_render_rectangle" c:identifier="gst_player_video_overlay_video_renderer_get_render_rectangle">
         <doc xml:space="preserve">Return the currently configured render rectangle. See gst_player_video_overlay_video_renderer_set_render_rectangle()
 for details.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2200,7 +2030,6 @@ for details.</doc>
         </parameters>
       </method>
       <method name="get_window_handle" c:identifier="gst_player_video_overlay_video_renderer_get_window_handle">
-        
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">The currently set, platform specific window
 handle</doc>
@@ -2224,7 +2053,6 @@ redraw. To unset the region pass -1 for the @width and @height parameters.
 
 This method is needed for non fullscreen video overlay in UI toolkits that
 do not support subwindows.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2254,7 +2082,6 @@ do not support subwindows.</doc>
       <method name="set_window_handle" c:identifier="gst_player_video_overlay_video_renderer_set_window_handle">
         <doc xml:space="preserve">Sets the platform specific window handle into which the video
 should be rendered</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2276,13 +2103,9 @@ should be rendered</doc>
         <type name="gpointer" c:type="gpointer"/>
       </property>
     </class>
-    <record name="PlayerVideoOverlayVideoRendererClass" c:type="GstPlayerVideoOverlayVideoRendererClass" disguised="1" glib:is-gtype-struct-for="PlayerVideoOverlayVideoRenderer">
-      
-    </record>
+    <record name="PlayerVideoOverlayVideoRendererClass" c:type="GstPlayerVideoOverlayVideoRendererClass" disguised="1" glib:is-gtype-struct-for="PlayerVideoOverlayVideoRenderer"/>
     <interface name="PlayerVideoRenderer" c:symbol-prefix="player_video_renderer" c:type="GstPlayerVideoRenderer" glib:type-name="GstPlayerVideoRenderer" glib:get-type="gst_player_video_renderer_get_type" glib:type-struct="PlayerVideoRendererInterface">
-      
       <virtual-method name="create_video_sink" introspectable="0">
-        
         <return-value>
           <type name="Gst.Element" c:type="GstElement*"/>
         </return-value>
@@ -2297,13 +2120,11 @@ should be rendered</doc>
       </virtual-method>
     </interface>
     <record name="PlayerVideoRendererInterface" c:type="GstPlayerVideoRendererInterface" glib:is-gtype-struct-for="PlayerVideoRenderer">
-      
       <field name="parent_iface">
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
       <field name="create_video_sink" introspectable="0">
         <callback name="create_video_sink" introspectable="0">
-          
           <return-value>
             <type name="Gst.Element" c:type="GstElement*"/>
           </return-value>
@@ -2320,7 +2141,6 @@ should be rendered</doc>
     </record>
     <record name="PlayerVisualization" c:type="GstPlayerVisualization" glib:type-name="GstPlayerVisualization" glib:get-type="gst_player_visualization_get_type" c:symbol-prefix="player_visualization">
       <doc xml:space="preserve">A #GstPlayerVisualization descriptor.</doc>
-      
       <field name="name" writable="1">
         <doc xml:space="preserve">name of the visualization.</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -2332,7 +2152,6 @@ should be rendered</doc>
       <method name="copy" c:identifier="gst_player_visualization_copy">
         <doc xml:space="preserve">Makes a copy of the #GstPlayerVisualization. The result must be
 freed using gst_player_visualization_free().</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">an allocated copy of @vis.</doc>
           <type name="PlayerVisualization" c:type="GstPlayerVisualization*"/>
@@ -2346,7 +2165,6 @@ freed using gst_player_visualization_free().</doc>
       </method>
       <method name="free" c:identifier="gst_player_visualization_free">
         <doc xml:space="preserve">Frees a #GstPlayerVisualization.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2360,7 +2178,6 @@ freed using gst_player_visualization_free().</doc>
     </record>
     <function name="player_color_balance_type_get_name" c:identifier="gst_player_color_balance_type_get_name" moved-to="PlayerColorBalanceType.get_name">
       <doc xml:space="preserve">Gets a string representing the given color balance type.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a string with the name of the color
   balance type.</doc>
@@ -2375,7 +2192,6 @@ freed using gst_player_visualization_free().</doc>
     </function>
     <function name="player_error_get_name" c:identifier="gst_player_error_get_name" moved-to="PlayerError.get_name">
       <doc xml:space="preserve">Gets a string representing the given error.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a string with the given error.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -2394,7 +2210,6 @@ freed using gst_player_visualization_free().</doc>
     </function>
     <function name="player_state_get_name" c:identifier="gst_player_state_get_name" moved-to="PlayerState.get_name">
       <doc xml:space="preserve">Gets a string representing the given state.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a string with the name of the state.</doc>
         <type name="utf8" c:type="const gchar*"/>

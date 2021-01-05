@@ -10,24 +10,17 @@ and/or use gtk-doc annotations.  -->
   <package name="gstreamer-gl-egl-1.0"/>
   <c:include name="gst/gl/egl/egl.h"/>
   <namespace name="GstGLEGL" version="1.0" shared-library="libgstgl-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
-    
-    
-    
-    
     <class name="GLDisplayEGL" c:symbol-prefix="gl_display_egl" c:type="GstGLDisplayEGL" parent="GstGL.GLDisplay" glib:type-name="GstGLDisplayEGL" glib:get-type="gst_gl_display_egl_get_type" glib:type-struct="GLDisplayEGLClass">
       <doc xml:space="preserve">the contents of a #GstGLDisplayEGL are private and should only be accessed
 through the provided API</doc>
-      
       <constructor name="new" c:identifier="gst_gl_display_egl_new">
         <doc xml:space="preserve">Create a new #GstGLDisplayEGL using the default EGL_DEFAULT_DISPLAY.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstGLDisplayEGL or %NULL</doc>
           <type name="GLDisplayEGL" c:type="GstGLDisplayEGL*"/>
         </return-value>
       </constructor>
       <constructor name="new_with_egl_display" c:identifier="gst_gl_display_egl_new_with_egl_display">
-        
         <return-value transfer-ownership="none">
           <type name="GLDisplayEGL" c:type="GstGLDisplayEGL*"/>
         </return-value>
@@ -42,7 +35,6 @@ through the provided API</doc>
 
 This function will return the same value for multiple calls with the same
 @display.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstGLDisplayEGL</doc>
           <type name="GLDisplayEGL" c:type="GstGLDisplayEGL*"/>
@@ -58,7 +50,6 @@ This function will return the same value for multiple calls with the same
         <doc xml:space="preserve">Attempts to create a new `EGLDisplay` from @display.  If @type is
 %GST_GL_DISPLAY_TYPE_ANY, then @display must be 0. @type must not be
 %GST_GL_DISPLAY_TYPE_NONE.</doc>
-        
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">A `EGLDisplay` or `EGL_NO_DISPLAY`</doc>
           <type name="gpointer" c:type="gpointer"/>
@@ -90,7 +81,6 @@ This function will return the same value for multiple calls with the same
       </field>
     </class>
     <record name="GLDisplayEGLClass" c:type="GstGLDisplayEGLClass" glib:is-gtype-struct-for="GLDisplayEGL">
-      
       <field name="object_class">
         <type name="GstGL.GLDisplayClass" c:type="GstGLDisplayClass"/>
       </field>
@@ -100,99 +90,69 @@ This function will return the same value for multiple calls with the same
         </array>
       </field>
     </record>
-    
-    
-    
-    
-    
     <function-macro name="GL_DISPLAY_EGL" c:identifier="GST_GL_DISPLAY_EGL" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="GL_DISPLAY_EGL_CAST" c:identifier="GST_GL_DISPLAY_EGL_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="GL_DISPLAY_EGL_CLASS" c:identifier="GST_GL_DISPLAY_EGL_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="GL_DISPLAY_EGL_DEVICE" c:identifier="GST_GL_DISPLAY_EGL_DEVICE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="GL_DISPLAY_EGL_DEVICE_CAST" c:identifier="GST_GL_DISPLAY_EGL_DEVICE_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="GL_DISPLAY_EGL_DEVICE_CLASS" c:identifier="GST_GL_DISPLAY_EGL_DEVICE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <constant name="GL_DISPLAY_EGL_NAME" value="gst.gl.display.egl" c:type="GST_GL_DISPLAY_EGL_NAME">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
-    
-    
-    
-    
-    
-    
     <function-macro name="IS_GL_DISPLAY_EGL" c:identifier="GST_IS_GL_DISPLAY_EGL" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_GL_DISPLAY_EGL_CLASS" c:identifier="GST_IS_GL_DISPLAY_EGL_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_GL_DISPLAY_EGL_DEVICE" c:identifier="GST_IS_GL_DISPLAY_EGL_DEVICE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_GL_DISPLAY_EGL_DEVICE_CLASS" c:identifier="GST_IS_GL_DISPLAY_EGL_DEVICE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
-    
-    
-    
-    
-    
-    
-    
-    
     <docsection name="gstgldisplay_egl">
       <doc xml:space="preserve">#GstGLDisplayEGL represents a connection to an EGL `EGLDisplay` handle created
 internally (gst_gl_display_egl_new()) or wrapped by the application
@@ -203,6 +163,5 @@ internally (gst_gl_display_egl_new()) or wrapped by the application
 (gst_gl_display_egl_device_new()) or wrapped by the application
 (gst_gl_display_egl_device_new_with_egl_device())</doc>
     </docsection>
-    
   </namespace>
 </repository>

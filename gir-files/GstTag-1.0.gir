@@ -9,35 +9,30 @@ and/or use gtk-doc annotations.  -->
   <c:include name="gst/tag/tag.h"/>
   <namespace name="GstTag" version="1.0" shared-library="libgsttag-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
     <function-macro name="IS_TAG_DEMUX" c:identifier="GST_IS_TAG_DEMUX" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TAG_DEMUX_CLASS" c:identifier="GST_IS_TAG_DEMUX_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TAG_MUX" c:identifier="GST_IS_TAG_MUX" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TAG_MUX_CLASS" c:identifier="GST_IS_TAG_MUX_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TAG_XMP_WRITER" c:identifier="GST_IS_TAG_XMP_WRITER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -45,12 +40,10 @@ and/or use gtk-doc annotations.  -->
     </function-macro>
     <constant name="TAG_ACOUSTID_FINGERPRINT" value="chromaprint-fingerprint" c:type="GST_TAG_ACOUSTID_FINGERPRINT" version="1.18">
       <doc xml:space="preserve">AcoustID Fingerprint (Chromaprint)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_ACOUSTID_ID" value="acoustid-id" c:type="GST_TAG_ACOUSTID_ID" version="1.18">
       <doc xml:space="preserve">AcoustID Identifier</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_CONTRAST" value="capturing-contrast" c:type="GST_TAG_CAPTURING_CONTRAST">
@@ -60,17 +53,14 @@ The allowed values are:
  "normal"
  "soft"
  "hard"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_DIGITAL_ZOOM_RATIO" value="capturing-digital-zoom-ratio" c:type="GST_TAG_CAPTURING_DIGITAL_ZOOM_RATIO">
       <doc xml:space="preserve">Digital zoom ratio used when capturing an image. (double)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_EXPOSURE_COMPENSATION" value="capturing-exposure-compensation" c:type="GST_TAG_CAPTURING_EXPOSURE_COMPENSATION">
       <doc xml:space="preserve">Exposure compensation using when capturing an image in EV. (double)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_EXPOSURE_MODE" value="capturing-exposure-mode" c:type="GST_TAG_CAPTURING_EXPOSURE_MODE">
@@ -80,7 +70,6 @@ The allowed values are:
   "auto-exposure"
   "manual-exposure"
   "auto-bracket"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_EXPOSURE_PROGRAM" value="capturing-exposure-program" c:type="GST_TAG_CAPTURING_EXPOSURE_PROGRAM">
@@ -96,7 +85,6 @@ The allowed values are:
   "action" - biased towards fast shutter speed
   "portrait" - closeup, leaving background out of focus
   "landscape" - landscape photos, background in focus</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_FLASH_FIRED" value="capturing-flash-fired" c:type="GST_TAG_CAPTURING_FLASH_FIRED">
@@ -104,7 +92,6 @@ The allowed values are:
 
 Note that if this tag isn't present, it should not be assumed that
 the flash did not fire. It should be treated as unknown.</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_FLASH_MODE" value="capturing-flash-mode" c:type="GST_TAG_CAPTURING_FLASH_MODE">
@@ -114,17 +101,14 @@ The allowed values are:
  "auto"
  "always"
  "never"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_FOCAL_LENGTH" value="capturing-focal-length" c:type="GST_TAG_CAPTURING_FOCAL_LENGTH">
       <doc xml:space="preserve">Focal length used when capturing an image, in mm. (double)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_FOCAL_LENGTH_35_MM" value="capturing-focal-length-35mm" c:type="GST_TAG_CAPTURING_FOCAL_LENGTH_35_MM" version="1.10">
       <doc xml:space="preserve">35 mm equivalent focal length used when capturing an image, in mm. (double)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_FOCAL_RATIO" value="capturing-focal-ratio" c:type="GST_TAG_CAPTURING_FOCAL_RATIO">
@@ -132,7 +116,6 @@ The allowed values are:
 
 The value stored is the denominator of the focal ratio (f-number).
 For example, if this tag value is 2, the focal ratio is f/2.</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_GAIN_ADJUSTMENT" value="capturing-gain-adjustment" c:type="GST_TAG_CAPTURING_GAIN_ADJUSTMENT">
@@ -144,12 +127,10 @@ The allowed values are:
   "high-gain-up"
   "low-gain-down"
   "high-gain-down"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_ISO_SPEED" value="capturing-iso-speed" c:type="GST_TAG_CAPTURING_ISO_SPEED">
       <doc xml:space="preserve">ISO speed used when capturing an image. (integer)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_METERING_MODE" value="capturing-metering-mode" c:type="GST_TAG_CAPTURING_METERING_MODE">
@@ -164,7 +145,6 @@ The allowed values are:
   "pattern"
   "partial"
   "other"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_SATURATION" value="capturing-saturation" c:type="GST_TAG_CAPTURING_SATURATION">
@@ -174,7 +154,6 @@ The allowed values are:
  "normal"
  "low-saturation"
  "high-saturation"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_SCENE_CAPTURE_TYPE" value="capturing-scene-capture-type" c:type="GST_TAG_CAPTURING_SCENE_CAPTURE_TYPE">
@@ -185,7 +164,6 @@ The allowed values are:
   "landscape"
   "portrait"
   "night-scene"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_SHARPNESS" value="capturing-sharpness" c:type="GST_TAG_CAPTURING_SHARPNESS">
@@ -195,12 +173,10 @@ The allowed values are:
  "normal"
  "soft"
  "hard"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_SHUTTER_SPEED" value="capturing-shutter-speed" c:type="GST_TAG_CAPTURING_SHUTTER_SPEED">
       <doc xml:space="preserve">Shutter speed used when capturing an image, in seconds. (fraction)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_SOURCE" value="capturing-source" c:type="GST_TAG_CAPTURING_SOURCE">
@@ -212,7 +188,6 @@ Allowed values are:
   "transparent-scanner"
   "reflex-scanner"
   "other"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CAPTURING_WHITE_BALANCE" value="capturing-white-balance" c:type="GST_TAG_CAPTURING_WHITE_BALANCE">
@@ -227,53 +202,43 @@ The allowed values are:
   "fluorescent"
   "fluorescent h" (newer daylight-calibrated fluorescents)
   "flash"</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CDDA_CDDB_DISCID" value="discid" c:type="GST_TAG_CDDA_CDDB_DISCID">
       <doc xml:space="preserve">CDDB disc id in its short form (e.g. 'aa063d0f')</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CDDA_CDDB_DISCID_FULL" value="discid-full" c:type="GST_TAG_CDDA_CDDB_DISCID_FULL">
       <doc xml:space="preserve">CDDB disc id including all details</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CDDA_MUSICBRAINZ_DISCID" value="musicbrainz-discid" c:type="GST_TAG_CDDA_MUSICBRAINZ_DISCID">
       <doc xml:space="preserve">Musicbrainz disc id (e.g. 'ahg7JUcfR3vCYBphSDIogOOWrr0-')</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CDDA_MUSICBRAINZ_DISCID_FULL" value="musicbrainz-discid-full" c:type="GST_TAG_CDDA_MUSICBRAINZ_DISCID_FULL">
       <doc xml:space="preserve">Musicbrainz disc id details</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CMML_CLIP" value="cmml-clip" c:type="GST_TAG_CMML_CLIP">
       <doc xml:space="preserve">Annodex CMML clip element tag</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CMML_HEAD" value="cmml-head" c:type="GST_TAG_CMML_HEAD">
       <doc xml:space="preserve">Annodex CMML head element tag</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_CMML_STREAM" value="cmml-stream" c:type="GST_TAG_CMML_STREAM">
       <doc xml:space="preserve">Annodex CMML stream element tag</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <function-macro name="TAG_DEMUX" c:identifier="GST_TAG_DEMUX" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TAG_DEMUX_CLASS" c:identifier="GST_TAG_DEMUX_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -282,17 +247,14 @@ The allowed values are:
     <constant name="TAG_ID3V2_HEADER_SIZE" value="10" c:type="GST_TAG_ID3V2_HEADER_SIZE">
       <doc xml:space="preserve">ID3V2 header size considered minimum input for some functions such as
 gst_tag_list_from_id3v2_tag() and gst_tag_get_id3v2_tag_size() for example.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="TAG_IMAGE_HORIZONTAL_PPI" value="image-horizontal-ppi" c:type="GST_TAG_IMAGE_HORIZONTAL_PPI">
       <doc xml:space="preserve">Media (image/video) intended horizontal pixel density in ppi. (double)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_IMAGE_VERTICAL_PPI" value="image-vertical-ppi" c:type="GST_TAG_IMAGE_VERTICAL_PPI">
       <doc xml:space="preserve">Media (image/video) intended vertical pixel density in ppi. (double)</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICAL_KEY" value="musical-key" c:type="GST_TAG_MUSICAL_KEY" version="1.2">
@@ -303,67 +265,55 @@ represented with "b" and "#". Minor is represented as "m" (e.g. "Dbm").
 Off key is represented with an "o" only.
 This notation might be extended in the future to support non-minor/major
 keys.</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICBRAINZ_ALBUMARTISTID" value="musicbrainz-albumartistid" c:type="GST_TAG_MUSICBRAINZ_ALBUMARTISTID">
       <doc xml:space="preserve">MusicBrainz album artist ID</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICBRAINZ_ALBUMID" value="musicbrainz-albumid" c:type="GST_TAG_MUSICBRAINZ_ALBUMID">
       <doc xml:space="preserve">MusicBrainz album ID</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICBRAINZ_ARTISTID" value="musicbrainz-artistid" c:type="GST_TAG_MUSICBRAINZ_ARTISTID">
       <doc xml:space="preserve">MusicBrainz artist ID</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICBRAINZ_RELEASEGROUPID" value="musicbrainz-releasegroupid" c:type="GST_TAG_MUSICBRAINZ_RELEASEGROUPID" version="1.18">
       <doc xml:space="preserve">MusicBrainz Release Group ID</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICBRAINZ_RELEASETRACKID" value="musicbrainz-releasetrackid" c:type="GST_TAG_MUSICBRAINZ_RELEASETRACKID" version="1.18">
       <doc xml:space="preserve">MusicBrainz Release Track ID</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICBRAINZ_TRACKID" value="musicbrainz-trackid" c:type="GST_TAG_MUSICBRAINZ_TRACKID">
       <doc xml:space="preserve">MusicBrainz track ID</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="TAG_MUSICBRAINZ_TRMID" value="musicbrainz-trmid" c:type="GST_TAG_MUSICBRAINZ_TRMID">
       <doc xml:space="preserve">MusicBrainz track TRM ID</doc>
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <function-macro name="TAG_MUX" c:identifier="GST_TAG_MUX" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TAG_MUX_CLASS" c:identifier="GST_TAG_MUX_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TAG_XMP_WRITER" c:identifier="GST_TAG_XMP_WRITER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TAG_XMP_WRITER_GET_INTERFACE" c:identifier="GST_TAG_XMP_WRITER_GET_INTERFACE" introspectable="0">
-      
       <parameters>
         <parameter name="inst">
         </parameter>
@@ -399,9 +349,7 @@ Subclasses have to do four things:
  for the identify function to decide whether the stream has a supported tag
  or not. A class parsing ID3v1 tags, for example, would set min_end_size to
  128 bytes.</doc>
-      
       <virtual-method name="identify_tag">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -421,7 +369,6 @@ Subclasses have to do four things:
         </parameters>
       </virtual-method>
       <virtual-method name="merge_tags">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.TagList" c:type="GstTagList*"/>
         </return-value>
@@ -438,7 +385,6 @@ Subclasses have to do four things:
         </parameters>
       </virtual-method>
       <virtual-method name="parse_tag">
-        
         <return-value transfer-ownership="none">
           <type name="TagDemuxResult" c:type="GstTagDemuxResult"/>
         </return-value>
@@ -476,7 +422,6 @@ Subclasses have to do four things:
     <record name="TagDemuxClass" c:type="GstTagDemuxClass" glib:is-gtype-struct-for="TagDemux">
       <doc xml:space="preserve">The #GstTagDemuxClass structure.  See documentation at beginning of section
 for details about what subclasses need to override and do.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">the parent class.</doc>
         <type name="Gst.ElementClass" c:type="GstElementClass"/>
@@ -495,7 +440,6 @@ Subclasses should set this in their class_init function.</doc>
       </field>
       <field name="identify_tag">
         <callback name="identify_tag">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -517,7 +461,6 @@ Subclasses should set this in their class_init function.</doc>
       </field>
       <field name="parse_tag">
         <callback name="parse_tag">
-          
           <return-value transfer-ownership="none">
             <type name="TagDemuxResult" c:type="GstTagDemuxResult"/>
           </return-value>
@@ -542,7 +485,6 @@ Subclasses should set this in their class_init function.</doc>
       </field>
       <field name="merge_tags">
         <callback name="merge_tags">
-          
           <return-value transfer-ownership="full">
             <type name="Gst.TagList" c:type="GstTagList*"/>
           </return-value>
@@ -565,9 +507,7 @@ Subclasses should set this in their class_init function.</doc>
         </array>
       </field>
     </record>
-    <record name="TagDemuxPrivate" c:type="GstTagDemuxPrivate" disguised="1">
-      
-    </record>
+    <record name="TagDemuxPrivate" c:type="GstTagDemuxPrivate" disguised="1"/>
     <enumeration name="TagDemuxResult" glib:type-name="GstTagDemuxResult" glib:get-type="gst_tag_demux_result_get_type" c:type="GstTagDemuxResult">
       <doc xml:space="preserve">Result values from the parse_tag virtual function.</doc>
       <member name="broken_tag" value="0" c:identifier="GST_TAG_DEMUX_RESULT_BROKEN_TAG" glib:nick="broken-tag">
@@ -724,10 +664,8 @@ Subclasses have to do the following things:
    GST_TAG_MUX_CLASS(mux_klass)-&gt;render_start_tag and/or
    GST_TAG_MUX_CLASS(mux_klass)-&gt;render_end_tag vfuncs and set up a render
    function.</doc>
-      
       <implements name="Gst.TagSetter"/>
       <virtual-method name="render_end_tag">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
         </return-value>
@@ -741,7 +679,6 @@ Subclasses have to do the following things:
         </parameters>
       </virtual-method>
       <virtual-method name="render_start_tag">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
         </return-value>
@@ -770,14 +707,12 @@ Subclasses have to do the following things:
     <record name="TagMuxClass" c:type="GstTagMuxClass" glib:is-gtype-struct-for="TagMux">
       <doc xml:space="preserve">The #GstTagMuxClass structure. Subclasses need to override at least one
 of the two render vfuncs.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">the parent class.</doc>
         <type name="Gst.ElementClass" c:type="GstElementClass"/>
       </field>
       <field name="render_start_tag">
         <callback name="render_start_tag">
-          
           <return-value transfer-ownership="full">
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </return-value>
@@ -793,7 +728,6 @@ of the two render vfuncs.</doc>
       </field>
       <field name="render_end_tag">
         <callback name="render_end_tag">
-          
           <return-value transfer-ownership="full">
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </return-value>
@@ -813,9 +747,7 @@ of the two render vfuncs.</doc>
         </array>
       </field>
     </record>
-    <record name="TagMuxPrivate" c:type="GstTagMuxPrivate" disguised="1">
-      
-    </record>
+    <record name="TagMuxPrivate" c:type="GstTagMuxPrivate" disguised="1"/>
     <interface name="TagXmpWriter" c:symbol-prefix="tag_xmp_writer" c:type="GstTagXmpWriter" glib:type-name="GstTagXmpWriter" glib:get-type="gst_tag_xmp_writer_get_type" glib:type-struct="TagXmpWriterInterface">
       <doc xml:space="preserve">This interface is implemented by elements that are able to do XMP serialization. Examples for
 such elements are #jifmux and #qtmux.
@@ -823,12 +755,10 @@ such elements are #jifmux and #qtmux.
 Applications can use this interface to configure which XMP schemas should be used when serializing
 tags into XMP. Schemas are represented by their names, a full list of the supported schemas can be
 obtained from gst_tag_xmp_list_schemas(). By default, all schemas are used.</doc>
-      
       <prerequisite name="Gst.Element"/>
       <method name="add_all_schemas" c:identifier="gst_tag_xmp_writer_add_all_schemas">
         <doc xml:space="preserve">Adds all available XMP schemas to the configuration. Meaning that
 all will be used.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -841,7 +771,6 @@ all will be used.</doc>
       </method>
       <method name="add_schema" c:identifier="gst_tag_xmp_writer_add_schema">
         <doc xml:space="preserve">Adds @schema to the list schemas</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -858,7 +787,6 @@ all will be used.</doc>
       </method>
       <method name="has_schema" c:identifier="gst_tag_xmp_writer_has_schema">
         <doc xml:space="preserve">Checks if @schema is going to be used</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if it is going to be used</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -877,7 +805,6 @@ all will be used.</doc>
       <method name="remove_all_schemas" c:identifier="gst_tag_xmp_writer_remove_all_schemas">
         <doc xml:space="preserve">Removes all schemas from the list of schemas to use. Meaning that no
 XMP will be generated.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -891,7 +818,6 @@ XMP will be generated.</doc>
       <method name="remove_schema" c:identifier="gst_tag_xmp_writer_remove_schema">
         <doc xml:space="preserve">Removes a schema from the list of schemas to use. Nothing is done if
 the schema wasn't in the list</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -907,7 +833,6 @@ the schema wasn't in the list</doc>
         </parameters>
       </method>
       <method name="tag_list_to_xmp_buffer" c:identifier="gst_tag_xmp_writer_tag_list_to_xmp_buffer">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
         </return-value>
@@ -925,7 +850,6 @@ the schema wasn't in the list</doc>
       </method>
     </interface>
     <record name="TagXmpWriterInterface" c:type="GstTagXmpWriterInterface" glib:is-gtype-struct-for="TagXmpWriter">
-      
       <field name="parent">
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
@@ -972,7 +896,6 @@ This is useful in situations where it's not clear whether a given
 string is a language code (which should be put into a #GST_TAG_LANGUAGE_CODE
 tag) or a free-form language name descriptor (which should be put into a
 #GST_TAG_LANGUAGE_NAME tag instead).</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if the two- or three-letter language code in @lang_code
     is a valid ISO-639 language code.</doc>
@@ -994,7 +917,6 @@ variables (whose names are specified in the NULL-terminated string array
 @env_vars) containing a list of character encodings to try/use. If none
 are specified, the current locale will be tried. If that also doesn't work,
 WINDOWS-1252/ISO-8859-1 is assumed (which will almost always succeed).</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a newly-allocated string in UTF-8 encoding, or NULL</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -1021,7 +943,6 @@ WINDOWS-1252/ISO-8859-1 is assumed (which will almost always succeed).</doc>
     </function>
     <function name="tag_from_id3_tag" c:identifier="gst_tag_from_id3_tag">
       <doc xml:space="preserve">Looks up the GStreamer tag for a ID3v2 tag.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The corresponding GStreamer tag or NULL if none exists.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -1036,7 +957,6 @@ WINDOWS-1252/ISO-8859-1 is assumed (which will almost always succeed).</doc>
     <function name="tag_from_id3_user_tag" c:identifier="gst_tag_from_id3_user_tag">
       <doc xml:space="preserve">Looks up the GStreamer tag for an ID3v2 user tag (e.g. description in
 TXXX frame or owner in UFID frame).</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The corresponding GStreamer tag or NULL if none exists.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -1054,7 +974,6 @@ TXXX frame or owner in UFID frame).</doc>
     </function>
     <function name="tag_from_vorbis_tag" c:identifier="gst_tag_from_vorbis_tag">
       <doc xml:space="preserve">Looks up the GStreamer tag for a vorbiscomment tag.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The corresponding GStreamer tag or NULL if none exists.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -1069,7 +988,6 @@ TXXX frame or owner in UFID frame).</doc>
     <function name="tag_get_id3v2_tag_size" c:identifier="gst_tag_get_id3v2_tag_size">
       <doc xml:space="preserve">Determines size of an ID3v2 tag on buffer containing at least ID3v2 header,
 i.e. at least #GST_TAG_ID3V2_HEADER_SIZE (10) bytes;</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">Size of tag, or 0 if header is invalid or too small.</doc>
         <type name="guint" c:type="guint"/>
@@ -1083,7 +1001,6 @@ i.e. at least #GST_TAG_ID3V2_HEADER_SIZE (10) bytes;</doc>
     </function>
     <function-macro name="tag_get_language_code" c:identifier="gst_tag_get_language_code" introspectable="0">
       <doc xml:space="preserve">Convenience macro wrapping gst_tag_get_language_code_iso_639_1().</doc>
-      
       <parameters>
         <parameter name="lang_code">
           <doc xml:space="preserve">ISO-639 language code (e.g. "deu" or "ger" or "de")</doc>
@@ -1096,7 +1013,6 @@ language code or two-letter ISO-639-1 language code (both are accepted for
 convenience).
 
 Language codes are case-sensitive and expected to be lower case.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">two-letter ISO-639-1 language code string that maps to @lang_code,
     or NULL if no mapping is known. The returned string must not be
@@ -1120,7 +1036,6 @@ The "bibliographic" code is derived from the English name of the language
 "terminological" codes are preferred.
 
 Language codes are case-sensitive and expected to be lower case.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">three-letter ISO-639-2 language code string that maps to @lang_code,
     or NULL if no mapping is known. The returned string must not be
@@ -1144,7 +1059,6 @@ The "terminological" code is derived from the local name of the language
 "terminological" codes are preferred over the "bibliographic" ones.
 
 Language codes are case-sensitive and expected to be lower case.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">three-letter ISO-639-2 language code string that maps to @lang_code,
     or NULL if no mapping is known. The returned string must not be
@@ -1163,7 +1077,6 @@ Language codes are case-sensitive and expected to be lower case.</doc>
 codes). This is useful for UIs to build a list of available languages for
 tagging purposes (e.g. to tag an audio track appropriately in a video or
 audio editor).</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">NULL-terminated string array with two-letter
     language codes. Free with g_strfreev() when no longer needed.</doc>
@@ -1179,7 +1092,6 @@ according to the current locale (if the library was built against the
 iso-codes package, otherwise the English name will be returned).
 
 Language codes are case-sensitive and expected to be lower case.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">language name in UTF-8 format, or NULL if @language_code could
     not be mapped to a language name. The returned string must not be
@@ -1197,7 +1109,6 @@ Language codes are case-sensitive and expected to be lower case.</doc>
     <function name="tag_get_license_description" c:identifier="gst_tag_get_license_description">
       <doc xml:space="preserve">Get the description of a license, which is a translated description
 of the license's main features.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the description of the license, or NULL if the license is unknown
    or a description is not available.</doc>
@@ -1214,7 +1125,6 @@ of the license's main features.</doc>
     <function name="tag_get_license_flags" c:identifier="gst_tag_get_license_flags">
       <doc xml:space="preserve">Get the flags of a license, which describe most of the features of
 a license in their most general form.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the flags of the license, or 0 if the license is unknown</doc>
         <type name="TagLicenseFlags" c:type="GstTagLicenseFlags"/>
@@ -1235,7 +1145,6 @@ for which no code exists and which is thus represented as "scotland".
 Known jurisdictions: ar, at, au, be, bg, br, ca, ch, cl, cn, co, de,
 dk, es, fi, fr, hr, hu, il, in, it, jp, kr, mk, mt, mx, my, nl, pe, pl,
 pt, scotland, se, si, tw, uk, us, za.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the jurisdiction code of the license, or NULL if the license is
    unknown or is not specific to a particular jurisdiction.</doc>
@@ -1252,7 +1161,6 @@ pt, scotland, se, si, tw, uk, us, za.</doc>
     <function name="tag_get_license_nick" c:identifier="gst_tag_get_license_nick">
       <doc xml:space="preserve">Get the nick name of a license, which is a short (untranslated) string
 such as e.g. "CC BY-NC-ND 2.0 UK".</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the nick name of the license, or NULL if the license is unknown</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -1268,7 +1176,6 @@ such as e.g. "CC BY-NC-ND 2.0 UK".</doc>
     <function name="tag_get_license_title" c:identifier="gst_tag_get_license_title">
       <doc xml:space="preserve">Get the title of a license, which is a short translated description
 of the license's features (generally not very pretty though).</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the title of the license, or NULL if the license is unknown or
    no title is available.</doc>
@@ -1284,7 +1191,6 @@ of the license's features (generally not very pretty though).</doc>
     </function>
     <function name="tag_get_license_version" c:identifier="gst_tag_get_license_version">
       <doc xml:space="preserve">Get the version of a license.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the version of the license, or NULL if the license is not known or
    has no version</doc>
@@ -1303,7 +1209,6 @@ of the license's features (generally not very pretty though).</doc>
 useful for UIs to build a list of available licenses for tagging purposes
 (e.g. to tag an audio track appropriately in a video or audio editor, or
 an image in a camera application).</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">NULL-terminated array of license strings. Free
     with g_strfreev() when no longer needed.</doc>
@@ -1315,7 +1220,6 @@ an image in a camera application).</doc>
     <function name="tag_id3_genre_count" c:identifier="gst_tag_id3_genre_count">
       <doc xml:space="preserve">Gets the number of ID3v1 genres that can be identified. Winamp genres are
 included.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the number of ID3v1 genres that can be identified</doc>
         <type name="guint" c:type="guint"/>
@@ -1323,7 +1227,6 @@ included.</doc>
     </function>
     <function name="tag_id3_genre_get" c:identifier="gst_tag_id3_genre_get">
       <doc xml:space="preserve">Gets the ID3v1 genre name for a given ID.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the genre or NULL if no genre is associated with that ID.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -1358,7 +1261,6 @@ the special tag name.
 
 This function will do various checks and typefind the encoded image
 data (we can't trust the declared mime type).</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a newly-allocated image sample for use in tag lists, or NULL</doc>
         <type name="Gst.Sample" c:type="GstSample*"/>
@@ -1386,7 +1288,6 @@ data (we can't trust the declared mime type).</doc>
       <doc xml:space="preserve">Adds an image from an ID3 APIC frame (or similar, such as used in FLAC)
 to the given tag list. Also see gst_tag_image_data_to_image_sample() for
 more information on image tags in GStreamer.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE if the image was processed, otherwise %FALSE</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -1418,7 +1319,6 @@ more information on image tags in GStreamer.</doc>
 on a taglist. The base_offset is used to subtract from the offset in
 the tag entries and be able to get the offset relative to the buffer
 start</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">The parsed taglist</doc>
         <type name="Gst.TagList" c:type="GstTagList*"/>
@@ -1440,7 +1340,6 @@ start</doc>
     </function>
     <function name="tag_list_from_exif_buffer_with_tiff_header" c:identifier="gst_tag_list_from_exif_buffer_with_tiff_header">
       <doc xml:space="preserve">Parses the exif tags starting with a tiff header structure.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">The taglist</doc>
         <type name="Gst.TagList" c:type="GstTagList*"/>
@@ -1455,7 +1354,6 @@ start</doc>
     <function name="tag_list_from_id3v2_tag" c:identifier="gst_tag_list_from_id3v2_tag">
       <doc xml:space="preserve">Creates a new tag list that contains the information parsed out of a
 ID3 tag.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A new #GstTagList with all tags that could be extracted from the
          given vorbiscomment buffer or NULL on error.</doc>
@@ -1471,7 +1369,6 @@ ID3 tag.</doc>
     <function name="tag_list_from_vorbiscomment" c:identifier="gst_tag_list_from_vorbiscomment">
       <doc xml:space="preserve">Creates a new tag list that contains the information parsed out of a
 vorbiscomment packet.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A new #GstTagList with all tags that could be extracted from the
          given vorbiscomment buffer or NULL on error.</doc>
@@ -1508,7 +1405,6 @@ vorbiscomment packet.</doc>
     <function name="tag_list_from_vorbiscomment_buffer" c:identifier="gst_tag_list_from_vorbiscomment_buffer">
       <doc xml:space="preserve">Creates a new tag list that contains the information parsed out of a
 vorbiscomment packet.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A new #GstTagList with all tags that could be extracted from the
          given vorbiscomment buffer or NULL on error.</doc>
@@ -1538,7 +1434,6 @@ vorbiscomment packet.</doc>
     </function>
     <function name="tag_list_from_xmp_buffer" c:identifier="gst_tag_list_from_xmp_buffer">
       <doc xml:space="preserve">Parse a xmp packet into a taglist.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">new taglist or %NULL, free the list when done</doc>
         <type name="Gst.TagList" c:type="GstTagList*"/>
@@ -1553,7 +1448,6 @@ vorbiscomment packet.</doc>
     <function name="tag_list_new_from_id3v1" c:identifier="gst_tag_list_new_from_id3v1">
       <doc xml:space="preserve">Parses the data containing an ID3v1 tag and returns a #GstTagList from the
 parsed data.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A new tag list or NULL if the data was not an ID3v1 tag.</doc>
         <type name="Gst.TagList" c:type="GstTagList*"/>
@@ -1570,7 +1464,6 @@ parsed data.</doc>
     <function name="tag_list_to_exif_buffer" c:identifier="gst_tag_list_to_exif_buffer">
       <doc xml:space="preserve">Formats the tags in taglist on exif format. The resulting buffer contains
 the tags IFD and is followed by the data pointed by the tag entries.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A GstBuffer containing the tag entries followed by the tag data</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -1593,7 +1486,6 @@ the tags IFD and is followed by the data pointed by the tag entries.</doc>
     <function name="tag_list_to_exif_buffer_with_tiff_header" c:identifier="gst_tag_list_to_exif_buffer_with_tiff_header">
       <doc xml:space="preserve">Formats the tags in taglist into exif structure, a tiff header
 is put in the beginning of the buffer.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A GstBuffer containing the data</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -1607,7 +1499,6 @@ is put in the beginning of the buffer.</doc>
     </function>
     <function name="tag_list_to_vorbiscomment_buffer" c:identifier="gst_tag_list_to_vorbiscomment_buffer">
       <doc xml:space="preserve">Creates a new vorbiscomment buffer from a tag list.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A new #GstBuffer containing a vorbiscomment buffer with all tags
          that could be converted from the given tag list.</doc>
@@ -1638,7 +1529,6 @@ is put in the beginning of the buffer.</doc>
       <doc xml:space="preserve">Formats a taglist as a xmp packet using only the selected
 schemas. An empty list (%NULL) means that all schemas should
 be used</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">new buffer or %NULL, unref the buffer when done</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -1669,7 +1559,6 @@ If successful, @key, @lang and/or @value will be set to newly allocated
 strings that you need to free with g_free() when done. @key and @lang
 may also be set to NULL by this function if there is no key or no language
 code in the extended comment string.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if the string could be parsed, otherwise FALSE</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -1703,14 +1592,12 @@ code in the extended comment string.</doc>
       <doc xml:space="preserve">Registers additional musicbrainz-specific tags with the GStreamer tag
 system. Plugins and applications that use these tags should call this
 function before using them. Can be called multiple times.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
     </function>
     <function name="tag_to_id3_tag" c:identifier="gst_tag_to_id3_tag">
       <doc xml:space="preserve">Looks up the ID3v2 tag for a GStreamer tag.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The corresponding ID3v2 tag or NULL if none exists.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -1725,7 +1612,6 @@ function before using them. Can be called multiple times.</doc>
     <function name="tag_to_vorbis_comments" c:identifier="gst_tag_to_vorbis_comments">
       <doc xml:space="preserve">Creates a new tag list that contains the information parsed out of a
 vorbiscomment packet.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A #GList of newly-allocated
     key=value strings. Free with g_list_foreach (list, (GFunc) g_free, NULL)
@@ -1747,7 +1633,6 @@ vorbiscomment packet.</doc>
     </function>
     <function name="tag_to_vorbis_tag" c:identifier="gst_tag_to_vorbis_tag">
       <doc xml:space="preserve">Looks up the vorbiscomment tag for a GStreamer tag.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The corresponding vorbiscomment tag or NULL if none exists.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -1761,7 +1646,6 @@ vorbiscomment packet.</doc>
     </function>
     <function name="tag_xmp_list_schemas" c:identifier="gst_tag_xmp_list_schemas">
       <doc xml:space="preserve">Gets the list of supported schemas in the xmp lib</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a %NULL terminated array of strings with the
     schema names</doc>
@@ -1777,7 +1661,6 @@ given taglist @list.
 
 Unknown vorbiscomment tags will be added to the tag list in form
 of a #GST_TAG_EXTENDED_COMMENT.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>

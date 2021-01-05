@@ -9,224 +9,192 @@ and/or use gtk-doc annotations.  -->
   <c:include name="gst/webrtc/webrtc.h"/>
   <namespace name="GstWebRTC" version="1.0" shared-library="libgstwebrtc-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
     <function-macro name="IS_WEBRTC_DATA_CHANNEL" c:identifier="GST_IS_WEBRTC_DATA_CHANNEL" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_DATA_CHANNEL_CLASS" c:identifier="GST_IS_WEBRTC_DATA_CHANNEL_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_DTLS_TRANSPORT" c:identifier="GST_IS_WEBRTC_DTLS_TRANSPORT" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_DTLS_TRANSPORT_CLASS" c:identifier="GST_IS_WEBRTC_DTLS_TRANSPORT_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_ICE_TRANSPORT" c:identifier="GST_IS_WEBRTC_ICE_TRANSPORT" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_ICE_TRANSPORT_CLASS" c:identifier="GST_IS_WEBRTC_ICE_TRANSPORT_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_RTP_RECEIVER" c:identifier="GST_IS_WEBRTC_RTP_RECEIVER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_RTP_RECEIVER_CLASS" c:identifier="GST_IS_WEBRTC_RTP_RECEIVER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_RTP_SENDER" c:identifier="GST_IS_WEBRTC_RTP_SENDER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_RTP_SENDER_CLASS" c:identifier="GST_IS_WEBRTC_RTP_SENDER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_RTP_TRANSCEIVER" c:identifier="GST_IS_WEBRTC_RTP_TRANSCEIVER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_WEBRTC_RTP_TRANSCEIVER_CLASS" c:identifier="GST_IS_WEBRTC_RTP_TRANSCEIVER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DATA_CHANNEL" c:identifier="GST_WEBRTC_DATA_CHANNEL" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DATA_CHANNEL_CLASS" c:identifier="GST_WEBRTC_DATA_CHANNEL_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DATA_CHANNEL_GET_CLASS" c:identifier="GST_WEBRTC_DATA_CHANNEL_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DATA_CHANNEL_LOCK" c:identifier="GST_WEBRTC_DATA_CHANNEL_LOCK" introspectable="0">
-      
       <parameters>
         <parameter name="channel">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DATA_CHANNEL_UNLOCK" c:identifier="GST_WEBRTC_DATA_CHANNEL_UNLOCK" introspectable="0">
-      
       <parameters>
         <parameter name="channel">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DTLS_TRANSPORT" c:identifier="GST_WEBRTC_DTLS_TRANSPORT" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DTLS_TRANSPORT_CLASS" c:identifier="GST_WEBRTC_DTLS_TRANSPORT_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_DTLS_TRANSPORT_GET_CLASS" c:identifier="GST_WEBRTC_DTLS_TRANSPORT_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_ICE_TRANSPORT" c:identifier="GST_WEBRTC_ICE_TRANSPORT" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_ICE_TRANSPORT_CLASS" c:identifier="GST_WEBRTC_ICE_TRANSPORT_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_ICE_TRANSPORT_GET_CLASS" c:identifier="GST_WEBRTC_ICE_TRANSPORT_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_RECEIVER" c:identifier="GST_WEBRTC_RTP_RECEIVER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_RECEIVER_CLASS" c:identifier="GST_WEBRTC_RTP_RECEIVER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_RECEIVER_GET_CLASS" c:identifier="GST_WEBRTC_RTP_RECEIVER_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_SENDER" c:identifier="GST_WEBRTC_RTP_SENDER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_SENDER_CLASS" c:identifier="GST_WEBRTC_RTP_SENDER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_SENDER_GET_CLASS" c:identifier="GST_WEBRTC_RTP_SENDER_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_TRANSCEIVER" c:identifier="GST_WEBRTC_RTP_TRANSCEIVER" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_TRANSCEIVER_CLASS" c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="WEBRTC_RTP_TRANSCEIVER_GET_CLASS" c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -263,9 +231,7 @@ for more information.</doc>
       </member>
     </enumeration>
     <class name="WebRTCDTLSTransport" c:symbol-prefix="webrtc_dtls_transport" c:type="GstWebRTCDTLSTransport" parent="Gst.Object" glib:type-name="GstWebRTCDTLSTransport" glib:get-type="gst_webrtc_dtls_transport_get_type" glib:type-struct="WebRTCDTLSTransportClass">
-      
       <constructor name="new" c:identifier="gst_webrtc_dtls_transport_new">
-        
         <return-value transfer-ownership="none">
           <type name="WebRTCDTLSTransport" c:type="GstWebRTCDTLSTransport*"/>
         </return-value>
@@ -279,7 +245,6 @@ for more information.</doc>
         </parameters>
       </constructor>
       <method name="set_transport" c:identifier="gst_webrtc_dtls_transport_set_transport">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -344,7 +309,6 @@ for more information.</doc>
       </field>
     </class>
     <record name="WebRTCDTLSTransportClass" c:type="GstWebRTCDTLSTransportClass" glib:is-gtype-struct-for="WebRTCDTLSTransport">
-      
       <field name="parent_class">
         <type name="Gst.ObjectClass" c:type="GstObjectClass"/>
       </field>
@@ -372,10 +336,8 @@ for more information.</doc>
       </member>
     </enumeration>
     <class name="WebRTCDataChannel" c:symbol-prefix="webrtc_data_channel" c:type="GstWebRTCDataChannel" version="1.18" parent="GObject.Object" abstract="1" glib:type-name="GstWebRTCDataChannel" glib:get-type="gst_webrtc_data_channel_get_type" glib:type-struct="WebRTCDataChannelClass">
-      
       <virtual-method name="close" invoker="close">
         <doc xml:space="preserve">Close the @channel.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -388,7 +350,6 @@ for more information.</doc>
       </virtual-method>
       <virtual-method name="send_data" invoker="send_data">
         <doc xml:space="preserve">Send @data as a data message over @channel.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -405,7 +366,6 @@ for more information.</doc>
       </virtual-method>
       <virtual-method name="send_string" invoker="send_string">
         <doc xml:space="preserve">Send @str as a string message over @channel.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -422,7 +382,6 @@ for more information.</doc>
       </virtual-method>
       <method name="close" c:identifier="gst_webrtc_data_channel_close">
         <doc xml:space="preserve">Close the @channel.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -435,7 +394,6 @@ for more information.</doc>
       </method>
       <method name="on_buffered_amount_low" c:identifier="gst_webrtc_data_channel_on_buffered_amount_low">
         <doc xml:space="preserve">Signal that the data channel reached a low buffered amount. Should only be used by subclasses.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -448,7 +406,6 @@ for more information.</doc>
       </method>
       <method name="on_close" c:identifier="gst_webrtc_data_channel_on_close">
         <doc xml:space="preserve">Signal that the data channel was closed. Should only be used by subclasses.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -461,7 +418,6 @@ for more information.</doc>
       </method>
       <method name="on_error" c:identifier="gst_webrtc_data_channel_on_error">
         <doc xml:space="preserve">Signal that the data channel had an error. Should only be used by subclasses.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -478,7 +434,6 @@ for more information.</doc>
       </method>
       <method name="on_message_data" c:identifier="gst_webrtc_data_channel_on_message_data">
         <doc xml:space="preserve">Signal that the data channel received a data message. Should only be used by subclasses.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -495,7 +450,6 @@ for more information.</doc>
       </method>
       <method name="on_message_string" c:identifier="gst_webrtc_data_channel_on_message_string">
         <doc xml:space="preserve">Signal that the data channel received a string message. Should only be used by subclasses.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -512,7 +466,6 @@ for more information.</doc>
       </method>
       <method name="on_open" c:identifier="gst_webrtc_data_channel_on_open">
         <doc xml:space="preserve">Signal that the data channel was opened. Should only be used by subclasses.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -525,7 +478,6 @@ for more information.</doc>
       </method>
       <method name="send_data" c:identifier="gst_webrtc_data_channel_send_data">
         <doc xml:space="preserve">Send @data as a data message over @channel.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -542,7 +494,6 @@ for more information.</doc>
       </method>
       <method name="send_string" c:identifier="gst_webrtc_data_channel_send_string">
         <doc xml:space="preserve">Send @str as a string message over @channel.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -712,13 +663,11 @@ for more information.</doc>
       </glib:signal>
     </class>
     <record name="WebRTCDataChannelClass" c:type="GstWebRTCDataChannelClass" glib:is-gtype-struct-for="WebRTCDataChannel" version="1.18">
-      
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
       <field name="send_data">
         <callback name="send_data">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -736,7 +685,6 @@ for more information.</doc>
       </field>
       <field name="send_string">
         <callback name="send_string">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -754,7 +702,6 @@ for more information.</doc>
       </field>
       <field name="close">
         <callback name="close">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -851,9 +798,7 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate&gt;</doc>
       </member>
     </enumeration>
     <class name="WebRTCICETransport" c:symbol-prefix="webrtc_ice_transport" c:type="GstWebRTCICETransport" parent="Gst.Object" abstract="1" glib:type-name="GstWebRTCICETransport" glib:get-type="gst_webrtc_ice_transport_get_type" glib:type-struct="WebRTCICETransportClass">
-      
       <virtual-method name="gather_candidates">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -864,7 +809,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate&gt;</doc>
         </parameters>
       </virtual-method>
       <method name="connection_state_change" c:identifier="gst_webrtc_ice_transport_connection_state_change">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -878,7 +822,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate&gt;</doc>
         </parameters>
       </method>
       <method name="gathering_state_change" c:identifier="gst_webrtc_ice_transport_gathering_state_change">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -892,7 +835,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate&gt;</doc>
         </parameters>
       </method>
       <method name="new_candidate" c:identifier="gst_webrtc_ice_transport_new_candidate">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -912,7 +854,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate&gt;</doc>
         </parameters>
       </method>
       <method name="selected_pair_change" c:identifier="gst_webrtc_ice_transport_selected_pair_change">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -974,13 +915,11 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate&gt;</doc>
       </glib:signal>
     </class>
     <record name="WebRTCICETransportClass" c:type="GstWebRTCICETransportClass" glib:is-gtype-struct-for="WebRTCICETransport">
-      
       <field name="parent_class">
         <type name="Gst.ObjectClass" c:type="GstObjectClass"/>
       </field>
       <field name="gather_candidates">
         <callback name="gather_candidates">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -1044,15 +983,12 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
       </member>
     </enumeration>
     <class name="WebRTCRTPReceiver" c:symbol-prefix="webrtc_rtp_receiver" c:type="GstWebRTCRTPReceiver" parent="Gst.Object" glib:type-name="GstWebRTCRTPReceiver" glib:get-type="gst_webrtc_rtp_receiver_get_type" glib:type-struct="WebRTCRTPReceiverClass">
-      
       <constructor name="new" c:identifier="gst_webrtc_rtp_receiver_new">
-        
         <return-value transfer-ownership="none">
           <type name="WebRTCRTPReceiver" c:type="GstWebRTCRTPReceiver*"/>
         </return-value>
       </constructor>
       <method name="set_rtcp_transport" c:identifier="gst_webrtc_rtp_receiver_set_rtcp_transport">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1066,7 +1002,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
         </parameters>
       </method>
       <method name="set_transport" c:identifier="gst_webrtc_rtp_receiver_set_transport">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1095,7 +1030,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
       </field>
     </class>
     <record name="WebRTCRTPReceiverClass" c:type="GstWebRTCRTPReceiverClass" glib:is-gtype-struct-for="WebRTCRTPReceiver">
-      
       <field name="parent_class">
         <type name="Gst.ObjectClass" c:type="GstObjectClass"/>
       </field>
@@ -1106,15 +1040,12 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
       </field>
     </record>
     <class name="WebRTCRTPSender" c:symbol-prefix="webrtc_rtp_sender" c:type="GstWebRTCRTPSender" parent="Gst.Object" glib:type-name="GstWebRTCRTPSender" glib:get-type="gst_webrtc_rtp_sender_get_type" glib:type-struct="WebRTCRTPSenderClass">
-      
       <constructor name="new" c:identifier="gst_webrtc_rtp_sender_new">
-        
         <return-value transfer-ownership="none">
           <type name="WebRTCRTPSender" c:type="GstWebRTCRTPSender*"/>
         </return-value>
       </constructor>
       <method name="set_rtcp_transport" c:identifier="gst_webrtc_rtp_sender_set_rtcp_transport">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1128,7 +1059,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
         </parameters>
       </method>
       <method name="set_transport" c:identifier="gst_webrtc_rtp_sender_set_transport">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1162,7 +1092,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
       </field>
     </class>
     <record name="WebRTCRTPSenderClass" c:type="GstWebRTCRTPSenderClass" glib:is-gtype-struct-for="WebRTCRTPSender">
-      
       <field name="parent_class">
         <type name="Gst.ObjectClass" c:type="GstObjectClass"/>
       </field>
@@ -1173,7 +1102,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
       </field>
     </record>
     <class name="WebRTCRTPTransceiver" c:symbol-prefix="webrtc_rtp_transceiver" c:type="GstWebRTCRTPTransceiver" parent="Gst.Object" abstract="1" glib:type-name="GstWebRTCRTPTransceiver" glib:get-type="gst_webrtc_rtp_transceiver_get_type" glib:type-struct="WebRTCRTPTransceiverClass">
-      
       <property name="direction" version="1.18" writable="1" transfer-ownership="none">
         <doc xml:space="preserve">Direction of the transceiver.</doc>
         <type name="WebRTCRTPTransceiverDirection"/>
@@ -1221,7 +1149,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype&gt;</doc>
       </field>
     </class>
     <record name="WebRTCRTPTransceiverClass" c:type="GstWebRTCRTPTransceiverClass" glib:is-gtype-struct-for="WebRTCRTPTransceiver">
-      
       <field name="parent_class">
         <type name="Gst.ObjectClass" c:type="GstObjectClass"/>
       </field>
@@ -1278,7 +1205,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcsctptransportstate&gt;</doc>
         <doc xml:space="preserve">rollback</doc>
       </member>
       <function name="to_string" c:identifier="gst_webrtc_sdp_type_to_string">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the string representation of @type or "unknown" when @type is not
      recognized.</doc>
@@ -1294,7 +1220,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcsctptransportstate&gt;</doc>
     </enumeration>
     <record name="WebRTCSessionDescription" c:type="GstWebRTCSessionDescription" glib:type-name="GstWebRTCSessionDescription" glib:get-type="gst_webrtc_session_description_get_type" c:symbol-prefix="webrtc_session_description">
       <doc xml:space="preserve">See &lt;https://www.w3.org/TR/webrtc/#rtcsessiondescription-class&gt;</doc>
-      
       <field name="type" writable="1">
         <doc xml:space="preserve">the #GstWebRTCSDPType of the description</doc>
         <type name="WebRTCSDPType" c:type="GstWebRTCSDPType"/>
@@ -1304,7 +1229,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcsctptransportstate&gt;</doc>
         <type name="GstSdp.SDPMessage" c:type="GstSDPMessage*"/>
       </field>
       <constructor name="new" c:identifier="gst_webrtc_session_description_new">
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstWebRTCSessionDescription from @type
      and @sdp</doc>
@@ -1322,7 +1246,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcsctptransportstate&gt;</doc>
         </parameters>
       </constructor>
       <method name="copy" c:identifier="gst_webrtc_session_description_copy">
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new copy of @src</doc>
           <type name="WebRTCSessionDescription" c:type="GstWebRTCSessionDescription*"/>
@@ -1336,7 +1259,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcsctptransportstate&gt;</doc>
       </method>
       <method name="free" c:identifier="gst_webrtc_session_description_free">
         <doc xml:space="preserve">Free @desc and all associated resources</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1435,7 +1357,6 @@ See &lt;http://w3c.github.io/webrtc-pc/#dom-rtcsctptransportstate&gt;</doc>
       <doc xml:space="preserve">&lt;https://www.w3.org/TR/webrtc/#rtcrtptransceiver-interface&gt;</doc>
     </docsection>
     <function name="webrtc_sdp_type_to_string" c:identifier="gst_webrtc_sdp_type_to_string" moved-to="WebRTCSDPType.to_string">
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the string representation of @type or "unknown" when @type is not
      recognized.</doc>

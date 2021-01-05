@@ -14,11 +14,9 @@ and/or use gtk-doc annotations.  -->
       <doc xml:space="preserve">A value mapping object that attaches multiple control sources to a guint
 gobject properties representing a color. A control value of 0.0 will turn the
 color component off and a value of 1.0 will be the color level.</doc>
-      
       <constructor name="new" c:identifier="gst_argb_control_binding_new">
         <doc xml:space="preserve">Create a new control-binding that attaches the given #GstControlSource to the
 #GObject property.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the new #GstARGBControlBinding</doc>
           <type name="Gst.ControlBinding" c:type="GstControlBinding*"/>
@@ -91,7 +89,6 @@ color component off and a value of 1.0 will be the color level.</doc>
     </class>
     <record name="ARGBControlBindingClass" c:type="GstARGBControlBindingClass" glib:is-gtype-struct-for="ARGBControlBinding">
       <doc xml:space="preserve">The class structure of #GstARGBControlBinding.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">Parent class</doc>
         <type name="Gst.ControlBindingClass" c:type="GstControlBindingClass"/>
@@ -103,21 +100,18 @@ color component off and a value of 1.0 will be the color level.</doc>
       </field>
     </record>
     <function-macro name="ARGB_CONTROL_BINDING" c:identifier="GST_ARGB_CONTROL_BINDING" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="ARGB_CONTROL_BINDING_CLASS" c:identifier="GST_ARGB_CONTROL_BINDING_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="ARGB_CONTROL_BINDING_GET_CLASS" c:identifier="GST_ARGB_CONTROL_BINDING_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -127,7 +121,6 @@ color component off and a value of 1.0 will be the color level.</doc>
       <doc xml:space="preserve">An internal structure for value+time and various temporary
 values used for interpolation. This "inherits" from
 GstTimedValue.</doc>
-      
       <field name="timestamp" writable="1">
         <doc xml:space="preserve">timestamp of the value change</doc>
         <type name="Gst.ClockTime" c:type="GstClockTime"/>
@@ -137,9 +130,7 @@ GstTimedValue.</doc>
         <type name="gdouble" c:type="gdouble"/>
       </field>
       <union name="cache" c:type="cache">
-        
         <record name="cubic" c:type="cubic">
-          
           <field name="h" writable="1">
             <type name="gdouble" c:type="gdouble"/>
           </field>
@@ -148,7 +139,6 @@ GstTimedValue.</doc>
           </field>
         </record>
         <record name="cubic_monotonic" c:type="cubic_monotonic">
-          
           <field name="c1s" writable="1">
             <type name="gdouble" c:type="gdouble"/>
           </field>
@@ -167,7 +157,6 @@ GstTimedValue.</doc>
       </union>
       <method name="copy" c:identifier="gst_control_point_copy">
         <doc xml:space="preserve">Copies a #GstControlPoint</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A copy of @cp</doc>
           <type name="ControlPoint" c:type="GstControlPoint*"/>
@@ -181,7 +170,6 @@ GstTimedValue.</doc>
       </method>
       <method name="free" c:identifier="gst_control_point_free">
         <doc xml:space="preserve">Frees all data allocated by a #GstControlPoint instance.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -194,21 +182,18 @@ GstTimedValue.</doc>
       </method>
     </record>
     <function-macro name="DIRECT_CONTROL_BINDING" c:identifier="GST_DIRECT_CONTROL_BINDING" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="DIRECT_CONTROL_BINDING_CLASS" c:identifier="GST_DIRECT_CONTROL_BINDING_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="DIRECT_CONTROL_BINDING_GET_CLASS" c:identifier="GST_DIRECT_CONTROL_BINDING_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -221,12 +206,10 @@ non-absolute direct control binding is used, the value range [0.0 ... 1.0]
 is mapped to full target property range, and all values outside the range
 will be clipped. An absolute control binding will not do any value
 transformations.</doc>
-      
       <constructor name="new" c:identifier="gst_direct_control_binding_new">
         <doc xml:space="preserve">Create a new control-binding that attaches the #GstControlSource to the
 #GObject property. It will map the control source range [0.0 ... 1.0] to
 the full target property range, and clip all values outside this range.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the new #GstDirectControlBinding</doc>
           <type name="Gst.ControlBinding" c:type="GstControlBinding*"/>
@@ -250,7 +233,6 @@ the full target property range, and clip all values outside this range.</doc>
         <doc xml:space="preserve">Create a new control-binding that attaches the #GstControlSource to the
 #GObject property. It will directly map the control source values to the
 target property range without any transformations.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the new #GstDirectControlBinding</doc>
           <type name="Gst.ControlBinding" c:type="GstControlBinding*"/>
@@ -298,14 +280,12 @@ target property range without any transformations.</doc>
         <type name="DirectControlBindingConvertGValue" c:type="GstDirectControlBindingConvertGValue"/>
       </field>
       <union name="ABI" c:type="ABI">
-        
         <field name="_gst_reserved" writable="1">
           <array zero-terminated="0" fixed-size="4">
             <type name="gpointer" c:type="gpointer"/>
           </array>
         </field>
         <record name="abi" c:type="abi">
-          
           <field name="want_absolute" writable="1">
             <type name="gboolean" c:type="gboolean"/>
           </field>
@@ -314,7 +294,6 @@ target property range without any transformations.</doc>
     </class>
     <record name="DirectControlBindingClass" c:type="GstDirectControlBindingClass" glib:is-gtype-struct-for="DirectControlBinding">
       <doc xml:space="preserve">The class structure of #GstDirectControlBinding.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">Parent class</doc>
         <type name="Gst.ControlBindingClass" c:type="GstControlBindingClass"/>
@@ -327,7 +306,6 @@ target property range without any transformations.</doc>
     </record>
     <callback name="DirectControlBindingConvertGValue" c:type="GstDirectControlBindingConvertGValue">
       <doc xml:space="preserve">Function to map a control-value to the target GValue.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -348,7 +326,6 @@ target property range without any transformations.</doc>
     </callback>
     <callback name="DirectControlBindingConvertValue" c:type="GstDirectControlBindingConvertValue">
       <doc xml:space="preserve">Function to map a control-value to the target plain data type.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -368,119 +345,102 @@ target property range without any transformations.</doc>
       </parameters>
     </callback>
     <function-macro name="INTERPOLATION_CONTROL_SOURCE" c:identifier="GST_INTERPOLATION_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="INTERPOLATION_CONTROL_SOURCE_CLASS" c:identifier="GST_INTERPOLATION_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="INTERPOLATION_CONTROL_SOURCE_GET_CLASS" c:identifier="GST_INTERPOLATION_CONTROL_SOURCE_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="inst">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_ARGB_CONTROL_BINDING" c:identifier="GST_IS_ARGB_CONTROL_BINDING" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_ARGB_CONTROL_BINDING_CLASS" c:identifier="GST_IS_ARGB_CONTROL_BINDING_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_DIRECT_CONTROL_BINDING" c:identifier="GST_IS_DIRECT_CONTROL_BINDING" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_DIRECT_CONTROL_BINDING_CLASS" c:identifier="GST_IS_DIRECT_CONTROL_BINDING_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_INTERPOLATION_CONTROL_SOURCE" c:identifier="GST_IS_INTERPOLATION_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_INTERPOLATION_CONTROL_SOURCE_CLASS" c:identifier="GST_IS_INTERPOLATION_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_LFO_CONTROL_SOURCE" c:identifier="GST_IS_LFO_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_LFO_CONTROL_SOURCE_CLASS" c:identifier="GST_IS_LFO_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PROXY_CONTROL_BINDING" c:identifier="GST_IS_PROXY_CONTROL_BINDING" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_PROXY_CONTROL_BINDING_CLASS" c:identifier="GST_IS_PROXY_CONTROL_BINDING_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TIMED_VALUE_CONTROL_SOURCE" c:identifier="GST_IS_TIMED_VALUE_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TIMED_VALUE_CONTROL_SOURCE_CLASS" c:identifier="GST_IS_TIMED_VALUE_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TRIGGER_CONTROL_SOURCE" c:identifier="GST_IS_TRIGGER_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TRIGGER_CONTROL_SOURCE_CLASS" c:identifier="GST_IS_TRIGGER_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
@@ -495,10 +455,8 @@ gst_interpolation_control_source_new(), bind it to a #GParamSpec and set some
 control points by calling gst_timed_value_control_source_set().
 
 All functions are MT-safe.</doc>
-      
       <constructor name="new" c:identifier="gst_interpolation_control_source_new">
         <doc xml:space="preserve">This returns a new, unbound #GstInterpolationControlSource.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new, unbound #GstInterpolationControlSource.</doc>
           <type name="Gst.ControlSource" c:type="GstControlSource*"/>
@@ -520,7 +478,6 @@ All functions are MT-safe.</doc>
       </field>
     </class>
     <record name="InterpolationControlSourceClass" c:type="GstInterpolationControlSourceClass" glib:is-gtype-struct-for="InterpolationControlSource">
-      
       <field name="parent_class">
         <type name="TimedValueControlSourceClass" c:type="GstTimedValueControlSourceClass"/>
       </field>
@@ -530,9 +487,7 @@ All functions are MT-safe.</doc>
         </array>
       </field>
     </record>
-    <record name="InterpolationControlSourcePrivate" c:type="GstInterpolationControlSourcePrivate" disguised="1">
-      
-    </record>
+    <record name="InterpolationControlSourcePrivate" c:type="GstInterpolationControlSourcePrivate" disguised="1"/>
     <enumeration name="InterpolationMode" glib:type-name="GstInterpolationMode" glib:get-type="gst_interpolation_mode_get_type" c:type="GstInterpolationMode">
       <doc xml:space="preserve">The various interpolation modes available.</doc>
       <member name="none" value="0" c:identifier="GST_INTERPOLATION_MODE_NONE" glib:nick="none">
@@ -560,10 +515,8 @@ gst_lfo_control_source_new(), bind it to a #GParamSpec and set the relevant
 properties.
 
 All functions are MT-safe.</doc>
-      
       <constructor name="new" c:identifier="gst_lfo_control_source_new">
         <doc xml:space="preserve">This returns a new, unbound #GstLFOControlSource.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new, unbound #GstLFOControlSource.</doc>
           <type name="Gst.ControlSource" c:type="GstControlSource*"/>
@@ -611,7 +564,6 @@ To get a n nanosecond shift to the left use
       </field>
     </class>
     <record name="LFOControlSourceClass" c:type="GstLFOControlSourceClass" glib:is-gtype-struct-for="LFOControlSource">
-      
       <field name="parent_class">
         <type name="Gst.ControlSourceClass" c:type="GstControlSourceClass"/>
       </field>
@@ -621,9 +573,7 @@ To get a n nanosecond shift to the left use
         </array>
       </field>
     </record>
-    <record name="LFOControlSourcePrivate" c:type="GstLFOControlSourcePrivate" disguised="1">
-      
-    </record>
+    <record name="LFOControlSourcePrivate" c:type="GstLFOControlSourcePrivate" disguised="1"/>
     <enumeration name="LFOWaveform" glib:type-name="GstLFOWaveform" glib:get-type="gst_lfo_waveform_get_type" c:type="GstLFOWaveform">
       <doc xml:space="preserve">The various waveform modes available.</doc>
       <member name="sine" value="0" c:identifier="GST_LFO_WAVEFORM_SINE" glib:nick="sine">
@@ -643,42 +593,36 @@ To get a n nanosecond shift to the left use
       </member>
     </enumeration>
     <function-macro name="LFO_CONTROL_SOURCE" c:identifier="GST_LFO_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="LFO_CONTROL_SOURCE_CLASS" c:identifier="GST_LFO_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="LFO_CONTROL_SOURCE_GET_CLASS" c:identifier="GST_LFO_CONTROL_SOURCE_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="inst">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PROXY_CONTROL_BINDING" c:identifier="GST_PROXY_CONTROL_BINDING" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PROXY_CONTROL_BINDING_CLASS" c:identifier="GST_PROXY_CONTROL_BINDING_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="PROXY_CONTROL_BINDING_GET_CLASS" c:identifier="GST_PROXY_CONTROL_BINDING_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -686,12 +630,10 @@ To get a n nanosecond shift to the left use
     </function-macro>
     <class name="ProxyControlBinding" c:symbol-prefix="proxy_control_binding" c:type="GstProxyControlBinding" parent="Gst.ControlBinding" glib:type-name="GstProxyControlBinding" glib:get-type="gst_proxy_control_binding_get_type" glib:type-struct="ProxyControlBindingClass">
       <doc xml:space="preserve">A #GstControlBinding that forwards requests to another #GstControlBinding</doc>
-      
       <constructor name="new" c:identifier="gst_proxy_control_binding_new" version="1.12">
         <doc xml:space="preserve">#GstProxyControlBinding forwards all access to data or `sync_values()`
 requests from @property_name on @object to the control binding at
 @ref_property_name on @ref_object.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a new #GstControlBinding that proxies the control interface between
 properties on different #GstObject's</doc>
@@ -734,7 +676,6 @@ properties on different #GstObject's</doc>
     </class>
     <record name="ProxyControlBindingClass" c:type="GstProxyControlBindingClass" glib:is-gtype-struct-for="ProxyControlBinding">
       <doc xml:space="preserve">Opaque #GstProxyControlBindingClass struct</doc>
-      
       <field name="parent_class" readable="0" private="1">
         <type name="Gst.ControlBindingClass" c:type="GstControlBindingClass"/>
       </field>
@@ -745,56 +686,48 @@ properties on different #GstObject's</doc>
       </field>
     </record>
     <function-macro name="TIMED_VALUE_CONTROL_SOURCE" c:identifier="GST_TIMED_VALUE_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TIMED_VALUE_CONTROL_SOURCE_CLASS" c:identifier="GST_TIMED_VALUE_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TIMED_VALUE_CONTROL_SOURCE_GET_CLASS" c:identifier="GST_TIMED_VALUE_CONTROL_SOURCE_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="inst">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TIMED_VALUE_CONTROL_SOURCE_LOCK" c:identifier="GST_TIMED_VALUE_CONTROL_SOURCE_LOCK" introspectable="0">
-      
       <parameters>
         <parameter name="o">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TIMED_VALUE_CONTROL_SOURCE_UNLOCK" c:identifier="GST_TIMED_VALUE_CONTROL_SOURCE_UNLOCK" introspectable="0">
-      
       <parameters>
         <parameter name="o">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TRIGGER_CONTROL_SOURCE" c:identifier="GST_TRIGGER_CONTROL_SOURCE" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TRIGGER_CONTROL_SOURCE_CLASS" c:identifier="GST_TRIGGER_CONTROL_SOURCE_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="vtable">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TRIGGER_CONTROL_SOURCE_GET_CLASS" c:identifier="GST_TRIGGER_CONTROL_SOURCE_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="inst">
         </parameter>
@@ -807,14 +740,12 @@ When overriding bind, chain up first to give this bind implementation a
 chance to setup things.
 
 All functions are MT-safe.</doc>
-      
       <method name="find_control_point_iter" c:identifier="gst_timed_value_control_source_find_control_point_iter">
         <doc xml:space="preserve">Find last value before given timestamp in control point list.
 If all values in the control point list come after the given
 timestamp or no values exist, %NULL is returned.
 
 For use in control source implementations.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the found #GSequenceIter or %NULL</doc>
           <type name="GLib.SequenceIter" c:type="GSequenceIter*"/>
@@ -833,7 +764,6 @@ For use in control source implementations.</doc>
       <method name="get_all" c:identifier="gst_timed_value_control_source_get_all">
         <doc xml:space="preserve">Returns a read-only copy of the list of #GstTimedValue for the given property.
 Free the list after done with it.</doc>
-        
         <return-value transfer-ownership="container">
           <doc xml:space="preserve">a copy
 of the list, or %NULL if the property isn't handled by the controller</doc>
@@ -850,7 +780,6 @@ of the list, or %NULL if the property isn't handled by the controller</doc>
       </method>
       <method name="get_count" c:identifier="gst_timed_value_control_source_get_count">
         <doc xml:space="preserve">Get the number of control points that are set.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the number of control points that are set.</doc>
           <type name="gint" c:type="gint"/>
@@ -864,7 +793,6 @@ of the list, or %NULL if the property isn't handled by the controller</doc>
       </method>
       <method name="set" c:identifier="gst_timed_value_control_source_set">
         <doc xml:space="preserve">Set the value of given controller-handled property at a certain time.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">FALSE if the values couldn't be set, TRUE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -886,7 +814,6 @@ of the list, or %NULL if the property isn't handled by the controller</doc>
       </method>
       <method name="set_from_list" c:identifier="gst_timed_value_control_source_set_from_list">
         <doc xml:space="preserve">Sets multiple timed values at once.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">FALSE if the values couldn't be set, TRUE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -908,7 +835,6 @@ with #GstTimedValue items</doc>
       <method name="unset" c:identifier="gst_timed_value_control_source_unset">
         <doc xml:space="preserve">Used to remove the value of given controller-handled property at a certain
 time.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">FALSE if the value couldn't be unset (i.e. not found, TRUE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -926,7 +852,6 @@ time.</doc>
       </method>
       <method name="unset_all" c:identifier="gst_timed_value_control_source_unset_all">
         <doc xml:space="preserve">Used to remove all time-stamped values of given controller-handled property</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -998,7 +923,6 @@ time.</doc>
       </glib:signal>
     </class>
     <record name="TimedValueControlSourceClass" c:type="GstTimedValueControlSourceClass" glib:is-gtype-struct-for="TimedValueControlSource">
-      
       <field name="parent_class">
         <type name="Gst.ControlSourceClass" c:type="GstControlSourceClass"/>
       </field>
@@ -1008,9 +932,7 @@ time.</doc>
         </array>
       </field>
     </record>
-    <record name="TimedValueControlSourcePrivate" c:type="GstTimedValueControlSourcePrivate" disguised="1">
-      
-    </record>
+    <record name="TimedValueControlSourcePrivate" c:type="GstTimedValueControlSourcePrivate" disguised="1"/>
     <class name="TriggerControlSource" c:symbol-prefix="trigger_control_source" c:type="GstTriggerControlSource" parent="TimedValueControlSource" glib:type-name="GstTriggerControlSource" glib:get-type="gst_trigger_control_source_get_type" glib:type-struct="TriggerControlSourceClass">
       <doc xml:space="preserve">#GstTriggerControlSource is a #GstControlSource, that returns values from user-given
 control points. It allows for a tolerance on the time-stamps.
@@ -1020,10 +942,8 @@ gst_trigger_control_source_new(), bind it to a #GParamSpec and set some
 control points by calling gst_timed_value_control_source_set().
 
 All functions are MT-safe.</doc>
-      
       <constructor name="new" c:identifier="gst_trigger_control_source_new">
         <doc xml:space="preserve">This returns a new, unbound #GstTriggerControlSource.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new, unbound #GstTriggerControlSource.</doc>
           <type name="Gst.ControlSource" c:type="GstControlSource*"/>
@@ -1045,7 +965,6 @@ All functions are MT-safe.</doc>
       </field>
     </class>
     <record name="TriggerControlSourceClass" c:type="GstTriggerControlSourceClass" glib:is-gtype-struct-for="TriggerControlSource">
-      
       <field name="parent_class">
         <type name="TimedValueControlSourceClass" c:type="GstTimedValueControlSourceClass"/>
       </field>
@@ -1055,12 +974,9 @@ All functions are MT-safe.</doc>
         </array>
       </field>
     </record>
-    <record name="TriggerControlSourcePrivate" c:type="GstTriggerControlSourcePrivate" disguised="1">
-      
-    </record>
+    <record name="TriggerControlSourcePrivate" c:type="GstTriggerControlSourcePrivate" disguised="1"/>
     <function name="timed_value_control_invalidate_cache" c:identifier="gst_timed_value_control_invalidate_cache">
       <doc xml:space="preserve">Reset the controlled value cache.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>

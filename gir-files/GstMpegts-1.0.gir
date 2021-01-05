@@ -12,7 +12,6 @@ and/or use gtk-doc annotations.  -->
 the various ATSC specifications.
 
 Consult the relevant specifications for more details.</doc>
-      
       <member name="stuffing" value="128" c:identifier="GST_MTS_DESC_ATSC_STUFFING">
       </member>
       <member name="ac3" value="131" c:identifier="GST_MTS_DESC_ATSC_AC3">
@@ -60,7 +59,6 @@ Consult the relevant specifications for more details.</doc>
     </enumeration>
     <record name="AtscEIT" c:type="GstMpegtsAtscEIT" glib:type-name="GstMpegtsAtscEIT" glib:get-type="gst_mpegts_atsc_eit_get_type" c:symbol-prefix="atsc_eit">
       <doc xml:space="preserve">Event Information Table (ATSC)</doc>
-      
       <field name="source_id" writable="1">
         <doc xml:space="preserve">The source id</doc>
         <type name="guint16" c:type="guint16"/>
@@ -78,7 +76,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscEITEvent" c:type="GstMpegtsAtscEITEvent" glib:type-name="GstMpegtsAtscEITEvent" glib:get-type="gst_mpegts_atsc_eit_event_get_type" c:symbol-prefix="atsc_eit_event">
       <doc xml:space="preserve">An ATSC EIT Event</doc>
-      
       <field name="event_id" writable="1">
         <doc xml:space="preserve">The event id</doc>
         <type name="guint16" c:type="guint16"/>
@@ -110,7 +107,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscETT" c:type="GstMpegtsAtscETT" glib:type-name="GstMpegtsAtscETT" glib:get-type="gst_mpegts_atsc_ett_get_type" c:symbol-prefix="atsc_ett">
       <doc xml:space="preserve">Extended Text Table (ATSC)</doc>
-      
       <field name="ett_table_id_extension" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -131,7 +127,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscMGT" c:type="GstMpegtsAtscMGT" glib:type-name="GstMpegtsAtscMGT" glib:get-type="gst_mpegts_atsc_mgt_get_type" c:symbol-prefix="atsc_mgt">
       <doc xml:space="preserve">Master Guide Table (A65)</doc>
-      
       <field name="protocol_version" writable="1">
         <doc xml:space="preserve">The protocol version</doc>
         <type name="guint8" c:type="guint8"/>
@@ -153,7 +148,6 @@ Consult the relevant specifications for more details.</doc>
         </array>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_atsc_mgt_new">
-        
         <return-value transfer-ownership="full">
           <type name="AtscMGT" c:type="GstMpegtsAtscMGT*"/>
         </return-value>
@@ -161,7 +155,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscMGTTable" c:type="GstMpegtsAtscMGTTable" glib:type-name="GstMpegtsAtscMGTTable" glib:get-type="gst_mpegts_atsc_mgt_table_get_type" c:symbol-prefix="atsc_mgt_table">
       <doc xml:space="preserve">Source from a @GstMpegtsAtscMGT</doc>
-      
       <field name="table_type" writable="1">
         <doc xml:space="preserve">#GstMpegtsAtscMGTTableType</doc>
         <type name="guint16" c:type="guint16"/>
@@ -185,7 +178,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <enumeration name="AtscMGTTableType" c:type="GstMpegtsAtscMGTTableType">
-      
       <member name="eit0" value="256" c:identifier="GST_MPEGTS_ATSC_MGT_TABLE_TYPE_EIT0">
       </member>
       <member name="eit127" value="383" c:identifier="GST_MPEGTS_ATSC_MGT_TABLE_TYPE_EIT127">
@@ -196,7 +188,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="AtscMultString" c:type="GstMpegtsAtscMultString" glib:type-name="GstMpegtsAtscMultString" glib:get-type="gst_mpegts_atsc_mult_string_get_type" c:symbol-prefix="atsc_mult_string">
-      
       <field name="iso_639_langcode" writable="1">
         <doc xml:space="preserve">The ISO639 language code</doc>
         <array zero-terminated="0" fixed-size="4">
@@ -211,7 +202,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscRRT" c:type="GstMpegtsAtscRRT" version="1.18" glib:type-name="GstMpegtsAtscRRT" glib:get-type="gst_mpegts_atsc_rrt_get_type" c:symbol-prefix="atsc_rrt">
       <doc xml:space="preserve">Region Rating Table (A65)</doc>
-      
       <field name="protocol_version" writable="1">
         <doc xml:space="preserve">The protocol version</doc>
         <type name="guint8" c:type="guint8"/>
@@ -239,14 +229,12 @@ Consult the relevant specifications for more details.</doc>
         </array>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_atsc_rrt_new">
-        
         <return-value transfer-ownership="full">
           <type name="AtscRRT" c:type="GstMpegtsAtscRRT*"/>
         </return-value>
       </constructor>
     </record>
     <record name="AtscRRTDimension" c:type="GstMpegtsAtscRRTDimension" glib:type-name="GstMpegtsAtscRRTDimension" glib:get-type="gst_mpegts_atsc_rrt_dimension_get_type" c:symbol-prefix="atsc_rrt_dimension">
-      
       <field name="names" writable="1">
         <array name="GLib.PtrArray" c:type="GPtrArray*">
           <type name="gpointer" c:type="gpointer"/>
@@ -264,14 +252,12 @@ Consult the relevant specifications for more details.</doc>
         </array>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_atsc_rrt_dimension_new">
-        
         <return-value transfer-ownership="full">
           <type name="AtscRRTDimension" c:type="GstMpegtsAtscRRTDimension*"/>
         </return-value>
       </constructor>
     </record>
     <record name="AtscRRTDimensionValue" c:type="GstMpegtsAtscRRTDimensionValue" version="1.18" glib:type-name="GstMpegtsAtscRRTDimensionValue" glib:get-type="gst_mpegts_atsc_rrt_dimension_value_get_type" c:symbol-prefix="atsc_rrt_dimension_value">
-      
       <field name="abbrev_ratings" writable="1">
         <doc xml:space="preserve">the abbreviated ratings</doc>
         <array name="GLib.PtrArray" c:type="GPtrArray*">
@@ -285,7 +271,6 @@ Consult the relevant specifications for more details.</doc>
         </array>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_atsc_rrt_dimension_value_new">
-        
         <return-value transfer-ownership="full">
           <type name="AtscRRTDimensionValue" c:type="GstMpegtsAtscRRTDimensionValue*"/>
         </return-value>
@@ -293,7 +278,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscSTT" c:type="GstMpegtsAtscSTT" glib:type-name="GstMpegtsAtscSTT" glib:get-type="gst_mpegts_atsc_stt_get_type" c:symbol-prefix="atsc_stt">
       <doc xml:space="preserve">System Time Table (A65)</doc>
-      
       <field name="protocol_version" writable="1">
         <doc xml:space="preserve">The protocol version</doc>
         <type name="guint8" c:type="guint8"/>
@@ -328,13 +312,11 @@ Consult the relevant specifications for more details.</doc>
         <type name="Gst.DateTime" c:type="GstDateTime*"/>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_atsc_stt_new">
-        
         <return-value transfer-ownership="full">
           <type name="AtscSTT" c:type="GstMpegtsAtscSTT*"/>
         </return-value>
       </constructor>
       <method name="get_datetime_utc" c:identifier="gst_mpegts_atsc_stt_get_datetime_utc">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -347,7 +329,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscStringSegment" c:type="GstMpegtsAtscStringSegment" glib:type-name="GstMpegtsAtscStringSegment" glib:get-type="gst_mpegts_atsc_string_segment_get_type" c:symbol-prefix="atsc_string_segment">
       <doc xml:space="preserve">A string segment</doc>
-      
       <field name="compression_type" writable="1">
         <doc xml:space="preserve">The compression type</doc>
         <type name="guint8" c:type="guint8"/>
@@ -368,7 +349,6 @@ Consult the relevant specifications for more details.</doc>
         <type name="utf8" c:type="gchar*"/>
       </field>
       <method name="get_string" c:identifier="gst_mpegts_atsc_string_segment_get_string">
-        
         <return-value transfer-ownership="none">
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
@@ -379,7 +359,6 @@ Consult the relevant specifications for more details.</doc>
         </parameters>
       </method>
       <method name="set_string" c:identifier="gst_mpegts_atsc_string_segment_set_string">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -403,7 +382,6 @@ Consult the relevant specifications for more details.</doc>
       <doc xml:space="preserve">Represents both:
   Terrestrial Virtual Channel Table (A65)
   Cable Virtual Channel Table (A65)</doc>
-      
       <field name="transport_stream_id" writable="1">
         <doc xml:space="preserve">The transport stream</doc>
         <type name="guint16" c:type="guint16"/>
@@ -427,7 +405,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="AtscVCTSource" c:type="GstMpegtsAtscVCTSource" glib:type-name="GstMpegtsAtscVCTSource" glib:get-type="gst_mpegts_atsc_vct_source_get_type" c:symbol-prefix="atsc_vct_source">
       <doc xml:space="preserve">Source from a @GstMpegtsAtscVCT, can be used both for TVCT and CVCT tables</doc>
-      
       <field name="short_name" writable="1">
         <doc xml:space="preserve">The short name of a source</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -497,7 +474,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="BAT" c:type="GstMpegtsBAT" glib:type-name="GstMpegtsBAT" glib:get-type="gst_mpegts_bat_get_type" c:symbol-prefix="bat">
       <doc xml:space="preserve">DVB Bouquet Association Table (EN 300 468)</doc>
-      
       <field name="descriptors" writable="1">
         <array name="GLib.PtrArray" c:type="GPtrArray*">
           <type name="Descriptor"/>
@@ -510,7 +486,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="BATStream" c:type="GstMpegtsBATStream" glib:type-name="GstMpegtsBATStream" glib:get-type="gst_mpegts_bat_stream_get_type" c:symbol-prefix="bat_stream">
-      
       <field name="transport_stream_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -525,7 +500,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="CableDeliverySystemDescriptor" c:type="GstMpegtsCableDeliverySystemDescriptor" glib:type-name="GstMpegtsCableDeliverySystemDescriptor" glib:get-type="gst_mpegts_dvb_cable_delivery_system_descriptor_get_type" c:symbol-prefix="dvb_cable_delivery_system_descriptor">
       <doc xml:space="preserve">Cable Delivery System Descriptor (EN 300 468 v.1.13.1)</doc>
-      
       <field name="frequency" writable="1">
         <doc xml:space="preserve">the frequency in Hz (Hertz)</doc>
         <type name="guint32" c:type="guint32"/>
@@ -547,7 +521,6 @@ Consult the relevant specifications for more details.</doc>
         <type name="DVBCodeRate" c:type="GstMpegtsDVBCodeRate"/>
       </field>
       <method name="free" c:identifier="gst_mpegts_dvb_cable_delivery_system_descriptor_free">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -559,7 +532,6 @@ Consult the relevant specifications for more details.</doc>
       </method>
     </record>
     <enumeration name="CableOuterFECScheme" c:type="GstMpegtsCableOuterFECScheme">
-      
       <member name="undefined" value="0" c:identifier="GST_MPEGTS_CABLE_OUTER_FEC_UNDEFINED">
       </member>
       <member name="none" value="1" c:identifier="GST_MPEGTS_CABLE_OUTER_FEC_NONE">
@@ -568,7 +540,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="ComponentDescriptor" c:type="GstMpegtsComponentDescriptor" glib:type-name="GstMpegtsComponentDescriptor" glib:get-type="gst_mpegts_component_descriptor_get_type" c:symbol-prefix="component_descriptor">
-      
       <field name="stream_content" writable="1">
         <type name="guint8" c:type="guint8"/>
       </field>
@@ -586,7 +557,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <enumeration name="ComponentStreamContent" c:type="GstMpegtsComponentStreamContent">
-      
       <member name="mpeg2_video" value="1" c:identifier="GST_MPEGTS_STREAM_CONTENT_MPEG2_VIDEO">
       </member>
       <member name="mpeg1_layer2_audio" value="2" c:identifier="GST_MPEGTS_STREAM_CONTENT_MPEG1_LAYER2_AUDIO">
@@ -605,7 +575,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="Content" c:type="GstMpegtsContent" glib:type-name="GstMpegtsContent" glib:get-type="gst_mpegts_content_get_type" c:symbol-prefix="content">
-      
       <field name="content_nibble_1" writable="1">
         <type name="ContentNibbleHi" c:type="GstMpegtsContentNibbleHi"/>
       </field>
@@ -617,7 +586,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <enumeration name="ContentNibbleHi" c:type="GstMpegtsContentNibbleHi">
-      
       <member name="movie_drama" value="1" c:identifier="GST_MPEGTS_CONTENT_MOVIE_DRAMA">
       </member>
       <member name="news_current_affairs" value="2" c:identifier="GST_MPEGTS_CONTENT_NEWS_CURRENT_AFFAIRS">
@@ -642,7 +610,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <enumeration name="DVBCodeRate" c:type="GstMpegtsDVBCodeRate">
-      
       <member name="none" value="0" c:identifier="GST_MPEGTS_FEC_NONE">
       </member>
       <member name="1_2" value="1" c:identifier="GST_MPEGTS_FEC_1_2">
@@ -677,7 +644,6 @@ These values correspond to the registered descriptor type from
 the various DVB specifications.
 
 Consult the relevant specifications for more details.</doc>
-      
       <member name="network_name" value="64" c:identifier="GST_MTS_DESC_DVB_NETWORK_NAME">
       </member>
       <member name="service_list" value="65" c:identifier="GST_MTS_DESC_DVB_SERVICE_LIST">
@@ -814,7 +780,6 @@ These values correspond to the registered extended descriptor
 type from the various DVB specifications.
 
 Consult the relevant specifications for more details.</doc>
-      
       <member name="image_icon" value="0" c:identifier="GST_MTS_DESC_EXT_DVB_IMAGE_ICON">
       </member>
       <member name="cpcm_delivery_signalling" value="1" c:identifier="GST_MTS_DESC_EXT_DVB_CPCM_DELIVERY_SIGNALLING">
@@ -857,7 +822,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="DVBLinkageDescriptor" c:type="GstMpegtsDVBLinkageDescriptor" glib:type-name="GstMpegtsDVBLinkageDescriptor" glib:get-type="gst_mpegts_dvb_linkage_descriptor_get_type" c:symbol-prefix="dvb_linkage_descriptor">
-      
       <field name="transport_stream_id" writable="1">
         <doc xml:space="preserve">the transport id</doc>
         <type name="guint16" c:type="guint16"/>
@@ -886,7 +850,6 @@ Consult the relevant specifications for more details.</doc>
         <type name="guint8" c:type="guint8*"/>
       </field>
       <method name="free" c:identifier="gst_mpegts_dvb_linkage_descriptor_free">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -897,7 +860,6 @@ Consult the relevant specifications for more details.</doc>
         </parameters>
       </method>
       <method name="get_event" c:identifier="gst_mpegts_dvb_linkage_descriptor_get_event">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsDVBLinkageEvent or %NULL if an error happened</doc>
           <type name="DVBLinkageEvent" c:type="const GstMpegtsDVBLinkageEvent*"/>
@@ -910,7 +872,6 @@ Consult the relevant specifications for more details.</doc>
         </parameters>
       </method>
       <method name="get_extended_event" c:identifier="gst_mpegts_dvb_linkage_descriptor_get_extended_event">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">an #GstMpegtsDVBLinkageExtendedEvent array or %NULL if an error happened</doc>
           <array name="GLib.PtrArray" c:type="const GPtrArray*">
@@ -925,7 +886,6 @@ Consult the relevant specifications for more details.</doc>
         </parameters>
       </method>
       <method name="get_mobile_hand_over" c:identifier="gst_mpegts_dvb_linkage_descriptor_get_mobile_hand_over">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsDVBLinkageMobileHandOver or %NULL if an error happened</doc>
           <type name="DVBLinkageMobileHandOver" c:type="const GstMpegtsDVBLinkageMobileHandOver*"/>
@@ -939,7 +899,6 @@ Consult the relevant specifications for more details.</doc>
       </method>
     </record>
     <record name="DVBLinkageEvent" c:type="GstMpegtsDVBLinkageEvent" glib:type-name="GstMpegtsDVBLinkageEvent" glib:get-type="gst_mpegts_dvb_linkage_event_get_type" c:symbol-prefix="dvb_linkage_event">
-      
       <field name="target_event_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -951,7 +910,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="DVBLinkageExtendedEvent" c:type="GstMpegtsDVBLinkageExtendedEvent" glib:type-name="GstMpegtsDVBLinkageExtendedEvent" glib:get-type="gst_mpegts_dvb_linkage_extended_event_get_type" c:symbol-prefix="dvb_linkage_extended_event">
-      
       <field name="target_event_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -987,7 +945,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <enumeration name="DVBLinkageHandOverType" c:type="GstMpegtsDVBLinkageHandOverType">
-      
       <member name="reserved" value="0" c:identifier="GST_MPEGTS_DVB_LINKAGE_HAND_OVER_RESERVED">
       </member>
       <member name="identical" value="1" c:identifier="GST_MPEGTS_DVB_LINKAGE_HAND_OVER_IDENTICAL">
@@ -998,7 +955,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="DVBLinkageMobileHandOver" c:type="GstMpegtsDVBLinkageMobileHandOver" glib:type-name="GstMpegtsDVBLinkageMobileHandOver" glib:get-type="gst_mpegts_dvb_linkage_mobile_hand_over_get_type" c:symbol-prefix="dvb_linkage_mobile_hand_over">
-      
       <field name="hand_over_type" writable="1">
         <type name="DVBLinkageHandOverType" c:type="GstMpegtsDVBLinkageHandOverType"/>
       </field>
@@ -1014,7 +970,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <enumeration name="DVBLinkageType" c:type="GstMpegtsDVBLinkageType">
       <doc xml:space="preserve">Linkage Type (EN 300 468 v.1.13.1)</doc>
-      
       <member name="reserved_00" value="0" c:identifier="GST_MPEGTS_DVB_LINKAGE_RESERVED_00">
       </member>
       <member name="information" value="1" c:identifier="GST_MPEGTS_DVB_LINKAGE_INFORMATION">
@@ -1047,7 +1002,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="DVBParentalRatingItem" c:type="GstMpegtsDVBParentalRatingItem" glib:type-name="GstMpegtsDVBParentalRatingItem" glib:get-type="gst_mpegts_dvb_parental_rating_item_get_type" c:symbol-prefix="dvb_parental_rating_item">
-      
       <field name="country_code" writable="1">
         <type name="utf8" c:type="gchar*"/>
       </field>
@@ -1056,7 +1010,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <enumeration name="DVBScramblingModeType" c:type="GstMpegtsDVBScramblingModeType">
-      
       <member name="reserved" value="0" c:identifier="GST_MPEGTS_DVB_SCRAMBLING_MODE_RESERVED">
       </member>
       <member name="csa1" value="1" c:identifier="GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA1">
@@ -1077,7 +1030,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="DVBServiceListItem" c:type="GstMpegtsDVBServiceListItem" glib:type-name="GstMpegtsDVBServiceListItem" glib:get-type="gst_mpegts_dvb_service_list_item_get_type" c:symbol-prefix="dvb_service_list_item">
-      
       <field name="service_id" writable="1">
         <doc xml:space="preserve">the id of a service</doc>
         <type name="guint16" c:type="guint16"/>
@@ -1091,7 +1043,6 @@ Consult the relevant specifications for more details.</doc>
       <doc xml:space="preserve">The type of service of a channel.
 
 As specified in Table 87 of ETSI EN 300 468 v1.13.1</doc>
-      
       <member name="reserved_00" value="0" c:identifier="GST_DVB_SERVICE_RESERVED_00">
       </member>
       <member name="digital_television" value="1" c:identifier="GST_DVB_SERVICE_DIGITAL_TELEVISION">
@@ -1153,7 +1104,6 @@ As specified in Table 87 of ETSI EN 300 468 v1.13.1</doc>
       <doc xml:space="preserve">The type of teletext page.
 
 As specified in Table 100 of ETSI EN 300 468 v1.13.1</doc>
-      
       <member name="nitial_page" value="1" c:identifier="INITIAL_PAGE">
       </member>
       <member name="ubtitle_page" value="2" c:identifier="SUBTITLE_PAGE">
@@ -1166,7 +1116,6 @@ As specified in Table 100 of ETSI EN 300 468 v1.13.1</doc>
       </member>
     </enumeration>
     <record name="DataBroadcastDescriptor" c:type="GstMpegtsDataBroadcastDescriptor" glib:type-name="GstMpegtsDataBroadcastDescriptor" glib:get-type="gst_mpegts_dvb_data_broadcast_descriptor_get_type" c:symbol-prefix="dvb_data_broadcast_descriptor">
-      
       <field name="data_broadcast_id" writable="1">
         <doc xml:space="preserve">the data broadcast id</doc>
         <type name="guint16" c:type="guint16"/>
@@ -1191,7 +1140,6 @@ As specified in Table 100 of ETSI EN 300 468 v1.13.1</doc>
         <type name="utf8" c:type="gchar*"/>
       </field>
       <method name="free" c:identifier="gst_mpegts_dvb_data_broadcast_descriptor_free">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1207,7 +1155,6 @@ As specified in Table 100 of ETSI EN 300 468 v1.13.1</doc>
 
 For more details, refer to the ITU H.222.0 or ISO/IEC 13818-1 specifications
 and other specifications mentioned in the documentation.</doc>
-      
       <field name="tag" writable="1">
         <doc xml:space="preserve">the type of descriptor</doc>
         <type name="guint8" c:type="guint8"/>
@@ -1232,7 +1179,6 @@ two bytes are the @tag and @length.</doc>
       </field>
       <method name="free" c:identifier="gst_mpegts_descriptor_free">
         <doc xml:space="preserve">Frees @desc</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1245,7 +1191,6 @@ two bytes are the @tag and @length.</doc>
       </method>
       <method name="parse_ca" c:identifier="gst_mpegts_descriptor_parse_ca">
         <doc xml:space="preserve">Extracts the Conditional Access information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1277,7 +1222,6 @@ two bytes are the @tag and @length.</doc>
       </method>
       <method name="parse_cable_delivery_system" c:identifier="gst_mpegts_descriptor_parse_cable_delivery_system">
         <doc xml:space="preserve">Extracts the cable delivery system information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1295,7 +1239,6 @@ two bytes are the @tag and @length.</doc>
       </method>
       <method name="parse_dvb_bouquet_name" c:identifier="gst_mpegts_descriptor_parse_dvb_bouquet_name">
         <doc xml:space="preserve">Extracts the bouquet name from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1312,7 +1255,6 @@ two bytes are the @tag and @length.</doc>
       </method>
       <method name="parse_dvb_ca_identifier" c:identifier="gst_mpegts_descriptor_parse_dvb_ca_identifier">
         <doc xml:space="preserve">Extracts ca id's from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1334,7 +1276,6 @@ are found in http://www.dvbservices.com</doc>
       </method>
       <method name="parse_dvb_component" c:identifier="gst_mpegts_descriptor_parse_dvb_component">
         <doc xml:space="preserve">Extracts the DVB component information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1352,7 +1293,6 @@ are found in http://www.dvbservices.com</doc>
       </method>
       <method name="parse_dvb_content" c:identifier="gst_mpegts_descriptor_parse_dvb_content">
         <doc xml:space="preserve">Extracts the DVB content information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1372,7 +1312,6 @@ are found in http://www.dvbservices.com</doc>
       </method>
       <method name="parse_dvb_data_broadcast" c:identifier="gst_mpegts_descriptor_parse_dvb_data_broadcast">
         <doc xml:space="preserve">Parses out the data broadcast from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1390,7 +1329,6 @@ are found in http://www.dvbservices.com</doc>
       </method>
       <method name="parse_dvb_data_broadcast_id" c:identifier="gst_mpegts_descriptor_parse_dvb_data_broadcast_id">
         <doc xml:space="preserve">Parses out the data broadcast id from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1418,7 +1356,6 @@ are found in http://www.dvbservices.com</doc>
       </method>
       <method name="parse_dvb_extended_event" c:identifier="gst_mpegts_descriptor_parse_dvb_extended_event">
         <doc xml:space="preserve">Extracts the DVB extended event information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1436,7 +1373,6 @@ are found in http://www.dvbservices.com</doc>
       </method>
       <method name="parse_dvb_frequency_list" c:identifier="gst_mpegts_descriptor_parse_dvb_frequency_list">
         <doc xml:space="preserve">Parses out a list of frequencies from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1461,7 +1397,6 @@ depending on @offset</doc>
       </method>
       <method name="parse_dvb_linkage" c:identifier="gst_mpegts_descriptor_parse_dvb_linkage">
         <doc xml:space="preserve">Extracts the DVB linkage information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1479,7 +1414,6 @@ depending on @offset</doc>
       </method>
       <method name="parse_dvb_multilingual_bouquet_name" c:identifier="gst_mpegts_descriptor_parse_dvb_multilingual_bouquet_name">
         <doc xml:space="preserve">Parses out the multilingual bouquet name from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1501,7 +1435,6 @@ a #GstMpegtsDvbMultilingualBouquetNameItem</doc>
       </method>
       <method name="parse_dvb_multilingual_component" c:identifier="gst_mpegts_descriptor_parse_dvb_multilingual_component">
         <doc xml:space="preserve">Parses out the multilingual component from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1527,7 +1460,6 @@ a #GstMpegtsDvbMultilingualComponentItem</doc>
       </method>
       <method name="parse_dvb_multilingual_network_name" c:identifier="gst_mpegts_descriptor_parse_dvb_multilingual_network_name">
         <doc xml:space="preserve">Parses out the multilingual network name from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1549,7 +1481,6 @@ a #GstMpegtsDvbMultilingualNetworkNameItem</doc>
       </method>
       <method name="parse_dvb_multilingual_service_name" c:identifier="gst_mpegts_descriptor_parse_dvb_multilingual_service_name">
         <doc xml:space="preserve">Parses out the multilingual service name from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1571,7 +1502,6 @@ a #GstMpegtsDvbMultilingualServiceNameItem</doc>
       </method>
       <method name="parse_dvb_network_name" c:identifier="gst_mpegts_descriptor_parse_dvb_network_name">
         <doc xml:space="preserve">Parses out the dvb network name from the @descriptor:</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1589,7 +1519,6 @@ a #GstMpegtsDvbMultilingualServiceNameItem</doc>
       </method>
       <method name="parse_dvb_parental_rating" c:identifier="gst_mpegts_descriptor_parse_dvb_parental_rating">
         <doc xml:space="preserve">Extracts the DVB parental rating information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1610,7 +1539,6 @@ a #GstMpegtsDvbMultilingualServiceNameItem</doc>
       </method>
       <method name="parse_dvb_private_data_specifier" c:identifier="gst_mpegts_descriptor_parse_dvb_private_data_specifier">
         <doc xml:space="preserve">Parses out the private data specifier from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1639,7 +1567,6 @@ registered by http://www.dvbservices.com/</doc>
       </method>
       <method name="parse_dvb_scrambling" c:identifier="gst_mpegts_descriptor_parse_dvb_scrambling">
         <doc xml:space="preserve">Parses out the scrambling mode from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1661,7 +1588,6 @@ administered by the DVB Common Scrambling Algorithm Custodian.</doc>
       </method>
       <method name="parse_dvb_service" c:identifier="gst_mpegts_descriptor_parse_dvb_service">
         <doc xml:space="preserve">Extracts the dvb service information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1687,7 +1613,6 @@ administered by the DVB Common Scrambling Algorithm Custodian.</doc>
       </method>
       <method name="parse_dvb_service_list" c:identifier="gst_mpegts_descriptor_parse_dvb_service_list">
         <doc xml:space="preserve">Parses out a list of services from the @descriptor:</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1708,7 +1633,6 @@ the list of services</doc>
       </method>
       <method name="parse_dvb_short_event" c:identifier="gst_mpegts_descriptor_parse_dvb_short_event">
         <doc xml:space="preserve">Extracts the DVB short event information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1734,7 +1658,6 @@ the list of services</doc>
       </method>
       <method name="parse_dvb_stream_identifier" c:identifier="gst_mpegts_descriptor_parse_dvb_stream_identifier">
         <doc xml:space="preserve">Extracts the component tag from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1752,7 +1675,6 @@ the list of services</doc>
       </method>
       <method name="parse_dvb_stuffing" c:identifier="gst_mpegts_descriptor_parse_dvb_stuffing">
         <doc xml:space="preserve">Parses out the stuffing bytes from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1773,7 +1695,6 @@ the list of services</doc>
 
 Note: Use #gst_tag_get_language_code if you want to get the the
 ISO 639-1 language code from the returned ISO 639-2 one.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1806,7 +1727,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
         </parameters>
       </method>
       <method name="parse_dvb_subtitling_nb" c:identifier="gst_mpegts_descriptor_parse_dvb_subtitling_nb">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of entries in @descriptor</doc>
           <type name="guint" c:type="guint"/>
@@ -1820,7 +1740,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </method>
       <method name="parse_dvb_t2_delivery_system" c:identifier="gst_mpegts_descriptor_parse_dvb_t2_delivery_system">
         <doc xml:space="preserve">Parses out the DVB-T2 delivery system from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1838,7 +1757,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </method>
       <method name="parse_dvb_teletext_idx" c:identifier="gst_mpegts_descriptor_parse_dvb_teletext_idx">
         <doc xml:space="preserve">Parses teletext number @idx in the @descriptor. The language is in ISO639 format.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">FALSE on out-of-bounds and errors</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1870,7 +1788,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </method>
       <method name="parse_dvb_teletext_nb" c:identifier="gst_mpegts_descriptor_parse_dvb_teletext_nb">
         <doc xml:space="preserve">Find the number of teletext entries in @descriptor</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">Number of teletext entries</doc>
           <type name="guint" c:type="guint"/>
@@ -1887,7 +1804,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
 
 Note: Use #gst_tag_get_language_code if you want to get the the
 ISO 639-1 language code from the returned ISO 639-2 one.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1908,7 +1824,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
 
 Note: Use #gst_tag_get_language_code if you want to get the the
 ISO 639-1 language code from the returned ISO 639-2 one.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1933,7 +1848,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
         </parameters>
       </method>
       <method name="parse_iso_639_language_nb" c:identifier="gst_mpegts_descriptor_parse_iso_639_language_nb">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of languages in @descriptor</doc>
           <type name="guint" c:type="guint"/>
@@ -1947,7 +1861,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </method>
       <method name="parse_logical_channel" c:identifier="gst_mpegts_descriptor_parse_logical_channel">
         <doc xml:space="preserve">Extracts the logical channels from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1965,7 +1878,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </method>
       <method name="parse_satellite_delivery_system" c:identifier="gst_mpegts_descriptor_parse_satellite_delivery_system">
         <doc xml:space="preserve">Extracts the satellite delivery system information from @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if parsing succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1983,7 +1895,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </method>
       <method name="parse_terrestrial_delivery_system" c:identifier="gst_mpegts_descriptor_parse_terrestrial_delivery_system">
         <doc xml:space="preserve">Parses out the terrestrial delivery system from the @descriptor.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the parsing happened correctly, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -2001,7 +1912,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </method>
       <function name="from_custom" c:identifier="gst_mpegts_descriptor_from_custom">
         <doc xml:space="preserve">Creates a #GstMpegtsDescriptor with custom @tag and @data</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">#GstMpegtsDescriptor</doc>
           <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -2025,7 +1935,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
       </function>
       <function name="from_custom_with_extension" c:identifier="gst_mpegts_descriptor_from_custom_with_extension">
         <doc xml:space="preserve">Creates a #GstMpegtsDescriptor with custom @tag, @tag_extension and @data</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">#GstMpegtsDescriptor</doc>
           <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -2055,7 +1964,6 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
         <doc xml:space="preserve">Creates a #GstMpegtsDescriptor to be a %GST_MTS_DESC_DVB_NETWORK_NAME,
 with the network name @name. The data field of the #GstMpegtsDescriptor
 will be allocated, and transferred to the caller.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstMpegtsDescriptor or %NULL on fail</doc>
           <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -2071,7 +1979,6 @@ will be allocated, and transferred to the caller.</doc>
         <doc xml:space="preserve">Fills a #GstMpegtsDescriptor to be a %GST_MTS_DESC_DVB_SERVICE.
 The data field of the #GstMpegtsDescriptor will be allocated,
 and transferred to the caller.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstMpegtsDescriptor or %NULL on fail</doc>
           <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -2092,7 +1999,6 @@ and transferred to the caller.</doc>
         </parameters>
       </function>
       <function name="from_dvb_subtitling" c:identifier="gst_mpegts_descriptor_from_dvb_subtitling">
-        
         <return-value transfer-ownership="full">
           <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
         </return-value>
@@ -2118,7 +2024,6 @@ and transferred to the caller.</doc>
       <function name="from_iso_639_language" c:identifier="gst_mpegts_descriptor_from_iso_639_language">
         <doc xml:space="preserve">Creates a %GST_MTS_DESC_ISO_639_LANGUAGE #GstMpegtsDescriptor with
 a single language</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">#GstMpegtsDescriptor, %NULL on failure</doc>
           <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -2132,7 +2037,6 @@ a single language</doc>
       </function>
       <function name="from_registration" c:identifier="gst_mpegts_descriptor_from_registration">
         <doc xml:space="preserve">Creates a %GST_MTS_DESC_REGISTRATION #GstMpegtsDescriptor</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">#GstMpegtsDescriptor, %NULL on failure</doc>
           <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -2162,7 +2066,6 @@ These values correspond to the registered descriptor type from
 the base MPEG-TS specifications (ITU H.222.0 | ISO/IEC 13818-1).
 
 Consult the relevant specifications for more details.</doc>
-      
       <member name="reserved_00" value="0" c:identifier="GST_MTS_DESC_RESERVED_00">
       </member>
       <member name="reserved_01" value="1" c:identifier="GST_MTS_DESC_RESERVED_01">
@@ -2274,7 +2177,6 @@ Consult the relevant specifications for more details.</doc>
     </enumeration>
     <record name="DvbMultilingualBouquetNameItem" c:type="GstMpegtsDvbMultilingualBouquetNameItem" glib:type-name="GstMpegtsDvbMultilingualBouquetNameItem" glib:get-type="gst_mpegts_dvb_multilingual_bouquet_name_item_get_type" c:symbol-prefix="dvb_multilingual_bouquet_name_item">
       <doc xml:space="preserve">a multilingual bouquet name entry</doc>
-      
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -2285,7 +2187,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="DvbMultilingualComponentItem" c:type="GstMpegtsDvbMultilingualComponentItem" glib:type-name="GstMpegtsDvbMultilingualComponentItem" glib:get-type="gst_mpegts_dvb_multilingual_component_item_get_type" c:symbol-prefix="dvb_multilingual_component_item">
-      
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -2297,7 +2198,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="DvbMultilingualNetworkNameItem" c:type="GstMpegtsDvbMultilingualNetworkNameItem" glib:type-name="GstMpegtsDvbMultilingualNetworkNameItem" glib:get-type="gst_mpegts_dvb_multilingual_network_name_item_get_type" c:symbol-prefix="dvb_multilingual_network_name_item">
       <doc xml:space="preserve">a multilingual network name entry</doc>
-      
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -2309,7 +2209,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="DvbMultilingualServiceNameItem" c:type="GstMpegtsDvbMultilingualServiceNameItem" glib:type-name="GstMpegtsDvbMultilingualServiceNameItem" glib:get-type="gst_mpegts_dvb_multilingual_service_name_item_get_type" c:symbol-prefix="dvb_multilingual_service_name_item">
       <doc xml:space="preserve">a multilingual service name entry</doc>
-      
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -2325,7 +2224,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="EIT" c:type="GstMpegtsEIT" glib:type-name="GstMpegtsEIT" glib:get-type="gst_mpegts_eit_get_type" c:symbol-prefix="eit">
       <doc xml:space="preserve">Event Information Table (EN 300 468)</doc>
-      
       <field name="transport_stream_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -2353,7 +2251,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="EITEvent" c:type="GstMpegtsEITEvent" glib:type-name="GstMpegtsEITEvent" glib:get-type="gst_mpegts_eit_event_get_type" c:symbol-prefix="eit_event">
       <doc xml:space="preserve">Event from a @GstMpegtsEIT</doc>
-      
       <field name="event_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -2378,7 +2275,6 @@ Consult the relevant specifications for more details.</doc>
     </record>
     <record name="ExtendedEventDescriptor" c:type="GstMpegtsExtendedEventDescriptor" glib:type-name="GstMpegtsExtendedEventDescriptor" glib:get-type="gst_mpegts_extended_event_descriptor_get_type" c:symbol-prefix="extended_event_descriptor">
       <doc xml:space="preserve">Extended Event Descriptor (EN 300 468 v.1.13.1)</doc>
-      
       <field name="descriptor_number" writable="1">
         <type name="guint8" c:type="guint8"/>
       </field>
@@ -2399,7 +2295,6 @@ Consult the relevant specifications for more details.</doc>
         <type name="utf8" c:type="gchar*"/>
       </field>
       <method name="free" c:identifier="gst_mpegts_extended_event_descriptor_free">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2411,7 +2306,6 @@ Consult the relevant specifications for more details.</doc>
       </method>
     </record>
     <record name="ExtendedEventItem" c:type="GstMpegtsExtendedEventItem" glib:type-name="GstMpegtsExtendedEventItem" glib:get-type="gst_mpegts_extended_event_item_get_type" c:symbol-prefix="extended_event_item">
-      
       <field name="item_description" writable="1">
         <type name="utf8" c:type="gchar*"/>
       </field>
@@ -2424,7 +2318,6 @@ Consult the relevant specifications for more details.</doc>
 the various ISDB specifications.
 
 Consult the relevant specifications for more details.</doc>
-      
       <member name="hierarchical_transmission" value="192" c:identifier="GST_MTS_DESC_ISDB_HIERARCHICAL_TRANSMISSION">
       </member>
       <member name="digital_copy_control" value="193" c:identifier="GST_MTS_DESC_ISDB_DIGITAL_COPY_CONTROL">
@@ -2491,7 +2384,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="ISO639LanguageDescriptor" c:type="GstMpegtsISO639LanguageDescriptor" glib:type-name="GstMpegtsISO639LanguageDescriptor" glib:get-type="gst_mpegts_iso_639_language_get_type" c:symbol-prefix="iso_639_language">
-      
       <field name="nb_language" writable="1">
         <type name="guint" c:type="guint"/>
       </field>
@@ -2506,7 +2398,6 @@ Consult the relevant specifications for more details.</doc>
         </array>
       </field>
       <method name="descriptor_free" c:identifier="gst_mpegts_iso_639_language_descriptor_free">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2518,7 +2409,6 @@ Consult the relevant specifications for more details.</doc>
       </method>
     </record>
     <enumeration name="Iso639AudioType" c:type="GstMpegtsIso639AudioType">
-      
       <member name="undefined" value="0" c:identifier="GST_MPEGTS_AUDIO_TYPE_UNDEFINED">
       </member>
       <member name="clean_effects" value="1" c:identifier="GST_MPEGTS_AUDIO_TYPE_CLEAN_EFFECTS">
@@ -2529,7 +2419,6 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="LogicalChannel" c:type="GstMpegtsLogicalChannel" glib:type-name="GstMpegtsLogicalChannel" glib:get-type="gst_mpegts_logical_channel_get_type" c:symbol-prefix="logical_channel">
-      
       <field name="service_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -2541,7 +2430,6 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="LogicalChannelDescriptor" c:type="GstMpegtsLogicalChannelDescriptor" glib:type-name="GstMpegtsLogicalChannelDescriptor" glib:get-type="gst_mpegts_logical_channel_descriptor_get_type" c:symbol-prefix="logical_channel_descriptor">
-      
       <field name="nb_channels" writable="1">
         <type name="guint" c:type="guint"/>
       </field>
@@ -2556,14 +2444,12 @@ Consult the relevant specifications for more details.</doc>
 
 These values correspond to miscellaneous descriptor types that are
 not yet identified from known specifications.</doc>
-      
       <member name="ac3_audio_stream" value="129" c:identifier="GST_MTS_DESC_AC3_AUDIO_STREAM">
       </member>
       <member name="dtg_logical_channel" value="131" c:identifier="GST_MTS_DESC_DTG_LOGICAL_CHANNEL">
       </member>
     </enumeration>
     <enumeration name="ModulationType" c:type="GstMpegtsModulationType">
-      
       <member name="qpsk" value="0" c:identifier="GST_MPEGTS_MODULATION_QPSK">
       </member>
       <member name="qam_16" value="1" c:identifier="GST_MPEGTS_MODULATION_QAM_16">
@@ -2597,7 +2483,6 @@ not yet identified from known specifications.</doc>
     </enumeration>
     <record name="NIT" c:type="GstMpegtsNIT" glib:type-name="GstMpegtsNIT" glib:get-type="gst_mpegts_nit_get_type" c:symbol-prefix="nit">
       <doc xml:space="preserve">Network Information Table (ISO/IEC 13818-1 / EN 300 468)</doc>
-      
       <field name="actual_network" writable="1">
         <doc xml:space="preserve">Whether this NIT corresponds to the actual stream</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -2620,7 +2505,6 @@ not yet identified from known specifications.</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_nit_new">
         <doc xml:space="preserve">Allocates and initializes a #GstMpegtsNIT.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated #GstMpegtsNIT</doc>
           <type name="NIT" c:type="GstMpegtsNIT*"/>
@@ -2628,7 +2512,6 @@ not yet identified from known specifications.</doc>
       </constructor>
     </record>
     <record name="NITStream" c:type="GstMpegtsNITStream" glib:type-name="GstMpegtsNITStream" glib:get-type="gst_mpegts_nit_stream_get_type" c:symbol-prefix="nit_stream">
-      
       <field name="transport_stream_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -2642,7 +2525,6 @@ not yet identified from known specifications.</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_nit_stream_new">
         <doc xml:space="preserve">Allocates and initializes a #GstMpegtsNITStream</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated #GstMpegtsNITStream</doc>
           <type name="NITStream" c:type="GstMpegtsNITStream*"/>
@@ -2654,7 +2536,6 @@ not yet identified from known specifications.</doc>
 
 The program_number is contained in the subtable_extension field of the
 container #GstMpegtsSection.</doc>
-      
       <field name="pcr_pid" writable="1">
         <doc xml:space="preserve">PID of the stream containing PCR</doc>
         <type name="guint16" c:type="guint16"/>
@@ -2676,7 +2557,6 @@ container #GstMpegtsSection.</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_pmt_new">
         <doc xml:space="preserve">Allocates and initializes a new #GstMpegtsPMT.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">#GstMpegtsPMT</doc>
           <type name="PMT" c:type="GstMpegtsPMT*"/>
@@ -2685,7 +2565,6 @@ container #GstMpegtsSection.</doc>
     </record>
     <record name="PMTStream" c:type="GstMpegtsPMTStream" glib:type-name="GstMpegtsPMTStream" glib:get-type="gst_mpegts_pmt_stream_get_type" c:symbol-prefix="pmt_stream">
       <doc xml:space="preserve">An individual stream definition.</doc>
-      
       <field name="stream_type" writable="1">
         <doc xml:space="preserve">the type of stream. See #GstMpegtsStreamType</doc>
         <type name="guint8" c:type="guint8"/>
@@ -2703,7 +2582,6 @@ stream</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_pmt_stream_new">
         <doc xml:space="preserve">Allocates and initializes a new #GstMpegtsPMTStream.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">#GstMpegtsPMTStream</doc>
           <type name="PMTStream" c:type="GstMpegtsPMTStream*"/>
@@ -2711,7 +2589,6 @@ stream</doc>
       </constructor>
     </record>
     <callback name="PacketizeFunc" c:type="GstMpegtsPacketizeFunc">
-      
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
@@ -2723,7 +2600,6 @@ stream</doc>
     </callback>
     <record name="PatProgram" c:type="GstMpegtsPatProgram" glib:type-name="GstMpegtsPatProgram" glib:get-type="gst_mpegts_pat_program_get_type" c:symbol-prefix="pat_program">
       <doc xml:space="preserve">A program entry from a Program Association Table (ITU H.222.0, ISO/IEC 13818-1).</doc>
-      
       <field name="program_number" writable="1">
         <doc xml:space="preserve">the program number</doc>
         <type name="guint16" c:type="guint16"/>
@@ -2734,7 +2610,6 @@ stream</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_pat_program_new">
         <doc xml:space="preserve">Allocates a new #GstMpegtsPatProgram.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated #GstMpegtsPatProgram</doc>
           <type name="PatProgram" c:type="GstMpegtsPatProgram*"/>
@@ -2745,7 +2620,6 @@ stream</doc>
       <doc xml:space="preserve">Running status of a service.
 
 Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
-      
       <member name="undefined" value="0" c:identifier="GST_MPEGTS_RUNNING_STATUS_UNDEFINED">
       </member>
       <member name="not_running" value="1" c:identifier="GST_MPEGTS_RUNNING_STATUS_NOT_RUNNING">
@@ -2760,7 +2634,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </member>
     </enumeration>
     <record name="SCTESIT" c:type="GstMpegtsSCTESIT" glib:type-name="GstMpegtsSCTESIT" glib:get-type="gst_mpegts_scte_sit_get_type" c:symbol-prefix="scte_sit">
-      
       <field name="encrypted_packet" writable="1">
         <type name="gboolean" c:type="gboolean"/>
       </field>
@@ -2800,7 +2673,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_scte_sit_new">
         <doc xml:space="preserve">Allocates and initializes a #GstMpegtsSCTESIT.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
           <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
@@ -2808,7 +2680,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </constructor>
     </record>
     <enumeration name="SCTESpliceCommandType" c:type="GstMpegtsSCTESpliceCommandType">
-      
       <member name="null" value="0" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_NULL">
       </member>
       <member name="schedule" value="4" c:identifier="GST_MTS_SCTE_SPLICE_COMMAND_SCHEDULE">
@@ -2823,7 +2694,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </member>
     </enumeration>
     <enumeration name="SCTESpliceDescriptor" c:type="GstMpegtsSCTESpliceDescriptor">
-      
       <member name="avail" value="0" c:identifier="GST_MTS_SCTE_DESC_AVAIL">
       </member>
       <member name="dtmf" value="1" c:identifier="GST_MTS_SCTE_DESC_DTMF">
@@ -2836,7 +2706,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </member>
     </enumeration>
     <record name="SCTESpliceEvent" c:type="GstMpegtsSCTESpliceEvent" glib:type-name="GstMpegtsSCTESpliceEvent" glib:get-type="gst_mpegts_scte_splice_event_get_type" c:symbol-prefix="scte_splice_event">
-      
       <field name="insert_event" writable="1">
         <type name="gboolean" c:type="gboolean"/>
       </field>
@@ -2881,7 +2750,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_scte_splice_event_new">
         <doc xml:space="preserve">Allocates and initializes a #GstMpegtsSCTESpliceEvent.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESpliceEvent</doc>
           <type name="SCTESpliceEvent" c:type="GstMpegtsSCTESpliceEvent*"/>
@@ -2890,7 +2758,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
     </record>
     <record name="SDT" c:type="GstMpegtsSDT" glib:type-name="GstMpegtsSDT" glib:get-type="gst_mpegts_sdt_get_type" c:symbol-prefix="sdt">
       <doc xml:space="preserve">Service Description Table (EN 300 468)</doc>
-      
       <field name="original_network_id" writable="1">
         <doc xml:space="preserve">Network ID of the originating delivery system</doc>
         <type name="guint16" c:type="guint16"/>
@@ -2911,7 +2778,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_sdt_new">
         <doc xml:space="preserve">Allocates and initializes a #GstMpegtsSDT.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated #GstMpegtsSDT</doc>
           <type name="SDT" c:type="GstMpegtsSDT*"/>
@@ -2919,7 +2785,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </constructor>
     </record>
     <record name="SDTService" c:type="GstMpegtsSDTService" glib:type-name="GstMpegtsSDTService" glib:get-type="gst_mpegts_sdt_service_get_type" c:symbol-prefix="sdt_service">
-      
       <field name="service_id" writable="1">
         <doc xml:space="preserve">The program number this table belongs to</doc>
         <type name="guint16" c:type="guint16"/>
@@ -2948,7 +2813,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </field>
       <constructor name="new" c:identifier="gst_mpegts_sdt_service_new">
         <doc xml:space="preserve">Allocates and initializes a #GstMpegtsSDTService.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated #GstMpegtsSDTService</doc>
           <type name="SDTService" c:type="GstMpegtsSDTService*"/>
@@ -2956,14 +2820,12 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </constructor>
     </record>
     <function-macro name="SECTION" c:identifier="GST_MPEGTS_SECTION" introspectable="0">
-      
       <parameters>
         <parameter name="section">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="SECTION_TYPE" c:identifier="GST_MPEGTS_SECTION_TYPE" introspectable="0">
-      
       <parameters>
         <parameter name="section">
         </parameter>
@@ -2971,7 +2833,6 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
     </function-macro>
     <record name="SatelliteDeliverySystemDescriptor" c:type="GstMpegtsSatelliteDeliverySystemDescriptor" glib:type-name="GstMpegtsSatelliteDeliverySystemDescriptor" glib:get-type="gst_mpegts_satellite_delivery_system_descriptor_get_type" c:symbol-prefix="satellite_delivery_system_descriptor">
       <doc xml:space="preserve">Satellite Delivery System Descriptor (EN 300 468 v.1.13.1)</doc>
-      
       <field name="frequency" writable="1">
         <doc xml:space="preserve">the frequency in kHz (kiloHertz)</doc>
         <type name="guint32" c:type="guint32"/>
@@ -3011,7 +2872,6 @@ else in the western part.</doc>
       </field>
     </record>
     <enumeration name="SatellitePolarizationType" c:type="GstMpegtsSatellitePolarizationType">
-      
       <member name="linear_horizontal" value="0" c:identifier="GST_MPEGTS_POLARIZATION_LINEAR_HORIZONTAL">
       </member>
       <member name="linear_vertical" value="1" c:identifier="GST_MPEGTS_POLARIZATION_LINEAR_VERTICAL">
@@ -3022,7 +2882,6 @@ else in the western part.</doc>
       </member>
     </enumeration>
     <enumeration name="SatelliteRolloff" c:type="GstMpegtsSatelliteRolloff">
-      
       <member name="35" value="0" c:identifier="GST_MPEGTS_ROLLOFF_35">
       </member>
       <member name="20" value="1" c:identifier="GST_MPEGTS_ROLLOFF_20">
@@ -3036,7 +2895,6 @@ else in the western part.</doc>
     </enumeration>
     <enumeration name="ScteStreamType" c:type="GstMpegtsScteStreamType">
       <doc xml:space="preserve">Type of mpeg-ts streams for SCTE</doc>
-      
       <member name="subtitling" value="130" c:identifier="GST_MPEGTS_STREAM_TYPE_SCTE_SUBTITLING">
         <doc xml:space="preserve">SCTE-27 Subtitling</doc>
       </member>
@@ -3068,7 +2926,6 @@ Signaling (OC-SP-ETV-AM1.0.1-120614)</doc>
     <record name="Section" c:type="GstMpegtsSection" glib:type-name="GstMpegtsSection" glib:get-type="gst_mpegts_section_get_type" c:symbol-prefix="section">
       <doc xml:space="preserve">For more details, refer to the ITU H.222.0 or ISO/IEC 13818-1 specifications
 and other specifications mentioned in the documentation.</doc>
-      
       <field name="parent" readable="0" private="1">
         <type name="Gst.MiniObject" c:type="GstMiniObject"/>
       </field>
@@ -3144,7 +3001,6 @@ returned.
 
 Note: it is the responsibility of the caller to ensure @data does point
 to the beginning of the section.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A new #GstMpegtsSection if the data was valid,
 else %NULL</doc>
@@ -3170,7 +3026,6 @@ should contain the table_id field).</doc>
       </constructor>
       <method name="get_atsc_cvct" c:identifier="gst_mpegts_section_get_atsc_cvct">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscVCT contained in the @section</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsAtscVCT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3185,7 +3040,6 @@ happened.</doc>
       </method>
       <method name="get_atsc_eit" c:identifier="gst_mpegts_section_get_atsc_eit">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscEIT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsAtscEIT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3200,7 +3054,6 @@ happened.</doc>
       </method>
       <method name="get_atsc_ett" c:identifier="gst_mpegts_section_get_atsc_ett">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscETT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsAtscETT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3215,7 +3068,6 @@ happened.</doc>
       </method>
       <method name="get_atsc_mgt" c:identifier="gst_mpegts_section_get_atsc_mgt">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscMGT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsAtscMGT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3230,7 +3082,6 @@ happened.</doc>
       </method>
       <method name="get_atsc_rrt" c:identifier="gst_mpegts_section_get_atsc_rrt" version="1.18">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscRRT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsAtscRRT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3245,7 +3096,6 @@ happened.</doc>
       </method>
       <method name="get_atsc_stt" c:identifier="gst_mpegts_section_get_atsc_stt">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscSTT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsAtscSTT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3260,7 +3110,6 @@ happened.</doc>
       </method>
       <method name="get_atsc_tvct" c:identifier="gst_mpegts_section_get_atsc_tvct">
         <doc xml:space="preserve">Returns the #GstMpegtsAtscVCT contained in the @section</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsAtscVCT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3275,7 +3124,6 @@ happened.</doc>
       </method>
       <method name="get_bat" c:identifier="gst_mpegts_section_get_bat">
         <doc xml:space="preserve">Returns the #GstMpegtsBAT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsBAT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3291,7 +3139,6 @@ happened.</doc>
       <method name="get_cat" c:identifier="gst_mpegts_section_get_cat">
         <doc xml:space="preserve">Returns the array of #GstMpegtsDescriptor contained in the Conditional
 Access Table.</doc>
-        
         <return-value transfer-ownership="container">
           <doc xml:space="preserve">The
 #GstMpegtsDescriptor contained in the section, or %NULL if an error
@@ -3309,7 +3156,6 @@ happened. Release with #g_array_unref when done.</doc>
       </method>
       <method name="get_data" c:identifier="gst_mpegts_section_get_data">
         <doc xml:space="preserve">Gets the original unparsed section data.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">The original unparsed section data.</doc>
           <type name="GLib.Bytes" c:type="GBytes*"/>
@@ -3323,7 +3169,6 @@ happened. Release with #g_array_unref when done.</doc>
       </method>
       <method name="get_eit" c:identifier="gst_mpegts_section_get_eit">
         <doc xml:space="preserve">Returns the #GstMpegtsEIT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsEIT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3338,7 +3183,6 @@ happened.</doc>
       </method>
       <method name="get_nit" c:identifier="gst_mpegts_section_get_nit">
         <doc xml:space="preserve">Returns the #GstMpegtsNIT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsNIT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3358,7 +3202,6 @@ Returns the array of #GstMpegtsPatProgram contained in the section.
 
 Note: The PAT "transport_id" field corresponds to the "subtable_extension"
 field of the provided @section.</doc>
-        
         <return-value transfer-ownership="container">
           <doc xml:space="preserve">The
 #GstMpegtsPatProgram contained in the section, or %NULL if an error
@@ -3376,7 +3219,6 @@ happened. Release with #g_ptr_array_unref when done.</doc>
       </method>
       <method name="get_pmt" c:identifier="gst_mpegts_section_get_pmt">
         <doc xml:space="preserve">Returns the #GstMpegtsPMT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsPMT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3391,7 +3233,6 @@ happened.</doc>
       </method>
       <method name="get_scte_sit" c:identifier="gst_mpegts_section_get_scte_sit">
         <doc xml:space="preserve">Returns the #GstMpegtsSCTESIT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsSCTESIT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3406,7 +3247,6 @@ happened.</doc>
       </method>
       <method name="get_sdt" c:identifier="gst_mpegts_section_get_sdt">
         <doc xml:space="preserve">Returns the #GstMpegtsSDT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsSDT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3421,7 +3261,6 @@ happened.</doc>
       </method>
       <method name="get_tdt" c:identifier="gst_mpegts_section_get_tdt">
         <doc xml:space="preserve">Returns the #GstDateTime of the TDT</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">The #GstDateTime contained in the section, or %NULL
 if an error happened. Release with #gst_date_time_unref when done.</doc>
@@ -3436,7 +3275,6 @@ if an error happened. Release with #gst_date_time_unref when done.</doc>
       </method>
       <method name="get_tot" c:identifier="gst_mpegts_section_get_tot">
         <doc xml:space="preserve">Returns the #GstMpegtsTOT contained in the @section.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The #GstMpegtsTOT contained in the section, or %NULL if an error
 happened.</doc>
@@ -3451,7 +3289,6 @@ happened.</doc>
       </method>
       <method name="get_tsdt" c:identifier="gst_mpegts_section_get_tsdt">
         <doc xml:space="preserve">Returns the array of #GstMpegtsDescriptor contained in the section</doc>
-        
         <return-value transfer-ownership="container">
           <doc xml:space="preserve">The
 #GstMpegtsDescriptor contained in the section, or %NULL if an error
@@ -3470,7 +3307,6 @@ happened. Release with #g_array_unref when done.</doc>
       <method name="packetize" c:identifier="gst_mpegts_section_packetize">
         <doc xml:space="preserve">If the data in @section has already been packetized, the data pointer is returned
 immediately. Otherwise, the data field is allocated and populated.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">pointer to section data, or %NULL on fail</doc>
           <type name="guint8" c:type="guint8*"/>
@@ -3489,7 +3325,6 @@ immediately. Otherwise, the data field is allocated and populated.</doc>
       <method name="send_event" c:identifier="gst_mpegts_section_send_event">
         <doc xml:space="preserve">Creates a custom #GstEvent with a @GstMpegtsSection.
 The #GstEvent is sent to the @element #GstElement.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the event is sent</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3506,7 +3341,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
         </parameters>
       </method>
       <function name="from_atsc_mgt" c:identifier="gst_mpegts_section_from_atsc_mgt" version="1.18">
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstMpegtsSection</doc>
           <type name="Section" c:type="GstMpegtsSection*"/>
@@ -3519,7 +3353,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
         </parameters>
       </function>
       <function name="from_atsc_rrt" c:identifier="gst_mpegts_section_from_atsc_rrt">
-        
         <return-value transfer-ownership="full">
           <type name="Section" c:type="GstMpegtsSection*"/>
         </return-value>
@@ -3530,7 +3363,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
         </parameters>
       </function>
       <function name="from_atsc_stt" c:identifier="gst_mpegts_section_from_atsc_stt">
-        
         <return-value transfer-ownership="full">
           <type name="Section" c:type="GstMpegtsSection*"/>
         </return-value>
@@ -3542,7 +3374,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
       </function>
       <function name="from_nit" c:identifier="gst_mpegts_section_from_nit">
         <doc xml:space="preserve">Ownership of @nit is taken. The data in @nit is managed by the #GstMpegtsSection</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstMpegtsSection</doc>
           <type name="Section" c:type="GstMpegtsSection*"/>
@@ -3556,7 +3387,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
       </function>
       <function name="from_pat" c:identifier="gst_mpegts_section_from_pat">
         <doc xml:space="preserve">Creates a PAT #GstMpegtsSection from the @programs array of #GstMpegtsPatPrograms</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstMpegtsSection</doc>
           <type name="Section" c:type="GstMpegtsSection*"/>
@@ -3576,7 +3406,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
       </function>
       <function name="from_pmt" c:identifier="gst_mpegts_section_from_pmt">
         <doc xml:space="preserve">Creates a #GstMpegtsSection from @pmt that is bound to @pid</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">#GstMpegtsSection</doc>
           <type name="Section" c:type="GstMpegtsSection*"/>
@@ -3594,7 +3423,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
       </function>
       <function name="from_scte_sit" c:identifier="gst_mpegts_section_from_scte_sit">
         <doc xml:space="preserve">Ownership of @sit is taken. The data in @sit is managed by the #GstMpegtsSection</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstMpegtsSection</doc>
           <type name="Section" c:type="GstMpegtsSection*"/>
@@ -3611,7 +3439,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
       </function>
       <function name="from_sdt" c:identifier="gst_mpegts_section_from_sdt">
         <doc xml:space="preserve">Ownership of @sdt is taken. The data in @sdt is managed by the #GstMpegtsSection</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstMpegtsSection</doc>
           <type name="Section" c:type="GstMpegtsSection*"/>
@@ -3630,7 +3457,6 @@ The #GstEvent is sent to the @element #GstElement.</doc>
 These are the registered ATSC table_id variants.
 
 see also: #GstMpegtsSectionTableID</doc>
-      
       <member name="master_guide" value="199" c:identifier="GST_MTS_TABLE_ID_ATSC_MASTER_GUIDE">
       </member>
       <member name="terrestrial_virtual_channel" value="200" c:identifier="GST_MTS_TABLE_ID_ATSC_TERRESTRIAL_VIRTUAL_CHANNEL">
@@ -3672,7 +3498,6 @@ see also: #GstMpegtsSectionTableID</doc>
 These are the registered DVB table_id variants.
 
 see also: #GstMpegtsSectionTableID</doc>
-      
       <member name="network_information_actual_network" value="64" c:identifier="GST_MTS_TABLE_ID_NETWORK_INFORMATION_ACTUAL_NETWORK">
       </member>
       <member name="network_information_other_network" value="65" c:identifier="GST_MTS_TABLE_ID_NETWORK_INFORMATION_OTHER_NETWORK">
@@ -3756,7 +3581,6 @@ see also: #GstMpegtsSectionTableID</doc>
 These are the registered SCTE table_id variants.
 
 see also: #GstMpegtsSectionTableID</doc>
-      
       <member name="eas" value="216" c:identifier="GST_MTS_TABLE_ID_SCTE_EAS">
         <doc xml:space="preserve">SCTE-18 Emergency Alert System</doc>
       </member>
@@ -3788,7 +3612,6 @@ These are the registered ITU H.222.0 | ISO/IEC 13818-1 table_id variants.
 
 see also #GstMpegtsSectionATSCTableID, #GstMpegtsSectionDVBTableID, and
 #GstMpegtsSectionSCTETableID</doc>
-      
       <member name="program_association" value="0" c:identifier="GST_MTS_TABLE_ID_PROGRAM_ASSOCIATION">
       </member>
       <member name="conditional_access" value="1" c:identifier="GST_MTS_TABLE_ID_CONDITIONAL_ACCESS">
@@ -3822,7 +3645,6 @@ see also #GstMpegtsSectionATSCTableID, #GstMpegtsSectionDVBTableID, and
     </enumeration>
     <enumeration name="SectionType" c:type="GstMpegtsSectionType">
       <doc xml:space="preserve">Types of #GstMpegtsSection that the library handles.</doc>
-      
       <member name="unknown" value="0" c:identifier="GST_MPEGTS_SECTION_UNKNOWN">
         <doc xml:space="preserve">Unknown section type</doc>
       </member>
@@ -3888,7 +3710,6 @@ on the variant of mpeg-ts being used (Bluray, ATSC, DVB, ...), other
 types might also be used, but will not conflict with these.
 
 Corresponds to table 2-34 of ITU H.222.0 | ISO/IEC 13818-1</doc>
-      
       <member name="reserved_00" value="0" c:identifier="GST_MPEGTS_STREAM_TYPE_RESERVED_00">
         <doc xml:space="preserve">ITU-T | ISO/IEC Reserved</doc>
       </member>
@@ -4029,7 +3850,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       </member>
     </enumeration>
     <record name="T2DeliverySystemCell" c:type="GstMpegtsT2DeliverySystemCell" glib:type-name="GstMpegtsT2DeliverySystemCell" glib:get-type="gst_mpegts_t2_delivery_system_cell_get_type" c:symbol-prefix="t2_delivery_system_cell">
-      
       <field name="cell_id" writable="1">
         <doc xml:space="preserve">id of the cell</doc>
         <type name="guint16" c:type="guint16"/>
@@ -4047,7 +3867,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       </field>
     </record>
     <record name="T2DeliverySystemCellExtension" c:type="GstMpegtsT2DeliverySystemCellExtension" glib:type-name="GstMpegtsT2DeliverySystemCellExtension" glib:get-type="gst_mpegts_t2_delivery_system_cell_extension_get_type" c:symbol-prefix="t2_delivery_system_cell_extension">
-      
       <field name="cell_id_extension" writable="1">
         <doc xml:space="preserve">id of the sub cell</doc>
         <type name="guint8" c:type="guint8"/>
@@ -4059,7 +3878,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
     </record>
     <record name="T2DeliverySystemDescriptor" c:type="GstMpegtsT2DeliverySystemDescriptor" glib:type-name="GstMpegtsT2DeliverySystemDescriptor" glib:get-type="gst_mpegts_t2_delivery_system_descriptor_get_type" c:symbol-prefix="t2_delivery_system_descriptor">
       <doc xml:space="preserve">describe DVB-T2 transmissions according to EN 302 755</doc>
-      
       <field name="plp_id" writable="1">
         <type name="guint8" c:type="guint8"/>
       </field>
@@ -4090,7 +3908,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
         </array>
       </field>
       <method name="free" c:identifier="gst_mpegts_t2_delivery_system_descriptor_free">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4103,7 +3920,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
     </record>
     <record name="TOT" c:type="GstMpegtsTOT" glib:type-name="GstMpegtsTOT" glib:get-type="gst_mpegts_tot_get_type" c:symbol-prefix="tot">
       <doc xml:space="preserve">Time Offset Table (EN 300 468)</doc>
-      
       <field name="utc_time" writable="1">
         <type name="Gst.DateTime" c:type="GstDateTime*"/>
       </field>
@@ -4116,7 +3932,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
     </record>
     <record name="TerrestrialDeliverySystemDescriptor" c:type="GstMpegtsTerrestrialDeliverySystemDescriptor" glib:type-name="GstMpegtsTerrestrialDeliverySystemDescriptor" glib:get-type="gst_mpegts_terrestrial_delivery_system_descriptor_get_type" c:symbol-prefix="terrestrial_delivery_system_descriptor">
       <doc xml:space="preserve">Terrestrial Delivery System Descriptor (EN 300 468 v.1.13.1)</doc>
-      
       <field name="frequency" writable="1">
         <doc xml:space="preserve">the frequency in Hz (Hertz)</doc>
         <type name="guint32" c:type="guint32"/>
@@ -4163,7 +3978,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       </field>
     </record>
     <enumeration name="TerrestrialGuardInterval" c:type="GstMpegtsTerrestrialGuardInterval">
-      
       <member name="1_32" value="0" c:identifier="GST_MPEGTS_GUARD_INTERVAL_1_32">
       </member>
       <member name="1_16" value="1" c:identifier="GST_MPEGTS_GUARD_INTERVAL_1_16">
@@ -4188,7 +4002,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       </member>
     </enumeration>
     <enumeration name="TerrestrialHierarchy" c:type="GstMpegtsTerrestrialHierarchy">
-      
       <member name="none" value="0" c:identifier="GST_MPEGTS_HIERARCHY_NONE">
       </member>
       <member name="1" value="1" c:identifier="GST_MPEGTS_HIERARCHY_1">
@@ -4201,7 +4014,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       </member>
     </enumeration>
     <enumeration name="TerrestrialTransmissionMode" c:type="GstMpegtsTerrestrialTransmissionMode">
-      
       <member name="2k" value="0" c:identifier="GST_MPEGTS_TRANSMISSION_MODE_2K">
       </member>
       <member name="8k" value="1" c:identifier="GST_MPEGTS_TRANSMISSION_MODE_8K">
@@ -4223,7 +4035,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
     </enumeration>
     <function name="descriptor_from_custom" c:identifier="gst_mpegts_descriptor_from_custom" moved-to="Descriptor.from_custom">
       <doc xml:space="preserve">Creates a #GstMpegtsDescriptor with custom @tag and @data</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">#GstMpegtsDescriptor</doc>
         <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -4247,7 +4058,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
     </function>
     <function name="descriptor_from_custom_with_extension" c:identifier="gst_mpegts_descriptor_from_custom_with_extension" moved-to="Descriptor.from_custom_with_extension">
       <doc xml:space="preserve">Creates a #GstMpegtsDescriptor with custom @tag, @tag_extension and @data</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">#GstMpegtsDescriptor</doc>
         <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -4277,7 +4087,6 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       <doc xml:space="preserve">Creates a #GstMpegtsDescriptor to be a %GST_MTS_DESC_DVB_NETWORK_NAME,
 with the network name @name. The data field of the #GstMpegtsDescriptor
 will be allocated, and transferred to the caller.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the #GstMpegtsDescriptor or %NULL on fail</doc>
         <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -4293,7 +4102,6 @@ will be allocated, and transferred to the caller.</doc>
       <doc xml:space="preserve">Fills a #GstMpegtsDescriptor to be a %GST_MTS_DESC_DVB_SERVICE.
 The data field of the #GstMpegtsDescriptor will be allocated,
 and transferred to the caller.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the #GstMpegtsDescriptor or %NULL on fail</doc>
         <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -4314,7 +4122,6 @@ and transferred to the caller.</doc>
       </parameters>
     </function>
     <function name="descriptor_from_dvb_subtitling" c:identifier="gst_mpegts_descriptor_from_dvb_subtitling" moved-to="Descriptor.from_dvb_subtitling">
-      
       <return-value transfer-ownership="full">
         <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
       </return-value>
@@ -4340,7 +4147,6 @@ and transferred to the caller.</doc>
     <function name="descriptor_from_iso_639_language" c:identifier="gst_mpegts_descriptor_from_iso_639_language" moved-to="Descriptor.from_iso_639_language">
       <doc xml:space="preserve">Creates a %GST_MTS_DESC_ISO_639_LANGUAGE #GstMpegtsDescriptor with
 a single language</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">#GstMpegtsDescriptor, %NULL on failure</doc>
         <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -4354,7 +4160,6 @@ a single language</doc>
     </function>
     <function name="descriptor_from_registration" c:identifier="gst_mpegts_descriptor_from_registration" moved-to="Descriptor.from_registration">
       <doc xml:space="preserve">Creates a %GST_MTS_DESC_REGISTRATION #GstMpegtsDescriptor</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">#GstMpegtsDescriptor, %NULL on failure</doc>
         <type name="Descriptor" c:type="GstMpegtsDescriptor*"/>
@@ -4377,7 +4182,6 @@ a single language</doc>
       </parameters>
     </function>
     <function name="dvb_component_descriptor_free" c:identifier="gst_mpegts_dvb_component_descriptor_free">
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -4389,7 +4193,6 @@ a single language</doc>
     </function>
     <function name="event_parse_mpegts_section" c:identifier="gst_event_parse_mpegts_section">
       <doc xml:space="preserve">Extracts the #GstMpegtsSection contained in the @event #GstEvent</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">The extracted #GstMpegtsSection</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4406,7 +4209,6 @@ a single language</doc>
 
 Note: To look for descriptors that can be present more than once in an
 array of descriptors, iterate the #GArray manually.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the first descriptor matching @tag, else %NULL.</doc>
         <type name="Descriptor" c:type="const GstMpegtsDescriptor*"/>
@@ -4428,14 +4230,12 @@ of #GstMpegtsDescriptor</doc>
     <function name="initialize" c:identifier="gst_mpegts_initialize">
       <doc xml:space="preserve">Initializes the MPEG-TS helper library. Must be called before any
 usage.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
     </function>
     <function name="message_new_mpegts_section" c:identifier="gst_message_new_mpegts_section">
       <doc xml:space="preserve">Creates a new #GstMessage for a @GstMpegtsSection.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">The new #GstMessage to be posted, or %NULL if the
 section is not valid.</doc>
@@ -4454,7 +4254,6 @@ section is not valid.</doc>
     </function>
     <function name="message_parse_mpegts_section" c:identifier="gst_message_parse_mpegts_section">
       <doc xml:space="preserve">Returns the #GstMpegtsSection contained in a message.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the contained #GstMpegtsSection, or %NULL.</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4471,7 +4270,6 @@ section is not valid.</doc>
 array.
 
 Note: The data provided in @buffer will not be copied.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">an
 array of the parsed descriptors or %NULL if there was an error.
@@ -4493,7 +4291,6 @@ Release with #g_array_unref when done with it.</doc>
     </function>
     <function name="pat_new" c:identifier="gst_mpegts_pat_new">
       <doc xml:space="preserve">Allocates a new #GPtrArray for #GstMpegtsPatProgram</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated #GPtrArray</doc>
         <array name="GLib.PtrArray" c:type="GPtrArray*">
@@ -4504,7 +4301,6 @@ Release with #g_array_unref when done with it.</doc>
     <function name="scte_cancel_new" c:identifier="gst_mpegts_scte_cancel_new">
       <doc xml:space="preserve">Allocates and initializes a new INSERT command #GstMpegtsSCTESIT
 setup to cancel the specified @event_id.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
         <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
@@ -4518,7 +4314,6 @@ setup to cancel the specified @event_id.</doc>
     </function>
     <function name="scte_null_new" c:identifier="gst_mpegts_scte_null_new">
       <doc xml:space="preserve">Allocates and initializes a NULL command #GstMpegtsSCTESIT.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
         <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
@@ -4530,7 +4325,6 @@ setup to cancel the specified @event_id.</doc>
 
 If the @splice_time is #G_MAXUINT64 then the event will be
 immediate as opposed to for the target @splice_time.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
         <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
@@ -4555,7 +4349,6 @@ If the @splice_time is #G_MAXUINT64 then the event will be
 immediate as opposed to for the target @splice_time.
 
 If the @duration is 0 it won't be specified in the event.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated #GstMpegtsSCTESIT</doc>
         <type name="SCTESIT" c:type="GstMpegtsSCTESIT*"/>
@@ -4576,7 +4369,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
       </parameters>
     </function>
     <function name="section_from_atsc_mgt" c:identifier="gst_mpegts_section_from_atsc_mgt" moved-to="Section.from_atsc_mgt" version="1.18">
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the #GstMpegtsSection</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4589,7 +4381,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
       </parameters>
     </function>
     <function name="section_from_atsc_rrt" c:identifier="gst_mpegts_section_from_atsc_rrt" moved-to="Section.from_atsc_rrt">
-      
       <return-value transfer-ownership="full">
         <type name="Section" c:type="GstMpegtsSection*"/>
       </return-value>
@@ -4600,7 +4391,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
       </parameters>
     </function>
     <function name="section_from_atsc_stt" c:identifier="gst_mpegts_section_from_atsc_stt" moved-to="Section.from_atsc_stt">
-      
       <return-value transfer-ownership="full">
         <type name="Section" c:type="GstMpegtsSection*"/>
       </return-value>
@@ -4612,7 +4402,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
     </function>
     <function name="section_from_nit" c:identifier="gst_mpegts_section_from_nit" moved-to="Section.from_nit">
       <doc xml:space="preserve">Ownership of @nit is taken. The data in @nit is managed by the #GstMpegtsSection</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the #GstMpegtsSection</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4626,7 +4415,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
     </function>
     <function name="section_from_pat" c:identifier="gst_mpegts_section_from_pat" moved-to="Section.from_pat">
       <doc xml:space="preserve">Creates a PAT #GstMpegtsSection from the @programs array of #GstMpegtsPatPrograms</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstMpegtsSection</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4646,7 +4434,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
     </function>
     <function name="section_from_pmt" c:identifier="gst_mpegts_section_from_pmt" moved-to="Section.from_pmt">
       <doc xml:space="preserve">Creates a #GstMpegtsSection from @pmt that is bound to @pid</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">#GstMpegtsSection</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4664,7 +4451,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
     </function>
     <function name="section_from_scte_sit" c:identifier="gst_mpegts_section_from_scte_sit" moved-to="Section.from_scte_sit">
       <doc xml:space="preserve">Ownership of @sit is taken. The data in @sit is managed by the #GstMpegtsSection</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the #GstMpegtsSection</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4681,7 +4467,6 @@ If the @duration is 0 it won't be specified in the event.</doc>
     </function>
     <function name="section_from_sdt" c:identifier="gst_mpegts_section_from_sdt" moved-to="Section.from_sdt">
       <doc xml:space="preserve">Ownership of @sdt is taken. The data in @sdt is managed by the #GstMpegtsSection</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the #GstMpegtsSection</doc>
         <type name="Section" c:type="GstMpegtsSection*"/>
@@ -4694,14 +4479,12 @@ If the @duration is 0 it won't be specified in the event.</doc>
       </parameters>
     </function>
     <function-macro name="section_ref" c:identifier="gst_mpegts_section_ref" introspectable="0">
-      
       <parameters>
         <parameter name="section">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="section_unref" c:identifier="gst_mpegts_section_unref" introspectable="0">
-      
       <parameters>
         <parameter name="section">
         </parameter>

@@ -11,15 +11,11 @@ and/or use gtk-doc annotations.  -->
   <c:include name="gst/check/check.h"/>
   <namespace name="GstCheck" version="1.0" shared-library="libgstcheck-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
     <function-macro name="CHECK_DEPRECATED_FOR" c:identifier="GST_CHECK_DEPRECATED_FOR" introspectable="0">
-      
       <parameters>
         <parameter name="f">
         </parameter>
       </parameters>
     </function-macro>
-    
-    
-    
     <record name="Harness" c:type="GstHarness" version="1.6">
       <doc xml:space="preserve">#GstHarness is meant to make writing unit test for GStreamer much easier.
 It can be thought of as a way of treating a #GstElement as a black box,
@@ -111,7 +107,6 @@ and then feeding it data with:
 |[&lt;!-- language="C" --&gt;
 gst_harness_push_from_src (h);
 ]|</doc>
-      
       <field name="element" writable="1">
         <doc xml:space="preserve">the element inside the harness</doc>
         <type name="Gst.Element" c:type="GstElement*"/>
@@ -139,7 +134,6 @@ gst_harness_push_from_src (h);
         <doc xml:space="preserve">Adds a #GstElement to an empty #GstHarness
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -181,7 +175,6 @@ srcpad that is then linked to the harness sinkpad, similar to the
         <doc xml:space="preserve">Links the specified #GstPad the @GstHarness srcpad.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -202,7 +195,6 @@ perhaps the srcpad did not exist at the time of creating the harness,
 like a demuxer that provides a sometimes-pad after receiving data.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -222,7 +214,6 @@ MT safe.</doc>
 and then attches the supplied #GstHarness to the bin.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -243,7 +234,6 @@ MT safe.</doc>
 by using normal gst_pad_add_probe syntax
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -283,7 +273,6 @@ MT safe.</doc>
 receiving an allocation query.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -307,7 +296,6 @@ MT safe.</doc>
 directly create a sink-harness using the @sink_element_name name specified.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -333,7 +321,6 @@ this is better achieved using gst_harness_new directly on the sink.
 If a sink-harness already exists it will be replaced.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -353,7 +340,6 @@ MT safe.</doc>
 instead of just an element name. See gst_harness_add_src_parse for details.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -373,7 +359,6 @@ MT safe.</doc>
 directly create a src-harness using the @src_element_name name specified.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -405,7 +390,6 @@ spin out of control producing buffers as fast as possible.
 If a src-harness already exists it will be replaced.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -433,7 +417,6 @@ data), but also by allowing you to set properties like "is-live" directly on
 the elements.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -457,7 +440,6 @@ gst_clock_wait_id internally.</doc>
         <doc xml:space="preserve">The number of #GstBuffers currently in the #GstHarness sinkpad #GAsyncQueue
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #guint number of buffers in the queue</doc>
           <type name="guint" c:type="guint"/>
@@ -475,7 +457,6 @@ This number includes buffers that have been dropped as well as buffers
 that have already been pulled out.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #guint number of buffers received</doc>
           <type name="guint" c:type="guint"/>
@@ -496,7 +477,6 @@ same time, ensuring that one thread can't register another wait before
 both are released.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a @gboolean %TRUE if the "crank" was successful, %FALSE if not.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -523,7 +503,6 @@ that are dependent on this. A "crank" can be though of as the notion of
 manually driving the clock forward to its next logical step.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a @gboolean %TRUE if the "crank" was successful, %FALSE if not.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -540,7 +519,6 @@ MT safe.</doc>
 configured #GstAllocator and #GstAllocationParams
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstBuffer of size @size</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -561,7 +539,6 @@ MT safe.</doc>
 to a file.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -580,7 +557,6 @@ MT safe.</doc>
         <doc xml:space="preserve">The number of #GstEvents currently in the #GstHarness sinkpad #GAsyncQueue
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #guint number of events in the queue</doc>
           <type name="guint" c:type="guint"/>
@@ -598,7 +574,6 @@ This number includes events handled by the harness as well as events
 that have already been pulled out.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #guint number of events received</doc>
           <type name="guint" c:type="guint"/>
@@ -617,7 +592,6 @@ MT safe.</doc>
 harnessed elements for properties and/or signals.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstElement or %NULL if not found</doc>
           <type name="Gst.Element" c:type="GstElement*"/>
@@ -639,7 +613,6 @@ that are residing inside the #GstHarness, by using normal g_object_get
 syntax.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -668,7 +641,6 @@ MT safe.</doc>
 allocation query.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -693,7 +665,6 @@ MT safe.</doc>
 typically with gst_harness_push or gst_harness_push_from_src.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstClockTime with the timestamp or %GST_CLOCK_TIME_NONE if no
 #GstBuffer has been pushed on the #GstHarness srcpad</doc>
@@ -711,7 +682,6 @@ MT safe.</doc>
 needed.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstTestClock, or %NULL if the testclock is not
 present.</doc>
@@ -734,7 +704,6 @@ starting to produce buffers.
 Hence, for src #GstElement you must call gst_harness_play() explicitly.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -751,7 +720,6 @@ will timeout in 60 seconds. This is the standard way of getting a buffer
 from a harnessed #GstElement.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstBuffer or %NULL if timed out.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -768,7 +736,6 @@ MT safe.</doc>
 Timeouts after 60 seconds similar to gst_harness_pull.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstEvent or %NULL if timed out.</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
@@ -784,7 +751,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Pulls a #GstBuffer from the #GAsyncQueue on the #GstHarness sinkpad. The pull
 will block until an EOS event is received, or timeout in 60 seconds.
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE on success, %FALSE on timeout.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -806,7 +772,6 @@ MT safe.</doc>
 Timeouts after 60 seconds similar to gst_harness_pull.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstEvent or %NULL if timed out.</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
@@ -823,7 +788,6 @@ MT safe.</doc>
 interacting with an harnessed element.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn with the result from the push</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -845,7 +809,6 @@ the fact that you often want to do exactly this in your test: Push one buffer
 in, and inspect the outcome.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstBuffer or %NULL if timed out.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -865,7 +828,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Pushes an #GstEvent on the #GstHarness srcpad.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #gboolean with the result from the push</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -890,7 +852,6 @@ of 4 steps:
 4: Push the same #GstBuffer into the main-#GstHarness (see: gst_harness_push)
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn with the result of the push</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -907,7 +868,6 @@ MT safe.</doc>
 See gst_harness_push_from_src for details.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn with the result of the push</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -923,7 +883,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Pushes an #GstEvent on the #GstHarness sinkpad.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #gboolean with the result from the push</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -943,7 +902,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Get the min latency reported by any harnessed #GstElement.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstClockTime with min latency</doc>
           <type name="Gst.ClockTime" c:type="GstClockTime"/>
@@ -961,7 +919,6 @@ that are residing inside the #GstHarness, by using normal g_object_set
 syntax.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -993,7 +950,6 @@ gst_clock_id_wait() so it can't be controlled by the #GstTestClock, since
 it otherwise would produce buffers as fast as possible.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1008,7 +964,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Sets the @GstHarness srcpad and sinkpad caps.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1031,7 +986,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Sets the @GstHarness srcpad and sinkpad caps using strings.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1055,7 +1009,6 @@ MT safe.</doc>
 #GstElement inside the sinkpads #GAsyncQueue, they are instead unreffed.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1086,7 +1039,6 @@ is providing data for the main-harness.
 Forwarding is enabled by default.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1106,7 +1058,6 @@ MT safe.</doc>
 query.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1129,7 +1080,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Sets the @GstHarness sinkpad caps.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1148,7 +1098,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Sets the @GstHarness sinkpad caps using a string.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1168,7 +1117,6 @@ MT safe.</doc>
 can legally be pushed from the harness to the element.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1188,7 +1136,6 @@ MT safe.</doc>
 any buffers can legally be pushed from the harness to the element.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1207,7 +1154,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Advance the #GstTestClock to a specific time.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a @gboolean %TRUE if the time could be set. %FALSE if not.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1225,7 +1171,6 @@ MT safe.</doc>
       </method>
       <method name="set_upstream_latency" c:identifier="gst_harness_set_upstream_latency" version="1.6">
         <doc xml:space="preserve">Sets the min latency reported by #GstHarness when receiving a latency-query</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1245,7 +1190,6 @@ MT safe.</doc>
 Will abort the pushing if any one push fails.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn with the result of the push</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -1269,7 +1213,6 @@ of data at the same time, as well as cases when one crank does not equal one
 buffer to push and v.v.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn with the result of the push</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -1296,7 +1239,6 @@ some #GstEvents are being transferred automagically. Look at sink_forward_pad
 for details.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #gboolean with the result of the push</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1313,7 +1255,6 @@ MT safe.</doc>
 iteration allowing you to do something nasty.
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1346,7 +1287,6 @@ each call to the @callback</doc>
         <doc xml:space="preserve">Call g_object_set with @name and @value in intervals of @sleep microseconds
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1375,7 +1315,6 @@ each g_object_set with @name and @value</doc>
         <doc xml:space="preserve">Push a #GstBuffer in intervals of @sleep microseconds.
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1408,7 +1347,6 @@ each call to gst_pad_push</doc>
         <doc xml:space="preserve">Push a #GstBuffer returned by @func in intervals of @sleep microseconds.
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1451,7 +1389,6 @@ each call to gst_pad_push</doc>
 @sleep microseconds
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1477,7 +1414,6 @@ each gst_event_push with @event</doc>
 in intervals of @sleep microseconds.
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1512,7 +1448,6 @@ each call to gst_pad_push</doc>
 @sleep microseconds.
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1538,7 +1473,6 @@ each gst_event_push with @event</doc>
 in intervals of @sleep microseconds.
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1572,7 +1506,6 @@ each call to gst_pad_push</doc>
         <doc xml:space="preserve">Call gst_element_request_pad in intervals of @sleep microseconds
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1610,7 +1543,6 @@ each gst_element_request_pad</doc>
 back again, only pausing for @sleep microseconds every time.
 
 MT safe.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GstHarnessThread</doc>
           <type name="HarnessThread" c:type="GstHarnessThread*"/>
@@ -1630,7 +1562,6 @@ each state-change</doc>
       <method name="take_all_data" c:identifier="gst_harness_take_all_data" shadowed-by="take_all_data_as_bytes" version="1.14" introspectable="0">
         <doc xml:space="preserve">Pulls all pending data from the harness and returns it as a single
 data slice.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a pointer to the data, newly allocated. Free
     with g_free() when no longer needed. Will return %NULL if there is no
@@ -1650,7 +1581,6 @@ data slice.</doc>
       </method>
       <method name="take_all_data_as_buffer" c:identifier="gst_harness_take_all_data_as_buffer" version="1.14">
         <doc xml:space="preserve">Pulls all pending data from the harness and returns it as a single buffer.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the data as a buffer. Unref with gst_buffer_unref()
     when no longer needed.</doc>
@@ -1665,7 +1595,6 @@ data slice.</doc>
       </method>
       <method name="take_all_data_as_bytes" c:identifier="gst_harness_take_all_data_as_bytes" shadows="take_all_data" version="1.14">
         <doc xml:space="preserve">Pulls all pending data from the harness and returns it as a single #GBytes.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a pointer to the data, newly allocated. Free
     with g_free() when no longer needed.</doc>
@@ -1682,7 +1611,6 @@ data slice.</doc>
         <doc xml:space="preserve">Tears down a @GstHarness, freeing all resources allocated using it.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1699,7 +1627,6 @@ gst_harness_pull this will not wait for any buffers if not any are present,
 and return %NULL straight away.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstBuffer or %NULL if no buffers are present in the #GAsyncQueue</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -1716,7 +1643,6 @@ MT safe.</doc>
 See gst_harness_try_pull for details.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstEvent or %NULL if no buffers are present in the #GAsyncQueue</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
@@ -1733,7 +1659,6 @@ MT safe.</doc>
 See gst_harness_try_pull for details.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstEvent or %NULL if no buffers are present in the #GAsyncQueue</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
@@ -1749,7 +1674,6 @@ MT safe.</doc>
         <doc xml:space="preserve">The number of #GstEvents currently in the #GstHarness srcpad #GAsyncQueue
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #guint number of events in the queue</doc>
           <type name="guint" c:type="guint"/>
@@ -1767,7 +1691,6 @@ This number includes events handled by the harness as well as events
 that have already been pulled out.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #guint number of events received</doc>
           <type name="guint" c:type="guint"/>
@@ -1783,7 +1706,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Sets the system #GstClock on the @GstHarness #GstElement
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1798,7 +1720,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Sets the #GstTestClock on the #GstHarness #GstElement
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1816,7 +1737,6 @@ where you want to make sure that an expected number of waits have been
 reached.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a @gboolean %TRUE if the waits have been registered, %FALSE if not.
 (Could be that it timed out waiting or that more waits than waits was found)</doc>
@@ -1843,7 +1763,6 @@ the #GstTestClock</doc>
 assumes the #GstElement sinkpad is named "sink" and srcpad is named "src"
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -1861,7 +1780,6 @@ not be created</doc>
 an #GstElement to it.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -1872,7 +1790,6 @@ not be created</doc>
         <doc xml:space="preserve">Creates a new harness.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -1913,7 +1830,6 @@ srcpad that is then linked to the harness sinkpad, similar to the
 and then attches the harness to the bin.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -1932,7 +1848,6 @@ that generic padtemplates are used for the harness src and sinkpads, which
 will be sufficient in most usecases.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -1962,7 +1877,6 @@ srcpad</doc>
 except you specify the factoryname of the #GstElement
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -1992,7 +1906,6 @@ srcpad</doc>
 assumes the #GstElement sinkpad is named "sink" and srcpad is named "src"
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2019,7 +1932,6 @@ not be created</doc>
         <doc xml:space="preserve">Stop the running #GstHarnessThread
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="guint" c:type="guint"/>
         </return-value>
@@ -2032,7 +1944,6 @@ MT safe.</doc>
       </function>
     </record>
     <callback name="HarnessPrepareBufferFunc" c:type="GstHarnessPrepareBufferFunc" version="1.6">
-      
       <return-value transfer-ownership="full">
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
       </return-value>
@@ -2048,7 +1959,6 @@ MT safe.</doc>
       </parameters>
     </callback>
     <callback name="HarnessPrepareEventFunc" c:type="GstHarnessPrepareEventFunc" version="1.8">
-      
       <return-value transfer-ownership="full">
         <type name="Gst.Event" c:type="GstEvent*"/>
       </return-value>
@@ -2063,22 +1973,17 @@ MT safe.</doc>
         </parameter>
       </parameters>
     </callback>
-    <record name="HarnessPrivate" c:type="GstHarnessPrivate" disguised="1">
-      
-    </record>
+    <record name="HarnessPrivate" c:type="GstHarnessPrivate" disguised="1"/>
     <record name="HarnessThread" c:type="GstHarnessThread" disguised="1" version="1.6">
       <doc xml:space="preserve">Opaque handle representing a GstHarness stress testing thread.</doc>
-      
     </record>
     <function-macro name="IS_TEST_CLOCK" c:identifier="GST_IS_TEST_CLOCK" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_TEST_CLOCK_CLASS" c:identifier="GST_IS_TEST_CLOCK_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2086,31 +1991,26 @@ MT safe.</doc>
     </function-macro>
     <record name="StreamConsistency" c:type="GstStreamConsistency" disguised="1">
       <doc xml:space="preserve">Opaque consistency checker handle.</doc>
-      
     </record>
     <function-macro name="TEST_CLOCK" c:identifier="GST_TEST_CLOCK" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TEST_CLOCK_CAST" c:identifier="GST_TEST_CLOCK_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TEST_CLOCK_CLASS" c:identifier="GST_TEST_CLOCK_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="TEST_CLOCK_GET_CLASS" c:identifier="GST_TEST_CLOCK_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2261,12 +2161,10 @@ clock notification.
 Since #GstTestClock is only supposed to be used in unit tests it calls
 g_assert(), g_assert_cmpint() or g_assert_cmpuint() to validate all function
 arguments. This will highlight any issues with the unit test code itself.</doc>
-      
       <constructor name="new" c:identifier="gst_test_clock_new" version="1.2">
         <doc xml:space="preserve">Creates a new test clock with its time set to zero.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstTestClock cast to #GstClock.</doc>
           <type name="Gst.Clock" c:type="GstClock*"/>
@@ -2276,7 +2174,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Creates a new test clock with its time set to the specified time.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstTestClock cast to #GstClock.</doc>
           <type name="Gst.Clock" c:type="GstClock*"/>
@@ -2292,7 +2189,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Finds the latest time inside the list.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="Gst.ClockTime" c:type="GstClockTime"/>
         </return-value>
@@ -2312,7 +2208,6 @@ time of @test_clock is monotonically increasing, therefore providing a
 @delta which is negative or zero is a programming error.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2335,7 +2230,6 @@ MT safe.</doc>
 3: Release the #GstClockID wait.
 A "crank" can be though of as the notion of
 manually driving the clock forward to its next logical step.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the crank was successful, %FALSE otherwise.
 
@@ -2353,7 +2247,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Retrieve the requested time for the next pending clock notification.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstClockTime set to the time of the next pending clock
 notification. If no clock notifications have been requested
@@ -2372,7 +2265,6 @@ notification. If no clock notifications have been requested
 given by @id.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the clock has been asked to provide the given clock
 notification, %FALSE otherwise.</doc>
@@ -2394,7 +2286,6 @@ notification, %FALSE otherwise.</doc>
 requested from the @test_clock.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the number of pending clock notifications.</doc>
           <type name="guint" c:type="guint"/>
@@ -2411,7 +2302,6 @@ MT safe.</doc>
 be triggered given the current time of the @test_clock.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @pending_id is the next clock notification to be
 triggered, %FALSE otherwise.</doc>
@@ -2433,7 +2323,6 @@ notification to look for</doc>
         <doc xml:space="preserve">Processes and releases the pending ID.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2452,7 +2341,6 @@ MT safe.</doc>
         <doc xml:space="preserve">Processes and releases the pending IDs in the list.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="guint" c:type="guint"/>
         </return-value>
@@ -2472,7 +2360,6 @@ MT safe.</doc>
       </method>
       <method name="process_next_clock_id" c:identifier="gst_test_clock_process_next_clock_id" version="1.2">
         <doc xml:space="preserve">MT safe.</doc>
-        
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstClockID containing the next pending clock
 notification.</doc>
@@ -2493,7 +2380,6 @@ which is earlier or equal to the time of the clock as given by
 gst_clock_get_time() is a programming error.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2513,7 +2399,6 @@ MT safe.</doc>
 @test_clock, or the timeout expires.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a @gboolean %TRUE if the waits have been registered, %FALSE if not.
 (Could be that it timed out waiting or that more waits than waits was found)</doc>
@@ -2548,7 +2433,6 @@ MT safe.</doc>
 #GstTestClock.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2577,7 +2461,6 @@ timeout for this wait, see the main description of #GstTestClock. A reference
 to the pending clock notification is stored in @pending_id.
 
 MT safe.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2598,7 +2481,6 @@ with information about the pending clock notification</doc>
 @test_clock. There is no timeout for this wait, see the main description of
 #GstTestClock.</doc>
         <doc-deprecated xml:space="preserve">use gst_test_clock_wait_for_multiple_pending_ids() instead.</doc-deprecated>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2633,52 +2515,15 @@ this property contains the value 0.</doc>
     </class>
     <record name="TestClockClass" c:type="GstTestClockClass" glib:is-gtype-struct-for="TestClock" version="1.2">
       <doc xml:space="preserve">The class of a #GstTestClock, which has no virtual methods to override.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">the parent class structure</doc>
         <type name="Gst.ClockClass" c:type="GstClockClass"/>
       </field>
     </record>
-    <record name="TestClockPrivate" c:type="GstTestClockPrivate" disguised="1">
-      
-    </record>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <record name="TestClockPrivate" c:type="GstTestClockPrivate" disguised="1"/>
     <function name="consistency_checker_add_pad" c:identifier="gst_consistency_checker_add_pad">
       <doc xml:space="preserve">Sets up a data probe on the given pad which will raise assertions if the
 data flow is inconsistent.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE if the pad was added</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -2696,7 +2541,6 @@ data flow is inconsistent.</doc>
     </function>
     <function name="consistency_checker_free" c:identifier="gst_consistency_checker_free">
       <doc xml:space="preserve">Frees the allocated data and probes associated with @consist.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -2710,7 +2554,6 @@ data flow is inconsistent.</doc>
     <function name="consistency_checker_new" c:identifier="gst_consistency_checker_new" introspectable="0">
       <doc xml:space="preserve">Sets up a data probe on the given pad which will raise assertions if the
 data flow is inconsistent.</doc>
-      
       <return-value>
         <doc xml:space="preserve">A #GstStreamConsistency structure used to track data flow.</doc>
         <type name="StreamConsistency" c:type="GstStreamConsistency*"/>
@@ -2724,7 +2567,6 @@ data flow is inconsistent.</doc>
     </function>
     <function name="consistency_checker_reset" c:identifier="gst_consistency_checker_reset">
       <doc xml:space="preserve">Reset the stream checker's internal variables.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -2756,7 +2598,6 @@ inside the 'check' directories of various GStreamer packages.</doc>
 assumes the #GstElement sinkpad is named "sink" and srcpad is named "src"
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2774,7 +2615,6 @@ not be created</doc>
 an #GstElement to it.
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2785,7 +2625,6 @@ not be created</doc>
       <doc xml:space="preserve">Creates a new harness.
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2826,7 +2665,6 @@ srcpad that is then linked to the harness sinkpad, similar to the
 and then attches the harness to the bin.
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2845,7 +2683,6 @@ that generic padtemplates are used for the harness src and sinkpads, which
 will be sufficient in most usecases.
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2875,7 +2712,6 @@ srcpad</doc>
 except you specify the factoryname of the #GstElement
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2905,7 +2741,6 @@ srcpad</doc>
 assumes the #GstElement sinkpad is named "sink" and srcpad is named "src"
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a #GstHarness, or %NULL if the harness could
 not be created</doc>
@@ -2929,7 +2764,6 @@ not be created</doc>
       </parameters>
     </function>
     <function-macro name="harness_stress_property_start" c:identifier="gst_harness_stress_property_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -2940,7 +2774,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_push_buffer_start" c:identifier="gst_harness_stress_push_buffer_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -2953,7 +2786,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_push_buffer_with_cb_start" c:identifier="gst_harness_stress_push_buffer_with_cb_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -2970,7 +2802,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_push_event_start" c:identifier="gst_harness_stress_push_event_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -2979,7 +2810,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_push_event_with_cb_start" c:identifier="gst_harness_stress_push_event_with_cb_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -2992,7 +2822,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_requestpad_start" c:identifier="gst_harness_stress_requestpad_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -3007,7 +2836,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_send_upstream_event_start" c:identifier="gst_harness_stress_send_upstream_event_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -3016,7 +2844,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_send_upstream_event_with_cb_start" c:identifier="gst_harness_stress_send_upstream_event_with_cb_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -3029,7 +2856,6 @@ not be created</doc>
       </parameters>
     </function-macro>
     <function-macro name="harness_stress_statechange_start" c:identifier="gst_harness_stress_statechange_start" introspectable="0">
-      
       <parameters>
         <parameter name="h">
         </parameter>
@@ -3039,7 +2865,6 @@ not be created</doc>
       <doc xml:space="preserve">Stop the running #GstHarnessThread
 
 MT safe.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="guint" c:type="guint"/>
       </return-value>

@@ -11,10 +11,8 @@ and/or use gtk-doc annotations.  -->
       <doc xml:space="preserve">The #GModule struct is an opaque data structure to represent a
 [dynamically-loaded module][glib-Dynamic-Loading-of-Modules].
 It should only be accessed via the following functions.</doc>
-      
       <method name="close" c:identifier="g_module_close">
         <doc xml:space="preserve">Closes a module.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE on success</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -29,7 +27,6 @@ It should only be accessed via the following functions.</doc>
       <method name="make_resident" c:identifier="g_module_make_resident">
         <doc xml:space="preserve">Ensures that a module will never be unloaded.
 Any future g_module_close() calls on the module will be ignored.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -44,7 +41,6 @@ Any future g_module_close() calls on the module will be ignored.</doc>
         <doc xml:space="preserve">Returns the filename that the module was opened with.
 
 If @module refers to the application itself, "main" is returned.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the filename of the module</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -59,7 +55,6 @@ If @module refers to the application itself, "main" is returned.</doc>
       <method name="symbol" c:identifier="g_module_symbol">
         <doc xml:space="preserve">Gets a symbol pointer from a module, such as one exported
 by #G_MODULE_EXPORT. Note that a valid symbol can be %NULL.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE on success</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -93,7 +88,6 @@ For example, calling g_module_build_path() on a Linux system with a
 @directory of `/lib` and a @module_name of "mylibrary" will return
 `/lib/libmylibrary.so`. On a Windows system, using `\Windows` as the
 directory it will return `\Windows\mylibrary.dll`.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the complete path of the module, including the standard library
     prefix and suffix. This should be freed when no longer needed</doc>
@@ -114,7 +108,6 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
       </function>
       <function name="error" c:identifier="g_module_error">
         <doc xml:space="preserve">Gets a string describing the last module error.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a string describing the last module error</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -133,7 +126,6 @@ module will be opened. If that fails and @file_name doesn't have the
 ".la"-suffix, this suffix is appended and g_module_open() tries to open
 the corresponding module. If eventually that fails as well, %NULL is
 returned.</doc>
-        
         <return-value>
           <doc xml:space="preserve">a #GModule on success, or %NULL on failure</doc>
           <type name="Module" c:type="GModule*"/>
@@ -153,7 +145,6 @@ returned.</doc>
       </function>
       <function name="supported" c:identifier="g_module_supported">
         <doc xml:space="preserve">Checks if modules are supported on the current platform.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if modules are supported</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -166,7 +157,6 @@ If a module contains a function named g_module_check_init() it is called
 automatically when the module is loaded. It is passed the #GModule structure
 and should return %NULL on success or a string describing the initialization
 error.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%NULL on success, or a string describing the initialization error</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -181,7 +171,6 @@ error.</doc>
     <bitfield name="ModuleFlags" c:type="GModuleFlags">
       <doc xml:space="preserve">Flags passed to g_module_open().
 Note that these flags are not supported on all platforms.</doc>
-      
       <member name="lazy" value="1" c:identifier="G_MODULE_BIND_LAZY">
         <doc xml:space="preserve">specifies that symbols are only resolved when
     needed. The default action is to bind all symbols when the module
@@ -202,7 +191,6 @@ Note that these flags are not supported on all platforms.</doc>
 If a module contains a function named g_module_unload() it is called
 automatically when the module is unloaded.
 It is passed the #GModule structure.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -227,7 +215,6 @@ For example, calling g_module_build_path() on a Linux system with a
 @directory of `/lib` and a @module_name of "mylibrary" will return
 `/lib/libmylibrary.so`. On a Windows system, using `\Windows` as the
 directory it will return `\Windows\mylibrary.dll`.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">the complete path of the module, including the standard library
     prefix and suffix. This should be freed when no longer needed</doc>
@@ -248,7 +235,6 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
     </function>
     <function name="module_error" c:identifier="g_module_error" moved-to="Module.error">
       <doc xml:space="preserve">Gets a string describing the last module error.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a string describing the last module error</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -256,7 +242,6 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
     </function>
     <function name="module_supported" c:identifier="g_module_supported" moved-to="Module.supported">
       <doc xml:space="preserve">Checks if modules are supported on the current platform.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE if modules are supported</doc>
         <type name="gboolean" c:type="gboolean"/>

@@ -13,11 +13,9 @@ and/or use gtk-doc annotations.  -->
     <class name="GLDisplayWayland" c:symbol-prefix="gl_display_wayland" c:type="GstGLDisplayWayland" parent="GstGL.GLDisplay" glib:type-name="GstGLDisplayWayland" glib:get-type="gst_gl_display_wayland_get_type" glib:type-struct="GLDisplayWaylandClass">
       <doc xml:space="preserve">the contents of a #GstGLDisplayWayland are private and should only be accessed
 through the provided API</doc>
-      
       <constructor name="new" c:identifier="gst_gl_display_wayland_new">
         <doc xml:space="preserve">Create a new #GstGLDisplayWayland from the wayland display name.  See `wl_display_connect`()
 for details on what is a valid name.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstGLDisplayWayland or %NULL</doc>
           <type name="GLDisplayWayland" c:type="GstGLDisplayWayland*"/>
@@ -31,7 +29,6 @@ for details on what is a valid name.</doc>
       </constructor>
       <constructor name="new_with_display" c:identifier="gst_gl_display_wayland_new_with_display">
         <doc xml:space="preserve">Creates a new display connection from a wl_display Display.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstGLDisplayWayland</doc>
           <type name="GLDisplayWayland" c:type="GstGLDisplayWayland*"/>
@@ -71,7 +68,6 @@ for details on what is a valid name.</doc>
       </field>
     </class>
     <record name="GLDisplayWaylandClass" c:type="GstGLDisplayWaylandClass" glib:is-gtype-struct-for="GLDisplayWayland">
-      
       <field name="object_class">
         <type name="GstGL.GLDisplayClass" c:type="GstGLDisplayClass"/>
       </field>
@@ -82,35 +78,30 @@ for details on what is a valid name.</doc>
       </field>
     </record>
     <function-macro name="GL_DISPLAY_WAYLAND" c:identifier="GST_GL_DISPLAY_WAYLAND" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="GL_DISPLAY_WAYLAND_CAST" c:identifier="GST_GL_DISPLAY_WAYLAND_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="GL_DISPLAY_WAYLAND_CLASS" c:identifier="GST_GL_DISPLAY_WAYLAND_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_GL_DISPLAY_WAYLAND" c:identifier="GST_IS_GL_DISPLAY_WAYLAND" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_GL_DISPLAY_WAYLAND_CLASS" c:identifier="GST_IS_GL_DISPLAY_WAYLAND_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>

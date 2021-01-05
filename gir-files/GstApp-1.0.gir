@@ -9,42 +9,36 @@ and/or use gtk-doc annotations.  -->
   <c:include name="gst/app/app.h"/>
   <namespace name="GstApp" version="1.0" shared-library="libgstapp-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
     <function-macro name="APP_SINK" c:identifier="GST_APP_SINK" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="APP_SINK_CAST" c:identifier="GST_APP_SINK_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="APP_SINK_CLASS" c:identifier="GST_APP_SINK_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="APP_SRC" c:identifier="GST_APP_SRC" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="APP_SRC_CAST" c:identifier="GST_APP_SRC_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="APP_SRC_CLASS" c:identifier="GST_APP_SRC_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -87,10 +81,8 @@ is stopped or in the EOS state. You can check for the EOS state with the
 
 The eos signal can also be used to be informed when the EOS state is reached
 to avoid polling.</doc>
-      
       <implements name="Gst.URIHandler"/>
       <virtual-method name="eos">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -101,7 +93,6 @@ to avoid polling.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="new_preroll">
-        
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
@@ -112,7 +103,6 @@ to avoid polling.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="new_sample">
-        
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
@@ -141,7 +131,6 @@ If an EOS event was received before any buffers, this function returns
 
 This function blocks until a preroll sample or EOS is received or the appsink
 element is set to the READY/NULL state.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS.
          Call gst_sample_unref() after usage.</doc>
@@ -166,7 +155,6 @@ especially when dealing with raw video frames.
 
 If an EOS event was received before any buffers, this function returns
 %NULL. Use gst_app_sink_is_eos () to check for the EOS condition.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS.
          Call gst_sample_unref() after usage.</doc>
@@ -199,7 +187,6 @@ condition.
 
 This function blocks until a preroll sample or EOS is received, the appsink
 element is set to the READY/NULL state, or the timeout expires.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS or the timeout expires.
          Call gst_sample_unref() after usage.</doc>
@@ -229,7 +216,6 @@ especially when dealing with raw video frames.
 If an EOS event was received before any buffers or the timeout expires,
 this function returns %NULL. Use gst_app_sink_is_eos () to check for the EOS
 condition.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS or the timeout expires.
 Call gst_sample_unref() after usage.</doc>
@@ -248,7 +234,6 @@ Call gst_sample_unref() after usage.</doc>
       </virtual-method>
       <method name="get_buffer_list_support" c:identifier="gst_app_sink_get_buffer_list_support" version="1.12">
         <doc xml:space="preserve">Check if @appsink supports buffer lists.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @appsink supports buffer lists.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -262,7 +247,6 @@ Call gst_sample_unref() after usage.</doc>
       </method>
       <method name="get_caps" c:identifier="gst_app_sink_get_caps">
         <doc xml:space="preserve">Get the configured caps on @appsink.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstCaps accepted by the sink. gst_caps_unref() after usage.</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
@@ -277,7 +261,6 @@ Call gst_sample_unref() after usage.</doc>
       <method name="get_drop" c:identifier="gst_app_sink_get_drop">
         <doc xml:space="preserve">Check if @appsink will drop old buffers when the maximum amount of queued
 buffers is reached.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @appsink is dropping old buffers when the queue is
 filled.</doc>
@@ -292,7 +275,6 @@ filled.</doc>
       </method>
       <method name="get_emit_signals" c:identifier="gst_app_sink_get_emit_signals">
         <doc xml:space="preserve">Check if appsink will emit the "new-preroll" and "new-sample" signals.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @appsink is emitting the "new-preroll" and "new-sample"
 signals.</doc>
@@ -307,7 +289,6 @@ signals.</doc>
       </method>
       <method name="get_max_buffers" c:identifier="gst_app_sink_get_max_buffers">
         <doc xml:space="preserve">Get the maximum amount of buffers that can be queued in @appsink.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The maximum amount of buffers that can be queued.</doc>
           <type name="guint" c:type="guint"/>
@@ -322,7 +303,6 @@ signals.</doc>
       <method name="get_wait_on_eos" c:identifier="gst_app_sink_get_wait_on_eos">
         <doc xml:space="preserve">Check if @appsink will wait for all buffers to be consumed when an EOS is
 received.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @appsink will wait for all buffers to be consumed when an
 EOS is received.</doc>
@@ -341,7 +321,6 @@ an EOS event was received.
 
 This function also returns %TRUE when the appsink is not in the PAUSED or
 PLAYING state.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if no more samples can be pulled and the appsink is EOS.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -372,7 +351,6 @@ If an EOS event was received before any buffers, this function returns
 
 This function blocks until a preroll sample or EOS is received or the appsink
 element is set to the READY/NULL state.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS.
          Call gst_sample_unref() after usage.</doc>
@@ -397,7 +375,6 @@ especially when dealing with raw video frames.
 
 If an EOS event was received before any buffers, this function returns
 %NULL. Use gst_app_sink_is_eos () to check for the EOS condition.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS.
          Call gst_sample_unref() after usage.</doc>
@@ -415,7 +392,6 @@ If an EOS event was received before any buffers, this function returns
 
 For backwards-compatibility reasons applications need to opt in
 to indicate that they will be able to handle buffer lists.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -440,7 +416,6 @@ reasons.
 
 Before 1.16.3 it was not possible to change the callbacks in a thread-safe
 way.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -468,7 +443,6 @@ way.</doc>
 a copy of the caps structure. After calling this method, the sink will only
 accept caps that match @caps. If @caps is non-fixed, or incomplete,
 you must check the caps on the samples to get the actual used caps.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -486,7 +460,6 @@ you must check the caps on the samples to get the actual used caps.</doc>
       <method name="set_drop" c:identifier="gst_app_sink_set_drop">
         <doc xml:space="preserve">Instruct @appsink to drop old buffers when the maximum amount of queued
 buffers is reached.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -505,7 +478,6 @@ buffers is reached.</doc>
         <doc xml:space="preserve">Make appsink emit the "new-preroll" and "new-sample" signals. This option is
 by default disabled because signal emission is expensive and unneeded when
 the application prefers to operate in pull mode.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -524,7 +496,6 @@ the application prefers to operate in pull mode.</doc>
         <doc xml:space="preserve">Set the maximum amount of buffers that can be queued in @appsink. After this
 amount of buffers are queued in appsink, any more buffers will block upstream
 elements until a sample is pulled from @appsink.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -541,7 +512,6 @@ elements until a sample is pulled from @appsink.</doc>
       </method>
       <method name="set_wait_on_eos" c:identifier="gst_app_sink_set_wait_on_eos">
         <doc xml:space="preserve">Instruct @appsink to wait for all buffers to be consumed when an EOS is received.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -576,7 +546,6 @@ condition.
 
 This function blocks until a preroll sample or EOS is received, the appsink
 element is set to the READY/NULL state, or the timeout expires.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS or the timeout expires.
          Call gst_sample_unref() after usage.</doc>
@@ -606,7 +575,6 @@ especially when dealing with raw video frames.
 If an EOS event was received before any buffers or the timeout expires,
 this function returns %NULL. Use gst_app_sink_is_eos () to check for the EOS
 condition.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS or the timeout expires.
 Call gst_sample_unref() after usage.</doc>
@@ -800,10 +768,8 @@ for the EOS condition.</doc>
     <record name="AppSinkCallbacks" c:type="GstAppSinkCallbacks" introspectable="0">
       <doc xml:space="preserve">A set of callbacks that can be installed on the appsink with
 gst_app_sink_set_callbacks().</doc>
-      
       <field name="eos">
         <callback name="eos">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -819,7 +785,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="new_preroll">
         <callback name="new_preroll">
-          
           <return-value transfer-ownership="none">
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
@@ -835,7 +800,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="new_sample">
         <callback name="new_sample">
-          
           <return-value transfer-ownership="none">
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
@@ -856,13 +820,11 @@ gst_app_sink_set_callbacks().</doc>
       </field>
     </record>
     <record name="AppSinkClass" c:type="GstAppSinkClass" glib:is-gtype-struct-for="AppSink">
-      
       <field name="basesink_class">
         <type name="GstBase.BaseSinkClass" c:type="GstBaseSinkClass"/>
       </field>
       <field name="eos">
         <callback name="eos">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -875,7 +837,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="new_preroll">
         <callback name="new_preroll">
-          
           <return-value transfer-ownership="none">
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
@@ -888,7 +849,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="new_sample">
         <callback name="new_sample">
-          
           <return-value transfer-ownership="none">
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
@@ -901,7 +861,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="pull_preroll">
         <callback name="pull_preroll">
-          
           <return-value transfer-ownership="full">
             <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS.
          Call gst_sample_unref() after usage.</doc>
@@ -917,7 +876,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="pull_sample">
         <callback name="pull_sample">
-          
           <return-value transfer-ownership="full">
             <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS.
          Call gst_sample_unref() after usage.</doc>
@@ -933,7 +891,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="try_pull_preroll">
         <callback name="try_pull_preroll">
-          
           <return-value transfer-ownership="full">
             <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS or the timeout expires.
          Call gst_sample_unref() after usage.</doc>
@@ -953,7 +910,6 @@ gst_app_sink_set_callbacks().</doc>
       </field>
       <field name="try_pull_sample">
         <callback name="try_pull_sample">
-          
           <return-value transfer-ownership="full">
             <doc xml:space="preserve">a #GstSample or NULL when the appsink is stopped or EOS or the timeout expires.
 Call gst_sample_unref() after usage.</doc>
@@ -977,9 +933,7 @@ Call gst_sample_unref() after usage.</doc>
         </array>
       </field>
     </record>
-    <record name="AppSinkPrivate" c:type="GstAppSinkPrivate" disguised="1">
-      
-    </record>
+    <record name="AppSinkPrivate" c:type="GstAppSinkPrivate" disguised="1"/>
     <class name="AppSrc" c:symbol-prefix="app_src" c:type="GstAppSrc" parent="GstBase.BaseSrc" glib:type-name="GstAppSrc" glib:get-type="gst_app_src_get_type" glib:type-struct="AppSrcClass">
       <doc xml:space="preserve">The appsrc element can be used by applications to insert data into a
 GStreamer pipeline. Unlike most GStreamer elements, appsrc provides
@@ -1045,12 +999,10 @@ When the application has finished pushing data into appsrc, it should call
 gst_app_src_end_of_stream() or emit the end-of-stream action signal. After
 this call, no more buffers can be pushed into appsrc until a flushing seek
 occurs or the state of the appsrc has gone through READY.</doc>
-      
       <implements name="Gst.URIHandler"/>
       <virtual-method name="end_of_stream" invoker="end_of_stream">
         <doc xml:space="preserve">Indicates to the appsrc element that the last buffer queued in the
 element is the last buffer of the stream.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.</doc>
@@ -1064,7 +1016,6 @@ element is the last buffer of the stream.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="enough_data">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1075,7 +1026,6 @@ element is the last buffer of the stream.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="need_data">
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1094,7 +1044,6 @@ push to its source pad.  This function takes ownership of the buffer.
 
 When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1119,7 +1068,6 @@ of @buffer_list.
 
 When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1148,7 +1096,6 @@ sample so the sample needs to be unreffed after calling this function.
 
 When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1168,7 +1115,6 @@ extracted</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="seek_data">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -1184,7 +1130,6 @@ extracted</doc>
       <method name="end_of_stream" c:identifier="gst_app_src_end_of_stream">
         <doc xml:space="preserve">Indicates to the appsrc element that the last buffer queued in the
 element is the last buffer of the stream.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.</doc>
@@ -1199,7 +1144,6 @@ element is the last buffer of the stream.</doc>
       </method>
       <method name="get_caps" c:identifier="gst_app_src_get_caps">
         <doc xml:space="preserve">Get the configured caps on @appsrc.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">the #GstCaps produced by the source. gst_caps_unref() after usage.</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
@@ -1213,7 +1157,6 @@ element is the last buffer of the stream.</doc>
       </method>
       <method name="get_current_level_bytes" c:identifier="gst_app_src_get_current_level_bytes" version="1.2">
         <doc xml:space="preserve">Get the number of currently queued bytes inside @appsrc.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of currently queued bytes.</doc>
           <type name="guint64" c:type="guint64"/>
@@ -1228,7 +1171,6 @@ element is the last buffer of the stream.</doc>
       <method name="get_duration" c:identifier="gst_app_src_get_duration" version="1.10">
         <doc xml:space="preserve">Get the duration of the stream in nanoseconds. A value of GST_CLOCK_TIME_NONE means that the duration is
 not known.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the duration of the stream previously set with gst_app_src_set_duration();</doc>
           <type name="Gst.ClockTime" c:type="GstClockTime"/>
@@ -1242,7 +1184,6 @@ not known.</doc>
       </method>
       <method name="get_emit_signals" c:identifier="gst_app_src_get_emit_signals">
         <doc xml:space="preserve">Check if appsrc will emit the "new-preroll" and "new-buffer" signals.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @appsrc is emitting the "new-preroll" and "new-buffer"
 signals.</doc>
@@ -1257,7 +1198,6 @@ signals.</doc>
       </method>
       <method name="get_latency" c:identifier="gst_app_src_get_latency">
         <doc xml:space="preserve">Retrieve the min and max latencies in @min and @max respectively.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1278,7 +1218,6 @@ signals.</doc>
       </method>
       <method name="get_max_bytes" c:identifier="gst_app_src_get_max_bytes">
         <doc xml:space="preserve">Get the maximum amount of bytes that can be queued in @appsrc.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The maximum amount of bytes that can be queued.</doc>
           <type name="guint64" c:type="guint64"/>
@@ -1293,7 +1232,6 @@ signals.</doc>
       <method name="get_size" c:identifier="gst_app_src_get_size">
         <doc xml:space="preserve">Get the size of the stream in bytes. A value of -1 means that the size is
 not known.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the size of the stream previously set with gst_app_src_set_size();</doc>
           <type name="gint64" c:type="gint64"/>
@@ -1308,7 +1246,6 @@ not known.</doc>
       <method name="get_stream_type" c:identifier="gst_app_src_get_stream_type">
         <doc xml:space="preserve">Get the stream type. Control the stream type of @appsrc
 with gst_app_src_set_stream_type().</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the stream type.</doc>
           <type name="AppStreamType" c:type="GstAppStreamType"/>
@@ -1326,7 +1263,6 @@ push to its source pad.  This function takes ownership of the buffer.
 
 When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1351,7 +1287,6 @@ of @buffer_list.
 
 When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1380,7 +1315,6 @@ sample so the sample needs to be unreffed after calling this function.
 
 When the block property is TRUE, this function can block until free
 space becomes available in the queue.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1410,7 +1344,6 @@ reasons.
 
 Before 1.16.3 it was not possible to change the callbacks in a thread-safe
 way.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1438,7 +1371,6 @@ way.</doc>
 a copy of the caps structure. After calling this method, the source will
 only produce caps that match @caps. @caps must be fixed and the caps on the
 buffers must match the caps or left NULL.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1456,7 +1388,6 @@ buffers must match the caps or left NULL.</doc>
       <method name="set_duration" c:identifier="gst_app_src_set_duration" version="1.10">
         <doc xml:space="preserve">Set the duration of the stream in nanoseconds. A value of GST_CLOCK_TIME_NONE means that the duration is
 not known.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1475,7 +1406,6 @@ not known.</doc>
         <doc xml:space="preserve">Make appsrc emit the "new-preroll" and "new-buffer" signals. This option is
 by default disabled because signal emission is expensive and unneeded when
 the application prefers to operate in pull mode.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1493,7 +1423,6 @@ the application prefers to operate in pull mode.</doc>
       <method name="set_latency" c:identifier="gst_app_src_set_latency">
         <doc xml:space="preserve">Configure the @min and @max latency in @src. If @min is set to -1, the
 default latency calculations for pseudo-live sources will be used.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1516,7 +1445,6 @@ default latency calculations for pseudo-live sources will be used.</doc>
         <doc xml:space="preserve">Set the maximum amount of bytes that can be queued in @appsrc.
 After the maximum amount of bytes are queued, @appsrc will emit the
 "enough-data" signal.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1534,7 +1462,6 @@ After the maximum amount of bytes are queued, @appsrc will emit the
       <method name="set_size" c:identifier="gst_app_src_set_size">
         <doc xml:space="preserve">Set the size of the stream in bytes. A value of -1 means that the size is
 not known.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1554,7 +1481,6 @@ not known.</doc>
 be connected to.
 
 A stream_type stream</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1720,10 +1646,8 @@ application should connect to the seek-data signal.</doc>
     <record name="AppSrcCallbacks" c:type="GstAppSrcCallbacks" introspectable="0">
       <doc xml:space="preserve">A set of callbacks that can be installed on the appsrc with
 gst_app_src_set_callbacks().</doc>
-      
       <field name="need_data">
         <callback name="need_data">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -1742,7 +1666,6 @@ gst_app_src_set_callbacks().</doc>
       </field>
       <field name="enough_data">
         <callback name="enough_data">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -1758,7 +1681,6 @@ gst_app_src_set_callbacks().</doc>
       </field>
       <field name="seek_data">
         <callback name="seek_data">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -1782,13 +1704,11 @@ gst_app_src_set_callbacks().</doc>
       </field>
     </record>
     <record name="AppSrcClass" c:type="GstAppSrcClass" glib:is-gtype-struct-for="AppSrc">
-      
       <field name="basesrc_class">
         <type name="GstBase.BaseSrcClass" c:type="GstBaseSrcClass"/>
       </field>
       <field name="need_data">
         <callback name="need_data">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -1804,7 +1724,6 @@ gst_app_src_set_callbacks().</doc>
       </field>
       <field name="enough_data">
         <callback name="enough_data">
-          
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -1817,7 +1736,6 @@ gst_app_src_set_callbacks().</doc>
       </field>
       <field name="seek_data">
         <callback name="seek_data">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -1833,7 +1751,6 @@ gst_app_src_set_callbacks().</doc>
       </field>
       <field name="push_buffer">
         <callback name="push_buffer">
-          
           <return-value transfer-ownership="none">
             <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1854,7 +1771,6 @@ gst_app_src_set_callbacks().</doc>
       </field>
       <field name="end_of_stream">
         <callback name="end_of_stream">
-          
           <return-value transfer-ownership="none">
             <doc xml:space="preserve">#GST_FLOW_OK when the EOS was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.</doc>
@@ -1870,7 +1786,6 @@ gst_app_src_set_callbacks().</doc>
       </field>
       <field name="push_sample">
         <callback name="push_sample">
-          
           <return-value transfer-ownership="none">
             <doc xml:space="preserve">#GST_FLOW_OK when the buffer was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1892,7 +1807,6 @@ extracted</doc>
       </field>
       <field name="push_buffer_list">
         <callback name="push_buffer_list">
-          
           <return-value transfer-ownership="none">
             <doc xml:space="preserve">#GST_FLOW_OK when the buffer list was successfully queued.
 #GST_FLOW_FLUSHING when @appsrc is not PAUSED or PLAYING.
@@ -1917,9 +1831,7 @@ extracted</doc>
         </array>
       </field>
     </record>
-    <record name="AppSrcPrivate" c:type="GstAppSrcPrivate" disguised="1">
-      
-    </record>
+    <record name="AppSrcPrivate" c:type="GstAppSrcPrivate" disguised="1"/>
     <enumeration name="AppStreamType" glib:type-name="GstAppStreamType" glib:get-type="gst_app_stream_type_get_type" c:type="GstAppStreamType">
       <doc xml:space="preserve">The stream type.</doc>
       <member name="stream" value="0" c:identifier="GST_APP_STREAM_TYPE_STREAM" glib:nick="stream">
@@ -1936,28 +1848,24 @@ such as in a local file.</doc>
       </member>
     </enumeration>
     <function-macro name="IS_APP_SINK" c:identifier="GST_IS_APP_SINK" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_APP_SINK_CLASS" c:identifier="GST_IS_APP_SINK_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_APP_SRC" c:identifier="GST_IS_APP_SRC" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_APP_SRC_CLASS" c:identifier="GST_IS_APP_SRC_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>

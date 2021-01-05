@@ -9,42 +9,36 @@ and/or use gtk-doc annotations.  -->
   <c:include name="gst/rtp/rtp.h"/>
   <namespace name="GstRtp" version="1.0" shared-library="libgstrtp-1.0.so.0" c:identifier-prefixes="Gst" c:symbol-prefixes="gst">
     <function-macro name="IS_RTP_BASE_AUDIO_PAYLOAD" c:identifier="GST_IS_RTP_BASE_AUDIO_PAYLOAD" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_RTP_BASE_AUDIO_PAYLOAD_CLASS" c:identifier="GST_IS_RTP_BASE_AUDIO_PAYLOAD_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_RTP_BASE_DEPAYLOAD" c:identifier="GST_IS_RTP_BASE_DEPAYLOAD" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_RTP_BASE_DEPAYLOAD_CLASS" c:identifier="GST_IS_RTP_BASE_DEPAYLOAD_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_RTP_BASE_PAYLOAD" c:identifier="GST_IS_RTP_BASE_PAYLOAD" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="IS_RTP_BASE_PAYLOAD_CLASS" c:identifier="GST_IS_RTP_BASE_PAYLOAD_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -61,7 +55,6 @@ An RTCP buffer consists of 1 or more #GstRTCPPacket structures that you can
 retrieve with gst_rtcp_buffer_get_first_packet(). #GstRTCPPacket acts as a pointer
 into the RTCP buffer; you can move to the next packet with
 gst_rtcp_packet_move_to_next().</doc>
-      
       <field name="buffer" writable="1">
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
       </field>
@@ -71,7 +64,6 @@ gst_rtcp_packet_move_to_next().</doc>
       <method name="add_packet" c:identifier="gst_rtcp_buffer_add_packet">
         <doc xml:space="preserve">Add a new packet of @type to @rtcp. @packet will point to the newly created
 packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the packet could be created. This function returns %FALSE
 if the max mtu is exceeded for the buffer.</doc>
@@ -95,7 +87,6 @@ if the max mtu is exceeded for the buffer.</doc>
       <method name="get_first_packet" c:identifier="gst_rtcp_buffer_get_first_packet">
         <doc xml:space="preserve">Initialize a new #GstRTCPPacket pointer that points to the first packet in
 @rtcp.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if the packet existed in @rtcp.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -113,7 +104,6 @@ if the max mtu is exceeded for the buffer.</doc>
       </method>
       <method name="get_packet_count" c:identifier="gst_rtcp_buffer_get_packet_count">
         <doc xml:space="preserve">Get the number of RTCP packets in @rtcp.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the number of RTCP packets in @rtcp.</doc>
           <type name="guint" c:type="guint"/>
@@ -131,7 +121,6 @@ after gst_rtcp_buffer_map() and after adding the RTCP items to the new buffer.
 
 The function adjusts the size of @rtcp with the total length of all the
 added packets.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -145,7 +134,6 @@ added packets.</doc>
       <function name="map" c:identifier="gst_rtcp_buffer_map">
         <doc xml:space="preserve">Open @buffer for reading or writing, depending on @flags. The resulting RTCP
 buffer state is stored in @rtcp.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -167,7 +155,6 @@ buffer state is stored in @rtcp.</doc>
       <function name="new" c:identifier="gst_rtcp_buffer_new">
         <doc xml:space="preserve">Create a new buffer for constructing RTCP packets. The packet will have a
 maximum size of @mtu.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -183,7 +170,6 @@ maximum size of @mtu.</doc>
         <doc xml:space="preserve">Create a new buffer and set the data to a copy of @len
 bytes of @data and the size to @len. The data will be freed when the buffer
 is freed.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer with a copy of @data and of size @len.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -205,7 +191,6 @@ is freed.</doc>
         <doc xml:space="preserve">Create a new buffer and set the data and size of the buffer to @data and @len
 respectively. @data will be freed when the buffer is unreffed, so this
 function transfers ownership of @data to the new buffer.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer with @data and of size @len.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -226,7 +211,6 @@ function transfers ownership of @data to the new buffer.</doc>
       <function name="validate" c:identifier="gst_rtcp_buffer_validate">
         <doc xml:space="preserve">Check if the data pointed to by @buffer is a valid RTCP packet using
 gst_rtcp_buffer_validate_data().</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer is a valid RTCP packet.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -243,7 +227,6 @@ gst_rtcp_buffer_validate_data().</doc>
 non-reduced size RTCP packet.
 Use this function to validate a packet before using the other functions in
 this module.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if the data points to a valid RTCP packet.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -269,7 +252,6 @@ this module.
 This function is updated to support reduced size rtcp packets according to
 RFC 5506 and will validate full compound RTCP packets as well as reduced
 size RTCP packets.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if the data points to a valid RTCP packet.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -290,7 +272,6 @@ size RTCP packets.</doc>
       <function name="validate_reduced" c:identifier="gst_rtcp_buffer_validate_reduced" version="1.6">
         <doc xml:space="preserve">Check if the data pointed to by @buffer is a valid RTCP packet using
 gst_rtcp_buffer_validate_reduced().</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer is a valid RTCP packet.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -352,7 +333,6 @@ gst_rtcp_buffer_validate_reduced().</doc>
     <record name="RTCPPacket" c:type="GstRTCPPacket">
       <doc xml:space="preserve">Data structure that points to a packet at @offset in @buffer.
 The size of the structure is made public to allow stack allocations.</doc>
-      
       <field name="rtcp" writable="1">
         <doc xml:space="preserve">pointer to RTCP buffer</doc>
         <type name="RTCPBuffer" c:type="GstRTCPBuffer*"/>
@@ -386,7 +366,6 @@ The size of the structure is made public to allow stack allocations.</doc>
         <doc xml:space="preserve">Add profile-specific extension @data to @packet. If @packet already
 contains profile-specific extension @data will be appended to the existing
 extension.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the profile specific extension data was added.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -410,7 +389,6 @@ extension.</doc>
       </method>
       <method name="add_rb" c:identifier="gst_rtcp_packet_add_rb">
         <doc xml:space="preserve">Add a new report block to @packet with the given values.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the packet was created. This function can return %FALSE if
 the max MTU is exceeded or the number of report blocks is greater than
@@ -454,7 +432,6 @@ the max MTU is exceeded or the number of report blocks is greater than
       </method>
       <method name="app_get_data" c:identifier="gst_rtcp_packet_app_get_data" version="1.10">
         <doc xml:space="preserve">Get the application-dependent data attached to a RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A pointer to the data</doc>
           <type name="guint8" c:type="guint8*"/>
@@ -469,7 +446,6 @@ the max MTU is exceeded or the number of report blocks is greater than
       <method name="app_get_data_length" c:identifier="gst_rtcp_packet_app_get_data_length" version="1.10">
         <doc xml:space="preserve">Get the length of the application-dependent data attached to an APP
 @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The length of data in 32-bit words.</doc>
           <type name="guint16" c:type="guint16"/>
@@ -483,7 +459,6 @@ the max MTU is exceeded or the number of report blocks is greater than
       </method>
       <method name="app_get_name" c:identifier="gst_rtcp_packet_app_get_name" version="1.10">
         <doc xml:space="preserve">Get the name field of the APP @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The 4-byte name field, not zero-terminated.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -497,7 +472,6 @@ the max MTU is exceeded or the number of report blocks is greater than
       </method>
       <method name="app_get_ssrc" c:identifier="gst_rtcp_packet_app_get_ssrc" version="1.10">
         <doc xml:space="preserve">Get the SSRC/CSRC field of the APP @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The SSRC/CSRC.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -511,7 +485,6 @@ the max MTU is exceeded or the number of report blocks is greater than
       </method>
       <method name="app_get_subtype" c:identifier="gst_rtcp_packet_app_get_subtype" version="1.10">
         <doc xml:space="preserve">Get the subtype field of the APP @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The subtype.</doc>
           <type name="guint8" c:type="guint8"/>
@@ -526,7 +499,6 @@ the max MTU is exceeded or the number of report blocks is greater than
       <method name="app_set_data_length" c:identifier="gst_rtcp_packet_app_set_data_length" version="1.10">
         <doc xml:space="preserve">Set the length of the application-dependent data attached to an APP
 @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was enough space in the packet to add this much
 data.</doc>
@@ -545,7 +517,6 @@ data.</doc>
       </method>
       <method name="app_set_name" c:identifier="gst_rtcp_packet_app_set_name" version="1.10">
         <doc xml:space="preserve">Set the name field of the APP @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -562,7 +533,6 @@ data.</doc>
       </method>
       <method name="app_set_ssrc" c:identifier="gst_rtcp_packet_app_set_ssrc" version="1.10">
         <doc xml:space="preserve">Set the SSRC/CSRC field of the APP @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -579,7 +549,6 @@ data.</doc>
       </method>
       <method name="app_set_subtype" c:identifier="gst_rtcp_packet_app_set_subtype" version="1.10">
         <doc xml:space="preserve">Set the subtype field of the APP @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -596,7 +565,6 @@ data.</doc>
       </method>
       <method name="bye_add_ssrc" c:identifier="gst_rtcp_packet_bye_add_ssrc">
         <doc xml:space="preserve">Add @ssrc to the BYE @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the ssrc was added. This function can return %FALSE if
 the max MTU is exceeded or the number of sources blocks is greater than
@@ -616,7 +584,6 @@ the max MTU is exceeded or the number of sources blocks is greater than
       </method>
       <method name="bye_add_ssrcs" c:identifier="gst_rtcp_packet_bye_add_ssrcs">
         <doc xml:space="preserve">Adds @len SSRCs in @ssrc to BYE @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the all the SSRCs were added. This function can return %FALSE if
 the max MTU is exceeded or the number of sources blocks is greater than
@@ -642,7 +609,6 @@ the max MTU is exceeded or the number of sources blocks is greater than
       </method>
       <method name="bye_get_nth_ssrc" c:identifier="gst_rtcp_packet_bye_get_nth_ssrc">
         <doc xml:space="preserve">Get the @nth SSRC of the BYE @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The @nth SSRC of @packet.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -660,7 +626,6 @@ the max MTU is exceeded or the number of sources blocks is greater than
       </method>
       <method name="bye_get_reason" c:identifier="gst_rtcp_packet_bye_get_reason">
         <doc xml:space="preserve">Get the reason in @packet.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">The reason for the BYE @packet or NULL if the packet did not contain
 a reason string. The string must be freed with g_free() after usage.</doc>
@@ -675,7 +640,6 @@ a reason string. The string must be freed with g_free() after usage.</doc>
       </method>
       <method name="bye_get_reason_len" c:identifier="gst_rtcp_packet_bye_get_reason_len">
         <doc xml:space="preserve">Get the length of the reason string.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The length of the reason string or 0 when there is no reason string
 present.</doc>
@@ -690,7 +654,6 @@ present.</doc>
       </method>
       <method name="bye_get_ssrc_count" c:identifier="gst_rtcp_packet_bye_get_ssrc_count">
         <doc xml:space="preserve">Get the number of SSRC fields in @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of SSRC fields in @packet.</doc>
           <type name="guint" c:type="guint"/>
@@ -704,7 +667,6 @@ present.</doc>
       </method>
       <method name="bye_set_reason" c:identifier="gst_rtcp_packet_bye_set_reason">
         <doc xml:space="preserve">Set the reason string to @reason in @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if the string could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -723,7 +685,6 @@ present.</doc>
       <method name="copy_profile_specific_ext" c:identifier="gst_rtcp_packet_copy_profile_specific_ext" version="1.10">
         <doc xml:space="preserve">The profile-specific extension data is copied into a new allocated
 memory area @data. This must be freed with g_free() after usage.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was valid data.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -747,7 +708,6 @@ memory area @data. This must be freed with g_free() after usage.</doc>
       </method>
       <method name="fb_get_fci" c:identifier="gst_rtcp_packet_fb_get_fci">
         <doc xml:space="preserve">Get the Feedback Control Information attached to a RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a pointer to the FCI</doc>
           <type name="guint8" c:type="guint8*"/>
@@ -762,7 +722,6 @@ memory area @data. This must be freed with g_free() after usage.</doc>
       <method name="fb_get_fci_length" c:identifier="gst_rtcp_packet_fb_get_fci_length">
         <doc xml:space="preserve">Get the length of the Feedback Control Information attached to a
 RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The length of the FCI in 32-bit words.</doc>
           <type name="guint16" c:type="guint16"/>
@@ -776,7 +735,6 @@ RTPFB or PSFB @packet.</doc>
       </method>
       <method name="fb_get_media_ssrc" c:identifier="gst_rtcp_packet_fb_get_media_ssrc">
         <doc xml:space="preserve">Get the media SSRC field of the RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the media SSRC.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -790,7 +748,6 @@ RTPFB or PSFB @packet.</doc>
       </method>
       <method name="fb_get_sender_ssrc" c:identifier="gst_rtcp_packet_fb_get_sender_ssrc">
         <doc xml:space="preserve">Get the sender SSRC field of the RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the sender SSRC.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -804,7 +761,6 @@ RTPFB or PSFB @packet.</doc>
       </method>
       <method name="fb_get_type" c:identifier="gst_rtcp_packet_fb_get_type">
         <doc xml:space="preserve">Get the feedback message type of the FB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The feedback message type.</doc>
           <type name="RTCPFBType" c:type="GstRTCPFBType"/>
@@ -819,7 +775,6 @@ RTPFB or PSFB @packet.</doc>
       <method name="fb_set_fci_length" c:identifier="gst_rtcp_packet_fb_set_fci_length">
         <doc xml:space="preserve">Set the length of the Feedback Control Information attached to a
 RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was enough space in the packet to add this much FCI</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -837,7 +792,6 @@ RTPFB or PSFB @packet.</doc>
       </method>
       <method name="fb_set_media_ssrc" c:identifier="gst_rtcp_packet_fb_set_media_ssrc">
         <doc xml:space="preserve">Set the media SSRC field of the RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -854,7 +808,6 @@ RTPFB or PSFB @packet.</doc>
       </method>
       <method name="fb_set_sender_ssrc" c:identifier="gst_rtcp_packet_fb_set_sender_ssrc">
         <doc xml:space="preserve">Set the sender SSRC field of the RTPFB or PSFB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -871,7 +824,6 @@ RTPFB or PSFB @packet.</doc>
       </method>
       <method name="fb_set_type" c:identifier="gst_rtcp_packet_fb_set_type">
         <doc xml:space="preserve">Set the feedback message type of the FB @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -888,7 +840,6 @@ RTPFB or PSFB @packet.</doc>
       </method>
       <method name="get_count" c:identifier="gst_rtcp_packet_get_count">
         <doc xml:space="preserve">Get the count field in @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The count field in @packet or -1 if @packet does not point to a
 valid packet.</doc>
@@ -904,7 +855,6 @@ valid packet.</doc>
       <method name="get_length" c:identifier="gst_rtcp_packet_get_length">
         <doc xml:space="preserve">Get the length field of @packet. This is the length of the packet in
 32-bit words minus one.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The length field of @packet.</doc>
           <type name="guint16" c:type="guint16"/>
@@ -918,7 +868,6 @@ valid packet.</doc>
       </method>
       <method name="get_padding" c:identifier="gst_rtcp_packet_get_padding">
         <doc xml:space="preserve">Get the packet padding of the packet pointed to by @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">If the packet has the padding bit set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -931,7 +880,6 @@ valid packet.</doc>
         </parameters>
       </method>
       <method name="get_profile_specific_ext" c:identifier="gst_rtcp_packet_get_profile_specific_ext" version="1.10">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was valid data.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -954,7 +902,6 @@ valid packet.</doc>
         </parameters>
       </method>
       <method name="get_profile_specific_ext_length" c:identifier="gst_rtcp_packet_get_profile_specific_ext_length" version="1.10">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of 32-bit words containing profile-specific extension
          data from @packet.</doc>
@@ -970,7 +917,6 @@ valid packet.</doc>
       <method name="get_rb" c:identifier="gst_rtcp_packet_get_rb">
         <doc xml:space="preserve">Parse the values of the @nth report block in @packet and store the result in
 the values.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1015,7 +961,6 @@ the values.</doc>
       </method>
       <method name="get_rb_count" c:identifier="gst_rtcp_packet_get_rb_count">
         <doc xml:space="preserve">Get the number of report blocks in @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of report blocks in @packet.</doc>
           <type name="guint" c:type="guint"/>
@@ -1029,7 +974,6 @@ the values.</doc>
       </method>
       <method name="get_type" c:identifier="gst_rtcp_packet_get_type">
         <doc xml:space="preserve">Get the packet type of the packet pointed to by @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The packet type or GST_RTCP_TYPE_INVALID when @packet is not
 pointing to a valid packet.</doc>
@@ -1045,7 +989,6 @@ pointing to a valid packet.</doc>
       <method name="move_to_next" c:identifier="gst_rtcp_packet_move_to_next">
         <doc xml:space="preserve">Move the packet pointer @packet to the next packet in the payload.
 Use gst_rtcp_buffer_get_first_packet() to initialize @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @packet is pointing to a valid packet after calling this
 function.</doc>
@@ -1060,7 +1003,6 @@ function.</doc>
       </method>
       <method name="remove" c:identifier="gst_rtcp_packet_remove">
         <doc xml:space="preserve">Removes the packet pointed to by @packet and moves pointer to the next one</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @packet is pointing to a valid packet after calling this
 function.</doc>
@@ -1075,7 +1017,6 @@ function.</doc>
       </method>
       <method name="rr_get_ssrc" c:identifier="gst_rtcp_packet_rr_get_ssrc">
         <doc xml:space="preserve">Get the ssrc field of the RR @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the ssrc.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -1089,7 +1030,6 @@ function.</doc>
       </method>
       <method name="rr_set_ssrc" c:identifier="gst_rtcp_packet_rr_set_ssrc">
         <doc xml:space="preserve">Set the ssrc field of the RR @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1106,7 +1046,6 @@ function.</doc>
       </method>
       <method name="sdes_add_entry" c:identifier="gst_rtcp_packet_sdes_add_entry">
         <doc xml:space="preserve">Add a new SDES entry to the current item in @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the item could be added, %FALSE if the MTU has been
 reached.</doc>
@@ -1135,7 +1074,6 @@ reached.</doc>
       </method>
       <method name="sdes_add_item" c:identifier="gst_rtcp_packet_sdes_add_item">
         <doc xml:space="preserve">Add a new SDES item for @ssrc to @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the item could be added, %FALSE if the maximum amount of
 items has been exceeded for the SDES packet or the MTU has been reached.</doc>
@@ -1155,7 +1093,6 @@ items has been exceeded for the SDES packet or the MTU has been reached.</doc>
       <method name="sdes_copy_entry" c:identifier="gst_rtcp_packet_sdes_copy_entry">
         <doc xml:space="preserve">This function is like gst_rtcp_packet_sdes_get_entry() but it returns a
 null-terminated copy of the data instead. use g_free() after usage.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was valid data.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1183,7 +1120,6 @@ null-terminated copy of the data instead. use g_free() after usage.</doc>
       </method>
       <method name="sdes_first_entry" c:identifier="gst_rtcp_packet_sdes_first_entry">
         <doc xml:space="preserve">Move to the first SDES entry in the current item.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was a first entry.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1197,7 +1133,6 @@ null-terminated copy of the data instead. use g_free() after usage.</doc>
       </method>
       <method name="sdes_first_item" c:identifier="gst_rtcp_packet_sdes_first_item">
         <doc xml:space="preserve">Move to the first SDES item in @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if there was a first item.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1217,7 +1152,6 @@ bytes.
 When @type refers to a text item, @data will point to a UTF8 string. Note
 that this UTF8 string is NOT null-terminated. Use
 gst_rtcp_packet_sdes_copy_entry() to get a null-terminated copy of the entry.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was valid data.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1245,7 +1179,6 @@ gst_rtcp_packet_sdes_copy_entry() to get a null-terminated copy of the entry.</d
       </method>
       <method name="sdes_get_item_count" c:identifier="gst_rtcp_packet_sdes_get_item_count">
         <doc xml:space="preserve">Get the number of items in the SDES packet @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of items in @packet.</doc>
           <type name="guint" c:type="guint"/>
@@ -1259,7 +1192,6 @@ gst_rtcp_packet_sdes_copy_entry() to get a null-terminated copy of the entry.</d
       </method>
       <method name="sdes_get_ssrc" c:identifier="gst_rtcp_packet_sdes_get_ssrc">
         <doc xml:space="preserve">Get the SSRC of the current SDES item.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the SSRC of the current item.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -1273,7 +1205,6 @@ gst_rtcp_packet_sdes_copy_entry() to get a null-terminated copy of the entry.</d
       </method>
       <method name="sdes_next_entry" c:identifier="gst_rtcp_packet_sdes_next_entry">
         <doc xml:space="preserve">Move to the next SDES entry in the current item.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if there was a next entry.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1287,7 +1218,6 @@ gst_rtcp_packet_sdes_copy_entry() to get a null-terminated copy of the entry.</d
       </method>
       <method name="sdes_next_item" c:identifier="gst_rtcp_packet_sdes_next_item">
         <doc xml:space="preserve">Move to the next SDES item in @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if there was a next item.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1303,7 +1233,6 @@ gst_rtcp_packet_sdes_copy_entry() to get a null-terminated copy of the entry.</d
         <doc xml:space="preserve">Set the @nth new report block in @packet with the given values.
 
 Note: Not implemented.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1348,7 +1277,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="sr_get_sender_info" c:identifier="gst_rtcp_packet_sr_get_sender_info">
         <doc xml:space="preserve">Parse the SR sender info and store the values.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1381,7 +1309,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="sr_set_sender_info" c:identifier="gst_rtcp_packet_sr_set_sender_info">
         <doc xml:space="preserve">Set the given values in the SR packet @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1414,7 +1341,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_first_rb" c:identifier="gst_rtcp_packet_xr_first_rb" version="1.16">
         <doc xml:space="preserve">Move to the first extended report block in XR @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if there was a first extended report block.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1427,7 +1353,6 @@ Note: Not implemented.</doc>
         </parameters>
       </method>
       <method name="xr_get_block_length" c:identifier="gst_rtcp_packet_xr_get_block_length" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of 32-bit words containing type-specific block
          data from @packet.</doc>
@@ -1442,7 +1367,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_block_type" c:identifier="gst_rtcp_packet_xr_get_block_type" version="1.16">
         <doc xml:space="preserve">Get the extended report block type of the XR @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The extended report block type.</doc>
           <type name="RTCPXRType" c:type="GstRTCPXRType"/>
@@ -1456,7 +1380,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_dlrr_block" c:identifier="gst_rtcp_packet_xr_get_dlrr_block" version="1.16">
         <doc xml:space="preserve">Parse the extended report block for DLRR report block type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1486,7 +1409,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_prt_by_seq" c:identifier="gst_rtcp_packet_xr_get_prt_by_seq" version="1.16">
         <doc xml:space="preserve">Retrieve the packet receipt time of @seq which ranges in [begin_seq, end_seq).</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block returns the receipt time correctly.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1508,7 +1430,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_prt_info" c:identifier="gst_rtcp_packet_xr_get_prt_info" version="1.16">
         <doc xml:space="preserve">Parse the Packet Recept Times Report Block from a XR @packet</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1538,7 +1459,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_rle_info" c:identifier="gst_rtcp_packet_xr_get_rle_info" version="1.16">
         <doc xml:space="preserve">Parse the extended report block for Loss RLE and Duplicated LRE block type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1572,7 +1492,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_rle_nth_chunk" c:identifier="gst_rtcp_packet_xr_get_rle_nth_chunk" version="1.16">
         <doc xml:space="preserve">Retrieve actual chunk data.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block returns chunk correctly.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1593,7 +1512,6 @@ Note: Not implemented.</doc>
         </parameters>
       </method>
       <method name="xr_get_rrt" c:identifier="gst_rtcp_packet_xr_get_rrt" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block returns the reference time correctly.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1611,7 +1529,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_ssrc" c:identifier="gst_rtcp_packet_xr_get_ssrc" version="1.16">
         <doc xml:space="preserve">Get the ssrc field of the XR @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the ssrc.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -1625,7 +1542,6 @@ Note: Not implemented.</doc>
       </method>
       <method name="xr_get_summary_info" c:identifier="gst_rtcp_packet_xr_get_summary_info" version="1.16">
         <doc xml:space="preserve">Extract a basic information from static summary report block of XR @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1652,7 +1568,6 @@ Note: Not implemented.</doc>
       <method name="xr_get_summary_jitter" c:identifier="gst_rtcp_packet_xr_get_summary_jitter" version="1.16">
         <doc xml:space="preserve">Extract jitter information from the statistics summary. If the jitter flag in
 a block header is set as zero, all of jitters will be zero.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1683,7 +1598,6 @@ a block header is set as zero, all of jitters will be zero.</doc>
       <method name="xr_get_summary_pkt" c:identifier="gst_rtcp_packet_xr_get_summary_pkt" version="1.16">
         <doc xml:space="preserve">Get the number of lost or duplicate packets. If the flag in a block header
 is set as zero, @lost_packets or @dup_packets will be zero.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1705,7 +1619,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
       </method>
       <method name="xr_get_summary_ttl" c:identifier="gst_rtcp_packet_xr_get_summary_ttl" version="1.16">
         <doc xml:space="preserve">Extract the value of ttl for ipv4, or hop limit for ipv6.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1738,7 +1651,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_burst_metrics" c:identifier="gst_rtcp_packet_xr_get_voip_burst_metrics" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1767,7 +1679,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_configuration_params" c:identifier="gst_rtcp_packet_xr_get_voip_configuration_params" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1788,7 +1699,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_delay_metrics" c:identifier="gst_rtcp_packet_xr_get_voip_delay_metrics" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1809,7 +1719,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_jitter_buffer_params" c:identifier="gst_rtcp_packet_xr_get_voip_jitter_buffer_params" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1834,7 +1743,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_metrics_ssrc" c:identifier="gst_rtcp_packet_xr_get_voip_metrics_ssrc" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1851,7 +1759,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_packet_metrics" c:identifier="gst_rtcp_packet_xr_get_voip_packet_metrics" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1872,7 +1779,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_quality_metrics" c:identifier="gst_rtcp_packet_xr_get_voip_quality_metrics" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1901,7 +1807,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
         </parameters>
       </method>
       <method name="xr_get_voip_signal_metrics" c:identifier="gst_rtcp_packet_xr_get_voip_signal_metrics" version="1.16">
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the report block is correctly parsed.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1931,7 +1836,6 @@ is set as zero, @lost_packets or @dup_packets will be zero.</doc>
       </method>
       <method name="xr_next_rb" c:identifier="gst_rtcp_packet_xr_next_rb" version="1.16">
         <doc xml:space="preserve">Move to the next extended report block in XR @packet.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if there was a next extended report block.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -2037,44 +1941,36 @@ according to the [IANA registry](https://www.iana.org/assignments/rtcp-xr-block-
     </enumeration>
     <constant name="RTCP_MAX_BYE_SSRC_COUNT" value="31" c:type="GST_RTCP_MAX_BYE_SSRC_COUNT">
       <doc xml:space="preserve">The maximum amount of SSRCs in a BYE packet.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTCP_MAX_RB_COUNT" value="31" c:type="GST_RTCP_MAX_RB_COUNT">
       <doc xml:space="preserve">The maximum amount of Receiver report blocks in RR and SR messages.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTCP_MAX_SDES" value="255" c:type="GST_RTCP_MAX_SDES">
       <doc xml:space="preserve">The maximum text length for an SDES item.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTCP_MAX_SDES_ITEM_COUNT" value="31" c:type="GST_RTCP_MAX_SDES_ITEM_COUNT">
       <doc xml:space="preserve">The maximum amount of SDES items.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTCP_REDUCED_SIZE_VALID_MASK" value="57592" c:type="GST_RTCP_REDUCED_SIZE_VALID_MASK">
       <doc xml:space="preserve">Mask for version, padding bit and packet type pair allowing reduced size
 packets, basically it accepts other types than RR and SR</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTCP_VALID_MASK" value="57598" c:type="GST_RTCP_VALID_MASK">
       <doc xml:space="preserve">Mask for version, padding bit and packet type pair</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTCP_VALID_VALUE" value="200" c:type="GST_RTCP_VALID_VALUE">
       <doc xml:space="preserve">Valid value for the first two bytes of an RTCP packet after applying
 #GST_RTCP_VALID_MASK to them.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTCP_VERSION" value="2" c:type="GST_RTCP_VERSION">
       <doc xml:space="preserve">The supported RTCP version 2.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <class name="RTPBaseAudioPayload" c:symbol-prefix="rtp_base_audio_payload" c:type="GstRTPBaseAudioPayload" parent="RTPBasePayload" glib:type-name="GstRTPBaseAudioPayload" glib:get-type="gst_rtp_base_audio_payload_get_type" glib:type-struct="RTPBaseAudioPayloadClass">
@@ -2106,7 +2002,6 @@ GstRTPBaseAudioPayload derives from GstRTPBasePayload, the child element
 must set any variables or call/override any functions required by that base
 class. The child element does not need to override any other functions
 specific to GstRTPBaseAudioPayload.</doc>
-      
       <method name="flush" c:identifier="gst_rtp_base_audio_payload_flush">
         <doc xml:space="preserve">Create an RTP buffer and store @payload_len bytes of the adapter as the
 payload. Set the timestamp on the new buffer to @timestamp before pushing
@@ -2114,7 +2009,6 @@ the buffer downstream.
 
 If @payload_len is -1, all pending bytes will be flushed. If @timestamp is
 -1, the timestamp will be calculated automatically.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -2136,7 +2030,6 @@ If @payload_len is -1, all pending bytes will be flushed. If @timestamp is
       </method>
       <method name="get_adapter" c:identifier="gst_rtp_base_audio_payload_get_adapter">
         <doc xml:space="preserve">Gets the internal adapter used by the depayloader.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GstAdapter.</doc>
           <type name="GstBase.Adapter" c:type="GstAdapter*"/>
@@ -2152,7 +2045,6 @@ If @payload_len is -1, all pending bytes will be flushed. If @timestamp is
         <doc xml:space="preserve">Create an RTP buffer and store @payload_len bytes of @data as the
 payload. Set the timestamp on the new buffer to @timestamp before pushing
 the buffer downstream.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -2181,7 +2073,6 @@ the buffer downstream.</doc>
       <method name="set_frame_based" c:identifier="gst_rtp_base_audio_payload_set_frame_based">
         <doc xml:space="preserve">Tells #GstRTPBaseAudioPayload that the child element is for a frame based
 audio codec</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2194,7 +2085,6 @@ audio codec</doc>
       </method>
       <method name="set_frame_options" c:identifier="gst_rtp_base_audio_payload_set_frame_options">
         <doc xml:space="preserve">Sets the options for frame based audio codecs.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2216,7 +2106,6 @@ audio codec</doc>
       <method name="set_sample_based" c:identifier="gst_rtp_base_audio_payload_set_sample_based">
         <doc xml:space="preserve">Tells #GstRTPBaseAudioPayload that the child element is for a sample based
 audio codec</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2229,7 +2118,6 @@ audio codec</doc>
       </method>
       <method name="set_sample_options" c:identifier="gst_rtp_base_audio_payload_set_sample_options">
         <doc xml:space="preserve">Sets the options for sample based audio codecs.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2246,7 +2134,6 @@ audio codec</doc>
       </method>
       <method name="set_samplebits_options" c:identifier="gst_rtp_base_audio_payload_set_samplebits_options">
         <doc xml:space="preserve">Sets the options for sample based audio codecs.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2290,7 +2177,6 @@ audio codec</doc>
     </class>
     <record name="RTPBaseAudioPayloadClass" c:type="GstRTPBaseAudioPayloadClass" glib:is-gtype-struct-for="RTPBaseAudioPayload">
       <doc xml:space="preserve">Base class for audio RTP payloader.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">the parent class</doc>
         <type name="RTPBasePayloadClass" c:type="GstRTPBasePayloadClass"/>
@@ -2301,14 +2187,10 @@ audio codec</doc>
         </array>
       </field>
     </record>
-    <record name="RTPBaseAudioPayloadPrivate" c:type="GstRTPBaseAudioPayloadPrivate" disguised="1">
-      
-    </record>
+    <record name="RTPBaseAudioPayloadPrivate" c:type="GstRTPBaseAudioPayloadPrivate" disguised="1"/>
     <class name="RTPBaseDepayload" c:symbol-prefix="rtp_base_depayload" c:type="GstRTPBaseDepayload" parent="Gst.Element" abstract="1" glib:type-name="GstRTPBaseDepayload" glib:get-type="gst_rtp_base_depayload_get_type" glib:type-struct="RTPBaseDepayloadClass">
       <doc xml:space="preserve">Provides a base class for RTP depayloaders</doc>
-      
       <virtual-method name="handle_event">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2322,7 +2204,6 @@ audio codec</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="packet_lost">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2336,7 +2217,6 @@ audio codec</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="process">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
         </return-value>
@@ -2350,7 +2230,6 @@ audio codec</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="process_rtp_packet">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
         </return-value>
@@ -2364,7 +2243,6 @@ audio codec</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="set_caps">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2379,7 +2257,6 @@ audio codec</doc>
       </virtual-method>
       <method name="is_source_info_enabled" c:identifier="gst_rtp_base_depayload_is_source_info_enabled" version="1.16">
         <doc xml:space="preserve">Queries whether #GstRTPSourceMeta will be added to depayloaded buffers.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if source-info is enabled.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -2397,7 +2274,6 @@ audio codec</doc>
 
 This function will by default apply the last incoming timestamp on
 the outgoing buffer when it didn't have a timestamp already.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -2416,7 +2292,6 @@ the outgoing buffer when it didn't have a timestamp already.</doc>
       <method name="push_list" c:identifier="gst_rtp_base_depayload_push_list">
         <doc xml:space="preserve">Push @out_list to the peer of @filter. This function takes ownership of
 @out_list.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -2434,7 +2309,6 @@ the outgoing buffer when it didn't have a timestamp already.</doc>
       </method>
       <method name="set_source_info_enabled" c:identifier="gst_rtp_base_depayload_set_source_info_enabled" version="1.16">
         <doc xml:space="preserve">Enable or disable adding #GstRTPSourceMeta to depayloaded buffers.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2508,14 +2382,12 @@ the last processed buffer and current state of the stream being depayloaded:
     </class>
     <record name="RTPBaseDepayloadClass" c:type="GstRTPBaseDepayloadClass" glib:is-gtype-struct-for="RTPBaseDepayload">
       <doc xml:space="preserve">Base class for RTP depayloaders.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">the parent class</doc>
         <type name="Gst.ElementClass" c:type="GstElementClass"/>
       </field>
       <field name="set_caps">
         <callback name="set_caps">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -2531,7 +2403,6 @@ the last processed buffer and current state of the stream being depayloaded:
       </field>
       <field name="process">
         <callback name="process">
-          
           <return-value transfer-ownership="full">
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </return-value>
@@ -2547,7 +2418,6 @@ the last processed buffer and current state of the stream being depayloaded:
       </field>
       <field name="packet_lost">
         <callback name="packet_lost">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -2563,7 +2433,6 @@ the last processed buffer and current state of the stream being depayloaded:
       </field>
       <field name="handle_event">
         <callback name="handle_event">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -2579,7 +2448,6 @@ the last processed buffer and current state of the stream being depayloaded:
       </field>
       <field name="process_rtp_packet">
         <callback name="process_rtp_packet">
-          
           <return-value transfer-ownership="full">
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </return-value>
@@ -2599,14 +2467,10 @@ the last processed buffer and current state of the stream being depayloaded:
         </array>
       </field>
     </record>
-    <record name="RTPBaseDepayloadPrivate" c:type="GstRTPBaseDepayloadPrivate" disguised="1">
-      
-    </record>
+    <record name="RTPBaseDepayloadPrivate" c:type="GstRTPBaseDepayloadPrivate" disguised="1"/>
     <class name="RTPBasePayload" c:symbol-prefix="rtp_base_payload" c:type="GstRTPBasePayload" parent="Gst.Element" abstract="1" glib:type-name="GstRTPBasePayload" glib:get-type="gst_rtp_base_payload_get_type" glib:type-struct="RTPBasePayloadClass">
       <doc xml:space="preserve">Provides a base class for RTP payloaders</doc>
-      
       <virtual-method name="get_caps">
-        
         <return-value transfer-ownership="full">
           <type name="Gst.Caps" c:type="GstCaps*"/>
         </return-value>
@@ -2623,7 +2487,6 @@ the last processed buffer and current state of the stream being depayloaded:
         </parameters>
       </virtual-method>
       <virtual-method name="handle_buffer">
-        
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
@@ -2637,7 +2500,6 @@ the last processed buffer and current state of the stream being depayloaded:
         </parameters>
       </virtual-method>
       <virtual-method name="query">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2654,7 +2516,6 @@ the last processed buffer and current state of the stream being depayloaded:
         </parameters>
       </virtual-method>
       <virtual-method name="set_caps">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2668,7 +2529,6 @@ the last processed buffer and current state of the stream being depayloaded:
         </parameters>
       </virtual-method>
       <virtual-method name="sink_event">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2682,7 +2542,6 @@ the last processed buffer and current state of the stream being depayloaded:
         </parameters>
       </virtual-method>
       <virtual-method name="src_event">
-        
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -2700,7 +2559,6 @@ the last processed buffer and current state of the stream being depayloaded:
 minimum @csrc_count CSRCs, a payload length of @payload_len and padding of
 @pad_len. If @payload has #GstRTPBasePayload:source-info %TRUE additional
 CSRCs may be allocated and filled with RTP source information.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer that can hold an RTP packet with given
 parameters.</doc>
@@ -2729,7 +2587,6 @@ parameters.</doc>
         <doc xml:space="preserve">Count the total number of RTP sources found in the meta of @buffer, which
 will be automically added by gst_rtp_base_payload_allocate_output_buffer().
 If #GstRTPBasePayload:source-info is %FALSE the count will be 0.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of sources.</doc>
           <type name="guint" c:type="guint"/>
@@ -2748,7 +2605,6 @@ If #GstRTPBasePayload:source-info is %FALSE the count will be 0.</doc>
       <method name="is_filled" c:identifier="gst_rtp_base_payload_is_filled">
         <doc xml:space="preserve">Check if the packet with @size and @duration would exceed the configured
 maximum size.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the packet of @size and @duration would exceed the
 configured MTU or max_ptime.</doc>
@@ -2772,7 +2628,6 @@ configured MTU or max_ptime.</doc>
       <method name="is_source_info_enabled" c:identifier="gst_rtp_base_payload_is_source_info_enabled" version="1.16">
         <doc xml:space="preserve">Queries whether the payloader will add contributing sources (CSRCs) to the
 RTP header from #GstRTPSourceMeta.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if source-info is enabled.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -2789,7 +2644,6 @@ RTP header from #GstRTPSourceMeta.</doc>
 seqnum and timestamp of the RTP buffer will be updated first.
 
 This function takes ownership of @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -2810,7 +2664,6 @@ This function takes ownership of @buffer.</doc>
 seqnum and timestamp of the RTP buffer will be updated first.
 
 This function takes ownership of @list.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstFlowReturn.</doc>
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
@@ -2830,7 +2683,6 @@ This function takes ownership of @list.</doc>
         <doc xml:space="preserve">Set the rtp options of the payloader. These options will be set in the caps
 of the payloader. Subclasses must call this method before calling
 gst_rtp_base_payload_push() or gst_rtp_base_payload_set_outcaps().</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2862,7 +2714,6 @@ gst_rtp_base_payload_push() or gst_rtp_base_payload_set_outcaps().</doc>
 
 Variable arguments should be in the form field name, field type
 (as a GType), value(s).  The last variable argument should be NULL.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the caps could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -2885,7 +2736,6 @@ Variable arguments should be in the form field name, field type
       <method name="set_source_info_enabled" c:identifier="gst_rtp_base_payload_set_source_info_enabled" version="1.16">
         <doc xml:space="preserve">Enable or disable adding contributing sources to RTP packets from
 #GstRTPSourceMeta.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3065,14 +2915,12 @@ the last processed buffer and current state of the stream being payloaded:
     </class>
     <record name="RTPBasePayloadClass" c:type="GstRTPBasePayloadClass" glib:is-gtype-struct-for="RTPBasePayload">
       <doc xml:space="preserve">Base class for audio RTP payloader.</doc>
-      
       <field name="parent_class">
         <doc xml:space="preserve">the parent class</doc>
         <type name="Gst.ElementClass" c:type="GstElementClass"/>
       </field>
       <field name="get_caps">
         <callback name="get_caps">
-          
           <return-value transfer-ownership="full">
             <type name="Gst.Caps" c:type="GstCaps*"/>
           </return-value>
@@ -3091,7 +2939,6 @@ the last processed buffer and current state of the stream being payloaded:
       </field>
       <field name="set_caps">
         <callback name="set_caps">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -3107,7 +2954,6 @@ the last processed buffer and current state of the stream being payloaded:
       </field>
       <field name="handle_buffer">
         <callback name="handle_buffer">
-          
           <return-value transfer-ownership="none">
             <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
           </return-value>
@@ -3123,7 +2969,6 @@ the last processed buffer and current state of the stream being payloaded:
       </field>
       <field name="sink_event">
         <callback name="sink_event">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -3139,7 +2984,6 @@ the last processed buffer and current state of the stream being payloaded:
       </field>
       <field name="src_event">
         <callback name="src_event">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -3155,7 +2999,6 @@ the last processed buffer and current state of the stream being payloaded:
       </field>
       <field name="query">
         <callback name="query">
-          
           <return-value transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
@@ -3178,14 +3021,11 @@ the last processed buffer and current state of the stream being payloaded:
         </array>
       </field>
     </record>
-    <record name="RTPBasePayloadPrivate" c:type="GstRTPBasePayloadPrivate" disguised="1">
-      
-    </record>
+    <record name="RTPBasePayloadPrivate" c:type="GstRTPBasePayloadPrivate" disguised="1"/>
     <record name="RTPBuffer" c:type="GstRTPBuffer">
       <doc xml:space="preserve">The GstRTPBuffer helper functions makes it easy to parse and create regular
 #GstBuffer objects that contain RTP payloads. These buffers are typically of
 'application/x-rtp' #GstCaps.</doc>
-      
       <field name="buffer" writable="1">
         <doc xml:space="preserve">pointer to RTP buffer</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -3220,7 +3060,6 @@ It will not work if there is already a header extension that does not follow
 the mechanism described in RFC 5285 or if there is a header extension with
 a two bytes header as described in RFC 5285. In that case, use
 gst_rtp_buffer_add_extension_twobytes_header()</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if header extension could be added</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3254,7 +3093,6 @@ It will not work if there is already a header extension that does not follow
 the mechanism described in RFC 5285 or if there is a header extension with
 a one byte header as described in RFC 5285. In that case, use
 gst_rtp_buffer_add_extension_onebyte_header()</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if header extension could be added</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3286,7 +3124,6 @@ gst_rtp_buffer_add_extension_onebyte_header()</doc>
       </method>
       <method name="get_csrc" c:identifier="gst_rtp_buffer_get_csrc">
         <doc xml:space="preserve">Get the CSRC at index @idx in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the CSRC at index @idx in host order.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -3304,7 +3141,6 @@ gst_rtp_buffer_add_extension_onebyte_header()</doc>
       </method>
       <method name="get_csrc_count" c:identifier="gst_rtp_buffer_get_csrc_count">
         <doc xml:space="preserve">Get the CSRC count of the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the CSRC count of @buffer.</doc>
           <type name="guint8" c:type="guint8"/>
@@ -3318,7 +3154,6 @@ gst_rtp_buffer_add_extension_onebyte_header()</doc>
       </method>
       <method name="get_extension" c:identifier="gst_rtp_buffer_get_extension">
         <doc xml:space="preserve">Check if the extension bit is set on the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer has the extension bit set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3339,7 +3174,6 @@ the extension data (not including the extension header) is placed in a new
 If @rtp did not contain an extension, this function will return %NULL, with
 @bits unchanged. If there is an extension header but no extension data then
 an empty #GBytes will be returned.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A new #GBytes if an extension header was present
 and %NULL otherwise.</doc>
@@ -3363,7 +3197,6 @@ the length of @data in 32 bits words.
 
 If @buffer did not contain an extension, this function will return %FALSE
 with @bits, @data and @wordlen unchanged.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer had the extension bit set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3392,7 +3225,6 @@ with @bits, @data and @wordlen unchanged.</doc>
       <method name="get_extension_onebyte_header" c:identifier="gst_rtp_buffer_get_extension_onebyte_header">
         <doc xml:space="preserve">Parses RFC 5285 style header extensions with a one byte header. It will
 return the nth extension with the requested id.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer had the requested header extension</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3426,7 +3258,6 @@ return the nth extension with the requested id.</doc>
       <method name="get_extension_twobytes_header" c:identifier="gst_rtp_buffer_get_extension_twobytes_header">
         <doc xml:space="preserve">Parses RFC 5285 style header extensions with a two bytes header. It will
 return the nth extension with the requested id.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer had the requested header extension</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3464,7 +3295,6 @@ return the nth extension with the requested id.</doc>
       <method name="get_header_len" c:identifier="gst_rtp_buffer_get_header_len">
         <doc xml:space="preserve">Return the total length of the header in @buffer. This include the length of
 the fixed header, the CSRC list and the extension header.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The total length of the header in @buffer.</doc>
           <type name="guint" c:type="guint"/>
@@ -3478,7 +3308,6 @@ the fixed header, the CSRC list and the extension header.</doc>
       </method>
       <method name="get_marker" c:identifier="gst_rtp_buffer_get_marker">
         <doc xml:space="preserve">Check if the marker bit is set on the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer has the marker bit set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3492,7 +3321,6 @@ the fixed header, the CSRC list and the extension header.</doc>
       </method>
       <method name="get_packet_len" c:identifier="gst_rtp_buffer_get_packet_len">
         <doc xml:space="preserve">Return the total length of the packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The total length of the packet in @buffer.</doc>
           <type name="guint" c:type="guint"/>
@@ -3506,7 +3334,6 @@ the fixed header, the CSRC list and the extension header.</doc>
       </method>
       <method name="get_padding" c:identifier="gst_rtp_buffer_get_padding">
         <doc xml:space="preserve">Check if the padding bit is set on the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @buffer has the padding bit set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3521,7 +3348,6 @@ the fixed header, the CSRC list and the extension header.</doc>
       <method name="get_payload" c:identifier="gst_rtp_buffer_get_payload" shadowed-by="get_payload_bytes" introspectable="0">
         <doc xml:space="preserve">Get a pointer to the payload data in @buffer. This pointer is valid as long
 as a reference to @buffer is held.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">A pointer
 to the payload data in @buffer.</doc>
@@ -3540,7 +3366,6 @@ to the payload data in @buffer.</doc>
         <doc xml:space="preserve">Create a buffer of the payload of the RTP packet in @buffer. This function
 will internally create a subbuffer of @buffer so that a memcpy can be
 avoided.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A new buffer with the data of the payload.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -3556,7 +3381,6 @@ avoided.</doc>
         <doc xml:space="preserve">Similar to gst_rtp_buffer_get_payload, but more suitable for language
 bindings usage. The return value is a pointer to a #GBytes structure
 containing the payload data in @rtp.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A new #GBytes containing the payload data in @rtp.</doc>
           <type name="GLib.Bytes" c:type="GBytes*"/>
@@ -3570,7 +3394,6 @@ containing the payload data in @rtp.</doc>
       </method>
       <method name="get_payload_len" c:identifier="gst_rtp_buffer_get_payload_len">
         <doc xml:space="preserve">Get the length of the payload of the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The length of the payload in @buffer.</doc>
           <type name="guint" c:type="guint"/>
@@ -3586,7 +3409,6 @@ containing the payload data in @rtp.</doc>
         <doc xml:space="preserve">Create a subbuffer of the payload of the RTP packet in @buffer. @offset bytes
 are skipped in the payload and the subbuffer will be of size @len.
 If @len is -1 the total payload starting from @offset is subbuffered.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A new buffer with the specified data of the payload.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -3608,7 +3430,6 @@ If @len is -1 the total payload starting from @offset is subbuffered.</doc>
       </method>
       <method name="get_payload_type" c:identifier="gst_rtp_buffer_get_payload_type">
         <doc xml:space="preserve">Get the payload type of the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The payload type.</doc>
           <type name="guint8" c:type="guint8"/>
@@ -3622,7 +3443,6 @@ If @len is -1 the total payload starting from @offset is subbuffered.</doc>
       </method>
       <method name="get_seq" c:identifier="gst_rtp_buffer_get_seq">
         <doc xml:space="preserve">Get the sequence number of the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The sequence number in host order.</doc>
           <type name="guint16" c:type="guint16"/>
@@ -3636,7 +3456,6 @@ If @len is -1 the total payload starting from @offset is subbuffered.</doc>
       </method>
       <method name="get_ssrc" c:identifier="gst_rtp_buffer_get_ssrc">
         <doc xml:space="preserve">Get the SSRC of the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the SSRC of @buffer in host order.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -3650,7 +3469,6 @@ If @len is -1 the total payload starting from @offset is subbuffered.</doc>
       </method>
       <method name="get_timestamp" c:identifier="gst_rtp_buffer_get_timestamp">
         <doc xml:space="preserve">Get the timestamp of the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The timestamp in host order.</doc>
           <type name="guint32" c:type="guint32"/>
@@ -3664,7 +3482,6 @@ If @len is -1 the total payload starting from @offset is subbuffered.</doc>
       </method>
       <method name="get_version" c:identifier="gst_rtp_buffer_get_version">
         <doc xml:space="preserve">Get the version number of the RTP packet in @buffer.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The version of @buffer.</doc>
           <type name="guint8" c:type="guint8"/>
@@ -3681,7 +3498,6 @@ If @len is -1 the total payload starting from @offset is subbuffered.</doc>
 @len. If @len is 0, the padding is removed.
 
 NOTE: This function does not work correctly.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3698,7 +3514,6 @@ NOTE: This function does not work correctly.</doc>
       </method>
       <method name="set_csrc" c:identifier="gst_rtp_buffer_set_csrc">
         <doc xml:space="preserve">Modify the CSRC at index @idx in @buffer to @csrc.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3719,7 +3534,6 @@ NOTE: This function does not work correctly.</doc>
       </method>
       <method name="set_extension" c:identifier="gst_rtp_buffer_set_extension">
         <doc xml:space="preserve">Set the extension bit on the RTP packet in @buffer to @extension.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3738,7 +3552,6 @@ NOTE: This function does not work correctly.</doc>
         <doc xml:space="preserve">Set the extension bit of the rtp buffer and fill in the @bits and @length of the
 extension header. If the existing extension data is not large enough, it will
 be made larger.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">True if done.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3761,7 +3574,6 @@ the extension, excluding the extension header ( therefore zero is a valid length
       </method>
       <method name="set_marker" c:identifier="gst_rtp_buffer_set_marker">
         <doc xml:space="preserve">Set the marker bit on the RTP packet in @buffer to @marker.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3779,7 +3591,6 @@ the extension, excluding the extension header ( therefore zero is a valid length
       <method name="set_packet_len" c:identifier="gst_rtp_buffer_set_packet_len">
         <doc xml:space="preserve">Set the total @rtp size to @len. The data in the buffer will be made
 larger if needed. Any padding will be removed from the packet.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3796,7 +3607,6 @@ larger if needed. Any padding will be removed from the packet.</doc>
       </method>
       <method name="set_padding" c:identifier="gst_rtp_buffer_set_padding">
         <doc xml:space="preserve">Set the padding bit on the RTP packet in @buffer to @padding.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3813,7 +3623,6 @@ larger if needed. Any padding will be removed from the packet.</doc>
       </method>
       <method name="set_payload_type" c:identifier="gst_rtp_buffer_set_payload_type">
         <doc xml:space="preserve">Set the payload type of the RTP packet in @buffer to @payload_type.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3830,7 +3639,6 @@ larger if needed. Any padding will be removed from the packet.</doc>
       </method>
       <method name="set_seq" c:identifier="gst_rtp_buffer_set_seq">
         <doc xml:space="preserve">Set the sequence number of the RTP packet in @buffer to @seq.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3847,7 +3655,6 @@ larger if needed. Any padding will be removed from the packet.</doc>
       </method>
       <method name="set_ssrc" c:identifier="gst_rtp_buffer_set_ssrc">
         <doc xml:space="preserve">Set the SSRC on the RTP packet in @buffer to @ssrc.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3864,7 +3671,6 @@ larger if needed. Any padding will be removed from the packet.</doc>
       </method>
       <method name="set_timestamp" c:identifier="gst_rtp_buffer_set_timestamp">
         <doc xml:space="preserve">Set the timestamp of the RTP packet in @buffer to @timestamp.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3881,7 +3687,6 @@ larger if needed. Any padding will be removed from the packet.</doc>
       </method>
       <method name="set_version" c:identifier="gst_rtp_buffer_set_version">
         <doc xml:space="preserve">Set the version of the RTP packet in @buffer to @version.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3898,7 +3703,6 @@ larger if needed. Any padding will be removed from the packet.</doc>
       </method>
       <method name="unmap" c:identifier="gst_rtp_buffer_unmap">
         <doc xml:space="preserve">Unmap @rtp previously mapped with gst_rtp_buffer_map().</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3915,7 +3719,6 @@ a payload length of @payload_len and padding of @pad_len.
 @buffer must be writable and all previous memory in @buffer will be freed.
 If @pad_len is &gt;0, the padding bit will be set. All other RTP header fields
 will be set to 0/FALSE.</doc>
-        
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3941,7 +3744,6 @@ will be set to 0/FALSE.</doc>
       <function name="calc_header_len" c:identifier="gst_rtp_buffer_calc_header_len">
         <doc xml:space="preserve">Calculate the header length of an RTP packet with @csrc_count CSRC entries.
 An RTP packet can have at most 15 CSRC entries.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The length of an RTP header with @csrc_count CSRC entries.</doc>
           <type name="guint" c:type="guint"/>
@@ -3956,7 +3758,6 @@ An RTP packet can have at most 15 CSRC entries.</doc>
       <function name="calc_packet_len" c:identifier="gst_rtp_buffer_calc_packet_len">
         <doc xml:space="preserve">Calculate the total length of an RTP packet with a payload size of @payload_len,
 a padding of @pad_len and a @csrc_count CSRC entries.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The total length of an RTP header with given parameters.</doc>
           <type name="guint" c:type="guint"/>
@@ -3979,7 +3780,6 @@ a padding of @pad_len and a @csrc_count CSRC entries.</doc>
       <function name="calc_payload_len" c:identifier="gst_rtp_buffer_calc_payload_len">
         <doc xml:space="preserve">Calculate the length of the payload of an RTP packet with size @packet_len,
 a padding of @pad_len and a @csrc_count CSRC entries.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The length of the payload of an RTP packet  with given parameters.</doc>
           <type name="guint" c:type="guint"/>
@@ -4002,7 +3802,6 @@ a padding of @pad_len and a @csrc_count CSRC entries.</doc>
       <function name="compare_seqnum" c:identifier="gst_rtp_buffer_compare_seqnum">
         <doc xml:space="preserve">Compare two sequence numbers, taking care of wraparounds. This function
 returns the difference between @seqnum1 and @seqnum2.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a negative value if @seqnum1 is bigger than @seqnum2, 0 if they
 are equal or a positive value if @seqnum1 is smaller than @segnum2.</doc>
@@ -4021,7 +3820,6 @@ are equal or a positive value if @seqnum1 is smaller than @segnum2.</doc>
       </function>
       <function name="default_clock_rate" c:identifier="gst_rtp_buffer_default_clock_rate">
         <doc xml:space="preserve">Get the default clock-rate for the static payload type @payload_type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the default clock rate or -1 if the payload type is not static or
 the clock-rate is undefined.</doc>
@@ -4043,7 +3841,6 @@ This function is able to handle both forward and backward timestamps taking
 into account:
   - timestamp wraparound making sure that the returned value is properly increased.
   - timestamp unwraparound making sure that the returned value is properly decreased.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The extended timestamp of @timestamp or 0 if the result can't go anywhere backwards.</doc>
           <type name="guint64" c:type="guint64"/>
@@ -4064,7 +3861,6 @@ into account:
 on the #GBytes you get from gst_rtp_buffer_get_extension_bytes.
 Parses RFC 5285 style header extensions with a one byte header. It will
 return the nth extension with the requested id.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">TRUE if @bytes had the requested header extension</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -4101,7 +3897,6 @@ return the nth extension with the requested id.</doc>
       </function>
       <function name="map" c:identifier="gst_rtp_buffer_map">
         <doc xml:space="preserve">Map the contents of @buffer into @rtp.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @buffer could be mapped.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -4125,7 +3920,6 @@ return the nth extension with the requested id.</doc>
         <doc xml:space="preserve">Allocate a new #GstBuffer with enough data to hold an RTP packet with
 @csrc_count CSRCs, a payload length of @payload_len and padding of @pad_len.
 All other RTP header fields will be set to 0/FALSE.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer that can hold an RTP packet with given
 parameters.</doc>
@@ -4151,7 +3945,6 @@ parameters.</doc>
 @packet_len long. The length of the payload depends on @pad_len and
 @csrc_count and can be calculated with gst_rtp_buffer_calc_payload_len().
 All RTP header fields will be set to 0/FALSE.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer that can hold an RTP packet of @packet_len.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -4175,7 +3968,6 @@ All RTP header fields will be set to 0/FALSE.</doc>
         <doc xml:space="preserve">Create a new buffer and set the data to a copy of @len
 bytes of @data and the size to @len. The data will be freed when the buffer
 is freed.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer with a copy of @data and of size @len.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -4198,7 +3990,6 @@ is freed.</doc>
         <doc xml:space="preserve">Create a new buffer and set the data and size of the buffer to @data and @len
 respectively. @data will be freed when the buffer is unreffed, so this
 function transfers ownership of @data to the new buffer.</doc>
-        
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A newly allocated buffer with @data and of size @len.</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -4343,7 +4134,6 @@ Reserved for RTCP conflict avoidance: 72-76</doc>
     </enumeration>
     <record name="RTPPayloadInfo" c:type="GstRTPPayloadInfo">
       <doc xml:space="preserve">Structure holding default payload type information.</doc>
-      
       <field name="payload_type" writable="1">
         <doc xml:space="preserve">payload type, -1 means dynamic</doc>
         <type name="guint8" c:type="guint8"/>
@@ -4381,7 +4171,6 @@ mostly used to get the default clock-rate and bandwidth for dynamic payload
 types specified with @media and @encoding name.
 
 The search for @encoding_name will be performed in a case insensitive way.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstRTPPayloadInfo or NULL when no info could be found.</doc>
           <type name="RTPPayloadInfo" c:type="const GstRTPPayloadInfo*"/>
@@ -4401,7 +4190,6 @@ The search for @encoding_name will be performed in a case insensitive way.</doc>
         <doc xml:space="preserve">Get the #GstRTPPayloadInfo for @payload_type. This function is
 mostly used to get the default clock-rate and bandwidth for static payload
 types specified with @payload_type.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">a #GstRTPPayloadInfo or NULL when no info could be found.</doc>
           <type name="RTPPayloadInfo" c:type="const GstRTPPayloadInfo*"/>
@@ -4434,7 +4222,6 @@ types specified with @payload_type.</doc>
     </enumeration>
     <record name="RTPSourceMeta" c:type="GstRTPSourceMeta" version="1.16">
       <doc xml:space="preserve">Meta describing the source(s) of the buffer.</doc>
-      
       <field name="meta" writable="1">
         <doc xml:space="preserve">parent #GstMeta</doc>
         <type name="Gst.Meta" c:type="GstMeta"/>
@@ -4459,7 +4246,6 @@ types specified with @payload_type.</doc>
       </field>
       <method name="append_csrc" c:identifier="gst_rtp_source_meta_append_csrc" version="1.16">
         <doc xml:space="preserve">Appends @csrc to the list of contributing sources in @meta.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if all elements in @csrc was added, %FALSE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -4481,7 +4267,6 @@ types specified with @payload_type.</doc>
       </method>
       <method name="get_source_count" c:identifier="gst_rtp_source_meta_get_source_count" version="1.16">
         <doc xml:space="preserve">Count the total number of RTP sources found in @meta, both SSRC and CSRC.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The number of RTP sources</doc>
           <type name="guint" c:type="guint"/>
@@ -4495,7 +4280,6 @@ types specified with @payload_type.</doc>
       </method>
       <method name="set_ssrc" c:identifier="gst_rtp_source_meta_set_ssrc" version="1.16">
         <doc xml:space="preserve">Sets @ssrc in @meta. If @ssrc is %NULL the ssrc of @meta will be unset.</doc>
-        
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE on success, %FALSE otherwise.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -4512,98 +4296,84 @@ types specified with @payload_type.</doc>
         </parameters>
       </method>
       <function name="get_info" c:identifier="gst_rtp_source_meta_get_info">
-        
         <return-value transfer-ownership="none">
           <type name="Gst.MetaInfo" c:type="const GstMetaInfo*"/>
         </return-value>
       </function>
     </record>
     <function-macro name="RTP_BASE_AUDIO_PAYLOAD" c:identifier="GST_RTP_BASE_AUDIO_PAYLOAD" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_AUDIO_PAYLOAD_CAST" c:identifier="GST_RTP_BASE_AUDIO_PAYLOAD_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_AUDIO_PAYLOAD_CLASS" c:identifier="GST_RTP_BASE_AUDIO_PAYLOAD_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_DEPAYLOAD" c:identifier="GST_RTP_BASE_DEPAYLOAD" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_DEPAYLOAD_CAST" c:identifier="GST_RTP_BASE_DEPAYLOAD_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_DEPAYLOAD_CLASS" c:identifier="GST_RTP_BASE_DEPAYLOAD_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_DEPAYLOAD_GET_CLASS" c:identifier="GST_RTP_BASE_DEPAYLOAD_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_DEPAYLOAD_SINKPAD" c:identifier="GST_RTP_BASE_DEPAYLOAD_SINKPAD" introspectable="0">
-      
       <parameters>
         <parameter name="depayload">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_DEPAYLOAD_SRCPAD" c:identifier="GST_RTP_BASE_DEPAYLOAD_SRCPAD" introspectable="0">
-      
       <parameters>
         <parameter name="depayload">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD" c:identifier="GST_RTP_BASE_PAYLOAD" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD_CAST" c:identifier="GST_RTP_BASE_PAYLOAD_CAST" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD_CLASS" c:identifier="GST_RTP_BASE_PAYLOAD_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="klass">
         </parameter>
       </parameters>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD_GET_CLASS" c:identifier="GST_RTP_BASE_PAYLOAD_GET_CLASS" introspectable="0">
-      
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -4611,7 +4381,6 @@ types specified with @payload_type.</doc>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD_MTU" c:identifier="GST_RTP_BASE_PAYLOAD_MTU" introspectable="0">
       <doc xml:space="preserve">Get access to the configured MTU of @payload.</doc>
-      
       <parameters>
         <parameter name="payload">
           <doc xml:space="preserve">a #GstRTPBasePayload</doc>
@@ -4620,7 +4389,6 @@ types specified with @payload_type.</doc>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD_PT" c:identifier="GST_RTP_BASE_PAYLOAD_PT" introspectable="0">
       <doc xml:space="preserve">Get access to the configured payload type of @payload.</doc>
-      
       <parameters>
         <parameter name="payload">
           <doc xml:space="preserve">a #GstRTPBasePayload</doc>
@@ -4629,7 +4397,6 @@ types specified with @payload_type.</doc>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD_SINKPAD" c:identifier="GST_RTP_BASE_PAYLOAD_SINKPAD" introspectable="0">
       <doc xml:space="preserve">Get access to the sinkpad of @payload.</doc>
-      
       <parameters>
         <parameter name="payload">
           <doc xml:space="preserve">a #GstRTPBasePayload</doc>
@@ -4638,7 +4405,6 @@ types specified with @payload_type.</doc>
     </function-macro>
     <function-macro name="RTP_BASE_PAYLOAD_SRCPAD" c:identifier="GST_RTP_BASE_PAYLOAD_SRCPAD" introspectable="0">
       <doc xml:space="preserve">Get access to the srcpad of @payload.</doc>
-      
       <parameters>
         <parameter name="payload">
           <doc xml:space="preserve">a #GstRTPBasePayload</doc>
@@ -4646,108 +4412,82 @@ types specified with @payload_type.</doc>
       </parameters>
     </function-macro>
     <constant name="RTP_HDREXT_BASE" value="urn:ietf:params:rtp-hdrext:" c:type="GST_RTP_HDREXT_BASE">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_HDREXT_NTP_56" value="ntp-56" c:type="GST_RTP_HDREXT_NTP_56">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_HDREXT_NTP_56_SIZE" value="7" c:type="GST_RTP_HDREXT_NTP_56_SIZE">
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTP_HDREXT_NTP_64" value="ntp-64" c:type="GST_RTP_HDREXT_NTP_64">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_HDREXT_NTP_64_SIZE" value="8" c:type="GST_RTP_HDREXT_NTP_64_SIZE">
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTP_PAYLOAD_1016_STRING" value="1" c:type="GST_RTP_PAYLOAD_1016_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_CELLB_STRING" value="25" c:type="GST_RTP_PAYLOAD_CELLB_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_CN_STRING" value="13" c:type="GST_RTP_PAYLOAD_CN_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_DVI4_11025_STRING" value="16" c:type="GST_RTP_PAYLOAD_DVI4_11025_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_DVI4_16000_STRING" value="6" c:type="GST_RTP_PAYLOAD_DVI4_16000_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_DVI4_22050_STRING" value="17" c:type="GST_RTP_PAYLOAD_DVI4_22050_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_DVI4_8000_STRING" value="5" c:type="GST_RTP_PAYLOAD_DVI4_8000_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_DYNAMIC_STRING" value="[96, 127]" c:type="GST_RTP_PAYLOAD_DYNAMIC_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_G721_STRING" value="2" c:type="GST_RTP_PAYLOAD_G721_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_G722_STRING" value="9" c:type="GST_RTP_PAYLOAD_G722_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_G723_53" value="17" c:type="GST_RTP_PAYLOAD_G723_53">
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTP_PAYLOAD_G723_53_STRING" value="17" c:type="GST_RTP_PAYLOAD_G723_53_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_G723_63" value="16" c:type="GST_RTP_PAYLOAD_G723_63">
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTP_PAYLOAD_G723_63_STRING" value="16" c:type="GST_RTP_PAYLOAD_G723_63_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_G723_STRING" value="4" c:type="GST_RTP_PAYLOAD_G723_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_G728_STRING" value="15" c:type="GST_RTP_PAYLOAD_G728_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_G729_STRING" value="18" c:type="GST_RTP_PAYLOAD_G729_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_GSM_STRING" value="3" c:type="GST_RTP_PAYLOAD_GSM_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_H261_STRING" value="31" c:type="GST_RTP_PAYLOAD_H261_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_H263_STRING" value="34" c:type="GST_RTP_PAYLOAD_H263_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <function-macro name="RTP_PAYLOAD_IS_DYNAMIC" c:identifier="GST_RTP_PAYLOAD_IS_DYNAMIC" introspectable="0">
       <doc xml:space="preserve">Check if @pt is a dynamic payload type.</doc>
-      
       <parameters>
         <parameter name="pt">
           <doc xml:space="preserve">a payload type</doc>
@@ -4755,77 +4495,59 @@ types specified with @payload_type.</doc>
       </parameters>
     </function-macro>
     <constant name="RTP_PAYLOAD_JPEG_STRING" value="26" c:type="GST_RTP_PAYLOAD_JPEG_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_L16_MONO_STRING" value="11" c:type="GST_RTP_PAYLOAD_L16_MONO_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_L16_STEREO_STRING" value="10" c:type="GST_RTP_PAYLOAD_L16_STEREO_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_LPC_STRING" value="7" c:type="GST_RTP_PAYLOAD_LPC_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_MP2T_STRING" value="33" c:type="GST_RTP_PAYLOAD_MP2T_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_MPA_STRING" value="14" c:type="GST_RTP_PAYLOAD_MPA_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_MPV_STRING" value="32" c:type="GST_RTP_PAYLOAD_MPV_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_NV_STRING" value="28" c:type="GST_RTP_PAYLOAD_NV_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_PCMA_STRING" value="8" c:type="GST_RTP_PAYLOAD_PCMA_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_PCMU_STRING" value="0" c:type="GST_RTP_PAYLOAD_PCMU_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_QCELP_STRING" value="12" c:type="GST_RTP_PAYLOAD_QCELP_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_TS41" value="19" c:type="GST_RTP_PAYLOAD_TS41">
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTP_PAYLOAD_TS41_STRING" value="19" c:type="GST_RTP_PAYLOAD_TS41_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_PAYLOAD_TS48" value="18" c:type="GST_RTP_PAYLOAD_TS48">
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTP_PAYLOAD_TS48_STRING" value="18" c:type="GST_RTP_PAYLOAD_TS48_STRING">
-      
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="RTP_SOURCE_META_MAX_CSRC_COUNT" value="15" c:type="GST_RTP_SOURCE_META_MAX_CSRC_COUNT">
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="RTP_VERSION" value="2" c:type="GST_RTP_VERSION">
       <doc xml:space="preserve">The supported RTP version 2.</doc>
-      
       <type name="gint" c:type="gint"/>
     </constant>
     <function name="buffer_add_rtp_source_meta" c:identifier="gst_buffer_add_rtp_source_meta" version="1.16">
       <doc xml:space="preserve">Attaches RTP source information to @buffer.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the #GstRTPSourceMeta on @buffer.</doc>
         <type name="RTPSourceMeta" c:type="GstRTPSourceMeta*"/>
@@ -4851,7 +4573,6 @@ types specified with @payload_type.</doc>
     </function>
     <function name="buffer_get_rtp_source_meta" c:identifier="gst_buffer_get_rtp_source_meta" version="1.16">
       <doc xml:space="preserve">Find the #GstRTPSourceMeta on @buffer.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the #GstRTPSourceMeta or %NULL when there
 is no such metadata on @buffer.</doc>
@@ -4875,7 +4596,6 @@ and get session bandwidth information.</doc>
     <function name="rtcp_buffer_map" c:identifier="gst_rtcp_buffer_map" moved-to="RTCPBuffer.map">
       <doc xml:space="preserve">Open @buffer for reading or writing, depending on @flags. The resulting RTCP
 buffer state is stored in @rtcp.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
@@ -4897,7 +4617,6 @@ buffer state is stored in @rtcp.</doc>
     <function name="rtcp_buffer_new" c:identifier="gst_rtcp_buffer_new" moved-to="RTCPBuffer.new">
       <doc xml:space="preserve">Create a new buffer for constructing RTCP packets. The packet will have a
 maximum size of @mtu.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated buffer.</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -4913,7 +4632,6 @@ maximum size of @mtu.</doc>
       <doc xml:space="preserve">Create a new buffer and set the data to a copy of @len
 bytes of @data and the size to @len. The data will be freed when the buffer
 is freed.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated buffer with a copy of @data and of size @len.</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -4935,7 +4653,6 @@ is freed.</doc>
       <doc xml:space="preserve">Create a new buffer and set the data and size of the buffer to @data and @len
 respectively. @data will be freed when the buffer is unreffed, so this
 function transfers ownership of @data to the new buffer.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated buffer with @data and of size @len.</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -4956,7 +4673,6 @@ function transfers ownership of @data to the new buffer.</doc>
     <function name="rtcp_buffer_validate" c:identifier="gst_rtcp_buffer_validate" moved-to="RTCPBuffer.validate">
       <doc xml:space="preserve">Check if the data pointed to by @buffer is a valid RTCP packet using
 gst_rtcp_buffer_validate_data().</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if @buffer is a valid RTCP packet.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -4973,7 +4689,6 @@ gst_rtcp_buffer_validate_data().</doc>
 non-reduced size RTCP packet.
 Use this function to validate a packet before using the other functions in
 this module.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if the data points to a valid RTCP packet.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -4999,7 +4714,6 @@ this module.
 This function is updated to support reduced size rtcp packets according to
 RFC 5506 and will validate full compound RTCP packets as well as reduced
 size RTCP packets.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if the data points to a valid RTCP packet.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5020,7 +4734,6 @@ size RTCP packets.</doc>
     <function name="rtcp_buffer_validate_reduced" c:identifier="gst_rtcp_buffer_validate_reduced" moved-to="RTCPBuffer.validate_reduced" version="1.6">
       <doc xml:space="preserve">Check if the data pointed to by @buffer is a valid RTCP packet using
 gst_rtcp_buffer_validate_reduced().</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if @buffer is a valid RTCP packet.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5037,7 +4750,6 @@ gst_rtcp_buffer_validate_reduced().</doc>
 the NTP time of an SR RTCP message and contains, in the upper 32 bits, the
 number of seconds since 1900 and, in the lower 32 bits, the fractional
 seconds. The resulting value will be the number of nanoseconds since 1970.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the UNIX time for @ntptime in nanoseconds.</doc>
         <type name="guint64" c:type="guint64"/>
@@ -5052,7 +4764,6 @@ seconds. The resulting value will be the number of nanoseconds since 1970.</doc>
     <function name="rtcp_sdes_name_to_type" c:identifier="gst_rtcp_sdes_name_to_type">
       <doc xml:space="preserve">Convert @name into a @GstRTCPSDESType. @name is typically a key in a
 #GstStructure containing SDES items.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the #GstRTCPSDESType for @name or #GST_RTCP_SDES_PRIV when @name
 is a private sdes item.</doc>
@@ -5068,7 +4779,6 @@ is a private sdes item.</doc>
     <function name="rtcp_sdes_type_to_name" c:identifier="gst_rtcp_sdes_type_to_name">
       <doc xml:space="preserve">Converts @type to the string equivalent. The string is typically used as a
 key in a #GstStructure containing SDES items.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the string equivalent of @type</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -5086,7 +4796,6 @@ pass a value with nanoseconds since 1970. The NTP time will, in the upper
 32 bits, contain the number of seconds since 1900 and, in the lower 32
 bits, the fractional seconds. The resulting value can be used as an ntptime
 for constructing SR RTCP packets.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the NTP time for @unixtime.</doc>
         <type name="guint64" c:type="guint64"/>
@@ -5104,7 +4813,6 @@ a payload length of @payload_len and padding of @pad_len.
 @buffer must be writable and all previous memory in @buffer will be freed.
 If @pad_len is &gt;0, the padding bit will be set. All other RTP header fields
 will be set to 0/FALSE.</doc>
-      
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -5130,7 +4838,6 @@ will be set to 0/FALSE.</doc>
     <function name="rtp_buffer_calc_header_len" c:identifier="gst_rtp_buffer_calc_header_len" moved-to="RTPBuffer.calc_header_len">
       <doc xml:space="preserve">Calculate the header length of an RTP packet with @csrc_count CSRC entries.
 An RTP packet can have at most 15 CSRC entries.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The length of an RTP header with @csrc_count CSRC entries.</doc>
         <type name="guint" c:type="guint"/>
@@ -5145,7 +4852,6 @@ An RTP packet can have at most 15 CSRC entries.</doc>
     <function name="rtp_buffer_calc_packet_len" c:identifier="gst_rtp_buffer_calc_packet_len" moved-to="RTPBuffer.calc_packet_len">
       <doc xml:space="preserve">Calculate the total length of an RTP packet with a payload size of @payload_len,
 a padding of @pad_len and a @csrc_count CSRC entries.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The total length of an RTP header with given parameters.</doc>
         <type name="guint" c:type="guint"/>
@@ -5168,7 +4874,6 @@ a padding of @pad_len and a @csrc_count CSRC entries.</doc>
     <function name="rtp_buffer_calc_payload_len" c:identifier="gst_rtp_buffer_calc_payload_len" moved-to="RTPBuffer.calc_payload_len">
       <doc xml:space="preserve">Calculate the length of the payload of an RTP packet with size @packet_len,
 a padding of @pad_len and a @csrc_count CSRC entries.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The length of the payload of an RTP packet  with given parameters.</doc>
         <type name="guint" c:type="guint"/>
@@ -5191,7 +4896,6 @@ a padding of @pad_len and a @csrc_count CSRC entries.</doc>
     <function name="rtp_buffer_compare_seqnum" c:identifier="gst_rtp_buffer_compare_seqnum" moved-to="RTPBuffer.compare_seqnum">
       <doc xml:space="preserve">Compare two sequence numbers, taking care of wraparounds. This function
 returns the difference between @seqnum1 and @seqnum2.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a negative value if @seqnum1 is bigger than @seqnum2, 0 if they
 are equal or a positive value if @seqnum1 is smaller than @segnum2.</doc>
@@ -5210,7 +4914,6 @@ are equal or a positive value if @seqnum1 is smaller than @segnum2.</doc>
     </function>
     <function name="rtp_buffer_default_clock_rate" c:identifier="gst_rtp_buffer_default_clock_rate" moved-to="RTPBuffer.default_clock_rate">
       <doc xml:space="preserve">Get the default clock-rate for the static payload type @payload_type.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the default clock rate or -1 if the payload type is not static or
 the clock-rate is undefined.</doc>
@@ -5232,7 +4935,6 @@ This function is able to handle both forward and backward timestamps taking
 into account:
   - timestamp wraparound making sure that the returned value is properly increased.
   - timestamp unwraparound making sure that the returned value is properly decreased.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The extended timestamp of @timestamp or 0 if the result can't go anywhere backwards.</doc>
         <type name="guint64" c:type="guint64"/>
@@ -5253,7 +4955,6 @@ into account:
 on the #GBytes you get from gst_rtp_buffer_get_extension_bytes.
 Parses RFC 5285 style header extensions with a one byte header. It will
 return the nth extension with the requested id.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if @bytes had the requested header extension</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5290,7 +4991,6 @@ return the nth extension with the requested id.</doc>
     </function>
     <function name="rtp_buffer_map" c:identifier="gst_rtp_buffer_map" moved-to="RTPBuffer.map">
       <doc xml:space="preserve">Map the contents of @buffer into @rtp.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE if @buffer could be mapped.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5314,7 +5014,6 @@ return the nth extension with the requested id.</doc>
       <doc xml:space="preserve">Allocate a new #GstBuffer with enough data to hold an RTP packet with
 @csrc_count CSRCs, a payload length of @payload_len and padding of @pad_len.
 All other RTP header fields will be set to 0/FALSE.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated buffer that can hold an RTP packet with given
 parameters.</doc>
@@ -5340,7 +5039,6 @@ parameters.</doc>
 @packet_len long. The length of the payload depends on @pad_len and
 @csrc_count and can be calculated with gst_rtp_buffer_calc_payload_len().
 All RTP header fields will be set to 0/FALSE.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated buffer that can hold an RTP packet of @packet_len.</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -5364,7 +5062,6 @@ All RTP header fields will be set to 0/FALSE.</doc>
       <doc xml:space="preserve">Create a new buffer and set the data to a copy of @len
 bytes of @data and the size to @len. The data will be freed when the buffer
 is freed.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated buffer with a copy of @data and of size @len.</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -5387,7 +5084,6 @@ is freed.</doc>
       <doc xml:space="preserve">Create a new buffer and set the data and size of the buffer to @data and @len
 respectively. @data will be freed when the buffer is unreffed, so this
 function transfers ownership of @data to the new buffer.</doc>
-      
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">A newly allocated buffer with @data and of size @len.</doc>
         <type name="Gst.Buffer" c:type="GstBuffer*"/>
@@ -5409,7 +5105,6 @@ function transfers ownership of @data to the new buffer.</doc>
     <function name="rtp_hdrext_get_ntp_56" c:identifier="gst_rtp_hdrext_get_ntp_56">
       <doc xml:space="preserve">Reads the NTP time from the @size NTP-56 extension bytes in @data and store the
 result in @ntptime.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE on success.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5434,7 +5129,6 @@ result in @ntptime.</doc>
     <function name="rtp_hdrext_get_ntp_64" c:identifier="gst_rtp_hdrext_get_ntp_64">
       <doc xml:space="preserve">Reads the NTP time from the @size NTP-64 extension bytes in @data and store the
 result in @ntptime.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE on success.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5459,7 +5153,6 @@ result in @ntptime.</doc>
     <function name="rtp_hdrext_set_ntp_56" c:identifier="gst_rtp_hdrext_set_ntp_56">
       <doc xml:space="preserve">Writes the NTP time in @ntptime to the format required for the NTP-56 header
 extension. @data must hold at least #GST_RTP_HDREXT_NTP_56_SIZE bytes.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE on success.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5482,7 +5175,6 @@ extension. @data must hold at least #GST_RTP_HDREXT_NTP_56_SIZE bytes.</doc>
     <function name="rtp_hdrext_set_ntp_64" c:identifier="gst_rtp_hdrext_set_ntp_64">
       <doc xml:space="preserve">Writes the NTP time in @ntptime to the format required for the NTP-64 header
 extension. @data must hold at least #GST_RTP_HDREXT_NTP_64_SIZE bytes.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">%TRUE on success.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -5508,7 +5200,6 @@ mostly used to get the default clock-rate and bandwidth for dynamic payload
 types specified with @media and @encoding name.
 
 The search for @encoding_name will be performed in a case insensitive way.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a #GstRTPPayloadInfo or NULL when no info could be found.</doc>
         <type name="RTPPayloadInfo" c:type="const GstRTPPayloadInfo*"/>
@@ -5528,7 +5219,6 @@ The search for @encoding_name will be performed in a case insensitive way.</doc>
       <doc xml:space="preserve">Get the #GstRTPPayloadInfo for @payload_type. This function is
 mostly used to get the default clock-rate and bandwidth for static payload
 types specified with @payload_type.</doc>
-      
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">a #GstRTPPayloadInfo or NULL when no info could be found.</doc>
         <type name="RTPPayloadInfo" c:type="const GstRTPPayloadInfo*"/>
@@ -5541,13 +5231,11 @@ types specified with @payload_type.</doc>
       </parameters>
     </function>
     <function name="rtp_source_meta_api_get_type" c:identifier="gst_rtp_source_meta_api_get_type">
-      
       <return-value transfer-ownership="none">
         <type name="GType" c:type="GType"/>
       </return-value>
     </function>
     <function name="rtp_source_meta_get_info" c:identifier="gst_rtp_source_meta_get_info" moved-to="RTPSourceMeta.get_info">
-      
       <return-value transfer-ownership="none">
         <type name="Gst.MetaInfo" c:type="const GstMetaInfo*"/>
       </return-value>
