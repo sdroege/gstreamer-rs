@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 #[macro_export]
-macro_rules! mini_object_wrapper(
-    ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr) => {
+macro_rules! mini_object_wrapper (
+    ($name:ident, $ref_name:ident, $ffi_name:path) => {
         pub struct $name {
             obj: std::ptr::NonNull<$ffi_name>,
         }
@@ -114,12 +114,6 @@ macro_rules! mini_object_wrapper(
         impl std::borrow::Borrow<$ref_name> for $name {
             fn borrow(&self) -> &$ref_name {
                 &*self
-            }
-        }
-
-        impl $crate::glib::types::StaticType for $name {
-            fn static_type() -> $crate::glib::types::Type {
-                $ref_name::static_type()
             }
         }
 
@@ -362,31 +356,6 @@ macro_rules! mini_object_wrapper(
             }
         }
 
-        impl<'a> $crate::glib::value::FromValueOptional<'a>
-            for $name
-        {
-            unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-                let ptr = $crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(v).0);
-                $crate::glib::translate::from_glib_none(ptr as *const $ffi_name)
-            }
-        }
-
-        impl $crate::glib::value::SetValue for $name {
-            unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-                $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, s.as_ptr() as $crate::glib::ffi::gpointer);
-            }
-        }
-
-        impl $crate::glib::value::SetValueOptional for $name {
-            unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-                if let Some(s) = s {
-                    $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, s.as_ptr() as $crate::glib::ffi::gpointer);
-                } else {
-                    $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, std::ptr::null_mut());
-                }
-            }
-        }
-
         impl $crate::glib::translate::GlibPtrDefault for $name {
             type GlibType = *mut $ffi_name;
         }
@@ -423,14 +392,61 @@ macro_rules! mini_object_wrapper(
             }
         }
 
+        impl $crate::glib::translate::GlibPtrDefault for $ref_name {
+            type GlibType = *mut $ffi_name;
+        }
+
+        impl ToOwned for $ref_name {
+            type Owned = $name;
+
+            fn to_owned(&self) -> $name {
+                self.copy()
+            }
+        }
+
+        unsafe impl Sync for $ref_name {}
+        unsafe impl Send for $ref_name {}
+        unsafe impl Sync for $name {}
+        unsafe impl Send for $name {}
+    };
+    ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr) => {
+        $crate::mini_object_wrapper!($name, $ref_name, $ffi_name);
+
+        impl $crate::glib::types::StaticType for $name {
+            fn static_type() -> $crate::glib::types::Type {
+                $ref_name::static_type()
+            }
+        }
+
         impl $crate::glib::types::StaticType for $ref_name {
             fn static_type() -> $crate::glib::types::Type {
                 unsafe { $crate::glib::translate::from_glib($get_type()) }
             }
         }
 
-        impl $crate::glib::translate::GlibPtrDefault for $ref_name {
-            type GlibType = *mut $ffi_name;
+        impl<'a> $crate::glib::value::FromValueOptional<'a>
+            for $name
+        {
+            unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
+                let ptr = $crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(v).0);
+                $crate::glib::translate::from_glib_none(ptr as *const $ffi_name)
+            }
+        }
+
+        impl $crate::glib::value::SetValue for $name {
+            unsafe fn set_value(v: &mut glib::Value, s: &Self) {
+                $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, s.as_ptr() as $crate::glib::ffi::gpointer);
+            }
+        }
+
+        impl $crate::glib::value::SetValueOptional for $name {
+            unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
+                if let Some(s) = s {
+                    $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, s.as_ptr() as $crate::glib::ffi::gpointer);
+                } else {
+                    $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, std::ptr::null_mut());
+                }
+            }
         }
 
         impl<'a> $crate::glib::value::FromValueOptional<'a>
@@ -448,18 +464,5 @@ macro_rules! mini_object_wrapper(
 
         // Can't have SetValue/SetValueOptional impls as otherwise one could use it to get
         // immutable references from a mutable reference without borrowing via the value
-
-        impl ToOwned for $ref_name {
-            type Owned = $name;
-
-            fn to_owned(&self) -> $name {
-                self.copy()
-            }
-        }
-
-        unsafe impl Sync for $ref_name {}
-        unsafe impl Send for $ref_name {}
-        unsafe impl Sync for $name {}
-        unsafe impl Send for $name {}
-    }
+    };
 );
