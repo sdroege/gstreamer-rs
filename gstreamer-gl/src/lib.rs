@@ -39,6 +39,8 @@ mod gl_sync_meta;
 pub use crate::gl_sync_meta::*;
 mod gl_base_memory;
 pub use self::gl_base_memory::*;
+mod gl_memory;
+pub use crate::gl_memory::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
