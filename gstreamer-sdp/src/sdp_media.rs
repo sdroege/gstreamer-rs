@@ -228,11 +228,7 @@ impl SDPMediaRef {
             if ptr.is_null() {
                 None
             } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
+                CStr::from_ptr(ptr).to_str().ok()
             }
         }
     }
@@ -243,11 +239,7 @@ impl SDPMediaRef {
             if ptr.is_null() {
                 None
             } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
+                CStr::from_ptr(ptr).to_str().ok()
             }
         }
     }
@@ -296,11 +288,7 @@ impl SDPMediaRef {
             if ptr.is_null() {
                 None
             } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
+                CStr::from_ptr(ptr).to_str().ok()
             }
         }
     }
@@ -311,11 +299,7 @@ impl SDPMediaRef {
             if ptr.is_null() {
                 None
             } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
+                CStr::from_ptr(ptr).to_str().ok()
             }
         }
     }
@@ -337,11 +321,7 @@ impl SDPMediaRef {
             if ptr.is_null() {
                 None
             } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
+                CStr::from_ptr(ptr).to_str().ok()
             }
         }
     }
@@ -360,11 +340,7 @@ impl SDPMediaRef {
             if ptr.is_null() {
                 None
             } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
+                CStr::from_ptr(ptr).to_str().ok()
             }
         }
     }
