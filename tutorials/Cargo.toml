@@ -16,8 +16,13 @@ gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
 byte-slice-cast = "1"
 anyhow = "1"
+termion = { version = "1.5", optional = true }
 
 [features]
 tutorial5 = ["gtk", "gdk", "gst-video"]
 tutorial5-x11 = ["tutorial5"]
 tutorial5-quartz = ["tutorial5"]
+
+[[bin]]
+name = "basic-tutorial-13"
+required-features = ["termion"]
