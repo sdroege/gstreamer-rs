@@ -218,6 +218,7 @@ impl From<(i32, i32)> for Fraction {
 
 impl From<Fraction> for (i32, i32) {
     fn from(f: Fraction) -> Self {
+        skip_assert_initialized!();
         f.0.into()
     }
 }

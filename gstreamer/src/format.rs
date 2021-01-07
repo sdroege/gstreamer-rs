@@ -298,7 +298,7 @@ macro_rules! impl_format_value_traits(
 
         impl From<$name> for GenericFormattedValue {
             fn from(v: $name) -> Self {
-	        skip_assert_initialized!();
+               skip_assert_initialized!();
                 GenericFormattedValue::$format_value(v)
             }
         }
@@ -307,7 +307,7 @@ macro_rules! impl_format_value_traits(
             type Error = TryFromGenericFormattedValueError;
 
             fn try_from(v: GenericFormattedValue) -> Result<$name, Self::Error> {
-	        skip_assert_initialized!();
+                skip_assert_initialized!();
                 if let GenericFormattedValue::$format_value(v) = v {
                     Ok(v)
                 } else {
@@ -320,20 +320,21 @@ macro_rules! impl_format_value_traits(
 
         impl From<u64> for $name {
             fn from(v: u64) -> Self {
-	        skip_assert_initialized!();
+                skip_assert_initialized!();
                 $name(Some(v))
             }
         }
 
         impl From<Option<u64>> for $name {
             fn from(v: Option<u64>) -> Self {
-	        skip_assert_initialized!();
+                skip_assert_initialized!();
                 $name(v)
             }
         }
 
         impl From<$name> for Option<u64> {
             fn from(v: $name) -> Self {
+                skip_assert_initialized!();
                 v.0
             }
         }
@@ -568,6 +569,7 @@ impl From<i64> for Undefined {
 
 impl From<Undefined> for i64 {
     fn from(u: Undefined) -> Self {
+        skip_assert_initialized!();
         u.0
     }
 }
