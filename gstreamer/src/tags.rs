@@ -1063,7 +1063,7 @@ mod tests {
     fn test_custom_tags() {
         crate::init().unwrap();
 
-        enum MyCustomTag {};
+        enum MyCustomTag {}
 
         impl<'a> Tag<'a> for MyCustomTag {
             type TagType = &'a str;
