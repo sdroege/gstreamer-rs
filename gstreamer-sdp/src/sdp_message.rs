@@ -24,8 +24,12 @@ glib::wrapper! {
     pub struct SDPMessage(Boxed<ffi::GstSDPMessage>);
 
     match fn {
-        copy => |ptr| glib::gobject_ffi::g_boxed_copy(ffi::gst_sdp_message_get_type(), ptr as *mut _) as *mut ffi::GstSDPMessage,
-        free => |ptr| glib::gobject_ffi::g_boxed_free(ffi::gst_sdp_message_get_type(), ptr as *mut _),
+        copy => |ptr| {
+            let mut copy = std::ptr::null_mut();
+            assert_eq!(ffi::gst_sdp_message_copy(ptr, &mut copy), ffi::GST_SDP_OK);
+            copy
+        },
+        free => |ptr| assert_eq!(ffi::gst_sdp_message_free(ptr), ffi::GST_SDP_OK),
         get_type => || ffi::gst_sdp_message_get_type(),
     }
 }

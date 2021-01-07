@@ -8,11 +8,15 @@ glib::wrapper! {
 
     match fn {
         copy => |ptr| {
-            glib::gobject_ffi::g_boxed_copy(ffi::gst_parse_context_get_type(), ptr as *mut _) as *mut ffi::GstParseContext
+            cfg_if::cfg_if! {
+                if #[cfg(feature = "v1_12_1")] {
+                    ffi::gst_parse_context_copy(ptr)
+                } else {
+                    glib::gobject_ffi::g_boxed_copy(ffi::gst_parse_context_get_type(), ptr as *mut _) as *mut ffi::GstParseContext
+                }
+            }
         },
-        free => |ptr| {
-            glib::gobject_ffi::g_boxed_free(ffi::gst_parse_context_get_type(), ptr as *mut _)
-        },
+        free => |ptr| ffi::gst_parse_context_free(ptr),
         get_type => || ffi::gst_parse_context_get_type(),
     }
 }

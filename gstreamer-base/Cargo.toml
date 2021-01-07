@@ -14,6 +14,7 @@ build = "build.rs"
 edition = "2018"
 
 [dependencies]
+cfg-if = "1.0"
 libc = "0.2"
 bitflags = "1.0"
 ffi = { package = "gstreamer-base-sys", path = "sys", features = ["v1_8"] }
@@ -27,7 +28,8 @@ gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 default = []
 v1_10 = ["gst/v1_10", "ffi/v1_10"]
 v1_12 = ["gst/v1_12", "ffi/v1_12", "v1_10"]
-v1_14 = ["gst/v1_14", "ffi/v1_14", "v1_12"]
+v1_12_1 = ["gst/v1_12_1", "ffi/v1_12_1", "v1_12"]
+v1_14 = ["gst/v1_14", "ffi/v1_14", "v1_12_1"]
 v1_14_1 = ["gst/v1_14", "ffi/v1_14_1", "v1_14"]
 v1_16 = ["gst/v1_16", "ffi/v1_16", "v1_14_1"]
 v1_18 = ["gst/v1_18", "ffi/v1_18", "v1_16"]

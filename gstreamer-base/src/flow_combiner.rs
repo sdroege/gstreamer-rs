@@ -8,8 +8,24 @@ glib::wrapper! {
     pub struct FlowCombiner(Shared<ffi::GstFlowCombiner>);
 
     match fn {
-        ref => |ptr| glib::gobject_ffi::g_boxed_copy(ffi::gst_flow_combiner_get_type(), ptr as *mut _),
-        unref => |ptr| glib::gobject_ffi::g_boxed_free(ffi::gst_flow_combiner_get_type(), ptr as *mut _),
+        ref => |ptr| {
+            // cfg_if emits code in blocks (curly braces) and `ref` handling inserts a
+            // trailing semicolon to void an optionally returned value. The linter
+            // requests the resulting { ..ref() }; to be simplified making it unsuitable.
+            #[cfg(feature = "v1_12_1")]
+            ffi::gst_flow_combiner_ref(ptr);
+            #[cfg(not(feature = "v1_12_1"))]
+            glib::gobject_ffi::g_boxed_copy(ffi::gst_flow_combiner_get_type(), ptr as *mut _);
+        },
+        unref => |ptr| {
+            cfg_if::cfg_if! {
+                if #[cfg(feature = "v1_12_1")] {
+                    ffi::gst_flow_combiner_unref(ptr)
+                } else {
+                    glib::gobject_ffi::g_boxed_free(ffi::gst_flow_combiner_get_type(), ptr as *mut _)
+                }
+            }
+        },
         get_type => || ffi::gst_flow_combiner_get_type(),
     }
 }
