@@ -21,7 +21,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| {
             let mut copy = ptr::null_mut();
-            ffi::gst_sdp_media_copy(ptr as *const ffi::GstSDPMedia, &mut copy);
+            assert_eq!(ffi::gst_sdp_media_copy(ptr, &mut copy), ffi::GST_SDP_OK);
             copy
         },
         free => |ptr| {
