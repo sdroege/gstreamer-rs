@@ -332,9 +332,9 @@ macro_rules! impl_format_value_traits(
             }
         }
 
-        impl Into<Option<u64>> for $name {
-            fn into(self) -> Option<u64> {
-                self.0
+        impl From<$name> for Option<u64> {
+            fn from(v: $name) -> Self {
+                v.0
             }
         }
 
@@ -566,9 +566,9 @@ impl From<i64> for Undefined {
     }
 }
 
-impl Into<i64> for Undefined {
-    fn into(self) -> i64 {
-        self.0
+impl From<Undefined> for i64 {
+    fn from(u: Undefined) -> Self {
+        u.0
     }
 }
 

@@ -216,9 +216,9 @@ impl From<(i32, i32)> for Fraction {
     }
 }
 
-impl Into<(i32, i32)> for Fraction {
-    fn into(self) -> (i32, i32) {
-        self.0.into()
+impl From<Fraction> for (i32, i32) {
+    fn from(f: Fraction) -> Self {
+        f.0.into()
     }
 }
 
