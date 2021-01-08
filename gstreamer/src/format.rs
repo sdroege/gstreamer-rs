@@ -136,7 +136,7 @@ macro_rules! impl_op_same(
         impl ops::$op<$name> for $name {
             type Output = $name;
 
-            fn $op_name(self, other: $name) -> $name {
+            fn $op_name(self, other: $name) -> Self::Output {
                 match (self.0, other.0) {
                     (Some(a), Some(b)) => $name($e(a, b)),
                     _ => $name(None),
@@ -147,7 +147,7 @@ macro_rules! impl_op_same(
         impl<'a> ops::$op<&'a $name> for $name {
             type Output = $name;
 
-            fn $op_name(self, other: &'a $name) -> $name {
+            fn $op_name(self, other: &'a $name) -> Self::Output {
                 self.$op_name(*other)
             }
         }
@@ -155,7 +155,7 @@ macro_rules! impl_op_same(
         impl<'a> ops::$op<$name> for &'a $name {
             type Output = $name;
 
-            fn $op_name(self, other: $name) -> $name {
+            fn $op_name(self, other: $name) -> Self::Output {
                 (*self).$op_name(other)
             }
         }
@@ -163,7 +163,7 @@ macro_rules! impl_op_same(
         impl<'a, 'b> ops::$op<&'a $name> for &'b $name {
             type Output = $name;
 
-            fn $op_name(self, other: &'a $name) -> $name {
+            fn $op_name(self, other: &'a $name) -> Self::Output {
                 (*self).$op_name(*other)
             }
         }
@@ -190,7 +190,7 @@ macro_rules! impl_op_u64(
         impl ops::$op<u64> for $name {
             type Output = $name;
 
-            fn $op_name(self, other: u64) -> $name {
+            fn $op_name(self, other: u64) -> Self::Output {
                 match self.0 {
                     Some(a) => $name($e(a, other)),
                     _ => $name(None),
@@ -201,7 +201,7 @@ macro_rules! impl_op_u64(
         impl<'a> ops::$op<&'a u64> for $name {
             type Output = $name;
 
-            fn $op_name(self, other: &'a u64) -> $name {
+            fn $op_name(self, other: &'a u64) -> Self::Output {
                 self.$op_name(*other)
             }
         }
@@ -209,7 +209,7 @@ macro_rules! impl_op_u64(
         impl<'a> ops::$op<u64> for &'a $name {
             type Output = $name;
 
-            fn $op_name(self, other: u64) -> $name {
+            fn $op_name(self, other: u64) -> Self::Output {
                 (*self).$op_name(other)
             }
         }
@@ -217,7 +217,7 @@ macro_rules! impl_op_u64(
         impl<'a, 'b> ops::$op<&'a u64> for &'b $name {
             type Output = $name;
 
-            fn $op_name(self, other: &'a u64) -> $name {
+            fn $op_name(self, other: &'a u64) -> Self::Output {
                 self.$op_name(*other)
             }
         }
@@ -297,7 +297,7 @@ macro_rules! impl_format_value_traits(
         }
 
         impl From<$name> for GenericFormattedValue {
-            fn from(v: $name) -> GenericFormattedValue {
+            fn from(v: $name) -> Self {
 	        skip_assert_initialized!();
                 GenericFormattedValue::$format_value(v)
             }
@@ -306,7 +306,7 @@ macro_rules! impl_format_value_traits(
         impl TryFrom<GenericFormattedValue> for $name {
             type Error = TryFromGenericFormattedValueError;
 
-            fn try_from(v: GenericFormattedValue) -> Result<$name, TryFromGenericFormattedValueError> {
+            fn try_from(v: GenericFormattedValue) -> Result<$name, Self::Error> {
 	        skip_assert_initialized!();
                 if let GenericFormattedValue::$format_value(v) = v {
                     Ok(v)
@@ -319,14 +319,14 @@ macro_rules! impl_format_value_traits(
         impl SpecificFormattedValue for $name { }
 
         impl From<u64> for $name {
-            fn from(v: u64) -> $name {
+            fn from(v: u64) -> Self {
 	        skip_assert_initialized!();
                 $name(Some(v))
             }
         }
 
         impl From<Option<u64>> for $name {
-            fn from(v: Option<u64>) -> $name {
+            fn from(v: Option<u64>) -> Self {
 	        skip_assert_initialized!();
                 $name(v)
             }
@@ -538,7 +538,7 @@ impl FormattedValue for Undefined {
 }
 
 impl From<Undefined> for GenericFormattedValue {
-    fn from(v: Undefined) -> GenericFormattedValue {
+    fn from(v: Undefined) -> Self {
         skip_assert_initialized!();
         GenericFormattedValue::Undefined(v)
     }
@@ -560,7 +560,7 @@ impl TryFrom<GenericFormattedValue> for Undefined {
 impl SpecificFormattedValue for Undefined {}
 
 impl From<i64> for Undefined {
-    fn from(v: i64) -> Undefined {
+    fn from(v: i64) -> Self {
         skip_assert_initialized!();
         Undefined(v)
     }
@@ -622,7 +622,7 @@ impl FormattedValue for Percent {
 }
 
 impl From<Percent> for GenericFormattedValue {
-    fn from(v: Percent) -> GenericFormattedValue {
+    fn from(v: Percent) -> Self {
         skip_assert_initialized!();
         GenericFormattedValue::Percent(v)
     }

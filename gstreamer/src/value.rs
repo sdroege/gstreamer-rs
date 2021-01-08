@@ -14,17 +14,17 @@ use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
 pub struct Fraction(pub Rational32);
 
 impl Fraction {
-    pub fn new(num: i32, den: i32) -> Fraction {
+    pub fn new(num: i32, den: i32) -> Self {
         assert_initialized_main_thread!();
         (num, den).into()
     }
 
-    pub fn approximate_f32(x: f32) -> Option<Fraction> {
+    pub fn approximate_f32(x: f32) -> Option<Self> {
         assert_initialized_main_thread!();
         Rational32::approximate_float(x).map(|r| r.into())
     }
 
-    pub fn approximate_f64(x: f64) -> Option<Fraction> {
+    pub fn approximate_f64(x: f64) -> Option<Self> {
         assert_initialized_main_thread!();
         Rational32::approximate_float(x).map(|r| r.into())
     }
@@ -39,7 +39,7 @@ impl fmt::Display for Fraction {
 impl ops::Deref for Fraction {
     type Target = Rational32;
 
-    fn deref(&self) -> &Rational32 {
+    fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
@@ -61,7 +61,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<Fraction> for Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: Fraction) -> Fraction {
+            fn $f(self, other: Fraction) -> Self::Output {
                 Fraction((self.0).$f(other.0))
             }
         }
@@ -69,7 +69,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<Fraction> for &Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: Fraction) -> Fraction {
+            fn $f(self, other: Fraction) -> Self::Output {
                 Fraction((self.0).$f(other.0))
             }
         }
@@ -77,7 +77,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<&Fraction> for Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: &Fraction) -> Fraction {
+            fn $f(self, other: &Fraction) -> Self::Output {
                 Fraction((self.0).$f(other.0))
             }
         }
@@ -85,7 +85,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<&Fraction> for &Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: &Fraction) -> Fraction {
+            fn $f(self, other: &Fraction) -> Self::Output {
                 Fraction((self.0).$f(other.0))
             }
         }
@@ -93,7 +93,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<i32> for Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: i32) -> Fraction {
+            fn $f(self, other: i32) -> Self::Output {
                 self.$f(Fraction::from(other))
             }
         }
@@ -101,7 +101,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<i32> for &Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: i32) -> Fraction {
+            fn $f(self, other: i32) -> Self::Output {
                 self.$f(Fraction::from(other))
             }
         }
@@ -109,7 +109,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<&i32> for Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: &i32) -> Fraction {
+            fn $f(self, other: &i32) -> Self::Output {
                 self.$f(Fraction::from(*other))
             }
         }
@@ -117,7 +117,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<&i32> for &Fraction {
             type Output = Fraction;
 
-            fn $f(self, other: &i32) -> Fraction {
+            fn $f(self, other: &i32) -> Self::Output {
                 self.$f(Fraction::from(*other))
             }
         }
@@ -125,7 +125,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<Fraction> for i32 {
             type Output = Fraction;
 
-            fn $f(self, other: Fraction) -> Fraction {
+            fn $f(self, other: Fraction) -> Self::Output {
                 Fraction::from(self).$f(other)
             }
         }
@@ -133,7 +133,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<&Fraction> for i32 {
             type Output = Fraction;
 
-            fn $f(self, other: &Fraction) -> Fraction {
+            fn $f(self, other: &Fraction) -> Self::Output {
                 Fraction::from(self).$f(other)
             }
         }
@@ -141,7 +141,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<Fraction> for &i32 {
             type Output = Fraction;
 
-            fn $f(self, other: Fraction) -> Fraction {
+            fn $f(self, other: Fraction) -> Self::Output {
                 Fraction::from(*self).$f(other)
             }
         }
@@ -149,7 +149,7 @@ macro_rules! impl_fraction_binop {
         impl ops::$name<&Fraction> for &i32 {
             type Output = Fraction;
 
-            fn $f(self, other: &Fraction) -> Fraction {
+            fn $f(self, other: &Fraction) -> Self::Output {
                 Fraction::from(*self).$f(other)
             }
         }
@@ -189,7 +189,7 @@ impl_fraction_binop!(Rem, rem, RemAssign, rem_assign);
 impl ops::Neg for Fraction {
     type Output = Fraction;
 
-    fn neg(self) -> Fraction {
+    fn neg(self) -> Self::Output {
         Fraction(self.0.neg())
     }
 }
@@ -197,20 +197,20 @@ impl ops::Neg for Fraction {
 impl ops::Neg for &Fraction {
     type Output = Fraction;
 
-    fn neg(self) -> Fraction {
+    fn neg(self) -> Self::Output {
         Fraction(self.0.neg())
     }
 }
 
 impl From<i32> for Fraction {
-    fn from(x: i32) -> Fraction {
+    fn from(x: i32) -> Self {
         assert_initialized_main_thread!();
         Fraction(x.into())
     }
 }
 
 impl From<(i32, i32)> for Fraction {
-    fn from(x: (i32, i32)) -> Fraction {
+    fn from(x: (i32, i32)) -> Self {
         assert_initialized_main_thread!();
         Fraction(x.into())
     }
@@ -223,14 +223,14 @@ impl From<Fraction> for (i32, i32) {
 }
 
 impl From<Rational32> for Fraction {
-    fn from(x: Rational32) -> Fraction {
+    fn from(x: Rational32) -> Self {
         assert_initialized_main_thread!();
         Fraction(x)
     }
 }
 
 impl From<Fraction> for Rational32 {
-    fn from(x: Fraction) -> Rational32 {
+    fn from(x: Fraction) -> Self {
         skip_assert_initialized!();
         x.0
     }
@@ -243,7 +243,7 @@ impl glib::types::StaticType for Fraction {
 }
 
 impl<'a> FromValue<'a> for Fraction {
-    unsafe fn from_value(v: &'a Value) -> Fraction {
+    unsafe fn from_value(v: &'a Value) -> Self {
         let n = ffi::gst_value_get_fraction_numerator(v.to_glib_none().0);
         let d = ffi::gst_value_get_fraction_denominator(v.to_glib_none().0);
 
@@ -252,7 +252,7 @@ impl<'a> FromValue<'a> for Fraction {
 }
 
 impl<'a> FromValueOptional<'a> for Fraction {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Fraction> {
+    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
         Some(Fraction::from_value(v))
     }
 }
