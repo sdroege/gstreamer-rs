@@ -81,7 +81,7 @@ stages:
   - .fdo.container-build@debian
   stage: container-base
   variables:
-    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev"
+    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev lcov"
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates'
 
 .build-final-image:
@@ -191,9 +191,7 @@ plugins-update-nightly:
   variables:
     UPDATE_IMG: "nightly"
 
-.cargo test:
-  stage: "test"
-  script:
+.cargo_test_var: &cargo_test
     - rustc --version
       # First build and test all the crates with their relevant features
       # Keep features in sync with below
@@ -228,6 +226,11 @@ plugins-update-nightly:
         cargo build --locked --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features
         cargo build --locked --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
+
+.cargo test:
+  stage: "test"
+  script:
+    - *cargo_test
 
 test msrv:
   extends:
@@ -412,6 +415,31 @@ outdated:
     - schedules
   script:
     - cargo outdated --color=always --root-deps-only --exit-code 1 -v
+
+coverage:
+  extends:
+    - '.cargo test'
+    - .img-nightly
+  stage: 'extras'
+  variables:
+    ALL_FEATURES: 'yes'
+    RUSTFLAGS: "-Zinstrument-coverage"
+    LLVM_PROFILE_FILE: "gstreamer-rs-%p-%m.profraw"
+  script:
+    - *cargo_test
+    # generate html report
+    - grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" -o ./coverage/
+    # generate cobertura report for gitlab integration
+    - grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" -o lcov
+    - python3 /usr/local/lib/python3.7/dist-packages/lcov_cobertura.py lcov
+    # output coverage summary for gitlab parsing
+    - lcov -r lcov "/*" 2&> out
+    - grep lines out
+  artifacts:
+    paths:
+      - 'coverage'
+    reports:
+      cobertura: coverage.xml
 
 pages:
   extends: .img-stable

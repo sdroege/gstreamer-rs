@@ -26,3 +26,10 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   cargo install --force cargo-deny
   cargo install --force cargo-outdated
 fi
+
+# coverage tools
+if [ "$RUST_VERSION" = "nightly" ]; then
+  cargo install grcov
+  rustup component add llvm-tools-preview
+  pip3 install lcov_cobertura
+fi
