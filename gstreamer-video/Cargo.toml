@@ -29,7 +29,7 @@ futures-util = "0.3"
 gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
 
 [dev-dependencies]
-itertools = "0.9"
+itertools = "0.10"
 
 [features]
 default = []
