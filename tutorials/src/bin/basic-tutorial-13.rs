@@ -29,7 +29,7 @@ fn send_seek_event(pipeline: &Element, rate: f64) -> bool {
     let position = match pipeline.query_position::<gst::ClockTime>() {
         Some(pos) => pos,
         None => {
-            eprintln!("Unable to retrieve current position...");
+            eprintln!("Unable to retrieve current position...\r");
             return false;
         }
     };
@@ -61,11 +61,11 @@ fn send_seek_event(pipeline: &Element, rate: f64) -> bool {
         .unwrap()
         .get::<Element>()
     {
-        println!("Current rate: {}", rate);
+        println!("Current rate: {}\r", rate);
         // Send the event
         video_sink.send_event(seek_event)
     } else {
-        eprintln!("Failed to update rate...");
+        eprintln!("Failed to update rate...\r");
         false
     }
 }
@@ -157,7 +157,7 @@ USAGE: Choose one of the following options, then press enter:
                     "PLAYING"
                 };
                 playing = !playing;
-                println!("Setting state to {}", status);
+                println!("Setting state to {}\r", status);
             }
             Command::DataRateUp => {
                 if send_seek_event(&pipeline, rate * 2.) {
@@ -183,7 +183,7 @@ USAGE: Choose one of the following options, then press enter:
                     // Send the event
                     let step = Step::new(gst::format::Buffers(Some(1)), rate.abs(), true, false);
                     video_sink.send_event(step);
-                    println!("Stepping one frame");
+                    println!("Stepping one frame\r");
                 }
             }
             Command::Quit => {
