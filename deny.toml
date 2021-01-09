@@ -1,6 +1,6 @@
 [advisories]
 db-path = "~/.cargo/advisory-db"
-db-url = "https://github.com/rustsec/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
 vulnerability = "deny"
 unmaintained = "warn"
 notice = "warn"
@@ -43,3 +43,9 @@ allow-git = [
 [[bans.skip]]
 name = "cfg-if"
 version = "0.1"
+
+# ignore duplicated itertools dependency because a few dozen dependencies still
+# pull in the old version
+[[bans.skip]]
+name = "itertools"
+version = "0.9"
