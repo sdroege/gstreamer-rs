@@ -32,14 +32,13 @@ impl AllocationParams {
     pub fn new(flags: MemoryFlags, align: usize, prefix: usize, padding: usize) -> Self {
         assert_initialized_main_thread!();
         let allocationparams = unsafe {
-            let mut allocationparams: ffi::GstAllocationParams = mem::zeroed();
-
-            allocationparams.flags = flags.to_glib();
-            allocationparams.align = align;
-            allocationparams.prefix = prefix;
-            allocationparams.padding = padding;
-
-            allocationparams
+            ffi::GstAllocationParams {
+                flags: flags.to_glib(),
+                align,
+                prefix,
+                padding,
+                ..mem::zeroed()
+            }
         };
 
         AllocationParams(allocationparams)

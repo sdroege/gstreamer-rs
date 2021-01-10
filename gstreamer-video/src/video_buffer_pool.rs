@@ -59,16 +59,12 @@ impl VideoAlignment {
     ) -> Self {
         assert_initialized_main_thread!();
 
-        let videoalignment = unsafe {
-            let mut videoalignment: ffi::GstVideoAlignment = mem::zeroed();
-
-            videoalignment.padding_top = padding_top;
-            videoalignment.padding_bottom = padding_bottom;
-            videoalignment.padding_left = padding_left;
-            videoalignment.padding_right = padding_right;
-            videoalignment.stride_align = *stride_align;
-
-            videoalignment
+        let videoalignment = ffi::GstVideoAlignment {
+            padding_top,
+            padding_bottom,
+            padding_left,
+            padding_right,
+            stride_align: *stride_align,
         };
 
         VideoAlignment(videoalignment)

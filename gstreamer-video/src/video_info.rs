@@ -84,15 +84,11 @@ impl VideoColorimetry {
     ) -> Self {
         assert_initialized_main_thread!();
 
-        let colorimetry = unsafe {
-            let mut colorimetry: ffi::GstVideoColorimetry = mem::zeroed();
-
-            colorimetry.range = range.to_glib();
-            colorimetry.matrix = matrix.to_glib();
-            colorimetry.transfer = transfer.to_glib();
-            colorimetry.primaries = primaries.to_glib();
-
-            colorimetry
+        let colorimetry = ffi::GstVideoColorimetry {
+            range: range.to_glib(),
+            matrix: matrix.to_glib(),
+            transfer: transfer.to_glib(),
+            primaries: primaries.to_glib(),
         };
 
         VideoColorimetry(colorimetry)
