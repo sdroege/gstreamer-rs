@@ -126,8 +126,6 @@ mod element;
 
 mod bin;
 
-mod allocator;
-pub use crate::allocator::AllocatorExtManual;
 mod pipeline;
 pub use crate::pipeline::GstPipelineExtManual;
 
@@ -317,7 +315,6 @@ pub mod prelude {
 
     pub use crate::meta::MetaAPI;
 
-    pub use crate::allocator::AllocatorExtManual;
     pub use crate::bin::GstBinExtManual;
     pub use crate::element::{ElementClassExt, ElementExtManual};
 

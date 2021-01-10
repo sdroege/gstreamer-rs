@@ -64,6 +64,8 @@ manual = [
     "GLib.Source",
     "GObject.Object",
     "GObject.Value",
+    "Gst.AllocationParams",
+    "Gst.Memory",
     "Gst.Segment",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
@@ -72,7 +74,14 @@ manual = [
 [[object]]
 name = "Gst.Allocator"
 status = "generate"
-manual_traits = ["AllocatorExtManual"]
+
+    [[object.function]]
+    name = "alloc"
+        [object.function.return]
+        nullable_return_is_error = "Failed to allocate memory"
+        [[object.function.parameter]]
+        name = "params"
+        const = true
 
 [[object]]
 name = "Gst.Bin"

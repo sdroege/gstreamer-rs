@@ -2,6 +2,8 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::AllocationParams;
+use crate::Memory;
 use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
@@ -36,24 +38,32 @@ unsafe impl Sync for Allocator {}
 pub const NONE_ALLOCATOR: Option<&Allocator> = None;
 
 pub trait AllocatorExt: 'static {
-    //#[doc(alias = "gst_allocator_alloc")]
-    //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory>;
-
-    //#[doc(alias = "gst_allocator_free")]
-    //fn free(&self, memory: /*Ignored*/&mut Memory);
+    #[doc(alias = "gst_allocator_alloc")]
+    fn alloc(
+        &self,
+        size: usize,
+        params: Option<&AllocationParams>,
+    ) -> Result<Memory, glib::BoolError>;
 
     #[doc(alias = "gst_allocator_set_default")]
     fn set_default(&self);
 }
 
 impl<O: IsA<Allocator>> AllocatorExt for O {
-    //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory> {
-    //    unsafe { TODO: call ffi:gst_allocator_alloc() }
-    //}
-
-    //fn free(&self, memory: /*Ignored*/&mut Memory) {
-    //    unsafe { TODO: call ffi:gst_allocator_free() }
-    //}
+    fn alloc(
+        &self,
+        size: usize,
+        params: Option<&AllocationParams>,
+    ) -> Result<Memory, glib::BoolError> {
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_allocator_alloc(
+                self.as_ref().to_glib_none().0,
+                size,
+                mut_override(params.to_glib_none().0),
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+        }
+    }
 
     fn set_default(&self) {
         unsafe {
