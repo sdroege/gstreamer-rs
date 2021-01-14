@@ -109,14 +109,12 @@ pub fn convert_sample_future(
     skip_assert_initialized!();
 
     use futures_channel::oneshot;
-    use futures_util::future::lazy;
-    use futures_util::future::FutureExt;
 
     let (sender, receiver) = oneshot::channel();
 
     let sample = sample.clone();
     let caps = caps.clone();
-    let future = lazy(move |_| {
+    let future = async move {
         assert!(
             glib::MainContext::ref_thread_default().is_owner(),
             "Spawning futures only allowed if the thread is owning the MainContext"
@@ -125,8 +123,11 @@ pub fn convert_sample_future(
         convert_sample_async(&sample, &caps, timeout, move |res| {
             let _ = sender.send(res);
         });
-    })
-    .then(|_| receiver.map(|res| res.expect("Sender dropped before callback was called")));
+
+        receiver
+            .await
+            .expect("Sender dropped before callback was called")
+    };
 
     Box::pin(future)
 }

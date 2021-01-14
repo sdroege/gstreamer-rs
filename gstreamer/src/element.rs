@@ -36,9 +36,6 @@ use std::ffi::CStr;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use std::future::Future;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use std::marker::Unpin;
 use std::mem;
 use std::num::NonZeroU64;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -262,10 +259,7 @@ pub trait ElementExtManual: 'static {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    fn call_async_future<F, T>(
-        &self,
-        func: F,
-    ) -> Pin<Box<dyn Future<Output = T> + Unpin + Send + 'static>>
+    fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
     where
         F: FnOnce(&Self) -> T + Send + 'static,
         T: Send + 'static;
@@ -810,16 +804,12 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    fn call_async_future<F, T>(
-        &self,
-        func: F,
-    ) -> Pin<Box<dyn Future<Output = T> + Unpin + Send + 'static>>
+    fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
     where
         F: FnOnce(&Self) -> T + Send + 'static,
         T: Send + 'static,
     {
         use futures_channel::oneshot;
-        use futures_util::future::FutureExt;
 
         let (sender, receiver) = oneshot::channel();
 
@@ -827,7 +817,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let _ = sender.send(func(element));
         });
 
-        Box::pin(receiver.map(|res| res.expect("sender dropped")))
+        Box::pin(async move { receiver.await.expect("sender dropped") })
     }
 
     fn get_current_running_time(&self) -> crate::ClockTime {

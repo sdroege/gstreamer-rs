@@ -174,18 +174,10 @@ impl SingleShotClockId {
     pub fn wait_async_future(
         &self,
     ) -> Result<
-        Pin<
-            Box<
-                dyn Future<Output = Result<(ClockTime, ClockId), ClockError>>
-                    + Unpin
-                    + Send
-                    + 'static,
-            >,
-        >,
+        Pin<Box<dyn Future<Output = Result<(ClockTime, ClockId), ClockError>> + Send + 'static>>,
         ClockError,
     > {
         use futures_channel::oneshot;
-        use futures_util::TryFutureExt;
 
         let (sender, receiver) = oneshot::channel();
 
@@ -196,7 +188,9 @@ impl SingleShotClockId {
             }
         })?;
 
-        Ok(Box::pin(receiver.map_err(|_| ClockError::Unscheduled)))
+        Ok(Box::pin(async move {
+            receiver.await.map_err(|_| ClockError::Unscheduled)
+        }))
     }
 }
 
