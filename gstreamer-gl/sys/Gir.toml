@@ -30,3 +30,31 @@ gstreamer-video="GstVideo"
 #[[object]]
 #name = "GstGL.GL_COLOR_CONVERT_VIDEO_CAPS"
 #status = "manual"
+
+[[object]]
+name = "GstGL.GLBuffer"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
+name = "GstGL.GLMemory"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
+name = "GstGL.GLMemoryPBO"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
+
+[[object]]
+name = "GstGL.GLRenderbuffer"
+status = "generate"
+    [[object.function]]
+    name = "get_type"
+    version = "1.20"
