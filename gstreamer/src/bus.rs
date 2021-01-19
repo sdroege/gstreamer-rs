@@ -2,12 +2,13 @@
 
 use futures_channel::mpsc::{self, UnboundedReceiver};
 use futures_core::Stream;
-use futures_util::{future, StreamExt};
+use futures_util::StreamExt;
 use glib::ffi::{gboolean, gpointer};
 use glib::prelude::*;
 use glib::source::{Continue, Priority, SourceId};
 use glib::translate::*;
 use std::cell::RefCell;
+use std::future;
 use std::mem::transmute;
 use std::pin::Pin;
 use std::task::{Context, Poll};
