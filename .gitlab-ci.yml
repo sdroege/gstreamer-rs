@@ -443,7 +443,7 @@ coverage:
       cobertura: coverage.xml
 
 pages:
-  extends: .img-stable
+  extends: .img-nightly
   stage: 'deploy'
   script:
     - |
