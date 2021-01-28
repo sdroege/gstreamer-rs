@@ -1,8 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
+use num_integer::div_rem;
+use std::io::{self, prelude::*};
 use std::time::Duration;
-use std::{cmp, convert, fmt};
+use std::{cmp, convert, fmt, str};
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug, Default)]
 pub struct ClockTime(pub Option<u64>);
@@ -125,44 +127,157 @@ macro_rules! impl_common_ops_for_opt_int(
 
 impl_common_ops_for_opt_int!(ClockTime);
 
+/// Tell [`pad_clocktime`] what kind of time we're formatting
+enum Sign {
+    /// An invalid time (`None`)
+    Invalid,
+
+    /// A non-negative time (zero or greater)
+    NonNegative,
+
+    // For a future ClockTimeDiff formatting
+    #[allow(dead_code)]
+    /// A negative time (below zero)
+    Negative,
+}
+
+// Derived from libcore `Formatter::pad_integral` (same APACHE v2 + MIT licenses)
+//
+// TODO: Would be useful for formatting ClockTimeDiff
+// if it was a new type instead of an alias for i64
+//
+/// Performs the correct padding for a clock time which has already been
+/// emitted into a str, as by [`write_clocktime`]. The str should *not*
+/// contain the sign; that will be added by this method.
+fn pad_clocktime(f: &mut fmt::Formatter<'_>, sign: Sign, buf: &str) -> fmt::Result {
+    skip_assert_initialized!();
+    use self::Sign::*;
+    use std::fmt::{Alignment, Write};
+
+    // Start by determining how we're padding, gathering
+    // settings from the Formatter and the Sign
+
+    // Choose the fill character
+    let sign_aware_zero_pad = f.sign_aware_zero_pad();
+    let fill_char = match sign {
+        Invalid if sign_aware_zero_pad => '-', // Zero-padding an invalid time
+        _ if sign_aware_zero_pad => '0',       // Zero-padding a valid time
+        _ => f.fill(),                         // Otherwise, pad with the user-chosen character
+    };
+
+    // Choose the sign character
+    let sign_plus = f.sign_plus();
+    let sign_char = match sign {
+        Invalid if sign_plus => Some(fill_char), // User requested sign, time is invalid
+        NonNegative if sign_plus => Some('+'),   // User requested sign, time is zero or above
+        Negative => Some('-'),                   // Time is below zero
+        _ => None,                               // Otherwise, add no sign
+    };
+
+    // Our minimum width is the value's width, plus 1 for the sign if present
+    let width = buf.len() + sign_char.map_or(0, |_| 1);
+
+    // Subtract the minimum width from the requested width to get the padding,
+    // taking care not to allow wrapping due to underflow
+    let padding = f.width().unwrap_or(0).saturating_sub(width);
+
+    // Split the required padding into the three possible parts
+    let align = f.align().unwrap_or(Alignment::Right);
+    let (pre_padding, zero_padding, post_padding) = match align {
+        _ if sign_aware_zero_pad => (0, padding, 0), // Zero-padding: Pad between sign and value
+        Alignment::Left => (0, 0, padding),          // Align left: Pad on the right side
+        Alignment::Right => (padding, 0, 0),         // Align right: Pad on the left side
+
+        // Align center: Split equally between left and right side
+        // If the required padding is odd, the right side gets one more char
+        Alignment::Center => (padding / 2, 0, (padding + 1) / 2),
+    };
+
+    // And now for the actual writing
+
+    for _ in 0..pre_padding {
+        f.write_char(fill_char)?; // Left padding
+    }
+    if let Some(c) = sign_char {
+        f.write_char(c)?; // ------- Sign character
+    }
+    for _ in 0..zero_padding {
+        f.write_char(fill_char)?; // Padding between sign and value
+    }
+    f.write_str(buf)?; // ---------- Value
+    for _ in 0..post_padding {
+        f.write_char(fill_char)?; // Right padding
+    }
+
+    Ok(())
+}
+
+/// Writes an unpadded, signless clocktime string with the given precision
+fn write_clocktime<W: io::Write>(
+    mut writer: W,
+    clocktime: Option<u64>,
+    precision: usize,
+) -> io::Result<()> {
+    skip_assert_initialized!();
+    let precision = cmp::min(9, precision);
+
+    if let Some(ns) = clocktime {
+        // Valid time
+
+        // Split the time into parts
+        let (s, ns) = div_rem(ns, 1_000_000_000);
+        let (m, s) = div_rem(s, 60);
+        let (h, m) = div_rem(m, 60);
+
+        // Write HH:MM:SS
+        write!(writer, "{}:{:02}:{:02}", h, m, s)?;
+
+        if precision > 0 {
+            // Format the nanoseconds into a stack-allocated string
+            // The value is zero-padded so always 9 digits long
+            let mut buf = [0u8; 9];
+            write!(&mut buf[..], "{:09}", ns).unwrap();
+            let buf_str = str::from_utf8(&buf[..]).unwrap();
+
+            // Write decimal point and a prefix of the nanoseconds for more precision
+            write!(writer, ".{:.p$}", buf_str, p = precision)?;
+        }
+    } else {
+        // Invalid time
+
+        // Write HH:MM:SS, but invalid
+        write!(writer, "--:--:--")?;
+
+        if precision > 0 {
+            // Write decimal point and dashes for more precision
+            write!(writer, ".{:->p$}", "", p = precision)?;
+        }
+    }
+
+    Ok(())
+}
+
 impl fmt::Display for ClockTime {
-    #[allow(clippy::many_single_char_names)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let precision = f.precision().unwrap_or(9);
-        // TODO: Could also check width and pad the hours as needed
 
-        let (h, m, s, ns) = match self.0 {
-            Some(v) => {
-                let mut s = v / 1_000_000_000;
-                let mut m = s / 60;
-                let h = m / 60;
-                s %= 60;
-                m %= 60;
-                let ns = v % 1_000_000_000;
+        // What the maximum time (u64::MAX - 1) would format to
+        const MAX_SIZE: usize = "5124095:34:33.709551614".len();
 
-                (h, m, s, ns)
-            }
-            None => (99, 99, 99, 999_999_999),
+        // Write the unpadded clocktime value into a stack-allocated string
+        let mut buf = [0u8; MAX_SIZE];
+        let mut cursor = io::Cursor::new(&mut buf[..]);
+        write_clocktime(&mut cursor, self.0, precision).unwrap();
+        let pos = cursor.position() as usize;
+        let buf_str = str::from_utf8(&buf[..pos]).unwrap();
+
+        let sign = if self.0.is_some() {
+            Sign::NonNegative
+        } else {
+            Sign::Invalid
         };
 
-        if precision == 0 {
-            f.write_fmt(format_args!("{:02}:{:02}:{:02}", h, m, s))
-        } else {
-            let mut divisor = 1;
-            let precision = cmp::min(precision, 9);
-            for _ in 0..(9 - precision) {
-                divisor *= 10;
-            }
-
-            f.write_fmt(format_args!(
-                "{:02}:{:02}:{:02}.{:0width$}",
-                h,
-                m,
-                s,
-                ns / divisor,
-                width = precision
-            ))
-        }
+        pad_clocktime(f, sign, buf_str)
     }
 }
 
@@ -395,5 +510,109 @@ mod tests {
         assert_eq!(ct_20.max(ct_10).unwrap(), ct_20);
         assert!(ct_none.max(ct_10).is_none());
         assert!(ct_20.max(ct_none).is_none());
+    }
+
+    #[test]
+    fn display() {
+        let none = ClockTime::none();
+        let some = ClockTime::from_nseconds(45834908569837);
+        let lots = ClockTime::from_nseconds(std::u64::MAX - 1);
+
+        // Simple
+
+        assert_eq!(format!("{:.0}", none), "--:--:--");
+        assert_eq!(format!("{:.3}", none), "--:--:--.---");
+        assert_eq!(format!("{}", none), "--:--:--.---------");
+
+        assert_eq!(format!("{:.0}", some), "12:43:54");
+        assert_eq!(format!("{:.3}", some), "12:43:54.908");
+        assert_eq!(format!("{}", some), "12:43:54.908569837");
+
+        assert_eq!(format!("{:.0}", lots), "5124095:34:33");
+        assert_eq!(format!("{:.3}", lots), "5124095:34:33.709");
+        assert_eq!(format!("{}", lots), "5124095:34:33.709551614");
+
+        // Precision caps at 9
+        assert_eq!(format!("{:.10}", none), "--:--:--.---------");
+        assert_eq!(format!("{:.10}", some), "12:43:54.908569837");
+        assert_eq!(format!("{:.10}", lots), "5124095:34:33.709551614");
+
+        // Short width
+
+        assert_eq!(format!("{:4.0}", none), "--:--:--");
+        assert_eq!(format!("{:4.3}", none), "--:--:--.---");
+        assert_eq!(format!("{:4}", none), "--:--:--.---------");
+
+        assert_eq!(format!("{:4.0}", some), "12:43:54");
+        assert_eq!(format!("{:4.3}", some), "12:43:54.908");
+        assert_eq!(format!("{:4}", some), "12:43:54.908569837");
+
+        assert_eq!(format!("{:4.0}", lots), "5124095:34:33");
+        assert_eq!(format!("{:4.3}", lots), "5124095:34:33.709");
+        assert_eq!(format!("{:4}", lots), "5124095:34:33.709551614");
+
+        // Simple padding
+
+        assert_eq!(format!("{:>9.0}", none), " --:--:--");
+        assert_eq!(format!("{:<9.0}", none), "--:--:-- ");
+        assert_eq!(format!("{:^10.0}", none), " --:--:-- ");
+        assert_eq!(format!("{:>13.3}", none), " --:--:--.---");
+        assert_eq!(format!("{:<13.3}", none), "--:--:--.--- ");
+        assert_eq!(format!("{:^14.3}", none), " --:--:--.--- ");
+        assert_eq!(format!("{:>19}", none), " --:--:--.---------");
+        assert_eq!(format!("{:<19}", none), "--:--:--.--------- ");
+        assert_eq!(format!("{:^20}", none), " --:--:--.--------- ");
+
+        assert_eq!(format!("{:>9.0}", some), " 12:43:54");
+        assert_eq!(format!("{:<9.0}", some), "12:43:54 ");
+        assert_eq!(format!("{:^10.0}", some), " 12:43:54 ");
+        assert_eq!(format!("{:>13.3}", some), " 12:43:54.908");
+        assert_eq!(format!("{:<13.3}", some), "12:43:54.908 ");
+        assert_eq!(format!("{:^14.3}", some), " 12:43:54.908 ");
+        assert_eq!(format!("{:>19}", some), " 12:43:54.908569837");
+        assert_eq!(format!("{:<19}", some), "12:43:54.908569837 ");
+        assert_eq!(format!("{:^20}", some), " 12:43:54.908569837 ");
+
+        assert_eq!(format!("{:>14.0}", lots), " 5124095:34:33");
+        assert_eq!(format!("{:<14.0}", lots), "5124095:34:33 ");
+        assert_eq!(format!("{:^15.0}", lots), " 5124095:34:33 ");
+        assert_eq!(format!("{:>18.3}", lots), " 5124095:34:33.709");
+        assert_eq!(format!("{:<18.3}", lots), "5124095:34:33.709 ");
+        assert_eq!(format!("{:^19.3}", lots), " 5124095:34:33.709 ");
+        assert_eq!(format!("{:>24}", lots), " 5124095:34:33.709551614");
+        assert_eq!(format!("{:<24}", lots), "5124095:34:33.709551614 ");
+        assert_eq!(format!("{:^25}", lots), " 5124095:34:33.709551614 ");
+
+        // Padding with sign or zero-extension
+
+        assert_eq!(format!("{:+11.0}", none), "   --:--:--");
+        assert_eq!(format!("{:011.0}", none), "-----:--:--");
+        assert_eq!(format!("{:+011.0}", none), "-----:--:--");
+        assert_eq!(format!("{:+15.3}", none), "   --:--:--.---");
+        assert_eq!(format!("{:015.3}", none), "-----:--:--.---");
+        assert_eq!(format!("{:+015.3}", none), "-----:--:--.---");
+        assert_eq!(format!("{:+21}", none), "   --:--:--.---------");
+        assert_eq!(format!("{:021}", none), "-----:--:--.---------");
+        assert_eq!(format!("{:+021}", none), "-----:--:--.---------");
+
+        assert_eq!(format!("{:+11.0}", some), "  +12:43:54");
+        assert_eq!(format!("{:011.0}", some), "00012:43:54");
+        assert_eq!(format!("{:+011.0}", some), "+0012:43:54");
+        assert_eq!(format!("{:+15.3}", some), "  +12:43:54.908");
+        assert_eq!(format!("{:015.3}", some), "00012:43:54.908");
+        assert_eq!(format!("{:+015.3}", some), "+0012:43:54.908");
+        assert_eq!(format!("{:+21}", some), "  +12:43:54.908569837");
+        assert_eq!(format!("{:021}", some), "00012:43:54.908569837");
+        assert_eq!(format!("{:+021}", some), "+0012:43:54.908569837");
+
+        assert_eq!(format!("{:+16.0}", lots), "  +5124095:34:33");
+        assert_eq!(format!("{:016.0}", lots), "0005124095:34:33");
+        assert_eq!(format!("{:+016.0}", lots), "+005124095:34:33");
+        assert_eq!(format!("{:+20.3}", lots), "  +5124095:34:33.709");
+        assert_eq!(format!("{:020.3}", lots), "0005124095:34:33.709");
+        assert_eq!(format!("{:+020.3}", lots), "+005124095:34:33.709");
+        assert_eq!(format!("{:+26}", lots), "  +5124095:34:33.709551614");
+        assert_eq!(format!("{:026}", lots), "0005124095:34:33.709551614");
+        assert_eq!(format!("{:+026}", lots), "+005124095:34:33.709551614");
     }
 }
