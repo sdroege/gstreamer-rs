@@ -3,15 +3,12 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 mod gl_base_filter;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::gl_base_filter::GLBaseFilterExt;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::gl_base_filter::{GLBaseFilter, NONE_GL_BASE_FILTER};
+
+mod gl_base_memory_allocator;
+pub use self::gl_base_memory_allocator::{GLBaseMemoryAllocator, NONE_GL_BASE_MEMORY_ALLOCATOR};
 
 mod gl_color_convert;
 pub use self::gl_color_convert::GLColorConvert;
@@ -24,9 +21,16 @@ mod gl_display;
 pub use self::gl_display::GLDisplayExt;
 pub use self::gl_display::{GLDisplay, NONE_GL_DISPLAY};
 
+mod gl_filter;
+pub use self::gl_filter::GLFilterExt;
+pub use self::gl_filter::{GLFilter, NONE_GL_FILTER};
+
 mod gl_framebuffer;
 pub use self::gl_framebuffer::GLFramebufferExt;
 pub use self::gl_framebuffer::{GLFramebuffer, NONE_GL_FRAMEBUFFER};
+
+mod gl_memory_allocator;
+pub use self::gl_memory_allocator::{GLMemoryAllocator, NONE_GL_MEMORY_ALLOCATOR};
 
 mod gl_overlay_compositor;
 pub use self::gl_overlay_compositor::GLOverlayCompositor;
@@ -47,6 +51,12 @@ mod gl_window;
 pub use self::gl_window::GLWindowExt;
 pub use self::gl_window::{GLWindow, NONE_GL_WINDOW};
 
+mod gl_allocation_params;
+pub use self::gl_allocation_params::GLAllocationParams;
+
+mod gl_video_allocation_params;
+pub use self::gl_video_allocation_params::GLVideoAllocationParams;
+
 mod enums;
 pub use self::enums::GLContextError;
 pub use self::enums::GLFormat;
@@ -66,11 +76,10 @@ pub use self::flags::GLAPI;
 
 #[doc(hidden)]
 pub mod traits {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub use super::GLBaseFilterExt;
     pub use super::GLContextExt;
     pub use super::GLDisplayExt;
+    pub use super::GLFilterExt;
     pub use super::GLFramebufferExt;
     pub use super::GLWindowExt;
 }

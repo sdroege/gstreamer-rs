@@ -3,13 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use crate::GLContext;
 use crate::GLSLProfile;
 use glib::error::ErrorDomain;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::object::IsA;
 use glib::translate::*;
 use glib::value::FromValue;
@@ -169,10 +165,21 @@ pub enum GLFormat {
 }
 
 impl GLFormat {
-    //#[doc(alias = "gst_gl_format_from_video_info")]
-    //pub fn from_video_info<P: IsA<GLContext>>(context: &P, vinfo: /*Ignored*/&mut gst_video::VideoInfo, plane: u32) -> GLFormat {
-    //    unsafe { TODO: call ffi:gst_gl_format_from_video_info() }
-    //}
+    #[doc(alias = "gst_gl_format_from_video_info")]
+    pub fn from_video_info<P: IsA<GLContext>>(
+        context: &P,
+        vinfo: &gst_video::VideoInfo,
+        plane: u32,
+    ) -> GLFormat {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib(ffi::gst_gl_format_from_video_info(
+                context.as_ref().to_glib_none().0,
+                mut_override(vinfo.to_glib_none().0),
+                plane,
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]

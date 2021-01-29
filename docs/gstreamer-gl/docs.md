@@ -13,25 +13,67 @@ OpenGL ES 1.x
 OpenGL ES 2.x and 3.x
 <!-- struct GLAPI::const ANY -->
 Any OpenGL API
+<!-- struct GLAllocationParams -->
+<!-- impl GLAllocationParams::fn copy -->
+
+# Returns
+
+a copy of the `GLAllocationParams` specified by
+ `self` or `None` on failure
+<!-- impl GLAllocationParams::fn copy_data -->
+Copies the dynamically allocated data from `self` to `dest`. Direct subclasses
+should call this function in their own overridden copy function.
+## `dest`
+the destination `GLAllocationParams`
+<!-- impl GLAllocationParams::fn free -->
+Frees the `GLAllocationParams` and all associated data.
+<!-- impl GLAllocationParams::fn free_data -->
+Frees the dynamically allocated data in `self`. Direct subclasses
+should call this function in their own overridden free function.
+<!-- impl GLAllocationParams::fn init -->
+`notify` will be called once for each allocated memory using these `self`
+when freeing the memory.
+## `struct_size`
+the struct size of the implementation
+## `alloc_flags`
+some alloc flags
+## `copy`
+a copy function
+## `free`
+a free function
+## `context`
+a `GLContext`
+## `alloc_size`
+the number of bytes to allocate.
+## `alloc_params`
+a `gst::AllocationParams` to apply
+## `wrapped_data`
+a sysmem data pointer to initialize the allocation with
+## `gl_handle`
+a GL handle to initialize the allocation with
+## `user_data`
+user data to call `notify` with
+## `notify`
+a `GDestroyNotify`
+
+# Returns
+
+whether the parameters could be initialized
 <!-- struct GLBaseFilter -->
 `GLBaseFilter` handles the nitty gritty details of retrieving an OpenGL
 context. It also provided some wrappers around `gst_base::BaseTransform`'s
 `start()`, `stop()` and `set_caps()` virtual methods that ensure an OpenGL
 context is available and current in the calling thread.
 
-Feature: `v1_16`
-
 # Implements
 
-[`GLBaseFilterExt`](trait.GLBaseFilterExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLBaseFilterExt`](trait.GLBaseFilterExt.html), [`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait GLBaseFilterExt -->
 Trait containing all `GLBaseFilter` methods.
 
-Feature: `v1_16`
-
 # Implementors
 
-[`GLBaseFilter`](struct.GLBaseFilter.html)
+[`GLBaseFilter`](struct.GLBaseFilter.html), [`GLFilter`](struct.GLFilter.html)
 <!-- trait GLBaseFilterExt::fn find_gl_context -->
 
 Feature: `v1_16`
@@ -48,6 +90,66 @@ Feature: `v1_18`
 # Returns
 
 the `GLContext` found by `self`
+<!-- struct GLBaseMemory -->
+GstGLBaseMemory is a `gst::Memory` subclass providing the basis of support
+for the mapping of GL buffers.
+
+Data is uploaded or downloaded from the GPU as is necessary.
+<!-- impl GLBaseMemory::fn alloc_data -->
+Note: only intended for subclass usage to allocate the system memory buffer
+on demand. If there is already a non-NULL data pointer in `self`->data,
+then this function imply returns TRUE.
+
+# Returns
+
+whether the system memory could be allocated
+<!-- impl GLBaseMemory::fn init -->
+Initializes `self` with the required parameters
+## `allocator`
+the `gst::Allocator` to initialize with
+## `parent`
+the parent `gst::Memory` to initialize with
+## `context`
+the `GLContext` to initialize with
+## `params`
+the [`crate::gst::AllocationParams`] (XXX: @-reference does not belong to GLBaseMemory!) to initialize with
+## `size`
+the number of bytes to be allocated
+## `user_data`
+user data to call `notify` with
+## `notify`
+a `GDestroyNotify`
+<!-- impl GLBaseMemory::fn memcpy -->
+## `dest`
+the destination `GLBaseMemory`
+## `offset`
+the offset to start at
+## `size`
+the number of bytes to copy
+
+# Returns
+
+whether the copy succeeded.
+<!-- impl GLBaseMemory::fn alloc -->
+## `allocator`
+a `GLBaseMemoryAllocator`
+## `params`
+the `GLAllocationParams` to allocate the memory with
+
+# Returns
+
+a new `GLBaseMemory` from `allocator` with the requested `params`.
+<!-- impl GLBaseMemory::fn init_once -->
+Initializes the GL Base Memory allocator. It is safe to call this function
+multiple times. This must be called before any other GstGLBaseMemory operation.
+<!-- struct GLBaseMemoryAllocator -->
+Opaque `GLBaseMemoryAllocator` struct
+
+This is an Abstract Base Class, you cannot instantiate it.
+
+# Implements
+
+[`gst::AllocatorExt`](../gst/trait.AllocatorExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- struct GLColorConvert -->
 `GLColorConvert` is an object that converts between color spaces and/or
 formats using OpenGL Shaders.
@@ -629,6 +731,58 @@ Mesa3D GBM display
 EGLDevice display (Since: 1.18)
 <!-- struct GLDisplayType::const ANY -->
 any display type
+<!-- struct GLFilter -->
+`GLFilter` helps to implement simple OpenGL filter elements taking a
+single input and producing a single output with a `GLFramebuffer`
+
+# Implements
+
+[`GLFilterExt`](trait.GLFilterExt.html), [`GLBaseFilterExt`](trait.GLBaseFilterExt.html), [`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait GLFilterExt -->
+Trait containing all `GLFilter` methods.
+
+# Implementors
+
+[`GLFilter`](struct.GLFilter.html)
+<!-- trait GLFilterExt::fn draw_fullscreen_quad -->
+Render a fullscreen quad using the current GL state. The only GL state this
+modifies is the necessary vertex/index buffers and, if necessary, a
+Vertex Array Object for drawing a fullscreen quad. Framebuffer state,
+any shaders, viewport state, etc must be setup by the caller.
+<!-- trait GLFilterExt::fn filter_texture -->
+Calls filter_texture vfunc with correctly mapped `GstGLMemorys`
+## `input`
+an input buffer
+## `output`
+an output buffer
+
+# Returns
+
+whether the transformation succeeded
+<!-- trait GLFilterExt::fn render_to_target -->
+Transforms `input` into `output` using `func` on through FBO.
+## `input`
+the input texture
+## `output`
+the output texture
+## `func`
+the function to transform `input` into `output`. called with `data`
+## `data`
+the data associated with `func`
+
+# Returns
+
+the return value of `func`
+<!-- trait GLFilterExt::fn render_to_target_with_shader -->
+Transforms `input` into `output` using `shader` with a FBO.
+
+See also: `GLFilterExt::render_to_target`
+## `input`
+the input texture
+## `output`
+the output texture
+## `shader`
+the shader to use.
 <!-- enum GLFormat -->
 <!-- enum GLFormat::variant Luminance -->
 Single component replicated across R, G, and B textures
@@ -746,6 +900,20 @@ output height
 # Returns
 
 the OpenGL id for `self`
+<!-- struct GLMemoryAllocator -->
+Opaque `GLMemoryAllocator` struct
+
+# Implements
+
+[`GLBaseMemoryAllocatorExt`](trait.GLBaseMemoryAllocatorExt.html), [`gst::AllocatorExt`](../gst/trait.AllocatorExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl GLMemoryAllocator::fn get_default -->
+## `context`
+a `GLContext`
+
+# Returns
+
+the default `GLMemoryAllocator` supported by
+ `context`
 <!-- struct GLOverlayCompositor -->
 Opaque `GLOverlayCompositor` object
 
@@ -1421,6 +1589,148 @@ The configuration is unsupported.
 This element requires a reconfiguration.
 <!-- enum GLUploadReturn::variant UnsharedGlContext -->
 private return value.
+<!-- struct GLVideoAllocationParams -->
+<!-- impl GLVideoAllocationParams::fn new -->
+## `context`
+a `GLContext`
+## `alloc_params`
+the `gst::AllocationParams` for sysmem mappings of the texture
+## `v_info`
+the `gst_video::VideoInfo` for the texture
+## `plane`
+the video plane of `v_info` to allocate
+## `valign`
+any `gst_video::VideoAlignment` applied to symem mappings of the texture
+## `target`
+the `GLTextureTarget` for the created textures
+## `tex_format`
+the `GLFormat` for the created textures
+
+# Returns
+
+a new `GLVideoAllocationParams` for allocating `GLMemory`'s
+<!-- impl GLVideoAllocationParams::fn new_wrapped_data -->
+## `context`
+a `GLContext`
+## `alloc_params`
+the `gst::AllocationParams` for `wrapped_data`
+## `v_info`
+the `gst_video::VideoInfo` for `wrapped_data`
+## `plane`
+the video plane `wrapped_data` represents
+## `valign`
+any `gst_video::VideoAlignment` applied to symem mappings of `wrapped_data`
+## `target`
+the `GLTextureTarget` for `wrapped_data`
+## `tex_format`
+the `GLFormat` for `wrapped_data`
+## `wrapped_data`
+the data pointer to wrap
+## `user_data`
+user data to call `notify` with
+## `notify`
+a `GDestroyNotify`
+
+# Returns
+
+a new `GLVideoAllocationParams` for wrapping `wrapped_data`
+<!-- impl GLVideoAllocationParams::fn new_wrapped_gl_handle -->
+`gl_handle` is defined by the specific OpenGL handle being wrapped
+For `GLMemory` and `GLMemoryPBO` it is an OpenGL texture id.
+Other memory types may define it to require a different type of parameter.
+## `context`
+a `GLContext`
+## `alloc_params`
+the `gst::AllocationParams` for `tex_id`
+## `v_info`
+the `gst_video::VideoInfo` for `tex_id`
+## `plane`
+the video plane `tex_id` represents
+## `valign`
+any `gst_video::VideoAlignment` applied to symem mappings of `tex_id`
+## `target`
+the `GLTextureTarget` for `tex_id`
+## `tex_format`
+the `GLFormat` for `tex_id`
+## `gl_handle`
+the GL handle to wrap
+## `user_data`
+user data to call `notify` with
+## `notify`
+a `GDestroyNotify`
+
+# Returns
+
+a new `GLVideoAllocationParams` for wrapping `gl_handle`
+<!-- impl GLVideoAllocationParams::fn new_wrapped_texture -->
+## `context`
+a `GLContext`
+## `alloc_params`
+the `gst::AllocationParams` for `tex_id`
+## `v_info`
+the `gst_video::VideoInfo` for `tex_id`
+## `plane`
+the video plane `tex_id` represents
+## `valign`
+any `gst_video::VideoAlignment` applied to symem mappings of `tex_id`
+## `target`
+the `GLTextureTarget` for `tex_id`
+## `tex_format`
+the `GLFormat` for `tex_id`
+## `tex_id`
+the GL texture to wrap
+## `user_data`
+user data to call `notify` with
+## `notify`
+a `GDestroyNotify`
+
+# Returns
+
+a new `GLVideoAllocationParams` for wrapping `tex_id`
+<!-- impl GLVideoAllocationParams::fn copy_data -->
+Copy and set any dynamically allocated resources in `dest_vid`. Intended
+for subclass usage only to chain up at the end of a subclass copy function.
+## `dest_vid`
+destination `GLVideoAllocationParams` to copy into
+<!-- impl GLVideoAllocationParams::fn free_data -->
+Unset and free any dynamically allocated resources. Intended for subclass
+usage only to chain up at the end of a subclass free function.
+<!-- impl GLVideoAllocationParams::fn init_full -->
+Intended for subclass usage
+## `struct_size`
+the size of the struct in `self`
+## `alloc_flags`
+some allocation flags
+## `copy`
+a copy function
+## `free`
+a free function
+## `context`
+a `GLContext`
+## `alloc_params`
+the `gst::AllocationParams` for `wrapped_data`
+## `v_info`
+the `gst_video::VideoInfo` for `wrapped_data`
+## `plane`
+the video plane `wrapped_data` represents
+## `valign`
+any `gst_video::VideoAlignment` applied to symem mappings of `wrapped_data`
+## `target`
+the `GLTextureTarget`
+## `tex_format`
+the `GLFormat`
+## `wrapped_data`
+the optional data pointer to wrap
+## `gl_handle`
+the optional OpenGL handle to wrap or 0
+## `user_data`
+user data to call `notify` with
+## `notify`
+a `GDestroyNotify`
+
+# Returns
+
+initializes `self` with the parameters specified
 <!-- struct GLViewConvert -->
 Convert stereoscopic/multiview video using fragment shaders.
 
