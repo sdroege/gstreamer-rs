@@ -34,8 +34,6 @@ use gst::element_warning;
 use gst::prelude::*;
 
 #[cfg(feature = "v1_10")]
-use glib::subclass::prelude::*;
-#[cfg(feature = "v1_10")]
 use glib::GBoxed;
 
 use std::env;

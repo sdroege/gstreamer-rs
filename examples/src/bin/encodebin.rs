@@ -19,8 +19,6 @@ use gst::prelude::*;
 use gst_pbutils::prelude::*;
 
 #[cfg(feature = "v1_10")]
-use glib::subclass::prelude::*;
-#[cfg(feature = "v1_10")]
 use glib::GBoxed;
 
 use std::env;
