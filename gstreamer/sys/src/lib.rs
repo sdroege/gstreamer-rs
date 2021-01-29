@@ -4259,9 +4259,6 @@ extern "C" {
         offset: ssize_t,
         size: ssize_t,
     ) -> *mut GstBuffer;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_buffer_copy(buf: *const GstBuffer) -> *mut GstBuffer;
     pub fn gst_buffer_copy_deep(buf: *const GstBuffer) -> *mut GstBuffer;
     pub fn gst_buffer_copy_into(
         dest: *mut GstBuffer,
@@ -4386,9 +4383,6 @@ extern "C" {
     pub fn gst_buffer_n_memory(buffer: *mut GstBuffer) -> c_uint;
     pub fn gst_buffer_peek_memory(buffer: *mut GstBuffer, idx: c_uint) -> *mut GstMemory;
     pub fn gst_buffer_prepend_memory(buffer: *mut GstBuffer, mem: *mut GstMemory);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_buffer_ref(buf: *mut GstBuffer) -> *mut GstBuffer;
     pub fn gst_buffer_remove_all_memory(buffer: *mut GstBuffer);
     pub fn gst_buffer_remove_memory(buffer: *mut GstBuffer, idx: c_uint);
     pub fn gst_buffer_remove_memory_range(buffer: *mut GstBuffer, idx: c_uint, length: c_int);
@@ -4414,16 +4408,10 @@ extern "C" {
     pub fn gst_buffer_set_flags(buffer: *mut GstBuffer, flags: GstBufferFlags) -> gboolean;
     pub fn gst_buffer_set_size(buffer: *mut GstBuffer, size: ssize_t);
     pub fn gst_buffer_unmap(buffer: *mut GstBuffer, info: *mut GstMapInfo);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_buffer_unref(buf: *mut GstBuffer);
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_buffer_unset_flags(buffer: *mut GstBuffer, flags: GstBufferFlags) -> gboolean;
     pub fn gst_buffer_get_max_memory() -> c_uint;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_buffer_replace(obuf: *mut *mut GstBuffer, nbuf: *mut GstBuffer) -> gboolean;
 
     //=========================================================================
     // GstBufferList
@@ -4434,9 +4422,6 @@ extern "C" {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_buffer_list_calculate_size(list: *mut GstBufferList) -> size_t;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_buffer_list_copy(list: *const GstBufferList) -> *mut GstBufferList;
     pub fn gst_buffer_list_copy_deep(list: *const GstBufferList) -> *mut GstBufferList;
     pub fn gst_buffer_list_foreach(
         list: *mut GstBufferList,
@@ -4449,13 +4434,7 @@ extern "C" {
     pub fn gst_buffer_list_get_writable(list: *mut GstBufferList, idx: c_uint) -> *mut GstBuffer;
     pub fn gst_buffer_list_insert(list: *mut GstBufferList, idx: c_int, buffer: *mut GstBuffer);
     pub fn gst_buffer_list_length(list: *mut GstBufferList) -> c_uint;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_buffer_list_ref(list: *mut GstBufferList) -> *mut GstBufferList;
     pub fn gst_buffer_list_remove(list: *mut GstBufferList, idx: c_uint, length: c_uint);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_buffer_list_unref(list: *mut GstBufferList);
 
     //=========================================================================
     // GstCaps
@@ -4538,9 +4517,6 @@ extern "C" {
         features: *mut GstCapsFeatures,
     ) -> *mut GstCaps;
     pub fn gst_caps_normalize(caps: *mut GstCaps) -> *mut GstCaps;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_caps_ref(caps: *mut GstCaps) -> *mut GstCaps;
     pub fn gst_caps_remove_structure(caps: *mut GstCaps, idx: c_uint);
     pub fn gst_caps_set_features(caps: *mut GstCaps, index: c_uint, features: *mut GstCapsFeatures);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -4558,16 +4534,7 @@ extern "C" {
     pub fn gst_caps_subtract(minuend: *mut GstCaps, subtrahend: *mut GstCaps) -> *mut GstCaps;
     pub fn gst_caps_to_string(caps: *const GstCaps) -> *mut c_char;
     pub fn gst_caps_truncate(caps: *mut GstCaps) -> *mut GstCaps;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_caps_unref(caps: *mut GstCaps);
     pub fn gst_caps_from_string(string: *const c_char) -> *mut GstCaps;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_caps_replace(old_caps: *mut *mut GstCaps, new_caps: *mut GstCaps) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_caps_take(old_caps: *mut *mut GstCaps, new_caps: *mut GstCaps) -> gboolean;
 
     //=========================================================================
     // GstCapsFeatures
@@ -4857,9 +4824,6 @@ extern "C" {
     pub fn gst_event_new_tag(taglist: *mut GstTagList) -> *mut GstEvent;
     pub fn gst_event_new_toc(toc: *mut GstToc, updated: gboolean) -> *mut GstEvent;
     pub fn gst_event_new_toc_select(uid: *const c_char) -> *mut GstEvent;
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn gst_event_copy(event: *const GstEvent) -> *mut GstEvent;
     pub fn gst_event_copy_segment(event: *mut GstEvent, segment: *mut GstSegment);
     pub fn gst_event_get_running_time_offset(event: *mut GstEvent) -> i64;
     pub fn gst_event_get_seqnum(event: *mut GstEvent) -> u32;
@@ -4963,9 +4927,6 @@ extern "C" {
     pub fn gst_event_parse_tag(event: *mut GstEvent, taglist: *mut *mut GstTagList);
     pub fn gst_event_parse_toc(event: *mut GstEvent, toc: *mut *mut GstToc, updated: *mut gboolean);
     pub fn gst_event_parse_toc_select(event: *mut GstEvent, uid: *mut *mut c_char);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_event_ref(event: *mut GstEvent) -> *mut GstEvent;
     pub fn gst_event_set_group_id(event: *mut GstEvent, group_id: c_uint);
     pub fn gst_event_set_running_time_offset(event: *mut GstEvent, offset: i64);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -4976,19 +4937,7 @@ extern "C" {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     pub fn gst_event_set_stream(event: *mut GstEvent, stream: *mut GstStream);
     pub fn gst_event_set_stream_flags(event: *mut GstEvent, flags: GstStreamFlags);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_event_unref(event: *mut GstEvent);
     pub fn gst_event_writable_structure(event: *mut GstEvent) -> *mut GstStructure;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_event_replace(old_event: *mut *mut GstEvent, new_event: *mut GstEvent) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_event_steal(old_event: *mut *mut GstEvent) -> *mut GstEvent;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_event_take(old_event: *mut *mut GstEvent, new_event: *mut GstEvent) -> gboolean;
 
     //=========================================================================
     // GstIterator
@@ -5091,15 +5040,9 @@ extern "C" {
         info: *mut GstMapInfo,
         flags: GstMapFlags,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_memory_ref(memory: *mut GstMemory) -> *mut GstMemory;
     pub fn gst_memory_resize(mem: *mut GstMemory, offset: ssize_t, size: size_t);
     pub fn gst_memory_share(mem: *mut GstMemory, offset: ssize_t, size: ssize_t) -> *mut GstMemory;
     pub fn gst_memory_unmap(mem: *mut GstMemory, info: *mut GstMapInfo);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_memory_unref(memory: *mut GstMemory);
 
     //=========================================================================
     // GstMessage
@@ -5501,9 +5444,6 @@ extern "C" {
         message: *mut GstMessage,
         structure: *mut *const GstStructure,
     );
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_message_ref(msg: *mut GstMessage) -> *mut GstMessage;
     pub fn gst_message_set_buffering_stats(
         message: *mut GstMessage,
         mode: GstBufferingMode,
@@ -5541,9 +5481,6 @@ extern "C" {
         message: *mut GstMessage,
         idx: c_uint,
     ) -> *mut GstStream;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_message_unref(msg: *mut GstMessage);
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     pub fn gst_message_writable_structure(message: *mut GstMessage) -> *mut GstStructure;
@@ -5782,9 +5719,6 @@ extern "C" {
     );
     pub fn gst_query_add_buffering_range(query: *mut GstQuery, start: i64, stop: i64) -> gboolean;
     pub fn gst_query_add_scheduling_mode(query: *mut GstQuery, mode: GstPadMode);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_query_copy(q: *const GstQuery) -> *mut GstQuery;
     pub fn gst_query_find_allocation_meta(
         query: *mut GstQuery,
         api: GType,
@@ -5995,13 +5929,7 @@ extern "C" {
     pub fn gst_query_set_uri(query: *mut GstQuery, uri: *const c_char);
     pub fn gst_query_set_uri_redirection(query: *mut GstQuery, uri: *const c_char);
     pub fn gst_query_set_uri_redirection_permanent(query: *mut GstQuery, permanent: gboolean);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_query_unref(q: *mut GstQuery);
     pub fn gst_query_writable_structure(query: *mut GstQuery) -> *mut GstStructure;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_query_replace(old_query: *mut *mut GstQuery, new_query: *mut GstQuery) -> gboolean;
 
     //=========================================================================
     // GstReferenceTimestampMeta
@@ -6020,17 +5948,11 @@ extern "C" {
         segment: *const GstSegment,
         info: *mut GstStructure,
     ) -> *mut GstSample;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_sample_copy(buf: *const GstSample) -> *mut GstSample;
     pub fn gst_sample_get_buffer(sample: *mut GstSample) -> *mut GstBuffer;
     pub fn gst_sample_get_buffer_list(sample: *mut GstSample) -> *mut GstBufferList;
     pub fn gst_sample_get_caps(sample: *mut GstSample) -> *mut GstCaps;
     pub fn gst_sample_get_info(sample: *mut GstSample) -> *const GstStructure;
     pub fn gst_sample_get_segment(sample: *mut GstSample) -> *mut GstSegment;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_sample_ref(sample: *mut GstSample) -> *mut GstSample;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn gst_sample_set_buffer(sample: *mut GstSample, buffer: *mut GstBuffer);
@@ -6044,9 +5966,6 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     pub fn gst_sample_set_segment(sample: *mut GstSample, segment: *const GstSegment);
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_sample_unref(sample: *mut GstSample);
 
     //=========================================================================
     // GstSegment
@@ -6613,15 +6532,9 @@ extern "C" {
         index: c_uint,
         value: *mut *const c_char,
     ) -> gboolean;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_tag_list_ref(taglist: *mut GstTagList) -> *mut GstTagList;
     pub fn gst_tag_list_remove_tag(list: *mut GstTagList, tag: *const c_char);
     pub fn gst_tag_list_set_scope(list: *mut GstTagList, scope: GstTagScope);
     pub fn gst_tag_list_to_string(list: *const GstTagList) -> *mut c_char;
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn gst_tag_list_unref(taglist: *mut GstTagList);
     pub fn gst_tag_list_copy_value(
         dest: *mut gobject::GValue,
         list: *const GstTagList,

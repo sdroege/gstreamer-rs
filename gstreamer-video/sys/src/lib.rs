@@ -2821,7 +2821,7 @@ extern "C" {
         width: c_uint,
         height: c_uint,
     ) -> gboolean;
-    pub fn gst_video_info_to_caps(info: *mut GstVideoInfo) -> *mut gst::GstCaps;
+    pub fn gst_video_info_to_caps(info: *const GstVideoInfo) -> *mut gst::GstCaps;
 
     //=========================================================================
     // GstVideoMasteringDisplayInfo

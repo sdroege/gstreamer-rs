@@ -315,11 +315,11 @@ impl AppSrc {
     ) -> SignalHandlerId {
         unsafe extern "C" fn need_data_trampoline<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(
             this: *mut ffi::GstAppSrc,
-            object: libc::c_uint,
+            length: libc::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), object)
+            f(&from_glib_borrow(this), length)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -342,11 +342,11 @@ impl AppSrc {
             F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static,
         >(
             this: *mut ffi::GstAppSrc,
-            object: u64,
+            offset: u64,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), object).to_glib()
+            f(&from_glib_borrow(this), offset).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

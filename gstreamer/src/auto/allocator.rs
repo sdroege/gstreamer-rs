@@ -40,7 +40,7 @@ pub trait AllocatorExt: 'static {
     //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory>;
 
     //#[doc(alias = "gst_allocator_free")]
-    //fn free(&self, memory: /*Ignored*/&Memory);
+    //fn free(&self, memory: /*Ignored*/&mut Memory);
 
     #[doc(alias = "gst_allocator_set_default")]
     fn set_default(&self);
@@ -51,7 +51,7 @@ impl<O: IsA<Allocator>> AllocatorExt for O {
     //    unsafe { TODO: call ffi:gst_allocator_alloc() }
     //}
 
-    //fn free(&self, memory: /*Ignored*/&Memory) {
+    //fn free(&self, memory: /*Ignored*/&mut Memory) {
     //    unsafe { TODO: call ffi:gst_allocator_free() }
     //}
 
