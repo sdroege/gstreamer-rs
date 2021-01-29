@@ -3555,7 +3555,13 @@ OpenGL textures.
 #GstGLMemory is created or wrapped through gst_gl_base_memory_alloc()
 with #GstGLVideoAllocationParams.
 
-Data is uploaded or downloaded from the GPU as is necessary.</doc>
+Data is uploaded or downloaded from the GPU as is necessary.
+
+The #GstCaps that is used for #GstGLMemory based buffers should contain
+the %GST_CAPS_FEATURE_MEMORY_GL_MEMORY as a #GstCapsFeatures and should
+contain a 'texture-target' field with one of the #GstGLTextureTarget values
+as a string, i.e. some combination of 'texture-target=(string){2D,
+rectangle, external-oes}'.</doc>
       <field name="mem" writable="1">
         <doc xml:space="preserve">the parent #GstGLBaseMemory object</doc>
         <type name="GLBaseMemory" c:type="GstGLBaseMemory"/>
@@ -6275,17 +6281,24 @@ the sync point are now visible.</doc>
       </function>
     </record>
     <enumeration name="GLTextureTarget" version="1.8" glib:type-name="GstGLTextureTarget" glib:get-type="gst_gl_texture_target_get_type" c:type="GstGLTextureTarget">
+      <doc xml:space="preserve">The OpenGL texture target that an OpenGL texture can be bound to.  The
+gst_gl_value_set_texture_target_from_mask(),
+gst_gl_value_get_texture_target_mask(), and
+gst_gl_value_set_texture_target() functions can be used for handling texture
+targets with #GValue's when e.g. dealing with #GstCaps.</doc>
       <member name="none" value="0" c:identifier="GST_GL_TEXTURE_TARGET_NONE" glib:nick="none">
         <doc xml:space="preserve">no texture target</doc>
       </member>
       <member name="2d" value="1" c:identifier="GST_GL_TEXTURE_TARGET_2D" glib:nick="2d">
-        <doc xml:space="preserve">2D texture target</doc>
+        <doc xml:space="preserve">2D texture target (`GL_TEXTURE_2D`)</doc>
       </member>
       <member name="rectangle" value="2" c:identifier="GST_GL_TEXTURE_TARGET_RECTANGLE" glib:nick="rectangle">
-        <doc xml:space="preserve">rectangle texture target</doc>
+        <doc xml:space="preserve">rectangle texture target
+    (`GL_TEXTURE_RECTANGLE`)</doc>
       </member>
       <member name="external_oes" value="3" c:identifier="GST_GL_TEXTURE_TARGET_EXTERNAL_OES" glib:nick="external-oes">
-        <doc xml:space="preserve">external oes texture target</doc>
+        <doc xml:space="preserve">external oes texture target
+    (`GL_TEXTURE_EXTERNAL_OES`)</doc>
       </member>
       <function name="from_gl" c:identifier="gst_gl_texture_target_from_gl">
         <return-value transfer-ownership="none">
@@ -9735,7 +9748,8 @@ multiple times.  This must be called before any other GstGLRenderbuffer operatio
     <function name="gl_value_get_texture_target_mask" c:identifier="gst_gl_value_get_texture_target_mask">
       <doc xml:space="preserve">See gst_gl_value_set_texture_target_from_mask() for what entails a mask</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the mask of #GstGLTextureTarget's in @value</doc>
+        <doc xml:space="preserve">the mask of #GstGLTextureTarget's in @value or
+    %GST_GL_TEXTURE_TARGET_NONE on failure</doc>
         <type name="GLTextureTarget" c:type="GstGLTextureTarget"/>
       </return-value>
       <parameters>

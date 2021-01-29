@@ -9203,7 +9203,7 @@ mode.</doc>
         <parameters>
           <instance-parameter name="info" transfer-ownership="none">
             <doc xml:space="preserve">a #GstVideoInfo</doc>
-            <type name="VideoInfo" c:type="GstVideoInfo*"/>
+            <type name="VideoInfo" c:type="const GstVideoInfo*"/>
           </instance-parameter>
         </parameters>
       </method>

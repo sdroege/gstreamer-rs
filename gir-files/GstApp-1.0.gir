@@ -1583,61 +1583,106 @@ application should connect to the seek-data signal.</doc>
         </array>
       </field>
       <glib:signal name="end-of-stream" when="last" action="1">
+        <doc xml:space="preserve">Notify @appsrc that no more buffer are available.</doc>
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn"/>
         </return-value>
       </glib:signal>
       <glib:signal name="enough-data" when="last">
+        <doc xml:space="preserve">Signal that the source has enough data. It is recommended that the
+application stops calling push-buffer until the need-data signal is
+emitted again to avoid excessive buffer queueing.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
       </glib:signal>
       <glib:signal name="need-data" when="last">
+        <doc xml:space="preserve">Signal that the source needs more data. In the callback or from another
+thread you should call push-buffer or end-of-stream.
+
+@length is just a hint and when it is set to -1, any number of bytes can be
+pushed into @appsrc.
+
+You can call push-buffer multiple times until the enough-data signal is
+fired.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="length" transfer-ownership="none">
+            <doc xml:space="preserve">the amount of bytes needed.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="push-buffer" when="last" action="1">
+        <doc xml:space="preserve">Adds a buffer to the queue of buffers that the appsrc element will
+push to its source pad. This function does not take ownership of the
+buffer so the buffer needs to be unreffed after calling this function.
+
+When the block property is TRUE, this function can block until free space
+becomes available in the queue.</doc>
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="buffer" transfer-ownership="none">
+            <doc xml:space="preserve">a buffer to push</doc>
             <type name="Gst.Buffer"/>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="push-buffer-list" when="last" action="1">
+      <glib:signal name="push-buffer-list" when="last" action="1" version="1.14">
+        <doc xml:space="preserve">Adds a buffer list to the queue of buffers and buffer lists that the
+appsrc element will push to its source pad. This function does not take
+ownership of the buffer list so the buffer list needs to be unreffed
+after calling this function.
+
+When the block property is TRUE, this function can block until free space
+becomes available in the queue.</doc>
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="buffer_list" transfer-ownership="none">
+            <doc xml:space="preserve">a buffer list to push</doc>
             <type name="Gst.BufferList"/>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="push-sample" when="last" action="1">
+      <glib:signal name="push-sample" when="last" action="1" version="1.6">
+        <doc xml:space="preserve">Extract a buffer from the provided sample and adds the extracted buffer
+to the queue of buffers that the appsrc element will
+push to its source pad. This function set the appsrc caps based on the caps
+in the sample and reset the caps if they change.
+Only the caps and the buffer of the provided sample are used and not
+for example the segment in the sample.
+This function does not take ownership of the
+sample so the sample needs to be unreffed after calling this function.
+
+When the block property is TRUE, this function can block until free space
+becomes available in the queue.</doc>
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="sample" transfer-ownership="none">
+            <doc xml:space="preserve">a sample from which extract buffer to push</doc>
             <type name="Gst.Sample"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="seek-data" when="last">
+        <doc xml:space="preserve">Seek to the given offset. The next push-buffer should produce buffers from
+the new @offset.
+This callback is only called for seekable stream types.</doc>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the seek succeeded.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="offset" transfer-ownership="none">
+            <doc xml:space="preserve">the offset to seek to</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
         </parameters>
