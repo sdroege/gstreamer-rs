@@ -2117,23 +2117,6 @@ contain a concatenation of the memory of @buf1 and the requested region of
           </parameter>
         </parameters>
       </method>
-      <method name="copy" c:identifier="gst_buffer_copy" introspectable="0">
-        <doc xml:space="preserve">Create a copy of the given buffer. This will only copy the buffer's
-data to a newly allocated memory if needed (if the type of memory
-requires it), otherwise the underlying data is just referenced.
-Check gst_buffer_copy_deep() if you want to force the data
-to be copied to newly allocated memory.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new copy of @buf.</doc>
-          <type name="Buffer" c:type="GstBuffer*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="buf" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstBuffer.</doc>
-            <type name="Buffer" c:type="const GstBuffer*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="copy_deep" c:identifier="gst_buffer_copy_deep" version="1.6">
         <doc xml:space="preserve">Create a copy of the given buffer. This will make a newly allocated
 copy of the data the source buffer contains.</doc>
@@ -2895,25 +2878,6 @@ See gst_buffer_insert_memory() for more details.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_buffer_ref" introspectable="0">
-        <doc xml:space="preserve">Increases the refcount of the given buffer by one.
-
-Note that the refcount affects the writability
-of @buf and its metadata, see gst_buffer_is_writable().
-It is important to note that keeping additional references to
-GstBuffer instances can potentially increase the number
-of memcpy operations in a pipeline.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">@buf</doc>
-          <type name="Buffer" c:type="GstBuffer*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="buf" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstBuffer.</doc>
-            <type name="Buffer" c:type="GstBuffer*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="remove_all_memory" c:identifier="gst_buffer_remove_all_memory">
         <doc xml:space="preserve">Remove all the memory blocks in @buffer.</doc>
         <return-value transfer-ownership="none">
@@ -3146,19 +3110,6 @@ replaced with @mem.
           </parameter>
         </parameters>
       </method>
-      <method name="unref" c:identifier="gst_buffer_unref" introspectable="0">
-        <doc xml:space="preserve">Decreases the refcount of the buffer. If the refcount reaches 0, the buffer
-with the associated metadata and memory will be freed.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="buf" transfer-ownership="full">
-            <doc xml:space="preserve">a #GstBuffer.</doc>
-            <type name="Buffer" c:type="GstBuffer*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="unset_flags" c:identifier="gst_buffer_unset_flags" version="1.10">
         <doc xml:space="preserve">Clears one or more buffer flags.</doc>
         <return-value transfer-ownership="none">
@@ -3186,30 +3137,6 @@ together to make room for the new block.</doc>
           <doc xml:space="preserve">the maximum amount of memory blocks that a buffer can hold.</doc>
           <type name="guint" c:type="guint"/>
         </return-value>
-      </function>
-      <function name="replace" c:identifier="gst_buffer_replace" introspectable="0">
-        <doc xml:space="preserve">Modifies a pointer to a #GstBuffer to point to a different #GstBuffer. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-buffer is unreffed, the new is reffed).
-
-Either @nbuf or the #GstBuffer pointed to by @obuf may be %NULL.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE when @obuf was different from @nbuf.</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="obuf" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a pointer to
-    a #GstBuffer to be replaced.</doc>
-            <type name="Buffer" c:type="GstBuffer**"/>
-          </parameter>
-          <parameter name="nbuf" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a #GstBuffer that will
-    replace the buffer pointed to by @obuf.</doc>
-            <type name="Buffer" c:type="GstBuffer*"/>
-          </parameter>
-        </parameters>
       </function>
     </record>
     <bitfield name="BufferCopyFlags" glib:type-name="GstBufferCopyFlags" glib:get-type="gst_buffer_copy_flags_get_type" c:type="GstBufferCopyFlags">
@@ -3392,21 +3319,6 @@ size of all buffers.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="copy" c:identifier="gst_buffer_list_copy" introspectable="0">
-        <doc xml:space="preserve">Create a shallow copy of the given buffer list. This will make a newly
-allocated copy of the source list with copies of buffer pointers. The
-refcount of buffers pointed to will be increased by one.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new copy of @list.</doc>
-          <type name="BufferList" c:type="GstBufferList*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="list" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstBufferList</doc>
-            <type name="BufferList" c:type="const GstBufferList*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="copy_deep" c:identifier="gst_buffer_list_copy_deep" version="1.6">
         <doc xml:space="preserve">Create a copy of the given buffer list. This will make a newly allocated
 copy of the buffer that the source buffer list contains.</doc>
@@ -3527,24 +3439,6 @@ A -1 value for @idx will append the buffer at the end.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_buffer_list_ref" introspectable="0">
-        <doc xml:space="preserve">Increases the refcount of the given buffer list by one.
-
-Note that the refcount affects the writability of @list and its data, see
-gst_buffer_list_make_writable(). It is important to note that keeping
-additional references to GstBufferList instances can potentially increase
-the number of memcpy operations in a pipeline.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">@list</doc>
-          <type name="BufferList" c:type="GstBufferList*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="list" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstBufferList</doc>
-            <type name="BufferList" c:type="GstBufferList*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="remove" c:identifier="gst_buffer_list_remove">
         <doc xml:space="preserve">Remove @length buffers starting from @idx in @list. The following buffers
 are moved to close the gap.</doc>
@@ -3564,19 +3458,6 @@ are moved to close the gap.</doc>
             <doc xml:space="preserve">the amount to remove</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
-        </parameters>
-      </method>
-      <method name="unref" c:identifier="gst_buffer_list_unref" introspectable="0">
-        <doc xml:space="preserve">Decreases the refcount of the buffer list. If the refcount reaches 0, the
-buffer list will be freed.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="list" transfer-ownership="full">
-            <doc xml:space="preserve">a #GstBufferList</doc>
-            <type name="BufferList" c:type="GstBufferList*"/>
-          </instance-parameter>
         </parameters>
       </method>
     </record>
@@ -6382,26 +6263,6 @@ reference to it with gst_caps_ref().</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_caps_ref" introspectable="0">
-        <doc xml:space="preserve">Add a reference to a #GstCaps object.
-
-From this point on, until the caller calls gst_caps_unref() or
-gst_caps_make_writable(), it is guaranteed that the caps object will not
-change. This means its structures won't change, etc. To use a #GstCaps
-object, you must always have a refcount on it -- either the one made
-implicitly by e.g. gst_caps_new_simple(), or via taking one explicitly with
-this function.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the same #GstCaps object.</doc>
-          <type name="Caps" c:type="GstCaps*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="caps" transfer-ownership="none">
-            <doc xml:space="preserve">the #GstCaps to reference</doc>
-            <type name="Caps" c:type="GstCaps*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="remove_structure" c:identifier="gst_caps_remove_structure">
         <doc xml:space="preserve">removes the structure with the given index from the list of structures
 contained in @caps.</doc>
@@ -6624,19 +6485,6 @@ the same and contain no structure at all.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="unref" c:identifier="gst_caps_unref" introspectable="0">
-        <doc xml:space="preserve">Unref a #GstCaps and and free all its structures and the
-structures' values when the refcount reaches 0.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="caps" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstCaps.</doc>
-            <type name="Caps" c:type="GstCaps*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <function name="from_string" c:identifier="gst_caps_from_string">
         <doc xml:space="preserve">Converts @caps from a string representation.
 
@@ -6650,51 +6498,6 @@ when there are nested #GstCaps / #GstStructure deeper than one level.</doc>
           <parameter name="string" transfer-ownership="none">
             <doc xml:space="preserve">a string to convert to #GstCaps</doc>
             <type name="utf8" c:type="const gchar*"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="replace" c:identifier="gst_caps_replace" introspectable="0">
-        <doc xml:space="preserve">Modifies a pointer to a #GstCaps to point to a different #GstCaps. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-caps is unreffed, the new is reffed).
-
-Either @new_caps or the #GstCaps pointed to by @old_caps may be %NULL.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if @new_caps was different from @old_caps</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="old_caps" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a pointer
-    to a #GstCaps to be replaced.</doc>
-            <type name="Caps" c:type="GstCaps**"/>
-          </parameter>
-          <parameter name="new_caps" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a #GstCaps that will
-    replace the caps pointed to by @old_caps.</doc>
-            <type name="Caps" c:type="GstCaps*"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="take" c:identifier="gst_caps_take" introspectable="0">
-        <doc xml:space="preserve">Modifies a pointer to a #GstCaps to point to a different #GstCaps. This
-function is similar to gst_caps_replace() except that it takes ownership
-of @new_caps.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if @new_caps was different from @old_caps</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="old_caps" direction="inout" caller-allocates="0" transfer-ownership="full">
-            <doc xml:space="preserve">pointer to a pointer to a #GstCaps to be
-    replaced.</doc>
-            <type name="Caps" c:type="GstCaps**"/>
-          </parameter>
-          <parameter name="new_caps" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a #GstCaps that will
-    replace the caps pointed to by @old_caps.</doc>
-            <type name="Caps" c:type="GstCaps*"/>
           </parameter>
         </parameters>
       </function>
@@ -16813,19 +16616,6 @@ given @uid.</doc>
           </parameter>
         </parameters>
       </constructor>
-      <method name="copy" c:identifier="gst_event_copy" introspectable="0">
-        <doc xml:space="preserve">Copy the event using the event specific copy function.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the new event</doc>
-          <type name="Event" c:type="GstEvent*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="event" transfer-ownership="none">
-            <doc xml:space="preserve">The event to copy</doc>
-            <type name="Event" c:type="const GstEvent*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="copy_segment" c:identifier="gst_event_copy_segment">
         <doc xml:space="preserve">Parses a segment @event and copies the #GstSegment into the location
 given by @segment.</doc>
@@ -17469,19 +17259,6 @@ want to modify it or store it for later use.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_event_ref" introspectable="0">
-        <doc xml:space="preserve">Increase the refcount of this event.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">@event (for convenience when doing assignments)</doc>
-          <type name="Event" c:type="GstEvent*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="event" transfer-ownership="none">
-            <doc xml:space="preserve">The event to refcount</doc>
-            <type name="Event" c:type="GstEvent*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="set_group_id" c:identifier="gst_event_set_group_id" version="1.2">
         <doc xml:space="preserve">All streams that have the same group id are supposed to be played
 together, i.e. all streams inside a container file should have the
@@ -17592,18 +17369,6 @@ MT safe.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="unref" c:identifier="gst_event_unref" introspectable="0">
-        <doc xml:space="preserve">Decrease the refcount of an event, freeing it if the refcount reaches 0.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="event" transfer-ownership="full">
-            <doc xml:space="preserve">the event to refcount</doc>
-            <type name="Event" c:type="GstEvent*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="writable_structure" c:identifier="gst_event_writable_structure">
         <doc xml:space="preserve">Get a writable version of the structure.</doc>
         <return-value transfer-ownership="none">
@@ -17623,68 +17388,6 @@ MT safe.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <function name="replace" c:identifier="gst_event_replace" introspectable="0">
-        <doc xml:space="preserve">Modifies a pointer to a #GstEvent to point to a different #GstEvent. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-event is unreffed, the new one is reffed).
-
-Either @new_event or the #GstEvent pointed to by @old_event may be %NULL.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if @new_event was different from @old_event</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="old_event" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a
-    pointer to a #GstEvent to be replaced.</doc>
-            <type name="Event" c:type="GstEvent**"/>
-          </parameter>
-          <parameter name="new_event" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a #GstEvent that will
-    replace the event pointed to by @old_event.</doc>
-            <type name="Event" c:type="GstEvent*"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="steal" c:identifier="gst_event_steal" introspectable="0">
-        <doc xml:space="preserve">Atomically replace the #GstEvent pointed to by @old_event with %NULL and
-return the original event.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the #GstEvent that was in @old_event</doc>
-          <type name="Event" c:type="GstEvent*"/>
-        </return-value>
-        <parameters>
-          <parameter name="old_event" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a
-    pointer to a #GstEvent to be stolen.</doc>
-            <type name="Event" c:type="GstEvent**"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="take" c:identifier="gst_event_take" introspectable="0">
-        <doc xml:space="preserve">Modifies a pointer to a #GstEvent to point to a different #GstEvent. This
-function is similar to gst_event_replace() except that it takes ownership of
-@new_event.
-
-Either @new_event or the #GstEvent pointed to by @old_event may be %NULL.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if @new_event was different from @old_event</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="old_event" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a
-    pointer to a #GstEvent to be stolen.</doc>
-            <type name="Event" c:type="GstEvent**"/>
-          </parameter>
-          <parameter name="new_event" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a #GstEvent that will
-    replace the event pointed to by @old_event.</doc>
-            <type name="Event" c:type="GstEvent*"/>
-          </parameter>
-        </parameters>
-      </function>
     </record>
     <enumeration name="EventType" glib:type-name="GstEventType" glib:get-type="gst_event_type_get_type" c:type="GstEventType">
       <doc xml:space="preserve">#GstEventType lists the standard event types that can be sent in a pipeline.
@@ -20383,19 +20086,6 @@ should be done.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_memory_ref" introspectable="0">
-        <doc xml:space="preserve">Increase the refcount of this memory.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">@memory (for convenience when doing assignments)</doc>
-          <type name="Memory" c:type="GstMemory*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="memory" transfer-ownership="none">
-            <doc xml:space="preserve">The memory to refcount</doc>
-            <type name="Memory" c:type="GstMemory*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="resize" c:identifier="gst_memory_resize">
         <doc xml:space="preserve">Resize the memory region. @mem should be writable and offset + size should be
 less than the maxsize of @mem.
@@ -20458,18 +20148,6 @@ copy from @offset to the end of the memory region.</doc>
             <doc xml:space="preserve">a #GstMapInfo</doc>
             <type name="MapInfo" c:type="GstMapInfo*"/>
           </parameter>
-        </parameters>
-      </method>
-      <method name="unref" c:identifier="gst_memory_unref" introspectable="0">
-        <doc xml:space="preserve">Decrease the refcount of a memory, freeing it if the refcount reaches 0.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="memory" transfer-ownership="full">
-            <doc xml:space="preserve">the memory to refcount</doc>
-            <type name="Memory" c:type="GstMemory*"/>
-          </instance-parameter>
         </parameters>
       </method>
     </record>
@@ -22845,19 +22523,6 @@ The returned structure must not be freed.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_message_ref" introspectable="0">
-        <doc xml:space="preserve">Convenience macro to increase the reference count of the message.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">@msg (for convenience when doing assignments)</doc>
-          <type name="Message" c:type="GstMessage*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="msg" transfer-ownership="none">
-            <doc xml:space="preserve">the message to ref</doc>
-            <type name="Message" c:type="GstMessage*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="set_buffering_stats" c:identifier="gst_message_set_buffering_stats">
         <doc xml:space="preserve">Configures the buffering stats values in @message.</doc>
         <return-value transfer-ownership="none">
@@ -23055,19 +22720,6 @@ GstTask object but other objects might be added in the future.</doc>
             <doc xml:space="preserve">Index of the stream to retrieve</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
-        </parameters>
-      </method>
-      <method name="unref" c:identifier="gst_message_unref" introspectable="0">
-        <doc xml:space="preserve">Convenience macro to decrease the reference count of the message, possibly
-freeing it.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="msg" transfer-ownership="none">
-            <doc xml:space="preserve">the message to unref</doc>
-            <type name="Message" c:type="GstMessage*"/>
-          </instance-parameter>
         </parameters>
       </method>
       <method name="writable_structure" c:identifier="gst_message_writable_structure" version="1.14">
@@ -32692,21 +32344,6 @@ start position of the array should be inferior to @start.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="copy" c:identifier="gst_query_copy" introspectable="0">
-        <doc xml:space="preserve">Copies the given query using the copy function of the parent #GstStructure.
-
-Free-function: gst_query_unref</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new copy of @q.</doc>
-          <type name="Query" c:type="GstQuery*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="q" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstQuery to copy.</doc>
-            <type name="Query" c:type="const GstQuery*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="find_allocation_meta" c:identifier="gst_query_find_allocation_meta">
         <doc xml:space="preserve">Check if @query has metadata @api set. When this function returns %TRUE,
 @index will contain the index where the requested API and the parameters
@@ -34031,19 +33668,6 @@ to permanent or not.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="unref" c:identifier="gst_query_unref" introspectable="0">
-        <doc xml:space="preserve">Decreases the refcount of the query. If the refcount reaches 0, the query
-will be freed.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="q" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstQuery to decrease the refcount of.</doc>
-            <type name="Query" c:type="GstQuery*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="writable_structure" c:identifier="gst_query_writable_structure">
         <doc xml:space="preserve">Get the structure of a query. This method should be called with a writable
 @query so that the returned structure is guaranteed to be writable.</doc>
@@ -34060,30 +33684,6 @@ will be freed.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <function name="replace" c:identifier="gst_query_replace" introspectable="0">
-        <doc xml:space="preserve">Modifies a pointer to a #GstQuery to point to a different #GstQuery. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-query is unreffed, the new one is reffed).
-
-Either @new_query or the #GstQuery pointed to by @old_query may be %NULL.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if @new_query was different from @old_query</doc>
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="old_query" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a pointer to a
-    #GstQuery to be replaced.</doc>
-            <type name="Query" c:type="GstQuery**"/>
-          </parameter>
-          <parameter name="new_query" transfer-ownership="none" nullable="1" allow-none="1">
-            <doc xml:space="preserve">pointer to a #GstQuery that will
-    replace the query pointed to by @old_query.</doc>
-            <type name="Query" c:type="GstQuery*"/>
-          </parameter>
-        </parameters>
-      </function>
     </record>
     <enumeration name="QueryType" glib:type-name="GstQueryType" glib:get-type="gst_query_type_get_type" c:type="GstQueryType">
       <doc xml:space="preserve">Standard predefined Query types</doc>
@@ -35420,20 +35020,6 @@ Free-function: gst_sample_unref</doc>
           </parameter>
         </parameters>
       </constructor>
-      <method name="copy" c:identifier="gst_sample_copy" version="1.2" introspectable="0">
-        <doc xml:space="preserve">Create a copy of the given sample. This will also make a newly allocated
-copy of the data the source sample contains.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new copy of @buf.</doc>
-          <type name="Sample" c:type="GstSample*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="buf" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstSample.</doc>
-            <type name="Sample" c:type="const GstSample*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="get_buffer" c:identifier="gst_sample_get_buffer">
         <doc xml:space="preserve">Get the buffer associated with @sample</doc>
         <return-value transfer-ownership="none" nullable="1">
@@ -35502,19 +35088,6 @@ copy of the data the source sample contains.</doc>
           <doc xml:space="preserve">the segment of @sample.
  The segment remains valid as long as @sample is valid.</doc>
           <type name="Segment" c:type="GstSegment*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="sample" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstSample</doc>
-            <type name="Sample" c:type="GstSample*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
-      <method name="ref" c:identifier="gst_sample_ref" introspectable="0">
-        <doc xml:space="preserve">Increases the refcount of the given sample by one.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">@sample</doc>
-          <type name="Sample" c:type="GstSample*"/>
         </return-value>
         <parameters>
           <instance-parameter name="sample" transfer-ownership="none">
@@ -35602,19 +35175,6 @@ and @info must not have a parent set already.</doc>
             <doc xml:space="preserve">A #GstSegment</doc>
             <type name="Segment" c:type="const GstSegment*"/>
           </parameter>
-        </parameters>
-      </method>
-      <method name="unref" c:identifier="gst_sample_unref" introspectable="0">
-        <doc xml:space="preserve">Decreases the refcount of the sample. If the refcount reaches 0, the
-sample will be freed.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="sample" transfer-ownership="full">
-            <doc xml:space="preserve">a #GstSample</doc>
-            <type name="Sample" c:type="GstSample*"/>
-          </instance-parameter>
         </parameters>
       </method>
     </record>
@@ -40993,25 +40553,6 @@ be non-%NULL and non-empty.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_tag_list_ref" introspectable="0">
-        <doc xml:space="preserve">Add a reference to a #GstTagList mini object.
-
-From this point on, until the caller calls gst_tag_list_unref() or
-gst_tag_list_make_writable(), it is guaranteed that the taglist object will
-not change. To use a #GstTagList object, you must always have a refcount on
-it -- either the one made implicitly by e.g. gst_tag_list_new(), or via
-taking one explicitly with this function.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the same #GstTagList mini object.</doc>
-          <type name="TagList" c:type="GstTagList*"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="taglist" transfer-ownership="none">
-            <doc xml:space="preserve">the #GstTagList to reference</doc>
-            <type name="TagList" c:type="GstTagList*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
       <method name="remove_tag" c:identifier="gst_tag_list_remove_tag">
         <doc xml:space="preserve">Removes the given tag from the taglist.</doc>
         <return-value transfer-ownership="none">
@@ -41057,18 +40598,6 @@ of a taglist is stream scope.</doc>
           <instance-parameter name="list" transfer-ownership="none">
             <doc xml:space="preserve">a #GstTagList</doc>
             <type name="TagList" c:type="const GstTagList*"/>
-          </instance-parameter>
-        </parameters>
-      </method>
-      <method name="unref" c:identifier="gst_tag_list_unref" introspectable="0">
-        <doc xml:space="preserve">Unref a #GstTagList, and and free all its memory when the refcount reaches 0.</doc>
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="taglist" transfer-ownership="none">
-            <doc xml:space="preserve">a #GstTagList.</doc>
-            <type name="TagList" c:type="GstTagList*"/>
           </instance-parameter>
         </parameters>
       </method>
@@ -44574,7 +44103,7 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The major version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="2" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="3" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
@@ -44582,7 +44111,7 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The minor version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_NANO" value="0" c:type="GST_VERSION_NANO">
+    <constant name="VERSION_NANO" value="1" c:type="GST_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer at compile time:
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       <type name="gint" c:type="gint"/>
@@ -45101,30 +44630,6 @@ you have an additional reference to it.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    <function name="buffer_replace" c:identifier="gst_buffer_replace" moved-to="Buffer.replace" introspectable="0">
-      <doc xml:space="preserve">Modifies a pointer to a #GstBuffer to point to a different #GstBuffer. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-buffer is unreffed, the new is reffed).
-
-Either @nbuf or the #GstBuffer pointed to by @obuf may be %NULL.</doc>
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">%TRUE when @obuf was different from @nbuf.</doc>
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="obuf" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a pointer to
-    a #GstBuffer to be replaced.</doc>
-          <type name="Buffer" c:type="GstBuffer**"/>
-        </parameter>
-        <parameter name="nbuf" transfer-ownership="none" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a #GstBuffer that will
-    replace the buffer pointed to by @obuf.</doc>
-          <type name="Buffer" c:type="GstBuffer*"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="calculate_linear_regression" c:identifier="gst_calculate_linear_regression" version="1.12" introspectable="0">
       <doc xml:space="preserve">Calculates the linear regression of the values @xy and places the
 result in @m_num, @m_denom, @b and @xbase, representing the function
@@ -45241,51 +44746,6 @@ also: gst_caps_ref().</doc>
         </parameter>
       </parameters>
     </function-macro>
-    <function name="caps_replace" c:identifier="gst_caps_replace" moved-to="Caps.replace" introspectable="0">
-      <doc xml:space="preserve">Modifies a pointer to a #GstCaps to point to a different #GstCaps. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-caps is unreffed, the new is reffed).
-
-Either @new_caps or the #GstCaps pointed to by @old_caps may be %NULL.</doc>
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">%TRUE if @new_caps was different from @old_caps</doc>
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="old_caps" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a pointer
-    to a #GstCaps to be replaced.</doc>
-          <type name="Caps" c:type="GstCaps**"/>
-        </parameter>
-        <parameter name="new_caps" transfer-ownership="none" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a #GstCaps that will
-    replace the caps pointed to by @old_caps.</doc>
-          <type name="Caps" c:type="GstCaps*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="caps_take" c:identifier="gst_caps_take" moved-to="Caps.take" introspectable="0">
-      <doc xml:space="preserve">Modifies a pointer to a #GstCaps to point to a different #GstCaps. This
-function is similar to gst_caps_replace() except that it takes ownership
-of @new_caps.</doc>
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">%TRUE if @new_caps was different from @old_caps</doc>
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="old_caps" direction="inout" caller-allocates="0" transfer-ownership="full">
-          <doc xml:space="preserve">pointer to a pointer to a #GstCaps to be
-    replaced.</doc>
-          <type name="Caps" c:type="GstCaps**"/>
-        </parameter>
-        <parameter name="new_caps" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a #GstCaps that will
-    replace the caps pointed to by @old_caps.</doc>
-          <type name="Caps" c:type="GstCaps*"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="clear_mini_object" c:identifier="gst_clear_mini_object" version="1.16" introspectable="0">
       <doc xml:space="preserve">Clears a reference to a #GstMiniObject.
 
@@ -46077,68 +45537,6 @@ otherwise be made using gst_event_copy().</doc>
         </parameter>
       </parameters>
     </function-macro>
-    <function name="event_replace" c:identifier="gst_event_replace" moved-to="Event.replace" introspectable="0">
-      <doc xml:space="preserve">Modifies a pointer to a #GstEvent to point to a different #GstEvent. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-event is unreffed, the new one is reffed).
-
-Either @new_event or the #GstEvent pointed to by @old_event may be %NULL.</doc>
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">%TRUE if @new_event was different from @old_event</doc>
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="old_event" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a
-    pointer to a #GstEvent to be replaced.</doc>
-          <type name="Event" c:type="GstEvent**"/>
-        </parameter>
-        <parameter name="new_event" transfer-ownership="none" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a #GstEvent that will
-    replace the event pointed to by @old_event.</doc>
-          <type name="Event" c:type="GstEvent*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="event_steal" c:identifier="gst_event_steal" moved-to="Event.steal" introspectable="0">
-      <doc xml:space="preserve">Atomically replace the #GstEvent pointed to by @old_event with %NULL and
-return the original event.</doc>
-      <return-value transfer-ownership="full">
-        <doc xml:space="preserve">the #GstEvent that was in @old_event</doc>
-        <type name="Event" c:type="GstEvent*"/>
-      </return-value>
-      <parameters>
-        <parameter name="old_event" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a
-    pointer to a #GstEvent to be stolen.</doc>
-          <type name="Event" c:type="GstEvent**"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="event_take" c:identifier="gst_event_take" moved-to="Event.take" introspectable="0">
-      <doc xml:space="preserve">Modifies a pointer to a #GstEvent to point to a different #GstEvent. This
-function is similar to gst_event_replace() except that it takes ownership of
-@new_event.
-
-Either @new_event or the #GstEvent pointed to by @old_event may be %NULL.</doc>
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">%TRUE if @new_event was different from @old_event</doc>
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="old_event" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a
-    pointer to a #GstEvent to be stolen.</doc>
-          <type name="Event" c:type="GstEvent**"/>
-        </parameter>
-        <parameter name="new_event" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a #GstEvent that will
-    replace the event pointed to by @old_event.</doc>
-          <type name="Event" c:type="GstEvent*"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="event_type_get_flags" c:identifier="gst_event_type_get_flags" moved-to="EventType.get_flags">
       <doc xml:space="preserve">Gets the #GstEventTypeFlags associated with @type.</doc>
       <return-value transfer-ownership="none">
@@ -47806,30 +47204,6 @@ checked.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    <function name="query_replace" c:identifier="gst_query_replace" moved-to="Query.replace" introspectable="0">
-      <doc xml:space="preserve">Modifies a pointer to a #GstQuery to point to a different #GstQuery. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-query is unreffed, the new one is reffed).
-
-Either @new_query or the #GstQuery pointed to by @old_query may be %NULL.</doc>
-      <return-value transfer-ownership="none">
-        <doc xml:space="preserve">%TRUE if @new_query was different from @old_query</doc>
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="old_query" direction="inout" caller-allocates="0" transfer-ownership="full" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a pointer to a
-    #GstQuery to be replaced.</doc>
-          <type name="Query" c:type="GstQuery**"/>
-        </parameter>
-        <parameter name="new_query" transfer-ownership="none" nullable="1" allow-none="1">
-          <doc xml:space="preserve">pointer to a #GstQuery that will
-    replace the query pointed to by @old_query.</doc>
-          <type name="Query" c:type="GstQuery*"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="query_type_get_flags" c:identifier="gst_query_type_get_flags" moved-to="QueryType.get_flags">
       <doc xml:space="preserve">Gets the #GstQueryTypeFlags associated with @type.</doc>
       <return-value transfer-ownership="none">
