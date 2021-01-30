@@ -2,14 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::translate::*;
-
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct WebRTCSessionDescription(Boxed<ffi::GstWebRTCSessionDescription>);
 
     match fn {
-        copy => |ptr| ffi::gst_webrtc_session_description_copy(mut_override(ptr)),
+        copy => |ptr| ffi::gst_webrtc_session_description_copy(ptr),
         free => |ptr| ffi::gst_webrtc_session_description_free(ptr),
         get_type => || ffi::gst_webrtc_session_description_get_type(),
     }

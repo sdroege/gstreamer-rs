@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use glib::object::IsA;
-use glib::translate::*;
 
 glib::wrapper! {
     pub struct PlayerSignalDispatcher(Interface<ffi::GstPlayerSignalDispatcher>);

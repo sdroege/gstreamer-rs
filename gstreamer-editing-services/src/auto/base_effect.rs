@@ -6,6 +6,8 @@ use crate::Extractable;
 use crate::TimelineElement;
 use crate::TrackElement;
 use glib::object::IsA;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::translate::*;
 
 glib::wrapper! {

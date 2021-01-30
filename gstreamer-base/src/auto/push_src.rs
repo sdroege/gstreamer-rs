@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use crate::BaseSrc;
-use glib::translate::*;
 
 glib::wrapper! {
     pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;

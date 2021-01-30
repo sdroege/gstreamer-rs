@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use crate::NetClientClock;
-use glib::translate::*;
 
 glib::wrapper! {
     pub struct NtpClock(Object<ffi::GstNtpClock, ffi::GstNtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;

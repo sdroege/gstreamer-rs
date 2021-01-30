@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use crate::AudioBaseSrc;
-use glib::translate::*;
 
 glib::wrapper! {
     pub struct AudioSrc(Object<ffi::GstAudioSrc, ffi::GstAudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;

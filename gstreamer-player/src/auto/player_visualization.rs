@@ -2,14 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::translate::*;
-
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct PlayerVisualization(Boxed<ffi::GstPlayerVisualization>);
 
     match fn {
-        copy => |ptr| ffi::gst_player_visualization_copy(mut_override(ptr)),
+        copy => |ptr| ffi::gst_player_visualization_copy(ptr),
         free => |ptr| ffi::gst_player_visualization_free(ptr),
         get_type => || ffi::gst_player_visualization_get_type(),
     }

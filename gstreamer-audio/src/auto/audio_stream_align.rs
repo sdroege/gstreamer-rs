@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct AudioStreamAlign(Boxed<ffi::GstAudioStreamAlign>);
 
     match fn {
-        copy => |ptr| ffi::gst_audio_stream_align_copy(mut_override(ptr)),
+        copy => |ptr| ffi::gst_audio_stream_align_copy(ptr),
         free => |ptr| ffi::gst_audio_stream_align_free(ptr),
         get_type => || ffi::gst_audio_stream_align_get_type(),
     }

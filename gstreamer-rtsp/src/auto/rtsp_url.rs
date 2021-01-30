@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct RTSPUrl(Boxed<ffi::GstRTSPUrl>);
 
     match fn {
-        copy => |ptr| ffi::gst_rtsp_url_copy(mut_override(ptr)),
+        copy => |ptr| ffi::gst_rtsp_url_copy(ptr),
         free => |ptr| ffi::gst_rtsp_url_free(ptr),
         get_type => || ffi::gst_rtsp_url_get_type(),
     }

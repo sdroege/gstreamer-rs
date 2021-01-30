@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use crate::EncodingProfile;
-use glib::translate::*;
 
 glib::wrapper! {
     pub struct EncodingAudioProfile(Object<ffi::GstEncodingAudioProfile, ffi::GstEncodingAudioProfileClass>) @extends EncodingProfile;

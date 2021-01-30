@@ -8,6 +8,8 @@ use glib::object::Cast;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use glib::object::IsA;
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 use glib::translate::*;
 
 glib::wrapper! {
