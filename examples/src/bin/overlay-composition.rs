@@ -183,10 +183,10 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
                 let cr = cairo::Context::new(&surface);
 
-                    cr.save();
+                    cr.save().expect("Failed to save state");
                     cr.set_operator(cairo::Operator::Clear);
                     cr.paint();
-                    cr.restore();
+                    cr.restore().expect("Failed to restore state");
 
                 // The image we draw (the text) will be static, but we will change the
                 // transformation on the drawing context, which rotates and shifts everything
@@ -207,7 +207,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     // with this, we push our current transformation onto this stack - allowing us
                     // to make temporary changes / render something / and then returning to the
                     // previous transformations.
-                    cr.save();
+                    cr.save().expect("Failed to save state");
 
                     let angle = (360. * f64::from(i)) / 10.0;
                     let red = (1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0;
@@ -231,7 +231,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
                     // Here we go one step up in our stack of transformations, removing any
                     // changes we did to them since the last call to cr.save();
-                    cr.restore();
+                    cr.restore().expect("Failed to restore state");
                 }
 
                 // Safety: The surface still owns a mutable reference to the buffer but our reference
