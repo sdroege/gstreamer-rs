@@ -38,7 +38,7 @@ impl DebugMessage {
 }
 
 #[derive(PartialEq, Eq, Clone, Copy)]
-pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
+pub struct DebugCategory(Option<ptr::NonNull<ffi::GstDebugCategory>>);
 
 impl DebugCategory {
     pub fn new(
@@ -62,8 +62,8 @@ impl DebugCategory {
                 color.to_glib(),
                 description.to_glib_none().0,
             );
-            assert!(!ptr.is_null());
-            DebugCategory(ptr::NonNull::new_unchecked(ptr))
+            // Can be NULL if the debug system is compiled out
+            DebugCategory(ptr::NonNull::new(ptr))
         }
     }
 
@@ -79,44 +79,60 @@ impl DebugCategory {
             if cat.is_null() {
                 None
             } else {
-                Some(DebugCategory(ptr::NonNull::new_unchecked(cat)))
+                Some(DebugCategory(Some(ptr::NonNull::new_unchecked(cat))))
             }
         }
     }
 
     pub fn get_threshold(self) -> crate::DebugLevel {
-        unsafe { from_glib(ffi::gst_debug_category_get_threshold(self.0.as_ptr())) }
+        match self.0 {
+            Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_threshold(cat.as_ptr())) },
+            None => crate::DebugLevel::None,
+        }
     }
 
     pub fn set_threshold(self, threshold: crate::DebugLevel) {
-        unsafe { ffi::gst_debug_category_set_threshold(self.0.as_ptr(), threshold.to_glib()) }
+        if let Some(cat) = self.0 {
+            unsafe { ffi::gst_debug_category_set_threshold(cat.as_ptr(), threshold.to_glib()) }
+        }
     }
 
     pub fn reset_threshold(self) {
-        unsafe { ffi::gst_debug_category_reset_threshold(self.0.as_ptr()) }
+        if let Some(cat) = self.0 {
+            unsafe { ffi::gst_debug_category_reset_threshold(cat.as_ptr()) }
+        }
     }
 
     pub fn get_color(self) -> crate::DebugColorFlags {
-        unsafe { from_glib(ffi::gst_debug_category_get_color(self.0.as_ptr())) }
+        match self.0 {
+            Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_color(cat.as_ptr())) },
+            None => crate::DebugColorFlags::empty(),
+        }
     }
 
     pub fn get_name<'a>(self) -> &'a str {
-        unsafe {
-            CStr::from_ptr(ffi::gst_debug_category_get_name(self.0.as_ptr()))
-                .to_str()
-                .unwrap()
+        match self.0 {
+            Some(cat) => unsafe {
+                CStr::from_ptr(ffi::gst_debug_category_get_name(cat.as_ptr()))
+                    .to_str()
+                    .unwrap()
+            },
+            None => "",
         }
     }
 
     pub fn get_description<'a>(self) -> Option<&'a str> {
-        unsafe {
-            let ptr = ffi::gst_debug_category_get_description(self.0.as_ptr());
+        match self.0 {
+            Some(cat) => unsafe {
+                let ptr = ffi::gst_debug_category_get_description(cat.as_ptr());
 
-            if ptr.is_null() {
-                None
-            } else {
-                Some(CStr::from_ptr(ptr).to_str().unwrap())
-            }
+                if ptr.is_null() {
+                    None
+                } else {
+                    Some(CStr::from_ptr(ptr).to_str().unwrap())
+                }
+            },
+            None => None,
         }
     }
 
@@ -130,8 +146,13 @@ impl DebugCategory {
         line: u32,
         args: fmt::Arguments,
     ) {
+        let cat = match self.0 {
+            Some(cat) => cat,
+            None => return,
+        };
+
         unsafe {
-            if level.to_glib() as i32 > self.0.as_ref().threshold {
+            if level.to_glib() as i32 > cat.as_ref().threshold {
                 return;
             }
         }
@@ -143,7 +164,7 @@ impl DebugCategory {
 
         unsafe {
             ffi::gst_debug_log(
-                self.0.as_ptr(),
+                cat.as_ptr(),
                 level.to_glib(),
                 file.to_glib_none().0,
                 module.to_glib_none().0,
@@ -321,7 +342,10 @@ unsafe extern "C" fn log_handler<T>(
         + Sync
         + 'static,
 {
-    let category = DebugCategory(ptr::NonNull::new_unchecked(category));
+    if category.is_null() {
+        return;
+    }
+    let category = DebugCategory(Some(ptr::NonNull::new_unchecked(category)));
     let level = from_glib(level);
     let file = CStr::from_ptr(file).to_string_lossy();
     let function = CStr::from_ptr(function).to_string_lossy();
@@ -460,8 +484,7 @@ pub fn debug_remove_default_log_function() {
 pub fn debug_remove_log_function(log_fn: DebugLogFunction) {
     skip_assert_initialized!();
     unsafe {
-        let removed = ffi::gst_debug_remove_log_function_by_data(log_fn.0.as_ptr());
-        assert_eq!(removed, 1);
+        ffi::gst_debug_remove_log_function_by_data(log_fn.0.as_ptr());
     }
 }
 
