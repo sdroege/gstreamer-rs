@@ -174,8 +174,7 @@ impl ValidVideoTimeCode {
         }
     }
 
-    //    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    //    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     //    pub fn from_date_time(
     //        fps: gst::Fraction,
     //        dt: &glib::DateTime,
@@ -582,7 +581,7 @@ mod tests {
         let mut buffer = gst::Buffer::new();
         {
             let datetime =
-                glib::DateTime::new_utc(2021, 02, 04, 10, 53, 17.0).expect("can't create datetime");
+                glib::DateTime::new_utc(2021, 2, 4, 10, 53, 17.0).expect("can't create datetime");
             let time_code = crate::VideoTimeCode::from_date_time(
                 gst::Fraction::new(30, 1),
                 &datetime,
@@ -598,7 +597,7 @@ mod tests {
             );
 
             let datetime =
-                glib::DateTime::new_utc(2021, 02, 04, 10, 53, 17.0).expect("can't create datetime");
+                glib::DateTime::new_utc(2021, 2, 4, 10, 53, 17.0).expect("can't create datetime");
             let mut time_code_2 = crate::ValidVideoTimeCode::try_from(
                 crate::VideoTimeCode::from_date_time(
                     gst::Fraction::new(30, 1),
