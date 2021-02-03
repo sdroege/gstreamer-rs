@@ -146,6 +146,10 @@ impl TryFrom<VideoTimeCode> for ValidVideoTimeCode {
     fn try_from(v: VideoTimeCode) -> Result<ValidVideoTimeCode, VideoTimeCode> {
         skip_assert_initialized!();
         if v.is_valid() {
+            // Use ManuallyDrop here to prevent the Drop impl of VideoTimeCode
+            // from running as we don't move v.0 out here but copy it.
+            // GstVideoTimeCode implements Copy.
+            let v = mem::ManuallyDrop::new(v);
             Ok(ValidVideoTimeCode(v.0))
         } else {
             Err(v)
@@ -521,6 +525,10 @@ impl Ord for ValidVideoTimeCode {
 impl From<ValidVideoTimeCode> for VideoTimeCode {
     fn from(v: ValidVideoTimeCode) -> VideoTimeCode {
         skip_assert_initialized!();
+        // Use ManuallyDrop here to prevent the Drop impl of VideoTimeCode
+        // from running as we don't move v.0 out here but copy it.
+        // GstVideoTimeCode implements Copy.
+        let v = mem::ManuallyDrop::new(v);
         VideoTimeCode(v.0)
     }
 }
@@ -555,10 +563,11 @@ impl VideoTimeCodeMeta {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
             gst_video_sys::gst_video_time_code_clear(&mut self.0.tc);
+            // Use ManuallyDrop here to prevent the Drop impl of VideoTimeCode
+            // from running as we don't move tc.0 out here but copy it.
+            // GstVideoTimeCode implements Copy.
+            let tc = mem::ManuallyDrop::new(tc);
             self.0.tc = tc.0;
-            if !self.0.tc.config.latest_daily_jam.is_null() {
-                glib_sys::g_date_time_ref(self.0.tc.config.latest_daily_jam);
-            }
         }
     }
 }
@@ -576,5 +585,55 @@ impl fmt::Debug for VideoTimeCodeMeta {
         f.debug_struct("VideoTimeCodeMeta")
             .field("tc", &self.get_tc())
             .finish()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_get_set_meta() {
+        gst::init().unwrap();
+
+        let mut buffer = gst::Buffer::new();
+        {
+            let datetime = glib::DateTime::new_utc(2021, 2, 4, 10, 53, 17.0);
+            let time_code = crate::VideoTimeCode::from_date_time(
+                gst::Fraction::new(30, 1),
+                &datetime,
+                crate::VideoTimeCodeFlags::empty(),
+                0,
+            )
+            .expect("can't create timecode");
+            drop(datetime);
+
+            let mut meta = crate::VideoTimeCodeMeta::add(
+                buffer.get_mut().unwrap(),
+                &time_code.try_into().expect("invalid timecode"),
+            );
+
+            let datetime = glib::DateTime::new_utc(2021, 2, 4, 10, 53, 17.0);
+            let mut time_code_2 = crate::ValidVideoTimeCode::try_from(
+                crate::VideoTimeCode::from_date_time(
+                    gst::Fraction::new(30, 1),
+                    &datetime,
+                    crate::VideoTimeCodeFlags::empty(),
+                    0,
+                )
+                .expect("can't create timecode"),
+            )
+            .expect("invalid timecode");
+
+            assert_eq!(meta.get_tc(), time_code_2);
+
+            time_code_2.increment_frame();
+
+            assert_eq!(meta.get_tc().get_frames() + 1, time_code_2.get_frames());
+
+            meta.set_tc(time_code_2.clone());
+
+            assert_eq!(meta.get_tc(), time_code_2);
+        }
     }
 }
