@@ -6,16 +6,27 @@ use glib::source::SourceId;
 use glib::translate::*;
 
 pub trait RTSPServerExtManual: 'static {
-    fn attach(&self, context: Option<&glib::MainContext>) -> SourceId;
+    fn attach(
+        &self,
+        context: Option<&glib::MainContext>,
+    ) -> Result<SourceId, glib::error::BoolError>;
 }
 
 impl<O: IsA<RTSPServer>> RTSPServerExtManual for O {
-    fn attach(&self, context: Option<&glib::MainContext>) -> SourceId {
+    fn attach(
+        &self,
+        context: Option<&glib::MainContext>,
+    ) -> Result<SourceId, glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_rtsp_server_attach(
+            match ffi::gst_rtsp_server_attach(
                 self.as_ref().to_glib_none().0,
                 context.to_glib_none().0,
-            ))
+            ) {
+                0 => Err(glib::bool_error!(
+                    "Failed to attach main context to RTSP server"
+                )),
+                id => Ok(from_glib(id)),
+            }
         }
     }
 }

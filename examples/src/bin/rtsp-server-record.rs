@@ -130,7 +130,7 @@ fn main_loop() -> Result<(), Error> {
     // interested in them. In this example, we only do have one, so we can
     // leave the context parameter empty, it will automatically select
     // the default one.
-    let id = server.attach(None);
+    let id = server.attach(None)?;
 
     println!(
         "Stream ready at rtsps://127.0.0.1:{}/test",
