@@ -199,6 +199,75 @@ impl SetValue for AudioChannelPosition {
     }
 }
 
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstAudioDitherMethod")]
+pub enum AudioDitherMethod {
+    #[doc(alias = "GST_AUDIO_DITHER_NONE")]
+    None,
+    #[doc(alias = "GST_AUDIO_DITHER_RPDF")]
+    Rpdf,
+    #[doc(alias = "GST_AUDIO_DITHER_TPDF")]
+    Tpdf,
+    #[doc(alias = "GST_AUDIO_DITHER_TPDF_HF")]
+    TpdfHf,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for AudioDitherMethod {
+    type GlibType = ffi::GstAudioDitherMethod;
+
+    fn to_glib(&self) -> ffi::GstAudioDitherMethod {
+        match *self {
+            AudioDitherMethod::None => ffi::GST_AUDIO_DITHER_NONE,
+            AudioDitherMethod::Rpdf => ffi::GST_AUDIO_DITHER_RPDF,
+            AudioDitherMethod::Tpdf => ffi::GST_AUDIO_DITHER_TPDF,
+            AudioDitherMethod::TpdfHf => ffi::GST_AUDIO_DITHER_TPDF_HF,
+            AudioDitherMethod::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstAudioDitherMethod> for AudioDitherMethod {
+    unsafe fn from_glib(value: ffi::GstAudioDitherMethod) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => AudioDitherMethod::None,
+            1 => AudioDitherMethod::Rpdf,
+            2 => AudioDitherMethod::Tpdf,
+            3 => AudioDitherMethod::TpdfHf,
+            value => AudioDitherMethod::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for AudioDitherMethod {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_audio_dither_method_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for AudioDitherMethod {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for AudioDitherMethod {
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for AudioDitherMethod {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAudioFormat")]
@@ -451,6 +520,168 @@ impl<'a> FromValue<'a> for AudioLayout {
 }
 
 impl SetValue for AudioLayout {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstAudioNoiseShapingMethod")]
+pub enum AudioNoiseShapingMethod {
+    #[doc(alias = "GST_AUDIO_NOISE_SHAPING_NONE")]
+    None,
+    #[doc(alias = "GST_AUDIO_NOISE_SHAPING_ERROR_FEEDBACK")]
+    ErrorFeedback,
+    #[doc(alias = "GST_AUDIO_NOISE_SHAPING_SIMPLE")]
+    Simple,
+    #[doc(alias = "GST_AUDIO_NOISE_SHAPING_MEDIUM")]
+    Medium,
+    #[doc(alias = "GST_AUDIO_NOISE_SHAPING_HIGH")]
+    High,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for AudioNoiseShapingMethod {
+    type GlibType = ffi::GstAudioNoiseShapingMethod;
+
+    fn to_glib(&self) -> ffi::GstAudioNoiseShapingMethod {
+        match *self {
+            AudioNoiseShapingMethod::None => ffi::GST_AUDIO_NOISE_SHAPING_NONE,
+            AudioNoiseShapingMethod::ErrorFeedback => ffi::GST_AUDIO_NOISE_SHAPING_ERROR_FEEDBACK,
+            AudioNoiseShapingMethod::Simple => ffi::GST_AUDIO_NOISE_SHAPING_SIMPLE,
+            AudioNoiseShapingMethod::Medium => ffi::GST_AUDIO_NOISE_SHAPING_MEDIUM,
+            AudioNoiseShapingMethod::High => ffi::GST_AUDIO_NOISE_SHAPING_HIGH,
+            AudioNoiseShapingMethod::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstAudioNoiseShapingMethod> for AudioNoiseShapingMethod {
+    unsafe fn from_glib(value: ffi::GstAudioNoiseShapingMethod) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => AudioNoiseShapingMethod::None,
+            1 => AudioNoiseShapingMethod::ErrorFeedback,
+            2 => AudioNoiseShapingMethod::Simple,
+            3 => AudioNoiseShapingMethod::Medium,
+            4 => AudioNoiseShapingMethod::High,
+            value => AudioNoiseShapingMethod::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for AudioNoiseShapingMethod {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_audio_noise_shaping_method_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for AudioNoiseShapingMethod {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for AudioNoiseShapingMethod {
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for AudioNoiseShapingMethod {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstAudioResamplerMethod")]
+pub enum AudioResamplerMethod {
+    #[doc(alias = "GST_AUDIO_RESAMPLER_METHOD_NEAREST")]
+    Nearest,
+    #[doc(alias = "GST_AUDIO_RESAMPLER_METHOD_LINEAR")]
+    Linear,
+    #[doc(alias = "GST_AUDIO_RESAMPLER_METHOD_CUBIC")]
+    Cubic,
+    #[doc(alias = "GST_AUDIO_RESAMPLER_METHOD_BLACKMAN_NUTTALL")]
+    BlackmanNuttall,
+    #[doc(alias = "GST_AUDIO_RESAMPLER_METHOD_KAISER")]
+    Kaiser,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[doc(hidden)]
+impl ToGlib for AudioResamplerMethod {
+    type GlibType = ffi::GstAudioResamplerMethod;
+
+    fn to_glib(&self) -> ffi::GstAudioResamplerMethod {
+        match *self {
+            AudioResamplerMethod::Nearest => ffi::GST_AUDIO_RESAMPLER_METHOD_NEAREST,
+            AudioResamplerMethod::Linear => ffi::GST_AUDIO_RESAMPLER_METHOD_LINEAR,
+            AudioResamplerMethod::Cubic => ffi::GST_AUDIO_RESAMPLER_METHOD_CUBIC,
+            AudioResamplerMethod::BlackmanNuttall => {
+                ffi::GST_AUDIO_RESAMPLER_METHOD_BLACKMAN_NUTTALL
+            }
+            AudioResamplerMethod::Kaiser => ffi::GST_AUDIO_RESAMPLER_METHOD_KAISER,
+            AudioResamplerMethod::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
+    unsafe fn from_glib(value: ffi::GstAudioResamplerMethod) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => AudioResamplerMethod::Nearest,
+            1 => AudioResamplerMethod::Linear,
+            2 => AudioResamplerMethod::Cubic,
+            3 => AudioResamplerMethod::BlackmanNuttall,
+            4 => AudioResamplerMethod::Kaiser,
+            value => AudioResamplerMethod::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl StaticType for AudioResamplerMethod {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_audio_resampler_method_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl<'a> FromValueOptional<'a> for AudioResamplerMethod {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl<'a> FromValue<'a> for AudioResamplerMethod {
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl SetValue for AudioResamplerMethod {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
