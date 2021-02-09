@@ -1,6 +1,6 @@
 [build-dependencies]
 pkg-config = "0.3.7"
-system-deps = "2.0"
+system-deps = "3"
 
 [dependencies]
 libc = "0.2"
