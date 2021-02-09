@@ -351,6 +351,7 @@ impl cmp::PartialOrd for DateTime {
     // are compared in the same TZ.
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         #[inline]
+        #[allow(clippy::unnecessary_wraps)]
         fn get_cmp(delta: i32) -> Option<cmp::Ordering> {
             skip_assert_initialized!();
             Some(delta.cmp(&0))
