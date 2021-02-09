@@ -312,13 +312,21 @@ impl AtomicClockReturn {
         unsafe { from_glib(self.0.swap(val.to_glib(), atomic::Ordering::SeqCst)) }
     }
 
-    pub fn compare_and_swap(&self, current: ClockReturn, new: ClockReturn) -> ClockReturn {
+    pub fn compare_exchange(
+        &self,
+        current: ClockReturn,
+        new: ClockReturn,
+    ) -> Result<ClockReturn, ClockReturn> {
         unsafe {
-            from_glib(self.0.compare_and_swap(
-                current.to_glib(),
-                new.to_glib(),
-                atomic::Ordering::SeqCst,
-            ))
+            self.0
+                .compare_exchange(
+                    current.to_glib(),
+                    new.to_glib(),
+                    atomic::Ordering::SeqCst,
+                    atomic::Ordering::SeqCst,
+                )
+                .map(|v| from_glib(v))
+                .map_err(|v| from_glib(v))
         }
     }
 }
