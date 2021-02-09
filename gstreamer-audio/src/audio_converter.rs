@@ -97,7 +97,7 @@ impl AudioConverterConfig {
     }
 
     pub fn set_quantization(&mut self, v: u32) {
-        self.0.set("GstAudioConverter.dither-quantization", &v);
+        self.0.set("GstAudioConverter.quantization", &v);
     }
 
     pub fn get_quantization(&self) -> u32 {
