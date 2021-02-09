@@ -570,6 +570,7 @@ impl fmt::Debug for VideoTimeCodeMeta {
     }
 }
 
+#[cfg(feature = "v1_16")]
 #[cfg(test)]
 mod tests {
     use super::*;
