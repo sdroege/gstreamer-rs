@@ -122,11 +122,12 @@ impl AudioConverterConfig {
             .unwrap_or(crate::AudioResamplerMethod::BlackmanNuttall)
     }
 
-    pub fn set_mix_matrix(&mut self, v: &[&[f64]]) {
-        let length = v.get(0).map(|v| v.len()).unwrap_or(0);
+    pub fn set_mix_matrix<T: AsRef<[f64]>>(&mut self, v: &[T]) {
+        let length = v.get(0).map(|v| v.as_ref().len()).unwrap_or(0);
         let array = gst::Array::from_owned(
             v.iter()
                 .map(|val| {
+                    let val = val.as_ref();
                     assert_eq!(val.len(), length);
                     gst::Array::from_owned(
                         val.iter()
@@ -163,5 +164,25 @@ impl AudioConverterConfig {
                     .collect::<Vec<_>>()
             })
             .unwrap_or_else(Vec::new)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_mix_matrix() {
+        const MATRIX: &[&[f64]] = &[&[1.2, 0.3], &[0.2, 0.8]];
+
+        gst::init().unwrap();
+
+        let mut config = AudioConverterConfig::new();
+        config.set_mix_matrix(MATRIX);
+
+        let matrix = config.get_mix_matrix();
+        assert_eq!(matrix, MATRIX);
+
+        config.set_mix_matrix(&matrix);
     }
 }
