@@ -676,20 +676,16 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
     Ok(app.into_context())
 }
 
-fn cleanup(
-    _windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
-) -> Result<(), Error> {
+fn cleanup(_windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>) {
     // To ensure that the context stays alive longer than the pipeline or any reference
     // inside GStreamer to the GL context, its display or anything else. See
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/196
     //
     // We might do any window/GL specific cleanup here as needed.
-
-    Ok(())
 }
 
 fn example_main() {
-    match App::new().and_then(main_loop).and_then(cleanup) {
+    match App::new().and_then(main_loop).map(cleanup) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
     }
