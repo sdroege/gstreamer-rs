@@ -37,15 +37,3 @@ unknown-git = "deny"
 allow-git = [
   "https://github.com/gtk-rs/gtk-rs",
 ]
-
-# ignore duplicated cfg-if dependency because a few dozen dependencies still
-# pull in the old version
-[[bans.skip]]
-name = "cfg-if"
-version = "0.1"
-
-# ignore duplicated itertools dependency because a few dozen dependencies still
-# pull in the old version
-[[bans.skip]]
-name = "itertools"
-version = "0.9"
