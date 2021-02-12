@@ -122,7 +122,7 @@ impl AudioConverterConfig {
             .unwrap_or(crate::AudioResamplerMethod::BlackmanNuttall)
     }
 
-    pub fn set_mix_matrix<T: AsRef<[f64]>>(&mut self, v: &[T]) {
+    pub fn set_mix_matrix<T: AsRef<[f32]>>(&mut self, v: &[T]) {
         let length = v.get(0).map(|v| v.as_ref().len()).unwrap_or(0);
         let array = gst::Array::from_owned(
             v.iter()
@@ -141,7 +141,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.mix-matrix", &array);
     }
 
-    pub fn get_mix_matrix(&self) -> Vec<Vec<f64>> {
+    pub fn get_mix_matrix(&self) -> Vec<Vec<f32>> {
         self.0
             .get_optional::<gst::Array>("GstAudioConverter.mix-matrix")
             .expect("Wrong type")
@@ -158,7 +158,7 @@ impl AudioConverterConfig {
                         array
                             .as_slice()
                             .iter()
-                            .map(|val| val.get_some::<f64>().expect("Wrong type"))
+                            .map(|val| val.get_some::<f32>().expect("Wrong type"))
                             .collect::<Vec<_>>()
                     })
                     .collect::<Vec<_>>()
@@ -173,7 +173,7 @@ mod tests {
 
     #[test]
     fn test_mix_matrix() {
-        const MATRIX: &[&[f64]] = &[&[1.2, 0.3], &[0.2, 0.8]];
+        const MATRIX: &[&[f32]] = &[&[1.2, 0.3], &[0.2, 0.8]];
 
         gst::init().unwrap();
 
