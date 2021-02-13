@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.16.7] - 2021-02-13
+### Fixed
+- Usage of the logging system with a GStreamer library with the logging system
+  compiled out does not crash any longer.
+- Double-free in `gst_video::VideoTimeCode` API when converting between
+  validated and unvalidated timecodes.
+
+### Added
+- `gst::Element::get_current_state()` and `get_pending_state()` convenience APIs.
+- `gst_audio::AudioConverterConfig` for setting the configuration on e.g. the
+  `audiomixer` element. The low-level `AudioConverter` API is still not
+  included in the bindings.
+
 ## [0.16.6] - 2020-12-20
 ### Fixed
 - `VideoTimeCodeInterval`'s `Ord` and `PartialEq` implementations compare
