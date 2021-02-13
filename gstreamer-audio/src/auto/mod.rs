@@ -35,8 +35,12 @@ pub use self::audio_stream_align::AudioStreamAlign;
 
 mod enums;
 pub use self::enums::AudioChannelPosition;
+pub use self::enums::AudioDitherMethod;
 pub use self::enums::AudioFormat;
 pub use self::enums::AudioLayout;
+pub use self::enums::AudioNoiseShapingMethod;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+pub use self::enums::AudioResamplerMethod;
 pub use self::enums::AudioRingBufferFormatType;
 pub use self::enums::StreamVolumeFormat;
 

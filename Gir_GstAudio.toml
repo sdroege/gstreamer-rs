@@ -18,6 +18,9 @@ external_libraries = [
 ]
 
 generate = [
+    "GstAudio.AudioDitherMethod",
+    "GstAudio.AudioNoiseShapingMethod",
+    "GstAudio.AudioResamplerMethod",
     "GstAudio.AudioFormatFlags",
     "GstAudio.AudioLayout",
     "GstAudio.AudioChannelPosition",
