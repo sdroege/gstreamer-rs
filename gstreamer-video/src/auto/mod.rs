@@ -16,6 +16,10 @@ pub use self::video_encoder::{VideoEncoder, NONE_VIDEO_ENCODER};
 mod video_filter;
 pub use self::video_filter::{VideoFilter, NONE_VIDEO_FILTER};
 
+mod video_orientation;
+pub use self::video_orientation::VideoOrientationExt;
+pub use self::video_orientation::{VideoOrientation, NONE_VIDEO_ORIENTATION};
+
 mod video_overlay;
 pub use self::video_overlay::VideoOverlayExt;
 pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
@@ -48,6 +52,9 @@ pub use self::enums::VideoInterlaceMode;
 pub use self::enums::VideoMatrixMode;
 pub use self::enums::VideoMultiviewFramePacking;
 pub use self::enums::VideoMultiviewMode;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+pub use self::enums::VideoOrientationMethod;
 pub use self::enums::VideoPrimariesMode;
 pub use self::enums::VideoResamplerMethod;
 pub use self::enums::VideoTileMode;
@@ -71,6 +78,7 @@ pub use self::flags::VideoTimeCodeFlags;
 pub mod traits {
     pub use super::VideoDecoderExt;
     pub use super::VideoEncoderExt;
+    pub use super::VideoOrientationExt;
     pub use super::VideoOverlayExt;
     pub use super::VideoSinkExt;
 }

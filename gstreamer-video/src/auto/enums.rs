@@ -1967,6 +1967,113 @@ impl SetValue for VideoMultiviewMode {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstVideoOrientationMethod")]
+pub enum VideoOrientationMethod {
+    #[doc(alias = "GST_VIDEO_ORIENTATION_IDENTITY")]
+    Identity,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_90R")]
+    _90r,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_180")]
+    _180,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_90L")]
+    _90l,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_HORIZ")]
+    Horiz,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_VERT")]
+    Vert,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_UL_LR")]
+    UlLr,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_UR_LL")]
+    UrLl,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_AUTO")]
+    Auto,
+    #[doc(alias = "GST_VIDEO_ORIENTATION_CUSTOM")]
+    Custom,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[doc(hidden)]
+impl ToGlib for VideoOrientationMethod {
+    type GlibType = ffi::GstVideoOrientationMethod;
+
+    fn to_glib(&self) -> ffi::GstVideoOrientationMethod {
+        match *self {
+            VideoOrientationMethod::Identity => ffi::GST_VIDEO_ORIENTATION_IDENTITY,
+            VideoOrientationMethod::_90r => ffi::GST_VIDEO_ORIENTATION_90R,
+            VideoOrientationMethod::_180 => ffi::GST_VIDEO_ORIENTATION_180,
+            VideoOrientationMethod::_90l => ffi::GST_VIDEO_ORIENTATION_90L,
+            VideoOrientationMethod::Horiz => ffi::GST_VIDEO_ORIENTATION_HORIZ,
+            VideoOrientationMethod::Vert => ffi::GST_VIDEO_ORIENTATION_VERT,
+            VideoOrientationMethod::UlLr => ffi::GST_VIDEO_ORIENTATION_UL_LR,
+            VideoOrientationMethod::UrLl => ffi::GST_VIDEO_ORIENTATION_UR_LL,
+            VideoOrientationMethod::Auto => ffi::GST_VIDEO_ORIENTATION_AUTO,
+            VideoOrientationMethod::Custom => ffi::GST_VIDEO_ORIENTATION_CUSTOM,
+            VideoOrientationMethod::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
+    unsafe fn from_glib(value: ffi::GstVideoOrientationMethod) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoOrientationMethod::Identity,
+            1 => VideoOrientationMethod::_90r,
+            2 => VideoOrientationMethod::_180,
+            3 => VideoOrientationMethod::_90l,
+            4 => VideoOrientationMethod::Horiz,
+            5 => VideoOrientationMethod::Vert,
+            6 => VideoOrientationMethod::UlLr,
+            7 => VideoOrientationMethod::UrLl,
+            8 => VideoOrientationMethod::Auto,
+            9 => VideoOrientationMethod::Custom,
+            value => VideoOrientationMethod::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl StaticType for VideoOrientationMethod {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_orientation_method_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl<'a> FromValueOptional<'a> for VideoOrientationMethod {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl<'a> FromValue<'a> for VideoOrientationMethod {
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+impl SetValue for VideoOrientationMethod {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoPrimariesMode")]

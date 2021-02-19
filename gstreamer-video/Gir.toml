@@ -27,6 +27,7 @@ generate = [
     "GstVideo.VideoAlphaMode",
     "GstVideo.VideoChromaMode",
     "GstVideo.VideoMatrixMode",
+    "GstVideo.VideoOrientationMethod",
     "GstVideo.VideoGammaMode",
     "GstVideo.VideoPrimariesMode",
     "GstVideo.VideoResamplerMethod",
@@ -71,6 +72,26 @@ conversion_type = "scalar"
 name = "Gst.Caps"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstVideo.VideoOrientation"
+status = "generate"
+    [[object.function]]
+    name = "set_hcenter"
+        [object.function.return]
+        bool_return_is_error = "Failed to set horizontal centering"
+    [[object.function]]
+    name = "set_hflip"
+        [object.function.return]
+        bool_return_is_error = "Failed to set horizontal flipping"
+    [[object.function]]
+    name = "set_vcenter"
+        [object.function.return]
+        bool_return_is_error = "Failed to set vertical centering"
+    [[object.function]]
+    name = "set_vflip"
+        [object.function.return]
+        bool_return_is_error = "Failed to set vertical flipping"
 
 [[object]]
 name = "GstVideo.VideoOverlay"
