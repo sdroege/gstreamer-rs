@@ -1240,8 +1240,7 @@ manual_traits = ["PluginFeatureExtManual"]
 
     [[object.function]]
     name = "load"
-        [object.function.return]
-        nullable_return_is_error = "Failed to load plugin feature"
+    manual = true
 
 [[object]]
 name = "Gst.Registry"

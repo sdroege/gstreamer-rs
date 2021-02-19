@@ -3,12 +3,13 @@
 use crate::PluginFeature;
 use crate::Rank;
 
-use glib::object::IsA;
-use glib::translate::{from_glib, ToGlib, ToGlibPtr};
+use glib::object::{Cast, IsA};
+use glib::translate::{from_glib, FromGlibPtrFull, ToGlib, ToGlibPtr};
 
-pub trait PluginFeatureExtManual: 'static {
+pub trait PluginFeatureExtManual: Sized + 'static {
     fn get_rank(&self) -> Rank;
     fn set_rank(&self, rank: Rank);
+    fn load(&self) -> Result<Self, glib::BoolError>;
 }
 
 impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
@@ -23,5 +24,31 @@ impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
         unsafe {
             ffi::gst_plugin_feature_set_rank(self.as_ref().to_glib_none().0, rank.to_glib() as u32);
         }
+    }
+
+    fn load(&self) -> Result<Self, glib::BoolError> {
+        unsafe {
+            let loaded = Option::<PluginFeature>::from_glib_full(ffi::gst_plugin_feature_load(
+                self.as_ref().to_glib_none().0,
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to load plugin feature"))?;
+            Ok(loaded.unsafe_cast())
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::prelude::*;
+
+    #[test]
+    fn test_load() {
+        crate::init().unwrap();
+
+        let factory = crate::ElementFactory::find("identity").unwrap();
+        let loaded = factory.load().unwrap();
+        assert_eq!(factory.get_type(), loaded.get_type());
+        let _element = loaded.create(None).unwrap();
     }
 }

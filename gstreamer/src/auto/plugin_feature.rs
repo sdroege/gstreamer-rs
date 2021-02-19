@@ -29,9 +29,6 @@ pub trait PluginFeatureExt: 'static {
 
     #[doc(alias = "gst_plugin_feature_get_plugin_name")]
     fn get_plugin_name(&self) -> Option<glib::GString>;
-
-    #[doc(alias = "gst_plugin_feature_load")]
-    fn load(&self) -> Result<PluginFeature, glib::BoolError>;
 }
 
 impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
@@ -59,15 +56,6 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
             from_glib_none(ffi::gst_plugin_feature_get_plugin_name(
                 self.as_ref().to_glib_none().0,
             ))
-        }
-    }
-
-    fn load(&self) -> Result<PluginFeature, glib::BoolError> {
-        unsafe {
-            Option::<_>::from_glib_full(ffi::gst_plugin_feature_load(
-                self.as_ref().to_glib_none().0,
-            ))
-            .ok_or_else(|| glib::bool_error!("Failed to load plugin feature"))
         }
     }
 }
