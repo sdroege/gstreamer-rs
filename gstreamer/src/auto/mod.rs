@@ -208,7 +208,6 @@ pub use self::flags::StreamType;
 
 mod alias;
 pub use self::alias::ClockTimeDiff;
-pub use self::alias::ElementFactoryListType;
 
 pub mod functions;
 

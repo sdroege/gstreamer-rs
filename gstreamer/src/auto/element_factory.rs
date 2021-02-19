@@ -144,7 +144,7 @@ impl ElementFactory {
         unsafe {
             from_glib(ffi::gst_element_factory_list_is_type(
                 self.to_glib_none().0,
-                type_,
+                type_.to_glib(),
             ))
         }
     }
@@ -178,7 +178,7 @@ impl ElementFactory {
         assert_initialized_main_thread!();
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_list_get_elements(
-                type_,
+                type_.to_glib(),
                 minrank.to_glib(),
             ))
         }

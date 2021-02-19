@@ -25,7 +25,6 @@ generate = [
     "Gst.DebugColorFlags",
     "Gst.DebugGraphDetails",
     "Gst.DebugLevel",
-    "Gst.ElementFactoryListType",
     "Gst.EventTypeFlags",
     "Gst.LibraryError",
     "Gst.PadDirection",
@@ -231,6 +230,11 @@ status = "generate"
     [[object.member]]
     name = "last"
     ignore = true
+
+[[object]]
+name = "Gst.ElementFactoryListType"
+status = "manual"
+conversion_type = "scalar"
 
 [[object]]
 name = "Gst.Format"
