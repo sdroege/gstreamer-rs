@@ -304,7 +304,7 @@ impl WebRTCDataChannel {
     pub fn emit_close(&self) {
         let _ = unsafe {
             glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
-                .emit("close", &[])
+                .emit_by_name("close", &[])
                 .unwrap()
         };
     }
@@ -519,7 +519,7 @@ impl WebRTCDataChannel {
     pub fn emit_send_data(&self, data: Option<&glib::Bytes>) {
         let _ = unsafe {
             glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
-                .emit("send-data", &[&data])
+                .emit_by_name("send-data", &[&data])
                 .unwrap()
         };
     }
@@ -559,7 +559,7 @@ impl WebRTCDataChannel {
     pub fn emit_send_string(&self, data: Option<&str>) {
         let _ = unsafe {
             glib::Object::from_glib_borrow(self.as_ptr() as *mut glib::gobject_ffi::GObject)
-                .emit("send-string", &[&data])
+                .emit_by_name("send-string", &[&data])
                 .unwrap()
         };
     }
