@@ -12,7 +12,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
-    pub struct AppSrc(Object<ffi::GstAppSrc, ffi::GstAppSrcClass>) @extends gst_base::BaseSrc, gst::Element, gst::Object, @implements gst::URIHandler;
+    pub struct AppSrc(Object<ffi::GstAppSrc, ffi::GstAppSrcClass>) @extends gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {
         get_type => || ffi::gst_app_src_get_type(),

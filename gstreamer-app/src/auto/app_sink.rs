@@ -11,7 +11,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
-    pub struct AppSink(Object<ffi::GstAppSink, ffi::GstAppSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object, @implements gst::URIHandler;
+    pub struct AppSink(Object<ffi::GstAppSink, ffi::GstAppSinkClass>) @extends gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {
         get_type => || ffi::gst_app_sink_get_type(),

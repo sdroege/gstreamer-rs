@@ -13,7 +13,6 @@ external_libraries = [
     "GLib",
     "GObject",
     "Gst",
-    "GstBase",
 ]
 
 generate = [
@@ -27,8 +26,6 @@ manual = [
     "Gst.URIHandler",
     "Gst.FlowReturn",
     "Gst.Format",
-    "GstBase.BaseSrc",
-    "GstBase.BaseSink",
 ]
 
 [[object]]
