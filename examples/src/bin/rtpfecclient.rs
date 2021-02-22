@@ -83,7 +83,7 @@ fn connect_rtpbin_srcpad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), 
 fn make_fec_decoder(rtpbin: &gst::Element, sess_id: u32) -> Result<gst::Element, Error> {
     let fecdec = make_element("rtpulpfecdec", None)?;
     let internal_storage = rtpbin
-        .emit("get-internal-storage", &[&sess_id])
+        .emit_by_name("get-internal-storage", &[&sess_id])
         .unwrap()
         .unwrap()
         .get::<glib::Object>()

@@ -31,7 +31,7 @@ fn tutorial_main() -> Result<(), Error> {
         .set_by_nick("download")
         .build()
         .unwrap();
-    pipeline.set_property_generic("flags", &flags).unwrap();
+    pipeline.set_property_with_value("flags", &flags).unwrap();
 
     // Uncomment this line to limit the amount of downloaded data.
     // pipeline.set_property("ring-buffer-max-size", &4_000_000u64)?;

@@ -44,7 +44,7 @@ mod tutorial5 {
         match playbin.get_property(propname).unwrap().get() {
             Ok(Some(x)) => {
                 for i in 0..x {
-                    let tags = playbin.emit(signame, &[&i]).unwrap().unwrap();
+                    let tags = playbin.emit_by_name(signame, &[&i]).unwrap().unwrap();
 
                     if let Ok(Some(tags)) = tags.get::<gst::TagList>() {
                         textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
