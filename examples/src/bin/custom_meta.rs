@@ -12,7 +12,7 @@ mod examples_common;
 mod custom_meta {
     use gst::prelude::*;
     use std::fmt;
-    use std::ptr;
+    use std::mem;
 
     // Public Rust type for the custom meta.
     #[repr(transparent)]
@@ -29,18 +29,16 @@ mod custom_meta {
             label: String,
         ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
             unsafe {
-                // First add it: this will store an empty label via custom_meta_init().
+                // Manually dropping because gst_buffer_add_meta() takes ownership of the
+                // content of the struct.
+                let mut params = mem::ManuallyDrop::new(imp::CustomMetaParams { label });
+
+                // The label is passed through via the params to custom_meta_init().
                 let meta = gst::ffi::gst_buffer_add_meta(
                     buffer.as_mut_ptr(),
                     imp::custom_meta_get_info(),
-                    ptr::null_mut(),
+                    &mut *params as *mut imp::CustomMetaParams as glib::ffi::gpointer,
                 ) as *mut imp::CustomMeta;
-
-                // Then actually set the label.
-                {
-                    let meta = &mut *meta;
-                    meta.label = label;
-                }
 
                 Self::from_mut_ptr(buffer, meta)
             }
@@ -76,6 +74,10 @@ mod custom_meta {
         use std::mem;
         use std::ptr;
 
+        pub(super) struct CustomMetaParams {
+            pub label: String,
+        }
+
         // This is the C type that is actually stored as meta inside the buffers.
         #[repr(C)]
         pub struct CustomMeta {
@@ -89,7 +91,7 @@ mod custom_meta {
                 let t = from_glib(gst::ffi::gst_meta_api_type_register(
                     b"MyCustomMetaAPI\0".as_ptr() as *const _,
                     // We provide no tags here as our meta is just a label and does
-                    // not refer to any specific aspect of the buffer
+                    // not refer to any specific aspect of the buffer.
                     [ptr::null::<std::os::raw::c_char>()].as_ptr() as *mut *const _,
                 ));
 
@@ -105,13 +107,16 @@ mod custom_meta {
         // initialized. They will contain random memory before.
         unsafe extern "C" fn custom_meta_init(
             meta: *mut gst::ffi::GstMeta,
-            _params: glib::ffi::gpointer,
+            params: glib::ffi::gpointer,
             _buffer: *mut gst::ffi::GstBuffer,
         ) -> glib::ffi::gboolean {
-            let meta = &mut *(meta as *mut CustomMeta);
+            assert!(!params.is_null());
 
-            // Need to initialize all our fields correctly here
-            ptr::write(&mut meta.label, String::new());
+            let meta = &mut *(meta as *mut CustomMeta);
+            let params = ptr::read(params as *const CustomMetaParams);
+
+            // Need to initialize all our fields correctly here.
+            ptr::write(&mut meta.label, params.label);
 
             true.to_glib()
         }
@@ -137,7 +142,7 @@ mod custom_meta {
             _type_: glib::ffi::GQuark,
             _data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let meta = &mut *(meta as *mut CustomMeta);
+            let meta = &*(meta as *mut CustomMeta);
 
             // We simply copy over our meta here. Other metas might have to look at the type
             // and do things conditional on that, or even just drop the meta.
