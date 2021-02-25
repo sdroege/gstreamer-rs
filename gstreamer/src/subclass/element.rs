@@ -323,7 +323,7 @@ where
         f: F,
     ) -> R {
         unsafe {
-            assert!(element.get_type().is_a(&T::get_type()));
+            assert!(element.get_type().is_a(T::get_type()));
             let ptr: *mut ffi::GstElement = element.as_ptr() as *mut _;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
@@ -339,7 +339,7 @@ where
     ) -> R {
         unsafe {
             let wrap = parent.as_ref().unwrap().downcast_ref::<Element>().unwrap();
-            assert!(wrap.get_type().is_a(&T::get_type()));
+            assert!(wrap.get_type().is_a(T::get_type()));
             let ptr: *mut ffi::GstElement = wrap.to_glib_none().0;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();

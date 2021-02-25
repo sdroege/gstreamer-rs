@@ -1666,15 +1666,15 @@ impl<T: IsA<Pad> + IsA<glib::Object>> PadBuilder<T> {
                 .get_some::<glib::Type>()
                 .unwrap();
 
-            if gtype == glib::Type::Unit {
+            if gtype == glib::Type::UNIT {
                 // Nothing to be done, we can create any kind of pad
-            } else if gtype.is_a(&type_) {
+            } else if gtype.is_a(type_) {
                 // We were asked to create a parent type of the template type, e.g. a gst::Pad for
                 // a template that wants a gst_base::AggregatorPad. Not a problem: update the type
                 type_ = gtype;
             } else {
                 // Otherwise the requested type must be a subclass of the template pad type
-                assert!(type_.is_a(&gtype));
+                assert!(type_.is_a(gtype));
             }
         }
 

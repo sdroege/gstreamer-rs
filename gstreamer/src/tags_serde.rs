@@ -58,7 +58,7 @@ impl<'a> Serialize for TagValuesSer<'a> {
         for value in tag_iter.deref_mut() {
             match value.type_() {
                 glib::Type::F64 => ser_some_tag!(value, seq, f64),
-                glib::Type::String => {
+                glib::Type::STRING => {
                     // See above comment about `Tag`s with `String` values
                     ser_opt_value!(value, String, |_, value: Option<String>| {
                         seq.serialize_element(&value.expect("String tag ser"))
@@ -66,7 +66,7 @@ impl<'a> Serialize for TagValuesSer<'a> {
                 }
                 glib::Type::U32 => ser_some_tag!(value, seq, u32),
                 glib::Type::U64 => ser_some_tag!(value, seq, u64),
-                glib::Type::Other(type_id) => {
+                type_id => {
                     if *DATE_OTHER_TYPE_ID == type_id {
                         // See above comment about `Tag`s with `Date` values
                         ser_opt_value!(value, Date, |_, value: Option<Date>| {
@@ -83,14 +83,10 @@ impl<'a> Serialize for TagValuesSer<'a> {
                     } else {
                         Err(ser::Error::custom(format!(
                             "unimplemented `Tag` serialization for type {}",
-                            glib::Type::Other(type_id),
+                            type_id,
                         )))
                     }
                 }
-                type_ => Err(ser::Error::custom(format!(
-                    "unimplemented `Tag` serialization for type {}",
-                    type_
-                ))),
             }?;
         }
         seq.end()
@@ -181,13 +177,13 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
         loop {
             let tag_value = match tag_type {
                 glib::Type::F64 => de_some_tag!(self.0, seq, f64),
-                glib::Type::String => {
+                glib::Type::STRING => {
                     // See comment above `TagValuesSer` definition about `Tag`s with `String` values
                     de_some_tag!(self.0, seq, String)
                 }
                 glib::Type::U32 => de_some_tag!(self.0, seq, u32),
                 glib::Type::U64 => de_some_tag!(self.0, seq, u64),
-                glib::Type::Other(type_id) => {
+                type_id => {
                     if *DATE_OTHER_TYPE_ID == type_id {
                         // See comment above `TagValuesSer` definition about `Tag`s with `Date` values
                         // Need to deserialize as `date_time_serde::Date` new type
@@ -200,16 +196,9 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
                     } else {
                         return Err(de::Error::custom(format!(
                             "unimplemented deserialization for `Tag` {} with type `{}`",
-                            self.0,
-                            glib::Type::Other(type_id),
+                            self.0, type_id,
                         )));
                     }
-                }
-                type_ => {
-                    return Err(de::Error::custom(format!(
-                        "unimplemented deserialization for `Tag` {} with type `{}`",
-                        self.0, type_,
-                    )));
                 }
             }?;
 

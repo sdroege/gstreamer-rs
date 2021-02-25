@@ -30,7 +30,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
         assert!(!ptr.is_null());
 
         let meta_api = Self::get_meta_api();
-        if meta_api != glib::Type::Invalid {
+        if meta_api != glib::Type::INVALID {
             assert_eq!(
                 meta_api,
                 from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
@@ -50,7 +50,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
         assert!(!ptr.is_null());
 
         let meta_api = Self::get_meta_api();
-        if meta_api != glib::Type::Invalid {
+        if meta_api != glib::Type::INVALID {
             assert_eq!(
                 meta_api,
                 from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
@@ -165,7 +165,7 @@ impl<'a> MetaRef<'a, Meta> {
         let target_type = T::get_meta_api();
         let type_ = self.get_api();
 
-        if type_ == glib::Type::Invalid || target_type == type_ {
+        if type_ == glib::Type::INVALID || target_type == type_ {
             Some(unsafe { &*(self as *const MetaRef<'a, Meta> as *const MetaRef<'a, T>) })
         } else {
             None
@@ -217,7 +217,7 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
         let target_type = T::get_meta_api();
         let type_ = self.get_api();
 
-        if type_ == glib::Type::Invalid || target_type == type_ {
+        if type_ == glib::Type::INVALID || target_type == type_ {
             Some(unsafe { &*(self as *mut MetaRefMut<'a, Meta, U> as *const MetaRefMut<'a, T, U>) })
         } else {
             None
@@ -241,7 +241,7 @@ unsafe impl MetaAPI for Meta {
     type GstType = ffi::GstMeta;
 
     fn get_meta_api() -> glib::Type {
-        glib::Type::Invalid
+        glib::Type::INVALID
     }
 }
 

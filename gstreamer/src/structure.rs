@@ -769,14 +769,14 @@ mod tests {
             s.get::<i32>("f2"),
             Err(GetError::from_value_get_error(
                 "f2",
-                value::GetError::new_type_mismatch(Type::String, Type::I32),
+                value::GetError::new_type_mismatch(Type::STRING, Type::I32),
             ))
         );
         assert_eq!(
             s.get_some::<bool>("f3"),
             Err(GetError::from_value_get_error(
                 "f3",
-                value::GetError::new_type_mismatch(Type::I32, Type::Bool),
+                value::GetError::new_type_mismatch(Type::I32, Type::BOOL),
             ))
         );
         assert_eq!(

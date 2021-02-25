@@ -20,27 +20,20 @@ use crate::Sample;
 use crate::date_time_serde;
 use crate::value::*;
 
-fn get_other_type_id<T: StaticType>() -> usize {
-    match T::static_type() {
-        glib::Type::Other(type_id) => type_id,
-        type_ => panic!("Expecting `Other` variant, found `{}`", type_),
-    }
-}
-
-pub(crate) static ARRAY_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Array>);
-pub(crate) static BITMASK_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Bitmask>);
-pub(crate) static DATE_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Date>);
-pub(crate) static DATE_TIME_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<DateTime>);
-pub(crate) static FRACTION_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Fraction>);
-pub(crate) static FRACTION_RANGE_OTHER_TYPE_ID: Lazy<usize> =
-    Lazy::new(get_other_type_id::<FractionRange>);
-pub(crate) static INT_RANGE_I32_OTHER_TYPE_ID: Lazy<usize> =
-    Lazy::new(get_other_type_id::<IntRange<i32>>);
-pub(crate) static INT_RANGE_I64_OTHER_TYPE_ID: Lazy<usize> =
-    Lazy::new(get_other_type_id::<IntRange<i64>>);
-pub(crate) static LIST_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<List>);
-pub(crate) static SAMPLE_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Sample>);
-pub(crate) static BUFFER_OTHER_TYPE_ID: Lazy<usize> = Lazy::new(get_other_type_id::<Buffer>);
+pub(crate) static ARRAY_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Array::static_type);
+pub(crate) static BITMASK_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Bitmask::static_type);
+pub(crate) static DATE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Date::static_type);
+pub(crate) static DATE_TIME_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(DateTime::static_type);
+pub(crate) static FRACTION_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Fraction::static_type);
+pub(crate) static FRACTION_RANGE_OTHER_TYPE_ID: Lazy<glib::Type> =
+    Lazy::new(FractionRange::static_type);
+pub(crate) static INT_RANGE_I32_OTHER_TYPE_ID: Lazy<glib::Type> =
+    Lazy::new(IntRange::<i32>::static_type);
+pub(crate) static INT_RANGE_I64_OTHER_TYPE_ID: Lazy<glib::Type> =
+    Lazy::new(IntRange::<i64>::static_type);
+pub(crate) static LIST_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(List::static_type);
+pub(crate) static SAMPLE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Sample::static_type);
+pub(crate) static BUFFER_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Buffer::static_type);
 
 impl<'a> Serialize for Fraction {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -77,15 +70,15 @@ macro_rules! ser_value (
         match $value.type_() {
             glib::Type::I8 => ser_some_value!($value, i8, $ser_closure),
             glib::Type::U8 => ser_some_value!($value, u8, $ser_closure),
-            glib::Type::Bool => ser_some_value!($value, bool, $ser_closure),
+            glib::Type::BOOL => ser_some_value!($value, bool, $ser_closure),
             glib::Type::I32 => ser_some_value!($value, i32, $ser_closure),
             glib::Type::U32 => ser_some_value!($value, u32, $ser_closure),
             glib::Type::I64 => ser_some_value!($value, i64, $ser_closure),
             glib::Type::U64 => ser_some_value!($value, u64, $ser_closure),
             glib::Type::F32 => ser_some_value!($value, f32, $ser_closure),
             glib::Type::F64 => ser_some_value!($value, f64, $ser_closure),
-            glib::Type::String => ser_opt_value!($value, String, $ser_closure),
-            glib::Type::Other(type_id) => {
+            glib::Type::STRING => ser_opt_value!($value, String, $ser_closure),
+            type_id => {
                 if *ARRAY_OTHER_TYPE_ID == type_id {
                     ser_some_value!($value, Array, $ser_closure)
                 } else if *BITMASK_OTHER_TYPE_ID == type_id {
@@ -116,18 +109,11 @@ macro_rules! ser_value (
                     Err(
                         ser::Error::custom(
                             format!("unimplemented `Value` serialization for type {}",
-                                glib::Type::Other(type_id),
+                                type_id,
                             )
                         )
                     )
                 }
-            }
-            type_ => {
-                Err(
-                    ser::Error::custom(
-                        format!("unimplemented `Value` serialization for type {}", type_)
-                    )
-                )
             }
         }
     );

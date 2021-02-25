@@ -727,7 +727,7 @@ macro_rules! define_meta_iter(
 
                     if meta.is_null() {
                         return None;
-                    } else if self.meta_api == glib::Type::Invalid || glib::Type::from_glib((*(*meta).info).api) == self.meta_api {
+                    } else if self.meta_api == glib::Type::INVALID || glib::Type::from_glib((*(*meta).info).api) == self.meta_api {
                         // FIXME: Workaround for a lifetime issue with the mutable iterator only
                         let buffer = $prepare_buffer(self.buffer.as_mut_ptr());
                         let item = $from_ptr(buffer, meta);

@@ -139,7 +139,7 @@ where
             let func_ptr = &mut func as *mut F as gpointer;
 
             let mut accum = Some(init);
-            let mut ret = glib::Value::from_type(glib::Type::Pointer);
+            let mut ret = glib::Value::from_type(glib::Type::POINTER);
             glib::gobject_ffi::g_value_set_pointer(
                 ret.to_glib_none_mut().0,
                 &mut accum as *mut _ as gpointer,
@@ -357,7 +357,7 @@ unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib::f
     let mut types = TYPES.lock().unwrap();
     let type_name = T::static_type().name();
 
-    if let Some(type_) = types.get(&type_name) {
+    if let Some(type_) = types.get(type_name) {
         return *type_;
     }
 
@@ -389,7 +389,7 @@ unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib::f
         type_
     };
 
-    types.insert(type_name, type_);
+    types.insert(String::from(type_name), type_);
 
     type_
 }

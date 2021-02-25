@@ -95,7 +95,7 @@ mod custom_meta {
                     [ptr::null::<std::os::raw::c_char>()].as_ptr() as *mut *const _,
                 ));
 
-                assert_ne!(t, glib::Type::Invalid);
+                assert_ne!(t, glib::Type::INVALID);
 
                 t
             });
