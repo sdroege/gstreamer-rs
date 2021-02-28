@@ -128,7 +128,7 @@ pub trait GstObjectExt: 'static {
     #[doc(alias = "gst_object_unparent")]
     fn unparent(&self);
 
-    //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId;
 
     fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -316,7 +316,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
+    //fn connect_deep_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
     //    Ignored prop: GObject.ParamSpec
     //}
 
