@@ -34,7 +34,7 @@ fn example_main() {
     let main_loop_clone = main_loop.clone();
 
     //bus.add_signal_watch();
-    //bus.connect_message(move |_, msg| {
+    //bus.connect_message(None, move |_, msg| {
     bus.add_watch(move |_, msg| {
         use gst::MessageView;
 

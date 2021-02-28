@@ -240,7 +240,7 @@ fn main() {
     let main_loop_clone = main_loop.clone();
     let bus = pipeline.get_bus().unwrap();
     #[allow(clippy::single_match)]
-    bus.connect_message(move |_, msg| match msg.view() {
+    bus.connect_message(Some("error"), move |_, msg| match msg.view() {
         gst::MessageView::Error(err) => {
             let main_loop = &main_loop_clone;
             eprintln!(
@@ -251,7 +251,7 @@ fn main() {
             eprintln!("Debugging information: {:?}", err.get_debug());
             main_loop.quit();
         }
-        _ => (),
+        _ => unreachable!(),
     });
     bus.add_signal_watch();
 

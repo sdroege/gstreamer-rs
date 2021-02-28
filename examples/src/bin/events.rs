@@ -81,7 +81,7 @@ fn example_main() {
     });
 
     //bus.add_signal_watch();
-    //bus.connect_message(move |_, msg| {
+    //bus.connect_message(None, move |_, msg| {
     let main_loop_clone = main_loop.clone();
     // This sets the bus's signal handler (don't be mislead by the "add", there can only be one).
     // Every message from the bus is passed through this function. Its returnvalue determines

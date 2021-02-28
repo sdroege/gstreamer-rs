@@ -247,7 +247,7 @@ mod tutorial5 {
         let bus = playbin.get_bus().unwrap();
 
         #[allow(clippy::single_match)]
-        bus.connect_message(move |_, msg| match msg.view() {
+        bus.connect_message(Some("application"), move |_, msg| match msg.view() {
             gst::MessageView::Application(application) => {
                 let pipeline = match pipeline_weak.upgrade() {
                     Some(pipeline) => pipeline,
@@ -266,7 +266,7 @@ mod tutorial5 {
                     analyze_streams(&pipeline, &textbuf);
                 }
             }
-            _ => (),
+            _ => unreachable!(),
         });
 
         let vbox = gtk::Box::new(gtk::Orientation::Horizontal, 0);
@@ -364,7 +364,7 @@ mod tutorial5 {
         bus.add_signal_watch();
 
         let pipeline_weak = playbin.downgrade();
-        bus.connect_message(move |_, msg| {
+        bus.connect_message(None, move |_, msg| {
             let pipeline = match pipeline_weak.upgrade() {
                 Some(pipeline) => pipeline,
                 None => return,
