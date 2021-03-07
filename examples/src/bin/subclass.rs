@@ -19,11 +19,8 @@ mod examples_common;
 mod fir_filter {
     use super::*;
 
-    use glib::subclass;
     use glib::subclass::prelude::*;
-
     use gst::subclass::prelude::*;
-
     use gst_base::subclass::prelude::*;
 
     use byte_slice_cast::*;
@@ -47,6 +44,7 @@ mod fir_filter {
         use std::sync::Mutex;
 
         // This is the private data of our filter
+        #[derive(Default)]
         pub struct FirFilter {
             pub(super) coeffs: Mutex<Vec<f32>>,
             history: Mutex<VecDeque<f32>>,
@@ -55,25 +53,12 @@ mod fir_filter {
         // This trait registers our type with the GObject object system and
         // provides the entry points for creating a new instance and setting
         // up the class data
+        #[glib::object_subclass]
         impl ObjectSubclass for FirFilter {
             const NAME: &'static str = "RsFirFilter";
             type Type = super::FirFilter;
             type ParentType = gst_base::BaseTransform;
-            type Interfaces = ();
             type Instance = gst::subclass::ElementInstanceStruct<Self>;
-            type Class = subclass::simple::ClassStruct<Self>;
-
-            // This macro provides some boilerplate
-            glib::object_subclass!();
-
-            // Called when a new instance is to be created. We need to return an instance
-            // of our struct here.
-            fn new() -> Self {
-                Self {
-                    coeffs: Mutex::new(Vec::new()),
-                    history: Mutex::new(VecDeque::new()),
-                }
-            }
         }
 
         // Implementation of glib::Object virtual methods

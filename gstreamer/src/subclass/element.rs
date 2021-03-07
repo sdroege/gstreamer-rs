@@ -589,7 +589,6 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use glib::subclass;
     use std::sync::atomic;
 
     use crate::ElementFactory;
@@ -652,15 +651,12 @@ mod tests {
             }
         }
 
+        #[glib::object_subclass]
         impl ObjectSubclass for TestElement {
             const NAME: &'static str = "TestElement";
             type Type = super::TestElement;
             type ParentType = Element;
-            type Interfaces = ();
             type Instance = crate::subclass::ElementInstanceStruct<Self>;
-            type Class = subclass::simple::ClassStruct<Self>;
-
-            glib::object_subclass!();
 
             fn with_class(klass: &Self::Class) -> Self {
                 let templ = klass.get_pad_template("sink").unwrap();

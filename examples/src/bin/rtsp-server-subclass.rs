@@ -78,9 +78,7 @@ fn main_loop() -> Result<(), Error> {
 mod media_factory {
     use super::*;
 
-    use glib::subclass;
     use glib::subclass::prelude::*;
-
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -88,27 +86,17 @@ mod media_factory {
         use super::*;
 
         // This is the private data of our factory
+        #[derive(Default)]
         pub struct Factory {}
 
         // This trait registers our type with the GObject object system and
         // provides the entry points for creating a new instance and setting
         // up the class data
+        #[glib::object_subclass]
         impl ObjectSubclass for Factory {
             const NAME: &'static str = "RsRTSPMediaFactory";
             type Type = super::Factory;
             type ParentType = gst_rtsp_server::RTSPMediaFactory;
-            type Interfaces = ();
-            type Instance = gst::subclass::ElementInstanceStruct<Self>;
-            type Class = subclass::simple::ClassStruct<Self>;
-
-            // This macro provides some boilerplate
-            glib::object_subclass!();
-
-            // Called when a new instance is to be created. We need to return an instance
-            // of our struct here.
-            fn new() -> Self {
-                Self {}
-            }
         }
 
         // Implementation of glib::Object virtual methods
@@ -172,9 +160,7 @@ mod media_factory {
 
 // Our custom media subclass that adds a custom attribute to the SDP returned by DESCRIBE
 mod media {
-    use glib::subclass;
     use glib::subclass::prelude::*;
-
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -182,27 +168,17 @@ mod media {
         use super::*;
 
         // This is the private data of our media
+        #[derive(Default)]
         pub struct Media {}
 
         // This trait registers our type with the GObject object system and
         // provides the entry points for creating a new instance and setting
         // up the class data
+        #[glib::object_subclass]
         impl ObjectSubclass for Media {
             const NAME: &'static str = "RsRTSPMedia";
             type Type = super::Media;
             type ParentType = gst_rtsp_server::RTSPMedia;
-            type Interfaces = ();
-            type Instance = gst::subclass::ElementInstanceStruct<Self>;
-            type Class = subclass::simple::ClassStruct<Self>;
-
-            // This macro provides some boilerplate
-            glib::object_subclass!();
-
-            // Called when a new instance is to be created. We need to return an instance
-            // of our struct here.
-            fn new() -> Self {
-                Self {}
-            }
         }
 
         // Implementation of glib::Object virtual methods
@@ -241,9 +217,7 @@ mod media {
 mod server {
     use super::*;
 
-    use glib::subclass;
     use glib::subclass::prelude::*;
-
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -251,27 +225,17 @@ mod server {
         use super::*;
 
         // This is the private data of our server
+        #[derive(Default)]
         pub struct Server {}
 
         // This trait registers our type with the GObject object system and
         // provides the entry points for creating a new instance and setting
         // up the class data
+        #[glib::object_subclass]
         impl ObjectSubclass for Server {
             const NAME: &'static str = "RsRTSPServer";
             type Type = super::Server;
             type ParentType = gst_rtsp_server::RTSPServer;
-            type Interfaces = ();
-            type Instance = gst::subclass::ElementInstanceStruct<Self>;
-            type Class = subclass::simple::ClassStruct<Self>;
-
-            // This macro provides some boilerplate
-            glib::object_subclass!();
-
-            // Called when a new instance is to be created. We need to return an instance
-            // of our struct here.
-            fn new() -> Self {
-                Self {}
-            }
         }
 
         // Implementation of glib::Object virtual methods
@@ -318,9 +282,7 @@ mod server {
 
 // Our custom RTSP client subclass.
 mod client {
-    use glib::subclass;
     use glib::subclass::prelude::*;
-
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -328,27 +290,17 @@ mod client {
         use super::*;
 
         // This is the private data of our server
+        #[derive(Default)]
         pub struct Client {}
 
         // This trait registers our type with the GObject object system and
         // provides the entry points for creating a new instance and setting
         // up the class data
+        #[glib::object_subclass]
         impl ObjectSubclass for Client {
             const NAME: &'static str = "RsRTSPClient";
             type Type = super::Client;
             type ParentType = gst_rtsp_server::RTSPClient;
-            type Interfaces = ();
-            type Instance = gst::subclass::ElementInstanceStruct<Self>;
-            type Class = subclass::simple::ClassStruct<Self>;
-
-            // This macro provides some boilerplate
-            glib::object_subclass!();
-
-            // Called when a new instance is to be created. We need to return an instance
-            // of our struct here.
-            fn new() -> Self {
-                Self {}
-            }
         }
 
         // Implementation of glib::Object virtual methods

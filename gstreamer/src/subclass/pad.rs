@@ -87,7 +87,6 @@ unsafe extern "C" fn pad_unlinked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut 
 mod tests {
     use super::*;
     use crate::prelude::*;
-    use glib::subclass;
     use std::sync::atomic;
 
     use crate::PadDirection;
@@ -95,27 +94,17 @@ mod tests {
     pub mod imp {
         use super::*;
 
+        #[derive(Default)]
         pub struct TestPad {
             pub(super) linked: atomic::AtomicBool,
             pub(super) unlinked: atomic::AtomicBool,
         }
 
+        #[glib::object_subclass]
         impl ObjectSubclass for TestPad {
             const NAME: &'static str = "TestPad";
             type Type = super::TestPad;
             type ParentType = Pad;
-            type Interfaces = ();
-            type Instance = subclass::simple::InstanceStruct<Self>;
-            type Class = subclass::simple::ClassStruct<Self>;
-
-            glib::object_subclass!();
-
-            fn new() -> Self {
-                Self {
-                    linked: atomic::AtomicBool::new(false),
-                    unlinked: atomic::AtomicBool::new(false),
-                }
-            }
         }
 
         impl ObjectImpl for TestPad {}
