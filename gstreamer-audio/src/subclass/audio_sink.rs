@@ -188,8 +188,8 @@ unsafe impl<T: AudioSinkImpl> IsSubclassable<T> for AudioSink
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <gst_base::BaseSink as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <gst_base::BaseSink as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.close = Some(audiosink_close::<T>);
         klass.delay = Some(audiosink_delay::<T>);

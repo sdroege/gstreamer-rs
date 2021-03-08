@@ -11,13 +11,10 @@ pub trait PlayerVideoRendererImpl: ObjectImpl {
 }
 
 unsafe impl<T: PlayerVideoRendererImpl> IsImplementable<T> for PlayerVideoRenderer {
-    unsafe extern "C" fn interface_init(
-        iface: glib::ffi::gpointer,
-        _iface_data: glib::ffi::gpointer,
-    ) {
-        let video_renderer_iface = &mut *(iface as *mut ffi::GstPlayerVideoRendererInterface);
+    fn interface_init(iface: &mut glib::Class<Self>) {
+        let iface = iface.as_mut();
 
-        video_renderer_iface.create_video_sink = Some(video_renderer_create_video_sink::<T>);
+        iface.create_video_sink = Some(video_renderer_create_video_sink::<T>);
     }
 }
 

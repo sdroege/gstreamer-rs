@@ -114,8 +114,8 @@ unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrc
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <crate::BaseSrc as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <crate::BaseSrc as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.fill = Some(push_src_fill::<T>);
         klass.alloc = Some(push_src_alloc::<T>);

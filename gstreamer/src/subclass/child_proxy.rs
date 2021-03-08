@@ -33,17 +33,14 @@ pub trait ChildProxyImpl: ObjectImpl + Send + Sync {
 }
 
 unsafe impl<T: ChildProxyImpl> IsImplementable<T> for ChildProxy {
-    unsafe extern "C" fn interface_init(
-        iface: glib::ffi::gpointer,
-        _iface_data: glib::ffi::gpointer,
-    ) {
-        let child_proxy_iface = &mut *(iface as *mut ffi::GstChildProxyInterface);
+    fn interface_init(iface: &mut glib::Class<Self>) {
+        let iface = iface.as_mut();
 
-        child_proxy_iface.get_child_by_name = Some(child_proxy_get_child_by_name::<T>);
-        child_proxy_iface.get_child_by_index = Some(child_proxy_get_child_by_index::<T>);
-        child_proxy_iface.get_children_count = Some(child_proxy_get_children_count::<T>);
-        child_proxy_iface.child_added = Some(child_proxy_child_added::<T>);
-        child_proxy_iface.child_removed = Some(child_proxy_child_removed::<T>);
+        iface.get_child_by_name = Some(child_proxy_get_child_by_name::<T>);
+        iface.get_child_by_index = Some(child_proxy_get_child_by_index::<T>);
+        iface.get_children_count = Some(child_proxy_get_children_count::<T>);
+        iface.child_added = Some(child_proxy_child_added::<T>);
+        iface.child_removed = Some(child_proxy_child_removed::<T>);
     }
 }
 

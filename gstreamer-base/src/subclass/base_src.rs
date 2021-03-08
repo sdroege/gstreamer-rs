@@ -584,8 +584,8 @@ unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.start = Some(base_src_start::<T>);
         klass.stop = Some(base_src_stop::<T>);

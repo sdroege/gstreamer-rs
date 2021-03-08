@@ -207,8 +207,8 @@ unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.start = Some(base_parse_start::<T>);
         klass.stop = Some(base_parse_stop::<T>);

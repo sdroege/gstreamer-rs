@@ -7,9 +7,5 @@ use crate::TagSetter;
 pub trait TagSetterImpl: super::element::ElementImpl {}
 
 unsafe impl<T: TagSetterImpl> IsImplementable<T> for TagSetter {
-    unsafe extern "C" fn interface_init(
-        _iface: glib::ffi::gpointer,
-        _iface_data: glib::ffi::gpointer,
-    ) {
-    }
+    fn interface_init(_iface: &mut glib::Class<Self>) {}
 }

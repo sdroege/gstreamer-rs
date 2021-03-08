@@ -451,8 +451,8 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
     }
 }
 unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMedia {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.handle_message = Some(media_handle_message::<T>);
         klass.prepare = Some(media_prepare::<T>);

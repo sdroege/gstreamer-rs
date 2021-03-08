@@ -8,8 +8,8 @@ use crate::GhostPad;
 pub trait GhostPadImpl: PadImpl {}
 
 unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <crate::Pad as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <crate::Pad as IsSubclassable<T>>::class_init(klass);
         let _klass = klass.as_mut();
         // Nothing to do here
     }

@@ -21,24 +21,23 @@ unsafe impl Send for CStrV {}
 unsafe impl Sync for CStrV {}
 
 unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
-    unsafe extern "C" fn interface_init(
-        iface: glib::ffi::gpointer,
-        _iface_data: glib::ffi::gpointer,
-    ) {
-        let uri_handler_iface = &mut *(iface as *mut ffi::GstURIHandlerInterface);
+    fn interface_init(iface: &mut glib::Class<Self>) {
+        let iface = iface.as_mut();
 
         // Store the protocols in the interface data for later use
-        let mut data = T::type_data();
-        let protocols = T::get_protocols();
-        let protocols = protocols.to_glib_full();
-        let data = data.as_mut();
+        unsafe {
+            let mut data = T::type_data();
+            let protocols = T::get_protocols();
+            let protocols = protocols.to_glib_full();
+            let data = data.as_mut();
 
-        data.set_class_data(URIHandler::static_type(), CStrV(protocols));
+            data.set_class_data(URIHandler::static_type(), CStrV(protocols));
+        }
 
-        uri_handler_iface.get_type = Some(uri_handler_get_type::<T>);
-        uri_handler_iface.get_protocols = Some(uri_handler_get_protocols::<T>);
-        uri_handler_iface.get_uri = Some(uri_handler_get_uri::<T>);
-        uri_handler_iface.set_uri = Some(uri_handler_set_uri::<T>);
+        iface.get_type = Some(uri_handler_get_type::<T>);
+        iface.get_protocols = Some(uri_handler_get_protocols::<T>);
+        iface.get_uri = Some(uri_handler_get_uri::<T>);
+        iface.set_uri = Some(uri_handler_set_uri::<T>);
     }
 }
 

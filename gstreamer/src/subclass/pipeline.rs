@@ -11,8 +11,8 @@ unsafe impl<T: PipelineImpl> IsSubclassable<T> for Pipeline
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <crate::Bin as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <crate::Bin as IsSubclassable<T>>::class_init(klass);
         let _klass = klass.as_mut();
         // Nothing to do here
     }

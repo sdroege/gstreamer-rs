@@ -94,8 +94,8 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
     }
 }
 unsafe impl<T: AggregatorPadImpl> IsSubclassable<T> for AggregatorPad {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <gst::Pad as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <gst::Pad as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.flush = Some(aggregator_pad_flush::<T>);
         klass.skip_buffer = Some(aggregator_pad_skip_buffer::<T>);

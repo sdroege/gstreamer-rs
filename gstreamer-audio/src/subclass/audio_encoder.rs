@@ -480,8 +480,8 @@ unsafe impl<T: AudioEncoderImpl> IsSubclassable<T> for AudioEncoder
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.open = Some(audio_encoder_open::<T>);
         klass.close = Some(audio_encoder_close::<T>);

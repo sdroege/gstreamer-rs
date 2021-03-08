@@ -8,8 +8,8 @@ use crate::SystemClock;
 pub trait SystemClockImpl: ClockImpl {}
 
 unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <crate::Clock as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <crate::Clock as IsSubclassable<T>>::class_init(klass);
         let _klass = klass.as_mut();
         // Nothing to do here
     }

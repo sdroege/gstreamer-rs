@@ -854,8 +854,8 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
     }
 }
 unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <glib::Object as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <glib::Object as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.create_sdp = Some(client_create_sdp::<T>);
         klass.configure_client_media = Some(client_configure_client_media::<T>);

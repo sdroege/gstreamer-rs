@@ -707,8 +707,8 @@ unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <gst::Element as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <gst::Element as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.flush = Some(aggregator_flush::<T>);
         klass.clip = Some(aggregator_clip::<T>);

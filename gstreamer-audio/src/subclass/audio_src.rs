@@ -204,8 +204,8 @@ unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc
 where
     <T as ObjectSubclass>::Instance: PanicPoison,
 {
-    fn override_vfuncs(klass: &mut glib::Class<Self>) {
-        <gst_base::BaseSrc as IsSubclassable<T>>::override_vfuncs(klass);
+    fn class_init(klass: &mut glib::Class<Self>) {
+        <gst_base::BaseSrc as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
         klass.close = Some(audiosrc_close::<T>);
         klass.delay = Some(audiosrc_delay::<T>);
