@@ -5,7 +5,7 @@
 use glib::object::IsA;
 
 glib::wrapper! {
-    pub struct PlayerSignalDispatcher(Interface<ffi::GstPlayerSignalDispatcher>);
+    pub struct PlayerSignalDispatcher(Interface<ffi::GstPlayerSignalDispatcher, ffi::GstPlayerSignalDispatcherInterface>);
 
     match fn {
         get_type => || ffi::gst_player_signal_dispatcher_get_type(),

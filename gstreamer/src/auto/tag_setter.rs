@@ -10,7 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
-    pub struct TagSetter(Interface<ffi::GstTagSetter>) @requires Element, Object;
+    pub struct TagSetter(Interface<ffi::GstTagSetter, ffi::GstTagSetterInterface>) @requires Element, Object;
 
     match fn {
         get_type => || ffi::gst_tag_setter_get_type(),

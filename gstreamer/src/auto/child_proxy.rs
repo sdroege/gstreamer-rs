@@ -11,7 +11,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib::wrapper! {
-    pub struct ChildProxy(Interface<ffi::GstChildProxy>);
+    pub struct ChildProxy(Interface<ffi::GstChildProxy, ffi::GstChildProxyInterface>);
 
     match fn {
         get_type => || ffi::gst_child_proxy_get_type(),

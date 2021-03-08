@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
-    pub struct Extractable(Interface<ffi::GESExtractable>);
+    pub struct Extractable(Interface<ffi::GESExtractable, ffi::GESExtractableInterface>);
 
     match fn {
         get_type => || ffi::ges_extractable_get_type(),

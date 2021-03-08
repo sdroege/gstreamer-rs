@@ -7,7 +7,7 @@ use glib::translate::*;
 use std::ptr;
 
 glib::wrapper! {
-    pub struct Preset(Interface<ffi::GstPreset>);
+    pub struct Preset(Interface<ffi::GstPreset, ffi::GstPresetInterface>);
 
     match fn {
         get_type => || ffi::gst_preset_get_type(),

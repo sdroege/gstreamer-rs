@@ -9,7 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib::wrapper! {
-    pub struct TocSetter(Interface<ffi::GstTocSetter>) @requires Element, Object;
+    pub struct TocSetter(Interface<ffi::GstTocSetter, ffi::GstTocSetterInterface>) @requires Element, Object;
 
     match fn {
         get_type => || ffi::gst_toc_setter_get_type(),
