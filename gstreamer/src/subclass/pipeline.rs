@@ -7,10 +7,7 @@ use crate::Pipeline;
 
 pub trait PipelineImpl: BinImpl {}
 
-unsafe impl<T: PipelineImpl> IsSubclassable<T> for Pipeline
-where
-    <T as ObjectSubclass>::Instance: PanicPoison,
-{
+unsafe impl<T: PipelineImpl> IsSubclassable<T> for Pipeline {
     fn class_init(klass: &mut glib::Class<Self>) {
         <crate::Bin as IsSubclassable<T>>::class_init(klass);
         let _klass = klass.as_mut();

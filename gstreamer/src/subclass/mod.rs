@@ -55,28 +55,4 @@ pub mod prelude {
     pub use super::system_clock::SystemClockImpl;
     pub use super::tag_setter::TagSetterImpl;
     pub use super::uri_handler::URIHandlerImpl;
-    pub use super::PanicPoison;
-}
-
-use self::prelude::*;
-use std::sync::atomic::AtomicBool;
-
-#[repr(C)]
-pub struct ElementInstanceStruct<T: ObjectSubclass> {
-    parent: <T::ParentType as glib::object::ObjectType>::GlibType,
-    panicked: AtomicBool,
-}
-
-unsafe impl<T: ObjectSubclass> InstanceStruct for ElementInstanceStruct<T> {
-    type Type = T;
-}
-
-pub trait PanicPoison {
-    fn panicked(&self) -> &AtomicBool;
-}
-
-impl<T: ObjectSubclass> PanicPoison for ElementInstanceStruct<T> {
-    fn panicked(&self) -> &AtomicBool {
-        &self.panicked
-    }
 }

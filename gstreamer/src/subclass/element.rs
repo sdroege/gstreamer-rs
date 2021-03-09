@@ -1,6 +1,5 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use super::prelude::*;
 use crate::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
@@ -13,6 +12,8 @@ use crate::StateChange;
 use crate::StateChangeError;
 use crate::StateChangeReturn;
 use crate::StateChangeSuccess;
+
+use std::sync::atomic;
 
 #[derive(Debug, Clone)]
 pub struct ElementMetadata {
@@ -140,6 +141,8 @@ pub trait ElementImplExt: ObjectSubclass {
 
     fn parent_post_message(&self, element: &Self::Type, msg: crate::Message) -> bool;
 
+    fn panicked(&self) -> &atomic::AtomicBool;
+
     fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R, P: IsA<Element>>(
         &self,
         element: &P,
@@ -154,10 +157,7 @@ pub trait ElementImplExt: ObjectSubclass {
     ) -> R;
 }
 
-impl<T: ElementImpl> ElementImplExt for T
-where
-    T::Instance: PanicPoison,
-{
+impl<T: ElementImpl> ElementImplExt for T {
     fn parent_change_state(
         &self,
         element: &Self::Type,
@@ -316,6 +316,11 @@ where
         }
     }
 
+    fn panicked(&self) -> &atomic::AtomicBool {
+        self.get_instance_data::<atomic::AtomicBool>(crate::Element::static_type())
+            .expect("instance not initialized correctly")
+    }
+
     fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R, P: IsA<Element>>(
         &self,
         element: &P,
@@ -328,7 +333,7 @@ where
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
 
-            panic_to_error!(element, &instance.panicked(), fallback(), { f(&imp) })
+            panic_to_error!(element, &imp.panicked(), fallback(), { f(&imp) })
         }
     }
 
@@ -344,17 +349,14 @@ where
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
 
-            panic_to_error!(wrap, &instance.panicked(), fallback(), {
+            panic_to_error!(wrap, &imp.panicked(), fallback(), {
                 f(&imp, wrap.unsafe_cast_ref())
             })
         }
     }
 }
 
-unsafe impl<T: ElementImpl> IsSubclassable<T> for Element
-where
-    <T as ObjectSubclass>::Instance: PanicPoison,
-{
+unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
     fn class_init(klass: &mut glib::Class<Self>) {
         <glib::Object as IsSubclassable<T>>::class_init(klass);
 
@@ -396,16 +398,18 @@ where
 
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
         <glib::Object as IsSubclassable<T>>::instance_init(instance);
+
+        instance.set_instance_data(
+            crate::Element::static_type(),
+            atomic::AtomicBool::new(false),
+        );
     }
 }
 
 unsafe extern "C" fn element_change_state<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     transition: ffi::GstStateChange,
-) -> ffi::GstStateChangeReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> ffi::GstStateChangeReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
@@ -420,7 +424,7 @@ where
         _ => StateChangeReturn::Failure,
     };
 
-    panic_to_error!(&wrap, &instance.panicked(), fallback, {
+    panic_to_error!(&wrap, &imp.panicked(), fallback, {
         imp.change_state(wrap.unsafe_cast_ref(), transition).into()
     })
     .to_glib()
@@ -431,10 +435,7 @@ unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
     templ: *mut ffi::GstPadTemplate,
     name: *const libc::c_char,
     caps: *const ffi::GstCaps,
-) -> *mut ffi::GstPad
-where
-    T::Instance: PanicPoison,
-{
+) -> *mut ffi::GstPad {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
@@ -443,7 +444,7 @@ where
 
     // XXX: This is effectively unsafe but the best we can do
     // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
-    let pad = panic_to_error!(&wrap, &instance.panicked(), None, {
+    let pad = panic_to_error!(&wrap, &imp.panicked(), None, {
         imp.request_new_pad(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(templ),
@@ -468,9 +469,7 @@ where
 unsafe extern "C" fn element_release_pad<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     pad: *mut ffi::GstPad,
-) where
-    T::Instance: PanicPoison,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
@@ -483,7 +482,7 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
         return;
     }
 
-    panic_to_error!(&wrap, &instance.panicked(), (), {
+    panic_to_error!(&wrap, &imp.panicked(), (), {
         imp.release_pad(wrap.unsafe_cast_ref(), &from_glib_none(pad))
     })
 }
@@ -491,15 +490,12 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
 unsafe extern "C" fn element_send_event<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     event: *mut ffi::GstEvent,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.send_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
@@ -508,16 +504,13 @@ where
 unsafe extern "C" fn element_query<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     query: *mut ffi::GstQuery,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
     let query = QueryRef::from_mut_ptr(query);
 
-    panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.query(wrap.unsafe_cast_ref(), query)
     })
     .to_glib()
@@ -526,14 +519,12 @@ where
 unsafe extern "C" fn element_set_context<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     context: *mut ffi::GstContext,
-) where
-    T::Instance: PanicPoison,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &instance.panicked(), (), {
+    panic_to_error!(&wrap, &imp.panicked(), (), {
         imp.set_context(wrap.unsafe_cast_ref(), &from_glib_borrow(context))
     })
 }
@@ -541,17 +532,14 @@ unsafe extern "C" fn element_set_context<T: ElementImpl>(
 unsafe extern "C" fn element_set_clock<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     clock: *mut ffi::GstClock,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
     let clock = Option::<crate::Clock>::from_glib_borrow(clock);
 
-    panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.set_clock(wrap.unsafe_cast_ref(), clock.as_ref().as_ref())
     })
     .to_glib()
@@ -559,15 +547,12 @@ where
 
 unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
-) -> *mut ffi::GstClock
-where
-    T::Instance: PanicPoison,
-{
+) -> *mut ffi::GstClock {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &instance.panicked(), None, {
+    panic_to_error!(&wrap, &imp.panicked(), None, {
         imp.provide_clock(wrap.unsafe_cast_ref())
     })
     .to_glib_full()
@@ -576,10 +561,7 @@ where
 unsafe extern "C" fn element_post_message<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     msg: *mut ffi::GstMessage,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Element> = from_glib_borrow(ptr);
@@ -660,7 +642,6 @@ mod tests {
             const NAME: &'static str = "TestElement";
             type Type = super::TestElement;
             type ParentType = Element;
-            type Instance = crate::subclass::ElementInstanceStruct<Self>;
 
             fn with_class(klass: &Self::Class) -> Self {
                 let templ = klass.get_pad_template("sink").unwrap();

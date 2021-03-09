@@ -98,10 +98,7 @@ impl<T: BinImpl> BinImplExt for T {
     }
 }
 
-unsafe impl<T: BinImpl> IsSubclassable<T> for Bin
-where
-    <T as ObjectSubclass>::Instance: PanicPoison,
-{
+unsafe impl<T: BinImpl> IsSubclassable<T> for Bin {
     fn class_init(klass: &mut glib::Class<Self>) {
         <crate::Element as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
@@ -118,15 +115,12 @@ where
 unsafe extern "C" fn bin_add_element<T: BinImpl>(
     ptr: *mut ffi::GstBin,
     element: *mut ffi::GstElement,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.add_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
@@ -141,10 +135,7 @@ where
 unsafe extern "C" fn bin_remove_element<T: BinImpl>(
     ptr: *mut ffi::GstBin,
     element: *mut ffi::GstElement,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
@@ -158,7 +149,7 @@ where
         return glib::ffi::GFALSE;
     }
 
-    panic_to_error!(&wrap, &instance.panicked(), false, {
+    panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.remove_element(wrap.unsafe_cast_ref(), &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
@@ -173,14 +164,12 @@ where
 unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     ptr: *mut ffi::GstBin,
     message: *mut ffi::GstMessage,
-) where
-    T::Instance: PanicPoison,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
-    panic_to_error!(&wrap, &instance.panicked(), (), {
+    panic_to_error!(&wrap, &imp.panicked(), (), {
         imp.handle_message(wrap.unsafe_cast_ref(), from_glib_full(message))
     });
 }

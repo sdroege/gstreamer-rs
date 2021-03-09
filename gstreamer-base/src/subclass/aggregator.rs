@@ -703,10 +703,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     }
 }
 
-unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator
-where
-    <T as ObjectSubclass>::Instance: PanicPoison,
-{
+unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator {
     fn class_init(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
@@ -743,15 +740,12 @@ where
 
 unsafe extern "C" fn aggregator_flush<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.flush(wrap.unsafe_cast_ref()).into()
     })
     .to_glib()
@@ -761,15 +755,12 @@ unsafe extern "C" fn aggregator_clip<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     aggregator_pad: *mut ffi::GstAggregatorPad,
     buffer: *mut gst::ffi::GstBuffer,
-) -> *mut gst::ffi::GstBuffer
-where
-    T::Instance: PanicPoison,
-{
+) -> *mut gst::ffi::GstBuffer {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    let ret = gst::panic_to_error!(&wrap, &instance.panicked(), None, {
+    let ret = gst::panic_to_error!(&wrap, &imp.panicked(), None, {
         imp.clip(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(aggregator_pad),
@@ -783,15 +774,12 @@ where
 unsafe extern "C" fn aggregator_finish_buffer<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     buffer: *mut gst::ffi::GstBuffer,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.finish_buffer(wrap.unsafe_cast_ref(), from_glib_full(buffer))
             .into()
     })
@@ -803,15 +791,12 @@ where
 unsafe extern "C" fn aggregator_finish_buffer_list<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     buffer_list: *mut gst::ffi::GstBufferList,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.finish_buffer_list(wrap.unsafe_cast_ref(), from_glib_full(buffer_list))
             .into()
     })
@@ -822,15 +807,12 @@ unsafe extern "C" fn aggregator_sink_event<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     aggregator_pad: *mut ffi::GstAggregatorPad,
     event: *mut gst::ffi::GstEvent,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(wrap, &imp.panicked(), false, {
         imp.sink_event(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(aggregator_pad),
@@ -846,15 +828,12 @@ unsafe extern "C" fn aggregator_sink_event_pre_queue<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     aggregator_pad: *mut ffi::GstAggregatorPad,
     event: *mut gst::ffi::GstEvent,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.sink_event_pre_queue(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(aggregator_pad),
@@ -869,15 +848,12 @@ unsafe extern "C" fn aggregator_sink_query<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     aggregator_pad: *mut ffi::GstAggregatorPad,
     query: *mut gst::ffi::GstQuery,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_query(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(aggregator_pad),
@@ -893,15 +869,12 @@ unsafe extern "C" fn aggregator_sink_query_pre_queue<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     aggregator_pad: *mut ffi::GstAggregatorPad,
     query: *mut gst::ffi::GstQuery,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_query_pre_queue(
             wrap.unsafe_cast_ref(),
             &from_glib_borrow(aggregator_pad),
@@ -914,15 +887,12 @@ where
 unsafe extern "C" fn aggregator_src_event<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     event: *mut gst::ffi::GstEvent,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
     .to_glib()
@@ -931,15 +901,12 @@ where
 unsafe extern "C" fn aggregator_src_query<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     query: *mut gst::ffi::GstQuery,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
@@ -949,15 +916,12 @@ unsafe extern "C" fn aggregator_src_activate<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     mode: gst::ffi::GstPadMode,
     active: glib::ffi::gboolean,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.src_activate(wrap.unsafe_cast_ref(), from_glib(mode), from_glib(active)) {
             Ok(()) => true,
             Err(err) => {
@@ -972,15 +936,12 @@ where
 unsafe extern "C" fn aggregator_aggregate<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     timeout: glib::ffi::gboolean,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.aggregate(wrap.unsafe_cast_ref(), from_glib(timeout))
             .into()
     })
@@ -989,15 +950,12 @@ where
 
 unsafe extern "C" fn aggregator_start<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -1011,15 +969,12 @@ where
 
 unsafe extern "C" fn aggregator_stop<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -1033,15 +988,12 @@ where
 
 unsafe extern "C" fn aggregator_get_next_time<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
-) -> gst::ffi::GstClockTime
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::CLOCK_TIME_NONE, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::CLOCK_TIME_NONE, {
         imp.get_next_time(wrap.unsafe_cast_ref())
     })
     .to_glib()
@@ -1052,15 +1004,12 @@ unsafe extern "C" fn aggregator_create_new_pad<T: AggregatorImpl>(
     templ: *mut gst::ffi::GstPadTemplate,
     req_name: *const libc::c_char,
     caps: *const gst::ffi::GstCaps,
-) -> *mut ffi::GstAggregatorPad
-where
-    T::Instance: PanicPoison,
-{
+) -> *mut ffi::GstAggregatorPad {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), None, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), None, {
         let req_name: Borrowed<Option<glib::GString>> = from_glib_borrow(req_name);
 
         imp.create_new_pad(
@@ -1079,17 +1028,14 @@ unsafe extern "C" fn aggregator_update_src_caps<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     caps: *mut gst::ffi::GstCaps,
     res: *mut *mut gst::ffi::GstCaps,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     *res = ptr::null_mut();
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         match imp.update_src_caps(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
             Ok(res_caps) => {
                 *res = res_caps.into_ptr();
@@ -1104,15 +1050,12 @@ where
 unsafe extern "C" fn aggregator_fixate_src_caps<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     caps: *mut gst::ffi::GstCaps,
-) -> *mut gst::ffi::GstCaps
-where
-    T::Instance: PanicPoison,
-{
+) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::Caps::new_empty(), {
         imp.fixate_src_caps(wrap.unsafe_cast_ref(), from_glib_full(caps))
     })
     .into_ptr()
@@ -1121,15 +1064,12 @@ where
 unsafe extern "C" fn aggregator_negotiated_src_caps<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     caps: *mut gst::ffi::GstCaps,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.negotiated_src_caps(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
             Ok(()) => true,
             Err(err) => {
@@ -1145,15 +1085,12 @@ where
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 unsafe extern "C" fn aggregator_negotiate<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.negotiate(wrap.unsafe_cast_ref())
     })
     .to_glib()
@@ -1164,15 +1101,12 @@ where
 unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
     pad: *mut ffi::GstAggregatorPad,
-) -> *mut gst::ffi::GstSample
-where
-    T::Instance: PanicPoison,
-{
+) -> *mut gst::ffi::GstSample {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), None, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), None, {
         imp.peek_next_sample(wrap.unsafe_cast_ref(), &from_glib_borrow(pad))
     })
     .to_glib_full()

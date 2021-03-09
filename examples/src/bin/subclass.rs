@@ -58,7 +58,6 @@ mod fir_filter {
             const NAME: &'static str = "RsFirFilter";
             type Type = super::FirFilter;
             type ParentType = gst_base::BaseTransform;
-            type Instance = gst::subclass::ElementInstanceStruct<Self>;
         }
 
         // Implementation of glib::Object virtual methods

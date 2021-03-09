@@ -4,8 +4,6 @@ use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use gst::subclass::prelude::*;
-
 use std::ptr;
 
 use super::base_src::BaseSrcImpl;
@@ -110,10 +108,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
     }
 }
 
-unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrc
-where
-    <T as ObjectSubclass>::Instance: PanicPoison,
-{
+unsafe impl<T: PushSrcImpl> IsSubclassable<T> for PushSrc {
     fn class_init(klass: &mut glib::Class<Self>) {
         <crate::BaseSrc as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
@@ -130,16 +125,13 @@ where
 unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(
     ptr: *mut ffi::GstPushSrc,
     buffer: *mut gst::ffi::GstBuffer,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         PushSrcImpl::fill(imp, wrap.unsafe_cast_ref(), buffer).into()
     })
     .to_glib()
@@ -148,10 +140,7 @@ where
 unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
     ptr: *mut ffi::GstPushSrc,
     buffer_ptr: *mut gst::ffi::GstBuffer,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
@@ -159,7 +148,7 @@ where
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         match PushSrcImpl::alloc(imp, wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();
@@ -174,10 +163,7 @@ where
 unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
     ptr: *mut ffi::GstPushSrc,
     buffer_ptr: *mut gst::ffi::GstBuffer,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
@@ -185,7 +171,7 @@ where
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
     let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         match PushSrcImpl::create(imp, wrap.unsafe_cast_ref()) {
             Ok(buffer) => {
                 *buffer_ptr = buffer.into_ptr();

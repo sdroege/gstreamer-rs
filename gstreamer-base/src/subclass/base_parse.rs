@@ -203,10 +203,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
     }
 }
 
-unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse
-where
-    <T as ObjectSubclass>::Instance: PanicPoison,
-{
+unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse {
     fn class_init(klass: &mut glib::Class<Self>) {
         <gst::Element as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
@@ -224,15 +221,12 @@ where
 
 unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.start(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -246,15 +240,12 @@ where
 
 unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.stop(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -269,16 +260,13 @@ where
 unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
     caps: *mut gst::ffi::GstCaps,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.set_sink_caps(wrap.unsafe_cast_ref(), &caps) {
             Ok(()) => true,
             Err(err) => {
@@ -294,16 +282,13 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
     frame: *mut ffi::GstBaseParseFrame,
     skipsize: *mut i32,
-) -> gst::ffi::GstFlowReturn
-where
-    T::Instance: PanicPoison,
-{
+) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let wrap_frame = BaseParseFrame::new(frame, &wrap);
 
-    let res = gst::panic_to_error!(&wrap, &instance.panicked(), Err(gst::FlowError::Error), {
+    let res = gst::panic_to_error!(&wrap, &imp.panicked(), Err(gst::FlowError::Error), {
         imp.handle_frame(&wrap.unsafe_cast_ref(), wrap_frame)
     });
 
@@ -323,16 +308,13 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
     source_value: i64,
     dest_format: gst::ffi::GstFormat,
     dest_value: *mut i64,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
-    let res = gst::panic_to_error!(&wrap, &instance.panicked(), None, {
+    let res = gst::panic_to_error!(&wrap, &imp.panicked(), None, {
         imp.convert(wrap.unsafe_cast_ref(), source, from_glib(dest_format))
     });
 

@@ -6,7 +6,6 @@ use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
 
-use gst::subclass::prelude::*;
 use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
@@ -200,10 +199,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
     }
 }
 
-unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc
-where
-    <T as ObjectSubclass>::Instance: PanicPoison,
-{
+unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc {
     fn class_init(klass: &mut glib::Class<Self>) {
         <gst_base::BaseSrc as IsSubclassable<T>>::class_init(klass);
         let klass = klass.as_mut();
@@ -223,15 +219,12 @@ where
 
 unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.close(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -243,30 +236,24 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn audiosrc_delay<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) -> u32
-where
-    T::Instance: PanicPoison,
-{
+unsafe extern "C" fn audiosrc_delay<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) -> u32 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), 0, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), 0, {
         imp.delay(wrap.unsafe_cast_ref())
     })
 }
 
 unsafe extern "C" fn audiosrc_open<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.open(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -281,17 +268,14 @@ where
 unsafe extern "C" fn audiosrc_prepare<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
     spec: *mut ffi::GstAudioRingBufferSpec,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
     let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match AudioSrcImpl::prepare(imp, wrap.unsafe_cast_ref(), spec) {
             Ok(()) => true,
             Err(err) => {
@@ -305,15 +289,12 @@ where
 
 unsafe extern "C" fn audiosrc_unprepare<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
-) -> glib::ffi::gboolean
-where
-    T::Instance: PanicPoison,
-{
+) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), false, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         match imp.unprepare(wrap.unsafe_cast_ref()) {
             Ok(()) => true,
             Err(err) => {
@@ -330,16 +311,13 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
     data: glib::ffi::gpointer,
     length: u32,
     timestamp: *mut gst::ffi::GstClockTime,
-) -> u32
-where
-    T::Instance: PanicPoison,
-{
+) -> u32 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
     let data_slice = std::slice::from_raw_parts_mut(data as *mut u8, length as usize);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), 0, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), 0, {
         let (res, timestamp_res) = imp
             .read(wrap.unsafe_cast_ref(), data_slice)
             .unwrap_or((0, gst::CLOCK_TIME_NONE));
@@ -349,15 +327,12 @@ where
     })
 }
 
-unsafe extern "C" fn audiosrc_reset<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc)
-where
-    T::Instance: PanicPoison,
-{
+unsafe extern "C" fn audiosrc_reset<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<AudioSrc> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &instance.panicked(), (), {
+    gst::panic_to_error!(&wrap, &imp.panicked(), (), {
         imp.reset(wrap.unsafe_cast_ref());
     });
 }
