@@ -324,7 +324,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                         length,
                         buffer_ref,
                     ));
-                    res.into_result_value(|| from_glib_full(buffer_ref))
+                    res.into_result_value(|| from_glib_full(buffer_ptr))
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }
