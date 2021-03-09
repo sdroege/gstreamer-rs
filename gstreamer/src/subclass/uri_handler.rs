@@ -50,7 +50,7 @@ unsafe extern "C" fn uri_handler_get_type<T: URIHandlerImpl>(
 unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
     _type_: glib::ffi::GType,
 ) -> *const *const libc::c_char {
-    let data = <T as ObjectSubclass>::type_data();
+    let data = <T as ObjectSubclassType>::type_data();
     data.as_ref()
         .get_class_data::<CStrV>(URIHandler::static_type())
         .unwrap_or(&CStrV(std::ptr::null()))
