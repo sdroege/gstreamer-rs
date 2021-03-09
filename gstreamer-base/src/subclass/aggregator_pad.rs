@@ -100,6 +100,10 @@ unsafe impl<T: AggregatorPadImpl> IsSubclassable<T> for AggregatorPad {
         klass.flush = Some(aggregator_pad_flush::<T>);
         klass.skip_buffer = Some(aggregator_pad_skip_buffer::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst::Pad as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn aggregator_pad_flush<T: AggregatorPadImpl>(

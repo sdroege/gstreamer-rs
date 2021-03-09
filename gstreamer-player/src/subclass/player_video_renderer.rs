@@ -16,6 +16,8 @@ unsafe impl<T: PlayerVideoRendererImpl> IsImplementable<T> for PlayerVideoRender
 
         iface.create_video_sink = Some(video_renderer_create_video_sink::<T>);
     }
+
+    fn instance_init(_instance: &mut glib::subclass::InitializingObject<T>) {}
 }
 
 unsafe extern "C" fn video_renderer_create_video_sink<T: PlayerVideoRendererImpl>(

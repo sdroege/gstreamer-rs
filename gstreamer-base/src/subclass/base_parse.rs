@@ -216,6 +216,10 @@ where
         klass.handle_frame = Some(base_parse_handle_frame::<T>);
         klass.convert = Some(base_parse_convert::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst::Element as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(

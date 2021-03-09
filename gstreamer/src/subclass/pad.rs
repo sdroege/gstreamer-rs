@@ -65,6 +65,10 @@ unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
         klass.linked = Some(pad_linked::<T>);
         klass.unlinked = Some(pad_unlinked::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {

@@ -109,6 +109,10 @@ where
         klass.remove_element = Some(bin_remove_element::<T>);
         klass.handle_message = Some(bin_handle_message::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <crate::Element as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn bin_add_element<T: BinImpl>(

@@ -888,6 +888,10 @@ unsafe impl<T: RTSPClientImpl> IsSubclassable<T> for RTSPClient {
         klass.pre_announce_request = Some(client_pre_announce_request::<T>);
         klass.pre_record_request = Some(client_pre_record_request::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn client_create_sdp<T: RTSPClientImpl>(

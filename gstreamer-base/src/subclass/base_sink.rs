@@ -421,6 +421,10 @@ where
         klass.unlock = Some(base_sink_unlock::<T>);
         klass.unlock_stop = Some(base_sink_unlock_stop::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst::Element as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn base_sink_start<T: BaseSinkImpl>(

@@ -119,6 +119,10 @@ unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
             }
         }
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn device_provider_probe<T: DeviceProviderImpl>(

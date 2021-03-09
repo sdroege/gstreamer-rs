@@ -500,6 +500,10 @@ where
         klass.propose_allocation = Some(audio_encoder_propose_allocation::<T>);
         klass.decide_allocation = Some(audio_encoder_decide_allocation::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst::Element as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn audio_encoder_open<T: AudioEncoderImpl>(

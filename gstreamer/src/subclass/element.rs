@@ -393,6 +393,10 @@ where
             }
         }
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn element_change_state<T: ElementImpl>(

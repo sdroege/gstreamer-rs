@@ -54,6 +54,10 @@ unsafe impl<T: RTSPServerImpl> IsSubclassable<T> for RTSPServer {
         klass.create_client = Some(server_create_client::<T>);
         klass.client_connected = Some(server_client_connected::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn server_create_client<T: RTSPServerImpl>(

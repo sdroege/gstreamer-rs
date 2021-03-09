@@ -13,4 +13,8 @@ unsafe impl<T: SystemClockImpl> IsSubclassable<T> for SystemClock {
         let _klass = klass.as_mut();
         // Nothing to do here
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <crate::Clock as IsSubclassable<T>>::instance_init(instance);
+    }
 }

@@ -8,4 +8,6 @@ pub trait PresetImpl: super::element::ElementImpl {}
 
 unsafe impl<T: PresetImpl> IsImplementable<T> for Preset {
     fn interface_init(_iface: &mut glib::Class<Self>) {}
+
+    fn instance_init(_instance: &mut glib::subclass::InitializingObject<T>) {}
 }

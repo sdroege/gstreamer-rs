@@ -472,6 +472,10 @@ unsafe impl<T: RTSPMediaImpl> IsSubclassable<T> for RTSPMedia {
         klass.new_state = Some(media_new_state::<T>);
         klass.handle_sdp = Some(media_handle_sdp::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn media_handle_message<T: RTSPMediaImpl>(

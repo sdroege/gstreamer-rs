@@ -243,6 +243,10 @@ unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
         klass.media_constructed = Some(factory_media_constructed::<T>);
         klass.media_configure = Some(factory_media_configure::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn factory_gen_key<T: RTSPMediaFactoryImpl>(

@@ -13,4 +13,8 @@ unsafe impl<T: GhostPadImpl> IsSubclassable<T> for GhostPad {
         let _klass = klass.as_mut();
         // Nothing to do here
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <crate::Pad as IsSubclassable<T>>::instance_init(instance);
+    }
 }

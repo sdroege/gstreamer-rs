@@ -42,6 +42,8 @@ unsafe impl<T: ChildProxyImpl> IsImplementable<T> for ChildProxy {
         iface.child_added = Some(child_proxy_child_added::<T>);
         iface.child_removed = Some(child_proxy_child_removed::<T>);
     }
+
+    fn instance_init(_instance: &mut glib::subclass::InitializingObject<T>) {}
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_name<T: ChildProxyImpl>(

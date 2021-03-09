@@ -106,6 +106,10 @@ unsafe impl<T: DeviceImpl> IsSubclassable<T> for Device {
         klass.create_element = Some(device_create_element::<T>);
         klass.reconfigure_element = Some(device_reconfigure_element::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn device_create_element<T: DeviceImpl>(

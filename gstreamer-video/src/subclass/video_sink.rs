@@ -59,6 +59,10 @@ where
         let klass = klass.as_mut();
         klass.show_frame = Some(video_sink_show_frame::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst_base::BaseSink as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(

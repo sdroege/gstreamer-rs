@@ -16,4 +16,8 @@ where
         let _klass = klass.as_mut();
         // Nothing to do here
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <crate::Bin as IsSubclassable<T>>::instance_init(instance);
+    }
 }

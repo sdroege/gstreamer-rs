@@ -735,6 +735,10 @@ where
             klass.finish_buffer_list = Some(aggregator_finish_buffer_list::<T>);
         }
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst::Element as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn aggregator_flush<T: AggregatorImpl>(

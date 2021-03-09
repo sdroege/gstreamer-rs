@@ -877,6 +877,10 @@ where
             }
         }
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst::Element as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 #[derive(Debug)]

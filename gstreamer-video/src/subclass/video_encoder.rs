@@ -490,6 +490,10 @@ where
         klass.propose_allocation = Some(video_encoder_propose_allocation::<T>);
         klass.decide_allocation = Some(video_encoder_decide_allocation::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst::Element as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn video_encoder_open<T: VideoEncoderImpl>(

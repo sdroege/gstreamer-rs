@@ -121,6 +121,10 @@ where
         klass.alloc = Some(push_src_alloc::<T>);
         klass.create = Some(push_src_create::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <crate::BaseSrc as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(

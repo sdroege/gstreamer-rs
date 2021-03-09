@@ -241,6 +241,10 @@ unsafe impl<T: ClockImpl> IsSubclassable<T> for Clock {
         klass.wait_async = Some(clock_wait_async::<T>);
         klass.unschedule = Some(clock_unschedule::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <glib::Object as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(

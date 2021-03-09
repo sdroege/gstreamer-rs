@@ -215,6 +215,10 @@ where
         klass.read = Some(audiosrc_read::<T>);
         klass.reset = Some(audiosrc_reset::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst_base::BaseSrc as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(

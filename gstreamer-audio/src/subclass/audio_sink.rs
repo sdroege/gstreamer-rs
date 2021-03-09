@@ -199,6 +199,10 @@ where
         klass.write = Some(audiosink_write::<T>);
         klass.reset = Some(audiosink_reset::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        <gst_base::BaseSink as IsSubclassable<T>>::instance_init(instance);
+    }
 }
 
 unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
