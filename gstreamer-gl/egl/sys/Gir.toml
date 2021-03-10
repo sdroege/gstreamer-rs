@@ -1,5 +1,4 @@
 [options]
-girs_dir = "../../../gir-files"
 library = "GstGLEGL"
 min_cfg_version = "1.14"
 version = "1.0"
