@@ -11,6 +11,7 @@ NEED_UPDATE = 1
 FAILURE = 2
 
 DEFAULT_GIR_FILES_DIRECTORY = Path("./gir-files")
+DEFAULT_GST_GIR_FILES_DIRECTORY = Path("./gst-gir-files")
 DEFAULT_GIR_DIRECTORY = Path("./gir/")
 DEFAULT_GIR_PATH = DEFAULT_GIR_DIRECTORY / "target/release/gir"
 
@@ -79,7 +80,13 @@ def regen_crates(path, conf):
     elif path.match("Gir*.toml"):
         print('==> Regenerating "{}"...'.format(path))
 
-        args = [conf.gir_path, "-c", path, "-o", path.parent, "-d", conf.gir_files_path]
+        args = [
+            conf.gir_path,
+            "-c",
+            path,
+            "-o",
+            path.parent,
+        ] + [d for path in conf.gir_files_paths for d in ("-d", path)]
         if path.parent.name.endswith("sys"):
             args.extend(["-m", "sys"])
         error = False
@@ -133,9 +140,10 @@ def parse_args():
         help="Paths in which to look for Gir.toml files",
     )
     parser.add_argument(
-        "--gir-files-directory",
-        dest="gir_files_path",
-        default=DEFAULT_GIR_FILES_DIRECTORY,
+        "--gir-files-directories",
+        nargs="*",
+        dest="gir_files_paths",
+        default=[DEFAULT_GIR_FILES_DIRECTORY, DEFAULT_GST_GIR_FILES_DIRECTORY],
         type=directory_path,
         help="Path of the gir-files folder",
     )
