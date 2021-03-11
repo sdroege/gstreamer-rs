@@ -4,3 +4,6 @@
 [submodule "gir-files"]
 	path = gir-files
 	url = https://github.com/gtk-rs/gir-files
+[submodule "gst-gir-files"]
+	path = gst-gir-files
+	url = https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git
