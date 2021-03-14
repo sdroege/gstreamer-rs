@@ -1624,7 +1624,7 @@ impl Pad {
 
 pub struct PadBuilder<T>(pub(crate) T);
 
-impl<T: IsA<Pad> + IsA<glib::Object>> PadBuilder<T> {
+impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     pub fn new(name: Option<&str>, direction: crate::PadDirection) -> Self {
         assert_initialized_main_thread!();
 

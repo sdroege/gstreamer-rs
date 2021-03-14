@@ -7,6 +7,6 @@ use crate::TagSetter;
 pub trait TagSetterImpl: super::element::ElementImpl {}
 
 unsafe impl<T: TagSetterImpl> IsImplementable<T> for TagSetter {
-    fn interface_init(_iface: &mut glib::Class<Self>) {}
+    fn interface_init(_iface: &mut glib::Interface<Self>) {}
     fn instance_init(_instance: &mut glib::subclass::InitializingObject<T>) {}
 }

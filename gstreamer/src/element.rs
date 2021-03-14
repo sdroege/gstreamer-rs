@@ -878,7 +878,7 @@ pub unsafe trait ElementClassExt {
     }
 }
 
-unsafe impl<T: IsA<Element>> ElementClassExt for glib::object::Class<T> {}
+unsafe impl<T: IsA<Element> + glib::object::IsClass> ElementClassExt for glib::object::Class<T> {}
 
 pub static ELEMENT_METADATA_AUTHOR: Lazy<&'static str> = Lazy::new(|| unsafe {
     CStr::from_ptr(ffi::GST_ELEMENT_METADATA_AUTHOR)

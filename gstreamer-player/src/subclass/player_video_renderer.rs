@@ -11,13 +11,49 @@ pub trait PlayerVideoRendererImpl: ObjectImpl {
 }
 
 unsafe impl<T: PlayerVideoRendererImpl> IsImplementable<T> for PlayerVideoRenderer {
-    fn interface_init(iface: &mut glib::Class<Self>) {
+    fn interface_init(iface: &mut glib::Interface<Self>) {
         let iface = iface.as_mut();
 
         iface.create_video_sink = Some(video_renderer_create_video_sink::<T>);
     }
 
     fn instance_init(_instance: &mut glib::subclass::InitializingObject<T>) {}
+}
+
+pub trait PlayerVideoRendererImplExt: ObjectSubclass {
+    fn parent_create_video_sink(
+        &self,
+        video_renderer: &Self::Type,
+        player: &Player,
+    ) -> gst::Element;
+}
+
+impl<T: PlayerVideoRendererImpl> PlayerVideoRendererImplExt for T {
+    fn parent_create_video_sink(
+        &self,
+        video_renderer: &Self::Type,
+        player: &Player,
+    ) -> gst::Element {
+        unsafe {
+            let type_data = Self::type_data();
+            let parent_iface = type_data
+                .as_ref()
+                .get_parent_interface::<PlayerVideoRenderer>()
+                as *const ffi::GstPlayerVideoRendererInterface;
+
+            let func = (*parent_iface)
+                .create_video_sink
+                .expect("no parent \"create_video_sink\" implementation");
+            let ret = func(
+                video_renderer
+                    .unsafe_cast_ref::<PlayerVideoRenderer>()
+                    .to_glib_none()
+                    .0,
+                player.to_glib_none().0,
+            );
+            from_glib_none(ret)
+        }
+    }
 }
 
 unsafe extern "C" fn video_renderer_create_video_sink<T: PlayerVideoRendererImpl>(
