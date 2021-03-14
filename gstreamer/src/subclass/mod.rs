@@ -43,7 +43,7 @@ pub mod prelude {
     pub use glib::subclass::prelude::*;
 
     pub use super::bin::{BinImpl, BinImplExt};
-    pub use super::child_proxy::ChildProxyImpl;
+    pub use super::child_proxy::{ChildProxyImpl, ChildProxyImplExt};
     pub use super::clock::{ClockImpl, ClockImplExt};
     pub use super::device::{DeviceImpl, DeviceImplExt};
     pub use super::device_provider::{DeviceProviderImpl, DeviceProviderImplExt};
@@ -54,5 +54,5 @@ pub mod prelude {
     pub use super::preset::PresetImpl;
     pub use super::system_clock::SystemClockImpl;
     pub use super::tag_setter::TagSetterImpl;
-    pub use super::uri_handler::URIHandlerImpl;
+    pub use super::uri_handler::{URIHandlerImpl, URIHandlerImplExt};
 }
