@@ -71,7 +71,7 @@ mod tests {
 
         let expected_addr = &gio::InetSocketAddress::new(&inet_addr, port);
 
-        let expected_inet_addr = expected_addr.get_address().unwrap();
+        let expected_inet_addr = expected_addr.get_address();
 
         {
             let meta = NetAddressMeta::add(
@@ -86,7 +86,7 @@ mod tests {
 
             assert_eq!(actual_addr.get_port(), expected_addr.get_port());
 
-            let actual_inet_addr = actual_addr.get_address().unwrap();
+            let actual_inet_addr = actual_addr.get_address();
 
             assert!(actual_inet_addr.equal(&expected_inet_addr));
         }
@@ -100,7 +100,7 @@ mod tests {
 
             assert_eq!(actual_addr.get_port(), expected_addr.get_port());
 
-            let actual_inet_addr = actual_addr.get_address().unwrap();
+            let actual_inet_addr = actual_addr.get_address();
 
             assert!(actual_inet_addr.equal(&expected_inet_addr));
         }
