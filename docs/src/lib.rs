@@ -20,6 +20,7 @@ pub enum Library {
     GstAudio,
     GstApp,
     Gst,
+    GstController,
 }
 
 fn docs(lib: Library) -> &'static str {
@@ -40,6 +41,7 @@ fn docs(lib: Library) -> &'static str {
         Library::GstAudio => include_str!("../gstreamer-audio/docs.md"),
         Library::GstApp => include_str!("../gstreamer-app/docs.md"),
         Library::Gst => include_str!("../gstreamer/docs.md"),
+        Library::GstController => include_str!("../gstreamer-controller/docs.md"),
     }
 }
 
