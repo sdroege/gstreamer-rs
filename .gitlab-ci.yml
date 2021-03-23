@@ -442,6 +442,17 @@ coverage:
     reports:
       cobertura: coverage.xml
 
+docs:
+  extends: .img-nightly
+  stage: 'extras'
+  script:
+    - |
+      for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
+        pushd $crate
+        cargo +nightly doc --color=always --features=dox,embed-lgpl-docs
+        popd
+      done
+
 pages:
   extends: .img-nightly
   stage: 'deploy'
