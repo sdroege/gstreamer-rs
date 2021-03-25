@@ -242,6 +242,20 @@ impl Harness {
         }
     }
 
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub fn pull_until_eos(&mut self) -> Result<Option<gst::Buffer>, glib::BoolError> {
+        unsafe {
+            let mut buffer = ptr::null_mut();
+            let res = ffi::gst_harness_pull_until_eos(self.0.as_ptr(), &mut buffer);
+            if from_glib(res) {
+                Ok(from_glib_full(buffer))
+            } else {
+                Err(glib::bool_error!("Failed to pull buffer or EOS"))
+            }
+        }
+    }
+
     pub fn pull_event(&mut self) -> Result<gst::Event, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_harness_pull_event(self.0.as_ptr()))
