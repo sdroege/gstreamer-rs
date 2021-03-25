@@ -355,13 +355,13 @@ clippy:
 
           echo "Running clippy on $crate with $FEATURES"
 
-          cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml $FEATURES --all-targets -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -D warnings
+          cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml $FEATURES --all-targets -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
         fi
       done
     # And also run over all the examples/tutorials
     - |
-      cargo clippy --locked --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -D warnings
-      cargo clippy --locked --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -D warnings
+      cargo clippy --locked --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
+      cargo clippy --locked --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
 
 deny:
   extends: .img-stable
