@@ -31,18 +31,12 @@ unsafe impl Sync for Aggregator {}
 pub const NONE_AGGREGATOR: Option<&Aggregator> = None;
 
 pub trait AggregatorExt: 'static {
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //#[doc(alias = "gst_aggregator_get_allocator")]
     //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_get_buffer_pool")]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_get_latency")]
     fn get_latency(&self) -> gst::ClockTime;
 
@@ -56,13 +50,9 @@ pub trait AggregatorExt: 'static {
     #[doc(alias = "gst_aggregator_peek_next_sample")]
     fn peek_next_sample<P: IsA<AggregatorPad>>(&self, pad: &P) -> Option<gst::Sample>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_set_latency")]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_set_src_caps")]
     fn set_src_caps(&self, caps: &gst::Caps);
 
@@ -128,14 +118,10 @@ pub trait AggregatorExt: 'static {
 }
 
 impl<O: IsA<Aggregator>> AggregatorExt for O {
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
     //    unsafe { TODO: call ffi:gst_aggregator_get_allocator() }
     //}
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_get_buffer_pool(
@@ -144,8 +130,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn get_latency(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_aggregator_get_latency(
@@ -175,8 +159,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
         unsafe {
             ffi::gst_aggregator_set_latency(
@@ -187,8 +169,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn set_src_caps(&self, caps: &gst::Caps) {
         unsafe {
             ffi::gst_aggregator_set_src_caps(self.as_ref().to_glib_none().0, caps.to_glib_none().0);

@@ -27,8 +27,6 @@ unsafe impl Sync for AggregatorPad {}
 pub const NONE_AGGREGATOR_PAD: Option<&AggregatorPad> = None;
 
 pub trait AggregatorPadExt: 'static {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_pad_drop_buffer")]
     fn drop_buffer(&self) -> bool;
 
@@ -37,18 +35,12 @@ pub trait AggregatorPadExt: 'static {
     #[doc(alias = "gst_aggregator_pad_has_buffer")]
     fn has_buffer(&self) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_pad_is_eos")]
     fn is_eos(&self) -> bool;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_pad_peek_buffer")]
     fn peek_buffer(&self) -> Option<gst::Buffer>;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_aggregator_pad_pop_buffer")]
     fn pop_buffer(&self) -> Option<gst::Buffer>;
 
@@ -74,8 +66,6 @@ pub trait AggregatorPadExt: 'static {
 }
 
 impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn drop_buffer(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_pad_drop_buffer(
@@ -94,8 +84,6 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn is_eos(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_pad_is_eos(
@@ -104,8 +92,6 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn peek_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_pad_peek_buffer(
@@ -114,8 +100,6 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     fn pop_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_pad_pop_buffer(

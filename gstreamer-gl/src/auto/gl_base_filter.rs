@@ -26,8 +26,6 @@ unsafe impl Sync for GLBaseFilter {}
 pub const NONE_GL_BASE_FILTER: Option<&GLBaseFilter> = None;
 
 pub trait GLBaseFilterExt: 'static {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_base_filter_find_gl_context")]
     fn find_gl_context(&self) -> bool;
 
@@ -45,8 +43,6 @@ pub trait GLBaseFilterExt: 'static {
 }
 
 impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn find_gl_context(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_gl_base_filter_find_gl_context(

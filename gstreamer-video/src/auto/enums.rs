@@ -289,16 +289,12 @@ pub enum VideoCaptionType {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl VideoCaptionType {
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_video_caption_type_from_caps")]
     pub fn from_caps(caps: &gst::Caps) -> VideoCaptionType {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_video_caption_type_from_caps(caps.to_glib_none().0)) }
     }
 
-    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_video_caption_type_to_caps")]
     pub fn to_caps(self) -> Option<gst::Caps> {
         assert_initialized_main_thread!();
@@ -777,8 +773,6 @@ pub enum VideoFieldOrder {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 impl VideoFieldOrder {
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_video_field_order_from_string")]
     pub fn from_string(order: &str) -> VideoFieldOrder {
         assert_initialized_main_thread!();
