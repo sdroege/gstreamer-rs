@@ -28,6 +28,8 @@ include:
 
 variables:
   FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
+  RUST_DOCS_FLAGS: "--extern-html-root-url=glib=https://gtk-rs.org/gtk-rs/ --extern-html-root-url=gio=https://gtk-rs.org/gtk-rs/ --extern-html-root-url=muldiv=https://docs.rs/muldiv/1.0.0/muldiv/ -Z unstable-options"
+
 
 stages:
   - "container-base"
@@ -449,18 +451,19 @@ docs:
     - |
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         pushd $crate
-        cargo +nightly doc --color=always --features=dox,embed-lgpl-docs
+        RUSTDOCFLAGS="$RUST_DOCS_FLAGS" cargo +nightly doc --color=always --features=dox,embed-lgpl-docs --no-deps
         popd
       done
 
 pages:
   extends: .img-nightly
   stage: 'deploy'
+  
   script:
     - |
       for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         cd $crate
-        cargo +nightly doc --color=always --features=dox,embed-lgpl-docs
+        RUSTDOCFLAGS="$RUST_DOCS_FLAGS" cargo +nightly doc --color=always --features=dox,embed-lgpl-docs --no-deps
         cd ..
       done
     - mv target/doc public/
