@@ -18,7 +18,6 @@ external_libraries = [
 
 generate = [
     # Enums
-    "GstGL.GLFormat",
     "GstGL.GLQueryType",
     "GstGL.GLSLVersion",
     "GstGL.GLTextureTarget",
@@ -499,6 +498,13 @@ status = "generate"
         name = "src_vid"
         const = true
 
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        # Parameters will be marked const in 1.20 bindings
+        pattern = "alloc_params|v_info|valign"
+        const = true
+
 [[object]]
 name = "GstGL.GLFramebuffer"
 status = "generate"
@@ -533,3 +539,14 @@ status = "generate"
     name = "filter_texture"
         [object.function.return]
         bool_return_is_error = "Failed to transform texture"
+
+[[object]]
+name = "GstGL.GLFormat"
+status = "generate"
+
+    [[object.function]]
+    name = "from_video_info"
+        [[object.function.parameter]]
+        # Parameter will be marked const in 1.20 bindings
+        name = "vinfo"
+        const = true
