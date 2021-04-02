@@ -46,7 +46,7 @@ impl<'name> GetError<'name> {
     }
 }
 
-pub struct Structure(ptr::NonNull<StructureRef>);
+pub struct Structure(ptr::NonNull<ffi::GstStructure>);
 unsafe impl Send for Structure {}
 unsafe impl Sync for Structure {}
 
@@ -59,7 +59,7 @@ impl Structure {
     pub fn new_empty(name: &str) -> Structure {
         assert_initialized_main_thread!();
         unsafe {
-            let ptr = ffi::gst_structure_new_empty(name.to_glib_none().0) as *mut StructureRef;
+            let ptr = ffi::gst_structure_new_empty(name.to_glib_none().0);
             assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
@@ -78,7 +78,7 @@ impl Structure {
 
     pub unsafe fn into_ptr(self) -> *mut ffi::GstStructure {
         let s = mem::ManuallyDrop::new(self);
-        s.0.as_ptr() as *mut StructureRef as *mut ffi::GstStructure
+        s.0.as_ptr()
     }
 
     #[allow(clippy::should_implement_trait)]
@@ -91,11 +91,7 @@ impl Structure {
 
         iter.into_iter().for_each(|(f, v)| unsafe {
             let mut value = v.clone().into_raw();
-            ffi::gst_structure_take_value(
-                &mut structure.0.as_mut().0,
-                f.to_glib_none().0,
-                &mut value,
-            );
+            ffi::gst_structure_take_value(structure.0.as_mut(), f.to_glib_none().0, &mut value);
         });
 
         structure
@@ -106,13 +102,13 @@ impl Deref for Structure {
     type Target = StructureRef;
 
     fn deref(&self) -> &StructureRef {
-        unsafe { self.0.as_ref() }
+        unsafe { &*(self.0.as_ptr() as *const StructureRef) }
     }
 }
 
 impl DerefMut for Structure {
     fn deref_mut(&mut self) -> &mut StructureRef {
-        unsafe { self.0.as_mut() }
+        unsafe { &mut *(self.0.as_ptr() as *mut StructureRef) }
     }
 }
 
@@ -131,7 +127,7 @@ impl AsMut<StructureRef> for Structure {
 impl Clone for Structure {
     fn clone(&self) -> Self {
         unsafe {
-            let ptr = ffi::gst_structure_copy(&self.0.as_ref().0) as *mut StructureRef;
+            let ptr = ffi::gst_structure_copy(self.0.as_ref());
             assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
@@ -140,7 +136,7 @@ impl Clone for Structure {
 
 impl Drop for Structure {
     fn drop(&mut self) {
-        unsafe { ffi::gst_structure_free(&mut self.0.as_mut().0) }
+        unsafe { ffi::gst_structure_free(self.0.as_mut()) }
     }
 }
 
@@ -182,9 +178,7 @@ impl str::FromStr for Structure {
             if structure.is_null() {
                 Err(glib::bool_error!("Failed to parse structure from string"))
             } else {
-                Ok(Self(ptr::NonNull::new_unchecked(
-                    structure as *mut StructureRef,
-                )))
+                Ok(Self(ptr::NonNull::new_unchecked(structure)))
             }
         }
     }
@@ -192,13 +186,13 @@ impl str::FromStr for Structure {
 
 impl Borrow<StructureRef> for Structure {
     fn borrow(&self) -> &StructureRef {
-        unsafe { self.0.as_ref() }
+        self.as_ref()
     }
 }
 
 impl BorrowMut<StructureRef> for Structure {
     fn borrow_mut(&mut self) -> &mut StructureRef {
-        unsafe { self.0.as_mut() }
+        self.as_mut()
     }
 }
 
@@ -207,7 +201,7 @@ impl ToOwned for StructureRef {
 
     fn to_owned(&self) -> Structure {
         unsafe {
-            let ptr = ffi::gst_structure_copy(&self.0) as *mut StructureRef;
+            let ptr = ffi::gst_structure_copy(&self.0);
             assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
@@ -224,11 +218,11 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstStructure> for Structure {
     type Storage = &'a Self;
 
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstStructure, Self> {
-        unsafe { Stash(&self.0.as_ref().0, self) }
+        unsafe { Stash(self.0.as_ref(), self) }
     }
 
     fn to_glib_full(&self) -> *const ffi::GstStructure {
-        unsafe { ffi::gst_structure_copy(&self.0.as_ref().0) }
+        unsafe { ffi::gst_structure_copy(self.0.as_ref()) }
     }
 }
 
@@ -236,11 +230,16 @@ impl<'a> ToGlibPtr<'a, *mut ffi::GstStructure> for Structure {
     type Storage = &'a Self;
 
     fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GstStructure, Self> {
-        unsafe { Stash(&self.0.as_ref().0 as *const _ as *mut _, self) }
+        unsafe {
+            Stash(
+                self.0.as_ref() as *const ffi::GstStructure as *mut ffi::GstStructure,
+                self,
+            )
+        }
     }
 
     fn to_glib_full(&self) -> *mut ffi::GstStructure {
-        unsafe { ffi::gst_structure_copy(&self.0.as_ref().0) }
+        unsafe { ffi::gst_structure_copy(self.0.as_ref()) }
     }
 }
 
@@ -248,7 +247,7 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstStructure> for Structure {
     type Storage = &'a mut Self;
 
     fn to_glib_none_mut(&'a mut self) -> StashMut<*mut ffi::GstStructure, Self> {
-        unsafe { StashMut(&mut self.0.as_mut().0, self) }
+        unsafe { StashMut(self.0.as_mut(), self) }
     }
 }
 
@@ -257,7 +256,7 @@ impl FromGlibPtrNone<*const ffi::GstStructure> for Structure {
         assert!(!ptr.is_null());
         let ptr = ffi::gst_structure_copy(ptr);
         assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
+        Structure(ptr::NonNull::new_unchecked(ptr))
     }
 }
 
@@ -266,21 +265,21 @@ impl FromGlibPtrNone<*mut ffi::GstStructure> for Structure {
         assert!(!ptr.is_null());
         let ptr = ffi::gst_structure_copy(ptr);
         assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
+        Structure(ptr::NonNull::new_unchecked(ptr))
     }
 }
 
 impl FromGlibPtrFull<*const ffi::GstStructure> for Structure {
     unsafe fn from_glib_full(ptr: *const ffi::GstStructure) -> Self {
         assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
+        Structure(ptr::NonNull::new_unchecked(ptr as *mut ffi::GstStructure))
     }
 }
 
 impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
     unsafe fn from_glib_full(ptr: *mut ffi::GstStructure) -> Self {
         assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr as *mut StructureRef))
+        Structure(ptr::NonNull::new_unchecked(ptr))
     }
 }
 
