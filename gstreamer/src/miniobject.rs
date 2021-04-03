@@ -4,7 +4,7 @@
 macro_rules! mini_object_wrapper(
     ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr) => {
         pub struct $name {
-            obj: std::ptr::NonNull<$ref_name>,
+            obj: std::ptr::NonNull<$ffi_name>,
         }
 
         #[repr(transparent)]
@@ -18,7 +18,7 @@ macro_rules! mini_object_wrapper(
                 $crate::ffi::gst_mini_object_ref(ptr as *mut $crate::ffi::GstMiniObject);
 
                 $name {
-                    obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name as *mut $ref_name),
+                    obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
                 }
             }
 
@@ -27,7 +27,7 @@ macro_rules! mini_object_wrapper(
                 assert!(!ptr.is_null());
 
                 $name {
-                    obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name as *mut $ref_name),
+                    obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
                 }
             }
 
@@ -36,19 +36,19 @@ macro_rules! mini_object_wrapper(
                 assert!(!ptr.is_null());
 
                 $crate::glib::translate::Borrowed::new($name {
-                    obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name as *mut $ref_name),
+                    obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
                 })
             }
 
             pub unsafe fn replace_ptr(&mut self, ptr: *mut $ffi_name) {
                 assert!(!ptr.is_null());
-                self.obj = std::ptr::NonNull::new_unchecked(ptr as *mut $ref_name);
+                self.obj = std::ptr::NonNull::new_unchecked(ptr);
             }
 
             pub fn make_mut(&mut self) -> &mut $ref_name {
                 unsafe {
                     if self.is_writable() {
-                        return self.obj.as_mut();
+                        return &mut *(self.obj.as_mut() as *mut $ffi_name as *mut $ref_name);
                     }
 
                     let ptr = $crate::ffi::gst_mini_object_make_writable(
@@ -57,13 +57,13 @@ macro_rules! mini_object_wrapper(
                     self.replace_ptr(ptr as *mut $ffi_name);
                     assert!(self.is_writable());
 
-                    self.obj.as_mut()
+                    &mut *(self.obj.as_mut() as *mut $ffi_name as *mut $ref_name)
                 }
             }
 
             pub fn get_mut(&mut self) -> Option<&mut $ref_name> {
                 if self.is_writable() {
-                    Some(unsafe { self.obj.as_mut() })
+                    Some(unsafe { &mut *(self.obj.as_mut() as *mut $ffi_name as *mut $ref_name) })
                 } else {
                     None
                 }
@@ -101,7 +101,7 @@ macro_rules! mini_object_wrapper(
             type Target = $ref_name;
 
             fn deref(&self) -> &Self::Target {
-                unsafe { &*(self.obj.as_ptr() as *const Self::Target) }
+                unsafe { &*(self.obj.as_ref() as *const $ffi_name as *const $ref_name) }
             }
         }
 
