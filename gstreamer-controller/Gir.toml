@@ -21,7 +21,6 @@ generate = [
     "GstController.InterpolationControlSource",
     "GstController.LFOControlSource",
     "GstController.ProxyControlBinding",
-    "GstController.TimedValueControlSource",
     "GstController.TriggerControlSource",
     "GstController.DirectControlBindingConvertValue",
     "GstController.DirectControlBindingConvertGValue",
@@ -39,5 +38,21 @@ manual = [
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"
 
+
+[[object]]
+name = "GstController.TimedValueControlSource"
+status = "generate"
+
+    [[object.function]]
+    name = "set"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+    [[object.function]]
+    name = "unset"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true

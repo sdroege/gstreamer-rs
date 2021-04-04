@@ -27,7 +27,6 @@ generate = [
     "GstAudio.StreamVolumeFormat",
     "GstAudio.AudioSink",
     "GstAudio.AudioSrc",
-    "GstAudio.AudioBaseSink",
     "GstAudio.AudioBaseSrc",
 ]
 
@@ -69,7 +68,33 @@ ref_mode = "ref"
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"
+
+[[object]]
+name = "GstAudio.AudioBaseSink"
+status = "generate"
+
+    [[object.function]]
+    name = "get_alignment_threshold"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_discont_wait"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "set_alignment_threshold"
+        [[object.function.parameter]]
+        name = "alignment_threshold"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_discont_wait"
+        [[object.function.parameter]]
+        name = "discont_wait"
+        mandatory = true
 
 [[object]]
 name = "GstAudio.AudioBuffer"
@@ -191,6 +216,43 @@ status = "generate"
     # bool does not signal error
     manual = true
 
+    [[object.function]]
+    pattern = "get_.*"
+        [[object.function.parameter]]
+        name = "align"
+        const = true
+
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "alignment_threshold"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "discont_wait"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_alignment_threshold"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_discont_wait"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "set_alignment_threshold"
+        [[object.function.parameter]]
+        name = "alignment_threshold"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_discont_wait"
+        [[object.function.parameter]]
+        name = "discont_wait"
+        mandatory = true
+
 [[object]]
 name = "GstAudio.AudioDecoder"
 status = "generate"
@@ -205,8 +267,36 @@ manual_traits = ["AudioDecoderExtManual"]
     manual = true
 
     [[object.function]]
+    name = "get_latency"
+        [[object.function.parameter]]
+        name = "min"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_min_latency"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_tolerance"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
     name = "negotiate"
     manual = true
+
+    [[object.function]]
+    name = "set_latency"
+        [[object.function.parameter]]
+        name = "min"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_min_latency"
+        [[object.function.parameter]]
+        name = "num"
+        mandatory = true
 
     [[object.function]]
     name = "set_output_caps"
@@ -215,6 +305,12 @@ manual_traits = ["AudioDecoderExtManual"]
     [[object.function]]
     name = "set_output_format"
     manual = true
+
+    [[object.function]]
+    name = "set_tolerance"
+        [[object.function.parameter]]
+        name = "tolerance"
+        mandatory = true
 
     [[object.function]]
     name = "get_allocator"
@@ -253,12 +349,31 @@ manual_traits = ["AudioEncoderExtManual"]
 
     [[object.function]]
     name = "get_latency"
-    manual = true
+        [[object.function.parameter]]
+        name = "min"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_tolerance"
+        [object.function.return]
+        mandatory = true
 
     [[object.function]]
     name = "proxy_getcaps"
         [object.function.return]
         nullable = false
+
+    [[object.function]]
+    name = "set_latency"
+        [[object.function.parameter]]
+        name = "min"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_tolerance"
+        [[object.function.parameter]]
+        name = "tolerance"
+        mandatory = true
 
     [[object.function]]
     name = "allocate_output_buffer"

@@ -94,7 +94,7 @@ ref_mode = "ref"
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"
 
 [[object]]
 name = "GES.BaseEffect"
@@ -131,6 +131,17 @@ status = "generate"
         nullable = false
 
     [[object.function]]
+    name = "get_duration"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_frame_at"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+    [[object.function]]
     name = "load_from_uri"
         [object.function.return]
         bool_return_is_error = "Failed to load from uri"
@@ -154,6 +165,12 @@ status = "generate"
     name = "move_layer"
         [object.function.return]
         bool_return_is_error = "Failed to move layer"
+
+    [[object.function]]
+    name = "paste_element"
+        [[object.function.parameter]]
+        name = "position"
+        mandatory = true
 
     [[object.function]]
     name = "remove_track"
@@ -234,6 +251,11 @@ status = "generate"
 name = "GES.Clip"
 status = "generate"
     [[object.function]]
+    name = "get_duration_limit"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
     name = "move_to_layer"
         [object.function.return]
         bool_return_is_error = "Failed to move clip to specified layer"
@@ -291,6 +313,11 @@ status = "generate"
         bool_return_is_error = "Failed to add clip"
 
     [[object.function]]
+    name = "get_duration"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
     name = "remove_clip"
         [object.function.return]
         bool_return_is_error = "Failed to remove clip"
@@ -318,24 +345,55 @@ name = "GES.TimelineElement"
 status = "generate"
 manual_traits = ["TimelineElementExtManual"]
     [[object.function]]
+    name = "get_duration"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "paste"
+        [[object.function.parameter]]
+        name = "paste_position"
+        mandatory = true
+        [object.function.return]
+        nullable_return_is_error = "Failed to paste timeline element"
+
+    [[object.function]]
     name = "ripple"
+        [[object.function.parameter]]
+        name = "start"
+        mandatory = true
         [object.function.return]
         bool_return_is_error = "Failed to ripple"
 
     [[object.function]]
     name = "ripple_end"
+        [[object.function.parameter]]
+        name = "end"
+        mandatory = true
         [object.function.return]
         bool_return_is_error = "Failed to ripple"
 
     [[object.function]]
     name = "roll_end"
+        [[object.function.parameter]]
+        name = "end"
+        mandatory = true
         [object.function.return]
         bool_return_is_error = "Failed to roll"
 
     [[object.function]]
     name = "roll_start"
+        [[object.function.parameter]]
+        name = "start"
+        mandatory = true
         [object.function.return]
         bool_return_is_error = "Failed to roll"
+
+    [[object.function]]
+    name = "set_inpoint"
+        [[object.function.parameter]]
+        name = "inpoint"
+        mandatory = true
 
     [[object.function]]
     name = "set_name"
@@ -359,6 +417,9 @@ manual_traits = ["TimelineElementExtManual"]
 
     [[object.function]]
     name = "trim"
+        [[object.function.parameter]]
+        name = "start"
+        mandatory = true
         [object.function.return]
         bool_return_is_error = "Failed to trim"
 
@@ -366,11 +427,6 @@ manual_traits = ["TimelineElementExtManual"]
     name = "copy"
         [object.function.return]
         nullable_return_is_error = "Failed to copy timeline element"
-
-    [[object.function]]
-    name = "paste"
-        [object.function.return]
-        nullable_return_is_error = "Failed to paste timeline element"
 
 [[object]]
 name = "GES.TrackElement"

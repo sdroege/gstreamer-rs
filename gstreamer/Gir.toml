@@ -254,7 +254,7 @@ manual_traits = ["ChildProxyExtManual"]
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"
 
 [[object]]
 name = "Gst.ClockFlags"
@@ -646,6 +646,16 @@ ref_mode = "ref"
 [[object]]
 name = "Gst.Pipeline"
 status = "generate"
+    [[object.function]]
+    name = "get_delay"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "set_delay"
+        [[object.function.parameter]]
+        name = "delay"
+        mandatory = true
 
 [[object]]
 name = "Gst.Promise"
@@ -687,9 +697,99 @@ manual_traits = ["ClockExtManual"]
     manual = true
 
     [[object.function]]
+    name = "add_observation"
+        [[object.function.parameter]]
+        name = "slave"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "master"
+        mandatory = true
+
+    [[object.function]]
+    name = "add_observation_unapplied"
+        [[object.function.parameter]]
+        name = "slave"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "master"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_num"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_denom"
+        mandatory = true
+
+    [[object.function]]
+    name = "adjust_unlocked"
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_calibration"
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_num"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_denom"
+        mandatory = true
+
+    [[object.function]]
+    name = "get_internal_time"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_resolution"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "set_calibration"
+        [[object.function.parameter]]
+        name = "internal"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_num"
+        mandatory = true
+        [[object.function.parameter]]
+        name = "rate_denom"
+        mandatory = true
+
+    [[object.function]]
     name = "set_master"
         [object.function.return]
         bool_return_is_error = "Failed to set master clock"
+
+    [[object.function]]
+    name = "set_resolution"
+        [[object.function.parameter]]
+        name = "resolution"
+        mandatory = true
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "unadjust_unlocked"
+        [[object.function.parameter]]
+        name = "external"
+        mandatory = true
 
     [[object.function]]
     name = "wait_for_sync"
@@ -738,6 +838,12 @@ manual_traits = ["ElementExtManual"]
     name = "call_async"
     # more specific closure type possible
     manual = true
+
+    [[object.function]]
+    name = "set_base_time"
+        [[object.function.parameter]]
+        name = "time"
+        mandatory = true
 
     [[object.function]]
     name = "get_current_running_time"
@@ -1033,17 +1139,26 @@ trait_name = "GstObjectExt"
 
     [[object.function]]
     name = "sync_values"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
         [object.function.return]
         bool_return_is_error = "Failed to sync values"
 
     [[object.function]]
+    name = "value"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+    [[object.function]]
     name = "get_g_value_array"
     ignore = true
+
     [[object.function]]
     name = "add_control_binding"
     [object.function.return]
     bool_return_is_error = "Failed to add control binding"
-
 
 [[object]]
 name = "Gst.ObjectFlags"
@@ -1841,6 +1956,9 @@ status = "generate"
     name = "util_get_timestamp"
     # can be called before gst_init()
     assertion = "skip"
+        [object.function.return]
+        # always returns a value
+        mandatory = true
 
     [[object.function]]
     name = "version"
@@ -2028,10 +2146,13 @@ generate_builder = true
     [[object.function]]
     name = "control_source_get_value"
     rename = "value"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
     [[object.function]]
     name = "control_source_get_value_array"
     manual = true
-
 
 [[object]]
 name = "Gst.ControlBinding"
@@ -2041,3 +2162,15 @@ generate_builder = true
     [[object.function]]
     name = "get_g_value_array"
     manual = true
+
+    [[object.function]]
+    name = "get_value"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
+
+    [[object.function]]
+    name = "sync_values"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true

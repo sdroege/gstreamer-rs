@@ -71,7 +71,7 @@ ref_mode = "ref"
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"
 
 [[object]]
 name = "GstPbutils.Discoverer"
@@ -82,6 +82,12 @@ final_type = true
     name = "discover_uri_async"
         [object.function.return]
         bool_return_is_error = "Failed to add URI to list of discovers"
+
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "timeout"
+        mandatory = true
 
     # Manually implemented to use ClockTime
     [[object.property]]

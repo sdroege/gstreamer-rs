@@ -91,6 +91,12 @@ final_type = true
         nullable = false
 
     [[object.function]]
+    name = "seek"
+        [[object.function.parameter]]
+        name = "position"
+        mandatory = true
+
+    [[object.function]]
     name = "set_audio_track"
         [object.function.return]
         bool_return_is_error = "Failed to set audio track"
@@ -256,4 +262,4 @@ final_type = true
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"

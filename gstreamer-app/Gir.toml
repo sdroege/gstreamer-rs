@@ -217,4 +217,4 @@ ref_mode = "ref"
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"

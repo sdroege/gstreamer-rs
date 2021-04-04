@@ -119,6 +119,21 @@ status = "generate"
 manual_traits = ["BaseSinkExtManual"]
 
     [[object.function]]
+    name = "get_latency"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_processing_deadline"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_render_delay"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
     name = "query_latency"
     # Use Result
     manual = true
@@ -157,6 +172,24 @@ manual_traits = ["BaseSinkExtManual"]
     name = "get_drop_out_of_segment"
     rename = "drops_out_of_segment"
 
+    [[object.function]]
+    name = "set_processing_deadline"
+        [[object.function.parameter]]
+        name = "processing_deadline"
+        mandatory = true
+
+    [[object.function]]
+    name = "set_render_delay"
+        [[object.function.parameter]]
+        name = "delay"
+        mandatory = true
+
+    [[object.function]]
+    name = "wait_clock"
+        [[object.function.parameter]]
+        name = "time"
+        mandatory = true
+
 [[object]]
 name = "GstBase.BaseSrc"
 status = "generate"
@@ -194,6 +227,12 @@ manual_traits = ["BaseTransformExtManual"]
     [[object.function]]
     name = "get_allocator"
     manual = true
+
+    [[object.function]]
+    name = "update_qos"
+        [[object.function.parameter]]
+        name = "timestamp"
+        mandatory = true
 
     [[object.function]]
     name = "update_src_caps"
@@ -238,6 +277,12 @@ manual_traits = ["AggregatorExtManual"]
     name = "selected_samples"
     # Info parameter
     manual = true
+
+    [[object.function]]
+    name = "set_latency"
+        [[object.function.parameter]]
+        name = "min_latency"
+        mandatory = true
 
     [[object.property]]
     name = "latency"
@@ -328,7 +373,7 @@ ref_mode = "ref"
 [[object]]
 name = "Gst.ClockTime"
 status = "manual"
-conversion_type = "scalar"
+conversion_type = "Option"
 
 [[object]]
 name = "Gst.TagList"
@@ -340,12 +385,24 @@ name = "GstBase.BaseParse"
 status = "generate"
 manual_traits = ["BaseParseExtManual"]
     [[object.function]]
+    name = "add_index_entry"
+        [[object.function.parameter]]
+        name = "ts"
+        mandatory = true
+
+    [[object.function]]
     name = "finish_frame"
     manual = true
 
     [[object.function]]
     name = "set_duration"
     manual = true
+
+    [[object.function]]
+    name = "set_latency"
+        [[object.function.parameter]]
+        name = "min_latency"
+        mandatory = true
 
     [[object.function]]
     name = "convert_default"
