@@ -269,7 +269,7 @@ pub fn update_registry() -> Result<(), glib::error::BoolError> {
 #[doc(alias = "gst_util_get_timestamp")]
 pub fn util_get_timestamp() -> ClockTime {
     skip_assert_initialized!();
-    unsafe { from_glib(ffi::gst_util_get_timestamp()) }
+    unsafe { try_from_glib(ffi::gst_util_get_timestamp()).expect("mandatory glib value is None") }
 }
 
 #[doc(alias = "gst_version")]

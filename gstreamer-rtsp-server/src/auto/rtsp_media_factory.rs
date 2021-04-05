@@ -120,7 +120,7 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     #[doc(alias = "gst_rtsp_media_factory_get_retransmission_time")]
     #[doc(alias = "get_retransmission_time")]
-    fn retransmission_time(&self) -> gst::ClockTime;
+    fn retransmission_time(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "gst_rtsp_media_factory_get_suspend_mode")]
     #[doc(alias = "get_suspend_mode")]
@@ -211,7 +211,7 @@ pub trait RTSPMediaFactoryExt: 'static {
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode);
 
     #[doc(alias = "gst_rtsp_media_factory_set_retransmission_time")]
-    fn set_retransmission_time(&self, time: gst::ClockTime);
+    fn set_retransmission_time(&self, time: impl Into<Option<gst::ClockTime>>);
 
     #[doc(alias = "gst_rtsp_media_factory_set_shared")]
     fn set_shared(&self, shared: bool);
@@ -463,7 +463,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn retransmission_time(&self) -> gst::ClockTime {
+    fn retransmission_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_get_retransmission_time(
                 self.as_ref().to_glib_none().0,
@@ -680,11 +680,11 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn set_retransmission_time(&self, time: gst::ClockTime) {
+    fn set_retransmission_time(&self, time: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_rtsp_media_factory_set_retransmission_time(
                 self.as_ref().to_glib_none().0,
-                time.into_glib(),
+                time.into().into_glib(),
             );
         }
     }

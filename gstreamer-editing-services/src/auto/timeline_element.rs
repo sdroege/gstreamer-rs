@@ -94,7 +94,7 @@ pub trait TimelineElementExt: 'static {
 
     #[doc(alias = "ges_timeline_element_get_inpoint")]
     #[doc(alias = "get_inpoint")]
-    fn inpoint(&self) -> gst::ClockTime;
+    fn inpoint(&self) -> Option<gst::ClockTime>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -104,7 +104,7 @@ pub trait TimelineElementExt: 'static {
 
     #[doc(alias = "ges_timeline_element_get_max_duration")]
     #[doc(alias = "get_max_duration")]
-    fn max_duration(&self) -> gst::ClockTime;
+    fn max_duration(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "ges_timeline_element_get_name")]
     #[doc(alias = "get_name")]
@@ -126,7 +126,7 @@ pub trait TimelineElementExt: 'static {
 
     #[doc(alias = "ges_timeline_element_get_start")]
     #[doc(alias = "get_start")]
-    fn start(&self) -> gst::ClockTime;
+    fn start(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "ges_timeline_element_get_timeline")]
     #[doc(alias = "get_timeline")]
@@ -190,13 +190,13 @@ pub trait TimelineElementExt: 'static {
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     #[doc(alias = "ges_timeline_element_set_duration")]
-    fn set_duration(&self, duration: gst::ClockTime) -> bool;
+    fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_inpoint")]
     fn set_inpoint(&self, inpoint: gst::ClockTime) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_max_duration")]
-    fn set_max_duration(&self, maxduration: gst::ClockTime) -> bool;
+    fn set_max_duration(&self, maxduration: impl Into<Option<gst::ClockTime>>) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_name")]
     fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError>;
@@ -210,7 +210,7 @@ pub trait TimelineElementExt: 'static {
     fn set_priority(&self, priority: u32) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_start")]
-    fn set_start(&self, start: gst::ClockTime) -> bool;
+    fn set_start(&self, start: impl Into<Option<gst::ClockTime>>) -> bool;
 
     #[doc(alias = "ges_timeline_element_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
@@ -364,13 +364,14 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_timeline_element_get_duration(
+            try_from_glib(ffi::ges_timeline_element_get_duration(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
-    fn inpoint(&self) -> gst::ClockTime {
+    fn inpoint(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_inpoint(
                 self.as_ref().to_glib_none().0,
@@ -384,7 +385,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         unsafe { ffi::ges_timeline_element_get_layer_priority(self.as_ref().to_glib_none().0) }
     }
 
-    fn max_duration(&self) -> gst::ClockTime {
+    fn max_duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_max_duration(
                 self.as_ref().to_glib_none().0,
@@ -433,7 +434,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         unsafe { ffi::ges_timeline_element_get_priority(self.as_ref().to_glib_none().0) }
     }
 
-    fn start(&self) -> gst::ClockTime {
+    fn start(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_start(
                 self.as_ref().to_glib_none().0,
@@ -581,11 +582,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_property_valist() }
     //}
 
-    fn set_duration(&self, duration: gst::ClockTime) -> bool {
+    fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_duration(
                 self.as_ref().to_glib_none().0,
-                duration.into_glib(),
+                duration.into().into_glib(),
             ))
         }
     }
@@ -599,11 +600,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_max_duration(&self, maxduration: gst::ClockTime) -> bool {
+    fn set_max_duration(&self, maxduration: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_max_duration(
                 self.as_ref().to_glib_none().0,
-                maxduration.into_glib(),
+                maxduration.into().into_glib(),
             ))
         }
     }
@@ -644,11 +645,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_start(&self, start: gst::ClockTime) -> bool {
+    fn set_start(&self, start: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_start(
                 self.as_ref().to_glib_none().0,
-                start.into_glib(),
+                start.into().into_glib(),
             ))
         }
     }

@@ -120,7 +120,7 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "gst_base_sink_wait")]
     fn wait(
         &self,
-        time: gst::ClockTime,
+        time: impl Into<Option<gst::ClockTime>>,
     ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff);
 
     #[doc(alias = "gst_base_sink_wait_clock")]
@@ -251,9 +251,10 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn latency(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_base_sink_get_latency(
+            try_from_glib(ffi::gst_base_sink_get_latency(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -269,17 +270,19 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     fn processing_deadline(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_base_sink_get_processing_deadline(
+            try_from_glib(ffi::gst_base_sink_get_processing_deadline(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
     fn render_delay(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_base_sink_get_render_delay(
+            try_from_glib(ffi::gst_base_sink_get_render_delay(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -367,13 +370,13 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn wait(
         &self,
-        time: gst::ClockTime,
+        time: impl Into<Option<gst::ClockTime>>,
     ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::MaybeUninit::uninit();
             let ret = try_from_glib(ffi::gst_base_sink_wait(
                 self.as_ref().to_glib_none().0,
-                time.into_glib(),
+                time.into().into_glib(),
                 jitter.as_mut_ptr(),
             ));
             let jitter = jitter.assume_init();

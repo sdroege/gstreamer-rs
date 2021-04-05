@@ -49,7 +49,11 @@ pub trait BaseParseExt: 'static {
     fn set_infer_ts(&self, infer_ts: bool);
 
     #[doc(alias = "gst_base_parse_set_latency")]
-    fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
+    fn set_latency(
+        &self,
+        min_latency: gst::ClockTime,
+        max_latency: impl Into<Option<gst::ClockTime>>,
+    );
 
     #[doc(alias = "gst_base_parse_set_min_frame_size")]
     fn set_min_frame_size(&self, min_size: u32);
@@ -131,12 +135,16 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
+    fn set_latency(
+        &self,
+        min_latency: gst::ClockTime,
+        max_latency: impl Into<Option<gst::ClockTime>>,
+    ) {
         unsafe {
             ffi::gst_base_parse_set_latency(
                 self.as_ref().to_glib_none().0,
                 min_latency.into_glib(),
-                max_latency.into_glib(),
+                max_latency.into().into_glib(),
             );
         }
     }

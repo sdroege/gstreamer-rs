@@ -41,7 +41,7 @@ impl PlayerMediaInfo {
 
     #[doc(alias = "gst_player_media_info_get_duration")]
     #[doc(alias = "get_duration")]
-    pub fn duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_player_media_info_get_duration(
                 self.to_glib_none().0,

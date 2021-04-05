@@ -105,7 +105,7 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_get_base_time")]
     #[doc(alias = "get_base_time")]
-    fn base_time(&self) -> ClockTime;
+    fn base_time(&self) -> Option<ClockTime>;
 
     #[doc(alias = "gst_element_get_bus")]
     #[doc(alias = "get_bus")]
@@ -137,13 +137,13 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_get_start_time")]
     #[doc(alias = "get_start_time")]
-    fn start_time(&self) -> ClockTime;
+    fn start_time(&self) -> Option<ClockTime>;
 
     #[doc(alias = "gst_element_get_state")]
     #[doc(alias = "get_state")]
     fn state(
         &self,
-        timeout: ClockTime,
+        timeout: impl Into<Option<ClockTime>>,
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State);
 
     #[doc(alias = "gst_element_get_static_pad")]
@@ -233,7 +233,7 @@ pub trait ElementExt: 'static {
     fn set_locked_state(&self, locked_state: bool) -> bool;
 
     #[doc(alias = "gst_element_set_start_time")]
-    fn set_start_time(&self, time: ClockTime);
+    fn set_start_time(&self, time: impl Into<Option<ClockTime>>);
 
     #[doc(alias = "gst_element_set_state")]
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
@@ -390,7 +390,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn base_time(&self) -> ClockTime {
+    fn base_time(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_element_get_base_time(
                 self.as_ref().to_glib_none().0,
@@ -446,7 +446,7 @@ impl<O: IsA<Element>> ElementExt for O {
         unsafe { from_glib_none(ffi::gst_element_get_factory(self.as_ref().to_glib_none().0)) }
     }
 
-    fn start_time(&self) -> ClockTime {
+    fn start_time(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_element_get_start_time(
                 self.as_ref().to_glib_none().0,
@@ -456,7 +456,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn state(
         &self,
-        timeout: ClockTime,
+        timeout: impl Into<Option<ClockTime>>,
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State) {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -465,7 +465,7 @@ impl<O: IsA<Element>> ElementExt for O {
                 self.as_ref().to_glib_none().0,
                 state.as_mut_ptr(),
                 pending.as_mut_ptr(),
-                timeout.into_glib(),
+                timeout.into().into_glib(),
             ));
             let state = state.assume_init();
             let pending = pending.assume_init();
@@ -687,9 +687,12 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn set_start_time(&self, time: ClockTime) {
+    fn set_start_time(&self, time: impl Into<Option<ClockTime>>) {
         unsafe {
-            ffi::gst_element_set_start_time(self.as_ref().to_glib_none().0, time.into_glib());
+            ffi::gst_element_set_start_time(
+                self.as_ref().to_glib_none().0,
+                time.into().into_glib(),
+            );
         }
     }
 

@@ -58,7 +58,7 @@ pub trait AudioBaseSinkExt: 'static {
     fn set_alignment_threshold(&self, alignment_threshold: gst::ClockTime);
 
     //#[doc(alias = "gst_audio_base_sink_set_custom_slaving_callback")]
-    //fn set_custom_slaving_callback(&self, callback: /*Unimplemented*/Fn(&AudioBaseSink, gst::ClockTime, gst::ClockTime, gst::ClockTimeDiff, /*Ignored*/AudioBaseSinkDiscontReason), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
+    //fn set_custom_slaving_callback(&self, callback: /*Unimplemented*/Fn(&AudioBaseSink, impl Into<Option<gst::ClockTime>>, impl Into<Option<gst::ClockTime>>, gst::ClockTimeDiff, /*Ignored*/AudioBaseSinkDiscontReason), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     #[doc(alias = "gst_audio_base_sink_set_discont_wait")]
     fn set_discont_wait(&self, discont_wait: gst::ClockTime);
@@ -146,17 +146,19 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
 
     fn alignment_threshold(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_audio_base_sink_get_alignment_threshold(
+            try_from_glib(ffi::gst_audio_base_sink_get_alignment_threshold(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
     fn discont_wait(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_audio_base_sink_get_discont_wait(
+            try_from_glib(ffi::gst_audio_base_sink_get_discont_wait(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -191,7 +193,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         }
     }
 
-    //fn set_custom_slaving_callback(&self, callback: /*Unimplemented*/Fn(&AudioBaseSink, gst::ClockTime, gst::ClockTime, gst::ClockTimeDiff, /*Ignored*/AudioBaseSinkDiscontReason), user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //fn set_custom_slaving_callback(&self, callback: /*Unimplemented*/Fn(&AudioBaseSink, impl Into<Option<gst::ClockTime>>, impl Into<Option<gst::ClockTime>>, gst::ClockTimeDiff, /*Ignored*/AudioBaseSinkDiscontReason), user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_set_custom_slaving_callback() }
     //}
 

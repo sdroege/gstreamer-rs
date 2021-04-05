@@ -84,8 +84,8 @@ pub trait ClipExt: 'static {
     fn internal_time_from_timeline_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
-        timeline_time: gst::ClockTime,
-    ) -> Result<gst::ClockTime, glib::Error>;
+        timeline_time: impl Into<Option<gst::ClockTime>>,
+    ) -> Result<Option<gst::ClockTime>, glib::Error>;
 
     #[doc(alias = "ges_clip_get_layer")]
     #[doc(alias = "get_layer")]
@@ -102,8 +102,8 @@ pub trait ClipExt: 'static {
     fn timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
-        internal_time: gst::ClockTime,
-    ) -> Result<gst::ClockTime, glib::Error>;
+        internal_time: impl Into<Option<gst::ClockTime>>,
+    ) -> Result<Option<gst::ClockTime>, glib::Error>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -112,7 +112,7 @@ pub trait ClipExt: 'static {
     fn timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
-    ) -> Result<gst::ClockTime, glib::Error>;
+    ) -> Result<Option<gst::ClockTime>, glib::Error>;
 
     #[doc(alias = "ges_clip_get_top_effect_index")]
     #[doc(alias = "get_top_effect_index")]
@@ -276,9 +276,10 @@ impl<O: IsA<Clip>> ClipExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn duration_limit(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_clip_get_duration_limit(
+            try_from_glib(ffi::ges_clip_get_duration_limit(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -287,14 +288,14 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn internal_time_from_timeline_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
-        timeline_time: gst::ClockTime,
-    ) -> Result<gst::ClockTime, glib::Error> {
+        timeline_time: impl Into<Option<gst::ClockTime>>,
+    ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::ges_clip_get_internal_time_from_timeline_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                timeline_time.into_glib(),
+                timeline_time.into().into_glib(),
                 &mut error,
             );
             if error.is_null() {
@@ -322,14 +323,14 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
-        internal_time: gst::ClockTime,
-    ) -> Result<gst::ClockTime, glib::Error> {
+        internal_time: impl Into<Option<gst::ClockTime>>,
+    ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::ges_clip_get_timeline_time_from_internal_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                internal_time.into_glib(),
+                internal_time.into().into_glib(),
                 &mut error,
             );
             if error.is_null() {
@@ -345,7 +346,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
-    ) -> Result<gst::ClockTime, glib::Error> {
+    ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::ges_clip_get_timeline_time_from_source_frame(

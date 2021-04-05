@@ -45,7 +45,7 @@ impl DiscovererInfo {
 
     #[doc(alias = "gst_discoverer_info_get_duration")]
     #[doc(alias = "get_duration")]
-    pub fn duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_discoverer_info_get_duration(self.to_glib_none().0)) }
     }
 

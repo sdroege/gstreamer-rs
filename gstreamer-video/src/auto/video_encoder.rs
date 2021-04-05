@@ -44,7 +44,7 @@ pub trait VideoEncoderExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
     #[doc(alias = "get_min_force_key_unit_interval")]
-    fn min_force_key_unit_interval(&self) -> gst::ClockTime;
+    fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
@@ -63,10 +63,10 @@ pub trait VideoEncoderExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_set_min_force_key_unit_interval")]
-    fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime);
+    fn set_min_force_key_unit_interval(&self, interval: impl Into<Option<gst::ClockTime>>);
 
     #[doc(alias = "gst_video_encoder_set_min_pts")]
-    fn set_min_pts(&self, min_pts: gst::ClockTime);
+    fn set_min_pts(&self, min_pts: impl Into<Option<gst::ClockTime>>);
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
@@ -113,7 +113,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn min_force_key_unit_interval(&self) -> gst::ClockTime {
+    fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_video_encoder_get_min_force_key_unit_interval(
                 self.as_ref().to_glib_none().0,
@@ -162,18 +162,21 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_min_force_key_unit_interval(&self, interval: gst::ClockTime) {
+    fn set_min_force_key_unit_interval(&self, interval: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_video_encoder_set_min_force_key_unit_interval(
                 self.as_ref().to_glib_none().0,
-                interval.into_glib(),
+                interval.into().into_glib(),
             );
         }
     }
 
-    fn set_min_pts(&self, min_pts: gst::ClockTime) {
+    fn set_min_pts(&self, min_pts: impl Into<Option<gst::ClockTime>>) {
         unsafe {
-            ffi::gst_video_encoder_set_min_pts(self.as_ref().to_glib_none().0, min_pts.into_glib());
+            ffi::gst_video_encoder_set_min_pts(
+                self.as_ref().to_glib_none().0,
+                min_pts.into().into_glib(),
+            );
         }
     }
 

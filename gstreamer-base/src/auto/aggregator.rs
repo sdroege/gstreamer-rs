@@ -40,7 +40,7 @@ pub trait AggregatorExt: 'static {
 
     #[doc(alias = "gst_aggregator_get_latency")]
     #[doc(alias = "get_latency")]
-    fn latency(&self) -> gst::ClockTime;
+    fn latency(&self) -> Option<gst::ClockTime>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -53,7 +53,11 @@ pub trait AggregatorExt: 'static {
     fn peek_next_sample<P: IsA<AggregatorPad>>(&self, pad: &P) -> Option<gst::Sample>;
 
     #[doc(alias = "gst_aggregator_set_latency")]
-    fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
+    fn set_latency(
+        &self,
+        min_latency: gst::ClockTime,
+        max_latency: impl Into<Option<gst::ClockTime>>,
+    );
 
     #[doc(alias = "gst_aggregator_set_src_caps")]
     fn set_src_caps(&self, caps: &gst::Caps);
@@ -61,7 +65,7 @@ pub trait AggregatorExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_aggregator_simple_get_next_time")]
-    fn simple_get_next_time(&self) -> gst::ClockTime;
+    fn simple_get_next_time(&self) -> Option<gst::ClockTime>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -127,7 +131,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    fn latency(&self) -> gst::ClockTime {
+    fn latency(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_aggregator_get_latency(
                 self.as_ref().to_glib_none().0,
@@ -156,12 +160,16 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
+    fn set_latency(
+        &self,
+        min_latency: gst::ClockTime,
+        max_latency: impl Into<Option<gst::ClockTime>>,
+    ) {
         unsafe {
             ffi::gst_aggregator_set_latency(
                 self.as_ref().to_glib_none().0,
                 min_latency.into_glib(),
-                max_latency.into_glib(),
+                max_latency.into().into_glib(),
             );
         }
     }
@@ -174,7 +182,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn simple_get_next_time(&self) -> gst::ClockTime {
+    fn simple_get_next_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_aggregator_simple_get_next_time(
                 self.as_ref().to_glib_none().0,

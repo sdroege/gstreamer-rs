@@ -74,7 +74,7 @@ pub trait GstObjectExt: 'static {
 
     #[doc(alias = "gst_object_get_control_rate")]
     #[doc(alias = "get_control_rate")]
-    fn control_rate(&self) -> ClockTime;
+    fn control_rate(&self) -> Option<ClockTime>;
 
     #[doc(alias = "gst_object_get_name")]
     #[doc(alias = "get_name")]
@@ -90,11 +90,15 @@ pub trait GstObjectExt: 'static {
 
     #[doc(alias = "gst_object_get_value")]
     #[doc(alias = "get_value")]
-    fn value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value>;
+    fn value(
+        &self,
+        property_name: &str,
+        timestamp: impl Into<Option<ClockTime>>,
+    ) -> Option<glib::Value>;
 
     //#[doc(alias = "gst_object_get_value_array")]
     //#[doc(alias = "get_value_array")]
-    //fn is_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
+    //fn is_value_array(&self, property_name: &str, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
     #[doc(alias = "gst_object_has_active_control_bindings")]
     fn has_active_control_bindings(&self) -> bool;
@@ -118,13 +122,13 @@ pub trait GstObjectExt: 'static {
     fn set_control_bindings_disabled(&self, disabled: bool);
 
     #[doc(alias = "gst_object_set_control_rate")]
-    fn set_control_rate(&self, control_rate: ClockTime);
+    fn set_control_rate(&self, control_rate: impl Into<Option<ClockTime>>);
 
     #[doc(alias = "gst_object_set_parent")]
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "gst_object_suggest_next_sync")]
-    fn suggest_next_sync(&self) -> ClockTime;
+    fn suggest_next_sync(&self) -> Option<ClockTime>;
 
     #[doc(alias = "gst_object_sync_values")]
     fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError>;
@@ -174,7 +178,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn control_rate(&self) -> ClockTime {
+    fn control_rate(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_object_get_control_rate(
                 self.as_ref().to_glib_none().0,
@@ -198,17 +202,21 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value> {
+    fn value(
+        &self,
+        property_name: &str,
+        timestamp: impl Into<Option<ClockTime>>,
+    ) -> Option<glib::Value> {
         unsafe {
             from_glib_full(ffi::gst_object_get_value(
                 self.as_ref().to_glib_none().0,
                 property_name.to_glib_none().0,
-                timestamp.into_glib(),
+                timestamp.into().into_glib(),
             ))
         }
     }
 
-    //fn is_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
+    //fn is_value_array(&self, property_name: &str, timestamp: impl Into<Option<ClockTime>>, interval: impl Into<Option<ClockTime>>, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi:gst_object_get_value_array() }
     //}
 
@@ -275,11 +283,11 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn set_control_rate(&self, control_rate: ClockTime) {
+    fn set_control_rate(&self, control_rate: impl Into<Option<ClockTime>>) {
         unsafe {
             ffi::gst_object_set_control_rate(
                 self.as_ref().to_glib_none().0,
-                control_rate.into_glib(),
+                control_rate.into().into_glib(),
             );
         }
     }
@@ -296,7 +304,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn suggest_next_sync(&self) -> ClockTime {
+    fn suggest_next_sync(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_object_suggest_next_sync(
                 self.as_ref().to_glib_none().0,

@@ -42,7 +42,7 @@ pub trait RTSPSessionMediaExt: 'static {
 
     #[doc(alias = "gst_rtsp_session_media_get_base_time")]
     #[doc(alias = "get_base_time")]
-    fn base_time(&self) -> gst::ClockTime;
+    fn base_time(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "gst_rtsp_session_media_get_media")]
     #[doc(alias = "get_media")]
@@ -84,7 +84,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_session_media_alloc_channels() }
     //}
 
-    fn base_time(&self) -> gst::ClockTime {
+    fn base_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_rtsp_session_media_get_base_time(
                 self.as_ref().to_glib_none().0,

@@ -71,7 +71,7 @@ pub trait RTSPMediaExt: 'static {
 
     #[doc(alias = "gst_rtsp_media_get_base_time")]
     #[doc(alias = "get_base_time")]
-    fn base_time(&self) -> gst::ClockTime;
+    fn base_time(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "gst_rtsp_media_get_buffer_size")]
     #[doc(alias = "get_buffer_size")]
@@ -145,7 +145,7 @@ pub trait RTSPMediaExt: 'static {
 
     #[doc(alias = "gst_rtsp_media_get_retransmission_time")]
     #[doc(alias = "get_retransmission_time")]
-    fn retransmission_time(&self) -> gst::ClockTime;
+    fn retransmission_time(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "gst_rtsp_media_get_status")]
     #[doc(alias = "get_status")]
@@ -222,7 +222,7 @@ pub trait RTSPMediaExt: 'static {
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     //#[doc(alias = "gst_rtsp_media_seek_trickmode")]
-    //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: gst::ClockTime) -> bool;
+    //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: impl Into<Option<gst::ClockTime>>) -> bool;
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
@@ -288,7 +288,7 @@ pub trait RTSPMediaExt: 'static {
     fn set_rate_control(&self, enabled: bool);
 
     #[doc(alias = "gst_rtsp_media_set_retransmission_time")]
-    fn set_retransmission_time(&self, time: gst::ClockTime);
+    fn set_retransmission_time(&self, time: impl Into<Option<gst::ClockTime>>);
 
     #[doc(alias = "gst_rtsp_media_set_reusable")]
     fn set_reusable(&self, reusable: bool);
@@ -504,7 +504,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    fn base_time(&self) -> gst::ClockTime {
+    fn base_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_rtsp_media_get_base_time(
                 self.as_ref().to_glib_none().0,
@@ -635,7 +635,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    fn retransmission_time(&self) -> gst::ClockTime {
+    fn retransmission_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_rtsp_media_get_retransmission_time(
                 self.as_ref().to_glib_none().0,
@@ -793,7 +793,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: gst::ClockTime) -> bool {
+    //fn seek_trickmode(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags, rate: f64, trickmode_interval: impl Into<Option<gst::ClockTime>>) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_media_seek_trickmode() }
     //}
 
@@ -940,11 +940,11 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    fn set_retransmission_time(&self, time: gst::ClockTime) {
+    fn set_retransmission_time(&self, time: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_rtsp_media_set_retransmission_time(
                 self.as_ref().to_glib_none().0,
-                time.into_glib(),
+                time.into().into_glib(),
             );
         }
     }

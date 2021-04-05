@@ -165,7 +165,7 @@ pub trait RTSPStreamExt: 'static {
 
     #[doc(alias = "gst_rtsp_stream_get_retransmission_time")]
     #[doc(alias = "get_retransmission_time")]
-    fn retransmission_time(&self) -> gst::ClockTime;
+    fn retransmission_time(&self) -> Option<gst::ClockTime>;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
@@ -187,7 +187,7 @@ pub trait RTSPStreamExt: 'static {
 
     #[doc(alias = "gst_rtsp_stream_get_rtpinfo")]
     #[doc(alias = "get_rtpinfo")]
-    fn rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)>;
+    fn rtpinfo(&self) -> Option<(u32, u32, u32, Option<gst::ClockTime>)>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtpsession")]
     #[doc(alias = "get_rtpsession")]
@@ -384,7 +384,7 @@ pub trait RTSPStreamExt: 'static {
     fn set_retransmission_pt(&self, rtx_pt: u32);
 
     #[doc(alias = "gst_rtsp_stream_set_retransmission_time")]
-    fn set_retransmission_time(&self, time: gst::ClockTime);
+    fn set_retransmission_time(&self, time: impl Into<Option<gst::ClockTime>>);
 
     #[doc(alias = "gst_rtsp_stream_set_seqnum_offset")]
     fn set_seqnum_offset(&self, seqnum: u16);
@@ -649,7 +649,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe { ffi::gst_rtsp_stream_get_retransmission_pt(self.as_ref().to_glib_none().0) }
     }
 
-    fn retransmission_time(&self) -> gst::ClockTime {
+    fn retransmission_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_get_retransmission_time(
                 self.as_ref().to_glib_none().0,
@@ -695,7 +695,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)> {
+    fn rtpinfo(&self) -> Option<(u32, u32, u32, Option<gst::ClockTime>)> {
         unsafe {
             let mut rtptime = mem::MaybeUninit::uninit();
             let mut seq = mem::MaybeUninit::uninit();
@@ -1148,11 +1148,11 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn set_retransmission_time(&self, time: gst::ClockTime) {
+    fn set_retransmission_time(&self, time: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_rtsp_stream_set_retransmission_time(
                 self.as_ref().to_glib_none().0,
-                time.into_glib(),
+                time.into().into_glib(),
             );
         }
     }

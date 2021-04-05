@@ -60,7 +60,7 @@ pub const NONE_URI_CLIP_ASSET: Option<&UriClipAsset> = None;
 pub trait UriClipAssetExt: 'static {
     #[doc(alias = "ges_uri_clip_asset_get_duration")]
     #[doc(alias = "get_duration")]
-    fn duration(&self) -> gst::ClockTime;
+    fn duration(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "ges_uri_clip_asset_get_info")]
     #[doc(alias = "get_info")]
@@ -70,7 +70,7 @@ pub trait UriClipAssetExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_uri_clip_asset_get_max_duration")]
     #[doc(alias = "get_max_duration")]
-    fn max_duration(&self) -> gst::ClockTime;
+    fn max_duration(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "ges_uri_clip_asset_get_stream_assets")]
     #[doc(alias = "get_stream_assets")]
@@ -98,7 +98,7 @@ pub trait UriClipAssetExt: 'static {
 }
 
 impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
-    fn duration(&self) -> gst::ClockTime {
+    fn duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_duration(
                 self.as_ref().to_glib_none().0,
@@ -116,7 +116,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn max_duration(&self) -> gst::ClockTime {
+    fn max_duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_max_duration(
                 self.as_ref().to_glib_none().0,

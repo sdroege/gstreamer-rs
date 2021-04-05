@@ -39,7 +39,7 @@ impl Clock {
     //}
 
     //#[doc(alias = "gst_clock_id_get_time")]
-    //pub fn id_get_time(id: /*Unimplemented*/ClockID) -> ClockTime {
+    //pub fn id_get_time(id: /*Unimplemented*/ClockID) -> Option<ClockTime> {
     //    unsafe { TODO: call ffi:gst_clock_id_get_time() }
     //}
 
@@ -71,7 +71,7 @@ impl Clock {
     //}
 
     //#[doc(alias = "gst_clock_id_wait_async")]
-    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, ClockTime, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Result<ClockSuccess, ClockError> {
+    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, impl Into<Option<ClockTime>>, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Result<ClockSuccess, ClockError> {
     //    unsafe { TODO: call ffi:gst_clock_id_wait_async() }
     //}
 }
@@ -93,7 +93,7 @@ pub trait ClockExt: 'static {
     ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)>;
 
     #[doc(alias = "gst_clock_adjust_unlocked")]
-    fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime;
+    fn adjust_unlocked(&self, internal: ClockTime) -> Option<ClockTime>;
 
     #[doc(alias = "gst_clock_get_calibration")]
     #[doc(alias = "get_calibration")]
@@ -113,11 +113,11 @@ pub trait ClockExt: 'static {
 
     #[doc(alias = "gst_clock_get_time")]
     #[doc(alias = "get_time")]
-    fn time(&self) -> ClockTime;
+    fn time(&self) -> Option<ClockTime>;
 
     #[doc(alias = "gst_clock_get_timeout")]
     #[doc(alias = "get_timeout")]
-    fn timeout(&self) -> ClockTime;
+    fn timeout(&self) -> Option<ClockTime>;
 
     #[doc(alias = "gst_clock_is_synced")]
     fn is_synced(&self) -> bool;
@@ -141,13 +141,16 @@ pub trait ClockExt: 'static {
     fn set_synced(&self, synced: bool);
 
     #[doc(alias = "gst_clock_set_timeout")]
-    fn set_timeout(&self, timeout: ClockTime);
+    fn set_timeout(&self, timeout: impl Into<Option<ClockTime>>);
 
     #[doc(alias = "gst_clock_unadjust_unlocked")]
-    fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime;
+    fn unadjust_unlocked(&self, external: ClockTime) -> Option<ClockTime>;
 
     #[doc(alias = "gst_clock_wait_for_sync")]
-    fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError>;
+    fn wait_for_sync(
+        &self,
+        timeout: impl Into<Option<ClockTime>>,
+    ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "window-size")]
     fn window_size(&self) -> i32;
@@ -229,10 +232,10 @@ impl<O: IsA<Clock>> ClockExt for O {
             if ret {
                 Some((
                     r_squared,
-                    from_glib(internal),
-                    from_glib(external),
-                    from_glib(rate_num),
-                    from_glib(rate_denom),
+                    try_from_glib(internal).expect("mandatory glib value is None"),
+                    try_from_glib(external).expect("mandatory glib value is None"),
+                    try_from_glib(rate_num).expect("mandatory glib value is None"),
+                    try_from_glib(rate_denom).expect("mandatory glib value is None"),
                 ))
             } else {
                 None
@@ -240,7 +243,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime {
+    fn adjust_unlocked(&self, internal: ClockTime) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_clock_adjust_unlocked(
                 self.as_ref().to_glib_none().0,
@@ -267,19 +270,20 @@ impl<O: IsA<Clock>> ClockExt for O {
             let rate_num = rate_num.assume_init();
             let rate_denom = rate_denom.assume_init();
             (
-                from_glib(internal),
-                from_glib(external),
-                from_glib(rate_num),
-                from_glib(rate_denom),
+                try_from_glib(internal).expect("mandatory glib value is None"),
+                try_from_glib(external).expect("mandatory glib value is None"),
+                try_from_glib(rate_num).expect("mandatory glib value is None"),
+                try_from_glib(rate_denom).expect("mandatory glib value is None"),
             )
         }
     }
 
     fn internal_time(&self) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_clock_get_internal_time(
+            try_from_glib(ffi::gst_clock_get_internal_time(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -289,17 +293,18 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn resolution(&self) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_clock_get_resolution(
+            try_from_glib(ffi::gst_clock_get_resolution(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
-    fn time(&self) -> ClockTime {
+    fn time(&self) -> Option<ClockTime> {
         unsafe { from_glib(ffi::gst_clock_get_time(self.as_ref().to_glib_none().0)) }
     }
 
-    fn timeout(&self) -> ClockTime {
+    fn timeout(&self) -> Option<ClockTime> {
         unsafe { from_glib(ffi::gst_clock_get_timeout(self.as_ref().to_glib_none().0)) }
     }
 
@@ -339,10 +344,11 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_clock_set_resolution(
+            try_from_glib(ffi::gst_clock_set_resolution(
                 self.as_ref().to_glib_none().0,
                 resolution.into_glib(),
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -352,13 +358,13 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn set_timeout(&self, timeout: ClockTime) {
+    fn set_timeout(&self, timeout: impl Into<Option<ClockTime>>) {
         unsafe {
-            ffi::gst_clock_set_timeout(self.as_ref().to_glib_none().0, timeout.into_glib());
+            ffi::gst_clock_set_timeout(self.as_ref().to_glib_none().0, timeout.into().into_glib());
         }
     }
 
-    fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime {
+    fn unadjust_unlocked(&self, external: ClockTime) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_clock_unadjust_unlocked(
                 self.as_ref().to_glib_none().0,
@@ -367,10 +373,16 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
+    fn wait_for_sync(
+        &self,
+        timeout: impl Into<Option<ClockTime>>,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_clock_wait_for_sync(self.as_ref().to_glib_none().0, timeout.into_glib()),
+                ffi::gst_clock_wait_for_sync(
+                    self.as_ref().to_glib_none().0,
+                    timeout.into().into_glib()
+                ),
                 "Timed out waiting for sync"
             )
         }

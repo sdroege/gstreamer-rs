@@ -55,7 +55,7 @@ impl AppSrc {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_current_level_time")]
     #[doc(alias = "get_current_level_time")]
-    pub fn current_level_time(&self) -> gst::ClockTime {
+    pub fn current_level_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_app_src_get_current_level_time(
                 self.to_glib_none().0,
@@ -67,7 +67,7 @@ impl AppSrc {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_src_get_duration")]
     #[doc(alias = "get_duration")]
-    pub fn duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
 
@@ -97,7 +97,7 @@ impl AppSrc {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_max_time")]
     #[doc(alias = "get_max_time")]
-    pub fn max_time(&self) -> gst::ClockTime {
+    pub fn max_time(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_app_src_get_max_time(self.to_glib_none().0)) }
     }
 
@@ -138,9 +138,9 @@ impl AppSrc {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_src_set_duration")]
-    pub fn set_duration(&self, duration: gst::ClockTime) {
+    pub fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) {
         unsafe {
-            ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.into_glib());
+            ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.into().into_glib());
         }
     }
 
@@ -172,9 +172,9 @@ impl AppSrc {
     #[cfg(any(feature = "v1_20", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_max_time")]
-    pub fn set_max_time(&self, max: gst::ClockTime) {
+    pub fn set_max_time(&self, max: impl Into<Option<gst::ClockTime>>) {
         unsafe {
-            ffi::gst_app_src_set_max_time(self.to_glib_none().0, max.into_glib());
+            ffi::gst_app_src_set_max_time(self.to_glib_none().0, max.into().into_glib());
         }
     }
 

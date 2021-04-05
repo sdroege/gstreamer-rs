@@ -55,7 +55,7 @@ pub trait PipelineExt: 'static {
 
     #[doc(alias = "gst_pipeline_get_latency")]
     #[doc(alias = "get_latency")]
-    fn latency(&self) -> ClockTime;
+    fn latency(&self) -> Option<ClockTime>;
 
     #[doc(alias = "gst_pipeline_get_pipeline_clock")]
     #[doc(alias = "get_pipeline_clock")]
@@ -68,7 +68,7 @@ pub trait PipelineExt: 'static {
     fn set_delay(&self, delay: ClockTime);
 
     #[doc(alias = "gst_pipeline_set_latency")]
-    fn set_latency(&self, latency: ClockTime);
+    fn set_latency(&self, latency: impl Into<Option<ClockTime>>);
 
     #[doc(alias = "gst_pipeline_use_clock")]
     fn use_clock<P: IsA<Clock>>(&self, clock: Option<&P>);
@@ -103,10 +103,13 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
     }
 
     fn delay(&self) -> ClockTime {
-        unsafe { from_glib(ffi::gst_pipeline_get_delay(self.as_ref().to_glib_none().0)) }
+        unsafe {
+            try_from_glib(ffi::gst_pipeline_get_delay(self.as_ref().to_glib_none().0))
+                .expect("mandatory glib value is None")
+        }
     }
 
-    fn latency(&self) -> ClockTime {
+    fn latency(&self) -> Option<ClockTime> {
         unsafe {
             from_glib(ffi::gst_pipeline_get_latency(
                 self.as_ref().to_glib_none().0,
@@ -137,9 +140,12 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn set_latency(&self, latency: ClockTime) {
+    fn set_latency(&self, latency: impl Into<Option<ClockTime>>) {
         unsafe {
-            ffi::gst_pipeline_set_latency(self.as_ref().to_glib_none().0, latency.into_glib());
+            ffi::gst_pipeline_set_latency(
+                self.as_ref().to_glib_none().0,
+                latency.into().into_glib(),
+            );
         }
     }
 

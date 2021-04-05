@@ -49,7 +49,7 @@ pub trait AudioDecoderExt: 'static {
 
     #[doc(alias = "gst_audio_decoder_get_latency")]
     #[doc(alias = "get_latency")]
-    fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
+    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>);
 
     #[doc(alias = "gst_audio_decoder_get_max_errors")]
     #[doc(alias = "get_max_errors")]
@@ -97,7 +97,7 @@ pub trait AudioDecoderExt: 'static {
     fn set_estimate_rate(&self, enabled: bool);
 
     #[doc(alias = "gst_audio_decoder_set_latency")]
-    fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime);
+    fn set_latency(&self, min: gst::ClockTime, max: impl Into<Option<gst::ClockTime>>);
 
     #[doc(alias = "gst_audio_decoder_set_max_errors")]
     fn set_max_errors(&self, num: i32);
@@ -179,7 +179,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         unsafe { ffi::gst_audio_decoder_get_estimate_rate(self.as_ref().to_glib_none().0) }
     }
 
-    fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();
@@ -190,7 +190,10 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
             );
             let min = min.assume_init();
             let max = max.assume_init();
-            (from_glib(min), from_glib(max))
+            (
+                try_from_glib(min).expect("mandatory glib value is None"),
+                from_glib(max),
+            )
         }
     }
 
@@ -200,9 +203,10 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn min_latency(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_audio_decoder_get_min_latency(
+            try_from_glib(ffi::gst_audio_decoder_get_min_latency(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -243,9 +247,10 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn tolerance(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_audio_decoder_get_tolerance(
+            try_from_glib(ffi::gst_audio_decoder_get_tolerance(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -298,12 +303,12 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
+    fn set_latency(&self, min: gst::ClockTime, max: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_audio_decoder_set_latency(
                 self.as_ref().to_glib_none().0,
                 min.into_glib(),
-                max.into_glib(),
+                max.into().into_glib(),
             );
         }
     }

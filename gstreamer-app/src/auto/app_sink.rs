@@ -127,11 +127,14 @@ impl AppSink {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_sink_try_pull_preroll")]
-    pub fn try_pull_preroll(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
+    pub fn try_pull_preroll(
+        &self,
+        timeout: impl Into<Option<gst::ClockTime>>,
+    ) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_preroll(
                 self.to_glib_none().0,
-                timeout.into_glib(),
+                timeout.into().into_glib(),
             ))
         }
     }
@@ -139,11 +142,14 @@ impl AppSink {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_sink_try_pull_sample")]
-    pub fn try_pull_sample(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
+    pub fn try_pull_sample(
+        &self,
+        timeout: impl Into<Option<gst::ClockTime>>,
+    ) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_sample(
                 self.to_glib_none().0,
-                timeout.into_glib(),
+                timeout.into().into_glib(),
             ))
         }
     }

@@ -110,7 +110,7 @@ pub trait TimelineExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_get_frame_time")]
     #[doc(alias = "get_frame_time")]
-    fn frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
+    fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime>;
 
     #[doc(alias = "ges_timeline_get_groups")]
     #[doc(alias = "get_groups")]
@@ -130,7 +130,7 @@ pub trait TimelineExt: 'static {
 
     #[doc(alias = "ges_timeline_get_snapping_distance")]
     #[doc(alias = "get_snapping_distance")]
-    fn snapping_distance(&self) -> gst::ClockTime;
+    fn snapping_distance(&self) -> Option<gst::ClockTime>;
 
     #[doc(alias = "ges_timeline_get_track_for_pad")]
     #[doc(alias = "get_track_for_pad")]
@@ -181,7 +181,7 @@ pub trait TimelineExt: 'static {
     fn set_auto_transition(&self, auto_transition: bool);
 
     #[doc(alias = "ges_timeline_set_snapping_distance")]
-    fn set_snapping_distance(&self, snapping_distance: gst::ClockTime);
+    fn set_snapping_distance(&self, snapping_distance: impl Into<Option<gst::ClockTime>>);
 
     #[doc(alias = "commited")]
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -292,9 +292,10 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     fn duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_timeline_get_duration(
+            try_from_glib(ffi::ges_timeline_get_duration(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -317,7 +318,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime {
+    fn frame_time(&self, frame_number: FrameNumber) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_get_frame_time(
                 self.as_ref().to_glib_none().0,
@@ -360,7 +361,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn snapping_distance(&self) -> gst::ClockTime {
+    fn snapping_distance(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_get_snapping_distance(
                 self.as_ref().to_glib_none().0,
@@ -496,11 +497,11 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn set_snapping_distance(&self, snapping_distance: gst::ClockTime) {
+    fn set_snapping_distance(&self, snapping_distance: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::ges_timeline_set_snapping_distance(
                 self.as_ref().to_glib_none().0,
-                snapping_distance.into_glib(),
+                snapping_distance.into().into_glib(),
             );
         }
     }

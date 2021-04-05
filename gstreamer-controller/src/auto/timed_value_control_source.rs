@@ -28,7 +28,7 @@ pub const NONE_TIMED_VALUE_CONTROL_SOURCE: Option<&TimedValueControlSource> = No
 
 pub trait TimedValueControlSourceExt: 'static {
     //#[doc(alias = "gst_timed_value_control_source_find_control_point_iter")]
-    //fn find_control_point_iter(&self, timestamp: gst::ClockTime) -> /*Ignored*/Option<glib::SequenceIter>;
+    //fn find_control_point_iter(&self, timestamp: impl Into<Option<gst::ClockTime>>) -> /*Ignored*/Option<glib::SequenceIter>;
 
     //#[doc(alias = "gst_timed_value_control_source_get_all")]
     //#[doc(alias = "get_all")]
@@ -70,7 +70,7 @@ pub trait TimedValueControlSourceExt: 'static {
 }
 
 impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
-    //fn find_control_point_iter(&self, timestamp: gst::ClockTime) -> /*Ignored*/Option<glib::SequenceIter> {
+    //fn find_control_point_iter(&self, timestamp: impl Into<Option<gst::ClockTime>>) -> /*Ignored*/Option<glib::SequenceIter> {
     //    unsafe { TODO: call ffi:gst_timed_value_control_source_find_control_point_iter() }
     //}
 

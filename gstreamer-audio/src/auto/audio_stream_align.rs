@@ -37,9 +37,10 @@ impl AudioStreamAlign {
     #[doc(alias = "get_alignment_threshold")]
     pub fn alignment_threshold(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_audio_stream_align_get_alignment_threshold(
+            try_from_glib(ffi::gst_audio_stream_align_get_alignment_threshold(
                 self.to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -47,9 +48,10 @@ impl AudioStreamAlign {
     #[doc(alias = "get_discont_wait")]
     pub fn discont_wait(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_audio_stream_align_get_discont_wait(
+            try_from_glib(ffi::gst_audio_stream_align_get_discont_wait(
                 self.to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -67,7 +69,7 @@ impl AudioStreamAlign {
 
     #[doc(alias = "gst_audio_stream_align_get_timestamp_at_discont")]
     #[doc(alias = "get_timestamp_at_discont")]
-    pub fn timestamp_at_discont(&self) -> gst::ClockTime {
+    pub fn timestamp_at_discont(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_audio_stream_align_get_timestamp_at_discont(
                 self.to_glib_none().0,

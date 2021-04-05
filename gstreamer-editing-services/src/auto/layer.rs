@@ -52,9 +52,9 @@ pub trait LayerExt: 'static {
     fn add_asset<P: IsA<Asset>>(
         &self,
         asset: &P,
-        start: gst::ClockTime,
-        inpoint: gst::ClockTime,
-        duration: gst::ClockTime,
+        start: impl Into<Option<gst::ClockTime>>,
+        inpoint: impl Into<Option<gst::ClockTime>>,
+        duration: impl Into<Option<gst::ClockTime>>,
         track_types: TrackType,
     ) -> Result<Clip, glib::BoolError>;
 
@@ -64,9 +64,9 @@ pub trait LayerExt: 'static {
     fn add_asset_full<P: IsA<Asset>>(
         &self,
         asset: &P,
-        start: gst::ClockTime,
-        inpoint: gst::ClockTime,
-        duration: gst::ClockTime,
+        start: impl Into<Option<gst::ClockTime>>,
+        inpoint: impl Into<Option<gst::ClockTime>>,
+        duration: impl Into<Option<gst::ClockTime>>,
         track_types: TrackType,
     ) -> Result<Clip, glib::Error>;
 
@@ -94,7 +94,11 @@ pub trait LayerExt: 'static {
 
     #[doc(alias = "ges_layer_get_clips_in_interval")]
     #[doc(alias = "get_clips_in_interval")]
-    fn clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip>;
+    fn clips_in_interval(
+        &self,
+        start: impl Into<Option<gst::ClockTime>>,
+        end: impl Into<Option<gst::ClockTime>>,
+    ) -> Vec<Clip>;
 
     #[doc(alias = "ges_layer_get_duration")]
     #[doc(alias = "get_duration")]
@@ -152,18 +156,18 @@ impl<O: IsA<Layer>> LayerExt for O {
     fn add_asset<P: IsA<Asset>>(
         &self,
         asset: &P,
-        start: gst::ClockTime,
-        inpoint: gst::ClockTime,
-        duration: gst::ClockTime,
+        start: impl Into<Option<gst::ClockTime>>,
+        inpoint: impl Into<Option<gst::ClockTime>>,
+        duration: impl Into<Option<gst::ClockTime>>,
         track_types: TrackType,
     ) -> Result<Clip, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_none(ffi::ges_layer_add_asset(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
-                start.into_glib(),
-                inpoint.into_glib(),
-                duration.into_glib(),
+                start.into().into_glib(),
+                inpoint.into().into_glib(),
+                duration.into().into_glib(),
                 track_types.into_glib(),
             ))
             .ok_or_else(|| glib::bool_error!("Failed to add asset"))
@@ -175,9 +179,9 @@ impl<O: IsA<Layer>> LayerExt for O {
     fn add_asset_full<P: IsA<Asset>>(
         &self,
         asset: &P,
-        start: gst::ClockTime,
-        inpoint: gst::ClockTime,
-        duration: gst::ClockTime,
+        start: impl Into<Option<gst::ClockTime>>,
+        inpoint: impl Into<Option<gst::ClockTime>>,
+        duration: impl Into<Option<gst::ClockTime>>,
         track_types: TrackType,
     ) -> Result<Clip, glib::Error> {
         unsafe {
@@ -185,9 +189,9 @@ impl<O: IsA<Layer>> LayerExt for O {
             let ret = ffi::ges_layer_add_asset_full(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
-                start.into_glib(),
-                inpoint.into_glib(),
-                duration.into_glib(),
+                start.into().into_glib(),
+                inpoint.into().into_glib(),
+                duration.into().into_glib(),
                 track_types.into_glib(),
                 &mut error,
             );
@@ -256,18 +260,25 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip> {
+    fn clips_in_interval(
+        &self,
+        start: impl Into<Option<gst::ClockTime>>,
+        end: impl Into<Option<gst::ClockTime>>,
+    ) -> Vec<Clip> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips_in_interval(
                 self.as_ref().to_glib_none().0,
-                start.into_glib(),
-                end.into_glib(),
+                start.into().into_glib(),
+                end.into().into_glib(),
             ))
         }
     }
 
     fn duration(&self) -> gst::ClockTime {
-        unsafe { from_glib(ffi::ges_layer_get_duration(self.as_ref().to_glib_none().0)) }
+        unsafe {
+            try_from_glib(ffi::ges_layer_get_duration(self.as_ref().to_glib_none().0))
+                .expect("mandatory glib value is None")
+        }
     }
 
     fn priority(&self) -> u32 {

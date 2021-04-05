@@ -57,9 +57,10 @@ impl TestClock {
     #[doc(alias = "get_next_entry_time")]
     pub fn next_entry_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_test_clock_get_next_entry_time(
+            try_from_glib(ffi::gst_test_clock_get_next_entry_time(
                 self.to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -124,7 +125,7 @@ impl TestClock {
     }
 
     //#[doc(alias = "gst_test_clock_id_list_get_latest_time")]
-    //pub fn id_list_get_latest_time(pending_list: /*Unimplemented*/&[&gst::ClockID]) -> gst::ClockTime {
+    //pub fn id_list_get_latest_time(pending_list: /*Unimplemented*/&[&gst::ClockID]) -> Option<gst::ClockTime> {
     //    unsafe { TODO: call ffi:gst_test_clock_id_list_get_latest_time() }
     //}
 

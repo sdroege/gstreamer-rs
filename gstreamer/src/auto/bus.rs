@@ -118,11 +118,11 @@ impl Bus {
     //}
 
     #[doc(alias = "gst_bus_timed_pop")]
-    pub fn timed_pop(&self, timeout: ClockTime) -> Option<Message> {
+    pub fn timed_pop(&self, timeout: impl Into<Option<ClockTime>>) -> Option<Message> {
         unsafe {
             from_glib_full(ffi::gst_bus_timed_pop(
                 self.to_glib_none().0,
-                timeout.into_glib(),
+                timeout.into().into_glib(),
             ))
         }
     }

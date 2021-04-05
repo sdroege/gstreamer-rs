@@ -10,6 +10,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use std::boxed::Box as Box_;
+use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
@@ -57,6 +58,10 @@ pub trait AudioEncoderExt: 'static {
     #[doc(alias = "gst_audio_encoder_get_hard_resync")]
     #[doc(alias = "get_hard_resync")]
     fn is_hard_resync(&self) -> bool;
+
+    #[doc(alias = "gst_audio_encoder_get_latency")]
+    #[doc(alias = "get_latency")]
+    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>);
 
     #[doc(alias = "gst_audio_encoder_get_lookahead")]
     #[doc(alias = "get_lookahead")]
@@ -107,7 +112,7 @@ pub trait AudioEncoderExt: 'static {
     fn set_headers(&self, headers: &[&gst::Buffer]);
 
     #[doc(alias = "gst_audio_encoder_set_latency")]
-    fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime);
+    fn set_latency(&self, min: gst::ClockTime, max: impl Into<Option<gst::ClockTime>>);
 
     #[doc(alias = "gst_audio_encoder_set_lookahead")]
     fn set_lookahead(&self, num: i32);
@@ -201,6 +206,24 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
+    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>) {
+        unsafe {
+            let mut min = mem::MaybeUninit::uninit();
+            let mut max = mem::MaybeUninit::uninit();
+            ffi::gst_audio_encoder_get_latency(
+                self.as_ref().to_glib_none().0,
+                min.as_mut_ptr(),
+                max.as_mut_ptr(),
+            );
+            let min = min.assume_init();
+            let max = max.assume_init();
+            (
+                try_from_glib(min).expect("mandatory glib value is None"),
+                from_glib(max),
+            )
+        }
+    }
+
     fn lookahead(&self) -> i32 {
         unsafe { ffi::gst_audio_encoder_get_lookahead(self.as_ref().to_glib_none().0) }
     }
@@ -223,9 +246,10 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn tolerance(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_audio_encoder_get_tolerance(
+            try_from_glib(ffi::gst_audio_encoder_get_tolerance(
                 self.as_ref().to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -314,12 +338,12 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         }
     }
 
-    fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
+    fn set_latency(&self, min: gst::ClockTime, max: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_audio_encoder_set_latency(
                 self.as_ref().to_glib_none().0,
                 min.into_glib(),
-                max.into_glib(),
+                max.into().into_glib(),
             );
         }
     }

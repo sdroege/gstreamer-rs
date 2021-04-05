@@ -85,7 +85,7 @@ impl Player {
 
     #[doc(alias = "gst_player_get_duration")]
     #[doc(alias = "get_duration")]
-    pub fn duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_player_get_duration(self.to_glib_none().0)) }
     }
 
@@ -121,7 +121,7 @@ impl Player {
 
     #[doc(alias = "gst_player_get_position")]
     #[doc(alias = "get_position")]
-    pub fn position(&self) -> gst::ClockTime {
+    pub fn position(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_player_get_position(self.to_glib_none().0)) }
     }
 
