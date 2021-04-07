@@ -129,10 +129,6 @@ manual_traits = ["VideoDecoderExtManual"]
     manual = true
 
     [[object.function]]
-    name = "have_frame"
-    manual = true
-
-    [[object.function]]
     name = "set_latency"
     manual = true
 

@@ -53,7 +53,6 @@ manual = [
     "Gst.Pipeline",
     "Gst.Pad",
     "Gst.Bin",
-    "Gst.FlowReturn",
     "GstRtsp.RTSPAuthMethod",
     "GstRtsp.RTSPUrl",
     "GstRtsp.RTSPResult",
@@ -62,6 +61,15 @@ manual = [
     "GstRtsp.RTSPProfile",
     "GstRtsp.RTSPLowerTrans"
 ]
+
+[[object]]
+name = "Gst.FlowReturn"
+status = "manual"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "gst::FlowSuccess"
+    err_type = "gst::FlowError"
 
 [[object]]
 name = "Gst.Object"
@@ -140,17 +148,6 @@ manual_traits = ["RTSPClientExtManual"]
 [[object]]
 name = "GstRtspServer.RTSPStream"
 status = "generate"
-manual_traits = ["RTSPStreamExtManual"]
-
-    [[object.function]]
-    name = "recv_rtcp"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
-
-    [[object.function]]
-    name = "recv_rtp"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
 
     [[object.function]]
     name = "query_position"
@@ -204,12 +201,6 @@ concurrency = "send"
 name = "GstRtspServer.RTSPStreamTransport"
 status = "generate"
 concurrency = "none"
-manual_traits = ["RTSPStreamTransportExtManual"]
-
-    [[object.function]]
-    name = "recv_data"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
 
     [[object.function]]
     name = "send_rtcp"

@@ -600,26 +600,6 @@ manual_traits = ["ElementExtManual"]
         bool_return_is_error = "Failed to sync state with parent"
 
     [[object.function]]
-    name = "change_state"
-    # Use Result<StateChangeSuccess, StateChangeError>
-    manual = true
-
-    [[object.function]]
-    name = "continue_state"
-    # Use Result<StateChangeSuccess, StateChangeError>
-    manual = true
-
-    [[object.function]]
-    name = "get_state"
-    # Use Result<StateChangeSuccess, StateChangeError>
-    manual = true
-
-    [[object.function]]
-    name = "set_state"
-    # Use Result<StateChangeSuccess, StateChangeError>
-    manual = true
-
-    [[object.function]]
     name = "query"
     # correct mutability
     manual = true
@@ -931,7 +911,7 @@ manual_traits = ["PadExtManual"]
     [[object.function]]
     name = "get_last_flow_return"
     # Use Result<FlowSuccess, FlowError>
-    manual = true
+    rename = "last_flow_result"
 
     [[object.function]]
     name = "query"
@@ -971,21 +951,6 @@ manual_traits = ["PadExtManual"]
     [[object.function]]
     name = "send_event"
     # Pass by value
-    manual = true
-
-    [[object.function]]
-    name = "link"
-    # Use Result<PadLinkSuccess, PadLinkError>
-    manual = true
-
-    [[object.function]]
-    name = "link_full"
-    # Use Result<PadLinkSuccess, PadLinkError>
-    manual = true
-
-    [[object.function]]
-    name = "store_sticky_event"
-    # Use Result<FlowSuccess, FlowError>
     manual = true
 
     [[object.function]]
@@ -1661,21 +1626,37 @@ status = "generate"
 name = "Gst.StateChangeReturn"
 status = "generate"
 must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "StateChangeSuccess"
+    err_type = "StateChangeError"
 
 [[object]]
 name = "Gst.FlowReturn"
 status = "generate"
 must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "FlowSuccess"
+    err_type = "FlowError"
 
 [[object]]
 name = "Gst.PadLinkReturn"
 status = "generate"
 must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "PadLinkSuccess"
+    err_type = "PadLinkError"
 
 [[object]]
 name = "Gst.ClockReturn"
 status = "generate"
 must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "ClockSuccess"
+    err_type = "ClockError"
 
 [[object]]
 name = "Gst.DateTime"

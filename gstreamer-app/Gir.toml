@@ -24,9 +24,17 @@ manual = [
     "Gst.Object",
     "Gst.Element",
     "Gst.URIHandler",
-    "Gst.FlowReturn",
     "Gst.Format",
 ]
+
+[[object]]
+name = "Gst.FlowReturn"
+status = "manual"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "gst::FlowSuccess"
+    err_type = "gst::FlowError"
 
 [[object]]
 name = "GstApp.AppSink"
@@ -52,16 +60,6 @@ final_type = true
     name = "try-pull-preroll"
     # Action signal
     ignore = true
-
-    [[object.signal]]
-    name = "new-sample"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
-
-    [[object.signal]]
-    name = "new-preroll"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
 
     [[object.signal]]
     name = "eos"
@@ -117,16 +115,6 @@ final_type = true
     name = "push-sample"
     # Action signal
     ignore = true
-
-    [[object.function]]
-    name = "end_of_stream"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
-
-    [[object.function]]
-    name = "push_sample"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
 
     [[object.function]]
     name = "set_latency"

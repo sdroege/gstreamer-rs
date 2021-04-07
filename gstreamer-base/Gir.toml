@@ -28,14 +28,30 @@ manual = [
     "Gst.Element",
     "Gst.BufferPool",
     "Gst.ClockTimeDiff",
-    "Gst.ClockReturn",
-    "Gst.FlowReturn",
     "Gst.Format",
     "Gst.Pad",
     "Gst.TypeFindProbability",
     "Gst.TagMergeMode",
     "GstBase.BaseParseFrame",
 ]
+
+[[object]]
+name = "Gst.ClockReturn"
+status = "manual"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "gst::ClockSuccess"
+    err_type = "gst::ClockError"
+
+[[object]]
+name = "Gst.FlowReturn"
+status = "manual"
+must_use = true
+    [object.conversion_type]
+    variant = "Result"
+    ok_type = "gst::FlowSuccess"
+    err_type = "gst::FlowError"
 
 [[object]]
 name = "GstBase.Adapter"
@@ -95,21 +111,6 @@ status = "generate"
 manual_traits = ["BaseSinkExtManual"]
 
     [[object.function]]
-    name = "wait"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
-
-    [[object.function]]
-    name = "wait_preroll"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
-
-    [[object.function]]
-    name = "wait_clock"
-    # Use Result<ClockSuccess, ClockError>
-    manual = true
-
-    [[object.function]]
     name = "query_latency"
     # Use Result
     manual = true
@@ -125,24 +126,9 @@ manual_traits = ["BaseSrcExtManual"]
         bool_return_is_error = "Failed to set caps"
 
     [[object.function]]
-    name = "start_complete"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
-
-    [[object.function]]
-    name = "start_wait"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
-
-    [[object.function]]
     name = "submit_buffer_list"
     # Pass by value, to be added manually
     ignore = true
-
-    [[object.function]]
-    name = "wait_playing"
-    # Use Result<FlowSuccess, FlowError>
-    manual = true
 
     [[object.function]]
     name = "query_latency"
