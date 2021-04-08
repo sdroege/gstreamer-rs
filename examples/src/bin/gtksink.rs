@@ -17,7 +17,6 @@ use gio::prelude::*;
 use gtk::prelude::*;
 
 use std::cell::RefCell;
-use std::env;
 
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
@@ -155,6 +154,5 @@ fn main() {
     let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE).unwrap();
 
     app.connect_activate(create_ui);
-    let args = env::args().collect::<Vec<_>>();
-    app.run(&args);
+    app.run();
 }

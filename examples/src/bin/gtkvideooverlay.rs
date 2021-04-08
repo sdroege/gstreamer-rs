@@ -25,8 +25,6 @@ use gio::prelude::*;
 
 use gtk::prelude::*;
 
-use std::env;
-
 use std::os::raw::c_void;
 
 use std::cell::RefCell;
@@ -269,6 +267,5 @@ fn main() {
     let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE).unwrap();
 
     app.connect_activate(create_ui);
-    let args = env::args().collect::<Vec<_>>();
-    app.run(&args);
+    app.run();
 }
