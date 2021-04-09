@@ -40,6 +40,10 @@ generate = [
     "GES.Group",
     "GES.UriClipAsset",
     "GES.UriSourceAsset",
+    "GES.OperationClip",
+    "GES.TransitionClip",
+    "GES.BaseTransitionClip",
+    "GES.VideoStandardTransitionType",
 ]
 
 [[object]]

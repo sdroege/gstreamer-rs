@@ -203,3 +203,466 @@ impl SetValue for EditMode {
         glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GESVideoStandardTransitionType")]
+pub enum VideoStandardTransitionType {
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_NONE")]
+    None,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BAR_WIPE_LR")]
+    BarWipeLr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BAR_WIPE_TB")]
+    BarWipeTb,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TL")]
+    BoxWipeTl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TR")]
+    BoxWipeTr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BR")]
+    BoxWipeBr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BL")]
+    BoxWipeBl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CI")]
+    FourBoxWipeCi,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CO")]
+    FourBoxWipeCo,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_V")]
+    BarndoorV,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_H")]
+    BarndoorH,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TC")]
+    BoxWipeTc,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_RC")]
+    BoxWipeRc,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BC")]
+    BoxWipeBc,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_LC")]
+    BoxWipeLc,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TL")]
+    DiagonalTl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TR")]
+    DiagonalTr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOWTIE_V")]
+    BowtieV,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BOWTIE_H")]
+    BowtieH,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DBL")]
+    BarndoorDbl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DTL")]
+    BarndoorDtl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DBD")]
+    MiscDiagonalDbd,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DD")]
+    MiscDiagonalDd,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_D")]
+    VeeD,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_L")]
+    VeeL,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_U")]
+    VeeU,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_R")]
+    VeeR,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_D")]
+    BarnveeD,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_L")]
+    BarnveeL,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_U")]
+    BarnveeU,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_R")]
+    BarnveeR,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_IRIS_RECT")]
+    IrisRect,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW12")]
+    ClockCw12,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW3")]
+    ClockCw3,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW6")]
+    ClockCw6,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW9")]
+    ClockCw9,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBV")]
+    PinwheelTbv,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBH")]
+    PinwheelTbh,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_FB")]
+    PinwheelFb,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_CT")]
+    FanCt,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_CR")]
+    FanCr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOV")]
+    DoublefanFov,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOH")]
+    DoublefanFoh,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWT")]
+    SinglesweepCwt,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWR")]
+    SinglesweepCwr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWB")]
+    SinglesweepCwb,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWL")]
+    SinglesweepCwl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PV")]
+    DoublesweepPv,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PD")]
+    DoublesweepPd,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OV")]
+    DoublesweepOv,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OH")]
+    DoublesweepOh,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_T")]
+    FanT,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_R")]
+    FanR,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_B")]
+    FanB,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_L")]
+    FanL,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIV")]
+    DoublefanFiv,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIH")]
+    DoublefanFih,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTL")]
+    SinglesweepCwtl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBL")]
+    SinglesweepCwbl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBR")]
+    SinglesweepCwbr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTR")]
+    SinglesweepCwtr,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDTL")]
+    DoublesweepPdtl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDBL")]
+    DoublesweepPdbl,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_T")]
+    SaloondoorT,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_L")]
+    SaloondoorL,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_B")]
+    SaloondoorB,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_R")]
+    SaloondoorR,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_R")]
+    WindshieldR,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_U")]
+    WindshieldU,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V")]
+    WindshieldV,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H")]
+    WindshieldH,
+    #[doc(alias = "GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE")]
+    Crossfade,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoStandardTransitionType {
+    type GlibType = ffi::GESVideoStandardTransitionType;
+
+    fn to_glib(&self) -> ffi::GESVideoStandardTransitionType {
+        match *self {
+            VideoStandardTransitionType::None => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_NONE,
+            VideoStandardTransitionType::BarWipeLr => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BAR_WIPE_LR
+            }
+            VideoStandardTransitionType::BarWipeTb => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BAR_WIPE_TB
+            }
+            VideoStandardTransitionType::BoxWipeTl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TL
+            }
+            VideoStandardTransitionType::BoxWipeTr => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TR
+            }
+            VideoStandardTransitionType::BoxWipeBr => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BR
+            }
+            VideoStandardTransitionType::BoxWipeBl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BL
+            }
+            VideoStandardTransitionType::FourBoxWipeCi => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CI
+            }
+            VideoStandardTransitionType::FourBoxWipeCo => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CO
+            }
+            VideoStandardTransitionType::BarndoorV => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_V
+            }
+            VideoStandardTransitionType::BarndoorH => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_H
+            }
+            VideoStandardTransitionType::BoxWipeTc => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TC
+            }
+            VideoStandardTransitionType::BoxWipeRc => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_RC
+            }
+            VideoStandardTransitionType::BoxWipeBc => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BC
+            }
+            VideoStandardTransitionType::BoxWipeLc => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_LC
+            }
+            VideoStandardTransitionType::DiagonalTl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TL
+            }
+            VideoStandardTransitionType::DiagonalTr => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TR
+            }
+            VideoStandardTransitionType::BowtieV => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOWTIE_V
+            }
+            VideoStandardTransitionType::BowtieH => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BOWTIE_H
+            }
+            VideoStandardTransitionType::BarndoorDbl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DBL
+            }
+            VideoStandardTransitionType::BarndoorDtl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DTL
+            }
+            VideoStandardTransitionType::MiscDiagonalDbd => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DBD
+            }
+            VideoStandardTransitionType::MiscDiagonalDd => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DD
+            }
+            VideoStandardTransitionType::VeeD => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_D,
+            VideoStandardTransitionType::VeeL => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_L,
+            VideoStandardTransitionType::VeeU => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_U,
+            VideoStandardTransitionType::VeeR => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_R,
+            VideoStandardTransitionType::BarnveeD => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_D
+            }
+            VideoStandardTransitionType::BarnveeL => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_L
+            }
+            VideoStandardTransitionType::BarnveeU => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_U
+            }
+            VideoStandardTransitionType::BarnveeR => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_R
+            }
+            VideoStandardTransitionType::IrisRect => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_IRIS_RECT
+            }
+            VideoStandardTransitionType::ClockCw12 => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW12
+            }
+            VideoStandardTransitionType::ClockCw3 => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW3
+            }
+            VideoStandardTransitionType::ClockCw6 => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW6
+            }
+            VideoStandardTransitionType::ClockCw9 => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW9
+            }
+            VideoStandardTransitionType::PinwheelTbv => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBV
+            }
+            VideoStandardTransitionType::PinwheelTbh => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBH
+            }
+            VideoStandardTransitionType::PinwheelFb => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_FB
+            }
+            VideoStandardTransitionType::FanCt => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_CT,
+            VideoStandardTransitionType::FanCr => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_CR,
+            VideoStandardTransitionType::DoublefanFov => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOV
+            }
+            VideoStandardTransitionType::DoublefanFoh => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOH
+            }
+            VideoStandardTransitionType::SinglesweepCwt => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWT
+            }
+            VideoStandardTransitionType::SinglesweepCwr => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWR
+            }
+            VideoStandardTransitionType::SinglesweepCwb => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWB
+            }
+            VideoStandardTransitionType::SinglesweepCwl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWL
+            }
+            VideoStandardTransitionType::DoublesweepPv => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PV
+            }
+            VideoStandardTransitionType::DoublesweepPd => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PD
+            }
+            VideoStandardTransitionType::DoublesweepOv => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OV
+            }
+            VideoStandardTransitionType::DoublesweepOh => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OH
+            }
+            VideoStandardTransitionType::FanT => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_T,
+            VideoStandardTransitionType::FanR => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_R,
+            VideoStandardTransitionType::FanB => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_B,
+            VideoStandardTransitionType::FanL => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_L,
+            VideoStandardTransitionType::DoublefanFiv => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIV
+            }
+            VideoStandardTransitionType::DoublefanFih => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIH
+            }
+            VideoStandardTransitionType::SinglesweepCwtl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTL
+            }
+            VideoStandardTransitionType::SinglesweepCwbl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBL
+            }
+            VideoStandardTransitionType::SinglesweepCwbr => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBR
+            }
+            VideoStandardTransitionType::SinglesweepCwtr => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTR
+            }
+            VideoStandardTransitionType::DoublesweepPdtl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDTL
+            }
+            VideoStandardTransitionType::DoublesweepPdbl => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDBL
+            }
+            VideoStandardTransitionType::SaloondoorT => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_T
+            }
+            VideoStandardTransitionType::SaloondoorL => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_L
+            }
+            VideoStandardTransitionType::SaloondoorB => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_B
+            }
+            VideoStandardTransitionType::SaloondoorR => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_R
+            }
+            VideoStandardTransitionType::WindshieldR => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_R
+            }
+            VideoStandardTransitionType::WindshieldU => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_U
+            }
+            VideoStandardTransitionType::WindshieldV => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V
+            }
+            VideoStandardTransitionType::WindshieldH => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H
+            }
+            VideoStandardTransitionType::Crossfade => {
+                ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE
+            }
+            VideoStandardTransitionType::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GESVideoStandardTransitionType> for VideoStandardTransitionType {
+    unsafe fn from_glib(value: ffi::GESVideoStandardTransitionType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoStandardTransitionType::None,
+            1 => VideoStandardTransitionType::BarWipeLr,
+            2 => VideoStandardTransitionType::BarWipeTb,
+            3 => VideoStandardTransitionType::BoxWipeTl,
+            4 => VideoStandardTransitionType::BoxWipeTr,
+            5 => VideoStandardTransitionType::BoxWipeBr,
+            6 => VideoStandardTransitionType::BoxWipeBl,
+            7 => VideoStandardTransitionType::FourBoxWipeCi,
+            8 => VideoStandardTransitionType::FourBoxWipeCo,
+            21 => VideoStandardTransitionType::BarndoorV,
+            22 => VideoStandardTransitionType::BarndoorH,
+            23 => VideoStandardTransitionType::BoxWipeTc,
+            24 => VideoStandardTransitionType::BoxWipeRc,
+            25 => VideoStandardTransitionType::BoxWipeBc,
+            26 => VideoStandardTransitionType::BoxWipeLc,
+            41 => VideoStandardTransitionType::DiagonalTl,
+            42 => VideoStandardTransitionType::DiagonalTr,
+            43 => VideoStandardTransitionType::BowtieV,
+            44 => VideoStandardTransitionType::BowtieH,
+            45 => VideoStandardTransitionType::BarndoorDbl,
+            46 => VideoStandardTransitionType::BarndoorDtl,
+            47 => VideoStandardTransitionType::MiscDiagonalDbd,
+            48 => VideoStandardTransitionType::MiscDiagonalDd,
+            61 => VideoStandardTransitionType::VeeD,
+            62 => VideoStandardTransitionType::VeeL,
+            63 => VideoStandardTransitionType::VeeU,
+            64 => VideoStandardTransitionType::VeeR,
+            65 => VideoStandardTransitionType::BarnveeD,
+            66 => VideoStandardTransitionType::BarnveeL,
+            67 => VideoStandardTransitionType::BarnveeU,
+            68 => VideoStandardTransitionType::BarnveeR,
+            101 => VideoStandardTransitionType::IrisRect,
+            201 => VideoStandardTransitionType::ClockCw12,
+            202 => VideoStandardTransitionType::ClockCw3,
+            203 => VideoStandardTransitionType::ClockCw6,
+            204 => VideoStandardTransitionType::ClockCw9,
+            205 => VideoStandardTransitionType::PinwheelTbv,
+            206 => VideoStandardTransitionType::PinwheelTbh,
+            207 => VideoStandardTransitionType::PinwheelFb,
+            211 => VideoStandardTransitionType::FanCt,
+            212 => VideoStandardTransitionType::FanCr,
+            213 => VideoStandardTransitionType::DoublefanFov,
+            214 => VideoStandardTransitionType::DoublefanFoh,
+            221 => VideoStandardTransitionType::SinglesweepCwt,
+            222 => VideoStandardTransitionType::SinglesweepCwr,
+            223 => VideoStandardTransitionType::SinglesweepCwb,
+            224 => VideoStandardTransitionType::SinglesweepCwl,
+            225 => VideoStandardTransitionType::DoublesweepPv,
+            226 => VideoStandardTransitionType::DoublesweepPd,
+            227 => VideoStandardTransitionType::DoublesweepOv,
+            228 => VideoStandardTransitionType::DoublesweepOh,
+            231 => VideoStandardTransitionType::FanT,
+            232 => VideoStandardTransitionType::FanR,
+            233 => VideoStandardTransitionType::FanB,
+            234 => VideoStandardTransitionType::FanL,
+            235 => VideoStandardTransitionType::DoublefanFiv,
+            236 => VideoStandardTransitionType::DoublefanFih,
+            241 => VideoStandardTransitionType::SinglesweepCwtl,
+            242 => VideoStandardTransitionType::SinglesweepCwbl,
+            243 => VideoStandardTransitionType::SinglesweepCwbr,
+            244 => VideoStandardTransitionType::SinglesweepCwtr,
+            245 => VideoStandardTransitionType::DoublesweepPdtl,
+            246 => VideoStandardTransitionType::DoublesweepPdbl,
+            251 => VideoStandardTransitionType::SaloondoorT,
+            252 => VideoStandardTransitionType::SaloondoorL,
+            253 => VideoStandardTransitionType::SaloondoorB,
+            254 => VideoStandardTransitionType::SaloondoorR,
+            261 => VideoStandardTransitionType::WindshieldR,
+            262 => VideoStandardTransitionType::WindshieldU,
+            263 => VideoStandardTransitionType::WindshieldV,
+            264 => VideoStandardTransitionType::WindshieldH,
+            512 => VideoStandardTransitionType::Crossfade,
+            value => VideoStandardTransitionType::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoStandardTransitionType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::ges_video_standard_transition_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoStandardTransitionType {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoStandardTransitionType {
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoStandardTransitionType {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}

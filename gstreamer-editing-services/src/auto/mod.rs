@@ -11,6 +11,9 @@ mod base_effect;
 pub use self::base_effect::BaseEffectExt;
 pub use self::base_effect::{BaseEffect, NONE_BASE_EFFECT};
 
+mod base_transition_clip;
+pub use self::base_transition_clip::{BaseTransitionClip, NONE_BASE_TRANSITION_CLIP};
+
 mod clip;
 pub use self::clip::ClipExt;
 pub use self::clip::{Clip, NONE_CLIP};
@@ -34,6 +37,9 @@ pub use self::group::{Group, NONE_GROUP};
 mod layer;
 pub use self::layer::LayerExt;
 pub use self::layer::{Layer, NONE_LAYER};
+
+mod operation_clip;
+pub use self::operation_clip::{OperationClip, NONE_OPERATION_CLIP};
 
 mod pipeline;
 pub use self::pipeline::GESPipelineExt;
@@ -59,6 +65,10 @@ mod track_element;
 pub use self::track_element::TrackElementExt;
 pub use self::track_element::{TrackElement, NONE_TRACK_ELEMENT};
 
+mod transition_clip;
+pub use self::transition_clip::TransitionClipExt;
+pub use self::transition_clip::{TransitionClip, NONE_TRANSITION_CLIP};
+
 mod uri_clip;
 pub use self::uri_clip::UriClipExt;
 pub use self::uri_clip::{UriClip, NONE_URI_CLIP};
@@ -74,6 +84,7 @@ pub use self::uri_source_asset::{UriSourceAsset, NONE_URI_SOURCE_ASSET};
 mod enums;
 pub use self::enums::Edge;
 pub use self::enums::EditMode;
+pub use self::enums::VideoStandardTransitionType;
 
 mod flags;
 pub use self::flags::PipelineFlags;
@@ -98,6 +109,7 @@ pub mod traits {
     pub use super::TimelineElementExt;
     pub use super::TimelineExt;
     pub use super::TrackElementExt;
+    pub use super::TransitionClipExt;
     pub use super::UriClipAssetExt;
     pub use super::UriClipExt;
     pub use super::UriSourceAssetExt;
