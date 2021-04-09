@@ -503,6 +503,12 @@ Method to call to destroy
 # Returns
 
 `true` if the translation functions were set.
+<!-- struct BaseTransitionClip -->
+
+
+# Implements
+
+[`OperationClipExt`](trait.OperationClipExt.html), [`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
 <!-- struct Clip -->
 `Clip`-s are the core objects of a `Layer`. Each clip may exist in
 a single layer but may control several `TrackElement`-s that span
@@ -690,7 +696,7 @@ Trait containing all `Clip` methods.
 
 # Implementors
 
-[`Clip`](struct.Clip.html)
+[`Clip`](struct.Clip.html), [`OperationClip`](struct.OperationClip.html)
 <!-- trait ClipExt::fn add_asset -->
 Extracts a `TrackElement` from an asset and adds it to the clip.
 This can be used to add effects that derive from the asset to the
@@ -1513,7 +1519,7 @@ Trait containing all `Extractable` methods.
 
 # Implementors
 
-[`BaseEffect`](struct.BaseEffect.html), [`Clip`](struct.Clip.html), [`Container`](struct.Container.html), [`Effect`](struct.Effect.html), [`Extractable`](struct.Extractable.html), [`Group`](struct.Group.html), [`Layer`](struct.Layer.html), [`TimelineElement`](struct.TimelineElement.html), [`Timeline`](struct.Timeline.html), [`TrackElement`](struct.TrackElement.html), [`UriClip`](struct.UriClip.html)
+[`BaseEffect`](struct.BaseEffect.html), [`BaseTransitionClip`](struct.BaseTransitionClip.html), [`Clip`](struct.Clip.html), [`Container`](struct.Container.html), [`Effect`](struct.Effect.html), [`Extractable`](struct.Extractable.html), [`Group`](struct.Group.html), [`Layer`](struct.Layer.html), [`OperationClip`](struct.OperationClip.html), [`TimelineElement`](struct.TimelineElement.html), [`Timeline`](struct.Timeline.html), [`TrackElement`](struct.TrackElement.html), [`TransitionClip`](struct.TransitionClip.html), [`UriClip`](struct.UriClip.html)
 <!-- trait ExtractableExt::fn get_asset -->
 Get the asset that has been set on the extractable object.
 
@@ -1935,6 +1941,12 @@ for the change to be taken into account.
 use `TimelineExt::move_layer` instead. This deprecation means
 that you will not need to handle layer priorities at all yourself, GES
 will make sure there is never 'gaps' between layer priorities.
+<!-- struct OperationClip -->
+Operations are any kind of object that both outputs AND consumes data.
+
+# Implements
+
+[`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
 <!-- struct Pipeline -->
 A `Pipeline` can take an audio-video `Timeline` and conveniently
 link its `Track`-s to an internal `playsink` element, for
@@ -2059,7 +2071,7 @@ The mode to set for `self`
 
 `true` if the mode of `self` was successfully set to `mode`.
 <!-- trait GESPipelineExt::fn set_render_settings -->
-Specifies the encoding to be used by the pipeline to render its
+Specifies encoding setting to be used by the pipeline to render its
 `Pipeline:timeline`, and where the result should be written to.
 
 This method **must** be called before setting the pipeline mode to
@@ -2154,7 +2166,9 @@ forced decoding (the underlying `encodebin` has its
 <!-- struct PipelineFlags::const SMART_RENDER -->
 Render the `Pipeline:timeline`,
 avoiding decoding/reencoding (the underlying `encodebin` has its
-`encodebin:avoid-reencoding` property set to `true`)
+`encodebin:avoid-reencoding` property set to `true`).
+> NOTE: Smart rendering can not work in tracks where `Track:mixing`
+> is enabled.
 <!-- struct Project -->
 The `Project` is used to control a set of `Asset` and is a
 `Asset` with `GES_TYPE_TIMELINE` as `extractable_type` itself. That
@@ -2884,6 +2898,21 @@ The layer that was added to `timeline`
 Will be emitted after the layer is removed from the timeline.
 ## `layer`
 The layer that was removed from `timeline`
+<!-- trait TimelineExt::fn connect_select_element_track -->
+Simplified version of `Timeline::select-tracks-for-object` which only
+allows `track_element` to be added to a single `Track`.
+
+Feature: `v1_18`
+
+## `clip`
+The clip that `track_element` is being added to
+## `track_element`
+The element being added
+
+# Returns
+
+A track to put `track_element` into, or `None` if
+it should be discarded.
 <!-- trait TimelineExt::fn connect_select_tracks_for_object -->
 This will be emitted whenever the timeline needs to determine which
 tracks a clip's children should be added to. The track element will
@@ -3993,6 +4022,9 @@ Sets the `Track:mixing` for the track.
 Whether `self` should be mixing
 <!-- trait GESTrackExt::fn set_restriction_caps -->
 Sets the `Track:restriction-caps` for the track.
+
+> **NOTE**: Restriction caps are **not** taken into account when
+> using `Pipeline:mode`=`PipelineFlags::SmartRender`.
 ## `caps`
 The new restriction-caps for `self`
 <!-- trait GESTrackExt::fn set_timeline -->
@@ -4714,6 +4746,51 @@ A video track
 A text (subtitle) track
 <!-- struct TrackType::const CUSTOM -->
 A custom-content track
+<!-- struct TransitionClip -->
+Creates an object that mixes together the two underlying objects, A and B.
+The A object is assumed to have a higher prioirity (lower number) than the
+B object. At the transition in point, only A will be visible, and by the
+end only B will be visible.
+
+The shape of the video transition depends on the value of the "vtype"
+property. The default value is "crossfade". For audio, only "crossfade" is
+supported.
+
+The ID of the ExtractableType is the nickname of the vtype property value. Note
+that this value can be changed after creation and the GESExtractable.asset value
+will be updated when needed.
+
+# Implements
+
+[`TransitionClipExt`](trait.TransitionClipExt.html), [`BaseTransitionClipExt`](trait.BaseTransitionClipExt.html), [`OperationClipExt`](trait.OperationClipExt.html), [`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+<!-- trait TransitionClipExt -->
+Trait containing all `TransitionClip` methods.
+
+# Implementors
+
+[`TransitionClip`](struct.TransitionClip.html)
+<!-- impl TransitionClip::fn new -->
+Creates a new `TransitionClip`.
+## `vtype`
+the type of transition to create
+
+# Returns
+
+a newly created `TransitionClip`,
+or `None` if something went wrong.
+<!-- impl TransitionClip::fn new_for_nick -->
+Creates a new `TransitionClip` for the provided `nick`.
+## `nick`
+a string representing the type of transition to create
+
+# Returns
+
+The newly created `TransitionClip`,
+or `None` if something went wrong
+<!-- trait TransitionClipExt::fn get_property_vtype -->
+a `VideoStandardTransitionType` representing the wipe to use
+<!-- trait TransitionClipExt::fn set_property_vtype -->
+a `VideoStandardTransitionType` representing the wipe to use
 <!-- struct UriClip -->
 Represents all the output streams from a particular uri. It is assumed that
 the URI points to a file of some type.
@@ -4939,3 +5016,148 @@ Feature: `v1_18`
 
 `true` if the video stream corresponds to an image (i.e. only
 contains one frame)
+<!-- enum VideoStandardTransitionType -->
+<!-- enum VideoStandardTransitionType::variant None -->
+Transition type has not been set,
+<!-- enum VideoStandardTransitionType::variant BarWipeLr -->
+A bar moves from left to right,
+<!-- enum VideoStandardTransitionType::variant BarWipeTb -->
+A bar moves from top to bottom,
+<!-- enum VideoStandardTransitionType::variant BoxWipeTl -->
+A box expands from the upper-left corner to the lower-right corner,
+<!-- enum VideoStandardTransitionType::variant BoxWipeTr -->
+A box expands from the upper-right corner to the lower-left corner,
+<!-- enum VideoStandardTransitionType::variant BoxWipeBr -->
+A box expands from the lower-right corner to the upper-left corner,
+<!-- enum VideoStandardTransitionType::variant BoxWipeBl -->
+A box expands from the lower-left corner to the upper-right corner,
+<!-- enum VideoStandardTransitionType::variant FourBoxWipeCi -->
+A box shape expands from each of the four corners toward the center,
+<!-- enum VideoStandardTransitionType::variant FourBoxWipeCo -->
+A box shape expands from the center of each quadrant toward the corners of each quadrant,
+<!-- enum VideoStandardTransitionType::variant BarndoorV -->
+A central, vertical line splits and expands toward the left and right edges,
+<!-- enum VideoStandardTransitionType::variant BarndoorH -->
+A central, horizontal line splits and expands toward the top and bottom edges,
+<!-- enum VideoStandardTransitionType::variant BoxWipeTc -->
+A box expands from the top edge's midpoint to the bottom corners,
+<!-- enum VideoStandardTransitionType::variant BoxWipeRc -->
+A box expands from the right edge's midpoint to the left corners,
+<!-- enum VideoStandardTransitionType::variant BoxWipeBc -->
+A box expands from the bottom edge's midpoint to the top corners,
+<!-- enum VideoStandardTransitionType::variant BoxWipeLc -->
+A box expands from the left edge's midpoint to the right corners,
+<!-- enum VideoStandardTransitionType::variant DiagonalTl -->
+A diagonal line moves from the upper-left corner to the lower-right corner,
+<!-- enum VideoStandardTransitionType::variant DiagonalTr -->
+A diagonal line moves from the upper right corner to the lower-left corner,
+<!-- enum VideoStandardTransitionType::variant BowtieV -->
+Two wedge shapes slide in from the top and bottom edges toward the center,
+<!-- enum VideoStandardTransitionType::variant BowtieH -->
+Two wedge shapes slide in from the left and right edges toward the center,
+<!-- enum VideoStandardTransitionType::variant BarndoorDbl -->
+A diagonal line from the lower-left to upper-right corners splits and expands toward the opposite corners,
+<!-- enum VideoStandardTransitionType::variant BarndoorDtl -->
+A diagonal line from upper-left to lower-right corners splits and expands toward the opposite corners,
+<!-- enum VideoStandardTransitionType::variant MiscDiagonalDbd -->
+Four wedge shapes split from the center and retract toward the four edges,
+<!-- enum VideoStandardTransitionType::variant MiscDiagonalDd -->
+A diamond connecting the four edge midpoints simultaneously contracts toward the center and expands toward the edges,
+<!-- enum VideoStandardTransitionType::variant VeeD -->
+A wedge shape moves from top to bottom,
+<!-- enum VideoStandardTransitionType::variant VeeL -->
+A wedge shape moves from right to left,
+<!-- enum VideoStandardTransitionType::variant VeeU -->
+A wedge shape moves from bottom to top,
+<!-- enum VideoStandardTransitionType::variant VeeR -->
+A wedge shape moves from left to right,
+<!-- enum VideoStandardTransitionType::variant BarnveeD -->
+A 'V' shape extending from the bottom edge's midpoint to the opposite corners contracts toward the center and expands toward the edges,
+<!-- enum VideoStandardTransitionType::variant BarnveeL -->
+A 'V' shape extending from the left edge's midpoint to the opposite corners contracts toward the center and expands toward the edges,
+<!-- enum VideoStandardTransitionType::variant BarnveeU -->
+A 'V' shape extending from the top edge's midpoint to the opposite corners contracts toward the center and expands toward the edges,
+<!-- enum VideoStandardTransitionType::variant BarnveeR -->
+A 'V' shape extending from the right edge's midpoint to the opposite corners contracts toward the center and expands toward the edges,
+<!-- enum VideoStandardTransitionType::variant IrisRect -->
+A rectangle expands from the center.,
+<!-- enum VideoStandardTransitionType::variant ClockCw12 -->
+A radial hand sweeps clockwise from the twelve o'clock position,
+<!-- enum VideoStandardTransitionType::variant ClockCw3 -->
+A radial hand sweeps clockwise from the three o'clock position,
+<!-- enum VideoStandardTransitionType::variant ClockCw6 -->
+A radial hand sweeps clockwise from the six o'clock position,
+<!-- enum VideoStandardTransitionType::variant ClockCw9 -->
+A radial hand sweeps clockwise from the nine o'clock position,
+<!-- enum VideoStandardTransitionType::variant PinwheelTbv -->
+Two radial hands sweep clockwise from the twelve and six o'clock positions,
+<!-- enum VideoStandardTransitionType::variant PinwheelTbh -->
+Two radial hands sweep clockwise from the nine and three o'clock positions,
+<!-- enum VideoStandardTransitionType::variant PinwheelFb -->
+Four radial hands sweep clockwise,
+<!-- enum VideoStandardTransitionType::variant FanCt -->
+A fan unfolds from the top edge, the fan axis at the center,
+<!-- enum VideoStandardTransitionType::variant FanCr -->
+A fan unfolds from the right edge, the fan axis at the center,
+<!-- enum VideoStandardTransitionType::variant DoublefanFov -->
+Two fans, their axes at the center, unfold from the top and bottom,
+<!-- enum VideoStandardTransitionType::variant DoublefanFoh -->
+Two fans, their axes at the center, unfold from the left and right,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwt -->
+A radial hand sweeps clockwise from the top edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwr -->
+A radial hand sweeps clockwise from the right edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwb -->
+A radial hand sweeps clockwise from the bottom edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwl -->
+A radial hand sweeps clockwise from the left edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant DoublesweepPv -->
+Two radial hands sweep clockwise and counter-clockwise from the top and bottom edges' midpoints,
+<!-- enum VideoStandardTransitionType::variant DoublesweepPd -->
+Two radial hands sweep clockwise and counter-clockwise from the left and right edges' midpoints,
+<!-- enum VideoStandardTransitionType::variant DoublesweepOv -->
+Two radial hands attached at the top and bottom edges' midpoints sweep from right to left,
+<!-- enum VideoStandardTransitionType::variant DoublesweepOh -->
+Two radial hands attached at the left and right edges' midpoints sweep from top to bottom,
+<!-- enum VideoStandardTransitionType::variant FanT -->
+A fan unfolds from the bottom, the fan axis at the top edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant FanR -->
+A fan unfolds from the left, the fan axis at the right edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant FanB -->
+A fan unfolds from the top, the fan axis at the bottom edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant FanL -->
+A fan unfolds from the right, the fan axis at the left edge's midpoint,
+<!-- enum VideoStandardTransitionType::variant DoublefanFiv -->
+Two fans, their axes at the top and bottom, unfold from the center,
+<!-- enum VideoStandardTransitionType::variant DoublefanFih -->
+Two fans, their axes at the left and right, unfold from the center,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwtl -->
+A radial hand sweeps clockwise from the upper-left corner,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwbl -->
+A radial hand sweeps counter-clockwise from the lower-left corner.,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwbr -->
+A radial hand sweeps clockwise from the lower-right corner,
+<!-- enum VideoStandardTransitionType::variant SinglesweepCwtr -->
+A radial hand sweeps counter-clockwise from the upper-right corner,
+<!-- enum VideoStandardTransitionType::variant DoublesweepPdtl -->
+Two radial hands attached at the upper-left and lower-right corners sweep down and up,
+<!-- enum VideoStandardTransitionType::variant DoublesweepPdbl -->
+Two radial hands attached at the lower-left and upper-right corners sweep down and up,
+<!-- enum VideoStandardTransitionType::variant SaloondoorT -->
+Two radial hands attached at the upper-left and upper-right corners sweep down,
+<!-- enum VideoStandardTransitionType::variant SaloondoorL -->
+Two radial hands attached at the upper-left and lower-left corners sweep to the right,
+<!-- enum VideoStandardTransitionType::variant SaloondoorB -->
+Two radial hands attached at the lower-left and lower-right corners sweep up,
+<!-- enum VideoStandardTransitionType::variant SaloondoorR -->
+Two radial hands attached at the upper-right and lower-right corners sweep to the left,
+<!-- enum VideoStandardTransitionType::variant WindshieldR -->
+Two radial hands attached at the midpoints of the top and bottom halves sweep from right to left,
+<!-- enum VideoStandardTransitionType::variant WindshieldU -->
+Two radial hands attached at the midpoints of the left and right halves sweep from top to bottom,
+<!-- enum VideoStandardTransitionType::variant WindshieldV -->
+Two sets of radial hands attached at the midpoints of the top and bottom halves sweep from top to bottom and bottom to top,
+<!-- enum VideoStandardTransitionType::variant WindshieldH -->
+Two sets of radial hands attached at the midpoints of the left and right halves sweep from left to right and right to left,
+<!-- enum VideoStandardTransitionType::variant Crossfade -->
+Crossfade
