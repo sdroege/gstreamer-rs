@@ -618,7 +618,16 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
         #[allow(clippy::single_match)]
         events_loop.poll_events(|event| match event {
             glutin::Event::WindowEvent { event, .. } => match event {
-                glutin::WindowEvent::CloseRequested => running = false,
+                glutin::WindowEvent::CloseRequested
+                | glutin::WindowEvent::KeyboardInput {
+                    input:
+                        glutin::KeyboardInput {
+                            state: glutin::ElementState::Released,
+                            virtual_keycode: Some(glutin::VirtualKeyCode::Escape),
+                            ..
+                        },
+                    ..
+                } => running = false,
                 glutin::WindowEvent::Resized(logical_size) => {
                     let dpi_factor = windowed_context.window().get_hidpi_factor();
                     windowed_context.resize(logical_size.to_physical(dpi_factor));
