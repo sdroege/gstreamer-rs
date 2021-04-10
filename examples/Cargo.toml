@@ -162,7 +162,6 @@ required-features = ["ges"]
 [[bin]]
 name = "glupload"
 required-features = ["gl"]
-features = ["gst-gl-egl", "gst-gl-wayland", "gst-gl-x11"]
 
 [[bin]]
 name = "subclass"
