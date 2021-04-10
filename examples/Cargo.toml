@@ -26,7 +26,6 @@ gtk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 gio = { git = "https://github.com/gtk-rs/gtk-rs", optional = true }
 anyhow = "1.0"
-cfg-if = "1.0"
 derive_more = "0.99.5"
 futures = "0.3"
 byte-slice-cast = "1"

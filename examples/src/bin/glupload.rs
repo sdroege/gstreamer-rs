@@ -356,27 +356,31 @@ impl App {
             {
                 #[cfg(any(feature = "gst-gl-egl", feature = "gst-gl-wayland"))]
                 RawHandle::Egl(egl_context) => {
-                    cfg_if::cfg_if! {
-                        if #[cfg(feature = "gst-gl-egl")] {
-                            let gl_display = if let Some(display) =
-                                unsafe { windowed_context.get_egl_display() }
-                            {
-                                unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }.unwrap()
-                            } else {
-                                panic!("EGL context without EGL display");
-                            };
-                        } else if #[cfg(feature = "gst-gl-wayland")] {
-                            let gl_display = if let Some(display) = inner_window.get_wayland_display() {
-                                unsafe { gst_gl_wayland::GLDisplayWayland::with_display(display as usize) }.unwrap()
-                            } else {
-                                panic!("Wayland window without Wayland display");
-                            };
-                        }
-                    }
+                    let mut gl_display = None;
+
+                    #[cfg(feature = "gst-gl-egl")]
+                    if let Some(display) = unsafe { windowed_context.get_egl_display() } {
+                        gl_display = Some(
+                            unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }
+                                .unwrap()
+                                .upcast::<gst_gl::GLDisplay>(),
+                        )
+                    };
+
+                    #[cfg(feature = "gst-gl-wayland")]
+                    if let Some(display) = inner_window.get_wayland_display() {
+                        gl_display = Some(
+                            unsafe {
+                                gst_gl_wayland::GLDisplayWayland::with_display(display as usize)
+                            }
+                            .unwrap()
+                            .upcast::<gst_gl::GLDisplay>(),
+                        )
+                    };
 
                     (
                         egl_context as usize,
-                        gl_display.upcast::<gst_gl::GLDisplay>(),
+                        gl_display.expect("Could not retrieve GLDisplay through EGL context and/or Wayland display"),
                         gst_gl::GLPlatform::EGL,
                     )
                 }
