@@ -13,7 +13,6 @@ use std::ffi::CStr;
 use std::mem;
 use std::ptr;
 use std::sync;
-use std::sync::mpsc;
 
 use anyhow::Error;
 use derive_more::{Display, Error};
@@ -314,12 +313,18 @@ fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
     }
 }
 
+#[derive(Debug)]
+enum Message {
+    Sample(gst::Sample),
+    BusEvent,
+}
+
 struct App {
     pipeline: gst::Pipeline,
     appsink: gst_app::AppSink,
     glupload: gst::Element,
     bus: gst::Bus,
-    event_loop: glutin::event_loop::EventLoop<()>,
+    event_loop: glutin::event_loop::EventLoop<Message>,
     windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
     shared_context: gst_gl::GLContext,
 }
@@ -333,7 +338,7 @@ impl App {
             .get_bus()
             .expect("Pipeline without bus. Shouldn't happen!");
 
-        let event_loop = glutin::event_loop::EventLoop::new();
+        let event_loop = glutin::event_loop::EventLoop::with_user_event();
         let window = glutin::window::WindowBuilder::new().with_title("GL rendering");
         let windowed_context = glutin::ContextBuilder::new()
             .with_vsync(true)
@@ -447,7 +452,7 @@ impl App {
                     _ => (),
                 }
 
-                if let Err(e) = event_proxy.lock().unwrap().send_event(()) {
+                if let Err(e) = event_proxy.lock().unwrap().send_event(Message::BusEvent) {
                     eprintln!("Failed to send BusEvent to event proxy: {}", e)
                 }
 
@@ -468,12 +473,8 @@ impl App {
         })
     }
 
-    fn setup(
-        &self,
-        event_loop: &glutin::event_loop::EventLoop<()>,
-    ) -> Result<mpsc::Receiver<gst::Sample>, Error> {
-        let events_proxy = event_loop.create_proxy();
-        let (sender, receiver) = mpsc::channel();
+    fn setup(&self, event_loop: &glutin::event_loop::EventLoop<Message>) -> Result<(), Error> {
+        let event_proxy = event_loop.create_proxy();
         self.appsink.set_callbacks(
             gst_app::AppSinkCallbacks::builder()
                 .new_sample(move |appsink| {
@@ -504,21 +505,25 @@ impl App {
                             })?;
                     }
 
-                    sender
-                        .send(sample)
-                        .map(|_| gst::FlowSuccess::Ok)
-                        .map_err(|_| gst::FlowError::Error)?;
+                    event_proxy
+                        .send_event(Message::Sample(sample))
+                        .map(|()| gst::FlowSuccess::Ok)
+                        .map_err(|e| {
+                            element_error!(
+                                appsink,
+                                gst::ResourceError::Failed,
+                                ("Failed to send sample to event loop: {}", e)
+                            );
 
-                    let _ = events_proxy.send_event(());
-
-                    Ok(gst::FlowSuccess::Ok)
+                            gst::FlowError::Error
+                        })
                 })
                 .build(),
         );
 
         self.pipeline.set_state(gst::State::Playing)?;
 
-        Ok(receiver)
+        Ok(())
     }
 
     fn map_gl_api(api: glutin::Api) -> gst_gl::GLAPI {
@@ -601,7 +606,7 @@ impl App {
 }
 
 fn main_loop(app: App) -> Result<(), Error> {
-    let receiver = app.setup(&app.event_loop)?;
+    app.setup(&app.event_loop)?;
 
     println!(
         "Pixel format of the window's GL context {:?}",
@@ -650,38 +655,37 @@ fn main_loop(app: App) -> Result<(), Error> {
                 _ => (),
             },
             glutin::event::Event::RedrawRequested(_) => needs_redraw = true,
-            _ => (),
-        }
+            // Receive a frame
+            glutin::event::Event::UserEvent(Message::Sample(sample)) => {
+                let buffer = sample.get_buffer_owned().unwrap();
+                let info = sample
+                    .get_caps()
+                    .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
+                    .unwrap();
 
-        // Handle all pending messages. Whenever there is a message we will
-        // wake up the events loop above
-        App::handle_messages(&bus).unwrap();
+                {
+                    if gst_gl_context.is_none() {
+                        gst_gl_context = glupload
+                            .get_property("context")
+                            .unwrap()
+                            .get::<gst_gl::GLContext>()
+                            .unwrap();
+                    }
 
-        // get the last frame in channel
-        if let Some(sample) = receiver.try_iter().last() {
-            let buffer = sample.get_buffer_owned().unwrap();
-            let info = sample
-                .get_caps()
-                .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
-                .unwrap();
-
-            {
-                if gst_gl_context.is_none() {
-                    gst_gl_context = glupload
-                        .get_property("context")
-                        .unwrap()
-                        .get::<gst_gl::GLContext>()
-                        .unwrap();
+                    let sync_meta = buffer.get_meta::<gst_gl::GLSyncMeta>().unwrap();
+                    sync_meta.set_sync_point(gst_gl_context.as_ref().unwrap());
                 }
 
-                let sync_meta = buffer.get_meta::<gst_gl::GLSyncMeta>().unwrap();
-                sync_meta.set_sync_point(gst_gl_context.as_ref().unwrap());
+                if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
+                    curr_frame = Some(frame);
+                    needs_redraw = true;
+                }
             }
-
-            if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
-                curr_frame = Some(frame);
-                needs_redraw = true;
+            // Handle all pending messages when we are awaken by set_sync_handler
+            glutin::event::Event::UserEvent(Message::BusEvent) => {
+                App::handle_messages(&bus).unwrap();
             }
+            _ => (),
         }
 
         if needs_redraw {
