@@ -1,4 +1,4 @@
-// This example demostrates how to output GL textures, within an
+// This example demonstrates how to output GL textures, within an
 // EGL/X11 context provided by the application, and render those
 // textures in the GL application.
 
