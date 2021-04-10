@@ -30,6 +30,11 @@ name = "gstreamer-rs-lgpl-docs"
 multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
+skip-tree = [
+  # Winit introduces quite a few duplicate (outdated!) dependencies together
+  # with its direct dependant glutin.
+  { name = "winit", version = "0.24" }
+]
 
 [sources]
 unknown-registry = "deny"

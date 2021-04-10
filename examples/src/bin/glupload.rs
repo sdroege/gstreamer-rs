@@ -12,6 +12,7 @@ use gst_gl::prelude::*;
 use std::ffi::CStr;
 use std::mem;
 use std::ptr;
+use std::sync;
 use std::sync::mpsc;
 
 use anyhow::Error;
@@ -184,7 +185,7 @@ impl Gl {
         }
     }
 
-    fn resize(&self, size: glutin::dpi::PhysicalSize) {
+    fn resize(&self, size: glutin::dpi::PhysicalSize<u32>) {
         unsafe {
             self.gl
                 .Viewport(0, 0, size.width as i32, size.height as i32);
@@ -318,7 +319,7 @@ struct App {
     appsink: gst_app::AppSink,
     glupload: gst::Element,
     bus: gst::Bus,
-    events_loop: glutin::EventsLoop,
+    event_loop: glutin::event_loop::EventLoop<()>,
     windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
     shared_context: gst_gl::GLContext,
 }
@@ -332,11 +333,11 @@ impl App {
             .get_bus()
             .expect("Pipeline without bus. Shouldn't happen!");
 
-        let events_loop = glutin::EventsLoop::new();
-        let window = glutin::WindowBuilder::new().with_title("GL rendering");
+        let event_loop = glutin::event_loop::EventLoop::new();
+        let window = glutin::window::WindowBuilder::new().with_title("GL rendering");
         let windowed_context = glutin::ContextBuilder::new()
             .with_vsync(true)
-            .build_windowed(window, &events_loop)?;
+            .build_windowed(window, &event_loop)?;
 
         let windowed_context = unsafe { windowed_context.make_current().map_err(|(_, err)| err)? };
 
@@ -345,10 +346,10 @@ impl App {
 
         let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
-            use glutin::os::unix::RawHandle;
+            use glutin::platform::unix::RawHandle;
             #[cfg(any(feature = "gst-gl-x11", feature = "gst-gl-wayland"))]
-            use glutin::os::unix::WindowExt;
-            use glutin::os::ContextTraitExt;
+            use glutin::platform::unix::WindowExtUnix;
+            use glutin::platform::ContextTraitExt;
 
             let api = App::map_gl_api(windowed_context.get_api());
 
@@ -368,7 +369,7 @@ impl App {
                     };
 
                     #[cfg(feature = "gst-gl-wayland")]
-                    if let Some(display) = inner_window.get_wayland_display() {
+                    if let Some(display) = inner_window.wayland_display() {
                         gl_display = Some(
                             unsafe {
                                 gst_gl_wayland::GLDisplayWayland::with_display(display as usize)
@@ -386,7 +387,7 @@ impl App {
                 }
                 #[cfg(feature = "gst-gl-x11")]
                 RawHandle::Glx(glx_context) => {
-                    let gl_display = if let Some(display) = inner_window.get_xlib_display() {
+                    let gl_display = if let Some(display) = inner_window.xlib_display() {
                         unsafe { gst_gl_x11::GLDisplayX11::with_display(display as usize) }.unwrap()
                     } else {
                         panic!("X11 window without X Display");
@@ -413,7 +414,7 @@ impl App {
             shared_context.fill_info()?;
 
             let gl_context = shared_context.clone();
-            let events_proxy = events_loop.create_proxy();
+            let event_proxy = sync::Mutex::new(event_loop.create_proxy());
 
             #[allow(clippy::single_match)]
             bus.set_sync_handler(move |_, msg| {
@@ -446,7 +447,9 @@ impl App {
                     _ => (),
                 }
 
-                let _ = events_proxy.wakeup();
+                if let Err(e) = event_proxy.lock().unwrap().send_event(()) {
+                    eprintln!("Failed to send BusEvent to event proxy: {}", e)
+                }
 
                 gst::BusSyncReply::Pass
             });
@@ -459,7 +462,7 @@ impl App {
             appsink,
             glupload,
             bus,
-            events_loop,
+            event_loop,
             windowed_context,
             shared_context,
         })
@@ -467,9 +470,9 @@ impl App {
 
     fn setup(
         &self,
-        events_loop: &glutin::EventsLoop,
+        event_loop: &glutin::event_loop::EventLoop<()>,
     ) -> Result<mpsc::Receiver<gst::Sample>, Error> {
-        let events_proxy = events_loop.create_proxy();
+        let events_proxy = event_loop.create_proxy();
         let (sender, receiver) = mpsc::channel();
         self.appsink.set_callbacks(
             gst_app::AppSinkCallbacks::builder()
@@ -506,7 +509,7 @@ impl App {
                         .map(|_| gst::FlowSuccess::Ok)
                         .map_err(|_| gst::FlowError::Error)?;
 
-                    let _ = events_proxy.wakeup();
+                    let _ = events_proxy.send_event(());
 
                     Ok(gst::FlowSuccess::Ok)
                 })
@@ -595,13 +598,11 @@ impl App {
 
         Ok(())
     }
-
-    fn into_context(self: App) -> glutin::WindowedContext<glutin::PossiblyCurrent> {
-        self.windowed_context
-    }
 }
 
-fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCurrent>, Error> {
+fn main_loop(app: App) -> Result<(), Error> {
+    let receiver = app.setup(&app.event_loop)?;
+
     println!(
         "Pixel format of the window's GL context {:?}",
         app.windowed_context.get_pixel_format()
@@ -609,42 +610,52 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
 
     let gl = load(&app.windowed_context);
 
-    let receiver = app.setup(&app.events_loop)?;
-
     let mut curr_frame: Option<gst_video::VideoFrame<gst_video::video_frame::Readable>> = None;
-    let mut running = true;
     let mut gst_gl_context: Option<gst_gl::GLContext> = None;
-    let events_loop = &mut app.events_loop;
-    let windowed_context = &mut app.windowed_context;
-    let bus = &app.bus;
 
-    while running {
-        #[allow(clippy::single_match)]
-        events_loop.poll_events(|event| match event {
-            glutin::Event::WindowEvent { event, .. } => match event {
-                glutin::WindowEvent::CloseRequested
-                | glutin::WindowEvent::KeyboardInput {
+    let App {
+        bus,
+        event_loop,
+        glupload,
+        pipeline,
+        shared_context,
+        windowed_context,
+        ..
+    } = app;
+
+    event_loop.run(move |event, _, cf| {
+        *cf = glutin::event_loop::ControlFlow::Wait;
+
+        let mut needs_redraw = false;
+        match event {
+            glutin::event::Event::LoopDestroyed => {
+                pipeline.send_event(gst::event::Eos::new());
+                pipeline.set_state(gst::State::Null).unwrap();
+            }
+            glutin::event::Event::WindowEvent { event, .. } => match event {
+                glutin::event::WindowEvent::CloseRequested
+                | glutin::event::WindowEvent::KeyboardInput {
                     input:
-                        glutin::KeyboardInput {
-                            state: glutin::ElementState::Released,
-                            virtual_keycode: Some(glutin::VirtualKeyCode::Escape),
+                        glutin::event::KeyboardInput {
+                            state: glutin::event::ElementState::Released,
+                            virtual_keycode: Some(glutin::event::VirtualKeyCode::Escape),
                             ..
                         },
                     ..
-                } => running = false,
-                glutin::WindowEvent::Resized(logical_size) => {
-                    let dpi_factor = windowed_context.window().get_hidpi_factor();
-                    windowed_context.resize(logical_size.to_physical(dpi_factor));
-                    gl.resize(logical_size.to_physical(dpi_factor));
+                } => *cf = glutin::event_loop::ControlFlow::Exit,
+                glutin::event::WindowEvent::Resized(physical_size) => {
+                    windowed_context.resize(physical_size);
+                    gl.resize(physical_size);
                 }
                 _ => (),
             },
+            glutin::event::Event::RedrawRequested(_) => needs_redraw = true,
             _ => (),
-        });
+        }
 
         // Handle all pending messages. Whenever there is a message we will
         // wake up the events loop above
-        App::handle_messages(&bus)?;
+        App::handle_messages(&bus).unwrap();
 
         // get the last frame in channel
         if let Some(sample) = receiver.try_iter().last() {
@@ -656,8 +667,7 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
 
             {
                 if gst_gl_context.is_none() {
-                    gst_gl_context = app
-                        .glupload
+                    gst_gl_context = glupload
                         .get_property("context")
                         .unwrap()
                         .get::<gst_gl::GLContext>()
@@ -670,38 +680,27 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
 
             if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
                 curr_frame = Some(frame);
+                needs_redraw = true;
             }
         }
 
-        if let Some(frame) = curr_frame.as_ref() {
-            let sync_meta = frame.buffer().get_meta::<gst_gl::GLSyncMeta>().unwrap();
-            sync_meta.wait(&app.shared_context);
-            if let Some(texture) = frame.get_texture_id(0) {
-                gl.draw_frame(texture as gl::types::GLuint);
+        if needs_redraw {
+            if let Some(frame) = curr_frame.as_ref() {
+                let sync_meta = frame.buffer().get_meta::<gst_gl::GLSyncMeta>().unwrap();
+                sync_meta.wait(&shared_context);
+                if let Some(texture) = frame.get_texture_id(0) {
+                    gl.draw_frame(texture as gl::types::GLuint);
+                }
             }
+            windowed_context.swap_buffers().unwrap();
         }
-        windowed_context.swap_buffers()?;
-    }
-
-    app.pipeline.send_event(gst::event::Eos::new());
-    app.pipeline.set_state(gst::State::Null)?;
-
-    Ok(app.into_context())
-}
-
-fn cleanup(_windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>) {
-    // To ensure that the context stays alive longer than the pipeline or any reference
-    // inside GStreamer to the GL context, its display or anything else. See
-    // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/196
-    //
-    // We might do any window/GL specific cleanup here as needed.
+    })
 }
 
 fn example_main() {
-    match App::new().and_then(main_loop).map(cleanup) {
-        Ok(r) => r,
-        Err(e) => eprintln!("Error! {}", e),
-    }
+    App::new()
+        .and_then(main_loop)
+        .unwrap_or_else(|e| eprintln!("Error! {}", e))
 }
 
 fn main() {
