@@ -2372,7 +2372,7 @@ Retrieve the current caps of `self`.
 # Returns
 
 the `gst::Caps` of `self`.
-use `gst::Caps::unref` after usage.
+use `gst_caps_unref` after usage.
 <!-- trait RTSPStreamExt::fn get_control -->
 Get the control string to identify this stream.
 

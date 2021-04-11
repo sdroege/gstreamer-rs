@@ -38,6 +38,8 @@ connected
 <!-- struct WebRTCDataChannel -->
 
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 Feature: `v1_18`
 
 # Implements
@@ -170,6 +172,8 @@ controlling
 <!-- struct WebRTCICETransport -->
 
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
@@ -218,6 +222,8 @@ Feature: `v1_16`
 [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- struct WebRTCRTPTransceiver -->
 
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 

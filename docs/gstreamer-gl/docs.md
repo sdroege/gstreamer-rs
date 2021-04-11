@@ -125,6 +125,8 @@ output `gst::Caps`
 of the limitation on OpenGL context, this object is not thread safe unless
 specified and must only be activated in a single thread.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`GLContextExt`](trait.GLContextExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`GLContextExtManual`](prelude/trait.GLContextExtManual.html)
@@ -486,7 +488,7 @@ Trait containing all `GLDisplay` methods.
 
 # Implementors
 
-[`GLDisplayEGL`](struct.GLDisplayEGL.html), [`GLDisplayWayland`](struct.GLDisplayWayland.html), [`GLDisplayX11`](struct.GLDisplayX11.html), [`GLDisplay`](struct.GLDisplay.html)
+[`GLDisplay`](struct.GLDisplay.html)
 <!-- impl GLDisplay::fn new -->
 
 # Returns
@@ -539,14 +541,6 @@ a comparison function to run
 
 The first `GLWindow` that causes a match
  from `compare_func`
-<!-- trait GLDisplayExt::fn get_foreign_display -->
-
-Feature: `v1_18`
-
-
-# Returns
-
-whether the context belongs to a foreign display
 <!-- trait GLDisplayExt::fn get_gl_api -->
 see `GLDisplayExt::filter_gl_api` for what the returned value represents
 
@@ -612,31 +606,6 @@ other context to share resources with.
 # Returns
 
 the new context.
-<!-- struct GLDisplayEGL -->
-the contents of a `GLDisplayEGL` are private and should only be accessed
-through the provided API
-
-# Implements
-
-[`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl GLDisplayEGL::fn new -->
-Create a new `GLDisplayEGL` using the default EGL_DEFAULT_DISPLAY.
-
-# Returns
-
-a new `GLDisplayEGL` or `None`
-<!-- impl GLDisplayEGL::fn get_from_native -->
-Attempts to create a new `EGLDisplay` from `display`. If `type_` is
-`GLDisplayType::Any`, then `display` must be 0. `type_` must not be
-`GLDisplayType::None`.
-## `type_`
-a `GLDisplayType`
-## `display`
-pointer to a display (or 0)
-
-# Returns
-
-A `EGLDisplay` or `EGL_NO_DISPLAY`
 <!-- struct GLDisplayType -->
 <!-- struct GLDisplayType::const NONE -->
 no display type
@@ -660,54 +629,6 @@ Mesa3D GBM display
 EGLDevice display (Since: 1.18)
 <!-- struct GLDisplayType::const ANY -->
 any display type
-<!-- struct GLDisplayWayland -->
-the contents of a `GLDisplayWayland` are private and should only be accessed
-through the provided API
-
-# Implements
-
-[`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl GLDisplayWayland::fn new -->
-Create a new `GLDisplayWayland` from the wayland display name. See `wl_display_connect`()
-for details on what is a valid name.
-## `name`
-a display name
-
-# Returns
-
-a new `GLDisplayWayland` or `None`
-<!-- impl GLDisplayWayland::fn new_with_display -->
-Creates a new display connection from a wl_display Display.
-## `display`
-an existing, wayland display
-
-# Returns
-
-a new `GLDisplayWayland`
-<!-- struct GLDisplayX11 -->
-the contents of a `GLDisplayX11` are private and should only be accessed
-through the provided API
-
-# Implements
-
-[`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl GLDisplayX11::fn new -->
-Create a new `GLDisplayX11` from the x11 display name. See `XOpenDisplay`()
-for details on what is a valid name.
-## `name`
-a display name
-
-# Returns
-
-a new `GLDisplayX11` or `None`
-<!-- impl GLDisplayX11::fn new_with_display -->
-Creates a new display connection from a X11 Display.
-## `display`
-an existing, x11 display
-
-# Returns
-
-a new `GLDisplayX11`
 <!-- enum GLFormat -->
 <!-- enum GLFormat::variant Luminance -->
 Single component replicated across R, G, and B textures
@@ -1427,14 +1348,21 @@ Dubois optimised Red-Cyan anaglyph
 <!-- enum GLStereoDownmix::variant AmberBlueDubois -->
 Dubois optimised Amber-Blue anaglyph
 <!-- enum GLTextureTarget -->
+The OpenGL texture target that an OpenGL texture can be bound to. The
+`gst_gl_value_set_texture_target_from_mask`,
+`gst_gl_value_get_texture_target_mask`, and
+`gst_gl_value_set_texture_target` functions can be used for handling texture
+targets with `gobject::Value`'s when e.g. dealing with `gst::Caps`.
 <!-- enum GLTextureTarget::variant None -->
 no texture target
 <!-- enum GLTextureTarget::variant 2d -->
-2D texture target
+2D texture target (`GL_TEXTURE_2D`)
 <!-- enum GLTextureTarget::variant Rectangle -->
 rectangle texture target
+ (`GL_TEXTURE_RECTANGLE`)
 <!-- enum GLTextureTarget::variant ExternalOes -->
 external oes texture target
+ (`GL_TEXTURE_EXTERNAL_OES`)
 <!-- struct GLUpload -->
 `GLUpload` is an object that uploads data from system memory into GL textures.
 
@@ -1571,6 +1499,8 @@ the converted `gst::Caps`
 <!-- struct GLWindow -->
 GstGLWindow represents a window that elements can render into. A window can
 either be a user visible window (onscreen) or hidden (offscreen).
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 

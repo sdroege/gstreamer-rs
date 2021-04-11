@@ -1,4 +1,19 @@
 <!-- file * -->
+<!-- struct AllocationParams -->
+Parameters to control the allocation of memory
+<!-- impl AllocationParams::fn copy -->
+Create a copy of `self`.
+
+Free-function: gst_allocation_params_free
+
+# Returns
+
+a new #`AllocationParams`, free with
+`AllocationParams::free`.
+<!-- impl AllocationParams::fn free -->
+Free `self`
+<!-- impl AllocationParams::fn init -->
+Initialize `self` to its default values
 <!-- struct Allocator -->
 Memory is usually created by allocators with a `AllocatorExt::alloc`
 method call. When `None` is used as the allocator, the default allocator will
@@ -12,9 +27,11 @@ default allocator.
 New memory can be created with `Memory::new_wrapped` that wraps the memory
 allocated elsewhere.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
-[`AllocatorExt`](trait.AllocatorExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AllocatorExtManual`](prelude/trait.AllocatorExtManual.html)
+[`AllocatorExt`](trait.AllocatorExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait AllocatorExt -->
 Trait containing all `Allocator` methods.
 
@@ -547,7 +564,7 @@ the end of the buffer. These can only be meaningfully interpreted if you
 know the media type of the buffer (the preceding CAPS event). Either or both
 can be set to `GST_BUFFER_OFFSET_NONE`.
 
-`Buffer::ref` is used to increase the refcount of a buffer. This must be
+`gst_buffer_ref` is used to increase the refcount of a buffer. This must be
 done when you want to keep a handle to the buffer after pushing it to the
 next element. The buffer refcount determines the writability of the buffer, a
 buffer is only writable when the refcount is exactly 1, i.e. when the caller
@@ -576,7 +593,7 @@ Metadata can be retrieved with `Buffer::get_meta`. See also `Meta`
 An element should either unref the buffer or push it out on a src pad
 using `Pad::push` (see `Pad`).
 
-Buffers are usually freed by unreffing them with `Buffer::unref`. When
+Buffers are usually freed by unreffing them with `gst_buffer_unref`. When
 the refcount drops to 0, any memory and metadata pointed to by the buffer is
 unreffed as well. Buffers allocated from a `BufferPool` will be returned to
 the pool when the refcount drops to 0.
@@ -753,16 +770,6 @@ the size or -1 of `buf2`
 
 the new `Buffer` that contains the memory
  of the two source buffers.
-<!-- impl Buffer::fn copy -->
-Create a copy of the given buffer. This will only copy the buffer's
-data to a newly allocated memory if needed (if the type of memory
-requires it), otherwise the underlying data is just referenced.
-Check `Buffer::copy_deep` if you want to force the data
-to be copied to newly allocated memory.
-
-# Returns
-
-a new copy of `self`.
 <!-- impl Buffer::fn copy_deep -->
 Create a copy of the given buffer. This will make a newly allocated
 copy of the data the source buffer contains.
@@ -1189,18 +1196,6 @@ This function is identical to `Buffer::insert_memory` with an index of 0.
 See `Buffer::insert_memory` for more details.
 ## `mem`
 a `Memory`.
-<!-- impl Buffer::fn ref -->
-Increases the refcount of the given buffer by one.
-
-Note that the refcount affects the writability
-of `self` and its metadata, see `gst_buffer_is_writable`.
-It is important to note that keeping additional references to
-GstBuffer instances can potentially increase the number
-of memcpy operations in a pipeline.
-
-# Returns
-
-`self`
 <!-- impl Buffer::fn remove_all_memory -->
 Remove all the memory blocks in `self`.
 <!-- impl Buffer::fn remove_memory -->
@@ -1287,9 +1282,6 @@ the new size
 Release the memory previously mapped with `Buffer::map`.
 ## `info`
 a `MapInfo`
-<!-- impl Buffer::fn unref -->
-Decreases the refcount of the buffer. If the refcount reaches 0, the buffer
-with the associated metadata and memory will be freed.
 <!-- impl Buffer::fn unset_flags -->
 Clears one or more buffer flags.
 
@@ -1311,23 +1303,6 @@ together to make room for the new block.
 # Returns
 
 the maximum amount of memory blocks that a buffer can hold.
-<!-- impl Buffer::fn replace -->
-Modifies a pointer to a `Buffer` to point to a different `Buffer`. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-buffer is unreffed, the new is reffed).
-
-Either `nbuf` or the `Buffer` pointed to by `obuf` may be `None`.
-## `obuf`
-pointer to a pointer to
- a `Buffer` to be replaced.
-## `nbuf`
-pointer to a `Buffer` that will
- replace the buffer pointed to by `obuf`.
-
-# Returns
-
-`true` when `obuf` was different from `nbuf`.
 <!-- struct BufferCopyFlags -->
 A set of flags that can be provided to the `Buffer::copy_into`
 function to specify which items should be copied.
@@ -1421,7 +1396,7 @@ Free-function: gst_buffer_list_unref
 
 # Returns
 
-the new `BufferList`. `BufferList::unref`
+the new `BufferList`. `gst_buffer_list_unref`
  after usage.
 <!-- impl BufferList::fn new_sized -->
 Creates a new, empty `BufferList`. The caller is responsible for unreffing
@@ -1434,7 +1409,7 @@ an initial reserved size
 
 # Returns
 
-the new `BufferList`. `BufferList::unref`
+the new `BufferList`. `gst_buffer_list_unref`
  after usage.
 <!-- impl BufferList::fn calculate_size -->
 Calculates the size of the data contained in buffer list by adding the
@@ -1446,14 +1421,6 @@ Feature: `v1_14`
 # Returns
 
 the size of the data contained in buffer list in bytes.
-<!-- impl BufferList::fn copy -->
-Create a shallow copy of the given buffer list. This will make a newly
-allocated copy of the source list with copies of buffer pointers. The
-refcount of buffers pointed to will be increased by one.
-
-# Returns
-
-a new copy of `self`.
 <!-- impl BufferList::fn copy_deep -->
 Create a copy of the given buffer list. This will make a newly allocated
 copy of the buffer that the source buffer list contains.
@@ -1520,17 +1487,6 @@ Returns the number of buffers in `self`.
 # Returns
 
 the number of buffers in the buffer list
-<!-- impl BufferList::fn ref -->
-Increases the refcount of the given buffer list by one.
-
-Note that the refcount affects the writability of `self` and its data, see
-`gst_buffer_list_make_writable`. It is important to note that keeping
-additional references to GstBufferList instances can potentially increase
-the number of memcpy operations in a pipeline.
-
-# Returns
-
-`self`
 <!-- impl BufferList::fn remove -->
 Remove `length` buffers starting from `idx` in `self`. The following buffers
 are moved to close the gap.
@@ -1538,9 +1494,6 @@ are moved to close the gap.
 the index
 ## `length`
 the amount to remove
-<!-- impl BufferList::fn unref -->
-Decreases the refcount of the buffer list. If the refcount reaches 0, the
-buffer list will be freed.
 <!-- struct BufferPool -->
 A `BufferPool` is an object that can be used to pre-allocate and recycle
 buffers of the same size and with the same properties.
@@ -1970,7 +1923,7 @@ can set a new one.
 The bus watch will only work if a GLib main loop is being run.
 
 When `func` is called, the message belongs to the caller; if you want to
-keep a copy of it, call `Message::ref` before leaving `func`.
+keep a copy of it, call `gst_message_ref` before leaving `func`.
 
 The watch can be removed using `Bus::remove_watch` or by returning `false`
 from `func`. If the watch was added to the default main context it is also
@@ -2121,7 +2074,7 @@ indefinitely.
 
 the message that was received,
  or `None` if the poll timed out. The message is taken from the
- bus and needs to be unreffed with `Message::unref` after
+ bus and needs to be unreffed with `gst_message_unref` after
  usage.
 <!-- impl Bus::fn pop -->
 Get a message from the bus.
@@ -2130,7 +2083,7 @@ Get a message from the bus.
 
 the `Message` that is on the
  bus, or `None` if the bus is empty. The message is taken from
- the bus and needs to be unreffed with `Message::unref` after
+ the bus and needs to be unreffed with `gst_message_unref` after
  usage.
 
 MT safe.
@@ -2148,7 +2101,7 @@ message types to take into account
 the next `Message` matching
  `type_` that is on the bus, or `None` if the bus is empty or there
  is no message matching `type_`. The message is taken from the bus
- and needs to be unreffed with `Message::unref` after usage.
+ and needs to be unreffed with `gst_message_unref` after usage.
 
 MT safe.
 <!-- impl Bus::fn post -->
@@ -2221,7 +2174,7 @@ a timeout
 the `Message` that is on the
  bus after the specified timeout or `None` if the bus is empty
  after the timeout expired. The message is taken from the bus
- and needs to be unreffed with `Message::unref` after usage.
+ and needs to be unreffed with `gst_message_unref` after usage.
 
 MT safe.
 <!-- impl Bus::fn timed_pop_filtered -->
@@ -2242,7 +2195,7 @@ message types to take into account, GST_MESSAGE_ANY for any type
 a `Message` matching the
  filter in `types`, or `None` if no matching message was found on
  the bus until the timeout expired. The message is taken from
- the bus and needs to be unreffed with `Message::unref` after
+ the bus and needs to be unreffed with `gst_message_unref` after
  usage.
 
 MT safe.
@@ -2396,11 +2349,11 @@ a `Caps` to intersect
 Creates a new `Caps` as a copy of the old `self`. The new caps will have a
 refcount of 1, owned by the caller. The structures are copied as well.
 
-Note that this function is the semantic equivalent of a `Caps::ref`
+Note that this function is the semantic equivalent of a `gst_caps_ref`
 followed by a `gst_caps_make_writable`. If you only want to hold on to a
-reference to the data, you should use `Caps::ref`.
+reference to the data, you should use `gst_caps_ref`.
 
-When you are finished with the caps, call `Caps::unref` on it.
+When you are finished with the caps, call `gst_caps_unref` on it.
 
 # Returns
 
@@ -2435,7 +2388,7 @@ fixated with `Structure::fixate`.
 
 This function takes ownership of `self` and will call `gst_caps_make_writable`
 on it so you must not use `self` afterwards unless you keep an additional
-reference to it with `Caps::ref`.
+reference to it with `gst_caps_ref`.
 
 Note that it is not guaranteed that the returned caps have exactly one
 structure. If `self` are empty caps then then returned caps will be
@@ -2662,24 +2615,11 @@ Returns a `Caps` that represents the same set of formats as
 
 This function takes ownership of `self` and will call `gst_caps_make_writable`
 on it so you must not use `self` afterwards unless you keep an additional
-reference to it with `Caps::ref`.
+reference to it with `gst_caps_ref`.
 
 # Returns
 
 the normalized `Caps`
-<!-- impl Caps::fn ref -->
-Add a reference to a `Caps` object.
-
-From this point on, until the caller calls `Caps::unref` or
-`gst_caps_make_writable`, it is guaranteed that the caps object will not
-change. This means its structures won't change, etc. To use a `Caps`
-object, you must always have a refcount on it -- either the one made
-implicitly by e.g. `Caps::new_simple`, or via taking one explicitly with
-this function.
-
-# Returns
-
-the same `Caps` object.
 <!-- impl Caps::fn remove_structure -->
 removes the structure with the given index from the list of structures
 contained in `self`.
@@ -2726,7 +2666,7 @@ merged are also merged.
 
 This function takes ownership of `self` and will call `gst_caps_make_writable`
 on it if necessary, so you must not use `self` afterwards unless you keep an
-additional reference to it with `Caps::ref`.
+additional reference to it with `gst_caps_ref`.
 
 This method does not preserve the original order of `self`.
 
@@ -2776,7 +2716,7 @@ fixating.
 
 This function takes ownership of `self` and will call `gst_caps_make_writable`
 on it if necessary, so you must not use `self` afterwards unless you keep an
-additional reference to it with `Caps::ref`.
+additional reference to it with `gst_caps_ref`.
 
 Note that it is not guaranteed that the returned caps have exactly one
 structure. If `self` is any or empty caps then then returned caps will be
@@ -2785,9 +2725,6 @@ the same and contain no structure at all.
 # Returns
 
 truncated caps
-<!-- impl Caps::fn unref -->
-Unref a `Caps` and and free all its structures and the
-structures' values when the refcount reaches 0.
 <!-- impl Caps::fn from_string -->
 Converts `caps` from a string representation.
 
@@ -2799,37 +2736,6 @@ a string to convert to `Caps`
 # Returns
 
 a newly allocated `Caps`
-<!-- impl Caps::fn replace -->
-Modifies a pointer to a `Caps` to point to a different `Caps`. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-caps is unreffed, the new is reffed).
-
-Either `new_caps` or the `Caps` pointed to by `old_caps` may be `None`.
-## `old_caps`
-pointer to a pointer
- to a `Caps` to be replaced.
-## `new_caps`
-pointer to a `Caps` that will
- replace the caps pointed to by `old_caps`.
-
-# Returns
-
-`true` if `new_caps` was different from `old_caps`
-<!-- impl Caps::fn take -->
-Modifies a pointer to a `Caps` to point to a different `Caps`. This
-function is similar to `Caps::replace` except that it takes ownership
-of `new_caps`.
-## `old_caps`
-pointer to a pointer to a `Caps` to be
- replaced.
-## `new_caps`
-pointer to a `Caps` that will
- replace the caps pointed to by `old_caps`.
-
-# Returns
-
-`true` if `new_caps` was different from `old_caps`
 <!-- enum CapsIntersectMode -->
 Modes of caps intersection
 
@@ -3061,6 +2967,8 @@ The `Clock:timeout` property defines the interval to sample the master
 clock and run the calibration functions. `Clock:window-size` defines the
 number of samples to use when calibrating and `Clock:window-threshold`
 defines the minimum number of samples before the calibration is performed.
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
@@ -3684,6 +3592,154 @@ The structure of the context. The structure is still
 owned by the context, which means that you should not free it and
 that the pointer becomes invalid when you free the context.
 This function checks if `self` is writable.
+<!-- struct ControlBinding -->
+A base class for value mapping objects that attaches control sources to gobject
+properties. Such an object is taking one or more `ControlSource` instances,
+combines them and maps the resulting value to the type and value range of the
+bound property.
+
+This is an Abstract Base Class, you cannot instantiate it.
+
+# Implements
+
+[`ControlBindingExt`](trait.ControlBindingExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ControlBindingExtManual`](prelude/trait.ControlBindingExtManual.html)
+<!-- trait ControlBindingExt -->
+Trait containing all `ControlBinding` methods.
+
+# Implementors
+
+[`ControlBinding`](struct.ControlBinding.html)
+<!-- trait ControlBindingExt::fn get_g_value_array -->
+Gets a number of `GValues` for the given controlled property starting at the
+requested time. The array `values` need to hold enough space for `n_values` of
+`gobject::Value`.
+
+This function is useful if one wants to e.g. draw a graph of the control
+curve or apply a control curve sample by sample.
+## `timestamp`
+the time that should be processed
+## `interval`
+the time spacing between subsequent values
+## `n_values`
+the number of values
+## `values`
+array to put control-values in
+
+# Returns
+
+`true` if the given array could be filled, `false` otherwise
+<!-- trait ControlBindingExt::fn get_value -->
+Gets the value for the given controlled property at the requested time.
+## `timestamp`
+the time the control-change should be read from
+
+# Returns
+
+the GValue of the property at the given time,
+or `None` if the property isn't controlled.
+<!-- trait ControlBindingExt::fn get_value_array -->
+Gets a number of values for the given controlled property starting at the
+requested time. The array `values` need to hold enough space for `n_values` of
+the same type as the objects property's type.
+
+This function is useful if one wants to e.g. draw a graph of the control
+curve or apply a control curve sample by sample.
+
+The values are unboxed and ready to be used. The similar function
+`ControlBinding::get_g_value_array` returns the array as `GValues` and is
+more suitable for bindings.
+## `timestamp`
+the time that should be processed
+## `interval`
+the time spacing between subsequent values
+## `n_values`
+the number of values
+## `values`
+array to put control-values in
+
+# Returns
+
+`true` if the given array could be filled, `false` otherwise
+<!-- trait ControlBindingExt::fn is_disabled -->
+Check if the control binding is disabled.
+
+# Returns
+
+`true` if the binding is inactive
+<!-- trait ControlBindingExt::fn set_disabled -->
+This function is used to disable a control binding for some time, i.e.
+`GstObjectExt::sync_values` will do nothing.
+## `disabled`
+boolean that specifies whether to disable the controller
+or not.
+<!-- trait ControlBindingExt::fn sync_values -->
+Sets the property of the `object`, according to the `GstControlSources` that
+handle them and for the given timestamp.
+
+If this function fails, it is most likely the application developers fault.
+Most probably the control sources are not setup correctly.
+## `object`
+the object that has controlled properties
+## `timestamp`
+the time that should be processed
+## `last_sync`
+the last time this was called
+
+# Returns
+
+`true` if the controller value could be applied to the object
+property, `false` otherwise
+<!-- struct ControlSource -->
+The `ControlSource` is a base class for control value sources that could
+be used to get timestamp-value pairs. A control source essentially is a
+function over time.
+
+A `ControlSource` is used by first getting an instance of a specific
+control-source, creating a binding for the control-source to the target property
+of the element and then adding the binding to the element. The binding will
+convert the data types and value range to fit to the bound property.
+
+For implementing a new `ControlSource` one has to implement
+`GstControlSourceGetValue` and `GstControlSourceGetValueArray` functions.
+These are then used by `ControlSourceExt::control_source_get_value` and
+`ControlSource::control_source_get_value_array` to get values for specific timestamps.
+
+This is an Abstract Base Class, you cannot instantiate it.
+
+# Implements
+
+[`ControlSourceExt`](trait.ControlSourceExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ControlSourceExtManual`](prelude/trait.ControlSourceExtManual.html)
+<!-- trait ControlSourceExt -->
+Trait containing all `ControlSource` methods.
+
+# Implementors
+
+[`ControlSource`](struct.ControlSource.html)
+<!-- trait ControlSourceExt::fn get_value -->
+Gets the value for this `ControlSource` at a given timestamp.
+## `timestamp`
+the time for which the value should be returned
+## `value`
+the value
+
+# Returns
+
+`false` if the value couldn't be returned, `true` otherwise.
+<!-- trait ControlSourceExt::fn control_source_get_value_array -->
+Gets an array of values for for this `ControlSource`. Values that are
+undefined contain NANs.
+## `timestamp`
+the first timestamp
+## `interval`
+the time steps
+## `n_values`
+the number of values to fetch
+## `values`
+array to put control-values in
+
+# Returns
+
+`true` if the given array could be filled, `false` otherwise
 <!-- enum CoreError -->
 Core errors are errors inside the core GStreamer library.
 <!-- enum CoreError::variant Failed -->
@@ -4178,6 +4234,8 @@ representing the media types it can produce or handle.
 `Device` are created by `DeviceProvider` objects which can be
 aggregated by `DeviceMonitor` objects.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`DeviceExt`](trait.DeviceExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
@@ -4204,7 +4262,7 @@ Getter for the `Caps` that this device supports.
 # Returns
 
 The `Caps` supported by this device. Unref with
-`Caps::unref` when done.
+`gst_caps_unref` when done.
 <!-- trait DeviceExt::fn get_device_class -->
 Gets the "class" of a device. This is a "/" separated list of
 classes that represent this device. They are a subset of the
@@ -4424,6 +4482,8 @@ normally provide a single subclass for all devices.
 Applications would normally use a `DeviceMonitor` to monitor devices
 from all relevant providers.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`DeviceProviderExt`](trait.DeviceProviderExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`DeviceProviderExtManual`](prelude/trait.DeviceProviderExtManual.html)
@@ -4489,6 +4549,9 @@ a `Bus`
 Gets a list of devices that this provider understands. This may actually
 probe the hardware if the provider is not currently started.
 
+If the provider has been started, this will returned the same `Device`
+objedcts that have been returned by the `MessageType::DeviceAdded` messages.
+
 # Returns
 
 a `glib::List` of
@@ -4537,6 +4600,10 @@ Since the `DeviceProvider` is a singleton,
 `DeviceProviderExt::start` may already have been called by another
 user of the object, `DeviceProviderExt::stop` needs to be called the same
 number of times.
+
+After this function has been called, `DeviceProviderExt::get_devices` will
+return the same objects that have been received from the
+`MessageType::DeviceAdded` messages and will no longer probe.
 
 # Returns
 
@@ -4609,7 +4676,7 @@ if the device provider couldn't be created
 <!-- impl DeviceProviderFactory::fn get_device_provider_type -->
 Get the `glib::Type` for device providers managed by this factory. The type can
 only be retrieved if the device provider factory is loaded, which can be
-assured with `PluginFeatureExt::load`.
+assured with `PluginFeature::load`.
 
 # Returns
 
@@ -4699,6 +4766,8 @@ element with `ElementExt::set_clock`.
 Note that clock selection and distribution is normally handled by the
 toplevel `Pipeline` so the clock functions are only to be used in very
 specific situations.
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
@@ -5605,7 +5674,7 @@ event handler, the event will be pushed on a random linked sink pad for
 downstream events or a random linked source pad for upstream events.
 
 This function takes ownership of the provided event so you should
-`Event::ref` it if you want to reuse the event after this call.
+`gst_event_ref` it if you want to reuse the event after this call.
 
 MT safe.
 ## `event`
@@ -5887,7 +5956,7 @@ new `Element` or `None`
 <!-- impl ElementFactory::fn get_element_type -->
 Get the `glib::Type` for elements managed by this factory. The type can
 only be retrieved if the element factory is loaded, which can be
-assured with `PluginFeatureExt::load`.
+assured with `PluginFeature::load`.
 
 # Returns
 
@@ -5979,7 +6048,7 @@ Events are usually created with gst_event_new_*() which takes event-type
 specific parameters as arguments.
 To send an event application will usually use `Element::send_event` and
 elements will use `Pad::send_event` or `Pad::push_event`.
-The event should be unreffed with `Event::unref` if it has not been sent.
+The event should be unreffed with `gst_event_unref` if it has not been sent.
 
 Events that have been received can be parsed with their respective
 gst_event_parse_*() functions. It is valid to pass `None` for unwanted details.
@@ -6018,14 +6087,14 @@ the needed parameters to specify seeking time and mode.
 Create a new buffersize event. The event is sent downstream and notifies
 elements that they should provide a buffer of the specified dimensions.
 
-When the `async` flag is set, a thread boundary is preferred.
+When the `async_` flag is set, a thread boundary is preferred.
 ## `format`
 buffer format
 ## `minsize`
 minimum buffer size
 ## `maxsize`
 maximum buffer size
-## `async`
+## `async_`
 thread behavior
 
 # Returns
@@ -6572,12 +6641,6 @@ UID in the TOC to start playback from.
 # Returns
 
 a new `Event`.
-<!-- impl Event::fn copy -->
-Copy the event using the event specific copy function.
-
-# Returns
-
-the new event
 <!-- impl Event::fn copy_segment -->
 Parses a segment `self` and copies the `Segment` into the location
 given by `segment`.
@@ -6657,7 +6720,7 @@ A pointer to store the format in
 A pointer to store the minsize in
 ## `maxsize`
 A pointer to store the maxsize in
-## `async`
+## `async_`
 A pointer to store the async-flag in
 <!-- impl Event::fn parse_caps -->
 Get the caps from `self`. The caps remains valid as long as `self` remains
@@ -6847,12 +6910,6 @@ pointer to store TOC updated flag.
 Parse a TOC select `self` and store the results in the given `uid` location.
 ## `uid`
 storage for the selection UID.
-<!-- impl Event::fn ref -->
-Increase the refcount of this event.
-
-# Returns
-
-`self` (for convenience when doing assignments)
 <!-- impl Event::fn set_group_id -->
 All streams that have the same group id are supposed to be played
 together, i.e. all streams inside a container file should have the
@@ -6897,8 +6954,6 @@ the stream object to set
 <!-- impl Event::fn set_stream_flags -->
 ## `flags`
 the stream flags to set
-<!-- impl Event::fn unref -->
-Decrease the refcount of an event, freeing it if the refcount reaches 0.
 <!-- impl Event::fn writable_structure -->
 Get a writable version of the structure.
 
@@ -6911,49 +6966,6 @@ This function checks if `self` is writable and will never return
 `None`.
 
 MT safe.
-<!-- impl Event::fn replace -->
-Modifies a pointer to a `Event` to point to a different `Event`. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-event is unreffed, the new one is reffed).
-
-Either `new_event` or the `Event` pointed to by `old_event` may be `None`.
-## `old_event`
-pointer to a
- pointer to a `Event` to be replaced.
-## `new_event`
-pointer to a `Event` that will
- replace the event pointed to by `old_event`.
-
-# Returns
-
-`true` if `new_event` was different from `old_event`
-<!-- impl Event::fn steal -->
-Atomically replace the `Event` pointed to by `old_event` with `None` and
-return the original event.
-## `old_event`
-pointer to a
- pointer to a `Event` to be stolen.
-
-# Returns
-
-the `Event` that was in `old_event`
-<!-- impl Event::fn take -->
-Modifies a pointer to a `Event` to point to a different `Event`. This
-function is similar to `Event::replace` except that it takes ownership of
-`new_event`.
-
-Either `new_event` or the `Event` pointed to by `old_event` may be `None`.
-## `old_event`
-pointer to a
- pointer to a `Event` to be stolen.
-## `new_event`
-pointer to a `Event` that will
- replace the event pointed to by `old_event`.
-
-# Returns
-
-`true` if `new_event` was different from `old_event`
 <!-- enum EventType -->
 `EventType` lists the standard event types that can be sent in a pipeline.
 
@@ -7054,6 +7066,22 @@ Custom upstream or downstream event.
  In-band when travelling downstream.
 <!-- enum EventType::variant CustomBothOob -->
 Custom upstream or downstream out-of-band event.
+<!-- struct EventTypeFlags -->
+`EventTypeFlags` indicate the aspects of the different `EventType`
+values. You can get the type flags of a `EventType` with the
+`EventType::get_flags` function.
+<!-- struct EventTypeFlags::const UPSTREAM -->
+Set if the event can travel upstream.
+<!-- struct EventTypeFlags::const DOWNSTREAM -->
+Set if the event can travel downstream.
+<!-- struct EventTypeFlags::const SERIALIZED -->
+Set if the event should be serialized with data
+ flow.
+<!-- struct EventTypeFlags::const STICKY -->
+Set if the event is sticky on the pads.
+<!-- struct EventTypeFlags::const STICKY_MULTI -->
+Multiple sticky events can be on a pad, each
+ identified by the event name.
 <!-- enum FlowReturn -->
 The result of passing data to a pad.
 
@@ -7081,8 +7109,8 @@ Pad is EOS.
 Pad is not negotiated.
 <!-- enum FlowReturn::variant Error -->
 Some (fatal) error occurred. Element generating
- this error should post an error message with more
- details.
+ this error should post an error message using
+ GST_ELEMENT_ERROR() with more details.
 <!-- enum FlowReturn::variant NotSupported -->
 This operation is not supported.
 <!-- enum FlowReturn::variant CustomError -->
@@ -7277,6 +7305,193 @@ used when the library doesn't accept settings.
 used when the library generated an encoding error.
 <!-- enum LibraryError::variant NumErrors -->
 the number of library error types.
+<!-- struct Memory -->
+GstMemory is a lightweight refcounted object that wraps a region of memory.
+They are typically used to manage the data of a `Buffer`.
+
+A GstMemory object has an allocated region of memory of maxsize. The maximum
+size does not change during the lifetime of the memory object. The memory
+also has an offset and size property that specifies the valid range of memory
+in the allocated region.
+
+Memory is usually created by allocators with a `AllocatorExt::alloc`
+method call. When `None` is used as the allocator, the default allocator will
+be used.
+
+New allocators can be registered with `Allocator::register`.
+Allocators are identified by name and can be retrieved with
+`Allocator::find`. `AllocatorExt::set_default` can be used to change the
+default allocator.
+
+New memory can be created with `Memory::new_wrapped` that wraps the memory
+allocated elsewhere.
+
+Refcounting of the memory block is performed with `gst_memory_ref` and
+`gst_memory_unref`.
+
+The size of the memory can be retrieved and changed with
+`Memory::get_sizes` and `Memory::resize` respectively.
+
+Getting access to the data of the memory is performed with `Memory::map`.
+The call will return a pointer to offset bytes into the region of memory.
+After the memory access is completed, `Memory::unmap` should be called.
+
+Memory can be copied with `Memory::copy`, which will return a writable
+copy. `Memory::share` will create a new memory block that shares the
+memory with an existing memory block at a custom offset and with a custom
+size.
+
+Memory can be efficiently merged when `Memory::is_span` returns `true`.
+<!-- impl Memory::fn new_wrapped -->
+Allocate a new memory block that wraps the given `data`.
+
+The prefix/padding must be filled with 0 if `flags` contains
+`MemoryFlags::ZeroPrefixed` and `MemoryFlags::ZeroPadded` respectively.
+## `flags`
+`MemoryFlags`
+## `data`
+data to
+ wrap
+## `maxsize`
+allocated size of `data`
+## `offset`
+offset in `data`
+## `size`
+size of valid data
+## `user_data`
+user_data
+## `notify`
+called with `user_data` when the memory is freed
+
+# Returns
+
+a new `Memory`.
+<!-- impl Memory::fn copy -->
+Return a copy of `size` bytes from `self` starting from `offset`. This copy is
+guaranteed to be writable. `size` can be set to -1 to return a copy
+from `offset` to the end of the memory region.
+## `offset`
+offset to copy from
+## `size`
+size to copy, or -1 to copy to the end of the memory region
+
+# Returns
+
+a new `Memory`.
+<!-- impl Memory::fn get_sizes -->
+Get the current `size`, `offset` and `maxsize` of `self`.
+## `offset`
+pointer to offset
+## `maxsize`
+pointer to maxsize
+
+# Returns
+
+the current size of `self`
+<!-- impl Memory::fn init -->
+Initializes a newly allocated `self` with the given parameters. This function
+will call `MiniObject::init` with the default memory parameters.
+## `flags`
+`MemoryFlags`
+## `allocator`
+the `Allocator`
+## `parent`
+the parent of `self`
+## `maxsize`
+the total size of the memory
+## `align`
+the alignment of the memory
+## `offset`
+The offset in the memory
+## `size`
+the size of valid data in the memory
+<!-- impl Memory::fn is_span -->
+Check if `self` and mem2 share the memory with a common parent memory object
+and that the memory is contiguous.
+
+If this is the case, the memory of `self` and `mem2` can be merged
+efficiently by performing `Memory::share` on the parent object from
+the returned `offset`.
+## `mem2`
+a `Memory`
+## `offset`
+a pointer to a result offset
+
+# Returns
+
+`true` if the memory is contiguous and of a common parent.
+<!-- impl Memory::fn is_type -->
+Check if `self` if allocated with an allocator for `mem_type`.
+## `mem_type`
+a memory type
+
+# Returns
+
+`true` if `self` was allocated from an allocator for `mem_type`.
+<!-- impl Memory::fn make_mapped -->
+Create a `Memory` object that is mapped with `flags`. If `self` is mappable
+with `flags`, this function returns the mapped `self` directly. Otherwise a
+mapped copy of `self` is returned.
+
+This function takes ownership of old `self` and returns a reference to a new
+`Memory`.
+## `info`
+pointer for info
+## `flags`
+mapping flags
+
+# Returns
+
+a `Memory` object mapped
+with `flags` or `None` when a mapping is not possible.
+<!-- impl Memory::fn map -->
+Fill `info` with the pointer and sizes of the memory in `self` that can be
+accessed according to `flags`.
+
+This function can return `false` for various reasons:
+- the memory backed by `self` is not accessible with the given `flags`.
+- the memory was already mapped with a different mapping.
+
+`info` and its contents remain valid for as long as `self` is valid and
+until `Memory::unmap` is called.
+
+For each `Memory::map` call, a corresponding `Memory::unmap` call
+should be done.
+## `info`
+pointer for info
+## `flags`
+mapping flags
+
+# Returns
+
+`true` if the map operation was successful.
+<!-- impl Memory::fn resize -->
+Resize the memory region. `self` should be writable and offset + size should be
+less than the maxsize of `self`.
+
+`MemoryFlags::ZeroPrefixed` and `MemoryFlags::ZeroPadded` will be
+cleared when offset or padding is increased respectively.
+## `offset`
+a new offset
+## `size`
+a new size
+<!-- impl Memory::fn share -->
+Return a shared copy of `size` bytes from `self` starting from `offset`. No
+memory copy is performed and the memory region is simply shared. The result
+is guaranteed to be non-writable. `size` can be set to -1 to return a shared
+copy from `offset` to the end of the memory region.
+## `offset`
+offset to share from
+## `size`
+size to share, or -1 to share to the end of the memory region
+
+# Returns
+
+a new `Memory`.
+<!-- impl Memory::fn unmap -->
+Release the memory obtained with `Memory::map`
+## `info`
+a `MapInfo`
 <!-- struct MemoryFlags -->
 Flags for wrapped memory.
 <!-- struct MemoryFlags::const READONLY -->
@@ -8570,12 +8785,6 @@ Feature: `v1_10`
 
 ## `structure`
 A pointer to the returned details structure
-<!-- impl Message::fn ref -->
-Convenience macro to increase the reference count of the message.
-
-# Returns
-
-`self` (for convenience when doing assignments)
 <!-- impl Message::fn set_buffering_stats -->
 Configures the buffering stats values in `self`.
 ## `mode`
@@ -8670,9 +8879,6 @@ Index of the stream to retrieve
 # Returns
 
 A `Stream`
-<!-- impl Message::fn unref -->
-Convenience macro to decrease the reference count of the message, possibly
-freeing it.
 <!-- impl Message::fn writable_structure -->
 Get a writable version of the structure.
 
@@ -8756,6 +8962,8 @@ What needs to be done in applications? Again it's not a lot to change.
 
  * start your pipeline
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
@@ -8764,7 +8972,7 @@ Trait containing all `Object` methods.
 
 # Implementors
 
-[`Allocator`](struct.Allocator.html), [`BufferPool`](struct.BufferPool.html), [`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
+[`Allocator`](struct.Allocator.html), [`BufferPool`](struct.BufferPool.html), [`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`ControlBinding`](struct.ControlBinding.html), [`ControlSource`](struct.ControlSource.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
 <!-- impl Object::fn check_uniqueness -->
 Checks to see if there is any object named `name` in `list`. This function
 does not do any locking of any kind. You might want to protect the
@@ -8955,7 +9163,7 @@ This function is useful if one wants to e.g. draw a graph of the control
 curve or apply a control curve sample by sample.
 
 The values are unboxed and ready to be used. The similar function
-`GstObjectExt::get_g_value_array` returns the array as `GValues` and is
+`Object::get_g_value_array` returns the array as `GValues` and is
 better suites for bindings.
 ## `property_name`
 the name of the property to get
@@ -9573,7 +9781,7 @@ installed (see `gst_pad_set_getrange_function`) this function returns
 
 If `buffer` points to a variable holding `None`, a valid new `Buffer` will be
 placed in `buffer` when this function returns `FlowReturn::Ok`. The new buffer
-must be freed with `Buffer::unref` after usage.
+must be freed with `gst_buffer_unref` after usage.
 
 When `buffer` points to a variable that points to a valid `Buffer`, the
 buffer will be filled with the result data when this function returns
@@ -9938,7 +10146,7 @@ semantics of the arguments of this function.
 
 If `buffer` points to a variable holding `None`, a valid new `Buffer` will be
 placed in `buffer` when this function returns `FlowReturn::Ok`. The new buffer
-must be freed with `Buffer::unref` after usage. When this function
+must be freed with `gst_buffer_unref` after usage. When this function
 returns any other result value, `buffer` will still point to `None`.
 
 When `buffer` points to a variable that points to a valid `Buffer`, the
@@ -9991,7 +10199,7 @@ mainly used by elements to send events to their peer
 elements.
 
 This function takes ownership of the provided event so you should
-`Event::ref` it if you want to reuse the event after this call.
+`gst_event_ref` it if you want to reuse the event after this call.
 ## `event`
 the `Event` to send to the pad.
 
@@ -10145,7 +10353,7 @@ plugin doesn't need to bother itself with this information; the core handles
 all necessary locks and checks.
 
 This function takes ownership of the provided event so you should
-`Event::ref` it if you want to reuse the event after this call.
+`gst_event_ref` it if you want to reuse the event after this call.
 ## `event`
 the `Event` to send to the pad.
 
@@ -11346,6 +11554,8 @@ The plugin has already be loaded from a different file
 <!-- struct PluginFeature -->
 This is a base class for anything that can be added to a `Plugin`.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PluginFeatureExtManual`](prelude/trait.PluginFeatureExtManual.html)
@@ -11870,7 +12080,7 @@ The following example shows how to query the duration of a pipeline:
 <!-- impl Query::fn new_accept_caps -->
 Constructs a new query object for querying if `caps` are accepted.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `caps`
 a fixed `Caps`
 
@@ -11880,7 +12090,7 @@ a new `Query`
 <!-- impl Query::fn new_allocation -->
 Constructs a new query object for querying the allocation properties.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `caps`
 the negotiated caps
 ## `need_pool`
@@ -11892,7 +12102,7 @@ a new `Query`
 <!-- impl Query::fn new_bitrate -->
 Constructs a new query object for querying the bitrate.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 
 Feature: `v1_16`
 
@@ -11904,7 +12114,7 @@ a new `Query`
 Constructs a new query object for querying the buffering status of
 a stream.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `format`
 the default `Format` for the new query
 
@@ -11931,7 +12141,7 @@ The `filter` is used to restrict the result caps, only the caps matching
 `filter` should be returned from the CAPS query. Specifying a filter might
 greatly reduce the amount of processing an element needs to do.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `filter`
 a filter
 
@@ -11941,7 +12151,7 @@ a new `Query`
 <!-- impl Query::fn new_context -->
 Constructs a new query object for querying the pipeline-local context.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `context_type`
 Context type to query
 
@@ -11949,11 +12159,11 @@ Context type to query
 
 a new `Query`
 <!-- impl Query::fn new_convert -->
-Constructs a new convert query object. Use `Query::unref`
+Constructs a new convert query object. Use `gst_query_unref`
 when done with it. A convert query is used to ask for a conversion between
 one format and another.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `src_format`
 the source `Format` for the new query
 ## `value`
@@ -11965,10 +12175,10 @@ the target `Format`
 
 a `Query`
 <!-- impl Query::fn new_custom -->
-Constructs a new custom query object. Use `Query::unref`
+Constructs a new custom query object. Use `gst_query_unref`
 when done with it.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `type_`
 the query type
 ## `structure`
@@ -11980,17 +12190,17 @@ a new `Query`
 <!-- impl Query::fn new_drain -->
 Constructs a new query object for querying the drain state.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 
 # Returns
 
 a new `Query`
 <!-- impl Query::fn new_duration -->
 Constructs a new stream duration query object to query in the given format.
-Use `Query::unref` when done with it. A duration query will give the
+Use `gst_query_unref` when done with it. A duration query will give the
 total length of the stream.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `format`
 the `Format` for this duration query
 
@@ -12001,28 +12211,28 @@ a new `Query`
 Constructs a new query object for querying formats of
 the stream.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 
 # Returns
 
 a new `Query`
 <!-- impl Query::fn new_latency -->
 Constructs a new latency query object.
-Use `Query::unref` when done with it. A latency query is usually performed
+Use `gst_query_unref` when done with it. A latency query is usually performed
 by sinks to compensate for additional latency introduced by elements in the
 pipeline.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 
 # Returns
 
 a `Query`
 <!-- impl Query::fn new_position -->
-Constructs a new query stream position query object. Use `Query::unref`
+Constructs a new query stream position query object. Use `gst_query_unref`
 when done with it. A position query is used to query the current position
 of playback in the streams, in some format.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `format`
 the default `Format` for the new query
 
@@ -12032,7 +12242,7 @@ a new `Query`
 <!-- impl Query::fn new_scheduling -->
 Constructs a new query object for querying the scheduling properties.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 
 # Returns
 
@@ -12041,7 +12251,7 @@ a new `Query`
 Constructs a new query object for querying seeking properties of
 the stream.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `format`
 the default `Format` for the new query
 
@@ -12049,11 +12259,11 @@ the default `Format` for the new query
 
 a new `Query`
 <!-- impl Query::fn new_segment -->
-Constructs a new segment query object. Use `Query::unref`
+Constructs a new segment query object. Use `gst_query_unref`
 when done with it. A segment query is used to discover information about the
 currently configured segment for playback.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 ## `format`
 the `Format` for the new query
 
@@ -12061,11 +12271,11 @@ the `Format` for the new query
 
 a new `Query`
 <!-- impl Query::fn new_uri -->
-Constructs a new query URI query object. Use `Query::unref`
+Constructs a new query URI query object. Use `gst_query_unref`
 when done with it. An URI query is used to query the current URI
 that is used by the source or sink.
 
-Free-function: `Query::unref`
+Free-function: `gst_query_unref`
 
 # Returns
 
@@ -12107,14 +12317,6 @@ a `gboolean` indicating if the range was added or not.
 Add `mode` as one of the supported scheduling modes to `self`.
 ## `mode`
 a `PadMode`
-<!-- impl Query::fn copy -->
-Copies the given query using the copy function of the parent `Structure`.
-
-Free-function: gst_query_unref
-
-# Returns
-
-a new copy of `self`.
 <!-- impl Query::fn find_allocation_meta -->
 Check if `self` has metadata `api` set. When this function returns `true`,
 `index` will contain the index where the requested API and the parameters
@@ -12626,9 +12828,6 @@ Answer a URI query by setting the requested URI redirection
 to permanent or not.
 ## `permanent`
 whether the redirect is permanent or not
-<!-- impl Query::fn unref -->
-Decreases the refcount of the query. If the refcount reaches 0, the query
-will be freed.
 <!-- impl Query::fn writable_structure -->
 Get the structure of a query. This method should be called with a writable
 `self` so that the returned structure is guaranteed to be writable.
@@ -12638,23 +12837,6 @@ Get the structure of a query. This method should be called with a writable
 the `Structure` of the query. The structure is
  still owned by the query and will therefore be freed when the query
  is unreffed.
-<!-- impl Query::fn replace -->
-Modifies a pointer to a `Query` to point to a different `Query`. The
-modification is done atomically (so this is useful for ensuring thread safety
-in some cases), and the reference counts are updated appropriately (the old
-query is unreffed, the new one is reffed).
-
-Either `new_query` or the `Query` pointed to by `old_query` may be `None`.
-## `old_query`
-pointer to a pointer to a
- `Query` to be replaced.
-## `new_query`
-pointer to a `Query` that will
- replace the query pointed to by `old_query`.
-
-# Returns
-
-`true` if `new_query` was different from `old_query`
 <!-- enum Rank -->
 Element priority ranks. Defines the order in which the autoplugger (or
 similar rank-picking mechanisms, such as e.g. `Element::make_from_uri`)
@@ -13015,15 +13197,8 @@ a `Structure`, or `None`
 
 # Returns
 
-the new `Sample`. `Sample::unref`
+the new `Sample`. `gst_sample_unref`
  after usage.
-<!-- impl Sample::fn copy -->
-Create a copy of the given sample. This will also make a newly allocated
-copy of the data the source sample contains.
-
-# Returns
-
-a new copy of `self`.
 <!-- impl Sample::fn get_buffer -->
 Get the buffer associated with `self`
 
@@ -13032,7 +13207,7 @@ Get the buffer associated with `self`
 the buffer of `self` or `None`
  when there is no buffer. The buffer remains valid as long as
  `self` is valid. If you need to hold on to it for longer than
- that, take a ref to the buffer with `Buffer::ref`.
+ that, take a ref to the buffer with `gst_buffer_ref`.
 <!-- impl Sample::fn get_buffer_list -->
 Get the buffer list associated with `self`
 
@@ -13050,7 +13225,7 @@ Get the caps associated with `self`
 the caps of `self` or `None`
  when there is no caps. The caps remain valid as long as `self` is
  valid. If you need to hold on to the caps for longer than that,
- take a ref to the caps with `Caps::ref`.
+ take a ref to the caps with `gst_caps_ref`.
 <!-- impl Sample::fn get_info -->
 Get extra information associated with `self`.
 
@@ -13065,12 +13240,6 @@ Get the segment associated with `self`
 
 the segment of `self`.
  The segment remains valid as long as `self` is valid.
-<!-- impl Sample::fn ref -->
-Increases the refcount of the given sample by one.
-
-# Returns
-
-`self`
 <!-- impl Sample::fn set_buffer -->
 Set the buffer associated with `self`. `self` must be writable.
 
@@ -13104,9 +13273,6 @@ Feature: `v1_16`
 
 ## `segment`
 A `Segment`
-<!-- impl Sample::fn unref -->
-Decreases the refcount of the sample. If the refcount reaches 0, the
-sample will be freed.
 <!-- struct SchedulingFlags -->
 The different scheduling flags.
 <!-- struct SchedulingFlags::const SEEKABLE -->
@@ -15037,7 +15203,7 @@ tag
 
 # Returns
 
-a new `TagList`. Free with `TagList::unref`
+a new `TagList`. Free with `gst_tag_list_unref`
  when no longer needed.
 <!-- impl TagList::fn new_empty -->
 Creates a new empty GstTagList.
@@ -15066,7 +15232,7 @@ tag / value pairs to set
 
 # Returns
 
-a new `TagList`. Free with `TagList::unref`
+a new `TagList`. Free with `gst_tag_list_unref`
  when no longer needed.
 <!-- impl TagList::fn add -->
 Sets the values for the given tags using the specified mode.
@@ -15109,11 +15275,11 @@ Creates a new `TagList` as a copy of the old `self`. The new taglist
 will have a refcount of 1, owned by the caller, and will be writable as
 a result.
 
-Note that this function is the semantic equivalent of a `TagList::ref`
+Note that this function is the semantic equivalent of a `gst_tag_list_ref`
 followed by a `gst_tag_list_make_writable`. If you only want to hold on to a
-reference to the data, you should use `TagList::ref`.
+reference to the data, you should use `gst_tag_list_ref`.
 
-When you are finished with the taglist, call `TagList::unref` on it.
+When you are finished with the taglist, call `gst_tag_list_unref` on it.
 
 # Returns
 
@@ -15349,7 +15515,7 @@ location for the result
  given list.
 <!-- impl TagList::fn get_sample -->
 Copies the first sample for the given tag in the taglist into the variable
-pointed to by `sample`. Free the sample with `Sample::unref` when it is
+pointed to by `sample`. Free the sample with `gst_sample_unref` when it is
 no longer needed. You can retrieve the buffer from the sample using
 `Sample::get_buffer` and the associated caps (if any) with
 `Sample::get_caps`.
@@ -15368,7 +15534,7 @@ address of a GstSample
 <!-- impl TagList::fn get_sample_index -->
 Gets the sample that is at the given index for the given tag in the given
 list and copies it into the variable pointed to by `sample`. Free the sample
-with `Sample::unref` when it is no longer needed. You can retrieve the
+with `gst_sample_unref` when it is no longer needed. You can retrieve the
 buffer from the sample using `Sample::get_buffer` and the associated
 caps (if any) with `Sample::get_caps`.
 
@@ -15570,18 +15736,6 @@ location for the result
 
 `true`, if a value was set, `false` if the tag didn't exist in the
  given list.
-<!-- impl TagList::fn ref -->
-Add a reference to a `TagList` mini object.
-
-From this point on, until the caller calls `TagList::unref` or
-`gst_tag_list_make_writable`, it is guaranteed that the taglist object will
-not change. To use a `TagList` object, you must always have a refcount on
-it -- either the one made implicitly by e.g. `TagList::new`, or via
-taking one explicitly with this function.
-
-# Returns
-
-the same `TagList` mini object.
 <!-- impl TagList::fn remove_tag -->
 Removes the given tag from the taglist.
 ## `tag`
@@ -15599,8 +15753,6 @@ Serializes a tag list to a string.
 a newly-allocated string, or `None` in case of
  an error. The string must be freed with `g_free` when no longer
  needed.
-<!-- impl TagList::fn unref -->
-Unref a `TagList`, and and free all its memory when the refcount reaches 0.
 <!-- impl TagList::fn copy_value -->
 Copies the contents for the given tag into the value,
 merging multiple values into one if multiple values are associated

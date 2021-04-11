@@ -338,6 +338,8 @@ Things that subclass need to take care of:
  PLC, it should also accept NULL data in `handle_frame` and provide for
  data for indicated duration.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`AudioDecoderExt`](trait.AudioDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AudioDecoderExtManual`](prelude/trait.AudioDecoderExtManual.html)
@@ -631,6 +633,16 @@ Maximum number of tolerated consecutive decode errors. See
 
 Feature: `v1_18`
 
+<!-- enum AudioDitherMethod -->
+Set of available dithering methods.
+<!-- enum AudioDitherMethod::variant None -->
+No dithering
+<!-- enum AudioDitherMethod::variant Rpdf -->
+Rectangular dithering
+<!-- enum AudioDitherMethod::variant Tpdf -->
+Triangular dithering (default)
+<!-- enum AudioDitherMethod::variant TpdfHf -->
+High frequency triangular dithering
 <!-- struct AudioEncoder -->
 This base class is for audio encoders turning raw audio samples into
 encoded audio data.
@@ -724,6 +736,8 @@ Things that subclass need to take care of:
  and discontinuity processing.
  * Accept data in `handle_frame` and provide encoded results to
  `AudioEncoder::finish_frame`.
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
@@ -1176,6 +1190,18 @@ Layout of the audio samples for the different channels.
 interleaved audio
 <!-- enum AudioLayout::variant NonInterleaved -->
 non-interleaved audio
+<!-- enum AudioNoiseShapingMethod -->
+Set of available noise shaping methods
+<!-- enum AudioNoiseShapingMethod::variant None -->
+No noise shaping (default)
+<!-- enum AudioNoiseShapingMethod::variant ErrorFeedback -->
+Error feedback
+<!-- enum AudioNoiseShapingMethod::variant Simple -->
+Simple 2-pole noise shaping
+<!-- enum AudioNoiseShapingMethod::variant Medium -->
+Medium 5-pole noise shaping
+<!-- enum AudioNoiseShapingMethod::variant High -->
+High 8-pole noise shaping
 <!-- struct AudioPackFlags -->
 The different flags that can be used when packing and unpacking.
 <!-- struct AudioPackFlags::const NONE -->
@@ -1186,6 +1212,23 @@ When the source has a smaller depth
  to 0. This is likely slightly faster but less accurate. When this flag
  is not specified, the most significant bits of the source are duplicated
  in the least significant bits of the destination.
+<!-- enum AudioResamplerMethod -->
+Different subsampling and upsampling methods
+<!-- enum AudioResamplerMethod::variant Nearest -->
+Duplicates the samples when
+ upsampling and drops when downsampling
+<!-- enum AudioResamplerMethod::variant Linear -->
+Uses linear interpolation to reconstruct
+ missing samples and averaging to downsample
+<!-- enum AudioResamplerMethod::variant Cubic -->
+Uses cubic interpolation
+<!-- enum AudioResamplerMethod::variant BlackmanNuttall -->
+Uses Blackman-Nuttall windowed sinc interpolation
+<!-- enum AudioResamplerMethod::variant Kaiser -->
+Uses Kaiser windowed sinc interpolation
+
+Feature: `v1_10`
+
 <!-- enum AudioRingBufferFormatType -->
 The format of the samples in the ringbuffer.
 <!-- enum AudioRingBufferFormatType::variant Raw -->

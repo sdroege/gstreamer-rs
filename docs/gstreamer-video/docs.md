@@ -292,13 +292,15 @@ non-linear RGB (R'G'B')
 <!-- enum VideoColorMatrix::variant Unknown -->
 unknown matrix
 <!-- enum VideoColorMatrix::variant Rgb -->
-identity matrix
+identity matrix. Order of coefficients is
+actually GBR, also IEC 61966-2-1 (sRGB)
 <!-- enum VideoColorMatrix::variant Fcc -->
-FCC color matrix
+FCC Title 47 Code of Federal Regulations 73.682 (a)(20)
 <!-- enum VideoColorMatrix::variant Bt709 -->
-ITU-R BT.709 color matrix
+ITU-R BT.709 color matrix, also ITU-R BT1361
+/ IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
 <!-- enum VideoColorMatrix::variant Bt601 -->
-ITU-R BT.601 color matrix
+ITU-R BT.601 color matrix, also SMPTE170M / ITU-R BT1358 525 / ITU-R BT1700 NTSC
 <!-- enum VideoColorMatrix::variant Smpte240m -->
 SMPTE 240M color matrix
 <!-- enum VideoColorMatrix::variant Bt2020 -->
@@ -309,29 +311,38 @@ the CIE XYZ colorspace.
 <!-- enum VideoColorPrimaries::variant Unknown -->
 unknown color primaries
 <!-- enum VideoColorPrimaries::variant Bt709 -->
-BT709 primaries
+BT709 primaries, also ITU-R BT1361 / IEC
+61966-2-4 / SMPTE RP177 Annex B
 <!-- enum VideoColorPrimaries::variant Bt470m -->
-BT470M primaries
+BT470M primaries, also FCC Title 47 Code
+of Federal Regulations 73.682 (a)(20)
 <!-- enum VideoColorPrimaries::variant Bt470bg -->
-BT470BG primaries
+BT470BG primaries, also ITU-R BT601-6
+625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM
 <!-- enum VideoColorPrimaries::variant Smpte170m -->
-SMPTE170M primaries
+SMPTE170M primaries, also ITU-R
+BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
 <!-- enum VideoColorPrimaries::variant Smpte240m -->
 SMPTE240M primaries
 <!-- enum VideoColorPrimaries::variant Film -->
-Generic film
+Generic film (colour filters using
+Illuminant C)
 <!-- enum VideoColorPrimaries::variant Bt2020 -->
-BT2020 primaries. Since: 1.6
+ITU-R BT2020 primaries. Since: 1.6
 <!-- enum VideoColorPrimaries::variant Adobergb -->
 Adobe RGB primaries. Since: 1.8
 <!-- enum VideoColorPrimaries::variant Smptest428 -->
-SMPTE ST 428 primaries. Since: 1.16
+SMPTE ST 428 primaries (CIE 1931
+XYZ). Since: 1.16
 <!-- enum VideoColorPrimaries::variant Smpterp431 -->
-SMPTE RP 431 primaries. Since: 1.16
+SMPTE RP 431 primaries (ST 431-2
+(2011) / DCI P3). Since: 1.16
 <!-- enum VideoColorPrimaries::variant Smpteeg432 -->
-SMPTE EG 432 primaries. Since: 1.16
+SMPTE EG 432 primaries (ST 432-1
+(2010) / P3 D65). Since: 1.16
 <!-- enum VideoColorPrimaries::variant Ebu3213 -->
-EBU 3213 primaries. Since: 1.16
+EBU 3213 primaries (JEDEC P22
+phosphors). Since: 1.16
 <!-- enum VideoColorRange -->
 Possible color range values. These constants are defined for 8 bit color
 values and can be scaled for other bit depths.
@@ -446,6 +457,8 @@ The bare minimum that a functional subclass needs to implement is:
 
  * Accept data in `handle_frame` and provide decoded results to
  `VideoDecoder::finish_frame`, or call `VideoDecoder::drop_frame`.
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
@@ -680,7 +693,7 @@ Feature: `v1_16`
 
 ## `fmt`
 a `VideoFormat`
-## `mode`
+## `interlace_mode`
 A `VideoInterlaceMode`
 ## `width`
 The width in pixels
@@ -858,6 +871,8 @@ performance of the downstream elements. If enabled, subclasses can
 use `VideoEncoderExt::get_max_encode_time` to check if input frames
 are already late and drop them right away to give a chance to the
 pipeline to catch up.
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
@@ -1137,6 +1152,8 @@ Provides useful functions and a base class for video filters.
 The videofilter will by default enable QoS on the parent GstBaseTransform
 to implement frame dropping.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
@@ -1352,6 +1369,10 @@ packed 4:2:2 YUV, 12 bits per channel (Y-U-Y-V) (Since: 1.18)
 packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)
 <!-- enum VideoFormat::variant Y412Le -->
 packed 4:4:4:4 YUV, 12 bits per channel(U-Y-V-A...) (Since: 1.18)
+<!-- enum VideoFormat::variant Nv124l4 -->
+NV12 with 4x4 tiles in linear order.
+<!-- enum VideoFormat::variant Nv1232l32 -->
+NV12 with 32x32 tiles in linear order.
 <!-- struct VideoFormatFlags -->
 The different video flags that a format info can have.
 <!-- struct VideoFormatFlags::const YUV -->
@@ -1570,7 +1591,7 @@ frames contains both interlaced and
 1 field is stored in one buffer,
  `GST_VIDEO_BUFFER_FLAG_TF` or `GST_VIDEO_BUFFER_FLAG_BF` indicates if
  the buffer is carrying the top or bottom field, respectively. The top and
- bottom buffers are expected to alternate in the pipeline, with this mode
+ bottom buffers must alternate in the pipeline, with this mode
  (Since: 1.16).
 <!-- enum VideoMatrixMode -->
 Different color matrix conversion modes
@@ -1710,6 +1731,108 @@ Multiple views are
 provided as separate `gst::Memory` framebuffers attached to each
 `gst::Buffer`, described by the `GstVideoMultiviewMeta`
 and `VideoMeta`(s)
+<!-- struct VideoOrientation -->
+The interface allows unified access to control flipping and autocenter
+operation of video-sources or operators.
+
+# Implements
+
+[`VideoOrientationExt`](trait.VideoOrientationExt.html)
+<!-- trait VideoOrientationExt -->
+Trait containing all `VideoOrientation` methods.
+
+# Implementors
+
+[`VideoOrientation`](struct.VideoOrientation.html)
+<!-- trait VideoOrientationExt::fn get_hcenter -->
+Get the horizontal centering offset from the given object.
+## `center`
+return location for the result
+
+# Returns
+
+`true` in case the element supports centering
+<!-- trait VideoOrientationExt::fn get_hflip -->
+Get the horizontal flipping state (`true` for flipped) from the given object.
+## `flip`
+return location for the result
+
+# Returns
+
+`true` in case the element supports flipping
+<!-- trait VideoOrientationExt::fn get_vcenter -->
+Get the vertical centering offset from the given object.
+## `center`
+return location for the result
+
+# Returns
+
+`true` in case the element supports centering
+<!-- trait VideoOrientationExt::fn get_vflip -->
+Get the vertical flipping state (`true` for flipped) from the given object.
+## `flip`
+return location for the result
+
+# Returns
+
+`true` in case the element supports flipping
+<!-- trait VideoOrientationExt::fn set_hcenter -->
+Set the horizontal centering offset for the given object.
+## `center`
+centering offset
+
+# Returns
+
+`true` in case the element supports centering
+<!-- trait VideoOrientationExt::fn set_hflip -->
+Set the horizontal flipping state (`true` for flipped) for the given object.
+## `flip`
+use flipping
+
+# Returns
+
+`true` in case the element supports flipping
+<!-- trait VideoOrientationExt::fn set_vcenter -->
+Set the vertical centering offset for the given object.
+## `center`
+centering offset
+
+# Returns
+
+`true` in case the element supports centering
+<!-- trait VideoOrientationExt::fn set_vflip -->
+Set the vertical flipping state (`true` for flipped) for the given object.
+## `flip`
+use flipping
+
+# Returns
+
+`true` in case the element supports flipping
+<!-- enum VideoOrientationMethod -->
+The different video orientation methods.
+<!-- enum VideoOrientationMethod::variant Identity -->
+Identity (no rotation)
+<!-- enum VideoOrientationMethod::variant 90r -->
+Rotate clockwise 90 degrees
+<!-- enum VideoOrientationMethod::variant 180 -->
+Rotate 180 degrees
+<!-- enum VideoOrientationMethod::variant 90l -->
+Rotate counter-clockwise 90 degrees
+<!-- enum VideoOrientationMethod::variant Horiz -->
+Flip horizontally
+<!-- enum VideoOrientationMethod::variant Vert -->
+Flip vertically
+<!-- enum VideoOrientationMethod::variant UlLr -->
+Flip across upper left/lower right diagonal
+<!-- enum VideoOrientationMethod::variant UrLl -->
+Flip across upper right/lower left diagonal
+<!-- enum VideoOrientationMethod::variant Auto -->
+Select flip method based on image-orientation tag
+<!-- enum VideoOrientationMethod::variant Custom -->
+Current status depends on plugin internal setup
+
+Feature: `v1_10`
+
 <!-- struct VideoOverlay -->
 The `VideoOverlay` interface is used for 2 main purposes :
 
@@ -2156,6 +2279,8 @@ Every four adjacent blocks - two
  horizontally and two vertically are grouped together and are located
  in memory in Z or flipped Z order. In case of odd rows, the last row
  of blocks is arranged in linear order.
+<!-- enum VideoTileMode::variant Linear -->
+Tiles are in row order.
 <!-- struct VideoTimeCode -->
 `field_count` must be 0 for progressive video and 1 or 2 for interlaced.
 
@@ -2537,21 +2662,22 @@ Gamma 2.0 curve
 Gamma 2.2 curve
 <!-- enum VideoTransferFunction::variant Bt709 -->
 Gamma 2.2 curve with a linear segment in the lower
- range
+ range, also ITU-R BT470M / ITU-R BT1700 625 PAL &
+ SECAM / ITU-R BT1361
 <!-- enum VideoTransferFunction::variant Smpte240m -->
 Gamma 2.2 curve with a linear segment in the
  lower range
 <!-- enum VideoTransferFunction::variant Srgb -->
 Gamma 2.4 curve with a linear segment in the lower
- range
+ range. IEC 61966-2-1 (sRGB or sYCC)
 <!-- enum VideoTransferFunction::variant Gamma28 -->
-Gamma 2.8 curve
+Gamma 2.8 curve, also ITU-R BT470BG
 <!-- enum VideoTransferFunction::variant Log100 -->
 Logarithmic transfer characteristic
  100:1 range
 <!-- enum VideoTransferFunction::variant Log316 -->
 Logarithmic transfer characteristic
- 316.22777:1 range
+ 316.22777:1 range (100 * sqrt(10) : 1)
 <!-- enum VideoTransferFunction::variant Bt202012 -->
 Gamma 2.2 curve with a linear segment in the lower
  range. Used for BT.2020 with 12 bits per
@@ -2561,7 +2687,7 @@ Gamma 2.19921875. Since: 1.8
 <!-- enum VideoTransferFunction::variant Bt202010 -->
 Rec. ITU-R BT.2020-2 with 10 bits per component.
  (functionally the same as the values
- GST_VIDEO_TRANSFER_BT709 and GST_VIDEO_TRANSFER_BT2020_12).
+ GST_VIDEO_TRANSFER_BT709 and GST_VIDEO_TRANSFER_BT601).
  Since: 1.18
 <!-- enum VideoTransferFunction::variant Smpte2084 -->
 SMPTE ST 2084 for 10, 12, 14, and 16-bit systems.
@@ -2571,3 +2697,5 @@ SMPTE ST 2084 for 10, 12, 14, and 16-bit systems.
 Association of Radio Industries and Businesses (ARIB)
  STD-B67 and Rec. ITU-R BT.2100-1 hybrid loggamma (HLG) system
  Since: 1.18
+<!-- enum VideoTransferFunction::variant Bt601 -->
+also known as SMPTE170M / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC

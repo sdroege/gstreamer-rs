@@ -97,7 +97,7 @@ of `Adapter` is inside one pad's chain function, in which case access is
 serialized via the pad's STREAM_LOCK.
 
 Note that `Adapter::push` takes ownership of the buffer passed. Use
-`gst::Buffer::ref` before pushing it into the adapter if you still want to
+`gst_buffer_ref` before pushing it into the adapter if you still want to
 access the buffer later. The adapter will never modify the data in the
 buffer pushed in it.
 
@@ -192,7 +192,7 @@ Returns a `gst::Buffer` containing the first `nbytes` of the `self`, but
 does not flush them from the adapter. See `Adapter::take_buffer`
 for details.
 
-Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
+Caller owns a reference to the returned buffer. `gst_buffer_unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -203,13 +203,13 @@ the number of bytes to get
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst::Buffer::unref` when no longer needed.
+ `gst_buffer_unref` when no longer needed.
 <!-- impl Adapter::fn get_buffer_fast -->
 Returns a `gst::Buffer` containing the first `nbytes` of the `self`, but
 does not flush them from the adapter. See `Adapter::take_buffer_fast`
 for details.
 
-Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
+Caller owns a reference to the returned buffer. `gst_buffer_unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -220,13 +220,13 @@ the number of bytes to get
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst::Buffer::unref` when no longer needed.
+ `gst_buffer_unref` when no longer needed.
 <!-- impl Adapter::fn get_buffer_list -->
 Returns a `gst::BufferList` of buffers containing the first `nbytes` bytes of
 the `self` but does not flush them from the adapter. See
 `Adapter::take_buffer_list` for details.
 
-Caller owns the returned list. Call `gst::BufferList::unref` to free
+Caller owns the returned list. Call `gst_buffer_list_unref` to free
 the list after usage.
 ## `nbytes`
 the number of bytes to get
@@ -241,7 +241,7 @@ Returns a `glib::List` of buffers containing the first `nbytes` bytes of the
 `self`, but does not flush them from the adapter. See
 `Adapter::take_list` for details.
 
-Caller owns returned list and contained buffers. `gst::Buffer::unref` each
+Caller owns returned list and contained buffers. `gst_buffer_unref` each
 buffer in the list before freeing the list after usage.
 ## `nbytes`
 the number of bytes to get
@@ -482,7 +482,7 @@ unset.
 Since 1.6 this will also copy over all GstMeta of the input buffers except
 for meta with the `gst::MetaFlags::Pooled` flag or with the "memory" tag.
 
-Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
+Caller owns a reference to the returned buffer. `gst_buffer_unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -493,7 +493,7 @@ the number of bytes to take
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst::Buffer::unref` when no longer needed.
+ `gst_buffer_unref` when no longer needed.
 <!-- impl Adapter::fn take_buffer_fast -->
 Returns a `gst::Buffer` containing the first `nbytes` of the `self`.
 The returned bytes will be flushed from the adapter. This function
@@ -514,7 +514,7 @@ for meta with the `gst::MetaFlags::Pooled` flag or with the "memory" tag.
 This function can return buffer up to the return value of
 `Adapter::available` without making copies if possible.
 
-Caller owns a reference to the returned buffer. `gst::Buffer::unref` after
+Caller owns a reference to the returned buffer. `gst_buffer_unref` after
 usage.
 
 Free-function: gst_buffer_unref
@@ -525,14 +525,14 @@ the number of bytes to take
 
 a `gst::Buffer` containing the first
  `nbytes` of the adapter, or `None` if `nbytes` bytes are not available.
- `gst::Buffer::unref` when no longer needed.
+ `gst_buffer_unref` when no longer needed.
 <!-- impl Adapter::fn take_buffer_list -->
 Returns a `gst::BufferList` of buffers containing the first `nbytes` bytes of
 the `self`. The returned bytes will be flushed from the adapter.
 When the caller can deal with individual buffers, this function is more
 performant because no memory should be copied.
 
-Caller owns the returned list. Call `gst::BufferList::unref` to free
+Caller owns the returned list. Call `gst_buffer_list_unref` to free
 the list after usage.
 ## `nbytes`
 the number of bytes to take
@@ -548,7 +548,7 @@ Returns a `glib::List` of buffers containing the first `nbytes` bytes of the
 When the caller can deal with individual buffers, this function is more
 performant because no memory should be copied.
 
-Caller owns returned list and contained buffers. `gst::Buffer::unref` each
+Caller owns returned list and contained buffers. `gst_buffer_unref` each
 buffer in the list before freeing the list after usage.
 ## `nbytes`
 the number of bytes to take
@@ -576,16 +576,35 @@ Control is given to the subclass when all pads have data.
  * When data is queued on all pads, the aggregate vmethod is called.
 
  * One can peek at the data on any given GstAggregatorPad with the
- gst_aggregator_pad_peek_buffer () method, and remove it from the pad
+ `AggregatorPadExt::peek_buffer` method, and remove it from the pad
  with the gst_aggregator_pad_pop_buffer () method. When a buffer
  has been taken with pop_buffer (), a new buffer can be queued
  on that pad.
 
+ * When `AggregatorPadExt::peek_buffer` or `AggregatorPadExt::has_buffer`
+ are called, a reference is taken to the returned buffer, which stays
+ valid until either:
+
+ - `AggregatorPadExt::pop_buffer` is called, in which case the caller
+ is guaranteed that the buffer they receive is the same as the peeked
+ buffer.
+ - `AggregatorPadExt::drop_buffer` is called, in which case the caller
+ is guaranteed that the dropped buffer is the one that was peeked.
+ - the subclass implementation of `AggregatorClass.aggregate` returns.
+
+ Subsequent calls to `AggregatorPadExt::peek_buffer` or
+ `AggregatorPadExt::has_buffer` return / check the same buffer that was
+ returned / checked, until one of the conditions listed above is met.
+
+ Subclasses are only allowed to call these methods from the aggregate
+ thread.
+
  * If the subclass wishes to push a buffer downstream in its aggregate
  implementation, it should do so through the
- gst_aggregator_finish_buffer () method. This method will take care
+ `Aggregator::finish_buffer` method. This method will take care
  of sending and ordering mandatory events such as stream start, caps
- and segment.
+ and segment. Buffer lists can also be pushed out with
+ `Aggregator::finish_buffer_list`.
 
  * Same goes for EOS events, which should not be pushed directly by the
  subclass, it should instead return GST_FLOW_EOS in its aggregate
@@ -601,6 +620,8 @@ Control is given to the subclass when all pads have data.
  See `gst::ElementClass::add_static_pad_template_with_gtype`.
 
 This class used to live in gst-plugins-bad and was moved to core.
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 Feature: `v1_14`
 
@@ -624,6 +645,15 @@ Feature: `v1_14`
 
 ## `buffer`
 the `gst::Buffer` to push.
+<!-- trait AggregatorExt::fn finish_buffer_list -->
+This method will push the provided output buffer list downstream. If needed,
+mandatory events such as stream-start, caps, and segment events will be
+sent before pushing the buffer.
+
+Feature: `v1_18`
+
+## `bufferlist`
+the `gst::BufferList` to push.
 <!-- trait AggregatorExt::fn get_allocator -->
 Lets `Aggregator` sub-classes get the memory `allocator`
 acquired by the base class and its `params`.
@@ -671,6 +701,44 @@ Feature: `v1_18`
 # Returns
 
 `true` if the negotiation succeeded, else `false`.
+<!-- trait AggregatorExt::fn peek_next_sample -->
+Use this function to determine what input buffers will be aggregated
+to produce the next output buffer. This should only be called from
+a `Aggregator::samples-selected` handler, and can be used to precisely
+control aggregating parameters for a given set of input samples.
+
+Feature: `v1_18`
+
+
+# Returns
+
+The sample that is about to be aggregated. It may hold a `gst::Buffer`
+ or a `gst::BufferList`. The contents of its info structure is subclass-dependent,
+ and documented on a subclass basis. The buffers held by the sample are
+ not writable.
+<!-- trait AggregatorExt::fn selected_samples -->
+Subclasses should call this when they have prepared the
+buffers they will aggregate for each of their sink pads, but
+before using any of the properties of the pads that govern
+*how* aggregation should be performed, for example z-index
+for video aggregators.
+
+If `AggregatorExt::update_segment` is used by the subclass,
+it MUST be called before `Aggregator::selected_samples`.
+
+This function MUST only be called from the `AggregatorClass::aggregate`()
+function.
+
+Feature: `v1_18`
+
+## `pts`
+The presentation timestamp of the next output buffer
+## `dts`
+The decoding timestamp of the next output buffer
+## `duration`
+The duration of the next output buffer
+## `info`
+a `gst::Structure` containing additional information
 <!-- trait AggregatorExt::fn set_latency -->
 Lets `Aggregator` sub-classes tell the baseclass what their internal
 latency is. Will also post a LATENCY message on the bus so the pipeline
@@ -707,6 +775,36 @@ The running time based on the position
 Subclasses should use this to update the segment on their
 source pad, instead of directly pushing new segment events
 downstream.
+
+Subclasses MUST call this before `Aggregator::selected_samples`,
+if it is used at all.
+
+Feature: `v1_18`
+
+<!-- trait AggregatorExt::fn connect_samples_selected -->
+Signals that the `Aggregator` subclass has selected the next set
+of input samples it will aggregate. Handlers may call
+`AggregatorExt::peek_next_sample` at that point.
+
+Feature: `v1_18`
+
+## `segment`
+The `gst::Segment` the next output buffer is part of
+## `pts`
+The presentation timestamp of the next output buffer
+## `dts`
+The decoding timestamp of the next output buffer
+## `duration`
+The duration of the next output buffer
+## `info`
+a `gst::Structure` containing additional information
+<!-- trait AggregatorExt::fn get_property_emit_signals -->
+Enables the emission of signals such as `Aggregator::samples-selected`
+
+Feature: `v1_18`
+
+<!-- trait AggregatorExt::fn set_property_emit_signals -->
+Enables the emission of signals such as `Aggregator::samples-selected`
 
 Feature: `v1_18`
 
@@ -952,6 +1050,8 @@ Things that subclass need to take care of:
  overridden) will then use these rates to perform obvious conversions.
  These rates are also used to update (estimated) duration at regular
  frame intervals.
+
+This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
@@ -1337,6 +1437,8 @@ The `BaseSink:async` property can be used to instruct the sink to never
 perform an ASYNC state change. This feature is mostly usable when dealing
 with non-synchronized streams or sparse streams.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`BaseSinkExt`](trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSinkExtManual`](prelude/trait.BaseSinkExtManual.html)
@@ -1388,7 +1490,7 @@ Free-function: gst_sample_unref
 
 # Returns
 
-a `gst::Sample`. `gst::Sample::unref` after
+a `gst::Sample`. `gst_sample_unref` after
  usage. This function returns `None` when no buffer has arrived in the
  sink yet or when the sink is not in PAUSED or PLAYING.
 <!-- trait BaseSinkExt::fn get_latency -->
@@ -1859,6 +1961,8 @@ After the EOS has been sent to the element, the application should wait for
 an EOS message to be posted on the pipeline's bus. Once this EOS message is
 received, it may safely shut down the entire pipeline.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSrcExtManual`](prelude/trait.BaseSrcExtManual.html)
@@ -1877,8 +1981,7 @@ Unref the `allocator` after usage.
 the `gst::Allocator`
 used
 ## `params`
-the
-`gst::AllocationParams` of `allocator`
+the `gst::AllocationParams` of `allocator`
 <!-- trait BaseSrcExt::fn get_blocksize -->
 Get the number of bytes that `self` will push out with each buffer.
 
@@ -1931,6 +2034,10 @@ as the stream-lock needs to be held.
 
 The format for the new segment will be the current format of the source, as
 configured with `BaseSrcExt::set_format`
+
+# Deprecated since 1.18
+
+Use `BaseSrc::new_segment`
 ## `start`
 The new start value for the segment
 ## `stop`
@@ -1941,6 +2048,25 @@ The new time value for the start of the new segment
 # Returns
 
 `true` if preparation of the seamless segment succeeded.
+<!-- trait BaseSrcExt::fn new_segment -->
+Prepare a new segment for emission downstream. This function must
+only be called by derived sub-classes, and only from the `BaseSrcClass::create` function,
+as the stream-lock needs to be held.
+
+The format for the `segment` must be identical with the current format
+of the source, as configured with `BaseSrcExt::set_format`.
+
+The format of `self` must not be `gst::Format::Undefined` and the format
+should be configured via `BaseSrcExt::set_format` before calling this method.
+
+Feature: `v1_18`
+
+## `segment`
+a pointer to a `gst::Segment`
+
+# Returns
+
+`true` if preparation of new segment succeeded.
 <!-- trait BaseSrcExt::fn query_latency -->
 Query the source for the latency parameters. `live` will be `true` when `self` is
 configured as a live source. `min_latency` and `max_latency` will be set
@@ -1963,7 +2089,7 @@ Configure async behaviour in `self`, no state change will block. The open,
 close, start, stop, play and pause virtual methods will be executed in a
 different thread and are thus allowed to perform blocking operations. Any
 blocking operation should be unblocked with the unlock vmethod.
-## `async`
+## `async_`
 new async mode
 <!-- trait BaseSrcExt::fn set_automatic_eos -->
 If `automatic_eos` is `true`, `self` will automatically go EOS if a buffer
@@ -2179,6 +2305,8 @@ It provides for:
  * Implied `true` if no transform function is implemented.
  * Implied `false` if ONLY transform function is implemented.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`BaseTransformExt`](trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseTransformExtManual`](prelude/trait.BaseTransformExtManual.html)
@@ -2197,8 +2325,7 @@ Unref the `allocator` after use.
 the `gst::Allocator`
 used
 ## `params`
-the
-`gst::AllocationParams` of `allocator`
+the `gst::AllocationParams` of `allocator`
 <!-- trait BaseTransformExt::fn get_buffer_pool -->
 
 # Returns

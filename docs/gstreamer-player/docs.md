@@ -571,6 +571,8 @@ Base structure for information concerning a media stream. Depending on
 the stream type, one can find more media-specific information in
 `PlayerVideoInfo`, `PlayerAudioInfo`, `PlayerSubtitleInfo`.
 
+This is an Abstract Base Class, you cannot instantiate it.
+
 # Implements
 
 [`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)

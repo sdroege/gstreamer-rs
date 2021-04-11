@@ -39,7 +39,7 @@ to avoid polling.
 
 # Implements
 
-[`gst_base::BaseSinkExt`](../gst_base/trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
+[`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
 <!-- impl AppSink::fn get_buffer_list_support -->
 Check if `self` supports buffer lists.
 
@@ -54,7 +54,7 @@ Get the configured caps on `self`.
 
 # Returns
 
-the `gst::Caps` accepted by the sink. `gst::Caps::unref` after usage.
+the `gst::Caps` accepted by the sink. `gst_caps_unref` after usage.
 <!-- impl AppSink::fn get_drop -->
 Check if `self` will drop old buffers when the maximum amount of queued
 buffers is reached.
@@ -117,7 +117,7 @@ element is set to the READY/NULL state.
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
- Call `gst::Sample::unref` after usage.
+ Call `gst_sample_unref` after usage.
 <!-- impl AppSink::fn pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state.
@@ -134,7 +134,7 @@ If an EOS event was received before any buffers, this function returns
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
- Call `gst::Sample::unref` after usage.
+ Call `gst_sample_unref` after usage.
 <!-- impl AppSink::fn set_buffer_list_support -->
 Instruct `self` to enable or disable buffer list support.
 
@@ -218,7 +218,7 @@ the maximum amount of time to wait for the preroll sample
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
- Call `gst::Sample::unref` after usage.
+ Call `gst_sample_unref` after usage.
 <!-- impl AppSink::fn try_pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state or the timeout expires.
@@ -241,7 +241,7 @@ the maximum amount of time to wait for a sample
 # Returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
-Call `gst::Sample::unref` after usage.
+Call `gst_sample_unref` after usage.
 <!-- impl AppSink::fn connect_eos -->
 Signal that the end-of-stream has been reached. This signal is emitted from
 the streaming thread.
@@ -433,7 +433,7 @@ occurs or the state of the appsrc has gone through READY.
 
 # Implements
 
-[`gst_base::BaseSrcExt`](../gst_base/trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
+[`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
 <!-- impl AppSrc::fn end_of_stream -->
 Indicates to the appsrc element that the last buffer queued in the
 element is the last buffer of the stream.
@@ -447,7 +447,7 @@ Get the configured caps on `self`.
 
 # Returns
 
-the `gst::Caps` produced by the source. `gst::Caps::unref` after usage.
+the `gst::Caps` produced by the source. `gst_caps_unref` after usage.
 <!-- impl AppSrc::fn get_current_level_bytes -->
 Get the number of currently queued bytes inside `self`.
 
@@ -675,6 +675,110 @@ the offset to seek to
 # Returns
 
 `true` if the seek succeeded.
+<!-- impl AppSrc::fn get_property_block -->
+When max-bytes are queued and after the enough-data signal has been emitted,
+block any further push-buffer calls until the amount of queued bytes drops
+below the max-bytes limit.
+<!-- impl AppSrc::fn set_property_block -->
+When max-bytes are queued and after the enough-data signal has been emitted,
+block any further push-buffer calls until the amount of queued bytes drops
+below the max-bytes limit.
+<!-- impl AppSrc::fn get_property_caps -->
+The GstCaps that will negotiated downstream and will be put
+on outgoing buffers.
+<!-- impl AppSrc::fn set_property_caps -->
+The GstCaps that will negotiated downstream and will be put
+on outgoing buffers.
+<!-- impl AppSrc::fn get_property_current_level_bytes -->
+The number of currently queued bytes inside appsrc.
+<!-- impl AppSrc::fn get_property_duration -->
+The total duration in nanoseconds of the data stream. If the total duration is known, it
+is recommended to configure it with this property.
+
+Feature: `v1_10`
+
+<!-- impl AppSrc::fn set_property_duration -->
+The total duration in nanoseconds of the data stream. If the total duration is known, it
+is recommended to configure it with this property.
+
+Feature: `v1_10`
+
+<!-- impl AppSrc::fn get_property_emit_signals -->
+Make appsrc emit the "need-data", "enough-data" and "seek-data" signals.
+This option is by default enabled for backwards compatibility reasons but
+can disabled when needed because signal emission is expensive.
+<!-- impl AppSrc::fn set_property_emit_signals -->
+Make appsrc emit the "need-data", "enough-data" and "seek-data" signals.
+This option is by default enabled for backwards compatibility reasons but
+can disabled when needed because signal emission is expensive.
+<!-- impl AppSrc::fn get_property_format -->
+The format to use for segment events. When the source is producing
+timestamped buffers this property should be set to GST_FORMAT_TIME.
+<!-- impl AppSrc::fn set_property_format -->
+The format to use for segment events. When the source is producing
+timestamped buffers this property should be set to GST_FORMAT_TIME.
+<!-- impl AppSrc::fn get_property_handle_segment_change -->
+When enabled, appsrc will check GstSegment in GstSample which was
+pushed via `AppSrc::push_sample` or "push-sample" signal action.
+If a GstSegment is changed, corresponding segment event will be followed
+by next data flow.
+
+FIXME: currently only GST_FORMAT_TIME format is supported and therefore
+GstAppSrc::format should be time. However, possibly `AppSrc` can support
+other formats.
+
+Feature: `v1_18`
+
+<!-- impl AppSrc::fn set_property_handle_segment_change -->
+When enabled, appsrc will check GstSegment in GstSample which was
+pushed via `AppSrc::push_sample` or "push-sample" signal action.
+If a GstSegment is changed, corresponding segment event will be followed
+by next data flow.
+
+FIXME: currently only GST_FORMAT_TIME format is supported and therefore
+GstAppSrc::format should be time. However, possibly `AppSrc` can support
+other formats.
+
+Feature: `v1_18`
+
+<!-- impl AppSrc::fn get_property_is_live -->
+Instruct the source to behave like a live source. This includes that it
+will only push out buffers in the PLAYING state.
+<!-- impl AppSrc::fn set_property_is_live -->
+Instruct the source to behave like a live source. This includes that it
+will only push out buffers in the PLAYING state.
+<!-- impl AppSrc::fn get_property_max_bytes -->
+The maximum amount of bytes that can be queued internally.
+After the maximum amount of bytes are queued, appsrc will emit the
+"enough-data" signal.
+<!-- impl AppSrc::fn set_property_max_bytes -->
+The maximum amount of bytes that can be queued internally.
+After the maximum amount of bytes are queued, appsrc will emit the
+"enough-data" signal.
+<!-- impl AppSrc::fn get_property_min_latency -->
+The minimum latency of the source. A value of -1 will use the default
+latency calculations of `gst_base::BaseSrc`.
+<!-- impl AppSrc::fn set_property_min_latency -->
+The minimum latency of the source. A value of -1 will use the default
+latency calculations of `gst_base::BaseSrc`.
+<!-- impl AppSrc::fn get_property_min_percent -->
+Make appsrc emit the "need-data" signal when the amount of bytes in the
+queue drops below this percentage of max-bytes.
+<!-- impl AppSrc::fn set_property_min_percent -->
+Make appsrc emit the "need-data" signal when the amount of bytes in the
+queue drops below this percentage of max-bytes.
+<!-- impl AppSrc::fn get_property_size -->
+The total size in bytes of the data stream. If the total size is known, it
+is recommended to configure it with this property.
+<!-- impl AppSrc::fn set_property_size -->
+The total size in bytes of the data stream. If the total size is known, it
+is recommended to configure it with this property.
+<!-- impl AppSrc::fn get_property_stream_type -->
+The type of stream that this source is producing. For seekable streams the
+application should connect to the seek-data signal.
+<!-- impl AppSrc::fn set_property_stream_type -->
+The type of stream that this source is producing. For seekable streams the
+application should connect to the seek-data signal.
 <!-- enum AppStreamType -->
 The stream type.
 <!-- enum AppStreamType::variant Stream -->

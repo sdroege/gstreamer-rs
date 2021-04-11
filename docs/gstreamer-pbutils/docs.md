@@ -382,7 +382,7 @@ a `glib::List` of `DiscovererStreamInfo`
 # Returns
 
 the `gst::Caps` of the stream. Unref with
-`gst::Caps::unref` after usage.
+`gst_caps_unref` after usage.
 <!-- trait DiscovererStreamInfoExt::fn get_misc -->
 
 # Deprecated
@@ -650,7 +650,7 @@ Computes the full output caps that this `self` will be able to consume.
 # Returns
 
 The full caps the given `self` can consume. Call
-`gst::Caps::unref` when you are done with the caps.
+`gst_caps_unref` when you are done with the caps.
 <!-- trait EncodingProfileExt::fn get_name -->
 
 # Returns
@@ -752,14 +752,17 @@ for more about restrictions. Does not apply to `EncodingContainerProfile`.
 ## `restriction`
 the restriction to apply
 <!-- trait EncodingProfileExt::fn set_single_segment -->
-If using a single segment, buffers will be retimestamped
-and segments will be eat so as to appear as one segment.
+If using a single segment, buffers will be retimestamped and segments will be
+eat so as to appear as one segment.
+
+> *NOTE*: Single segment is not property supported when using
+> `encodebin:avoid-reencoding`
 
 Feature: `v1_18`
 
 ## `single_segment`
-`true` if the stream represented by `self` should use a single
-segment before the encoder `false` otherwise.
+`true` if the stream represented by `self` should use a
+single segment before the encoder, `false` otherwise.
 <!-- struct EncodingTarget -->
 Collection of `EncodingProfile` for a specific target or use-case.
 
@@ -925,6 +928,8 @@ Get the pass number if this is part of a multi-pass profile.
 The pass number. Starts at 1 for multi-pass. 0 if this is
 not a multi-pass profile
 <!-- impl EncodingVideoProfile::fn get_variableframerate -->
+> *NOTE*: Fixed framerate won't be enforced when `encodebin:avoid-reencoding`
+> is set.
 
 # Returns
 
