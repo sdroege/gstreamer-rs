@@ -60,13 +60,13 @@ pub trait GLDisplayExt: 'static {
     fn filter_gl_api(&self, gl_api: GLAPI);
 
     #[doc(alias = "gst_gl_display_get_gl_api")]
-    fn get_gl_api(&self) -> GLAPI;
+    fn gl_api(&self) -> GLAPI;
 
     #[doc(alias = "gst_gl_display_get_gl_api_unlocked")]
-    fn get_gl_api_unlocked(&self) -> GLAPI;
+    fn gl_api_unlocked(&self) -> GLAPI;
 
     #[doc(alias = "gst_gl_display_get_handle_type")]
-    fn get_handle_type(&self) -> GLDisplayType;
+    fn handle_type(&self) -> GLDisplayType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -136,7 +136,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    fn get_gl_api(&self) -> GLAPI {
+    fn gl_api(&self) -> GLAPI {
         unsafe {
             from_glib(ffi::gst_gl_display_get_gl_api(
                 self.as_ref().to_glib_none().0,
@@ -144,7 +144,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    fn get_gl_api_unlocked(&self) -> GLAPI {
+    fn gl_api_unlocked(&self) -> GLAPI {
         unsafe {
             from_glib(ffi::gst_gl_display_get_gl_api_unlocked(
                 self.as_ref().to_glib_none().0,
@@ -152,7 +152,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    fn get_handle_type(&self) -> GLDisplayType {
+    fn handle_type(&self) -> GLDisplayType {
         unsafe {
             from_glib(ffi::gst_gl_display_get_handle_type(
                 self.as_ref().to_glib_none().0,

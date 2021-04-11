@@ -61,10 +61,10 @@ pub trait ProjectExt: 'static {
     fn get_asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
 
     #[doc(alias = "ges_project_get_loading_assets")]
-    fn get_loading_assets(&self) -> Vec<Asset>;
+    fn loading_assets(&self) -> Vec<Asset>;
 
     #[doc(alias = "ges_project_get_uri")]
-    fn get_uri(&self) -> Option<glib::GString>;
+    fn uri(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_project_list_assets")]
     fn list_assets(&self, filter: glib::types::Type) -> Vec<Asset>;
@@ -189,7 +189,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn get_loading_assets(&self) -> Vec<Asset> {
+    fn loading_assets(&self) -> Vec<Asset> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_project_get_loading_assets(
                 self.as_ref().to_glib_none().0,
@@ -197,7 +197,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn get_uri(&self) -> Option<glib::GString> {
+    fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::ges_project_get_uri(self.as_ref().to_glib_none().0)) }
     }
 

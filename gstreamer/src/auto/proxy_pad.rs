@@ -30,11 +30,11 @@ pub const NONE_PROXY_PAD: Option<&ProxyPad> = None;
 
 pub trait ProxyPadExt: 'static {
     #[doc(alias = "gst_proxy_pad_get_internal")]
-    fn get_internal(&self) -> Option<ProxyPad>;
+    fn internal(&self) -> Option<ProxyPad>;
 }
 
 impl<O: IsA<ProxyPad>> ProxyPadExt for O {
-    fn get_internal(&self) -> Option<ProxyPad> {
+    fn internal(&self) -> Option<ProxyPad> {
         unsafe {
             from_glib_full(ffi::gst_proxy_pad_get_internal(
                 self.as_ref().to_glib_none().0,

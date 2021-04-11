@@ -606,7 +606,7 @@ pub enum DebugLevel {
 }
 
 impl DebugLevel {
-    pub fn get_name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
                 ffi::gst_debug_level_get_name(self.to_glib())
@@ -622,7 +622,7 @@ impl DebugLevel {
 impl fmt::Display for DebugLevel {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.get_name())
+        f.write_str(&self.name())
     }
 }
 
@@ -773,12 +773,12 @@ pub enum EventType {
 
 impl EventType {
     #[doc(alias = "gst_event_type_get_flags")]
-    pub fn get_flags(self) -> EventTypeFlags {
+    pub fn flags(self) -> EventTypeFlags {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_event_type_get_flags(self.to_glib())) }
     }
 
-    pub fn get_name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
                 ffi::gst_event_type_get_name(self.to_glib())
@@ -800,7 +800,7 @@ impl EventType {
 impl fmt::Display for EventType {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.get_name())
+        f.write_str(&self.name())
     }
 }
 
@@ -1061,7 +1061,7 @@ impl Format {
     //}
 
     #[doc(alias = "gst_format_get_name")]
-    pub fn get_name(self) -> Option<glib::GString> {
+    pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_format_get_name(self.to_glib())) }
     }
@@ -1404,7 +1404,7 @@ pub enum PadMode {
 }
 
 impl PadMode {
-    pub fn get_name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
                 ffi::gst_pad_mode_get_name(self.to_glib())
@@ -1420,7 +1420,7 @@ impl PadMode {
 impl fmt::Display for PadMode {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.get_name())
+        f.write_str(&self.name())
     }
 }
 
@@ -2423,7 +2423,7 @@ pub enum StateChange {
 impl fmt::Display for StateChange {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.get_name())
+        f.write_str(&self.name())
     }
 }
 

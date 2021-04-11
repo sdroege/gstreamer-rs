@@ -22,7 +22,7 @@ pub const NONE_BUFFER_POOL: Option<&BufferPool> = None;
 
 pub trait BufferPoolExt: 'static {
     #[doc(alias = "gst_buffer_pool_get_options")]
-    fn get_options(&self) -> Vec<glib::GString>;
+    fn options(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_buffer_pool_has_option")]
     fn has_option(&self, option: &str) -> bool;
@@ -38,7 +38,7 @@ pub trait BufferPoolExt: 'static {
 }
 
 impl<O: IsA<BufferPool>> BufferPoolExt for O {
-    fn get_options(&self) -> Vec<glib::GString> {
+    fn options(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_buffer_pool_get_options(
                 self.as_ref().to_glib_none().0,

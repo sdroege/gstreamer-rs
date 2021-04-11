@@ -26,9 +26,11 @@ unsafe impl Sync for VideoSink {}
 pub const NONE_VIDEO_SINK: Option<&VideoSink> = None;
 
 pub trait VideoSinkExt: 'static {
-    fn get_property_show_preroll_frame(&self) -> bool;
+    #[doc(alias = "get_property_show_preroll_frame")]
+    fn shows_preroll_frame(&self) -> bool;
 
-    fn set_property_show_preroll_frame(&self, show_preroll_frame: bool);
+    #[doc(alias = "set_property_show_preroll_frame")]
+    fn set_show_preroll_frame(&self, show_preroll_frame: bool);
 
     fn connect_property_show_preroll_frame_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -37,7 +39,7 @@ pub trait VideoSinkExt: 'static {
 }
 
 impl<O: IsA<VideoSink>> VideoSinkExt for O {
-    fn get_property_show_preroll_frame(&self) -> bool {
+    fn shows_preroll_frame(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -52,7 +54,7 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
         }
     }
 
-    fn set_property_show_preroll_frame(&self, show_preroll_frame: bool) {
+    fn set_show_preroll_frame(&self, show_preroll_frame: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

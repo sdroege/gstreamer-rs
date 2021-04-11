@@ -63,7 +63,7 @@ pub trait GstBinExt: 'static {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_bin_get_suppressed_flags")]
-    fn get_suppressed_flags(&self) -> ElementFlags;
+    fn suppressed_flags(&self) -> ElementFlags;
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -105,13 +105,17 @@ pub trait GstBinExt: 'static {
     #[doc(alias = "gst_bin_sync_children_states")]
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
 
-    fn get_property_async_handling(&self) -> bool;
+    #[doc(alias = "get_property_async_handling")]
+    fn is_async_handling(&self) -> bool;
 
-    fn set_property_async_handling(&self, async_handling: bool);
+    #[doc(alias = "set_property_async_handling")]
+    fn set_async_handling(&self, async_handling: bool);
 
-    fn get_property_message_forward(&self) -> bool;
+    #[doc(alias = "get_property_message_forward")]
+    fn is_message_forward(&self) -> bool;
 
-    fn set_property_message_forward(&self, message_forward: bool);
+    #[doc(alias = "set_property_message_forward")]
+    fn set_message_forward(&self, message_forward: bool);
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -203,7 +207,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    fn get_suppressed_flags(&self) -> ElementFlags {
+    fn suppressed_flags(&self) -> ElementFlags {
         unsafe {
             from_glib(ffi::gst_bin_get_suppressed_flags(
                 self.as_ref().to_glib_none().0,
@@ -283,7 +287,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn get_property_async_handling(&self) -> bool {
+    fn is_async_handling(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -298,7 +302,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn set_property_async_handling(&self, async_handling: bool) {
+    fn set_async_handling(&self, async_handling: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -308,7 +312,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn get_property_message_forward(&self) -> bool {
+    fn is_message_forward(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -323,7 +327,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn set_property_message_forward(&self, message_forward: bool) {
+    fn set_message_forward(&self, message_forward: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

@@ -35,7 +35,7 @@ impl TransitionClip {
     }
 
     #[doc(alias = "ges_transition_clip_new_for_nick")]
-    pub fn new_for_nick(nick: &str) -> Option<TransitionClip> {
+    pub fn for_nick(nick: &str) -> Option<TransitionClip> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_transition_clip_new_for_nick(nick.to_glib_none().0)) }
     }
@@ -44,15 +44,17 @@ impl TransitionClip {
 pub const NONE_TRANSITION_CLIP: Option<&TransitionClip> = None;
 
 pub trait TransitionClipExt: 'static {
-    fn get_property_vtype(&self) -> VideoStandardTransitionType;
+    #[doc(alias = "get_property_vtype")]
+    fn vtype(&self) -> VideoStandardTransitionType;
 
-    fn set_property_vtype(&self, vtype: VideoStandardTransitionType);
+    #[doc(alias = "set_property_vtype")]
+    fn set_vtype(&self, vtype: VideoStandardTransitionType);
 
     fn connect_property_vtype_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<TransitionClip>> TransitionClipExt for O {
-    fn get_property_vtype(&self) -> VideoStandardTransitionType {
+    fn vtype(&self) -> VideoStandardTransitionType {
         unsafe {
             let mut value =
                 glib::Value::from_type(<VideoStandardTransitionType as StaticType>::static_type());
@@ -68,7 +70,7 @@ impl<O: IsA<TransitionClip>> TransitionClipExt for O {
         }
     }
 
-    fn set_property_vtype(&self, vtype: VideoStandardTransitionType) {
+    fn set_vtype(&self, vtype: VideoStandardTransitionType) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

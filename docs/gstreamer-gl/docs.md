@@ -597,7 +597,7 @@ a comparison function to run
 The first `GLWindow` that causes a match
  from `compare_func`
 <!-- trait GLDisplayExt::fn connect_create_context -->
-Overrides the `GLContext` creation mechanism.
+Overrides the [`crate::GLContext`] (XXX: @-reference does not belong to GLDisplayExt!) creation mechanism.
 It can be called in any thread and it is emitted with
 display's object lock held.
 ## `context`
@@ -1352,7 +1352,7 @@ The OpenGL texture target that an OpenGL texture can be bound to. The
 `gst_gl_value_set_texture_target_from_mask`,
 `gst_gl_value_get_texture_target_mask`, and
 `gst_gl_value_set_texture_target` functions can be used for handling texture
-targets with `gobject::Value`'s when e.g. dealing with `gst::Caps`.
+targets with `glib::object::Value`'s when e.g. dealing with `gst::Caps`.
 <!-- enum GLTextureTarget::variant None -->
 no texture target
 <!-- enum GLTextureTarget::variant 2d -->

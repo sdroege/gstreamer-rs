@@ -21,7 +21,8 @@ glib::wrapper! {
 }
 
 impl NetClientClock {
-    pub fn get_property_address(&self) -> Option<glib::GString> {
+    #[doc(alias = "get_property_address")]
+    pub fn address(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -35,7 +36,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_address(&self, address: Option<&str>) {
+    #[doc(alias = "set_property_address")]
+    pub fn set_address(&self, address: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -45,7 +47,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn get_property_base_time(&self) -> u64 {
+    #[doc(alias = "get_property_base_time")]
+    pub fn base_time(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -60,7 +63,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn get_property_bus(&self) -> Option<gst::Bus> {
+    #[doc(alias = "get_property_bus")]
+    pub fn bus(&self) -> Option<gst::Bus> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Bus as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -72,7 +76,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_bus<P: IsA<gst::Bus>>(&self, bus: Option<&P>) {
+    #[doc(alias = "set_property_bus")]
+    pub fn set_bus<P: IsA<gst::Bus>>(&self, bus: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -82,7 +87,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn get_property_internal_clock(&self) -> Option<gst::Clock> {
+    #[doc(alias = "get_property_internal_clock")]
+    pub fn internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -96,7 +102,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn get_property_minimum_update_interval(&self) -> u64 {
+    #[doc(alias = "get_property_minimum_update_interval")]
+    pub fn minimum_update_interval(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -111,7 +118,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_minimum_update_interval(&self, minimum_update_interval: u64) {
+    #[doc(alias = "set_property_minimum_update_interval")]
+    pub fn set_minimum_update_interval(&self, minimum_update_interval: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -121,7 +129,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn get_property_port(&self) -> i32 {
+    #[doc(alias = "get_property_port")]
+    pub fn port(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -136,7 +145,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_port(&self, port: i32) {
+    #[doc(alias = "set_property_port")]
+    pub fn set_port(&self, port: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -146,7 +156,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn get_property_qos_dscp(&self) -> i32 {
+    #[doc(alias = "get_property_qos_dscp")]
+    pub fn qos_dscp(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -161,7 +172,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_qos_dscp(&self, qos_dscp: i32) {
+    #[doc(alias = "set_property_qos_dscp")]
+    pub fn set_qos_dscp(&self, qos_dscp: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -171,7 +183,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn get_property_round_trip_limit(&self) -> u64 {
+    #[doc(alias = "get_property_round_trip_limit")]
+    pub fn round_trip_limit(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -186,7 +199,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_round_trip_limit(&self, round_trip_limit: u64) {
+    #[doc(alias = "set_property_round_trip_limit")]
+    pub fn set_round_trip_limit(&self, round_trip_limit: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,

@@ -75,7 +75,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_element_type")]
-    pub fn get_element_type(&self) -> glib::types::Type {
+    pub fn element_type(&self) -> glib::types::Type {
         unsafe {
             from_glib(ffi::gst_element_factory_get_element_type(
                 self.to_glib_none().0,
@@ -94,7 +94,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_metadata_keys")]
-    pub fn get_metadata_keys(&self) -> Vec<glib::GString> {
+    pub fn metadata_keys(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_get_metadata_keys(
                 self.to_glib_none().0,
@@ -103,12 +103,12 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_num_pad_templates")]
-    pub fn get_num_pad_templates(&self) -> u32 {
+    pub fn num_pad_templates(&self) -> u32 {
         unsafe { ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_element_factory_get_static_pad_templates")]
-    pub fn get_static_pad_templates(&self) -> Vec<StaticPadTemplate> {
+    pub fn static_pad_templates(&self) -> Vec<StaticPadTemplate> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_static_pad_templates(
                 self.to_glib_none().0,
@@ -117,7 +117,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_uri_protocols")]
-    pub fn get_uri_protocols(&self) -> Vec<glib::GString> {
+    pub fn uri_protocols(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_uri_protocols(
                 self.to_glib_none().0,
@@ -126,7 +126,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_uri_type")]
-    pub fn get_uri_type(&self) -> URIType {
+    pub fn uri_type(&self) -> URIType {
         unsafe { from_glib(ffi::gst_element_factory_get_uri_type(self.to_glib_none().0)) }
     }
 

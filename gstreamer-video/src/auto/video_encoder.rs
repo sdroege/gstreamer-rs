@@ -40,7 +40,7 @@ pub trait VideoEncoderExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
-    fn get_min_force_key_unit_interval(&self) -> gst::ClockTime;
+    fn min_force_key_unit_interval(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
@@ -69,9 +69,11 @@ pub trait VideoEncoderExt: 'static {
     #[doc(alias = "gst_video_encoder_set_qos_enabled")]
     fn set_qos_enabled(&self, enabled: bool);
 
-    fn get_property_qos(&self) -> bool;
+    #[doc(alias = "get_property_qos")]
+    fn is_qos(&self) -> bool;
 
-    fn set_property_qos(&self, qos: bool);
+    #[doc(alias = "set_property_qos")]
+    fn set_qos(&self, qos: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -110,7 +112,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_min_force_key_unit_interval(&self) -> gst::ClockTime {
+    fn min_force_key_unit_interval(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_video_encoder_get_min_force_key_unit_interval(
                 self.as_ref().to_glib_none().0,
@@ -185,7 +187,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    fn get_property_qos(&self) -> bool {
+    fn is_qos(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -200,7 +202,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    fn set_property_qos(&self, qos: bool) {
+    fn set_qos(&self, qos: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

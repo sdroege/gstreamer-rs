@@ -57,29 +57,31 @@ pub const NONE_URI_CLIP_ASSET: Option<&UriClipAsset> = None;
 
 pub trait UriClipAssetExt: 'static {
     #[doc(alias = "ges_uri_clip_asset_get_duration")]
-    fn get_duration(&self) -> gst::ClockTime;
+    fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_uri_clip_asset_get_info")]
-    fn get_info(&self) -> Option<gst_pbutils::DiscovererInfo>;
+    fn info(&self) -> Option<gst_pbutils::DiscovererInfo>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_uri_clip_asset_get_max_duration")]
-    fn get_max_duration(&self) -> gst::ClockTime;
+    fn max_duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_uri_clip_asset_get_stream_assets")]
-    fn get_stream_assets(&self) -> Vec<UriSourceAsset>;
+    fn stream_assets(&self) -> Vec<UriSourceAsset>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_uri_clip_asset_is_image")]
     fn is_image(&self) -> bool;
 
-    fn set_property_duration(&self, duration: u64);
+    #[doc(alias = "set_property_duration")]
+    fn set_duration(&self, duration: u64);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_is_nested_timeline(&self) -> bool;
+    #[doc(alias = "get_property_is_nested_timeline")]
+    fn is_nested_timeline(&self) -> bool;
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -92,7 +94,7 @@ pub trait UriClipAssetExt: 'static {
 }
 
 impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
-    fn get_duration(&self) -> gst::ClockTime {
+    fn duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_duration(
                 self.as_ref().to_glib_none().0,
@@ -100,7 +102,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    fn get_info(&self) -> Option<gst_pbutils::DiscovererInfo> {
+    fn info(&self) -> Option<gst_pbutils::DiscovererInfo> {
         unsafe {
             from_glib_none(ffi::ges_uri_clip_asset_get_info(const_override(
                 self.as_ref().to_glib_none().0,
@@ -110,7 +112,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_max_duration(&self) -> gst::ClockTime {
+    fn max_duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_max_duration(
                 self.as_ref().to_glib_none().0,
@@ -118,7 +120,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    fn get_stream_assets(&self) -> Vec<UriSourceAsset> {
+    fn stream_assets(&self) -> Vec<UriSourceAsset> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_uri_clip_asset_get_stream_assets(
                 self.as_ref().to_glib_none().0,
@@ -136,7 +138,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
         }
     }
 
-    fn set_property_duration(&self, duration: u64) {
+    fn set_duration(&self, duration: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -148,7 +150,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_is_nested_timeline(&self) -> bool {
+    fn is_nested_timeline(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

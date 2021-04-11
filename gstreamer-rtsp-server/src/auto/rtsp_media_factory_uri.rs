@@ -42,14 +42,16 @@ pub const NONE_RTSP_MEDIA_FACTORY_URI: Option<&RTSPMediaFactoryURI> = None;
 
 pub trait RTSPMediaFactoryURIExt: 'static {
     #[doc(alias = "gst_rtsp_media_factory_uri_get_uri")]
-    fn get_uri(&self) -> Option<glib::GString>;
+    fn uri(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_media_factory_uri_set_uri")]
     fn set_uri(&self, uri: &str);
 
-    fn get_property_use_gstpay(&self) -> bool;
+    #[doc(alias = "get_property_use_gstpay")]
+    fn uses_gstpay(&self) -> bool;
 
-    fn set_property_use_gstpay(&self, use_gstpay: bool);
+    #[doc(alias = "set_property_use_gstpay")]
+    fn set_use_gstpay(&self, use_gstpay: bool);
 
     fn connect_property_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -63,7 +65,7 @@ pub trait RTSPMediaFactoryURIExt: 'static {
 }
 
 impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
-    fn get_uri(&self) -> Option<glib::GString> {
+    fn uri(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_factory_uri_get_uri(
                 self.as_ref().to_glib_none().0,
@@ -80,7 +82,7 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         }
     }
 
-    fn get_property_use_gstpay(&self) -> bool {
+    fn uses_gstpay(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -95,7 +97,7 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
         }
     }
 
-    fn set_property_use_gstpay(&self, use_gstpay: bool) {
+    fn set_use_gstpay(&self, use_gstpay: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

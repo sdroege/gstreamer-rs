@@ -12,7 +12,6 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -39,7 +38,7 @@ pub const NONE_URI_CLIP: Option<&UriClip> = None;
 
 pub trait UriClipExt: 'static {
     #[doc(alias = "ges_uri_clip_get_uri")]
-    fn get_uri(&self) -> Option<glib::GString>;
+    fn uri(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_uri_clip_is_image")]
     fn is_image(&self) -> bool;
@@ -53,10 +52,6 @@ pub trait UriClipExt: 'static {
     #[doc(alias = "ges_uri_clip_set_mute")]
     fn set_mute(&self, mute: bool);
 
-    fn get_property_is_image(&self) -> bool;
-
-    fn get_property_mute(&self) -> bool;
-
     fn connect_property_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_mute_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -68,7 +63,7 @@ pub trait UriClipExt: 'static {
 }
 
 impl<O: IsA<UriClip>> UriClipExt for O {
-    fn get_uri(&self) -> Option<glib::GString> {
+    fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::ges_uri_clip_get_uri(self.as_ref().to_glib_none().0)) }
     }
 
@@ -89,36 +84,6 @@ impl<O: IsA<UriClip>> UriClipExt for O {
     fn set_mute(&self, mute: bool) {
         unsafe {
             ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
-        }
-    }
-
-    fn get_property_is_image(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"is-image\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `is-image` getter")
-                .unwrap()
-        }
-    }
-
-    fn get_property_mute(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"mute\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `mute` getter")
-                .unwrap()
         }
     }
 

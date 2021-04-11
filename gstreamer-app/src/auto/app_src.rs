@@ -22,39 +22,39 @@ glib::wrapper! {
 
 impl AppSrc {
     #[doc(alias = "gst_app_src_get_caps")]
-    pub fn get_caps(&self) -> Option<gst::Caps> {
+    pub fn caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_app_src_get_caps(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_current_level_bytes")]
-    pub fn get_current_level_bytes(&self) -> u64 {
+    pub fn current_level_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_app_src_get_duration")]
-    pub fn get_duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_emit_signals")]
-    pub fn get_emit_signals(&self) -> bool {
+    pub fn emits_signals(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_src_get_emit_signals(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_max_bytes")]
-    pub fn get_max_bytes(&self) -> u64 {
+    pub fn max_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_max_bytes(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_src_get_size")]
-    pub fn get_size(&self) -> i64 {
+    pub fn size(&self) -> i64 {
         unsafe { ffi::gst_app_src_get_size(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_src_get_stream_type")]
-    pub fn get_stream_type(&self) -> AppStreamType {
+    pub fn stream_type(&self) -> AppStreamType {
         unsafe { from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0)) }
     }
 
@@ -107,7 +107,8 @@ impl AppSrc {
         }
     }
 
-    pub fn get_property_block(&self) -> bool {
+    #[doc(alias = "get_property_block")]
+    pub fn is_block(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -122,7 +123,8 @@ impl AppSrc {
         }
     }
 
-    pub fn set_property_block(&self, block: bool) {
+    #[doc(alias = "set_property_block")]
+    pub fn set_block(&self, block: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -132,7 +134,8 @@ impl AppSrc {
         }
     }
 
-    pub fn get_property_format(&self) -> gst::Format {
+    #[doc(alias = "get_property_format")]
+    pub fn format(&self) -> gst::Format {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Format as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -147,7 +150,8 @@ impl AppSrc {
         }
     }
 
-    pub fn set_property_format(&self, format: gst::Format) {
+    #[doc(alias = "set_property_format")]
+    pub fn set_format(&self, format: gst::Format) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -159,7 +163,8 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn get_property_handle_segment_change(&self) -> bool {
+    #[doc(alias = "get_property_handle_segment_change")]
+    pub fn is_handle_segment_change(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -176,7 +181,8 @@ impl AppSrc {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn set_property_handle_segment_change(&self, handle_segment_change: bool) {
+    #[doc(alias = "set_property_handle_segment_change")]
+    pub fn set_handle_segment_change(&self, handle_segment_change: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -186,7 +192,8 @@ impl AppSrc {
         }
     }
 
-    pub fn get_property_is_live(&self) -> bool {
+    #[doc(alias = "get_property_is_live")]
+    pub fn is_live(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -201,7 +208,8 @@ impl AppSrc {
         }
     }
 
-    pub fn set_property_is_live(&self, is_live: bool) {
+    #[doc(alias = "set_property_is_live")]
+    pub fn set_is_live(&self, is_live: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -211,7 +219,8 @@ impl AppSrc {
         }
     }
 
-    pub fn get_property_max_latency(&self) -> i64 {
+    #[doc(alias = "get_property_max_latency")]
+    pub fn max_latency(&self) -> i64 {
         unsafe {
             let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -226,7 +235,8 @@ impl AppSrc {
         }
     }
 
-    pub fn set_property_max_latency(&self, max_latency: i64) {
+    #[doc(alias = "set_property_max_latency")]
+    pub fn set_max_latency(&self, max_latency: i64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -236,7 +246,8 @@ impl AppSrc {
         }
     }
 
-    pub fn get_property_min_latency(&self) -> i64 {
+    #[doc(alias = "get_property_min_latency")]
+    pub fn min_latency(&self) -> i64 {
         unsafe {
             let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -251,7 +262,8 @@ impl AppSrc {
         }
     }
 
-    pub fn set_property_min_latency(&self, min_latency: i64) {
+    #[doc(alias = "set_property_min_latency")]
+    pub fn set_min_latency(&self, min_latency: i64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -261,7 +273,8 @@ impl AppSrc {
         }
     }
 
-    pub fn get_property_min_percent(&self) -> u32 {
+    #[doc(alias = "get_property_min_percent")]
+    pub fn min_percent(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -276,7 +289,8 @@ impl AppSrc {
         }
     }
 
-    pub fn set_property_min_percent(&self, min_percent: u32) {
+    #[doc(alias = "set_property_min_percent")]
+    pub fn set_min_percent(&self, min_percent: u32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,

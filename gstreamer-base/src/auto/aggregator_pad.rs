@@ -47,11 +47,13 @@ pub trait AggregatorPadExt: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_property_emit_signals(&self) -> bool;
+    #[doc(alias = "get_property_emit_signals")]
+    fn emits_signals(&self) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn set_property_emit_signals(&self, emit_signals: bool);
+    #[doc(alias = "set_property_emit_signals")]
+    fn set_emit_signals(&self, emit_signals: bool);
 
     fn connect_buffer_consumed<F: Fn(&Self, &gst::Buffer) + Send + Sync + 'static>(
         &self,
@@ -111,7 +113,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_property_emit_signals(&self) -> bool {
+    fn emits_signals(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -128,7 +130,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn set_property_emit_signals(&self, emit_signals: bool) {
+    fn set_emit_signals(&self, emit_signals: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

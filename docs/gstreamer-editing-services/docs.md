@@ -328,7 +328,7 @@ The `Extractable` object type that can be extracted from the asset.
 The ID of the asset. This should be unique amongst all assets with
 the same `Asset:extractable-type`. Depending on the associated
 `Extractable` implementation, this id may convey some information
-about the `gobject::Object` that should be extracted. Note that, as such, the
+about the `glib::object::Object` that should be extracted. Note that, as such, the
 ID will have an expected format, and you can not choose this value
 arbitrarily. By default, this will be set to the type name of the
 `Asset:extractable-type`, but you should check the documentation
@@ -338,7 +338,7 @@ default behaviour.
 The ID of the asset. This should be unique amongst all assets with
 the same `Asset:extractable-type`. Depending on the associated
 `Extractable` implementation, this id may convey some information
-about the `gobject::Object` that should be extracted. Note that, as such, the
+about the `glib::object::Object` that should be extracted. Note that, as such, the
 ID will have an expected format, and you can not choose this value
 arbitrarily. By default, this will be set to the type name of the
 `Asset:extractable-type`, but you should check the documentation
@@ -368,8 +368,8 @@ will *still* point to this other asset. So you should check the
 `Asset:proxy` property of `target`-proxy before assuming it is the
 current default proxy for the target.
 
-Note that the `gobject::Object::notify` for this property is emitted after
-the `Asset:proxy` `gobject::Object::notify` for the corresponding (if any)
+Note that the `glib::object::Object::notify` for this property is emitted after
+the `Asset:proxy` `glib::object::Object::notify` for the corresponding (if any)
 asset it is now the proxy of/no longer the proxy of.
 <!-- struct BaseEffect -->
 A `BaseEffect` is some operation that applies an effect to the data
@@ -1145,7 +1145,7 @@ Feature: `v1_18`
 <!-- trait ClipExt::fn get_property_layer -->
 The layer this clip lies in.
 
-If you want to connect to this property's `gobject::Object::notify` signal,
+If you want to connect to this property's `glib::object::Object::notify` signal,
 you should connect to it with `g_signal_connect_after` since the
 signal emission may be stopped internally.
 <!-- trait ClipExt::fn get_property_supported_formats -->
@@ -1502,7 +1502,7 @@ pipeline description.
 
 Example: "videobalance saturation=1.5 hue=+0.5"
 <!-- struct Extractable -->
-A `gobject::Object` that implements the `Extractable` interface can be
+A `glib::object::Object` that implements the `Extractable` interface can be
 extracted from a `Asset` using `AssetExt::extract`.
 
 Each extractable type will have its own way of interpreting the
@@ -3257,7 +3257,7 @@ Gets the property of a child of the element.
 
 `property_name` can either be in the format "prop-name" or
 "TypeName::prop-name", where "prop-name" is the name of the property
-to get (as used in `gobject::ObjectExt::get`), and "TypeName" is the type name of
+to get (as used in `glib::object::ObjectExt::get`), and "TypeName" is the type name of
 the child (as returned by G_OBJECT_TYPE_NAME()). The latter format is
 useful when two children of different types share the same property
 name.
@@ -3403,14 +3403,14 @@ returned array
 # Returns
 
 An array of
-`gobject::ParamSpec` corresponding to the child properties of `self`, or `None` if
+`glib::object::ParamSpec` corresponding to the child properties of `self`, or `None` if
 something went wrong.
 <!-- trait TimelineElementExt::fn lookup_child -->
 Looks up a child property of the element.
 
 `prop_name` can either be in the format "prop-name" or
 "TypeName::prop-name", where "prop-name" is the name of the property
-to look up (as used in `gobject::ObjectExt::get`), and "TypeName" is the type name
+to look up (as used in `glib::object::ObjectExt::get`), and "TypeName" is the type name
 of the child (as returned by G_OBJECT_TYPE_NAME()). The latter format is
 useful when two children of different types share the same property
 name.
@@ -3543,7 +3543,7 @@ Sets the property of a child of the element.
 
 `property_name` can either be in the format "prop-name" or
 "TypeName::prop-name", where "prop-name" is the name of the property
-to set (as used in `gobject::ObjectExt::set`), and "TypeName" is the type name of
+to set (as used in `glib::object::ObjectExt::set`), and "TypeName" is the type name of
 the child (as returned by G_OBJECT_TYPE_NAME()). The latter format is
 useful when two children of different types share the same property
 name.
@@ -3737,7 +3737,7 @@ The specification for the property that has been unregistered
 <!-- trait TimelineElementExt::fn connect_deep_notify -->
 Emitted when a child of the element has one of its registered
 properties set. See `TimelineElementExt::add_child_property`.
-Note that unlike `gobject::Object::notify`, a child property name can not be
+Note that unlike `glib::object::Object::notify`, a child property name can not be
 used as a signal detail.
 ## `prop_object`
 The child whose property has been set
@@ -4311,7 +4311,7 @@ The name of the first property to get
 <!-- trait TrackElementExt::fn get_child_property -->
 In general, a copy is made of the property contents and
 the caller is responsible for freeing the memory by calling
-`gobject::Value::unset`.
+`glib::object::Value::unset`.
 
 Gets a property of a GstElement contained in `self`.
 
@@ -4338,7 +4338,7 @@ Gets a property of a child of `self`.
 
 Use `TimelineElementExt::get_child_property_by_pspec`
 ## `pspec`
-The `gobject::ParamSpec` that specifies the property you want to get
+The `glib::object::ParamSpec` that specifies the property you want to get
 ## `value`
 return location for the value
 <!-- trait TrackElementExt::fn get_child_property_valist -->
@@ -4445,7 +4445,7 @@ Feature: `v1_18`
 
 `true` if `element` is a core track element.
 <!-- trait TrackElementExt::fn list_children_properties -->
-Gets an array of `gobject::ParamSpec`* for all configurable properties of the
+Gets an array of `glib::object::ParamSpec`* for all configurable properties of the
 children of `self`.
 
 # Deprecated
@@ -4456,7 +4456,7 @@ return location for the length of the returned array
 
 # Returns
 
-An array of `gobject::ParamSpec`* which should be freed after use or
+An array of `glib::object::ParamSpec`* which should be freed after use or
 `None` if something went wrong.
 <!-- trait TrackElementExt::fn lookup_child -->
 Looks up which `element` and `pspec` would be effected by the given `name`. If various
@@ -4551,7 +4551,7 @@ Sets a property of a child of `self`.
 
 Use `ges_timeline_element_set_child_property_by_spec`
 ## `pspec`
-The `gobject::ParamSpec` that specifies the property you want to set
+The `glib::object::ParamSpec` that specifies the property you want to set
 ## `value`
 The value
 <!-- trait TrackElementExt::fn set_child_property_valist -->
@@ -4745,10 +4745,10 @@ correspond to the type of data that the element can produce or
 process.
 <!-- struct TrackType -->
 Types of content handled by a track. If the content is not one of
-`TrackType::Audio`, `TrackType::Video` or `TrackType::Text`,
-the user of the `Track` must set the type to `TrackType::Custom`.
+[`Audio`](Self::Audio), [`Video`](Self::Video) or [`Text`](Self::Text),
+the user of the `Track` must set the type to [`Custom`](Self::Custom).
 
-`TrackType::Unknown` is for internal purposes and should not be used
+[`Unknown`](Self::Unknown) is for internal purposes and should not be used
 by users
 <!-- struct TrackType::const UNKNOWN -->
 A track of unknown type (i.e. invalid)

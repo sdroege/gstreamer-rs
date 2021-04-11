@@ -57,33 +57,29 @@ unsafe impl Sync for ARGBControlBinding {}
 pub const NONE_ARGB_CONTROL_BINDING: Option<&ARGBControlBinding> = None;
 
 pub trait ARGBControlBindingExt: 'static {
-    fn get_property_control_source_a(&self) -> Option<gst::ControlSource>;
+    #[doc(alias = "get_property_control_source_a")]
+    fn control_source_a(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_a<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_a: Option<&P>,
-    );
+    #[doc(alias = "set_property_control_source_a")]
+    fn set_control_source_a<P: IsA<gst::ControlSource>>(&self, control_source_a: Option<&P>);
 
-    fn get_property_control_source_b(&self) -> Option<gst::ControlSource>;
+    #[doc(alias = "get_property_control_source_b")]
+    fn control_source_b(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_b<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_b: Option<&P>,
-    );
+    #[doc(alias = "set_property_control_source_b")]
+    fn set_control_source_b<P: IsA<gst::ControlSource>>(&self, control_source_b: Option<&P>);
 
-    fn get_property_control_source_g(&self) -> Option<gst::ControlSource>;
+    #[doc(alias = "get_property_control_source_g")]
+    fn control_source_g(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_g<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_g: Option<&P>,
-    );
+    #[doc(alias = "set_property_control_source_g")]
+    fn set_control_source_g<P: IsA<gst::ControlSource>>(&self, control_source_g: Option<&P>);
 
-    fn get_property_control_source_r(&self) -> Option<gst::ControlSource>;
+    #[doc(alias = "get_property_control_source_r")]
+    fn control_source_r(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source_r<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_r: Option<&P>,
-    );
+    #[doc(alias = "set_property_control_source_r")]
+    fn set_control_source_r<P: IsA<gst::ControlSource>>(&self, control_source_r: Option<&P>);
 
     fn connect_property_control_source_a_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -107,7 +103,7 @@ pub trait ARGBControlBindingExt: 'static {
 }
 
 impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
-    fn get_property_control_source_a(&self) -> Option<gst::ControlSource> {
+    fn control_source_a(&self) -> Option<gst::ControlSource> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
@@ -122,10 +118,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_a<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_a: Option<&P>,
-    ) {
+    fn set_control_source_a<P: IsA<gst::ControlSource>>(&self, control_source_a: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -135,7 +128,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn get_property_control_source_b(&self) -> Option<gst::ControlSource> {
+    fn control_source_b(&self) -> Option<gst::ControlSource> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
@@ -150,10 +143,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_b<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_b: Option<&P>,
-    ) {
+    fn set_control_source_b<P: IsA<gst::ControlSource>>(&self, control_source_b: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -163,7 +153,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn get_property_control_source_g(&self) -> Option<gst::ControlSource> {
+    fn control_source_g(&self) -> Option<gst::ControlSource> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
@@ -178,10 +168,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_g<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_g: Option<&P>,
-    ) {
+    fn set_control_source_g<P: IsA<gst::ControlSource>>(&self, control_source_g: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -191,7 +178,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn get_property_control_source_r(&self) -> Option<gst::ControlSource> {
+    fn control_source_r(&self) -> Option<gst::ControlSource> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
@@ -206,10 +193,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source_r<P: IsA<gst::ControlSource>>(
-        &self,
-        control_source_r: Option<&P>,
-    ) {
+    fn set_control_source_r<P: IsA<gst::ControlSource>>(&self, control_source_r: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

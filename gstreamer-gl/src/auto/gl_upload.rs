@@ -24,7 +24,7 @@ impl GLUpload {
     }
 
     #[doc(alias = "gst_gl_upload_get_caps")]
-    pub fn get_caps(&self) -> (gst::Caps, gst::Caps) {
+    pub fn caps(&self) -> (gst::Caps, gst::Caps) {
         unsafe {
             let mut in_caps = ptr::null_mut();
             let mut out_caps = ptr::null_mut();

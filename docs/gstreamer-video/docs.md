@@ -175,7 +175,7 @@ CEA-608 as byte pairs. Note that
  this format is not recommended since is does not specify to
  which field the caption comes from and therefore assumes
  it comes from the first field (and that there is no information
- on the second field). Use `VideoCaptionType::Cea708Raw`
+ on the second field). Use [`Cea708Raw`](Self::Cea708Raw)
  if you wish to store CEA-608 from two fields and prefix each byte pair
  with 0xFC for the first field and 0xFD for the second field.
 <!-- enum VideoCaptionType::variant Cea608S3341a -->
@@ -275,8 +275,8 @@ Decoders and encoders will receive such a state through their
 respective `set_format` vmethods.
 
 Decoders and encoders can set the downstream state, by using the
-`VideoDecoder::set_output_state`() or
-`VideoEncoder::set_output_state`() methods.
+[`crate::VideoDecoder::set_output_state`] (XXX: @-reference does not belong to VideoCodecState!)() or
+[`crate::VideoEncoder::set_output_state`] (XXX: @-reference does not belong to VideoCodecState!)() methods.
 <!-- impl VideoCodecState::fn ref -->
 Increases the refcount of the given state by one.
 
@@ -387,9 +387,9 @@ follows:
  The ownership of the frame is given to the `handle_frame` callback.
 
  * If codec processing results in decoded data, the subclass should call
- `VideoDecoder::finish_frame` to have decoded data pushed.
+ [`finish_frame`](Self::finish_frame) to have decoded data pushed.
  downstream. Otherwise, the subclass must call
- `VideoDecoder::drop_frame`, to allow the base class to do timestamp
+ [`drop_frame`](Self::drop_frame), to allow the base class to do timestamp
  and offset tracking, and possibly to requeue the frame for a later
  attempt in the case of reverse playback.
 
@@ -420,8 +420,8 @@ source and sink pads. The pads need to be named "sink" and "src". It also
 needs to provide information about the output caps, when they are known.
 This may be when the base class calls the subclass' `set_format` function,
 though it might be during decoding, before calling
-`VideoDecoder::finish_frame`. This is done via
-`VideoDecoder::set_output_state`
+[`finish_frame`](Self::finish_frame). This is done via
+[`set_output_state`](Self::set_output_state)
 
 The subclass is also responsible for providing (presentation) timestamps
 (likely based on corresponding input ones). If that is not applicable
@@ -432,7 +432,7 @@ if specifically requested by the subclass, as full-fledged support
 should rather be left to upstream demuxer, parser or alike. This simple
 approach caters for seeking and duration reporting using estimated input
 bitrates. To enable it, a subclass should call
-`VideoDecoderExt::set_estimate_rate` to enable handling of incoming
+[`crate::VideoDecoderExt::set_estimate_rate`] (XXX: @-reference does not belong to VideoDecoder!) to enable handling of incoming
 byte-streams.
 
 The base class provides some support for reverse playback, in particular
@@ -448,15 +448,15 @@ The bare minimum that a functional subclass needs to implement is:
 
  * Provide pad templates
  * Inform the base class of output caps via
- `VideoDecoder::set_output_state`
+ [`set_output_state`](Self::set_output_state)
 
  * Parse input data, if it is not considered packetized from upstream
  Data will be provided to `parse` which should invoke
- `VideoDecoderExt::add_to_frame` and `VideoDecoder::have_frame` to
+ [`crate::VideoDecoderExt::add_to_frame`] (XXX: @-reference does not belong to VideoDecoder!) and [`have_frame`](Self::have_frame) to
  separate the data belonging to each video frame.
 
  * Accept data in `handle_frame` and provide decoded results to
- `VideoDecoder::finish_frame`, or call `VideoDecoder::drop_frame`.
+ [`finish_frame`](Self::finish_frame), or call [`drop_frame`](Self::drop_frame).
 
 This is an Abstract Base Class, you cannot instantiate it.
 
@@ -836,7 +836,7 @@ GstVideoEncoder and subclass should cooperate as follows.
  this to subclass' `handle_frame`.
 
  * If codec processing results in encoded data, subclass should call
- `VideoEncoder::finish_frame` to have encoded data pushed
+ [`finish_frame`](Self::finish_frame) to have encoded data pushed
  downstream.
 
  * If implemented, baseclass calls subclass `pre_push` just prior to
@@ -855,14 +855,14 @@ GstVideoEncoder and subclass should cooperate as follows.
 Subclass is responsible for providing pad template caps for
 source and sink pads. The pads need to be named "sink" and "src". It should
 also be able to provide fixed src pad caps in `getcaps` by the time it calls
-`VideoEncoder::finish_frame`.
+[`finish_frame`](Self::finish_frame).
 
 Things that subclass need to take care of:
 
  * Provide pad templates
  * Provide source pad caps before pushing the first buffer
  * Accept data in `handle_frame` and provide encoded results to
- `VideoEncoder::finish_frame`.
+ [`finish_frame`](Self::finish_frame).
 
 
 The `VideoEncoder:qos` property will enable the Quality-of-Service
@@ -1107,7 +1107,7 @@ from the next call to `VideoEncoder::finish_frame`().
 ## `caps`
 the `gst::Caps` to use for the output
 ## `reference`
-An optional reference `VideoCodecState`
+An optional reference [`crate::VideoCodecState`] (XXX: @-reference does not belong to VideoEncoderExt!)
 
 # Returns
 
@@ -1334,9 +1334,9 @@ planar 4:4:4 YUV, 12 bits per channel (Since: 1.12)
 <!-- enum VideoFormat::variant Gray10Le32 -->
 10-bit grayscale, packed into 32bit words (2 bits padding) (Since: 1.14)
 <!-- enum VideoFormat::variant Nv1210le32 -->
-10-bit variant of `VideoFormat::Nv12`, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
+10-bit variant of [`Nv12`](Self::Nv12), packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
 <!-- enum VideoFormat::variant Nv1610le32 -->
-10-bit variant of `VideoFormat::Nv16`, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
+10-bit variant of [`Nv16`](Self::Nv16), packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
 <!-- enum VideoFormat::variant Nv1210le40 -->
 Fully packed variant of NV12_10LE32 (Since: 1.16)
 <!-- enum VideoFormat::variant Y210 -->
@@ -1639,7 +1639,7 @@ For frame-packed
 <!-- struct VideoMultiviewFlags::const MIXED_MONO -->
 The video stream contains both
  mono and multiview portions, signalled on each buffer by the
- absence or presence of the `VideoBufferFlags::MultipleView`
+ absence or presence of the [`crate::VideoBufferFlags::MultipleView`] (XXX: @-reference does not belong to VideoMultiviewFlags!)
  buffer flag.
 <!-- enum VideoMultiviewFramePacking -->
 `VideoMultiviewFramePacking` represents the subset of `VideoMultiviewMode`
@@ -2132,7 +2132,7 @@ The highest property ID.
 ## `property_id`
 The property ID
 ## `value`
-The `gobject::Value` to be set
+The `glib::object::Value` to be set
 
 # Returns
 

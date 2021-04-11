@@ -83,22 +83,22 @@ pub trait LayerExt: 'static {
     fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
     #[doc(alias = "ges_layer_get_auto_transition")]
-    fn get_auto_transition(&self) -> bool;
+    fn is_auto_transition(&self) -> bool;
 
     #[doc(alias = "ges_layer_get_clips")]
-    fn get_clips(&self) -> Vec<Clip>;
+    fn clips(&self) -> Vec<Clip>;
 
     #[doc(alias = "ges_layer_get_clips_in_interval")]
     fn get_clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip>;
 
     #[doc(alias = "ges_layer_get_duration")]
-    fn get_duration(&self) -> gst::ClockTime;
+    fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_layer_get_priority")]
-    fn get_priority(&self) -> u32;
+    fn priority(&self) -> u32;
 
     #[doc(alias = "ges_layer_get_timeline")]
-    fn get_timeline(&self) -> Option<Timeline>;
+    fn timeline(&self) -> Option<Timeline>;
 
     #[doc(alias = "ges_layer_is_empty")]
     fn is_empty(&self) -> bool;
@@ -230,7 +230,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn get_auto_transition(&self) -> bool {
+    fn is_auto_transition(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_get_auto_transition(
                 self.as_ref().to_glib_none().0,
@@ -238,7 +238,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn get_clips(&self) -> Vec<Clip> {
+    fn clips(&self) -> Vec<Clip> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips(
                 self.as_ref().to_glib_none().0,
@@ -256,15 +256,15 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn get_duration(&self) -> gst::ClockTime {
+    fn duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::ges_layer_get_duration(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_priority(&self) -> u32 {
+    fn priority(&self) -> u32 {
         unsafe { ffi::ges_layer_get_priority(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_timeline(&self) -> Option<Timeline> {
+    fn timeline(&self) -> Option<Timeline> {
         unsafe { from_glib_none(ffi::ges_layer_get_timeline(self.as_ref().to_glib_none().0)) }
     }
 

@@ -26,10 +26,10 @@ pub trait PluginFeatureExt: 'static {
     fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool;
 
     #[doc(alias = "gst_plugin_feature_get_plugin")]
-    fn get_plugin(&self) -> Option<Plugin>;
+    fn plugin(&self) -> Option<Plugin>;
 
     #[doc(alias = "gst_plugin_feature_get_plugin_name")]
-    fn get_plugin_name(&self) -> Option<glib::GString>;
+    fn plugin_name(&self) -> Option<glib::GString>;
 }
 
 impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
@@ -44,7 +44,7 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 
-    fn get_plugin(&self) -> Option<Plugin> {
+    fn plugin(&self) -> Option<Plugin> {
         unsafe {
             from_glib_full(ffi::gst_plugin_feature_get_plugin(
                 self.as_ref().to_glib_none().0,
@@ -52,7 +52,7 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 
-    fn get_plugin_name(&self) -> Option<glib::GString> {
+    fn plugin_name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_plugin_feature_get_plugin_name(
                 self.as_ref().to_glib_none().0,

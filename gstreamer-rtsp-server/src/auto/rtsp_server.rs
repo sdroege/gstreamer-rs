@@ -85,33 +85,33 @@ pub trait RTSPServerExt: 'static {
     ) -> Result<glib::Source, glib::Error>;
 
     #[doc(alias = "gst_rtsp_server_get_address")]
-    fn get_address(&self) -> Option<glib::GString>;
+    fn address(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_server_get_auth")]
-    fn get_auth(&self) -> Option<RTSPAuth>;
+    fn auth(&self) -> Option<RTSPAuth>;
 
     #[doc(alias = "gst_rtsp_server_get_backlog")]
-    fn get_backlog(&self) -> i32;
+    fn backlog(&self) -> i32;
 
     #[doc(alias = "gst_rtsp_server_get_bound_port")]
-    fn get_bound_port(&self) -> i32;
+    fn bound_port(&self) -> i32;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_server_get_content_length_limit")]
-    fn get_content_length_limit(&self) -> u32;
+    fn content_length_limit(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_server_get_mount_points")]
-    fn get_mount_points(&self) -> Option<RTSPMountPoints>;
+    fn mount_points(&self) -> Option<RTSPMountPoints>;
 
     #[doc(alias = "gst_rtsp_server_get_service")]
-    fn get_service(&self) -> Option<glib::GString>;
+    fn service(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_server_get_session_pool")]
-    fn get_session_pool(&self) -> Option<RTSPSessionPool>;
+    fn session_pool(&self) -> Option<RTSPSessionPool>;
 
     #[doc(alias = "gst_rtsp_server_get_thread_pool")]
-    fn get_thread_pool(&self) -> Option<RTSPThreadPool>;
+    fn thread_pool(&self) -> Option<RTSPThreadPool>;
 
     #[doc(alias = "gst_rtsp_server_set_address")]
     fn set_address(&self, address: &str);
@@ -273,7 +273,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_address(&self) -> Option<glib::GString> {
+    fn address(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_address(
                 self.as_ref().to_glib_none().0,
@@ -281,7 +281,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_auth(&self) -> Option<RTSPAuth> {
+    fn auth(&self) -> Option<RTSPAuth> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_auth(
                 self.as_ref().to_glib_none().0,
@@ -289,21 +289,21 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_backlog(&self) -> i32 {
+    fn backlog(&self) -> i32 {
         unsafe { ffi::gst_rtsp_server_get_backlog(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_bound_port(&self) -> i32 {
+    fn bound_port(&self) -> i32 {
         unsafe { ffi::gst_rtsp_server_get_bound_port(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_content_length_limit(&self) -> u32 {
+    fn content_length_limit(&self) -> u32 {
         unsafe { ffi::gst_rtsp_server_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_mount_points(&self) -> Option<RTSPMountPoints> {
+    fn mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_mount_points(
                 self.as_ref().to_glib_none().0,
@@ -311,7 +311,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_service(&self) -> Option<glib::GString> {
+    fn service(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_service(
                 self.as_ref().to_glib_none().0,
@@ -319,7 +319,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_session_pool(&self) -> Option<RTSPSessionPool> {
+    fn session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_session_pool(
                 self.as_ref().to_glib_none().0,
@@ -327,7 +327,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_thread_pool(&self) -> Option<RTSPThreadPool> {
+    fn thread_pool(&self) -> Option<RTSPThreadPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_thread_pool(
                 self.as_ref().to_glib_none().0,

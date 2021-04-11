@@ -31,40 +31,40 @@ pub trait AudioDecoderExt: 'static {
     fn allocate_output_buffer(&self, size: usize) -> Result<gst::Buffer, glib::BoolError>;
 
     #[doc(alias = "gst_audio_decoder_get_audio_info")]
-    fn get_audio_info(&self) -> Option<AudioInfo>;
+    fn audio_info(&self) -> Option<AudioInfo>;
 
     #[doc(alias = "gst_audio_decoder_get_delay")]
-    fn get_delay(&self) -> i32;
+    fn delay(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_drainable")]
-    fn get_drainable(&self) -> bool;
+    fn is_drainable(&self) -> bool;
 
     #[doc(alias = "gst_audio_decoder_get_estimate_rate")]
-    fn get_estimate_rate(&self) -> i32;
+    fn estimate_rate(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_latency")]
-    fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime);
+    fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
 
     #[doc(alias = "gst_audio_decoder_get_max_errors")]
-    fn get_max_errors(&self) -> i32;
+    fn max_errors(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_min_latency")]
-    fn get_min_latency(&self) -> gst::ClockTime;
+    fn min_latency(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_decoder_get_needs_format")]
-    fn get_needs_format(&self) -> bool;
+    fn is_needs_format(&self) -> bool;
 
     #[doc(alias = "gst_audio_decoder_get_parse_state")]
-    fn get_parse_state(&self) -> (bool, bool);
+    fn parse_state(&self) -> (bool, bool);
 
     #[doc(alias = "gst_audio_decoder_get_plc")]
-    fn get_plc(&self) -> bool;
+    fn is_plc(&self) -> bool;
 
     #[doc(alias = "gst_audio_decoder_get_plc_aware")]
-    fn get_plc_aware(&self) -> i32;
+    fn plc_aware(&self) -> i32;
 
     #[doc(alias = "gst_audio_decoder_get_tolerance")]
-    fn get_tolerance(&self) -> gst::ClockTime;
+    fn tolerance(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
@@ -141,7 +141,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_audio_info(&self) -> Option<AudioInfo> {
+    fn audio_info(&self) -> Option<AudioInfo> {
         unsafe {
             from_glib_full(ffi::gst_audio_decoder_get_audio_info(
                 self.as_ref().to_glib_none().0,
@@ -149,11 +149,11 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_delay(&self) -> i32 {
+    fn delay(&self) -> i32 {
         unsafe { ffi::gst_audio_decoder_get_delay(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_drainable(&self) -> bool {
+    fn is_drainable(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_decoder_get_drainable(
                 self.as_ref().to_glib_none().0,
@@ -161,11 +161,11 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_estimate_rate(&self) -> i32 {
+    fn estimate_rate(&self) -> i32 {
         unsafe { ffi::gst_audio_decoder_get_estimate_rate(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+    fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();
@@ -180,11 +180,11 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_max_errors(&self) -> i32 {
+    fn max_errors(&self) -> i32 {
         unsafe { ffi::gst_audio_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_min_latency(&self) -> gst::ClockTime {
+    fn min_latency(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_audio_decoder_get_min_latency(
                 self.as_ref().to_glib_none().0,
@@ -192,7 +192,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_needs_format(&self) -> bool {
+    fn is_needs_format(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_decoder_get_needs_format(
                 self.as_ref().to_glib_none().0,
@@ -200,7 +200,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_parse_state(&self) -> (bool, bool) {
+    fn parse_state(&self) -> (bool, bool) {
         unsafe {
             let mut sync = mem::MaybeUninit::uninit();
             let mut eos = mem::MaybeUninit::uninit();
@@ -215,7 +215,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_plc(&self) -> bool {
+    fn is_plc(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_decoder_get_plc(
                 self.as_ref().to_glib_none().0,
@@ -223,11 +223,11 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn get_plc_aware(&self) -> i32 {
+    fn plc_aware(&self) -> i32 {
         unsafe { ffi::gst_audio_decoder_get_plc_aware(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_tolerance(&self) -> gst::ClockTime {
+    fn tolerance(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_audio_decoder_get_tolerance(
                 self.as_ref().to_glib_none().0,

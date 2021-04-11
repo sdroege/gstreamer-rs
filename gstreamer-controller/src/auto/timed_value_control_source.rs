@@ -30,10 +30,10 @@ pub trait TimedValueControlSourceExt: 'static {
     //fn find_control_point_iter(&self, timestamp: gst::ClockTime) -> /*Ignored*/Option<glib::SequenceIter>;
 
     //#[doc(alias = "gst_timed_value_control_source_get_all")]
-    //fn get_all(&self) -> /*Ignored*/Vec<gst::TimedValue>;
+    //fn all(&self) -> /*Ignored*/Vec<gst::TimedValue>;
 
     #[doc(alias = "gst_timed_value_control_source_get_count")]
-    fn get_count(&self) -> i32;
+    fn count(&self) -> i32;
 
     #[doc(alias = "gst_timed_value_control_source_set")]
     fn set(&self, timestamp: gst::ClockTime, value: f64) -> bool;
@@ -68,11 +68,11 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
     //    unsafe { TODO: call ffi:gst_timed_value_control_source_find_control_point_iter() }
     //}
 
-    //fn get_all(&self) -> /*Ignored*/Vec<gst::TimedValue> {
+    //fn all(&self) -> /*Ignored*/Vec<gst::TimedValue> {
     //    unsafe { TODO: call ffi:gst_timed_value_control_source_get_all() }
     //}
 
-    fn get_count(&self) -> i32 {
+    fn count(&self) -> i32 {
         unsafe { ffi::gst_timed_value_control_source_get_count(self.as_ref().to_glib_none().0) }
     }
 

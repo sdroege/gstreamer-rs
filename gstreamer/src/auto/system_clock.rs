@@ -45,9 +45,11 @@ unsafe impl Sync for SystemClock {}
 pub const NONE_SYSTEM_CLOCK: Option<&SystemClock> = None;
 
 pub trait SystemClockExt: 'static {
-    fn get_property_clock_type(&self) -> ClockType;
+    #[doc(alias = "get_property_clock_type")]
+    fn clock_type(&self) -> ClockType;
 
-    fn set_property_clock_type(&self, clock_type: ClockType);
+    #[doc(alias = "set_property_clock_type")]
+    fn set_clock_type(&self, clock_type: ClockType);
 
     fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -56,7 +58,7 @@ pub trait SystemClockExt: 'static {
 }
 
 impl<O: IsA<SystemClock>> SystemClockExt for O {
-    fn get_property_clock_type(&self) -> ClockType {
+    fn clock_type(&self) -> ClockType {
         unsafe {
             let mut value = glib::Value::from_type(<ClockType as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -71,7 +73,7 @@ impl<O: IsA<SystemClock>> SystemClockExt for O {
         }
     }
 
-    fn set_property_clock_type(&self, clock_type: ClockType) {
+    fn set_clock_type(&self, clock_type: ClockType) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

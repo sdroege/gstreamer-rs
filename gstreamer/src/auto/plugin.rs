@@ -56,32 +56,32 @@ impl Plugin {
     }
 
     #[doc(alias = "gst_plugin_get_description")]
-    pub fn get_description(&self) -> glib::GString {
+    pub fn description(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_description(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_filename")]
-    pub fn get_filename(&self) -> Option<std::path::PathBuf> {
+    pub fn filename(&self) -> Option<std::path::PathBuf> {
         unsafe { from_glib_none(ffi::gst_plugin_get_filename(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_license")]
-    pub fn get_license(&self) -> glib::GString {
+    pub fn license(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_license(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_origin")]
-    pub fn get_origin(&self) -> glib::GString {
+    pub fn origin(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_origin(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_package")]
-    pub fn get_package(&self) -> glib::GString {
+    pub fn package(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_package(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_release_date_string")]
-    pub fn get_release_date_string(&self) -> Option<glib::GString> {
+    pub fn release_date_string(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_release_date_string(
                 self.to_glib_none().0,
@@ -90,12 +90,12 @@ impl Plugin {
     }
 
     #[doc(alias = "gst_plugin_get_source")]
-    pub fn get_source(&self) -> glib::GString {
+    pub fn source(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_source(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_plugin_get_version")]
-    pub fn get_version(&self) -> glib::GString {
+    pub fn version(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_version(self.to_glib_none().0)) }
     }
 

@@ -49,21 +49,21 @@ pub trait GESTrackExt: 'static {
     fn commit(&self) -> bool;
 
     #[doc(alias = "ges_track_get_caps")]
-    fn get_caps(&self) -> Option<gst::Caps>;
+    fn caps(&self) -> Option<gst::Caps>;
 
     #[doc(alias = "ges_track_get_elements")]
-    fn get_elements(&self) -> Vec<TrackElement>;
+    fn elements(&self) -> Vec<TrackElement>;
 
     #[doc(alias = "ges_track_get_mixing")]
-    fn get_mixing(&self) -> bool;
+    fn is_mixing(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_get_restriction_caps")]
-    fn get_restriction_caps(&self) -> Option<gst::Caps>;
+    fn restriction_caps(&self) -> Option<gst::Caps>;
 
     #[doc(alias = "ges_track_get_timeline")]
-    fn get_timeline(&self) -> Option<Timeline>;
+    fn timeline(&self) -> Option<Timeline>;
 
     #[doc(alias = "ges_track_remove_element")]
     fn remove_element<P: IsA<TrackElement>>(
@@ -91,19 +91,23 @@ pub trait GESTrackExt: 'static {
     #[doc(alias = "ges_track_update_restriction_caps")]
     fn update_restriction_caps(&self, caps: &gst::Caps);
 
-    fn get_property_duration(&self) -> u64;
+    #[doc(alias = "get_property_duration")]
+    fn duration(&self) -> u64;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_id(&self) -> Option<glib::GString>;
+    #[doc(alias = "get_property_id")]
+    fn id(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_id(&self, id: Option<&str>);
+    #[doc(alias = "set_property_id")]
+    fn set_id(&self, id: Option<&str>);
 
     fn get_property_restriction_caps(&self) -> Option<gst::Caps>;
 
-    fn get_property_track_type(&self) -> TrackType;
+    #[doc(alias = "get_property_track_type")]
+    fn track_type(&self) -> TrackType;
 
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -166,11 +170,11 @@ impl<O: IsA<Track>> GESTrackExt for O {
         unsafe { from_glib(ffi::ges_track_commit(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_caps(&self) -> Option<gst::Caps> {
+    fn caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_none(ffi::ges_track_get_caps(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_elements(&self) -> Vec<TrackElement> {
+    fn elements(&self) -> Vec<TrackElement> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_track_get_elements(
                 self.as_ref().to_glib_none().0,
@@ -178,13 +182,13 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    fn get_mixing(&self) -> bool {
+    fn is_mixing(&self) -> bool {
         unsafe { from_glib(ffi::ges_track_get_mixing(self.as_ref().to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_restriction_caps(&self) -> Option<gst::Caps> {
+    fn restriction_caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::ges_track_get_restriction_caps(
                 self.as_ref().to_glib_none().0,
@@ -192,7 +196,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    fn get_timeline(&self) -> Option<Timeline> {
+    fn timeline(&self) -> Option<Timeline> {
         unsafe { from_glib_none(ffi::ges_track_get_timeline(self.as_ref().to_glib_none().0)) }
     }
 
@@ -266,7 +270,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    fn get_property_duration(&self) -> u64 {
+    fn duration(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -283,7 +287,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_id(&self) -> Option<glib::GString> {
+    fn id(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -297,7 +301,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_id(&self, id: Option<&str>) {
+    fn set_id(&self, id: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -321,7 +325,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
         }
     }
 
-    fn get_property_track_type(&self) -> TrackType {
+    fn track_type(&self) -> TrackType {
         unsafe {
             let mut value = glib::Value::from_type(<TrackType as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

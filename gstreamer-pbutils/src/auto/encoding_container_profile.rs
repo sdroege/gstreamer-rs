@@ -27,7 +27,7 @@ impl EncodingContainerProfile {
     }
 
     #[doc(alias = "gst_encoding_container_profile_get_profiles")]
-    pub fn get_profiles(&self) -> Vec<EncodingProfile> {
+    pub fn profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_container_profile_get_profiles(
                 self.to_glib_none().0,

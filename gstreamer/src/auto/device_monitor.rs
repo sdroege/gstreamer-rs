@@ -30,16 +30,16 @@ pub const NONE_DEVICE_MONITOR: Option<&DeviceMonitor> = None;
 
 pub trait DeviceMonitorExt: 'static {
     #[doc(alias = "gst_device_monitor_get_bus")]
-    fn get_bus(&self) -> Bus;
+    fn bus(&self) -> Bus;
 
     #[doc(alias = "gst_device_monitor_get_devices")]
-    fn get_devices(&self) -> Vec<Device>;
+    fn devices(&self) -> Vec<Device>;
 
     #[doc(alias = "gst_device_monitor_get_providers")]
-    fn get_providers(&self) -> Vec<glib::GString>;
+    fn providers(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_device_monitor_get_show_all_devices")]
-    fn get_show_all_devices(&self) -> bool;
+    fn shows_all_devices(&self) -> bool;
 
     #[doc(alias = "gst_device_monitor_set_show_all_devices")]
     fn set_show_all_devices(&self, show_all: bool);
@@ -50,9 +50,11 @@ pub trait DeviceMonitorExt: 'static {
     #[doc(alias = "gst_device_monitor_stop")]
     fn stop(&self);
 
-    fn get_property_show_all(&self) -> bool;
+    #[doc(alias = "get_property_show_all")]
+    fn shows_all(&self) -> bool;
 
-    fn set_property_show_all(&self, show_all: bool);
+    #[doc(alias = "set_property_show_all")]
+    fn set_show_all(&self, show_all: bool);
 
     fn connect_property_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -61,7 +63,7 @@ pub trait DeviceMonitorExt: 'static {
 }
 
 impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
-    fn get_bus(&self) -> Bus {
+    fn bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_monitor_get_bus(
                 self.as_ref().to_glib_none().0,
@@ -69,7 +71,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn get_devices(&self) -> Vec<Device> {
+    fn devices(&self) -> Vec<Device> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_devices(
                 self.as_ref().to_glib_none().0,
@@ -77,7 +79,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn get_providers(&self) -> Vec<glib::GString> {
+    fn providers(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_providers(
                 self.as_ref().to_glib_none().0,
@@ -85,7 +87,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn get_show_all_devices(&self) -> bool {
+    fn shows_all_devices(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_device_monitor_get_show_all_devices(
                 self.as_ref().to_glib_none().0,
@@ -117,7 +119,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn get_property_show_all(&self) -> bool {
+    fn shows_all(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -132,7 +134,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn set_property_show_all(&self, show_all: bool) {
+    fn set_show_all(&self, show_all: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

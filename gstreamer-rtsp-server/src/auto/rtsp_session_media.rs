@@ -40,16 +40,16 @@ pub trait RTSPSessionMediaExt: 'static {
     //fn alloc_channels(&self, range: /*Ignored*/gst_rtsp::RTSPRange) -> bool;
 
     #[doc(alias = "gst_rtsp_session_media_get_base_time")]
-    fn get_base_time(&self) -> gst::ClockTime;
+    fn base_time(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_rtsp_session_media_get_media")]
-    fn get_media(&self) -> Option<RTSPMedia>;
+    fn media(&self) -> Option<RTSPMedia>;
 
     #[doc(alias = "gst_rtsp_session_media_get_rtpinfo")]
-    fn get_rtpinfo(&self) -> Option<glib::GString>;
+    fn rtpinfo(&self) -> Option<glib::GString>;
 
     //#[doc(alias = "gst_rtsp_session_media_get_rtsp_state")]
-    //fn get_rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState;
+    //fn rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState;
 
     #[doc(alias = "gst_rtsp_session_media_get_transport")]
     fn get_transport(&self, idx: u32) -> Option<RTSPStreamTransport>;
@@ -57,7 +57,7 @@ pub trait RTSPSessionMediaExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_session_media_get_transports")]
-    fn get_transports(&self) -> Vec<RTSPStreamTransport>;
+    fn transports(&self) -> Vec<RTSPStreamTransport>;
 
     #[doc(alias = "gst_rtsp_session_media_matches")]
     fn matches(&self, path: &str) -> Option<i32>;
@@ -77,7 +77,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_session_media_alloc_channels() }
     //}
 
-    fn get_base_time(&self) -> gst::ClockTime {
+    fn base_time(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_rtsp_session_media_get_base_time(
                 self.as_ref().to_glib_none().0,
@@ -85,7 +85,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    fn get_media(&self) -> Option<RTSPMedia> {
+    fn media(&self) -> Option<RTSPMedia> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_session_media_get_media(
                 self.as_ref().to_glib_none().0,
@@ -93,7 +93,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    fn get_rtpinfo(&self) -> Option<glib::GString> {
+    fn rtpinfo(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_session_media_get_rtpinfo(
                 self.as_ref().to_glib_none().0,
@@ -101,7 +101,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    //fn get_rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState {
+    //fn rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState {
     //    unsafe { TODO: call ffi:gst_rtsp_session_media_get_rtsp_state() }
     //}
 
@@ -116,7 +116,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn get_transports(&self) -> Vec<RTSPStreamTransport> {
+    fn transports(&self) -> Vec<RTSPStreamTransport> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_media_get_transports(
                 self.as_ref().to_glib_none().0,

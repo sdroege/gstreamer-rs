@@ -30,13 +30,13 @@ pub trait RTSPStreamTransportExt: 'static {
     fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_transport_get_stream")]
-    fn get_stream(&self) -> Option<RTSPStream>;
+    fn stream(&self) -> Option<RTSPStream>;
 
     //#[doc(alias = "gst_rtsp_stream_transport_get_transport")]
-    //fn get_transport(&self) -> /*Ignored*/Option<gst_rtsp::RTSPTransport>;
+    //fn transport(&self) -> /*Ignored*/Option<gst_rtsp::RTSPTransport>;
 
     #[doc(alias = "gst_rtsp_stream_transport_get_url")]
-    fn get_url(&self) -> Option<gst_rtsp::RTSPUrl>;
+    fn url(&self) -> Option<gst_rtsp::RTSPUrl>;
 
     #[doc(alias = "gst_rtsp_stream_transport_is_timed_out")]
     fn is_timed_out(&self) -> bool;
@@ -107,7 +107,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         }
     }
 
-    fn get_stream(&self) -> Option<RTSPStream> {
+    fn stream(&self) -> Option<RTSPStream> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_stream_transport_get_stream(
                 self.as_ref().to_glib_none().0,
@@ -115,11 +115,11 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         }
     }
 
-    //fn get_transport(&self) -> /*Ignored*/Option<gst_rtsp::RTSPTransport> {
+    //fn transport(&self) -> /*Ignored*/Option<gst_rtsp::RTSPTransport> {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_get_transport() }
     //}
 
-    fn get_url(&self) -> Option<gst_rtsp::RTSPUrl> {
+    fn url(&self) -> Option<gst_rtsp::RTSPUrl> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_stream_transport_get_url(
                 self.as_ref().to_glib_none().0,

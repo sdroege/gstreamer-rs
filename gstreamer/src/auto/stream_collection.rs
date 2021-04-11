@@ -17,7 +17,7 @@ glib::wrapper! {
 
 impl StreamCollection {
     #[doc(alias = "gst_stream_collection_get_size")]
-    pub fn get_size(&self) -> u32 {
+    pub fn size(&self) -> u32 {
         unsafe { ffi::gst_stream_collection_get_size(self.to_glib_none().0) }
     }
 
@@ -32,7 +32,7 @@ impl StreamCollection {
     }
 
     #[doc(alias = "gst_stream_collection_get_upstream_id")]
-    pub fn get_upstream_id(&self) -> Option<glib::GString> {
+    pub fn upstream_id(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_upstream_id(
                 self.to_glib_none().0,

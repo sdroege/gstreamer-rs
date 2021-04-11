@@ -87,10 +87,10 @@ pub trait TimelineExt: 'static {
     fn commit_sync(&self) -> bool;
 
     #[doc(alias = "ges_timeline_get_auto_transition")]
-    fn get_auto_transition(&self) -> bool;
+    fn is_auto_transition(&self) -> bool;
 
     #[doc(alias = "ges_timeline_get_duration")]
-    fn get_duration(&self) -> gst::ClockTime;
+    fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_element")]
     fn get_element(&self, name: &str) -> Option<TimelineElement>;
@@ -106,25 +106,25 @@ pub trait TimelineExt: 'static {
     fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_groups")]
-    fn get_groups(&self) -> Vec<Group>;
+    fn groups(&self) -> Vec<Group>;
 
     #[doc(alias = "ges_timeline_get_layer")]
     fn get_layer(&self, priority: u32) -> Option<Layer>;
 
     #[doc(alias = "ges_timeline_get_layers")]
-    fn get_layers(&self) -> Vec<Layer>;
+    fn layers(&self) -> Vec<Layer>;
 
     #[doc(alias = "ges_timeline_get_pad_for_track")]
     fn get_pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad>;
 
     #[doc(alias = "ges_timeline_get_snapping_distance")]
-    fn get_snapping_distance(&self) -> gst::ClockTime;
+    fn snapping_distance(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_track_for_pad")]
     fn get_track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track>;
 
     #[doc(alias = "ges_timeline_get_tracks")]
-    fn get_tracks(&self) -> Vec<Track>;
+    fn tracks(&self) -> Vec<Track>;
 
     #[doc(alias = "ges_timeline_is_empty")]
     fn is_empty(&self) -> bool;
@@ -260,7 +260,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_auto_transition(&self) -> bool {
+    fn is_auto_transition(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_get_auto_transition(
                 self.as_ref().to_glib_none().0,
@@ -268,7 +268,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_duration(&self) -> gst::ClockTime {
+    fn duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_get_duration(
                 self.as_ref().to_glib_none().0,
@@ -304,7 +304,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_groups(&self) -> Vec<Group> {
+    fn groups(&self) -> Vec<Group> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_timeline_get_groups(
                 self.as_ref().to_glib_none().0,
@@ -321,7 +321,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_layers(&self) -> Vec<Layer> {
+    fn layers(&self) -> Vec<Layer> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_layers(
                 self.as_ref().to_glib_none().0,
@@ -338,7 +338,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_snapping_distance(&self) -> gst::ClockTime {
+    fn snapping_distance(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_get_snapping_distance(
                 self.as_ref().to_glib_none().0,
@@ -355,7 +355,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_tracks(&self) -> Vec<Track> {
+    fn tracks(&self) -> Vec<Track> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_tracks(
                 self.as_ref().to_glib_none().0,

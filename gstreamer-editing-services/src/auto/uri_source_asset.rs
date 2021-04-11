@@ -20,13 +20,13 @@ pub const NONE_URI_SOURCE_ASSET: Option<&UriSourceAsset> = None;
 
 pub trait UriSourceAssetExt: 'static {
     #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]
-    fn get_filesource_asset(&self) -> Option<UriClipAsset>;
+    fn filesource_asset(&self) -> Option<UriClipAsset>;
 
     #[doc(alias = "ges_uri_source_asset_get_stream_info")]
-    fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo>;
+    fn stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo>;
 
     #[doc(alias = "ges_uri_source_asset_get_stream_uri")]
-    fn get_stream_uri(&self) -> Option<glib::GString>;
+    fn stream_uri(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -35,7 +35,7 @@ pub trait UriSourceAssetExt: 'static {
 }
 
 impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
-    fn get_filesource_asset(&self) -> Option<UriClipAsset> {
+    fn filesource_asset(&self) -> Option<UriClipAsset> {
         unsafe {
             from_glib_none(ffi::ges_uri_source_asset_get_filesource_asset(
                 self.as_ref().to_glib_none().0,
@@ -43,7 +43,7 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
         }
     }
 
-    fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo> {
+    fn stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo> {
         unsafe {
             from_glib_none(ffi::ges_uri_source_asset_get_stream_info(
                 self.as_ref().to_glib_none().0,
@@ -51,7 +51,7 @@ impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
         }
     }
 
-    fn get_stream_uri(&self) -> Option<glib::GString> {
+    fn stream_uri(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::ges_uri_source_asset_get_stream_uri(
                 self.as_ref().to_glib_none().0,

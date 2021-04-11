@@ -45,16 +45,16 @@ pub trait PipelineExt: 'static {
     fn auto_clock(&self);
 
     #[doc(alias = "gst_pipeline_get_auto_flush_bus")]
-    fn get_auto_flush_bus(&self) -> bool;
+    fn is_auto_flush_bus(&self) -> bool;
 
     #[doc(alias = "gst_pipeline_get_delay")]
-    fn get_delay(&self) -> ClockTime;
+    fn delay(&self) -> ClockTime;
 
     #[doc(alias = "gst_pipeline_get_latency")]
-    fn get_latency(&self) -> ClockTime;
+    fn latency(&self) -> ClockTime;
 
     #[doc(alias = "gst_pipeline_get_pipeline_clock")]
-    fn get_pipeline_clock(&self) -> Clock;
+    fn pipeline_clock(&self) -> Clock;
 
     #[doc(alias = "gst_pipeline_set_auto_flush_bus")]
     fn set_auto_flush_bus(&self, auto_flush: bool);
@@ -91,7 +91,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn get_auto_flush_bus(&self) -> bool {
+    fn is_auto_flush_bus(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_pipeline_get_auto_flush_bus(
                 self.as_ref().to_glib_none().0,
@@ -99,11 +99,11 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn get_delay(&self) -> ClockTime {
+    fn delay(&self) -> ClockTime {
         unsafe { from_glib(ffi::gst_pipeline_get_delay(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_latency(&self) -> ClockTime {
+    fn latency(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_pipeline_get_latency(
                 self.as_ref().to_glib_none().0,
@@ -111,7 +111,7 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    fn get_pipeline_clock(&self) -> Clock {
+    fn pipeline_clock(&self) -> Clock {
         unsafe {
             from_glib_full(ffi::gst_pipeline_get_pipeline_clock(
                 self.as_ref().to_glib_none().0,

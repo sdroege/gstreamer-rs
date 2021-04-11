@@ -19,17 +19,17 @@ pub const NONE_EXTRACTABLE: Option<&Extractable> = None;
 
 pub trait ExtractableExt: 'static {
     #[doc(alias = "ges_extractable_get_asset")]
-    fn get_asset(&self) -> Option<Asset>;
+    fn asset(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_extractable_get_id")]
-    fn get_id(&self) -> Option<glib::GString>;
+    fn id(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_extractable_set_asset")]
     fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Extractable>> ExtractableExt for O {
-    fn get_asset(&self) -> Option<Asset> {
+    fn asset(&self) -> Option<Asset> {
         unsafe {
             from_glib_none(ffi::ges_extractable_get_asset(
                 self.as_ref().to_glib_none().0,
@@ -37,7 +37,7 @@ impl<O: IsA<Extractable>> ExtractableExt for O {
         }
     }
 
-    fn get_id(&self) -> Option<glib::GString> {
+    fn id(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::ges_extractable_get_id(self.as_ref().to_glib_none().0)) }
     }
 

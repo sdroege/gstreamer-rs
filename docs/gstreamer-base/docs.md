@@ -7,7 +7,7 @@ a file. So if you have undefined buffer sizes and require a specific size,
 this object is for you.
 
 An adapter is created with `Adapter::new`. It can be freed again with
-`gobject::ObjectExt::unref`.
+`glib::object::ObjectExt::unref`.
 
 The theory of operation is like this: All buffers received are put
 into the adapter using `Adapter::push` and the data is then read back
@@ -105,7 +105,7 @@ buffer pushed in it.
 
 [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Adapter::fn new -->
-Creates a new `Adapter`. Free with `gobject::ObjectExt::unref`.
+Creates a new `Adapter`. Free with `glib::object::ObjectExt::unref`.
 
 # Returns
 

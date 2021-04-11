@@ -29,7 +29,7 @@ glib::wrapper! {
 
 impl Player {
     #[doc(alias = "gst_player_get_audio_video_offset")]
-    pub fn get_audio_video_offset(&self) -> i64 {
+    pub fn audio_video_offset(&self) -> i64 {
         unsafe { ffi::gst_player_get_audio_video_offset(self.to_glib_none().0) }
     }
 
@@ -39,7 +39,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_current_audio_track")]
-    pub fn get_current_audio_track(&self) -> Option<PlayerAudioInfo> {
+    pub fn current_audio_track(&self) -> Option<PlayerAudioInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_audio_track(
                 self.to_glib_none().0,
@@ -48,7 +48,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_current_subtitle_track")]
-    pub fn get_current_subtitle_track(&self) -> Option<PlayerSubtitleInfo> {
+    pub fn current_subtitle_track(&self) -> Option<PlayerSubtitleInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_subtitle_track(
                 self.to_glib_none().0,
@@ -57,7 +57,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_current_video_track")]
-    pub fn get_current_video_track(&self) -> Option<PlayerVideoInfo> {
+    pub fn current_video_track(&self) -> Option<PlayerVideoInfo> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_video_track(
                 self.to_glib_none().0,
@@ -66,7 +66,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_current_visualization")]
-    pub fn get_current_visualization(&self) -> Option<glib::GString> {
+    pub fn current_visualization(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_visualization(
                 self.to_glib_none().0,
@@ -75,59 +75,59 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_duration")]
-    pub fn get_duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_player_get_duration(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_media_info")]
-    pub fn get_media_info(&self) -> Option<PlayerMediaInfo> {
+    pub fn media_info(&self) -> Option<PlayerMediaInfo> {
         unsafe { from_glib_full(ffi::gst_player_get_media_info(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_multiview_flags")]
-    pub fn get_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
+    pub fn multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe { from_glib(ffi::gst_player_get_multiview_flags(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_multiview_mode")]
-    pub fn get_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
+    pub fn multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe { from_glib(ffi::gst_player_get_multiview_mode(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_mute")]
-    pub fn get_mute(&self) -> bool {
+    pub fn is_muted(&self) -> bool {
         unsafe { from_glib(ffi::gst_player_get_mute(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_pipeline")]
-    pub fn get_pipeline(&self) -> gst::Element {
+    pub fn pipeline(&self) -> gst::Element {
         unsafe { from_glib_full(ffi::gst_player_get_pipeline(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_position")]
-    pub fn get_position(&self) -> gst::ClockTime {
+    pub fn position(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_player_get_position(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_player_get_rate")]
-    pub fn get_rate(&self) -> f64 {
+    pub fn rate(&self) -> f64 {
         unsafe { ffi::gst_player_get_rate(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_get_subtitle_uri")]
-    pub fn get_subtitle_uri(&self) -> Option<glib::GString> {
+    pub fn subtitle_uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_player_get_subtitle_uri(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_player_get_subtitle_video_offset")]
-    pub fn get_subtitle_video_offset(&self) -> i64 {
+    pub fn subtitle_video_offset(&self) -> i64 {
         unsafe { ffi::gst_player_get_subtitle_video_offset(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_player_get_uri")]
-    pub fn get_uri(&self) -> Option<glib::GString> {
+    pub fn uri(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_player_get_uri(self.to_glib_none().0)) }
     }
 
@@ -147,7 +147,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_volume")]
-    pub fn get_volume(&self) -> f64 {
+    pub fn volume(&self) -> f64 {
         unsafe { ffi::gst_player_get_volume(self.to_glib_none().0) }
     }
 
@@ -324,7 +324,8 @@ impl Player {
         }
     }
 
-    pub fn get_property_suburi(&self) -> Option<glib::GString> {
+    #[doc(alias = "get_property_suburi")]
+    pub fn suburi(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -338,7 +339,8 @@ impl Player {
         }
     }
 
-    pub fn set_property_suburi(&self, suburi: Option<&str>) {
+    #[doc(alias = "set_property_suburi")]
+    pub fn set_suburi(&self, suburi: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -348,7 +350,8 @@ impl Player {
         }
     }
 
-    pub fn get_property_video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
+    #[doc(alias = "get_property_video_multiview_flags")]
+    pub fn video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
             let mut value = glib::Value::from_type(
                 <gst_video::VideoMultiviewFlags as StaticType>::static_type(),
@@ -365,10 +368,8 @@ impl Player {
         }
     }
 
-    pub fn set_property_video_multiview_flags(
-        &self,
-        video_multiview_flags: gst_video::VideoMultiviewFlags,
-    ) {
+    #[doc(alias = "set_property_video_multiview_flags")]
+    pub fn set_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -378,7 +379,8 @@ impl Player {
         }
     }
 
-    pub fn get_property_video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
+    #[doc(alias = "get_property_video_multiview_mode")]
+    pub fn video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe {
             let mut value = glib::Value::from_type(
                 <gst_video::VideoMultiviewFramePacking as StaticType>::static_type(),
@@ -395,7 +397,8 @@ impl Player {
         }
     }
 
-    pub fn set_property_video_multiview_mode(
+    #[doc(alias = "set_property_video_multiview_mode")]
+    pub fn set_video_multiview_mode(
         &self,
         video_multiview_mode: gst_video::VideoMultiviewFramePacking,
     ) {

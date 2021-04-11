@@ -27,10 +27,10 @@ pub const NONE_BASE_TRANSFORM: Option<&BaseTransform> = None;
 
 pub trait BaseTransformExt: 'static {
     //#[doc(alias = "gst_base_transform_get_allocator")]
-    //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
+    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
     #[doc(alias = "gst_base_transform_get_buffer_pool")]
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
+    fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_base_transform_is_in_place")]
     fn is_in_place(&self) -> bool;
@@ -73,9 +73,11 @@ pub trait BaseTransformExt: 'static {
     #[doc(alias = "gst_base_transform_update_src_caps")]
     fn update_src_caps(&self, updated_caps: &gst::Caps) -> Result<(), glib::error::BoolError>;
 
-    fn get_property_qos(&self) -> bool;
+    #[doc(alias = "get_property_qos")]
+    fn is_qos(&self) -> bool;
 
-    fn set_property_qos(&self, qos: bool);
+    #[doc(alias = "set_property_qos")]
+    fn set_qos(&self, qos: bool);
 
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -84,11 +86,11 @@ pub trait BaseTransformExt: 'static {
 }
 
 impl<O: IsA<BaseTransform>> BaseTransformExt for O {
-    //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
+    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
     //    unsafe { TODO: call ffi:gst_base_transform_get_allocator() }
     //}
 
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
+    fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_base_transform_get_buffer_pool(
                 self.as_ref().to_glib_none().0,
@@ -210,7 +212,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         }
     }
 
-    fn get_property_qos(&self) -> bool {
+    fn is_qos(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -225,7 +227,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         }
     }
 
-    fn set_property_qos(&self, qos: bool) {
+    fn set_qos(&self, qos: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

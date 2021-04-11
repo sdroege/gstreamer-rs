@@ -16,7 +16,7 @@ glib::wrapper! {
 
 impl PlayerSubtitleInfo {
     #[doc(alias = "gst_player_subtitle_info_get_language")]
-    pub fn get_language(&self) -> Option<glib::GString> {
+    pub fn language(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_player_subtitle_info_get_language(
                 self.to_glib_none().0,

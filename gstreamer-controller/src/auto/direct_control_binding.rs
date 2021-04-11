@@ -62,11 +62,14 @@ unsafe impl Sync for DirectControlBinding {}
 pub const NONE_DIRECT_CONTROL_BINDING: Option<&DirectControlBinding> = None;
 
 pub trait DirectControlBindingExt: 'static {
-    fn get_property_absolute(&self) -> bool;
+    #[doc(alias = "get_property_absolute")]
+    fn is_absolute(&self) -> bool;
 
-    fn get_property_control_source(&self) -> Option<gst::ControlSource>;
+    #[doc(alias = "get_property_control_source")]
+    fn control_source(&self) -> Option<gst::ControlSource>;
 
-    fn set_property_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>);
+    #[doc(alias = "set_property_control_source")]
+    fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>);
 
     fn connect_property_control_source_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -75,7 +78,7 @@ pub trait DirectControlBindingExt: 'static {
 }
 
 impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
-    fn get_property_absolute(&self) -> bool {
+    fn is_absolute(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -90,7 +93,7 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
         }
     }
 
-    fn get_property_control_source(&self) -> Option<gst::ControlSource> {
+    fn control_source(&self) -> Option<gst::ControlSource> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<gst::ControlSource as StaticType>::static_type());
@@ -105,7 +108,7 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
         }
     }
 
-    fn set_property_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
+    fn set_control_source<P: IsA<gst::ControlSource>>(&self, control_source: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

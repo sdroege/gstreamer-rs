@@ -69,14 +69,14 @@ impl PadTemplate {
     }
 
     #[doc(alias = "gst_pad_template_get_caps")]
-    pub fn get_caps(&self) -> Caps {
+    pub fn caps(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_pad_template_get_caps(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_pad_template_get_documentation_caps")]
-    pub fn get_documentation_caps(&self) -> Caps {
+    pub fn documentation_caps(&self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_template_get_documentation_caps(
                 self.to_glib_none().0,
@@ -103,7 +103,8 @@ impl PadTemplate {
         }
     }
 
-    pub fn get_property_direction(&self) -> PadDirection {
+    #[doc(alias = "get_property_direction")]
+    pub fn direction(&self) -> PadDirection {
         unsafe {
             let mut value = glib::Value::from_type(<PadDirection as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -120,7 +121,8 @@ impl PadTemplate {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    pub fn get_property_gtype(&self) -> glib::types::Type {
+    #[doc(alias = "get_property_gtype")]
+    pub fn gtype(&self) -> glib::types::Type {
         unsafe {
             let mut value =
                 glib::Value::from_type(<glib::types::Type as StaticType>::static_type());
@@ -136,7 +138,8 @@ impl PadTemplate {
         }
     }
 
-    pub fn get_property_name_template(&self) -> Option<glib::GString> {
+    #[doc(alias = "get_property_name_template")]
+    pub fn name_template(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -150,7 +153,8 @@ impl PadTemplate {
         }
     }
 
-    pub fn get_property_presence(&self) -> PadPresence {
+    #[doc(alias = "get_property_presence")]
+    pub fn presence(&self) -> PadPresence {
         unsafe {
             let mut value = glib::Value::from_type(<PadPresence as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

@@ -15,7 +15,7 @@ Trait containing all `ARGBControlBinding` methods.
 [`ARGBControlBinding`](struct.ARGBControlBinding.html)
 <!-- impl ARGBControlBinding::fn new -->
 Create a new control-binding that attaches the given `gst::ControlSource` to the
-`gobject::Object` property.
+`glib::object::Object` property.
 ## `object`
 the object of the property
 ## `property_name`
@@ -63,7 +63,7 @@ Trait containing all `DirectControlBinding` methods.
 [`DirectControlBinding`](struct.DirectControlBinding.html)
 <!-- impl DirectControlBinding::fn new -->
 Create a new control-binding that attaches the `gst::ControlSource` to the
-`gobject::Object` property. It will map the control source range [0.0 ... 1.0] to
+`glib::object::Object` property. It will map the control source range [0.0 ... 1.0] to
 the full target property range, and clip all values outside this range.
 ## `object`
 the object of the property
@@ -77,7 +77,7 @@ the control source
 the new `DirectControlBinding`
 <!-- impl DirectControlBinding::fn new_absolute -->
 Create a new control-binding that attaches the `gst::ControlSource` to the
-`gobject::Object` property. It will directly map the control source values to the
+`glib::object::Object` property. It will directly map the control source values to the
 target property range without any transformations.
 ## `object`
 the object of the property
@@ -94,7 +94,7 @@ the new `DirectControlBinding`
 control points. It supports several interpolation modes and property types.
 
 To use `InterpolationControlSource` get a new instance by calling
-`InterpolationControlSource::new`, bind it to a `gobject::ParamSpec` and set some
+`InterpolationControlSource::new`, bind it to a `glib::object::ParamSpec` and set some
 control points by calling `TimedValueControlSourceExt::set`.
 
 All functions are MT-safe.
@@ -132,7 +132,7 @@ monotonic cubic interpolation, will not
 waveforms as control values.
 
 To use `LFOControlSource` get a new instance by calling
-`LFOControlSource::new`, bind it to a `gobject::ParamSpec` and set the relevant
+`LFOControlSource::new`, bind it to a `glib::object::ParamSpec` and set the relevant
 properties.
 
 All functions are MT-safe.
@@ -317,7 +317,7 @@ The removed `gst::TimedValue`
 control points. It allows for a tolerance on the time-stamps.
 
 To use `TriggerControlSource` get a new instance by calling
-`TriggerControlSource::new`, bind it to a `gobject::ParamSpec` and set some
+`TriggerControlSource::new`, bind it to a `glib::object::ParamSpec` and set some
 control points by calling `TimedValueControlSourceExt::set`.
 
 All functions are MT-safe.

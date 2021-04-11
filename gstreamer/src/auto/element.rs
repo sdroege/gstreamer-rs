@@ -87,13 +87,13 @@ pub trait ElementExt: 'static {
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
     #[doc(alias = "gst_element_get_base_time")]
-    fn get_base_time(&self) -> ClockTime;
+    fn base_time(&self) -> ClockTime;
 
     #[doc(alias = "gst_element_get_bus")]
-    fn get_bus(&self) -> Option<Bus>;
+    fn bus(&self) -> Option<Bus>;
 
     #[doc(alias = "gst_element_get_clock")]
-    fn get_clock(&self) -> Option<Clock>;
+    fn clock(&self) -> Option<Clock>;
 
     #[doc(alias = "gst_element_get_compatible_pad")]
     fn get_compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad>;
@@ -105,16 +105,16 @@ pub trait ElementExt: 'static {
     fn get_context(&self, context_type: &str) -> Option<Context>;
 
     #[doc(alias = "gst_element_get_contexts")]
-    fn get_contexts(&self) -> Vec<Context>;
+    fn contexts(&self) -> Vec<Context>;
 
     #[doc(alias = "gst_element_get_factory")]
-    fn get_factory(&self) -> Option<ElementFactory>;
+    fn factory(&self) -> Option<ElementFactory>;
 
     #[doc(alias = "gst_element_get_request_pad")]
     fn get_request_pad(&self, name: &str) -> Option<Pad>;
 
     #[doc(alias = "gst_element_get_start_time")]
-    fn get_start_time(&self) -> ClockTime;
+    fn start_time(&self) -> ClockTime;
 
     #[doc(alias = "gst_element_get_static_pad")]
     fn get_static_pad(&self, name: &str) -> Option<Pad>;
@@ -347,7 +347,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_base_time(&self) -> ClockTime {
+    fn base_time(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_element_get_base_time(
                 self.as_ref().to_glib_none().0,
@@ -355,11 +355,11 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_bus(&self) -> Option<Bus> {
+    fn bus(&self) -> Option<Bus> {
         unsafe { from_glib_full(ffi::gst_element_get_bus(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_clock(&self) -> Option<Clock> {
+    fn clock(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_element_get_clock(self.as_ref().to_glib_none().0)) }
     }
 
@@ -391,7 +391,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_contexts(&self) -> Vec<Context> {
+    fn contexts(&self) -> Vec<Context> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_element_get_contexts(
                 self.as_ref().to_glib_none().0,
@@ -399,7 +399,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_factory(&self) -> Option<ElementFactory> {
+    fn factory(&self) -> Option<ElementFactory> {
         unsafe { from_glib_none(ffi::gst_element_get_factory(self.as_ref().to_glib_none().0)) }
     }
 
@@ -412,7 +412,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_start_time(&self) -> ClockTime {
+    fn start_time(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_element_get_start_time(
                 self.as_ref().to_glib_none().0,

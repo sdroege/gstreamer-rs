@@ -59,7 +59,8 @@ pub trait GESContainerExt: 'static {
     #[doc(alias = "ges_container_ungroup")]
     fn ungroup(&self, recursive: bool) -> Vec<Container>;
 
-    fn get_property_height(&self) -> u32;
+    #[doc(alias = "get_property_height")]
+    fn height(&self) -> u32;
 
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(
         &self,
@@ -140,7 +141,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    fn get_property_height(&self) -> u32 {
+    fn height(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

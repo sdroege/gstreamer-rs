@@ -43,7 +43,8 @@ pub trait ControlBindingExt: 'static {
         last_sync: ClockTime,
     ) -> bool;
 
-    fn get_property_object(&self) -> Option<Object>;
+    #[doc(alias = "get_property_object")]
+    fn object(&self) -> Option<Object>;
 }
 
 impl<O: IsA<ControlBinding>> ControlBindingExt for O {
@@ -93,7 +94,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
         }
     }
 
-    fn get_property_object(&self) -> Option<Object> {
+    fn object(&self) -> Option<Object> {
         unsafe {
             let mut value = glib::Value::from_type(<Object as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

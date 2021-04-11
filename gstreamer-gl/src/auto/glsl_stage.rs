@@ -106,22 +106,22 @@ impl GLSLStage {
     }
 
     #[doc(alias = "gst_glsl_stage_get_handle")]
-    pub fn get_handle(&self) -> u32 {
+    pub fn handle(&self) -> u32 {
         unsafe { ffi::gst_glsl_stage_get_handle(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_glsl_stage_get_profile")]
-    pub fn get_profile(&self) -> GLSLProfile {
+    pub fn profile(&self) -> GLSLProfile {
         unsafe { from_glib(ffi::gst_glsl_stage_get_profile(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_glsl_stage_get_shader_type")]
-    pub fn get_shader_type(&self) -> u32 {
+    pub fn shader_type(&self) -> u32 {
         unsafe { ffi::gst_glsl_stage_get_shader_type(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_glsl_stage_get_version")]
-    pub fn get_version(&self) -> GLSLVersion {
+    pub fn version(&self) -> GLSLVersion {
         unsafe { from_glib(ffi::gst_glsl_stage_get_version(self.to_glib_none().0)) }
     }
 

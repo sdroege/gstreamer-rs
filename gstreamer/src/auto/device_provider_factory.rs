@@ -24,7 +24,7 @@ impl DeviceProviderFactory {
     }
 
     #[doc(alias = "gst_device_provider_factory_get_device_provider_type")]
-    pub fn get_device_provider_type(&self) -> glib::types::Type {
+    pub fn device_provider_type(&self) -> glib::types::Type {
         unsafe {
             from_glib(ffi::gst_device_provider_factory_get_device_provider_type(
                 self.to_glib_none().0,
@@ -43,7 +43,7 @@ impl DeviceProviderFactory {
     }
 
     #[doc(alias = "gst_device_provider_factory_get_metadata_keys")]
-    pub fn get_metadata_keys(&self) -> Vec<glib::GString> {
+    pub fn metadata_keys(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(
                 ffi::gst_device_provider_factory_get_metadata_keys(self.to_glib_none().0),

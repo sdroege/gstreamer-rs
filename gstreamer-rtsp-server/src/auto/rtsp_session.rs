@@ -48,16 +48,16 @@ pub trait RTSPSessionExt: 'static {
     ) -> Vec<RTSPSessionMedia>;
 
     #[doc(alias = "gst_rtsp_session_get_header")]
-    fn get_header(&self) -> Option<glib::GString>;
+    fn header(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_session_get_media")]
     fn get_media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
 
     #[doc(alias = "gst_rtsp_session_get_sessionid")]
-    fn get_sessionid(&self) -> Option<glib::GString>;
+    fn sessionid(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_session_get_timeout")]
-    fn get_timeout(&self) -> u32;
+    fn timeout(&self) -> u32;
 
     //#[doc(alias = "gst_rtsp_session_is_expired")]
     //fn is_expired(&self, now: /*Ignored*/&mut glib::TimeVal) -> bool;
@@ -90,13 +90,17 @@ pub trait RTSPSessionExt: 'static {
     #[doc(alias = "gst_rtsp_session_touch")]
     fn touch(&self);
 
-    fn get_property_extra_timeout(&self) -> u32;
+    #[doc(alias = "get_property_extra_timeout")]
+    fn extra_timeout(&self) -> u32;
 
-    fn set_property_extra_timeout(&self, extra_timeout: u32);
+    #[doc(alias = "set_property_extra_timeout")]
+    fn set_extra_timeout(&self, extra_timeout: u32);
 
-    fn get_property_timeout_always_visible(&self) -> bool;
+    #[doc(alias = "get_property_timeout_always_visible")]
+    fn is_timeout_always_visible(&self) -> bool;
 
-    fn set_property_timeout_always_visible(&self, timeout_always_visible: bool);
+    #[doc(alias = "set_property_timeout_always_visible")]
+    fn set_timeout_always_visible(&self, timeout_always_visible: bool);
 
     fn connect_property_extra_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -165,7 +169,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn get_header(&self) -> Option<glib::GString> {
+    fn header(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_session_get_header(
                 self.as_ref().to_glib_none().0,
@@ -186,7 +190,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn get_sessionid(&self) -> Option<glib::GString> {
+    fn sessionid(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_session_get_sessionid(
                 self.as_ref().to_glib_none().0,
@@ -194,7 +198,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn get_timeout(&self) -> u32 {
+    fn timeout(&self) -> u32 {
         unsafe { ffi::gst_rtsp_session_get_timeout(self.as_ref().to_glib_none().0) }
     }
 
@@ -261,7 +265,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn get_property_extra_timeout(&self) -> u32 {
+    fn extra_timeout(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -276,7 +280,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn set_property_extra_timeout(&self, extra_timeout: u32) {
+    fn set_extra_timeout(&self, extra_timeout: u32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -286,7 +290,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn get_property_timeout_always_visible(&self) -> bool {
+    fn is_timeout_always_visible(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -301,7 +305,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn set_property_timeout_always_visible(&self, timeout_always_visible: bool) {
+    fn set_timeout_always_visible(&self, timeout_always_visible: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

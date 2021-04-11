@@ -140,7 +140,7 @@ A Function to get current audio `PlayerAudioInfo` instance.
 
 current audio track.
 
-The caller should free it with `gobject::ObjectExt::unref`
+The caller should free it with `glib::object::ObjectExt::unref`
 <!-- impl Player::fn get_current_subtitle_track -->
 A Function to get current subtitle `PlayerSubtitleInfo` instance.
 
@@ -148,7 +148,7 @@ A Function to get current subtitle `PlayerSubtitleInfo` instance.
 
 current subtitle track.
 
-The caller should free it with `gobject::ObjectExt::unref`
+The caller should free it with `glib::object::ObjectExt::unref`
 <!-- impl Player::fn get_current_video_track -->
 A Function to get current video `PlayerVideoInfo` instance.
 
@@ -156,7 +156,7 @@ A Function to get current video `PlayerVideoInfo` instance.
 
 current video track.
 
-The caller should free it with `gobject::ObjectExt::unref`
+The caller should free it with `glib::object::ObjectExt::unref`
 <!-- impl Player::fn get_current_visualization -->
 
 # Returns
@@ -177,7 +177,7 @@ A Function to get the current media info `PlayerMediaInfo` instance.
 
 media info instance.
 
-The caller should free it with `gobject::ObjectExt::unref`
+The caller should free it with `glib::object::ObjectExt::unref`
 <!-- impl Player::fn get_multiview_flags -->
 Retrieve the current value of the indicated `type_`.
 

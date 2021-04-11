@@ -46,28 +46,28 @@ pub trait VideoDecoderExt: 'static {
     fn allocate_output_buffer(&self) -> Result<gst::Buffer, glib::BoolError>;
 
     #[doc(alias = "gst_video_decoder_get_buffer_pool")]
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
+    fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_video_decoder_get_estimate_rate")]
-    fn get_estimate_rate(&self) -> i32;
+    fn estimate_rate(&self) -> i32;
 
     #[doc(alias = "gst_video_decoder_get_max_decode_time")]
     fn get_max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
     #[doc(alias = "gst_video_decoder_get_max_errors")]
-    fn get_max_errors(&self) -> i32;
+    fn max_errors(&self) -> i32;
 
     #[doc(alias = "gst_video_decoder_get_needs_format")]
-    fn get_needs_format(&self) -> bool;
+    fn is_needs_format(&self) -> bool;
 
     #[doc(alias = "gst_video_decoder_get_packetized")]
-    fn get_packetized(&self) -> bool;
+    fn is_packetized(&self) -> bool;
 
     #[doc(alias = "gst_video_decoder_get_pending_frame_size")]
-    fn get_pending_frame_size(&self) -> usize;
+    fn pending_frame_size(&self) -> usize;
 
     #[doc(alias = "gst_video_decoder_get_qos_proportion")]
-    fn get_qos_proportion(&self) -> f64;
+    fn qos_proportion(&self) -> f64;
 
     #[doc(alias = "gst_video_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
@@ -92,11 +92,13 @@ pub trait VideoDecoderExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_qos(&self) -> bool;
+    #[doc(alias = "get_property_qos")]
+    fn is_qos(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_qos(&self, qos: bool);
+    #[doc(alias = "set_property_qos")]
+    fn set_qos(&self, qos: bool);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -129,7 +131,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
+    fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_video_decoder_get_buffer_pool(
                 self.as_ref().to_glib_none().0,
@@ -137,7 +139,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn get_estimate_rate(&self) -> i32 {
+    fn estimate_rate(&self) -> i32 {
         unsafe { ffi::gst_video_decoder_get_estimate_rate(self.as_ref().to_glib_none().0) }
     }
 
@@ -150,11 +152,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn get_max_errors(&self) -> i32 {
+    fn max_errors(&self) -> i32 {
         unsafe { ffi::gst_video_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_needs_format(&self) -> bool {
+    fn is_needs_format(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_video_decoder_get_needs_format(
                 self.as_ref().to_glib_none().0,
@@ -162,7 +164,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn get_packetized(&self) -> bool {
+    fn is_packetized(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_video_decoder_get_packetized(
                 self.as_ref().to_glib_none().0,
@@ -170,11 +172,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn get_pending_frame_size(&self) -> usize {
+    fn pending_frame_size(&self) -> usize {
         unsafe { ffi::gst_video_decoder_get_pending_frame_size(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_qos_proportion(&self) -> f64 {
+    fn qos_proportion(&self) -> f64 {
         unsafe { ffi::gst_video_decoder_get_qos_proportion(self.as_ref().to_glib_none().0) }
     }
 
@@ -242,7 +244,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_qos(&self) -> bool {
+    fn is_qos(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -259,7 +261,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_qos(&self, qos: bool) {
+    fn set_qos(&self, qos: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

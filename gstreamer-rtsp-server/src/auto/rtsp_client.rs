@@ -54,21 +54,21 @@ pub trait RTSPClientExt: 'static {
     fn close(&self);
 
     #[doc(alias = "gst_rtsp_client_get_auth")]
-    fn get_auth(&self) -> Option<RTSPAuth>;
+    fn auth(&self) -> Option<RTSPAuth>;
 
     //#[doc(alias = "gst_rtsp_client_get_connection")]
-    //fn get_connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection>;
+    //fn connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_client_get_content_length_limit")]
-    fn get_content_length_limit(&self) -> u32;
+    fn content_length_limit(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_client_get_mount_points")]
-    fn get_mount_points(&self) -> Option<RTSPMountPoints>;
+    fn mount_points(&self) -> Option<RTSPMountPoints>;
 
     #[doc(alias = "gst_rtsp_client_get_session_pool")]
-    fn get_session_pool(&self) -> Option<RTSPSessionPool>;
+    fn session_pool(&self) -> Option<RTSPSessionPool>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -76,7 +76,7 @@ pub trait RTSPClientExt: 'static {
     fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport>;
 
     #[doc(alias = "gst_rtsp_client_get_thread_pool")]
-    fn get_thread_pool(&self) -> Option<RTSPThreadPool>;
+    fn thread_pool(&self) -> Option<RTSPThreadPool>;
 
     //#[doc(alias = "gst_rtsp_client_handle_message")]
     //fn handle_message(&self, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
@@ -118,13 +118,17 @@ pub trait RTSPClientExt: 'static {
     #[doc(alias = "gst_rtsp_client_set_thread_pool")]
     fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>);
 
-    fn get_property_drop_backlog(&self) -> bool;
+    #[doc(alias = "get_property_drop_backlog")]
+    fn is_drop_backlog(&self) -> bool;
 
-    fn set_property_drop_backlog(&self, drop_backlog: bool);
+    #[doc(alias = "set_property_drop_backlog")]
+    fn set_drop_backlog(&self, drop_backlog: bool);
 
-    fn get_property_post_session_timeout(&self) -> i32;
+    #[doc(alias = "get_property_post_session_timeout")]
+    fn post_session_timeout(&self) -> i32;
 
-    fn set_property_post_session_timeout(&self, post_session_timeout: i32);
+    #[doc(alias = "set_property_post_session_timeout")]
+    fn set_post_session_timeout(&self, post_session_timeout: i32);
 
     fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(
         &self,
@@ -310,7 +314,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn get_auth(&self) -> Option<RTSPAuth> {
+    fn auth(&self) -> Option<RTSPAuth> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_client_get_auth(
                 self.as_ref().to_glib_none().0,
@@ -318,17 +322,17 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    //fn get_connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection> {
+    //fn connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection> {
     //    unsafe { TODO: call ffi:gst_rtsp_client_get_connection() }
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_content_length_limit(&self) -> u32 {
+    fn content_length_limit(&self) -> u32 {
         unsafe { ffi::gst_rtsp_client_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_mount_points(&self) -> Option<RTSPMountPoints> {
+    fn mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_client_get_mount_points(
                 self.as_ref().to_glib_none().0,
@@ -336,7 +340,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn get_session_pool(&self) -> Option<RTSPSessionPool> {
+    fn session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_client_get_session_pool(
                 self.as_ref().to_glib_none().0,
@@ -355,7 +359,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn get_thread_pool(&self) -> Option<RTSPThreadPool> {
+    fn thread_pool(&self) -> Option<RTSPThreadPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_client_get_thread_pool(
                 self.as_ref().to_glib_none().0,
@@ -470,7 +474,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn get_property_drop_backlog(&self) -> bool {
+    fn is_drop_backlog(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -485,7 +489,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn set_property_drop_backlog(&self, drop_backlog: bool) {
+    fn set_drop_backlog(&self, drop_backlog: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -495,7 +499,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn get_property_post_session_timeout(&self) -> i32 {
+    fn post_session_timeout(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -510,7 +514,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
         }
     }
 
-    fn set_property_post_session_timeout(&self, post_session_timeout: i32) {
+    fn set_post_session_timeout(&self, post_session_timeout: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

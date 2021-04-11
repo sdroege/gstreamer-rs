@@ -21,23 +21,23 @@ pub const NONE_PLAYER_STREAM_INFO: Option<&PlayerStreamInfo> = None;
 
 pub trait PlayerStreamInfoExt: 'static {
     #[doc(alias = "gst_player_stream_info_get_caps")]
-    fn get_caps(&self) -> Option<gst::Caps>;
+    fn caps(&self) -> Option<gst::Caps>;
 
     #[doc(alias = "gst_player_stream_info_get_codec")]
-    fn get_codec(&self) -> Option<glib::GString>;
+    fn codec(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_player_stream_info_get_index")]
-    fn get_index(&self) -> i32;
+    fn index(&self) -> i32;
 
     #[doc(alias = "gst_player_stream_info_get_stream_type")]
-    fn get_stream_type(&self) -> glib::GString;
+    fn stream_type(&self) -> glib::GString;
 
     #[doc(alias = "gst_player_stream_info_get_tags")]
-    fn get_tags(&self) -> Option<gst::TagList>;
+    fn tags(&self) -> Option<gst::TagList>;
 }
 
 impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
-    fn get_caps(&self) -> Option<gst::Caps> {
+    fn caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_none(ffi::gst_player_stream_info_get_caps(const_override(
                 self.as_ref().to_glib_none().0,
@@ -45,7 +45,7 @@ impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
         }
     }
 
-    fn get_codec(&self) -> Option<glib::GString> {
+    fn codec(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_player_stream_info_get_codec(const_override(
                 self.as_ref().to_glib_none().0,
@@ -53,13 +53,13 @@ impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
         }
     }
 
-    fn get_index(&self) -> i32 {
+    fn index(&self) -> i32 {
         unsafe {
             ffi::gst_player_stream_info_get_index(const_override(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_stream_type(&self) -> glib::GString {
+    fn stream_type(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gst_player_stream_info_get_stream_type(const_override(
                 self.as_ref().to_glib_none().0,
@@ -67,7 +67,7 @@ impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
         }
     }
 
-    fn get_tags(&self) -> Option<gst::TagList> {
+    fn tags(&self) -> Option<gst::TagList> {
         unsafe {
             from_glib_none(ffi::gst_player_stream_info_get_tags(const_override(
                 self.as_ref().to_glib_none().0,

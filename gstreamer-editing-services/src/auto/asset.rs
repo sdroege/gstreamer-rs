@@ -122,19 +122,19 @@ pub trait AssetExt: 'static {
     fn extract(&self) -> Result<Extractable, glib::Error>;
 
     #[doc(alias = "ges_asset_get_error")]
-    fn get_error(&self) -> Option<glib::Error>;
+    fn error(&self) -> Option<glib::Error>;
 
     #[doc(alias = "ges_asset_get_extractable_type")]
-    fn get_extractable_type(&self) -> glib::types::Type;
+    fn extractable_type(&self) -> glib::types::Type;
 
     #[doc(alias = "ges_asset_get_id")]
-    fn get_id(&self) -> Option<glib::GString>;
+    fn id(&self) -> Option<glib::GString>;
 
     #[doc(alias = "ges_asset_get_proxy")]
-    fn get_proxy(&self) -> Option<Asset>;
+    fn proxy(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_asset_get_proxy_target")]
-    fn get_proxy_target(&self) -> Option<Asset>;
+    fn proxy_target(&self) -> Option<Asset>;
 
     #[doc(alias = "ges_asset_list_proxies")]
     fn list_proxies(&self) -> Vec<Asset>;
@@ -164,11 +164,11 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn get_error(&self) -> Option<glib::Error> {
+    fn error(&self) -> Option<glib::Error> {
         unsafe { from_glib_none(ffi::ges_asset_get_error(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_extractable_type(&self) -> glib::types::Type {
+    fn extractable_type(&self) -> glib::types::Type {
         unsafe {
             from_glib(ffi::ges_asset_get_extractable_type(
                 self.as_ref().to_glib_none().0,
@@ -176,15 +176,15 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn get_id(&self) -> Option<glib::GString> {
+    fn id(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::ges_asset_get_id(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_proxy(&self) -> Option<Asset> {
+    fn proxy(&self) -> Option<Asset> {
         unsafe { from_glib_none(ffi::ges_asset_get_proxy(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_proxy_target(&self) -> Option<Asset> {
+    fn proxy_target(&self) -> Option<Asset> {
         unsafe {
             from_glib_none(ffi::ges_asset_get_proxy_target(
                 self.as_ref().to_glib_none().0,

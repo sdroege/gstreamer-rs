@@ -23,12 +23,12 @@ impl TypeFindFactory {
     //}
 
     #[doc(alias = "gst_type_find_factory_get_caps")]
-    pub fn get_caps(&self) -> Option<Caps> {
+    pub fn caps(&self) -> Option<Caps> {
         unsafe { from_glib_none(ffi::gst_type_find_factory_get_caps(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_type_find_factory_get_extensions")]
-    pub fn get_extensions(&self) -> Vec<glib::GString> {
+    pub fn extensions(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_type_find_factory_get_extensions(
                 self.to_glib_none().0,

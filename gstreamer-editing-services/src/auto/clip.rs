@@ -73,7 +73,7 @@ pub trait ClipExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_duration_limit")]
-    fn get_duration_limit(&self) -> gst::ClockTime;
+    fn duration_limit(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -85,10 +85,10 @@ pub trait ClipExt: 'static {
     ) -> Result<gst::ClockTime, glib::Error>;
 
     #[doc(alias = "ges_clip_get_layer")]
-    fn get_layer(&self) -> Option<Layer>;
+    fn layer(&self) -> Option<Layer>;
 
     #[doc(alias = "ges_clip_get_supported_formats")]
-    fn get_supported_formats(&self) -> TrackType;
+    fn supported_formats(&self) -> TrackType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -114,7 +114,7 @@ pub trait ClipExt: 'static {
     fn get_top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
 
     #[doc(alias = "ges_clip_get_top_effects")]
-    fn get_top_effects(&self) -> Vec<TrackElement>;
+    fn top_effects(&self) -> Vec<TrackElement>;
 
     #[doc(alias = "ges_clip_move_to_layer")]
     fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
@@ -267,7 +267,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_duration_limit(&self) -> gst::ClockTime {
+    fn duration_limit(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_clip_get_duration_limit(
                 self.as_ref().to_glib_none().0,
@@ -298,11 +298,11 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn get_layer(&self) -> Option<Layer> {
+    fn layer(&self) -> Option<Layer> {
         unsafe { from_glib_full(ffi::ges_clip_get_layer(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_supported_formats(&self) -> TrackType {
+    fn supported_formats(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_clip_get_supported_formats(
                 self.as_ref().to_glib_none().0,
@@ -372,7 +372,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn get_top_effects(&self) -> Vec<TrackElement> {
+    fn top_effects(&self) -> Vec<TrackElement> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_clip_get_top_effects(
                 self.as_ref().to_glib_none().0,

@@ -64,9 +64,11 @@ pub trait BaseParseExt: 'static {
     #[doc(alias = "gst_base_parse_set_ts_at_offset")]
     fn set_ts_at_offset(&self, offset: usize);
 
-    fn get_property_disable_passthrough(&self) -> bool;
+    #[doc(alias = "get_property_disable_passthrough")]
+    fn is_disable_passthrough(&self) -> bool;
 
-    fn set_property_disable_passthrough(&self, disable_passthrough: bool);
+    #[doc(alias = "set_property_disable_passthrough")]
+    fn set_disable_passthrough(&self, disable_passthrough: bool);
 
     fn connect_property_disable_passthrough_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -172,7 +174,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    fn get_property_disable_passthrough(&self) -> bool {
+    fn is_disable_passthrough(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -187,7 +189,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         }
     }
 
-    fn set_property_disable_passthrough(&self, disable_passthrough: bool) {
+    fn set_disable_passthrough(&self, disable_passthrough: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

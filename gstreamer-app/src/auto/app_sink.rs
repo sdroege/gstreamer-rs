@@ -23,7 +23,7 @@ impl AppSink {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_app_sink_get_buffer_list_support")]
-    pub fn get_buffer_list_support(&self) -> bool {
+    pub fn is_buffer_list_support(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_app_sink_get_buffer_list_support(
                 self.to_glib_none().0,
@@ -32,27 +32,27 @@ impl AppSink {
     }
 
     #[doc(alias = "gst_app_sink_get_caps")]
-    pub fn get_caps(&self) -> Option<gst::Caps> {
+    pub fn caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_app_sink_get_caps(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_drop")]
-    pub fn get_drop(&self) -> bool {
+    pub fn is_drop(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_drop(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_emit_signals")]
-    pub fn get_emit_signals(&self) -> bool {
+    pub fn emits_signals(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_emit_signals(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_max_buffers")]
-    pub fn get_max_buffers(&self) -> u32 {
+    pub fn max_buffers(&self) -> u32 {
         unsafe { ffi::gst_app_sink_get_max_buffers(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_sink_get_wait_on_eos")]
-    pub fn get_wait_on_eos(&self) -> bool {
+    pub fn is_wait_on_eos(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_wait_on_eos(self.to_glib_none().0)) }
     }
 
@@ -153,7 +153,8 @@ impl AppSink {
         }
     }
 
-    pub fn get_property_buffer_list(&self) -> bool {
+    #[doc(alias = "get_property_buffer_list")]
+    pub fn is_buffer_list(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -168,28 +169,14 @@ impl AppSink {
         }
     }
 
-    pub fn set_property_buffer_list(&self, buffer_list: bool) {
+    #[doc(alias = "set_property_buffer_list")]
+    pub fn set_buffer_list(&self, buffer_list: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffer-list\0".as_ptr() as *const _,
                 glib::Value::from(&buffer_list).to_glib_none().0,
             );
-        }
-    }
-
-    pub fn get_property_eos(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"eos\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `eos` getter")
-                .unwrap()
         }
     }
 

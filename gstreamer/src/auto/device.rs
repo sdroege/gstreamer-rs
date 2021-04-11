@@ -33,16 +33,16 @@ pub trait DeviceExt: 'static {
     fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError>;
 
     #[doc(alias = "gst_device_get_caps")]
-    fn get_caps(&self) -> Option<Caps>;
+    fn caps(&self) -> Option<Caps>;
 
     #[doc(alias = "gst_device_get_device_class")]
-    fn get_device_class(&self) -> glib::GString;
+    fn device_class(&self) -> glib::GString;
 
     #[doc(alias = "gst_device_get_display_name")]
-    fn get_display_name(&self) -> glib::GString;
+    fn display_name(&self) -> glib::GString;
 
     #[doc(alias = "gst_device_get_properties")]
-    fn get_properties(&self) -> Option<Structure>;
+    fn properties(&self) -> Option<Structure>;
 
     #[doc(alias = "gst_device_has_classes")]
     fn has_classes(&self, classes: &str) -> bool;
@@ -70,11 +70,11 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
-    fn get_caps(&self) -> Option<Caps> {
+    fn caps(&self) -> Option<Caps> {
         unsafe { from_glib_full(ffi::gst_device_get_caps(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_device_class(&self) -> glib::GString {
+    fn device_class(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_device_class(
                 self.as_ref().to_glib_none().0,
@@ -82,7 +82,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
-    fn get_display_name(&self) -> glib::GString {
+    fn display_name(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_display_name(
                 self.as_ref().to_glib_none().0,
@@ -90,7 +90,7 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
-    fn get_properties(&self) -> Option<Structure> {
+    fn properties(&self) -> Option<Structure> {
         unsafe {
             from_glib_full(ffi::gst_device_get_properties(
                 self.as_ref().to_glib_none().0,

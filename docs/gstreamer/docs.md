@@ -1320,7 +1320,7 @@ flag indicating that buffer meta should be
 flag indicating that buffer memory should be reffed
  and appended to already existing memory. Unless the memory is marked as
  NO_SHARE, no actual copy of the memory is made but it is simply reffed.
- Add `BufferCopyFlags::Deep` to force a real copy.
+ Add [`Deep`](Self::Deep) to force a real copy.
 <!-- struct BufferCopyFlags::const MERGE -->
 flag indicating that buffer memory should be
  merged
@@ -2739,7 +2739,7 @@ a newly allocated `Caps`
 <!-- enum CapsIntersectMode -->
 Modes of caps intersection
 
-`CapsIntersectMode::ZigZag` tries to preserve overall order of both caps
+[`ZigZag`](Self::ZigZag) tries to preserve overall order of both caps
 by iterating on the caps' structures as the following matrix shows:
 
 ```text
@@ -2753,7 +2753,7 @@ Used when there is no explicit precedence of one caps over the other. e.g.
 tee's sink pad getcaps function, it will probe its src pad peers' for their
 caps and intersect them with this mode.
 
-`CapsIntersectMode::First` is useful when an element wants to preserve
+[`First`](Self::First) is useful when an element wants to preserve
 another element's caps priority order when intersecting with its own caps.
 Example: If caps1 is [A, B, C] and caps2 is [E, B, D, A], the result
 would be [A, B], maintaining the first caps priority on the intersection.
@@ -2837,11 +2837,11 @@ the number of child objects
 MT safe.
 <!-- trait ChildProxyExt::fn get_property -->
 Gets a single property using the GstChildProxy mechanism.
-You are responsible for freeing it by calling `gobject::Value::unset`
+You are responsible for freeing it by calling `glib::object::Value::unset`
 ## `name`
 name of the property
 ## `value`
-a `gobject::Value` that should take the result.
+a `glib::object::Value` that should take the result.
 <!-- trait ChildProxyExt::fn get_valist -->
 Gets properties of the parent object and its children.
 ## `first_property_name`
@@ -2849,16 +2849,16 @@ name of the first property to get
 ## `var_args`
 return location for the first property, followed optionally by more name/return location pairs, followed by `None`
 <!-- trait ChildProxyExt::fn lookup -->
-Looks up which object and `gobject::ParamSpec` would be effected by the given `name`.
+Looks up which object and `glib::object::ParamSpec` would be effected by the given `name`.
 
 MT safe.
 ## `name`
 name of the property to look up
 ## `target`
-pointer to a `gobject::Object` that
+pointer to a `glib::object::Object` that
  takes the real object to set property on
 ## `pspec`
-pointer to take the `gobject::ParamSpec`
+pointer to take the `glib::object::ParamSpec`
  describing the property
 
 # Returns
@@ -2875,7 +2875,7 @@ Sets a single property using the GstChildProxy mechanism.
 ## `name`
 name of the property to set
 ## `value`
-new `gobject::Value` for the property
+new `glib::object::Value` for the property
 <!-- trait ChildProxyExt::fn set_valist -->
 Sets properties of the parent object and its children.
 ## `first_property_name`
@@ -2885,13 +2885,13 @@ value for the first property, followed optionally by more name/value pairs, foll
 <!-- trait ChildProxyExt::fn connect_child_added -->
 Will be emitted after the `object` was added to the `child_proxy`.
 ## `object`
-the `gobject::Object` that was added
+the `glib::object::Object` that was added
 ## `name`
 the name of the new child
 <!-- trait ChildProxyExt::fn connect_child_removed -->
 Will be emitted after the `object` was removed from the `child_proxy`.
 ## `object`
-the `gobject::Object` that was removed
+the `glib::object::Object` that was removed
 ## `name`
 the name of the old child
 <!-- struct Clock -->
@@ -3612,7 +3612,7 @@ Trait containing all `ControlBinding` methods.
 <!-- trait ControlBindingExt::fn get_g_value_array -->
 Gets a number of `GValues` for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
-`gobject::Value`.
+`glib::object::Value`.
 
 This function is useful if one wants to e.g. draw a graph of the control
 curve or apply a control curve sample by sample.
@@ -7129,7 +7129,7 @@ undefined format
 <!-- enum Format::variant Default -->
 the default format of the pad/element. This can be
  samples for raw audio, frames/fields for raw video (some, but not all,
- elements support this; use `Format::Time` if you don't have a good
+ elements support this; use [`Time`](Self::Time) if you don't have a good
  reason to query for samples/frames)
 <!-- enum Format::variant Bytes -->
 bytes
@@ -7809,7 +7809,7 @@ Creates a new instant-rate-request message. Elements handling the
 instant-rate-change event must post this message. The message is
 handled at the pipeline, and allows the pipeline to select the
 running time when the rate change should happen and to send an
-`EventType::InstantRateSyncTime` event to notify the elements
+[`crate::EventType::InstantRateSyncTime`] (XXX: @-reference does not belong to Message!) event to notify the elements
 in the pipeline.
 
 Feature: `v1_18`
@@ -8553,7 +8553,7 @@ the duration of the buffer that
 Extract the QoS stats representing the history of the current continuous
 pipeline playback period.
 
-When `format` is `Format::Undefined` both `dropped` and `processed` are
+When `format` is [`crate::Format::Undefined`] (XXX: @-reference does not belong to Message!) both `dropped` and `processed` are
 invalid. Values of -1 for either `processed` or `dropped` mean unknown values.
 
 MT safe.
@@ -8811,7 +8811,7 @@ the group id
 Set the QoS stats representing the history of the current continuous pipeline
 playback period.
 
-When `format` is `Format::Undefined` both `dropped` and `processed` are
+When `format` is [`crate::Format::Undefined`] (XXX: @-reference does not belong to Message!) both `dropped` and `processed` are
 invalid. Values of -1 for either `processed` or `dropped` mean unknown values.
 
 MT safe.
@@ -8914,18 +8914,18 @@ pointer to a `Message` that will
 <!-- struct Object -->
 `Object` provides a root for the object hierarchy tree filed in by the
 GStreamer library. It is currently a thin wrapper on top of
-`gobject::InitiallyUnowned`. It is an abstract class that is not very usable on its own.
+`glib::object::InitiallyUnowned`. It is an abstract class that is not very usable on its own.
 
 `Object` gives us basic refcounting, parenting functionality and locking.
 Most of the functions are just extended for special GStreamer needs and can be
-found under the same name in the base class of `Object` which is `gobject::Object`
-(e.g. `gobject::ObjectExt::ref` becomes `GstObjectExt::ref`).
+found under the same name in the base class of `Object` which is `glib::object::Object`
+(e.g. `glib::object::ObjectExt::ref` becomes `GstObjectExt::ref`).
 
-Since `Object` derives from `gobject::InitiallyUnowned`, it also inherits the
+Since `Object` derives from `glib::object::InitiallyUnowned`, it also inherits the
 floating reference. Be aware that functions such as `GstBinExt::add` and
 `ElementExt::add_pad` take ownership of the floating reference.
 
-In contrast to `gobject::Object` instances, `Object` adds a name property. The functions
+In contrast to `glib::object::Object` instances, `Object` adds a name property. The functions
 `Object::set_name` and `GstObjectExt::get_name` are used to set/get the name
 of the object.
 
@@ -9000,11 +9000,11 @@ using g_print.
 MT safe. This function grabs and releases `object`'s LOCK for getting its
  path string.
 ## `object`
-the `gobject::Object` that signalled the notify.
+the `glib::object::Object` that signalled the notify.
 ## `orig`
 a `Object` that initiated the notify.
 ## `pspec`
-a `gobject::ParamSpec` of the property.
+a `glib::object::ParamSpec` of the property.
 ## `excluded_props`
 
  a set of user-specified properties to exclude or `None` to show
@@ -9019,7 +9019,7 @@ the floating flag while leaving the reference count unchanged. If the object
 is not floating, then this call adds a new normal reference increasing the
 reference count by one.
 
-For more background on "floating references" please see the `gobject::Object`
+For more background on "floating references" please see the `glib::object::Object`
 documentation.
 ## `object`
 a `Object` to sink
@@ -9088,7 +9088,7 @@ the control rate in nanoseconds
 <!-- trait GstObjectExt::fn get_g_value_array -->
 Gets a number of `GValues` for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
-`gobject::Value`.
+`glib::object::Value`.
 
 This function is useful if one wants to e.g. draw a graph of the control
 curve or apply a control curve sample by sample.
@@ -9339,13 +9339,13 @@ the object that originated the signal
 the property that changed
 <!-- trait GstObjectExt::fn get_property_parent -->
 The parent of the object. Please note, that when changing the 'parent'
-property, we don't emit `gobject::Object::notify` and `Object::deep-notify`
+property, we don't emit `glib::object::Object::notify` and `Object::deep-notify`
 signals due to locking issues. In some cases one can use
 `Bin::element-added` or `Bin::element-removed` signals on the parent to
 achieve a similar effect.
 <!-- trait GstObjectExt::fn set_property_parent -->
 The parent of the object. Please note, that when changing the 'parent'
-property, we don't emit `gobject::Object::notify` and `Object::deep-notify`
+property, we don't emit `glib::object::Object::notify` and `Object::deep-notify`
 signals due to locking issues. In some cases one can use
 `Bin::element-added` or `Bin::element-removed` signals on the parent to
 achieve a similar effect.
@@ -10635,9 +10635,9 @@ the default accept-caps handler will use
 <!-- struct PadFlags::const LAST -->
 offset to define more flags
 <!-- struct PadLinkCheck -->
-The amount of checking to be done when linking pads. `PadLinkCheck::Caps`
-and `PadLinkCheck::TemplateCaps` are mutually exclusive. If both are
-specified, expensive but safe `PadLinkCheck::Caps` are performed.
+The amount of checking to be done when linking pads. [`Caps`](Self::Caps)
+and [`TemplateCaps`](Self::TemplateCaps) are mutually exclusive. If both are
+specified, expensive but safe [`Caps`](Self::Caps) are performed.
 
 > Only disable some of the checks if you are 100% certain you know the link
 > will not fail because of hierarchy/caps compatibility failures. If uncertain,
@@ -10651,7 +10651,7 @@ Check the pads have same parents/grandparents.
  pads are in the same bin.
 <!-- struct PadLinkCheck::const TEMPLATE_CAPS -->
 Check if the pads are compatible by using
- their template caps. This is much faster than `PadLinkCheck::Caps`, but
+ their template caps. This is much faster than [`Caps`](Self::Caps), but
  would be unsafe e.g. if one pad has `GST_CAPS_ANY`.
 <!-- struct PadLinkCheck::const CAPS -->
 Check if the pads are compatible by comparing the
@@ -10727,7 +10727,7 @@ Data has been handled in the probe and will not be
  Since: 1.6
 <!-- struct PadProbeType -->
 The different probing types that can occur. When either one of
-`PadProbeType::Idle` or `PadProbeType::Block` is used, the probe will be a
+[`Idle`](Self::Idle) or [`Block`](Self::Block) is used, the probe will be a
 blocking probe.
 <!-- struct PadProbeType::const INVALID -->
 invalid probe type
@@ -10746,8 +10746,8 @@ probe upstream events
 <!-- struct PadProbeType::const EVENT_FLUSH -->
 probe flush events. This probe has to be
  explicitly enabled and is not included in the
- @`PadProbeType::EventDownstream` or
- @`PadProbeType::EventUpstream` probe types.
+ @[`EventDownstream`](Self::EventDownstream) or
+ @[`EventUpstream`](Self::EventUpstream) probe types.
 <!-- struct PadProbeType::const QUERY_DOWNSTREAM -->
 probe downstream queries
 <!-- struct PadProbeType::const QUERY_UPSTREAM -->
@@ -11566,7 +11566,7 @@ Trait containing all `PluginFeature` methods.
 
 [`DeviceProviderFactory`](struct.DeviceProviderFactory.html), [`ElementFactory`](struct.ElementFactory.html), [`PluginFeature`](struct.PluginFeature.html), [`TypeFindFactory`](struct.TypeFindFactory.html)
 <!-- impl PluginFeature::fn list_copy -->
-Copies the list of features. Caller should call `PluginFeature::list_free`
+Copies the list of features. Caller should call [`list_free`](Self::list_free)
 when done with the list.
 ## `list`
 list
@@ -11830,7 +11830,7 @@ with `Promise::reply`. The exact value returned is defined by the API
 contract of the producer and `None` may be a valid reply.
 `Promise::interrupt` is for the consumer to
 indicate to the producer that the value is not needed anymore and producing
-that value can stop. The `PromiseResult::Expired` state set by a call
+that value can stop. The [`crate::PromiseResult::Expired`] (XXX: @-reference does not belong to Promise!) state set by a call
 to `Promise::expire` indicates to the consumer that a value will never
 be produced and is intended to be called by a third party that implements
 some notion of message handling such as `Bus`.
@@ -12739,7 +12739,7 @@ in the `formats` array must be equal to `n_formats`.
 the number of formats to set.
 ## `formats`
 an array containing `n_formats`
- `Format` values.
+ [`crate::Format`] (XXX: @-reference does not belong to Query!) values.
 <!-- impl Query::fn set_latency -->
 Answer a latency query by setting the requested values in the given format.
 ## `live`
@@ -12844,7 +12844,7 @@ will choose this element over an alternative one with the same function.
 
 These constants serve as a rough guidance for defining the rank of a
 `PluginFeature`. Any value is valid, including values bigger than
-`Rank::Primary`.
+[`Primary`](Self::Primary).
 <!-- enum Rank::variant None -->
 will be chosen last or not at all
 <!-- enum Rank::variant Marginal -->
@@ -13779,7 +13779,7 @@ reset the pipeline running_time to the segment
 perform skip playback (Since: 1.6)
 <!-- struct SegmentFlags::const SKIP -->
 Deprecated backward compatibility flag, replaced
- by `SegmentFlags::Trickmode`
+ by [`Trickmode`](Self::Trickmode)
 <!-- struct SegmentFlags::const SEGMENT -->
 send SEGMENT_DONE instead of EOS
 <!-- struct SegmentFlags::const TRICKMODE_KEY_UNITS -->
@@ -13897,7 +13897,7 @@ they should make sure to go back to real 'PAUSED' state (prerolling for example)
 state change from PLAYING to PLAYING. (Since: 1.14)
 <!-- enum StateChangeReturn -->
 The possible return values from a state change function such as
-`Element::set_state`. Only `StateChangeReturn::Failure` is a real failure.
+`Element::set_state`. Only [`Failure`](Self::Failure) is a real failure.
 <!-- enum StateChangeReturn::variant Failure -->
 the state change failed
 <!-- enum StateChangeReturn::variant Success -->
@@ -14545,17 +14545,17 @@ the name of the first field to read
  because the field requested did not exist, or was of a type other
  than the type specified), otherwise `true`.
 <!-- impl Structure::fn get_array -->
-This is useful in language bindings where unknown `gobject::Value` types are not
+This is useful in language bindings where unknown `glib::object::Value` types are not
 supported. This function will convert the `GST_TYPE_ARRAY` into a newly
-allocated `gobject::ValueArray` and return it through `array`. Be aware that this is
-slower then getting the `gobject::Value` directly.
+allocated `glib::object::ValueArray` and return it through `array`. Be aware that this is
+slower then getting the `glib::object::Value` directly.
 
 Feature: `v1_12`
 
 ## `fieldname`
 the name of a field
 ## `array`
-a pointer to a `gobject::ValueArray`
+a pointer to a `glib::object::ValueArray`
 
 # Returns
 
@@ -14667,7 +14667,7 @@ the name of the field
 
 # Returns
 
-the `gobject::Value` of the field
+the `glib::object::Value` of the field
 <!-- impl Structure::fn get_flagset -->
 Read the GstFlagSet flags and mask out of the structure into the
 provided pointers.
@@ -14728,17 +14728,17 @@ a pointer to a `gint64` to set
 with `fieldname` or the existing field did not contain a `gint64`, this function
 returns `false`.
 <!-- impl Structure::fn get_list -->
-This is useful in language bindings where unknown `gobject::Value` types are not
+This is useful in language bindings where unknown `glib::object::Value` types are not
 supported. This function will convert the `GST_TYPE_LIST` into a newly
 allocated GValueArray and return it through `array`. Be aware that this is
-slower then getting the `gobject::Value` directly.
+slower then getting the `glib::object::Value` directly.
 
 Feature: `v1_12`
 
 ## `fieldname`
 the name of a field
 ## `array`
-a pointer to a `gobject::ValueArray`
+a pointer to a `glib::object::ValueArray`
 
 # Returns
 
@@ -14818,7 +14818,7 @@ the name of the field to get
 
 # Returns
 
-the `gobject::Value` corresponding to the field with the given
+the `glib::object::Value` corresponding to the field with the given
 name.
 <!-- impl Structure::fn has_field -->
 Check if `self` contains a field named `fieldname`.
@@ -14889,7 +14889,7 @@ the `glib::Quark` of the field to get
 
 # Returns
 
-the `gobject::Value` corresponding to the field with the given
+the `glib::object::Value` corresponding to the field with the given
 name identifier.
 <!-- impl Structure::fn id_has_field -->
 Check if `self` contains a field named `field`.
@@ -15021,26 +15021,26 @@ the name of the field to set
 This is useful in language bindings where unknown GValue types are not
 supported. This function will convert a `array` to `GST_TYPE_ARRAY` and set
 the field specified by `fieldname`. Be aware that this is slower then using
-`GST_TYPE_ARRAY` in a `gobject::Value` directly.
+`GST_TYPE_ARRAY` in a `glib::object::Value` directly.
 
 Feature: `v1_12`
 
 ## `fieldname`
 the name of a field
 ## `array`
-a pointer to a `gobject::ValueArray`
+a pointer to a `glib::object::ValueArray`
 <!-- impl Structure::fn set_list -->
 This is useful in language bindings where unknown GValue types are not
 supported. This function will convert a `array` to `GST_TYPE_LIST` and set
 the field specified by `fieldname`. Be aware that this is slower then using
-`GST_TYPE_LIST` in a `gobject::Value` directly.
+`GST_TYPE_LIST` in a `glib::object::Value` directly.
 
 Feature: `v1_12`
 
 ## `fieldname`
 the name of a field
 ## `array`
-a pointer to a `gobject::ValueArray`
+a pointer to a `glib::object::ValueArray`
 <!-- impl Structure::fn set_name -->
 Sets the name of the structure to the given `name`. The string
 provided is copied before being used. It must not be empty, start with a
@@ -15757,9 +15757,9 @@ a newly-allocated string, or `None` in case of
 Copies the contents for the given tag into the value,
 merging multiple values into one if multiple values are associated
 with the tag.
-You must `gobject::Value::unset` the value after use.
+You must `glib::object::Value::unset` the value after use.
 ## `dest`
-uninitialized `gobject::Value` to copy into
+uninitialized `glib::object::Value` to copy into
 ## `list`
 list to get the tag from
 ## `tag`

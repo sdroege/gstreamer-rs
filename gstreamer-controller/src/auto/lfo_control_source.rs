@@ -43,25 +43,35 @@ unsafe impl Sync for LFOControlSource {}
 pub const NONE_LFO_CONTROL_SOURCE: Option<&LFOControlSource> = None;
 
 pub trait LFOControlSourceExt: 'static {
-    fn get_property_amplitude(&self) -> f64;
+    #[doc(alias = "get_property_amplitude")]
+    fn amplitude(&self) -> f64;
 
-    fn set_property_amplitude(&self, amplitude: f64);
+    #[doc(alias = "set_property_amplitude")]
+    fn set_amplitude(&self, amplitude: f64);
 
-    fn get_property_frequency(&self) -> f64;
+    #[doc(alias = "get_property_frequency")]
+    fn frequency(&self) -> f64;
 
-    fn set_property_frequency(&self, frequency: f64);
+    #[doc(alias = "set_property_frequency")]
+    fn set_frequency(&self, frequency: f64);
 
-    fn get_property_offset(&self) -> f64;
+    #[doc(alias = "get_property_offset")]
+    fn offset(&self) -> f64;
 
-    fn set_property_offset(&self, offset: f64);
+    #[doc(alias = "set_property_offset")]
+    fn set_offset(&self, offset: f64);
 
-    fn get_property_timeshift(&self) -> u64;
+    #[doc(alias = "get_property_timeshift")]
+    fn timeshift(&self) -> u64;
 
-    fn set_property_timeshift(&self, timeshift: u64);
+    #[doc(alias = "set_property_timeshift")]
+    fn set_timeshift(&self, timeshift: u64);
 
-    fn get_property_waveform(&self) -> LFOWaveform;
+    #[doc(alias = "get_property_waveform")]
+    fn waveform(&self) -> LFOWaveform;
 
-    fn set_property_waveform(&self, waveform: LFOWaveform);
+    #[doc(alias = "set_property_waveform")]
+    fn set_waveform(&self, waveform: LFOWaveform);
 
     fn connect_property_amplitude_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -90,7 +100,7 @@ pub trait LFOControlSourceExt: 'static {
 }
 
 impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
-    fn get_property_amplitude(&self) -> f64 {
+    fn amplitude(&self) -> f64 {
         unsafe {
             let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -105,7 +115,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn set_property_amplitude(&self, amplitude: f64) {
+    fn set_amplitude(&self, amplitude: f64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -115,7 +125,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn get_property_frequency(&self) -> f64 {
+    fn frequency(&self) -> f64 {
         unsafe {
             let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -130,7 +140,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn set_property_frequency(&self, frequency: f64) {
+    fn set_frequency(&self, frequency: f64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -140,7 +150,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn get_property_offset(&self) -> f64 {
+    fn offset(&self) -> f64 {
         unsafe {
             let mut value = glib::Value::from_type(<f64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -155,7 +165,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn set_property_offset(&self, offset: f64) {
+    fn set_offset(&self, offset: f64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -165,7 +175,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn get_property_timeshift(&self) -> u64 {
+    fn timeshift(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -180,7 +190,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn set_property_timeshift(&self, timeshift: u64) {
+    fn set_timeshift(&self, timeshift: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -190,7 +200,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn get_property_waveform(&self) -> LFOWaveform {
+    fn waveform(&self) -> LFOWaveform {
         unsafe {
             let mut value = glib::Value::from_type(<LFOWaveform as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -205,7 +215,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
         }
     }
 
-    fn set_property_waveform(&self, waveform: LFOWaveform) {
+    fn set_waveform(&self, waveform: LFOWaveform) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

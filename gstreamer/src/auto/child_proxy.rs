@@ -41,7 +41,7 @@ pub trait ChildProxyExt: 'static {
     fn get_child_by_name(&self, name: &str) -> Option<glib::Object>;
 
     #[doc(alias = "gst_child_proxy_get_children_count")]
-    fn get_children_count(&self) -> u32;
+    fn children_count(&self) -> u32;
 
     //#[doc(alias = "gst_child_proxy_get_valist")]
     //fn get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
@@ -109,7 +109,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
-    fn get_children_count(&self) -> u32 {
+    fn children_count(&self) -> u32 {
         unsafe { ffi::gst_child_proxy_get_children_count(self.as_ref().to_glib_none().0) }
     }
 

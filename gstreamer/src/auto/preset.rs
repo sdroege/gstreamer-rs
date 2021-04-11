@@ -49,10 +49,10 @@ pub trait PresetExt: 'static {
     fn get_meta(&self, name: &str, tag: &str) -> Option<glib::GString>;
 
     #[doc(alias = "gst_preset_get_preset_names")]
-    fn get_preset_names(&self) -> Vec<glib::GString>;
+    fn preset_names(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_preset_get_property_names")]
-    fn get_property_names(&self) -> Vec<glib::GString>;
+    fn property_names(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_preset_is_editable")]
     fn is_editable(&self) -> bool;
@@ -105,7 +105,7 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
-    fn get_preset_names(&self) -> Vec<glib::GString> {
+    fn preset_names(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_preset_get_preset_names(
                 self.as_ref().to_glib_none().0,
@@ -113,7 +113,7 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
-    fn get_property_names(&self) -> Vec<glib::GString> {
+    fn property_names(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_preset_get_property_names(
                 self.as_ref().to_glib_none().0,

@@ -35,7 +35,7 @@ pub const NONE_STREAM_VOLUME: Option<&StreamVolume> = None;
 
 pub trait StreamVolumeExt: 'static {
     #[doc(alias = "gst_stream_volume_get_mute")]
-    fn get_mute(&self) -> bool;
+    fn is_muted(&self) -> bool;
 
     #[doc(alias = "gst_stream_volume_get_volume")]
     fn get_volume(&self, format: StreamVolumeFormat) -> f64;
@@ -58,7 +58,7 @@ pub trait StreamVolumeExt: 'static {
 }
 
 impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
-    fn get_mute(&self) -> bool {
+    fn is_muted(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_stream_volume_get_mute(
                 self.as_ref().to_glib_none().0,

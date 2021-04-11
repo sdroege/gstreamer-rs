@@ -75,36 +75,36 @@ pub trait RTSPStreamExt: 'static {
     //fn complete_stream(&self, transport: /*Ignored*/&gst_rtsp::RTSPTransport) -> bool;
 
     #[doc(alias = "gst_rtsp_stream_get_address_pool")]
-    fn get_address_pool(&self) -> Option<RTSPAddressPool>;
+    fn address_pool(&self) -> Option<RTSPAddressPool>;
 
     #[doc(alias = "gst_rtsp_stream_get_buffer_size")]
-    fn get_buffer_size(&self) -> u32;
+    fn buffer_size(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_caps")]
-    fn get_caps(&self) -> Option<gst::Caps>;
+    fn caps(&self) -> Option<gst::Caps>;
 
     #[doc(alias = "gst_rtsp_stream_get_control")]
-    fn get_control(&self) -> Option<glib::GString>;
+    fn control(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_get_current_seqnum")]
-    fn get_current_seqnum(&self) -> u16;
+    fn current_seqnum(&self) -> u16;
 
     #[doc(alias = "gst_rtsp_stream_get_dscp_qos")]
-    fn get_dscp_qos(&self) -> i32;
+    fn dscp_qos(&self) -> i32;
 
     #[doc(alias = "gst_rtsp_stream_get_index")]
-    fn get_index(&self) -> u32;
+    fn index(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_joined_bin")]
-    fn get_joined_bin(&self) -> Option<gst::Bin>;
+    fn joined_bin(&self) -> Option<gst::Bin>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_max_mcast_ttl")]
-    fn get_max_mcast_ttl(&self) -> u32;
+    fn max_mcast_ttl(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_mtu")]
-    fn get_mtu(&self) -> u32;
+    fn mtu(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_multicast_address")]
     fn get_multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress>;
@@ -112,38 +112,38 @@ pub trait RTSPStreamExt: 'static {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_multicast_client_addresses")]
-    fn get_multicast_client_addresses(&self) -> Option<glib::GString>;
+    fn multicast_client_addresses(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_get_multicast_iface")]
-    fn get_multicast_iface(&self) -> Option<glib::GString>;
+    fn multicast_iface(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_get_profiles")]
-    fn get_profiles(&self) -> gst_rtsp::RTSPProfile;
+    fn profiles(&self) -> gst_rtsp::RTSPProfile;
 
     #[doc(alias = "gst_rtsp_stream_get_protocols")]
-    fn get_protocols(&self) -> gst_rtsp::RTSPLowerTrans;
+    fn protocols(&self) -> gst_rtsp::RTSPLowerTrans;
 
     #[doc(alias = "gst_rtsp_stream_get_pt")]
-    fn get_pt(&self) -> u32;
+    fn pt(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_publish_clock_mode")]
-    fn get_publish_clock_mode(&self) -> RTSPPublishClockMode;
+    fn publish_clock_mode(&self) -> RTSPPublishClockMode;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_stream_get_rate_control")]
-    fn get_rate_control(&self) -> bool;
+    fn is_rate_control(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_stream_get_rates")]
-    fn get_rates(&self) -> Option<(f64, f64)>;
+    fn rates(&self) -> Option<(f64, f64)>;
 
     #[doc(alias = "gst_rtsp_stream_get_retransmission_pt")]
-    fn get_retransmission_pt(&self) -> u32;
+    fn retransmission_pt(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_retransmission_time")]
-    fn get_retransmission_time(&self) -> gst::ClockTime;
+    fn retransmission_time(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
@@ -160,38 +160,38 @@ pub trait RTSPStreamExt: 'static {
     fn get_rtp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtpinfo")]
-    fn get_rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)>;
+    fn rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtpsession")]
-    fn get_rtpsession(&self) -> Option<glib::Object>;
+    fn rtpsession(&self) -> Option<glib::Object>;
 
     //#[doc(alias = "gst_rtsp_stream_get_server_port")]
     //fn get_server_port(&self, server_port: /*Ignored*/gst_rtsp::RTSPRange, family: gio::SocketFamily);
 
     #[doc(alias = "gst_rtsp_stream_get_sinkpad")]
-    fn get_sinkpad(&self) -> Option<gst::Pad>;
+    fn sinkpad(&self) -> Option<gst::Pad>;
 
     #[doc(alias = "gst_rtsp_stream_get_srcpad")]
-    fn get_srcpad(&self) -> Option<gst::Pad>;
+    fn srcpad(&self) -> Option<gst::Pad>;
 
     #[doc(alias = "gst_rtsp_stream_get_srtp_encoder")]
-    fn get_srtp_encoder(&self) -> Option<gst::Element>;
+    fn srtp_encoder(&self) -> Option<gst::Element>;
 
     #[doc(alias = "gst_rtsp_stream_get_ssrc")]
-    fn get_ssrc(&self) -> u32;
+    fn ssrc(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_ulpfec_enabled")]
-    fn get_ulpfec_enabled(&self) -> bool;
+    fn is_ulpfec_enabled(&self) -> bool;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_ulpfec_percentage")]
-    fn get_ulpfec_percentage(&self) -> u32;
+    fn ulpfec_percentage(&self) -> u32;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_get_ulpfec_pt")]
-    fn get_ulpfec_pt(&self) -> u32;
+    fn ulpfec_pt(&self) -> u32;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -455,7 +455,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_complete_stream() }
     //}
 
-    fn get_address_pool(&self) -> Option<RTSPAddressPool> {
+    fn address_pool(&self) -> Option<RTSPAddressPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_address_pool(
                 self.as_ref().to_glib_none().0,
@@ -463,11 +463,11 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_buffer_size(&self) -> u32 {
+    fn buffer_size(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_buffer_size(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_caps(&self) -> Option<gst::Caps> {
+    fn caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_caps(
                 self.as_ref().to_glib_none().0,
@@ -475,7 +475,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_control(&self) -> Option<glib::GString> {
+    fn control(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_control(
                 self.as_ref().to_glib_none().0,
@@ -483,19 +483,19 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_current_seqnum(&self) -> u16 {
+    fn current_seqnum(&self) -> u16 {
         unsafe { ffi::gst_rtsp_stream_get_current_seqnum(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_dscp_qos(&self) -> i32 {
+    fn dscp_qos(&self) -> i32 {
         unsafe { ffi::gst_rtsp_stream_get_dscp_qos(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_index(&self) -> u32 {
+    fn index(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_index(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_joined_bin(&self) -> Option<gst::Bin> {
+    fn joined_bin(&self) -> Option<gst::Bin> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_joined_bin(
                 self.as_ref().to_glib_none().0,
@@ -505,11 +505,11 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_max_mcast_ttl(&self) -> u32 {
+    fn max_mcast_ttl(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_max_mcast_ttl(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_mtu(&self) -> u32 {
+    fn mtu(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_mtu(self.as_ref().to_glib_none().0) }
     }
 
@@ -524,7 +524,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_multicast_client_addresses(&self) -> Option<glib::GString> {
+    fn multicast_client_addresses(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_multicast_client_addresses(
                 self.as_ref().to_glib_none().0,
@@ -532,7 +532,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_multicast_iface(&self) -> Option<glib::GString> {
+    fn multicast_iface(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_multicast_iface(
                 self.as_ref().to_glib_none().0,
@@ -540,7 +540,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_profiles(&self) -> gst_rtsp::RTSPProfile {
+    fn profiles(&self) -> gst_rtsp::RTSPProfile {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_get_profiles(
                 self.as_ref().to_glib_none().0,
@@ -548,7 +548,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_protocols(&self) -> gst_rtsp::RTSPLowerTrans {
+    fn protocols(&self) -> gst_rtsp::RTSPLowerTrans {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_get_protocols(
                 self.as_ref().to_glib_none().0,
@@ -556,11 +556,11 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_pt(&self) -> u32 {
+    fn pt(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_pt(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_publish_clock_mode(&self) -> RTSPPublishClockMode {
+    fn publish_clock_mode(&self) -> RTSPPublishClockMode {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_get_publish_clock_mode(
                 self.as_ref().to_glib_none().0,
@@ -570,7 +570,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_rate_control(&self) -> bool {
+    fn is_rate_control(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_get_rate_control(
                 self.as_ref().to_glib_none().0,
@@ -580,7 +580,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_rates(&self) -> Option<(f64, f64)> {
+    fn rates(&self) -> Option<(f64, f64)> {
         unsafe {
             let mut rate = mem::MaybeUninit::uninit();
             let mut applied_rate = mem::MaybeUninit::uninit();
@@ -599,11 +599,11 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_retransmission_pt(&self) -> u32 {
+    fn retransmission_pt(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_retransmission_pt(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_retransmission_time(&self) -> gst::ClockTime {
+    fn retransmission_time(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_get_retransmission_time(
                 self.as_ref().to_glib_none().0,
@@ -649,7 +649,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)> {
+    fn rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)> {
         unsafe {
             let mut rtptime = mem::MaybeUninit::uninit();
             let mut seq = mem::MaybeUninit::uninit();
@@ -674,7 +674,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_rtpsession(&self) -> Option<glib::Object> {
+    fn rtpsession(&self) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtpsession(
                 self.as_ref().to_glib_none().0,
@@ -686,7 +686,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_get_server_port() }
     //}
 
-    fn get_sinkpad(&self) -> Option<gst::Pad> {
+    fn sinkpad(&self) -> Option<gst::Pad> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_sinkpad(
                 self.as_ref().to_glib_none().0,
@@ -694,7 +694,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_srcpad(&self) -> Option<gst::Pad> {
+    fn srcpad(&self) -> Option<gst::Pad> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_srcpad(
                 self.as_ref().to_glib_none().0,
@@ -702,7 +702,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_srtp_encoder(&self) -> Option<gst::Element> {
+    fn srtp_encoder(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_srtp_encoder(
                 self.as_ref().to_glib_none().0,
@@ -710,7 +710,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_ssrc(&self) -> u32 {
+    fn ssrc(&self) -> u32 {
         unsafe {
             let mut ssrc = mem::MaybeUninit::uninit();
             ffi::gst_rtsp_stream_get_ssrc(self.as_ref().to_glib_none().0, ssrc.as_mut_ptr());
@@ -719,7 +719,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_ulpfec_enabled(&self) -> bool {
+    fn is_ulpfec_enabled(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_get_ulpfec_enabled(
                 self.as_ref().to_glib_none().0,
@@ -729,13 +729,13 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_ulpfec_percentage(&self) -> u32 {
+    fn ulpfec_percentage(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_ulpfec_percentage(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_ulpfec_pt(&self) -> u32 {
+    fn ulpfec_pt(&self) -> u32 {
         unsafe { ffi::gst_rtsp_stream_get_ulpfec_pt(self.as_ref().to_glib_none().0) }
     }
 

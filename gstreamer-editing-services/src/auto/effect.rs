@@ -33,11 +33,12 @@ impl Effect {
 pub const NONE_EFFECT: Option<&Effect> = None;
 
 pub trait EffectExt: 'static {
-    fn get_property_bin_description(&self) -> Option<glib::GString>;
+    #[doc(alias = "get_property_bin_description")]
+    fn bin_description(&self) -> Option<glib::GString>;
 }
 
 impl<O: IsA<Effect>> EffectExt for O {
-    fn get_property_bin_description(&self) -> Option<glib::GString> {
+    fn bin_description(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

@@ -43,7 +43,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn get_property_certificate(&self) -> Option<glib::GString> {
+    #[doc(alias = "get_property_certificate")]
+    pub fn certificate(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -57,7 +58,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn set_property_certificate(&self, certificate: Option<&str>) {
+    #[doc(alias = "set_property_certificate")]
+    pub fn set_certificate(&self, certificate: Option<&str>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -67,7 +69,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn get_property_client(&self) -> bool {
+    #[doc(alias = "get_property_client")]
+    pub fn is_client(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -82,7 +85,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn set_property_client(&self, client: bool) {
+    #[doc(alias = "set_property_client")]
+    pub fn set_client(&self, client: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -92,7 +96,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn get_property_remote_certificate(&self) -> Option<glib::GString> {
+    #[doc(alias = "get_property_remote_certificate")]
+    pub fn remote_certificate(&self) -> Option<glib::GString> {
         unsafe {
             let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -106,7 +111,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn get_property_rtcp(&self) -> bool {
+    #[doc(alias = "get_property_rtcp")]
+    pub fn is_rtcp(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -121,7 +127,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn get_property_session_id(&self) -> u32 {
+    #[doc(alias = "get_property_session_id")]
+    pub fn session_id(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -136,7 +143,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn get_property_state(&self) -> WebRTCDTLSTransportState {
+    #[doc(alias = "get_property_state")]
+    pub fn state(&self) -> WebRTCDTLSTransportState {
         unsafe {
             let mut value =
                 glib::Value::from_type(<WebRTCDTLSTransportState as StaticType>::static_type());
@@ -152,7 +160,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn get_property_transport(&self) -> Option<WebRTCICETransport> {
+    #[doc(alias = "get_property_transport")]
+    pub fn transport(&self) -> Option<WebRTCICETransport> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<WebRTCICETransport as StaticType>::static_type());

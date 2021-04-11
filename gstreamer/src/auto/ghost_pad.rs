@@ -24,14 +24,14 @@ pub const NONE_GHOST_PAD: Option<&GhostPad> = None;
 
 pub trait GhostPadExt: 'static {
     #[doc(alias = "gst_ghost_pad_get_target")]
-    fn get_target(&self) -> Option<Pad>;
+    fn target(&self) -> Option<Pad>;
 
     #[doc(alias = "gst_ghost_pad_set_target")]
     fn set_target<P: IsA<Pad>>(&self, newtarget: Option<&P>) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<GhostPad>> GhostPadExt for O {
-    fn get_target(&self) -> Option<Pad> {
+    fn target(&self) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_ghost_pad_get_target(
                 self.as_ref().to_glib_none().0,

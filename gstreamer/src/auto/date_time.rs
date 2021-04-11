@@ -89,7 +89,7 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_get_year")]
-    pub fn get_year(&self) -> i32 {
+    pub fn year(&self) -> i32 {
         unsafe { ffi::gst_date_time_get_year(self.to_glib_none().0) }
     }
 

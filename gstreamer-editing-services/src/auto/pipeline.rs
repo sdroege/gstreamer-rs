@@ -41,7 +41,7 @@ pub const NONE_PIPELINE: Option<&Pipeline> = None;
 
 pub trait GESPipelineExt: 'static {
     #[doc(alias = "ges_pipeline_get_mode")]
-    fn get_mode(&self) -> PipelineFlags;
+    fn mode(&self) -> PipelineFlags;
 
     #[doc(alias = "ges_pipeline_get_thumbnail")]
     fn get_thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample>;
@@ -83,23 +83,32 @@ pub trait GESPipelineExt: 'static {
     #[doc(alias = "ges_pipeline_set_timeline")]
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
 
-    fn get_property_audio_filter(&self) -> Option<gst::Element>;
+    #[doc(alias = "get_property_audio_filter")]
+    fn audio_filter(&self) -> Option<gst::Element>;
 
-    fn set_property_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>);
+    #[doc(alias = "set_property_audio_filter")]
+    fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>);
 
-    fn get_property_audio_sink(&self) -> Option<gst::Element>;
+    #[doc(alias = "get_property_audio_sink")]
+    fn audio_sink(&self) -> Option<gst::Element>;
 
-    fn set_property_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>);
+    #[doc(alias = "set_property_audio_sink")]
+    fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>);
 
-    fn get_property_timeline(&self) -> Option<Timeline>;
+    #[doc(alias = "get_property_timeline")]
+    fn timeline(&self) -> Option<Timeline>;
 
-    fn get_property_video_filter(&self) -> Option<gst::Element>;
+    #[doc(alias = "get_property_video_filter")]
+    fn video_filter(&self) -> Option<gst::Element>;
 
-    fn set_property_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>);
+    #[doc(alias = "set_property_video_filter")]
+    fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>);
 
-    fn get_property_video_sink(&self) -> Option<gst::Element>;
+    #[doc(alias = "get_property_video_sink")]
+    fn video_sink(&self) -> Option<gst::Element>;
 
-    fn set_property_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>);
+    #[doc(alias = "set_property_video_sink")]
+    fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>);
 
     fn connect_property_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F)
         -> SignalHandlerId;
@@ -117,7 +126,7 @@ pub trait GESPipelineExt: 'static {
 }
 
 impl<O: IsA<Pipeline>> GESPipelineExt for O {
-    fn get_mode(&self) -> PipelineFlags {
+    fn mode(&self) -> PipelineFlags {
         unsafe { from_glib(ffi::ges_pipeline_get_mode(self.as_ref().to_glib_none().0)) }
     }
 
@@ -237,7 +246,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn get_property_audio_filter(&self) -> Option<gst::Element> {
+    fn audio_filter(&self) -> Option<gst::Element> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -251,7 +260,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>) {
+    fn set_audio_filter<P: IsA<gst::Element>>(&self, audio_filter: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -261,7 +270,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn get_property_audio_sink(&self) -> Option<gst::Element> {
+    fn audio_sink(&self) -> Option<gst::Element> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -275,7 +284,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>) {
+    fn set_audio_sink<P: IsA<gst::Element>>(&self, audio_sink: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -285,7 +294,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn get_property_timeline(&self) -> Option<Timeline> {
+    fn timeline(&self) -> Option<Timeline> {
         unsafe {
             let mut value = glib::Value::from_type(<Timeline as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -299,7 +308,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn get_property_video_filter(&self) -> Option<gst::Element> {
+    fn video_filter(&self) -> Option<gst::Element> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -313,7 +322,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>) {
+    fn set_video_filter<P: IsA<gst::Element>>(&self, video_filter: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -323,7 +332,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn get_property_video_sink(&self) -> Option<gst::Element> {
+    fn video_sink(&self) -> Option<gst::Element> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -337,7 +346,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
+    fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

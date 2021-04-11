@@ -20,7 +20,7 @@ A `NetClientClock` and `NtpClock` is typically set on a `gst::Pipeline` with
 `gst::Pipeline::use_clock`.
 
 If you set a `gst::Bus` on the clock via the "bus" object property, it will
-send `gst::MessageType::Element` messages with an attached `gst::Structure` containing
+send [`crate::gst::MessageType::Element`] (XXX: @-reference does not belong to NetClientClock!) messages with an attached `gst::Structure` containing
 statistics about clock accuracy and network traffic.
 
 # Implements

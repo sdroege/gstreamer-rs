@@ -62,7 +62,8 @@ impl WebRTCICETransport {
         }
     }
 
-    pub fn get_property_component(&self) -> WebRTCICEComponent {
+    #[doc(alias = "get_property_component")]
+    pub fn component(&self) -> WebRTCICEComponent {
         unsafe {
             let mut value =
                 glib::Value::from_type(<WebRTCICEComponent as StaticType>::static_type());
@@ -78,7 +79,8 @@ impl WebRTCICETransport {
         }
     }
 
-    pub fn get_property_gathering_state(&self) -> WebRTCICEGatheringState {
+    #[doc(alias = "get_property_gathering_state")]
+    pub fn gathering_state(&self) -> WebRTCICEGatheringState {
         unsafe {
             let mut value =
                 glib::Value::from_type(<WebRTCICEGatheringState as StaticType>::static_type());
@@ -94,7 +96,8 @@ impl WebRTCICETransport {
         }
     }
 
-    pub fn get_property_state(&self) -> WebRTCICEConnectionState {
+    #[doc(alias = "get_property_state")]
+    pub fn state(&self) -> WebRTCICEConnectionState {
         unsafe {
             let mut value =
                 glib::Value::from_type(<WebRTCICEConnectionState as StaticType>::static_type());

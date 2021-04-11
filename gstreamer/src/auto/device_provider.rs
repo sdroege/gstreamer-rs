@@ -44,16 +44,16 @@ pub trait DeviceProviderExt: 'static {
     fn device_remove<P: IsA<Device>>(&self, device: &P);
 
     #[doc(alias = "gst_device_provider_get_bus")]
-    fn get_bus(&self) -> Bus;
+    fn bus(&self) -> Bus;
 
     #[doc(alias = "gst_device_provider_get_devices")]
-    fn get_devices(&self) -> Vec<Device>;
+    fn devices(&self) -> Vec<Device>;
 
     #[doc(alias = "gst_device_provider_get_factory")]
-    fn get_factory(&self) -> Option<DeviceProviderFactory>;
+    fn factory(&self) -> Option<DeviceProviderFactory>;
 
     #[doc(alias = "gst_device_provider_get_hidden_providers")]
-    fn get_hidden_providers(&self) -> Vec<glib::GString>;
+    fn hidden_providers(&self) -> Vec<glib::GString>;
 
     #[doc(alias = "gst_device_provider_hide_provider")]
     fn hide_provider(&self, name: &str);
@@ -117,7 +117,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    fn get_bus(&self) -> Bus {
+    fn bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_provider_get_bus(
                 self.as_ref().to_glib_none().0,
@@ -125,7 +125,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    fn get_devices(&self) -> Vec<Device> {
+    fn devices(&self) -> Vec<Device> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_devices(
                 self.as_ref().to_glib_none().0,
@@ -133,7 +133,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    fn get_factory(&self) -> Option<DeviceProviderFactory> {
+    fn factory(&self) -> Option<DeviceProviderFactory> {
         unsafe {
             from_glib_none(ffi::gst_device_provider_get_factory(
                 self.as_ref().to_glib_none().0,
@@ -141,7 +141,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    fn get_hidden_providers(&self) -> Vec<glib::GString> {
+    fn hidden_providers(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_hidden_providers(
                 self.as_ref().to_glib_none().0,

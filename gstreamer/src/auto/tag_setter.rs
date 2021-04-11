@@ -37,10 +37,10 @@ pub trait TagSetterExt: 'static {
     //fn add_tags(&self, mode: TagMergeMode, tag: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[doc(alias = "gst_tag_setter_get_tag_list")]
-    fn get_tag_list(&self) -> Option<TagList>;
+    fn tag_list(&self) -> Option<TagList>;
 
     #[doc(alias = "gst_tag_setter_get_tag_merge_mode")]
-    fn get_tag_merge_mode(&self) -> TagMergeMode;
+    fn tag_merge_mode(&self) -> TagMergeMode;
 
     #[doc(alias = "gst_tag_setter_merge_tags")]
     fn merge_tags(&self, list: &TagList, mode: TagMergeMode);
@@ -69,7 +69,7 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
     //    unsafe { TODO: call ffi:gst_tag_setter_add_tags() }
     //}
 
-    fn get_tag_list(&self) -> Option<TagList> {
+    fn tag_list(&self) -> Option<TagList> {
         unsafe {
             from_glib_none(ffi::gst_tag_setter_get_tag_list(
                 self.as_ref().to_glib_none().0,
@@ -77,7 +77,7 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
         }
     }
 
-    fn get_tag_merge_mode(&self) -> TagMergeMode {
+    fn tag_merge_mode(&self) -> TagMergeMode {
         unsafe {
             from_glib(ffi::gst_tag_setter_get_tag_merge_mode(
                 self.as_ref().to_glib_none().0,

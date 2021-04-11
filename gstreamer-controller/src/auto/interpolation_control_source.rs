@@ -45,9 +45,11 @@ unsafe impl Sync for InterpolationControlSource {}
 pub const NONE_INTERPOLATION_CONTROL_SOURCE: Option<&InterpolationControlSource> = None;
 
 pub trait InterpolationControlSourceExt: 'static {
-    fn get_property_mode(&self) -> InterpolationMode;
+    #[doc(alias = "get_property_mode")]
+    fn mode(&self) -> InterpolationMode;
 
-    fn set_property_mode(&self, mode: InterpolationMode);
+    #[doc(alias = "set_property_mode")]
+    fn set_mode(&self, mode: InterpolationMode);
 
     fn connect_property_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -56,7 +58,7 @@ pub trait InterpolationControlSourceExt: 'static {
 }
 
 impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
-    fn get_property_mode(&self) -> InterpolationMode {
+    fn mode(&self) -> InterpolationMode {
         unsafe {
             let mut value =
                 glib::Value::from_type(<InterpolationMode as StaticType>::static_type());
@@ -72,7 +74,7 @@ impl<O: IsA<InterpolationControlSource>> InterpolationControlSourceExt for O {
         }
     }
 
-    fn set_property_mode(&self, mode: InterpolationMode) {
+    fn set_mode(&self, mode: InterpolationMode) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

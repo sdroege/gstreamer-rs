@@ -31,7 +31,7 @@ impl PlayerVideoOverlayVideoRenderer {
     }
 
     #[doc(alias = "gst_player_video_overlay_video_renderer_get_render_rectangle")]
-    pub fn get_render_rectangle(&self) -> (i32, i32, i32, i32) {
+    pub fn render_rectangle(&self) -> (i32, i32, i32, i32) {
         unsafe {
             let mut x = mem::MaybeUninit::uninit();
             let mut y = mem::MaybeUninit::uninit();
@@ -53,7 +53,7 @@ impl PlayerVideoOverlayVideoRenderer {
     }
 
     //#[doc(alias = "gst_player_video_overlay_video_renderer_get_window_handle")]
-    //pub fn get_window_handle(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
+    //pub fn window_handle(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_get_window_handle() }
     //}
 
@@ -75,7 +75,8 @@ impl PlayerVideoOverlayVideoRenderer {
     //    unsafe { TODO: call ffi:gst_player_video_overlay_video_renderer_set_window_handle() }
     //}
 
-    pub fn get_property_video_sink(&self) -> Option<gst::Element> {
+    #[doc(alias = "get_property_video_sink")]
+    pub fn video_sink(&self) -> Option<gst::Element> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Element as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -89,7 +90,8 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
-    pub fn set_property_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
+    #[doc(alias = "set_property_video_sink")]
+    pub fn set_video_sink<P: IsA<gst::Element>>(&self, video_sink: Option<&P>) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,

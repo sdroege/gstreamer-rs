@@ -35,7 +35,8 @@ glib::wrapper! {
 impl WebRTCRTPTransceiver {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn get_property_direction(&self) -> WebRTCRTPTransceiverDirection {
+    #[doc(alias = "get_property_direction")]
+    pub fn direction(&self) -> WebRTCRTPTransceiverDirection {
         unsafe {
             let mut value = glib::Value::from_type(
                 <WebRTCRTPTransceiverDirection as StaticType>::static_type(),
@@ -54,7 +55,8 @@ impl WebRTCRTPTransceiver {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn set_property_direction(&self, direction: WebRTCRTPTransceiverDirection) {
+    #[doc(alias = "set_property_direction")]
+    pub fn set_direction(&self, direction: WebRTCRTPTransceiverDirection) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -64,7 +66,8 @@ impl WebRTCRTPTransceiver {
         }
     }
 
-    pub fn get_property_mlineindex(&self) -> u32 {
+    #[doc(alias = "get_property_mlineindex")]
+    pub fn mlineindex(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -79,7 +82,8 @@ impl WebRTCRTPTransceiver {
         }
     }
 
-    pub fn get_property_receiver(&self) -> Option<WebRTCRTPReceiver> {
+    #[doc(alias = "get_property_receiver")]
+    pub fn receiver(&self) -> Option<WebRTCRTPReceiver> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<WebRTCRTPReceiver as StaticType>::static_type());
@@ -94,7 +98,8 @@ impl WebRTCRTPTransceiver {
         }
     }
 
-    pub fn get_property_sender(&self) -> Option<WebRTCRTPSender> {
+    #[doc(alias = "get_property_sender")]
+    pub fn sender(&self) -> Option<WebRTCRTPSender> {
         unsafe {
             let mut value = glib::Value::from_type(<WebRTCRTPSender as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

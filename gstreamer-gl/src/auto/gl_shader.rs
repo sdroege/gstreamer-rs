@@ -16,7 +16,6 @@ use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
@@ -141,7 +140,7 @@ impl GLShader {
     }
 
     #[doc(alias = "gst_gl_shader_get_program_handle")]
-    pub fn get_program_handle(&self) -> i32 {
+    pub fn program_handle(&self) -> i32 {
         unsafe { ffi::gst_gl_shader_get_program_handle(self.to_glib_none().0) }
     }
 
@@ -367,21 +366,6 @@ impl GLShader {
     pub fn use_(&self) {
         unsafe {
             ffi::gst_gl_shader_use(self.to_glib_none().0);
-        }
-    }
-
-    pub fn get_property_linked(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"linked\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `linked` getter")
-                .unwrap()
         }
     }
 

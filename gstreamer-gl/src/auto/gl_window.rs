@@ -45,10 +45,10 @@ pub trait GLWindowExt: 'static {
     fn draw(&self);
 
     #[doc(alias = "gst_gl_window_get_context")]
-    fn get_context(&self) -> Option<GLContext>;
+    fn context(&self) -> Option<GLContext>;
 
     #[doc(alias = "gst_gl_window_get_surface_dimensions")]
-    fn get_surface_dimensions(&self) -> (u32, u32);
+    fn surface_dimensions(&self) -> (u32, u32);
 
     #[doc(alias = "gst_gl_window_handle_events")]
     fn handle_events(&self, handle_events: bool);
@@ -131,7 +131,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    fn get_context(&self) -> Option<GLContext> {
+    fn context(&self) -> Option<GLContext> {
         unsafe {
             from_glib_full(ffi::gst_gl_window_get_context(
                 self.as_ref().to_glib_none().0,
@@ -139,7 +139,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    fn get_surface_dimensions(&self) -> (u32, u32) {
+    fn surface_dimensions(&self) -> (u32, u32) {
         unsafe {
             let mut width = mem::MaybeUninit::uninit();
             let mut height = mem::MaybeUninit::uninit();

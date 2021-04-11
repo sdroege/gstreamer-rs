@@ -60,10 +60,10 @@ pub trait GLFramebufferExt: 'static {
     //fn draw_to_texture(&self, mem: /*Ignored*/&mut GLMemory, func: /*Unimplemented*/FnMut(/*Unimplemented*/Option<Fundamental: Pointer>) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
     #[doc(alias = "gst_gl_framebuffer_get_effective_dimensions")]
-    fn get_effective_dimensions(&self) -> (u32, u32);
+    fn effective_dimensions(&self) -> (u32, u32);
 
     #[doc(alias = "gst_gl_framebuffer_get_id")]
-    fn get_id(&self) -> u32;
+    fn id(&self) -> u32;
 }
 
 impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
@@ -81,7 +81,7 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
     //    unsafe { TODO: call ffi:gst_gl_framebuffer_draw_to_texture() }
     //}
 
-    fn get_effective_dimensions(&self) -> (u32, u32) {
+    fn effective_dimensions(&self) -> (u32, u32) {
         unsafe {
             let mut width = mem::MaybeUninit::uninit();
             let mut height = mem::MaybeUninit::uninit();
@@ -96,7 +96,7 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
         }
     }
 
-    fn get_id(&self) -> u32 {
+    fn id(&self) -> u32 {
         unsafe { ffi::gst_gl_framebuffer_get_id(self.as_ref().to_glib_none().0) }
     }
 }

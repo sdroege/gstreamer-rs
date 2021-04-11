@@ -36,12 +36,12 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_get_category")]
-    pub fn get_category(&self) -> glib::GString {
+    pub fn category(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_category(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_encoding_target_get_description")]
-    pub fn get_description(&self) -> glib::GString {
+    pub fn description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gst_encoding_target_get_description(
                 self.to_glib_none().0,
@@ -50,14 +50,14 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_get_name")]
-    pub fn get_name(&self) -> glib::GString {
+    pub fn name(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_name(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_encoding_target_get_path")]
-    pub fn get_path(&self) -> Option<glib::GString> {
+    pub fn path(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gst_encoding_target_get_path(self.to_glib_none().0)) }
     }
 
@@ -72,7 +72,7 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_get_profiles")]
-    pub fn get_profiles(&self) -> Vec<EncodingProfile> {
+    pub fn profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_target_get_profiles(
                 self.to_glib_none().0,
@@ -151,7 +151,7 @@ impl EncodingTarget {
 impl fmt::Display for EncodingTarget {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.get_name())
+        f.write_str(&self.name())
     }
 }
 

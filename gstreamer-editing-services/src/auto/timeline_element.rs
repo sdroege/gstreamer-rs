@@ -83,44 +83,44 @@ pub trait TimelineElementExt: 'static {
     //fn get_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     #[doc(alias = "ges_timeline_element_get_duration")]
-    fn get_duration(&self) -> gst::ClockTime;
+    fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_element_get_inpoint")]
-    fn get_inpoint(&self) -> gst::ClockTime;
+    fn inpoint(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
     #[doc(alias = "ges_timeline_element_get_layer_priority")]
-    fn get_layer_priority(&self) -> u32;
+    fn layer_priority(&self) -> u32;
 
     #[doc(alias = "ges_timeline_element_get_max_duration")]
-    fn get_max_duration(&self) -> gst::ClockTime;
+    fn max_duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_element_get_name")]
-    fn get_name(&self) -> Option<glib::GString>;
+    fn name(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_element_get_natural_framerate")]
-    fn get_natural_framerate(&self) -> Option<(i32, i32)>;
+    fn natural_framerate(&self) -> Option<(i32, i32)>;
 
     #[doc(alias = "ges_timeline_element_get_parent")]
-    fn get_parent(&self) -> Option<TimelineElement>;
+    fn parent(&self) -> Option<TimelineElement>;
 
     #[doc(alias = "ges_timeline_element_get_priority")]
-    fn get_priority(&self) -> u32;
+    fn priority(&self) -> u32;
 
     #[doc(alias = "ges_timeline_element_get_start")]
-    fn get_start(&self) -> gst::ClockTime;
+    fn start(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_element_get_timeline")]
-    fn get_timeline(&self) -> Option<Timeline>;
+    fn timeline(&self) -> Option<Timeline>;
 
     #[doc(alias = "ges_timeline_element_get_toplevel_parent")]
-    fn get_toplevel_parent(&self) -> Option<TimelineElement>;
+    fn toplevel_parent(&self) -> Option<TimelineElement>;
 
     #[doc(alias = "ges_timeline_element_get_track_types")]
-    fn get_track_types(&self) -> TrackType;
+    fn track_types(&self) -> TrackType;
 
     //#[doc(alias = "ges_timeline_element_list_children_properties")]
     //fn list_children_properties(&self) -> /*Ignored*/Vec<glib::ParamSpec>;
@@ -192,13 +192,17 @@ pub trait TimelineElementExt: 'static {
     #[doc(alias = "ges_timeline_element_trim")]
     fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
-    fn get_property_in_point(&self) -> u64;
+    #[doc(alias = "get_property_in_point")]
+    fn in_point(&self) -> u64;
 
-    fn set_property_in_point(&self, in_point: u64);
+    #[doc(alias = "set_property_in_point")]
+    fn set_in_point(&self, in_point: u64);
 
-    fn get_property_serialize(&self) -> bool;
+    #[doc(alias = "get_property_serialize")]
+    fn is_serialize(&self) -> bool;
 
-    fn set_property_serialize(&self, serialize: bool);
+    #[doc(alias = "set_property_serialize")]
+    fn set_serialize(&self, serialize: bool);
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -311,7 +315,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property_valist() }
     //}
 
-    fn get_duration(&self) -> gst::ClockTime {
+    fn duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_duration(
                 self.as_ref().to_glib_none().0,
@@ -319,7 +323,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_inpoint(&self) -> gst::ClockTime {
+    fn inpoint(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_inpoint(
                 self.as_ref().to_glib_none().0,
@@ -329,11 +333,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_layer_priority(&self) -> u32 {
+    fn layer_priority(&self) -> u32 {
         unsafe { ffi::ges_timeline_element_get_layer_priority(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_max_duration(&self) -> gst::ClockTime {
+    fn max_duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_max_duration(
                 self.as_ref().to_glib_none().0,
@@ -341,7 +345,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_name(&self) -> Option<glib::GString> {
+    fn name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_name(
                 self.as_ref().to_glib_none().0,
@@ -351,7 +355,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_natural_framerate(&self) -> Option<(i32, i32)> {
+    fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut framerate_n = mem::MaybeUninit::uninit();
             let mut framerate_d = mem::MaybeUninit::uninit();
@@ -370,7 +374,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_parent(&self) -> Option<TimelineElement> {
+    fn parent(&self) -> Option<TimelineElement> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_parent(
                 self.as_ref().to_glib_none().0,
@@ -378,11 +382,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_priority(&self) -> u32 {
+    fn priority(&self) -> u32 {
         unsafe { ffi::ges_timeline_element_get_priority(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_start(&self) -> gst::ClockTime {
+    fn start(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_start(
                 self.as_ref().to_glib_none().0,
@@ -390,7 +394,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_timeline(&self) -> Option<Timeline> {
+    fn timeline(&self) -> Option<Timeline> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_timeline(
                 self.as_ref().to_glib_none().0,
@@ -398,7 +402,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_toplevel_parent(&self) -> Option<TimelineElement> {
+    fn toplevel_parent(&self) -> Option<TimelineElement> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_toplevel_parent(
                 self.as_ref().to_glib_none().0,
@@ -406,7 +410,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_track_types(&self) -> TrackType {
+    fn track_types(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_track_types(
                 self.as_ref().to_glib_none().0,
@@ -590,7 +594,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_property_in_point(&self) -> u64 {
+    fn in_point(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -605,7 +609,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_property_in_point(&self, in_point: u64) {
+    fn set_in_point(&self, in_point: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -615,7 +619,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_property_serialize(&self) -> bool {
+    fn is_serialize(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -630,7 +634,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_property_serialize(&self, serialize: bool) {
+    fn set_serialize(&self, serialize: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

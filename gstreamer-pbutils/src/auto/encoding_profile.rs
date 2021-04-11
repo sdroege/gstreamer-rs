@@ -58,39 +58,39 @@ pub trait EncodingProfileExt: 'static {
     fn copy(&self) -> EncodingProfile;
 
     #[doc(alias = "gst_encoding_profile_get_allow_dynamic_output")]
-    fn get_allow_dynamic_output(&self) -> bool;
+    fn allows_dynamic_output(&self) -> bool;
 
     #[doc(alias = "gst_encoding_profile_get_description")]
-    fn get_description(&self) -> Option<glib::GString>;
+    fn description(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_file_extension")]
-    fn get_file_extension(&self) -> Option<glib::GString>;
+    fn file_extension(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_format")]
-    fn get_format(&self) -> gst::Caps;
+    fn format(&self) -> gst::Caps;
 
     #[doc(alias = "gst_encoding_profile_get_input_caps")]
-    fn get_input_caps(&self) -> gst::Caps;
+    fn input_caps(&self) -> gst::Caps;
 
     #[doc(alias = "gst_encoding_profile_get_name")]
-    fn get_name(&self) -> Option<glib::GString>;
+    fn name(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_presence")]
-    fn get_presence(&self) -> u32;
+    fn presence(&self) -> u32;
 
     #[doc(alias = "gst_encoding_profile_get_preset")]
-    fn get_preset(&self) -> Option<glib::GString>;
+    fn preset(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_get_preset_name")]
-    fn get_preset_name(&self) -> Option<glib::GString>;
+    fn preset_name(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_encoding_profile_get_single_segment")]
-    fn get_single_segment(&self) -> bool;
+    fn is_single_segment(&self) -> bool;
 
     #[doc(alias = "gst_encoding_profile_get_type_nick")]
-    fn get_type_nick(&self) -> Option<glib::GString>;
+    fn type_nick(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_encoding_profile_is_enabled")]
     fn is_enabled(&self) -> bool;
@@ -110,7 +110,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_allow_dynamic_output(&self) -> bool {
+    fn allows_dynamic_output(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_profile_get_allow_dynamic_output(
                 self.as_ref().to_glib_none().0,
@@ -118,7 +118,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_description(&self) -> Option<glib::GString> {
+    fn description(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_description(
                 self.as_ref().to_glib_none().0,
@@ -126,7 +126,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_file_extension(&self) -> Option<glib::GString> {
+    fn file_extension(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_file_extension(
                 self.as_ref().to_glib_none().0,
@@ -134,7 +134,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_format(&self) -> gst::Caps {
+    fn format(&self) -> gst::Caps {
         unsafe {
             from_glib_full(ffi::gst_encoding_profile_get_format(
                 self.as_ref().to_glib_none().0,
@@ -142,7 +142,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_input_caps(&self) -> gst::Caps {
+    fn input_caps(&self) -> gst::Caps {
         unsafe {
             from_glib_full(ffi::gst_encoding_profile_get_input_caps(
                 self.as_ref().to_glib_none().0,
@@ -150,7 +150,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_name(&self) -> Option<glib::GString> {
+    fn name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_name(
                 self.as_ref().to_glib_none().0,
@@ -158,11 +158,11 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_presence(&self) -> u32 {
+    fn presence(&self) -> u32 {
         unsafe { ffi::gst_encoding_profile_get_presence(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_preset(&self) -> Option<glib::GString> {
+    fn preset(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_preset(
                 self.as_ref().to_glib_none().0,
@@ -170,7 +170,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_preset_name(&self) -> Option<glib::GString> {
+    fn preset_name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_preset_name(
                 self.as_ref().to_glib_none().0,
@@ -180,7 +180,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_single_segment(&self) -> bool {
+    fn is_single_segment(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_encoding_profile_get_single_segment(
                 self.as_ref().to_glib_none().0,
@@ -188,7 +188,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_type_nick(&self) -> Option<glib::GString> {
+    fn type_nick(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_type_nick(
                 self.as_ref().to_glib_none().0,

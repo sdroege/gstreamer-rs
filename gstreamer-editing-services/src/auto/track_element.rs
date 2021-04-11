@@ -15,7 +15,6 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -55,30 +54,30 @@ pub trait TrackElementExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     //#[doc(alias = "ges_track_element_get_all_control_bindings")]
-    //fn get_all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 };
+    //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 };
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_get_auto_clamp_control_sources")]
-    fn get_auto_clamp_control_sources(&self) -> bool;
+    fn is_auto_clamp_control_sources(&self) -> bool;
 
     //#[doc(alias = "ges_track_element_get_control_binding")]
     //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding>;
 
     #[doc(alias = "ges_track_element_get_element")]
-    fn get_element(&self) -> Option<gst::Element>;
+    fn element(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_track_element_get_gnlobject")]
-    fn get_gnlobject(&self) -> Option<gst::Element>;
+    fn gnlobject(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_track_element_get_nleobject")]
-    fn get_nleobject(&self) -> Option<gst::Element>;
+    fn nleobject(&self) -> Option<gst::Element>;
 
     #[doc(alias = "ges_track_element_get_track")]
-    fn get_track(&self) -> Option<Track>;
+    fn track(&self) -> Option<Track>;
 
     #[doc(alias = "ges_track_element_get_track_type")]
-    fn get_track_type(&self) -> TrackType;
+    fn track_type(&self) -> TrackType;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -117,12 +116,6 @@ pub trait TrackElementExt: 'static {
 
     #[doc(alias = "ges_track_element_set_track_type")]
     fn set_track_type(&self, type_: TrackType);
-
-    fn get_property_active(&self) -> bool;
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_has_internal_source(&self) -> bool;
 
     //fn connect_control_binding_added<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
@@ -200,13 +193,13 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    //fn get_all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 } {
+    //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 } {
     //    unsafe { TODO: call ffi:ges_track_element_get_all_control_bindings() }
     //}
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_auto_clamp_control_sources(&self) -> bool {
+    fn is_auto_clamp_control_sources(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_get_auto_clamp_control_sources(
                 self.as_ref().to_glib_none().0,
@@ -218,7 +211,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     //    unsafe { TODO: call ffi:ges_track_element_get_control_binding() }
     //}
 
-    fn get_element(&self) -> Option<gst::Element> {
+    fn element(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_element(
                 self.as_ref().to_glib_none().0,
@@ -226,7 +219,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn get_gnlobject(&self) -> Option<gst::Element> {
+    fn gnlobject(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_gnlobject(
                 self.as_ref().to_glib_none().0,
@@ -234,7 +227,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn get_nleobject(&self) -> Option<gst::Element> {
+    fn nleobject(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_nleobject(
                 self.as_ref().to_glib_none().0,
@@ -242,7 +235,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn get_track(&self) -> Option<Track> {
+    fn track(&self) -> Option<Track> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_track(
                 self.as_ref().to_glib_none().0,
@@ -250,7 +243,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn get_track_type(&self) -> TrackType {
+    fn track_type(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_track_element_get_track_type(
                 self.as_ref().to_glib_none().0,
@@ -340,38 +333,6 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
             ffi::ges_track_element_set_track_type(self.as_ref().to_glib_none().0, type_.to_glib());
-        }
-    }
-
-    fn get_property_active(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"active\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `active` getter")
-                .unwrap()
-        }
-    }
-
-    #[cfg(any(feature = "v1_18", feature = "dox"))]
-    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_has_internal_source(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"has-internal-source\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `has-internal-source` getter")
-                .unwrap()
         }
     }
 

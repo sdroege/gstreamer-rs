@@ -94,22 +94,22 @@ pub trait ClockExt: 'static {
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_calibration")]
-    fn get_calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime);
+    fn calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime);
 
     #[doc(alias = "gst_clock_get_internal_time")]
-    fn get_internal_time(&self) -> ClockTime;
+    fn internal_time(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_master")]
-    fn get_master(&self) -> Option<Clock>;
+    fn master(&self) -> Option<Clock>;
 
     #[doc(alias = "gst_clock_get_resolution")]
-    fn get_resolution(&self) -> ClockTime;
+    fn resolution(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_time")]
-    fn get_time(&self) -> ClockTime;
+    fn time(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_get_timeout")]
-    fn get_timeout(&self) -> ClockTime;
+    fn timeout(&self) -> ClockTime;
 
     #[doc(alias = "gst_clock_is_synced")]
     fn is_synced(&self) -> bool;
@@ -153,13 +153,17 @@ pub trait ClockExt: 'static {
     #[doc(alias = "gst_clock_wait_for_sync")]
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError>;
 
-    fn get_property_window_size(&self) -> i32;
+    #[doc(alias = "get_property_window_size")]
+    fn window_size(&self) -> i32;
 
-    fn set_property_window_size(&self, window_size: i32);
+    #[doc(alias = "set_property_window_size")]
+    fn set_window_size(&self, window_size: i32);
 
-    fn get_property_window_threshold(&self) -> i32;
+    #[doc(alias = "get_property_window_threshold")]
+    fn window_threshold(&self) -> i32;
 
-    fn set_property_window_threshold(&self, window_threshold: i32);
+    #[doc(alias = "set_property_window_threshold")]
+    fn set_window_threshold(&self, window_threshold: i32);
 
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -247,7 +251,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn get_calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime) {
+    fn calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime) {
         unsafe {
             let mut internal = mem::MaybeUninit::uninit();
             let mut external = mem::MaybeUninit::uninit();
@@ -273,7 +277,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn get_internal_time(&self) -> ClockTime {
+    fn internal_time(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_clock_get_internal_time(
                 self.as_ref().to_glib_none().0,
@@ -281,11 +285,11 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn get_master(&self) -> Option<Clock> {
+    fn master(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_clock_get_master(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_resolution(&self) -> ClockTime {
+    fn resolution(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_clock_get_resolution(
                 self.as_ref().to_glib_none().0,
@@ -293,11 +297,11 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn get_time(&self) -> ClockTime {
+    fn time(&self) -> ClockTime {
         unsafe { from_glib(ffi::gst_clock_get_time(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_timeout(&self) -> ClockTime {
+    fn timeout(&self) -> ClockTime {
         unsafe { from_glib(ffi::gst_clock_get_timeout(self.as_ref().to_glib_none().0)) }
     }
 
@@ -390,7 +394,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn get_property_window_size(&self) -> i32 {
+    fn window_size(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -405,7 +409,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn set_property_window_size(&self, window_size: i32) {
+    fn set_window_size(&self, window_size: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -415,7 +419,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn get_property_window_threshold(&self) -> i32 {
+    fn window_threshold(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -430,7 +434,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         }
     }
 
-    fn set_property_window_threshold(&self, window_threshold: i32) {
+    fn set_window_threshold(&self, window_threshold: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

@@ -33,13 +33,13 @@ pub const NONE_AGGREGATOR: Option<&Aggregator> = None;
 
 pub trait AggregatorExt: 'static {
     //#[doc(alias = "gst_aggregator_get_allocator")]
-    //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
+    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
     #[doc(alias = "gst_aggregator_get_buffer_pool")]
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
+    fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_aggregator_get_latency")]
-    fn get_latency(&self) -> gst::ClockTime;
+    fn latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -69,23 +69,29 @@ pub trait AggregatorExt: 'static {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_emit_signals(&self) -> bool;
+    #[doc(alias = "get_property_emit_signals")]
+    fn emits_signals(&self) -> bool;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_emit_signals(&self, emit_signals: bool);
+    #[doc(alias = "set_property_emit_signals")]
+    fn set_emit_signals(&self, emit_signals: bool);
 
-    fn get_property_start_time(&self) -> u64;
+    #[doc(alias = "get_property_start_time")]
+    fn start_time(&self) -> u64;
 
-    fn set_property_start_time(&self, start_time: u64);
+    #[doc(alias = "set_property_start_time")]
+    fn set_start_time(&self, start_time: u64);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_start_time_selection(&self) -> AggregatorStartTimeSelection;
+    #[doc(alias = "get_property_start_time_selection")]
+    fn start_time_selection(&self) -> AggregatorStartTimeSelection;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection);
+    #[doc(alias = "set_property_start_time_selection")]
+    fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection);
 
     //#[cfg(any(feature = "v1_18", feature = "dox"))]
     //#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -119,11 +125,11 @@ pub trait AggregatorExt: 'static {
 }
 
 impl<O: IsA<Aggregator>> AggregatorExt for O {
-    //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
+    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
     //    unsafe { TODO: call ffi:gst_aggregator_get_allocator() }
     //}
 
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
+    fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_get_buffer_pool(
                 self.as_ref().to_glib_none().0,
@@ -131,7 +137,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    fn get_latency(&self) -> gst::ClockTime {
+    fn latency(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_aggregator_get_latency(
                 self.as_ref().to_glib_none().0,
@@ -194,7 +200,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_emit_signals(&self) -> bool {
+    fn emits_signals(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -211,7 +217,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_emit_signals(&self, emit_signals: bool) {
+    fn set_emit_signals(&self, emit_signals: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -221,7 +227,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    fn get_property_start_time(&self) -> u64 {
+    fn start_time(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -236,7 +242,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
         }
     }
 
-    fn set_property_start_time(&self, start_time: u64) {
+    fn set_start_time(&self, start_time: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -248,7 +254,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_property_start_time_selection(&self) -> AggregatorStartTimeSelection {
+    fn start_time_selection(&self) -> AggregatorStartTimeSelection {
         unsafe {
             let mut value =
                 glib::Value::from_type(<AggregatorStartTimeSelection as StaticType>::static_type());
@@ -266,10 +272,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn set_property_start_time_selection(
-        &self,
-        start_time_selection: AggregatorStartTimeSelection,
-    ) {
+    fn set_start_time_selection(&self, start_time_selection: AggregatorStartTimeSelection) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

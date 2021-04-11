@@ -90,22 +90,22 @@ pub trait GLContextExt: 'static {
     fn fill_info(&self) -> Result<(), glib::Error>;
 
     #[doc(alias = "gst_gl_context_get_display")]
-    fn get_display(&self) -> GLDisplay;
+    fn display(&self) -> GLDisplay;
 
     #[doc(alias = "gst_gl_context_get_gl_api")]
-    fn get_gl_api(&self) -> GLAPI;
+    fn gl_api(&self) -> GLAPI;
 
     #[doc(alias = "gst_gl_context_get_gl_platform")]
-    fn get_gl_platform(&self) -> GLPlatform;
+    fn gl_platform(&self) -> GLPlatform;
 
     #[doc(alias = "gst_gl_context_get_gl_platform_version")]
-    fn get_gl_platform_version(&self) -> (i32, i32);
+    fn gl_platform_version(&self) -> (i32, i32);
 
     #[doc(alias = "gst_gl_context_get_gl_version")]
-    fn get_gl_version(&self) -> (i32, i32);
+    fn gl_version(&self) -> (i32, i32);
 
     #[doc(alias = "gst_gl_context_get_window")]
-    fn get_window(&self) -> Option<GLWindow>;
+    fn window(&self) -> Option<GLWindow>;
 
     #[doc(alias = "gst_gl_context_is_shared")]
     fn is_shared(&self) -> bool;
@@ -227,7 +227,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn get_display(&self) -> GLDisplay {
+    fn display(&self) -> GLDisplay {
         unsafe {
             from_glib_full(ffi::gst_gl_context_get_display(
                 self.as_ref().to_glib_none().0,
@@ -235,7 +235,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn get_gl_api(&self) -> GLAPI {
+    fn gl_api(&self) -> GLAPI {
         unsafe {
             from_glib(ffi::gst_gl_context_get_gl_api(
                 self.as_ref().to_glib_none().0,
@@ -243,7 +243,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn get_gl_platform(&self) -> GLPlatform {
+    fn gl_platform(&self) -> GLPlatform {
         unsafe {
             from_glib(ffi::gst_gl_context_get_gl_platform(
                 self.as_ref().to_glib_none().0,
@@ -251,7 +251,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn get_gl_platform_version(&self) -> (i32, i32) {
+    fn gl_platform_version(&self) -> (i32, i32) {
         unsafe {
             let mut major = mem::MaybeUninit::uninit();
             let mut minor = mem::MaybeUninit::uninit();
@@ -266,7 +266,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn get_gl_version(&self) -> (i32, i32) {
+    fn gl_version(&self) -> (i32, i32) {
         unsafe {
             let mut maj = mem::MaybeUninit::uninit();
             let mut min = mem::MaybeUninit::uninit();
@@ -281,7 +281,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn get_window(&self) -> Option<GLWindow> {
+    fn window(&self) -> Option<GLWindow> {
         unsafe {
             from_glib_full(ffi::gst_gl_context_get_window(
                 self.as_ref().to_glib_none().0,

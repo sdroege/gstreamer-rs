@@ -40,25 +40,35 @@ impl Default for Group {
 pub const NONE_GROUP: Option<&Group> = None;
 
 pub trait GroupExt: 'static {
-    fn get_property_duration(&self) -> u64;
+    #[doc(alias = "get_property_duration")]
+    fn duration(&self) -> u64;
 
-    fn set_property_duration(&self, duration: u64);
+    #[doc(alias = "set_property_duration")]
+    fn set_duration(&self, duration: u64);
 
-    fn get_property_in_point(&self) -> u64;
+    #[doc(alias = "get_property_in_point")]
+    fn in_point(&self) -> u64;
 
-    fn set_property_in_point(&self, in_point: u64);
+    #[doc(alias = "set_property_in_point")]
+    fn set_in_point(&self, in_point: u64);
 
-    fn get_property_max_duration(&self) -> u64;
+    #[doc(alias = "get_property_max_duration")]
+    fn max_duration(&self) -> u64;
 
-    fn set_property_max_duration(&self, max_duration: u64);
+    #[doc(alias = "set_property_max_duration")]
+    fn set_max_duration(&self, max_duration: u64);
 
-    fn get_property_priority(&self) -> u32;
+    #[doc(alias = "get_property_priority")]
+    fn priority(&self) -> u32;
 
-    fn set_property_priority(&self, priority: u32);
+    #[doc(alias = "set_property_priority")]
+    fn set_priority(&self, priority: u32);
 
-    fn get_property_start(&self) -> u64;
+    #[doc(alias = "get_property_start")]
+    fn start(&self) -> u64;
 
-    fn set_property_start(&self, start: u64);
+    #[doc(alias = "set_property_start")]
+    fn set_start(&self, start: u64);
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -73,7 +83,7 @@ pub trait GroupExt: 'static {
 }
 
 impl<O: IsA<Group>> GroupExt for O {
-    fn get_property_duration(&self) -> u64 {
+    fn duration(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -88,7 +98,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn set_property_duration(&self, duration: u64) {
+    fn set_duration(&self, duration: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -98,7 +108,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn get_property_in_point(&self) -> u64 {
+    fn in_point(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -113,7 +123,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn set_property_in_point(&self, in_point: u64) {
+    fn set_in_point(&self, in_point: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -123,7 +133,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn get_property_max_duration(&self) -> u64 {
+    fn max_duration(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -138,7 +148,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn set_property_max_duration(&self, max_duration: u64) {
+    fn set_max_duration(&self, max_duration: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -148,7 +158,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn get_property_priority(&self) -> u32 {
+    fn priority(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -163,7 +173,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn set_property_priority(&self, priority: u32) {
+    fn set_priority(&self, priority: u32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -173,7 +183,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn get_property_start(&self) -> u64 {
+    fn start(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -188,7 +198,7 @@ impl<O: IsA<Group>> GroupExt for O {
         }
     }
 
-    fn set_property_start(&self, start: u64) {
+    fn set_start(&self, start: u64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

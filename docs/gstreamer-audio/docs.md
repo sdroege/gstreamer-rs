@@ -172,11 +172,11 @@ not allowed in negotiated caps. It is not allowed in any situation other
 than the one mentioned below to have less bits set in the channel mask than
 the number of channels.
 
-`AudioChannelPosition::Mono` can only be used with a single mono channel that
+[`Mono`](Self::Mono) can only be used with a single mono channel that
 has no direction information and would be mixed into all directional channels.
 This is expressed in caps by having a single channel and no channel mask.
 
-`AudioChannelPosition::None` can only be used if all channels have this position.
+[`None`](Self::None) can only be used if all channels have this position.
 This is expressed in caps by having a channel mask with no bits set.
 
 As another special case it is allowed to have two channels without a channel mask.
@@ -279,7 +279,7 @@ base class of its expectation w.r.t. buffer handling.
  though they may or may not correspond to 1 (or more) audio format frame.
  * Input frame is provided to subclass' `handle_frame`.
  * If codec processing results in decoded data, subclass should call
- `AudioDecoder::finish_frame` to have decoded data pushed
+ [`finish_frame`](Self::finish_frame) to have decoded data pushed
  downstream.
  * Just prior to actually pushing a buffer downstream,
  it is passed to `pre_push`. Subclass should either use this callback
@@ -299,7 +299,7 @@ Subclass is responsible for providing pad template caps for
 source and sink pads. The pads need to be named "sink" and "src". It also
 needs to set the fixed caps on srcpad, when the format is ensured. This
 is typically when base class calls subclass' `set_format` function, though
-it might be delayed until calling `AudioDecoder::finish_frame`.
+it might be delayed until calling [`finish_frame`](Self::finish_frame).
 
 In summary, above process should have subclass concentrating on
 codec data processing while leaving other matters to base class,
@@ -334,7 +334,7 @@ Things that subclass need to take care of:
  expectations in context.
 
  * Accept data in `handle_frame` and provide encoded results to
- `AudioDecoder::finish_frame`. If it is prepared to perform
+ [`finish_frame`](Self::finish_frame). If it is prepared to perform
  PLC, it should also accept NULL data in `handle_frame` and provide for
  data for indicated duration.
 
@@ -693,7 +693,7 @@ Subclass is responsible for providing pad template caps for
 source and sink pads. The pads need to be named "sink" and "src". It also
 needs to set the fixed caps on srcpad, when the format is ensured. This
 is typically when base class calls subclass' `set_format` function, though
-it might be delayed until calling `AudioEncoder::finish_frame`.
+it might be delayed until calling [`finish_frame`](Self::finish_frame).
 
 In summary, above process should have subclass concentrating on
 codec data processing while leaving other matters to base class,
@@ -1470,17 +1470,17 @@ This interface is implemented by elements that provide a stream volume. Examples
 such elements are `volume` and `playbin`.
 
 Applications can use this interface to get or set the current stream volume. For this
-the "volume" `gobject::Object` property can be used or the helper functions `StreamVolume::set_volume`
+the "volume" `glib::object::Object` property can be used or the helper functions `StreamVolume::set_volume`
 and `StreamVolume::get_volume`. This volume is always a linear factor, i.e. 0.0 is muted
 1.0 is 100%. For showing the volume in a GUI it might make sense to convert it to
 a different format by using `StreamVolume::convert_volume`. Volume sliders should usually
 use a cubic volume.
 
-Separate from the volume the stream can also be muted by the "mute" `gobject::Object` property or
+Separate from the volume the stream can also be muted by the "mute" `glib::object::Object` property or
 `StreamVolume::set_mute` and `StreamVolume::get_mute`.
 
 Elements that provide some kind of stream volume should implement the "volume" and
-"mute" `gobject::Object` properties and handle setting and getting of them properly.
+"mute" `glib::object::Object` properties and handle setting and getting of them properly.
 The volume property is defined to be a linear volume factor.
 
 # Implements

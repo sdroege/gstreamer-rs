@@ -27,16 +27,16 @@ pub const NONE_BASE_SRC: Option<&BaseSrc> = None;
 
 pub trait BaseSrcExt: 'static {
     //#[doc(alias = "gst_base_src_get_allocator")]
-    //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
+    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams);
 
     #[doc(alias = "gst_base_src_get_blocksize")]
-    fn get_blocksize(&self) -> u32;
+    fn blocksize(&self) -> u32;
 
     #[doc(alias = "gst_base_src_get_buffer_pool")]
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
+    fn buffer_pool(&self) -> Option<gst::BufferPool>;
 
     #[doc(alias = "gst_base_src_get_do_timestamp")]
-    fn get_do_timestamp(&self) -> bool;
+    fn does_timestamp(&self) -> bool;
 
     #[doc(alias = "gst_base_src_is_async")]
     fn is_async(&self) -> bool;
@@ -77,13 +77,17 @@ pub trait BaseSrcExt: 'static {
     #[doc(alias = "gst_base_src_set_live")]
     fn set_live(&self, live: bool);
 
-    fn get_property_num_buffers(&self) -> i32;
+    #[doc(alias = "get_property_num_buffers")]
+    fn num_buffers(&self) -> i32;
 
-    fn set_property_num_buffers(&self, num_buffers: i32);
+    #[doc(alias = "set_property_num_buffers")]
+    fn set_num_buffers(&self, num_buffers: i32);
 
-    fn get_property_typefind(&self) -> bool;
+    #[doc(alias = "get_property_typefind")]
+    fn is_typefind(&self) -> bool;
 
-    fn set_property_typefind(&self, typefind: bool);
+    #[doc(alias = "set_property_typefind")]
+    fn set_typefind(&self, typefind: bool);
 
     fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -107,15 +111,15 @@ pub trait BaseSrcExt: 'static {
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExt for O {
-    //fn get_allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
+    //fn allocator(&self, allocator: /*Ignored*/Option<gst::Allocator>, params: /*Ignored*/gst::AllocationParams) {
     //    unsafe { TODO: call ffi:gst_base_src_get_allocator() }
     //}
 
-    fn get_blocksize(&self) -> u32 {
+    fn blocksize(&self) -> u32 {
         unsafe { ffi::gst_base_src_get_blocksize(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
+    fn buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_base_src_get_buffer_pool(
                 self.as_ref().to_glib_none().0,
@@ -123,7 +127,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn get_do_timestamp(&self) -> bool {
+    fn does_timestamp(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_src_get_do_timestamp(
                 self.as_ref().to_glib_none().0,
@@ -210,7 +214,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn get_property_num_buffers(&self) -> i32 {
+    fn num_buffers(&self) -> i32 {
         unsafe {
             let mut value = glib::Value::from_type(<i32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -225,7 +229,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn set_property_num_buffers(&self, num_buffers: i32) {
+    fn set_num_buffers(&self, num_buffers: i32) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
@@ -235,7 +239,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn get_property_typefind(&self) -> bool {
+    fn is_typefind(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -250,7 +254,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn set_property_typefind(&self, typefind: bool) {
+    fn set_typefind(&self, typefind: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

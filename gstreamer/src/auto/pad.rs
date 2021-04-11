@@ -69,36 +69,36 @@ pub trait PadExt: 'static {
     fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool;
 
     #[doc(alias = "gst_pad_get_allowed_caps")]
-    fn get_allowed_caps(&self) -> Option<Caps>;
+    fn allowed_caps(&self) -> Option<Caps>;
 
     #[doc(alias = "gst_pad_get_current_caps")]
-    fn get_current_caps(&self) -> Option<Caps>;
+    fn current_caps(&self) -> Option<Caps>;
 
     #[doc(alias = "gst_pad_get_direction")]
-    fn get_direction(&self) -> PadDirection;
+    fn direction(&self) -> PadDirection;
 
     //#[doc(alias = "gst_pad_get_element_private")]
-    //fn get_element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer>;
+    //fn element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer>;
 
     #[doc(alias = "gst_pad_get_offset")]
-    fn get_offset(&self) -> i64;
+    fn offset(&self) -> i64;
 
     #[doc(alias = "gst_pad_get_pad_template")]
-    fn get_pad_template(&self) -> Option<PadTemplate>;
+    fn pad_template(&self) -> Option<PadTemplate>;
 
     #[doc(alias = "gst_pad_get_pad_template_caps")]
-    fn get_pad_template_caps(&self) -> Caps;
+    fn pad_template_caps(&self) -> Caps;
 
     #[doc(alias = "gst_pad_get_parent_element")]
-    fn get_parent_element(&self) -> Option<Element>;
+    fn parent_element(&self) -> Option<Element>;
 
     #[doc(alias = "gst_pad_get_peer")]
-    fn get_peer(&self) -> Option<Pad>;
+    fn peer(&self) -> Option<Pad>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_pad_get_single_internal_link")]
-    fn get_single_internal_link(&self) -> Option<Pad>;
+    fn single_internal_link(&self) -> Option<Pad>;
 
     #[doc(alias = "gst_pad_get_sticky_event")]
     fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
@@ -106,15 +106,15 @@ pub trait PadExt: 'static {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_get_stream")]
-    fn get_stream(&self) -> Option<Stream>;
+    fn stream(&self) -> Option<Stream>;
 
     #[doc(alias = "gst_pad_get_stream_id")]
-    fn get_stream_id(&self) -> Option<glib::GString>;
+    fn stream_id(&self) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
     #[doc(alias = "gst_pad_get_task_state")]
-    fn get_task_state(&self) -> TaskState;
+    fn task_state(&self) -> TaskState;
 
     #[doc(alias = "gst_pad_has_current_caps")]
     fn has_current_caps(&self) -> bool;
@@ -190,7 +190,8 @@ pub trait PadExt: 'static {
     #[doc(alias = "gst_pad_use_fixed_caps")]
     fn use_fixed_caps(&self);
 
-    fn get_property_caps(&self) -> Option<Caps>;
+    #[doc(alias = "get_property_caps")]
+    fn caps(&self) -> Option<Caps>;
 
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -283,7 +284,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_allowed_caps(&self) -> Option<Caps> {
+    fn allowed_caps(&self) -> Option<Caps> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_allowed_caps(
                 self.as_ref().to_glib_none().0,
@@ -291,7 +292,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_current_caps(&self) -> Option<Caps> {
+    fn current_caps(&self) -> Option<Caps> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_current_caps(
                 self.as_ref().to_glib_none().0,
@@ -299,19 +300,19 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_direction(&self) -> PadDirection {
+    fn direction(&self) -> PadDirection {
         unsafe { from_glib(ffi::gst_pad_get_direction(self.as_ref().to_glib_none().0)) }
     }
 
-    //fn get_element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
+    //fn element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_pad_get_element_private() }
     //}
 
-    fn get_offset(&self) -> i64 {
+    fn offset(&self) -> i64 {
         unsafe { ffi::gst_pad_get_offset(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_pad_template(&self) -> Option<PadTemplate> {
+    fn pad_template(&self) -> Option<PadTemplate> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_pad_template(
                 self.as_ref().to_glib_none().0,
@@ -319,7 +320,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_pad_template_caps(&self) -> Caps {
+    fn pad_template_caps(&self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_pad_get_pad_template_caps(
                 self.as_ref().to_glib_none().0,
@@ -327,7 +328,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_parent_element(&self) -> Option<Element> {
+    fn parent_element(&self) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_parent_element(
                 self.as_ref().to_glib_none().0,
@@ -335,13 +336,13 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_peer(&self) -> Option<Pad> {
+    fn peer(&self) -> Option<Pad> {
         unsafe { from_glib_full(ffi::gst_pad_get_peer(self.as_ref().to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_single_internal_link(&self) -> Option<Pad> {
+    fn single_internal_link(&self) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_single_internal_link(
                 self.as_ref().to_glib_none().0,
@@ -361,17 +362,17 @@ impl<O: IsA<Pad>> PadExt for O {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    fn get_stream(&self) -> Option<Stream> {
+    fn stream(&self) -> Option<Stream> {
         unsafe { from_glib_full(ffi::gst_pad_get_stream(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_stream_id(&self) -> Option<glib::GString> {
+    fn stream_id(&self) -> Option<glib::GString> {
         unsafe { from_glib_full(ffi::gst_pad_get_stream_id(self.as_ref().to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
-    fn get_task_state(&self) -> TaskState {
+    fn task_state(&self) -> TaskState {
         unsafe { from_glib(ffi::gst_pad_get_task_state(self.as_ref().to_glib_none().0)) }
     }
 
@@ -545,7 +546,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_property_caps(&self) -> Option<Caps> {
+    fn caps(&self) -> Option<Caps> {
         unsafe {
             let mut value = glib::Value::from_type(<Caps as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

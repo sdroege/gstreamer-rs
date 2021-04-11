@@ -20,7 +20,8 @@ glib::wrapper! {
 }
 
 impl PtpClock {
-    pub fn get_property_domain(&self) -> u32 {
+    #[doc(alias = "get_property_domain")]
+    pub fn domain(&self) -> u32 {
         unsafe {
             let mut value = glib::Value::from_type(<u32 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -35,7 +36,8 @@ impl PtpClock {
         }
     }
 
-    pub fn get_property_grandmaster_clock_id(&self) -> u64 {
+    #[doc(alias = "get_property_grandmaster_clock_id")]
+    pub fn grandmaster_clock_id(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -50,7 +52,8 @@ impl PtpClock {
         }
     }
 
-    pub fn get_property_internal_clock(&self) -> Option<gst::Clock> {
+    #[doc(alias = "get_property_internal_clock")]
+    pub fn internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = glib::Value::from_type(<gst::Clock as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -64,7 +67,8 @@ impl PtpClock {
         }
     }
 
-    pub fn get_property_master_clock_id(&self) -> u64 {
+    #[doc(alias = "get_property_master_clock_id")]
+    pub fn master_clock_id(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

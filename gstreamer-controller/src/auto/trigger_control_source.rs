@@ -43,9 +43,11 @@ unsafe impl Sync for TriggerControlSource {}
 pub const NONE_TRIGGER_CONTROL_SOURCE: Option<&TriggerControlSource> = None;
 
 pub trait TriggerControlSourceExt: 'static {
-    fn get_property_tolerance(&self) -> i64;
+    #[doc(alias = "get_property_tolerance")]
+    fn tolerance(&self) -> i64;
 
-    fn set_property_tolerance(&self, tolerance: i64);
+    #[doc(alias = "set_property_tolerance")]
+    fn set_tolerance(&self, tolerance: i64);
 
     fn connect_property_tolerance_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -54,7 +56,7 @@ pub trait TriggerControlSourceExt: 'static {
 }
 
 impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
-    fn get_property_tolerance(&self) -> i64 {
+    fn tolerance(&self) -> i64 {
         unsafe {
             let mut value = glib::Value::from_type(<i64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -69,7 +71,7 @@ impl<O: IsA<TriggerControlSource>> TriggerControlSourceExt for O {
         }
     }
 
-    fn set_property_tolerance(&self, tolerance: i64) {
+    fn set_tolerance(&self, tolerance: i64) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

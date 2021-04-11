@@ -25,27 +25,27 @@ glib::wrapper! {
 
 impl Stream {
     #[doc(alias = "gst_stream_get_caps")]
-    pub fn get_caps(&self) -> Option<Caps> {
+    pub fn caps(&self) -> Option<Caps> {
         unsafe { from_glib_full(ffi::gst_stream_get_caps(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_stream_get_stream_flags")]
-    pub fn get_stream_flags(&self) -> StreamFlags {
+    pub fn stream_flags(&self) -> StreamFlags {
         unsafe { from_glib(ffi::gst_stream_get_stream_flags(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_stream_get_stream_id")]
-    pub fn get_stream_id(&self) -> Option<glib::GString> {
+    pub fn stream_id(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gst_stream_get_stream_id(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_stream_get_stream_type")]
-    pub fn get_stream_type(&self) -> StreamType {
+    pub fn stream_type(&self) -> StreamType {
         unsafe { from_glib(ffi::gst_stream_get_stream_type(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_stream_get_tags")]
-    pub fn get_tags(&self) -> Option<TagList> {
+    pub fn tags(&self) -> Option<TagList> {
         unsafe { from_glib_full(ffi::gst_stream_get_tags(self.to_glib_none().0)) }
     }
 

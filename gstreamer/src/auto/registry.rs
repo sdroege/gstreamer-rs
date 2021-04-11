@@ -138,12 +138,12 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_get_feature_list_cookie")]
-    pub fn get_feature_list_cookie(&self) -> u32 {
+    pub fn feature_list_cookie(&self) -> u32 {
         unsafe { ffi::gst_registry_get_feature_list_cookie(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_registry_get_plugin_list")]
-    pub fn get_plugin_list(&self) -> Vec<Plugin> {
+    pub fn plugin_list(&self) -> Vec<Plugin> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_plugin_list(
                 self.to_glib_none().0,

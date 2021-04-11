@@ -17,7 +17,8 @@ glib::wrapper! {
 }
 
 impl PlayerGMainContextSignalDispatcher {
-    pub fn get_property_application_context(&self) -> Option<glib::MainContext> {
+    #[doc(alias = "get_property_application_context")]
+    pub fn application_context(&self) -> Option<glib::MainContext> {
         unsafe {
             let mut value =
                 glib::Value::from_type(<glib::MainContext as StaticType>::static_type());

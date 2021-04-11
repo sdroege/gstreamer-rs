@@ -24,7 +24,7 @@ pub const NONE_TOC_SETTER: Option<&TocSetter> = None;
 
 pub trait TocSetterExt: 'static {
     #[doc(alias = "gst_toc_setter_get_toc")]
-    fn get_toc(&self) -> Option<Toc>;
+    fn toc(&self) -> Option<Toc>;
 
     #[doc(alias = "gst_toc_setter_reset")]
     fn reset(&self);
@@ -34,7 +34,7 @@ pub trait TocSetterExt: 'static {
 }
 
 impl<O: IsA<TocSetter>> TocSetterExt for O {
-    fn get_toc(&self) -> Option<Toc> {
+    fn toc(&self) -> Option<Toc> {
         unsafe { from_glib_full(ffi::gst_toc_setter_get_toc(self.as_ref().to_glib_none().0)) }
     }
 

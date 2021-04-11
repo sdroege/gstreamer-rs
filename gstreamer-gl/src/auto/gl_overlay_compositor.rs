@@ -60,7 +60,8 @@ impl GLOverlayCompositor {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_property_yinvert(&self) -> bool {
+    #[doc(alias = "get_property_yinvert")]
+    pub fn is_yinvert(&self) -> bool {
         unsafe {
             let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -77,7 +78,8 @@ impl GLOverlayCompositor {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn set_property_yinvert(&self, yinvert: bool) {
+    #[doc(alias = "set_property_yinvert")]
+    pub fn set_yinvert(&self, yinvert: bool) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,

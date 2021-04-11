@@ -51,7 +51,7 @@ impl TestClock {
     }
 
     #[doc(alias = "gst_test_clock_get_next_entry_time")]
-    pub fn get_next_entry_time(&self) -> gst::ClockTime {
+    pub fn next_entry_time(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_test_clock_get_next_entry_time(
                 self.to_glib_none().0,
@@ -122,7 +122,8 @@ impl TestClock {
         }
     }
 
-    pub fn get_property_clock_type(&self) -> gst::ClockType {
+    #[doc(alias = "get_property_clock_type")]
+    pub fn clock_type(&self) -> gst::ClockType {
         unsafe {
             let mut value = glib::Value::from_type(<gst::ClockType as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -137,7 +138,8 @@ impl TestClock {
         }
     }
 
-    pub fn set_property_clock_type(&self, clock_type: gst::ClockType) {
+    #[doc(alias = "set_property_clock_type")]
+    pub fn set_clock_type(&self, clock_type: gst::ClockType) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
@@ -147,7 +149,8 @@ impl TestClock {
         }
     }
 
-    pub fn get_property_start_time(&self) -> u64 {
+    #[doc(alias = "get_property_start_time")]
+    pub fn start_time(&self) -> u64 {
         unsafe {
             let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

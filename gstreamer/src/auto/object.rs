@@ -53,7 +53,7 @@ impl Object {
 impl fmt::Display for Object {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&GstObjectExt::get_name(self))
+        f.write_str(&GstObjectExt::name(self))
     }
 }
 
@@ -76,16 +76,16 @@ pub trait GstObjectExt: 'static {
     fn get_control_binding(&self, property_name: &str) -> Option<ControlBinding>;
 
     #[doc(alias = "gst_object_get_control_rate")]
-    fn get_control_rate(&self) -> ClockTime;
+    fn control_rate(&self) -> ClockTime;
 
     #[doc(alias = "gst_object_get_name")]
-    fn get_name(&self) -> glib::GString;
+    fn name(&self) -> glib::GString;
 
     #[doc(alias = "gst_object_get_parent")]
-    fn get_parent(&self) -> Option<Object>;
+    fn parent(&self) -> Option<Object>;
 
     #[doc(alias = "gst_object_get_path_string")]
-    fn get_path_string(&self) -> glib::GString;
+    fn path_string(&self) -> glib::GString;
 
     #[doc(alias = "gst_object_get_value")]
     fn get_value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value>;
@@ -172,7 +172,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn get_control_rate(&self) -> ClockTime {
+    fn control_rate(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_object_get_control_rate(
                 self.as_ref().to_glib_none().0,
@@ -180,15 +180,15 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn get_name(&self) -> glib::GString {
+    fn name(&self) -> glib::GString {
         unsafe { from_glib_full(ffi::gst_object_get_name(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_parent(&self) -> Option<Object> {
+    fn parent(&self) -> Option<Object> {
         unsafe { from_glib_full(ffi::gst_object_get_parent(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_path_string(&self) -> glib::GString {
+    fn path_string(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_object_get_path_string(
                 self.as_ref().to_glib_none().0,

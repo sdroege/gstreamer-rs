@@ -22,16 +22,16 @@ pub const NONE_VIDEO_ORIENTATION: Option<&VideoOrientation> = None;
 
 pub trait VideoOrientationExt: 'static {
     #[doc(alias = "gst_video_orientation_get_hcenter")]
-    fn get_hcenter(&self) -> Option<i32>;
+    fn hcenter(&self) -> Option<i32>;
 
     #[doc(alias = "gst_video_orientation_get_hflip")]
-    fn get_hflip(&self) -> Option<bool>;
+    fn hflip(&self) -> Option<bool>;
 
     #[doc(alias = "gst_video_orientation_get_vcenter")]
-    fn get_vcenter(&self) -> Option<i32>;
+    fn vcenter(&self) -> Option<i32>;
 
     #[doc(alias = "gst_video_orientation_get_vflip")]
-    fn get_vflip(&self) -> Option<bool>;
+    fn vflip(&self) -> Option<bool>;
 
     #[doc(alias = "gst_video_orientation_set_hcenter")]
     fn set_hcenter(&self, center: i32) -> Result<(), glib::error::BoolError>;
@@ -47,7 +47,7 @@ pub trait VideoOrientationExt: 'static {
 }
 
 impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
-    fn get_hcenter(&self) -> Option<i32> {
+    fn hcenter(&self) -> Option<i32> {
         unsafe {
             let mut center = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_hcenter(
@@ -63,7 +63,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
-    fn get_hflip(&self) -> Option<bool> {
+    fn hflip(&self) -> Option<bool> {
         unsafe {
             let mut flip = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_hflip(
@@ -79,7 +79,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
-    fn get_vcenter(&self) -> Option<i32> {
+    fn vcenter(&self) -> Option<i32> {
         unsafe {
             let mut center = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_vcenter(
@@ -95,7 +95,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
         }
     }
 
-    fn get_vflip(&self) -> Option<bool> {
+    fn vflip(&self) -> Option<bool> {
         unsafe {
             let mut flip = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_vflip(

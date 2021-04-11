@@ -33,9 +33,10 @@ pub trait GLBaseFilterExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_gl_base_filter_get_gl_context")]
-    fn get_gl_context(&self) -> Option<GLContext>;
+    fn gl_context(&self) -> Option<GLContext>;
 
-    fn get_property_context(&self) -> Option<GLContext>;
+    #[doc(alias = "get_property_context")]
+    fn context(&self) -> Option<GLContext>;
 
     fn connect_property_context_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -54,7 +55,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_gl_context(&self) -> Option<GLContext> {
+    fn gl_context(&self) -> Option<GLContext> {
         unsafe {
             from_glib_full(ffi::gst_gl_base_filter_get_gl_context(
                 self.as_ref().to_glib_none().0,
@@ -62,7 +63,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
         }
     }
 
-    fn get_property_context(&self) -> Option<GLContext> {
+    fn context(&self) -> Option<GLContext> {
         unsafe {
             let mut value = glib::Value::from_type(<GLContext as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
