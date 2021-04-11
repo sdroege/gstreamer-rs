@@ -10,7 +10,7 @@ use once_cell::sync::Lazy;
 use glib::translate::{
     from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr, ToGlibPtrMut,
 };
-use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue, Value};
+use glib::value::{FromValue, FromValueOptional, SendValue, SetValue, ToSendValue, Value};
 use glib::StaticType;
 
 use crate::Sample;
@@ -352,6 +352,26 @@ impl Default for TagList {
     }
 }
 
+#[derive(Debug, Clone)]
+#[repr(transparent)]
+pub struct TagValue<T>(SendValue, PhantomData<T>);
+
+impl<T> TagValue<T> {
+    pub fn get<'a>(&'a self) -> Option<T>
+    where
+        T: FromValueOptional<'a>,
+    {
+        self.0.get().expect("Invalid tag type")
+    }
+
+    pub fn get_some<'a>(&'a self) -> T
+    where
+        T: FromValue<'a>,
+    {
+        self.0.get_some().expect("Invalid tag type")
+    }
+}
+
 impl TagListRef {
     pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode)
     where
@@ -399,11 +419,16 @@ impl TagListRef {
         Ok(())
     }
 
-    pub fn get<'a, T: Tag<'a>>(&self) -> Option<TypedValue<T::TagType>> {
+    pub fn get<'a, T: Tag<'a>>(&self) -> Option<TagValue<T::TagType>> {
         self.get_generic(T::tag_name()).map(|value| {
-            value.downcast().unwrap_or_else(|_| {
-                panic!("TagListRef::get type mismatch for tag {}", T::tag_name())
-            })
+            if !value.is::<T::TagType>() {
+                panic!(
+                    "TagListRef::get type mismatch for tag {}: {}",
+                    T::tag_name(),
+                    value.type_()
+                );
+            }
+            TagValue(value, PhantomData)
         })
     }
 
@@ -437,9 +462,17 @@ impl TagListRef {
         }
     }
 
-    pub fn get_index<'a, T: Tag<'a>>(&'a self, idx: u32) -> Option<&'a TypedValue<T::TagType>> {
-        self.get_index_generic(T::tag_name(), idx)
-            .and_then(|value| value.downcast_ref())
+    pub fn get_index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
+        self.get_index_generic(T::tag_name(), idx).map(|value| {
+            if !value.is::<T::TagType>() {
+                panic!(
+                    "TagListRef::get_index type mismatch for tag {}: {}",
+                    T::tag_name(),
+                    value.type_()
+                );
+            }
+            unsafe { &*(value as *const SendValue as *const TagValue<T::TagType>) }
+        })
     }
 
     pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
@@ -569,7 +602,7 @@ where
     <T as Tag<'a>>::TagType: 'a,
     T: 'a,
 {
-    type Item = &'a TypedValue<T::TagType>;
+    type Item = &'a TagValue<T::TagType>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.size {
