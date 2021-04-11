@@ -26,6 +26,10 @@ def run_command(command, folder=None):
     return True
 
 
+def spawn_process(command):
+    return subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
 def update_workspace():
     return run_command(["cargo", "build", "--release"], "gir")
 
@@ -73,13 +77,11 @@ def build_gir_if_needed(updated_submodule):
 
 
 def regen_crates(path, conf):
+    processes = []
     if path.is_dir():
         for entry in path.rglob("Gir*.toml"):
-            if not regen_crates(entry, conf):
-                return False
+            processes += regen_crates(entry, conf)
     elif path.match("Gir*.toml"):
-        print('==> Regenerating "{}"...'.format(path))
-
         args = [
             conf.gir_path,
             "-c",
@@ -87,7 +89,7 @@ def regen_crates(path, conf):
             "-o",
             path.parent,
         ] + [d for path in conf.gir_files_paths for d in ("-d", path)]
-        error = False
+
         if path.parent.name.endswith("sys"):
             args.extend(["-m", "sys"])
         else:
@@ -100,28 +102,27 @@ def regen_crates(path, conf):
                 .joinpath(path.parent)
                 .joinpath("docs.md")
             )
-            print("==> Docs into {}".format(doc_path))
             doc_args = args + [
                 "-m",
                 "doc",
                 "--doc-target-path",
                 doc_path,
             ]
-            error |= not run_command(doc_args)
+            processes.append(
+                (
+                    "Regenerating documentation for `{}` into `{}`...".format(
+                        path, doc_path
+                    ),
+                    spawn_process(doc_args),
+                )
+            )
 
-        try:
-            error |= not run_command(args)
-        except Exception as err:
-            print("The following error occurred: {}".format(err))
-            error = True
-        if error:
-            if not ask_yes_no_question("Do you want to continue?", conf):
-                return False
-        print("<== Done!")
+        processes.append(("Regenerating `{}`...".format(path), spawn_process(args)))
+
     else:
-        print("==> {} is not a valid Gir*.toml file".format(path))
-        return False
-    return True
+        raise Exception("`{}` is not a valid Gir*.toml file".format(path))
+
+    return processes
 
 
 def valid_path(path):
@@ -196,8 +197,15 @@ def main():
     print("=> Regenerating crates...")
     for path in conf.path:
         print("=> Looking in path `{}`".format(path))
-        if not regen_crates(path, conf):
-            return 1
+        processes = regen_crates(path, conf)
+        for log, p in processes:
+            print("==> {}".format(log))
+            stdout, stderr = p.communicate()
+            # Gir doesn't print anything to stdout. If it does, this is likely out of
+            # order with stderr, unless the printer/logging flushes in between.
+            assert stdout == b""
+            print(stderr.decode("utf-8"), end="")
+
     if not conf.no_fmt and not run_command(["cargo", "fmt"]):
         return 1
     print("<= Done!")
