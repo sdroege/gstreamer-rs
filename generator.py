@@ -87,11 +87,30 @@ def regen_crates(path, conf):
             "-o",
             path.parent,
         ] + [d for path in conf.gir_files_paths for d in ("-d", path)]
+        error = False
         if path.parent.name.endswith("sys"):
             args.extend(["-m", "sys"])
-        error = False
+        else:
+            # Update docs/**/docs.md for non-sys crates
+
+            # doc-target-path is relative to `-c`
+            path_depth = len(path.parent.parts)
+            doc_path = (
+                Path(*[".."] * path_depth, "docs")
+                .joinpath(path.parent)
+                .joinpath("docs.md")
+            )
+            print("==> Docs into {}".format(doc_path))
+            doc_args = args + [
+                "-m",
+                "doc",
+                "--doc-target-path",
+                doc_path,
+            ]
+            error |= not run_command(doc_args)
+
         try:
-            error = not run_command(args)
+            error |= not run_command(args)
         except Exception as err:
             print("The following error occurred: {}".format(err))
             error = True
