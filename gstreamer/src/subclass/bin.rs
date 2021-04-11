@@ -41,7 +41,7 @@ impl<T: BinImpl> BinImplExt for T {
     fn parent_add_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).add_element.ok_or_else(|| {
                 loggable_error!(
                     crate::CAT_RUST,
@@ -66,7 +66,7 @@ impl<T: BinImpl> BinImplExt for T {
     ) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).remove_element.ok_or_else(|| {
                 loggable_error!(
                     crate::CAT_RUST,
@@ -87,7 +87,7 @@ impl<T: BinImpl> BinImplExt for T {
     fn parent_handle_message(&self, bin: &Self::Type, message: Message) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
             if let Some(ref f) = (*parent_class).handle_message {
                 f(
                     bin.unsafe_cast_ref::<crate::Bin>().to_glib_none().0,
@@ -117,7 +117,7 @@ unsafe extern "C" fn bin_add_element<T: BinImpl>(
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -137,7 +137,7 @@ unsafe extern "C" fn bin_remove_element<T: BinImpl>(
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     // If we get a floating reference passed simply return FALSE here. It can't be
@@ -166,7 +166,7 @@ unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     message: *mut ffi::GstMessage,
 ) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Bin> = from_glib_borrow(ptr);
 
     panic_to_error!(&wrap, &imp.panicked(), (), {

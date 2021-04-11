@@ -51,7 +51,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorPadClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorPadClass;
             (*parent_class)
                 .flush
                 .map(|f| {
@@ -76,7 +76,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
     ) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorPadClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorPadClass;
             (*parent_class)
                 .skip_buffer
                 .map(|f| {
@@ -111,7 +111,7 @@ unsafe extern "C" fn aggregator_pad_flush<T: AggregatorPadImpl>(
     aggregator: *mut ffi::GstAggregator,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);
 
     let res: gst::FlowReturn = imp
@@ -126,7 +126,7 @@ unsafe extern "C" fn aggregator_pad_skip_buffer<T: AggregatorPadImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<AggregatorPad> = from_glib_borrow(ptr);
 
     imp.skip_buffer(

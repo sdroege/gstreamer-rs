@@ -29,24 +29,24 @@ impl AudioClippingMeta {
         skip_assert_initialized!();
         let start = start.into();
         let end = end.into();
-        assert_eq!(start.get_format(), end.get_format());
+        assert_eq!(start.format(), end.format());
         unsafe {
             let meta = ffi::gst_buffer_add_audio_clipping_meta(
                 buffer.as_mut_ptr(),
-                start.get_format().to_glib(),
-                start.get_value() as u64,
-                end.get_value() as u64,
+                start.format().to_glib(),
+                start.value() as u64,
+                end.value() as u64,
             );
 
             Self::from_mut_ptr(buffer, meta)
         }
     }
 
-    pub fn get_start(&self) -> gst::GenericFormattedValue {
+    pub fn start(&self) -> gst::GenericFormattedValue {
         unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.start as i64) }
     }
 
-    pub fn get_end(&self) -> gst::GenericFormattedValue {
+    pub fn end(&self) -> gst::GenericFormattedValue {
         unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.end as i64) }
     }
 }
@@ -62,8 +62,8 @@ unsafe impl MetaAPI for AudioClippingMeta {
 impl fmt::Debug for AudioClippingMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("AudioClippingMeta")
-            .field("start", &self.get_start())
-            .field("end", &self.get_end())
+            .field("start", &self.start())
+            .field("end", &self.end())
             .finish()
     }
 }
@@ -144,8 +144,8 @@ impl AudioMeta {
                 max_offset.unwrap()
             };
 
-            if max_offset + plane_size > buffer.get_size() {
-                return Err(glib::bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.get_size()));
+            if max_offset + plane_size > buffer.size() {
+                return Err(glib::bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.size()));
             }
         }
 
@@ -169,15 +169,15 @@ impl AudioMeta {
         }
     }
 
-    pub fn get_info(&self) -> crate::AudioInfo {
+    pub fn info(&self) -> crate::AudioInfo {
         unsafe { from_glib_none(&self.0.info as *const _ as *mut ffi::GstAudioInfo) }
     }
 
-    pub fn get_samples(&self) -> usize {
+    pub fn samples(&self) -> usize {
         self.0.samples
     }
 
-    pub fn get_offsets(&self) -> &[usize] {
+    pub fn offsets(&self) -> &[usize] {
         if self.0.offsets.is_null() || self.0.info.channels < 1 {
             return &[];
         }
@@ -201,9 +201,9 @@ unsafe impl MetaAPI for AudioMeta {
 impl fmt::Debug for AudioMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("AudioMeta")
-            .field("info", &self.get_info())
-            .field("samples", &self.get_samples())
-            .field("offsets", &self.get_offsets())
+            .field("info", &self.info())
+            .field("samples", &self.samples())
+            .field("offsets", &self.offsets())
             .finish()
     }
 }
@@ -226,26 +226,14 @@ mod tests {
                 gst::format::Default(Some(1)),
                 gst::format::Default(Some(2)),
             );
-            assert_eq!(
-                cmeta.get_start().try_into(),
-                Ok(gst::format::Default(Some(1)))
-            );
-            assert_eq!(
-                cmeta.get_end().try_into(),
-                Ok(gst::format::Default(Some(2)))
-            );
+            assert_eq!(cmeta.start().try_into(), Ok(gst::format::Default(Some(1))));
+            assert_eq!(cmeta.end().try_into(), Ok(gst::format::Default(Some(2))));
         }
 
         {
             let cmeta = buffer.get_meta::<AudioClippingMeta>().unwrap();
-            assert_eq!(
-                cmeta.get_start().try_into(),
-                Ok(gst::format::Default(Some(1)))
-            );
-            assert_eq!(
-                cmeta.get_end().try_into(),
-                Ok(gst::format::Default(Some(2)))
-            );
+            assert_eq!(cmeta.start().try_into(), Ok(gst::format::Default(Some(1))));
+            assert_eq!(cmeta.end().try_into(), Ok(gst::format::Default(Some(2))));
         }
     }
 }

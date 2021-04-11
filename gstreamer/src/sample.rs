@@ -106,7 +106,7 @@ impl Sample {
 }
 
 impl SampleRef {
-    pub fn get_buffer(&self) -> Option<&BufferRef> {
+    pub fn buffer(&self) -> Option<&BufferRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_buffer(self.as_mut_ptr());
             if ptr.is_null() {
@@ -117,14 +117,11 @@ impl SampleRef {
         }
     }
 
-    pub fn get_buffer_owned(&self) -> Option<Buffer> {
-        unsafe {
-            self.get_buffer()
-                .map(|buffer| from_glib_none(buffer.as_ptr()))
-        }
+    pub fn buffer_owned(&self) -> Option<Buffer> {
+        unsafe { self.buffer().map(|buffer| from_glib_none(buffer.as_ptr())) }
     }
 
-    pub fn get_buffer_list(&self) -> Option<&BufferListRef> {
+    pub fn buffer_list(&self) -> Option<&BufferListRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_buffer_list(self.as_mut_ptr());
             if ptr.is_null() {
@@ -135,14 +132,11 @@ impl SampleRef {
         }
     }
 
-    pub fn get_buffer_list_owned(&self) -> Option<BufferList> {
-        unsafe {
-            self.get_buffer_list()
-                .map(|list| from_glib_none(list.as_ptr()))
-        }
+    pub fn buffer_list_owned(&self) -> Option<BufferList> {
+        unsafe { self.buffer_list().map(|list| from_glib_none(list.as_ptr())) }
     }
 
-    pub fn get_caps(&self) -> Option<&CapsRef> {
+    pub fn caps(&self) -> Option<&CapsRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_caps(self.as_mut_ptr());
             if ptr.is_null() {
@@ -153,15 +147,15 @@ impl SampleRef {
         }
     }
 
-    pub fn get_caps_owned(&self) -> Option<Caps> {
-        unsafe { self.get_caps().map(|caps| from_glib_none(caps.as_ptr())) }
+    pub fn caps_owned(&self) -> Option<Caps> {
+        unsafe { self.caps().map(|caps| from_glib_none(caps.as_ptr())) }
     }
 
-    pub fn get_segment(&self) -> Option<Segment> {
+    pub fn segment(&self) -> Option<Segment> {
         unsafe { from_glib_none(ffi::gst_sample_get_segment(self.as_mut_ptr())) }
     }
 
-    pub fn get_info(&self) -> Option<&StructureRef> {
+    pub fn info(&self) -> Option<&StructureRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_info(self.as_mut_ptr());
             if ptr.is_null() {
@@ -217,10 +211,10 @@ impl fmt::Debug for Sample {
 impl fmt::Debug for SampleRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Sample")
-            .field("buffer", &self.get_buffer())
-            .field("caps", &self.get_caps())
-            .field("segment", &self.get_segment())
-            .field("info", &self.get_info())
+            .field("buffer", &self.buffer())
+            .field("caps", &self.caps())
+            .field("segment", &self.segment())
+            .field("info", &self.info())
             .finish()
     }
 }
@@ -239,6 +233,6 @@ mod tests {
             .build();
         let sample = Sample::builder().info(info).build();
 
-        assert!(sample.get_info().is_some());
+        assert!(sample.info().is_some());
     }
 }

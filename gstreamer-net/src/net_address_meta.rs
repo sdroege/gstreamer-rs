@@ -26,7 +26,7 @@ impl NetAddressMeta {
         }
     }
 
-    pub fn get_addr(&self) -> gio::SocketAddress {
+    pub fn addr(&self) -> gio::SocketAddress {
         unsafe { from_glib_none(self.0.addr) }
     }
 
@@ -50,7 +50,7 @@ unsafe impl MetaAPI for NetAddressMeta {
 impl fmt::Debug for NetAddressMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("NetAddressMeta")
-            .field("addr", &self.get_addr())
+            .field("addr", &self.addr())
             .finish()
     }
 }
@@ -71,7 +71,7 @@ mod tests {
 
         let expected_addr = &gio::InetSocketAddress::new(&inet_addr, port);
 
-        let expected_inet_addr = expected_addr.get_address();
+        let expected_inet_addr = expected_addr.address();
 
         {
             let meta = NetAddressMeta::add(
@@ -79,28 +79,22 @@ mod tests {
                 &gio::InetSocketAddress::new(&inet_addr, port),
             );
 
-            let actual_addr = meta
-                .get_addr()
-                .downcast::<gio::InetSocketAddress>()
-                .unwrap();
+            let actual_addr = meta.addr().downcast::<gio::InetSocketAddress>().unwrap();
 
-            assert_eq!(actual_addr.get_port(), expected_addr.get_port());
+            assert_eq!(actual_addr.port(), expected_addr.port());
 
-            let actual_inet_addr = actual_addr.get_address();
+            let actual_inet_addr = actual_addr.address();
 
             assert!(actual_inet_addr.equal(&expected_inet_addr));
         }
 
         {
             let meta = buffer.get_meta::<NetAddressMeta>().unwrap();
-            let actual_addr = meta
-                .get_addr()
-                .downcast::<gio::InetSocketAddress>()
-                .unwrap();
+            let actual_addr = meta.addr().downcast::<gio::InetSocketAddress>().unwrap();
 
-            assert_eq!(actual_addr.get_port(), expected_addr.get_port());
+            assert_eq!(actual_addr.port(), expected_addr.port());
 
-            let actual_inet_addr = actual_addr.get_address();
+            let actual_inet_addr = actual_addr.address();
 
             assert!(actual_inet_addr.equal(&expected_inet_addr));
         }

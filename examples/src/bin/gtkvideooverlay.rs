@@ -40,7 +40,7 @@ fn create_video_sink() -> gst::Element {
 }
 #[cfg(all(target_os = "linux", feature = "gtkvideooverlay-x11"))]
 fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::Window) {
-    let display_type_name = gdk_window.get_display().get_type().name();
+    let display_type_name = gdk_window.display().type_().name();
 
     // Check if we're using X11 or ...
     if display_type_name == "GdkX11Display" {
@@ -75,7 +75,7 @@ fn create_video_sink() -> gst::Element {
 
 #[cfg(all(target_os = "macos", feature = "gtkvideooverlay-quartz"))]
 fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::Window) {
-    let display_type_name = gdk_window.get_display().get_type().name();
+    let display_type_name = gdk_window.display().type_().name();
 
     if display_type_name == "GdkQuartzDisplay" {
         extern "C" {
@@ -149,7 +149,7 @@ fn create_ui(app: &gtk::Application) {
         // Gtk uses gdk under the hood, to handle its drawing. Drawing regions are
         // called gdk windows. We request this underlying drawing region from the
         // widget we will overlay with our video.
-        let gdk_window = video_window.get_window().unwrap();
+        let gdk_window = video_window.window().unwrap();
 
         // This is where we tell our window system about the drawing-region we
         // want it to overlay. Most often, the window system would only know
@@ -205,7 +205,7 @@ fn create_ui(app: &gtk::Application) {
         glib::Continue(true)
     });
 
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     pipeline
         .set_state(gst::State::Playing)
@@ -225,9 +225,9 @@ fn create_ui(app: &gtk::Application) {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 app.quit();
             }

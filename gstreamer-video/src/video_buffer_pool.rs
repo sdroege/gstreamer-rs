@@ -34,19 +34,19 @@ pub static BUFFER_POOL_OPTION_VIDEO_META: Lazy<&'static str> = Lazy::new(|| unsa
 pub struct VideoAlignment(pub(crate) ffi::GstVideoAlignment);
 
 impl VideoAlignment {
-    pub fn get_padding_top(&self) -> u32 {
+    pub fn padding_top(&self) -> u32 {
         self.0.padding_top
     }
-    pub fn get_padding_bottom(&self) -> u32 {
+    pub fn padding_bottom(&self) -> u32 {
         self.0.padding_bottom
     }
-    pub fn get_padding_left(&self) -> u32 {
+    pub fn padding_left(&self) -> u32 {
         self.0.padding_left
     }
-    pub fn get_padding_right(&self) -> u32 {
+    pub fn padding_right(&self) -> u32 {
         self.0.padding_right
     }
-    pub fn get_stride_align(&self) -> &[u32; ffi::GST_VIDEO_MAX_PLANES as usize] {
+    pub fn stride_align(&self) -> &[u32; ffi::GST_VIDEO_MAX_PLANES as usize] {
         &self.0.stride_align
     }
 
@@ -73,24 +73,24 @@ impl VideoAlignment {
 
 impl PartialEq for VideoAlignment {
     fn eq(&self, other: &VideoAlignment) -> bool {
-        self.get_padding_top() == other.get_padding_top()
-            && self.get_padding_bottom() == other.get_padding_bottom()
-            && self.get_padding_left() == other.get_padding_left()
-            && self.get_padding_right() == other.get_padding_right()
-            && self.get_stride_align() == other.get_stride_align()
+        self.padding_top() == other.padding_top()
+            && self.padding_bottom() == other.padding_bottom()
+            && self.padding_left() == other.padding_left()
+            && self.padding_right() == other.padding_right()
+            && self.stride_align() == other.stride_align()
     }
 }
 
 impl Eq for VideoAlignment {}
 
 pub trait VideoBufferPoolConfig {
-    fn get_video_alignment(&self) -> Option<VideoAlignment>;
+    fn video_alignment(&self) -> Option<VideoAlignment>;
 
     fn set_video_alignment(&mut self, align: &VideoAlignment);
 }
 
 impl VideoBufferPoolConfig for gst::BufferPoolConfig {
-    fn get_video_alignment(&self) -> Option<VideoAlignment> {
+    fn video_alignment(&self) -> Option<VideoAlignment> {
         unsafe {
             let mut alignment = mem::MaybeUninit::zeroed();
             let ret = from_glib(ffi::gst_buffer_pool_config_get_video_alignment(

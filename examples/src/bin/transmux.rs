@@ -105,7 +105,7 @@ fn example_main() -> Result<(), Error> {
             let format_name = caps
                 .get_structure(0)
                 .expect("Failed to get format name")
-                .get_name();
+                .name();
 
             let demuxer = match format_name {
                 "video/x-matroska" | "video/webm" => {
@@ -147,7 +147,7 @@ fn example_main() -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
@@ -160,22 +160,22 @@ fn example_main() -> Result<(), Error> {
 
                 return Err(ErrorMessage {
                     src: msg
-                        .get_src()
-                        .map(|s| String::from(s.get_path_string()))
+                        .src()
+                        .map(|s| String::from(s.path_string()))
                         .unwrap_or_else(|| String::from("None")),
-                    error: err.get_error().to_string(),
-                    debug: err.get_debug(),
-                    source: err.get_error(),
+                    error: err.error().to_string(),
+                    debug: err.debug(),
+                    source: err.error(),
                 }
                 .into());
             }
             MessageView::StateChanged(s) => {
                 println!(
                     "State changed from {:?}: {:?} -> {:?} ({:?})",
-                    s.get_src().map(|s| s.get_path_string()),
-                    s.get_old(),
-                    s.get_current(),
-                    s.get_pending()
+                    s.src().map(|s| s.path_string()),
+                    s.old(),
+                    s.current(),
+                    s.pending()
                 );
             }
             _ => (),

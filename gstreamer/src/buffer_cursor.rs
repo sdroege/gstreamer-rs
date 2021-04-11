@@ -264,7 +264,7 @@ impl<T> BufferCursor<T> {
         Ok(self.cur_offset)
     }
 
-    pub fn get_buffer(&self) -> &BufferRef {
+    pub fn buffer(&self) -> &BufferRef {
         self.buffer.as_ref().unwrap().as_ref()
     }
 
@@ -276,7 +276,7 @@ impl<T> BufferCursor<T> {
 impl BufferCursor<Readable> {
     pub(crate) fn new_readable(buffer: Buffer) -> BufferCursor<Readable> {
         skip_assert_initialized!();
-        let size = buffer.get_size() as u64;
+        let size = buffer.size() as u64;
         let num_mem = buffer.n_memory();
 
         BufferCursor {
@@ -299,7 +299,7 @@ impl BufferCursor<Writable> {
             return Err(glib::bool_error!("Not all memories are writable"));
         }
 
-        let size = buffer.get_size() as u64;
+        let size = buffer.size() as u64;
         let num_mem = buffer.n_memory();
 
         Ok(BufferCursor {
@@ -369,13 +369,13 @@ impl<T> BufferRefCursor<T> {
 }
 
 impl<'a> BufferRefCursor<&'a BufferRef> {
-    pub fn get_buffer(&self) -> &BufferRef {
+    pub fn buffer(&self) -> &BufferRef {
         self.buffer
     }
 
     pub(crate) fn new_readable(buffer: &'a BufferRef) -> BufferRefCursor<&'a BufferRef> {
         skip_assert_initialized!();
-        let size = buffer.get_size() as u64;
+        let size = buffer.size() as u64;
         let num_mem = buffer.n_memory();
 
         BufferRefCursor {
@@ -391,7 +391,7 @@ impl<'a> BufferRefCursor<&'a BufferRef> {
 }
 
 impl<'a> BufferRefCursor<&'a mut BufferRef> {
-    pub fn get_buffer(&self) -> &BufferRef {
+    pub fn buffer(&self) -> &BufferRef {
         self.buffer
     }
 
@@ -403,7 +403,7 @@ impl<'a> BufferRefCursor<&'a mut BufferRef> {
             return Err(glib::bool_error!("Not all memories are writable"));
         }
 
-        let size = buffer.get_size() as u64;
+        let size = buffer.size() as u64;
         let num_mem = buffer.n_memory();
 
         Ok(BufferRefCursor {
@@ -444,7 +444,7 @@ mod tests {
 
         assert!(buffer.is_all_memory_writable());
         assert_eq!(buffer.n_memory(), 5);
-        assert_eq!(buffer.get_size(), 30);
+        assert_eq!(buffer.size(), 30);
 
         let mut cursor = buffer.into_cursor_writable().unwrap();
         assert_eq!(cursor.stream_position().unwrap(), 0);
@@ -536,7 +536,7 @@ mod tests {
 
         assert!(buffer.is_all_memory_writable());
         assert_eq!(buffer.n_memory(), 5);
-        assert_eq!(buffer.get_size(), 30);
+        assert_eq!(buffer.size(), 30);
 
         {
             let buffer = buffer.get_mut().unwrap();

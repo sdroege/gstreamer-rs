@@ -28,7 +28,7 @@ struct DiscovererError(#[error(not(source))] &'static str);
 fn print_tags(info: &DiscovererInfo) {
     println!("Tags:");
 
-    let tags = info.get_tags();
+    let tags = info.tags();
     match tags {
         Some(taglist) => {
             println!("  {}", taglist.to_string()); // FIXME use an iterator
@@ -41,10 +41,10 @@ fn print_tags(info: &DiscovererInfo) {
 
 fn print_stream_info(stream: &DiscovererStreamInfo) {
     println!("Stream: ");
-    if let Some(id) = stream.get_stream_id() {
+    if let Some(id) = stream.stream_id() {
         println!("  Stream id: {}", id);
     }
-    let caps_str = match stream.get_caps() {
+    let caps_str = match stream.caps() {
         Some(caps) => caps.to_string(),
         None => String::from("--"),
     };
@@ -53,18 +53,18 @@ fn print_stream_info(stream: &DiscovererStreamInfo) {
 
 fn print_discoverer_info(info: &DiscovererInfo) -> Result<(), Error> {
     let uri = info
-        .get_uri()
+        .uri()
         .ok_or(DiscovererError("URI should not be null"))?;
     println!("URI: {}", uri);
-    println!("Duration: {}", info.get_duration());
+    println!("Duration: {}", info.duration());
     print_tags(info);
     print_stream_info(
         &info
-            .get_stream_info()
+            .stream_info()
             .ok_or(DiscovererError("Error while obtaining stream info"))?,
     );
 
-    let children = info.get_stream_list();
+    let children = info.stream_list();
     println!("Children streams:");
     for child in children {
         print_stream_info(&child);

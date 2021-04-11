@@ -36,11 +36,7 @@ fn tutorial_main() {
 
     // Connect the pad-added signal
     source.connect_pad_added(move |src, src_pad| {
-        println!(
-            "Received new pad {} from {}",
-            src_pad.get_name(),
-            src.get_name()
-        );
+        println!("Received new pad {} from {}", src_pad.name(), src.name());
 
         let sink_pad = convert
             .get_static_pad("sink")
@@ -51,12 +47,12 @@ fn tutorial_main() {
         }
 
         let new_pad_caps = src_pad
-            .get_current_caps()
+            .current_caps()
             .expect("Failed to get caps of new pad.");
         let new_pad_struct = new_pad_caps
             .get_structure(0)
             .expect("Failed to get first structure of caps.");
-        let new_pad_type = new_pad_struct.get_name();
+        let new_pad_type = new_pad_struct.name();
 
         let is_audio = new_pad_type.starts_with("audio/x-raw");
         if !is_audio {
@@ -81,7 +77,7 @@ fn tutorial_main() {
         .expect("Unable to set the pipeline to the `Playing` state");
 
     // Wait until error or EOS
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 
@@ -89,22 +85,18 @@ fn tutorial_main() {
             MessageView::Error(err) => {
                 eprintln!(
                     "Error received from element {:?} {}",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error()
+                    err.src().map(|s| s.path_string()),
+                    err.error()
                 );
-                eprintln!("Debugging information: {:?}", err.get_debug());
+                eprintln!("Debugging information: {:?}", err.debug());
                 break;
             }
             MessageView::StateChanged(state_changed) => {
-                if state_changed
-                    .get_src()
-                    .map(|s| s == pipeline)
-                    .unwrap_or(false)
-                {
+                if state_changed.src().map(|s| s == pipeline).unwrap_or(false) {
                     println!(
                         "Pipeline state changed from {:?} to {:?}",
-                        state_changed.get_old(),
-                        state_changed.get_current()
+                        state_changed.old(),
+                        state_changed.current()
                     );
                 }
             }

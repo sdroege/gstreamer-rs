@@ -270,7 +270,7 @@ impl CapsFeaturesRef {
     }
 
     pub fn is_empty(&self) -> bool {
-        self.get_size() == 0 && !self.is_any()
+        self.size() == 0 && !self.is_any()
     }
 
     pub fn is_any(&self) -> bool {
@@ -286,12 +286,12 @@ impl CapsFeaturesRef {
         }
     }
 
-    pub fn get_size(&self) -> u32 {
+    pub fn size(&self) -> u32 {
         unsafe { ffi::gst_caps_features_get_size(self.as_ptr()) }
     }
 
     pub fn get_nth(&self, idx: u32) -> Option<&str> {
-        if idx >= self.get_size() {
+        if idx >= self.size() {
             return None;
         }
 
@@ -373,7 +373,7 @@ pub struct Iter<'a> {
 impl<'a> Iter<'a> {
     fn new(caps_features: &'a CapsFeaturesRef) -> Iter<'a> {
         skip_assert_initialized!();
-        let n_features = caps_features.get_size();
+        let n_features = caps_features.size();
 
         Iter {
             caps_features,

@@ -35,7 +35,7 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstVideoSinkClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoSinkClass;
             (*parent_class)
                 .show_frame
                 .map(|f| {
@@ -67,7 +67,7 @@ unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<VideoSink> = from_glib_borrow(ptr);
     let buffer = from_glib_borrow(buffer);
 

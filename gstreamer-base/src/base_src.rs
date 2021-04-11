@@ -8,9 +8,9 @@ use std::ptr;
 use crate::BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
-    fn get_segment(&self) -> gst::Segment;
+    fn segment(&self) -> gst::Segment;
 
     fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>);
 
@@ -26,7 +26,7 @@ pub trait BaseSrcExtManual: 'static {
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
@@ -39,7 +39,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
         }
     }
 
-    fn get_segment(&self) -> gst::Segment {
+    fn segment(&self) -> gst::Segment {
         unsafe {
             let src: &ffi::GstBaseSrc = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&src.element.object.lock);

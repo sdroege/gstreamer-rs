@@ -5,7 +5,7 @@ use glib::translate::*;
 use std::mem;
 
 impl PlayerVideoInfo {
-    pub fn get_framerate(&self) -> gst::Fraction {
+    pub fn framerate(&self) -> gst::Fraction {
         unsafe {
             let mut fps_n = mem::MaybeUninit::uninit();
             let mut fps_d = mem::MaybeUninit::uninit();
@@ -18,7 +18,7 @@ impl PlayerVideoInfo {
         }
     }
 
-    pub fn get_pixel_aspect_ratio(&self) -> gst::Fraction {
+    pub fn pixel_aspect_ratio(&self) -> gst::Fraction {
         unsafe {
             let mut par_n = mem::MaybeUninit::uninit();
             let mut par_d = mem::MaybeUninit::uninit();

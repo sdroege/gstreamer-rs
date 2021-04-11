@@ -49,7 +49,7 @@ impl VideoConverter {
         }
     }
 
-    pub fn get_config(&self) -> VideoConverterConfig {
+    pub fn config(&self) -> VideoConverterConfig {
         unsafe {
             VideoConverterConfig(
                 gst::StructureRef::from_glib_borrow(ffi::gst_video_converter_get_config(
@@ -127,7 +127,7 @@ impl convert::TryFrom<gst::Structure> for VideoConverterConfig {
 
     fn try_from(v: gst::Structure) -> Result<VideoConverterConfig, Self::Error> {
         skip_assert_initialized!();
-        if v.get_name() == "GstVideoConverter" {
+        if v.name() == "GstVideoConverter" {
             Ok(VideoConverterConfig(v))
         } else {
             Err(glib::bool_error!("Structure is no VideoConverterConfig"))
@@ -160,7 +160,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.resampler-method", &v);
     }
 
-    pub fn get_resampler_method(&self) -> crate::VideoResamplerMethod {
+    pub fn resampler_method(&self) -> crate::VideoResamplerMethod {
         self.0
             .get_optional("GstVideoConverter.resampler-method")
             .expect("Wrong type")
@@ -171,7 +171,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.chroma-resampler-method", &v);
     }
 
-    pub fn get_chroma_resampler_method(&self) -> crate::VideoResamplerMethod {
+    pub fn chroma_resampler_method(&self) -> crate::VideoResamplerMethod {
         self.0
             .get_optional("GstVideoConverter.chroma-resampler-method")
             .expect("Wrong type")
@@ -182,7 +182,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.resampler-taps", &v);
     }
 
-    pub fn get_resampler_taps(&self) -> u32 {
+    pub fn resampler_taps(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.resampler-taps")
             .expect("Wrong type")
@@ -193,7 +193,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dither-method", &v);
     }
 
-    pub fn get_dither_method(&self) -> crate::VideoDitherMethod {
+    pub fn dither_method(&self) -> crate::VideoDitherMethod {
         self.0
             .get_optional("GstVideoConverter.dither-method")
             .expect("Wrong type")
@@ -204,7 +204,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dither-quantization", &v);
     }
 
-    pub fn get_dither_quantization(&self) -> u32 {
+    pub fn dither_quantization(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.dither-quantization")
             .expect("Wrong type")
@@ -215,7 +215,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.src-x", &v);
     }
 
-    pub fn get_src_x(&self) -> i32 {
+    pub fn src_x(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.src-x")
             .expect("Wrong type")
@@ -226,7 +226,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.src-y", &v);
     }
 
-    pub fn get_src_y(&self) -> i32 {
+    pub fn src_y(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.src-y")
             .expect("Wrong type")
@@ -241,7 +241,7 @@ impl VideoConverterConfig {
         }
     }
 
-    pub fn get_src_width(&self) -> Option<i32> {
+    pub fn src_width(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.src-width")
             .expect("Wrong type")
@@ -255,7 +255,7 @@ impl VideoConverterConfig {
         }
     }
 
-    pub fn get_src_height(&self) -> Option<i32> {
+    pub fn src_height(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.src-height")
             .expect("Wrong type")
@@ -265,7 +265,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dest-x", &v);
     }
 
-    pub fn get_dest_x(&self) -> i32 {
+    pub fn dest_x(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.dest-x")
             .expect("Wrong type")
@@ -276,7 +276,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dest-y", &v);
     }
 
-    pub fn get_dest_y(&self) -> i32 {
+    pub fn dest_y(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.dest-y")
             .expect("Wrong type")
@@ -291,7 +291,7 @@ impl VideoConverterConfig {
         }
     }
 
-    pub fn get_dest_width(&self) -> Option<i32> {
+    pub fn dest_width(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.dest-width")
             .expect("Wrong type")
@@ -305,7 +305,7 @@ impl VideoConverterConfig {
         }
     }
 
-    pub fn get_dest_height(&self) -> Option<i32> {
+    pub fn dest_height(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.dest-height")
             .expect("Wrong type")
@@ -315,7 +315,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.fill-border", &v);
     }
 
-    pub fn get_fill_border(&self) -> bool {
+    pub fn fills_border(&self) -> bool {
         self.0
             .get_optional("GstVideoConverter.fill-border")
             .expect("Wrong type")
@@ -326,7 +326,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.alpha-value", &v);
     }
 
-    pub fn get_alpha_value(&self) -> f64 {
+    pub fn alpha_value(&self) -> f64 {
         self.0
             .get_optional("GstVideoConverter.alpha-value")
             .expect("Wrong type")
@@ -337,7 +337,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.alpha-mode", &v);
     }
 
-    pub fn get_alpha_mode(&self) -> crate::VideoAlphaMode {
+    pub fn alpha_mode(&self) -> crate::VideoAlphaMode {
         self.0
             .get_optional("GstVideoConverter.alpha-mode")
             .expect("Wrong type")
@@ -348,7 +348,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.border-argb", &v);
     }
 
-    pub fn get_border_argb(&self) -> u32 {
+    pub fn border_argb(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.border-argb")
             .expect("Wrong type")
@@ -359,7 +359,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.chroma-mode", &v);
     }
 
-    pub fn get_chroma_mode(&self) -> crate::VideoChromaMode {
+    pub fn chroma_mode(&self) -> crate::VideoChromaMode {
         self.0
             .get_optional("GstVideoConverter.chroma-mode")
             .expect("Wrong type")
@@ -370,7 +370,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.matrix-mode", &v);
     }
 
-    pub fn get_matrix_mode(&self) -> crate::VideoMatrixMode {
+    pub fn matrix_mode(&self) -> crate::VideoMatrixMode {
         self.0
             .get_optional("GstVideoConverter.matrix-mode")
             .expect("Wrong type")
@@ -381,7 +381,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.gamma-mode", &v);
     }
 
-    pub fn get_gamma_mode(&self) -> crate::VideoGammaMode {
+    pub fn gamma_mode(&self) -> crate::VideoGammaMode {
         self.0
             .get_optional("GstVideoConverter.gamma-mode")
             .expect("Wrong type")
@@ -392,7 +392,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.primaries-mode", &v);
     }
 
-    pub fn get_primaries_mode(&self) -> crate::VideoPrimariesMode {
+    pub fn primaries_mode(&self) -> crate::VideoPrimariesMode {
         self.0
             .get_optional("GstVideoConverter.primaries-mode")
             .expect("Wrong type")
@@ -403,7 +403,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.threads", &v);
     }
 
-    pub fn get_threads(&self) -> u32 {
+    pub fn threads(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.threads")
             .expect("Wrong type")

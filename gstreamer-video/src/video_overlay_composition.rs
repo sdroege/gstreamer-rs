@@ -21,9 +21,9 @@ impl fmt::Debug for VideoOverlayRectangle {
 impl fmt::Debug for VideoOverlayRectangleRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoOverlayRectangle")
-            .field("flags", &self.get_flags())
-            .field("global_alpha", &self.get_global_alpha())
-            .field("render_rectangle", &self.get_render_rectangle())
+            .field("flags", &self.flags())
+            .field("global_alpha", &self.global_alpha())
+            .field("render_rectangle", &self.render_rectangle())
             .finish()
     }
 }
@@ -53,7 +53,7 @@ impl VideoOverlayRectangle {
 }
 
 impl VideoOverlayRectangleRef {
-    pub fn get_flags(&self) -> crate::VideoOverlayFormatFlags {
+    pub fn flags(&self) -> crate::VideoOverlayFormatFlags {
         unsafe {
             from_glib(ffi::gst_video_overlay_rectangle_get_flags(
                 self.as_mut_ptr(),
@@ -61,7 +61,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
-    pub fn get_global_alpha(&self) -> f32 {
+    pub fn global_alpha(&self) -> f32 {
         unsafe { ffi::gst_video_overlay_rectangle_get_global_alpha(self.as_mut_ptr()) }
     }
 
@@ -69,11 +69,11 @@ impl VideoOverlayRectangleRef {
         unsafe { ffi::gst_video_overlay_rectangle_set_global_alpha(self.as_mut_ptr(), alpha) }
     }
 
-    pub fn get_seqnum(&self) -> u32 {
+    pub fn seqnum(&self) -> u32 {
         unsafe { ffi::gst_video_overlay_rectangle_get_seqnum(self.as_mut_ptr()) }
     }
 
-    pub fn get_render_rectangle(&self) -> (i32, i32, u32, u32) {
+    pub fn render_rectangle(&self) -> (i32, i32, u32, u32) {
         unsafe {
             let mut render_x = mem::MaybeUninit::uninit();
             let mut render_y = mem::MaybeUninit::uninit();
@@ -242,7 +242,7 @@ impl VideoOverlayCompositionRef {
         }
     }
 
-    pub fn get_seqnum(&self) -> u32 {
+    pub fn seqnum(&self) -> u32 {
         unsafe { ffi::gst_video_overlay_composition_get_seqnum(self.as_mut_ptr()) }
     }
 

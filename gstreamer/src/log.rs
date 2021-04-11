@@ -84,7 +84,7 @@ impl DebugCategory {
         }
     }
 
-    pub fn get_threshold(self) -> crate::DebugLevel {
+    pub fn threshold(self) -> crate::DebugLevel {
         match self.0 {
             Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_threshold(cat.as_ptr())) },
             None => crate::DebugLevel::None,
@@ -103,14 +103,14 @@ impl DebugCategory {
         }
     }
 
-    pub fn get_color(self) -> crate::DebugColorFlags {
+    pub fn color(self) -> crate::DebugColorFlags {
         match self.0 {
             Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_color(cat.as_ptr())) },
             None => crate::DebugColorFlags::empty(),
         }
     }
 
-    pub fn get_name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a str {
         match self.0 {
             Some(cat) => unsafe {
                 CStr::from_ptr(ffi::gst_debug_category_get_name(cat.as_ptr()))
@@ -121,7 +121,7 @@ impl DebugCategory {
         }
     }
 
-    pub fn get_description<'a>(self) -> Option<&'a str> {
+    pub fn description<'a>(self) -> Option<&'a str> {
         match self.0 {
             Some(cat) => unsafe {
                 let ptr = ffi::gst_debug_category_get_description(cat.as_ptr());
@@ -181,9 +181,7 @@ unsafe impl Send for DebugCategory {}
 
 impl fmt::Debug for DebugCategory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("DebugCategory")
-            .field(&self.get_name())
-            .finish()
+        f.debug_tuple("DebugCategory").field(&self.name()).finish()
     }
 }
 
@@ -500,7 +498,7 @@ mod tests {
 
         let perf_cat = DebugCategory::get("GST_PERFORMANCE")
             .expect("Unable to find `DebugCategory` with name \"GST_PERFORMANCE\"");
-        assert_eq!(perf_cat.get_name(), CAT_PERFORMANCE.get_name());
+        assert_eq!(perf_cat.name(), CAT_PERFORMANCE.name());
     }
 
     #[test]

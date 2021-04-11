@@ -9,7 +9,7 @@ use glib::translate::*;
 use glib::IsA;
 
 impl Plugin {
-    pub fn get_cache_data(&self) -> Option<&StructureRef> {
+    pub fn cache_data(&self) -> Option<&StructureRef> {
         unsafe {
             let cache_data = ffi::gst_plugin_get_cache_data(self.to_glib_none().0);
             if cache_data.is_null() {
@@ -28,13 +28,13 @@ impl Plugin {
 }
 
 pub trait GstPluginExtManual: 'static {
-    fn get_plugin_flags(&self) -> PluginFlags;
+    fn plugin_flags(&self) -> PluginFlags;
 
-    fn get_plugin_name(&self) -> glib::GString;
+    fn plugin_name(&self) -> glib::GString;
 }
 
 impl<O: IsA<crate::Plugin>> GstPluginExtManual for O {
-    fn get_plugin_flags(&self) -> PluginFlags {
+    fn plugin_flags(&self) -> PluginFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
@@ -42,7 +42,7 @@ impl<O: IsA<crate::Plugin>> GstPluginExtManual for O {
         }
     }
 
-    fn get_plugin_name(&self) -> glib::GString {
+    fn plugin_name(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_name(self.as_ref().to_glib_none().0)) }
     }
 }

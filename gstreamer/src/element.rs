@@ -120,7 +120,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
 }
 
 pub trait ElementExtManual: 'static {
-    fn get_element_class(&self) -> &glib::Class<Element>;
+    fn element_class(&self) -> &glib::Class<Element>;
 
     fn change_state(&self, transition: StateChange)
         -> Result<StateChangeSuccess, StateChangeError>;
@@ -135,12 +135,12 @@ pub trait ElementExtManual: 'static {
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State);
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
 
-    fn get_current_state(&self) -> State {
-        self.get_state(ClockTime::from(0)).1
+    fn current_state(&self) -> State {
+        self.state(ClockTime::from(0)).1
     }
 
-    fn get_pending_state(&self) -> State {
-        self.get_state(ClockTime::from(0)).2
+    fn pending_state(&self) -> State {
+        self.state(ClockTime::from(0)).2
     }
 
     fn query(&self, query: &mut QueryRef) -> bool;
@@ -150,7 +150,7 @@ pub trait ElementExtManual: 'static {
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str>;
 
     fn get_pad_template(&self, name: &str) -> Option<PadTemplate>;
-    fn get_pad_template_list(&self) -> Vec<PadTemplate>;
+    fn pad_template_list(&self) -> Vec<PadTemplate>;
 
     #[allow(clippy::too_many_arguments)]
     fn message_full<T: crate::MessageErrorDomain>(
@@ -168,7 +168,7 @@ pub trait ElementExtManual: 'static {
 
     fn unset_element_flags(&self, flags: ElementFlags);
 
-    fn get_element_flags(&self) -> ElementFlags;
+    fn element_flags(&self) -> ElementFlags;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -192,9 +192,9 @@ pub trait ElementExtManual: 'static {
     fn iterate_sink_pads(&self) -> crate::Iterator<Pad>;
     fn iterate_src_pads(&self) -> crate::Iterator<Pad>;
 
-    fn get_pads(&self) -> Vec<Pad>;
-    fn get_sink_pads(&self) -> Vec<Pad>;
-    fn get_src_pads(&self) -> Vec<Pad>;
+    fn pads(&self) -> Vec<Pad>;
+    fn sink_pads(&self) -> Vec<Pad>;
+    fn src_pads(&self) -> Vec<Pad>;
 
     fn num_pads(&self) -> u16;
     fn num_sink_pads(&self) -> u16;
@@ -264,12 +264,12 @@ pub trait ElementExtManual: 'static {
         F: FnOnce(&Self) -> T + Send + 'static,
         T: Send + 'static;
 
-    fn get_current_running_time(&self) -> crate::ClockTime;
-    fn get_current_clock_time(&self) -> crate::ClockTime;
+    fn current_running_time(&self) -> crate::ClockTime;
+    fn current_clock_time(&self) -> crate::ClockTime;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
-    fn get_element_class(&self) -> &glib::Class<Element> {
+    fn element_class(&self) -> &glib::Class<Element> {
         unsafe {
             let klass = (*(self.as_ptr() as *mut glib::gobject_ffi::GTypeInstance)).g_class
                 as *const glib::Class<Element>;
@@ -353,15 +353,15 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
-        self.get_element_class().get_metadata(key)
+        self.element_class().get_metadata(key)
     }
 
     fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
-        self.get_element_class().get_pad_template(name)
+        self.element_class().get_pad_template(name)
     }
 
-    fn get_pad_template_list(&self) -> Vec<PadTemplate> {
-        self.get_element_class().get_pad_template_list()
+    fn pad_template_list(&self) -> Vec<PadTemplate> {
+        self.element_class().pad_template_list()
     }
 
     fn set_element_flags(&self, flags: ElementFlags) {
@@ -380,7 +380,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn get_element_flags(&self) -> ElementFlags {
+    fn element_flags(&self) -> ElementFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
@@ -513,7 +513,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn get_pads(&self) -> Vec<Pad> {
+    fn pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
@@ -521,7 +521,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn get_sink_pads(&self) -> Vec<Pad> {
+    fn sink_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
@@ -529,7 +529,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn get_src_pads(&self) -> Vec<Pad> {
+    fn src_pads(&self) -> Vec<Pad> {
         unsafe {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&elt.object.lock);
@@ -615,7 +615,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
                 dest_val.as_mut_ptr(),
@@ -638,8 +638,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
-                src_val.get_value(),
+                src_val.format().to_glib(),
+                src_val.value(),
                 dest_format.to_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -730,19 +730,19 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let start = start.into();
         let stop = stop.into();
 
-        assert_eq!(stop.get_format(), start.get_format());
+        assert_eq!(stop.format(), start.format());
 
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_element_seek(
                     self.as_ref().to_glib_none().0,
                     rate,
-                    start.get_format().to_glib(),
+                    start.format().to_glib(),
                     flags.to_glib(),
                     start_type.to_glib(),
-                    start.get_value(),
+                    start.value(),
                     stop_type.to_glib(),
-                    stop.get_value(),
+                    stop.value(),
                 ),
                 "Failed to seek",
             )
@@ -759,9 +759,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
             glib::result_from_gboolean!(
                 ffi::gst_element_seek_simple(
                     self.as_ref().to_glib_none().0,
-                    seek_pos.get_format().to_glib(),
+                    seek_pos.format().to_glib(),
                     seek_flags.to_glib(),
-                    seek_pos.get_value(),
+                    seek_pos.value(),
                 ),
                 "Failed to seek",
             )
@@ -820,21 +820,21 @@ impl<O: IsA<Element>> ElementExtManual for O {
         Box::pin(async move { receiver.await.expect("sender dropped") })
     }
 
-    fn get_current_running_time(&self) -> crate::ClockTime {
+    fn current_running_time(&self) -> crate::ClockTime {
         use crate::ElementExt;
 
-        let base_time = self.get_base_time();
-        let clock_time = self.get_current_clock_time();
+        let base_time = self.base_time();
+        let clock_time = self.current_clock_time();
 
         clock_time - base_time
     }
 
-    fn get_current_clock_time(&self) -> crate::ClockTime {
+    fn current_clock_time(&self) -> crate::ClockTime {
         use crate::ClockExt;
         use crate::ElementExt;
 
-        if let Some(clock) = self.get_clock() {
-            clock.get_time()
+        if let Some(clock) = self.clock() {
+            clock.time()
         } else {
             crate::CLOCK_TIME_NONE
         }
@@ -867,7 +867,7 @@ pub unsafe trait ElementClassExt {
         }
     }
 
-    fn get_pad_template_list(&self) -> Vec<PadTemplate> {
+    fn pad_template_list(&self) -> Vec<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
 
@@ -1391,25 +1391,25 @@ mod tests {
         let identity = crate::ElementFactory::make("identity", None).unwrap();
 
         let mut pad_names = identity
-            .get_pads()
+            .pads()
             .iter()
-            .map(|p| p.get_name())
+            .map(|p| p.name())
             .collect::<Vec<GString>>();
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("sink"), String::from("src")]);
 
         let mut pad_names = identity
-            .get_sink_pads()
+            .sink_pads()
             .iter()
-            .map(|p| p.get_name())
+            .map(|p| p.name())
             .collect::<Vec<GString>>();
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("sink")]);
 
         let mut pad_names = identity
-            .get_src_pads()
+            .src_pads()
             .iter()
-            .map(|p| p.get_name())
+            .map(|p| p.name())
             .collect::<Vec<GString>>();
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("src")]);
@@ -1424,7 +1424,7 @@ mod tests {
 
         let mut pad_names = Vec::new();
         identity.foreach_pad(|_element, pad| {
-            pad_names.push(pad.get_name());
+            pad_names.push(pad.name());
 
             true
         });

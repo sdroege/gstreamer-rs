@@ -21,7 +21,7 @@ impl RTSPToken {
 
         {
             let token = token.get_mut().unwrap();
-            let structure = token.get_mut_structure().unwrap();
+            let structure = token.structure_mut().unwrap();
 
             for &(f, v) in values {
                 structure.set_value(f, v.to_send_value());
@@ -42,7 +42,7 @@ impl RTSPTokenRef {
         }
     }
 
-    pub fn get_structure(&self) -> Option<gst::Structure> {
+    pub fn structure(&self) -> Option<gst::Structure> {
         unsafe { from_glib_none(ffi::gst_rtsp_token_get_structure(self.as_mut_ptr())) }
     }
 
@@ -55,7 +55,7 @@ impl RTSPTokenRef {
         }
     }
 
-    pub fn get_mut_structure(&mut self) -> Option<&mut gst::StructureRef> {
+    pub fn structure_mut(&mut self) -> Option<&mut gst::StructureRef> {
         unsafe {
             let structure = ffi::gst_rtsp_token_writable_structure(self.as_mut_ptr());
             if structure.is_null() {
@@ -76,7 +76,7 @@ impl fmt::Debug for RTSPToken {
 impl fmt::Debug for RTSPTokenRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("RTSPToken")
-            .field("structure", &self.get_structure())
+            .field("structure", &self.structure())
             .finish()
     }
 }

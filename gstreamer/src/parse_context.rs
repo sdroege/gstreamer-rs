@@ -29,7 +29,7 @@ impl ParseContext {
         unsafe { from_glib_full(ffi::gst_parse_context_new()) }
     }
 
-    pub fn get_missing_elements(&self) -> Vec<String> {
+    pub fn missing_elements(&self) -> Vec<String> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_parse_context_get_missing_elements(
                 mut_override(self.to_glib_none().0),

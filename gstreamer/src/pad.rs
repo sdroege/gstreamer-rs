@@ -136,7 +136,7 @@ pub trait PadExtManual: 'static {
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 
-    fn get_last_flow_result(&self) -> Result<FlowSuccess, FlowError>;
+    fn last_flow_result(&self) -> Result<FlowSuccess, FlowError>;
 
     fn iterate_internal_links(&self) -> crate::Iterator<Pad>;
     fn iterate_internal_links_default<P: IsA<crate::Object>>(
@@ -259,7 +259,7 @@ pub trait PadExtManual: 'static {
     fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
-    fn get_mode(&self) -> crate::PadMode;
+    fn mode(&self) -> crate::PadMode;
 
     fn sticky_events_foreach<F: FnMut(Event) -> Result<Option<Event>, Option<Event>>>(
         &self,
@@ -272,7 +272,7 @@ pub trait PadExtManual: 'static {
 
     fn unset_pad_flags(&self, flags: PadFlags);
 
-    fn get_pad_flags(&self) -> PadFlags;
+    fn pad_flags(&self) -> PadFlags;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -363,7 +363,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         buffer: &mut crate::BufferRef,
         size: u32,
     ) -> Result<(), FlowError> {
-        assert!(buffer.get_size() >= size as usize);
+        assert!(buffer.size() >= size as usize);
 
         unsafe {
             let mut buffer_ref = buffer.as_mut_ptr();
@@ -406,7 +406,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         buffer: &mut crate::BufferRef,
         size: u32,
     ) -> Result<(), FlowError> {
-        assert!(buffer.get_size() >= size as usize);
+        assert!(buffer.size() >= size as usize);
 
         unsafe {
             let mut buffer_ref = buffer.as_mut_ptr();
@@ -510,7 +510,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_last_flow_result(&self) -> Result<FlowSuccess, FlowError> {
+    fn last_flow_result(&self) -> Result<FlowSuccess, FlowError> {
         let ret: FlowReturn = unsafe {
             from_glib(ffi::gst_pad_get_last_flow_return(
                 self.as_ref().to_glib_none().0,
@@ -766,7 +766,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
                 dest_val.as_mut_ptr(),
@@ -789,7 +789,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 dest_format.to_glib(),
                 dest_val.as_mut_ptr(),
@@ -879,7 +879,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
                 dest_val.as_mut_ptr(),
@@ -903,8 +903,8 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
-                src_val.get_value(),
+                src_val.format().to_glib(),
+                src_val.value(),
                 dest_format.to_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -983,7 +983,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_mode(&self) -> crate::PadMode {
+    fn mode(&self) -> crate::PadMode {
         unsafe {
             let ptr: &ffi::GstPad = &*(self.as_ptr() as *const _);
             from_glib(ptr.mode)
@@ -1065,7 +1065,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_pad_flags(&self) -> PadFlags {
+    fn pad_flags(&self) -> PadFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
@@ -1682,7 +1682,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             type_,
             &[
                 ("name", &name),
-                ("direction", &templ.get_property_direction()),
+                ("direction", &templ.property_direction()),
                 ("template", templ),
             ],
         )
@@ -2113,9 +2113,9 @@ mod tests {
         assert_eq!(events.len(), 3);
         assert_eq!(buffers.len(), 2);
 
-        assert_eq!(events[0].get_type(), crate::EventType::Latency);
-        assert_eq!(events[1].get_type(), crate::EventType::StreamStart);
-        assert_eq!(events[2].get_type(), crate::EventType::Segment);
+        assert_eq!(events[0].type_(), crate::EventType::Latency);
+        assert_eq!(events[1].type_(), crate::EventType::StreamStart);
+        assert_eq!(events[2].type_(), crate::EventType::Segment);
 
         assert!(
             buffers.iter().all(|b| b.is_writable()),

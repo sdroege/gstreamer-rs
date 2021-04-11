@@ -80,7 +80,7 @@ fn example_main() {
         .set_state(gst::State::Paused)
         .expect("Unable to set the pipeline to the `Paused` state");
 
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     // Instead of using a main loop (like GLib's), we manually iterate over
     // GStreamer's bus messages in this example. We don't need any special
@@ -95,23 +95,19 @@ fn example_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 break;
             }
             MessageView::Toc(msg_toc) => {
                 // Some element found a ToC in the current media stream and told
                 // us by posting a message to GStreamer's bus.
-                let (toc, updated) = msg_toc.get_toc();
-                println!(
-                    "\nReceived toc: {:?} - updated: {}",
-                    toc.get_scope(),
-                    updated
-                );
+                let (toc, updated) = msg_toc.toc();
+                println!("\nReceived toc: {:?} - updated: {}", toc.scope(), updated);
                 // Get a list of tags that are ToC specific.
-                if let Some(tags) = toc.get_tags() {
+                if let Some(tags) = toc.tags() {
                     println!("- tags: {}", tags.to_string());
                 }
                 // ToCs do not have a fixed structure. Depending on the format that
@@ -121,34 +117,30 @@ fn example_main() {
                 // interpreting the ToC manually.
                 // In this example, we simply want to print the ToC structure, so
                 // we iterate everything and don't try to interpret anything.
-                for toc_entry in toc.get_entries() {
+                for toc_entry in toc.entries() {
                     // Every entry in a ToC has its own type. One type could for
                     // example be Chapter.
-                    println!(
-                        "\t{:?} - {}",
-                        toc_entry.get_entry_type(),
-                        toc_entry.get_uid()
-                    );
+                    println!("\t{:?} - {}", toc_entry.entry_type(), toc_entry.uid());
                     // Every ToC entry can have a set of timestamps (start, stop).
-                    if let Some((start, stop)) = toc_entry.get_start_stop_times() {
+                    if let Some((start, stop)) = toc_entry.start_stop_times() {
                         println!("\t- start: {}, stop: {}", start, stop);
                     }
                     // Every ToC entry can have tags to it.
-                    if let Some(tags) = toc_entry.get_tags() {
+                    if let Some(tags) = toc_entry.tags() {
                         println!("\t- tags: {}", tags.to_string());
                     }
                     // Every ToC entry can have a set of child entries.
                     // With this structure, you can create trees of arbitrary depth.
-                    for toc_sub_entry in toc_entry.get_sub_entries() {
+                    for toc_sub_entry in toc_entry.sub_entries() {
                         println!(
                             "\n\t\t{:?} - {}",
-                            toc_sub_entry.get_entry_type(),
-                            toc_sub_entry.get_uid()
+                            toc_sub_entry.entry_type(),
+                            toc_sub_entry.uid()
                         );
-                        if let Some((start, stop)) = toc_sub_entry.get_start_stop_times() {
+                        if let Some((start, stop)) = toc_sub_entry.start_stop_times() {
                             println!("\t\t- start: {}, stop: {}", start, stop);
                         }
-                        if let Some(tags) = toc_sub_entry.get_tags() {
+                        if let Some(tags) = toc_sub_entry.tags() {
                             println!("\t\t- tags: {:?}", tags.to_string());
                         }
                     }

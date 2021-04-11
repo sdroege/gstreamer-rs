@@ -21,7 +21,7 @@ fn send_value_as_str(v: &glib::SendValue) -> Option<String> {
 }
 
 fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
-    let caps_str = if let Some(caps) = info.get_caps() {
+    let caps_str = if let Some(caps) = info.caps() {
         if caps.is_fixed() {
             gst_pbutils::pb_utils_get_codec_description(&caps)
                 .unwrap_or_else(|_| glib::GString::from("unknown codec"))
@@ -32,7 +32,7 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
         glib::GString::from("")
     };
 
-    let stream_nick = info.get_stream_type_nick();
+    let stream_nick = info.stream_type_nick();
     println!(
         "{stream_nick:>indent$}: {caps_str}",
         stream_nick = stream_nick,
@@ -40,7 +40,7 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
         caps_str = caps_str
     );
 
-    if let Some(tags) = info.get_tags() {
+    if let Some(tags) = info.tags() {
         println!("{:indent$}Tags:", " ", indent = 2 * depth);
         for (tag, values) in tags.iter_generic() {
             let mut tags_str = format!(
@@ -68,10 +68,10 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
 fn print_topology(info: &DiscovererStreamInfo, depth: usize) {
     print_stream_info(info, depth);
 
-    if let Some(next) = info.get_next() {
+    if let Some(next) = info.next() {
         print_topology(&next, depth + 1);
     } else if let Some(container_info) = info.downcast_ref::<DiscovererContainerInfo>() {
-        for stream in container_info.get_streams() {
+        for stream in container_info.streams() {
             print_topology(&stream, depth + 1);
         }
     }
@@ -82,8 +82,8 @@ fn on_discovered(
     discoverer_info: &DiscovererInfo,
     error: Option<&glib::Error>,
 ) {
-    let uri = discoverer_info.get_uri().unwrap();
-    match discoverer_info.get_result() {
+    let uri = discoverer_info.uri().unwrap();
+    match discoverer_info.result() {
         DiscovererResult::Ok => println!("Discovered {}", uri),
         DiscovererResult::UriInvalid => println!("Invalid uri {}", uri),
         DiscovererResult::Error => {
@@ -96,20 +96,20 @@ fn on_discovered(
         DiscovererResult::Timeout => println!("Timeout"),
         DiscovererResult::Busy => println!("Busy"),
         DiscovererResult::MissingPlugins => {
-            if let Some(s) = discoverer_info.get_misc() {
+            if let Some(s) = discoverer_info.misc() {
                 println!("{}", s);
             }
         }
         _ => println!("Unknown result"),
     }
 
-    if discoverer_info.get_result() != DiscovererResult::Ok {
+    if discoverer_info.result() != DiscovererResult::Ok {
         return;
     }
 
-    println!("Duration: {}", discoverer_info.get_duration());
+    println!("Duration: {}", discoverer_info.duration());
 
-    if let Some(tags) = discoverer_info.get_tags() {
+    if let Some(tags) = discoverer_info.tags() {
         println!("Tags:");
         for (tag, values) in tags.iter_generic() {
             print!("  {}: ", tag);
@@ -123,7 +123,7 @@ fn on_discovered(
 
     println!(
         "Seekable: {}",
-        if discoverer_info.get_seekable() {
+        if discoverer_info.is_seekable() {
             "yes"
         } else {
             "no"
@@ -132,7 +132,7 @@ fn on_discovered(
 
     println!("Stream information:");
 
-    if let Some(stream_info) = discoverer_info.get_stream_info() {
+    if let Some(stream_info) = discoverer_info.stream_info() {
         print_topology(&stream_info, 1);
     }
 }

@@ -24,7 +24,7 @@ impl Context {
 }
 
 impl ContextRef {
-    pub fn get_context_type(&self) -> &str {
+    pub fn context_type(&self) -> &str {
         unsafe {
             let raw = ffi::gst_context_get_context_type(self.as_mut_ptr());
             CStr::from_ptr(raw).to_str().unwrap()
@@ -44,11 +44,11 @@ impl ContextRef {
         unsafe { from_glib(ffi::gst_context_is_persistent(self.as_mut_ptr())) }
     }
 
-    pub fn get_structure(&self) -> &StructureRef {
+    pub fn structure(&self) -> &StructureRef {
         unsafe { StructureRef::from_glib_borrow(ffi::gst_context_get_structure(self.as_mut_ptr())) }
     }
 
-    pub fn get_mut_structure(&mut self) -> &mut StructureRef {
+    pub fn structure_mut(&mut self) -> &mut StructureRef {
         unsafe {
             StructureRef::from_glib_borrow_mut(ffi::gst_context_writable_structure(
                 self.as_mut_ptr(),
@@ -66,8 +66,8 @@ impl fmt::Debug for Context {
 impl fmt::Debug for ContextRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Context")
-            .field("type", &self.get_context_type())
-            .field("structure", &self.get_structure())
+            .field("type", &self.context_type())
+            .field("structure", &self.structure())
             .finish()
     }
 }

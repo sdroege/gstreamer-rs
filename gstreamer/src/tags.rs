@@ -526,7 +526,7 @@ impl TagListRef {
         }
     }
 
-    pub fn get_scope(&self) -> TagScope {
+    pub fn scope(&self) -> TagScope {
         unsafe { from_glib(ffi::gst_tag_list_get_scope(self.as_ptr())) }
     }
 
@@ -977,12 +977,12 @@ mod tests {
         crate::init().unwrap();
 
         let mut tags = TagList::new();
-        assert_eq!(tags.get_scope(), TagScope::Stream);
+        assert_eq!(tags.scope(), TagScope::Stream);
         {
             let tags = tags.get_mut().unwrap();
             tags.set_scope(TagScope::Global);
         }
-        assert_eq!(tags.get_scope(), TagScope::Global);
+        assert_eq!(tags.scope(), TagScope::Global);
     }
 
     #[test]

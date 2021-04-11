@@ -22,7 +22,7 @@ impl VideoTimeCodeInterval {
         }
     }
 
-    pub fn get_hours(&self) -> u32 {
+    pub fn hours(&self) -> u32 {
         self.0.hours
     }
 
@@ -30,7 +30,7 @@ impl VideoTimeCodeInterval {
         self.0.hours = hours
     }
 
-    pub fn get_minutes(&self) -> u32 {
+    pub fn minutes(&self) -> u32 {
         self.0.minutes
     }
 
@@ -39,7 +39,7 @@ impl VideoTimeCodeInterval {
         self.0.minutes = minutes
     }
 
-    pub fn get_seconds(&self) -> u32 {
+    pub fn seconds(&self) -> u32 {
         self.0.seconds
     }
 
@@ -48,7 +48,7 @@ impl VideoTimeCodeInterval {
         self.0.seconds = seconds
     }
 
-    pub fn get_frames(&self) -> u32 {
+    pub fn frames(&self) -> u32 {
         self.0.frames
     }
 

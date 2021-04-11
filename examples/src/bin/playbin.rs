@@ -101,7 +101,7 @@ fn example_main() {
 
     // The playbin element itself is a playbin, so it can be used as one, despite being
     // created from an element factory.
-    let bus = playbin.get_bus().unwrap();
+    let bus = playbin.bus().unwrap();
 
     playbin
         .set_state(gst::State::Playing)
@@ -115,20 +115,17 @@ fn example_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 break;
             }
             MessageView::StateChanged(state_changed) =>
             // We are only interested in state-changed messages from playbin
             {
-                if state_changed
-                    .get_src()
-                    .map(|s| s == playbin)
-                    .unwrap_or(false)
-                    && state_changed.get_current() == gst::State::Playing
+                if state_changed.src().map(|s| s == playbin).unwrap_or(false)
+                    && state_changed.current() == gst::State::Playing
                 {
                     // Generate a dot graph of the pipeline to GST_DEBUG_DUMP_DOT_DIR if defined
                     let bin_ref = playbin.downcast_ref::<gst::Bin>().unwrap();

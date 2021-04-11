@@ -15,7 +15,7 @@ fn print_caps(caps: &gst::Caps, prefix: &str) {
     }
 
     for structure in caps.iter() {
-        println!("{}{}", prefix, structure.get_name());
+        println!("{}{}", prefix, structure.name());
         for (field, value) in structure.iter() {
             println!(
                 "{}  {}:{}",
@@ -34,12 +34,12 @@ fn print_pad_template_information(factory: &gst::ElementFactory) {
         .expect("Failed to get long-name of element factory.");
     println!("Pad Template for {}:", long_name);
 
-    if factory.get_num_pad_templates() == 0u32 {
+    if factory.num_pad_templates() == 0u32 {
         println!("  None");
         return;
     }
 
-    for pad_template in factory.get_static_pad_templates() {
+    for pad_template in factory.static_pad_templates() {
         if pad_template.direction() == gst::PadDirection::Src {
             println!("  SRC template: '{}'", pad_template.name_template());
         } else if pad_template.direction() == gst::PadDirection::Sink {
@@ -58,7 +58,7 @@ fn print_pad_template_information(factory: &gst::ElementFactory) {
             println!("  Availability: UNKNOWN!!!");
         }
 
-        let caps = pad_template.get_caps();
+        let caps = pad_template.caps();
         println!("  Capabilities:");
         print_caps(&caps, "    ");
     }
@@ -70,9 +70,7 @@ fn print_pad_capabilities(element: &gst::Element, pad_name: &str) {
         .expect("Could not retrieve pad");
 
     println!("Caps for the {} pad:", pad_name);
-    let caps = pad
-        .get_current_caps()
-        .unwrap_or_else(|| pad.query_caps(None));
+    let caps = pad.current_caps().unwrap_or_else(|| pad.query_caps(None));
     print_caps(&caps, "      ");
 }
 
@@ -117,7 +115,7 @@ fn tutorial_main() {
     }
 
     // Wait until error, EOS or State Change
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -126,9 +124,9 @@ fn tutorial_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error received from element {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 break;
             }
@@ -139,13 +137,9 @@ fn tutorial_main() {
             MessageView::StateChanged(state_changed) =>
             // We are only interested in state-changed messages from the pipeline
             {
-                if state_changed
-                    .get_src()
-                    .map(|s| s == pipeline)
-                    .unwrap_or(false)
-                {
-                    let new_state = state_changed.get_current();
-                    let old_state = state_changed.get_old();
+                if state_changed.src().map(|s| s == pipeline).unwrap_or(false) {
+                    let new_state = state_changed.current();
+                    let old_state = state_changed.old();
 
                     println!(
                         "Pipeline state changed from {:?} to {:?}",

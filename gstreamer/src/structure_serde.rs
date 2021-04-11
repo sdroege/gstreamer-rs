@@ -54,7 +54,7 @@ impl<'a> Serialize for StructureForIter<'a> {
 impl Serialize for StructureRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut tup = serializer.serialize_tuple(2)?;
-        tup.serialize_element(self.get_name())?;
+        tup.serialize_element(self.name())?;
         tup.serialize_element(&StructureForIter(self))?;
         tup.end()
     }

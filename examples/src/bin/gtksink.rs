@@ -98,7 +98,7 @@ fn create_ui(app: &gtk::Application) {
         glib::Continue(true)
     });
 
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     pipeline
         .set_state(gst::State::Playing)
@@ -118,9 +118,9 @@ fn create_ui(app: &gtk::Application) {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 app.quit();
             }

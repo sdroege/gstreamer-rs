@@ -134,7 +134,7 @@ mini_object_wrapper!(Event, EventRef, ffi::GstEvent, || {
 });
 
 impl EventRef {
-    pub fn get_seqnum(&self) -> Seqnum {
+    pub fn seqnum(&self) -> Seqnum {
         unsafe {
             let seqnum = ffi::gst_event_get_seqnum(self.as_mut_ptr());
             assert_ne!(seqnum, 0);
@@ -142,7 +142,7 @@ impl EventRef {
         }
     }
 
-    pub fn get_running_time_offset(&self) -> i64 {
+    pub fn running_time_offset(&self) -> i64 {
         unsafe { ffi::gst_event_get_running_time_offset(self.as_mut_ptr()) }
     }
 
@@ -150,7 +150,7 @@ impl EventRef {
         unsafe { ffi::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
     }
 
-    pub fn get_structure(&self) -> Option<&StructureRef> {
+    pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_event_get_structure(self.as_mut_ptr());
             if structure.is_null() {
@@ -168,26 +168,26 @@ impl EventRef {
     }
 
     pub fn is_upstream(&self) -> bool {
-        self.get_type().is_upstream()
+        self.type_().is_upstream()
     }
 
     pub fn is_downstream(&self) -> bool {
-        self.get_type().is_downstream()
+        self.type_().is_downstream()
     }
 
     pub fn is_serialized(&self) -> bool {
-        self.get_type().is_serialized()
+        self.type_().is_serialized()
     }
 
     pub fn is_sticky(&self) -> bool {
-        self.get_type().is_sticky()
+        self.type_().is_sticky()
     }
 
     pub fn is_sticky_multi(&self) -> bool {
-        self.get_type().is_sticky_multi()
+        self.type_().is_sticky_multi()
     }
 
-    pub fn get_type(&self) -> EventType {
+    pub fn type_(&self) -> EventType {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
@@ -243,9 +243,9 @@ impl fmt::Debug for EventRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Event")
             .field("ptr", unsafe { &self.as_ptr() })
-            .field("type", &self.get_type().get_name())
-            .field("seqnum", &self.get_seqnum())
-            .field("structure", &self.get_structure())
+            .field("type", &self.type_().name())
+            .field("seqnum", &self.seqnum())
+            .field("structure", &self.structure())
             .finish()
     }
 }
@@ -327,7 +327,7 @@ impl<'a> FlushStop<'a> {
         FlushStopBuilder::new(reset_time)
     }
 
-    pub fn get_reset_time(&self) -> bool {
+    pub fn resets_time(&self) -> bool {
         unsafe {
             let mut reset_time = mem::MaybeUninit::uninit();
 
@@ -351,7 +351,7 @@ impl<'a> StreamStart<'a> {
         StreamStartBuilder::new(stream_id)
     }
 
-    pub fn get_stream_id(&self) -> &'a str {
+    pub fn stream_id(&self) -> &'a str {
         unsafe {
             let mut stream_id = ptr::null();
 
@@ -360,7 +360,7 @@ impl<'a> StreamStart<'a> {
         }
     }
 
-    pub fn get_stream_flags(&self) -> crate::StreamFlags {
+    pub fn stream_flags(&self) -> crate::StreamFlags {
         unsafe {
             let mut stream_flags = mem::MaybeUninit::uninit();
 
@@ -370,7 +370,7 @@ impl<'a> StreamStart<'a> {
         }
     }
 
-    pub fn get_group_id(&self) -> Option<GroupId> {
+    pub fn group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
@@ -387,7 +387,7 @@ impl<'a> StreamStart<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream(&self) -> Option<crate::Stream> {
+    pub fn stream(&self) -> Option<crate::Stream> {
         unsafe {
             let mut stream = ptr::null_mut();
             ffi::gst_event_parse_stream(self.as_mut_ptr(), &mut stream);
@@ -409,7 +409,7 @@ impl<'a> Caps<'a> {
         CapsBuilder::new(caps)
     }
 
-    pub fn get_caps(&self) -> &'a crate::CapsRef {
+    pub fn caps(&self) -> &'a crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
 
@@ -418,8 +418,8 @@ impl<'a> Caps<'a> {
         }
     }
 
-    pub fn get_caps_owned(&self) -> crate::Caps {
-        unsafe { from_glib_none(self.get_caps().as_ptr()) }
+    pub fn caps_owned(&self) -> crate::Caps {
+        unsafe { from_glib_none(self.caps().as_ptr()) }
     }
 }
 
@@ -438,7 +438,7 @@ impl<'a> Segment<'a> {
         SegmentBuilder::new(segment.as_ref())
     }
 
-    pub fn get_segment(&self) -> &'a crate::Segment {
+    pub fn segment(&self) -> &'a crate::Segment {
         unsafe {
             let mut segment = ptr::null();
 
@@ -467,7 +467,7 @@ impl<'a> StreamCollection<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream_collection(&self) -> crate::StreamCollection {
+    pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
 
@@ -490,7 +490,7 @@ impl<'a> Tag<'a> {
         TagBuilder::new(tags)
     }
 
-    pub fn get_tag(&self) -> &'a crate::TagListRef {
+    pub fn tag(&self) -> &'a crate::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
 
@@ -499,8 +499,8 @@ impl<'a> Tag<'a> {
         }
     }
 
-    pub fn get_tag_owned(&self) -> crate::TagList {
-        unsafe { from_glib_none(self.get_tag().as_ptr()) }
+    pub fn tag_owned(&self) -> crate::TagList {
+        unsafe { from_glib_none(self.tag().as_ptr()) }
     }
 }
 
@@ -520,7 +520,7 @@ impl<'a> BufferSize<'a> {
         assert_initialized_main_thread!();
         let minsize = minsize.into();
         let maxsize = maxsize.into();
-        assert_eq!(minsize.get_format(), maxsize.get_format());
+        assert_eq!(minsize.format(), maxsize.format());
 
         BufferSizeBuilder::new(minsize, maxsize, r#async)
     }
@@ -561,7 +561,7 @@ impl<'a> SinkMessage<'a> {
         SinkMessageBuilder::new(name, msg)
     }
 
-    pub fn get_message(&self) -> crate::Message {
+    pub fn message(&self) -> crate::Message {
         unsafe {
             let mut msg = ptr::null_mut();
 
@@ -590,7 +590,7 @@ impl<'a> StreamGroupDone<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_group_id(&self) -> GroupId {
+    pub fn group_id(&self) -> GroupId {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
@@ -632,7 +632,7 @@ impl<'a> Toc<'a> {
         TocBuilder::new(toc, updated)
     }
 
-    pub fn get_toc(&self) -> (&'a crate::TocRef, bool) {
+    pub fn toc(&self) -> (&'a crate::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::MaybeUninit::uninit();
@@ -645,9 +645,9 @@ impl<'a> Toc<'a> {
         }
     }
 
-    pub fn get_toc_owned(&self) -> (crate::Toc, bool) {
+    pub fn toc_owned(&self) -> (crate::Toc, bool) {
         unsafe {
-            let (toc, updated) = self.get_toc();
+            let (toc, updated) = self.toc();
             (from_glib_none(toc.as_ptr()), updated)
         }
     }
@@ -835,7 +835,7 @@ impl<'a> Seek<'a> {
         assert_initialized_main_thread!();
         let start = start.into();
         let stop = stop.into();
-        assert_eq!(start.get_format(), stop.get_format());
+        assert_eq!(start.format(), stop.format());
 
         SeekBuilder::new(rate, flags, start_type, start, stop_type, stop)
     }
@@ -883,7 +883,7 @@ impl<'a> Seek<'a> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_trickmode_interval(&self) -> crate::ClockTime {
+    pub fn trickmode_interval(&self) -> crate::ClockTime {
         unsafe {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
 
@@ -924,7 +924,7 @@ impl<'a> Latency<'a> {
         LatencyBuilder::new(latency)
     }
 
-    pub fn get_latency(&self) -> crate::ClockTime {
+    pub fn latency(&self) -> crate::ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
 
@@ -1015,7 +1015,7 @@ impl<'a> TocSelect<'a> {
         TocSelectBuilder::new(uid)
     }
 
-    pub fn get_uid(&self) -> &'a str {
+    pub fn uid(&self) -> &'a str {
         unsafe {
             let mut uid = ptr::null_mut();
 
@@ -1045,7 +1045,7 @@ impl<'a> SelectStreams<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_streams(&self) -> Vec<String> {
+    pub fn streams(&self) -> Vec<String> {
         unsafe {
             let mut streams = ptr::null_mut();
 
@@ -1428,9 +1428,9 @@ impl<'a> BufferSizeBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_buffer_size(
-        s.minsize.get_format().to_glib(),
-        s.minsize.get_value(),
-        s.maxsize.get_value(),
+        s.minsize.format().to_glib(),
+        s.minsize.value(),
+        s.maxsize.value(),
         s.r#async.to_glib(),
     ));
 }
@@ -1564,8 +1564,8 @@ impl<'a> SegmentDoneBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment_done(
-        s.position.get_format().to_glib(),
-        s.position.get_value()
+        s.position.format().to_glib(),
+        s.position.value()
     ));
 }
 
@@ -1658,12 +1658,12 @@ impl<'a> SeekBuilder<'a> {
         {
             let ev = ffi::gst_event_new_seek(
                 s.rate,
-                s.start.get_format().to_glib(),
+                s.start.format().to_glib(),
                 s.flags.to_glib(),
                 s.start_type.to_glib(),
-                s.start.get_value(),
+                s.start.value(),
                 s.stop_type.to_glib(),
-                s.stop.get_value(),
+                s.stop.value(),
             );
 
             #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -1734,8 +1734,8 @@ impl<'a> StepBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_step(
-        s.amount.get_format().to_glib(),
-        s.amount.get_value() as u64,
+        s.amount.format().to_glib(),
+        s.amount.value() as u64,
         s.rate,
         s.flush.to_glib(),
         s.intermediate.to_glib(),
@@ -1933,7 +1933,7 @@ mod tests {
         match flush_start_evt.view() {
             EventView::FlushStart(flush_start_evt) => {
                 assert!(!flush_start_evt.is_sticky());
-                assert!(flush_start_evt.get_structure().is_none());
+                assert!(flush_start_evt.structure().is_none());
             }
             _ => panic!("flush_start_evt.view() is not an EventView::FlushStart(_)"),
         }
@@ -1943,8 +1943,8 @@ mod tests {
             .build();
         match flush_start_evt.view() {
             EventView::FlushStart(flush_start_evt) => {
-                assert!(flush_start_evt.get_structure().is_some());
-                if let Some(other_fields) = flush_start_evt.get_structure() {
+                assert!(flush_start_evt.structure().is_some());
+                if let Some(other_fields) = flush_start_evt.structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }
             }
@@ -1957,9 +1957,9 @@ mod tests {
             .build();
         match flush_stop_evt.view() {
             EventView::FlushStop(flush_stop_evt) => {
-                assert_eq!(flush_stop_evt.get_reset_time(), true);
-                assert!(flush_stop_evt.get_structure().is_some());
-                if let Some(other_fields) = flush_stop_evt.get_structure() {
+                assert_eq!(flush_stop_evt.resets_time(), true);
+                assert!(flush_stop_evt.structure().is_some());
+                if let Some(other_fields) = flush_stop_evt.structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }
             }
@@ -1979,7 +1979,7 @@ mod tests {
             structure.set("test", &42u32);
         }
 
-        let structure = flush_start_evt.get_structure().unwrap();
+        let structure = flush_start_evt.structure().unwrap();
         assert_eq!(structure.get_some("test"), Ok(42u32));
     }
 }

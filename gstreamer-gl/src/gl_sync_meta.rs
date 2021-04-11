@@ -28,7 +28,7 @@ impl GLSyncMeta {
         }
     }
 
-    pub fn get_context(&self) -> GLContext {
+    pub fn context(&self) -> GLContext {
         unsafe { from_glib_none(self.0.context) }
     }
 
@@ -71,7 +71,7 @@ unsafe impl MetaAPI for GLSyncMeta {
 impl fmt::Debug for GLSyncMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("GLSyncMeta")
-            .field("context", &self.get_context())
+            .field("context", &self.context())
             .finish()
     }
 }

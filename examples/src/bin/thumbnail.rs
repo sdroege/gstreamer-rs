@@ -68,7 +68,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
             .new_sample(move |appsink| {
                 // Pull the sample in question out of the appsink's buffer.
                 let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
-                let buffer = sample.get_buffer().ok_or_else(|| {
+                let buffer = sample.buffer().ok_or_else(|| {
                     element_error!(
                         appsink,
                         gst::ResourceError::Failed,
@@ -78,7 +78,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
                     gst::FlowError::Error
                 })?;
 
-                let caps = sample.get_caps().expect("Sample without caps");
+                let caps = sample.caps().expect("Sample without caps");
                 let info = gst_video::VideoInfo::from_caps(&caps).expect("Failed to parse caps");
 
                 // Make sure that we only get a single buffer
@@ -156,7 +156,7 @@ fn main_loop(pipeline: gst::Pipeline, position: u64) -> Result<(), Error> {
     pipeline.set_state(gst::State::Paused)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     let mut seeked = false;
@@ -194,12 +194,12 @@ fn main_loop(pipeline: gst::Pipeline, position: u64) -> Result<(), Error> {
                 pipeline.set_state(gst::State::Null)?;
                 return Err(ErrorMessage {
                     src: msg
-                        .get_src()
-                        .map(|s| String::from(s.get_path_string()))
+                        .src()
+                        .map(|s| String::from(s.path_string()))
                         .unwrap_or_else(|| String::from("None")),
-                    error: err.get_error().to_string(),
-                    debug: err.get_debug(),
-                    source: err.get_error(),
+                    error: err.error().to_string(),
+                    debug: err.debug(),
+                    source: err.error(),
                 }
                 .into());
             }

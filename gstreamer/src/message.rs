@@ -26,11 +26,11 @@ mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
 });
 
 impl MessageRef {
-    pub fn get_src(&self) -> Option<Object> {
+    pub fn src(&self) -> Option<Object> {
         unsafe { from_glib_none((*self.as_ptr()).src) }
     }
 
-    pub fn get_seqnum(&self) -> Seqnum {
+    pub fn seqnum(&self) -> Seqnum {
         unsafe {
             let seqnum = ffi::gst_message_get_seqnum(self.as_mut_ptr());
 
@@ -53,7 +53,7 @@ impl MessageRef {
         }
     }
 
-    pub fn get_structure(&self) -> Option<&StructureRef> {
+    pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_message_get_structure(self.as_mut_ptr());
             if structure.is_null() {
@@ -117,7 +117,7 @@ impl MessageRef {
         }
     }
 
-    pub fn get_type(&self) -> MessageType {
+    pub fn type_(&self) -> MessageType {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 }
@@ -152,12 +152,12 @@ impl fmt::Debug for MessageRef {
             .field(
                 "src",
                 &self
-                    .get_src()
-                    .map(|s| s.get_name())
+                    .src()
+                    .map(|s| s.name())
                     .as_ref()
                     .map(glib::GString::as_str),
             )
-            .field("structure", &self.get_structure())
+            .field("structure", &self.structure())
             .finish()
     }
 }
@@ -248,7 +248,7 @@ impl<'a> Error<'a> {
         ErrorBuilder::new(error, message)
     }
 
-    pub fn get_error(&self) -> glib::Error {
+    pub fn error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
@@ -258,7 +258,7 @@ impl<'a> Error<'a> {
         }
     }
 
-    pub fn get_debug(&self) -> Option<String> {
+    pub fn debug(&self) -> Option<String> {
         unsafe {
             let mut debug = ptr::null_mut();
 
@@ -270,7 +270,7 @@ impl<'a> Error<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_details(&self) -> Option<&StructureRef> {
+    pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
 
@@ -298,7 +298,7 @@ impl<'a> Warning<'a> {
         WarningBuilder::new(error, message)
     }
 
-    pub fn get_error(&self) -> glib::Error {
+    pub fn error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
@@ -308,7 +308,7 @@ impl<'a> Warning<'a> {
         }
     }
 
-    pub fn get_debug(&self) -> Option<String> {
+    pub fn debug(&self) -> Option<String> {
         unsafe {
             let mut debug = ptr::null_mut();
 
@@ -320,7 +320,7 @@ impl<'a> Warning<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_details(&self) -> Option<&StructureRef> {
+    pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
 
@@ -348,7 +348,7 @@ impl<'a> Info<'a> {
         InfoBuilder::new(error, message)
     }
 
-    pub fn get_error(&self) -> glib::Error {
+    pub fn error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
@@ -358,7 +358,7 @@ impl<'a> Info<'a> {
         }
     }
 
-    pub fn get_debug(&self) -> Option<String> {
+    pub fn debug(&self) -> Option<String> {
         unsafe {
             let mut debug = ptr::null_mut();
 
@@ -370,7 +370,7 @@ impl<'a> Info<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_details(&self) -> Option<&StructureRef> {
+    pub fn details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
 
@@ -398,7 +398,7 @@ impl<'a> Tag<'a> {
         TagBuilder::new(tags)
     }
 
-    pub fn get_tags(&self) -> TagList {
+    pub fn tags(&self) -> TagList {
         unsafe {
             let mut tags = ptr::null_mut();
             ffi::gst_message_parse_tag(self.as_mut_ptr(), &mut tags);
@@ -420,7 +420,7 @@ impl<'a> Buffering<'a> {
         BufferingBuilder::new(percent)
     }
 
-    pub fn get_percent(&self) -> i32 {
+    pub fn percent(&self) -> i32 {
         unsafe {
             let mut p = mem::MaybeUninit::uninit();
             ffi::gst_message_parse_buffering(self.as_mut_ptr(), p.as_mut_ptr());
@@ -428,7 +428,7 @@ impl<'a> Buffering<'a> {
         }
     }
 
-    pub fn get_buffering_stats(&self) -> (crate::BufferingMode, i32, i32, i64) {
+    pub fn buffering_stats(&self) -> (crate::BufferingMode, i32, i32, i64) {
         unsafe {
             let mut mode = mem::MaybeUninit::uninit();
             let mut avg_in = mem::MaybeUninit::uninit();
@@ -470,7 +470,7 @@ impl<'a> StateChanged<'a> {
         StateChangedBuilder::new(old, new, pending)
     }
 
-    pub fn get_old(&self) -> crate::State {
+    pub fn old(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
@@ -485,7 +485,7 @@ impl<'a> StateChanged<'a> {
         }
     }
 
-    pub fn get_current(&self) -> crate::State {
+    pub fn current(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
@@ -500,7 +500,7 @@ impl<'a> StateChanged<'a> {
         }
     }
 
-    pub fn get_pending(&self) -> crate::State {
+    pub fn pending(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
@@ -633,7 +633,7 @@ impl<'a> ClockProvide<'a> {
         ClockProvideBuilder::new(clock, ready)
     }
 
-    pub fn get_clock(&self) -> Option<crate::Clock> {
+    pub fn clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
@@ -643,7 +643,7 @@ impl<'a> ClockProvide<'a> {
         }
     }
 
-    pub fn get_ready(&self) -> bool {
+    pub fn is_ready(&self) -> bool {
         unsafe {
             let mut ready = mem::MaybeUninit::uninit();
 
@@ -671,7 +671,7 @@ impl<'a> ClockLost<'a> {
         ClockLostBuilder::new(clock)
     }
 
-    pub fn get_clock(&self) -> Option<crate::Clock> {
+    pub fn clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
@@ -695,7 +695,7 @@ impl<'a> NewClock<'a> {
         NewClockBuilder::new(clock)
     }
 
-    pub fn get_clock(&self) -> Option<crate::Clock> {
+    pub fn clock(&self) -> Option<crate::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
@@ -769,7 +769,7 @@ impl<'a> StreamStatus<'a> {
         }
     }
 
-    pub fn get_stream_status_object(&self) -> Option<glib::Value> {
+    pub fn stream_status_object(&self) -> Option<glib::Value> {
         unsafe {
             let value = ffi::gst_message_get_stream_status_object(self.as_mut_ptr());
 
@@ -921,7 +921,7 @@ impl<'a> AsyncDone<'a> {
         AsyncDoneBuilder::new(running_time)
     }
 
-    pub fn get_running_time(&self) -> crate::ClockTime {
+    pub fn running_time(&self) -> crate::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
 
@@ -945,7 +945,7 @@ impl<'a> RequestState<'a> {
         RequestStateBuilder::new(state)
     }
 
-    pub fn get_requested_state(&self) -> crate::State {
+    pub fn requested_state(&self) -> crate::State {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
 
@@ -1074,7 +1074,7 @@ impl<'a> Qos<'a> {
         }
     }
 
-    pub fn get_values(&self) -> (i64, f64, i32) {
+    pub fn values(&self) -> (i64, f64, i32) {
         unsafe {
             let mut jitter = mem::MaybeUninit::uninit();
             let mut proportion = mem::MaybeUninit::uninit();
@@ -1095,7 +1095,7 @@ impl<'a> Qos<'a> {
         }
     }
 
-    pub fn get_stats(&self) -> (GenericFormattedValue, GenericFormattedValue) {
+    pub fn stats(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut format = mem::MaybeUninit::uninit();
             let mut processed = mem::MaybeUninit::uninit();
@@ -1175,7 +1175,7 @@ impl<'a> Toc<'a> {
         TocBuilder::new(toc, updated)
     }
 
-    pub fn get_toc(&self) -> (crate::Toc, bool) {
+    pub fn toc(&self) -> (crate::Toc, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::MaybeUninit::uninit();
@@ -1198,7 +1198,7 @@ impl<'a> ResetTime<'a> {
         ResetTimeBuilder::new(running_time)
     }
 
-    pub fn get_running_time(&self) -> crate::ClockTime {
+    pub fn running_time(&self) -> crate::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
 
@@ -1222,7 +1222,7 @@ impl<'a> StreamStart<'a> {
         StreamStartBuilder::new()
     }
 
-    pub fn get_group_id(&self) -> Option<GroupId> {
+    pub fn group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
 
@@ -1256,7 +1256,7 @@ impl<'a> NeedContext<'a> {
         NeedContextBuilder::new(context_type)
     }
 
-    pub fn get_context_type(&self) -> &str {
+    pub fn context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
 
@@ -1280,7 +1280,7 @@ impl<'a> HaveContext<'a> {
         HaveContextBuilder::new(context)
     }
 
-    pub fn get_context(&self) -> crate::Context {
+    pub fn context(&self) -> crate::Context {
         unsafe {
             let mut context = ptr::null_mut();
             ffi::gst_message_parse_have_context(self.as_mut_ptr(), &mut context);
@@ -1302,7 +1302,7 @@ impl<'a> DeviceAdded<'a> {
         DeviceAddedBuilder::new(device)
     }
 
-    pub fn get_device(&self) -> crate::Device {
+    pub fn device(&self) -> crate::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
@@ -1326,7 +1326,7 @@ impl<'a> DeviceRemoved<'a> {
         DeviceRemovedBuilder::new(device)
     }
 
-    pub fn get_device(&self) -> crate::Device {
+    pub fn device(&self) -> crate::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
@@ -1401,7 +1401,7 @@ impl<'a> StreamCollection<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream_collection(&self) -> crate::StreamCollection {
+    pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
@@ -1431,7 +1431,7 @@ impl<'a> StreamsSelected<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_stream_collection(&self) -> crate::StreamCollection {
+    pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
@@ -1443,7 +1443,7 @@ impl<'a> StreamsSelected<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_streams(&self) -> Vec<crate::Stream> {
+    pub fn streams(&self) -> Vec<crate::Stream> {
         unsafe {
             let n = ffi::gst_message_streams_selected_get_size(self.as_mut_ptr());
 
@@ -1478,7 +1478,7 @@ impl<'a> Redirect<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
+    pub fn entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
             let n = ffi::gst_message_get_num_redirect_entries(self.as_mut_ptr());
 
@@ -1535,7 +1535,7 @@ impl<'a> DeviceChanged<'a> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_device_changed(&self) -> (crate::Device, crate::Device) {
+    pub fn device_changed(&self) -> (crate::Device, crate::Device) {
         unsafe {
             let mut device = ptr::null_mut();
             let mut changed_device = ptr::null_mut();
@@ -2000,7 +2000,7 @@ impl<'a> StepDoneBuilder<'a> {
         eos: bool,
     ) -> Self {
         skip_assert_initialized!();
-        assert_eq!(amount.get_format(), duration.get_format());
+        assert_eq!(amount.format(), duration.format());
         Self {
             builder: MessageBuilder::new(),
             amount,
@@ -2014,12 +2014,12 @@ impl<'a> StepDoneBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_done(
         src,
-        s.amount.get_format().to_glib(),
-        s.amount.get_value() as u64,
+        s.amount.format().to_glib(),
+        s.amount.value() as u64,
         s.rate,
         s.flush.to_glib(),
         s.intermediate.to_glib(),
-        s.duration.get_value() as u64,
+        s.duration.value() as u64,
         s.eos.to_glib(),
     ));
 }
@@ -2207,8 +2207,8 @@ impl<'a> SegmentStartBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_start(
         src,
-        s.position.get_format().to_glib(),
-        s.position.get_value(),
+        s.position.format().to_glib(),
+        s.position.value(),
     ));
 }
 
@@ -2228,8 +2228,8 @@ impl<'a> SegmentDoneBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_done(
         src,
-        s.position.get_format().to_glib(),
-        s.position.get_value(),
+        s.position.format().to_glib(),
+        s.position.value(),
     ));
 }
 
@@ -2349,8 +2349,8 @@ impl<'a> StepStartBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_start(
         src,
         s.active.to_glib(),
-        s.amount.get_format().to_glib(),
-        s.amount.get_value() as u64,
+        s.amount.format().to_glib(),
+        s.amount.value() as u64,
         s.rate,
         s.flush.to_glib(),
         s.intermediate.to_glib(),
@@ -2399,7 +2399,7 @@ impl<'a> QosBuilder<'a> {
     pub fn stats<V: Into<GenericFormattedValue>>(self, processed: V, dropped: V) -> Self {
         let processed = processed.into();
         let dropped = dropped.into();
-        assert_eq!(processed.get_format(), dropped.get_format());
+        assert_eq!(processed.format(), dropped.format());
         Self {
             stats: Some((processed, dropped)),
             ..self
@@ -2421,9 +2421,9 @@ impl<'a> QosBuilder<'a> {
         if let Some((processed, dropped)) = s.stats {
             ffi::gst_message_set_qos_stats(
                 msg,
-                processed.get_format().to_glib(),
-                processed.get_value() as u64,
-                dropped.get_value() as u64,
+                processed.format().to_glib(),
+                processed.value() as u64,
+                dropped.value() as u64,
             );
         }
         msg
@@ -2839,8 +2839,8 @@ mod tests {
         let eos_msg = Eos::builder().seqnum(seqnum).build();
         match eos_msg.view() {
             MessageView::Eos(eos_msg) => {
-                assert_eq!(eos_msg.get_seqnum(), seqnum);
-                assert!(eos_msg.get_structure().is_none());
+                assert_eq!(eos_msg.seqnum(), seqnum);
+                assert!(eos_msg.structure().is_none());
             }
             _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
         }
@@ -2849,7 +2849,7 @@ mod tests {
         let buffering_msg = Buffering::new(42);
         match buffering_msg.view() {
             MessageView::Buffering(buffering_msg) => {
-                assert_eq!(buffering_msg.get_percent(), 42);
+                assert_eq!(buffering_msg.percent(), 42);
             }
             _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
         }
@@ -2867,8 +2867,8 @@ mod tests {
             .build();
         match eos_msg.view() {
             MessageView::Eos(eos_msg) => {
-                assert_eq!(eos_msg.get_seqnum(), seqnum);
-                if let Some(other_fields) = eos_msg.get_structure() {
+                assert_eq!(eos_msg.seqnum(), seqnum);
+                if let Some(other_fields) = eos_msg.structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }
             }
@@ -2880,8 +2880,8 @@ mod tests {
             .build();
         match buffering_msg.view() {
             MessageView::Buffering(buffering_msg) => {
-                assert_eq!(buffering_msg.get_percent(), 42);
-                if let Some(other_fields) = buffering_msg.get_structure() {
+                assert_eq!(buffering_msg.percent(), 42);
+                if let Some(other_fields) = buffering_msg.structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }
             }
@@ -2899,7 +2899,7 @@ mod tests {
         );
 
         match msg.view() {
-            MessageView::StreamStart(stream_start) => assert_eq!(seqnum, stream_start.get_seqnum()),
+            MessageView::StreamStart(stream_start) => assert_eq!(seqnum, stream_start.seqnum()),
             _ => panic!(),
         }
     }
@@ -2909,7 +2909,7 @@ mod tests {
         crate::init().unwrap();
 
         let msg = StreamStart::new();
-        let seqnum_init = msg.get_seqnum();
+        let seqnum_init = msg.seqnum();
 
         // Invalid the seqnum
         unsafe {
@@ -2921,7 +2921,7 @@ mod tests {
             MessageView::StreamStart(stream_start) => {
                 // get_seqnum is expected to return a new Seqnum,
                 // further in the sequence than the last known seqnum.
-                assert!(seqnum_init < stream_start.get_seqnum());
+                assert!(seqnum_init < stream_start.seqnum());
             }
             _ => panic!(),
         }

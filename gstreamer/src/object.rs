@@ -19,7 +19,7 @@ pub trait GstObjectExtManual: 'static {
 
     fn unset_object_flags(&self, flags: ObjectFlags);
 
-    fn get_object_flags(&self) -> ObjectFlags;
+    fn object_flags(&self) -> ObjectFlags;
 
     fn get_g_value_array(
         &self,
@@ -93,7 +93,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
         }
     }
 
-    fn get_object_flags(&self) -> ObjectFlags {
+    fn object_flags(&self) -> ObjectFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
@@ -142,7 +142,7 @@ mod tests {
         let notify = Arc::new(Mutex::new(None));
         let notify_clone = notify.clone();
         bin.connect_deep_notify(None, move |_, id, prop| {
-            *notify_clone.lock().unwrap() = Some((id.clone(), prop.get_name()));
+            *notify_clone.lock().unwrap() = Some((id.clone(), prop.name()));
         });
 
         identity.set_property("silent", &false).unwrap();

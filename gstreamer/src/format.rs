@@ -48,7 +48,7 @@ pub struct TryFromGenericFormattedValueError(());
 
 pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + 'static {
     fn get_default_format() -> Format;
-    fn get_format(&self) -> Format;
+    fn format(&self) -> Format;
 
     unsafe fn from_raw(format: Format, value: i64) -> Self;
     unsafe fn to_raw_value(&self) -> i64;
@@ -61,8 +61,8 @@ impl FormattedValue for GenericFormattedValue {
         Format::Undefined
     }
 
-    fn get_format(&self) -> Format {
-        self.get_format()
+    fn format(&self) -> Format {
+        self.format()
     }
 
     unsafe fn from_raw(format: Format, value: i64) -> Self {
@@ -70,7 +70,7 @@ impl FormattedValue for GenericFormattedValue {
     }
 
     unsafe fn to_raw_value(&self) -> i64 {
-        self.get_value()
+        self.value()
     }
 }
 
@@ -106,7 +106,7 @@ impl GenericFormattedValue {
         }
     }
 
-    pub fn get_format(&self) -> Format {
+    pub fn format(&self) -> Format {
         match *self {
             GenericFormattedValue::Undefined(_) => Format::Undefined,
             GenericFormattedValue::Default(_) => Format::Default,
@@ -118,7 +118,7 @@ impl GenericFormattedValue {
         }
     }
 
-    pub fn get_value(&self) -> i64 {
+    pub fn value(&self) -> i64 {
         match *self {
             GenericFormattedValue::Undefined(v) => v.0,
             GenericFormattedValue::Default(v) => v.map(|v| v as i64).unwrap_or(-1),
@@ -278,7 +278,7 @@ macro_rules! impl_format_value_traits(
                 Format::$format
             }
 
-            fn get_format(&self) -> Format {
+            fn format(&self) -> Format {
                 Format::$format
             }
 
@@ -524,7 +524,7 @@ impl FormattedValue for Undefined {
         Format::Undefined
     }
 
-    fn get_format(&self) -> Format {
+    fn format(&self) -> Format {
         Format::Undefined
     }
 
@@ -605,7 +605,7 @@ impl FormattedValue for Percent {
         Format::Percent
     }
 
-    fn get_format(&self) -> Format {
+    fn format(&self) -> Format {
         Format::Percent
     }
 

@@ -22,7 +22,7 @@ use std::mem::transmute;
 use std::ptr;
 
 pub trait AggregatorExtManual: 'static {
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 
@@ -35,7 +35,7 @@ pub trait AggregatorExtManual: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_property_min_upstream_latency(&self) -> gst::ClockTime;
+    fn property_min_upstream_latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -84,7 +84,7 @@ pub trait AggregatorExtManual: 'static {
 }
 
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
@@ -124,7 +124,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn get_property_min_upstream_latency(&self) -> gst::ClockTime {
+    fn property_min_upstream_latency(&self) -> gst::ClockTime {
         unsafe {
             let mut value = Value::from_type(<gst::ClockTime as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(

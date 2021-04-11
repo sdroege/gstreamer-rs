@@ -26,7 +26,7 @@ impl<T: PadImpl> PadImplExt for T {
     fn parent_linked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPadClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstPadClass;
 
             (*parent_class)
                 .linked
@@ -43,7 +43,7 @@ impl<T: PadImpl> PadImplExt for T {
     fn parent_unlinked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPadClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstPadClass;
 
             (*parent_class)
                 .unlinked
@@ -73,7 +73,7 @@ unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
 
 unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
     imp.linked(wrap.unsafe_cast_ref(), &from_glib_borrow(peer))
@@ -81,7 +81,7 @@ unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ff
 
 unsafe extern "C" fn pad_unlinked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Pad> = from_glib_borrow(ptr);
 
     imp.unlinked(wrap.unsafe_cast_ref(), &from_glib_borrow(peer))
@@ -145,7 +145,7 @@ mod tests {
 
         let pad = TestPad::new("test", PadDirection::Src);
 
-        assert_eq!(pad.get_name(), "test");
+        assert_eq!(pad.name(), "test");
 
         let otherpad = Pad::new(Some("other-test"), PadDirection::Sink);
         pad.link(&otherpad).unwrap();

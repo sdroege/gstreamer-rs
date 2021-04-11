@@ -20,7 +20,7 @@ fn example_main() {
         // In an endless-loop, we use the iterator until we either reach the end
         // or we hit an error.
         match iter.next() {
-            Ok(Some(pad)) => println!("Pad: {}", pad.get_name()),
+            Ok(Some(pad)) => println!("Pad: {}", pad.name()),
             Ok(None) => {
                 // We reached the end of the iterator, there are no more pads
                 println!("Done");

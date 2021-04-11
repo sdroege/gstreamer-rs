@@ -45,7 +45,7 @@ mod custom_meta {
         }
 
         // Retrieve the stored label.
-        pub fn get_label(&self) -> &str {
+        pub fn label(&self) -> &str {
             self.0.label.as_str()
         }
     }
@@ -62,7 +62,7 @@ mod custom_meta {
     impl fmt::Debug for CustomMeta {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             f.debug_struct("CustomMeta")
-                .field("label", &self.get_label())
+                .field("label", &self.label())
                 .finish()
         }
     }
@@ -231,7 +231,7 @@ fn example_main() {
             .new_sample(|appsink| {
                 // Pull the sample in question out of the appsink's buffer.
                 let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
-                let buffer = sample.get_buffer().ok_or_else(|| {
+                let buffer = sample.buffer().ok_or_else(|| {
                     element_error!(
                         appsink,
                         gst::ResourceError::Failed,
@@ -245,7 +245,7 @@ fn example_main() {
                 let meta = buffer
                     .get_meta::<custom_meta::CustomMeta>()
                     .expect("No custom meta found");
-                println!("Got buffer with label: {}", meta.get_label());
+                println!("Got buffer with label: {}", meta.label());
 
                 Ok(gst::FlowSuccess::Ok)
             })
@@ -259,7 +259,7 @@ fn example_main() {
     let pipeline = pipeline.dynamic_cast::<gst::Pipeline>().unwrap();
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     // And run until EOS or an error happened.
@@ -271,9 +271,9 @@ fn example_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 break;
             }

@@ -249,7 +249,7 @@ impl BufferRef {
     }
 
     pub fn copy_from_slice(&mut self, offset: usize, slice: &[u8]) -> Result<(), usize> {
-        let maxsize = self.get_maxsize();
+        let maxsize = self.maxsize();
         let size = slice.len();
 
         assert!(maxsize >= offset && maxsize - offset >= size);
@@ -272,7 +272,7 @@ impl BufferRef {
     }
 
     pub fn copy_to_slice(&self, offset: usize, slice: &mut [u8]) -> Result<(), usize> {
-        let maxsize = self.get_size();
+        let maxsize = self.size();
         let size = slice.len();
 
         assert!(maxsize >= offset && maxsize - offset >= size);
@@ -296,11 +296,11 @@ impl BufferRef {
         }
     }
 
-    pub fn get_size(&self) -> usize {
+    pub fn size(&self) -> usize {
         unsafe { ffi::gst_buffer_get_size(self.as_mut_ptr()) }
     }
 
-    pub fn get_maxsize(&self) -> usize {
+    pub fn maxsize(&self) -> usize {
         unsafe {
             let mut maxsize = mem::MaybeUninit::uninit();
             ffi::gst_buffer_get_sizes_range(
@@ -316,14 +316,14 @@ impl BufferRef {
     }
 
     pub fn set_size(&mut self, size: usize) {
-        assert!(self.get_maxsize() >= size);
+        assert!(self.maxsize() >= size);
 
         unsafe {
             ffi::gst_buffer_set_size(self.as_mut_ptr(), size as isize);
         }
     }
 
-    pub fn get_offset(&self) -> u64 {
+    pub fn offset(&self) -> u64 {
         self.0.offset
     }
 
@@ -331,7 +331,7 @@ impl BufferRef {
         self.0.offset = offset;
     }
 
-    pub fn get_offset_end(&self) -> u64 {
+    pub fn offset_end(&self) -> u64 {
         self.0.offset_end
     }
 
@@ -339,7 +339,7 @@ impl BufferRef {
         self.0.offset_end = offset_end;
     }
 
-    pub fn get_pts(&self) -> ClockTime {
+    pub fn pts(&self) -> ClockTime {
         unsafe { from_glib(self.0.pts) }
     }
 
@@ -347,7 +347,7 @@ impl BufferRef {
         self.0.pts = pts.to_glib();
     }
 
-    pub fn get_dts(&self) -> ClockTime {
+    pub fn dts(&self) -> ClockTime {
         unsafe { from_glib(self.0.dts) }
     }
 
@@ -355,16 +355,16 @@ impl BufferRef {
         self.0.dts = dts.to_glib();
     }
 
-    pub fn get_dts_or_pts(&self) -> ClockTime {
-        let val = self.get_dts();
+    pub fn dts_or_pts(&self) -> ClockTime {
+        let val = self.dts();
         if val.is_none() {
-            self.get_pts()
+            self.pts()
         } else {
             val
         }
     }
 
-    pub fn get_duration(&self) -> ClockTime {
+    pub fn duration(&self) -> ClockTime {
         unsafe { from_glib(self.0.duration) }
     }
 
@@ -372,7 +372,7 @@ impl BufferRef {
         self.0.duration = duration.to_glib();
     }
 
-    pub fn get_flags(&self) -> BufferFlags {
+    pub fn flags(&self) -> BufferFlags {
         BufferFlags::from_bits_truncate(self.0.mini_object.flags)
     }
 
@@ -500,7 +500,7 @@ impl BufferRef {
         }
     }
 
-    pub fn get_all_memory(&self) -> Option<Memory> {
+    pub fn all_memory(&self) -> Option<Memory> {
         unsafe {
             let res = ffi::gst_buffer_get_all_memory(self.as_mut_ptr());
             if res.is_null() {
@@ -898,17 +898,17 @@ impl fmt::Debug for BufferRef {
 
         f.debug_struct("Buffer")
             .field("ptr", unsafe { &self.as_ptr() })
-            .field("pts", &self.get_pts().to_string())
-            .field("dts", &self.get_dts().to_string())
-            .field("duration", &self.get_duration().to_string())
-            .field("size", &self.get_size())
-            .field("offset", &self.get_offset())
-            .field("offset_end", &self.get_offset_end())
-            .field("flags", &self.get_flags())
+            .field("pts", &self.pts().to_string())
+            .field("dts", &self.dts().to_string())
+            .field("duration", &self.duration().to_string())
+            .field("size", &self.size())
+            .field("offset", &self.offset())
+            .field("offset_end", &self.offset_end())
+            .field("flags", &self.flags())
             .field(
                 "metas",
                 &DebugIter(RefCell::new(
-                    self.iter_meta::<crate::Meta>().map(|m| m.get_api()),
+                    self.iter_meta::<crate::Meta>().map(|m| m.api()),
                 )),
             )
             .finish()
@@ -917,7 +917,7 @@ impl fmt::Debug for BufferRef {
 
 impl PartialEq for BufferRef {
     fn eq(&self, other: &BufferRef) -> bool {
-        if self.get_size() != other.get_size() {
+        if self.size() != other.size() {
             return false;
         }
 
@@ -934,11 +934,11 @@ impl PartialEq for BufferRef {
 impl Eq for BufferRef {}
 
 impl<'a, T> BufferMap<'a, T> {
-    pub fn get_size(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.map_info.size
     }
 
-    pub fn get_buffer(&self) -> &BufferRef {
+    pub fn buffer(&self) -> &BufferRef {
         self.buffer
     }
 
@@ -981,9 +981,7 @@ impl<'a> ops::DerefMut for BufferMap<'a, Writable> {
 
 impl<'a, T> fmt::Debug for BufferMap<'a, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("BufferMap")
-            .field(&self.get_buffer())
-            .finish()
+        f.debug_tuple("BufferMap").field(&self.buffer()).finish()
     }
 }
 
@@ -1011,11 +1009,11 @@ impl<T> MappedBuffer<T> {
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 
-    pub fn get_size(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.map_info.size
     }
 
-    pub fn get_buffer(&self) -> &BufferRef {
+    pub fn buffer(&self) -> &BufferRef {
         self.buffer.as_ref().unwrap().as_ref()
     }
 
@@ -1073,9 +1071,7 @@ impl<T> Drop for MappedBuffer<T> {
 
 impl<T> fmt::Debug for MappedBuffer<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("MappedBuffer")
-            .field(&self.get_buffer())
-            .finish()
+        f.debug_tuple("MappedBuffer").field(&self.buffer()).finish()
     }
 }
 
@@ -1113,11 +1109,11 @@ mod tests {
             buffer.set_offset_end(4);
             buffer.set_duration(5.into());
         }
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer.get_dts(), 2.into());
-        assert_eq!(buffer.get_offset(), 3);
-        assert_eq!(buffer.get_offset_end(), 4);
-        assert_eq!(buffer.get_duration(), 5.into());
+        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer.dts(), 2.into());
+        assert_eq!(buffer.offset(), 3);
+        assert_eq!(buffer.offset_end(), 4);
+        assert_eq!(buffer.duration(), 5.into());
     }
 
     #[test]
@@ -1155,8 +1151,8 @@ mod tests {
             data.as_mut_slice()[0] = 0;
         }
 
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer2.get_pts(), 2.into());
+        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer2.pts(), 2.into());
 
         {
             let data = buffer.map_readable().unwrap();
@@ -1184,29 +1180,29 @@ mod tests {
 
         assert!(buffer.is_all_memory_writable());
         assert_eq!(buffer.n_memory(), 5);
-        assert_eq!(buffer.get_size(), 30);
+        assert_eq!(buffer.size(), 30);
 
         for i in 0..5 {
             {
                 let mem = buffer.get_memory(i).unwrap();
-                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_readable().unwrap();
-                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
             }
 
             {
                 let mem = buffer.peek_memory(i);
-                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_readable().unwrap();
-                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
             }
 
             {
                 let buffer = buffer.get_mut().unwrap();
                 let mem = buffer.peek_memory_mut(i).unwrap();
-                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_writable().unwrap();
-                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
             }
         }
 
@@ -1215,21 +1211,21 @@ mod tests {
             let mut last = 0;
             for (i, mem) in buffer.iter_memories_mut().unwrap().enumerate() {
                 {
-                    assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                    assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                     let map = mem.map_readable().unwrap();
-                    assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                    assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
                 }
 
                 {
-                    assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                    assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                     let map = mem.map_readable().unwrap();
-                    assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                    assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
                 }
 
                 {
-                    assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                    assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                     let map = mem.map_writable().unwrap();
-                    assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                    assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
                 }
 
                 last = i;
@@ -1241,15 +1237,15 @@ mod tests {
         let mut last = 0;
         for (i, mem) in buffer.iter_memories().enumerate() {
             {
-                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_readable().unwrap();
-                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
             }
 
             {
-                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_readable().unwrap();
-                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
             }
 
             last = i;
@@ -1260,15 +1256,15 @@ mod tests {
         let mut last = 0;
         for (i, mem) in buffer.iter_memories_owned().enumerate() {
             {
-                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_readable().unwrap();
-                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
             }
 
             {
-                assert_eq!(mem.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_readable().unwrap();
-                assert_eq!(map.get_size(), if i < 4 { 5 } else { 10 });
+                assert_eq!(map.size(), if i < 4 { 5 } else { 10 });
             }
 
             last = i;
@@ -1305,7 +1301,7 @@ mod tests {
             let meta = meta
                 .downcast_ref::<crate::ReferenceTimestampMeta>()
                 .unwrap();
-            res.push(meta.get_timestamp());
+            res.push(meta.timestamp());
             true
         });
 
@@ -1340,8 +1336,8 @@ mod tests {
             let meta = meta
                 .downcast_ref::<crate::ReferenceTimestampMeta>()
                 .unwrap();
-            res.push(meta.get_timestamp());
-            if meta.get_timestamp() == crate::SECOND {
+            res.push(meta.timestamp());
+            if meta.timestamp() == crate::SECOND {
                 Ok(false)
             } else {
                 Ok(true)
@@ -1355,7 +1351,7 @@ mod tests {
             let meta = meta
                 .downcast_ref::<crate::ReferenceTimestampMeta>()
                 .unwrap();
-            res.push(meta.get_timestamp());
+            res.push(meta.timestamp());
             true
         });
 

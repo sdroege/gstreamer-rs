@@ -131,13 +131,13 @@ impl fmt::Debug for SDPMessageRef {
         }
 
         f.debug_struct("SDPMessage")
-            .field("connection", &self.get_connection())
-            .field("information", &self.get_information())
-            .field("key", &self.get_key())
-            .field("origin", &self.get_origin())
-            .field("session-name", &self.get_session_name())
-            .field("uri", &self.get_uri())
-            .field("version", &self.get_version())
+            .field("connection", &self.connection())
+            .field("information", &self.information())
+            .field("key", &self.key())
+            .field("origin", &self.origin())
+            .field("session-name", &self.session_name())
+            .field("uri", &self.uri())
+            .field("version", &self.version())
             .field("attributes", &DebugIter(RefCell::new(self.attributes())))
             .field("bandwidths", &DebugIter(RefCell::new(self.bandwidths())))
             .field("emails", &DebugIter(RefCell::new(self.emails())))
@@ -297,7 +297,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_connection(&self) -> Option<&SDPConnection> {
+    pub fn connection(&self) -> Option<&SDPConnection> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_connection(&self.0);
             if ptr.is_null() {
@@ -323,7 +323,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_information(&self) -> Option<&str> {
+    pub fn information(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_information(&self.0);
             if ptr.is_null() {
@@ -334,7 +334,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_key(&self) -> Option<&SDPKey> {
+    pub fn key(&self) -> Option<&SDPKey> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_key(&self.0);
             if ptr.is_null() {
@@ -375,7 +375,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_origin(&self) -> Option<&SDPOrigin> {
+    pub fn origin(&self) -> Option<&SDPOrigin> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_origin(&self.0);
             if ptr.is_null() {
@@ -401,7 +401,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_session_name(&self) -> Option<&str> {
+    pub fn session_name(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_session_name(&self.0);
             if ptr.is_null() {
@@ -427,7 +427,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_uri(&self) -> Option<&str> {
+    pub fn uri(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_uri(&self.0);
             if ptr.is_null() {
@@ -438,7 +438,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_version(&self) -> Option<&str> {
+    pub fn version(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_version(&self.0);
             if ptr.is_null() {

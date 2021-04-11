@@ -23,7 +23,7 @@ impl Discoverer {
         }
     }
 
-    pub fn get_property_timeout(&self) -> gst::ClockTime {
+    pub fn property_timeout(&self) -> gst::ClockTime {
         let mut value = Value::from(&0u64);
         unsafe {
             glib::gobject_ffi::g_object_get_property(

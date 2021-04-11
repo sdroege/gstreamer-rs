@@ -34,7 +34,7 @@ pub trait GstBinExtManual: 'static {
     fn iterate_sinks(&self) -> crate::Iterator<Element>;
     fn iterate_sorted(&self) -> crate::Iterator<Element>;
     fn iterate_sources(&self) -> crate::Iterator<Element>;
-    fn get_children(&self) -> Vec<Element>;
+    fn children(&self) -> Vec<Element>;
 
     fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString;
     fn debug_to_dot_file<Q: AsRef<path::Path>>(
@@ -52,7 +52,7 @@ pub trait GstBinExtManual: 'static {
 
     fn unset_bin_flags(&self, flags: BinFlags);
 
-    fn get_bin_flags(&self) -> BinFlags;
+    fn bin_flags(&self) -> BinFlags;
 }
 
 impl<O: IsA<Bin>> GstBinExtManual for O {
@@ -146,7 +146,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_children(&self) -> Vec<Element> {
+    fn children(&self) -> Vec<Element> {
         unsafe {
             let bin: &ffi::GstBin = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&bin.element.object.lock);
@@ -190,7 +190,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         }
     }
 
-    fn get_bin_flags(&self) -> BinFlags {
+    fn bin_flags(&self) -> BinFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
@@ -236,9 +236,9 @@ mod tests {
             .unwrap();
 
         let mut child_names = bin
-            .get_children()
+            .children()
             .iter()
-            .map(|c| c.get_name())
+            .map(|c| c.name())
             .collect::<Vec<GString>>();
         child_names.sort();
         assert_eq!(

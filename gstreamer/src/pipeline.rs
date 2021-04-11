@@ -10,7 +10,7 @@ pub trait GstPipelineExtManual: 'static {
 
     fn unset_pipeline_flags(&self, flags: PipelineFlags);
 
-    fn get_pipeline_flags(&self) -> PipelineFlags;
+    fn pipeline_flags(&self) -> PipelineFlags;
 }
 
 impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
@@ -30,7 +30,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
         }
     }
 
-    fn get_pipeline_flags(&self) -> PipelineFlags {
+    fn pipeline_flags(&self) -> PipelineFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);

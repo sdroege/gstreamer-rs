@@ -178,7 +178,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // So e.g. that after a 90 degree rotation it knows that what was previously going
                 // to end up as a 200x100 rectangle would now be 100x200.
                 pangocairo::functions::update_layout(&cr, &**layout);
-                let (width, _height) = layout.get_size();
+                let (width, _height) = layout.size();
                 // Using width and height of the text, we can properly possition it within
                 // our canvas.
                 cr.move_to(
@@ -224,7 +224,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
@@ -236,12 +236,12 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
                 pipeline.set_state(gst::State::Null)?;
                 return Err(ErrorMessage {
                     src: msg
-                        .get_src()
-                        .map(|s| String::from(s.get_path_string()))
+                        .src()
+                        .map(|s| String::from(s.path_string()))
                         .unwrap_or_else(|| String::from("None")),
-                    error: err.get_error().to_string(),
-                    debug: err.get_debug(),
-                    source: err.get_error(),
+                    error: err.error().to_string(),
+                    debug: err.debug(),
+                    source: err.error(),
                 }
                 .into());
             }

@@ -31,7 +31,7 @@ fn example_main() {
 
     // This creates a pipeline by parsing the gst-launch pipeline syntax.
     let pipeline = gst::parse_launch("audiotestsrc ! fakesink").unwrap();
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     pipeline
         .set_state(gst::State::Playing)
@@ -101,9 +101,9 @@ fn example_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 main_loop.quit();
             }

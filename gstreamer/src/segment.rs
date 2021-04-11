@@ -27,8 +27,7 @@ impl Segment {
     }
 
     pub fn downcast<T: FormattedValue>(self) -> Result<FormattedSegment<T>, Self> {
-        if T::get_default_format() == Format::Undefined
-            || T::get_default_format() == self.get_format()
+        if T::get_default_format() == Format::Undefined || T::get_default_format() == self.format()
         {
             Ok(FormattedSegment(self.0, PhantomData))
         } else {
@@ -37,8 +36,7 @@ impl Segment {
     }
 
     pub fn downcast_ref<T: FormattedValue>(&self) -> Option<&FormattedSegment<T>> {
-        if T::get_default_format() == Format::Undefined
-            || T::get_default_format() == self.get_format()
+        if T::get_default_format() == Format::Undefined || T::get_default_format() == self.format()
         {
             Some(unsafe {
                 &*(self as *const FormattedSegment<GenericFormattedValue>
@@ -50,8 +48,7 @@ impl Segment {
     }
 
     pub fn downcast_mut<T: FormattedValue>(&mut self) -> Option<&mut FormattedSegment<T>> {
-        if T::get_default_format() == Format::Undefined
-            || T::get_default_format() == self.get_format()
+        if T::get_default_format() == Format::Undefined || T::get_default_format() == self.format()
         {
             Some(unsafe {
                 &mut *(self as *mut FormattedSegment<GenericFormattedValue>
@@ -95,8 +92,8 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let stop = stop.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), start.get_format());
-            assert_eq!(self.get_format(), stop.get_format());
+            assert_eq!(self.format(), start.format());
+            assert_eq!(self.format(), stop.format());
         }
 
         unsafe {
@@ -104,7 +101,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let mut clip_stop = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_segment_clip(
                 &self.0,
-                start.get_format().to_glib(),
+                start.format().to_glib(),
                 start.to_raw_value() as u64,
                 stop.to_raw_value() as u64,
                 clip_start.as_mut_ptr(),
@@ -112,8 +109,8 @@ impl<T: FormattedValue> FormattedSegment<T> {
             ));
             if ret {
                 Some((
-                    T::from_raw(self.get_format(), clip_start.assume_init() as i64),
-                    T::from_raw(self.get_format(), clip_stop.assume_init() as i64),
+                    T::from_raw(self.format(), clip_start.assume_init() as i64),
+                    T::from_raw(self.format(), clip_stop.assume_init() as i64),
                 ))
             } else {
                 None
@@ -136,8 +133,8 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let stop = stop.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), start.get_format());
-            assert_eq!(self.get_format(), stop.get_format());
+            assert_eq!(self.format(), start.format());
+            assert_eq!(self.format(), stop.format());
         }
 
         unsafe {
@@ -145,7 +142,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let ret = from_glib(ffi::gst_segment_do_seek(
                 &mut self.0,
                 rate,
-                self.get_format().to_glib(),
+                self.format().to_glib(),
                 flags.to_glib(),
                 start_type.to_glib(),
                 start.to_raw_value() as u64,
@@ -164,11 +161,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn offset_running_time(&mut self, offset: i64) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_segment_offset_running_time(
-                    &mut self.0,
-                    self.get_format().to_glib(),
-                    offset,
-                ),
+                ffi::gst_segment_offset_running_time(&mut self.0, self.format().to_glib(), offset,),
                 "Offset is not in the segment"
             )
         }
@@ -178,15 +171,15 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let running_time = running_time.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), running_time.get_format());
+            assert_eq!(self.format(), running_time.format());
         }
 
         unsafe {
             T::from_raw(
-                self.get_format(),
+                self.format(),
                 ffi::gst_segment_position_from_running_time(
                     &self.0,
-                    self.get_format().to_glib(),
+                    self.format().to_glib(),
                     running_time.to_raw_value() as u64,
                 ) as i64,
             )
@@ -197,20 +190,20 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let running_time = running_time.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), running_time.get_format());
+            assert_eq!(self.format(), running_time.format());
         }
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_position_from_running_time_full(
                 &self.0,
-                self.get_format().to_glib(),
+                self.format().to_glib(),
                 running_time.to_raw_value() as u64,
                 position.as_mut_ptr(),
             );
             (
                 ret,
-                T::from_raw(self.get_format(), position.assume_init() as i64),
+                T::from_raw(self.format(), position.assume_init() as i64),
             )
         }
     }
@@ -219,15 +212,15 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let stream_time = stream_time.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), stream_time.get_format());
+            assert_eq!(self.format(), stream_time.format());
         }
 
         unsafe {
             T::from_raw(
-                self.get_format(),
+                self.format(),
                 ffi::gst_segment_position_from_stream_time(
                     &self.0,
-                    self.get_format().to_glib(),
+                    self.format().to_glib(),
                     stream_time.to_raw_value() as u64,
                 ) as i64,
             )
@@ -238,20 +231,20 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let stream_time = stream_time.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), stream_time.get_format());
+            assert_eq!(self.format(), stream_time.format());
         }
 
         unsafe {
             let mut position = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_position_from_stream_time_full(
                 &self.0,
-                self.get_format().to_glib(),
+                self.format().to_glib(),
                 stream_time.to_raw_value() as u64,
                 position.as_mut_ptr(),
             );
             (
                 ret,
-                T::from_raw(self.get_format(), position.assume_init() as i64),
+                T::from_raw(self.format(), position.assume_init() as i64),
             )
         }
     }
@@ -260,14 +253,14 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let running_time = running_time.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), running_time.get_format());
+            assert_eq!(self.format(), running_time.format());
         }
 
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_segment_set_running_time(
                     &mut self.0,
-                    self.get_format().to_glib(),
+                    self.format().to_glib(),
                     running_time.to_raw_value() as u64,
                 ),
                 "Running time is not in the segment"
@@ -279,15 +272,15 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let position = position.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), position.get_format());
+            assert_eq!(self.format(), position.format());
         }
 
         unsafe {
             T::from_raw(
-                self.get_format(),
+                self.format(),
                 ffi::gst_segment_to_running_time(
                     &self.0,
-                    self.get_format().to_glib(),
+                    self.format().to_glib(),
                     position.to_raw_value() as u64,
                 ) as i64,
             )
@@ -298,20 +291,20 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let position = position.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), position.get_format());
+            assert_eq!(self.format(), position.format());
         }
 
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_to_running_time_full(
                 &self.0,
-                self.get_format().to_glib(),
+                self.format().to_glib(),
                 position.to_raw_value() as u64,
                 running_time.as_mut_ptr(),
             );
             (
                 ret,
-                T::from_raw(self.get_format(), running_time.assume_init() as i64),
+                T::from_raw(self.format(), running_time.assume_init() as i64),
             )
         }
     }
@@ -320,15 +313,15 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let position = position.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), position.get_format());
+            assert_eq!(self.format(), position.format());
         }
 
         unsafe {
             T::from_raw(
-                self.get_format(),
+                self.format(),
                 ffi::gst_segment_to_stream_time(
                     &self.0,
-                    self.get_format().to_glib(),
+                    self.format().to_glib(),
                     position.to_raw_value() as u64,
                 ) as i64,
             )
@@ -339,25 +332,25 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let position = position.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), position.get_format());
+            assert_eq!(self.format(), position.format());
         }
 
         unsafe {
             let mut stream_time = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_to_stream_time_full(
                 &self.0,
-                self.get_format().to_glib(),
+                self.format().to_glib(),
                 position.to_raw_value() as u64,
                 stream_time.as_mut_ptr(),
             );
             (
                 ret,
-                T::from_raw(self.get_format(), stream_time.assume_init() as i64),
+                T::from_raw(self.format(), stream_time.assume_init() as i64),
             )
         }
     }
 
-    pub fn get_flags(&self) -> crate::SegmentFlags {
+    pub fn flags(&self) -> crate::SegmentFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
@@ -365,7 +358,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.flags = flags.to_glib();
     }
 
-    pub fn get_rate(&self) -> f64 {
+    pub fn rate(&self) -> f64 {
         self.0.rate
     }
 
@@ -375,7 +368,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.rate = rate;
     }
 
-    pub fn get_applied_rate(&self) -> f64 {
+    pub fn applied_rate(&self) -> f64 {
         self.0.applied_rate
     }
 
@@ -385,103 +378,103 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.applied_rate = applied_rate;
     }
 
-    pub fn get_format(&self) -> Format {
+    pub fn format(&self) -> Format {
         unsafe { from_glib(self.0.format) }
     }
 
-    pub fn get_base(&self) -> T {
-        unsafe { T::from_raw(self.get_format(), self.0.base as i64) }
+    pub fn base(&self) -> T {
+        unsafe { T::from_raw(self.format(), self.0.base as i64) }
     }
 
     pub fn set_base<V: Into<T>>(&mut self, base: V) {
         let base = base.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), base.get_format());
+            assert_eq!(self.format(), base.format());
         }
 
         self.0.base = unsafe { base.to_raw_value() } as u64;
     }
 
-    pub fn get_offset(&self) -> T {
-        unsafe { T::from_raw(self.get_format(), self.0.offset as i64) }
+    pub fn offset(&self) -> T {
+        unsafe { T::from_raw(self.format(), self.0.offset as i64) }
     }
 
     pub fn set_offset<V: Into<T>>(&mut self, offset: V) {
         let offset = offset.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), offset.get_format());
+            assert_eq!(self.format(), offset.format());
         }
 
         self.0.offset = unsafe { offset.to_raw_value() } as u64;
     }
 
-    pub fn get_start(&self) -> T {
-        unsafe { T::from_raw(self.get_format(), self.0.start as i64) }
+    pub fn start(&self) -> T {
+        unsafe { T::from_raw(self.format(), self.0.start as i64) }
     }
 
     pub fn set_start<V: Into<T>>(&mut self, start: V) {
         let start = start.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), start.get_format());
+            assert_eq!(self.format(), start.format());
         }
 
         self.0.start = unsafe { start.to_raw_value() } as u64;
     }
 
-    pub fn get_stop(&self) -> T {
-        unsafe { T::from_raw(self.get_format(), self.0.stop as i64) }
+    pub fn stop(&self) -> T {
+        unsafe { T::from_raw(self.format(), self.0.stop as i64) }
     }
 
     pub fn set_stop<V: Into<T>>(&mut self, stop: V) {
         let stop = stop.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), stop.get_format());
+            assert_eq!(self.format(), stop.format());
         }
 
         self.0.stop = unsafe { stop.to_raw_value() } as u64;
     }
 
-    pub fn get_time(&self) -> T {
-        unsafe { T::from_raw(self.get_format(), self.0.time as i64) }
+    pub fn time(&self) -> T {
+        unsafe { T::from_raw(self.format(), self.0.time as i64) }
     }
 
     pub fn set_time<V: Into<T>>(&mut self, time: V) {
         let time = time.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), time.get_format());
+            assert_eq!(self.format(), time.format());
         }
 
         self.0.time = unsafe { time.to_raw_value() } as u64;
     }
 
-    pub fn get_position(&self) -> T {
-        unsafe { T::from_raw(self.get_format(), self.0.position as i64) }
+    pub fn position(&self) -> T {
+        unsafe { T::from_raw(self.format(), self.0.position as i64) }
     }
 
     pub fn set_position<V: Into<T>>(&mut self, position: V) {
         let position = position.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), position.get_format());
+            assert_eq!(self.format(), position.format());
         }
 
         self.0.position = unsafe { position.to_raw_value() } as u64;
     }
 
-    pub fn get_duration(&self) -> T {
-        unsafe { T::from_raw(self.get_format(), self.0.duration as i64) }
+    pub fn duration(&self) -> T {
+        unsafe { T::from_raw(self.format(), self.0.duration as i64) }
     }
 
     pub fn set_duration<V: Into<T>>(&mut self, duration: V) {
         let duration = duration.into();
 
         if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), duration.get_format());
+            assert_eq!(self.format(), duration.format());
         }
 
         self.0.duration = unsafe { duration.to_raw_value() } as u64;
@@ -517,7 +510,7 @@ impl<T: FormattedValue> AsRef<Segment> for FormattedSegment<T> {
 impl<T: FormattedValue> fmt::Debug for FormattedSegment<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let segment = self.as_ref();
-        match segment.get_format() {
+        match segment.format() {
             Format::Undefined => f
                 .debug_struct("Segment")
                 .field("format", &Format::Undefined)
@@ -526,31 +519,31 @@ impl<T: FormattedValue> fmt::Debug for FormattedSegment<T> {
                 let segment = segment.downcast_ref::<crate::ClockTime>().unwrap();
                 f.debug_struct("Segment")
                     .field("format", &Format::Time)
-                    .field("start", &segment.get_start().to_string())
-                    .field("offset", &segment.get_offset().to_string())
-                    .field("stop", &segment.get_stop().to_string())
-                    .field("rate", &segment.get_rate())
-                    .field("applied_rate", &segment.get_applied_rate())
-                    .field("flags", &segment.get_flags())
-                    .field("time", &segment.get_time().to_string())
-                    .field("base", &segment.get_base().to_string())
-                    .field("position", &segment.get_position().to_string())
-                    .field("duration", &segment.get_duration().to_string())
+                    .field("start", &segment.start().to_string())
+                    .field("offset", &segment.offset().to_string())
+                    .field("stop", &segment.stop().to_string())
+                    .field("rate", &segment.rate())
+                    .field("applied_rate", &segment.applied_rate())
+                    .field("flags", &segment.flags())
+                    .field("time", &segment.time().to_string())
+                    .field("base", &segment.base().to_string())
+                    .field("position", &segment.position().to_string())
+                    .field("duration", &segment.duration().to_string())
                     .finish()
             }
             _ => f
                 .debug_struct("Segment")
-                .field("format", &segment.get_format())
-                .field("start", &segment.get_start())
-                .field("offset", &segment.get_offset())
-                .field("stop", &segment.get_stop())
-                .field("rate", &segment.get_rate())
-                .field("applied_rate", &segment.get_applied_rate())
-                .field("flags", &segment.get_flags())
-                .field("time", &segment.get_time())
-                .field("base", &segment.get_base())
-                .field("position", &segment.get_position())
-                .field("duration", &segment.get_duration())
+                .field("format", &segment.format())
+                .field("start", &segment.start())
+                .field("offset", &segment.offset())
+                .field("stop", &segment.stop())
+                .field("rate", &segment.rate())
+                .field("applied_rate", &segment.applied_rate())
+                .field("flags", &segment.flags())
+                .field("time", &segment.time())
+                .field("base", &segment.base())
+                .field("position", &segment.position())
+                .field("duration", &segment.duration())
                 .finish(),
         }
     }

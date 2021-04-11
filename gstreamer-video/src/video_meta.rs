@@ -32,10 +32,10 @@ impl VideoMeta {
             return Err(glib::bool_error!("Invalid video info"));
         }
 
-        if buffer.get_size() < info.size() {
+        if buffer.size() < info.size() {
             return Err(glib::bool_error!(
                 "Buffer smaller than required frame size ({} < {})",
-                buffer.get_size(),
+                buffer.size(),
                 info.size()
             ));
         }
@@ -82,10 +82,10 @@ impl VideoMeta {
             return Err(glib::bool_error!("Invalid video info"));
         }
 
-        if buffer.get_size() < info.size() {
+        if buffer.size() < info.size() {
             return Err(glib::bool_error!(
                 "Buffer smaller than required frame size ({} < {})",
-                buffer.get_size(),
+                buffer.size(),
                 info.size()
             ));
         }
@@ -110,41 +110,41 @@ impl VideoMeta {
         }
     }
 
-    pub fn get_flags(&self) -> crate::VideoFrameFlags {
+    pub fn flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
-    pub fn get_format(&self) -> crate::VideoFormat {
+    pub fn format(&self) -> crate::VideoFormat {
         unsafe { from_glib(self.0.format) }
     }
 
-    pub fn get_id(&self) -> i32 {
+    pub fn id(&self) -> i32 {
         self.0.id
     }
 
-    pub fn get_width(&self) -> u32 {
+    pub fn width(&self) -> u32 {
         self.0.width
     }
 
-    pub fn get_height(&self) -> u32 {
+    pub fn height(&self) -> u32 {
         self.0.height
     }
 
-    pub fn get_n_planes(&self) -> u32 {
+    pub fn n_planes(&self) -> u32 {
         self.0.n_planes
     }
 
-    pub fn get_offset(&self) -> &[usize] {
+    pub fn offset(&self) -> &[usize] {
         &self.0.offset[0..(self.0.n_planes as usize)]
     }
 
-    pub fn get_stride(&self) -> &[i32] {
+    pub fn stride(&self) -> &[i32] {
         &self.0.stride[0..(self.0.n_planes as usize)]
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn get_alignment(&self) -> crate::VideoAlignment {
+    pub fn alignment(&self) -> crate::VideoAlignment {
         crate::VideoAlignment::new(
             self.0.alignment.padding_top,
             self.0.alignment.padding_bottom,
@@ -156,7 +156,7 @@ impl VideoMeta {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn get_plane_size(&self) -> Result<[usize; crate::VIDEO_MAX_PLANES], glib::BoolError> {
+    pub fn plane_size(&self) -> Result<[usize; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
 
         unsafe {
@@ -174,7 +174,7 @@ impl VideoMeta {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    pub fn get_plane_height(&self) -> Result<[u32; crate::VIDEO_MAX_PLANES], glib::BoolError> {
+    pub fn plane_height(&self) -> Result<[u32; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_height = [0; crate::VIDEO_MAX_PLANES];
 
         unsafe {
@@ -216,14 +216,14 @@ unsafe impl MetaAPI for VideoMeta {
 impl fmt::Debug for VideoMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoMeta")
-            .field("id", &self.get_id())
-            .field("flags", &self.get_flags())
-            .field("format", &self.get_format())
-            .field("width", &self.get_width())
-            .field("height", &self.get_height())
-            .field("n_planes", &self.get_n_planes())
-            .field("offset", &self.get_offset())
-            .field("stride", &self.get_stride())
+            .field("id", &self.id())
+            .field("flags", &self.flags())
+            .field("format", &self.format())
+            .field("width", &self.width())
+            .field("height", &self.height())
+            .field("n_planes", &self.n_planes())
+            .field("offset", &self.offset())
+            .field("stride", &self.stride())
             .finish()
     }
 }
@@ -259,7 +259,7 @@ impl VideoCropMeta {
         }
     }
 
-    pub fn get_rect(&self) -> (u32, u32, u32, u32) {
+    pub fn rect(&self) -> (u32, u32, u32, u32) {
         (self.0.x, self.0.y, self.0.width, self.0.height)
     }
 
@@ -282,7 +282,7 @@ unsafe impl MetaAPI for VideoCropMeta {
 impl fmt::Debug for VideoCropMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoCropMeta")
-            .field("rect", &self.get_rect())
+            .field("rect", &self.rect())
             .finish()
     }
 }
@@ -314,24 +314,24 @@ impl VideoRegionOfInterestMeta {
         }
     }
 
-    pub fn get_rect(&self) -> (u32, u32, u32, u32) {
+    pub fn rect(&self) -> (u32, u32, u32, u32) {
         (self.0.x, self.0.y, self.0.w, self.0.h)
     }
 
-    pub fn get_id(&self) -> i32 {
+    pub fn id(&self) -> i32 {
         self.0.id
     }
 
-    pub fn get_parent_id(&self) -> i32 {
+    pub fn parent_id(&self) -> i32 {
         self.0.parent_id
     }
 
-    pub fn get_roi_type<'a>(&self) -> &'a str {
+    pub fn roi_type<'a>(&self) -> &'a str {
         unsafe { glib::Quark::from_glib(self.0.roi_type).to_string() }
     }
 
     #[cfg(feature = "v1_14")]
-    pub fn get_params(&self) -> ParamsIter {
+    pub fn params(&self) -> ParamsIter {
         ParamsIter {
             _meta: self,
             list: self.0.params,
@@ -340,7 +340,7 @@ impl VideoRegionOfInterestMeta {
 
     #[cfg(feature = "v1_14")]
     pub fn get_param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
-        self.get_params().find(|s| s.get_name() == name)
+        self.params().find(|s| s.name() == name)
     }
 
     pub fn set_rect(&mut self, rect: (u32, u32, u32, u32)) {
@@ -405,14 +405,14 @@ impl fmt::Debug for VideoRegionOfInterestMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut f = f.debug_struct("VideoRegionOfInterestMeta");
 
-        f.field("roi_type", &self.get_roi_type())
-            .field("rect", &self.get_rect())
-            .field("id", &self.get_id())
-            .field("parent_id", &self.get_parent_id());
+        f.field("roi_type", &self.roi_type())
+            .field("rect", &self.rect())
+            .field("id", &self.id())
+            .field("parent_id", &self.parent_id());
 
         #[cfg(feature = "v1_14")]
         {
-            f.field("params", &self.get_params().collect::<Vec<_>>());
+            f.field("params", &self.params().collect::<Vec<_>>());
         }
 
         f.finish()
@@ -447,7 +447,7 @@ impl VideoAffineTransformationMeta {
         }
     }
 
-    pub fn get_matrix(&self) -> &[f32; 16] {
+    pub fn matrix(&self) -> &[f32; 16] {
         &self.0.matrix
     }
 
@@ -473,7 +473,7 @@ unsafe impl MetaAPI for VideoAffineTransformationMeta {
 impl fmt::Debug for VideoAffineTransformationMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoAffineTransformationMeta")
-            .field("matrix", &self.get_matrix())
+            .field("matrix", &self.matrix())
             .finish()
     }
 }
@@ -500,12 +500,12 @@ impl VideoOverlayCompositionMeta {
         }
     }
 
-    pub fn get_overlay(&self) -> &crate::VideoOverlayCompositionRef {
+    pub fn overlay(&self) -> &crate::VideoOverlayCompositionRef {
         unsafe { crate::VideoOverlayCompositionRef::from_ptr(self.0.overlay) }
     }
 
-    pub fn get_overlay_owned(&self) -> crate::VideoOverlayComposition {
-        unsafe { from_glib_none(self.get_overlay().as_ptr()) }
+    pub fn overlay_owned(&self) -> crate::VideoOverlayComposition {
+        unsafe { from_glib_none(self.overlay().as_ptr()) }
     }
 
     pub fn set_overlay(&mut self, overlay: &crate::VideoOverlayComposition) {
@@ -529,7 +529,7 @@ unsafe impl MetaAPI for VideoOverlayCompositionMeta {
 impl fmt::Debug for VideoOverlayCompositionMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoOverlayCompositionMeta")
-            .field("overlay", &self.get_overlay())
+            .field("overlay", &self.overlay())
             .finish()
     }
 }
@@ -568,11 +568,11 @@ impl VideoCaptionMeta {
         }
     }
 
-    pub fn get_caption_type(&self) -> crate::VideoCaptionType {
+    pub fn caption_type(&self) -> crate::VideoCaptionType {
         unsafe { from_glib(self.0.caption_type) }
     }
 
-    pub fn get_data(&self) -> &[u8] {
+    pub fn data(&self) -> &[u8] {
         unsafe {
             use std::slice;
 
@@ -596,8 +596,8 @@ unsafe impl MetaAPI for VideoCaptionMeta {
 impl fmt::Debug for VideoCaptionMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoCaptionMeta")
-            .field("caption_type", &self.get_caption_type())
-            .field("data", &self.get_data())
+            .field("caption_type", &self.caption_type())
+            .field("data", &self.data())
             .finish()
     }
 }
@@ -637,15 +637,15 @@ impl VideoAFDMeta {
         }
     }
 
-    pub fn get_field(&self) -> u8 {
+    pub fn field(&self) -> u8 {
         self.0.field
     }
 
-    pub fn get_spec(&self) -> crate::VideoAFDSpec {
+    pub fn spec(&self) -> crate::VideoAFDSpec {
         unsafe { from_glib(self.0.spec) }
     }
 
-    pub fn get_afd(&self) -> crate::VideoAFDValue {
+    pub fn afd(&self) -> crate::VideoAFDValue {
         unsafe { from_glib(self.0.afd) }
     }
 }
@@ -665,9 +665,9 @@ unsafe impl MetaAPI for VideoAFDMeta {
 impl fmt::Debug for VideoAFDMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoAFDMeta")
-            .field("field", &self.get_field())
-            .field("spec", &self.get_spec())
-            .field("afd", &self.get_afd())
+            .field("field", &self.field())
+            .field("spec", &self.spec())
+            .field("afd", &self.afd())
             .finish()
     }
 }
@@ -709,7 +709,7 @@ impl VideoBarMeta {
         }
     }
 
-    pub fn get_field(&self) -> u8 {
+    pub fn field(&self) -> u8 {
         self.0.field
     }
 
@@ -717,11 +717,11 @@ impl VideoBarMeta {
         unsafe { from_glib(self.0.is_letterbox) }
     }
 
-    pub fn get_bar_data1(&self) -> u32 {
+    pub fn bar_data1(&self) -> u32 {
         self.0.bar_data1
     }
 
-    pub fn get_bar_data2(&self) -> u32 {
+    pub fn bar_data2(&self) -> u32 {
         self.0.bar_data2
     }
 }
@@ -741,10 +741,10 @@ unsafe impl MetaAPI for VideoBarMeta {
 impl fmt::Debug for VideoBarMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoBarMeta")
-            .field("field", &self.get_field())
+            .field("field", &self.field())
             .field("is_letterbox", &self.is_letterbox())
-            .field("bar_data1", &self.get_bar_data1())
-            .field("bar_data2", &self.get_bar_data2())
+            .field("bar_data1", &self.bar_data1())
+            .field("bar_data2", &self.bar_data2())
             .finish()
     }
 }
@@ -767,26 +767,26 @@ mod tests {
                 240,
             )
             .unwrap();
-            assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
-            assert_eq!(meta.get_width(), 320);
-            assert_eq!(meta.get_height(), 240);
-            assert_eq!(meta.get_n_planes(), 1);
-            assert_eq!(meta.get_offset(), &[0]);
-            assert_eq!(meta.get_stride(), &[320 * 4]);
+            assert_eq!(meta.id(), 0);
+            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.format(), crate::VideoFormat::Argb);
+            assert_eq!(meta.width(), 320);
+            assert_eq!(meta.height(), 240);
+            assert_eq!(meta.n_planes(), 1);
+            assert_eq!(meta.offset(), &[0]);
+            assert_eq!(meta.stride(), &[320 * 4]);
         }
 
         {
             let meta = buffer.get_meta::<VideoMeta>().unwrap();
-            assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
-            assert_eq!(meta.get_width(), 320);
-            assert_eq!(meta.get_height(), 240);
-            assert_eq!(meta.get_n_planes(), 1);
-            assert_eq!(meta.get_offset(), &[0]);
-            assert_eq!(meta.get_stride(), &[320 * 4]);
+            assert_eq!(meta.id(), 0);
+            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.format(), crate::VideoFormat::Argb);
+            assert_eq!(meta.width(), 320);
+            assert_eq!(meta.height(), 240);
+            assert_eq!(meta.n_planes(), 1);
+            assert_eq!(meta.offset(), &[0]);
+            assert_eq!(meta.stride(), &[320 * 4]);
         }
     }
 
@@ -806,26 +806,26 @@ mod tests {
                 &[320 * 4],
             )
             .unwrap();
-            assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
-            assert_eq!(meta.get_width(), 320);
-            assert_eq!(meta.get_height(), 240);
-            assert_eq!(meta.get_n_planes(), 1);
-            assert_eq!(meta.get_offset(), &[0]);
-            assert_eq!(meta.get_stride(), &[320 * 4]);
+            assert_eq!(meta.id(), 0);
+            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.format(), crate::VideoFormat::Argb);
+            assert_eq!(meta.width(), 320);
+            assert_eq!(meta.height(), 240);
+            assert_eq!(meta.n_planes(), 1);
+            assert_eq!(meta.offset(), &[0]);
+            assert_eq!(meta.stride(), &[320 * 4]);
         }
 
         {
             let meta = buffer.get_meta::<VideoMeta>().unwrap();
-            assert_eq!(meta.get_id(), 0);
-            assert_eq!(meta.get_flags(), crate::VideoFrameFlags::empty());
-            assert_eq!(meta.get_format(), crate::VideoFormat::Argb);
-            assert_eq!(meta.get_width(), 320);
-            assert_eq!(meta.get_height(), 240);
-            assert_eq!(meta.get_n_planes(), 1);
-            assert_eq!(meta.get_offset(), &[0]);
-            assert_eq!(meta.get_stride(), &[320 * 4]);
+            assert_eq!(meta.id(), 0);
+            assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
+            assert_eq!(meta.format(), crate::VideoFormat::Argb);
+            assert_eq!(meta.width(), 320);
+            assert_eq!(meta.height(), 240);
+            assert_eq!(meta.n_planes(), 1);
+            assert_eq!(meta.offset(), &[0]);
+            assert_eq!(meta.stride(), &[320 * 4]);
         }
     }
 
@@ -844,11 +844,11 @@ mod tests {
         )
         .unwrap();
 
-        let alig = meta.get_alignment();
+        let alig = meta.alignment();
         assert_eq!(alig, crate::VideoAlignment::new(0, 0, 0, 0, &[0, 0, 0, 0]));
 
-        assert_eq!(meta.get_plane_size().unwrap(), [76800, 38400, 0, 0]);
-        assert_eq!(meta.get_plane_height().unwrap(), [240, 120, 0, 0]);
+        assert_eq!(meta.plane_size().unwrap(), [76800, 38400, 0, 0]);
+        assert_eq!(meta.plane_height().unwrap(), [240, 120, 0, 0]);
 
         /* horizontal padding */
         let mut info = crate::VideoInfo::builder(crate::VideoFormat::Nv12, 320, 240)
@@ -869,11 +869,11 @@ mod tests {
         .unwrap();
         meta.set_alignment(&alig).unwrap();
 
-        let alig = meta.get_alignment();
+        let alig = meta.alignment();
         assert_eq!(alig, crate::VideoAlignment::new(0, 0, 2, 6, &[0, 0, 0, 0]));
 
-        assert_eq!(meta.get_plane_size().unwrap(), [78720, 39360, 0, 0]);
-        assert_eq!(meta.get_plane_height().unwrap(), [240, 120, 0, 0]);
+        assert_eq!(meta.plane_size().unwrap(), [78720, 39360, 0, 0]);
+        assert_eq!(meta.plane_height().unwrap(), [240, 120, 0, 0]);
 
         /* vertical alignment */
         let mut info = crate::VideoInfo::builder(crate::VideoFormat::Nv12, 320, 240)
@@ -894,10 +894,10 @@ mod tests {
         .unwrap();
         meta.set_alignment(&alig).unwrap();
 
-        let alig = meta.get_alignment();
+        let alig = meta.alignment();
         assert_eq!(alig, crate::VideoAlignment::new(2, 6, 0, 0, &[0, 0, 0, 0]));
 
-        assert_eq!(meta.get_plane_size().unwrap(), [79360, 39680, 0, 0]);
-        assert_eq!(meta.get_plane_height().unwrap(), [248, 124, 0, 0]);
+        assert_eq!(meta.plane_size().unwrap(), [79360, 39680, 0, 0]);
+        assert_eq!(meta.plane_height().unwrap(), [248, 124, 0, 0]);
     }
 }

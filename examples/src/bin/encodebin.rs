@@ -145,9 +145,9 @@ fn example_main() -> Result<(), Error> {
         };
 
         let (is_audio, is_video) = {
-            let media_type = dbin_src_pad.get_current_caps().and_then(|caps| {
+            let media_type = dbin_src_pad.current_caps().and_then(|caps| {
                 caps.get_structure(0).map(|s| {
-                    let name = s.get_name();
+                    let name = s.name();
                     (name.starts_with("audio/"), name.starts_with("video/"))
                 })
             });
@@ -157,10 +157,7 @@ fn example_main() -> Result<(), Error> {
                     element_warning!(
                         dbin,
                         gst::CoreError::Negotiation,
-                        (
-                            "Failed to get media type from pad {}",
-                            dbin_src_pad.get_name()
-                        )
+                        ("Failed to get media type from pad {}", dbin_src_pad.name())
                     );
 
                     return;
@@ -266,7 +263,7 @@ fn example_main() -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
@@ -279,8 +276,8 @@ fn example_main() -> Result<(), Error> {
 
                 #[cfg(feature = "v1_10")]
                 {
-                    match err.get_details() {
-                        Some(details) if details.get_name() == "error-details" => details
+                    match err.details() {
+                        Some(details) if details.name() == "error-details" => details
                             .get::<&ErrorValue>("error")
                             .unwrap()
                             .cloned()
@@ -289,12 +286,12 @@ fn example_main() -> Result<(), Error> {
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
                             src: msg
-                                .get_src()
-                                .map(|s| String::from(s.get_path_string()))
+                                .src()
+                                .map(|s| String::from(s.path_string()))
                                 .unwrap_or_else(|| String::from("None")),
-                            error: err.get_error().to_string(),
-                            debug: err.get_debug(),
-                            source: err.get_error(),
+                            error: err.error().to_string(),
+                            debug: err.debug(),
+                            source: err.error(),
                         }
                         .into()),
                     }?;
@@ -303,12 +300,12 @@ fn example_main() -> Result<(), Error> {
                 {
                     return Err(ErrorMessage {
                         src: msg
-                            .get_src()
-                            .map(|s| String::from(s.get_path_string()))
+                            .src()
+                            .map(|s| String::from(s.path_string()))
                             .unwrap_or_else(|| String::from("None")),
-                        error: err.get_error().to_string(),
-                        debug: err.get_debug(),
-                        source: err.get_error(),
+                        error: err.error().to_string(),
+                        debug: err.debug(),
+                        source: err.error(),
                     }
                     .into());
                 }
@@ -316,10 +313,10 @@ fn example_main() -> Result<(), Error> {
             MessageView::StateChanged(s) => {
                 println!(
                     "State changed from {:?}: {:?} -> {:?} ({:?})",
-                    s.get_src().map(|s| s.get_path_string()),
-                    s.get_old(),
-                    s.get_current(),
-                    s.get_pending()
+                    s.src().map(|s| s.path_string()),
+                    s.old(),
+                    s.current(),
+                    s.pending()
                 );
             }
             _ => (),

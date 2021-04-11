@@ -43,7 +43,7 @@ pub trait AudioDecoderExtManual: 'static {
 
     fn set_output_format(&self, info: &AudioInfo) -> Result<(), gst::FlowError>;
 
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     #[allow(clippy::too_many_arguments)]
     fn error<T: gst::MessageErrorDomain>(
@@ -132,7 +132,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         }
     }
 
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();

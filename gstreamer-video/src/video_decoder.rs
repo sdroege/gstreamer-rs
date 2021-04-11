@@ -37,20 +37,20 @@ pub trait VideoDecoderExtManual: 'static {
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn get_frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
-    fn get_frames(&self) -> Vec<VideoCodecFrame>;
-    fn get_oldest_frame(&self) -> Option<VideoCodecFrame>;
+    fn frames(&self) -> Vec<VideoCodecFrame>;
+    fn oldest_frame(&self) -> Option<VideoCodecFrame>;
 
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
     fn release_frame(&self, frame: VideoCodecFrame);
     fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime);
+    fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
-    fn get_output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
+    fn output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
     fn set_output_state(
         &self,
         fmt: VideoFormat,
@@ -106,7 +106,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         ret.into_result()
     }
 
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
@@ -154,7 +154,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         ret.into_result()
     }
 
-    fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+    fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         let mut min_latency = gst::ffi::GST_CLOCK_TIME_NONE;
         let mut max_latency = gst::ffi::GST_CLOCK_TIME_NONE;
 
@@ -191,7 +191,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    fn get_frames(&self) -> Vec<VideoCodecFrame> {
+    fn frames(&self) -> Vec<VideoCodecFrame> {
         unsafe {
             let frames = ffi::gst_video_decoder_get_frames(self.as_ref().to_glib_none().0);
             let mut iter: *const glib::ffi::GList = frames;
@@ -210,7 +210,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    fn get_oldest_frame(&self) -> Option<VideoCodecFrame> {
+    fn oldest_frame(&self) -> Option<VideoCodecFrame> {
         let frame =
             unsafe { ffi::gst_video_decoder_get_oldest_frame(self.as_ref().to_glib_none().0) };
 
@@ -221,7 +221,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    fn get_output_state(&self) -> Option<VideoCodecState<'static, Readable>> {
+    fn output_state(&self) -> Option<VideoCodecState<'static, Readable>> {
         let state =
             unsafe { ffi::gst_video_decoder_get_output_state(self.as_ref().to_glib_none().0) };
 
@@ -298,7 +298,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     ) -> Result<(), gst::FlowError> {
         // Consume output_state so user won't be able to modify it anymore
         let self_ptr = self.to_glib_none().0 as *const gst::ffi::GstElement;
-        assert_eq!(output_state.context.get_element_as_ptr(), self_ptr);
+        assert_eq!(output_state.context.element_as_ptr(), self_ptr);
 
         let ret = unsafe {
             from_glib(ffi::gst_video_decoder_negotiate(
@@ -339,12 +339,12 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
 }
 
 impl HasStreamLock for VideoDecoder {
-    fn get_stream_lock(&self) -> *mut glib::ffi::GRecMutex {
+    fn stream_lock(&self) -> *mut glib::ffi::GRecMutex {
         let decoder_sys: *const ffi::GstVideoDecoder = self.to_glib_none().0;
         unsafe { &(*decoder_sys).stream_lock as *const _ as usize as *mut _ }
     }
 
-    fn get_element_as_ptr(&self) -> *const gst::ffi::GstElement {
+    fn element_as_ptr(&self) -> *const gst::ffi::GstElement {
         let decoder_sys: *const ffi::GstVideoDecoder = self.to_glib_none().0;
         decoder_sys as *const gst::ffi::GstElement
     }

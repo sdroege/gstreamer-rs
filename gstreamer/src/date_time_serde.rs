@@ -54,9 +54,9 @@ impl StaticType for Date {
 impl<'a> Serialize for Date {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         DateTimeVariants::YMD(
-            self.0.get_year() as i32,
-            self.0.get_month().to_glib() as i32,
-            self.0.get_day() as i32,
+            self.0.year() as i32,
+            self.0.month().to_glib() as i32,
+            self.0.day() as i32,
         )
         .serialize(serializer)
     }
@@ -66,34 +66,30 @@ impl<'a> Serialize for DateTime {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let variant = if self.has_second() {
             DateTimeVariants::YMDhmsTz(
-                self.get_year(),
-                self.get_month().unwrap(),
-                self.get_day().unwrap(),
-                self.get_hour().unwrap(),
-                self.get_minute().unwrap(),
-                f64::from(self.get_second().unwrap())
-                    + f64::from(self.get_microsecond().unwrap()) / 1_000_000f64,
-                self.get_time_zone_offset().unwrap(),
+                self.year(),
+                self.month().unwrap(),
+                self.day().unwrap(),
+                self.hour().unwrap(),
+                self.minute().unwrap(),
+                f64::from(self.second().unwrap())
+                    + f64::from(self.microsecond().unwrap()) / 1_000_000f64,
+                self.time_zone_offset().unwrap(),
             )
         } else if self.has_time() {
             DateTimeVariants::YMDhmTz(
-                self.get_year(),
-                self.get_month().unwrap(),
-                self.get_day().unwrap(),
-                self.get_hour().unwrap(),
-                self.get_minute().unwrap(),
-                self.get_time_zone_offset().unwrap(),
+                self.year(),
+                self.month().unwrap(),
+                self.day().unwrap(),
+                self.hour().unwrap(),
+                self.minute().unwrap(),
+                self.time_zone_offset().unwrap(),
             )
         } else if self.has_day() {
-            DateTimeVariants::YMD(
-                self.get_year(),
-                self.get_month().unwrap(),
-                self.get_day().unwrap(),
-            )
+            DateTimeVariants::YMD(self.year(), self.month().unwrap(), self.day().unwrap())
         } else if self.has_month() {
-            DateTimeVariants::YM(self.get_year(), self.get_month().unwrap())
+            DateTimeVariants::YM(self.year(), self.month().unwrap())
         } else if self.has_year() {
-            DateTimeVariants::Y(self.get_year())
+            DateTimeVariants::Y(self.year())
         } else {
             return Err(ser::Error::custom(format!(
                 "no parts could be found in `DateTime` {}",

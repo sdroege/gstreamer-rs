@@ -138,7 +138,7 @@ mod tutorial5 {
         let pipeline = playbin.clone();
         let slider_update_signal_id = slider.connect_value_changed(move |slider| {
             let pipeline = &pipeline;
-            let value = slider.get_value() as u64;
+            let value = slider.value() as u64;
             if pipeline
                 .seek_simple(
                     gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
@@ -188,14 +188,14 @@ mod tutorial5 {
 
         video_window.connect_realize(move |video_window| {
             let video_overlay = &video_overlay;
-            let gdk_window = video_window.get_window().unwrap();
+            let gdk_window = video_window.window().unwrap();
 
             if !gdk_window.ensure_native() {
                 println!("Can't create native window for widget");
                 process::exit(-1);
             }
 
-            let display_type_name = gdk_window.get_display().get_type().name();
+            let display_type_name = gdk_window.display().type_().name();
             #[cfg(all(target_os = "linux", feature = "tutorial5-x11"))]
             {
                 // Check if we're using X11 or ...
@@ -244,7 +244,7 @@ mod tutorial5 {
         streams_list.set_editable(false);
         let pipeline_weak = playbin.downgrade();
         let streams_list_weak = glib::SendWeakRef::from(streams_list.downgrade());
-        let bus = playbin.get_bus().unwrap();
+        let bus = playbin.bus().unwrap();
 
         #[allow(clippy::single_match)]
         bus.connect_message(Some("application"), move |_, msg| match msg.view() {
@@ -259,9 +259,9 @@ mod tutorial5 {
                     None => return,
                 };
 
-                if application.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
+                if application.structure().map(|s| s.name()) == Some("tags-changed") {
                     let textbuf = streams_list
-                        .get_buffer()
+                        .buffer()
                         .expect("Couldn't get buffer from text_view");
                     analyze_streams(&pipeline, &textbuf);
                 }
@@ -360,7 +360,7 @@ mod tutorial5 {
 
         let window = create_ui(&playbin);
 
-        let bus = playbin.get_bus().unwrap();
+        let bus = playbin.bus().unwrap();
         bus.add_signal_watch();
 
         let pipeline_weak = playbin.downgrade();
@@ -384,20 +384,16 @@ mod tutorial5 {
                 gst::MessageView::Error(err) => {
                     println!(
                         "Error from {:?}: {} ({:?})",
-                        err.get_src().map(|s| s.get_path_string()),
-                        err.get_error(),
-                        err.get_debug()
+                        err.src().map(|s| s.path_string()),
+                        err.error(),
+                        err.debug()
                     );
                 }
                 // This is called when the pipeline changes states. We use it to
                 // keep track of the current state.
                 gst::MessageView::StateChanged(state_changed) => {
-                    if state_changed
-                        .get_src()
-                        .map(|s| s == pipeline)
-                        .unwrap_or(false)
-                    {
-                        println!("State set to {:?}", state_changed.get_current());
+                    if state_changed.src().map(|s| s == pipeline).unwrap_or(false) {
+                        println!("State set to {:?}", state_changed.current());
                     }
                 }
                 _ => (),

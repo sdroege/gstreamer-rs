@@ -29,7 +29,7 @@ impl Player {
         }
     }
 
-    pub fn get_config(&self) -> crate::PlayerConfig {
+    pub fn config(&self) -> crate::PlayerConfig {
         unsafe { from_glib_full(ffi::gst_player_get_config(self.to_glib_none().0)) }
     }
 

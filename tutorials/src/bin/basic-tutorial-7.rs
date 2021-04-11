@@ -50,7 +50,7 @@ fn tutorial_main() {
     let tee_audio_pad = tee.get_request_pad("src_%u").unwrap();
     println!(
         "Obtained request pad {} for audio branch",
-        tee_audio_pad.get_name()
+        tee_audio_pad.name()
     );
     let queue_audio_pad = audio_queue.get_static_pad("sink").unwrap();
     tee_audio_pad.link(&queue_audio_pad).unwrap();
@@ -58,7 +58,7 @@ fn tutorial_main() {
     let tee_video_pad = tee.get_request_pad("src_%u").unwrap();
     println!(
         "Obtained request pad {} for video branch",
-        tee_video_pad.get_name()
+        tee_video_pad.name()
     );
     let queue_video_pad = video_queue.get_static_pad("sink").unwrap();
     tee_video_pad.link(&queue_video_pad).unwrap();
@@ -66,7 +66,7 @@ fn tutorial_main() {
     pipeline
         .set_state(gst::State::Playing)
         .expect("Unable to set the pipeline to the `Playing` state");
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 
@@ -74,10 +74,10 @@ fn tutorial_main() {
             MessageView::Error(err) => {
                 eprintln!(
                     "Error received from element {:?}: {}",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error()
+                    err.src().map(|s| s.path_string()),
+                    err.error()
                 );
-                eprintln!("Debugging information: {:?}", err.get_debug());
+                eprintln!("Debugging information: {:?}", err.debug());
                 break;
             }
             MessageView::Eos(..) => break,

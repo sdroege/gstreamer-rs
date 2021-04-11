@@ -263,9 +263,9 @@ mod tests {
         let res = res_store.lock().unwrap().take().unwrap();
         let res = res.unwrap();
 
-        let converted_out_caps = res.get_caps().unwrap();
+        let converted_out_caps = res.caps().unwrap();
         assert_eq!(out_caps.as_ref(), converted_out_caps);
-        let out_buffer = res.get_buffer().unwrap();
+        let out_buffer = res.buffer().unwrap();
         {
             let data = out_buffer.map_readable().unwrap();
 

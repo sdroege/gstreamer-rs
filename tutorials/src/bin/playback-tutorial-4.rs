@@ -49,7 +49,7 @@ fn tutorial_main() -> Result<(), Error> {
     let main_loop = glib::MainLoop::new(None, false);
     let main_loop_clone = main_loop.clone();
     let pipeline_weak = pipeline.downgrade();
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
     bus.add_watch(move |_, msg| {
         use gst::MessageView;
 
@@ -63,9 +63,9 @@ fn tutorial_main() -> Result<(), Error> {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 main_loop.quit();
             }
@@ -79,7 +79,7 @@ fn tutorial_main() -> Result<(), Error> {
                 }
 
                 // Wait until buffering is complete before start/resume playing.
-                let percent = buffering.get_percent();
+                let percent = buffering.percent();
                 if percent < 100 {
                     let _ = pipeline.set_state(gst::State::Paused);
                 } else {
@@ -129,7 +129,7 @@ fn tutorial_main() -> Result<(), Error> {
         let mut graph = vec![b' '; GRAPH_LENGTH];
         let mut buffering = gst::query::Buffering::new(gst::Format::Percent);
         if pipeline.query(&mut buffering) {
-            let ranges = buffering.get_ranges();
+            let ranges = buffering.ranges();
             for range in &ranges {
                 let start = range.0;
                 let stop = range.1;

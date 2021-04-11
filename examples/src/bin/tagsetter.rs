@@ -53,7 +53,7 @@ fn example_main() -> Result<(), Error> {
         Ok(pipeline) => pipeline,
         Err(err) => {
             if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
-                return Err(MissingElement(context.get_missing_elements().join(",")).into());
+                return Err(MissingElement(context.missing_elements().join(",")).into());
             } else {
                 return Err(err.into());
             }
@@ -81,7 +81,7 @@ fn example_main() -> Result<(), Error> {
     // if there already is one.
     tagsetter.add::<gst::tags::Title>(&"Special randomized white-noise", gst::TagMergeMode::Append);
 
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     pipeline.set_state(gst::State::Playing)?;
 
@@ -93,13 +93,13 @@ fn example_main() -> Result<(), Error> {
             MessageView::Error(err) => {
                 return Err(ErrorMessage {
                     src: err
-                        .get_src()
-                        .map(|s| s.get_path_string())
+                        .src()
+                        .map(|s| s.path_string())
                         .unwrap_or_else(|| "None".into())
                         .to_string(),
-                    error: err.get_error().to_string(),
-                    debug: err.get_debug(),
-                    source: err.get_error(),
+                    error: err.error().to_string(),
+                    debug: err.debug(),
+                    source: err.error(),
                 }
                 .into());
             }

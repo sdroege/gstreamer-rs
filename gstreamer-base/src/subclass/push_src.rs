@@ -47,7 +47,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPushSrcClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstPushSrcClass;
             (*parent_class)
                 .fill
                 .map(|f| {
@@ -64,7 +64,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
     fn parent_alloc(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPushSrcClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstPushSrcClass;
             (*parent_class)
                 .alloc
                 .map(|f| {
@@ -87,7 +87,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
     fn parent_create(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPushSrcClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstPushSrcClass;
             (*parent_class)
                 .create
                 .map(|f| {
@@ -127,7 +127,7 @@ unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
@@ -142,7 +142,7 @@ unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
     buffer_ptr: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
@@ -165,7 +165,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
     buffer_ptr: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<PushSrc> = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3

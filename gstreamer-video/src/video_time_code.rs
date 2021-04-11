@@ -242,35 +242,35 @@ impl ValidVideoTimeCode {
 macro_rules! generic_impl {
     ($name:ident) => {
         impl $name {
-            pub fn get_hours(&self) -> u32 {
+            pub fn hours(&self) -> u32 {
                 self.0.hours
             }
 
-            pub fn get_minutes(&self) -> u32 {
+            pub fn minutes(&self) -> u32 {
                 self.0.minutes
             }
 
-            pub fn get_seconds(&self) -> u32 {
+            pub fn seconds(&self) -> u32 {
                 self.0.seconds
             }
 
-            pub fn get_frames(&self) -> u32 {
+            pub fn frames(&self) -> u32 {
                 self.0.frames
             }
 
-            pub fn get_field_count(&self) -> u32 {
+            pub fn field_count(&self) -> u32 {
                 self.0.field_count
             }
 
-            pub fn get_fps(&self) -> gst::Fraction {
+            pub fn fps(&self) -> gst::Fraction {
                 (self.0.config.fps_n as i32, self.0.config.fps_d as i32).into()
             }
 
-            pub fn get_flags(&self) -> VideoTimeCodeFlags {
+            pub fn flags(&self) -> VideoTimeCodeFlags {
                 unsafe { from_glib(self.0.config.flags) }
             }
 
-            pub fn get_latest_daily_jam(&self) -> Option<glib::DateTime> {
+            pub fn latest_daily_jam(&self) -> Option<glib::DateTime> {
                 unsafe { from_glib_none(self.0.config.latest_daily_jam) }
             }
 
@@ -311,14 +311,14 @@ macro_rules! generic_impl {
         impl fmt::Debug for $name {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 f.debug_struct(stringify!($name))
-                    .field("fps", &self.get_fps())
-                    .field("flags", &self.get_flags())
-                    .field("latest_daily_jam", &self.get_latest_daily_jam())
-                    .field("hours", &self.get_hours())
-                    .field("minutes", &self.get_minutes())
-                    .field("seconds", &self.get_seconds())
-                    .field("frames", &self.get_frames())
-                    .field("field_count", &self.get_field_count())
+                    .field("fps", &self.fps())
+                    .field("flags", &self.flags())
+                    .field("latest_daily_jam", &self.latest_daily_jam())
+                    .field("hours", &self.hours())
+                    .field("minutes", &self.minutes())
+                    .field("seconds", &self.seconds())
+                    .field("frames", &self.frames())
+                    .field("field_count", &self.field_count())
                     .finish()
             }
         }
@@ -537,7 +537,7 @@ impl VideoTimeCodeMeta {
         }
     }
 
-    pub fn get_tc(&self) -> ValidVideoTimeCode {
+    pub fn tc(&self) -> ValidVideoTimeCode {
         unsafe { ValidVideoTimeCode::from_glib_none(&self.0.tc as *const _) }
     }
 
@@ -565,7 +565,7 @@ unsafe impl MetaAPI for VideoTimeCodeMeta {
 impl fmt::Debug for VideoTimeCodeMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoTimeCodeMeta")
-            .field("tc", &self.get_tc())
+            .field("tc", &self.tc())
             .finish()
     }
 }
@@ -610,15 +610,15 @@ mod tests {
             )
             .expect("invalid timecode");
 
-            assert_eq!(meta.get_tc(), time_code_2);
+            assert_eq!(meta.tc(), time_code_2);
 
             time_code_2.increment_frame();
 
-            assert_eq!(meta.get_tc().get_frames() + 1, time_code_2.get_frames());
+            assert_eq!(meta.tc().frames() + 1, time_code_2.frames());
 
             meta.set_tc(time_code_2.clone());
 
-            assert_eq!(meta.get_tc(), time_code_2);
+            assert_eq!(meta.tc(), time_code_2);
         }
     }
 }

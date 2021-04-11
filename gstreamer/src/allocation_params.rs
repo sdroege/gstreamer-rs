@@ -13,19 +13,19 @@ unsafe impl Send for AllocationParams {}
 unsafe impl Sync for AllocationParams {}
 
 impl AllocationParams {
-    pub fn get_flags(&self) -> MemoryFlags {
+    pub fn flags(&self) -> MemoryFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
-    pub fn get_align(&self) -> usize {
+    pub fn align(&self) -> usize {
         self.0.align
     }
 
-    pub fn get_prefix(&self) -> usize {
+    pub fn prefix(&self) -> usize {
         self.0.prefix
     }
 
-    pub fn get_padding(&self) -> usize {
+    pub fn padding(&self) -> usize {
         self.0.padding
     }
 

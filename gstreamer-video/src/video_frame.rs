@@ -804,13 +804,13 @@ impl<T> Drop for VideoFrameRef<T> {
 }
 
 pub trait VideoBufferExt {
-    fn get_video_flags(&self) -> crate::VideoBufferFlags;
+    fn video_flags(&self) -> crate::VideoBufferFlags;
     fn set_video_flags(&mut self, flags: crate::VideoBufferFlags);
     fn unset_video_flags(&mut self, flags: crate::VideoBufferFlags);
 }
 
 impl VideoBufferExt for gst::BufferRef {
-    fn get_video_flags(&self) -> crate::VideoBufferFlags {
+    fn video_flags(&self) -> crate::VideoBufferFlags {
         unsafe {
             let ptr = self.as_mut_ptr();
             crate::VideoBufferFlags::from_bits_truncate((*ptr).mini_object.flags)

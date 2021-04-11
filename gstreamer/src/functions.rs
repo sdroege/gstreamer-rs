@@ -212,11 +212,11 @@ mod tests {
 
         let bin =
             parse_bin_from_description_with_name("fakesrc ! fakesink", false, "all_fake").unwrap();
-        let name = bin.get_name();
+        let name = bin.name();
         assert_eq!(name, "all_fake");
 
         let bin = parse_bin_from_description_with_name("fakesrc ! fakesink", false, "").unwrap();
-        let name = bin.get_name();
+        let name = bin.name();
         assert_ne!(name, "");
     }
 }

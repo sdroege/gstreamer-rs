@@ -6,7 +6,7 @@ use glib::translate::*;
 use std::mem;
 
 pub trait BaseSinkExtManual: 'static {
-    fn get_segment(&self) -> gst::Segment;
+    fn segment(&self) -> gst::Segment;
 
     fn wait(
         &self,
@@ -28,7 +28,7 @@ pub trait BaseSinkExtManual: 'static {
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
-    fn get_segment(&self) -> gst::Segment {
+    fn segment(&self) -> gst::Segment {
         unsafe {
             let sink: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&sink.element.object.lock);

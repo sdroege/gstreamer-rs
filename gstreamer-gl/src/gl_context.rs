@@ -45,13 +45,13 @@ impl GLContext {
 }
 
 pub trait GLContextExtManual: 'static {
-    fn get_gl_context(&self) -> uintptr_t;
+    fn gl_context(&self) -> uintptr_t;
 
     fn get_proc_address(&self, name: &str) -> uintptr_t;
 }
 
 impl<O: IsA<GLContext>> GLContextExtManual for O {
-    fn get_gl_context(&self) -> uintptr_t {
+    fn gl_context(&self) -> uintptr_t {
         unsafe { ffi::gst_gl_context_get_gl_context(self.as_ref().to_glib_none().0) as uintptr_t }
     }
 

@@ -7,13 +7,13 @@ use glib::object::{Cast, IsA};
 use glib::translate::{from_glib, FromGlibPtrFull, ToGlib, ToGlibPtr};
 
 pub trait PluginFeatureExtManual: Sized + 'static {
-    fn get_rank(&self) -> Rank;
+    fn rank(&self) -> Rank;
     fn set_rank(&self, rank: Rank);
     fn load(&self) -> Result<Self, glib::BoolError>;
 }
 
 impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
-    fn get_rank(&self) -> Rank {
+    fn rank(&self) -> Rank {
         unsafe {
             let rank = ffi::gst_plugin_feature_get_rank(self.as_ref().to_glib_none().0);
             from_glib(rank as i32)
@@ -48,7 +48,7 @@ mod tests {
 
         let factory = crate::ElementFactory::find("identity").unwrap();
         let loaded = factory.load().unwrap();
-        assert_eq!(factory.get_type(), loaded.get_type());
+        assert_eq!(factory.type_(), loaded.type_());
         let _element = loaded.create(None).unwrap();
     }
 }

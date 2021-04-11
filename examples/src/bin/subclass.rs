@@ -313,7 +313,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
@@ -325,12 +325,12 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
                 pipeline.set_state(gst::State::Null)?;
                 return Err(ErrorMessage {
                     src: msg
-                        .get_src()
-                        .map(|s| String::from(s.get_path_string()))
+                        .src()
+                        .map(|s| String::from(s.path_string()))
                         .unwrap_or_else(|| String::from("None")),
-                    error: err.get_error().to_string(),
-                    debug: err.get_debug(),
-                    source: err.get_error(),
+                    error: err.error().to_string(),
+                    debug: err.debug(),
+                    source: err.error(),
                 }
                 .into());
             }

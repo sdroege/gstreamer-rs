@@ -50,7 +50,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
     ) -> Result<Element, LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstDeviceClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
                 let ptr = f(
                     device.unsafe_cast_ref::<Device>().to_glib_none().0,
@@ -80,7 +80,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
     ) -> Result<(), LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstDeviceClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceClass;
             let f = (*parent_class).reconfigure_element.ok_or_else(|| {
                 loggable_error!(
                     crate::CAT_RUST,
@@ -117,7 +117,7 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
     name: *const libc::c_char,
 ) -> *mut ffi::GstElement {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.create_element(
@@ -150,7 +150,7 @@ unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Device> = from_glib_borrow(ptr);
 
     match imp.reconfigure_element(wrap.unsafe_cast_ref(), &from_glib_borrow(element)) {

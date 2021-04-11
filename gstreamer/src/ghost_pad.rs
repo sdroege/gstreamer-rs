@@ -101,7 +101,7 @@ impl GhostPad {
         target: &P,
     ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
-        Self::builder(name, target.get_direction()).build_with_target(target)
+        Self::builder(name, target.direction()).build_with_target(target)
     }
 
     pub fn from_template_with_target<P: IsA<Pad>>(
@@ -111,7 +111,7 @@ impl GhostPad {
     ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
-        if target.get_direction() != templ.get_property_direction() {
+        if target.direction() != templ.property_direction() {
             return Err(glib::bool_error!(
                 "Template and target have different directions"
             ));
@@ -135,7 +135,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_activate_function(func);
         }
@@ -161,7 +161,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_activatemode_function(func);
         }
@@ -186,7 +186,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_chain_function(func);
         }
@@ -211,7 +211,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_chain_list_function(func);
         }
@@ -232,7 +232,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_event_function(func);
         }
@@ -257,7 +257,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_event_full_function(func);
         }
@@ -284,7 +284,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_getrange_function(func);
         }
@@ -305,7 +305,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_iterate_internal_links_function(func);
         }
@@ -330,7 +330,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_link_function(func);
         }
@@ -351,7 +351,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_query_function(func);
         }
@@ -369,7 +369,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_unlink_function(func);
         }
@@ -384,7 +384,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             let proxy = self
                 .0
                 .unsafe_cast_ref::<crate::ProxyPad>()
-                .get_internal()
+                .internal()
                 .unwrap();
             proxy.set_pad_flags(flags);
         }
@@ -395,7 +395,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
     pub fn build_with_target<P: IsA<Pad>>(self, target: &P) -> Result<T, glib::BoolError> {
         use crate::GhostPadExt;
 
-        assert_eq!(self.0.get_direction(), target.get_direction());
+        assert_eq!(self.0.direction(), target.direction());
 
         self.0.set_target(Some(target))?;
 

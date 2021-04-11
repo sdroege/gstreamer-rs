@@ -39,13 +39,13 @@ impl fmt::Debug for MemoryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Memory")
             .field("ptr", unsafe { &self.as_ptr() })
-            .field("allocator", &self.get_allocator())
-            .field("parent", &self.get_parent())
-            .field("maxsize", &self.get_maxsize())
-            .field("align", &self.get_align())
-            .field("offset", &self.get_offset())
-            .field("size", &self.get_size())
-            .field("flags", &self.get_flags())
+            .field("allocator", &self.allocator())
+            .field("parent", &self.parent())
+            .field("maxsize", &self.maxsize())
+            .field("align", &self.align())
+            .field("offset", &self.offset())
+            .field("size", &self.size())
+            .field("flags", &self.flags())
             .finish()
     }
 }
@@ -166,11 +166,11 @@ impl Memory {
 }
 
 impl MemoryRef {
-    pub fn get_allocator(&self) -> Option<Allocator> {
+    pub fn allocator(&self) -> Option<Allocator> {
         unsafe { from_glib_none(self.0.allocator) }
     }
 
-    pub fn get_parent(&self) -> Option<&MemoryRef> {
+    pub fn parent(&self) -> Option<&MemoryRef> {
         unsafe {
             if self.0.parent.is_null() {
                 None
@@ -180,23 +180,23 @@ impl MemoryRef {
         }
     }
 
-    pub fn get_maxsize(&self) -> usize {
+    pub fn maxsize(&self) -> usize {
         self.0.maxsize
     }
 
-    pub fn get_align(&self) -> usize {
+    pub fn align(&self) -> usize {
         self.0.align
     }
 
-    pub fn get_offset(&self) -> usize {
+    pub fn offset(&self) -> usize {
         self.0.offset
     }
 
-    pub fn get_size(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.0.size
     }
 
-    pub fn get_flags(&self) -> MemoryFlags {
+    pub fn flags(&self) -> MemoryFlags {
         unsafe { from_glib(self.0.mini_object.flags) }
     }
 
@@ -205,7 +205,7 @@ impl MemoryRef {
             Some(val) => val as isize,
             None => 0,
         };
-        assert!(offset + pos_sz < (self.get_maxsize() as isize));
+        assert!(offset + pos_sz < (self.maxsize() as isize));
         unsafe {
             from_glib_full(ffi::gst_memory_copy(
                 self.as_mut_ptr(),
@@ -285,7 +285,7 @@ impl MemoryRef {
             Some(val) => val as isize,
             None => 0,
         };
-        assert!(offset + pos_sz < (self.get_maxsize() as isize));
+        assert!(offset + pos_sz < (self.maxsize() as isize));
         unsafe {
             from_glib_full(ffi::gst_memory_share(
                 self.as_ptr() as *mut _,
@@ -299,7 +299,7 @@ impl MemoryRef {
     }
 
     pub fn resize(&mut self, offset: isize, size: usize) {
-        assert!(offset + (size as isize) < (self.get_maxsize() as isize));
+        assert!(offset + (size as isize) < (self.maxsize() as isize));
         unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size) }
     }
 
@@ -309,11 +309,11 @@ impl MemoryRef {
 }
 
 impl<'a, T> MemoryMap<'a, T> {
-    pub fn get_size(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.map_info.size
     }
 
-    pub fn get_memory(&self) -> &MemoryRef {
+    pub fn memory(&self) -> &MemoryRef {
         self.memory
     }
 
@@ -356,9 +356,7 @@ impl<'a> ops::DerefMut for MemoryMap<'a, Writable> {
 
 impl<'a, T> fmt::Debug for MemoryMap<'a, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("MemoryMap")
-            .field(&self.get_memory())
-            .finish()
+        f.debug_tuple("MemoryMap").field(&self.memory()).finish()
     }
 }
 
@@ -386,11 +384,11 @@ impl<T> MappedMemory<T> {
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 
-    pub fn get_size(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.map_info.size
     }
 
-    pub fn get_memory(&self) -> &MemoryRef {
+    pub fn memory(&self) -> &MemoryRef {
         self.memory.as_ref().unwrap().as_ref()
     }
 
@@ -448,9 +446,7 @@ impl<T> Drop for MappedMemory<T> {
 
 impl<T> fmt::Debug for MappedMemory<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("MappedMemory")
-            .field(&self.get_memory())
-            .finish()
+        f.debug_tuple("MappedMemory").field(&self.memory()).finish()
     }
 }
 
@@ -476,7 +472,7 @@ impl<'a> Dump<'a> {
 
         let map = self.memory.map_readable().expect("Failed to map memory");
         let data = map.as_slice();
-        let size = self.size.unwrap_or_else(|| self.memory.get_size());
+        let size = self.size.unwrap_or_else(|| self.memory.size());
         let data = &data[0..size];
 
         if debug {
@@ -506,7 +502,7 @@ mod tests {
         crate::init().unwrap();
 
         let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
-        println!("{}", mem.dump(Some(mem.get_size())));
+        println!("{}", mem.dump(Some(mem.size())));
 
         let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
         println!("{:?}", mem.dump(Some(2)));

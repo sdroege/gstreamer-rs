@@ -7,13 +7,13 @@ use std::mem;
 use std::ptr;
 
 pub trait BaseTransformExtManual: 'static {
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
-    fn get_segment(&self) -> gst::Segment;
+    fn segment(&self) -> gst::Segment;
 }
 
 impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
@@ -26,7 +26,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
         }
     }
 
-    fn get_segment(&self) -> gst::Segment {
+    fn segment(&self) -> gst::Segment {
         unsafe {
             let trans: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&trans.element.object.lock);

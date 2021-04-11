@@ -30,20 +30,20 @@ impl<'a> fmt::Debug for VideoCodecFrame<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut b = f.debug_struct("VideoCodecFrame");
 
-        b.field("flags", &self.get_flags())
-            .field("system_frame_number", &self.get_system_frame_number())
-            .field("decode_frame_number", &self.get_decode_frame_number())
+        b.field("flags", &self.flags())
+            .field("system_frame_number", &self.system_frame_number())
+            .field("decode_frame_number", &self.decode_frame_number())
             .field(
                 "presentation_frame_number",
-                &self.get_presentation_frame_number(),
+                &self.presentation_frame_number(),
             )
-            .field("dts", &self.get_dts())
-            .field("pts", &self.get_pts())
-            .field("duration", &self.get_duration())
-            .field("distance_from_sync", &self.get_distance_from_sync())
-            .field("input_buffer", &self.get_input_buffer())
-            .field("output_buffer", &self.get_output_buffer())
-            .field("deadline", &self.get_deadline());
+            .field("dts", &self.dts())
+            .field("pts", &self.pts())
+            .field("duration", &self.duration())
+            .field("distance_from_sync", &self.distance_from_sync())
+            .field("input_buffer", &self.input_buffer())
+            .field("output_buffer", &self.output_buffer())
+            .field("deadline", &self.deadline());
 
         b.finish()
     }
@@ -56,12 +56,12 @@ impl<'a> VideoCodecFrame<'a> {
         element: &'a T,
     ) -> Self {
         skip_assert_initialized!();
-        let stream_lock = element.get_stream_lock();
+        let stream_lock = element.stream_lock();
         glib::ffi::g_rec_mutex_lock(stream_lock);
         Self { frame, element }
     }
 
-    pub fn get_flags(&self) -> VideoCodecFrameFlags {
+    pub fn flags(&self) -> VideoCodecFrameFlags {
         let flags = unsafe { (*self.to_glib_none().0).flags };
         VideoCodecFrameFlags::from_bits_truncate(flags)
     }
@@ -74,19 +74,19 @@ impl<'a> VideoCodecFrame<'a> {
         unsafe { (*self.to_glib_none().0).flags &= !flags.bits() }
     }
 
-    pub fn get_system_frame_number(&self) -> u32 {
+    pub fn system_frame_number(&self) -> u32 {
         unsafe { (*self.to_glib_none().0).system_frame_number }
     }
 
-    pub fn get_decode_frame_number(&self) -> u32 {
+    pub fn decode_frame_number(&self) -> u32 {
         unsafe { (*self.to_glib_none().0).decode_frame_number }
     }
 
-    pub fn get_presentation_frame_number(&self) -> u32 {
+    pub fn presentation_frame_number(&self) -> u32 {
         unsafe { (*self.to_glib_none().0).presentation_frame_number }
     }
 
-    pub fn get_dts(&self) -> gst::ClockTime {
+    pub fn dts(&self) -> gst::ClockTime {
         unsafe { from_glib((*self.to_glib_none().0).dts) }
     }
 
@@ -96,7 +96,7 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn get_pts(&self) -> gst::ClockTime {
+    pub fn pts(&self) -> gst::ClockTime {
         unsafe { from_glib((*self.to_glib_none().0).pts) }
     }
 
@@ -106,7 +106,7 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn get_duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> gst::ClockTime {
         unsafe { from_glib((*self.to_glib_none().0).duration) }
     }
 
@@ -116,11 +116,11 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn get_distance_from_sync(&self) -> i32 {
+    pub fn distance_from_sync(&self) -> i32 {
         unsafe { (*self.to_glib_none().0).distance_from_sync }
     }
 
-    pub fn get_input_buffer(&self) -> Option<&gst::BufferRef> {
+    pub fn input_buffer(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).input_buffer;
             if ptr.is_null() {
@@ -131,7 +131,7 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn get_output_buffer(&self) -> Option<&gst::BufferRef> {
+    pub fn output_buffer(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).output_buffer;
             if ptr.is_null() {
@@ -142,7 +142,7 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn get_output_buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
+    pub fn output_buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).output_buffer;
             if ptr.is_null() {
@@ -176,13 +176,13 @@ impl<'a> VideoCodecFrame<'a> {
         }
     }
 
-    pub fn get_deadline(&self) -> gst::ClockTime {
+    pub fn deadline(&self) -> gst::ClockTime {
         unsafe { from_glib((*self.to_glib_none().0).deadline) }
     }
 
     #[doc(hidden)]
     pub unsafe fn into_ptr(self) -> *mut ffi::GstVideoCodecFrame {
-        let stream_lock = self.element.get_stream_lock();
+        let stream_lock = self.element.stream_lock();
         glib::ffi::g_rec_mutex_unlock(stream_lock);
 
         let s = mem::ManuallyDrop::new(self);
@@ -193,7 +193,7 @@ impl<'a> VideoCodecFrame<'a> {
 impl<'a> Drop for VideoCodecFrame<'a> {
     fn drop(&mut self) {
         unsafe {
-            let stream_lock = self.element.get_stream_lock();
+            let stream_lock = self.element.stream_lock();
             glib::ffi::g_rec_mutex_unlock(stream_lock);
 
             ffi::gst_video_codec_frame_unref(self.frame);

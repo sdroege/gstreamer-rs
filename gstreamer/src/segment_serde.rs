@@ -31,17 +31,17 @@ impl<T: FormattedValue> Serialize for FormattedSegment<T> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let fmt_seg = unsafe {
             FormattedSegmentSerde {
-                flags: self.get_flags(),
-                rate: self.get_rate(),
-                applied_rate: self.get_applied_rate(),
-                format: self.get_format(),
-                base: self.get_base().to_raw_value(),
-                offset: self.get_offset().to_raw_value(),
-                start: self.get_start().to_raw_value(),
-                stop: self.get_stop().to_raw_value(),
-                time: self.get_time().to_raw_value(),
-                position: self.get_position().to_raw_value(),
-                duration: self.get_duration().to_raw_value(),
+                flags: self.flags(),
+                rate: self.rate(),
+                applied_rate: self.applied_rate(),
+                format: self.format(),
+                base: self.base().to_raw_value(),
+                offset: self.offset().to_raw_value(),
+                start: self.start().to_raw_value(),
+                stop: self.stop().to_raw_value(),
+                time: self.time().to_raw_value(),
+                position: self.position().to_raw_value(),
+                duration: self.duration().to_raw_value(),
             }
         };
         fmt_seg.serialize(serializer)
@@ -98,7 +98,7 @@ impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for Forma
             segment.downcast::<T>().map_err(|segment| {
                 de::Error::custom(format!(
                     "failed to convert segment with format {:?} to {:?}",
-                    segment.get_format(),
+                    segment.format(),
                     T::get_default_format(),
                 ))
             })
@@ -180,39 +180,36 @@ mod tests {
         "#;
 
         let segment: Segment = ron::de::from_str(segment_ron).unwrap();
+        assert_eq!(segment.flags(), SegmentFlags::RESET | SegmentFlags::SEGMENT);
+        assert!((segment.rate() - 1f64).abs() < std::f64::EPSILON);
+        assert!((segment.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
+        assert_eq!(segment.format(), Format::Time);
         assert_eq!(
-            segment.get_flags(),
-            SegmentFlags::RESET | SegmentFlags::SEGMENT
-        );
-        assert!((segment.get_rate() - 1f64).abs() < std::f64::EPSILON);
-        assert!((segment.get_applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
-        assert_eq!(segment.get_format(), Format::Time);
-        assert_eq!(
-            segment.get_base(),
+            segment.base(),
             GenericFormattedValue::Time(ClockTime::from_nseconds(123))
         );
         assert_eq!(
-            segment.get_offset(),
+            segment.offset(),
             GenericFormattedValue::Time(ClockTime::from_nseconds(42))
         );
         assert_eq!(
-            segment.get_start(),
+            segment.start(),
             GenericFormattedValue::Time(ClockTime::from_nseconds(1024))
         );
         assert_eq!(
-            segment.get_stop(),
+            segment.stop(),
             GenericFormattedValue::Time(ClockTime::from_nseconds(2048))
         );
         assert_eq!(
-            segment.get_time(),
+            segment.time(),
             GenericFormattedValue::Time(ClockTime::from_nseconds(1042))
         );
         assert_eq!(
-            segment.get_position(),
+            segment.position(),
             GenericFormattedValue::Time(ClockTime::from_nseconds(256))
         );
         assert_eq!(
-            segment.get_duration(),
+            segment.duration(),
             GenericFormattedValue::Time(ClockTime::none())
         );
     }
@@ -243,20 +240,17 @@ mod tests {
         "#;
 
         let fmt_seg: FormattedSegment<Time> = ron::de::from_str(segment_ron).unwrap();
-        assert_eq!(
-            fmt_seg.get_flags(),
-            SegmentFlags::RESET | SegmentFlags::SEGMENT
-        );
-        assert!((fmt_seg.get_rate() - 1f64).abs() < std::f64::EPSILON);
-        assert!((fmt_seg.get_applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
-        assert_eq!(fmt_seg.get_format(), Format::Time);
-        assert_eq!(fmt_seg.get_base(), ClockTime::from_nseconds(123));
-        assert_eq!(fmt_seg.get_offset(), ClockTime::from_nseconds(42));
-        assert_eq!(fmt_seg.get_start(), ClockTime::from_nseconds(1024));
-        assert_eq!(fmt_seg.get_stop(), ClockTime::from_nseconds(2048));
-        assert_eq!(fmt_seg.get_time(), ClockTime::from_nseconds(1042));
-        assert_eq!(fmt_seg.get_position(), ClockTime::from_nseconds(256));
-        assert_eq!(fmt_seg.get_duration(), ClockTime::none());
+        assert_eq!(fmt_seg.flags(), SegmentFlags::RESET | SegmentFlags::SEGMENT);
+        assert!((fmt_seg.rate() - 1f64).abs() < std::f64::EPSILON);
+        assert!((fmt_seg.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
+        assert_eq!(fmt_seg.format(), Format::Time);
+        assert_eq!(fmt_seg.base(), ClockTime::from_nseconds(123));
+        assert_eq!(fmt_seg.offset(), ClockTime::from_nseconds(42));
+        assert_eq!(fmt_seg.start(), ClockTime::from_nseconds(1024));
+        assert_eq!(fmt_seg.stop(), ClockTime::from_nseconds(2048));
+        assert_eq!(fmt_seg.time(), ClockTime::from_nseconds(1042));
+        assert_eq!(fmt_seg.position(), ClockTime::from_nseconds(256));
+        assert_eq!(fmt_seg.duration(), ClockTime::none());
     }
 
     #[test]
@@ -278,18 +272,16 @@ mod tests {
         let segment_se = ron::ser::to_string(&segment).unwrap();
 
         let segment_de: Segment = ron::de::from_str(segment_se.as_str()).unwrap();
-        assert_eq!(segment_de.get_flags(), segment.get_flags());
-        assert!((segment_de.get_rate() - segment.get_rate()).abs() < std::f64::EPSILON);
-        assert!(
-            (segment_de.get_applied_rate() - segment.get_applied_rate()).abs() < std::f64::EPSILON
-        );
-        assert_eq!(segment_de.get_format(), segment.get_format());
-        assert_eq!(segment_de.get_base(), segment.get_base());
-        assert_eq!(segment_de.get_offset(), segment.get_offset());
-        assert_eq!(segment_de.get_start(), segment.get_start());
-        assert_eq!(segment_de.get_stop(), segment.get_stop());
-        assert_eq!(segment_de.get_time(), segment.get_time());
-        assert_eq!(segment_de.get_position(), segment.get_position());
-        assert_eq!(segment_de.get_duration(), segment.get_duration());
+        assert_eq!(segment_de.flags(), segment.flags());
+        assert!((segment_de.rate() - segment.rate()).abs() < std::f64::EPSILON);
+        assert!((segment_de.applied_rate() - segment.applied_rate()).abs() < std::f64::EPSILON);
+        assert_eq!(segment_de.format(), segment.format());
+        assert_eq!(segment_de.base(), segment.base());
+        assert_eq!(segment_de.offset(), segment.offset());
+        assert_eq!(segment_de.start(), segment.start());
+        assert_eq!(segment_de.stop(), segment.stop());
+        assert_eq!(segment_de.time(), segment.time());
+        assert_eq!(segment_de.position(), segment.position());
+        assert_eq!(segment_de.duration(), segment.duration());
     }
 }

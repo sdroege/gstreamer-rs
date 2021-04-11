@@ -24,7 +24,7 @@ impl Toc {
 }
 
 impl TocRef {
-    pub fn get_scope(&self) -> TocScope {
+    pub fn scope(&self) -> TocScope {
         unsafe { from_glib(ffi::gst_toc_get_scope(self.as_ptr())) }
     }
 
@@ -32,7 +32,7 @@ impl TocRef {
         unsafe { from_glib_none(ffi::gst_toc_find_entry(self.as_ptr(), uid.to_glib_none().0)) }
     }
 
-    pub fn get_entries(&self) -> Vec<TocEntry> {
+    pub fn entries(&self) -> Vec<TocEntry> {
         unsafe { FromGlibPtrContainer::from_glib_none(ffi::gst_toc_get_entries(self.as_ptr())) }
     }
 
@@ -42,7 +42,7 @@ impl TocRef {
         }
     }
 
-    pub fn get_tags(&self) -> Option<TagList> {
+    pub fn tags(&self) -> Option<TagList> {
         unsafe { from_glib_none(ffi::gst_toc_get_tags(self.as_ptr())) }
     }
 
@@ -74,9 +74,9 @@ impl fmt::Debug for Toc {
 impl fmt::Debug for TocRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Toc")
-            .field("scope", &self.get_scope())
-            .field("tags", &self.get_tags())
-            .field("entries", &self.get_entries())
+            .field("scope", &self.scope())
+            .field("tags", &self.tags())
+            .field("entries", &self.entries())
             .finish()
     }
 }
@@ -98,11 +98,11 @@ impl TocEntry {
 }
 
 impl TocEntryRef {
-    pub fn get_entry_type(&self) -> TocEntryType {
+    pub fn entry_type(&self) -> TocEntryType {
         unsafe { from_glib(ffi::gst_toc_entry_get_entry_type(self.as_ptr())) }
     }
 
-    pub fn get_uid(&self) -> &str {
+    pub fn uid(&self) -> &str {
         unsafe {
             CStr::from_ptr(ffi::gst_toc_entry_get_uid(self.as_ptr()))
                 .to_str()
@@ -116,17 +116,17 @@ impl TocEntryRef {
         }
     }
 
-    pub fn get_sub_entries(&self) -> Vec<TocEntry> {
+    pub fn sub_entries(&self) -> Vec<TocEntry> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_toc_entry_get_sub_entries(self.as_ptr()))
         }
     }
 
-    pub fn get_parent(&self) -> Option<TocEntry> {
+    pub fn parent(&self) -> Option<TocEntry> {
         unsafe { from_glib_none(ffi::gst_toc_entry_get_parent(self.as_mut_ptr())) }
     }
 
-    pub fn get_start_stop_times(&self) -> Option<(i64, i64)> {
+    pub fn start_stop_times(&self) -> Option<(i64, i64)> {
         unsafe {
             let mut start = mem::MaybeUninit::uninit();
             let mut stop = mem::MaybeUninit::uninit();
@@ -149,7 +149,7 @@ impl TocEntryRef {
         }
     }
 
-    pub fn get_tags(&self) -> Option<TagList> {
+    pub fn tags(&self) -> Option<TagList> {
         unsafe { from_glib_none(ffi::gst_toc_entry_get_tags(self.as_ptr())) }
     }
 
@@ -173,7 +173,7 @@ impl TocEntryRef {
         unsafe { from_glib(ffi::gst_toc_entry_is_sequence(self.as_ptr())) }
     }
 
-    pub fn get_loop(&self) -> Option<(TocLoopType, i32)> {
+    pub fn loop_(&self) -> Option<(TocLoopType, i32)> {
         unsafe {
             let mut loop_type = mem::MaybeUninit::uninit();
             let mut repeat_count = mem::MaybeUninit::uninit();
@@ -208,14 +208,14 @@ impl fmt::Debug for TocEntry {
 impl fmt::Debug for TocEntryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("TocEntry")
-            .field("entry_type", &self.get_entry_type())
-            .field("uid", &self.get_uid())
-            .field("start_stop", &self.get_start_stop_times())
-            .field("tags", &self.get_tags())
+            .field("entry_type", &self.entry_type())
+            .field("uid", &self.uid())
+            .field("start_stop", &self.start_stop_times())
+            .field("tags", &self.tags())
             .field("is_alternative", &self.is_alternative())
             .field("is_sequence", &self.is_sequence())
-            .field("loop", &self.get_loop())
-            .field("sub_entries", &self.get_sub_entries())
+            .field("loop", &self.loop_())
+            .field("sub_entries", &self.sub_entries())
             .finish()
     }
 }
@@ -234,7 +234,7 @@ mod tests {
 
         // Toc sub entry
         let toc_sub_entry = TocEntry::new(TocEntryType::Angle, "angle");
-        let parent = toc_sub_entry.get_parent();
+        let parent = toc_sub_entry.parent();
         assert!(parent.is_none());
 
         // Append sub entry
@@ -242,30 +242,30 @@ mod tests {
 
         // Toc
         let mut toc = Toc::new(TocScope::Global);
-        assert_eq!(toc.get_scope(), TocScope::Global);
+        assert_eq!(toc.scope(), TocScope::Global);
 
         // Append toc entry
         toc.get_mut().unwrap().append_entry(toc_entry);
-        assert_eq!(toc.get_scope(), TocScope::Global);
+        assert_eq!(toc.scope(), TocScope::Global);
 
         // Check toc entries
-        let toc_entries = toc.get_entries();
+        let toc_entries = toc.entries();
         assert_eq!(toc_entries.len(), 1);
 
         let toc_parent_entry = &toc_entries[0];
-        assert_eq!(toc_parent_entry.get_entry_type(), TocEntryType::Chapter);
-        assert_eq!(toc_parent_entry.get_uid(), "chapter");
-        let start_stop_times = toc_parent_entry.get_start_stop_times();
+        assert_eq!(toc_parent_entry.entry_type(), TocEntryType::Chapter);
+        assert_eq!(toc_parent_entry.uid(), "chapter");
+        let start_stop_times = toc_parent_entry.start_stop_times();
         assert!(start_stop_times.is_some());
         assert_eq!(start_stop_times.unwrap(), (1, 10));
 
         // Check sub entry
-        let toc_sub_entries = toc_parent_entry.get_sub_entries();
+        let toc_sub_entries = toc_parent_entry.sub_entries();
         assert_eq!(toc_sub_entries.len(), 1);
         let toc_sub_entry = &toc_sub_entries[0];
-        assert_eq!(toc_sub_entry.get_entry_type(), TocEntryType::Angle);
-        let parent = toc_sub_entry.get_parent();
+        assert_eq!(toc_sub_entry.entry_type(), TocEntryType::Angle);
+        let parent = toc_sub_entry.parent();
         assert!(parent.is_some());
-        assert_eq!(parent.unwrap().get_entry_type(), TocEntryType::Chapter);
+        assert_eq!(parent.unwrap().entry_type(), TocEntryType::Chapter);
     }
 }

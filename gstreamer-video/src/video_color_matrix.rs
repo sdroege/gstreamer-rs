@@ -5,7 +5,7 @@ use std::mem;
 use glib::translate::ToGlib;
 
 impl crate::VideoColorMatrix {
-    pub fn get_kr_kb(&self) -> Result<(f64, f64), glib::BoolError> {
+    pub fn kr_kb(&self) -> Result<(f64, f64), glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
             let mut kr = mem::MaybeUninit::uninit();

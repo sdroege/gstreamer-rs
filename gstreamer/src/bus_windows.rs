@@ -19,11 +19,11 @@ cfg_if::cfg_if! {
 use super::Bus;
 
 pub trait WindowsBusExtManual: 'static {
-    fn get_pollfd(&self) -> windows::io::RawHandle;
+    fn pollfd(&self) -> windows::io::RawHandle;
 }
 
 impl WindowsBusExtManual for Bus {
-    fn get_pollfd(&self) -> windows::io::RawHandle {
+    fn pollfd(&self) -> windows::io::RawHandle {
         #[cfg(windows)]
         unsafe {
             let mut pollfd = mem::MaybeUninit::zeroed();

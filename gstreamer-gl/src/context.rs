@@ -7,12 +7,12 @@ use gst::ContextRef;
 use std::ptr;
 
 pub trait ContextGLExt {
-    fn get_gl_display(&self) -> Option<GLDisplay>;
+    fn gl_display(&self) -> Option<GLDisplay>;
     fn set_gl_display<T: IsA<GLDisplay>>(&self, display: &T);
 }
 
 impl ContextGLExt for ContextRef {
-    fn get_gl_display(&self) -> Option<GLDisplay> {
+    fn gl_display(&self) -> Option<GLDisplay> {
         unsafe {
             let mut display = ptr::null_mut();
             if from_glib(ffi::gst_context_get_gl_display(

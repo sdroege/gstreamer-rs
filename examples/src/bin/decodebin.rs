@@ -111,9 +111,9 @@ fn example_main() -> Result<(), Error> {
         // Try to detect whether the raw stream decodebin provided us with
         // just now is either audio or video (or none of both, e.g. subtitles).
         let (is_audio, is_video) = {
-            let media_type = src_pad.get_current_caps().and_then(|caps| {
+            let media_type = src_pad.current_caps().and_then(|caps| {
                 caps.get_structure(0).map(|s| {
-                    let name = s.get_name();
+                    let name = s.name();
                     (name.starts_with("audio/"), name.starts_with("video/"))
                 })
             });
@@ -123,7 +123,7 @@ fn example_main() -> Result<(), Error> {
                     element_warning!(
                         dbin,
                         gst::CoreError::Negotiation,
-                        ("Failed to get media type from pad {}", src_pad.get_name())
+                        ("Failed to get media type from pad {}", src_pad.name())
                     );
 
                     return;
@@ -229,7 +229,7 @@ fn example_main() -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     // This code iterates over all messages that are sent across our pipeline's bus.
@@ -246,13 +246,13 @@ fn example_main() -> Result<(), Error> {
 
                 #[cfg(feature = "v1_10")]
                 {
-                    match err.get_details() {
+                    match err.details() {
                         // This bus-message of type error contained our custom error-details struct
                         // that we sent in the pad-added callback above. So we unpack it and log
                         // the detailed error information here. details contains a glib::SendValue.
                         // The unpacked error is the converted to a Result::Err, stopping the
                         // application's execution.
-                        Some(details) if details.get_name() == "error-details" => details
+                        Some(details) if details.name() == "error-details" => details
                             .get::<&ErrorValue>("error")
                             .unwrap()
                             .and_then(|v| v.0.lock().unwrap().take())
@@ -260,12 +260,12 @@ fn example_main() -> Result<(), Error> {
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
                             src: msg
-                                .get_src()
-                                .map(|s| String::from(s.get_path_string()))
+                                .src()
+                                .map(|s| String::from(s.path_string()))
                                 .unwrap_or_else(|| String::from("None")),
-                            error: err.get_error().to_string(),
-                            debug: err.get_debug(),
-                            source: err.get_error(),
+                            error: err.error().to_string(),
+                            debug: err.debug(),
+                            source: err.error(),
                         }
                         .into()),
                     }?;
@@ -274,12 +274,12 @@ fn example_main() -> Result<(), Error> {
                 {
                     return Err(ErrorMessage {
                         src: msg
-                            .get_src()
-                            .map(|s| String::from(s.get_path_string()))
+                            .src()
+                            .map(|s| String::from(s.path_string()))
                             .unwrap_or_else(|| String::from("None")),
-                        error: err.get_error().to_string(),
-                        debug: err.get_debug(),
-                        source: err.get_error(),
+                        error: err.error().to_string(),
+                        debug: err.debug(),
+                        source: err.error(),
                     }
                     .into());
                 }
@@ -287,10 +287,10 @@ fn example_main() -> Result<(), Error> {
             MessageView::StateChanged(s) => {
                 println!(
                     "State changed from {:?}: {:?} -> {:?} ({:?})",
-                    s.get_src().map(|s| s.get_path_string()),
-                    s.get_old(),
-                    s.get_current(),
-                    s.get_pending()
+                    s.src().map(|s| s.path_string()),
+                    s.old(),
+                    s.current(),
+                    s.pending()
                 );
             }
             _ => (),

@@ -138,7 +138,7 @@ impl<'a, T: MetaAPI, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
 }
 
 impl<'a, T: MetaAPI> MetaRef<'a, T> {
-    pub fn get_api(&self) -> glib::Type {
+    pub fn api(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
             let info = (*meta).info;
@@ -148,7 +148,7 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_seqnum(&self) -> MetaSeqnum {
+    pub fn seqnum(&self) -> MetaSeqnum {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
             MetaSeqnum(ffi::gst_meta_get_seqnum(meta))
@@ -163,7 +163,7 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
 impl<'a> MetaRef<'a, Meta> {
     pub fn downcast_ref<T: MetaAPI>(&self) -> Option<&MetaRef<'a, T>> {
         let target_type = T::get_meta_api();
-        let type_ = self.get_api();
+        let type_ = self.api();
 
         if type_ == glib::Type::INVALID || target_type == type_ {
             Some(unsafe { &*(self as *const MetaRef<'a, Meta> as *const MetaRef<'a, T>) })
@@ -174,7 +174,7 @@ impl<'a> MetaRef<'a, Meta> {
 }
 
 impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
-    pub fn get_api(&self) -> glib::Type {
+    pub fn api(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
             let info = (*meta).info;
@@ -184,7 +184,7 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_seqnum(&self) -> u64 {
+    pub fn seqnum(&self) -> u64 {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
             ffi::gst_meta_get_seqnum(meta)
@@ -215,7 +215,7 @@ impl<'a, T: MetaAPI> MetaRefMut<'a, T, Standalone> {
 impl<'a, U> MetaRefMut<'a, Meta, U> {
     pub fn downcast_ref<T: MetaAPI>(&mut self) -> Option<&MetaRefMut<'a, T, U>> {
         let target_type = T::get_meta_api();
-        let type_ = self.get_api();
+        let type_ = self.api();
 
         if type_ == glib::Type::INVALID || target_type == type_ {
             Some(unsafe { &*(self as *mut MetaRefMut<'a, Meta, U> as *const MetaRefMut<'a, T, U>) })
@@ -232,7 +232,7 @@ unsafe impl Send for Meta {}
 unsafe impl Sync for Meta {}
 
 impl Meta {
-    fn get_api(&self) -> glib::Type {
+    fn api(&self) -> glib::Type {
         unsafe { glib::Type::from_glib((*self.0.info).api) }
     }
 }
@@ -247,9 +247,7 @@ unsafe impl MetaAPI for Meta {
 
 impl fmt::Debug for Meta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("Meta")
-            .field("api", &self.get_api())
-            .finish()
+        f.debug_struct("Meta").field("api", &self.api()).finish()
     }
 }
 
@@ -272,11 +270,11 @@ impl ParentBufferMeta {
         }
     }
 
-    pub fn get_parent(&self) -> &BufferRef {
+    pub fn parent(&self) -> &BufferRef {
         unsafe { BufferRef::from_ptr(self.0.buffer) }
     }
 
-    pub fn get_parent_owned(&self) -> Buffer {
+    pub fn parent_owned(&self) -> Buffer {
         unsafe { from_glib_none(self.0.buffer) }
     }
 }
@@ -292,7 +290,7 @@ unsafe impl MetaAPI for ParentBufferMeta {
 impl fmt::Debug for ParentBufferMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("ParentBufferMeta")
-            .field("parent", &self.get_parent())
+            .field("parent", &self.parent())
             .finish()
     }
 }
@@ -313,11 +311,11 @@ impl ProtectionMeta {
         }
     }
 
-    pub fn get_info(&self) -> &crate::StructureRef {
+    pub fn info(&self) -> &crate::StructureRef {
         unsafe { crate::StructureRef::from_glib_borrow(self.0.info) }
     }
 
-    pub fn get_info_mut(&mut self) -> &mut crate::StructureRef {
+    pub fn info_mut(&mut self) -> &mut crate::StructureRef {
         unsafe { crate::StructureRef::from_glib_borrow_mut(self.0.info) }
     }
 }
@@ -333,7 +331,7 @@ unsafe impl MetaAPI for ProtectionMeta {
 impl fmt::Debug for ProtectionMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("ProtectionMeta")
-            .field("info", &self.get_info())
+            .field("info", &self.info())
             .finish()
     }
 }
@@ -372,19 +370,19 @@ impl ReferenceTimestampMeta {
         }
     }
 
-    pub fn get_reference(&self) -> &CapsRef {
+    pub fn reference(&self) -> &CapsRef {
         unsafe { CapsRef::from_ptr(self.0.reference) }
     }
 
-    pub fn get_parent_owned(&self) -> Caps {
+    pub fn parent_owned(&self) -> Caps {
         unsafe { from_glib_none(self.0.reference) }
     }
 
-    pub fn get_timestamp(&self) -> ClockTime {
+    pub fn timestamp(&self) -> ClockTime {
         unsafe { from_glib(self.0.timestamp) }
     }
 
-    pub fn get_duration(&self) -> ClockTime {
+    pub fn duration(&self) -> ClockTime {
         unsafe { from_glib(self.0.duration) }
     }
 }
@@ -404,9 +402,9 @@ unsafe impl MetaAPI for ReferenceTimestampMeta {
 impl fmt::Debug for ReferenceTimestampMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("ReferenceTimestampMeta")
-            .field("reference", &self.get_reference())
-            .field("timestamp", &self.get_timestamp())
-            .field("duration", &self.get_duration())
+            .field("reference", &self.reference())
+            .field("timestamp", &self.timestamp())
+            .field("duration", &self.duration())
             .finish()
     }
 }
@@ -424,7 +422,7 @@ mod tests {
         {
             let meta = ParentBufferMeta::add(buffer.get_mut().unwrap(), &parent);
             unsafe {
-                assert_eq!(meta.get_parent().as_ptr(), parent.as_ptr());
+                assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
             }
         }
 
@@ -440,7 +438,7 @@ mod tests {
             let metas = buffer.iter_meta::<ParentBufferMeta>().collect::<Vec<_>>();
             assert_eq!(metas.len(), 1);
             unsafe {
-                assert_eq!(metas[0].get_parent().as_ptr(), parent.as_ptr());
+                assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
             }
         }
         {
@@ -451,7 +449,7 @@ mod tests {
                 .collect::<Vec<_>>();
             assert_eq!(metas.len(), 1);
             unsafe {
-                assert_eq!(metas[0].get_parent().as_ptr(), parent.as_ptr());
+                assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
             }
         }
 
@@ -462,7 +460,7 @@ mod tests {
                 .get_meta_mut::<ParentBufferMeta>()
                 .unwrap();
             unsafe {
-                assert_eq!(meta.get_parent().as_ptr(), parent.as_ptr());
+                assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
             }
             meta.remove();
         }

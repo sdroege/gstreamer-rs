@@ -16,7 +16,7 @@ mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
 });
 
 impl QueryRef {
-    pub fn get_structure(&self) -> Option<&StructureRef> {
+    pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_query_get_structure(self.as_mut_ptr());
             if structure.is_null() {
@@ -27,7 +27,7 @@ impl QueryRef {
         }
     }
 
-    pub fn get_mut_structure(&mut self) -> &mut StructureRef {
+    pub fn structure_mut(&mut self) -> &mut StructureRef {
         unsafe {
             let structure = ffi::gst_query_writable_structure(self.as_mut_ptr());
             StructureRef::from_glib_borrow_mut(structure)
@@ -90,7 +90,7 @@ impl fmt::Debug for QueryRef {
                 let type_ = ffi::gst_query_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
             })
-            .field("structure", &self.get_structure())
+            .field("structure", &self.structure())
             .finish()
     }
 }
@@ -162,7 +162,7 @@ macro_rules! declare_concrete_query(
         pub struct $name<$param>($param);
 
         impl<'a> $name<&'a QueryRef> {
-            pub fn get_query(&self) -> &QueryRef {
+            pub fn query(&self) -> &QueryRef {
                 self.0
             }
         }
@@ -186,7 +186,7 @@ macro_rules! declare_concrete_query(
         }
 
         impl<'a> $name<&'a mut QueryRef> {
-            pub fn get_mut_query(&mut self) -> &mut QueryRef {
+            pub fn query_mut(&mut self) -> &mut QueryRef {
                 self.0
             }
         }
@@ -223,7 +223,7 @@ impl Position<Query> {
 }
 
 impl<T: AsPtr> Position<T> {
-    pub fn get_result(&self) -> GenericFormattedValue {
+    pub fn result(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
             let mut pos = mem::MaybeUninit::uninit();
@@ -234,7 +234,7 @@ impl<T: AsPtr> Position<T> {
         }
     }
 
-    pub fn get_format(&self) -> crate::Format {
+    pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
 
@@ -248,13 +248,9 @@ impl<T: AsPtr> Position<T> {
 impl<T: AsMutPtr> Position<T> {
     pub fn set<V: Into<GenericFormattedValue>>(&mut self, pos: V) {
         let pos = pos.into();
-        assert_eq!(pos.get_format(), self.get_format());
+        assert_eq!(pos.format(), self.format());
         unsafe {
-            ffi::gst_query_set_position(
-                self.0.as_mut_ptr(),
-                pos.get_format().to_glib(),
-                pos.get_value(),
-            );
+            ffi::gst_query_set_position(self.0.as_mut_ptr(), pos.format().to_glib(), pos.value());
         }
     }
 }
@@ -268,7 +264,7 @@ impl Duration<Query> {
 }
 
 impl<T: AsPtr> Duration<T> {
-    pub fn get_result(&self) -> GenericFormattedValue {
+    pub fn result(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
             let mut pos = mem::MaybeUninit::uninit();
@@ -279,7 +275,7 @@ impl<T: AsPtr> Duration<T> {
         }
     }
 
-    pub fn get_format(&self) -> crate::Format {
+    pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
 
@@ -293,13 +289,9 @@ impl<T: AsPtr> Duration<T> {
 impl<T: AsMutPtr> Duration<T> {
     pub fn set<V: Into<GenericFormattedValue>>(&mut self, dur: V) {
         let dur = dur.into();
-        assert_eq!(dur.get_format(), self.get_format());
+        assert_eq!(dur.format(), self.format());
         unsafe {
-            ffi::gst_query_set_duration(
-                self.0.as_mut_ptr(),
-                dur.get_format().to_glib(),
-                dur.get_value(),
-            );
+            ffi::gst_query_set_duration(self.0.as_mut_ptr(), dur.format().to_glib(), dur.value());
         }
     }
 }
@@ -319,7 +311,7 @@ impl Default for Latency<Query> {
 }
 
 impl<T: AsPtr> Latency<T> {
-    pub fn get_result(&self) -> (bool, crate::ClockTime, crate::ClockTime) {
+    pub fn result(&self) -> (bool, crate::ClockTime, crate::ClockTime) {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
             let mut min = mem::MaybeUninit::uninit();
@@ -363,7 +355,7 @@ impl Seeking<Query> {
 }
 
 impl<T: AsPtr> Seeking<T> {
-    pub fn get_result(&self) -> (bool, GenericFormattedValue, GenericFormattedValue) {
+    pub fn result(&self) -> (bool, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
             let mut seekable = mem::MaybeUninit::uninit();
@@ -385,7 +377,7 @@ impl<T: AsPtr> Seeking<T> {
         }
     }
 
-    pub fn get_format(&self) -> crate::Format {
+    pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
             ffi::gst_query_parse_seeking(
@@ -406,16 +398,16 @@ impl<T: AsMutPtr> Seeking<T> {
         let start = start.into();
         let end = end.into();
 
-        assert_eq!(self.get_format(), start.get_format());
-        assert_eq!(start.get_format(), end.get_format());
+        assert_eq!(self.format(), start.format());
+        assert_eq!(start.format(), end.format());
 
         unsafe {
             ffi::gst_query_set_seeking(
                 self.0.as_mut_ptr(),
-                start.get_format().to_glib(),
+                start.format().to_glib(),
                 seekable.to_glib(),
-                start.get_value(),
-                end.get_value(),
+                start.value(),
+                end.value(),
             );
         }
     }
@@ -430,7 +422,7 @@ impl Segment<Query> {
 }
 
 impl<T: AsPtr> Segment<T> {
-    pub fn get_result(&self) -> (f64, GenericFormattedValue, GenericFormattedValue) {
+    pub fn result(&self) -> (f64, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut rate = mem::MaybeUninit::uninit();
             let mut fmt = mem::MaybeUninit::uninit();
@@ -452,7 +444,7 @@ impl<T: AsPtr> Segment<T> {
         }
     }
 
-    pub fn get_format(&self) -> crate::Format {
+    pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
 
@@ -473,15 +465,15 @@ impl<T: AsMutPtr> Segment<T> {
         let start = start.into();
         let stop = stop.into();
 
-        assert_eq!(start.get_format(), stop.get_format());
+        assert_eq!(start.format(), stop.format());
 
         unsafe {
             ffi::gst_query_set_segment(
                 self.0.as_mut_ptr(),
                 rate,
-                start.get_format().to_glib(),
-                start.get_value(),
-                stop.get_value(),
+                start.format().to_glib(),
+                start.value(),
+                stop.value(),
             );
         }
     }
@@ -494,8 +486,8 @@ impl Convert<Query> {
         let value = value.into();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_convert(
-                value.get_format().to_glib(),
-                value.get_value(),
+                value.format().to_glib(),
+                value.value(),
                 dest_fmt.to_glib(),
             )))
         }
@@ -503,7 +495,7 @@ impl Convert<Query> {
 }
 
 impl<T: AsPtr> Convert<T> {
-    pub fn get_result(&self) -> (GenericFormattedValue, GenericFormattedValue) {
+    pub fn result(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut src_fmt = mem::MaybeUninit::uninit();
             let mut src = mem::MaybeUninit::uninit();
@@ -553,10 +545,10 @@ impl<T: AsMutPtr> Convert<T> {
         unsafe {
             ffi::gst_query_set_convert(
                 self.0.as_mut_ptr(),
-                src.get_format().to_glib(),
-                src.get_value(),
-                dest.get_format().to_glib(),
-                dest.get_value(),
+                src.format().to_glib(),
+                src.value(),
+                dest.format().to_glib(),
+                dest.value(),
             );
         }
     }
@@ -577,7 +569,7 @@ impl Default for Formats<Query> {
 }
 
 impl<T: AsPtr> Formats<T> {
-    pub fn get_result(&self) -> Vec<crate::Format> {
+    pub fn result(&self) -> Vec<crate::Format> {
         unsafe {
             let mut n = mem::MaybeUninit::uninit();
             ffi::gst_query_parse_n_formats(self.0.as_ptr(), n.as_mut_ptr());
@@ -613,7 +605,7 @@ impl Buffering<Query> {
 }
 
 impl<T: AsPtr> Buffering<T> {
-    pub fn get_format(&self) -> crate::Format {
+    pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
 
@@ -629,7 +621,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
-    pub fn get_percent(&self) -> (bool, i32) {
+    pub fn percent(&self) -> (bool, i32) {
         unsafe {
             let mut busy = mem::MaybeUninit::uninit();
             let mut percent = mem::MaybeUninit::uninit();
@@ -644,7 +636,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
-    pub fn get_range(&self) -> (GenericFormattedValue, GenericFormattedValue, i64) {
+    pub fn range(&self) -> (GenericFormattedValue, GenericFormattedValue, i64) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
             let mut start = mem::MaybeUninit::uninit();
@@ -666,7 +658,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
-    pub fn get_stats(&self) -> (crate::BufferingMode, i32, i32, i64) {
+    pub fn stats(&self) -> (crate::BufferingMode, i32, i32, i64) {
         unsafe {
             let mut mode = mem::MaybeUninit::uninit();
             let mut avg_in = mem::MaybeUninit::uninit();
@@ -690,7 +682,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
-    pub fn get_ranges(&self) -> Vec<(GenericFormattedValue, GenericFormattedValue)> {
+    pub fn ranges(&self) -> Vec<(GenericFormattedValue, GenericFormattedValue)> {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
             ffi::gst_query_parse_buffering_range(
@@ -742,15 +734,15 @@ impl<T: AsMutPtr> Buffering<T> {
         let start = start.into();
         let stop = stop.into();
 
-        assert_eq!(self.get_format(), start.get_format());
-        assert_eq!(start.get_format(), stop.get_format());
+        assert_eq!(self.format(), start.format());
+        assert_eq!(start.format(), stop.format());
 
         unsafe {
             ffi::gst_query_set_buffering_range(
                 self.0.as_mut_ptr(),
-                start.get_format().to_glib(),
-                start.get_value(),
-                stop.get_value(),
+                start.format().to_glib(),
+                start.value(),
+                stop.value(),
                 estimated_total,
             );
         }
@@ -780,17 +772,17 @@ impl<T: AsMutPtr> Buffering<T> {
         ranges: &[(V, V)],
     ) {
         unsafe {
-            let fmt = self.get_format();
+            let fmt = self.format();
 
             for &(start, stop) in ranges {
                 let start = start.into();
                 let stop = stop.into();
-                assert_eq!(start.get_format(), fmt);
-                assert_eq!(stop.get_format(), fmt);
+                assert_eq!(start.format(), fmt);
+                assert_eq!(stop.format(), fmt);
                 ffi::gst_query_add_buffering_range(
                     self.0.as_mut_ptr(),
-                    start.get_value(),
-                    stop.get_value(),
+                    start.value(),
+                    stop.value(),
                 );
             }
         }
@@ -825,7 +817,7 @@ impl Default for Uri<Query> {
 }
 
 impl<T: AsPtr> Uri<T> {
-    pub fn get_uri(&self) -> Option<String> {
+    pub fn uri(&self) -> Option<String> {
         unsafe {
             let mut uri = ptr::null_mut();
             ffi::gst_query_parse_uri(self.0.as_ptr(), &mut uri);
@@ -833,7 +825,7 @@ impl<T: AsPtr> Uri<T> {
         }
     }
 
-    pub fn get_redirection(&self) -> (Option<String>, bool) {
+    pub fn redirection(&self) -> (Option<String>, bool) {
         unsafe {
             let mut uri = ptr::null_mut();
             ffi::gst_query_parse_uri_redirection(self.0.as_ptr(), &mut uri);
@@ -896,7 +888,7 @@ impl<T: AsPtr> Allocation<T> {
         }
     }
 
-    pub fn get_allocation_pools(&self) -> Vec<(Option<crate::BufferPool>, u32, u32, u32)> {
+    pub fn allocation_pools(&self) -> Vec<(Option<crate::BufferPool>, u32, u32, u32)> {
         unsafe {
             let n = ffi::gst_query_get_n_allocation_pools(self.0.as_ptr());
             let mut pools = Vec::with_capacity(n as usize);
@@ -926,7 +918,7 @@ impl<T: AsPtr> Allocation<T> {
         }
     }
 
-    pub fn get_allocation_metas(&self) -> Vec<(glib::Type, Option<&crate::StructureRef>)> {
+    pub fn allocation_metas(&self) -> Vec<(glib::Type, Option<&crate::StructureRef>)> {
         unsafe {
             let n = ffi::gst_query_get_n_allocation_metas(self.0.as_ptr());
             let mut metas = Vec::with_capacity(n as usize);
@@ -1074,7 +1066,7 @@ impl<T: AsPtr> Scheduling<T> {
         }
     }
 
-    pub fn get_scheduling_modes(&self) -> Vec<crate::PadMode> {
+    pub fn scheduling_modes(&self) -> Vec<crate::PadMode> {
         unsafe {
             let n = ffi::gst_query_get_n_scheduling_modes(self.0.as_ptr());
             let mut res = Vec::with_capacity(n as usize);
@@ -1089,7 +1081,7 @@ impl<T: AsPtr> Scheduling<T> {
         }
     }
 
-    pub fn get_result(&self) -> (crate::SchedulingFlags, i32, i32, i32) {
+    pub fn result(&self) -> (crate::SchedulingFlags, i32, i32, i32) {
         unsafe {
             let mut flags = mem::MaybeUninit::uninit();
             let mut minsize = mem::MaybeUninit::uninit();
@@ -1149,7 +1141,7 @@ impl AcceptCaps<Query> {
 }
 
 impl<T: AsPtr> AcceptCaps<T> {
-    pub fn get_caps(&self) -> &crate::CapsRef {
+    pub fn caps(&self) -> &crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
             ffi::gst_query_parse_accept_caps(self.0.as_ptr(), &mut caps);
@@ -1157,11 +1149,11 @@ impl<T: AsPtr> AcceptCaps<T> {
         }
     }
 
-    pub fn get_caps_owned(&self) -> crate::Caps {
-        unsafe { from_glib_none(self.get_caps().as_ptr()) }
+    pub fn caps_owned(&self) -> crate::Caps {
+        unsafe { from_glib_none(self.caps().as_ptr()) }
     }
 
-    pub fn get_result(&self) -> bool {
+    pub fn result(&self) -> bool {
         unsafe {
             let mut accepted = mem::MaybeUninit::uninit();
             ffi::gst_query_parse_accept_caps_result(self.0.as_ptr(), accepted.as_mut_ptr());
@@ -1191,7 +1183,7 @@ impl Caps<Query> {
 }
 
 impl<T: AsPtr> Caps<T> {
-    pub fn get_filter(&self) -> Option<&crate::CapsRef> {
+    pub fn filter(&self) -> Option<&crate::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
             ffi::gst_query_parse_caps(self.0.as_ptr(), &mut caps);
@@ -1203,11 +1195,11 @@ impl<T: AsPtr> Caps<T> {
         }
     }
 
-    pub fn get_filter_owned(&self) -> Option<crate::Caps> {
-        unsafe { self.get_filter().map(|caps| from_glib_none(caps.as_ptr())) }
+    pub fn filter_owned(&self) -> Option<crate::Caps> {
+        unsafe { self.filter().map(|caps| from_glib_none(caps.as_ptr())) }
     }
 
-    pub fn get_result(&self) -> Option<&crate::CapsRef> {
+    pub fn result(&self) -> Option<&crate::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
             ffi::gst_query_parse_caps_result(self.0.as_ptr(), &mut caps);
@@ -1219,8 +1211,8 @@ impl<T: AsPtr> Caps<T> {
         }
     }
 
-    pub fn get_result_owned(&self) -> Option<crate::Caps> {
-        unsafe { self.get_result().map(|caps| from_glib_none(caps.as_ptr())) }
+    pub fn result_owned(&self) -> Option<crate::Caps> {
+        unsafe { self.result().map(|caps| from_glib_none(caps.as_ptr())) }
     }
 }
 
@@ -1259,7 +1251,7 @@ impl Context<Query> {
 }
 
 impl<T: AsPtr> Context<T> {
-    pub fn get_context(&self) -> Option<&crate::ContextRef> {
+    pub fn context(&self) -> Option<&crate::ContextRef> {
         unsafe {
             let mut context = ptr::null_mut();
             ffi::gst_query_parse_context(self.0.as_ptr(), &mut context);
@@ -1271,14 +1263,14 @@ impl<T: AsPtr> Context<T> {
         }
     }
 
-    pub fn get_context_owned(&self) -> Option<crate::Context> {
+    pub fn context_owned(&self) -> Option<crate::Context> {
         unsafe {
-            self.get_context()
+            self.context()
                 .map(|context| from_glib_none(context.as_ptr()))
         }
     }
 
-    pub fn get_context_type(&self) -> &str {
+    pub fn context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
             ffi::gst_query_parse_context_type(self.0.as_ptr(), &mut context_type);
@@ -1317,7 +1309,7 @@ impl Default for Bitrate<Query> {
 impl<T: AsPtr> Bitrate<T> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_bitrate(&self) -> u32 {
+    pub fn bitrate(&self) -> u32 {
         unsafe {
             let mut bitrate = mem::MaybeUninit::uninit();
             ffi::gst_query_parse_bitrate(self.0.as_ptr(), bitrate.as_mut_ptr());
@@ -1351,10 +1343,10 @@ mod tests {
             skip_assert_initialized!();
             match query.view_mut() {
                 QueryView::Position(ref mut p) => {
-                    let pos = p.get_result();
+                    let pos = p.result();
                     assert_eq!(pos.try_into(), Ok(crate::CLOCK_TIME_NONE));
                     p.set(3 * crate::SECOND);
-                    let pos = p.get_result();
+                    let pos = p.result();
                     assert_eq!(pos.try_into(), Ok(3 * crate::SECOND));
                 }
                 _ => panic!("Wrong concrete Query in Query"),
@@ -1365,7 +1357,7 @@ mod tests {
             skip_assert_initialized!();
             match query.view() {
                 QueryView::Position(ref p) => {
-                    let pos = p.get_result();
+                    let pos = p.result();
                     assert_eq!(pos.try_into(), Ok(3 * crate::SECOND));
                     unsafe {
                         assert!(!p.as_mut_ptr().is_null());
@@ -1376,10 +1368,10 @@ mod tests {
         }
 
         let mut p = Position::new(crate::Format::Time);
-        let pos = p.get_result();
+        let pos = p.result();
         assert_eq!(pos.try_into(), Ok(crate::CLOCK_TIME_NONE));
 
-        p.get_mut_structure().set("check_mut", &true);
+        p.structure_mut().set("check_mut", &true);
 
         // deref
         assert!(!p.is_serialized());
@@ -1387,7 +1379,7 @@ mod tests {
         {
             check_mut(&mut p);
 
-            let structure = p.get_structure();
+            let structure = p.structure();
             structure.unwrap().has_field("check_mut");
 
             // Expected: cannot borrow `p` as mutable because it is also borrowed as immutable
@@ -1411,7 +1403,7 @@ mod tests {
         }
 
         if let QueryView::Duration(d) = &query.view() {
-            let duration = d.get_result();
+            let duration = d.result();
             assert_eq!(duration.try_into(), Ok(2 * crate::SECOND));
         }
     }

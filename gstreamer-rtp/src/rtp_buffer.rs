@@ -174,28 +174,28 @@ impl<'a> RTPBuffer<'a, Writable> {
 }
 
 impl<'a, T> RTPBuffer<'a, T> {
-    pub fn get_seq(&self) -> u16 {
+    pub fn seq(&self) -> u16 {
         unsafe { ffi::gst_rtp_buffer_get_seq(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
-    pub fn get_payload_type(&self) -> u8 {
+    pub fn payload_type(&self) -> u8 {
         unsafe {
             ffi::gst_rtp_buffer_get_payload_type(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
-    pub fn get_ssrc(&self) -> u32 {
+    pub fn ssrc(&self) -> u32 {
         unsafe { ffi::gst_rtp_buffer_get_ssrc(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
-    pub fn get_timestamp(&self) -> u32 {
+    pub fn timestamp(&self) -> u32 {
         unsafe {
             ffi::gst_rtp_buffer_get_timestamp(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
     pub fn get_csrc(&self, idx: u8) -> Option<u32> {
-        if idx < self.get_csrc_count() {
+        if idx < self.csrc_count() {
             unsafe {
                 Some(ffi::gst_rtp_buffer_get_csrc(
                     glib::translate::mut_override(&self.rtp_buffer),
@@ -207,13 +207,13 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn get_csrc_count(&self) -> u8 {
+    pub fn csrc_count(&self) -> u8 {
         unsafe {
             ffi::gst_rtp_buffer_get_csrc_count(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
-    pub fn get_marker(&self) -> bool {
+    pub fn is_marker(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_buffer_get_marker(
                 glib::translate::mut_override(&self.rtp_buffer),
@@ -221,15 +221,15 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn get_payload_size(&self) -> u32 {
+    pub fn payload_size(&self) -> u32 {
         unsafe {
             ffi::gst_rtp_buffer_get_payload_len(glib::translate::mut_override(&self.rtp_buffer))
                 as u32
         }
     }
 
-    pub fn get_payload(&self) -> Result<&[u8], glib::error::BoolError> {
-        let size = self.get_payload_size();
+    pub fn payload(&self) -> Result<&[u8], glib::error::BoolError> {
+        let size = self.payload_size();
         if size == 0 {
             return Ok(&[]);
         }
@@ -244,7 +244,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn get_extension(&self) -> bool {
+    pub fn is_extension(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_buffer_get_extension(
                 glib::translate::mut_override(&self.rtp_buffer),
@@ -252,7 +252,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn get_extension_bytes(&self) -> Option<(u16, glib::Bytes)> {
+    pub fn extension_bytes(&self) -> Option<(u16, glib::Bytes)> {
         unsafe {
             let mut bits: u16 = 0;
             match from_glib_full(ffi::gst_rtp_buffer_get_extension_bytes(
@@ -366,27 +366,27 @@ mod tests {
         let mut rtp_buffer = RTPBuffer::from_buffer_writable(&mut buffer).unwrap();
 
         rtp_buffer.set_seq(42);
-        assert_eq!(rtp_buffer.get_seq(), 42);
+        assert_eq!(rtp_buffer.seq(), 42);
 
         rtp_buffer.set_marker(true);
-        assert!(rtp_buffer.get_marker());
+        assert!(rtp_buffer.marker());
 
         rtp_buffer.set_payload_type(43);
-        assert_eq!(rtp_buffer.get_payload_type(), 43);
+        assert_eq!(rtp_buffer.payload_type(), 43);
 
         rtp_buffer.set_timestamp(44);
-        assert_eq!(rtp_buffer.get_timestamp(), 44);
+        assert_eq!(rtp_buffer.timestamp(), 44);
 
         rtp_buffer.set_ssrc(45);
-        assert_eq!(rtp_buffer.get_ssrc(), 45);
+        assert_eq!(rtp_buffer.ssrc(), 45);
 
-        assert_eq!(rtp_buffer.get_payload_size(), payload_size);
-        let payload = rtp_buffer.get_payload();
+        assert_eq!(rtp_buffer.payload_size(), payload_size);
+        let payload = rtp_buffer.payload();
         assert!(payload.is_ok());
         let payload = payload.unwrap();
         assert_eq!(payload.len(), payload_size as usize);
 
-        assert_eq!(rtp_buffer.get_csrc_count(), csrc_count);
+        assert_eq!(rtp_buffer.csrc_count(), csrc_count);
         rtp_buffer.set_csrc(0, 12);
         rtp_buffer.set_csrc(1, 15);
         assert_eq!(rtp_buffer.get_csrc(0).unwrap(), 12);
@@ -394,9 +394,9 @@ mod tests {
         assert!(rtp_buffer.get_csrc(2).is_none());
 
         rtp_buffer.set_extension(true);
-        assert_eq!(rtp_buffer.get_extension(), true);
+        assert_eq!(rtp_buffer.extension(), true);
 
-        assert_eq!(rtp_buffer.get_extension_bytes(), None);
+        assert_eq!(rtp_buffer.extension_bytes(), None);
     }
 
     #[test]
@@ -408,8 +408,8 @@ mod tests {
         let buffer = gst::Buffer::new_rtp_with_sizes(payload_size, 4, csrc_count).unwrap();
         let rtp_buffer = RTPBuffer::from_buffer_readable(&buffer).unwrap();
 
-        assert_eq!(rtp_buffer.get_payload_size(), payload_size);
-        let payload = rtp_buffer.get_payload();
+        assert_eq!(rtp_buffer.payload_size(), payload_size);
+        let payload = rtp_buffer.payload();
         assert!(payload.is_ok());
         assert_eq!(payload.unwrap().len(), payload_size as usize);
     }
@@ -421,13 +421,13 @@ mod tests {
         let mut buffer = gst::Buffer::new_rtp_with_sizes(16, 4, 0).unwrap();
         let mut rtp_buffer = RTPBuffer::from_buffer_writable(&mut buffer).unwrap();
 
-        assert_eq!(rtp_buffer.get_extension_bytes(), None);
+        assert_eq!(rtp_buffer.extension_bytes(), None);
 
         let extension_data: [u8; 4] = [100, 101, 102, 103];
         let result = rtp_buffer.add_extension_onebyte_header(1, &extension_data);
         assert!(result.is_ok());
 
-        let bytes_option = rtp_buffer.get_extension_bytes();
+        let bytes_option = rtp_buffer.extension_bytes();
         assert!(bytes_option.is_some());
         let (bits, bytes) = bytes_option.unwrap();
         // 0xBEDE is the onebyte extension header marker: https://tools.ietf.org/html/rfc5285 (4.2)
@@ -459,7 +459,7 @@ mod tests {
         let mut buffer = gst::Buffer::new_rtp_with_sizes(16, 4, 0).unwrap();
         let mut rtp_buffer = RTPBuffer::from_buffer_writable(&mut buffer).unwrap();
 
-        assert_eq!(rtp_buffer.get_extension_bytes(), None);
+        assert_eq!(rtp_buffer.extension_bytes(), None);
 
         let extension_data: [u8; 4] = [100, 101, 102, 103];
         let appbits = 5;
@@ -467,7 +467,7 @@ mod tests {
         let result = rtp_buffer.add_extension_twobytes_header(appbits, id, &extension_data);
         assert!(result.is_ok());
 
-        let bytes_option = rtp_buffer.get_extension_bytes();
+        let bytes_option = rtp_buffer.extension_bytes();
         assert!(bytes_option.is_some());
         let (bits, bytes) = bytes_option.unwrap();
         // 0x100 + appbits is the twobyte extension header marker:

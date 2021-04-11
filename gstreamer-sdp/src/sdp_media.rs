@@ -98,12 +98,12 @@ impl fmt::Debug for SDPMediaRef {
             .field("connections", &DebugIter(RefCell::new(self.connections())))
             .field("bandwidths", &DebugIter(RefCell::new(self.bandwidths())))
             .field("attributes", &DebugIter(RefCell::new(self.attributes())))
-            .field("information", &self.get_information())
-            .field("key", &self.get_key())
-            .field("media", &self.get_media())
-            .field("port", &self.get_port())
-            .field("num-ports", &self.get_num_ports())
-            .field("proto", &self.get_proto())
+            .field("information", &self.information())
+            .field("key", &self.key())
+            .field("media", &self.media())
+            .field("port", &self.port())
+            .field("num-ports", &self.num_ports())
+            .field("proto", &self.proto())
             .finish()
     }
 }
@@ -293,7 +293,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_information(&self) -> Option<&str> {
+    pub fn information(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_information(&self.0);
             if ptr.is_null() {
@@ -304,7 +304,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_key(&self) -> Option<&SDPKey> {
+    pub fn key(&self) -> Option<&SDPKey> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_key(&self.0);
             if ptr.is_null() {
@@ -315,7 +315,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_media(&self) -> Option<&str> {
+    pub fn media(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_media(&self.0);
             if ptr.is_null() {
@@ -326,15 +326,15 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_num_ports(&self) -> u32 {
+    pub fn num_ports(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_get_num_ports(&self.0) }
     }
 
-    pub fn get_port(&self) -> u32 {
+    pub fn port(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_get_port(&self.0) }
     }
 
-    pub fn get_proto(&self) -> Option<&str> {
+    pub fn proto(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_proto(&self.0);
             if ptr.is_null() {

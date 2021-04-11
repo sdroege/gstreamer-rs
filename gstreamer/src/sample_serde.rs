@@ -14,11 +14,11 @@ use crate::Structure;
 impl<'a> Serialize for SampleRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut sample = serializer.serialize_struct("Sample", 5)?;
-        sample.serialize_field("buffer", &self.get_buffer())?;
-        sample.serialize_field("buffer_list", &self.get_buffer_list())?;
-        sample.serialize_field("caps", &self.get_caps())?;
-        sample.serialize_field("segment", &self.get_segment())?;
-        sample.serialize_field("info", &self.get_info())?;
+        sample.serialize_field("buffer", &self.buffer())?;
+        sample.serialize_field("buffer_list", &self.buffer_list())?;
+        sample.serialize_field("caps", &self.caps())?;
+        sample.serialize_field("segment", &self.segment())?;
+        sample.serialize_field("info", &self.info())?;
         sample.end()
     }
 }
@@ -276,17 +276,17 @@ mod tests {
                 ])),
             )"#;
         let sample: Sample = ron::de::from_str(buffer_ron).unwrap();
-        let buffer = sample.get_buffer().unwrap();
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer.get_offset_end(), 4);
+        let buffer = sample.buffer().unwrap();
+        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer.offset_end(), 4);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
-        assert!(sample.get_buffer_list().is_none());
-        assert!(sample.get_caps().is_some());
-        assert!(sample.get_segment().is_some());
-        assert!(sample.get_info().is_some());
+        assert!(sample.buffer_list().is_none());
+        assert!(sample.caps().is_some());
+        assert!(sample.segment().is_some());
+        assert!(sample.info().is_some());
 
         let buffer_ron = r#"
             (
@@ -309,12 +309,12 @@ mod tests {
                 info: None,
             )"#;
         let sample: Sample = ron::de::from_str(buffer_ron).unwrap();
-        assert!(sample.get_buffer().is_none());
-        assert!(sample.get_buffer_list().is_some());
-        assert!(sample.get_caps().is_none());
+        assert!(sample.buffer().is_none());
+        assert!(sample.buffer_list().is_some());
+        assert!(sample.caps().is_none());
         // Not true in GStreamer 1.x, should be fixed in version 2.0
         //assert!(sample.get_segment().is_none());
-        assert!(sample.get_info().is_none());
+        assert!(sample.info().is_none());
     }
 
     #[test]
@@ -363,16 +363,16 @@ mod tests {
         };
         let sample_ser = ron::ser::to_string(&sample).unwrap();
         let sample_de: Sample = ron::de::from_str(sample_ser.as_str()).unwrap();
-        let buffer_de = sample_de.get_buffer().unwrap();
-        assert_eq!(buffer_de.get_pts(), 1.into());
-        assert_eq!(buffer_de.get_offset_end(), 4);
+        let buffer_de = sample_de.buffer().unwrap();
+        assert_eq!(buffer_de.pts(), 1.into());
+        assert_eq!(buffer_de.offset_end(), 4);
         {
             let data = buffer_de.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
-        assert!(sample_de.get_buffer_list().is_none());
-        assert!(sample_de.get_caps().is_some());
-        assert!(sample_de.get_segment().is_some());
-        assert!(sample_de.get_info().is_some());
+        assert!(sample_de.buffer_list().is_none());
+        assert!(sample_de.caps().is_some());
+        assert!(sample_de.segment().is_some());
+        assert!(sample_de.info().is_some());
     }
 }

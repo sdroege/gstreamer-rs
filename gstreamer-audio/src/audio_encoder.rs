@@ -17,9 +17,9 @@ pub trait AudioEncoderExtManual: 'static {
 
     fn set_output_format(&self, caps: &gst::Caps) -> Result<(), gst::FlowError>;
 
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
-    fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime);
+    fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
 }
 
 impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
@@ -65,7 +65,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         }
     }
 
-    fn get_allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
+    fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::zeroed();
@@ -78,7 +78,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
         }
     }
 
-    fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+    fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();

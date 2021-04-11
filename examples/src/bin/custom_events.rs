@@ -29,8 +29,8 @@ impl ExampleCustomEvent {
     pub fn parse(ev: &gst::EventRef) -> Option<ExampleCustomEvent> {
         match ev.view() {
             gst::EventView::CustomDownstream(e) => {
-                let s = match e.get_structure() {
-                    Some(s) if s.get_name() == Self::EVENT_NAME => s,
+                let s = match e.structure() {
+                    Some(s) if s.name() == Self::EVENT_NAME => s,
                     _ => return None, // No structure in this event, or the name didn't match
                 };
 
@@ -52,7 +52,7 @@ fn example_main() {
         "audiotestsrc name=src ! queue max-size-time=2000000000 ! fakesink name=sink sync=true",
     )
     .unwrap();
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     pipeline
         .set_state(gst::State::Playing)
@@ -77,7 +77,7 @@ fn example_main() {
     sinkpad.add_probe(gst::PadProbeType::EVENT_DOWNSTREAM, move |_, probe_info| {
         match probe_info.data {
             Some(gst::PadProbeData::Event(ref ev))
-                if ev.get_type() == gst::EventType::CustomDownstream =>
+                if ev.type_() == gst::EventType::CustomDownstream =>
             {
                 if let Some(custom_event) = ExampleCustomEvent::parse(ev) {
                     if let Some(pipeline) = pipeline_weak.upgrade() {
@@ -150,9 +150,9 @@ fn example_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 main_loop.quit();
             }

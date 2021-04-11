@@ -223,7 +223,7 @@ impl DateTime {
         }
     }
 
-    pub fn get_day(&self) -> Option<i32> {
+    pub fn day(&self) -> Option<i32> {
         if !self.has_day() {
             return None;
         }
@@ -231,7 +231,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_day(self.to_glib_none().0)) }
     }
 
-    pub fn get_hour(&self) -> Option<i32> {
+    pub fn hour(&self) -> Option<i32> {
         if !self.has_time() {
             return None;
         }
@@ -239,7 +239,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_hour(self.to_glib_none().0)) }
     }
 
-    pub fn get_microsecond(&self) -> Option<i32> {
+    pub fn microsecond(&self) -> Option<i32> {
         if !self.has_second() {
             return None;
         }
@@ -247,7 +247,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_microsecond(self.to_glib_none().0)) }
     }
 
-    pub fn get_minute(&self) -> Option<i32> {
+    pub fn minute(&self) -> Option<i32> {
         if !self.has_time() {
             return None;
         }
@@ -255,7 +255,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_minute(self.to_glib_none().0)) }
     }
 
-    pub fn get_month(&self) -> Option<i32> {
+    pub fn month(&self) -> Option<i32> {
         if !self.has_month() {
             return None;
         }
@@ -263,7 +263,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_month(self.to_glib_none().0)) }
     }
 
-    pub fn get_second(&self) -> Option<i32> {
+    pub fn second(&self) -> Option<i32> {
         if !self.has_second() {
             return None;
         }
@@ -271,7 +271,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_second(self.to_glib_none().0)) }
     }
 
-    pub fn get_time_zone_offset(&self) -> Option<f32> {
+    pub fn time_zone_offset(&self) -> Option<f32> {
         if !self.has_time() {
             return None;
         }
@@ -304,12 +304,12 @@ impl DateTime {
             // to `glib/v2_58`. So we need to build a new `gst::DateTime` with `0f64`
             // and then discard seconds again
             DateTime::new(
-                self.get_time_zone_offset(),
-                self.get_year(),
-                self.get_month(),
-                self.get_day(),
-                self.get_hour(),
-                self.get_minute(),
+                self.time_zone_offset(),
+                self.year(),
+                self.month(),
+                self.day(),
+                self.hour(),
+                self.minute(),
                 Some(0.0),
             )
             .and_then(|d| d.to_g_date_time())
@@ -317,11 +317,11 @@ impl DateTime {
             .and_then(|d| {
                 DateTime::new(
                     None, // UTC TZ offset
-                    d.get_year(),
-                    Some(d.get_month()),
-                    Some(d.get_day_of_month()),
-                    Some(d.get_hour()),
-                    Some(d.get_minute()),
+                    d.year(),
+                    Some(d.month()),
+                    Some(d.day_of_month()),
+                    Some(d.hour()),
+                    Some(d.minute()),
                     None, // No second
                 )
             })
@@ -369,7 +369,7 @@ impl cmp::PartialOrd for DateTime {
             (self.clone(), other.clone())
         };
 
-        let year_delta = self_norm.get_year() - other_norm.get_year();
+        let year_delta = self_norm.year() - other_norm.year();
         if year_delta != 0 {
             return get_cmp(year_delta);
         }
@@ -386,7 +386,7 @@ impl cmp::PartialOrd for DateTime {
             return None;
         }
 
-        let month_delta = self_norm.get_month().unwrap() - other_norm.get_month().unwrap();
+        let month_delta = self_norm.month().unwrap() - other_norm.month().unwrap();
         if month_delta != 0 {
             return get_cmp(month_delta);
         }
@@ -403,7 +403,7 @@ impl cmp::PartialOrd for DateTime {
             return None;
         }
 
-        let day_delta = self_norm.get_day().unwrap() - other_norm.get_day().unwrap();
+        let day_delta = self_norm.day().unwrap() - other_norm.day().unwrap();
         if day_delta != 0 {
             return get_cmp(day_delta);
         }
@@ -420,12 +420,12 @@ impl cmp::PartialOrd for DateTime {
             return None;
         }
 
-        let hour_delta = self_norm.get_hour().unwrap() - other_norm.get_hour().unwrap();
+        let hour_delta = self_norm.hour().unwrap() - other_norm.hour().unwrap();
         if hour_delta != 0 {
             return get_cmp(hour_delta);
         }
 
-        let minute_delta = self_norm.get_minute().unwrap() - other_norm.get_minute().unwrap();
+        let minute_delta = self_norm.minute().unwrap() - other_norm.minute().unwrap();
         if minute_delta != 0 {
             return get_cmp(minute_delta);
         }
@@ -441,12 +441,12 @@ impl cmp::PartialOrd for DateTime {
             // One has second, the other doesn't => can't compare (note 1)
             return None;
         }
-        let second_delta = self_norm.get_second().unwrap() - other_norm.get_second().unwrap();
+        let second_delta = self_norm.second().unwrap() - other_norm.second().unwrap();
         if second_delta != 0 {
             return get_cmp(second_delta);
         }
 
-        get_cmp(self_norm.get_microsecond().unwrap() - other_norm.get_microsecond().unwrap())
+        get_cmp(self_norm.microsecond().unwrap() - other_norm.microsecond().unwrap())
     }
 }
 
@@ -461,24 +461,24 @@ impl fmt::Debug for DateTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut debug_struct = f.debug_struct("DateTime");
         if self.has_year() {
-            debug_struct.field("year", &self.get_year());
+            debug_struct.field("year", &self.year());
         }
         if self.has_month() {
-            debug_struct.field("month", &self.get_month());
+            debug_struct.field("month", &self.month());
         }
         if self.has_day() {
-            debug_struct.field("day", &self.get_day());
+            debug_struct.field("day", &self.day());
         }
         if self.has_time() {
-            debug_struct.field("hour", &self.get_hour());
-            debug_struct.field("minute", &self.get_minute());
+            debug_struct.field("hour", &self.hour());
+            debug_struct.field("minute", &self.minute());
 
             if self.has_second() {
-                debug_struct.field("second", &self.get_second());
-                debug_struct.field("microsecond", &self.get_microsecond());
+                debug_struct.field("second", &self.second());
+                debug_struct.field("microsecond", &self.microsecond());
             }
 
-            debug_struct.field("tz_offset", &self.get_time_zone_offset());
+            debug_struct.field("tz_offset", &self.time_zone_offset());
         }
 
         debug_struct.finish()
@@ -541,32 +541,32 @@ mod tests {
             .unwrap()
             .to_utc()
             .unwrap();
-        assert_eq!(utc_date_time.get_year(), 2019);
-        assert_eq!(utc_date_time.get_month().unwrap(), 8);
-        assert_eq!(utc_date_time.get_day().unwrap(), 20);
-        assert_eq!(utc_date_time.get_hour().unwrap(), 18);
-        assert_eq!(utc_date_time.get_minute().unwrap(), 9);
-        assert_eq!(utc_date_time.get_second().unwrap(), 42);
-        assert_eq!(utc_date_time.get_microsecond().unwrap(), 123_456);
+        assert_eq!(utc_date_time.year(), 2019);
+        assert_eq!(utc_date_time.month().unwrap(), 8);
+        assert_eq!(utc_date_time.day().unwrap(), 20);
+        assert_eq!(utc_date_time.hour().unwrap(), 18);
+        assert_eq!(utc_date_time.minute().unwrap(), 9);
+        assert_eq!(utc_date_time.second().unwrap(), 42);
+        assert_eq!(utc_date_time.microsecond().unwrap(), 123_456);
 
         // Year, month, day and hour offset
         let utc_date_time = DateTime::new(2f32, 2019, 1, 1, 0, 0, 42.123_456f64)
             .unwrap()
             .to_utc()
             .unwrap();
-        assert_eq!(utc_date_time.get_year(), 2018);
-        assert_eq!(utc_date_time.get_month().unwrap(), 12);
-        assert_eq!(utc_date_time.get_day().unwrap(), 31);
-        assert_eq!(utc_date_time.get_hour().unwrap(), 22);
-        assert_eq!(utc_date_time.get_minute().unwrap(), 0);
-        assert_eq!(utc_date_time.get_second().unwrap(), 42);
-        assert_eq!(utc_date_time.get_microsecond().unwrap(), 123_456);
+        assert_eq!(utc_date_time.year(), 2018);
+        assert_eq!(utc_date_time.month().unwrap(), 12);
+        assert_eq!(utc_date_time.day().unwrap(), 31);
+        assert_eq!(utc_date_time.hour().unwrap(), 22);
+        assert_eq!(utc_date_time.minute().unwrap(), 0);
+        assert_eq!(utc_date_time.second().unwrap(), 42);
+        assert_eq!(utc_date_time.microsecond().unwrap(), 123_456);
 
         // Date without an hour (which implies no TZ)
         let utc_date_time = DateTime::new_ymd(2019, 1, 1).unwrap().to_utc().unwrap();
-        assert_eq!(utc_date_time.get_year(), 2019);
-        assert_eq!(utc_date_time.get_month().unwrap(), 1);
-        assert_eq!(utc_date_time.get_day().unwrap(), 1);
+        assert_eq!(utc_date_time.year(), 2019);
+        assert_eq!(utc_date_time.month().unwrap(), 1);
+        assert_eq!(utc_date_time.day().unwrap(), 1);
         assert!(!utc_date_time.has_time());
         assert!(!utc_date_time.has_second());
 
@@ -575,11 +575,11 @@ mod tests {
             .unwrap()
             .to_utc()
             .unwrap();
-        assert_eq!(utc_date_time.get_year(), 2018);
-        assert_eq!(utc_date_time.get_month().unwrap(), 5);
-        assert_eq!(utc_date_time.get_day().unwrap(), 28);
-        assert_eq!(utc_date_time.get_hour().unwrap(), 14);
-        assert_eq!(utc_date_time.get_minute().unwrap(), 6);
+        assert_eq!(utc_date_time.year(), 2018);
+        assert_eq!(utc_date_time.month().unwrap(), 5);
+        assert_eq!(utc_date_time.day().unwrap(), 28);
+        assert_eq!(utc_date_time.hour().unwrap(), 14);
+        assert_eq!(utc_date_time.minute().unwrap(), 6);
         assert!(!utc_date_time.has_second());
     }
 

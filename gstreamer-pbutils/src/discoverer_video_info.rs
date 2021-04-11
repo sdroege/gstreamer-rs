@@ -5,7 +5,7 @@ use crate::DiscovererVideoInfo;
 use glib::translate::*;
 
 impl DiscovererVideoInfo {
-    pub fn get_framerate(&self) -> gst::Fraction {
+    pub fn framerate(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(
                 ffi::gst_discoverer_video_info_get_framerate_num(self.to_glib_none().0) as i32,
@@ -14,7 +14,7 @@ impl DiscovererVideoInfo {
         }
     }
 
-    pub fn get_par(&self) -> gst::Fraction {
+    pub fn par(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(
                 ffi::gst_discoverer_video_info_get_par_num(self.to_glib_none().0) as i32,

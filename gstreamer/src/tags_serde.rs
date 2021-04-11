@@ -135,7 +135,7 @@ impl<'a> Serialize for TagListSer<'a> {
 impl Serialize for TagListRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut tag_list = serializer.serialize_struct("TagList", 3)?;
-        tag_list.serialize_field("scope", &self.get_scope())?;
+        tag_list.serialize_field("scope", &self.scope())?;
         tag_list.serialize_field("tags", &TagListSer(self))?;
         tag_list.end()
     }
@@ -462,7 +462,7 @@ mod tests {
             )
         "#;
         let tags: TagList = ron::de::from_str(tag_list_ron).unwrap();
-        assert_eq!(tags.get_scope(), TagScope::Global);
+        assert_eq!(tags.scope(), TagScope::Global);
 
         assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
         assert_eq!(
@@ -486,7 +486,7 @@ mod tests {
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
-        let buffer = sample.get_buffer().unwrap();
+        let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
@@ -507,7 +507,7 @@ mod tests {
             }
         "#;
         let tags: TagList = serde_json::from_str(tag_json).unwrap();
-        assert_eq!(tags.get_scope(), TagScope::Global);
+        assert_eq!(tags.scope(), TagScope::Global);
 
         assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
         assert_eq!(
@@ -527,7 +527,7 @@ mod tests {
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
-        let buffer = sample.get_buffer().unwrap();
+        let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
@@ -571,7 +571,7 @@ mod tests {
         let tags_ser = ron::ser::to_string(&tags).unwrap();
 
         let tags_de: TagList = ron::de::from_str(tags_ser.as_str()).unwrap();
-        assert_eq!(tags_de.get_scope(), TagScope::Global);
+        assert_eq!(tags_de.scope(), TagScope::Global);
 
         assert_eq!(
             tags_de.get_index::<Title>(0).unwrap().get(),
@@ -604,7 +604,7 @@ mod tests {
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
-        let buffer = sample.get_buffer().unwrap();
+        let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());

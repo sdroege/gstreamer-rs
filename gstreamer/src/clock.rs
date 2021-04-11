@@ -36,7 +36,7 @@ glib::wrapper! {
 }
 
 impl ClockId {
-    pub fn get_time(&self) -> ClockTime {
+    pub fn time(&self) -> ClockTime {
         unsafe { from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0)) }
     }
 
@@ -62,7 +62,7 @@ impl ClockId {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    pub fn get_clock(&self) -> Option<Clock> {
+    pub fn clock(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_clock_id_get_clock(self.to_glib_none().0)) }
     }
 
@@ -77,14 +77,14 @@ impl ClockId {
         }
     }
 
-    pub fn get_type(&self) -> ClockEntryType {
+    pub fn type_(&self) -> ClockEntryType {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
             from_glib((*ptr).type_)
         }
     }
 
-    pub fn get_status(&self) -> &AtomicClockReturn {
+    pub fn status(&self) -> &AtomicClockReturn {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
             &*((&(*ptr).status) as *const i32 as *const AtomicClockReturn)
@@ -115,7 +115,7 @@ impl convert::TryFrom<ClockId> for SingleShotClockId {
 
     fn try_from(id: ClockId) -> Result<SingleShotClockId, glib::BoolError> {
         skip_assert_initialized!();
-        match id.get_type() {
+        match id.type_() {
             ClockEntryType::Single => Ok(SingleShotClockId(id)),
             _ => Err(glib::bool_error!("Not a single-shot clock id")),
         }
@@ -217,7 +217,7 @@ impl convert::TryFrom<ClockId> for PeriodicClockId {
 
     fn try_from(id: ClockId) -> Result<PeriodicClockId, glib::BoolError> {
         skip_assert_initialized!();
-        match id.get_type() {
+        match id.type_() {
             ClockEntryType::Periodic => Ok(PeriodicClockId(id)),
             _ => Err(glib::bool_error!("Not a periodic clock id")),
         }
@@ -225,7 +225,7 @@ impl convert::TryFrom<ClockId> for PeriodicClockId {
 }
 
 impl PeriodicClockId {
-    pub fn get_interval(&self) -> ClockTime {
+    pub fn interval(&self) -> ClockTime {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
             from_glib((*ptr).interval)
@@ -398,7 +398,7 @@ pub trait ClockExtManual: 'static {
 
     fn unset_clock_flags(&self, flags: ClockFlags);
 
-    fn get_clock_flags(&self) -> ClockFlags;
+    fn clock_flags(&self) -> ClockFlags;
 }
 
 impl<O: IsA<Clock>> ClockExtManual for O {
@@ -484,7 +484,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         }
     }
 
-    fn get_clock_flags(&self) -> ClockFlags {
+    fn clock_flags(&self) -> ClockFlags {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
@@ -504,7 +504,7 @@ mod tests {
         crate::init().unwrap();
 
         let clock = SystemClock::obtain();
-        let now = clock.get_time();
+        let now = clock.time();
         let id = clock.new_single_shot_id(now + 20 * crate::MSECOND);
         let (res, _) = id.wait();
 
@@ -518,7 +518,7 @@ mod tests {
         let (sender, receiver) = channel();
 
         let clock = SystemClock::obtain();
-        let now = clock.get_time();
+        let now = clock.time();
         let id = clock.new_single_shot_id(now + 20 * crate::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             sender.send(()).unwrap();
@@ -534,7 +534,7 @@ mod tests {
         crate::init().unwrap();
 
         let clock = SystemClock::obtain();
-        let now = clock.get_time();
+        let now = clock.time();
         let id = clock.new_periodic_id(now + 20 * crate::MSECOND, 20 * crate::MSECOND);
 
         let (res, _) = id.wait();
@@ -551,7 +551,7 @@ mod tests {
         let (sender, receiver) = channel();
 
         let clock = SystemClock::obtain();
-        let now = clock.get_time();
+        let now = clock.time();
         let id = clock.new_periodic_id(now + 20 * crate::MSECOND, 20 * crate::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             let _ = sender.send(());

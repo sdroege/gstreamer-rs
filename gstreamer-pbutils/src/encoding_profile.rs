@@ -103,7 +103,7 @@ trait EncodingProfileHasRestrictionSetter {
 }
 
 pub trait EncodingProfileHasRestrictionGetter {
-    fn get_restriction(&self) -> Option<gst::Caps>;
+    fn restriction(&self) -> Option<gst::Caps>;
 }
 
 macro_rules! declare_encoding_profile_has_restriction(
@@ -127,7 +127,7 @@ macro_rules! declare_encoding_profile_has_restriction(
         }
 
         impl EncodingProfileHasRestrictionGetter for $name {
-            fn get_restriction(&self) -> Option<gst::Caps> {
+            fn restriction(&self) -> Option<gst::Caps> {
                 let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
 
                 unsafe {
@@ -529,25 +529,22 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(audio_profile.get_name().unwrap(), AUDIO_PROFILE_NAME);
+        assert_eq!(audio_profile.name().unwrap(), AUDIO_PROFILE_NAME);
         assert_eq!(
-            audio_profile.get_description().unwrap(),
+            audio_profile.description().unwrap(),
             AUDIO_PROFILE_DESCRIPTION
         );
-        assert_eq!(audio_profile.get_format(), caps);
-        assert_eq!(audio_profile.get_preset().unwrap(), PRESET);
-        assert_eq!(audio_profile.get_preset_name().unwrap(), PRESET_NAME);
-        assert_eq!(audio_profile.get_restriction().unwrap(), restriction);
-        assert_eq!(audio_profile.get_presence(), PRESENCE);
-        assert_eq!(
-            audio_profile.get_allow_dynamic_output(),
-            ALLOW_DYNAMIC_OUTPUT
-        );
+        assert_eq!(audio_profile.format(), caps);
+        assert_eq!(audio_profile.preset().unwrap(), PRESET);
+        assert_eq!(audio_profile.preset_name().unwrap(), PRESET_NAME);
+        assert_eq!(audio_profile.restriction().unwrap(), restriction);
+        assert_eq!(audio_profile.presence(), PRESENCE);
+        assert_eq!(audio_profile.allows_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
         assert_eq!(audio_profile.is_enabled(), ENABLED);
 
         let restriction = gst::Caps::new_simple("audio/x-raw", &[("format", &"S32BE")]);
         audio_profile.set_restriction(Some(&restriction));
-        assert_eq!(audio_profile.get_restriction().unwrap(), restriction);
+        assert_eq!(audio_profile.restriction().unwrap(), restriction);
     }
 
     #[test]
@@ -573,30 +570,27 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(video_profile.get_name().unwrap(), VIDEO_PROFILE_NAME);
+        assert_eq!(video_profile.name().unwrap(), VIDEO_PROFILE_NAME);
         assert_eq!(
-            video_profile.get_description().unwrap(),
+            video_profile.description().unwrap(),
             VIDEO_PROFILE_DESCRIPTION
         );
-        assert_eq!(video_profile.get_format(), caps);
-        assert_eq!(video_profile.get_preset().unwrap(), PRESET);
-        assert_eq!(video_profile.get_preset_name().unwrap(), PRESET_NAME);
-        assert_eq!(video_profile.get_restriction().unwrap(), restriction);
-        assert_eq!(video_profile.get_presence(), PRESENCE);
-        assert_eq!(
-            video_profile.get_allow_dynamic_output(),
-            ALLOW_DYNAMIC_OUTPUT
-        );
+        assert_eq!(video_profile.format(), caps);
+        assert_eq!(video_profile.preset().unwrap(), PRESET);
+        assert_eq!(video_profile.preset_name().unwrap(), PRESET_NAME);
+        assert_eq!(video_profile.restriction().unwrap(), restriction);
+        assert_eq!(video_profile.presence(), PRESENCE);
+        assert_eq!(video_profile.allows_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
         assert_eq!(video_profile.is_enabled(), ENABLED);
 
         let video_profile: EncodingVideoProfile =
             glib::object::Cast::downcast(video_profile).ok().unwrap();
-        assert_eq!(video_profile.get_variableframerate(), VARIABLE_FRAMERATE);
-        assert_eq!(video_profile.get_pass(), PASS);
+        assert_eq!(video_profile.variableframerate(), VARIABLE_FRAMERATE);
+        assert_eq!(video_profile.pass(), PASS);
 
         let restriction = gst::Caps::new_simple("video/x-raw", &[("format", &"NV12")]);
         video_profile.set_restriction(Some(&restriction));
-        assert_eq!(video_profile.get_restriction().unwrap(), restriction);
+        assert_eq!(video_profile.restriction().unwrap(), restriction);
     }
 
     #[test]
@@ -634,16 +628,16 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(profile.get_name().unwrap(), CONTAINER_PROFILE_NAME);
+        assert_eq!(profile.name().unwrap(), CONTAINER_PROFILE_NAME);
         assert_eq!(
-            profile.get_description().unwrap(),
+            profile.description().unwrap(),
             CONTAINER_PROFILE_DESCRIPTION
         );
-        assert_eq!(profile.get_format(), container_caps);
-        assert_eq!(profile.get_preset().unwrap(), PRESET);
-        assert_eq!(profile.get_preset_name().unwrap(), PRESET_NAME);
-        assert_eq!(profile.get_presence(), PRESENCE);
-        assert_eq!(profile.get_allow_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
+        assert_eq!(profile.format(), container_caps);
+        assert_eq!(profile.preset().unwrap(), PRESET);
+        assert_eq!(profile.preset_name().unwrap(), PRESET_NAME);
+        assert_eq!(profile.presence(), PRESENCE);
+        assert_eq!(profile.allows_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
         assert_eq!(profile.is_enabled(), ENABLED);
 
         let container_profile: EncodingContainerProfile =

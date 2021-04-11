@@ -111,7 +111,7 @@ impl StreamCollection {
     }
 
     pub fn len(&self) -> usize {
-        self.get_size() as usize
+        self.size() as usize
     }
 
     pub fn is_empty(&self) -> bool {

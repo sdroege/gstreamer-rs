@@ -174,10 +174,10 @@ impl fmt::Debug for BufferList {
 
 impl fmt::Debug for BufferListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let size = self.iter().map(|b| b.get_size()).sum::<usize>();
+        let size = self.iter().map(|b| b.size()).sum::<usize>();
         let (pts, dts) = self
             .get(0)
-            .map(|b| (b.get_pts(), b.get_dts()))
+            .map(|b| (b.pts(), b.dts()))
             .unwrap_or((crate::ClockTime::none(), crate::ClockTime::none()));
 
         f.debug_struct("BufferList")
@@ -280,7 +280,7 @@ mod tests {
 
         let mut res = vec![];
         buffer_list.foreach(|buffer, idx| {
-            res.push((buffer.get_pts(), idx));
+            res.push((buffer.pts(), idx));
 
             true
         });
@@ -310,11 +310,11 @@ mod tests {
 
         let mut res = vec![];
         buffer_list.get_mut().unwrap().foreach_mut(|buffer, idx| {
-            res.push((buffer.get_pts(), idx));
+            res.push((buffer.pts(), idx));
 
-            if buffer.get_pts() == crate::ClockTime::from(0) {
+            if buffer.pts() == crate::ClockTime::from(0) {
                 Ok(Some(buffer))
-            } else if buffer.get_pts() == crate::SECOND {
+            } else if buffer.pts() == crate::SECOND {
                 Ok(None)
             } else {
                 let mut new_buffer = Buffer::new();
@@ -334,7 +334,7 @@ mod tests {
 
         let mut res = vec![];
         buffer_list.foreach(|buffer, idx| {
-            res.push((buffer.get_pts(), idx));
+            res.push((buffer.pts(), idx));
 
             true
         });

@@ -45,7 +45,7 @@ impl convert::TryFrom<gst::Structure> for AudioConverterConfig {
 
     fn try_from(v: gst::Structure) -> Result<AudioConverterConfig, Self::Error> {
         skip_assert_initialized!();
-        if v.get_name() == "GstAudioConverter" {
+        if v.name() == "GstAudioConverter" {
             Ok(AudioConverterConfig(v))
         } else {
             Err(glib::bool_error!("Structure is no AudioConverterConfig"))
@@ -78,7 +78,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.dither-method", &v);
     }
 
-    pub fn get_dither_method(&self) -> crate::AudioDitherMethod {
+    pub fn dither_method(&self) -> crate::AudioDitherMethod {
         self.0
             .get_optional("GstAudioConverter.dither-method")
             .expect("Wrong type")
@@ -89,7 +89,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.noise-shaping-method", &v);
     }
 
-    pub fn get_noise_shaping_method(&self) -> crate::AudioNoiseShapingMethod {
+    pub fn noise_shaping_method(&self) -> crate::AudioNoiseShapingMethod {
         self.0
             .get_optional("GstAudioConverter.noise-shaping-method")
             .expect("Wrong type")
@@ -100,7 +100,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.quantization", &v);
     }
 
-    pub fn get_quantization(&self) -> u32 {
+    pub fn quantization(&self) -> u32 {
         self.0
             .get_optional("GstAudioConverter.quantization")
             .expect("Wrong type")
@@ -115,7 +115,7 @@ impl AudioConverterConfig {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn get_resampler_method(&self) -> crate::AudioResamplerMethod {
+    pub fn resampler_method(&self) -> crate::AudioResamplerMethod {
         self.0
             .get_optional("GstAudioConverter.resampler-method")
             .expect("Wrong type")
@@ -141,7 +141,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.mix-matrix", &array);
     }
 
-    pub fn get_mix_matrix(&self) -> Vec<Vec<f32>> {
+    pub fn mix_matrix(&self) -> Vec<Vec<f32>> {
         self.0
             .get_optional::<gst::Array>("GstAudioConverter.mix-matrix")
             .expect("Wrong type")
@@ -180,7 +180,7 @@ mod tests {
         let mut config = AudioConverterConfig::new();
         config.set_mix_matrix(MATRIX);
 
-        let matrix = config.get_mix_matrix();
+        let matrix = config.mix_matrix();
         assert_eq!(matrix, MATRIX);
 
         config.set_mix_matrix(&matrix);

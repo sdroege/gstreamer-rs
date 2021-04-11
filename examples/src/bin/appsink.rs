@@ -74,7 +74,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             .new_sample(|appsink| {
                 // Pull the sample in question out of the appsink's buffer.
                 let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
-                let buffer = sample.get_buffer().ok_or_else(|| {
+                let buffer = sample.buffer().ok_or_else(|| {
                     element_error!(
                         appsink,
                         gst::ResourceError::Failed,
@@ -138,7 +138,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
@@ -150,12 +150,12 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
                 pipeline.set_state(gst::State::Null)?;
                 return Err(ErrorMessage {
                     src: msg
-                        .get_src()
-                        .map(|s| String::from(s.get_path_string()))
+                        .src()
+                        .map(|s| String::from(s.path_string()))
                         .unwrap_or_else(|| String::from("None")),
-                    error: err.get_error().to_string(),
-                    debug: err.get_debug(),
-                    source: err.get_error(),
+                    error: err.error().to_string(),
+                    debug: err.debug(),
+                    source: err.error(),
                 }
                 .into());
             }

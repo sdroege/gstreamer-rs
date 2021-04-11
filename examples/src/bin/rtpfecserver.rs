@@ -44,7 +44,7 @@ fn get_static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst:
     match element.get_static_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {
-            let element_name = element.get_name();
+            let element_name = element.name();
             Err(Error::from(NoSuchPad(pad_name, element_name.to_string())))
         }
     }
@@ -54,7 +54,7 @@ fn get_request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst
     match element.get_request_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {
-            let element_name = element.get_name();
+            let element_name = element.name();
             Err(Error::from(NoSuchPad(pad_name, element_name.to_string())))
         }
     }
@@ -163,7 +163,7 @@ fn example_main() -> Result<(), Error> {
     src.set_property("uri", &uri)?;
 
     let bus = pipeline
-        .get_bus()
+        .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
     pipeline
@@ -182,18 +182,18 @@ fn example_main() -> Result<(), Error> {
 
                 return Err(ErrorMessage {
                     src: msg
-                        .get_src()
-                        .map(|s| String::from(s.get_path_string()))
+                        .src()
+                        .map(|s| String::from(s.path_string()))
                         .unwrap_or_else(|| String::from("None")),
-                    error: err.get_error().to_string(),
-                    debug: err.get_debug(),
-                    source: err.get_error(),
+                    error: err.error().to_string(),
+                    debug: err.debug(),
+                    source: err.error(),
                 }
                 .into());
             }
             MessageView::StateChanged(s) => {
-                if let Some(element) = msg.get_src() {
-                    if element == pipeline && s.get_current() == gst::State::Playing {
+                if let Some(element) = msg.src() {
+                    if element == pipeline && s.current() == gst::State::Playing {
                         eprintln!("PLAYING");
                         gst::debug_bin_to_dot_file(
                             &pipeline,

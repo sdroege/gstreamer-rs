@@ -60,7 +60,7 @@ impl BufferPoolConfig {
         }
     }
 
-    pub fn get_options(&self) -> Vec<String> {
+    pub fn options(&self) -> Vec<String> {
         unsafe {
             let n = ffi::gst_buffer_pool_config_n_options(self.0.to_glib_none().0) as usize;
             let mut options = Vec::with_capacity(n);
@@ -94,7 +94,7 @@ impl BufferPoolConfig {
         }
     }
 
-    pub fn get_params(&self) -> Option<(Option<crate::Caps>, u32, u32, u32)> {
+    pub fn params(&self) -> Option<(Option<crate::Caps>, u32, u32, u32)> {
         unsafe {
             let mut caps = ptr::null_mut();
             let mut size = mem::MaybeUninit::uninit();
@@ -142,7 +142,7 @@ impl BufferPoolConfig {
         }
     }
 
-    pub fn get_allocator(&self) -> Option<(Option<Allocator>, AllocationParams)> {
+    pub fn allocator(&self) -> Option<(Option<Allocator>, AllocationParams)> {
         unsafe {
             let mut allocator = ptr::null_mut();
             let mut params = mem::MaybeUninit::zeroed();
@@ -201,7 +201,7 @@ impl BufferPoolAcquireParams {
         skip_assert_initialized!();
         unsafe {
             BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams {
-                format: start.get_format().to_glib(),
+                format: start.format().to_glib(),
                 start: start.to_raw_value(),
                 stop: stop.to_raw_value(),
                 flags: flags.to_glib(),
@@ -279,7 +279,7 @@ impl Default for BufferPool {
 }
 
 pub trait BufferPoolExtManual: 'static {
-    fn get_config(&self) -> BufferPoolConfig;
+    fn config(&self) -> BufferPoolConfig;
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError>;
 
     fn is_flushing(&self) -> bool;
@@ -292,7 +292,7 @@ pub trait BufferPoolExtManual: 'static {
 }
 
 impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
-    fn get_config(&self) -> BufferPoolConfig {
+    fn config(&self) -> BufferPoolConfig {
         unsafe {
             let ptr = ffi::gst_buffer_pool_get_config(self.as_ref().to_glib_none().0);
             BufferPoolConfig(from_glib_full(ptr))
@@ -355,7 +355,7 @@ mod tests {
         crate::init().unwrap();
 
         let pool = crate::BufferPool::new();
-        let mut config = pool.get_config();
+        let mut config = pool.config();
         config.set_params(Some(&crate::Caps::new_simple("foo/bar", &[])), 1024, 0, 2);
         pool.set_config(config).unwrap();
 

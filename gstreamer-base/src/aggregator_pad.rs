@@ -5,11 +5,11 @@ use glib::object::IsA;
 use glib::translate::*;
 
 pub trait AggregatorPadExtManual: 'static {
-    fn get_segment(&self) -> gst::Segment;
+    fn segment(&self) -> gst::Segment;
 }
 
 impl<O: IsA<AggregatorPad>> AggregatorPadExtManual for O {
-    fn get_segment(&self) -> gst::Segment {
+    fn segment(&self) -> gst::Segment {
         unsafe {
             let ptr: &ffi::GstAggregatorPad = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&ptr.parent.object.lock);

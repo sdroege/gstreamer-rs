@@ -30,7 +30,7 @@ fn main_loop() -> Result<(), Error> {
     // provide different streams. Here, we ask our server to give
     // us a reference to his list of endpoints, so we can add our
     // test endpoint, providing the pipeline from the cli.
-    let mounts = server.get_mount_points().ok_or(NoMountPoints)?;
+    let mounts = server.mount_points().ok_or(NoMountPoints)?;
 
     // Next, we create our custom factory for the endpoint we want to create.
     // The job of the factory is to create a new pipeline for each client that
@@ -62,7 +62,7 @@ fn main_loop() -> Result<(), Error> {
 
     println!(
         "Stream ready at rtsp://127.0.0.1:{}/test",
-        server.get_bound_port()
+        server.bound_port()
     );
 
     // Start the mainloop. From this point on, the server will start to serve
@@ -247,10 +247,10 @@ mod server {
                 let client = super::client::Client::default();
 
                 // Duplicated from the default implementation
-                client.set_session_pool(server.get_session_pool().as_ref());
-                client.set_mount_points(server.get_mount_points().as_ref());
-                client.set_auth(server.get_auth().as_ref());
-                client.set_thread_pool(server.get_thread_pool().as_ref());
+                client.set_session_pool(server.session_pool().as_ref());
+                client.set_mount_points(server.mount_points().as_ref());
+                client.set_auth(server.auth().as_ref());
+                client.set_thread_pool(server.thread_pool().as_ref());
 
                 Some(client.upcast())
             }

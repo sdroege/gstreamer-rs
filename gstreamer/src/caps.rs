@@ -180,7 +180,7 @@ impl CapsRef {
     }
 
     pub fn get_structure(&self, idx: u32) -> Option<&StructureRef> {
-        if idx >= self.get_size() {
+        if idx >= self.size() {
             return None;
         }
 
@@ -195,7 +195,7 @@ impl CapsRef {
     }
 
     pub fn get_mut_structure(&mut self, idx: u32) -> Option<&mut StructureRef> {
-        if idx >= self.get_size() {
+        if idx >= self.size() {
             return None;
         }
 
@@ -210,7 +210,7 @@ impl CapsRef {
     }
 
     pub fn get_features(&self, idx: u32) -> Option<&CapsFeaturesRef> {
-        if idx >= self.get_size() {
+        if idx >= self.size() {
             return None;
         }
 
@@ -221,7 +221,7 @@ impl CapsRef {
     }
 
     pub fn get_mut_features(&mut self, idx: u32) -> Option<&mut CapsFeaturesRef> {
-        if idx >= self.get_size() {
+        if idx >= self.size() {
             return None;
         }
 
@@ -232,7 +232,7 @@ impl CapsRef {
     }
 
     pub fn set_features(&mut self, idx: u32, features: Option<CapsFeatures>) {
-        assert!(idx < self.get_size());
+        assert!(idx < self.size());
 
         unsafe {
             ffi::gst_caps_set_features(
@@ -254,7 +254,7 @@ impl CapsRef {
         }
     }
 
-    pub fn get_size(&self) -> u32 {
+    pub fn size(&self) -> u32 {
         unsafe { ffi::gst_caps_get_size(self.as_ptr()) }
     }
 
@@ -403,7 +403,7 @@ macro_rules! define_iter(
     impl<'a> $name<'a> {
         fn new(caps: $typ) -> $name<'a> {
             skip_assert_initialized!();
-            let n_structures = caps.get_size();
+            let n_structures = caps.size();
 
             $name {
                 caps,
@@ -887,12 +887,12 @@ mod tests {
             .structure(Structure::builder("video/x-raw").build())
             .build();
 
-        let audio = Caps::from_iter(caps.iter().filter(|s| s.get_name() == "audio/x-raw"));
+        let audio = Caps::from_iter(caps.iter().filter(|s| s.name() == "audio/x-raw"));
         assert_eq!(audio.to_string(), "audio/x-raw");
 
         let audio = Caps::from_iter_with_features(
             caps.iter_with_features()
-                .filter(|(s, _)| s.get_name() == "audio/x-raw"),
+                .filter(|(s, _)| s.name() == "audio/x-raw"),
         );
         assert_eq!(audio.to_string(), "audio/x-raw(ANY)");
     }

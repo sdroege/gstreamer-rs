@@ -22,7 +22,7 @@ fn tutorial_main() -> Result<(), Error> {
     let main_loop = glib::MainLoop::new(None, false);
     let main_loop_clone = main_loop.clone();
     let pipeline_weak = pipeline.downgrade();
-    let bus = pipeline.get_bus().expect("Pipeline has no bus");
+    let bus = pipeline.bus().expect("Pipeline has no bus");
     bus.add_watch(move |_, msg| {
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
@@ -33,9 +33,9 @@ fn tutorial_main() -> Result<(), Error> {
             gst::MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 let _ = pipeline.set_state(gst::State::Ready);
                 main_loop.quit();
@@ -51,7 +51,7 @@ fn tutorial_main() -> Result<(), Error> {
                     return glib::Continue(true);
                 }
 
-                let percent = buffering.get_percent();
+                let percent = buffering.percent();
                 print!("Buffering ({}%)\r", percent);
                 match std::io::stdout().flush() {
                     Ok(_) => {}

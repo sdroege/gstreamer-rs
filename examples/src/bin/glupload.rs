@@ -335,7 +335,7 @@ impl App {
 
         let (pipeline, appsink, glupload) = App::create_pipeline()?;
         let bus = pipeline
-            .get_bus()
+            .bus()
             .expect("Pipeline without bus. Shouldn't happen!");
 
         let event_loop = glutin::event_loop::EventLoop::with_user_event();
@@ -356,7 +356,7 @@ impl App {
             use glutin::platform::unix::WindowExtUnix;
             use glutin::platform::ContextTraitExt;
 
-            let api = App::map_gl_api(windowed_context.get_api());
+            let api = App::map_gl_api(windowed_context.api());
 
             let (gl_context, gl_display, platform) = match unsafe { windowed_context.raw_handle() }
             {
@@ -365,7 +365,7 @@ impl App {
                     let mut gl_display = None;
 
                     #[cfg(feature = "gst-gl-egl")]
-                    if let Some(display) = unsafe { windowed_context.get_egl_display() } {
+                    if let Some(display) = unsafe { windowed_context.egl_display() } {
                         gl_display = Some(
                             unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }
                                 .unwrap()
@@ -425,10 +425,10 @@ impl App {
             bus.set_sync_handler(move |_, msg| {
                 match msg.view() {
                     gst::MessageView::NeedContext(ctxt) => {
-                        let context_type = ctxt.get_context_type();
+                        let context_type = ctxt.context_type();
                         if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
                             if let Some(el) =
-                                msg.get_src().map(|s| s.downcast::<gst::Element>().unwrap())
+                                msg.src().map(|s| s.downcast::<gst::Element>().unwrap())
                             {
                                 let context = gst::Context::new(context_type, true);
                                 context.set_gl_display(&gl_display);
@@ -437,12 +437,12 @@ impl App {
                         }
                         if context_type == "gst.gl.app_context" {
                             if let Some(el) =
-                                msg.get_src().map(|s| s.downcast::<gst::Element>().unwrap())
+                                msg.src().map(|s| s.downcast::<gst::Element>().unwrap())
                             {
                                 let mut context = gst::Context::new(context_type, true);
                                 {
                                     let context = context.get_mut().unwrap();
-                                    let s = context.get_mut_structure();
+                                    let s = context.structure_mut();
                                     s.set("context", &gl_context);
                                 }
                                 el.set_context(&context);
@@ -481,7 +481,7 @@ impl App {
                     let sample = appsink.pull_sample().map_err(|_| gst::FlowError::Eos)?;
 
                     {
-                        let _buffer = sample.get_buffer().ok_or_else(|| {
+                        let _buffer = sample.buffer().ok_or_else(|| {
                             element_error!(
                                 appsink,
                                 gst::ResourceError::Failed,
@@ -492,7 +492,7 @@ impl App {
                         })?;
 
                         let _info = sample
-                            .get_caps()
+                            .caps()
                             .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
                             .ok_or_else(|| {
                                 element_error!(
@@ -567,7 +567,7 @@ impl App {
         let glupload = loop {
             match iter.next() {
                 Ok(Some(element)) => {
-                    if "glupload" == element.get_factory().unwrap().get_name() {
+                    if "glupload" == element.factory().unwrap().name() {
                         break Some(element);
                     }
                 }
@@ -588,12 +588,12 @@ impl App {
                 MessageView::Error(err) => {
                     return Err(ErrorMessage {
                         src: msg
-                            .get_src()
-                            .map(|s| String::from(s.get_path_string()))
+                            .src()
+                            .map(|s| String::from(s.path_string()))
                             .unwrap_or_else(|| String::from("None")),
-                        error: err.get_error().to_string(),
-                        debug: err.get_debug(),
-                        source: err.get_error(),
+                        error: err.error().to_string(),
+                        debug: err.debug(),
+                        source: err.error(),
                     }
                     .into());
                 }
@@ -610,7 +610,7 @@ fn main_loop(app: App) -> Result<(), Error> {
 
     println!(
         "Pixel format of the window's GL context {:?}",
-        app.windowed_context.get_pixel_format()
+        app.windowed_context.pixel_format()
     );
 
     let gl = load(&app.windowed_context);
@@ -657,9 +657,9 @@ fn main_loop(app: App) -> Result<(), Error> {
             glutin::event::Event::RedrawRequested(_) => needs_redraw = true,
             // Receive a frame
             glutin::event::Event::UserEvent(Message::Sample(sample)) => {
-                let buffer = sample.get_buffer_owned().unwrap();
+                let buffer = sample.buffer_owned().unwrap();
                 let info = sample
-                    .get_caps()
+                    .caps()
                     .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
                     .unwrap();
 

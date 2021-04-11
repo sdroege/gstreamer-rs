@@ -9,8 +9,8 @@ use std::convert::TryFrom;
 use std::mem;
 
 pub trait BaseParseExtManual: 'static {
-    fn get_sink_pad(&self) -> gst::Pad;
-    fn get_src_pad(&self) -> gst::Pad;
+    fn sink_pad(&self) -> gst::Pad;
+    fn src_pad(&self) -> gst::Pad;
 
     fn set_duration<V: Into<gst::GenericFormattedValue>>(&self, duration: V, interval: u32);
     fn set_frame_rate(&self, fps: gst::Fraction, lead_in: u32, lead_out: u32);
@@ -33,14 +33,14 @@ pub trait BaseParseExtManual: 'static {
 }
 
 impl<O: IsA<BaseParse>> BaseParseExtManual for O {
-    fn get_sink_pad(&self) -> gst::Pad {
+    fn sink_pad(&self) -> gst::Pad {
         unsafe {
             let elt: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
             from_glib_none(elt.sinkpad)
         }
     }
 
-    fn get_src_pad(&self) -> gst::Pad {
+    fn src_pad(&self) -> gst::Pad {
         unsafe {
             let elt: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
             from_glib_none(elt.srcpad)
@@ -52,8 +52,8 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         unsafe {
             ffi::gst_base_parse_set_duration(
                 self.as_ref().to_glib_none().0,
-                duration.get_format().to_glib(),
-                duration.get_value(),
+                duration.format().to_glib(),
+                duration.value(),
                 interval as i32,
             );
         }
@@ -81,7 +81,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
                 dest_val.as_mut_ptr(),
@@ -104,7 +104,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 dest_format.to_glib(),
                 dest_val.as_mut_ptr(),

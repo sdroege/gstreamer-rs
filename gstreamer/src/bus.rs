@@ -219,7 +219,7 @@ impl Bus {
         msg_types: &'a [MessageType],
     ) -> impl Iterator<Item = Message> + 'a {
         self.iter_timed(timeout)
-            .filter(move |msg| msg_types.contains(&msg.get_type()))
+            .filter(move |msg| msg_types.contains(&msg.type_()))
     }
 
     pub fn timed_pop_filtered(
@@ -229,7 +229,7 @@ impl Bus {
     ) -> Option<Message> {
         loop {
             let msg = self.timed_pop(timeout)?;
-            if msg_types.contains(&msg.get_type()) {
+            if msg_types.contains(&msg.type_()) {
                 return Some(msg);
             }
         }
@@ -238,7 +238,7 @@ impl Bus {
     pub fn pop_filtered(&self, msg_types: &[MessageType]) -> Option<Message> {
         loop {
             let msg = self.pop()?;
-            if msg_types.contains(&msg.get_type()) {
+            if msg_types.contains(&msg.type_()) {
                 return Some(msg);
             }
         }
@@ -253,7 +253,7 @@ impl Bus {
         message_types: &'a [MessageType],
     ) -> impl Stream<Item = Message> + Unpin + Send + 'a {
         self.stream().filter(move |message| {
-            let message_type = message.get_type();
+            let message_type = message.type_();
 
             future::ready(message_types.contains(&message_type))
         })

@@ -142,7 +142,7 @@ USAGE: Choose one of the following options, then press enter:
     let mut playing = true;
     let mut rate = 1.;
 
-    ready_rx.attach(Some(&main_loop.get_context()), move |command: Command| {
+    ready_rx.attach(Some(&main_loop.context()), move |command: Command| {
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
             None => return glib::Continue(true),

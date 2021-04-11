@@ -77,7 +77,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseParseClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .start
                 .map(|f| {
@@ -97,7 +97,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseParseClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .stop
                 .map(|f| {
@@ -121,7 +121,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseParseClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .set_sink_caps
                 .map(|f| {
@@ -148,7 +148,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseParseClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             let mut skipsize = 0;
             let res = (*parent_class).handle_frame.map(|f| {
                 let res = gst::FlowReturn::from_glib(f(
@@ -177,14 +177,14 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
     ) -> Option<gst::GenericFormattedValue> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseParseClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             let src_val = src_val.into();
             let res = (*parent_class).convert.map(|f| {
                 let mut dest_val = mem::MaybeUninit::uninit();
 
                 let res = from_glib(f(
                     element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
-                    src_val.get_format().to_glib(),
+                    src_val.format().to_glib(),
                     src_val.to_raw_value(),
                     dest_format.to_glib(),
                     dest_val.as_mut_ptr(),
@@ -223,7 +223,7 @@ unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -242,7 +242,7 @@ unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -262,7 +262,7 @@ unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
@@ -284,7 +284,7 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
     skipsize: *mut i32,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let wrap_frame = BaseParseFrame::new(frame, &wrap);
 
@@ -310,7 +310,7 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
     dest_value: *mut i64,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<BaseParse> = from_glib_borrow(ptr);
     let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 

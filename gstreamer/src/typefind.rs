@@ -17,7 +17,7 @@ pub struct TypeFind(ffi::GstTypeFind);
 pub trait TypeFindImpl {
     fn peek(&mut self, offset: i64, size: u32) -> Option<&[u8]>;
     fn suggest(&mut self, probability: TypeFindProbability, caps: &Caps);
-    fn get_length(&self) -> Option<u64> {
+    fn length(&self) -> Option<u64> {
         None
     }
 }
@@ -75,7 +75,7 @@ impl TypeFind {
         }
     }
 
-    pub fn get_length(&mut self) -> Option<u64> {
+    pub fn length(&mut self) -> Option<u64> {
         unsafe {
             let len = ffi::gst_type_find_get_length(&mut self.0);
             if len == 0 {
@@ -143,7 +143,7 @@ unsafe extern "C" fn type_find_get_length(data: glib::ffi::gpointer) -> u64 {
     use std::u64;
 
     let find: &mut &mut dyn TypeFindImpl = &mut *(data as *mut &mut dyn TypeFindImpl);
-    find.get_length().unwrap_or(u64::MAX)
+    find.length().unwrap_or(u64::MAX)
 }
 
 #[derive(Debug)]
@@ -226,7 +226,7 @@ impl<T: AsRef<[u8]>> TypeFindImpl for SliceTypeFind<T> {
             _ => (),
         }
     }
-    fn get_length(&self) -> Option<u64> {
+    fn length(&self) -> Option<u64> {
         Some(self.data.as_ref().len() as u64)
     }
 }
@@ -243,10 +243,10 @@ mod tests {
             .iter()
             .cloned()
             .find(|f| {
-                f.get_caps()
+                f.caps()
                     .map(|c| {
                         c.get_structure(0)
-                            .map(|s| s.get_name() == "application/xml")
+                            .map(|s| s.name() == "application/xml")
                             .unwrap_or(false)
                     })
                     .unwrap_or(false)
@@ -276,7 +276,7 @@ mod tests {
             None,
             Some(&Caps::new_simple("test/test", &[])),
             |typefind| {
-                assert_eq!(typefind.get_length(), Some(8));
+                assert_eq!(typefind.length(), Some(8));
                 let mut found = false;
                 if let Some(data) = typefind.peek(0, 8) {
                     if data == b"abcdefgh" {

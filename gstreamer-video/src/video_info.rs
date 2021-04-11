@@ -749,7 +749,7 @@ impl VideoInfo {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
                 dest_val.as_mut_ptr(),
@@ -773,7 +773,7 @@ impl VideoInfo {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
-                src_val.get_format().to_glib(),
+                src_val.format().to_glib(),
                 src_val.to_raw_value(),
                 dest_fmt.to_glib(),
                 dest_val.as_mut_ptr(),

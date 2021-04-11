@@ -163,15 +163,15 @@ mod tests {
         let buffer_list: BufferList = ron::de::from_str(buffer_list_ron).unwrap();
         let mut iter = buffer_list.iter();
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer.get_dts(), None.into());
+        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer.dts(), None.into());
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
 
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.get_pts(), 5.into());
+        assert_eq!(buffer.pts(), 5.into());
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![5, 6].as_slice());
@@ -213,15 +213,15 @@ mod tests {
         let buffer_list: BufferList = ron::de::from_str(buffer_list_ser.as_str()).unwrap();
         let mut iter = buffer_list.iter();
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer.get_dts(), None.into());
+        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer.dts(), None.into());
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
 
         let buffer = iter.next().unwrap();
-        assert_eq!(buffer.get_pts(), 5.into());
+        assert_eq!(buffer.pts(), 5.into());
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![5, 6].as_slice());

@@ -395,7 +395,7 @@ impl StructureRef {
         }
     }
 
-    pub fn get_name<'a>(&self) -> &'a str {
+    pub fn name<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(ffi::gst_structure_get_name(&self.0))
                 .to_str()
@@ -750,7 +750,7 @@ mod tests {
         crate::init().unwrap();
 
         let mut s = Structure::new_empty("test");
-        assert_eq!(s.get_name(), "test");
+        assert_eq!(s.name(), "test");
 
         s.set("f1", &"abc");
         s.set("f2", &String::from("bcd"));
@@ -812,7 +812,7 @@ mod tests {
             .field("f3", &123i32)
             .build();
 
-        assert_eq!(s.get_name(), "test");
+        assert_eq!(s.name(), "test");
         assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
         assert_eq!(s.get::<&str>("f2"), Ok(Some("bcd")));
         assert_eq!(s.get_some::<i32>("f3"), Ok(123i32));
@@ -851,9 +851,9 @@ mod tests {
             .field("f3", &123i32)
             .build();
 
-        let s2 = Structure::from_iter(s.get_name(), s.iter().filter(|(f, _)| *f == "f1"));
+        let s2 = Structure::from_iter(s.name(), s.iter().filter(|(f, _)| *f == "f1"));
 
-        assert_eq!(s2.get_name(), "test");
+        assert_eq!(s2.name(), "test");
         assert_eq!(s2.get::<&str>("f1"), Ok(Some("abc")));
         assert!(s2.get::<&str>("f2").is_err());
         assert!(s2.get::<&str>("f3").is_err());

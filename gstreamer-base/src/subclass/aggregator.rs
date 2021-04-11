@@ -285,7 +285,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_flush(&self, aggregator: &Self::Type) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .flush
                 .map(|f| {
@@ -307,7 +307,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Option<gst::Buffer> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             match (*parent_class).clip {
                 None => Some(buffer),
                 Some(ref func) => from_glib_full(func(
@@ -326,7 +326,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .finish_buffer
                 .expect("Missing parent function `finish_buffer`");
@@ -347,7 +347,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .finish_buffer_list
                 .expect("Missing parent function `finish_buffer_list`");
@@ -367,7 +367,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_event
                 .expect("Missing parent function `sink_event`");
@@ -389,7 +389,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_event_pre_queue
                 .expect("Missing parent function `sink_event_pre_queue`");
@@ -410,7 +410,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_query
                 .expect("Missing parent function `sink_query`");
@@ -432,7 +432,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_query_pre_queue
                 .expect("Missing parent function `sink_query`");
@@ -447,7 +447,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_src_event(&self, aggregator: &Self::Type, event: gst::Event) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .src_event
                 .expect("Missing parent function `src_event`");
@@ -461,7 +461,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_src_query(&self, aggregator: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .src_query
                 .expect("Missing parent function `src_query`");
@@ -480,7 +480,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             match (*parent_class).src_activate {
                 None => Ok(()),
                 Some(f) => gst::result_from_gboolean!(
@@ -503,7 +503,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .aggregate
                 .expect("Missing parent function `aggregate`");
@@ -518,7 +518,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_start(&self, aggregator: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .start
                 .map(|f| {
@@ -542,7 +542,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_stop(&self, aggregator: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .stop
                 .map(|f| {
@@ -566,7 +566,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_get_next_time(&self, aggregator: &Self::Type) -> gst::ClockTime {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .get_next_time
                 .map(|f| {
@@ -588,7 +588,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Option<AggregatorPad> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .create_new_pad
                 .expect("Missing parent function `create_new_pad`");
@@ -608,7 +608,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Result<gst::Caps, gst::FlowError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .update_src_caps
                 .expect("Missing parent function `update_src_caps`");
@@ -626,7 +626,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_fixate_src_caps(&self, aggregator: &Self::Type, caps: gst::Caps) -> gst::Caps {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
 
             let f = (*parent_class)
                 .fixate_src_caps
@@ -645,7 +645,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .negotiated_src_caps
                 .map(|f| {
@@ -667,7 +667,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_negotiate(&self, aggregator: &Self::Type) -> bool {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .negotiate
                 .map(|f| {
@@ -689,7 +689,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     ) -> Option<gst::Sample> {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .peek_next_sample
                 .map(|f| {
@@ -742,7 +742,7 @@ unsafe extern "C" fn aggregator_flush<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
@@ -757,7 +757,7 @@ unsafe extern "C" fn aggregator_clip<T: AggregatorImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> *mut gst::ffi::GstBuffer {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     let ret = gst::panic_to_error!(&wrap, &imp.panicked(), None, {
@@ -776,7 +776,7 @@ unsafe extern "C" fn aggregator_finish_buffer<T: AggregatorImpl>(
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
@@ -793,7 +793,7 @@ unsafe extern "C" fn aggregator_finish_buffer_list<T: AggregatorImpl>(
     buffer_list: *mut gst::ffi::GstBufferList,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
@@ -809,7 +809,7 @@ unsafe extern "C" fn aggregator_sink_event<T: AggregatorImpl>(
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(wrap, &imp.panicked(), false, {
@@ -830,7 +830,7 @@ unsafe extern "C" fn aggregator_sink_event_pre_queue<T: AggregatorImpl>(
     event: *mut gst::ffi::GstEvent,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
@@ -850,7 +850,7 @@ unsafe extern "C" fn aggregator_sink_query<T: AggregatorImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -871,7 +871,7 @@ unsafe extern "C" fn aggregator_sink_query_pre_queue<T: AggregatorImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -889,7 +889,7 @@ unsafe extern "C" fn aggregator_src_event<T: AggregatorImpl>(
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -903,7 +903,7 @@ unsafe extern "C" fn aggregator_src_query<T: AggregatorImpl>(
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -918,7 +918,7 @@ unsafe extern "C" fn aggregator_src_activate<T: AggregatorImpl>(
     active: glib::ffi::gboolean,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -938,7 +938,7 @@ unsafe extern "C" fn aggregator_aggregate<T: AggregatorImpl>(
     timeout: glib::ffi::gboolean,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
@@ -952,7 +952,7 @@ unsafe extern "C" fn aggregator_start<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -971,7 +971,7 @@ unsafe extern "C" fn aggregator_stop<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -990,7 +990,7 @@ unsafe extern "C" fn aggregator_get_next_time<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
 ) -> gst::ffi::GstClockTime {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::CLOCK_TIME_NONE, {
@@ -1006,7 +1006,7 @@ unsafe extern "C" fn aggregator_create_new_pad<T: AggregatorImpl>(
     caps: *const gst::ffi::GstCaps,
 ) -> *mut ffi::GstAggregatorPad {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), None, {
@@ -1030,7 +1030,7 @@ unsafe extern "C" fn aggregator_update_src_caps<T: AggregatorImpl>(
     res: *mut *mut gst::ffi::GstCaps,
 ) -> gst::ffi::GstFlowReturn {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     *res = ptr::null_mut();
@@ -1052,7 +1052,7 @@ unsafe extern "C" fn aggregator_fixate_src_caps<T: AggregatorImpl>(
     caps: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::Caps::new_empty(), {
@@ -1066,7 +1066,7 @@ unsafe extern "C" fn aggregator_negotiated_src_caps<T: AggregatorImpl>(
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -1087,7 +1087,7 @@ unsafe extern "C" fn aggregator_negotiate<T: AggregatorImpl>(
     ptr: *mut ffi::GstAggregator,
 ) -> glib::ffi::gboolean {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
@@ -1103,7 +1103,7 @@ unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
     pad: *mut ffi::GstAggregatorPad,
 ) -> *mut gst::ffi::GstSample {
     let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
+    let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), None, {

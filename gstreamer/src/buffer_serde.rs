@@ -16,12 +16,12 @@ use crate::ClockTime;
 impl<'a> Serialize for BufferRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut buffer = serializer.serialize_struct("Buffer", 6)?;
-        buffer.serialize_field("pts", &self.get_pts())?;
-        buffer.serialize_field("dts", &self.get_dts())?;
-        buffer.serialize_field("duration", &self.get_duration())?;
-        buffer.serialize_field("offset", &self.get_offset())?;
-        buffer.serialize_field("offset_end", &self.get_offset_end())?;
-        buffer.serialize_field("flags", &self.get_flags())?;
+        buffer.serialize_field("pts", &self.pts())?;
+        buffer.serialize_field("dts", &self.dts())?;
+        buffer.serialize_field("duration", &self.duration())?;
+        buffer.serialize_field("offset", &self.offset())?;
+        buffer.serialize_field("offset_end", &self.offset_end())?;
+        buffer.serialize_field("flags", &self.flags())?;
         {
             let data = self
                 .map_readable()
@@ -149,12 +149,12 @@ mod tests {
             )
         "#;
         let buffer: Buffer = ron::de::from_str(buffer_ron).unwrap();
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer.get_dts(), None.into());
-        assert_eq!(buffer.get_offset(), 3);
-        assert_eq!(buffer.get_offset_end(), 4);
-        assert_eq!(buffer.get_duration(), 5.into());
-        assert_eq!(buffer.get_flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
+        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer.dts(), None.into());
+        assert_eq!(buffer.offset(), 3);
+        assert_eq!(buffer.offset_end(), 4);
+        assert_eq!(buffer.duration(), 5.into());
+        assert_eq!(buffer.flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
@@ -172,12 +172,12 @@ mod tests {
             }
         "#;
         let buffer: Buffer = serde_json::from_str(buffer_json).unwrap();
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer.get_dts(), None.into());
-        assert_eq!(buffer.get_offset(), 3);
-        assert_eq!(buffer.get_offset_end(), 4);
-        assert_eq!(buffer.get_duration(), 5.into());
-        assert_eq!(buffer.get_flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
+        assert_eq!(buffer.pts(), 1.into());
+        assert_eq!(buffer.dts(), None.into());
+        assert_eq!(buffer.offset(), 3);
+        assert_eq!(buffer.offset_end(), 4);
+        assert_eq!(buffer.duration(), 5.into());
+        assert_eq!(buffer.flags(), BufferFlags::LIVE | BufferFlags::DISCONT);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
@@ -201,12 +201,12 @@ mod tests {
         // Ron
         let buffer_ser = ron::ser::to_string(&buffer).unwrap();
         let buffer_de: Buffer = ron::de::from_str(buffer_ser.as_str()).unwrap();
-        assert_eq!(buffer_de.get_pts(), buffer.get_pts());
-        assert_eq!(buffer_de.get_dts(), buffer.get_dts());
-        assert_eq!(buffer_de.get_offset(), buffer.get_offset());
-        assert_eq!(buffer_de.get_offset_end(), buffer.get_offset_end());
-        assert_eq!(buffer_de.get_duration(), buffer.get_duration());
-        assert_eq!(buffer_de.get_flags(), buffer.get_flags());
+        assert_eq!(buffer_de.pts(), buffer.pts());
+        assert_eq!(buffer_de.dts(), buffer.dts());
+        assert_eq!(buffer_de.offset(), buffer.offset());
+        assert_eq!(buffer_de.offset_end(), buffer.offset_end());
+        assert_eq!(buffer_de.duration(), buffer.duration());
+        assert_eq!(buffer_de.flags(), buffer.flags());
         {
             let data = buffer_de.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());

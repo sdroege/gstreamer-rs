@@ -32,7 +32,7 @@ fn example_main() {
             Ok(pipeline) => pipeline,
             Err(err) => {
                 if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
-                    println!("Missing element(s): {:?}", context.get_missing_elements());
+                    println!("Missing element(s): {:?}", context.missing_elements());
                 } else {
                     println!("Failed to parse pipeline: {}", err);
                 }
@@ -40,7 +40,7 @@ fn example_main() {
                 process::exit(-1)
             }
         };
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.bus().unwrap();
 
     pipeline
         .set_state(gst::State::Playing)
@@ -54,9 +54,9 @@ fn example_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
+                    err.src().map(|s| s.path_string()),
+                    err.error(),
+                    err.debug()
                 );
                 break;
             }

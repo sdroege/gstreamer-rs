@@ -18,9 +18,9 @@ impl Iterator for Iter {
             Some(ref c) => {
                 // Decide on the direction
                 if self.direction_forward {
-                    c.get_next()
+                    c.next()
                 } else {
-                    c.get_previous()
+                    c.previous()
                 }
             }
             None => None,
@@ -32,14 +32,14 @@ impl Iterator for Iter {
 impl DiscovererStreamInfo {
     pub fn next_iter(&self) -> Iter {
         Iter {
-            stream_info: self.get_next(),
+            stream_info: self.next(),
             direction_forward: true,
         }
     }
 
     pub fn previous_iter(&self) -> Iter {
         Iter {
-            stream_info: self.get_previous(),
+            stream_info: self.previous(),
             direction_forward: false,
         }
     }

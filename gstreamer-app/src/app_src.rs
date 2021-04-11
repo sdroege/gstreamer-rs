@@ -286,7 +286,7 @@ impl AppSrc {
         }
     }
 
-    pub fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+    pub fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();
@@ -356,8 +356,8 @@ impl Sink<gst::Sample> for AppSrcSink {
             None => return Poll::Ready(Err(gst::FlowError::Eos)),
         };
 
-        let current_level_bytes = app_src.get_current_level_bytes();
-        let max_bytes = app_src.get_max_bytes();
+        let current_level_bytes = app_src.current_level_bytes();
+        let max_bytes = app_src.max_bytes();
 
         if current_level_bytes >= max_bytes && max_bytes != 0 {
             waker.replace(context.waker().to_owned());
@@ -417,7 +417,7 @@ mod tests {
 
         appsrc.link(&fakesink).unwrap();
 
-        let mut bus_stream = pipeline.get_bus().unwrap().stream();
+        let mut bus_stream = pipeline.bus().unwrap().stream();
         let mut app_src_sink = appsrc.dynamic_cast::<AppSrc>().unwrap().sink();
 
         let sample_quantity = 5;
