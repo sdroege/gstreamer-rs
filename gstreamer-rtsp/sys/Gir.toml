@@ -1,4 +1,5 @@
 [options]
+girs_dir = "../../gir-files"
 library = "GstRtsp"
 version = "1.0"
 min_cfg_version = "1.8"
