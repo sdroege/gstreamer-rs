@@ -1,5 +1,5 @@
 [options]
-girs_dir = "../gir-files"
+girs_directories = ["../gir-files", "../gst-gir-files"]
 library = "GstPlayer"
 version = "1.0"
 min_cfg_version = "1.12"
