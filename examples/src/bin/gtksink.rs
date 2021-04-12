@@ -151,7 +151,7 @@ fn main() {
     gst::init().unwrap();
     gtk::init().unwrap();
 
-    let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE).unwrap();
+    let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE);
 
     app.connect_activate(create_ui);
     app.run();
