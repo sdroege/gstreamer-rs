@@ -356,7 +356,7 @@ impl App {
             use glutin::platform::unix::WindowExtUnix;
             use glutin::platform::ContextTraitExt;
 
-            let api = App::map_gl_api(windowed_context.api());
+            let api = App::map_gl_api(windowed_context.get_api());
 
             let (gl_context, gl_display, platform) = match unsafe { windowed_context.raw_handle() }
             {
@@ -365,7 +365,7 @@ impl App {
                     let mut gl_display = None;
 
                     #[cfg(feature = "gst-gl-egl")]
-                    if let Some(display) = unsafe { windowed_context.egl_display() } {
+                    if let Some(display) = unsafe { windowed_context.get_egl_display() } {
                         gl_display = Some(
                             unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }
                                 .unwrap()
@@ -610,7 +610,7 @@ fn main_loop(app: App) -> Result<(), Error> {
 
     println!(
         "Pixel format of the window's GL context {:?}",
-        app.windowed_context.pixel_format()
+        app.windowed_context.get_pixel_format()
     );
 
     let gl = load(&app.windowed_context);

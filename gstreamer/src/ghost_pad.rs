@@ -111,7 +111,7 @@ impl GhostPad {
     ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
-        if target.direction() != templ.property_direction() {
+        if target.direction() != templ.direction() {
             return Err(glib::bool_error!(
                 "Template and target have different directions"
             ));

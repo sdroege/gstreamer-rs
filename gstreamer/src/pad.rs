@@ -1682,7 +1682,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             type_,
             &[
                 ("name", &name),
-                ("direction", &templ.property_direction()),
+                ("direction", &templ.direction()),
                 ("template", templ),
             ],
         )

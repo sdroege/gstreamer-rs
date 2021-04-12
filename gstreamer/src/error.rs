@@ -108,7 +108,7 @@ macro_rules! result_from_gboolean(
 );
 
 #[derive(Debug, Clone, Error)]
-#[error("Error {:?}: {:?} at {}:{}", .category.get_name(), .bool_error.message, .bool_error.filename, .bool_error.line)]
+#[error("Error {:?}: {:?} at {}:{}", .category.name(), .bool_error.message, .bool_error.filename, .bool_error.line)]
 pub struct LoggableError {
     category: crate::DebugCategory,
     bool_error: glib::BoolError,

@@ -127,7 +127,7 @@ fn main() {
         .dynamic_cast::<AppSrc>()
         .expect("Source element is expected to be an appsrc!");
     appsrc.set_caps(Some(&audio_caps));
-    appsrc.set_property_format(gst::Format::Time);
+    appsrc.set_format(gst::Format::Time);
 
     let appsink = appsink
         .dynamic_cast::<AppSink>()

@@ -136,11 +136,11 @@ pub trait ElementExtManual: 'static {
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
 
     fn current_state(&self) -> State {
-        self.state(ClockTime::from(0)).1
+        self.get_state(ClockTime::from(0)).1
     }
 
     fn pending_state(&self) -> State {
-        self.state(ClockTime::from(0)).2
+        self.get_state(ClockTime::from(0)).2
     }
 
     fn query(&self, query: &mut QueryRef) -> bool;

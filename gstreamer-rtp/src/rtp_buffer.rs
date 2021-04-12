@@ -369,7 +369,7 @@ mod tests {
         assert_eq!(rtp_buffer.seq(), 42);
 
         rtp_buffer.set_marker(true);
-        assert!(rtp_buffer.marker());
+        assert!(rtp_buffer.is_marker());
 
         rtp_buffer.set_payload_type(43);
         assert_eq!(rtp_buffer.payload_type(), 43);
@@ -394,7 +394,7 @@ mod tests {
         assert!(rtp_buffer.get_csrc(2).is_none());
 
         rtp_buffer.set_extension(true);
-        assert_eq!(rtp_buffer.extension(), true);
+        assert_eq!(rtp_buffer.is_extension(), true);
 
         assert_eq!(rtp_buffer.extension_bytes(), None);
     }

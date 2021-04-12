@@ -585,7 +585,7 @@ mod tests {
 
         let video_profile: EncodingVideoProfile =
             glib::object::Cast::downcast(video_profile).ok().unwrap();
-        assert_eq!(video_profile.variableframerate(), VARIABLE_FRAMERATE);
+        assert_eq!(video_profile.is_variableframerate(), VARIABLE_FRAMERATE);
         assert_eq!(video_profile.pass(), PASS);
 
         let restriction = gst::Caps::new_simple("video/x-raw", &[("format", &"NV12")]);

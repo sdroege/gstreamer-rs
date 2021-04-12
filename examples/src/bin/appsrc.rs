@@ -60,7 +60,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             .expect("Failed to create video info");
 
     appsrc.set_caps(Some(&video_info.to_caps().unwrap()));
-    appsrc.set_property_format(gst::Format::Time);
+    appsrc.set_format(gst::Format::Time);
 
     // Our frame counter, that is stored in the mutable environment
     // of the closure of the need-data callback
