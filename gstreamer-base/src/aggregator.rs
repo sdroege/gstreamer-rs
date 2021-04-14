@@ -35,11 +35,11 @@ pub trait AggregatorExtManual: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn property_min_upstream_latency(&self) -> gst::ClockTime;
+    fn min_upstream_latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn set_property_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime);
+    fn set_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -124,7 +124,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn property_min_upstream_latency(&self) -> gst::ClockTime {
+    fn min_upstream_latency(&self) -> gst::ClockTime {
         unsafe {
             let mut value = Value::from_type(<gst::ClockTime as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -134,14 +134,14 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             );
             value
                 .get()
-                .expect("AggregatorExtManual::get_property_min_upstream_latency")
+                .expect("AggregatorExtManual::min_upstream_latency")
                 .unwrap()
         }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn set_property_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime) {
+    fn set_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,

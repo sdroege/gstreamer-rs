@@ -31,8 +31,8 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
         self.parent_is_seekable(element)
     }
 
-    fn get_size(&self, element: &Self::Type) -> Option<u64> {
-        self.parent_get_size(element)
+    fn size(&self, element: &Self::Type) -> Option<u64> {
+        self.parent_size(element)
     }
 
     fn get_times(
@@ -40,7 +40,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
         element: &Self::Type,
         buffer: &gst::BufferRef,
     ) -> (gst::ClockTime, gst::ClockTime) {
-        self.parent_get_times(element, buffer)
+        self.parent_times(element, buffer)
     }
 
     fn fill(
@@ -84,8 +84,8 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
         self.parent_event(element, event)
     }
 
-    fn get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
-        self.parent_get_caps(element, filter)
+    fn caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+        self.parent_caps(element, filter)
     }
 
     fn negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
@@ -116,9 +116,9 @@ pub trait BaseSrcImplExt: ObjectSubclass {
 
     fn parent_is_seekable(&self, element: &Self::Type) -> bool;
 
-    fn parent_get_size(&self, element: &Self::Type) -> Option<u64>;
+    fn parent_size(&self, element: &Self::Type) -> Option<u64>;
 
-    fn parent_get_times(
+    fn parent_times(
         &self,
         element: &Self::Type,
         buffer: &gst::BufferRef,
@@ -153,11 +153,7 @@ pub trait BaseSrcImplExt: ObjectSubclass {
 
     fn parent_event(&self, element: &Self::Type, event: &gst::Event) -> bool;
 
-    fn parent_get_caps(
-        &self,
-        element: &Self::Type,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
+    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
 
     fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError>;
 
@@ -226,7 +222,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_get_size(&self, element: &Self::Type) -> Option<u64> {
+    fn parent_size(&self, element: &Self::Type) -> Option<u64> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
@@ -247,7 +243,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_get_times(
+    fn parent_times(
         &self,
         element: &Self::Type,
         buffer: &gst::BufferRef,
@@ -462,11 +458,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         }
     }
 
-    fn parent_get_caps(
-        &self,
-        element: &Self::Type,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps> {
+    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
@@ -668,7 +660,7 @@ unsafe extern "C" fn base_src_get_size<T: BaseSrcImpl>(
     let wrap: Borrowed<BaseSrc> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
-        match imp.get_size(wrap.unsafe_cast_ref()) {
+        match imp.size(wrap.unsafe_cast_ref()) {
             Some(s) => {
                 *size = s;
                 true

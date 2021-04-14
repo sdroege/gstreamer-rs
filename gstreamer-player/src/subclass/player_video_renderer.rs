@@ -36,9 +36,7 @@ impl<T: PlayerVideoRendererImpl> PlayerVideoRendererImplExt for T {
     ) -> gst::Element {
         unsafe {
             let type_data = Self::type_data();
-            let parent_iface = type_data
-                .as_ref()
-                .get_parent_interface::<PlayerVideoRenderer>()
+            let parent_iface = type_data.as_ref().parent_interface::<PlayerVideoRenderer>()
                 as *const ffi::GstPlayerVideoRendererInterface;
 
             let func = (*parent_iface)

@@ -12,41 +12,41 @@ use std::ptr;
 
 pub trait URIHandlerImpl: super::element::ElementImpl {
     const URI_TYPE: URIType;
-    fn get_protocols() -> &'static [&'static str];
-    fn get_uri(&self, element: &Self::Type) -> Option<String>;
+    fn protocols() -> &'static [&'static str];
+    fn uri(&self, element: &Self::Type) -> Option<String>;
     fn set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error>;
 }
 
 pub trait URIHandlerImplExt: ObjectSubclass {
-    fn parent_get_protocols() -> Vec<String>;
-    fn parent_get_uri(&self, element: &Self::Type) -> Option<String>;
+    fn parent_protocols() -> Vec<String>;
+    fn parent_uri(&self, element: &Self::Type) -> Option<String>;
     fn parent_set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error>;
 }
 
 impl<T: URIHandlerImpl> URIHandlerImplExt for T {
-    fn parent_get_protocols() -> Vec<String> {
+    fn parent_protocols() -> Vec<String> {
         unsafe {
             let type_data = Self::type_data();
-            let parent_iface = type_data.as_ref().get_parent_interface::<URIHandler>()
+            let parent_iface = type_data.as_ref().parent_interface::<URIHandler>()
                 as *const ffi::GstURIHandlerInterface;
 
             let func = (*parent_iface)
                 .get_protocols
-                .expect("no parent \"get_protocols\" implementation");
+                .expect("no parent \"protocols\" implementation");
             let ret = func(Self::ParentType::static_type().to_glib());
             FromGlibPtrContainer::from_glib_none(ret)
         }
     }
 
-    fn parent_get_uri(&self, element: &Self::Type) -> Option<String> {
+    fn parent_uri(&self, element: &Self::Type) -> Option<String> {
         unsafe {
             let type_data = Self::type_data();
-            let parent_iface = type_data.as_ref().get_parent_interface::<URIHandler>()
+            let parent_iface = type_data.as_ref().parent_interface::<URIHandler>()
                 as *const ffi::GstURIHandlerInterface;
 
             let func = (*parent_iface)
                 .get_uri
-                .expect("no parent \"get_uri\" implementation");
+                .expect("no parent \"uri\" implementation");
             let ret = func(element.unsafe_cast_ref::<URIHandler>().to_glib_none().0);
             from_glib_full(ret)
         }
@@ -55,7 +55,7 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
     fn parent_set_uri(&self, element: &Self::Type, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let type_data = Self::type_data();
-            let parent_iface = type_data.as_ref().get_parent_interface::<URIHandler>()
+            let parent_iface = type_data.as_ref().parent_interface::<URIHandler>()
                 as *const ffi::GstURIHandlerInterface;
 
             let func = (*parent_iface)
@@ -90,7 +90,7 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
         // Store the protocols in the interface data for later use
         unsafe {
             let mut data = T::type_data();
-            let protocols = T::get_protocols();
+            let protocols = T::protocols();
             let protocols = protocols.to_glib_full();
             let data = data.as_mut();
 
@@ -117,7 +117,7 @@ unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
 ) -> *const *const libc::c_char {
     let data = <T as ObjectSubclassType>::type_data();
     data.as_ref()
-        .get_class_data::<CStrV>(URIHandler::static_type())
+        .class_data::<CStrV>(URIHandler::static_type())
         .unwrap_or(&CStrV(std::ptr::null()))
         .0
 }
@@ -128,7 +128,7 @@ unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.impl_();
 
-    imp.get_uri(&from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref())
+    imp.uri(&from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref())
         .to_glib_full()
 }
 

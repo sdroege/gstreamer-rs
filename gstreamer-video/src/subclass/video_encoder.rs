@@ -56,8 +56,8 @@ pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
         self.parent_negotiate(element)
     }
 
-    fn get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
-        self.parent_get_caps(element, filter)
+    fn caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
+        self.parent_caps(element, filter)
     }
 
     fn sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
@@ -120,7 +120,7 @@ pub trait VideoEncoderImplExt: ObjectSubclass {
 
     fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError>;
 
-    fn parent_get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps;
+    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps;
 
     fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool;
 
@@ -335,7 +335,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         }
     }
 
-    fn parent_get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
+    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;

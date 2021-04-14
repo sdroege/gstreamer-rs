@@ -9,7 +9,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| ffi::gst_control_point_copy(mut_override(ptr)),
         free => |ptr| ffi::gst_control_point_free(ptr),
-        get_type => || ffi::gst_control_point_get_type(),
+        type_ => || ffi::gst_control_point_get_type(),
     }
 }
 

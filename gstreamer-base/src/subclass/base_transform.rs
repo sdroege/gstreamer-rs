@@ -91,8 +91,8 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
         self.parent_transform_size(element, direction, caps, size, othercaps)
     }
 
-    fn get_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
-        self.parent_get_unit_size(element, caps)
+    fn unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
+        self.parent_unit_size(element, caps)
     }
 
     fn sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
@@ -227,7 +227,7 @@ pub trait BaseTransformImplExt: ObjectSubclass {
         othercaps: &gst::Caps,
     ) -> Option<usize>;
 
-    fn parent_get_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize>;
+    fn parent_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize>;
 
     fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool;
 
@@ -496,7 +496,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         }
     }
 
-    fn parent_get_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
+    fn parent_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;

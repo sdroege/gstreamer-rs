@@ -59,8 +59,8 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
         self.parent_event(element, event)
     }
 
-    fn get_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
-        self.parent_get_caps(element, filter)
+    fn caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+        self.parent_caps(element, filter)
     }
 
     fn set_caps(&self, element: &Self::Type, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
@@ -113,11 +113,7 @@ pub trait BaseSinkImplExt: ObjectSubclass {
 
     fn parent_event(&self, element: &Self::Type, event: gst::Event) -> bool;
 
-    fn parent_get_caps(
-        &self,
-        element: &Self::Type,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
+    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
 
     fn parent_set_caps(
         &self,
@@ -299,11 +295,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_get_caps(
-        &self,
-        element: &Self::Type,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps> {
+    fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;

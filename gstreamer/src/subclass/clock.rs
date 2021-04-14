@@ -22,12 +22,12 @@ pub trait ClockImpl: ClockImplExt + ObjectImpl + Send + Sync {
         self.parent_change_resolution(clock, old_resolution, new_resolution)
     }
 
-    fn get_resolution(&self, clock: &Self::Type) -> ClockTime {
-        self.parent_get_resolution(clock)
+    fn resolution(&self, clock: &Self::Type) -> ClockTime {
+        self.parent_resolution(clock)
     }
 
-    fn get_internal_time(&self, clock: &Self::Type) -> ClockTime {
-        self.parent_get_internal_time(clock)
+    fn internal_time(&self, clock: &Self::Type) -> ClockTime {
+        self.parent_internal_time(clock)
     }
 
     fn wait(
@@ -55,9 +55,9 @@ pub trait ClockImplExt: ObjectSubclass {
         new_resolution: ClockTime,
     ) -> ClockTime;
 
-    fn parent_get_resolution(&self, clock: &Self::Type) -> ClockTime;
+    fn parent_resolution(&self, clock: &Self::Type) -> ClockTime;
 
-    fn parent_get_internal_time(&self, clock: &Self::Type) -> ClockTime;
+    fn parent_internal_time(&self, clock: &Self::Type) -> ClockTime;
 
     fn parent_wait(
         &self,
@@ -97,12 +97,12 @@ impl<T: ClockImpl> ClockImplExt for T {
                     new_resolution.to_glib(),
                 ))
             } else {
-                self.get_resolution(clock)
+                self.resolution(clock)
             }
         }
     }
 
-    fn parent_get_resolution(&self, clock: &Self::Type) -> ClockTime {
+    fn parent_resolution(&self, clock: &Self::Type) -> ClockTime {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -116,7 +116,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         }
     }
 
-    fn parent_get_internal_time(&self, clock: &Self::Type) -> ClockTime {
+    fn parent_internal_time(&self, clock: &Self::Type) -> ClockTime {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
@@ -271,7 +271,7 @@ unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.get_resolution(wrap.unsafe_cast_ref()).to_glib()
+    imp.resolution(wrap.unsafe_cast_ref()).to_glib()
 }
 
 unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
@@ -281,7 +281,7 @@ unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.get_internal_time(wrap.unsafe_cast_ref()).to_glib()
+    imp.internal_time(wrap.unsafe_cast_ref()).to_glib()
 }
 
 unsafe extern "C" fn clock_wait<T: ClockImpl>(

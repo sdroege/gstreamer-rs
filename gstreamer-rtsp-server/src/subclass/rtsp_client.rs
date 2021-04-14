@@ -81,8 +81,8 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
         self.parent_set_parameter_request(client, ctx);
     }
 
-    fn get_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
-        self.parent_get_parameter_request(client, ctx);
+    fn parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
+        self.parent_parameter_request(client, ctx);
     }
 
     fn announce_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
@@ -253,7 +253,7 @@ pub trait RTSPClientImplExt: ObjectSubclass {
 
     fn parent_set_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
-    fn parent_get_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
+    fn parent_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
     fn parent_announce_request(&self, client: &Self::Type, ctx: &crate::RTSPContext);
 
@@ -560,7 +560,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         }
     }
 
-    fn parent_get_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
+    fn parent_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;

@@ -17,7 +17,7 @@ glib::wrapper! {
             }
         },
         free => |ptr| ffi::gst_parse_context_free(ptr),
-        get_type => || ffi::gst_parse_context_get_type(),
+        type_ => || ffi::gst_parse_context_get_type(),
     }
 }
 

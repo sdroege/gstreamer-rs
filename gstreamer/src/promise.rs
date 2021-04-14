@@ -17,7 +17,7 @@ glib::wrapper! {
     match fn {
         ref => |ptr| ffi::gst_mini_object_ref(ptr as *mut _),
         unref => |ptr| ffi::gst_mini_object_unref(ptr as *mut _),
-        get_type => || ffi::gst_promise_get_type(),
+        type_ => || ffi::gst_promise_get_type(),
     }
 }
 

@@ -26,7 +26,7 @@ glib::wrapper! {
                 }
             }
         },
-        get_type => || ffi::gst_flow_combiner_get_type(),
+        type_ => || ffi::gst_flow_combiner_get_type(),
     }
 }
 

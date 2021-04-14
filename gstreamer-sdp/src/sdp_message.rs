@@ -30,7 +30,7 @@ glib::wrapper! {
             copy
         },
         free => |ptr| assert_eq!(ffi::gst_sdp_message_free(ptr), ffi::GST_SDP_OK),
-        get_type => || ffi::gst_sdp_message_get_type(),
+        type_ => || ffi::gst_sdp_message_get_type(),
     }
 }
 

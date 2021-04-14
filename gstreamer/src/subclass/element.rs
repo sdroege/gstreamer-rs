@@ -317,7 +317,7 @@ impl<T: ElementImpl> ElementImplExt for T {
     }
 
     fn panicked(&self) -> &atomic::AtomicBool {
-        self.get_instance_data::<atomic::AtomicBool>(crate::Element::static_type())
+        self.instance_data::<atomic::AtomicBool>(crate::Element::static_type())
             .expect("instance not initialized correctly")
     }
 
@@ -328,7 +328,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         f: F,
     ) -> R {
         unsafe {
-            assert!(element.type_().is_a(T::get_type()));
+            assert!(element.type_().is_a(T::type_()));
             let ptr: *mut ffi::GstElement = element.as_ptr() as *mut _;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.impl_();
@@ -344,7 +344,7 @@ impl<T: ElementImpl> ElementImplExt for T {
     ) -> R {
         unsafe {
             let wrap = parent.as_ref().unwrap().downcast_ref::<Element>().unwrap();
-            assert!(wrap.type_().is_a(T::get_type()));
+            assert!(wrap.type_().is_a(T::type_()));
             let ptr: *mut ffi::GstElement = wrap.to_glib_none().0;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.impl_();
