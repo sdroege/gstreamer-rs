@@ -76,7 +76,7 @@ void main() {
 #[allow(clippy::unused_unit)]
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::manual_non_exhaustive)]
-mod gl {
+pub(crate) mod gl {
     pub use self::Gles2 as Gl;
     include!(concat!(env!("OUT_DIR"), "/test_gl_bindings.rs"));
 }
@@ -327,10 +327,10 @@ pub(crate) struct App {
 }
 
 impl App {
-    pub(crate) fn new() -> Result<App, Error> {
+    pub(crate) fn new(gl_element: Option<&gst::Element>) -> Result<App, Error> {
         gst::init()?;
 
-        let (pipeline, appsink, glupload) = App::create_pipeline()?;
+        let (pipeline, appsink, glupload) = App::create_pipeline(gl_element)?;
         let bus = pipeline
             .bus()
             .expect("Pipeline without bus. Shouldn't happen!");
@@ -531,22 +531,17 @@ impl App {
         }
     }
 
-    fn create_pipeline() -> Result<(gst::Pipeline, gst_app::AppSink, gst::Element), Error> {
+    fn create_pipeline(
+        gl_element: Option<&gst::Element>,
+    ) -> Result<(gst::Pipeline, gst_app::AppSink, gst::Element), Error> {
         let pipeline = gst::Pipeline::new(None);
         let src = gst::ElementFactory::make("videotestsrc", None)
             .map_err(|_| MissingElement("videotestsrc"))?;
-        let sink = gst::ElementFactory::make("glsinkbin", None)
-            .map_err(|_| MissingElement("glsinkbin"))?;
-
-        pipeline.add_many(&[&src, &sink])?;
-        src.link(&sink)?;
 
         let appsink = gst::ElementFactory::make("appsink", None)
             .map_err(|_| MissingElement("appsink"))?
             .dynamic_cast::<gst_app::AppSink>()
             .expect("Sink element is expected to be an appsink!");
-
-        sink.set_property("sink", &appsink)?;
 
         appsink.set_property("enable-last-sample", &false)?;
         appsink.set_property("emit-signals", &false)?;
@@ -559,21 +554,44 @@ impl App {
             .build();
         appsink.set_caps(Some(&caps));
 
-        // get the glupload element to extract later the used context in it
-        let mut iter = sink.dynamic_cast::<gst::Bin>().unwrap().iterate_elements();
-        let glupload = loop {
-            match iter.next() {
-                Ok(Some(element)) => {
-                    if "glupload" == element.factory().unwrap().name() {
-                        break Some(element);
-                    }
-                }
-                Err(gst::IteratorError::Resync) => iter.resync(),
-                _ => break None,
-            }
-        };
+        if let Some(gl_element) = gl_element {
+            let glupload = gst::ElementFactory::make("glupload", None)
+                .map_err(|_| MissingElement("glupload"))?;
 
-        Ok((pipeline, appsink, glupload.unwrap()))
+            pipeline.add_many(&[&src, &glupload])?;
+            pipeline.add(gl_element)?;
+            pipeline.add(&appsink)?;
+
+            src.link(&glupload)?;
+            glupload.link(gl_element)?;
+            gl_element.link(&appsink)?;
+
+            Ok((pipeline, appsink, glupload))
+        } else {
+            let sink = gst::ElementFactory::make("glsinkbin", None)
+                .map_err(|_| MissingElement("glsinkbin"))?;
+
+            sink.set_property("sink", &appsink)?;
+
+            pipeline.add_many(&[&src, &sink])?;
+            src.link(&sink)?;
+
+            // get the glupload element to extract later the used context in it
+            let mut iter = sink.dynamic_cast::<gst::Bin>().unwrap().iterate_elements();
+            let glupload = loop {
+                match iter.next() {
+                    Ok(Some(element)) => {
+                        if "glupload" == element.factory().unwrap().name() {
+                            break Some(element);
+                        }
+                    }
+                    Err(gst::IteratorError::Resync) => iter.resync(),
+                    _ => break None,
+                }
+            };
+
+            Ok((pipeline, appsink, glupload.unwrap()))
+        }
     }
 
     fn handle_messages(bus: &gst::Bus) -> Result<(), Error> {

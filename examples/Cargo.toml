@@ -162,6 +162,10 @@ name = "glwindow"
 required-features = ["gl"]
 
 [[bin]]
+name = "glfilter"
+required-features = ["gl"]
+
+[[bin]]
 name = "subclass"
 
 [[bin]]
