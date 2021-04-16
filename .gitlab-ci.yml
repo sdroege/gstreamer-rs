@@ -437,7 +437,6 @@ coverage:
     # output coverage summary for gitlab parsing
     - lcov -r lcov "/*" 2&> out
     - grep lines out
-  when: 'manual'
   artifacts:
     paths:
       - 'coverage'
