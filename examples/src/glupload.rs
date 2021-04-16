@@ -17,9 +17,6 @@ use std::sync;
 use anyhow::Error;
 use derive_more::{Display, Error};
 
-#[path = "../examples-common.rs"]
-mod examples_common;
-
 #[derive(Debug, Display, Error)]
 #[display(fmt = "Missing element {}", _0)]
 struct MissingElement(#[error(not(source))] &'static str);
@@ -319,7 +316,7 @@ enum Message {
     BusEvent,
 }
 
-struct App {
+pub(crate) struct App {
     pipeline: gst::Pipeline,
     appsink: gst_app::AppSink,
     glupload: gst::Element,
@@ -330,7 +327,7 @@ struct App {
 }
 
 impl App {
-    fn new() -> Result<App, Error> {
+    pub(crate) fn new() -> Result<App, Error> {
         gst::init()?;
 
         let (pipeline, appsink, glupload) = App::create_pipeline()?;
@@ -605,7 +602,7 @@ impl App {
     }
 }
 
-fn main_loop(app: App) -> Result<(), Error> {
+pub(crate) fn main_loop(app: App) -> Result<(), Error> {
     app.setup(&app.event_loop)?;
 
     println!(
@@ -699,14 +696,4 @@ fn main_loop(app: App) -> Result<(), Error> {
             windowed_context.swap_buffers().unwrap();
         }
     })
-}
-
-fn example_main() {
-    App::new()
-        .and_then(main_loop)
-        .unwrap_or_else(|e| eprintln!("Error! {}", e))
-}
-
-fn main() {
-    examples_common::run(example_main);
 }
