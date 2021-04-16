@@ -23,9 +23,11 @@ generate = [
     "Gst.CoreError",
     "Gst.DebugColorFlags",
     "Gst.DebugGraphDetails",
+    "Gst.DebugLevel",
     "Gst.EventTypeFlags",
     "Gst.LibraryError",
     "Gst.PadDirection",
+    "Gst.PadMode",
     "Gst.PadPresence",
     "Gst.PadProbeReturn",
     "Gst.ParseError",
@@ -242,10 +244,6 @@ status = "generate"
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
     [[object.function]]
-    name = "get_name"
-    # consumes `self` so not considered as a getter by gir
-    rename = "name"
-    [[object.function]]
     name = "register"
     # Needs manual work
     ignore = true
@@ -357,14 +355,6 @@ status = "generate"
     [[object.member]]
     name = "instant_rate_sync_time"
     version = "1.18"
-    [[object.function]]
-    name = "get_flags"
-    # consumes `self` so not considered as a getter by gir
-    rename = "flags"
-    [[object.function]]
-    name = "get_name"
-    # consumes `self` so not considered as a getter by gir
-    rename = "name"
 
 [[object]]
 name = "Gst.Structure"
@@ -537,6 +527,11 @@ manual_traits = ["ElementExtManual"]
     name = "get_current_clock_time"
     # manual implementation also works for earlier versions
     manual = true
+
+    [[object.function]]
+    name = "get_request_pad"
+    # rename to more explicite name and avoid conflict with `request_pad`
+    rename = "request_pad_simple"
 
     [[object.function]]
     name = "post_message"
@@ -725,14 +720,6 @@ final_type = true
 name = "Gst.TypeFindFactory"
 status = "generate"
 final_type = true
-
-[[object]]
-name = "Gst.DebugLevel"
-status = "generate"
-    [[object.function]]
-    name = "get_name"
-    # consumes `self` so not considered as a getter by gir
-    rename = "name"
 
 [[object]]
 name = "Gst.DeviceProviderFactory"
@@ -1074,14 +1061,6 @@ manual_traits = ["PadExtManual"]
     name = "template"
     # Has a proper getter
     ignore = true
-
-[[object]]
-name = "Gst.PadMode"
-status = "generate"
-    [[object.function]]
-    name = "get_name"
-    # consumes `self` so not considered as a getter by gir
-    rename = "name"
 
 [[object]]
 name = "Gst.PadTemplate"
@@ -1672,8 +1651,6 @@ name = "Gst.StateChange"
 status = "generate"
     [[object.function]]
     name = "get_name"
-    # consumes `self` so not considered as a getter by gir
-    rename = "name"
     # Manual function for < v1_14:
     manual = true
     # Always generate the trait, without version constraint:
