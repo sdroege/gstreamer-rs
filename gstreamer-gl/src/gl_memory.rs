@@ -7,7 +7,18 @@ use crate::GLTextureTarget;
 use ffi::{GstGLBaseMemory, GstGLMemory};
 use gst::{result_from_gboolean, LoggableError, CAT_RUST};
 
-gst::mini_object_wrapper!(GLMemory, GLMemoryRef, GstGLMemory);
+cfg_if::cfg_if! {
+    if #[cfg(feature = "v1_20")] {
+        gst::mini_object_wrapper!(
+            GLMemory,
+            GLMemoryRef,
+            GstGLMemory,
+            ffi::gst_gl_memory_get_type
+        );
+    } else {
+        gst::mini_object_wrapper!(GLMemory, GLMemoryRef, GstGLMemory);
+    }
+}
 
 impl std::ops::Deref for GLMemoryRef {
     type Target = GLBaseMemoryRef;
