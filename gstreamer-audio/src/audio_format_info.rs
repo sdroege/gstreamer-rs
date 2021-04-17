@@ -174,7 +174,7 @@ impl AudioFormatInfo {
 
         unsafe {
             cfg_if::cfg_if! {
-                if #[cfg(all(feature = "v1_20", not(feature = "dox")))] {
+                if #[cfg(feature = "v1_20")] {
                     ffi::gst_audio_format_info_fill_silence(self.0, dest.as_mut_ptr() as *mut _, dest.len())
                 } else {
                     ffi::gst_audio_format_fill_silence(self.0, dest.as_mut_ptr() as *mut _, dest.len())

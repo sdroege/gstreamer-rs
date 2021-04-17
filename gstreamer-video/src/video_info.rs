@@ -185,7 +185,7 @@ impl crate::VideoChromaSite {
 
         unsafe {
             cfg_if::cfg_if! {
-                if #[cfg(all(feature = "v1_20", not(feature = "dox")))] {
+                if #[cfg(feature = "v1_20")] {
                     from_glib_full(ffi::gst_video_chroma_site_to_string(self.into_glib()))
                 } else {
                     from_glib_none(ffi::gst_video_chroma_to_string(self.into_glib()))
@@ -203,7 +203,7 @@ impl str::FromStr for crate::VideoChromaSite {
         skip_assert_initialized!();
 
         cfg_if::cfg_if! {
-            if #[cfg(all(feature = "v1_20", not(feature = "dox")))] {
+            if #[cfg(feature = "v1_20")] {
                 let chroma_site = Self::from_string(s);
             } else {
                 assert_initialized_main_thread!();
