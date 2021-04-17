@@ -220,12 +220,6 @@ impl str::FromStr for crate::VideoChromaSite {
     }
 }
 
-impl fmt::Display for crate::VideoChromaSite {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_str())
-    }
-}
-
 impl From<crate::VideoMultiviewFramePacking> for crate::VideoMultiviewMode {
     fn from(v: crate::VideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
