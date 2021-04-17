@@ -31,6 +31,15 @@ impl GLDisplay {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_display_new()) }
     }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_gl_display_new_with_type")]
+    #[doc(alias = "new_with_type")]
+    pub fn with_type(type_: GLDisplayType) -> Option<GLDisplay> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(ffi::gst_gl_display_new_with_type(type_.into_glib())) }
+    }
 }
 
 impl Default for GLDisplay {

@@ -135,6 +135,11 @@ pub trait RTSPMediaFactoryExt: 'static {
     #[doc(alias = "gst_rtsp_media_factory_is_bind_mcast_address")]
     fn is_bind_mcast_address(&self) -> bool;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_rtsp_media_factory_is_enable_rtcp")]
+    fn is_enable_rtcp(&self) -> bool;
+
     #[doc(alias = "gst_rtsp_media_factory_is_eos_shutdown")]
     fn is_eos_shutdown(&self) -> bool;
 
@@ -167,6 +172,11 @@ pub trait RTSPMediaFactoryExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_factory_set_dscp_qos")]
     fn set_dscp_qos(&self, dscp_qos: i32);
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_rtsp_media_factory_set_enable_rtcp")]
+    fn set_enable_rtcp(&self, enable: bool);
 
     #[doc(alias = "gst_rtsp_media_factory_set_eos_shutdown")]
     fn set_eos_shutdown(&self, eos_shutdown: bool);
@@ -265,6 +275,14 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     #[doc(alias = "dscp-qos")]
     fn connect_dscp_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "enable-rtcp")]
+    fn connect_enable_rtcp_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -479,6 +497,16 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn is_enable_rtcp(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_rtsp_media_factory_is_enable_rtcp(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn is_eos_shutdown(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_is_eos_shutdown(
@@ -554,6 +582,17 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn set_dscp_qos(&self, dscp_qos: i32) {
         unsafe {
             ffi::gst_rtsp_media_factory_set_dscp_qos(self.as_ref().to_glib_none().0, dscp_qos);
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn set_enable_rtcp(&self, enable: bool) {
+        unsafe {
+            ffi::gst_rtsp_media_factory_set_enable_rtcp(
+                self.as_ref().to_glib_none().0,
+                enable.into_glib(),
+            );
         }
     }
 
@@ -943,6 +982,37 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 b"notify::dscp-qos\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_dscp_qos_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "enable-rtcp")]
+    fn connect_enable_rtcp_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_rtcp_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstRTSPMediaFactory,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::enable-rtcp\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_rtcp_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

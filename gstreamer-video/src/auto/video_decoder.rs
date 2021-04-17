@@ -4,6 +4,9 @@
 // DO NOT EDIT
 
 use crate::VideoCodecFrame;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use crate::VideoDecoderRequestSyncPointFlags;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::object::Cast;
@@ -69,6 +72,12 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "get_needs_format")]
     fn needs_format(&self) -> bool;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_get_needs_sync_point")]
+    #[doc(alias = "get_needs_sync_point")]
+    fn needs_sync_point(&self) -> bool;
+
     #[doc(alias = "gst_video_decoder_get_packetized")]
     #[doc(alias = "get_packetized")]
     fn is_packetized(&self) -> bool;
@@ -90,6 +99,11 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "gst_video_decoder_proxy_getcaps")]
     fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_request_sync_point")]
+    fn request_sync_point(&self, frame: &VideoCodecFrame, flags: VideoDecoderRequestSyncPointFlags);
+
     #[doc(alias = "gst_video_decoder_set_estimate_rate")]
     fn set_estimate_rate(&self, enabled: bool);
 
@@ -99,11 +113,36 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "gst_video_decoder_set_needs_format")]
     fn set_needs_format(&self, enabled: bool);
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_decoder_set_needs_sync_point")]
+    fn set_needs_sync_point(&self, enabled: bool);
+
     #[doc(alias = "gst_video_decoder_set_packetized")]
     fn set_packetized(&self, packetized: bool);
 
     #[doc(alias = "gst_video_decoder_set_use_default_pad_acceptcaps")]
     fn set_use_default_pad_acceptcaps(&self, use_: bool);
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "discard-corrupted-frames")]
+    fn is_discard_corrupted_frames(&self) -> bool;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "discard-corrupted-frames")]
+    fn set_discard_corrupted_frames(&self, discard_corrupted_frames: bool);
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "min-force-key-unit-interval")]
+    fn min_force_key_unit_interval(&self) -> u64;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "min-force-key-unit-interval")]
+    fn set_min_force_key_unit_interval(&self, min_force_key_unit_interval: u64);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -113,10 +152,26 @@ pub trait VideoDecoderExt: 'static {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_qos(&self, qos: bool);
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "discard-corrupted-frames")]
+    fn connect_discard_corrupted_frames_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "max-errors")]
     fn connect_max_errors_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "min-force-key-unit-interval")]
+    fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -176,6 +231,16 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn needs_sync_point(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_video_decoder_get_needs_sync_point(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn is_packetized(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_video_decoder_get_packetized(
@@ -220,6 +285,22 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn request_sync_point(
+        &self,
+        frame: &VideoCodecFrame,
+        flags: VideoDecoderRequestSyncPointFlags,
+    ) {
+        unsafe {
+            ffi::gst_video_decoder_request_sync_point(
+                self.as_ref().to_glib_none().0,
+                frame.to_glib_none().0,
+                flags.into_glib(),
+            );
+        }
+    }
+
     fn set_estimate_rate(&self, enabled: bool) {
         unsafe {
             ffi::gst_video_decoder_set_estimate_rate(
@@ -244,6 +325,17 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn set_needs_sync_point(&self, enabled: bool) {
+        unsafe {
+            ffi::gst_video_decoder_set_needs_sync_point(
+                self.as_ref().to_glib_none().0,
+                enabled.into_glib(),
+            );
+        }
+    }
+
     fn set_packetized(&self, packetized: bool) {
         unsafe {
             ffi::gst_video_decoder_set_packetized(
@@ -258,6 +350,62 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
             ffi::gst_video_decoder_set_use_default_pad_acceptcaps(
                 self.as_ref().to_glib_none().0,
                 use_.into_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn is_discard_corrupted_frames(&self) -> bool {
+        unsafe {
+            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"discard-corrupted-frames\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `discard-corrupted-frames` getter")
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn set_discard_corrupted_frames(&self, discard_corrupted_frames: bool) {
+        unsafe {
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"discard-corrupted-frames\0".as_ptr() as *const _,
+                discard_corrupted_frames.to_value().to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn min_force_key_unit_interval(&self) -> u64 {
+        unsafe {
+            let mut value = glib::Value::from_type(<u64 as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"min-force-key-unit-interval\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `min-force-key-unit-interval` getter")
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn set_min_force_key_unit_interval(&self, min_force_key_unit_interval: u64) {
+        unsafe {
+            glib::gobject_ffi::g_object_set_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
+                b"min-force-key-unit-interval\0".as_ptr() as *const _,
+                min_force_key_unit_interval.to_value().to_glib_none().0,
             );
         }
     }
@@ -288,6 +436,37 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "discard-corrupted-frames")]
+    fn connect_discard_corrupted_frames_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_discard_corrupted_frames_trampoline<
+            P: IsA<VideoDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstVideoDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::discard-corrupted-frames\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_discard_corrupted_frames_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "max-errors")]
@@ -313,6 +492,37 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
                 b"notify::max-errors\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_max_errors_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "min-force-key-unit-interval")]
+    fn connect_min_force_key_unit_interval_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_min_force_key_unit_interval_trampoline<
+            P: IsA<VideoDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstVideoDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::min-force-key-unit-interval\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_force_key_unit_interval_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

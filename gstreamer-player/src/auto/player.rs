@@ -10,6 +10,7 @@ use crate::PlayerSnapshotFormat;
 use crate::PlayerState;
 use crate::PlayerSubtitleInfo;
 use crate::PlayerVideoInfo;
+use crate::PlayerVideoRenderer;
 use crate::PlayerVisualization;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
@@ -425,6 +426,22 @@ impl Player {
                 b"video-multiview-mode\0".as_ptr() as *const _,
                 video_multiview_mode.to_value().to_glib_none().0,
             );
+        }
+    }
+
+    #[doc(alias = "video-renderer")]
+    pub fn video_renderer(&self) -> Option<PlayerVideoRenderer> {
+        unsafe {
+            let mut value =
+                glib::Value::from_type(<PlayerVideoRenderer as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
+                b"video-renderer\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `video-renderer` getter")
         }
     }
 
@@ -1121,6 +1138,34 @@ impl Player {
                 b"notify::video-multiview-mode\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_video_multiview_mode_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "video-renderer")]
+    pub fn connect_video_renderer_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_video_renderer_trampoline<
+            F: Fn(&Player) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstPlayer,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::video-renderer\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_video_renderer_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -9,6 +9,7 @@ use glib::value::FromValue;
 use glib::value::ToValue;
 use glib::StaticType;
 use glib::Type;
+use std::fmt;
 
 bitflags! {
     #[doc(alias = "GstVideoBufferFlags")]
@@ -112,6 +113,23 @@ bitflags! {
     }
 }
 
+impl VideoChromaSite {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_chroma_site_from_string")]
+    pub fn from_string(s: &str) -> VideoChromaSite {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_video_chroma_site_from_string(s.to_glib_none().0)) }
+    }
+}
+
+impl fmt::Display for VideoChromaSite {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_str())
+    }
+}
+
 #[doc(hidden)]
 impl IntoGlib for VideoChromaSite {
     type GlibType = ffi::GstVideoChromaSite;
@@ -173,6 +191,10 @@ bitflags! {
         const FORCE_KEYFRAME = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME as u32;
         #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS")]
         const FORCE_KEYFRAME_HEADERS = ffi::GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS as u32;
+        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[doc(alias = "GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED")]
+        const CORRUPTED = ffi::GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED as u32;
     }
 }
 
@@ -188,6 +210,39 @@ impl IntoGlib for VideoCodecFrameFlags {
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
     unsafe fn from_glib(value: ffi::GstVideoCodecFrameFlags) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+bitflags! {
+    #[doc(alias = "GstVideoDecoderRequestSyncPointFlags")]
+    pub struct VideoDecoderRequestSyncPointFlags: u32 {
+        #[doc(alias = "GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT")]
+        const DISCARD_INPUT = ffi::GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT as u32;
+        #[doc(alias = "GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT")]
+        const CORRUPT_OUTPUT = ffi::GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for VideoDecoderRequestSyncPointFlags {
+    type GlibType = ffi::GstVideoDecoderRequestSyncPointFlags;
+
+    fn into_glib(self) -> ffi::GstVideoDecoderRequestSyncPointFlags {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoDecoderRequestSyncPointFlags> for VideoDecoderRequestSyncPointFlags {
+    unsafe fn from_glib(value: ffi::GstVideoDecoderRequestSyncPointFlags) -> Self {
         skip_assert_initialized!();
         Self::from_bits_truncate(value)
     }

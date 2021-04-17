@@ -659,6 +659,78 @@ impl ToValue for EventTypeFlags {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+bitflags! {
+    #[doc(alias = "GstGapFlags")]
+    pub struct GapFlags: u32 {
+        #[doc(alias = "GST_GAP_FLAG_MISSING_DATA")]
+        const DATA = ffi::GST_GAP_FLAG_MISSING_DATA as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for GapFlags {
+    type GlibType = ffi::GstGapFlags;
+
+    fn into_glib(self) -> ffi::GstGapFlags {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstGapFlags> for GapFlags {
+    unsafe fn from_glib(value: ffi::GstGapFlags) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for GapFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_gap_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for GapFlags {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for GapFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for GapFlags {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstMemoryFlags")]
     pub struct MemoryFlags: u32 {
@@ -1561,6 +1633,80 @@ unsafe impl<'a> FromValue<'a> for SegmentFlags {
 }
 
 impl ToValue for SegmentFlags {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+bitflags! {
+    #[doc(alias = "GstSerializeFlags")]
+    pub struct SerializeFlags: u32 {
+        #[doc(alias = "GST_SERIALIZE_FLAG_NONE")]
+        const NONE = ffi::GST_SERIALIZE_FLAG_NONE as u32;
+        #[doc(alias = "GST_SERIALIZE_FLAG_BACKWARD_COMPAT")]
+        const BACKWARD_COMPAT = ffi::GST_SERIALIZE_FLAG_BACKWARD_COMPAT as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for SerializeFlags {
+    type GlibType = ffi::GstSerializeFlags;
+
+    fn into_glib(self) -> ffi::GstSerializeFlags {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstSerializeFlags> for SerializeFlags {
+    unsafe fn from_glib(value: ffi::GstSerializeFlags) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for SerializeFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_serialize_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for SerializeFlags {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for SerializeFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for SerializeFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {

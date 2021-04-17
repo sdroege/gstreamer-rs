@@ -83,13 +83,13 @@ impl DateTime {
     }
 
     #[doc(alias = "gst_date_time_new_now_local_time")]
-    pub fn new_now_local_time() -> DateTime {
+    pub fn new_now_local_time() -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_now_local_time()) }
     }
 
     #[doc(alias = "gst_date_time_new_now_utc")]
-    pub fn new_now_utc() -> DateTime {
+    pub fn new_now_utc() -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_date_time_new_now_utc()) }
     }

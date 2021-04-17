@@ -24,15 +24,12 @@ glib::wrapper! {
 }
 
 impl WebRTCDTLSTransport {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_webrtc_dtls_transport_new")]
-    pub fn new(session_id: u32, rtcp: bool) -> WebRTCDTLSTransport {
+    pub fn new(session_id: u32) -> WebRTCDTLSTransport {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::gst_webrtc_dtls_transport_new(
-                session_id,
-                rtcp.into_glib(),
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_webrtc_dtls_transport_new(session_id)) }
     }
 
     #[doc(alias = "gst_webrtc_dtls_transport_set_transport")]
@@ -105,20 +102,6 @@ impl WebRTCDTLSTransport {
             value
                 .get()
                 .expect("Return Value for property `remote-certificate` getter")
-        }
-    }
-
-    pub fn is_rtcp(&self) -> bool {
-        unsafe {
-            let mut value = glib::Value::from_type(<bool as StaticType>::static_type());
-            glib::gobject_ffi::g_object_get_property(
-                self.as_ptr() as *mut glib::gobject_ffi::GObject,
-                b"rtcp\0".as_ptr() as *const _,
-                value.to_glib_none_mut().0,
-            );
-            value
-                .get()
-                .expect("Return Value for property `rtcp` getter")
         }
     }
 

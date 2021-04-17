@@ -831,6 +831,94 @@ impl ToValue for WebRTCICETransportPolicy {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstWebRTCKind")]
+pub enum WebRTCKind {
+    #[doc(alias = "GST_WEBRTC_KIND_UNKNOWN")]
+    Unknown,
+    #[doc(alias = "GST_WEBRTC_KIND_AUDIO")]
+    Audio,
+    #[doc(alias = "GST_WEBRTC_KIND_VIDEO")]
+    Video,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for WebRTCKind {
+    type GlibType = ffi::GstWebRTCKind;
+
+    fn into_glib(self) -> ffi::GstWebRTCKind {
+        match self {
+            Self::Unknown => ffi::GST_WEBRTC_KIND_UNKNOWN,
+            Self::Audio => ffi::GST_WEBRTC_KIND_AUDIO,
+            Self::Video => ffi::GST_WEBRTC_KIND_VIDEO,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCKind> for WebRTCKind {
+    unsafe fn from_glib(value: ffi::GstWebRTCKind) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_WEBRTC_KIND_UNKNOWN => Self::Unknown,
+            ffi::GST_WEBRTC_KIND_AUDIO => Self::Audio,
+            ffi::GST_WEBRTC_KIND_VIDEO => Self::Video,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for WebRTCKind {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_kind_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for WebRTCKind {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for WebRTCKind {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for WebRTCKind {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCPeerConnectionState")]

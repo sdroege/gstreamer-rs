@@ -15,6 +15,105 @@ use glib::StaticType;
 use glib::Type;
 use std::mem;
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstGLConfigCaveat")]
+pub enum GLConfigCaveat {
+    #[doc(alias = "GST_GL_CONFIG_CAVEAT_NONE")]
+    None,
+    #[doc(alias = "GST_GL_CONFIG_CAVEAT_SLOW")]
+    Slow,
+    #[doc(alias = "GST_GL_CONFIG_CAVEAT_NON_CONFORMANT")]
+    NonConformant,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl GLConfigCaveat {
+    #[doc(alias = "gst_gl_config_caveat_to_string")]
+    #[doc(alias = "to_string")]
+    pub fn to_str(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_gl_config_caveat_to_string(self.into_glib())) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for GLConfigCaveat {
+    type GlibType = ffi::GstGLConfigCaveat;
+
+    fn into_glib(self) -> ffi::GstGLConfigCaveat {
+        match self {
+            Self::None => ffi::GST_GL_CONFIG_CAVEAT_NONE,
+            Self::Slow => ffi::GST_GL_CONFIG_CAVEAT_SLOW,
+            Self::NonConformant => ffi::GST_GL_CONFIG_CAVEAT_NON_CONFORMANT,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstGLConfigCaveat> for GLConfigCaveat {
+    unsafe fn from_glib(value: ffi::GstGLConfigCaveat) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_GL_CONFIG_CAVEAT_NONE => Self::None,
+            ffi::GST_GL_CONFIG_CAVEAT_SLOW => Self::Slow,
+            ffi::GST_GL_CONFIG_CAVEAT_NON_CONFORMANT => Self::NonConformant,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for GLConfigCaveat {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_gl_config_caveat_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for GLConfigCaveat {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for GLConfigCaveat {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for GLConfigCaveat {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstGLContextError")]
@@ -183,7 +282,7 @@ impl GLFormat {
         unsafe {
             from_glib(ffi::gst_gl_format_from_video_info(
                 context.as_ref().to_glib_none().0,
-                mut_override(vinfo.to_glib_none().0),
+                vinfo.to_glib_none().0,
                 plane,
             ))
         }

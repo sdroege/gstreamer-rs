@@ -16,13 +16,25 @@ pub use self::web_rtc_data_channel::WebRTCDataChannel;
 mod web_rtcice_transport;
 pub use self::web_rtcice_transport::WebRTCICETransport;
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 mod web_rtcrtp_receiver;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::web_rtcrtp_receiver::WebRTCRTPReceiver;
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 mod web_rtcrtp_sender;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::web_rtcrtp_sender::WebRTCRTPSender;
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 mod web_rtcrtp_transceiver;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::web_rtcrtp_transceiver::WebRTCRTPTransceiver;
 
 mod web_rtc_session_description;
@@ -47,6 +59,9 @@ pub use self::enums::WebRTCICERole;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCICETransportPolicy;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::enums::WebRTCKind;
 pub use self::enums::WebRTCPeerConnectionState;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]

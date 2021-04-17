@@ -3,6 +3,15 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+mod video_aggregator_parallel_convert_pad;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::video_aggregator_parallel_convert_pad::{
+    VideoAggregatorParallelConvertPad, NONE_VIDEO_AGGREGATOR_PARALLEL_CONVERT_PAD,
+};
+
 mod video_buffer_pool;
 pub use self::video_buffer_pool::{VideoBufferPool, NONE_VIDEO_BUFFER_POOL};
 
@@ -60,6 +69,9 @@ mod flags;
 pub use self::flags::VideoBufferFlags;
 pub use self::flags::VideoChromaSite;
 pub use self::flags::VideoCodecFrameFlags;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::flags::VideoDecoderRequestSyncPointFlags;
 pub use self::flags::VideoFlags;
 pub use self::flags::VideoFormatFlags;
 pub use self::flags::VideoFrameFlags;

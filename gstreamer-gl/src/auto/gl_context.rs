@@ -92,6 +92,12 @@ pub trait GLContextExt: 'static {
     #[doc(alias = "gst_gl_context_fill_info")]
     fn fill_info(&self) -> Result<(), glib::Error>;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_gl_context_get_config")]
+    #[doc(alias = "get_config")]
+    fn config(&self) -> Option<gst::Structure>;
+
     #[doc(alias = "gst_gl_context_get_display")]
     #[doc(alias = "get_display")]
     fn display(&self) -> GLDisplay;
@@ -118,6 +124,11 @@ pub trait GLContextExt: 'static {
 
     #[doc(alias = "gst_gl_context_is_shared")]
     fn is_shared(&self) -> bool;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_gl_context_request_config")]
+    fn request_config(&self, gl_config: Option<&gst::Structure>) -> bool;
 
     #[doc(alias = "gst_gl_context_set_shared_with")]
     fn set_shared_with<P: IsA<GLContext>>(&self, share: &P);
@@ -236,6 +247,16 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn config(&self) -> Option<gst::Structure> {
+        unsafe {
+            from_glib_full(ffi::gst_gl_context_get_config(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn display(&self) -> GLDisplay {
         unsafe {
             from_glib_full(ffi::gst_gl_context_get_display(
@@ -302,6 +323,17 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             from_glib(ffi::gst_gl_context_is_shared(
                 self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn request_config(&self, gl_config: Option<&gst::Structure>) -> bool {
+        unsafe {
+            from_glib(ffi::gst_gl_context_request_config(
+                self.as_ref().to_glib_none().0,
+                gl_config.to_glib_full(),
             ))
         }
     }

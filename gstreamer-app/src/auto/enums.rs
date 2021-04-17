@@ -9,6 +9,94 @@ use glib::value::ToValue;
 use glib::StaticType;
 use glib::Type;
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstAppLeakyType")]
+pub enum AppLeakyType {
+    #[doc(alias = "GST_APP_LEAKY_TYPE_NONE")]
+    None,
+    #[doc(alias = "GST_APP_LEAKY_TYPE_UPSTREAM")]
+    Upstream,
+    #[doc(alias = "GST_APP_LEAKY_TYPE_DOWNSTREAM")]
+    Downstream,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for AppLeakyType {
+    type GlibType = ffi::GstAppLeakyType;
+
+    fn into_glib(self) -> ffi::GstAppLeakyType {
+        match self {
+            Self::None => ffi::GST_APP_LEAKY_TYPE_NONE,
+            Self::Upstream => ffi::GST_APP_LEAKY_TYPE_UPSTREAM,
+            Self::Downstream => ffi::GST_APP_LEAKY_TYPE_DOWNSTREAM,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
+    unsafe fn from_glib(value: ffi::GstAppLeakyType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GST_APP_LEAKY_TYPE_NONE => Self::None,
+            ffi::GST_APP_LEAKY_TYPE_UPSTREAM => Self::Upstream,
+            ffi::GST_APP_LEAKY_TYPE_DOWNSTREAM => Self::Downstream,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for AppLeakyType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_app_leaky_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for AppLeakyType {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for AppLeakyType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for AppLeakyType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstAppStreamType")]

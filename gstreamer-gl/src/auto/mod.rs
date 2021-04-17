@@ -59,6 +59,9 @@ mod gl_video_allocation_params;
 pub use self::gl_video_allocation_params::GLVideoAllocationParams;
 
 mod enums;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::enums::GLConfigCaveat;
 pub use self::enums::GLContextError;
 pub use self::enums::GLFormat;
 pub use self::enums::GLQueryType;
@@ -70,6 +73,9 @@ pub use self::enums::GLUploadReturn;
 pub use self::enums::GLWindowError;
 
 mod flags;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::flags::GLConfigSurfaceType;
 pub use self::flags::GLDisplayType;
 pub use self::flags::GLPlatform;
 pub use self::flags::GLSLProfile;

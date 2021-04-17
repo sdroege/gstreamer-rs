@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use crate::AppLeakyType;
 use crate::AppStreamType;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
@@ -34,10 +37,30 @@ impl AppSrc {
         unsafe { from_glib_full(ffi::gst_app_src_get_caps(self.to_glib_none().0)) }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_get_current_level_buffers")]
+    #[doc(alias = "get_current_level_buffers")]
+    pub fn current_level_buffers(&self) -> u64 {
+        unsafe { ffi::gst_app_src_get_current_level_buffers(self.to_glib_none().0) }
+    }
+
     #[doc(alias = "gst_app_src_get_current_level_bytes")]
     #[doc(alias = "get_current_level_bytes")]
     pub fn current_level_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0) }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_get_current_level_time")]
+    #[doc(alias = "get_current_level_time")]
+    pub fn current_level_time(&self) -> gst::ClockTime {
+        unsafe {
+            from_glib(ffi::gst_app_src_get_current_level_time(
+                self.to_glib_none().0,
+            ))
+        }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -48,10 +71,34 @@ impl AppSrc {
         unsafe { from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0)) }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_get_leaky_type")]
+    #[doc(alias = "get_leaky_type")]
+    pub fn leaky_type(&self) -> AppLeakyType {
+        unsafe { from_glib(ffi::gst_app_src_get_leaky_type(self.to_glib_none().0)) }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_get_max_buffers")]
+    #[doc(alias = "get_max_buffers")]
+    pub fn max_buffers(&self) -> u64 {
+        unsafe { ffi::gst_app_src_get_max_buffers(self.to_glib_none().0) }
+    }
+
     #[doc(alias = "gst_app_src_get_max_bytes")]
     #[doc(alias = "get_max_bytes")]
     pub fn max_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_max_bytes(self.to_glib_none().0) }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_get_max_time")]
+    #[doc(alias = "get_max_time")]
+    pub fn max_time(&self) -> gst::ClockTime {
+        unsafe { from_glib(ffi::gst_app_src_get_max_time(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_src_get_size")]
@@ -97,10 +144,37 @@ impl AppSrc {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_set_leaky_type")]
+    pub fn set_leaky_type(&self, leaky: AppLeakyType) {
+        unsafe {
+            ffi::gst_app_src_set_leaky_type(self.to_glib_none().0, leaky.into_glib());
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_set_max_buffers")]
+    pub fn set_max_buffers(&self, max: u64) {
+        unsafe {
+            ffi::gst_app_src_set_max_buffers(self.to_glib_none().0, max);
+        }
+    }
+
     #[doc(alias = "gst_app_src_set_max_bytes")]
     pub fn set_max_bytes(&self, max: u64) {
         unsafe {
             ffi::gst_app_src_set_max_bytes(self.to_glib_none().0, max);
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_app_src_set_max_time")]
+    pub fn set_max_time(&self, max: gst::ClockTime) {
+        unsafe {
+            ffi::gst_app_src_set_max_time(self.to_glib_none().0, max.into_glib());
         }
     }
 
@@ -352,6 +426,36 @@ impl AppSrc {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "current-level-buffers")]
+    pub fn connect_current_level_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_level_buffers_trampoline<
+            F: Fn(&AppSrc) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::current-level-buffers\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_current_level_buffers_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "current-level-bytes")]
     pub fn connect_current_level_bytes_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -374,6 +478,36 @@ impl AppSrc {
                 b"notify::current-level-bytes\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_current_level_bytes_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "current-level-time")]
+    pub fn connect_current_level_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_level_time_trampoline<
+            F: Fn(&AppSrc) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::current-level-time\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_current_level_time_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -490,6 +624,66 @@ impl AppSrc {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "leaky-type")]
+    pub fn connect_leaky_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_leaky_type_trampoline<
+            F: Fn(&AppSrc) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::leaky-type\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_leaky_type_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "max-buffers")]
+    pub fn connect_max_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_buffers_trampoline<
+            F: Fn(&AppSrc) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-buffers\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_buffers_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "max-bytes")]
     pub fn connect_max_bytes_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -538,6 +732,34 @@ impl AppSrc {
                 b"notify::max-latency\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_max_latency_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "max-time")]
+    pub fn connect_max_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_time_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-time\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_time_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

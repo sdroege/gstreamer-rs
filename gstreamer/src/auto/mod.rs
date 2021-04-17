@@ -162,6 +162,9 @@ pub use self::flags::DebugColorFlags;
 pub use self::flags::DebugGraphDetails;
 pub use self::flags::ElementFlags;
 pub use self::flags::EventTypeFlags;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::flags::GapFlags;
 pub use self::flags::MemoryFlags;
 pub use self::flags::ObjectFlags;
 pub use self::flags::PadFlags;
@@ -177,6 +180,9 @@ pub use self::flags::PluginFlags;
 pub use self::flags::SchedulingFlags;
 pub use self::flags::SeekFlags;
 pub use self::flags::SegmentFlags;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::flags::SerializeFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 pub use self::flags::StackTraceFlags;

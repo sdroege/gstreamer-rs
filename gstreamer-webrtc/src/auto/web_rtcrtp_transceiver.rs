@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use crate::WebRTCKind;
 use crate::WebRTCRTPReceiver;
 use crate::WebRTCRTPSender;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -37,6 +40,55 @@ glib::wrapper! {
 }
 
 impl WebRTCRTPTransceiver {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "codec-preferences")]
+    pub fn codec_preferences(&self) -> Option<gst::Caps> {
+        unsafe {
+            let mut value = glib::Value::from_type(<gst::Caps as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
+                b"codec-preferences\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `codec-preferences` getter")
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "codec-preferences")]
+    pub fn set_codec_preferences(&self, codec_preferences: Option<&gst::Caps>) {
+        unsafe {
+            glib::gobject_ffi::g_object_set_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
+                b"codec-preferences\0".as_ptr() as *const _,
+                codec_preferences.to_value().to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "current-direction")]
+    pub fn current_direction(&self) -> WebRTCRTPTransceiverDirection {
+        unsafe {
+            let mut value = glib::Value::from_type(
+                <WebRTCRTPTransceiverDirection as StaticType>::static_type(),
+            );
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
+                b"current-direction\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `current-direction` getter")
+        }
+    }
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     pub fn direction(&self) -> WebRTCRTPTransceiverDirection {
@@ -64,6 +116,36 @@ impl WebRTCRTPTransceiver {
                 b"direction\0".as_ptr() as *const _,
                 direction.to_value().to_glib_none().0,
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn kind(&self) -> WebRTCKind {
+        unsafe {
+            let mut value = glib::Value::from_type(<WebRTCKind as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
+                b"kind\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `kind` getter")
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn mid(&self) -> Option<glib::GString> {
+        unsafe {
+            let mut value = glib::Value::from_type(<glib::GString as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
+                b"mid\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value.get().expect("Return Value for property `mid` getter")
         }
     }
 
@@ -110,6 +192,66 @@ impl WebRTCRTPTransceiver {
         }
     }
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "codec-preferences")]
+    pub fn connect_codec_preferences_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_codec_preferences_trampoline<
+            F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstWebRTCRTPTransceiver,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::codec-preferences\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_codec_preferences_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "current-direction")]
+    pub fn connect_current_direction_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_direction_trampoline<
+            F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstWebRTCRTPTransceiver,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::current-direction\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_current_direction_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "direction")]
@@ -134,6 +276,66 @@ impl WebRTCRTPTransceiver {
                 b"notify::direction\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_direction_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "kind")]
+    pub fn connect_kind_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_kind_trampoline<
+            F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstWebRTCRTPTransceiver,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::kind\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_kind_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "mid")]
+    pub fn connect_mid_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mid_trampoline<
+            F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstWebRTCRTPTransceiver,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::mid\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mid_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

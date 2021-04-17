@@ -157,7 +157,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn audio_info(&self) -> Option<AudioInfo> {
         unsafe {
-            from_glib_full(ffi::gst_audio_decoder_get_audio_info(
+            from_glib_none(ffi::gst_audio_decoder_get_audio_info(
                 self.as_ref().to_glib_none().0,
             ))
         }

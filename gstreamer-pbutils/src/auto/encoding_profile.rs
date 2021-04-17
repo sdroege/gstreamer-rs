@@ -4,8 +4,23 @@
 // DO NOT EDIT
 
 use crate::DiscovererInfo;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::object::Cast;
 use glib::object::IsA;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::signal::connect_raw;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use std::boxed::Box as Box_;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "GstEncodingProfile")]
@@ -66,6 +81,12 @@ pub trait EncodingProfileExt: 'static {
     #[doc(alias = "get_description")]
     fn description(&self) -> Option<glib::GString>;
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_encoding_profile_get_element_properties")]
+    #[doc(alias = "get_element_properties")]
+    fn element_properties(&self) -> Option<gst::Structure>;
+
     #[doc(alias = "gst_encoding_profile_get_file_extension")]
     #[doc(alias = "get_file_extension")]
     fn file_extension(&self) -> Option<glib::GString>;
@@ -109,6 +130,14 @@ pub trait EncodingProfileExt: 'static {
 
     #[doc(alias = "gst_encoding_profile_is_equal")]
     fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "element-properties")]
+    fn connect_element_properties_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
@@ -133,6 +162,16 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     fn description(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_description(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn element_properties(&self) -> Option<gst::Structure> {
+        unsafe {
+            from_glib_full(ffi::gst_encoding_profile_get_element_properties(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -222,6 +261,37 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
                 self.as_ref().to_glib_none().0,
                 b.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "element-properties")]
+    fn connect_element_properties_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_element_properties_trampoline<
+            P: IsA<EncodingProfile>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstEncodingProfile,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&EncodingProfile::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::element-properties\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_element_properties_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

@@ -44,6 +44,14 @@ pub fn rtcp_unix_to_ntp(unixtime: u64) -> u64 {
     unsafe { ffi::gst_rtcp_unix_to_ntp(unixtime) }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "gst_rtp_get_header_extension_list")]
+pub fn rtp_get_header_extension_list() -> Vec<gst::ElementFactory> {
+    assert_initialized_main_thread!();
+    unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_rtp_get_header_extension_list()) }
+}
+
 //#[doc(alias = "gst_rtp_hdrext_set_ntp_56")]
 //pub fn rtp_hdrext_set_ntp_56(data: /*Unimplemented*/Option<Fundamental: Pointer>, size: u32, ntptime: u64) -> bool {
 //    unsafe { TODO: call ffi:gst_rtp_hdrext_set_ntp_56() }

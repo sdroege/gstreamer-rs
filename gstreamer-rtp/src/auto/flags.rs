@@ -141,3 +141,77 @@ impl ToValue for RTPBufferMapFlags {
         Self::static_type()
     }
 }
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+bitflags! {
+    #[doc(alias = "GstRTPHeaderExtensionFlags")]
+    pub struct RTPHeaderExtensionFlags: u32 {
+        #[doc(alias = "GST_RTP_HEADER_EXTENSION_ONE_BYTE")]
+        const ONE_BYTE = ffi::GST_RTP_HEADER_EXTENSION_ONE_BYTE as u32;
+        #[doc(alias = "GST_RTP_HEADER_EXTENSION_TWO_BYTE")]
+        const TWO_BYTE = ffi::GST_RTP_HEADER_EXTENSION_TWO_BYTE as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for RTPHeaderExtensionFlags {
+    type GlibType = ffi::GstRTPHeaderExtensionFlags;
+
+    fn into_glib(self) -> ffi::GstRTPHeaderExtensionFlags {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstRTPHeaderExtensionFlags> for RTPHeaderExtensionFlags {
+    unsafe fn from_glib(value: ffi::GstRTPHeaderExtensionFlags) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for RTPHeaderExtensionFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_rtp_header_extension_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for RTPHeaderExtensionFlags {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for RTPHeaderExtensionFlags {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for RTPHeaderExtensionFlags {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}

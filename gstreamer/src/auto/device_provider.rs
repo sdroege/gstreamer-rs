@@ -63,6 +63,11 @@ pub trait DeviceProviderExt: 'static {
     #[doc(alias = "gst_device_provider_hide_provider")]
     fn hide_provider(&self, name: &str);
 
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_device_provider_is_started")]
+    fn is_started(&self) -> bool;
+
     #[doc(alias = "gst_device_provider_start")]
     fn start(&self) -> Result<(), glib::error::BoolError>;
 
@@ -162,6 +167,16 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             );
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn is_started(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_device_provider_is_started(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 

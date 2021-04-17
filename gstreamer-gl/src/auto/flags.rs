@@ -97,6 +97,95 @@ impl ToValue for GLAPI {
     }
 }
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+bitflags! {
+    #[doc(alias = "GstGLConfigSurfaceType")]
+    pub struct GLConfigSurfaceType: u32 {
+        #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_NONE")]
+        const NONE = ffi::GST_GL_CONFIG_SURFACE_TYPE_NONE as u32;
+        #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_WINDOW")]
+        const WINDOW = ffi::GST_GL_CONFIG_SURFACE_TYPE_WINDOW as u32;
+        #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_PBUFFER")]
+        const PBUFFER = ffi::GST_GL_CONFIG_SURFACE_TYPE_PBUFFER as u32;
+        #[doc(alias = "GST_GL_CONFIG_SURFACE_TYPE_PIXMAP")]
+        const PIXMAP = ffi::GST_GL_CONFIG_SURFACE_TYPE_PIXMAP as u32;
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl GLConfigSurfaceType {
+    #[doc(alias = "gst_gl_config_surface_type_to_string")]
+    #[doc(alias = "to_string")]
+    pub fn to_str(self) -> Option<glib::GString> {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_none(ffi::gst_gl_config_surface_type_to_string(self.into_glib())) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl IntoGlib for GLConfigSurfaceType {
+    type GlibType = ffi::GstGLConfigSurfaceType;
+
+    fn into_glib(self) -> ffi::GstGLConfigSurfaceType {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstGLConfigSurfaceType> for GLConfigSurfaceType {
+    unsafe fn from_glib(value: ffi::GstGLConfigSurfaceType) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl StaticType for GLConfigSurfaceType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_gl_config_surface_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl glib::value::ValueType for GLConfigSurfaceType {
+    type Type = Self;
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+unsafe impl<'a> FromValue<'a> for GLConfigSurfaceType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+impl ToValue for GLConfigSurfaceType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
 bitflags! {
     #[doc(alias = "GstGLDisplayType")]
     pub struct GLDisplayType: u32 {
@@ -120,6 +209,18 @@ bitflags! {
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_EGL_DEVICE")]
         const EGL_DEVICE = ffi::GST_GL_DISPLAY_TYPE_EGL_DEVICE as u32;
+        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_EAGL")]
+        const EAGL = ffi::GST_GL_DISPLAY_TYPE_EAGL as u32;
+        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_WINRT")]
+        const WINRT = ffi::GST_GL_DISPLAY_TYPE_WINRT as u32;
+        #[cfg(any(feature = "v1_20", feature = "dox"))]
+        #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_ANDROID")]
+        const ANDROID = ffi::GST_GL_DISPLAY_TYPE_ANDROID as u32;
     }
 }
 

@@ -10,6 +10,15 @@ pub static RTP_HDREXT_BASE: once_cell::sync::Lazy<&'static str> =
     once_cell::sync::Lazy::new(|| unsafe {
         CStr::from_ptr(ffi::GST_RTP_HDREXT_BASE).to_str().unwrap()
     });
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "GST_RTP_HDREXT_ELEMENT_CLASS")]
+pub static RTP_HDREXT_ELEMENT_CLASS: once_cell::sync::Lazy<&'static str> =
+    once_cell::sync::Lazy::new(|| unsafe {
+        CStr::from_ptr(ffi::GST_RTP_HDREXT_ELEMENT_CLASS)
+            .to_str()
+            .unwrap()
+    });
 #[doc(alias = "GST_RTP_HDREXT_NTP_56")]
 pub static RTP_HDREXT_NTP_56: once_cell::sync::Lazy<&'static str> =
     once_cell::sync::Lazy::new(|| unsafe {
@@ -19,6 +28,15 @@ pub static RTP_HDREXT_NTP_56: once_cell::sync::Lazy<&'static str> =
 pub static RTP_HDREXT_NTP_64: once_cell::sync::Lazy<&'static str> =
     once_cell::sync::Lazy::new(|| unsafe {
         CStr::from_ptr(ffi::GST_RTP_HDREXT_NTP_64).to_str().unwrap()
+    });
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+#[doc(alias = "GST_RTP_HEADER_EXTENSION_URI_METADATA_KEY")]
+pub static RTP_HEADER_EXTENSION_URI_METADATA_KEY: once_cell::sync::Lazy<&'static str> =
+    once_cell::sync::Lazy::new(|| unsafe {
+        CStr::from_ptr(ffi::GST_RTP_HEADER_EXTENSION_URI_METADATA_KEY)
+            .to_str()
+            .unwrap()
     });
 #[doc(alias = "GST_RTP_PAYLOAD_1016_STRING")]
 pub static RTP_PAYLOAD_1016_STRING: once_cell::sync::Lazy<&'static str> =

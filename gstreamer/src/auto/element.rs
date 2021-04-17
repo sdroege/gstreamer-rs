@@ -135,10 +135,6 @@ pub trait ElementExt: 'static {
     #[doc(alias = "get_factory")]
     fn factory(&self) -> Option<ElementFactory>;
 
-    #[doc(alias = "gst_element_get_request_pad")]
-    #[doc(alias = "get_request_pad")]
-    fn request_pad_simple(&self, name: &str) -> Option<Pad>;
-
     #[doc(alias = "gst_element_get_start_time")]
     #[doc(alias = "get_start_time")]
     fn start_time(&self) -> ClockTime;
@@ -215,6 +211,11 @@ pub trait ElementExt: 'static {
         name: Option<&str>,
         caps: Option<&Caps>,
     ) -> Option<Pad>;
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_element_request_pad_simple")]
+    fn request_pad_simple(&self, name: &str) -> Option<Pad>;
 
     #[doc(alias = "gst_element_set_base_time")]
     fn set_base_time(&self, time: ClockTime);
@@ -445,15 +446,6 @@ impl<O: IsA<Element>> ElementExt for O {
         unsafe { from_glib_none(ffi::gst_element_get_factory(self.as_ref().to_glib_none().0)) }
     }
 
-    fn request_pad_simple(&self, name: &str) -> Option<Pad> {
-        unsafe {
-            from_glib_full(ffi::gst_element_get_request_pad(
-                self.as_ref().to_glib_none().0,
-                name.to_glib_none().0,
-            ))
-        }
-    }
-
     fn start_time(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_element_get_start_time(
@@ -641,6 +633,17 @@ impl<O: IsA<Element>> ElementExt for O {
                 templ.to_glib_none().0,
                 name.to_glib_none().0,
                 caps.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    fn request_pad_simple(&self, name: &str) -> Option<Pad> {
+        unsafe {
+            from_glib_full(ffi::gst_element_request_pad_simple(
+                self.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
             ))
         }
     }

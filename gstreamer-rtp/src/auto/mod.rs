@@ -3,6 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+mod rtp_header_extension;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::rtp_header_extension::{RTPHeaderExtension, NONE_RTP_HEADER_EXTENSION};
+
 mod enums;
 pub use self::enums::RTCPFBType;
 pub use self::enums::RTCPSDESType;
@@ -18,13 +25,22 @@ mod flags;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub use self::flags::RTPBufferFlags;
 pub use self::flags::RTPBufferMapFlags;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::flags::RTPHeaderExtensionFlags;
 
 pub mod functions;
 
 mod constants;
 pub use self::constants::RTP_HDREXT_BASE;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::constants::RTP_HDREXT_ELEMENT_CLASS;
 pub use self::constants::RTP_HDREXT_NTP_56;
 pub use self::constants::RTP_HDREXT_NTP_64;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+pub use self::constants::RTP_HEADER_EXTENSION_URI_METADATA_KEY;
 pub use self::constants::RTP_PAYLOAD_1016_STRING;
 pub use self::constants::RTP_PAYLOAD_CELLB_STRING;
 pub use self::constants::RTP_PAYLOAD_CN_STRING;
@@ -58,4 +74,8 @@ pub use self::constants::RTP_PAYLOAD_TS41_STRING;
 pub use self::constants::RTP_PAYLOAD_TS48_STRING;
 
 #[doc(hidden)]
-pub mod traits {}
+pub mod traits {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub use super::rtp_header_extension::RTPHeaderExtensionExt;
+}

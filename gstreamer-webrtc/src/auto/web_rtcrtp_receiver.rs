@@ -3,8 +3,28 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
 use crate::WebRTCDTLSTransport;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::object::ObjectType as ObjectType_;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::signal::connect_raw;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use glib::StaticType;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use std::boxed::Box as Box_;
+#[cfg(any(feature = "v1_20", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+use std::mem::transmute;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCRTPReceiver")]
@@ -22,27 +42,56 @@ impl WebRTCRTPReceiver {
         unsafe { from_glib_none(ffi::gst_webrtc_rtp_receiver_new()) }
     }
 
-    #[doc(alias = "gst_webrtc_rtp_receiver_set_rtcp_transport")]
-    pub fn set_rtcp_transport(&self, transport: &WebRTCDTLSTransport) {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    pub fn transport(&self) -> Option<WebRTCDTLSTransport> {
         unsafe {
-            ffi::gst_webrtc_rtp_receiver_set_rtcp_transport(
-                self.to_glib_none().0,
-                transport.to_glib_none().0,
+            let mut value =
+                glib::Value::from_type(<WebRTCDTLSTransport as StaticType>::static_type());
+            glib::gobject_ffi::g_object_get_property(
+                self.as_ptr() as *mut glib::gobject_ffi::GObject,
+                b"transport\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
             );
+            value
+                .get()
+                .expect("Return Value for property `transport` getter")
         }
     }
 
-    #[doc(alias = "gst_webrtc_rtp_receiver_set_transport")]
-    pub fn set_transport(&self, transport: &WebRTCDTLSTransport) {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "transport")]
+    pub fn connect_transport_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_transport_trampoline<
+            F: Fn(&WebRTCRTPReceiver) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstWebRTCRTPReceiver,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
-            ffi::gst_webrtc_rtp_receiver_set_transport(
-                self.to_glib_none().0,
-                transport.to_glib_none().0,
-            );
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::transport\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_transport_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl Default for WebRTCRTPReceiver {
     fn default() -> Self {
         Self::new()

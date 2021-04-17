@@ -1216,6 +1216,18 @@ pub enum VideoFormat {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV12_32L32")]
     Nv1232l32,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBP")]
+    Rgbp,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_BGRP")]
+    Bgrp,
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_AV12")]
+    Av12,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1396,6 +1408,12 @@ impl IntoGlib for VideoFormat {
             Self::Nv124l4 => ffi::GST_VIDEO_FORMAT_NV12_4L4,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             Self::Nv1232l32 => ffi::GST_VIDEO_FORMAT_NV12_32L32,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Rgbp => ffi::GST_VIDEO_FORMAT_RGBP,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Bgrp => ffi::GST_VIDEO_FORMAT_BGRP,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            Self::Av12 => ffi::GST_VIDEO_FORMAT_AV12,
             Self::__Unknown(value) => value,
         }
     }
@@ -1543,6 +1561,12 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_NV12_4L4 => Self::Nv124l4,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
             ffi::GST_VIDEO_FORMAT_NV12_32L32 => Self::Nv1232l32,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_RGBP => Self::Rgbp,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_BGRP => Self::Bgrp,
+            #[cfg(any(feature = "v1_20", feature = "dox"))]
+            ffi::GST_VIDEO_FORMAT_AV12 => Self::Av12,
             value => Self::__Unknown(value),
         }
     }
@@ -2489,6 +2513,22 @@ pub enum VideoTransferFunction {
 }
 
 impl VideoTransferFunction {
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_transfer_function_decode")]
+    pub fn decode(self, val: f64) -> f64 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_video_transfer_function_decode(self.into_glib(), val) }
+    }
+
+    #[cfg(any(feature = "v1_20", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_20")))]
+    #[doc(alias = "gst_video_transfer_function_encode")]
+    pub fn encode(self, val: f64) -> f64 {
+        assert_initialized_main_thread!();
+        unsafe { ffi::gst_video_transfer_function_encode(self.into_glib(), val) }
+    }
+
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_transfer_function_from_iso")]
