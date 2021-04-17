@@ -23,7 +23,7 @@ name = "gstreamer-gl-egl-1.0"
 version = "1.18"
 
 [package.metadata.system-deps.gstreamer_gl_egl_1_0.v1_20]
-version = "1.20"
+version = "1.19.1"
 [package.metadata.docs.rs]
 features = ["dox"]
 
