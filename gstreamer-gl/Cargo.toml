@@ -27,17 +27,12 @@ gst = { package = "gstreamer", path = "../gstreamer", features = ["v1_14"] }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base", features = ["v1_14"] }
 gst-video = { package = "gstreamer-video", path = "../gstreamer-video", features = ["v1_14"] }
 
-[build-dependencies]
-gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
-
 [features]
 default = []
 dox = ["v1_20", "ffi/dox", "glib/dox", "gst/dox", "gst-base/dox", "gst-video/dox"]
-embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 v1_16 = ["gst/v1_16", "gst-base/v1_16", "gst-video/v1_16", "ffi/v1_16"]
 v1_18 = ["gst/v1_18", "gst-base/v1_18", "gst-video/v1_18", "ffi/v1_18", "v1_16"]
 v1_20 = ["gst/v1_20", "gst-base/v1_20", "gst-video/v1_20", "ffi/v1_20", "v1_18"]
 
 [package.metadata.docs.rs]
-features = ["dox", "embed-lgpl-docs"]
+features = ["dox"]

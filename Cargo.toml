@@ -45,7 +45,6 @@ members = [
   "gstreamer-webrtc",
   "examples",
   "tutorials",
-  "docs",
 ]
 
 exclude = ["gir"]

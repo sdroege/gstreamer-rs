@@ -20,13 +20,8 @@ glib = { git = "https://github.com/gtk-rs/gtk-rs" }
 gst = { package = "gstreamer", path = "../gstreamer", features = ["v1_14"] }
 gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp", features = ["v1_14"] }
 
-[build-dependencies]
-gstreamer-rs-lgpl-docs = { path = "../docs", optional = true }
-
 [features]
 default = []
-embed-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
-purge-lgpl-docs = ["gstreamer-rs-lgpl-docs"]
 dox = ["v1_20", "ffi/dox", "glib/dox", "gst/dox", "gst-sdp/dox"]
 v1_14_1 = ["ffi/v1_14_1"]
 v1_16 = ["gst/v1_16", "gst-sdp/v1_16", "ffi/v1_16", "v1_14_1"]
@@ -34,4 +29,4 @@ v1_18 = ["gst/v1_18", "gst-sdp/v1_18", "ffi/v1_18", "v1_16"]
 v1_20 = ["gst/v1_20", "gst-sdp/v1_20", "ffi/v1_20", "v1_18"]
 
 [package.metadata.docs.rs]
-features = ["dox", "embed-lgpl-docs"]
+features = ["dox"]
