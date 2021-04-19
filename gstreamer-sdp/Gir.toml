@@ -7,7 +7,6 @@ work_mode = "normal"
 concurrency = "send"
 generate_safety_asserts = true
 single_version_file = true
-doc_target_path = "docs/gstreamer-sdp/docs.md"
 generate_display_trait = false
 
 external_libraries = [
