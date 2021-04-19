@@ -6,8 +6,7 @@
 use glib::error::ErrorDomain;
 use glib::translate::*;
 use glib::value::FromValue;
-use glib::value::FromValueOptional;
-use glib::value::SetValue;
+use glib::value::ToValue;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
@@ -71,21 +70,30 @@ impl StaticType for PlayerColorBalanceType {
     }
 }
 
-impl<'a> FromValueOptional<'a> for PlayerColorBalanceType {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
+impl glib::value::ValueType for PlayerColorBalanceType {
+    type Type = Self;
 }
 
-impl<'a> FromValue<'a> for PlayerColorBalanceType {
-    unsafe fn from_value(value: &glib::Value) -> Self {
+unsafe impl<'a> FromValue<'a> for PlayerColorBalanceType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl SetValue for PlayerColorBalanceType {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+impl ToValue for PlayerColorBalanceType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<PlayerColorBalanceType>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -156,21 +164,30 @@ impl StaticType for PlayerError {
     }
 }
 
-impl<'a> FromValueOptional<'a> for PlayerError {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
+impl glib::value::ValueType for PlayerError {
+    type Type = Self;
 }
 
-impl<'a> FromValue<'a> for PlayerError {
-    unsafe fn from_value(value: &glib::Value) -> Self {
+unsafe impl<'a> FromValue<'a> for PlayerError {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl SetValue for PlayerError {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+impl ToValue for PlayerError {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<PlayerError>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -282,20 +299,29 @@ impl StaticType for PlayerState {
     }
 }
 
-impl<'a> FromValueOptional<'a> for PlayerState {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
+impl glib::value::ValueType for PlayerState {
+    type Type = Self;
 }
 
-impl<'a> FromValue<'a> for PlayerState {
-    unsafe fn from_value(value: &glib::Value) -> Self {
+unsafe impl<'a> FromValue<'a> for PlayerState {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl SetValue for PlayerState {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+impl ToValue for PlayerState {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<PlayerState>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }

@@ -12,6 +12,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -276,7 +277,6 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             value
                 .get()
                 .expect("Return Value for property `extra-timeout` getter")
-                .unwrap()
         }
     }
 
@@ -285,7 +285,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"extra-timeout\0".as_ptr() as *const _,
-                glib::Value::from(&extra_timeout).to_glib_none().0,
+                extra_timeout.to_value().to_glib_none().0,
             );
         }
     }
@@ -301,7 +301,6 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             value
                 .get()
                 .expect("Return Value for property `timeout-always-visible` getter")
-                .unwrap()
         }
     }
 
@@ -310,7 +309,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"timeout-always-visible\0".as_ptr() as *const _,
-                glib::Value::from(&timeout_always_visible).to_glib_none().0,
+                timeout_always_visible.to_value().to_glib_none().0,
             );
         }
     }

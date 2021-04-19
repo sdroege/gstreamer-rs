@@ -6,8 +6,7 @@
 use bitflags::bitflags;
 use glib::translate::*;
 use glib::value::FromValue;
-use glib::value::FromValueOptional;
-use glib::value::SetValue;
+use glib::value::ToValue;
 use glib::StaticType;
 use glib::Type;
 use std::fmt;
@@ -65,21 +64,30 @@ impl StaticType for GLAPI {
     }
 }
 
-impl<'a> FromValueOptional<'a> for GLAPI {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
+impl glib::value::ValueType for GLAPI {
+    type Type = Self;
 }
 
-impl<'a> FromValue<'a> for GLAPI {
-    unsafe fn from_value(value: &glib::Value) -> Self {
+unsafe impl<'a> FromValue<'a> for GLAPI {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-impl SetValue for GLAPI {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+impl ToValue for GLAPI {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<GLAPI>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -122,21 +130,30 @@ impl StaticType for GLDisplayType {
     }
 }
 
-impl<'a> FromValueOptional<'a> for GLDisplayType {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
+impl glib::value::ValueType for GLDisplayType {
+    type Type = Self;
 }
 
-impl<'a> FromValue<'a> for GLDisplayType {
-    unsafe fn from_value(value: &glib::Value) -> Self {
+unsafe impl<'a> FromValue<'a> for GLDisplayType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-impl SetValue for GLDisplayType {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+impl ToValue for GLDisplayType {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<GLDisplayType>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -198,21 +215,30 @@ impl StaticType for GLPlatform {
     }
 }
 
-impl<'a> FromValueOptional<'a> for GLPlatform {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
+impl glib::value::ValueType for GLPlatform {
+    type Type = Self;
 }
 
-impl<'a> FromValue<'a> for GLPlatform {
-    unsafe fn from_value(value: &glib::Value) -> Self {
+unsafe impl<'a> FromValue<'a> for GLPlatform {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-impl SetValue for GLPlatform {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+impl ToValue for GLPlatform {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<GLPlatform>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -261,20 +287,29 @@ impl StaticType for GLSLProfile {
     }
 }
 
-impl<'a> FromValueOptional<'a> for GLSLProfile {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
+impl glib::value::ValueType for GLSLProfile {
+    type Type = Self;
 }
 
-impl<'a> FromValue<'a> for GLSLProfile {
-    unsafe fn from_value(value: &glib::Value) -> Self {
+unsafe impl<'a> FromValue<'a> for GLSLProfile {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-impl SetValue for GLSLProfile {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+impl ToValue for GLSLProfile {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<GLSLProfile>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }

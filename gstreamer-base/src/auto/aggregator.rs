@@ -15,6 +15,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -211,7 +212,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             value
                 .get()
                 .expect("Return Value for property `emit-signals` getter")
-                .unwrap()
         }
     }
 
@@ -222,7 +222,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"emit-signals\0".as_ptr() as *const _,
-                glib::Value::from(&emit_signals).to_glib_none().0,
+                emit_signals.to_value().to_glib_none().0,
             );
         }
     }
@@ -238,7 +238,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             value
                 .get()
                 .expect("Return Value for property `start-time` getter")
-                .unwrap()
         }
     }
 
@@ -247,7 +246,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"start-time\0".as_ptr() as *const _,
-                glib::Value::from(&start_time).to_glib_none().0,
+                start_time.to_value().to_glib_none().0,
             );
         }
     }
@@ -266,7 +265,6 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             value
                 .get()
                 .expect("Return Value for property `start-time-selection` getter")
-                .unwrap()
         }
     }
 
@@ -277,7 +275,7 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"start-time-selection\0".as_ptr() as *const _,
-                glib::Value::from(&start_time_selection).to_glib_none().0,
+                start_time_selection.to_value().to_glib_none().0,
             );
         }
     }

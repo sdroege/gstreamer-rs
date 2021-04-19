@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -119,7 +120,6 @@ impl AppSrc {
             value
                 .get()
                 .expect("Return Value for property `block` getter")
-                .unwrap()
         }
     }
 
@@ -129,7 +129,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"block\0".as_ptr() as *const _,
-                glib::Value::from(&block).to_glib_none().0,
+                block.to_value().to_glib_none().0,
             );
         }
     }
@@ -146,7 +146,6 @@ impl AppSrc {
             value
                 .get()
                 .expect("Return Value for property `format` getter")
-                .unwrap()
         }
     }
 
@@ -156,7 +155,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"format\0".as_ptr() as *const _,
-                glib::Value::from(&format).to_glib_none().0,
+                format.to_value().to_glib_none().0,
             );
         }
     }
@@ -175,7 +174,6 @@ impl AppSrc {
             value
                 .get()
                 .expect("Return Value for property `handle-segment-change` getter")
-                .unwrap()
         }
     }
 
@@ -187,7 +185,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"handle-segment-change\0".as_ptr() as *const _,
-                glib::Value::from(&handle_segment_change).to_glib_none().0,
+                handle_segment_change.to_value().to_glib_none().0,
             );
         }
     }
@@ -204,7 +202,6 @@ impl AppSrc {
             value
                 .get()
                 .expect("Return Value for property `is-live` getter")
-                .unwrap()
         }
     }
 
@@ -214,7 +211,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"is-live\0".as_ptr() as *const _,
-                glib::Value::from(&is_live).to_glib_none().0,
+                is_live.to_value().to_glib_none().0,
             );
         }
     }
@@ -231,7 +228,6 @@ impl AppSrc {
             value
                 .get()
                 .expect("Return Value for property `max-latency` getter")
-                .unwrap()
         }
     }
 
@@ -241,7 +237,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"max-latency\0".as_ptr() as *const _,
-                glib::Value::from(&max_latency).to_glib_none().0,
+                max_latency.to_value().to_glib_none().0,
             );
         }
     }
@@ -258,7 +254,6 @@ impl AppSrc {
             value
                 .get()
                 .expect("Return Value for property `min-latency` getter")
-                .unwrap()
         }
     }
 
@@ -268,7 +263,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"min-latency\0".as_ptr() as *const _,
-                glib::Value::from(&min_latency).to_glib_none().0,
+                min_latency.to_value().to_glib_none().0,
             );
         }
     }
@@ -285,7 +280,6 @@ impl AppSrc {
             value
                 .get()
                 .expect("Return Value for property `min-percent` getter")
-                .unwrap()
         }
     }
 
@@ -295,7 +289,7 @@ impl AppSrc {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"min-percent\0".as_ptr() as *const _,
-                glib::Value::from(&min_percent).to_glib_none().0,
+                min_percent.to_value().to_glib_none().0,
             );
         }
     }

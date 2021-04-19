@@ -20,6 +20,9 @@ use glib::translate::*;
 use glib::StaticType;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use glib::ToValue;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -72,7 +75,6 @@ impl GLOverlayCompositor {
             value
                 .get()
                 .expect("Return Value for property `yinvert` getter")
-                .unwrap()
         }
     }
 
@@ -84,7 +86,7 @@ impl GLOverlayCompositor {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"yinvert\0".as_ptr() as *const _,
-                glib::Value::from(&yinvert).to_glib_none().0,
+                yinvert.to_value().to_glib_none().0,
             );
         }
     }

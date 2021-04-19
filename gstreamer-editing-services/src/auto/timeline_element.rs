@@ -21,6 +21,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -605,7 +606,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             value
                 .get()
                 .expect("Return Value for property `in-point` getter")
-                .unwrap()
         }
     }
 
@@ -614,7 +614,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"in-point\0".as_ptr() as *const _,
-                glib::Value::from(&in_point).to_glib_none().0,
+                in_point.to_value().to_glib_none().0,
             );
         }
     }
@@ -630,7 +630,6 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             value
                 .get()
                 .expect("Return Value for property `serialize` getter")
-                .unwrap()
         }
     }
 
@@ -639,7 +638,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"serialize\0".as_ptr() as *const _,
-                glib::Value::from(&serialize).to_glib_none().0,
+                serialize.to_value().to_glib_none().0,
             );
         }
     }

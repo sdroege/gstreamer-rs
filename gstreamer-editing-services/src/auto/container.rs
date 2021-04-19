@@ -14,6 +14,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -152,7 +153,6 @@ impl<O: IsA<Container>> GESContainerExt for O {
             value
                 .get()
                 .expect("Return Value for property `height` getter")
-                .unwrap()
         }
     }
 

@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -50,7 +51,6 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
             value
                 .get()
                 .expect("Return Value for property `show-preroll-frame` getter")
-                .unwrap()
         }
     }
 
@@ -59,7 +59,7 @@ impl<O: IsA<VideoSink>> VideoSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"show-preroll-frame\0".as_ptr() as *const _,
-                glib::Value::from(&show_preroll_frame).to_glib_none().0,
+                show_preroll_frame.to_value().to_glib_none().0,
             );
         }
     }

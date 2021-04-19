@@ -14,6 +14,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -115,7 +116,6 @@ impl PadTemplate {
             value
                 .get()
                 .expect("Return Value for property `direction` getter")
-                .unwrap()
         }
     }
 
@@ -134,7 +134,6 @@ impl PadTemplate {
             value
                 .get()
                 .expect("Return Value for property `gtype` getter")
-                .unwrap()
         }
     }
 
@@ -165,7 +164,6 @@ impl PadTemplate {
             value
                 .get()
                 .expect("Return Value for property `presence` getter")
-                .unwrap()
         }
     }
 

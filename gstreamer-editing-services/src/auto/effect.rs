@@ -10,6 +10,7 @@ use crate::TrackElement;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 
 glib::wrapper! {
     pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;

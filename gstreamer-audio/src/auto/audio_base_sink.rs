@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -222,7 +223,6 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             value
                 .get()
                 .expect("Return Value for property `buffer-time` getter")
-                .unwrap()
         }
     }
 
@@ -231,7 +231,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"buffer-time\0".as_ptr() as *const _,
-                glib::Value::from(&buffer_time).to_glib_none().0,
+                buffer_time.to_value().to_glib_none().0,
             );
         }
     }
@@ -247,7 +247,6 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             value
                 .get()
                 .expect("Return Value for property `can-activate-pull` getter")
-                .unwrap()
         }
     }
 
@@ -256,7 +255,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"can-activate-pull\0".as_ptr() as *const _,
-                glib::Value::from(&can_activate_pull).to_glib_none().0,
+                can_activate_pull.to_value().to_glib_none().0,
             );
         }
     }
@@ -272,7 +271,6 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             value
                 .get()
                 .expect("Return Value for property `latency-time` getter")
-                .unwrap()
         }
     }
 
@@ -281,7 +279,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"latency-time\0".as_ptr() as *const _,
-                glib::Value::from(&latency_time).to_glib_none().0,
+                latency_time.to_value().to_glib_none().0,
             );
         }
     }

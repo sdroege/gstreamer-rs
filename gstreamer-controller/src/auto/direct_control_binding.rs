@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -89,7 +90,6 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
             value
                 .get()
                 .expect("Return Value for property `absolute` getter")
-                .unwrap()
         }
     }
 
@@ -113,7 +113,7 @@ impl<O: IsA<DirectControlBinding>> DirectControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source\0".as_ptr() as *const _,
-                glib::Value::from(control_source).to_glib_none().0,
+                control_source.to_value().to_glib_none().0,
             );
         }
     }

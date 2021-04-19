@@ -10,6 +10,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -96,7 +97,7 @@ impl PlayerVideoOverlayVideoRenderer {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-sink\0".as_ptr() as *const _,
-                glib::Value::from(video_sink).to_glib_none().0,
+                video_sink.to_value().to_glib_none().0,
             );
         }
     }

@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -42,7 +43,7 @@ impl NetClientClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"address\0".as_ptr() as *const _,
-                glib::Value::from(address).to_glib_none().0,
+                address.to_value().to_glib_none().0,
             );
         }
     }
@@ -59,7 +60,6 @@ impl NetClientClock {
             value
                 .get()
                 .expect("Return Value for property `base-time` getter")
-                .unwrap()
         }
     }
 
@@ -82,7 +82,7 @@ impl NetClientClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"bus\0".as_ptr() as *const _,
-                glib::Value::from(bus).to_glib_none().0,
+                bus.to_value().to_glib_none().0,
             );
         }
     }
@@ -114,7 +114,6 @@ impl NetClientClock {
             value
                 .get()
                 .expect("Return Value for property `minimum-update-interval` getter")
-                .unwrap()
         }
     }
 
@@ -124,7 +123,7 @@ impl NetClientClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"minimum-update-interval\0".as_ptr() as *const _,
-                glib::Value::from(&minimum_update_interval).to_glib_none().0,
+                minimum_update_interval.to_value().to_glib_none().0,
             );
         }
     }
@@ -141,7 +140,6 @@ impl NetClientClock {
             value
                 .get()
                 .expect("Return Value for property `port` getter")
-                .unwrap()
         }
     }
 
@@ -151,7 +149,7 @@ impl NetClientClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"port\0".as_ptr() as *const _,
-                glib::Value::from(&port).to_glib_none().0,
+                port.to_value().to_glib_none().0,
             );
         }
     }
@@ -168,7 +166,6 @@ impl NetClientClock {
             value
                 .get()
                 .expect("Return Value for property `qos-dscp` getter")
-                .unwrap()
         }
     }
 
@@ -178,7 +175,7 @@ impl NetClientClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"qos-dscp\0".as_ptr() as *const _,
-                glib::Value::from(&qos_dscp).to_glib_none().0,
+                qos_dscp.to_value().to_glib_none().0,
             );
         }
     }
@@ -195,7 +192,6 @@ impl NetClientClock {
             value
                 .get()
                 .expect("Return Value for property `round-trip-limit` getter")
-                .unwrap()
         }
     }
 
@@ -205,7 +201,7 @@ impl NetClientClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"round-trip-limit\0".as_ptr() as *const _,
-                glib::Value::from(&round_trip_limit).to_glib_none().0,
+                round_trip_limit.to_value().to_glib_none().0,
             );
         }
     }

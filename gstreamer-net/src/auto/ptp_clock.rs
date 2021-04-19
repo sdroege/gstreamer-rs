@@ -8,6 +8,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -32,7 +33,6 @@ impl PtpClock {
             value
                 .get()
                 .expect("Return Value for property `domain` getter")
-                .unwrap()
         }
     }
 
@@ -48,7 +48,6 @@ impl PtpClock {
             value
                 .get()
                 .expect("Return Value for property `grandmaster-clock-id` getter")
-                .unwrap()
         }
     }
 
@@ -79,7 +78,6 @@ impl PtpClock {
             value
                 .get()
                 .expect("Return Value for property `master-clock-id` getter")
-                .unwrap()
         }
     }
 

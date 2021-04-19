@@ -11,6 +11,9 @@ use glib::translate::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::StaticType;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -124,7 +127,6 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
             value
                 .get()
                 .expect("Return Value for property `emit-signals` getter")
-                .unwrap()
         }
     }
 
@@ -135,7 +137,7 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"emit-signals\0".as_ptr() as *const _,
-                glib::Value::from(&emit_signals).to_glib_none().0,
+                emit_signals.to_value().to_glib_none().0,
             );
         }
     }

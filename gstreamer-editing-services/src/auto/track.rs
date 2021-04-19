@@ -12,6 +12,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -281,7 +282,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
             value
                 .get()
                 .expect("Return Value for property `duration` getter")
-                .unwrap()
         }
     }
 
@@ -306,7 +306,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"id\0".as_ptr() as *const _,
-                glib::Value::from(id).to_glib_none().0,
+                id.to_value().to_glib_none().0,
             );
         }
     }
@@ -336,7 +336,6 @@ impl<O: IsA<Track>> GESTrackExt for O {
             value
                 .get()
                 .expect("Return Value for property `track-type` getter")
-                .unwrap()
         }
     }
 

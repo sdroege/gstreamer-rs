@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -131,7 +132,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             value
                 .get()
                 .expect("Return Value for property `actual-buffer-time` getter")
-                .unwrap()
         }
     }
 
@@ -146,7 +146,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             value
                 .get()
                 .expect("Return Value for property `actual-latency-time` getter")
-                .unwrap()
         }
     }
 
@@ -161,7 +160,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             value
                 .get()
                 .expect("Return Value for property `buffer-time` getter")
-                .unwrap()
         }
     }
 
@@ -170,7 +168,7 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"buffer-time\0".as_ptr() as *const _,
-                glib::Value::from(&buffer_time).to_glib_none().0,
+                buffer_time.to_value().to_glib_none().0,
             );
         }
     }
@@ -186,7 +184,6 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             value
                 .get()
                 .expect("Return Value for property `latency-time` getter")
-                .unwrap()
         }
     }
 
@@ -195,7 +192,7 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"latency-time\0".as_ptr() as *const _,
-                glib::Value::from(&latency_time).to_glib_none().0,
+                latency_time.to_value().to_glib_none().0,
             );
         }
     }

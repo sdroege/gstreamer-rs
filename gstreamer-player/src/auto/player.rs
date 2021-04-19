@@ -16,6 +16,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -345,7 +346,7 @@ impl Player {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"suburi\0".as_ptr() as *const _,
-                glib::Value::from(suburi).to_glib_none().0,
+                suburi.to_value().to_glib_none().0,
             );
         }
     }
@@ -364,7 +365,6 @@ impl Player {
             value
                 .get()
                 .expect("Return Value for property `video-multiview-flags` getter")
-                .unwrap()
         }
     }
 
@@ -374,7 +374,7 @@ impl Player {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-multiview-flags\0".as_ptr() as *const _,
-                glib::Value::from(&video_multiview_flags).to_glib_none().0,
+                video_multiview_flags.to_value().to_glib_none().0,
             );
         }
     }
@@ -393,7 +393,6 @@ impl Player {
             value
                 .get()
                 .expect("Return Value for property `video-multiview-mode` getter")
-                .unwrap()
         }
     }
 
@@ -406,7 +405,7 @@ impl Player {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"video-multiview-mode\0".as_ptr() as *const _,
-                glib::Value::from(&video_multiview_mode).to_glib_none().0,
+                video_multiview_mode.to_value().to_glib_none().0,
             );
         }
     }

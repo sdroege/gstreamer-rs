@@ -8,6 +8,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -32,7 +33,6 @@ impl NetTimeProvider {
             value
                 .get()
                 .expect("Return Value for property `active` getter")
-                .unwrap()
         }
     }
 
@@ -42,7 +42,7 @@ impl NetTimeProvider {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"active\0".as_ptr() as *const _,
-                glib::Value::from(&active).to_glib_none().0,
+                active.to_value().to_glib_none().0,
             );
         }
     }
@@ -89,7 +89,6 @@ impl NetTimeProvider {
             value
                 .get()
                 .expect("Return Value for property `port` getter")
-                .unwrap()
         }
     }
 
@@ -105,7 +104,6 @@ impl NetTimeProvider {
             value
                 .get()
                 .expect("Return Value for property `qos-dscp` getter")
-                .unwrap()
         }
     }
 
@@ -115,7 +113,7 @@ impl NetTimeProvider {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"qos-dscp\0".as_ptr() as *const _,
-                glib::Value::from(&qos_dscp).to_glib_none().0,
+                qos_dscp.to_value().to_glib_none().0,
             );
         }
     }

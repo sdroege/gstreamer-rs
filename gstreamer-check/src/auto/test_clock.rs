@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -134,7 +135,6 @@ impl TestClock {
             value
                 .get()
                 .expect("Return Value for property `clock-type` getter")
-                .unwrap()
         }
     }
 
@@ -144,7 +144,7 @@ impl TestClock {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"clock-type\0".as_ptr() as *const _,
-                glib::Value::from(&clock_type).to_glib_none().0,
+                clock_type.to_value().to_glib_none().0,
             );
         }
     }
@@ -161,7 +161,6 @@ impl TestClock {
             value
                 .get()
                 .expect("Return Value for property `start-time` getter")
-                .unwrap()
         }
     }
 

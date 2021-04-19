@@ -10,6 +10,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -64,7 +65,7 @@ impl WebRTCDTLSTransport {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"certificate\0".as_ptr() as *const _,
-                glib::Value::from(certificate).to_glib_none().0,
+                certificate.to_value().to_glib_none().0,
             );
         }
     }
@@ -81,7 +82,6 @@ impl WebRTCDTLSTransport {
             value
                 .get()
                 .expect("Return Value for property `client` getter")
-                .unwrap()
         }
     }
 
@@ -91,7 +91,7 @@ impl WebRTCDTLSTransport {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"client\0".as_ptr() as *const _,
-                glib::Value::from(&client).to_glib_none().0,
+                client.to_value().to_glib_none().0,
             );
         }
     }
@@ -123,7 +123,6 @@ impl WebRTCDTLSTransport {
             value
                 .get()
                 .expect("Return Value for property `rtcp` getter")
-                .unwrap()
         }
     }
 
@@ -139,7 +138,6 @@ impl WebRTCDTLSTransport {
             value
                 .get()
                 .expect("Return Value for property `session-id` getter")
-                .unwrap()
         }
     }
 
@@ -156,7 +154,6 @@ impl WebRTCDTLSTransport {
             value
                 .get()
                 .expect("Return Value for property `state` getter")
-                .unwrap()
         }
     }
 

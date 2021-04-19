@@ -19,6 +19,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -485,7 +486,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             value
                 .get()
                 .expect("Return Value for property `drop-backlog` getter")
-                .unwrap()
         }
     }
 
@@ -494,7 +494,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"drop-backlog\0".as_ptr() as *const _,
-                glib::Value::from(&drop_backlog).to_glib_none().0,
+                drop_backlog.to_value().to_glib_none().0,
             );
         }
     }
@@ -510,7 +510,6 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             value
                 .get()
                 .expect("Return Value for property `post-session-timeout` getter")
-                .unwrap()
         }
     }
 
@@ -519,7 +518,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"post-session-timeout\0".as_ptr() as *const _,
-                glib::Value::from(&post_session_timeout).to_glib_none().0,
+                post_session_timeout.to_value().to_glib_none().0,
             );
         }
     }

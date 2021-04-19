@@ -17,6 +17,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -298,7 +299,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
             value
                 .get()
                 .expect("Return Value for property `async-handling` getter")
-                .unwrap()
         }
     }
 
@@ -307,7 +307,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"async-handling\0".as_ptr() as *const _,
-                glib::Value::from(&async_handling).to_glib_none().0,
+                async_handling.to_value().to_glib_none().0,
             );
         }
     }
@@ -323,7 +323,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
             value
                 .get()
                 .expect("Return Value for property `message-forward` getter")
-                .unwrap()
         }
     }
 
@@ -332,7 +331,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"message-forward\0".as_ptr() as *const _,
-                glib::Value::from(&message_forward).to_glib_none().0,
+                message_forward.to_value().to_glib_none().0,
             );
         }
     }

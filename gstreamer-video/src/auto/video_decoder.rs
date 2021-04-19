@@ -20,6 +20,9 @@ use glib::translate::*;
 use glib::StaticType;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+use glib::ToValue;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -252,10 +255,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
                 b"qos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value
-                .get()
-                .expect("Return Value for property `qos` getter")
-                .unwrap()
+            value.get().expect("Return Value for property `qos` getter")
         }
     }
 
@@ -266,7 +266,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
-                glib::Value::from(&qos).to_glib_none().0,
+                qos.to_value().to_glib_none().0,
             );
         }
     }

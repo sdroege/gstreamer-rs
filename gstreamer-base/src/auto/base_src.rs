@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -225,7 +226,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             value
                 .get()
                 .expect("Return Value for property `num-buffers` getter")
-                .unwrap()
         }
     }
 
@@ -234,7 +234,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"num-buffers\0".as_ptr() as *const _,
-                glib::Value::from(&num_buffers).to_glib_none().0,
+                num_buffers.to_value().to_glib_none().0,
             );
         }
     }
@@ -250,7 +250,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             value
                 .get()
                 .expect("Return Value for property `typefind` getter")
-                .unwrap()
         }
     }
 
@@ -259,7 +258,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"typefind\0".as_ptr() as *const _,
-                glib::Value::from(&typefind).to_glib_none().0,
+                typefind.to_value().to_glib_none().0,
             );
         }
     }

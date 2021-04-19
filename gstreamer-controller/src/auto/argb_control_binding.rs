@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -123,7 +124,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-a\0".as_ptr() as *const _,
-                glib::Value::from(control_source_a).to_glib_none().0,
+                control_source_a.to_value().to_glib_none().0,
             );
         }
     }
@@ -148,7 +149,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-b\0".as_ptr() as *const _,
-                glib::Value::from(control_source_b).to_glib_none().0,
+                control_source_b.to_value().to_glib_none().0,
             );
         }
     }
@@ -173,7 +174,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-g\0".as_ptr() as *const _,
-                glib::Value::from(control_source_g).to_glib_none().0,
+                control_source_g.to_value().to_glib_none().0,
             );
         }
     }
@@ -198,7 +199,7 @@ impl<O: IsA<ARGBControlBinding>> ARGBControlBindingExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"control-source-r\0".as_ptr() as *const _,
-                glib::Value::from(control_source_r).to_glib_none().0,
+                control_source_r.to_value().to_glib_none().0,
             );
         }
     }

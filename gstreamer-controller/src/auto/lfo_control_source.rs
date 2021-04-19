@@ -10,6 +10,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -111,7 +112,6 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             value
                 .get()
                 .expect("Return Value for property `amplitude` getter")
-                .unwrap()
         }
     }
 
@@ -120,7 +120,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"amplitude\0".as_ptr() as *const _,
-                glib::Value::from(&amplitude).to_glib_none().0,
+                amplitude.to_value().to_glib_none().0,
             );
         }
     }
@@ -136,7 +136,6 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             value
                 .get()
                 .expect("Return Value for property `frequency` getter")
-                .unwrap()
         }
     }
 
@@ -145,7 +144,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"frequency\0".as_ptr() as *const _,
-                glib::Value::from(&frequency).to_glib_none().0,
+                frequency.to_value().to_glib_none().0,
             );
         }
     }
@@ -161,7 +160,6 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             value
                 .get()
                 .expect("Return Value for property `offset` getter")
-                .unwrap()
         }
     }
 
@@ -170,7 +168,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"offset\0".as_ptr() as *const _,
-                glib::Value::from(&offset).to_glib_none().0,
+                offset.to_value().to_glib_none().0,
             );
         }
     }
@@ -186,7 +184,6 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             value
                 .get()
                 .expect("Return Value for property `timeshift` getter")
-                .unwrap()
         }
     }
 
@@ -195,7 +192,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"timeshift\0".as_ptr() as *const _,
-                glib::Value::from(&timeshift).to_glib_none().0,
+                timeshift.to_value().to_glib_none().0,
             );
         }
     }
@@ -211,7 +208,6 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             value
                 .get()
                 .expect("Return Value for property `waveform` getter")
-                .unwrap()
         }
     }
 
@@ -220,7 +216,7 @@ impl<O: IsA<LFOControlSource>> LFOControlSourceExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"waveform\0".as_ptr() as *const _,
-                glib::Value::from(&waveform).to_glib_none().0,
+                waveform.to_value().to_glib_none().0,
             );
         }
     }

@@ -11,6 +11,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -97,7 +98,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `buffered-amount` getter")
-                .unwrap()
         }
     }
 
@@ -113,7 +113,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `buffered-amount-low-threshold` getter")
-                .unwrap()
         }
     }
 
@@ -123,9 +122,7 @@ impl WebRTCDataChannel {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"buffered-amount-low-threshold\0".as_ptr() as *const _,
-                glib::Value::from(&buffered_amount_low_threshold)
-                    .to_glib_none()
-                    .0,
+                buffered_amount_low_threshold.to_value().to_glib_none().0,
             );
         }
     }
@@ -139,10 +136,7 @@ impl WebRTCDataChannel {
                 b"id\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value
-                .get()
-                .expect("Return Value for property `id` getter")
-                .unwrap()
+            value.get().expect("Return Value for property `id` getter")
         }
     }
 
@@ -173,7 +167,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `max-packet-lifetime` getter")
-                .unwrap()
         }
     }
 
@@ -189,7 +182,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `max-retransmits` getter")
-                .unwrap()
         }
     }
 
@@ -205,7 +197,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `negotiated` getter")
-                .unwrap()
         }
     }
 
@@ -221,7 +212,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `ordered` getter")
-                .unwrap()
         }
     }
 
@@ -238,7 +228,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `priority` getter")
-                .unwrap()
         }
     }
 
@@ -270,7 +259,6 @@ impl WebRTCDataChannel {
             value
                 .get()
                 .expect("Return Value for property `ready-state` getter")
-                .unwrap()
         }
     }
 

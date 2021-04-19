@@ -12,6 +12,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -195,10 +196,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
                 b"qos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value
-                .get()
-                .expect("Return Value for property `qos` getter")
-                .unwrap()
+            value.get().expect("Return Value for property `qos` getter")
         }
     }
 
@@ -207,7 +205,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
-                glib::Value::from(&qos).to_glib_none().0,
+                qos.to_value().to_glib_none().0,
             );
         }
     }

@@ -15,6 +15,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
@@ -435,7 +436,6 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             value
                 .get()
                 .expect("Return Value for property `content-length-limit` getter")
-                .unwrap()
         }
     }
 
@@ -444,7 +444,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"content-length-limit\0".as_ptr() as *const _,
-                glib::Value::from(&content_length_limit).to_glib_none().0,
+                content_length_limit.to_value().to_glib_none().0,
             );
         }
     }

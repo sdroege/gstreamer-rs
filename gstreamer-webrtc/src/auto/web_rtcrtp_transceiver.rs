@@ -17,6 +17,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use std::boxed::Box as Box_;
@@ -49,7 +50,6 @@ impl WebRTCRTPTransceiver {
             value
                 .get()
                 .expect("Return Value for property `direction` getter")
-                .unwrap()
         }
     }
 
@@ -61,7 +61,7 @@ impl WebRTCRTPTransceiver {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"direction\0".as_ptr() as *const _,
-                glib::Value::from(&direction).to_glib_none().0,
+                direction.to_value().to_glib_none().0,
             );
         }
     }
@@ -78,7 +78,6 @@ impl WebRTCRTPTransceiver {
             value
                 .get()
                 .expect("Return Value for property `mlineindex` getter")
-                .unwrap()
         }
     }
 

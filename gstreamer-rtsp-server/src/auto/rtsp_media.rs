@@ -17,6 +17,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -992,7 +993,6 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             value
                 .get()
                 .expect("Return Value for property `bind-mcast-address` getter")
-                .unwrap()
         }
     }
 
@@ -1001,7 +1001,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"bind-mcast-address\0".as_ptr() as *const _,
-                glib::Value::from(&bind_mcast_address).to_glib_none().0,
+                bind_mcast_address.to_value().to_glib_none().0,
             );
         }
     }
@@ -1017,7 +1017,6 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             value
                 .get()
                 .expect("Return Value for property `dscp-qos` getter")
-                .unwrap()
         }
     }
 
@@ -1026,7 +1025,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"dscp-qos\0".as_ptr() as *const _,
-                glib::Value::from(&dscp_qos).to_glib_none().0,
+                dscp_qos.to_value().to_glib_none().0,
             );
         }
     }
@@ -1042,7 +1041,6 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             value
                 .get()
                 .expect("Return Value for property `max-mcast-ttl` getter")
-                .unwrap()
         }
     }
 
@@ -1051,7 +1049,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"max-mcast-ttl\0".as_ptr() as *const _,
-                glib::Value::from(&max_mcast_ttl).to_glib_none().0,
+                max_mcast_ttl.to_value().to_glib_none().0,
             );
         }
     }
@@ -1061,7 +1059,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"time-provider\0".as_ptr() as *const _,
-                glib::Value::from(&time_provider).to_glib_none().0,
+                time_provider.to_value().to_glib_none().0,
             );
         }
     }

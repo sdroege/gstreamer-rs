@@ -11,6 +11,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -75,7 +76,6 @@ impl WebRTCICETransport {
             value
                 .get()
                 .expect("Return Value for property `component` getter")
-                .unwrap()
         }
     }
 
@@ -92,7 +92,6 @@ impl WebRTCICETransport {
             value
                 .get()
                 .expect("Return Value for property `gathering-state` getter")
-                .unwrap()
         }
     }
 
@@ -109,7 +108,6 @@ impl WebRTCICETransport {
             value
                 .get()
                 .expect("Return Value for property `state` getter")
-                .unwrap()
         }
     }
 

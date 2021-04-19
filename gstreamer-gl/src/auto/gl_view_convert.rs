@@ -11,6 +11,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -103,7 +104,6 @@ impl GLViewConvert {
             value
                 .get()
                 .expect("Return Value for property `downmix-mode` getter")
-                .unwrap()
         }
     }
 
@@ -113,7 +113,7 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"downmix-mode\0".as_ptr() as *const _,
-                glib::Value::from(&downmix_mode).to_glib_none().0,
+                downmix_mode.to_value().to_glib_none().0,
             );
         }
     }
@@ -132,7 +132,6 @@ impl GLViewConvert {
             value
                 .get()
                 .expect("Return Value for property `input-flags-override` getter")
-                .unwrap()
         }
     }
 
@@ -142,7 +141,7 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"input-flags-override\0".as_ptr() as *const _,
-                glib::Value::from(&input_flags_override).to_glib_none().0,
+                input_flags_override.to_value().to_glib_none().0,
             );
         }
     }
@@ -161,7 +160,6 @@ impl GLViewConvert {
             value
                 .get()
                 .expect("Return Value for property `input-mode-override` getter")
-                .unwrap()
         }
     }
 
@@ -171,7 +169,7 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"input-mode-override\0".as_ptr() as *const _,
-                glib::Value::from(&input_mode_override).to_glib_none().0,
+                input_mode_override.to_value().to_glib_none().0,
             );
         }
     }
@@ -190,7 +188,6 @@ impl GLViewConvert {
             value
                 .get()
                 .expect("Return Value for property `output-flags-override` getter")
-                .unwrap()
         }
     }
 
@@ -200,7 +197,7 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"output-flags-override\0".as_ptr() as *const _,
-                glib::Value::from(&output_flags_override).to_glib_none().0,
+                output_flags_override.to_value().to_glib_none().0,
             );
         }
     }
@@ -219,7 +216,6 @@ impl GLViewConvert {
             value
                 .get()
                 .expect("Return Value for property `output-mode-override` getter")
-                .unwrap()
         }
     }
 
@@ -229,7 +225,7 @@ impl GLViewConvert {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut glib::gobject_ffi::GObject,
                 b"output-mode-override\0".as_ptr() as *const _,
-                glib::Value::from(&output_mode_override).to_glib_none().0,
+                output_mode_override.to_value().to_glib_none().0,
             );
         }
     }

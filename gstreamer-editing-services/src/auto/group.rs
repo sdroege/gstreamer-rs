@@ -12,6 +12,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -94,7 +95,6 @@ impl<O: IsA<Group>> GroupExt for O {
             value
                 .get()
                 .expect("Return Value for property `duration` getter")
-                .unwrap()
         }
     }
 
@@ -103,7 +103,7 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"duration\0".as_ptr() as *const _,
-                glib::Value::from(&duration).to_glib_none().0,
+                duration.to_value().to_glib_none().0,
             );
         }
     }
@@ -119,7 +119,6 @@ impl<O: IsA<Group>> GroupExt for O {
             value
                 .get()
                 .expect("Return Value for property `in-point` getter")
-                .unwrap()
         }
     }
 
@@ -128,7 +127,7 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"in-point\0".as_ptr() as *const _,
-                glib::Value::from(&in_point).to_glib_none().0,
+                in_point.to_value().to_glib_none().0,
             );
         }
     }
@@ -144,7 +143,6 @@ impl<O: IsA<Group>> GroupExt for O {
             value
                 .get()
                 .expect("Return Value for property `max-duration` getter")
-                .unwrap()
         }
     }
 
@@ -153,7 +151,7 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"max-duration\0".as_ptr() as *const _,
-                glib::Value::from(&max_duration).to_glib_none().0,
+                max_duration.to_value().to_glib_none().0,
             );
         }
     }
@@ -169,7 +167,6 @@ impl<O: IsA<Group>> GroupExt for O {
             value
                 .get()
                 .expect("Return Value for property `priority` getter")
-                .unwrap()
         }
     }
 
@@ -178,7 +175,7 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"priority\0".as_ptr() as *const _,
-                glib::Value::from(&priority).to_glib_none().0,
+                priority.to_value().to_glib_none().0,
             );
         }
     }
@@ -194,7 +191,6 @@ impl<O: IsA<Group>> GroupExt for O {
             value
                 .get()
                 .expect("Return Value for property `start` getter")
-                .unwrap()
         }
     }
 
@@ -203,7 +199,7 @@ impl<O: IsA<Group>> GroupExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"start\0".as_ptr() as *const _,
-                glib::Value::from(&start).to_glib_none().0,
+                start.to_value().to_glib_none().0,
             );
         }
     }

@@ -13,6 +13,7 @@ use glib::translate::*;
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
@@ -143,7 +144,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"duration\0".as_ptr() as *const _,
-                glib::Value::from(&duration).to_glib_none().0,
+                duration.to_value().to_glib_none().0,
             );
         }
     }
@@ -161,7 +162,6 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
             value
                 .get()
                 .expect("Return Value for property `is-nested-timeline` getter")
-                .unwrap()
         }
     }
 

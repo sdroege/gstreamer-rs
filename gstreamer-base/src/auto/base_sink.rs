@@ -9,6 +9,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -407,7 +408,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             value
                 .get()
                 .expect("Return Value for property `async` getter")
-                .unwrap()
         }
     }
 
@@ -416,7 +416,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"async\0".as_ptr() as *const _,
-                glib::Value::from(&async_).to_glib_none().0,
+                async_.to_value().to_glib_none().0,
             );
         }
     }
@@ -432,7 +432,6 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             value
                 .get()
                 .expect("Return Value for property `enable-last-sample` getter")
-                .unwrap()
         }
     }
 
@@ -441,7 +440,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"enable-last-sample\0".as_ptr() as *const _,
-                glib::Value::from(&enable_last_sample).to_glib_none().0,
+                enable_last_sample.to_value().to_glib_none().0,
             );
         }
     }
@@ -454,10 +453,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 b"qos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value
-                .get()
-                .expect("Return Value for property `qos` getter")
-                .unwrap()
+            value.get().expect("Return Value for property `qos` getter")
         }
     }
 
@@ -466,7 +462,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             glib::gobject_ffi::g_object_set_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"qos\0".as_ptr() as *const _,
-                glib::Value::from(&qos).to_glib_none().0,
+                qos.to_value().to_glib_none().0,
             );
         }
     }
