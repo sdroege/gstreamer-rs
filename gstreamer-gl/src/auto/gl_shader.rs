@@ -24,7 +24,7 @@ glib::wrapper! {
     pub struct GLShader(Object<ffi::GstGLShader, ffi::GstGLShaderClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_shader_get_type(),
+        type_ => || ffi::gst_gl_shader_get_type(),
     }
 }
 

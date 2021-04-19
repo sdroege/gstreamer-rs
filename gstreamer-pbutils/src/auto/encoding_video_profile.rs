@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct EncodingVideoProfile(Object<ffi::GstEncodingVideoProfile, ffi::GstEncodingVideoProfileClass>) @extends EncodingProfile;
 
     match fn {
-        get_type => || ffi::gst_encoding_video_profile_get_type(),
+        type_ => || ffi::gst_encoding_video_profile_get_type(),
     }
 }
 

@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct AppSrc(Object<ffi::GstAppSrc, ffi::GstAppSrcClass>) @extends gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {
-        get_type => || ffi::gst_app_src_get_type(),
+        type_ => || ffi::gst_app_src_get_type(),
     }
 }
 

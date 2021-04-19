@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct DiscovererAudioInfo(Object<ffi::GstDiscovererAudioInfo>) @extends DiscovererStreamInfo;
 
     match fn {
-        get_type => || ffi::gst_discoverer_audio_info_get_type(),
+        type_ => || ffi::gst_discoverer_audio_info_get_type(),
     }
 }
 

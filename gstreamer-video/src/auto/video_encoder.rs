@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct VideoEncoder(Object<ffi::GstVideoEncoder, ffi::GstVideoEncoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_video_encoder_get_type(),
+        type_ => || ffi::gst_video_encoder_get_type(),
     }
 }
 

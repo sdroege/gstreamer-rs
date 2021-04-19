@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct DirectControlBinding(Object<ffi::GstDirectControlBinding, ffi::GstDirectControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_direct_control_binding_get_type(),
+        type_ => || ffi::gst_direct_control_binding_get_type(),
     }
 }
 

@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct PluginFeature(Object<ffi::GstPluginFeature, ffi::GstPluginFeatureClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_plugin_feature_get_type(),
+        type_ => || ffi::gst_plugin_feature_get_type(),
     }
 }
 

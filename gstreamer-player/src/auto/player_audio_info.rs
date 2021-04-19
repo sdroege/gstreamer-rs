@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct PlayerAudioInfo(Object<ffi::GstPlayerAudioInfo, ffi::GstPlayerAudioInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
-        get_type => || ffi::gst_player_audio_info_get_type(),
+        type_ => || ffi::gst_player_audio_info_get_type(),
     }
 }
 

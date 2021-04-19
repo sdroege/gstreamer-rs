@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct TimedValueControlSource(Object<ffi::GstTimedValueControlSource, ffi::GstTimedValueControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_timed_value_control_source_get_type(),
+        type_ => || ffi::gst_timed_value_control_source_get_type(),
     }
 }
 

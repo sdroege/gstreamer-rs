@@ -21,7 +21,7 @@ glib::wrapper! {
     pub struct PadTemplate(Object<ffi::GstPadTemplate, ffi::GstPadTemplateClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_pad_template_get_type(),
+        type_ => || ffi::gst_pad_template_get_type(),
     }
 }
 

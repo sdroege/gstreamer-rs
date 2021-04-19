@@ -15,7 +15,7 @@ glib::wrapper! {
     pub struct ChildProxy(Interface<ffi::GstChildProxy, ffi::GstChildProxyInterface>);
 
     match fn {
-        get_type => || ffi::gst_child_proxy_get_type(),
+        type_ => || ffi::gst_child_proxy_get_type(),
     }
 }
 

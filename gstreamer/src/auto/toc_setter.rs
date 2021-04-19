@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct TocSetter(Interface<ffi::GstTocSetter, ffi::GstTocSetterInterface>) @requires Element, Object;
 
     match fn {
-        get_type => || ffi::gst_toc_setter_get_type(),
+        type_ => || ffi::gst_toc_setter_get_type(),
     }
 }
 

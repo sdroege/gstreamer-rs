@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct GLFramebuffer(Object<ffi::GstGLFramebuffer, ffi::GstGLFramebufferClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_framebuffer_get_type(),
+        type_ => || ffi::gst_gl_framebuffer_get_type(),
     }
 }
 

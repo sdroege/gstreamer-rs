@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct RTSPMountPoints(Object<ffi::GstRTSPMountPoints, ffi::GstRTSPMountPointsClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_mount_points_get_type(),
+        type_ => || ffi::gst_rtsp_mount_points_get_type(),
     }
 }
 

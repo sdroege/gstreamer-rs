@@ -17,7 +17,7 @@ glib::wrapper! {
     pub struct LFOControlSource(Object<ffi::GstLFOControlSource, ffi::GstLFOControlSourceClass>) @extends gst::ControlSource, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_lfo_control_source_get_type(),
+        type_ => || ffi::gst_lfo_control_source_get_type(),
     }
 }
 

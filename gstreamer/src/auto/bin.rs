@@ -24,7 +24,7 @@ glib::wrapper! {
     pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass>) @extends Element, Object, @implements ChildProxy;
 
     match fn {
-        get_type => || ffi::gst_bin_get_type(),
+        type_ => || ffi::gst_bin_get_type(),
     }
 }
 

@@ -10,7 +10,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| ffi::gst_webrtc_session_description_copy(ptr),
         free => |ptr| ffi::gst_webrtc_session_description_free(ptr),
-        get_type => || ffi::gst_webrtc_session_description_get_type(),
+        type_ => || ffi::gst_webrtc_session_description_get_type(),
     }
 }
 

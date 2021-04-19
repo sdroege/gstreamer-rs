@@ -12,7 +12,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| ffi::gst_gl_allocation_params_copy(mut_override(ptr)),
         free => |ptr| ffi::gst_gl_allocation_params_free(ptr),
-        get_type => || ffi::gst_gl_allocation_params_get_type(),
+        type_ => || ffi::gst_gl_allocation_params_get_type(),
     }
 }
 

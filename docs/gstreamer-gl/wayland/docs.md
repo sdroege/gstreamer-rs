@@ -5,7 +5,7 @@ through the provided API
 
 # Implements
 
-[`gst_gl::GLDisplayExt`](../gst_gl/trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst_gl::GLDisplayExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLDisplayWayland::fn new -->
 Create a new `GLDisplayWayland` from the wayland display name. See `wl_display_connect`()
 for details on what is a valid name.
@@ -15,7 +15,7 @@ a display name
 # Returns
 
 a new `GLDisplayWayland` or `None`
-<!-- impl GLDisplayWayland::fn new_with_display -->
+<!-- impl GLDisplayWayland::fn with_display -->
 Creates a new display connection from a wl_display Display.
 ## `display`
 an existing, wayland display

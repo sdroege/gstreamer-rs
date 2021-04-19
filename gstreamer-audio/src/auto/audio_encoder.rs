@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct AudioEncoder(Object<ffi::GstAudioEncoder, ffi::GstAudioEncoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_audio_encoder_get_type(),
+        type_ => || ffi::gst_audio_encoder_get_type(),
     }
 }
 

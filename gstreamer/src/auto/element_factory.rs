@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
-        get_type => || ffi::gst_element_factory_get_type(),
+        type_ => || ffi::gst_element_factory_get_type(),
     }
 }
 

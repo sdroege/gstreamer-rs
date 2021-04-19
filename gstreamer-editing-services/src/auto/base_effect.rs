@@ -15,7 +15,7 @@ glib::wrapper! {
     pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_base_effect_get_type(),
+        type_ => || ffi::ges_base_effect_get_type(),
     }
 }
 

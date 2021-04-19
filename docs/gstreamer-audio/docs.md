@@ -6,13 +6,13 @@ writing samples to the ringbuffer, synchronisation, clipping and flushing.
 
 # Implements
 
-[`AudioBaseSinkExt`](trait.AudioBaseSinkExt.html), [`gst_base::BaseSinkExt`](../gst_base/trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AudioBaseSinkExt`](trait@crate::AudioBaseSinkExt), [`trait@gst_base::BaseSinkExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait AudioBaseSinkExt -->
 Trait containing all `AudioBaseSink` methods.
 
 # Implementors
 
-[`AudioBaseSink`](struct.AudioBaseSink.html), [`AudioSink`](struct.AudioSink.html)
+[`AudioBaseSink`](struct@crate::AudioBaseSink), [`AudioSink`](struct@crate::AudioSink)
 <!-- trait AudioBaseSinkExt::fn create_ringbuffer -->
 Create and return the `AudioRingBuffer` for `self`. This function will
 call the ::create_ringbuffer vmethod and will set `self` as the parent of
@@ -21,32 +21,32 @@ the returned buffer (see `gst::ObjectExt::set_parent`).
 # Returns
 
 The new ringbuffer of `self`.
-<!-- trait AudioBaseSinkExt::fn get_alignment_threshold -->
+<!-- trait AudioBaseSinkExt::fn alignment_threshold -->
 Get the current alignment threshold, in nanoseconds, used by `self`.
 
 # Returns
 
 The current alignment threshold used by `self`.
-<!-- trait AudioBaseSinkExt::fn get_discont_wait -->
+<!-- trait AudioBaseSinkExt::fn discont_wait -->
 Get the current discont wait, in nanoseconds, used by `self`.
 
 # Returns
 
 The current discont wait used by `self`.
-<!-- trait AudioBaseSinkExt::fn get_drift_tolerance -->
+<!-- trait AudioBaseSinkExt::fn drift_tolerance -->
 Get the current drift tolerance, in microseconds, used by `self`.
 
 # Returns
 
 The current drift tolerance used by `self`.
-<!-- trait AudioBaseSinkExt::fn get_provide_clock -->
+<!-- trait AudioBaseSinkExt::fn is_provide_clock -->
 Queries whether `self` will provide a clock or not. See also
 gst_audio_base_sink_set_provide_clock.
 
 # Returns
 
 `true` if `self` will provide a clock.
-<!-- trait AudioBaseSinkExt::fn get_slave_method -->
+<!-- trait AudioBaseSinkExt::fn slave_method -->
 Get the current slave method used by `self`.
 
 # Returns
@@ -115,13 +115,13 @@ reading samples from the ringbuffer, synchronisation and flushing.
 
 # Implements
 
-[`AudioBaseSrcExt`](trait.AudioBaseSrcExt.html), [`gst_base::BaseSrcExt`](../gst_base/trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AudioBaseSrcExt`](trait@crate::AudioBaseSrcExt), [`trait@gst_base::BaseSrcExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait AudioBaseSrcExt -->
 Trait containing all `AudioBaseSrc` methods.
 
 # Implementors
 
-[`AudioBaseSrc`](struct.AudioBaseSrc.html), [`AudioSrc`](struct.AudioSrc.html)
+[`AudioBaseSrc`](struct@crate::AudioBaseSrc), [`AudioSrc`](struct@crate::AudioSrc)
 <!-- trait AudioBaseSrcExt::fn create_ringbuffer -->
 Create and return the `AudioRingBuffer` for `self`. This function will call
 the ::create_ringbuffer vmethod and will set `self` as the parent of the
@@ -130,14 +130,14 @@ returned buffer (see `gst::ObjectExt::set_parent`).
 # Returns
 
 The new ringbuffer of `self`.
-<!-- trait AudioBaseSrcExt::fn get_provide_clock -->
+<!-- trait AudioBaseSrcExt::fn is_provide_clock -->
 Queries whether `self` will provide a clock or not. See also
 gst_audio_base_src_set_provide_clock.
 
 # Returns
 
 `true` if `self` will provide a clock.
-<!-- trait AudioBaseSrcExt::fn get_slave_method -->
+<!-- trait AudioBaseSrcExt::fn slave_method -->
 Get the current slave method used by `self`.
 
 # Returns
@@ -342,13 +342,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`AudioDecoderExt`](trait.AudioDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AudioDecoderExtManual`](prelude/trait.AudioDecoderExtManual.html)
+[`AudioDecoderExt`](trait@crate::AudioDecoderExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`AudioDecoderExtManual`](trait@crate::AudioDecoderExtManual)
 <!-- trait AudioDecoderExt -->
 Trait containing all `AudioDecoder` methods.
 
 # Implementors
 
-[`AudioDecoder`](struct.AudioDecoder.html)
+[`AudioDecoder`](struct@crate::AudioDecoder)
 <!-- trait AudioDecoderExt::fn allocate_output_buffer -->
 Helper function that allocates a buffer to hold an audio frame
 for `self`'s current output format.
@@ -400,7 +400,7 @@ decoded data
 # Returns
 
 a `gst::FlowReturn` that should be escalated to caller (of caller)
-<!-- trait AudioDecoderExt::fn get_allocator -->
+<!-- trait AudioDecoderExt::fn allocator -->
 Lets `AudioDecoder` sub-classes to know the memory `allocator`
 used by the base class and its `params`.
 
@@ -411,17 +411,17 @@ used
 ## `params`
 the
 `gst::AllocationParams` of `allocator`
-<!-- trait AudioDecoderExt::fn get_audio_info -->
+<!-- trait AudioDecoderExt::fn audio_info -->
 
 # Returns
 
 a `AudioInfo` describing the input audio format
-<!-- trait AudioDecoderExt::fn get_delay -->
+<!-- trait AudioDecoderExt::fn delay -->
 
 # Returns
 
 currently configured decoder delay
-<!-- trait AudioDecoderExt::fn get_drainable -->
+<!-- trait AudioDecoderExt::fn is_drainable -->
 Queries decoder drain handling.
 
 # Returns
@@ -429,24 +429,24 @@ Queries decoder drain handling.
 TRUE if drainable handling is enabled.
 
 MT safe.
-<!-- trait AudioDecoderExt::fn get_estimate_rate -->
+<!-- trait AudioDecoderExt::fn estimate_rate -->
 
 # Returns
 
 currently configured byte to time conversion setting
-<!-- trait AudioDecoderExt::fn get_latency -->
+<!-- trait AudioDecoderExt::fn latency -->
 Sets the variables pointed to by `min` and `max` to the currently configured
 latency.
 ## `min`
 a pointer to storage to hold minimum latency
 ## `max`
 a pointer to storage to hold maximum latency
-<!-- trait AudioDecoderExt::fn get_max_errors -->
+<!-- trait AudioDecoderExt::fn max_errors -->
 
 # Returns
 
 currently configured decoder tolerated error count.
-<!-- trait AudioDecoderExt::fn get_min_latency -->
+<!-- trait AudioDecoderExt::fn min_latency -->
 Queries decoder's latency aggregation.
 
 # Returns
@@ -454,7 +454,7 @@ Queries decoder's latency aggregation.
 aggregation latency.
 
 MT safe.
-<!-- trait AudioDecoderExt::fn get_needs_format -->
+<!-- trait AudioDecoderExt::fn needs_format -->
 Queries decoder required format handling.
 
 # Returns
@@ -462,13 +462,13 @@ Queries decoder required format handling.
 TRUE if required format handling is enabled.
 
 MT safe.
-<!-- trait AudioDecoderExt::fn get_parse_state -->
+<!-- trait AudioDecoderExt::fn parse_state -->
 Return current parsing (sync and eos) state.
 ## `sync`
 a pointer to a variable to hold the current sync state
 ## `eos`
 a pointer to a variable to hold the current eos state
-<!-- trait AudioDecoderExt::fn get_plc -->
+<!-- trait AudioDecoderExt::fn is_plc -->
 Queries decoder packet loss concealment handling.
 
 # Returns
@@ -476,12 +476,12 @@ Queries decoder packet loss concealment handling.
 TRUE if packet loss concealment is enabled.
 
 MT safe.
-<!-- trait AudioDecoderExt::fn get_plc_aware -->
+<!-- trait AudioDecoderExt::fn plc_aware -->
 
 # Returns
 
 currently configured plc handling
-<!-- trait AudioDecoderExt::fn get_tolerance -->
+<!-- trait AudioDecoderExt::fn tolerance -->
 Queries current audio jitter tolerance threshold.
 
 # Returns
@@ -741,13 +741,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`AudioEncoderExt`](trait.AudioEncoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AudioEncoderExtManual`](prelude/trait.AudioEncoderExtManual.html)
+[`AudioEncoderExt`](trait@crate::AudioEncoderExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`AudioEncoderExtManual`](trait@crate::AudioEncoderExtManual)
 <!-- trait AudioEncoderExt -->
 Trait containing all `AudioEncoder` methods.
 
 # Implementors
 
-[`AudioEncoder`](struct.AudioEncoder.html)
+[`AudioEncoder`](struct@crate::AudioEncoder)
 <!-- trait AudioEncoderExt::fn allocate_output_buffer -->
 Helper function that allocates a buffer to hold an encoded audio frame
 for `self`'s current output format.
@@ -776,7 +776,7 @@ number of samples (per channel) represented by encoded data
 # Returns
 
 a `gst::FlowReturn` that should be escalated to caller (of caller)
-<!-- trait AudioEncoderExt::fn get_allocator -->
+<!-- trait AudioEncoderExt::fn allocator -->
 Lets `AudioEncoder` sub-classes to know the memory `allocator`
 used by the base class and its `params`.
 
@@ -787,12 +787,12 @@ used
 ## `params`
 the
 `gst::AllocationParams` of `allocator`
-<!-- trait AudioEncoderExt::fn get_audio_info -->
+<!-- trait AudioEncoderExt::fn audio_info -->
 
 # Returns
 
 a `AudioInfo` describing the input audio format
-<!-- trait AudioEncoderExt::fn get_drainable -->
+<!-- trait AudioEncoderExt::fn is_drainable -->
 Queries encoder drain handling.
 
 # Returns
@@ -800,22 +800,22 @@ Queries encoder drain handling.
 TRUE if drainable handling is enabled.
 
 MT safe.
-<!-- trait AudioEncoderExt::fn get_frame_max -->
+<!-- trait AudioEncoderExt::fn frame_max -->
 
 # Returns
 
 currently configured maximum handled frames
-<!-- trait AudioEncoderExt::fn get_frame_samples_max -->
+<!-- trait AudioEncoderExt::fn frame_samples_max -->
 
 # Returns
 
 currently maximum requested samples per frame
-<!-- trait AudioEncoderExt::fn get_frame_samples_min -->
+<!-- trait AudioEncoderExt::fn frame_samples_min -->
 
 # Returns
 
 currently minimum requested samples per frame
-<!-- trait AudioEncoderExt::fn get_hard_min -->
+<!-- trait AudioEncoderExt::fn is_hard_min -->
 Queries encoder hard minimum handling.
 
 # Returns
@@ -823,19 +823,19 @@ Queries encoder hard minimum handling.
 TRUE if hard minimum handling is enabled.
 
 MT safe.
-<!-- trait AudioEncoderExt::fn get_latency -->
+<!-- trait AudioEncoderExt::fn latency -->
 Sets the variables pointed to by `min` and `max` to the currently configured
 latency.
 ## `min`
 a pointer to storage to hold minimum latency
 ## `max`
 a pointer to storage to hold maximum latency
-<!-- trait AudioEncoderExt::fn get_lookahead -->
+<!-- trait AudioEncoderExt::fn lookahead -->
 
 # Returns
 
 currently configured encoder lookahead
-<!-- trait AudioEncoderExt::fn get_mark_granule -->
+<!-- trait AudioEncoderExt::fn is_mark_granule -->
 Queries if the encoder will handle granule marking.
 
 # Returns
@@ -843,7 +843,7 @@ Queries if the encoder will handle granule marking.
 TRUE if granule marking is enabled.
 
 MT safe.
-<!-- trait AudioEncoderExt::fn get_perfect_timestamp -->
+<!-- trait AudioEncoderExt::fn is_perfect_timestamp -->
 Queries encoder perfect timestamp behaviour.
 
 # Returns
@@ -851,7 +851,7 @@ Queries encoder perfect timestamp behaviour.
 TRUE if perfect timestamp setting enabled.
 
 MT safe.
-<!-- trait AudioEncoderExt::fn get_tolerance -->
+<!-- trait AudioEncoderExt::fn tolerance -->
 Queries current audio jitter tolerance threshold.
 
 # Returns
@@ -1109,6 +1109,8 @@ complex layout
 <!-- struct AudioFormatFlags::const UNPACK -->
 the format can be used in
 `GstAudioFormatUnpack` and `GstAudioFormatPack` functions
+<!-- struct AudioFormatInfo -->
+Information for an audio format.
 <!-- struct AudioInfo -->
 Information describing audio properties. This information can be filled
 in from GstCaps with `AudioInfo::from_caps`.
@@ -1286,7 +1288,7 @@ together with `AudioBaseSink` using a default implementation of a
 
 # Implements
 
-[`AudioBaseSinkExt`](trait.AudioBaseSinkExt.html), [`gst_base::BaseSinkExt`](../gst_base/trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AudioBaseSinkExt`](trait@crate::AudioBaseSinkExt), [`trait@gst_base::BaseSinkExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- struct AudioSrc -->
 This is the most simple base class for audio sources that only requires
 subclasses to implement a set of simple functions:
@@ -1305,7 +1307,7 @@ together with `AudioBaseSrc` using a default implementation of a
 
 # Implements
 
-[`AudioBaseSrcExt`](trait.AudioBaseSrcExt.html), [`gst_base::BaseSrcExt`](../gst_base/trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AudioBaseSrcExt`](trait@crate::AudioBaseSrcExt), [`trait@gst_base::BaseSrcExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- struct AudioStreamAlign -->
 `AudioStreamAlign` provides a helper object that helps tracking audio
 stream alignment and discontinuities, and detects discontinuities if
@@ -1485,13 +1487,13 @@ The volume property is defined to be a linear volume factor.
 
 # Implements
 
-[`StreamVolumeExt`](trait.StreamVolumeExt.html)
+[`StreamVolumeExt`](trait@crate::StreamVolumeExt)
 <!-- trait StreamVolumeExt -->
 Trait containing all `StreamVolume` methods.
 
 # Implementors
 
-[`StreamVolume`](struct.StreamVolume.html)
+[`StreamVolume`](struct@crate::StreamVolume)
 <!-- impl StreamVolume::fn convert_volume -->
 ## `from`
 `StreamVolumeFormat` to convert from
@@ -1503,7 +1505,7 @@ Volume in `from` format that should be converted
 # Returns
 
 the converted volume
-<!-- trait StreamVolumeExt::fn get_mute -->
+<!-- trait StreamVolumeExt::fn is_muted -->
 
 # Returns
 

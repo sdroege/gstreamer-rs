@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_push_src_get_type(),
+        type_ => || ffi::gst_push_src_get_type(),
     }
 }
 

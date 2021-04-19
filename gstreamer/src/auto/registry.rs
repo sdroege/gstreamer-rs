@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct Registry(Object<ffi::GstRegistry, ffi::GstRegistryClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_registry_get_type(),
+        type_ => || ffi::gst_registry_get_type(),
     }
 }
 

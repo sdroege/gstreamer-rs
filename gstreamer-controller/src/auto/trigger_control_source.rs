@@ -17,7 +17,7 @@ glib::wrapper! {
     pub struct TriggerControlSource(Object<ffi::GstTriggerControlSource, ffi::GstTriggerControlSourceClass>) @extends TimedValueControlSource, gst::ControlSource, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_trigger_control_source_get_type(),
+        type_ => || ffi::gst_trigger_control_source_get_type(),
     }
 }
 

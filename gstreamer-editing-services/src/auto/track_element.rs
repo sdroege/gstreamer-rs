@@ -22,7 +22,7 @@ glib::wrapper! {
     pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_track_element_get_type(),
+        type_ => || ffi::ges_track_element_get_type(),
     }
 }
 

@@ -10,7 +10,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| ffi::gst_player_visualization_copy(ptr),
         free => |ptr| ffi::gst_player_visualization_free(ptr),
-        get_type => || ffi::gst_player_visualization_get_type(),
+        type_ => || ffi::gst_player_visualization_get_type(),
     }
 }
 

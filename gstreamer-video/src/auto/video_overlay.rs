@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct VideoOverlay(Interface<ffi::GstVideoOverlay, ffi::GstVideoOverlayInterface>);
 
     match fn {
-        get_type => || ffi::gst_video_overlay_get_type(),
+        type_ => || ffi::gst_video_overlay_get_type(),
     }
 }
 

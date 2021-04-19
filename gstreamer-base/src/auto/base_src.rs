@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_base_src_get_type(),
+        type_ => || ffi::gst_base_src_get_type(),
     }
 }
 

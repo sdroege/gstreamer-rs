@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass>) @extends ProxyPad, Pad, Object;
 
     match fn {
-        get_type => || ffi::gst_ghost_pad_get_type(),
+        type_ => || ffi::gst_ghost_pad_get_type(),
     }
 }
 

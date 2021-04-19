@@ -15,7 +15,7 @@ glib::wrapper! {
     pub struct PtpClock(Object<ffi::GstPtpClock, ffi::GstPtpClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_ptp_clock_get_type(),
+        type_ => || ffi::gst_ptp_clock_get_type(),
     }
 }
 

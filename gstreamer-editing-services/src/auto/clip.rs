@@ -30,7 +30,7 @@ glib::wrapper! {
     pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_clip_get_type(),
+        type_ => || ffi::ges_clip_get_type(),
     }
 }
 

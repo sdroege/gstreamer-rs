@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct NtpClock(Object<ffi::GstNtpClock, ffi::GstNtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_ntp_clock_get_type(),
+        type_ => || ffi::gst_ntp_clock_get_type(),
     }
 }
 

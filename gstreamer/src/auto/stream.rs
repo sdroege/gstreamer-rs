@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct Stream(Object<ffi::GstStream, ffi::GstStreamClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_stream_get_type(),
+        type_ => || ffi::gst_stream_get_type(),
     }
 }
 

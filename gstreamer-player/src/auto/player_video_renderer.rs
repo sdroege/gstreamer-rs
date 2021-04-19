@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct PlayerVideoRenderer(Interface<ffi::GstPlayerVideoRenderer, ffi::GstPlayerVideoRendererInterface>);
 
     match fn {
-        get_type => || ffi::gst_player_video_renderer_get_type(),
+        type_ => || ffi::gst_player_video_renderer_get_type(),
     }
 }
 

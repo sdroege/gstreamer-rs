@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct ProxyControlBinding(Object<ffi::GstProxyControlBinding, ffi::GstProxyControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_proxy_control_binding_get_type(),
+        type_ => || ffi::gst_proxy_control_binding_get_type(),
     }
 }
 

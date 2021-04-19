@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct StreamVolume(Interface<ffi::GstStreamVolume, ffi::GstStreamVolumeInterface>);
 
     match fn {
-        get_type => || ffi::gst_stream_volume_get_type(),
+        type_ => || ffi::gst_stream_volume_get_type(),
     }
 }
 

@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct BaseTransform(Object<ffi::GstBaseTransform, ffi::GstBaseTransformClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_base_transform_get_type(),
+        type_ => || ffi::gst_base_transform_get_type(),
     }
 }
 

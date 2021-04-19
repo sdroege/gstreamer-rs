@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct GLFilter(Object<ffi::GstGLFilter, ffi::GstGLFilterClass>) @extends GLBaseFilter, gst_base::BaseTransform, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_filter_get_type(),
+        type_ => || ffi::gst_gl_filter_get_type(),
     }
 }
 

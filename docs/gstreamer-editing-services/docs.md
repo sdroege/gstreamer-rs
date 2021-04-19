@@ -97,13 +97,13 @@ them with `AssetExt::unproxy`.
 
 # Implements
 
-[`AssetExt`](trait.AssetExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AssetExt`](trait@crate::AssetExt), [`trait@glib::object::ObjectExt`]
 <!-- trait AssetExt -->
 Trait containing all `Asset` methods.
 
 # Implementors
 
-[`Asset`](struct.Asset.html), [`Project`](struct.Project.html)
+[`Asset`](struct@crate::Asset), [`Project`](struct@crate::Project)
 <!-- impl Asset::fn needs_reload -->
 Indicate that an existing `Asset` in the cache should be reloaded
 upon the next request. This can be used when some condition has
@@ -241,32 +241,32 @@ newly created object.
 
 A newly created object, or `None` if an
 error occurred.
-<!-- trait AssetExt::fn get_error -->
+<!-- trait AssetExt::fn error -->
 Retrieve the error that was set on the asset when it was loaded.
 
 # Returns
 
 The error set on `asset`, or
 `None` if no error occurred when `asset` was loaded.
-<!-- trait AssetExt::fn get_extractable_type -->
+<!-- trait AssetExt::fn extractable_type -->
 Gets the `Asset:extractable-type` of the asset.
 
 # Returns
 
 The extractable type of `self`.
-<!-- trait AssetExt::fn get_id -->
+<!-- trait AssetExt::fn id -->
 Gets the `Asset:id` of the asset.
 
 # Returns
 
 The ID of `self`.
-<!-- trait AssetExt::fn get_proxy -->
+<!-- trait AssetExt::fn proxy -->
 Gets the default `Asset:proxy` of the asset.
 
 # Returns
 
 The default proxy of `self`.
-<!-- trait AssetExt::fn get_proxy_target -->
+<!-- trait AssetExt::fn proxy_target -->
 Gets the `Asset:proxy-target` of the asset.
 
 Note that the proxy target may have loaded with an error, so you should
@@ -426,13 +426,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`BaseEffectExt`](trait.BaseEffectExt.html), [`TrackElementExt`](trait.TrackElementExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`BaseEffectExt`](trait@crate::BaseEffectExt), [`TrackElementExt`](trait@crate::TrackElementExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait BaseEffectExt -->
 Trait containing all `BaseEffect` methods.
 
 # Implementors
 
-[`BaseEffect`](struct.BaseEffect.html), [`Effect`](struct.Effect.html)
+[`BaseEffect`](struct@crate::BaseEffect), [`Effect`](struct@crate::Effect)
 <!-- trait BaseEffectExt::fn is_time_effect -->
 Get whether the effect is considered a time effect or not. An effect
 with registered time properties or set translation functions is
@@ -512,7 +512,7 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`OperationClipExt`](trait.OperationClipExt.html), [`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`OperationClipExt`](trait@crate::OperationClipExt), [`ClipExt`](trait@crate::ClipExt), [`GESContainerExt`](trait@crate::GESContainerExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- struct Clip -->
 `Clip`-s are the core objects of a `Layer`. Each clip may exist in
 a single layer but may control several `TrackElement`-s that span
@@ -696,13 +696,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`ClipExt`](trait@crate::ClipExt), [`GESContainerExt`](trait@crate::GESContainerExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait ClipExt -->
 Trait containing all `Clip` methods.
 
 # Implementors
 
-[`Clip`](struct.Clip.html), [`OperationClip`](struct.OperationClip.html)
+[`Clip`](struct@crate::Clip), [`OperationClip`](struct@crate::OperationClip)
 <!-- trait ClipExt::fn add_asset -->
 Extracts a `TrackElement` from an asset and adds it to the clip.
 This can be used to add effects that derive from the asset to the
@@ -831,7 +831,7 @@ match any type
 A list of all
 the `TrackElement`-s controlled by `self`, in `track` or of the given
 `track_type`, and of the given `type_`.
-<!-- trait ClipExt::fn get_duration_limit -->
+<!-- trait ClipExt::fn duration_limit -->
 Gets the `Clip:duration-limit` of the clip.
 
 Feature: `v1_18`
@@ -892,14 +892,14 @@ A time in the timeline time coordinates
 The time in the internal coordinates of `child` corresponding
 to `timeline_time`, or `GST_CLOCK_TIME_NONE` if the conversion could not
 be performed.
-<!-- trait ClipExt::fn get_layer -->
+<!-- trait ClipExt::fn layer -->
 Gets the `Clip:layer` of the clip.
 
 # Returns
 
 The layer `self` is in, or `None` if
 `self` is not in any layer.
-<!-- trait ClipExt::fn get_supported_formats -->
+<!-- trait ClipExt::fn supported_formats -->
 Gets the `Clip:supported-formats` of the clip.
 
 # Returns
@@ -999,7 +999,7 @@ The effect we want to get the index of
 # Returns
 
 The index of `effect` in `self`, or -1 if something went wrong.
-<!-- trait ClipExt::fn get_top_effects -->
+<!-- trait ClipExt::fn top_effects -->
 Gets the `BaseEffect`-s that have been added to the clip. The
 returned list is ordered by their internal index in the clip. See
 `ClipExt::get_top_effect_index`.
@@ -1172,13 +1172,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`GESContainerExt`](trait@crate::GESContainerExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait GESContainerExt -->
 Trait containing all `Container` methods.
 
 # Implementors
 
-[`Clip`](struct.Clip.html), [`Container`](struct.Container.html), [`Group`](struct.Group.html)
+[`Clip`](struct@crate::Clip), [`Container`](struct@crate::Container), [`Group`](struct@crate::Group)
 <!-- impl Container::fn group -->
 Groups the containers into a single container by merging them. The
 containers must all belong to the same `TimelineElement:timeline`.
@@ -1470,13 +1470,13 @@ GES will always request at most one sinkpad per effect (when required).
 
 # Implements
 
-[`EffectExt`](trait.EffectExt.html), [`BaseEffectExt`](trait.BaseEffectExt.html), [`TrackElementExt`](trait.TrackElementExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`EffectExt`](trait@crate::EffectExt), [`BaseEffectExt`](trait@crate::BaseEffectExt), [`TrackElementExt`](trait@crate::TrackElementExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait EffectExt -->
 Trait containing all `Effect` methods.
 
 # Implementors
 
-[`Effect`](struct.Effect.html)
+[`Effect`](struct@crate::Effect)
 <!-- impl Effect::fn new -->
 Creates a new `Effect` from the description of the bin. It should be
 possible to determine the type of the effect through the element
@@ -1521,21 +1521,21 @@ came from, which you can retrieve using `Extractable::get_asset`.
 
 # Implements
 
-[`ExtractableExt`](trait.ExtractableExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`ExtractableExt`](trait@crate::ExtractableExt), [`trait@glib::object::ObjectExt`]
 <!-- trait ExtractableExt -->
 Trait containing all `Extractable` methods.
 
 # Implementors
 
-[`BaseEffect`](struct.BaseEffect.html), [`BaseTransitionClip`](struct.BaseTransitionClip.html), [`Clip`](struct.Clip.html), [`Container`](struct.Container.html), [`Effect`](struct.Effect.html), [`Extractable`](struct.Extractable.html), [`Group`](struct.Group.html), [`Layer`](struct.Layer.html), [`OperationClip`](struct.OperationClip.html), [`TimelineElement`](struct.TimelineElement.html), [`Timeline`](struct.Timeline.html), [`TrackElement`](struct.TrackElement.html), [`TransitionClip`](struct.TransitionClip.html), [`UriClip`](struct.UriClip.html)
-<!-- trait ExtractableExt::fn get_asset -->
+[`BaseEffect`](struct@crate::BaseEffect), [`BaseTransitionClip`](struct@crate::BaseTransitionClip), [`Clip`](struct@crate::Clip), [`Container`](struct@crate::Container), [`Effect`](struct@crate::Effect), [`Extractable`](struct@crate::Extractable), [`Group`](struct@crate::Group), [`Layer`](struct@crate::Layer), [`OperationClip`](struct@crate::OperationClip), [`TimelineElement`](struct@crate::TimelineElement), [`Timeline`](struct@crate::Timeline), [`TrackElement`](struct@crate::TrackElement), [`TransitionClip`](struct@crate::TransitionClip), [`UriClip`](struct@crate::UriClip)
+<!-- trait ExtractableExt::fn asset -->
 Get the asset that has been set on the extractable object.
 
 # Returns
 
 The asset set on `self`, or `None`
 if no asset has been set.
-<!-- trait ExtractableExt::fn get_id -->
+<!-- trait ExtractableExt::fn id -->
 Gets the `Asset:id` of some associated asset. It may be the case
 that the object has no set asset, or even that such an asset does not
 yet exist in the GES cache. Instead, this will return the asset
@@ -1604,13 +1604,13 @@ smallest) of all the layers it spans.
 
 # Implements
 
-[`GroupExt`](trait.GroupExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`GroupExt`](trait@crate::GroupExt), [`GESContainerExt`](trait@crate::GESContainerExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait GroupExt -->
 Trait containing all `Group` methods.
 
 # Implementors
 
-[`Group`](struct.Group.html)
+[`Group`](struct@crate::Group)
 <!-- impl Group::fn new -->
 Created a new empty group. You may wish to use
 `Container::group` instead, which can return a different
@@ -1681,13 +1681,13 @@ layers will simply play in addition.
 
 # Implements
 
-[`LayerExt`](trait.LayerExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html)
+[`LayerExt`](trait@crate::LayerExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt)
 <!-- trait LayerExt -->
 Trait containing all `Layer` methods.
 
 # Implementors
 
-[`Layer`](struct.Layer.html)
+[`Layer`](struct@crate::Layer)
 <!-- impl Layer::fn new -->
 Creates a new layer.
 
@@ -1778,13 +1778,13 @@ The `Track` to check if `self` is currently active for
 # Returns
 
 `true` if `self` is active for `track`, or `false` otherwise.
-<!-- trait LayerExt::fn get_auto_transition -->
+<!-- trait LayerExt::fn is_auto_transition -->
 Gets the `Layer:auto-transition` of the layer.
 
 # Returns
 
 `true` if transitions are automatically added to `self`.
-<!-- trait LayerExt::fn get_clips -->
+<!-- trait LayerExt::fn clips -->
 Get the `Clip`-s contained in this layer.
 
 # Returns
@@ -1802,7 +1802,7 @@ End of the interval
 
 A list of `Clip`-s
 that intersect the interval `[start, end)` in `self`.
-<!-- trait LayerExt::fn get_duration -->
+<!-- trait LayerExt::fn duration -->
 Retrieves the duration of the layer, which is the difference
 between the start of the layer (always time 0) and the end (which will
 be the end time of the final clip).
@@ -1810,14 +1810,14 @@ be the end time of the final clip).
 # Returns
 
 The duration of `self`.
-<!-- trait LayerExt::fn get_priority -->
+<!-- trait LayerExt::fn priority -->
 Get the priority of the layer. When inside a timeline, this is its
 index in the timeline. See `TimelineExt::move_layer`.
 
 # Returns
 
 The priority of `self` within its timeline.
-<!-- trait LayerExt::fn get_timeline -->
+<!-- trait LayerExt::fn timeline -->
 Gets the timeline that the layer is a part of.
 
 # Returns
@@ -1956,7 +1956,7 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`ClipExt`](trait@crate::ClipExt), [`GESContainerExt`](trait@crate::GESContainerExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- struct Pipeline -->
 A `Pipeline` can take an audio-video `Timeline` and conveniently
 link its `Track`-s to an internal `playsink` element, for
@@ -1972,20 +1972,20 @@ You can set the encoding and save location used in rendering by calling
 
 # Implements
 
-[`GESPipelineExt`](trait.GESPipelineExt.html), [`gst::PipelineExt`](../gst/trait.PipelineExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GESPipelineExt`](trait@crate::GESPipelineExt), [`trait@gst::PipelineExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait GESPipelineExt -->
 Trait containing all `Pipeline` methods.
 
 # Implementors
 
-[`Pipeline`](struct.Pipeline.html)
+[`Pipeline`](struct@crate::Pipeline)
 <!-- impl Pipeline::fn new -->
 Creates a new pipeline.
 
 # Returns
 
 The newly created pipeline.
-<!-- trait GESPipelineExt::fn get_mode -->
+<!-- trait GESPipelineExt::fn mode -->
 Gets the `Pipeline:mode` of the pipeline.
 
 # Returns
@@ -2223,13 +2223,13 @@ the same temporary location.
 
 # Implements
 
-[`ProjectExt`](trait.ProjectExt.html), [`AssetExt`](trait.AssetExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`ProjectExt`](trait@crate::ProjectExt), [`AssetExt`](trait@crate::AssetExt), [`trait@glib::object::ObjectExt`]
 <!-- trait ProjectExt -->
 Trait containing all `Project` methods.
 
 # Implementors
 
-[`Project`](struct.Project.html)
+[`Project`](struct@crate::Project)
 <!-- impl Project::fn new -->
 Creates a new `Project` and sets its uri to `uri` if provided. Note that
 if `uri` is not valid or `None`, the uri of the project will then be set
@@ -2306,7 +2306,7 @@ to retrieve from `object`
 
 The `Asset` with
 `id` or `None` if no asset with `id` as an ID
-<!-- trait ProjectExt::fn get_loading_assets -->
+<!-- trait ProjectExt::fn loading_assets -->
 Get the assets that are being loaded
 
 # Returns
@@ -2314,7 +2314,7 @@ Get the assets that are being loaded
 A set of loading asset
 that will be added to `self`. Note that those Asset are *not* loaded yet,
 and thus can not be used
-<!-- trait ProjectExt::fn get_uri -->
+<!-- trait ProjectExt::fn uri -->
 Retrieve the uri that is currently set on `self`
 
 # Returns
@@ -2545,13 +2545,13 @@ content, or render it to a file.
 
 # Implements
 
-[`TimelineExt`](trait.TimelineExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html)
+[`TimelineExt`](trait@crate::TimelineExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt)
 <!-- trait TimelineExt -->
 Trait containing all `Timeline` methods.
 
 # Implementors
 
-[`Timeline`](struct.Timeline.html)
+[`Timeline`](struct@crate::Timeline)
 <!-- impl Timeline::fn new -->
 Creates a new empty timeline.
 
@@ -2566,7 +2566,7 @@ single `VideoTrack`.
 
 The new timeline, or `None` if the tracks
 could not be created and added.
-<!-- impl Timeline::fn new_from_uri -->
+<!-- impl Timeline::fn from_uri -->
 Creates a timeline from the given URI.
 ## `uri`
 The URI to load from
@@ -2659,13 +2659,13 @@ See `TimelineExt::commit`.
 
 `true` if pending changes were committed, or `false` if nothing
 needed to be committed.
-<!-- trait TimelineExt::fn get_auto_transition -->
+<!-- trait TimelineExt::fn is_auto_transition -->
 Gets `Timeline:auto-transition` for the timeline.
 
 # Returns
 
 The auto-transition of `self_`.
-<!-- trait TimelineExt::fn get_duration -->
+<!-- trait TimelineExt::fn duration -->
 Get the current `Timeline:duration` of the timeline
 
 # Returns
@@ -2707,7 +2707,7 @@ The frame number to get the corresponding timestamp of in the
 # Returns
 
 The timestamp corresponding to `frame_number` in the output of `self`.
-<!-- trait TimelineExt::fn get_groups -->
+<!-- trait TimelineExt::fn groups -->
 Get the list of `Group`-s present in the timeline.
 
 # Returns
@@ -2727,7 +2727,7 @@ The layer with the given
 `priority`, or `None` if none was found.
 
 Since 1.6
-<!-- trait TimelineExt::fn get_layers -->
+<!-- trait TimelineExt::fn layers -->
 Get the list of `Layer`-s present in the timeline.
 
 # Returns
@@ -2744,7 +2744,7 @@ A track
 
 The pad corresponding to `track`,
 or `None` if there is an error.
-<!-- trait TimelineExt::fn get_snapping_distance -->
+<!-- trait TimelineExt::fn snapping_distance -->
 Gets the `Timeline:snapping-distance` for the timeline.
 
 # Returns
@@ -2759,7 +2759,7 @@ A pad
 
 The track corresponding to `pad`,
 or `None` if there is an error.
-<!-- trait TimelineExt::fn get_tracks -->
+<!-- trait TimelineExt::fn tracks -->
 Get the list of `Track`-s used by the timeline.
 
 # Returns
@@ -3137,13 +3137,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait TimelineElementExt -->
 Trait containing all `TimelineElement` methods.
 
 # Implementors
 
-[`Container`](struct.Container.html), [`TimelineElement`](struct.TimelineElement.html), [`TrackElement`](struct.TrackElement.html)
+[`Container`](struct@crate::Container), [`TimelineElement`](struct@crate::TimelineElement), [`TrackElement`](struct@crate::TrackElement)
 <!-- trait TimelineElementExt::fn add_child_property -->
 Register a property of a child of the element to allow it to be
 written with `TimelineElementExt::set_child_property` and read with
@@ -3293,19 +3293,19 @@ The name of the first child property to get
 ## `var_args`
 The return location for the first property, followed
 optionally by more name/return location pairs, followed by `None`
-<!-- trait TimelineElementExt::fn get_duration -->
+<!-- trait TimelineElementExt::fn duration -->
 Gets the `TimelineElement:duration` for the element.
 
 # Returns
 
 The duration of `self` (in nanoseconds).
-<!-- trait TimelineElementExt::fn get_inpoint -->
+<!-- trait TimelineElementExt::fn inpoint -->
 Gets the `TimelineElement:in-point` for the element.
 
 # Returns
 
 The in-point of `self` (in nanoseconds).
-<!-- trait TimelineElementExt::fn get_layer_priority -->
+<!-- trait TimelineElementExt::fn layer_priority -->
 Gets the priority of the layer the element is in. A `Group` may span
 several layers, so this would return the highest priority (numerically,
 the smallest) amongst them.
@@ -3318,19 +3318,19 @@ Feature: `v1_16`
 The priority of the layer `self` is in, or
 `GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY` if `self` does not exist in a
 layer.
-<!-- trait TimelineElementExt::fn get_max_duration -->
+<!-- trait TimelineElementExt::fn max_duration -->
 Gets the `TimelineElement:max-duration` for the element.
 
 # Returns
 
 The max-duration of `self` (in nanoseconds).
-<!-- trait TimelineElementExt::fn get_name -->
+<!-- trait TimelineElementExt::fn name -->
 Gets the `TimelineElement:name` for the element.
 
 # Returns
 
 The name of `self`.
-<!-- trait TimelineElementExt::fn get_natural_framerate -->
+<!-- trait TimelineElementExt::fn natural_framerate -->
 Get the "natural" framerate of `self`. This is to say, for example
 for a `VideoUriSource` the framerate of the source.
 
@@ -3353,39 +3353,39 @@ The framerate denominator
 Whether `self` has a natural framerate or not, `framerate_n`
 and `framerate_d` will be set to, respectively, 0 and -1 if it is
 not the case.
-<!-- trait TimelineElementExt::fn get_parent -->
+<!-- trait TimelineElementExt::fn parent -->
 Gets the `TimelineElement:parent` for the element.
 
 # Returns
 
 The parent of `self`, or `None` if
 `self` has no parent.
-<!-- trait TimelineElementExt::fn get_priority -->
+<!-- trait TimelineElementExt::fn priority -->
 Gets the `TimelineElement:priority` for the element.
 
 # Returns
 
 The priority of `self`.
-<!-- trait TimelineElementExt::fn get_start -->
+<!-- trait TimelineElementExt::fn start -->
 Gets the `TimelineElement:start` for the element.
 
 # Returns
 
 The start of `self` (in nanoseconds).
-<!-- trait TimelineElementExt::fn get_timeline -->
+<!-- trait TimelineElementExt::fn timeline -->
 Gets the `TimelineElement:timeline` for the element.
 
 # Returns
 
 The timeline of `self`, or `None`
 if `self` has no timeline.
-<!-- trait TimelineElementExt::fn get_toplevel_parent -->
+<!-- trait TimelineElementExt::fn toplevel_parent -->
 Gets the toplevel `TimelineElement:parent` of the element.
 
 # Returns
 
 The toplevel parent of `self`.
-<!-- trait TimelineElementExt::fn get_track_types -->
+<!-- trait TimelineElementExt::fn track_types -->
 Gets the track types that the element can interact with, i.e. the type
 of `Track` it can exist in, or will create `TrackElement`-s for.
 
@@ -3880,13 +3880,13 @@ updating them.
 
 # Implements
 
-[`GESTrackExt`](trait.GESTrackExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GESTrackExt`](trait@crate::GESTrackExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait GESTrackExt -->
 Trait containing all `Track` methods.
 
 # Implementors
 
-[`Track`](struct.Track.html)
+[`Track`](struct@crate::Track)
 <!-- impl Track::fn new -->
 Creates a new track with the given track-type and caps.
 
@@ -3958,13 +3958,13 @@ tracks, so you are unlikely to need to use this directly.
 
 `true` if pending changes were committed, or `false` if nothing
 needed to be committed.
-<!-- trait GESTrackExt::fn get_caps -->
+<!-- trait GESTrackExt::fn caps -->
 Get the `Track:caps` of the track.
 
 # Returns
 
 The caps of `self`.
-<!-- trait GESTrackExt::fn get_elements -->
+<!-- trait GESTrackExt::fn elements -->
 Gets the track elements contained in the track. The returned list is
 sorted by the element's `TimelineElement:priority` and
 `TimelineElement:start`.
@@ -3973,13 +3973,13 @@ sorted by the element's `TimelineElement:priority` and
 
 A list of
 all the `TrackElement`-s in `self`.
-<!-- trait GESTrackExt::fn get_mixing -->
+<!-- trait GESTrackExt::fn is_mixing -->
 Gets the `Track:mixing` of the track.
 
 # Returns
 
 Whether `self` is mixing.
-<!-- trait GESTrackExt::fn get_restriction_caps -->
+<!-- trait GESTrackExt::fn restriction_caps -->
 Gets the `Track:restriction-caps` of the track.
 
 Feature: `v1_18`
@@ -3988,7 +3988,7 @@ Feature: `v1_18`
 # Returns
 
 The restriction-caps of `self`.
-<!-- trait GESTrackExt::fn get_timeline -->
+<!-- trait GESTrackExt::fn timeline -->
 Get the timeline this track belongs to.
 
 # Returns
@@ -4206,13 +4206,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`TrackElementExt`](trait.TrackElementExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`TrackElementExt`](trait@crate::TrackElementExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait TrackElementExt -->
 Trait containing all `TrackElement` methods.
 
 # Implementors
 
-[`TrackElement`](struct.TrackElement.html)
+[`TrackElement`](struct@crate::TrackElement)
 <!-- trait TrackElementExt::fn add_children_props -->
 Adds all the properties of a `gst::Element` that match the criteria as
 children properties of the track element. If the name of `element`'s
@@ -4277,7 +4277,7 @@ The edit position: a new location for the edge of `self`
 # Returns
 
 `true` if the edit of `self` completed, `false` on failure.
-<!-- trait TrackElementExt::fn get_all_control_bindings -->
+<!-- trait TrackElementExt::fn all_control_bindings -->
 Get all the control bindings that have been created for the children
 properties of the track element using
 `TrackElementExt::set_control_source`. The keys used in the returned
@@ -4290,7 +4290,7 @@ corresponding created `gst::ControlBinding`.
 A
 hash table containing all child-property-name/control-binding pairs
 for `self`.
-<!-- trait TrackElementExt::fn get_auto_clamp_control_sources -->
+<!-- trait TrackElementExt::fn is_auto_clamp_control_sources -->
 Gets `TrackElement:auto-clamp-control-sources`.
 
 Feature: `v1_18`
@@ -4370,7 +4370,7 @@ binding of
 The control binding that was
 created for the specified child property of `self`, or `None` if
 `property_name` does not correspond to any control binding.
-<!-- trait TrackElementExt::fn get_element -->
+<!-- trait TrackElementExt::fn element -->
 Get the `gst::Element` that the track element's underlying nleobject
 controls.
 
@@ -4378,7 +4378,7 @@ controls.
 
 The `gst::Element` being controlled by the
 nleobject that `self` wraps.
-<!-- trait TrackElementExt::fn get_gnlobject -->
+<!-- trait TrackElementExt::fn gnlobject -->
 Get the GNonLin object this object is controlling.
 
 # Deprecated
@@ -4388,20 +4388,20 @@ use `TrackElementExt::get_nleobject` instead.
 # Returns
 
 The GNonLin object this object is controlling.
-<!-- trait TrackElementExt::fn get_nleobject -->
+<!-- trait TrackElementExt::fn nleobject -->
 Get the nleobject that this element wraps.
 
 # Returns
 
 The nleobject that `self` wraps.
-<!-- trait TrackElementExt::fn get_track -->
+<!-- trait TrackElementExt::fn track -->
 Get the `TrackElement:track` for the element.
 
 # Returns
 
 The track that `self` belongs to,
 or `None` if it does not belong to a track.
-<!-- trait TrackElementExt::fn get_track_type -->
+<!-- trait TrackElementExt::fn track_type -->
 Gets the `TrackElement:track-type` for the element.
 
 # Returns
@@ -4776,13 +4776,13 @@ will be updated when needed.
 
 # Implements
 
-[`TransitionClipExt`](trait.TransitionClipExt.html), [`BaseTransitionClipExt`](trait.BaseTransitionClipExt.html), [`OperationClipExt`](trait.OperationClipExt.html), [`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`TransitionClipExt`](trait@crate::TransitionClipExt), [`BaseTransitionClipExt`](trait@crate::BaseTransitionClipExt), [`OperationClipExt`](trait@crate::OperationClipExt), [`ClipExt`](trait@crate::ClipExt), [`GESContainerExt`](trait@crate::GESContainerExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait TransitionClipExt -->
 Trait containing all `TransitionClip` methods.
 
 # Implementors
 
-[`TransitionClip`](struct.TransitionClip.html)
+[`TransitionClip`](struct@crate::TransitionClip)
 <!-- impl TransitionClip::fn new -->
 Creates a new `TransitionClip`.
 ## `vtype`
@@ -4792,7 +4792,7 @@ the type of transition to create
 
 a newly created `TransitionClip`,
 or `None` if something went wrong.
-<!-- impl TransitionClip::fn new_for_nick -->
+<!-- impl TransitionClip::fn for_nick -->
 Creates a new `TransitionClip` for the provided `nick`.
 ## `nick`
 a string representing the type of transition to create
@@ -4811,13 +4811,13 @@ the URI points to a file of some type.
 
 # Implements
 
-[`UriClipExt`](trait.UriClipExt.html), [`ClipExt`](trait.ClipExt.html), [`GESContainerExt`](trait.GESContainerExt.html), [`TimelineElementExt`](trait.TimelineElementExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ExtractableExt`](trait.ExtractableExt.html), [`TimelineElementExtManual`](prelude/trait.TimelineElementExtManual.html)
+[`UriClipExt`](trait@crate::UriClipExt), [`ClipExt`](trait@crate::ClipExt), [`GESContainerExt`](trait@crate::GESContainerExt), [`TimelineElementExt`](trait@crate::TimelineElementExt), [`trait@glib::object::ObjectExt`], [`ExtractableExt`](trait@crate::ExtractableExt), [`TimelineElementExtManual`](trait@crate::TimelineElementExtManual)
 <!-- trait UriClipExt -->
 Trait containing all `UriClip` methods.
 
 # Implementors
 
-[`UriClip`](struct.UriClip.html)
+[`UriClip`](struct@crate::UriClip)
 <!-- impl UriClip::fn new -->
 Creates a new `UriClip` for the provided `uri`.
 
@@ -4832,7 +4832,7 @@ the URI the source should control
 
 The newly created `UriClip`, or
 `None` if there was an error.
-<!-- trait UriClipExt::fn get_uri -->
+<!-- trait UriClipExt::fn uri -->
 Get the location of the resource.
 
 # Returns
@@ -4877,13 +4877,13 @@ The location of the file/resource to use.
 
 # Implements
 
-[`UriClipAssetExt`](trait.UriClipAssetExt.html), [`AssetExt`](trait.AssetExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`UriClipAssetExt`](trait@crate::UriClipAssetExt), [`AssetExt`](trait@crate::AssetExt), [`trait@glib::object::ObjectExt`]
 <!-- trait UriClipAssetExt -->
 Trait containing all `UriClipAsset` methods.
 
 # Implementors
 
-[`UriClipAsset`](struct.UriClipAsset.html)
+[`UriClipAsset`](struct@crate::UriClipAsset)
 <!-- impl UriClipAsset::fn finish -->
 Finalize the request of an async `UriClipAsset`
 
@@ -4944,19 +4944,19 @@ You can also use multi file uris for `MultiFileSource`.
 
 A reference to the requested asset or `None` if
 an error happened
-<!-- trait UriClipAssetExt::fn get_duration -->
+<!-- trait UriClipAssetExt::fn duration -->
 Gets duration of the file represented by `self`
 
 # Returns
 
 The duration of `self`
-<!-- trait UriClipAssetExt::fn get_info -->
+<!-- trait UriClipAssetExt::fn info -->
 Gets `gst_pbutils::DiscovererInfo` about the file
 
 # Returns
 
 `gst_pbutils::DiscovererInfo` of specified asset
-<!-- trait UriClipAssetExt::fn get_max_duration -->
+<!-- trait UriClipAssetExt::fn max_duration -->
 Gets maximum duration of the file represented by `self`,
 it is usually the same as GESUriClipAsset::duration,
 but in the case of nested timelines, for example, they
@@ -4968,7 +4968,7 @@ Feature: `v1_18`
 # Returns
 
 The maximum duration of `self`
-<!-- trait UriClipAssetExt::fn get_stream_assets -->
+<!-- trait UriClipAssetExt::fn stream_assets -->
 Get the GESUriSourceAsset `self` containes
 
 # Returns
@@ -5001,20 +5001,20 @@ by `UriClipAsset`-s.
 
 # Implements
 
-[`UriSourceAssetExt`](trait.UriSourceAssetExt.html), [`AssetExt`](trait.AssetExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`UriSourceAssetExt`](trait@crate::UriSourceAssetExt), [`AssetExt`](trait@crate::AssetExt), [`trait@glib::object::ObjectExt`]
 <!-- trait UriSourceAssetExt -->
 Trait containing all `UriSourceAsset` methods.
 
 # Implementors
 
-[`UriSourceAsset`](struct.UriSourceAsset.html)
-<!-- trait UriSourceAssetExt::fn get_filesource_asset -->
+[`UriSourceAsset`](struct@crate::UriSourceAsset)
+<!-- trait UriSourceAssetExt::fn filesource_asset -->
 Get the `UriClipAsset` `self_` is contained in
 
 # Returns
 
 a `UriClipAsset`
-<!-- trait UriSourceAssetExt::fn get_stream_info -->
+<!-- trait UriSourceAssetExt::fn stream_info -->
 Get the `gst_pbutils::DiscovererStreamInfo` user by `self`
 
 # Returns

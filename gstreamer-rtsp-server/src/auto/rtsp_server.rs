@@ -23,7 +23,7 @@ glib::wrapper! {
     pub struct RTSPServer(Object<ffi::GstRTSPServer, ffi::GstRTSPServerClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_server_get_type(),
+        type_ => || ffi::gst_rtsp_server_get_type(),
     }
 }
 

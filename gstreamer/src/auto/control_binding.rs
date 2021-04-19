@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct ControlBinding(Object<ffi::GstControlBinding, ffi::GstControlBindingClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_control_binding_get_type(),
+        type_ => || ffi::gst_control_binding_get_type(),
     }
 }
 

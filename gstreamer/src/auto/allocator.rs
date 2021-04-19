@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct Allocator(Object<ffi::GstAllocator, ffi::GstAllocatorClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_allocator_get_type(),
+        type_ => || ffi::gst_allocator_get_type(),
     }
 }
 

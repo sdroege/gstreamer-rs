@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct GLContext(Object<ffi::GstGLContext, ffi::GstGLContextClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_context_get_type(),
+        type_ => || ffi::gst_gl_context_get_type(),
     }
 }
 

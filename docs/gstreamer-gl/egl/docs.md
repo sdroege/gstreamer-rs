@@ -5,7 +5,7 @@ through the provided API
 
 # Implements
 
-[`gst_gl::GLDisplayExt`](../gst_gl/trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst_gl::GLDisplayExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLDisplayEGL::fn new -->
 Create a new `GLDisplayEGL` using the default EGL_DEFAULT_DISPLAY.
 

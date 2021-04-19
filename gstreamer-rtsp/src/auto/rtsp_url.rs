@@ -14,7 +14,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| ffi::gst_rtsp_url_copy(ptr),
         free => |ptr| ffi::gst_rtsp_url_free(ptr),
-        get_type => || ffi::gst_rtsp_url_get_type(),
+        type_ => || ffi::gst_rtsp_url_get_type(),
     }
 }
 

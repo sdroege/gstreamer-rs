@@ -23,7 +23,7 @@ recvonly
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- enum WebRTCDTLSTransportState -->
 <!-- enum WebRTCDTLSTransportState::variant New -->
 new
@@ -44,7 +44,7 @@ Feature: `v1_18`
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- impl WebRTCDataChannel::fn close -->
 Close the `self`.
 
@@ -176,7 +176,7 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- enum WebRTCICETransportPolicy -->
 GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL: all
 GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY: relay
@@ -213,13 +213,13 @@ Feature: `v1_16`
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- struct WebRTCRTPSender -->
 
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- struct WebRTCRTPTransceiver -->
 
 
@@ -227,7 +227,7 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- impl WebRTCRTPTransceiver::fn get_property_direction -->
 Direction of the transceiver.
 

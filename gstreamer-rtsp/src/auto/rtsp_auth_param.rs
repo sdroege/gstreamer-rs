@@ -12,7 +12,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| ffi::gst_rtsp_auth_param_copy(mut_override(ptr)),
         free => |ptr| ffi::gst_rtsp_auth_param_free(ptr),
-        get_type => || ffi::gst_rtsp_auth_param_get_type(),
+        type_ => || ffi::gst_rtsp_auth_param_get_type(),
     }
 }
 

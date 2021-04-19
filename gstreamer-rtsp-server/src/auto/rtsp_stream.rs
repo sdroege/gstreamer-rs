@@ -21,7 +21,7 @@ glib::wrapper! {
     pub struct RTSPStream(Object<ffi::GstRTSPStream, ffi::GstRTSPStreamClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_stream_get_type(),
+        type_ => || ffi::gst_rtsp_stream_get_type(),
     }
 }
 

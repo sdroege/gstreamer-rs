@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct Adapter(Object<ffi::GstAdapter, ffi::GstAdapterClass>);
 
     match fn {
-        get_type => || ffi::gst_adapter_get_type(),
+        type_ => || ffi::gst_adapter_get_type(),
     }
 }
 

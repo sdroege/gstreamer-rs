@@ -27,7 +27,7 @@ glib::wrapper! {
     pub struct Element(Object<ffi::GstElement, ffi::GstElementClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_element_get_type(),
+        type_ => || ffi::gst_element_get_type(),
     }
 }
 

@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct ControlSource(Object<ffi::GstControlSource, ffi::GstControlSourceClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_control_source_get_type(),
+        type_ => || ffi::gst_control_source_get_type(),
     }
 }
 

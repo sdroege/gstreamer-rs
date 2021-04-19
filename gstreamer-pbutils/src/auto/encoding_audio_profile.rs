@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct EncodingAudioProfile(Object<ffi::GstEncodingAudioProfile, ffi::GstEncodingAudioProfileClass>) @extends EncodingProfile;
 
     match fn {
-        get_type => || ffi::gst_encoding_audio_profile_get_type(),
+        type_ => || ffi::gst_encoding_audio_profile_get_type(),
     }
 }
 

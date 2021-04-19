@@ -7,7 +7,7 @@ glib::wrapper! {
     pub struct GLBaseMemoryAllocator(Object<ffi::GstGLBaseMemoryAllocator, ffi::GstGLBaseMemoryAllocatorClass>) @extends gst::Allocator, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_base_memory_allocator_get_type(),
+        type_ => || ffi::gst_gl_base_memory_allocator_get_type(),
     }
 }
 

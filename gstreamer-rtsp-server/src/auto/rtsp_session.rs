@@ -20,7 +20,7 @@ glib::wrapper! {
     pub struct RTSPSession(Object<ffi::GstRTSPSession, ffi::GstRTSPSessionClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_session_get_type(),
+        type_ => || ffi::gst_rtsp_session_get_type(),
     }
 }
 

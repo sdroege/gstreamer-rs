@@ -103,7 +103,7 @@ buffer pushed in it.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- impl Adapter::fn new -->
 Creates a new `Adapter`. Free with `glib::object::ObjectExt::unref`.
 
@@ -627,7 +627,7 @@ Feature: `v1_14`
 
 # Implements
 
-[`AggregatorExt`](trait.AggregatorExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AggregatorExtManual`](prelude/trait.AggregatorExtManual.html)
+[`AggregatorExt`](trait@crate::AggregatorExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`AggregatorExtManual`](trait@crate::AggregatorExtManual)
 <!-- trait AggregatorExt -->
 Trait containing all `Aggregator` methods.
 
@@ -635,7 +635,7 @@ Feature: `v1_14`
 
 # Implementors
 
-[`Aggregator`](struct.Aggregator.html)
+[`Aggregator`](struct@crate::Aggregator)
 <!-- trait AggregatorExt::fn finish_buffer -->
 This method will push the provided output buffer downstream. If needed,
 mandatory events such as stream-start, caps, and segment events will be
@@ -654,7 +654,7 @@ Feature: `v1_18`
 
 ## `bufferlist`
 the `gst::BufferList` to push.
-<!-- trait AggregatorExt::fn get_allocator -->
+<!-- trait AggregatorExt::fn allocator -->
 Lets `Aggregator` sub-classes get the memory `allocator`
 acquired by the base class and its `params`.
 
@@ -668,7 +668,7 @@ used
 ## `params`
 the
 `gst::AllocationParams` of `allocator`
-<!-- trait AggregatorExt::fn get_buffer_pool -->
+<!-- trait AggregatorExt::fn buffer_pool -->
 
 Feature: `v1_14`
 
@@ -677,7 +677,7 @@ Feature: `v1_14`
 
 the instance of the `gst::BufferPool` used
 by `trans`; free it after use it
-<!-- trait AggregatorExt::fn get_latency -->
+<!-- trait AggregatorExt::fn latency -->
 Retrieves the latency values reported by `self` in response to the latency
 query, or `GST_CLOCK_TIME_NONE` if there is not live source connected and the element
 will not wait for the clock.
@@ -835,7 +835,7 @@ Feature: `v1_14`
 
 # Implements
 
-[`AggregatorPadExt`](trait.AggregatorPadExt.html), [`gst::PadExt`](../gst/trait.PadExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`AggregatorPadExtManual`](prelude/trait.AggregatorPadExtManual.html)
+[`AggregatorPadExt`](trait@crate::AggregatorPadExt), [`trait@gst::PadExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`AggregatorPadExtManual`](trait@crate::AggregatorPadExtManual)
 <!-- trait AggregatorPadExt -->
 Trait containing all `AggregatorPad` methods.
 
@@ -843,7 +843,7 @@ Feature: `v1_14`
 
 # Implementors
 
-[`AggregatorPad`](struct.AggregatorPad.html)
+[`AggregatorPad`](struct@crate::AggregatorPad)
 <!-- trait AggregatorPadExt::fn drop_buffer -->
 Drop the buffer currently queued in `self`.
 
@@ -1055,13 +1055,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`BaseParseExt`](trait.BaseParseExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseParseExtManual`](prelude/trait.BaseParseExtManual.html)
+[`BaseParseExt`](trait@crate::BaseParseExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`BaseParseExtManual`](trait@crate::BaseParseExtManual)
 <!-- trait BaseParseExt -->
 Trait containing all `BaseParse` methods.
 
 # Implementors
 
-[`BaseParse`](struct.BaseParse.html)
+[`BaseParse`](struct@crate::BaseParse)
 <!-- trait BaseParseExt::fn add_index_entry -->
 Adds an entry to the index associating `offset` to `ts`. It is recommended
 to only add keyframe entries. `force` allows to bypass checks, such as
@@ -1441,13 +1441,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`BaseSinkExt`](trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSinkExtManual`](prelude/trait.BaseSinkExtManual.html)
+[`BaseSinkExt`](trait@crate::BaseSinkExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`BaseSinkExtManual`](trait@crate::BaseSinkExtManual)
 <!-- trait BaseSinkExt -->
 Trait containing all `BaseSink` methods.
 
 # Implementors
 
-[`BaseSink`](struct.BaseSink.html)
+[`BaseSink`](struct@crate::BaseSink)
 <!-- trait BaseSinkExt::fn do_preroll -->
 If the `self` spawns its own thread for pulling buffers from upstream it
 should call this method after it has pulled a buffer. If the element needed
@@ -1462,14 +1462,14 @@ the mini object that caused the preroll
 
 `gst::FlowReturn::Ok` if the preroll completed and processing can
 continue. Any other return value should be returned from the render vmethod.
-<!-- trait BaseSinkExt::fn get_blocksize -->
+<!-- trait BaseSinkExt::fn blocksize -->
 Get the number of bytes that the sink will pull when it is operating in pull
 mode.
 
 # Returns
 
 the number of bytes `self` will pull in pull mode.
-<!-- trait BaseSinkExt::fn get_drop_out_of_segment -->
+<!-- trait BaseSinkExt::fn is_drop_out_of_segment -->
 Checks if `self` is currently configured to drop buffers which are outside
 the current segment
 
@@ -1480,7 +1480,7 @@ Feature: `v1_12`
 
 `true` if the sink is configured to drop buffers outside the
 current segment.
-<!-- trait BaseSinkExt::fn get_last_sample -->
+<!-- trait BaseSinkExt::fn last_sample -->
 Get the last sample that arrived in the sink and was used for preroll or for
 rendering. This property can be used to generate thumbnails.
 
@@ -1493,19 +1493,19 @@ Free-function: gst_sample_unref
 a `gst::Sample`. `gst_sample_unref` after
  usage. This function returns `None` when no buffer has arrived in the
  sink yet or when the sink is not in PAUSED or PLAYING.
-<!-- trait BaseSinkExt::fn get_latency -->
+<!-- trait BaseSinkExt::fn latency -->
 Get the currently configured latency.
 
 # Returns
 
 The configured latency.
-<!-- trait BaseSinkExt::fn get_max_bitrate -->
+<!-- trait BaseSinkExt::fn max_bitrate -->
 Get the maximum amount of bits per second that the sink will render.
 
 # Returns
 
 the maximum number of bits per second `self` will render.
-<!-- trait BaseSinkExt::fn get_max_lateness -->
+<!-- trait BaseSinkExt::fn max_lateness -->
 Gets the max lateness value. See `BaseSinkExt::set_max_lateness` for
 more details.
 
@@ -1514,7 +1514,7 @@ more details.
 The maximum time in nanoseconds that a buffer can be late
 before it is dropped and not rendered. A value of -1 means an
 unlimited time.
-<!-- trait BaseSinkExt::fn get_processing_deadline -->
+<!-- trait BaseSinkExt::fn processing_deadline -->
 Get the processing deadline of `self`. see
 `BaseSinkExt::set_processing_deadline` for more information about
 the processing deadline.
@@ -1525,14 +1525,14 @@ Feature: `v1_16`
 # Returns
 
 the processing deadline
-<!-- trait BaseSinkExt::fn get_render_delay -->
+<!-- trait BaseSinkExt::fn render_delay -->
 Get the render delay of `self`. see `BaseSinkExt::set_render_delay` for more
 information about the render delay.
 
 # Returns
 
 the render delay of `self`.
-<!-- trait BaseSinkExt::fn get_stats -->
+<!-- trait BaseSinkExt::fn stats -->
 Return various `BaseSink` statistics. This function returns a `gst::Structure`
 with name `application/x-gst-base-sink-stats` with the following fields:
 
@@ -1546,21 +1546,21 @@ Feature: `v1_18`
 # Returns
 
 pointer to `gst::Structure`
-<!-- trait BaseSinkExt::fn get_sync -->
+<!-- trait BaseSinkExt::fn is_sync -->
 Checks if `self` is currently configured to synchronize against the
 clock.
 
 # Returns
 
 `true` if the sink is configured to synchronize against the clock.
-<!-- trait BaseSinkExt::fn get_throttle_time -->
+<!-- trait BaseSinkExt::fn throttle_time -->
 Get the time that will be inserted between frames to control the
 maximum buffers per second.
 
 # Returns
 
 the number of nanoseconds `self` will put between frames.
-<!-- trait BaseSinkExt::fn get_ts_offset -->
+<!-- trait BaseSinkExt::fn ts_offset -->
 Get the synchronisation offset of `self`.
 
 # Returns
@@ -1965,14 +1965,14 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSrcExtManual`](prelude/trait.BaseSrcExtManual.html)
+[`BaseSrcExt`](trait@crate::BaseSrcExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`BaseSrcExtManual`](trait@crate::BaseSrcExtManual)
 <!-- trait BaseSrcExt -->
 Trait containing all `BaseSrc` methods.
 
 # Implementors
 
-[`BaseSrc`](struct.BaseSrc.html), [`PushSrc`](struct.PushSrc.html)
-<!-- trait BaseSrcExt::fn get_allocator -->
+[`BaseSrc`](struct@crate::BaseSrc), [`PushSrc`](struct@crate::PushSrc)
+<!-- trait BaseSrcExt::fn allocator -->
 Lets `BaseSrc` sub-classes to know the memory `allocator`
 used by the base class and its `params`.
 
@@ -1982,19 +1982,19 @@ the `gst::Allocator`
 used
 ## `params`
 the `gst::AllocationParams` of `allocator`
-<!-- trait BaseSrcExt::fn get_blocksize -->
+<!-- trait BaseSrcExt::fn blocksize -->
 Get the number of bytes that `self` will push out with each buffer.
 
 # Returns
 
 the number of bytes pushed with each buffer.
-<!-- trait BaseSrcExt::fn get_buffer_pool -->
+<!-- trait BaseSrcExt::fn buffer_pool -->
 
 # Returns
 
 the instance of the `gst::BufferPool` used
 by the src; unref it after usage.
-<!-- trait BaseSrcExt::fn get_do_timestamp -->
+<!-- trait BaseSrcExt::fn does_timestamp -->
 Query if `self` timestamps outgoing buffers based on the current running_time.
 
 # Returns
@@ -2309,14 +2309,14 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`BaseTransformExt`](trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseTransformExtManual`](prelude/trait.BaseTransformExtManual.html)
+[`BaseTransformExt`](trait@crate::BaseTransformExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`BaseTransformExtManual`](trait@crate::BaseTransformExtManual)
 <!-- trait BaseTransformExt -->
 Trait containing all `BaseTransform` methods.
 
 # Implementors
 
-[`BaseTransform`](struct.BaseTransform.html)
-<!-- trait BaseTransformExt::fn get_allocator -->
+[`BaseTransform`](struct@crate::BaseTransform)
+<!-- trait BaseTransformExt::fn allocator -->
 Lets `BaseTransform` sub-classes know the memory `allocator`
 used by the base class and its `params`.
 
@@ -2326,7 +2326,7 @@ the `gst::Allocator`
 used
 ## `params`
 the `gst::AllocationParams` of `allocator`
-<!-- trait BaseTransformExt::fn get_buffer_pool -->
+<!-- trait BaseTransformExt::fn buffer_pool -->
 
 # Returns
 
@@ -2582,4 +2582,4 @@ base class.
 
 # Implements
 
-[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BaseSrcExtManual`](prelude/trait.BaseSrcExtManual.html)
+[`BaseSrcExt`](trait@crate::BaseSrcExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`BaseSrcExtManual`](trait@crate::BaseSrcExtManual)

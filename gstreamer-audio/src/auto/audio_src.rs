@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct AudioSrc(Object<ffi::GstAudioSrc, ffi::GstAudioSrcClass>) @extends AudioBaseSrc, gst_base::BaseSrc, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_audio_src_get_type(),
+        type_ => || ffi::gst_audio_src_get_type(),
     }
 }
 

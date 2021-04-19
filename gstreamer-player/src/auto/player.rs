@@ -23,7 +23,7 @@ glib::wrapper! {
     pub struct Player(Object<ffi::GstPlayer, ffi::GstPlayerClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_player_get_type(),
+        type_ => || ffi::gst_player_get_type(),
     }
 }
 

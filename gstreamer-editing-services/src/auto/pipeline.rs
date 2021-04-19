@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass>) @extends gst::Pipeline, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::ges_pipeline_get_type(),
+        type_ => || ffi::ges_pipeline_get_type(),
     }
 }
 

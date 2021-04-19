@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct StreamCollection(Object<ffi::GstStreamCollection, ffi::GstStreamCollectionClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_stream_collection_get_type(),
+        type_ => || ffi::gst_stream_collection_get_type(),
     }
 }
 

@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct URIHandler(Interface<ffi::GstURIHandler, ffi::GstURIHandlerInterface>);
 
     match fn {
-        get_type => || ffi::gst_uri_handler_get_type(),
+        type_ => || ffi::gst_uri_handler_get_type(),
     }
 }
 

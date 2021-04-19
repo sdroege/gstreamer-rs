@@ -14,7 +14,7 @@ glib::wrapper! {
     pub struct GLSLStage(Object<ffi::GstGLSLStage, ffi::GstGLSLStageClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_glsl_stage_get_type(),
+        type_ => || ffi::gst_glsl_stage_get_type(),
     }
 }
 

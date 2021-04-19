@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct RTSPAddressPool(Object<ffi::GstRTSPAddressPool, ffi::GstRTSPAddressPoolClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_address_pool_get_type(),
+        type_ => || ffi::gst_rtsp_address_pool_get_type(),
     }
 }
 

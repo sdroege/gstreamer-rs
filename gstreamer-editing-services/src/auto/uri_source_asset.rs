@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass>) @extends Asset;
 
     match fn {
-        get_type => || ffi::ges_uri_source_asset_get_type(),
+        type_ => || ffi::ges_uri_source_asset_get_type(),
     }
 }
 

@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
-        get_type => || ffi::gst_device_provider_factory_get_type(),
+        type_ => || ffi::gst_device_provider_factory_get_type(),
     }
 }
 

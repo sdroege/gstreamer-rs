@@ -22,7 +22,7 @@ glib::wrapper! {
     pub struct Track(Object<ffi::GESTrack, ffi::GESTrackClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::ges_track_get_type(),
+        type_ => || ffi::ges_track_get_type(),
     }
 }
 

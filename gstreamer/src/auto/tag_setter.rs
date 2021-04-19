@@ -14,7 +14,7 @@ glib::wrapper! {
     pub struct TagSetter(Interface<ffi::GstTagSetter, ffi::GstTagSetterInterface>) @requires Element, Object;
 
     match fn {
-        get_type => || ffi::gst_tag_setter_get_type(),
+        type_ => || ffi::gst_tag_setter_get_type(),
     }
 }
 

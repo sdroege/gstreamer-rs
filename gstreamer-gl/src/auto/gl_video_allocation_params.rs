@@ -16,7 +16,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| glib::gobject_ffi::g_boxed_copy(ffi::gst_gl_video_allocation_params_get_type(), ptr as *mut _) as *mut ffi::GstGLVideoAllocationParams,
         free => |ptr| glib::gobject_ffi::g_boxed_free(ffi::gst_gl_video_allocation_params_get_type(), ptr as *mut _),
-        get_type => || ffi::gst_gl_video_allocation_params_get_type(),
+        type_ => || ffi::gst_gl_video_allocation_params_get_type(),
     }
 }
 

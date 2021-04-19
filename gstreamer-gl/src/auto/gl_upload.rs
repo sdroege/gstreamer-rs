@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct GLUpload(Object<ffi::GstGLUpload, ffi::GstGLUploadClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_upload_get_type(),
+        type_ => || ffi::gst_gl_upload_get_type(),
     }
 }
 

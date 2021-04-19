@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct Project(Object<ffi::GESProject, ffi::GESProjectClass>) @extends Asset;
 
     match fn {
-        get_type => || ffi::ges_project_get_type(),
+        type_ => || ffi::ges_project_get_type(),
     }
 }
 

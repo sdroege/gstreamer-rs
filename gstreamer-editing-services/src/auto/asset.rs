@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct Asset(Object<ffi::GESAsset, ffi::GESAssetClass>);
 
     match fn {
-        get_type => || ffi::ges_asset_get_type(),
+        type_ => || ffi::ges_asset_get_type(),
     }
 }
 

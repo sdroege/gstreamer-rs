@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct Object(Object<ffi::GstObject, ffi::GstObjectClass>);
 
     match fn {
-        get_type => || ffi::gst_object_get_type(),
+        type_ => || ffi::gst_object_get_type(),
     }
 }
 

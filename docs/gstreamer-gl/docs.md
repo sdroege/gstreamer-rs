@@ -67,13 +67,13 @@ context is available and current in the calling thread.
 
 # Implements
 
-[`GLBaseFilterExt`](trait.GLBaseFilterExt.html), [`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLBaseFilterExt`](trait@crate::GLBaseFilterExt), [`trait@gst_base::BaseTransformExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait GLBaseFilterExt -->
 Trait containing all `GLBaseFilter` methods.
 
 # Implementors
 
-[`GLBaseFilter`](struct.GLBaseFilter.html), [`GLFilter`](struct.GLFilter.html)
+[`GLBaseFilter`](struct@crate::GLBaseFilter), [`GLFilter`](struct@crate::GLFilter)
 <!-- trait GLBaseFilterExt::fn find_gl_context -->
 
 Feature: `v1_16`
@@ -82,7 +82,7 @@ Feature: `v1_16`
 # Returns
 
 Whether an OpenGL context could be retrieved or created successfully
-<!-- trait GLBaseFilterExt::fn get_gl_context -->
+<!-- trait GLBaseFilterExt::fn gl_context -->
 
 Feature: `v1_18`
 
@@ -149,7 +149,15 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`gst::AllocatorExt`](../gst/trait.AllocatorExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::AllocatorExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
+<!-- struct GLBuffer -->
+GstGLBuffer is a `gst::Memory` subclass providing support for the mapping of
+GL buffers.
+
+Data is uploaded or downloaded from the GPU as is necessary.
+<!-- impl GLBuffer::fn init_once -->
+Initializes the GL Buffer allocator. It is safe to call this function
+multiple times. This must be called before any other `GLBuffer` operation.
 <!-- struct GLColorConvert -->
 `GLColorConvert` is an object that converts between color spaces and/or
 formats using OpenGL Shaders.
@@ -163,7 +171,7 @@ The glcolorconvertelement provides a GStreamer element that uses
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLColorConvert::fn new -->
 ## `context`
 a `GLContext`
@@ -231,13 +239,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`GLContextExt`](trait.GLContextExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`GLContextExtManual`](prelude/trait.GLContextExtManual.html)
+[`GLContextExt`](trait@crate::GLContextExt), [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`GLContextExtManual`](trait@crate::GLContextExtManual)
 <!-- trait GLContextExt -->
 Trait containing all `GLContext` methods.
 
 # Implementors
 
-[`GLContext`](struct.GLContext.html)
+[`GLContext`](struct@crate::GLContext)
 <!-- impl GLContext::fn new -->
 Create a new `GLContext` with the specified `display`
 ## `display`
@@ -405,12 +413,12 @@ called for this context.
 Fills `self`'s info (version, extensions, vtable, etc) from the GL
 context in the current thread. Typically used with wrapped contexts to
 allow wrapped contexts to be used as regular `GLContext`'s.
-<!-- trait GLContextExt::fn get_display -->
+<!-- trait GLContextExt::fn display -->
 
 # Returns
 
 the `GLDisplay` associated with this `self`
-<!-- trait GLContextExt::fn get_gl_api -->
+<!-- trait GLContextExt::fn gl_api -->
 Get the currently enabled OpenGL api.
 
 The currently available API may be limited by the `GLDisplay` in use and/or
@@ -419,26 +427,26 @@ the `GLWindow` chosen.
 # Returns
 
 the available OpenGL api
-<!-- trait GLContextExt::fn get_gl_context -->
+<!-- trait GLContextExt::fn gl_context -->
 Gets the backing OpenGL context used by `self`.
 
 # Returns
 
 The platform specific backing OpenGL context
-<!-- trait GLContextExt::fn get_gl_platform -->
+<!-- trait GLContextExt::fn gl_platform -->
 Gets the OpenGL platform that used by `self`.
 
 # Returns
 
 The platform specific backing OpenGL context
-<!-- trait GLContextExt::fn get_gl_platform_version -->
+<!-- trait GLContextExt::fn gl_platform_version -->
 Get the version of the OpenGL platform (GLX, EGL, etc) used. Only valid
 after a call to `GLContextExt::create`.
 ## `major`
 return for the major version
 ## `minor`
 return for the minor version
-<!-- trait GLContextExt::fn get_gl_version -->
+<!-- trait GLContextExt::fn gl_version -->
 Returns the OpenGL version implemented by `self`. See
 `GLContextExt::get_gl_api` for retrieving the OpenGL api implemented by
 `self`.
@@ -478,7 +486,7 @@ a function pointer or `None`
 # Returns
 
 The `glib::Thread`, `self` is current in or NULL
-<!-- trait GLContextExt::fn get_window -->
+<!-- trait GLContextExt::fn window -->
 
 # Returns
 
@@ -584,13 +592,13 @@ platform and window system specific functionality.
 
 # Implements
 
-[`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLDisplayExt`](trait@crate::GLDisplayExt), [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait GLDisplayExt -->
 Trait containing all `GLDisplay` methods.
 
 # Implementors
 
-[`GLDisplay`](struct.GLDisplay.html)
+[`GLDisplay`](struct@crate::GLDisplay)
 <!-- impl GLDisplay::fn new -->
 
 # Returns
@@ -643,7 +651,7 @@ a comparison function to run
 
 The first `GLWindow` that causes a match
  from `compare_func`
-<!-- trait GLDisplayExt::fn get_gl_api -->
+<!-- trait GLDisplayExt::fn gl_api -->
 see `GLDisplayExt::filter_gl_api` for what the returned value represents
 
 # Returns
@@ -663,7 +671,7 @@ Must be called with the object lock held.
 # Returns
 
 the native handle for the display
-<!-- trait GLDisplayExt::fn get_handle_type -->
+<!-- trait GLDisplayExt::fn handle_type -->
 
 # Returns
 
@@ -737,13 +745,13 @@ single input and producing a single output with a `GLFramebuffer`
 
 # Implements
 
-[`GLFilterExt`](trait.GLFilterExt.html), [`GLBaseFilterExt`](trait.GLBaseFilterExt.html), [`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLFilterExt`](trait@crate::GLFilterExt), [`GLBaseFilterExt`](trait@crate::GLBaseFilterExt), [`trait@gst_base::BaseTransformExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait GLFilterExt -->
 Trait containing all `GLFilter` methods.
 
 # Implementors
 
-[`GLFilter`](struct.GLFilter.html)
+[`GLFilter`](struct@crate::GLFilter)
 <!-- trait GLFilterExt::fn draw_fullscreen_quad -->
 Render a fullscreen quad using the current GL state. The only GL state this
 modifies is the necessary vertex/index buffers and, if necessary, a
@@ -842,13 +850,13 @@ between multiple OpenGL contexts.
 
 # Implements
 
-[`GLFramebufferExt`](trait.GLFramebufferExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLFramebufferExt`](trait@crate::GLFramebufferExt), [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait GLFramebufferExt -->
 Trait containing all `GLFramebuffer` methods.
 
 # Implementors
 
-[`GLFramebuffer`](struct.GLFramebuffer.html)
+[`GLFramebuffer`](struct@crate::GLFramebuffer)
 <!-- impl GLFramebuffer::fn new -->
 ## `context`
 a `GLContext`
@@ -856,7 +864,7 @@ a `GLContext`
 # Returns
 
 a new `GLFramebuffer`
-<!-- impl GLFramebuffer::fn new_with_default_depth -->
+<!-- impl GLFramebuffer::fn with_default_depth -->
 ## `context`
 a `GLContext`
 ## `width`
@@ -888,24 +896,162 @@ data to pass to `func`
 # Returns
 
 the result of executing `func`
-<!-- trait GLFramebufferExt::fn get_effective_dimensions -->
+<!-- trait GLFramebufferExt::fn effective_dimensions -->
 Retrieve the effective dimensions from the current attachments attached to
 `self`.
 ## `width`
 output width
 ## `height`
 output height
-<!-- trait GLFramebufferExt::fn get_id -->
+<!-- trait GLFramebufferExt::fn id -->
 
 # Returns
 
 the OpenGL id for `self`
+<!-- struct GLMemory -->
+GstGLMemory is a `GLBaseMemory` subclass providing support for the mapping of
+OpenGL textures.
+
+`GLMemory` is created or wrapped through `GLBaseMemory::alloc`
+with `GLVideoAllocationParams`.
+
+Data is uploaded or downloaded from the GPU as is necessary.
+
+The `gst::Caps` that is used for `GLMemory` based buffers should contain
+the `GST_CAPS_FEATURE_MEMORY_GL_MEMORY` as a `gst::CapsFeatures` and should
+contain a 'texture-target' field with one of the `GLTextureTarget` values
+as a string, i.e. some combination of 'texture-target=(string){2D,
+rectangle, external-oes}'.
+<!-- impl GLMemory::fn copy_into -->
+Copies `self` into the texture specified by `tex_id`. The format of `tex_id`
+is specified by `tex_format`, `width` and `height`.
+## `tex_id`
+OpenGL texture id
+## `target`
+the `GLTextureTarget`
+## `tex_format`
+the `GLFormat`
+## `width`
+width of `tex_id`
+## `height`
+height of `tex_id`
+
+# Returns
+
+Whether the copy succeeded
+<!-- impl GLMemory::fn copy_teximage -->
+Copies the texture in `GLMemory` into the texture specified by `tex_id`,
+`out_target`, `out_tex_format`, `out_width` and `out_height`.
+## `tex_id`
+the destination texture id
+## `out_target`
+the destination `GLTextureTarget`
+## `out_tex_format`
+the destination `GLFormat`
+## `out_width`
+the destination width
+## `out_height`
+the destination height
+
+# Returns
+
+whether the copy succeeded.
+<!-- impl GLMemory::fn get_texture_format -->
+
+# Returns
+
+the `GLFormat` of `self`
+<!-- impl GLMemory::fn get_texture_height -->
+
+# Returns
+
+the texture height of `self`
+<!-- impl GLMemory::fn get_texture_id -->
+
+# Returns
+
+the OpenGL texture handle of `self`
+<!-- impl GLMemory::fn get_texture_target -->
+
+# Returns
+
+the `GLTextureTarget` of `self`
+<!-- impl GLMemory::fn get_texture_width -->
+
+# Returns
+
+the texture width of `self`
+<!-- impl GLMemory::fn init -->
+Initializes `self` with the required parameters. `info` is assumed to have
+already have been modified with `gst_video::VideoInfo::align`.
+## `allocator`
+the `gst::Allocator` to initialize with
+## `parent`
+the parent `gst::Memory` to initialize with
+## `context`
+the `GLContext` to initialize with
+## `target`
+the `GLTextureTarget` for this `GLMemory`
+## `tex_format`
+the `GLFormat` for this `GLMemory`
+## `params`
+the [`crate::gst::AllocationParams`] (XXX: @-reference does not belong to GLMemory!) to initialize with
+## `info`
+the `gst_video::VideoInfo` for this `GLMemory`
+## `plane`
+the plane number (starting from 0) for this `GLMemory`
+## `valign`
+optional `gst_video::VideoAlignment` parameters
+## `user_data`
+user data to call `notify` with
+## `notify`
+a `GDestroyNotify`
+<!-- impl GLMemory::fn read_pixels -->
+Reads the texture in `GLMemory` into `write_pointer` if no buffer is bound
+to `GL_PIXEL_PACK_BUFFER`. Otherwise `write_pointer` is the byte offset into
+the currently bound `GL_PIXEL_PACK_BUFFER` buffer to store the result of
+glReadPixels. See the OpenGL specification for glReadPixels for more
+details.
+## `write_pointer`
+the data pointer to pass to glReadPixels
+
+# Returns
+
+whether theread operation succeeded
+<!-- impl GLMemory::fn texsubimage -->
+Reads the texture in `read_pointer` into `self`.
+
+See `GLMemory::read_pixels` for what `read_pointer` signifies.
+## `read_pointer`
+the data pointer to pass to glTexSubImage
+<!-- impl GLMemory::fn init_once -->
+Initializes the GL Base Texture allocator. It is safe to call this function
+multiple times. This must be called before any other GstGLMemory operation.
+<!-- impl GLMemory::fn setup_buffer -->
+## `allocator`
+the [`crate::GLMemoryAllocator`] (XXX: @-reference does not belong to GLMemory!) to allocate from
+## `buffer`
+a `gst::Buffer` to setup
+## `params`
+the `GLVideoAllocationParams` to allocate with
+## `tex_formats`
+
+ a list of `GLFormat`'s to allocate with.
+## `wrapped_data`
+
+ a list of wrapped data pointers
+## `n_wrapped_pointers`
+the number of elements in `tex_formats` and `wrapped_data`
+
+# Returns
+
+whether the buffer was correctly setup
 <!-- struct GLMemoryAllocator -->
 Opaque `GLMemoryAllocator` struct
 
 # Implements
 
-[`GLBaseMemoryAllocatorExt`](trait.GLBaseMemoryAllocatorExt.html), [`gst::AllocatorExt`](../gst/trait.AllocatorExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLBaseMemoryAllocatorExt`](trait@crate::GLBaseMemoryAllocatorExt), [`trait@gst::AllocatorExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLMemoryAllocator::fn get_default -->
 ## `context`
 a `GLContext`
@@ -919,7 +1065,7 @@ Opaque `GLOverlayCompositor` object
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- struct GLPlatform -->
 <!-- struct GLPlatform::const NONE -->
 no platform
@@ -936,6 +1082,54 @@ the CGL platform used primarily on OS X
 the EAGL platform used primarily on iOS
 <!-- struct GLPlatform::const ANY -->
 any OpenGL platform
+<!-- struct GLQuery -->
+A `GLQuery` represents and holds an OpenGL query object. Various types of
+queries can be run or counters retrieved.
+<!-- impl GLQuery::fn counter -->
+Record the result of a counter
+<!-- impl GLQuery::fn end -->
+End counting the query
+<!-- impl GLQuery::fn free -->
+Frees a `GLQuery`
+<!-- impl GLQuery::fn init -->
+## `context`
+a `GLContext`
+## `query_type`
+the `GLQueryType`
+<!-- impl GLQuery::fn result -->
+
+# Returns
+
+the result of the query
+<!-- impl GLQuery::fn start -->
+Start counting the query
+<!-- impl GLQuery::fn unset -->
+Free any dynamically allocated resources
+<!-- impl GLQuery::fn local_gl_context -->
+Performs a GST_QUERY_CONTEXT query of type "gst.gl.local_context" on all
+`GstPads` in `element` of `direction` for the local OpenGL context used by
+GStreamer elements.
+## `element`
+a `gst::Element` to query from
+## `direction`
+the `gst::PadDirection` to query
+## `context_ptr`
+location containing the current and/or resulting
+ `GLContext`
+
+# Returns
+
+whether `context_ptr` contains a `GLContext`
+<!-- impl GLQuery::fn new -->
+Free with `GLQuery::free`
+## `context`
+a `GLContext`
+## `query_type`
+the `GLQueryType` to create
+
+# Returns
+
+a new `GLQuery`
 <!-- enum GLQueryType -->
 <!-- enum GLQueryType::variant None -->
 no query
@@ -968,7 +1162,7 @@ any OpenGL/OpenGL|ES profile
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLSLStage::fn new -->
 ## `context`
 a `GLContext`
@@ -978,7 +1172,7 @@ the GL enum shader stage type
 # Returns
 
 a new `GLSLStage` of the specified `type_`
-<!-- impl GLSLStage::fn new_with_string -->
+<!-- impl GLSLStage::fn with_string -->
 ## `context`
 a `GLContext`
 ## `type_`
@@ -993,7 +1187,7 @@ a shader string
 # Returns
 
 a new `GLSLStage` of the specified `type_`
-<!-- impl GLSLStage::fn new_with_strings -->
+<!-- impl GLSLStage::fn with_strings -->
 ## `context`
 a `GLContext`
 ## `type_`
@@ -1016,22 +1210,22 @@ a new `GLSLStage` of the specified `type_`
 # Returns
 
 whether the compilation succeeded
-<!-- impl GLSLStage::fn get_handle -->
+<!-- impl GLSLStage::fn handle -->
 
 # Returns
 
 The GL handle for this shader stage
-<!-- impl GLSLStage::fn get_profile -->
+<!-- impl GLSLStage::fn profile -->
 
 # Returns
 
 The GLSL profile for the current shader stage
-<!-- impl GLSLStage::fn get_shader_type -->
+<!-- impl GLSLStage::fn shader_type -->
 
 # Returns
 
 The GL shader type for this shader stage
-<!-- impl GLSLStage::fn get_version -->
+<!-- impl GLSLStage::fn version -->
 
 # Returns
 
@@ -1087,7 +1281,7 @@ version 450 (valid for compatibility/core desktop GL)
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLShader::fn new -->
 Note: must be called in the GL thread
 ## `context`
@@ -1118,7 +1312,7 @@ a `glib::Error`
 # Returns
 
 a new `shader` with the specified stages.
-<!-- impl GLShader::fn new_with_stages -->
+<!-- impl GLShader::fn with_stages -->
 Each stage will attempt to be compiled and attached to `shader`. On error,
 `None` will be returned and `error` will contain the details of the error.
 
@@ -1250,7 +1444,7 @@ name of the attribute
 # Returns
 
 the attribute index for `name` in `self` or -1 on failure
-<!-- impl GLShader::fn get_program_handle -->
+<!-- impl GLShader::fn program_handle -->
 
 # Returns
 
@@ -1538,7 +1732,7 @@ A `GLUpload` can be created with `GLUpload::new`
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLUpload::fn new -->
 ## `context`
 a `GLContext`
@@ -1546,7 +1740,7 @@ a `GLContext`
 # Returns
 
 a new `GLUpload` object
-<!-- impl GLUpload::fn get_caps -->
+<!-- impl GLUpload::fn caps -->
 ## `in_caps`
 the input `gst::Caps`
 ## `out_caps`
@@ -1736,7 +1930,7 @@ Convert stereoscopic/multiview video using fragment shaders.
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl GLViewConvert::fn new -->
 
 # Returns
@@ -1814,13 +2008,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`GLWindowExt`](trait.GLWindowExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GLWindowExt`](trait@crate::GLWindowExt), [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait GLWindowExt -->
 Trait containing all `GLWindow` methods.
 
 # Implementors
 
-[`GLWindow`](struct.GLWindow.html)
+[`GLWindow`](struct@crate::GLWindow)
 <!-- impl GLWindow::fn new -->
 ## `display`
 a `GLDisplay`
@@ -1839,7 +2033,7 @@ Feature: `v1_16`
 `true` if `self` controls the GL viewport, otherwise `false`
 <!-- trait GLWindowExt::fn draw -->
 Redraw the window contents. Implementations should invoke the draw callback.
-<!-- trait GLWindowExt::fn get_context -->
+<!-- trait GLWindowExt::fn context -->
 
 # Returns
 
@@ -1849,7 +2043,7 @@ the `GLContext` associated with this `self`
 # Returns
 
 the windowing system display handle for this `self`
-<!-- trait GLWindowExt::fn get_surface_dimensions -->
+<!-- trait GLWindowExt::fn surface_dimensions -->
 ## `width`
 resulting surface width
 ## `height`

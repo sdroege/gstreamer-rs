@@ -15,7 +15,7 @@ glib::wrapper! {
     pub struct NetTimeProvider(Object<ffi::GstNetTimeProvider, ffi::GstNetTimeProviderClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_net_time_provider_get_type(),
+        type_ => || ffi::gst_net_time_provider_get_type(),
     }
 }
 

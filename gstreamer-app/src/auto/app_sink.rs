@@ -15,7 +15,7 @@ glib::wrapper! {
     pub struct AppSink(Object<ffi::GstAppSink, ffi::GstAppSinkClass>) @extends gst::Element, gst::Object, @implements gst::URIHandler;
 
     match fn {
-        get_type => || ffi::gst_app_sink_get_type(),
+        type_ => || ffi::gst_app_sink_get_type(),
     }
 }
 

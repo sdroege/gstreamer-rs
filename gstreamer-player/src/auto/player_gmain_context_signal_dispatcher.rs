@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;
 
     match fn {
-        get_type => || ffi::gst_player_g_main_context_signal_dispatcher_get_type(),
+        type_ => || ffi::gst_player_g_main_context_signal_dispatcher_get_type(),
     }
 }
 

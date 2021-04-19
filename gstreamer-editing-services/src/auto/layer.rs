@@ -26,7 +26,7 @@ glib::wrapper! {
     pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass>) @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_layer_get_type(),
+        type_ => || ffi::ges_layer_get_type(),
     }
 }
 

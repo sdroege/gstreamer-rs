@@ -17,7 +17,7 @@ glib::wrapper! {
     pub struct Bus(Object<ffi::GstBus, ffi::GstBusClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_bus_get_type(),
+        type_ => || ffi::gst_bus_get_type(),
     }
 }
 

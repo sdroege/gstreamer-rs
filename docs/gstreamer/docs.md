@@ -31,13 +31,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`AllocatorExt`](trait.AllocatorExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`AllocatorExt`](trait@crate::AllocatorExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- trait AllocatorExt -->
 Trait containing all `Allocator` methods.
 
 # Implementors
 
-[`Allocator`](struct.Allocator.html)
+[`Allocator`](struct@crate::Allocator)
 <!-- impl Allocator::fn find -->
 Find a previously registered allocator with `name`. When `name` is `None`, the
 default allocator will be returned.
@@ -186,13 +186,13 @@ handler will return `true`.
 
 # Implements
 
-[`GstBinExt`](trait.GstBinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html), [`ElementExtManual`](prelude/trait.ElementExtManual.html), [`ChildProxyExtManual`](prelude/trait.ChildProxyExtManual.html)
+[`GstBinExt`](trait@crate::GstBinExt), [`ElementExt`](trait@crate::ElementExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ChildProxyExt`](trait@crate::ChildProxyExt), [`ElementExtManual`](trait@crate::ElementExtManual), [`ChildProxyExtManual`](trait@crate::ChildProxyExtManual)
 <!-- trait GstBinExt -->
 Trait containing all `Bin` methods.
 
 # Implementors
 
-[`Bin`](struct.Bin.html), [`Pipeline`](struct.Pipeline.html)
+[`Bin`](struct@crate::Bin), [`Pipeline`](struct@crate::Pipeline)
 <!-- impl Bin::fn new -->
 Creates a new bin with the given name.
 ## `name`
@@ -285,7 +285,7 @@ the element name to search for
 
 the `Element` with the given
 name, or `None`
-<!-- trait GstBinExt::fn get_suppressed_flags -->
+<!-- trait GstBinExt::fn suppressed_flags -->
 Return the suppressed flags of the bin.
 
 MT safe.
@@ -1535,13 +1535,13 @@ refcount of the pool reaches 0, the pool will be freed.
 
 # Implements
 
-[`BufferPoolExt`](trait.BufferPoolExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`BufferPoolExtManual`](prelude/trait.BufferPoolExtManual.html)
+[`BufferPoolExt`](trait@crate::BufferPoolExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`BufferPoolExtManual`](trait@crate::BufferPoolExtManual)
 <!-- trait BufferPoolExt -->
 Trait containing all `BufferPool` methods.
 
 # Implementors
 
-[`BufferPool`](struct.BufferPool.html)
+[`BufferPool`](struct@crate::BufferPool)
 <!-- impl BufferPool::fn new -->
 Creates a new `BufferPool` instance.
 
@@ -1684,7 +1684,7 @@ parameters.
 
 a `FlowReturn` such as `FlowReturn::Flushing` when the pool is
 inactive.
-<!-- trait BufferPoolExt::fn get_config -->
+<!-- trait BufferPoolExt::fn config -->
 Get a copy of the current configuration of the pool. This configuration
 can either be modified and used for the `BufferPool::set_config` call
 or it must be freed after usage.
@@ -1693,7 +1693,7 @@ or it must be freed after usage.
 
 a copy of the current configuration of `self`. use
 `Structure::free` after usage or `BufferPool::set_config`.
-<!-- trait BufferPoolExt::fn get_options -->
+<!-- trait BufferPoolExt::fn options -->
 Get a `None` terminated array of string with supported bufferpool options for
 `self`. An option would typically be enabled with
 `BufferPool::config_add_option`.
@@ -1838,7 +1838,7 @@ from READY to NULL state.
 
 # Implements
 
-[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- impl Bus::fn new -->
 Creates a new `Bus` instance.
 
@@ -1994,7 +1994,7 @@ comes from the thread of whatever object posted the message; the "message"
 signal is marshalled to the main thread via the main loop.
 
 MT safe.
-<!-- impl Bus::fn get_pollfd -->
+<!-- impl Bus::fn pollfd -->
 Gets the file descriptor from the bus which can be used to get notified about
 messages being available with functions like `g_poll`, and allows integration
 into other event loops based on file descriptors.
@@ -2778,13 +2778,13 @@ scheme is recursive. Thus "child1::child2::property" is valid too, if
 
 # Implements
 
-[`ChildProxyExt`](trait.ChildProxyExt.html), [`ChildProxyExtManual`](prelude/trait.ChildProxyExtManual.html)
+[`ChildProxyExt`](trait@crate::ChildProxyExt), [`ChildProxyExtManual`](trait@crate::ChildProxyExtManual)
 <!-- trait ChildProxyExt -->
 Trait containing all `ChildProxy` methods.
 
 # Implementors
 
-[`Bin`](struct.Bin.html), [`ChildProxy`](struct.ChildProxy.html), [`Pipeline`](struct.Pipeline.html)
+[`Bin`](struct@crate::Bin), [`ChildProxy`](struct@crate::ChildProxy), [`Pipeline`](struct@crate::Pipeline)
 <!-- trait ChildProxyExt::fn child_added -->
 Emits the "child-added" signal.
 ## `child`
@@ -2827,7 +2827,7 @@ the child object or `None` if
  not found. Unref after usage.
 
 MT safe.
-<!-- trait ChildProxyExt::fn get_children_count -->
+<!-- trait ChildProxyExt::fn children_count -->
 Gets the number of child objects this parent contains.
 
 # Returns
@@ -2972,13 +2972,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`ClockExt`](trait.ClockExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ClockExtManual`](prelude/trait.ClockExtManual.html)
+[`ClockExt`](trait@crate::ClockExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ClockExtManual`](trait@crate::ClockExtManual)
 <!-- trait ClockExt -->
 Trait containing all `Clock` methods.
 
 # Implementors
 
-[`Clock`](struct.Clock.html), [`SystemClock`](struct.SystemClock.html)
+[`Clock`](struct@crate::Clock), [`SystemClock`](struct@crate::SystemClock)
 <!-- impl Clock::fn id_compare_func -->
 Compares the two `ClockID` instances. This function can be used
 as a GCompareFunc when sorting ids.
@@ -3192,7 +3192,7 @@ the denominator of the rate of the clock
 # Returns
 
 the converted time of the clock.
-<!-- trait ClockExt::fn get_calibration -->
+<!-- trait ClockExt::fn calibration -->
 Gets the internal rate and reference time of `self`. See
 `ClockExt::set_calibration` for more information.
 
@@ -3208,7 +3208,7 @@ a location to store the external time
 a location to store the rate numerator
 ## `rate_denom`
 a location to store the rate denominator
-<!-- trait ClockExt::fn get_internal_time -->
+<!-- trait ClockExt::fn internal_time -->
 Gets the current internal time of the given clock. The time is returned
 unadjusted for the offset and the rate.
 
@@ -3218,7 +3218,7 @@ the internal time of the clock. Or GST_CLOCK_TIME_NONE when
 given invalid input.
 
 MT safe.
-<!-- trait ClockExt::fn get_master -->
+<!-- trait ClockExt::fn master -->
 Get the master clock that `self` is slaved to or `None` when the clock is
 not slaved to any master clock.
 
@@ -3229,7 +3229,7 @@ a master `Clock` or `None`
  usage.
 
 MT safe.
-<!-- trait ClockExt::fn get_resolution -->
+<!-- trait ClockExt::fn resolution -->
 Get the accuracy of the clock. The accuracy of the clock is the granularity
 of the values returned by `ClockExt::get_time`.
 
@@ -3238,7 +3238,7 @@ of the values returned by `ClockExt::get_time`.
 the resolution of the clock in units of `ClockTime`.
 
 MT safe.
-<!-- trait ClockExt::fn get_time -->
+<!-- trait ClockExt::fn time -->
 Gets the current time of the given clock. The time is always
 monotonically increasing and adjusted according to the current
 offset and rate.
@@ -3249,7 +3249,7 @@ the time of the clock. Or GST_CLOCK_TIME_NONE when
 given invalid input.
 
 MT safe.
-<!-- trait ClockExt::fn get_timeout -->
+<!-- trait ClockExt::fn timeout -->
 Get the amount of time that master and slave clocks are sampled.
 
 # Returns
@@ -3602,13 +3602,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`ControlBindingExt`](trait.ControlBindingExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ControlBindingExtManual`](prelude/trait.ControlBindingExtManual.html)
+[`ControlBindingExt`](trait@crate::ControlBindingExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ControlBindingExtManual`](trait@crate::ControlBindingExtManual)
 <!-- trait ControlBindingExt -->
 Trait containing all `ControlBinding` methods.
 
 # Implementors
 
-[`ControlBinding`](struct.ControlBinding.html)
+[`ControlBinding`](struct@crate::ControlBinding)
 <!-- trait ControlBindingExt::fn get_g_value_array -->
 Gets a number of `GValues` for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
@@ -3708,13 +3708,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`ControlSourceExt`](trait.ControlSourceExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ControlSourceExtManual`](prelude/trait.ControlSourceExtManual.html)
+[`ControlSourceExt`](trait@crate::ControlSourceExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ControlSourceExtManual`](trait@crate::ControlSourceExtManual)
 <!-- trait ControlSourceExt -->
 Trait containing all `ControlSource` methods.
 
 # Implementors
 
-[`ControlSource`](struct.ControlSource.html)
+[`ControlSource`](struct@crate::ControlSource)
 <!-- trait ControlSourceExt::fn get_value -->
 Gets the value for this `ControlSource` at a given timestamp.
 ## `timestamp`
@@ -4238,13 +4238,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`DeviceExt`](trait.DeviceExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`DeviceExt`](trait@crate::DeviceExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- trait DeviceExt -->
 Trait containing all `Device` methods.
 
 # Implementors
 
-[`Device`](struct.Device.html)
+[`Device`](struct@crate::Device)
 <!-- trait DeviceExt::fn create_element -->
 Creates the element with all of the required parameters set to use
 this device.
@@ -4256,14 +4256,14 @@ create a unique name.
 
 a new `Element` configured to use
 this device
-<!-- trait DeviceExt::fn get_caps -->
+<!-- trait DeviceExt::fn caps -->
 Getter for the `Caps` that this device supports.
 
 # Returns
 
 The `Caps` supported by this device. Unref with
 `gst_caps_unref` when done.
-<!-- trait DeviceExt::fn get_device_class -->
+<!-- trait DeviceExt::fn device_class -->
 Gets the "class" of a device. This is a "/" separated list of
 classes that represent this device. They are a subset of the
 classes of the `DeviceProvider` that produced this device.
@@ -4271,13 +4271,13 @@ classes of the `DeviceProvider` that produced this device.
 # Returns
 
 The device class. Free with `g_free` after use.
-<!-- trait DeviceExt::fn get_display_name -->
+<!-- trait DeviceExt::fn display_name -->
 Gets the user-friendly name of the device.
 
 # Returns
 
 The device name. Free with `g_free` after use.
-<!-- trait DeviceExt::fn get_properties -->
+<!-- trait DeviceExt::fn properties -->
 Gets the extra properties of a device.
 
 # Returns
@@ -4382,13 +4382,13 @@ The basic use pattern of a device monitor is as follows:
 
 # Implements
 
-[`DeviceMonitorExt`](trait.DeviceMonitorExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`DeviceMonitorExtManual`](prelude/trait.DeviceMonitorExtManual.html)
+[`DeviceMonitorExt`](trait@crate::DeviceMonitorExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`DeviceMonitorExtManual`](trait@crate::DeviceMonitorExtManual)
 <!-- trait DeviceMonitorExt -->
 Trait containing all `DeviceMonitor` methods.
 
 # Implementors
 
-[`DeviceMonitor`](struct.DeviceMonitor.html)
+[`DeviceMonitor`](struct@crate::DeviceMonitor)
 <!-- impl DeviceMonitor::fn new -->
 Create a new `DeviceMonitor`
 
@@ -4416,13 +4416,13 @@ the `Caps` to filter or `None` for ANY
 
 The id of the new filter or 0 if no provider matched the filter's
  classes.
-<!-- trait DeviceMonitorExt::fn get_bus -->
+<!-- trait DeviceMonitorExt::fn bus -->
 Gets the `Bus` of this `DeviceMonitor`
 
 # Returns
 
 a `Bus`
-<!-- trait DeviceMonitorExt::fn get_devices -->
+<!-- trait DeviceMonitorExt::fn devices -->
 Gets a list of devices from all of the relevant monitors. This may actually
 probe the hardware if the monitor is not currently started.
 
@@ -4430,7 +4430,7 @@ probe the hardware if the monitor is not currently started.
 
 a `glib::List` of
  `Device`
-<!-- trait DeviceMonitorExt::fn get_providers -->
+<!-- trait DeviceMonitorExt::fn providers -->
 Get a list of the currently selected device provider factories.
 
 This
@@ -4440,7 +4440,7 @@ This
 
  A list of device provider factory names that are currently being
  monitored by `self` or `None` when nothing is being monitored.
-<!-- trait DeviceMonitorExt::fn get_show_all_devices -->
+<!-- trait DeviceMonitorExt::fn shows_all_devices -->
 Get if `self` is currently showing all devices, even those from hidden
 providers.
 
@@ -4486,13 +4486,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`DeviceProviderExt`](trait.DeviceProviderExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`DeviceProviderExtManual`](prelude/trait.DeviceProviderExtManual.html)
+[`DeviceProviderExt`](trait@crate::DeviceProviderExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`DeviceProviderExtManual`](trait@crate::DeviceProviderExtManual)
 <!-- trait DeviceProviderExt -->
 Trait containing all `DeviceProvider` methods.
 
 # Implementors
 
-[`DeviceProvider`](struct.DeviceProvider.html)
+[`DeviceProvider`](struct@crate::DeviceProvider)
 <!-- impl DeviceProvider::fn register -->
 Create a new device providerfactory capable of instantiating objects of the
 `type_` and add the factory to `plugin`.
@@ -4539,13 +4539,13 @@ a device has been removed.
 This is for use by subclasses.
 ## `device`
 a `Device` that has been removed
-<!-- trait DeviceProviderExt::fn get_bus -->
+<!-- trait DeviceProviderExt::fn bus -->
 Gets the `Bus` of this `DeviceProvider`
 
 # Returns
 
 a `Bus`
-<!-- trait DeviceProviderExt::fn get_devices -->
+<!-- trait DeviceProviderExt::fn devices -->
 Gets a list of devices that this provider understands. This may actually
 probe the hardware if the provider is not currently started.
 
@@ -4556,14 +4556,14 @@ objedcts that have been returned by the `MessageType::DeviceAdded` messages.
 
 a `glib::List` of
  `Device`
-<!-- trait DeviceProviderExt::fn get_factory -->
+<!-- trait DeviceProviderExt::fn factory -->
 Retrieves the factory that was used to create this device provider.
 
 # Returns
 
 the `DeviceProviderFactory` used for
  creating this device provider. no refcounting is needed.
-<!-- trait DeviceProviderExt::fn get_hidden_providers -->
+<!-- trait DeviceProviderExt::fn hidden_providers -->
 Get the provider factory names of the `DeviceProvider` instances that
 are hidden by `self`.
 
@@ -4633,7 +4633,7 @@ convenient shortcut.
 
 # Implements
 
-[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PluginFeatureExtManual`](prelude/trait.PluginFeatureExtManual.html)
+[`PluginFeatureExt`](trait@crate::PluginFeatureExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`PluginFeatureExtManual`](trait@crate::PluginFeatureExtManual)
 <!-- impl DeviceProviderFactory::fn find -->
 Search for an device provider factory of the given name. Refs the returned
 device provider factory; caller is responsible for unreffing.
@@ -4673,7 +4673,7 @@ providerfactory.
 
 the `DeviceProvider` or `None`
 if the device provider couldn't be created
-<!-- impl DeviceProviderFactory::fn get_device_provider_type -->
+<!-- impl DeviceProviderFactory::fn device_provider_type -->
 Get the `glib::Type` for device providers managed by this factory. The type can
 only be retrieved if the device provider factory is loaded, which can be
 assured with `PluginFeature::load`.
@@ -4690,7 +4690,7 @@ a key
 
 the metadata with `key` on `self` or `None`
 when there was no metadata with the given `key`.
-<!-- impl DeviceProviderFactory::fn get_metadata_keys -->
+<!-- impl DeviceProviderFactory::fn metadata_keys -->
 Get the available keys for the metadata on `self`.
 
 # Returns
@@ -4771,13 +4771,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ElementExtManual`](prelude/trait.ElementExtManual.html)
+[`ElementExt`](trait@crate::ElementExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ElementExtManual`](trait@crate::ElementExtManual)
 <!-- trait ElementExt -->
 Trait containing all `Element` methods.
 
 # Implementors
 
-[`Bin`](struct.Bin.html), [`Element`](struct.Element.html), [`TagSetter`](struct.TagSetter.html), [`TocSetter`](struct.TocSetter.html)
+[`Bin`](struct@crate::Bin), [`Element`](struct@crate::Element), [`TagSetter`](struct@crate::TagSetter), [`TocSetter`](struct@crate::TocSetter)
 <!-- impl Element::fn make_from_uri -->
 Creates an element for handling the given URI.
 ## `type_`
@@ -4994,7 +4994,7 @@ user data passed to `func`
 
 `false` if `self` had no source pads or if one of the calls
  to `func` returned `false`.
-<!-- trait ElementExt::fn get_base_time -->
+<!-- trait ElementExt::fn base_time -->
 Returns the base time of the element. The base time is the
 absolute time of the clock when this element was last put to
 PLAYING. Subtracting the base time from the clock time gives
@@ -5005,7 +5005,7 @@ the running time of the element.
 the base time of the element.
 
 MT safe.
-<!-- trait ElementExt::fn get_bus -->
+<!-- trait ElementExt::fn bus -->
 Returns the bus of the element. Note that only a `Pipeline` will provide a
 bus for the application.
 
@@ -5015,7 +5015,7 @@ the element's `Bus`. unref after
 usage.
 
 MT safe.
-<!-- trait ElementExt::fn get_clock -->
+<!-- trait ElementExt::fn clock -->
 Gets the currently configured clock of the element. This is the clock as was
 last set with `ElementExt::set_clock`.
 
@@ -5074,7 +5074,7 @@ a name of a context to retrieve
 # Returns
 
 A `Context` or NULL
-<!-- trait ElementExt::fn get_contexts -->
+<!-- trait ElementExt::fn contexts -->
 Gets the contexts set on the element.
 
 MT safe.
@@ -5082,7 +5082,7 @@ MT safe.
 # Returns
 
 List of `Context`
-<!-- trait ElementExt::fn get_current_clock_time -->
+<!-- trait ElementExt::fn current_clock_time -->
 Returns the current clock time of the element, as in, the time of the
 element's clock, or GST_CLOCK_TIME_NONE if there is no clock.
 
@@ -5093,7 +5093,7 @@ Feature: `v1_18`
 
 the clock time of the element, or GST_CLOCK_TIME_NONE if there is
 no clock.
-<!-- trait ElementExt::fn get_current_running_time -->
+<!-- trait ElementExt::fn current_running_time -->
 Returns the running time of the element. The running time is the
 element's clock time minus its base time. Will return GST_CLOCK_TIME_NONE
 if the element has no clock, or if its base time has not been set.
@@ -5105,7 +5105,7 @@ Feature: `v1_18`
 
 the running time of the element, or GST_CLOCK_TIME_NONE if the
 element has no clock or its base time has not been set.
-<!-- trait ElementExt::fn get_factory -->
+<!-- trait ElementExt::fn factory -->
 Retrieves the factory that was used to create this element.
 
 # Returns
@@ -5136,7 +5136,7 @@ the name of the `PadTemplate` to get.
 the `PadTemplate` with the
  given name, or `None` if none was found. No unreferencing is
  necessary.
-<!-- trait ElementExt::fn get_pad_template_list -->
+<!-- trait ElementExt::fn pad_template_list -->
 Retrieves a list of the pad templates associated with `self`. The
 list must not be modified by the calling code.
 
@@ -5162,7 +5162,7 @@ the name of the request `Pad` to retrieve.
 
 requested `Pad` if found,
  otherwise `None`. Release after usage.
-<!-- trait ElementExt::fn get_start_time -->
+<!-- trait ElementExt::fn start_time -->
 Returns the start time of the element. The start time is the
 running time of the clock when this element was last put to PAUSED.
 
@@ -5847,7 +5847,7 @@ The following code example shows you how to create a GstFileSrc element.
 
 # Implements
 
-[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PluginFeatureExtManual`](prelude/trait.PluginFeatureExtManual.html)
+[`PluginFeatureExt`](trait@crate::PluginFeatureExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`PluginFeatureExtManual`](trait@crate::PluginFeatureExtManual)
 <!-- impl ElementFactory::fn find -->
 Search for an element factory of the given name. Refs the returned
 element factory; caller is responsible for unreffing.
@@ -5953,7 +5953,7 @@ name of new element, or `None` to automatically create
 
 new `Element` or `None`
  if the element couldn't be created
-<!-- impl ElementFactory::fn get_element_type -->
+<!-- impl ElementFactory::fn element_type -->
 Get the `glib::Type` for elements managed by this factory. The type can
 only be retrieved if the element factory is loaded, which can be
 assured with `PluginFeature::load`.
@@ -5971,7 +5971,7 @@ a key
 
 the metadata with `key` on `self` or `None`
 when there was no metadata with the given `key`.
-<!-- impl ElementFactory::fn get_metadata_keys -->
+<!-- impl ElementFactory::fn metadata_keys -->
 Get the available keys for the metadata on `self`.
 
 # Returns
@@ -5979,20 +5979,20 @@ Get the available keys for the metadata on `self`.
 
 a `None`-terminated array of key strings, or `None` when there is no
 metadata. Free with `g_strfreev` when no longer needed.
-<!-- impl ElementFactory::fn get_num_pad_templates -->
+<!-- impl ElementFactory::fn num_pad_templates -->
 Gets the number of pad_templates in this factory.
 
 # Returns
 
 the number of pad_templates
-<!-- impl ElementFactory::fn get_static_pad_templates -->
+<!-- impl ElementFactory::fn static_pad_templates -->
 Gets the `glib::List` of `StaticPadTemplate` for this factory.
 
 # Returns
 
 the
  static pad templates
-<!-- impl ElementFactory::fn get_uri_protocols -->
+<!-- impl ElementFactory::fn uri_protocols -->
 Gets a `None`-terminated array of protocols this element supports or `None` if
 no protocols are supported. You may not change the contents of the returned
 array, as it is still owned by the element factory. Use `g_strdupv` to
@@ -6002,7 +6002,7 @@ make a copy of the protocol string array if you need to.
 
 the supported protocols
  or `None`
-<!-- impl ElementFactory::fn get_uri_type -->
+<!-- impl ElementFactory::fn uri_type -->
 Gets the type of URIs the element supports or `URIType::Unknown` if none.
 
 # Returns
@@ -7158,13 +7158,13 @@ Note that GhostPads add overhead to the data processing of a pipeline.
 
 # Implements
 
-[`GhostPadExt`](trait.GhostPadExt.html), [`ProxyPadExt`](trait.ProxyPadExt.html), [`PadExt`](trait.PadExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ProxyPadExtManual`](prelude/trait.ProxyPadExtManual.html), [`PadExtManual`](prelude/trait.PadExtManual.html)
+[`GhostPadExt`](trait@crate::GhostPadExt), [`ProxyPadExt`](trait@crate::ProxyPadExt), [`PadExt`](trait@crate::PadExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ProxyPadExtManual`](trait@crate::ProxyPadExtManual), [`PadExtManual`](trait@crate::PadExtManual)
 <!-- trait GhostPadExt -->
 Trait containing all `GhostPad` methods.
 
 # Implementors
 
-[`GhostPad`](struct.GhostPad.html)
+[`GhostPad`](struct@crate::GhostPad)
 <!-- impl GhostPad::fn new -->
 Create a new ghostpad with `target` as the target. The direction will be taken
 from the target pad. `target` must be unlinked.
@@ -7179,7 +7179,7 @@ the pad to ghost.
 
 a new `Pad`, or `None` in
 case of an error.
-<!-- impl GhostPad::fn new_from_template -->
+<!-- impl GhostPad::fn from_template -->
 Create a new ghostpad with `target` as the target. The direction will be taken
 from the target pad. The template used on the ghostpad will be `template`.
 
@@ -7267,7 +7267,7 @@ anymore.
 # Returns
 
 `true` if the construction succeeds, `false` otherwise.
-<!-- trait GhostPadExt::fn get_target -->
+<!-- trait GhostPadExt::fn target -->
 Get the target pad of `self`. Unref target pad after usage.
 
 # Returns
@@ -8966,13 +8966,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- trait GstObjectExt -->
 Trait containing all `Object` methods.
 
 # Implementors
 
-[`Allocator`](struct.Allocator.html), [`BufferPool`](struct.BufferPool.html), [`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`ControlBinding`](struct.ControlBinding.html), [`ControlSource`](struct.ControlSource.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
+[`Allocator`](struct@crate::Allocator), [`BufferPool`](struct@crate::BufferPool), [`Bus`](struct@crate::Bus), [`Clock`](struct@crate::Clock), [`ControlBinding`](struct@crate::ControlBinding), [`ControlSource`](struct@crate::ControlSource), [`DeviceMonitor`](struct@crate::DeviceMonitor), [`DeviceProvider`](struct@crate::DeviceProvider), [`Device`](struct@crate::Device), [`Element`](struct@crate::Element), [`Object`](struct@crate::Object), [`PadTemplate`](struct@crate::PadTemplate), [`Pad`](struct@crate::Pad), [`PluginFeature`](struct@crate::PluginFeature), [`Plugin`](struct@crate::Plugin), [`Registry`](struct@crate::Registry), [`StreamCollection`](struct@crate::StreamCollection), [`Stream`](struct@crate::Stream)
 <!-- impl Object::fn check_uniqueness -->
 Checks to see if there is any object named `name` in `list`. This function
 does not do any locking of any kind. You might want to protect the
@@ -9070,7 +9070,7 @@ name of the property
 
 the `ControlBinding` for
 `property_name` or `None` if the property is not controlled.
-<!-- trait GstObjectExt::fn get_control_rate -->
+<!-- trait GstObjectExt::fn control_rate -->
 Obtain the control-rate for this `self`. Audio processing `Element`
 objects will use this rate to sub-divide their processing loop and call
 `GstObjectExt::sync_values` in between. The length of the processing segment
@@ -9106,7 +9106,7 @@ array to put control-values in
 # Returns
 
 `true` if the given array could be filled, `false` otherwise
-<!-- trait GstObjectExt::fn get_name -->
+<!-- trait GstObjectExt::fn name -->
 Returns a copy of the name of `self`.
 Caller should `g_free` the return value after usage.
 For a nameless object, this returns `None`, which you can safely `g_free`
@@ -9120,7 +9120,7 @@ the name of `self`. `g_free`
 after usage.
 
 MT safe. This function grabs and releases `self`'s LOCK.
-<!-- trait GstObjectExt::fn get_parent -->
+<!-- trait GstObjectExt::fn parent -->
 Returns the parent of `self`. This function increases the refcount
 of the parent object so you should `GstObjectExt::unref` it after usage.
 
@@ -9130,7 +9130,7 @@ parent of `self`, this can be
  `None` if `self` has no parent. unref after usage.
 
 MT safe. Grabs and releases `self`'s LOCK.
-<!-- trait GstObjectExt::fn get_path_string -->
+<!-- trait GstObjectExt::fn path_string -->
 Generates a string describing the path of `self` in
 the object hierarchy. Only useful (or used) for debugging.
 
@@ -9420,13 +9420,13 @@ respectively.
 
 # Implements
 
-[`PadExt`](trait.PadExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PadExtManual`](prelude/trait.PadExtManual.html)
+[`PadExt`](trait@crate::PadExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`PadExtManual`](trait@crate::PadExtManual)
 <!-- trait PadExt -->
 Trait containing all `Pad` methods.
 
 # Implementors
 
-[`Pad`](struct.Pad.html), [`ProxyPad`](struct.ProxyPad.html)
+[`Pad`](struct@crate::Pad), [`ProxyPad`](struct@crate::ProxyPad)
 <!-- impl Pad::fn new -->
 Creates a new pad with the given name in the given direction.
 If name is `None`, a guaranteed unique name (across all pads)
@@ -9442,7 +9442,7 @@ the `PadDirection` of the pad.
 a new `Pad`.
 
 MT safe.
-<!-- impl Pad::fn new_from_static_template -->
+<!-- impl Pad::fn from_static_template -->
 Creates a new pad with the given name from the given static template.
 If name is `None`, a guaranteed unique name (across all pads)
 will be assigned.
@@ -9455,7 +9455,7 @@ the name of the pad
 # Returns
 
 a new `Pad`.
-<!-- impl Pad::fn new_from_template -->
+<!-- impl Pad::fn from_template -->
 Creates a new pad with the given name from the given template.
 If name is `None`, a guaranteed unique name (across all pads)
 will be assigned.
@@ -9686,7 +9686,7 @@ user data passed to `forward`
 # Returns
 
 `true` if one of the dispatcher functions returned `true`.
-<!-- trait PadExt::fn get_allowed_caps -->
+<!-- trait PadExt::fn allowed_caps -->
 Gets the capabilities of the allowed media types that can flow through
 `self` and its peer.
 
@@ -9701,7 +9701,7 @@ the allowed `Caps` of the
  function returns `None` when `self` has no peer.
 
 MT safe.
-<!-- trait PadExt::fn get_current_caps -->
+<!-- trait PadExt::fn current_caps -->
 Gets the capabilities currently configured on `self` with the last
 `EventType::Caps` event.
 
@@ -9709,7 +9709,7 @@ Gets the capabilities currently configured on `self` with the last
 
 the current caps of the pad with
 incremented ref-count or `None` when pad has no caps. Unref after usage.
-<!-- trait PadExt::fn get_direction -->
+<!-- trait PadExt::fn direction -->
 Gets the direction of the pad. The direction of the pad is
 decided at construction time so this function does not take
 the LOCK.
@@ -9719,23 +9719,23 @@ the LOCK.
 the `PadDirection` of the pad.
 
 MT safe.
-<!-- trait PadExt::fn get_element_private -->
+<!-- trait PadExt::fn element_private -->
 Gets the private data of a pad.
 No locking is performed in this function.
 
 # Returns
 
 a `gpointer` to the private data.
-<!-- trait PadExt::fn get_last_flow_return -->
+<!-- trait PadExt::fn last_flow_return -->
 Gets the `FlowReturn` return from the last data passed by this pad.
-<!-- trait PadExt::fn get_offset -->
+<!-- trait PadExt::fn offset -->
 Get the offset applied to the running time of `self`. `self` has to be a source
 pad.
 
 # Returns
 
 the offset.
-<!-- trait PadExt::fn get_pad_template -->
+<!-- trait PadExt::fn pad_template -->
 Gets the template for `self`.
 
 # Returns
@@ -9743,14 +9743,14 @@ Gets the template for `self`.
 the `PadTemplate` from which
  this pad was instantiated, or `None` if this pad has no
  template. Unref after usage.
-<!-- trait PadExt::fn get_pad_template_caps -->
+<!-- trait PadExt::fn pad_template_caps -->
 Gets the capabilities for `self`'s template.
 
 # Returns
 
 the `Caps` of this pad template.
 Unref after usage.
-<!-- trait PadExt::fn get_parent_element -->
+<!-- trait PadExt::fn parent_element -->
 Gets the parent of `self`, cast to a `Element`. If a `self` has no parent or
 its parent is not an element, return `None`.
 
@@ -9761,7 +9761,7 @@ caller has a reference on the parent, so unref when you're finished
 with it.
 
 MT safe.
-<!-- trait PadExt::fn get_peer -->
+<!-- trait PadExt::fn peer -->
 Gets the peer of `self`. This function refs the peer pad so
 you need to unref it after use.
 
@@ -9810,7 +9810,7 @@ a pointer to hold the `Buffer`,
 a `FlowReturn` from the pad.
 
 MT safe.
-<!-- trait PadExt::fn get_single_internal_link -->
+<!-- trait PadExt::fn single_internal_link -->
 If there is a single internal link of the given pad, this function will
 return it. Otherwise, it will return NULL.
 
@@ -9835,7 +9835,7 @@ the index of the event
 a `Event` of type
 `event_type` or `None` when no event of `event_type` was on
 `self`. Unref after usage.
-<!-- trait PadExt::fn get_stream -->
+<!-- trait PadExt::fn stream -->
 Returns the current `Stream` for the `self`, or `None` if none has been
 set yet, i.e. the pad has not received a stream-start event yet.
 
@@ -9849,7 +9849,7 @@ Feature: `v1_10`
 
 the current `Stream` for `self`, or `None`.
  unref the returned stream when no longer needed.
-<!-- trait PadExt::fn get_stream_id -->
+<!-- trait PadExt::fn stream_id -->
 Returns the current stream-id for the `self`, or `None` if none has been
 set yet, i.e. the pad has not received a stream-start event yet.
 
@@ -9864,7 +9864,7 @@ contents should not be interpreted.
 a newly-allocated copy of the stream-id for
  `self`, or `None`. `g_free` the returned string when no longer
  needed.
-<!-- trait PadExt::fn get_task_state -->
+<!-- trait PadExt::fn task_state -->
 Get `self` task state. If no task is currently
 set, `TaskState::Stopped` is returned.
 
@@ -10842,7 +10842,7 @@ element class, this is usually done in the class_init of the class:
 
 # Implements
 
-[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- impl PadTemplate::fn new -->
 Creates a new pad template with a name according to the given template
 and with the given arguments.
@@ -10858,7 +10858,7 @@ a `Caps` set for the template.
 # Returns
 
 a new `PadTemplate`.
-<!-- impl PadTemplate::fn new_from_static_pad_template_with_gtype -->
+<!-- impl PadTemplate::fn from_static_pad_template_with_gtype -->
 Converts a `StaticPadTemplate` into a `PadTemplate` with a type.
 
 Feature: `v1_14`
@@ -10871,7 +10871,7 @@ The `glib::Type` of the pad to create
 # Returns
 
 a new `PadTemplate`.
-<!-- impl PadTemplate::fn new_with_gtype -->
+<!-- impl PadTemplate::fn with_gtype -->
 Creates a new pad template with a name according to the given template
 and with the given arguments.
 
@@ -10891,14 +10891,14 @@ The `glib::Type` of the pad to create
 # Returns
 
 a new `PadTemplate`.
-<!-- impl PadTemplate::fn get_caps -->
+<!-- impl PadTemplate::fn caps -->
 Gets the capabilities of the pad template.
 
 # Returns
 
 the `Caps` of the pad template.
 Unref after usage.
-<!-- impl PadTemplate::fn get_documentation_caps -->
+<!-- impl PadTemplate::fn documentation_caps -->
 See `PadTemplate::set_documentation_caps`.
 
 Feature: `v1_18`
@@ -11067,13 +11067,13 @@ in the PLAYING state. This default behaviour can be changed with the
 
 # Implements
 
-[`PipelineExt`](trait.PipelineExt.html), [`GstBinExt`](trait.GstBinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html), [`ElementExtManual`](prelude/trait.ElementExtManual.html), [`ChildProxyExtManual`](prelude/trait.ChildProxyExtManual.html)
+[`PipelineExt`](trait@crate::PipelineExt), [`GstBinExt`](trait@crate::GstBinExt), [`ElementExt`](trait@crate::ElementExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ChildProxyExt`](trait@crate::ChildProxyExt), [`ElementExtManual`](trait@crate::ElementExtManual), [`ChildProxyExtManual`](trait@crate::ChildProxyExtManual)
 <!-- trait PipelineExt -->
 Trait containing all `Pipeline` methods.
 
 # Implementors
 
-[`Pipeline`](struct.Pipeline.html)
+[`Pipeline`](struct@crate::Pipeline)
 <!-- impl Pipeline::fn new -->
 Create a new pipeline with the given name.
 ## `name`
@@ -11093,7 +11093,7 @@ Use this function if you previous forced a fixed clock with
 pipeline clock selection algorithm.
 
 MT safe.
-<!-- trait PipelineExt::fn get_auto_flush_bus -->
+<!-- trait PipelineExt::fn is_auto_flush_bus -->
 Check if `self` will automatically flush messages when going to
 the NULL state.
 
@@ -11123,7 +11123,7 @@ clock, even if the pipeline is not in the PLAYING state.
 # Returns
 
 a `Clock`, unref after usage.
-<!-- trait PipelineExt::fn get_delay -->
+<!-- trait PipelineExt::fn delay -->
 Get the configured delay (see `PipelineExt::set_delay`).
 
 # Returns
@@ -11131,14 +11131,14 @@ Get the configured delay (see `PipelineExt::set_delay`).
 The configured delay.
 
 MT safe.
-<!-- trait PipelineExt::fn get_latency -->
+<!-- trait PipelineExt::fn latency -->
 Gets the latency that should be configured on the pipeline. See
 `PipelineExt::set_latency`.
 
 # Returns
 
 Latency to configure on the pipeline or GST_CLOCK_TIME_NONE
-<!-- trait PipelineExt::fn get_pipeline_clock -->
+<!-- trait PipelineExt::fn pipeline_clock -->
 Gets the current clock used by `self`.
 
 Unlike `ElementExt::get_clock`, this function will always return a
@@ -11260,7 +11260,7 @@ into memory.
 
 # Implements
 
-[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- impl Plugin::fn list_free -->
 Unrefs each member of `list`, then frees the list.
 ## `list`
@@ -11414,7 +11414,7 @@ one or more file names or file name suffixes (separated by commas),
  or `None`
 ## `flags`
 optional flags, or `PluginDependencyFlags::None`
-<!-- impl Plugin::fn get_cache_data -->
+<!-- impl Plugin::fn cache_data -->
 Gets the plugin specific data cache. If it is `None` there is no cached data
 stored. This is the case when the registry is getting rebuilt.
 
@@ -11422,19 +11422,19 @@ stored. This is the case when the registry is getting rebuilt.
 
 The cached data as a
 `Structure` or `None`.
-<!-- impl Plugin::fn get_description -->
+<!-- impl Plugin::fn description -->
 Get the long descriptive name of the plugin
 
 # Returns
 
 the long name of the plugin
-<!-- impl Plugin::fn get_filename -->
+<!-- impl Plugin::fn filename -->
 get the filename of the plugin
 
 # Returns
 
 the filename of the plugin
-<!-- impl Plugin::fn get_license -->
+<!-- impl Plugin::fn license -->
 get the license of the plugin
 
 # Returns
@@ -11446,19 +11446,19 @@ Get the short name of the plugin
 # Returns
 
 the name of the plugin
-<!-- impl Plugin::fn get_origin -->
+<!-- impl Plugin::fn origin -->
 get the URL where the plugin comes from
 
 # Returns
 
 the origin of the plugin
-<!-- impl Plugin::fn get_package -->
+<!-- impl Plugin::fn package -->
 get the package the plugin belongs to.
 
 # Returns
 
 the package of the plugin
-<!-- impl Plugin::fn get_release_date_string -->
+<!-- impl Plugin::fn release_date_string -->
 Get the release date (and possibly time) in form of a string, if available.
 
 For normal GStreamer plugin releases this will usually just be a date in
@@ -11472,13 +11472,13 @@ There may be plugins that do not have a valid release date set on them.
 
 the date string of the plugin, or `None` if not
 available.
-<!-- impl Plugin::fn get_source -->
+<!-- impl Plugin::fn source -->
 get the source module the plugin belongs to.
 
 # Returns
 
 the source of the plugin
-<!-- impl Plugin::fn get_version -->
+<!-- impl Plugin::fn version -->
 get the version of the plugin
 
 # Returns
@@ -11558,13 +11558,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PluginFeatureExtManual`](prelude/trait.PluginFeatureExtManual.html)
+[`PluginFeatureExt`](trait@crate::PluginFeatureExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`PluginFeatureExtManual`](trait@crate::PluginFeatureExtManual)
 <!-- trait PluginFeatureExt -->
 Trait containing all `PluginFeature` methods.
 
 # Implementors
 
-[`DeviceProviderFactory`](struct.DeviceProviderFactory.html), [`ElementFactory`](struct.ElementFactory.html), [`PluginFeature`](struct.PluginFeature.html), [`TypeFindFactory`](struct.TypeFindFactory.html)
+[`DeviceProviderFactory`](struct@crate::DeviceProviderFactory), [`ElementFactory`](struct@crate::ElementFactory), [`PluginFeature`](struct@crate::PluginFeature), [`TypeFindFactory`](struct@crate::TypeFindFactory)
 <!-- impl PluginFeature::fn list_copy -->
 Copies the list of features. Caller should call [`list_free`](Self::list_free)
 when done with the list.
@@ -11614,7 +11614,7 @@ minimum required micro version
 
 `true` if the plugin feature has at least
  the required version, otherwise `false`.
-<!-- trait PluginFeatureExt::fn get_plugin -->
+<!-- trait PluginFeatureExt::fn plugin -->
 Get the plugin that provides this feature.
 
 # Returns
@@ -11622,7 +11622,7 @@ Get the plugin that provides this feature.
 the plugin that provides this
  feature, or `None`. Unref with `GstObjectExt::unref` when no
  longer needed.
-<!-- trait PluginFeatureExt::fn get_plugin_name -->
+<!-- trait PluginFeatureExt::fn plugin_name -->
 Get the name of the plugin that provides this feature.
 
 # Returns
@@ -11630,7 +11630,7 @@ Get the name of the plugin that provides this feature.
 the name of the plugin that provides this
  feature, or `None` if the feature is not associated with a
  plugin.
-<!-- trait PluginFeatureExt::fn get_rank -->
+<!-- trait PluginFeatureExt::fn rank -->
 Gets the rank of a plugin feature.
 
 # Returns
@@ -11693,13 +11693,13 @@ Presets found in those paths will be considered as "app presets".
 
 # Implements
 
-[`PresetExt`](trait.PresetExt.html)
+[`PresetExt`](trait@crate::PresetExt)
 <!-- trait PresetExt -->
 Trait containing all `Preset` methods.
 
 # Implementors
 
-[`Preset`](struct.Preset.html)
+[`Preset`](struct@crate::Preset)
 <!-- impl Preset::fn get_app_dir -->
 Gets the directory for application specific presets if set by the
 application.
@@ -11740,14 +11740,14 @@ value
 
 `true` for success, `false` if e.g. there is no preset with that `name`
 or no value for the given `tag`
-<!-- trait PresetExt::fn get_preset_names -->
+<!-- trait PresetExt::fn preset_names -->
 Get a copy of preset names as a `None` terminated string array.
 
 # Returns
 
 
  list with names, use `g_strfreev` after usage.
-<!-- trait PresetExt::fn get_property_names -->
+<!-- trait PresetExt::fn property_names -->
 Get a the names of the GObject properties that can be used for presets.
 
 # Returns
@@ -11966,13 +11966,13 @@ Feature: `v1_14`
 
 # Implements
 
-[`ProxyPadExt`](trait.ProxyPadExt.html), [`PadExt`](trait.PadExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ProxyPadExtManual`](prelude/trait.ProxyPadExtManual.html), [`PadExtManual`](prelude/trait.PadExtManual.html)
+[`ProxyPadExt`](trait@crate::ProxyPadExt), [`PadExt`](trait@crate::PadExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ProxyPadExtManual`](trait@crate::ProxyPadExtManual), [`PadExtManual`](trait@crate::PadExtManual)
 <!-- trait ProxyPadExt -->
 Trait containing all `ProxyPad` methods.
 
 # Implementors
 
-[`GhostPad`](struct.GhostPad.html), [`ProxyPad`](struct.ProxyPad.html)
+[`GhostPad`](struct@crate::GhostPad), [`ProxyPad`](struct@crate::ProxyPad)
 <!-- impl ProxyPad::fn chain_default -->
 Invoke the default chain function of the proxy pad.
 ## `pad`
@@ -12027,7 +12027,7 @@ the parent of `pad` or `None`
 
 a `Iterator` of `Pad`, or `None` if `pad`
 has no parent. Unref each returned pad with `GstObjectExt::unref`.
-<!-- trait ProxyPadExt::fn get_internal -->
+<!-- trait ProxyPadExt::fn internal -->
 Get the internal pad of `self`. Unref target pad after usage.
 
 The internal pad of a `GhostPad` is the internally used
@@ -12915,7 +12915,7 @@ removed at the end of initialization.
 
 # Implements
 
-[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- impl Registry::fn fork_is_enabled -->
 By default GStreamer will perform scanning and rebuilding of the
 registry file using a helper child process.
@@ -13050,14 +13050,14 @@ a plugin name.
 
 a `glib::List` of
  `PluginFeature`. Use `PluginFeature::list_free` after usage.
-<!-- impl Registry::fn get_feature_list_cookie -->
+<!-- impl Registry::fn feature_list_cookie -->
 Returns the registry's feature list cookie. This changes
 every time a feature is added or removed from the registry.
 
 # Returns
 
 the feature list cookie.
-<!-- impl Registry::fn get_plugin_list -->
+<!-- impl Registry::fn plugin_list -->
 Get a copy of all plugins registered in the given registry. The refcount
 of each element in the list in incremented.
 
@@ -13908,6 +13908,38 @@ the state change will happen asynchronously
 the state change succeeded but the element
  cannot produce data in `State::Paused`.
  This typically happens with live sources.
+<!-- struct StaticCaps -->
+Datastructure to initialize `Caps` from a string description usually
+used in conjunction with GST_STATIC_CAPS() and `StaticCaps::get` to
+instantiate a `Caps`.
+<!-- impl StaticCaps::fn cleanup -->
+Clean up the cached caps contained in `self`.
+<!-- impl StaticCaps::fn get -->
+Converts a `StaticCaps` to a `Caps`.
+
+# Returns
+
+a pointer to the `Caps`. Unref
+ after usage. Since the core holds an additional ref to the
+ returned caps, use `gst_caps_make_writable` on the returned caps
+ to modify it.
+<!-- struct StaticPadTemplate -->
+Structure describing the `StaticPadTemplate`.
+<!-- impl StaticPadTemplate::fn get -->
+Converts a `StaticPadTemplate` into a `PadTemplate`.
+
+# Returns
+
+a new `PadTemplate`.
+<!-- impl StaticPadTemplate::fn get_caps -->
+Gets the capabilities of the static pad template.
+
+# Returns
+
+the `Caps` of the static pad template.
+Unref after usage. Since the core holds an additional
+ref to the returned caps, use `gst_caps_make_writable`
+on the returned caps to modify it.
 <!-- struct Stream -->
 A high-level object representing a single stream. It might be backed, or
 not, by an actual flow of data in a pipeline (`Pad`).
@@ -13926,7 +13958,7 @@ Feature: `v1_10`
 
 # Implements
 
-[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- impl Stream::fn new -->
 Create a new `Stream` for the given `stream_id`, `caps`, `type_`
 and `flags`
@@ -13946,7 +13978,7 @@ the `StreamFlags` of the stream
 # Returns
 
 The new `Stream`
-<!-- impl Stream::fn get_caps -->
+<!-- impl Stream::fn caps -->
 Retrieve the caps for `self`, if any
 
 Feature: `v1_10`
@@ -13955,7 +13987,7 @@ Feature: `v1_10`
 # Returns
 
 The `Caps` for `self`
-<!-- impl Stream::fn get_stream_flags -->
+<!-- impl Stream::fn stream_flags -->
 Retrieve the current stream flags for `self`
 
 Feature: `v1_10`
@@ -13964,7 +13996,7 @@ Feature: `v1_10`
 # Returns
 
 The `StreamFlags` for `self`
-<!-- impl Stream::fn get_stream_id -->
+<!-- impl Stream::fn stream_id -->
 Returns the stream ID of `self`.
 
 Feature: `v1_10`
@@ -13974,7 +14006,7 @@ Feature: `v1_10`
 
 the stream ID of `self`. Only valid
 during the lifetime of `self`.
-<!-- impl Stream::fn get_stream_type -->
+<!-- impl Stream::fn stream_type -->
 Retrieve the stream type for `self`
 
 Feature: `v1_10`
@@ -13983,7 +14015,7 @@ Feature: `v1_10`
 # Returns
 
 The `StreamType` for `self`
-<!-- impl Stream::fn get_tags -->
+<!-- impl Stream::fn tags -->
 Retrieve the tags for `self`, if any
 
 Feature: `v1_10`
@@ -14060,7 +14092,7 @@ Feature: `v1_10`
 
 # Implements
 
-[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`]
 <!-- impl StreamCollection::fn new -->
 Create a new `StreamCollection`.
 
@@ -14083,7 +14115,7 @@ the `Stream` to add
 # Returns
 
 `true` if the `stream` was properly added, else `false`
-<!-- impl StreamCollection::fn get_size -->
+<!-- impl StreamCollection::fn size -->
 Get the number of streams this collection contains
 
 Feature: `v1_10`
@@ -14105,7 +14137,7 @@ Index of the stream to retrieve
 # Returns
 
 A `Stream`
-<!-- impl StreamCollection::fn get_upstream_id -->
+<!-- impl StreamCollection::fn upstream_id -->
 Returns the upstream id of the `self`.
 
 Feature: `v1_10`
@@ -15139,13 +15171,13 @@ wait operations.
 
 # Implements
 
-[`SystemClockExt`](trait.SystemClockExt.html), [`ClockExt`](trait.ClockExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ClockExtManual`](prelude/trait.ClockExtManual.html)
+[`SystemClockExt`](trait@crate::SystemClockExt), [`ClockExt`](trait@crate::ClockExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ClockExtManual`](trait@crate::ClockExtManual)
 <!-- trait SystemClockExt -->
 Trait containing all `SystemClock` methods.
 
 # Implementors
 
-[`SystemClock`](struct.SystemClock.html)
+[`SystemClock`](struct@crate::SystemClock)
 <!-- impl SystemClock::fn obtain -->
 Get a handle to the default system clock. The refcount of the
 clock will be increased so you need to unref the clock after
@@ -15854,13 +15886,13 @@ GST_LOG_OBJECT (tagsetter, "final tags: %" GST_PTR_FORMAT, result);
 
 # Implements
 
-[`TagSetterExt`](trait.TagSetterExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`TagSetterExtManual`](prelude/trait.TagSetterExtManual.html), [`ElementExtManual`](prelude/trait.ElementExtManual.html)
+[`TagSetterExt`](trait@crate::TagSetterExt), [`ElementExt`](trait@crate::ElementExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`TagSetterExtManual`](trait@crate::TagSetterExtManual), [`ElementExtManual`](trait@crate::ElementExtManual)
 <!-- trait TagSetterExt -->
 Trait containing all `TagSetter` methods.
 
 # Implementors
 
-[`TagSetter`](struct.TagSetter.html)
+[`TagSetter`](struct@crate::TagSetter)
 <!-- trait TagSetterExt::fn add_tag_valist -->
 Adds the given tag / value pairs on the setter using the given merge mode.
 The list must be terminated with `None`.
@@ -15901,7 +15933,7 @@ The list must be terminated with `None`.
 the mode to use
 ## `tag`
 tag to set
-<!-- trait TagSetterExt::fn get_tag_list -->
+<!-- trait TagSetterExt::fn tag_list -->
 Returns the current list of tags the setter uses. The list should not be
 modified or freed.
 
@@ -15911,7 +15943,7 @@ This function is not thread-safe.
 
 a current snapshot of the
  taglist used in the setter or `None` if none is used.
-<!-- trait TagSetterExt::fn get_tag_merge_mode -->
+<!-- trait TagSetterExt::fn tag_merge_mode -->
 Queries the mode by which tags inside the setter are overwritten by tags
 from events
 
@@ -16207,14 +16239,14 @@ with any TOC entries received from downstream.
 
 # Implements
 
-[`TocSetterExt`](trait.TocSetterExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ElementExtManual`](prelude/trait.ElementExtManual.html)
+[`TocSetterExt`](trait@crate::TocSetterExt), [`ElementExt`](trait@crate::ElementExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`ElementExtManual`](trait@crate::ElementExtManual)
 <!-- trait TocSetterExt -->
 Trait containing all `TocSetter` methods.
 
 # Implementors
 
-[`TocSetter`](struct.TocSetter.html)
-<!-- trait TocSetterExt::fn get_toc -->
+[`TocSetter`](struct@crate::TocSetter)
+<!-- trait TocSetterExt::fn toc -->
 Return current TOC the setter uses. The TOC should not be
 modified without making it writable first.
 
@@ -16284,7 +16316,7 @@ that though.
 
 # Implements
 
-[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PluginFeatureExtManual`](prelude/trait.PluginFeatureExtManual.html)
+[`PluginFeatureExt`](trait@crate::PluginFeatureExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`PluginFeatureExtManual`](trait@crate::PluginFeatureExtManual)
 <!-- impl TypeFindFactory::fn get_list -->
 Gets the list of all registered typefind factories. You must free the
 list using `PluginFeature::list_free`.
@@ -16303,13 +16335,13 @@ Calls the `GstTypeFindFunction` associated with this factory.
 ## `find`
 a properly setup `TypeFind` entry. The get_data
  and suggest_type members must be set.
-<!-- impl TypeFindFactory::fn get_caps -->
+<!-- impl TypeFindFactory::fn caps -->
 Gets the `Caps` associated with a typefind factory.
 
 # Returns
 
 the `Caps` associated with this factory
-<!-- impl TypeFindFactory::fn get_extensions -->
+<!-- impl TypeFindFactory::fn extensions -->
 Gets the extensions associated with a `TypeFindFactory`. The returned
 array should not be changed. If you need to change stuff in it, you should
 copy it using `g_strdupv`. This function may return `None` to indicate
@@ -16366,14 +16398,14 @@ Source and Sink plugins should implement this interface when possible.
 
 # Implements
 
-[`URIHandlerExt`](trait.URIHandlerExt.html)
+[`URIHandlerExt`](trait@crate::URIHandlerExt)
 <!-- trait URIHandlerExt -->
 Trait containing all `URIHandler` methods.
 
 # Implementors
 
-[`URIHandler`](struct.URIHandler.html)
-<!-- trait URIHandlerExt::fn get_protocols -->
+[`URIHandler`](struct@crate::URIHandler)
+<!-- trait URIHandlerExt::fn protocols -->
 Gets the list of protocols supported by `self`. This list may not be
 modified.
 
@@ -16383,7 +16415,7 @@ the
  supported protocols. Returns `None` if the `self` isn't
  implemented properly, or the `self` doesn't support any
  protocols.
-<!-- trait URIHandlerExt::fn get_uri -->
+<!-- trait URIHandlerExt::fn uri -->
 Gets the currently handled URI.
 
 # Returns
@@ -16392,7 +16424,7 @@ the URI currently handled by
  the `self`. Returns `None` if there are no URI currently
  handled. The returned string must be freed with `g_free` when no
  longer needed.
-<!-- trait URIHandlerExt::fn get_uri_type -->
+<!-- trait URIHandlerExt::fn uri_type -->
 Gets the type of the given URI handler
 
 # Returns

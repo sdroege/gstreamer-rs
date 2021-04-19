@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct TypeFindFactory(Object<ffi::GstTypeFindFactory, ffi::GstTypeFindFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
-        get_type => || ffi::gst_type_find_factory_get_type(),
+        type_ => || ffi::gst_type_find_factory_get_type(),
     }
 }
 

@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct BufferPool(Object<ffi::GstBufferPool, ffi::GstBufferPoolClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_buffer_pool_get_type(),
+        type_ => || ffi::gst_buffer_pool_get_type(),
     }
 }
 

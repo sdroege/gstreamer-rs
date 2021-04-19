@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct UriClip(Object<ffi::GESUriClip, ffi::GESUriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_uri_clip_get_type(),
+        type_ => || ffi::ges_uri_clip_get_type(),
     }
 }
 

@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct VideoBufferPool(Object<ffi::GstVideoBufferPool, ffi::GstVideoBufferPoolClass>) @extends gst::BufferPool, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_video_buffer_pool_get_type(),
+        type_ => || ffi::gst_video_buffer_pool_get_type(),
     }
 }
 

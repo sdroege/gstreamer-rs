@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct GLColorConvert(Object<ffi::GstGLColorConvert, ffi::GstGLColorConvertClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_color_convert_get_type(),
+        type_ => || ffi::gst_gl_color_convert_get_type(),
     }
 }
 

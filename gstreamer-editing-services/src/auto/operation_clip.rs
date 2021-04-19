@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct OperationClip(Object<ffi::GESOperationClip, ffi::GESOperationClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_operation_clip_get_type(),
+        type_ => || ffi::ges_operation_clip_get_type(),
     }
 }
 

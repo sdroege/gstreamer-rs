@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct ARGBControlBinding(Object<ffi::GstARGBControlBinding, ffi::GstARGBControlBindingClass>) @extends gst::ControlBinding, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_argb_control_binding_get_type(),
+        type_ => || ffi::gst_argb_control_binding_get_type(),
     }
 }
 

@@ -4,7 +4,7 @@
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl Player::fn new -->
 Creates a new `Player` instance that uses `signal_dispatcher` to dispatch
 signals to some event loop system, or emits signals directly if NULL is
@@ -109,7 +109,7 @@ a `None` terminated array of `PlayerVisualization` to free
  a `None` terminated array containing all available
  visualizations. Use `Player::visualizations_free` after
  usage.
-<!-- impl Player::fn get_audio_video_offset -->
+<!-- impl Player::fn audio_video_offset -->
 Retrieve the current value of audio-video-offset property
 
 # Returns
@@ -124,7 +124,7 @@ Retrieve the current value of the indicated `type_`.
 
 The current value of `type_`, between [0,1]. In case of
  error -1 is returned.
-<!-- impl Player::fn get_config -->
+<!-- impl Player::fn config -->
 Get a copy of the current configuration of the player. This configuration
 can either be modified and used for the `Player::set_config` call
 or it must be freed after usage.
@@ -133,7 +133,7 @@ or it must be freed after usage.
 
 a copy of the current configuration of `self`. Use
 `gst::Structure::free` after usage or `Player::set_config`.
-<!-- impl Player::fn get_current_audio_track -->
+<!-- impl Player::fn current_audio_track -->
 A Function to get current audio `PlayerAudioInfo` instance.
 
 # Returns
@@ -141,7 +141,7 @@ A Function to get current audio `PlayerAudioInfo` instance.
 current audio track.
 
 The caller should free it with `glib::object::ObjectExt::unref`
-<!-- impl Player::fn get_current_subtitle_track -->
+<!-- impl Player::fn current_subtitle_track -->
 A Function to get current subtitle `PlayerSubtitleInfo` instance.
 
 # Returns
@@ -149,7 +149,7 @@ A Function to get current subtitle `PlayerSubtitleInfo` instance.
 current subtitle track.
 
 The caller should free it with `glib::object::ObjectExt::unref`
-<!-- impl Player::fn get_current_video_track -->
+<!-- impl Player::fn current_video_track -->
 A Function to get current video `PlayerVideoInfo` instance.
 
 # Returns
@@ -157,20 +157,20 @@ A Function to get current video `PlayerVideoInfo` instance.
 current video track.
 
 The caller should free it with `glib::object::ObjectExt::unref`
-<!-- impl Player::fn get_current_visualization -->
+<!-- impl Player::fn current_visualization -->
 
 # Returns
 
 Name of the currently enabled visualization.
  `g_free` after usage.
-<!-- impl Player::fn get_duration -->
+<!-- impl Player::fn duration -->
 Retrieves the duration of the media stream that self represents.
 
 # Returns
 
 the duration of the currently-playing media stream, in
 nanoseconds.
-<!-- impl Player::fn get_media_info -->
+<!-- impl Player::fn media_info -->
 A Function to get the current media info `PlayerMediaInfo` instance.
 
 # Returns
@@ -178,47 +178,47 @@ A Function to get the current media info `PlayerMediaInfo` instance.
 media info instance.
 
 The caller should free it with `glib::object::ObjectExt::unref`
-<!-- impl Player::fn get_multiview_flags -->
+<!-- impl Player::fn multiview_flags -->
 Retrieve the current value of the indicated `type_`.
 
 # Returns
 
 The current value of `type_`, Default: 0x00000000 "none
-<!-- impl Player::fn get_multiview_mode -->
+<!-- impl Player::fn multiview_mode -->
 Retrieve the current value of the indicated `type_`.
 
 # Returns
 
 The current value of `type_`, Default: -1 "none"
-<!-- impl Player::fn get_mute -->
+<!-- impl Player::fn is_muted -->
 
 # Returns
 
 `true` if the currently-playing stream is muted.
-<!-- impl Player::fn get_pipeline -->
+<!-- impl Player::fn pipeline -->
 
 # Returns
 
 The internal playbin instance
-<!-- impl Player::fn get_position -->
+<!-- impl Player::fn position -->
 
 # Returns
 
 the absolute position time, in nanoseconds, of the
 currently-playing stream.
-<!-- impl Player::fn get_rate -->
+<!-- impl Player::fn rate -->
 
 # Returns
 
 current playback rate
-<!-- impl Player::fn get_subtitle_uri -->
+<!-- impl Player::fn subtitle_uri -->
 current subtitle URI
 
 # Returns
 
 URI of the current external subtitle.
  `g_free` after usage.
-<!-- impl Player::fn get_subtitle_video_offset -->
+<!-- impl Player::fn subtitle_video_offset -->
 Retrieve the current value of subtitle-video-offset property
 
 Feature: `v1_16`
@@ -227,7 +227,7 @@ Feature: `v1_16`
 # Returns
 
 The current value of subtitle-video-offset in nanoseconds
-<!-- impl Player::fn get_uri -->
+<!-- impl Player::fn uri -->
 Gets the URI of the currently-playing stream.
 
 # Returns
@@ -249,7 +249,7 @@ Additional configuration
 # Returns
 
 Current video snapshot sample or `None` on failure
-<!-- impl Player::fn get_volume -->
+<!-- impl Player::fn volume -->
 Returns the current volume level, as a percentage between 0 and 1.
 
 # Returns
@@ -397,28 +397,28 @@ in the stream.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerAudioInfo::fn get_bitrate -->
+[`PlayerStreamInfoExt`](trait@crate::PlayerStreamInfoExt), [`trait@glib::object::ObjectExt`]
+<!-- impl PlayerAudioInfo::fn bitrate -->
 
 # Returns
 
 the audio bitrate in `PlayerAudioInfo`.
-<!-- impl PlayerAudioInfo::fn get_channels -->
+<!-- impl PlayerAudioInfo::fn channels -->
 
 # Returns
 
 the number of audio channels in `PlayerAudioInfo`.
-<!-- impl PlayerAudioInfo::fn get_language -->
+<!-- impl PlayerAudioInfo::fn language -->
 
 # Returns
 
 the language of the stream, or NULL if unknown.
-<!-- impl PlayerAudioInfo::fn get_max_bitrate -->
+<!-- impl PlayerAudioInfo::fn max_bitrate -->
 
 # Returns
 
 the audio maximum bitrate in `PlayerAudioInfo`.
-<!-- impl PlayerAudioInfo::fn get_sample_rate -->
+<!-- impl PlayerAudioInfo::fn sample_rate -->
 
 # Returns
 
@@ -441,7 +441,7 @@ generic error.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
+[`trait@glib::object::ObjectExt`], [`PlayerSignalDispatcherExt`](trait@crate::PlayerSignalDispatcherExt)
 <!-- impl PlayerGMainContextSignalDispatcher::fn new -->
 Creates a new GstPlayerSignalDispatcher that uses `application_context`,
 or the thread default one if `None` is used. See `Player::new`.
@@ -456,78 +456,78 @@ Structure containing the media information of a URI.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerMediaInfo::fn get_audio_streams -->
+[`trait@glib::object::ObjectExt`]
+<!-- impl PlayerMediaInfo::fn audio_streams -->
 
 # Returns
 
 A `glib::List` of
 matching `PlayerAudioInfo`.
-<!-- impl PlayerMediaInfo::fn get_container_format -->
+<!-- impl PlayerMediaInfo::fn container_format -->
 
 # Returns
 
 the container format.
-<!-- impl PlayerMediaInfo::fn get_duration -->
+<!-- impl PlayerMediaInfo::fn duration -->
 
 # Returns
 
 duration of the media.
-<!-- impl PlayerMediaInfo::fn get_image_sample -->
+<!-- impl PlayerMediaInfo::fn image_sample -->
 Function to get the image (or preview-image) stored in taglist.
 Application can use `gst_sample_*_()` API's to get caps, buffer etc.
 
 # Returns
 
 GstSample or NULL.
-<!-- impl PlayerMediaInfo::fn get_number_of_audio_streams -->
+<!-- impl PlayerMediaInfo::fn number_of_audio_streams -->
 
 # Returns
 
 number of audio streams.
-<!-- impl PlayerMediaInfo::fn get_number_of_streams -->
+<!-- impl PlayerMediaInfo::fn number_of_streams -->
 
 # Returns
 
 number of total streams.
-<!-- impl PlayerMediaInfo::fn get_number_of_subtitle_streams -->
+<!-- impl PlayerMediaInfo::fn number_of_subtitle_streams -->
 
 # Returns
 
 number of subtitle streams.
-<!-- impl PlayerMediaInfo::fn get_number_of_video_streams -->
+<!-- impl PlayerMediaInfo::fn number_of_video_streams -->
 
 # Returns
 
 number of video streams.
-<!-- impl PlayerMediaInfo::fn get_stream_list -->
+<!-- impl PlayerMediaInfo::fn stream_list -->
 
 # Returns
 
 A `glib::List` of
 matching `PlayerStreamInfo`.
-<!-- impl PlayerMediaInfo::fn get_subtitle_streams -->
+<!-- impl PlayerMediaInfo::fn subtitle_streams -->
 
 # Returns
 
 A `glib::List` of
 matching `PlayerSubtitleInfo`.
-<!-- impl PlayerMediaInfo::fn get_tags -->
+<!-- impl PlayerMediaInfo::fn tags -->
 
 # Returns
 
 the tags contained in media info.
-<!-- impl PlayerMediaInfo::fn get_title -->
+<!-- impl PlayerMediaInfo::fn title -->
 
 # Returns
 
 the media title.
-<!-- impl PlayerMediaInfo::fn get_uri -->
+<!-- impl PlayerMediaInfo::fn uri -->
 
 # Returns
 
 the URI associated with `PlayerMediaInfo`.
-<!-- impl PlayerMediaInfo::fn get_video_streams -->
+<!-- impl PlayerMediaInfo::fn video_streams -->
 
 # Returns
 
@@ -548,13 +548,13 @@ matching `PlayerVideoInfo`.
 
 # Implements
 
-[`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
+[`PlayerSignalDispatcherExt`](trait@crate::PlayerSignalDispatcherExt)
 <!-- trait PlayerSignalDispatcherExt -->
 Trait containing all `PlayerSignalDispatcher` methods.
 
 # Implementors
 
-[`PlayerGMainContextSignalDispatcher`](struct.PlayerGMainContextSignalDispatcher.html), [`PlayerSignalDispatcher`](struct.PlayerSignalDispatcher.html)
+[`PlayerGMainContextSignalDispatcher`](struct@crate::PlayerGMainContextSignalDispatcher), [`PlayerSignalDispatcher`](struct@crate::PlayerSignalDispatcher)
 <!-- enum PlayerSnapshotFormat -->
 <!-- enum PlayerState -->
 <!-- enum PlayerState::variant Stopped -->
@@ -575,38 +575,38 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`PlayerStreamInfoExt`](trait@crate::PlayerStreamInfoExt), [`trait@glib::object::ObjectExt`]
 <!-- trait PlayerStreamInfoExt -->
 Trait containing all `PlayerStreamInfo` methods.
 
 # Implementors
 
-[`PlayerAudioInfo`](struct.PlayerAudioInfo.html), [`PlayerStreamInfo`](struct.PlayerStreamInfo.html), [`PlayerSubtitleInfo`](struct.PlayerSubtitleInfo.html), [`PlayerVideoInfo`](struct.PlayerVideoInfo.html)
-<!-- trait PlayerStreamInfoExt::fn get_caps -->
+[`PlayerAudioInfo`](struct@crate::PlayerAudioInfo), [`PlayerStreamInfo`](struct@crate::PlayerStreamInfo), [`PlayerSubtitleInfo`](struct@crate::PlayerSubtitleInfo), [`PlayerVideoInfo`](struct@crate::PlayerVideoInfo)
+<!-- trait PlayerStreamInfoExt::fn caps -->
 
 # Returns
 
 the `gst::Caps` of the stream.
-<!-- trait PlayerStreamInfoExt::fn get_codec -->
+<!-- trait PlayerStreamInfoExt::fn codec -->
 A string describing codec used in `PlayerStreamInfo`.
 
 # Returns
 
 codec string or NULL on unknown.
-<!-- trait PlayerStreamInfoExt::fn get_index -->
+<!-- trait PlayerStreamInfoExt::fn index -->
 Function to get stream index from `PlayerStreamInfo` instance.
 
 # Returns
 
 the stream index of this stream.
-<!-- trait PlayerStreamInfoExt::fn get_stream_type -->
+<!-- trait PlayerStreamInfoExt::fn stream_type -->
 Function to return human readable name for the stream type
 of the given `self` (ex: "audio", "video", "subtitle")
 
 # Returns
 
 a human readable name
-<!-- trait PlayerStreamInfoExt::fn get_tags -->
+<!-- trait PlayerStreamInfoExt::fn tags -->
 
 # Returns
 
@@ -616,8 +616,8 @@ the tags contained in this stream.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerSubtitleInfo::fn get_language -->
+[`PlayerStreamInfoExt`](trait@crate::PlayerStreamInfoExt), [`trait@glib::object::ObjectExt`]
+<!-- impl PlayerSubtitleInfo::fn language -->
 
 # Returns
 
@@ -627,34 +627,34 @@ the language of the stream, or NULL if unknown.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerVideoInfo::fn get_bitrate -->
+[`PlayerStreamInfoExt`](trait@crate::PlayerStreamInfoExt), [`trait@glib::object::ObjectExt`]
+<!-- impl PlayerVideoInfo::fn bitrate -->
 
 # Returns
 
 the current bitrate of video in `PlayerVideoInfo`.
-<!-- impl PlayerVideoInfo::fn get_framerate -->
+<!-- impl PlayerVideoInfo::fn framerate -->
 ## `fps_n`
 Numerator of frame rate
 ## `fps_d`
 Denominator of frame rate
-<!-- impl PlayerVideoInfo::fn get_height -->
+<!-- impl PlayerVideoInfo::fn height -->
 
 # Returns
 
 the height of video in `PlayerVideoInfo`.
-<!-- impl PlayerVideoInfo::fn get_max_bitrate -->
+<!-- impl PlayerVideoInfo::fn max_bitrate -->
 
 # Returns
 
 the maximum bitrate of video in `PlayerVideoInfo`.
-<!-- impl PlayerVideoInfo::fn get_pixel_aspect_ratio -->
+<!-- impl PlayerVideoInfo::fn pixel_aspect_ratio -->
 Returns the pixel aspect ratio in `par_n` and `par_d`
 ## `par_n`
 numerator
 ## `par_d`
 denominator
-<!-- impl PlayerVideoInfo::fn get_width -->
+<!-- impl PlayerVideoInfo::fn width -->
 
 # Returns
 
@@ -664,7 +664,7 @@ the width of video in `PlayerVideoInfo`.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
+[`trait@glib::object::ObjectExt`], [`PlayerVideoRendererExt`](trait@crate::PlayerVideoRendererExt)
 <!-- impl PlayerVideoOverlayVideoRenderer::fn new -->
 ## `window_handle`
 Window handle to use or `None`
@@ -676,7 +676,7 @@ the custom video_sink element to be set for the video renderer
 <!-- impl PlayerVideoOverlayVideoRenderer::fn expose -->
 Tell an overlay that it has been exposed. This will redraw the current frame
 in the drawable even if the pipeline is PAUSED.
-<!-- impl PlayerVideoOverlayVideoRenderer::fn get_render_rectangle -->
+<!-- impl PlayerVideoOverlayVideoRenderer::fn render_rectangle -->
 Return the currently configured render rectangle. See `PlayerVideoOverlayVideoRenderer::set_render_rectangle`
 for details.
 ## `x`
@@ -687,7 +687,7 @@ the vertical offset of the render area inside the window
 the width of the render area inside the window
 ## `height`
 the height of the render area inside the window
-<!-- impl PlayerVideoOverlayVideoRenderer::fn get_window_handle -->
+<!-- impl PlayerVideoOverlayVideoRenderer::fn window_handle -->
 
 # Returns
 
@@ -722,13 +722,13 @@ handle referencing to the platform specific window
 
 # Implements
 
-[`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
+[`PlayerVideoRendererExt`](trait@crate::PlayerVideoRendererExt)
 <!-- trait PlayerVideoRendererExt -->
 Trait containing all `PlayerVideoRenderer` methods.
 
 # Implementors
 
-[`PlayerVideoOverlayVideoRenderer`](struct.PlayerVideoOverlayVideoRenderer.html), [`PlayerVideoRenderer`](struct.PlayerVideoRenderer.html)
+[`PlayerVideoOverlayVideoRenderer`](struct@crate::PlayerVideoOverlayVideoRenderer), [`PlayerVideoRenderer`](struct@crate::PlayerVideoRenderer)
 <!-- struct PlayerVisualization -->
 A `PlayerVisualization` descriptor.
 <!-- impl PlayerVisualization::fn copy -->

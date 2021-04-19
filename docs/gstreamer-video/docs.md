@@ -158,7 +158,7 @@ Offset to define more flags
 
 # Implements
 
-[`gst::BufferPoolExt`](../gst/trait.BufferPoolExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::BufferPoolExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl VideoBufferPool::fn new -->
 Create a new bufferpool that can allocate video frames. This bufferpool
 supports all the video bufferpool options.
@@ -353,6 +353,42 @@ unknown range
 <!-- enum VideoColorRange::variant 16235 -->
 [16..235] for 8 bit components. Chroma has
  [16..240] range.
+<!-- struct VideoColorimetry -->
+Structure describing the color info.
+<!-- impl VideoColorimetry::fn from_string -->
+Parse the colorimetry string and update `self` with the parsed
+values.
+## `color`
+a colorimetry string
+
+# Returns
+
+`true` if `color` points to valid colorimetry info.
+<!-- impl VideoColorimetry::fn is_equal -->
+Compare the 2 colorimetry sets for equality
+## `other`
+another `VideoColorimetry`
+
+# Returns
+
+`true` if `self` and `other` are equal.
+<!-- impl VideoColorimetry::fn matches -->
+Check if the colorimetry information in `info` matches that of the
+string `color`.
+## `color`
+a colorimetry string
+
+# Returns
+
+`true` if `color` conveys the same colorimetry info as the color
+information in `info`.
+<!-- impl VideoColorimetry::fn to_string -->
+Make a string representation of `self`.
+
+# Returns
+
+a string representation of `self`
+or `None` if all the entries of `self` are unknown values.
 <!-- struct VideoDecoder -->
 This base class is for video decoders turning encoded data into raw video
 frames.
@@ -462,13 +498,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`VideoDecoderExt`](trait.VideoDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`VideoDecoderExtManual`](prelude/trait.VideoDecoderExtManual.html)
+[`VideoDecoderExt`](trait@crate::VideoDecoderExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`VideoDecoderExtManual`](trait@crate::VideoDecoderExtManual)
 <!-- trait VideoDecoderExt -->
 Trait containing all `VideoDecoder` methods.
 
 # Implementors
 
-[`VideoDecoder`](struct.VideoDecoder.html)
+[`VideoDecoder`](struct@crate::VideoDecoder)
 <!-- trait VideoDecoderExt::fn add_to_frame -->
 Removes next `n_bytes` of input data and adds it to currently parsed frame.
 ## `n_bytes`
@@ -536,7 +572,7 @@ a decoded `VideoCodecFrame`
 # Returns
 
 a `gst::FlowReturn` resulting from sending data downstream
-<!-- trait VideoDecoderExt::fn get_allocator -->
+<!-- trait VideoDecoderExt::fn allocator -->
 Lets `VideoDecoder` sub-classes to know the memory `allocator`
 used by the base class and its `params`.
 
@@ -547,13 +583,13 @@ used
 ## `params`
 the
 `gst::AllocationParams` of `allocator`
-<!-- trait VideoDecoderExt::fn get_buffer_pool -->
+<!-- trait VideoDecoderExt::fn buffer_pool -->
 
 # Returns
 
 the instance of the `gst::BufferPool` used
 by the decoder; free it after use it
-<!-- trait VideoDecoderExt::fn get_estimate_rate -->
+<!-- trait VideoDecoderExt::fn estimate_rate -->
 
 # Returns
 
@@ -566,13 +602,13 @@ system_frame_number of a frame
 # Returns
 
 pending unfinished `VideoCodecFrame` identified by `frame_number`.
-<!-- trait VideoDecoderExt::fn get_frames -->
+<!-- trait VideoDecoderExt::fn frames -->
 Get all pending unfinished `VideoCodecFrame`
 
 # Returns
 
 pending unfinished `VideoCodecFrame`.
-<!-- trait VideoDecoderExt::fn get_latency -->
+<!-- trait VideoDecoderExt::fn latency -->
 Query the configured decoder latency. Results will be returned via
 `min_latency` and `max_latency`.
 ## `min_latency`
@@ -592,44 +628,44 @@ a `VideoCodecFrame`
 # Returns
 
 max decoding time.
-<!-- trait VideoDecoderExt::fn get_max_errors -->
+<!-- trait VideoDecoderExt::fn max_errors -->
 
 # Returns
 
 currently configured decoder tolerated error count.
-<!-- trait VideoDecoderExt::fn get_needs_format -->
+<!-- trait VideoDecoderExt::fn needs_format -->
 Queries decoder required format handling.
 
 # Returns
 
 `true` if required format handling is enabled.
-<!-- trait VideoDecoderExt::fn get_oldest_frame -->
+<!-- trait VideoDecoderExt::fn oldest_frame -->
 Get the oldest pending unfinished `VideoCodecFrame`
 
 # Returns
 
 oldest pending unfinished `VideoCodecFrame`.
-<!-- trait VideoDecoderExt::fn get_output_state -->
+<!-- trait VideoDecoderExt::fn output_state -->
 Get the `VideoCodecState` currently describing the output stream.
 
 # Returns
 
 `VideoCodecState` describing format of video data.
-<!-- trait VideoDecoderExt::fn get_packetized -->
+<!-- trait VideoDecoderExt::fn is_packetized -->
 Queries whether input data is considered packetized or not by the
 base class.
 
 # Returns
 
 TRUE if input data is considered packetized.
-<!-- trait VideoDecoderExt::fn get_pending_frame_size -->
+<!-- trait VideoDecoderExt::fn pending_frame_size -->
 Returns the number of bytes previously added to the current frame
 by calling `VideoDecoderExt::add_to_frame`.
 
 # Returns
 
 The number of bytes pending for the current frame
-<!-- trait VideoDecoderExt::fn get_qos_proportion -->
+<!-- trait VideoDecoderExt::fn qos_proportion -->
 
 # Returns
 
@@ -876,13 +912,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`VideoEncoderExt`](trait.VideoEncoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`VideoEncoderExtManual`](prelude/trait.VideoEncoderExtManual.html)
+[`VideoEncoderExt`](trait@crate::VideoEncoderExt), [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`VideoEncoderExtManual`](trait@crate::VideoEncoderExtManual)
 <!-- trait VideoEncoderExt -->
 Trait containing all `VideoEncoder` methods.
 
 # Implementors
 
-[`VideoEncoder`](struct.VideoEncoder.html)
+[`VideoEncoder`](struct@crate::VideoEncoder)
 <!-- trait VideoEncoderExt::fn allocate_output_buffer -->
 Helper function that allocates a buffer to hold an encoded video frame
 for `self`'s current `VideoCodecState`.
@@ -942,7 +978,7 @@ a `VideoCodecFrame` being encoded
 # Returns
 
 a `gst::FlowReturn` resulting from pushing the buffer downstream.
-<!-- trait VideoEncoderExt::fn get_allocator -->
+<!-- trait VideoEncoderExt::fn allocator -->
 Lets `VideoEncoder` sub-classes to know the memory `allocator`
 used by the base class and its `params`.
 
@@ -961,13 +997,13 @@ system_frame_number of a frame
 # Returns
 
 pending unfinished `VideoCodecFrame` identified by `frame_number`.
-<!-- trait VideoEncoderExt::fn get_frames -->
+<!-- trait VideoEncoderExt::fn frames -->
 Get all pending unfinished `VideoCodecFrame`
 
 # Returns
 
 pending unfinished `VideoCodecFrame`.
-<!-- trait VideoEncoderExt::fn get_latency -->
+<!-- trait VideoEncoderExt::fn latency -->
 Query the configured encoding latency. Results will be returned via
 `min_latency` and `max_latency`.
 ## `min_latency`
@@ -993,7 +1029,7 @@ a `VideoCodecFrame`
 # Returns
 
 max decoding time.
-<!-- trait VideoEncoderExt::fn get_min_force_key_unit_interval -->
+<!-- trait VideoEncoderExt::fn min_force_key_unit_interval -->
 Returns the minimum force-keyunit interval, see `VideoEncoderExt::set_min_force_key_unit_interval`
 for more details.
 
@@ -1003,13 +1039,13 @@ Feature: `v1_18`
 # Returns
 
 the minimum force-keyunit interval
-<!-- trait VideoEncoderExt::fn get_oldest_frame -->
+<!-- trait VideoEncoderExt::fn oldest_frame -->
 Get the oldest unfinished pending `VideoCodecFrame`
 
 # Returns
 
 oldest unfinished pending `VideoCodecFrame`
-<!-- trait VideoEncoderExt::fn get_output_state -->
+<!-- trait VideoEncoderExt::fn output_state -->
 Get the current `VideoCodecState`
 
 # Returns
@@ -1156,7 +1192,7 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst_base::BaseTransformExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- struct VideoFlags -->
 Extra video flags
 <!-- struct VideoFlags::const NONE -->
@@ -1402,6 +1438,125 @@ This format can be used in a
 <!-- struct VideoFormatFlags::const TILED -->
 The format is tiled, there is tiling information
  in the last plane.
+<!-- struct VideoFormatInfo -->
+Information for a video format.
+
+Feature: `v1_18`
+<!-- impl VideoFormatInfo::fn component -->
+Fill `components` with the number of all the components packed in plane `p`
+for the format `self`. A value of -1 in `components` indicates that no more
+components are packed in the plane.
+
+Feature: `v1_18`
+
+## `plane`
+a plane number
+## `components`
+array used to store component numbers
+<!-- struct VideoFrame -->
+A video frame obtained from `VideoFrame::map`
+<!-- impl VideoFrame::fn copy -->
+Copy the contents from `src` to `self`.
+
+Note: Since: 1.18, `self` dimensions are allowed to be
+smaller than `src` dimensions.
+## `src`
+a `VideoFrame`
+
+# Returns
+
+TRUE if the contents could be copied.
+<!-- impl VideoFrame::fn copy_plane -->
+Copy the plane with index `plane` from `src` to `self`.
+
+Note: Since: 1.18, `self` dimensions are allowed to be
+smaller than `src` dimensions.
+## `src`
+a `VideoFrame`
+## `plane`
+a plane
+
+# Returns
+
+TRUE if the contents could be copied.
+<!-- impl VideoFrame::fn map -->
+Use `info` and `buffer` to fill in the values of `self`. `self` is usually
+allocated on the stack, and you will pass the address to the `VideoFrame`
+structure allocated on the stack; `VideoFrame::map` will then fill in
+the structures with the various video-specific information you need to access
+the pixels of the video buffer. You can then use accessor macros such as
+GST_VIDEO_FRAME_COMP_DATA(), GST_VIDEO_FRAME_PLANE_DATA(),
+GST_VIDEO_FRAME_COMP_STRIDE(), GST_VIDEO_FRAME_PLANE_STRIDE() etc.
+to get to the pixels.
+
+
+```C
+  GstVideoFrame vframe;
+  ...
+  // set RGB pixels to black one at a time
+  if (gst_video_frame_map (&amp;vframe, video_info, video_buffer, GST_MAP_WRITE)) {
+    guint8 *pixels = GST_VIDEO_FRAME_PLANE_DATA (vframe, 0);
+    guint stride = GST_VIDEO_FRAME_PLANE_STRIDE (vframe, 0);
+    guint pixel_stride = GST_VIDEO_FRAME_COMP_PSTRIDE (vframe, 0);
+
+    for (h = 0; h < height; ++h) {
+      for (w = 0; w < width; ++w) {
+        guint8 *pixel = pixels + h * stride + w * pixel_stride;
+
+        memset (pixel, 0, pixel_stride);
+      }
+    }
+
+    gst_video_frame_unmap (&amp;vframe);
+  }
+  ...
+```
+
+All video planes of `buffer` will be mapped and the pointers will be set in
+`self`->data.
+
+The purpose of this function is to make it easy for you to get to the video
+pixels in a generic way, without you having to worry too much about details
+such as whether the video data is allocated in one contiguous memory chunk
+or multiple memory chunks (e.g. one for each plane); or if custom strides
+and custom plane offsets are used or not (as signalled by GstVideoMeta on
+each buffer). This function will just fill the `VideoFrame` structure
+with the right values and if you use the accessor macros everything will
+just work and you can access the data easily. It also maps the underlying
+memory chunks for you.
+## `info`
+a `VideoInfo`
+## `buffer`
+the buffer to map
+## `flags`
+`gst::MapFlags`
+
+# Returns
+
+`true` on success.
+<!-- impl VideoFrame::fn map_id -->
+Use `info` and `buffer` to fill in the values of `self` with the video frame
+information of frame `id`.
+
+When `id` is -1, the default frame is mapped. When `id` != -1, this function
+will return `false` when there is no GstVideoMeta with that id.
+
+All video planes of `buffer` will be mapped and the pointers will be set in
+`self`->data.
+## `info`
+a `VideoInfo`
+## `buffer`
+the buffer to map
+## `id`
+the frame id to map
+## `flags`
+`gst::MapFlags`
+
+# Returns
+
+`true` on success.
+<!-- impl VideoFrame::fn unmap -->
+Unmap the memory previously mapped with gst_video_frame_map.
 <!-- struct VideoFrameFlags -->
 Extra video frame flags
 <!-- struct VideoFrameFlags::const NONE -->
@@ -1737,14 +1892,14 @@ operation of video-sources or operators.
 
 # Implements
 
-[`VideoOrientationExt`](trait.VideoOrientationExt.html)
+[`VideoOrientationExt`](trait@crate::VideoOrientationExt)
 <!-- trait VideoOrientationExt -->
 Trait containing all `VideoOrientation` methods.
 
 # Implementors
 
-[`VideoOrientation`](struct.VideoOrientation.html)
-<!-- trait VideoOrientationExt::fn get_hcenter -->
+[`VideoOrientation`](struct@crate::VideoOrientation)
+<!-- trait VideoOrientationExt::fn hcenter -->
 Get the horizontal centering offset from the given object.
 ## `center`
 return location for the result
@@ -1752,7 +1907,7 @@ return location for the result
 # Returns
 
 `true` in case the element supports centering
-<!-- trait VideoOrientationExt::fn get_hflip -->
+<!-- trait VideoOrientationExt::fn hflip -->
 Get the horizontal flipping state (`true` for flipped) from the given object.
 ## `flip`
 return location for the result
@@ -1760,7 +1915,7 @@ return location for the result
 # Returns
 
 `true` in case the element supports flipping
-<!-- trait VideoOrientationExt::fn get_vcenter -->
+<!-- trait VideoOrientationExt::fn vcenter -->
 Get the vertical centering offset from the given object.
 ## `center`
 return location for the result
@@ -1768,7 +1923,7 @@ return location for the result
 # Returns
 
 `true` in case the element supports centering
-<!-- trait VideoOrientationExt::fn get_vflip -->
+<!-- trait VideoOrientationExt::fn vflip -->
 Get the vertical flipping state (`true` for flipped) from the given object.
 ## `flip`
 return location for the result
@@ -2098,13 +2253,13 @@ int main(int argc, char *argv[])
 
 # Implements
 
-[`VideoOverlayExt`](trait.VideoOverlayExt.html), [`VideoOverlayExtManual`](prelude/trait.VideoOverlayExtManual.html)
+[`VideoOverlayExt`](trait@crate::VideoOverlayExt), [`VideoOverlayExtManual`](trait@crate::VideoOverlayExtManual)
 <!-- trait VideoOverlayExt -->
 Trait containing all `VideoOverlay` methods.
 
 # Implementors
 
-[`VideoOverlay`](struct.VideoOverlay.html)
+[`VideoOverlay`](struct@crate::VideoOverlay)
 <!-- impl VideoOverlay::fn install_properties -->
 This helper shall be used by classes implementing the `VideoOverlay`
 interface that want the render rectangle to be controllable using
@@ -2245,13 +2400,13 @@ observing out-of-sync frames.
 
 # Implements
 
-[`VideoSinkExt`](trait.VideoSinkExt.html), [`gst_base::BaseSinkExt`](../gst_base/trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`VideoSinkExt`](trait@crate::VideoSinkExt), [`trait@gst_base::BaseSinkExt`], [`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- trait VideoSinkExt -->
 Trait containing all `VideoSink` methods.
 
 # Implementors
 
-[`VideoSink`](struct.VideoSink.html)
+[`VideoSink`](struct@crate::VideoSink)
 <!-- impl VideoSink::fn center_rect -->
 Takes `src` rectangle and position it at the center of `dst` rectangle with or
 without `scaling`. It handles clipping if the `src` rectangle is bigger than

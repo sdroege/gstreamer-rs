@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct WebRTCRTPSender(Object<ffi::GstWebRTCRTPSender, ffi::GstWebRTCRTPSenderClass>);
 
     match fn {
-        get_type => || ffi::gst_webrtc_rtp_sender_get_type(),
+        type_ => || ffi::gst_webrtc_rtp_sender_get_type(),
     }
 }
 

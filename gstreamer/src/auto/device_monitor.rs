@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct DeviceMonitor(Object<ffi::GstDeviceMonitor, ffi::GstDeviceMonitorClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_device_monitor_get_type(),
+        type_ => || ffi::gst_device_monitor_get_type(),
     }
 }
 

@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct BaseParse(Object<ffi::GstBaseParse, ffi::GstBaseParseClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_base_parse_get_type(),
+        type_ => || ffi::gst_base_parse_get_type(),
     }
 }
 

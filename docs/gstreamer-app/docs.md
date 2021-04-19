@@ -39,8 +39,8 @@ to avoid polling.
 
 # Implements
 
-[`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
-<!-- impl AppSink::fn get_buffer_list_support -->
+[`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`trait@gst::URIHandlerExt`]
+<!-- impl AppSink::fn is_buffer_list_support -->
 Check if `self` supports buffer lists.
 
 Feature: `v1_12`
@@ -49,13 +49,13 @@ Feature: `v1_12`
 # Returns
 
 `true` if `self` supports buffer lists.
-<!-- impl AppSink::fn get_caps -->
+<!-- impl AppSink::fn caps -->
 Get the configured caps on `self`.
 
 # Returns
 
 the `gst::Caps` accepted by the sink. `gst_caps_unref` after usage.
-<!-- impl AppSink::fn get_drop -->
+<!-- impl AppSink::fn is_drop -->
 Check if `self` will drop old buffers when the maximum amount of queued
 buffers is reached.
 
@@ -63,20 +63,20 @@ buffers is reached.
 
 `true` if `self` is dropping old buffers when the queue is
 filled.
-<!-- impl AppSink::fn get_emit_signals -->
+<!-- impl AppSink::fn emits_signals -->
 Check if appsink will emit the "new-preroll" and "new-sample" signals.
 
 # Returns
 
 `true` if `self` is emitting the "new-preroll" and "new-sample"
 signals.
-<!-- impl AppSink::fn get_max_buffers -->
+<!-- impl AppSink::fn max_buffers -->
 Get the maximum amount of buffers that can be queued in `self`.
 
 # Returns
 
 The maximum amount of buffers that can be queued.
-<!-- impl AppSink::fn get_wait_on_eos -->
+<!-- impl AppSink::fn is_wait_on_eos -->
 Check if `self` will wait for all buffers to be consumed when an EOS is
 received.
 
@@ -433,7 +433,7 @@ occurs or the state of the appsrc has gone through READY.
 
 # Implements
 
-[`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
+[`trait@gst::ElementExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`], [`trait@gst::URIHandlerExt`]
 <!-- impl AppSrc::fn end_of_stream -->
 Indicates to the appsrc element that the last buffer queued in the
 element is the last buffer of the stream.
@@ -442,19 +442,19 @@ element is the last buffer of the stream.
 
 `gst::FlowReturn::Ok` when the EOS was successfully queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
-<!-- impl AppSrc::fn get_caps -->
+<!-- impl AppSrc::fn caps -->
 Get the configured caps on `self`.
 
 # Returns
 
 the `gst::Caps` produced by the source. `gst_caps_unref` after usage.
-<!-- impl AppSrc::fn get_current_level_bytes -->
+<!-- impl AppSrc::fn current_level_bytes -->
 Get the number of currently queued bytes inside `self`.
 
 # Returns
 
 The number of currently queued bytes.
-<!-- impl AppSrc::fn get_duration -->
+<!-- impl AppSrc::fn duration -->
 Get the duration of the stream in nanoseconds. A value of GST_CLOCK_TIME_NONE means that the duration is
 not known.
 
@@ -464,33 +464,33 @@ Feature: `v1_10`
 # Returns
 
 the duration of the stream previously set with `AppSrc::set_duration`;
-<!-- impl AppSrc::fn get_emit_signals -->
+<!-- impl AppSrc::fn emits_signals -->
 Check if appsrc will emit the "new-preroll" and "new-buffer" signals.
 
 # Returns
 
 `true` if `self` is emitting the "new-preroll" and "new-buffer"
 signals.
-<!-- impl AppSrc::fn get_latency -->
+<!-- impl AppSrc::fn latency -->
 Retrieve the min and max latencies in `min` and `max` respectively.
 ## `min`
 the min latency
 ## `max`
 the max latency
-<!-- impl AppSrc::fn get_max_bytes -->
+<!-- impl AppSrc::fn max_bytes -->
 Get the maximum amount of bytes that can be queued in `self`.
 
 # Returns
 
 The maximum amount of bytes that can be queued.
-<!-- impl AppSrc::fn get_size -->
+<!-- impl AppSrc::fn size -->
 Get the size of the stream in bytes. A value of -1 means that the size is
 not known.
 
 # Returns
 
 the size of the stream previously set with `AppSrc::set_size`;
-<!-- impl AppSrc::fn get_stream_type -->
+<!-- impl AppSrc::fn stream_type -->
 Get the stream type. Control the stream type of `self`
 with `AppSrc::set_stream_type`.
 

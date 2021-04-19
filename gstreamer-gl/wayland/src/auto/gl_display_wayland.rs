@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct GLDisplayWayland(Object<ffi::GstGLDisplayWayland, ffi::GstGLDisplayWaylandClass>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_display_wayland_get_type(),
+        type_ => || ffi::gst_gl_display_wayland_get_type(),
     }
 }
 

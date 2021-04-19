@@ -7,7 +7,7 @@ glib::wrapper! {
     pub struct VideoFilter(Object<ffi::GstVideoFilter, ffi::GstVideoFilterClass>) @extends gst_base::BaseTransform, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_video_filter_get_type(),
+        type_ => || ffi::gst_video_filter_get_type(),
     }
 }
 

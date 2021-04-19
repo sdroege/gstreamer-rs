@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct RTSPAuth(Object<ffi::GstRTSPAuth, ffi::GstRTSPAuthClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_auth_get_type(),
+        type_ => || ffi::gst_rtsp_auth_get_type(),
     }
 }
 

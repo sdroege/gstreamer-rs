@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct GLDisplayEGL(Object<ffi::GstGLDisplayEGL, ffi::GstGLDisplayEGLClass>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_display_egl_get_type(),
+        type_ => || ffi::gst_gl_display_egl_get_type(),
     }
 }
 

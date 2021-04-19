@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct RTSPSessionMedia(Object<ffi::GstRTSPSessionMedia, ffi::GstRTSPSessionMediaClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_session_media_get_type(),
+        type_ => || ffi::gst_rtsp_session_media_get_type(),
     }
 }
 

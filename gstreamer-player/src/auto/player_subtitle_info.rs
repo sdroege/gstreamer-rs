@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct PlayerSubtitleInfo(Object<ffi::GstPlayerSubtitleInfo, ffi::GstPlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
-        get_type => || ffi::gst_player_subtitle_info_get_type(),
+        type_ => || ffi::gst_player_subtitle_info_get_type(),
     }
 }
 

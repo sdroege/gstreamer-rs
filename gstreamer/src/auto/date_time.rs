@@ -12,7 +12,7 @@ glib::wrapper! {
     match fn {
         ref => |ptr| ffi::gst_date_time_ref(ptr),
         unref => |ptr| ffi::gst_date_time_unref(ptr),
-        get_type => || ffi::gst_date_time_get_type(),
+        type_ => || ffi::gst_date_time_get_type(),
     }
 }
 

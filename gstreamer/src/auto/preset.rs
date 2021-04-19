@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct Preset(Interface<ffi::GstPreset, ffi::GstPresetInterface>);
 
     match fn {
-        get_type => || ffi::gst_preset_get_type(),
+        type_ => || ffi::gst_preset_get_type(),
     }
 }
 

@@ -21,7 +21,7 @@ glib::wrapper! {
     pub struct Pipeline(Object<ffi::GstPipeline, ffi::GstPipelineClass>) @extends Bin, Element, Object, @implements ChildProxy;
 
     match fn {
-        get_type => || ffi::gst_pipeline_get_type(),
+        type_ => || ffi::gst_pipeline_get_type(),
     }
 }
 

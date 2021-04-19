@@ -26,7 +26,7 @@ glib::wrapper! {
     pub struct RTSPClient(Object<ffi::GstRTSPClient, ffi::GstRTSPClientClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_client_get_type(),
+        type_ => || ffi::gst_rtsp_client_get_type(),
     }
 }
 

@@ -34,7 +34,7 @@ glib::wrapper! {
     pub struct TimelineElement(Object<ffi::GESTimelineElement, ffi::GESTimelineElementClass>) @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_timeline_element_get_type(),
+        type_ => || ffi::ges_timeline_element_get_type(),
     }
 }
 

@@ -29,7 +29,7 @@ glib::wrapper! {
     pub struct GLOverlayCompositor(Object<ffi::GstGLOverlayCompositor, ffi::GstGLOverlayCompositorClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_overlay_compositor_get_type(),
+        type_ => || ffi::gst_gl_overlay_compositor_get_type(),
     }
 }
 

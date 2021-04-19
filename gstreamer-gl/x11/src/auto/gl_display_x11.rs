@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct GLDisplayX11(Object<ffi::GstGLDisplayX11, ffi::GstGLDisplayX11Class>) @extends gst_gl::GLDisplay, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_display_x11_get_type(),
+        type_ => || ffi::gst_gl_display_x11_get_type(),
     }
 }
 

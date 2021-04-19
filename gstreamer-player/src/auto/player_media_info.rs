@@ -13,7 +13,7 @@ glib::wrapper! {
     pub struct PlayerMediaInfo(Object<ffi::GstPlayerMediaInfo, ffi::GstPlayerMediaInfoClass>);
 
     match fn {
-        get_type => || ffi::gst_player_media_info_get_type(),
+        type_ => || ffi::gst_player_media_info_get_type(),
     }
 }
 

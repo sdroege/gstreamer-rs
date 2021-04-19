@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct TestClock(Object<ffi::GstTestClock, ffi::GstTestClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_test_clock_get_type(),
+        type_ => || ffi::gst_test_clock_get_type(),
     }
 }
 

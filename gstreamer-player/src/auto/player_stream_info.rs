@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct PlayerStreamInfo(Object<ffi::GstPlayerStreamInfo, ffi::GstPlayerStreamInfoClass>);
 
     match fn {
-        get_type => || ffi::gst_player_stream_info_get_type(),
+        type_ => || ffi::gst_player_stream_info_get_type(),
     }
 }
 

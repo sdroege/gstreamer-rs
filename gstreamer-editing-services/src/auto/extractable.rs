@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct Extractable(Interface<ffi::GESExtractable, ffi::GESExtractableInterface>);
 
     match fn {
-        get_type => || ffi::ges_extractable_get_type(),
+        type_ => || ffi::ges_extractable_get_type(),
     }
 }
 

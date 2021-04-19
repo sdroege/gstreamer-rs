@@ -23,7 +23,7 @@ glib::wrapper! {
     pub struct TransitionClip(Object<ffi::GESTransitionClip, ffi::GESTransitionClipClass>) @extends BaseTransitionClip, OperationClip, Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_transition_clip_get_type(),
+        type_ => || ffi::ges_transition_clip_get_type(),
     }
 }
 

@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct WebRTCICETransport(Object<ffi::GstWebRTCICETransport, ffi::GstWebRTCICETransportClass>);
 
     match fn {
-        get_type => || ffi::gst_webrtc_ice_transport_get_type(),
+        type_ => || ffi::gst_webrtc_ice_transport_get_type(),
     }
 }
 

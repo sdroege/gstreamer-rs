@@ -17,7 +17,7 @@ glib::wrapper! {
     pub struct WebRTCDTLSTransport(Object<ffi::GstWebRTCDTLSTransport, ffi::GstWebRTCDTLSTransportClass>);
 
     match fn {
-        get_type => || ffi::gst_webrtc_dtls_transport_get_type(),
+        type_ => || ffi::gst_webrtc_dtls_transport_get_type(),
     }
 }
 

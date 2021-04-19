@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct BaseSink(Object<ffi::GstBaseSink, ffi::GstBaseSinkClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_base_sink_get_type(),
+        type_ => || ffi::gst_base_sink_get_type(),
     }
 }
 

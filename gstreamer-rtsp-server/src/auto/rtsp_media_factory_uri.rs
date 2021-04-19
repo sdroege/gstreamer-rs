@@ -17,7 +17,7 @@ glib::wrapper! {
     pub struct RTSPMediaFactoryURI(Object<ffi::GstRTSPMediaFactoryURI, ffi::GstRTSPMediaFactoryURIClass>) @extends RTSPMediaFactory;
 
     match fn {
-        get_type => || ffi::gst_rtsp_media_factory_uri_get_type(),
+        type_ => || ffi::gst_rtsp_media_factory_uri_get_type(),
     }
 }
 

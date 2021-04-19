@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct Device(Object<ffi::GstDevice, ffi::GstDeviceClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_device_get_type(),
+        type_ => || ffi::gst_device_get_type(),
     }
 }
 

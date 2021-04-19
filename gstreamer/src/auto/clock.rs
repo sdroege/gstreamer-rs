@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct Clock(Object<ffi::GstClock, ffi::GstClockClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_clock_get_type(),
+        type_ => || ffi::gst_clock_get_type(),
     }
 }
 

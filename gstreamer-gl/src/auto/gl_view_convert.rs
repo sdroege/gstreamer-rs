@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct GLViewConvert(Object<ffi::GstGLViewConvert, ffi::GstGLViewConvertClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_view_convert_get_type(),
+        type_ => || ffi::gst_gl_view_convert_get_type(),
     }
 }
 

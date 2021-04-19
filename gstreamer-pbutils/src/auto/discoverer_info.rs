@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct DiscovererInfo(Object<ffi::GstDiscovererInfo>);
 
     match fn {
-        get_type => || ffi::gst_discoverer_info_get_type(),
+        type_ => || ffi::gst_discoverer_info_get_type(),
     }
 }
 

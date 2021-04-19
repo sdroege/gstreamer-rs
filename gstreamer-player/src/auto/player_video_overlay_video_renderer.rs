@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct PlayerVideoOverlayVideoRenderer(Object<ffi::GstPlayerVideoOverlayVideoRenderer, ffi::GstPlayerVideoOverlayVideoRendererClass>) @implements PlayerVideoRenderer;
 
     match fn {
-        get_type => || ffi::gst_player_video_overlay_video_renderer_get_type(),
+        type_ => || ffi::gst_player_video_overlay_video_renderer_get_type(),
     }
 }
 

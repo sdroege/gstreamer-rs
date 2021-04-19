@@ -17,7 +17,7 @@ glib::wrapper! {
     pub struct RTSPSessionPool(Object<ffi::GstRTSPSessionPool, ffi::GstRTSPSessionPoolClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_session_pool_get_type(),
+        type_ => || ffi::gst_rtsp_session_pool_get_type(),
     }
 }
 

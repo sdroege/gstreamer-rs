@@ -10,7 +10,7 @@ glib::wrapper! {
     pub struct DiscovererSubtitleInfo(Object<ffi::GstDiscovererSubtitleInfo>) @extends DiscovererStreamInfo;
 
     match fn {
-        get_type => || ffi::gst_discoverer_subtitle_info_get_type(),
+        type_ => || ffi::gst_discoverer_subtitle_info_get_type(),
     }
 }
 

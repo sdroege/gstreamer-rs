@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct RTSPStreamTransport(Object<ffi::GstRTSPStreamTransport, ffi::GstRTSPStreamTransportClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_stream_transport_get_type(),
+        type_ => || ffi::gst_rtsp_stream_transport_get_type(),
     }
 }
 

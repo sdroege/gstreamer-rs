@@ -6,13 +6,13 @@ color component off and a value of 1.0 will be the color level.
 
 # Implements
 
-[`ARGBControlBindingExt`](trait.ARGBControlBindingExt.html), [`gst::ControlBindingExt`](../gst/trait.ControlBindingExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html)
+[`ARGBControlBindingExt`](trait@crate::ARGBControlBindingExt), [`trait@gst::ControlBindingExt`], [`trait@gst::ObjectExt`]
 <!-- trait ARGBControlBindingExt -->
 Trait containing all `ARGBControlBinding` methods.
 
 # Implementors
 
-[`ARGBControlBinding`](struct.ARGBControlBinding.html)
+[`ARGBControlBinding`](struct@crate::ARGBControlBinding)
 <!-- impl ARGBControlBinding::fn new -->
 Create a new control-binding that attaches the given `gst::ControlSource` to the
 `glib::object::Object` property.
@@ -54,13 +54,13 @@ transformations.
 
 # Implements
 
-[`DirectControlBindingExt`](trait.DirectControlBindingExt.html), [`gst::ControlBindingExt`](../gst/trait.ControlBindingExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html)
+[`DirectControlBindingExt`](trait@crate::DirectControlBindingExt), [`trait@gst::ControlBindingExt`], [`trait@gst::ObjectExt`]
 <!-- trait DirectControlBindingExt -->
 Trait containing all `DirectControlBinding` methods.
 
 # Implementors
 
-[`DirectControlBinding`](struct.DirectControlBinding.html)
+[`DirectControlBinding`](struct@crate::DirectControlBinding)
 <!-- impl DirectControlBinding::fn new -->
 Create a new control-binding that attaches the `gst::ControlSource` to the
 `glib::object::Object` property. It will map the control source range [0.0 ... 1.0] to
@@ -101,13 +101,13 @@ All functions are MT-safe.
 
 # Implements
 
-[`InterpolationControlSourceExt`](trait.InterpolationControlSourceExt.html), [`TimedValueControlSourceExt`](trait.TimedValueControlSourceExt.html), [`gst::ControlSourceExt`](../gst/trait.ControlSourceExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html)
+[`InterpolationControlSourceExt`](trait@crate::InterpolationControlSourceExt), [`TimedValueControlSourceExt`](trait@crate::TimedValueControlSourceExt), [`trait@gst::ControlSourceExt`], [`trait@gst::ObjectExt`]
 <!-- trait InterpolationControlSourceExt -->
 Trait containing all `InterpolationControlSource` methods.
 
 # Implementors
 
-[`InterpolationControlSource`](struct.InterpolationControlSource.html)
+[`InterpolationControlSource`](struct@crate::InterpolationControlSource)
 <!-- impl InterpolationControlSource::fn new -->
 This returns a new, unbound `InterpolationControlSource`.
 
@@ -139,13 +139,13 @@ All functions are MT-safe.
 
 # Implements
 
-[`LFOControlSourceExt`](trait.LFOControlSourceExt.html), [`gst::ControlSourceExt`](../gst/trait.ControlSourceExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html)
+[`LFOControlSourceExt`](trait@crate::LFOControlSourceExt), [`trait@gst::ControlSourceExt`], [`trait@gst::ObjectExt`]
 <!-- trait LFOControlSourceExt -->
 Trait containing all `LFOControlSource` methods.
 
 # Implementors
 
-[`LFOControlSource`](struct.LFOControlSource.html)
+[`LFOControlSource`](struct@crate::LFOControlSource)
 <!-- impl LFOControlSource::fn new -->
 This returns a new, unbound `LFOControlSource`.
 
@@ -203,7 +203,7 @@ Feature: `v1_12`
 
 # Implements
 
-[`gst::ControlBindingExt`](../gst/trait.ControlBindingExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html)
+[`trait@gst::ControlBindingExt`], [`trait@gst::ObjectExt`]
 <!-- impl ProxyControlBinding::fn new -->
 `ProxyControlBinding` forwards all access to data or `sync_values()`
 requests from `property_name` on `object` to the control binding at
@@ -237,13 +237,13 @@ This is an Abstract Base Class, you cannot instantiate it.
 
 # Implements
 
-[`TimedValueControlSourceExt`](trait.TimedValueControlSourceExt.html), [`gst::ControlSourceExt`](../gst/trait.ControlSourceExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html)
+[`TimedValueControlSourceExt`](trait@crate::TimedValueControlSourceExt), [`trait@gst::ControlSourceExt`], [`trait@gst::ObjectExt`]
 <!-- trait TimedValueControlSourceExt -->
 Trait containing all `TimedValueControlSource` methods.
 
 # Implementors
 
-[`InterpolationControlSource`](struct.InterpolationControlSource.html), [`TimedValueControlSource`](struct.TimedValueControlSource.html), [`TriggerControlSource`](struct.TriggerControlSource.html)
+[`InterpolationControlSource`](struct@crate::InterpolationControlSource), [`TimedValueControlSource`](struct@crate::TimedValueControlSource), [`TriggerControlSource`](struct@crate::TriggerControlSource)
 <!-- trait TimedValueControlSourceExt::fn find_control_point_iter -->
 Find last value before given timestamp in control point list.
 If all values in the control point list come after the given
@@ -256,7 +256,7 @@ the search key
 # Returns
 
 the found `glib::SequenceIter` or `None`
-<!-- trait TimedValueControlSourceExt::fn get_all -->
+<!-- trait TimedValueControlSourceExt::fn all -->
 Returns a read-only copy of the list of `gst::TimedValue` for the given property.
 Free the list after done with it.
 
@@ -264,7 +264,7 @@ Free the list after done with it.
 
 a copy
 of the list, or `None` if the property isn't handled by the controller
-<!-- trait TimedValueControlSourceExt::fn get_count -->
+<!-- trait TimedValueControlSourceExt::fn count -->
 Get the number of control points that are set.
 
 # Returns
@@ -324,13 +324,13 @@ All functions are MT-safe.
 
 # Implements
 
-[`TriggerControlSourceExt`](trait.TriggerControlSourceExt.html), [`TimedValueControlSourceExt`](trait.TimedValueControlSourceExt.html), [`gst::ControlSourceExt`](../gst/trait.ControlSourceExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html)
+[`TriggerControlSourceExt`](trait@crate::TriggerControlSourceExt), [`TimedValueControlSourceExt`](trait@crate::TimedValueControlSourceExt), [`trait@gst::ControlSourceExt`], [`trait@gst::ObjectExt`]
 <!-- trait TriggerControlSourceExt -->
 Trait containing all `TriggerControlSource` methods.
 
 # Implementors
 
-[`TriggerControlSource`](struct.TriggerControlSource.html)
+[`TriggerControlSource`](struct@crate::TriggerControlSource)
 <!-- impl TriggerControlSource::fn new -->
 This returns a new, unbound `TriggerControlSource`.
 

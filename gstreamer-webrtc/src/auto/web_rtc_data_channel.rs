@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct WebRTCDataChannel(Object<ffi::GstWebRTCDataChannel, ffi::GstWebRTCDataChannelClass>);
 
     match fn {
-        get_type => || ffi::gst_webrtc_data_channel_get_type(),
+        type_ => || ffi::gst_webrtc_data_channel_get_type(),
     }
 }
 

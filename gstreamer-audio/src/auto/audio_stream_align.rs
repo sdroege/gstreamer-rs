@@ -12,7 +12,7 @@ glib::wrapper! {
     match fn {
         copy => |ptr| ffi::gst_audio_stream_align_copy(ptr),
         free => |ptr| ffi::gst_audio_stream_align_free(ptr),
-        get_type => || ffi::gst_audio_stream_align_get_type(),
+        type_ => || ffi::gst_audio_stream_align_get_type(),
     }
 }
 

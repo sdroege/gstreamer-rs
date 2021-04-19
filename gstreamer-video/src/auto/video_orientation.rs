@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct VideoOrientation(Interface<ffi::GstVideoOrientation, ffi::GstVideoOrientationInterface>);
 
     match fn {
-        get_type => || ffi::gst_video_orientation_get_type(),
+        type_ => || ffi::gst_video_orientation_get_type(),
     }
 }
 

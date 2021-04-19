@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct VideoSink(Object<ffi::GstVideoSink, ffi::GstVideoSinkClass>) @extends gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_video_sink_get_type(),
+        type_ => || ffi::gst_video_sink_get_type(),
     }
 }
 

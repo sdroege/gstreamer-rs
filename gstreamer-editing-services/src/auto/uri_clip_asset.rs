@@ -21,7 +21,7 @@ glib::wrapper! {
     pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends Asset;
 
     match fn {
-        get_type => || ffi::ges_uri_clip_asset_get_type(),
+        type_ => || ffi::ges_uri_clip_asset_get_type(),
     }
 }
 

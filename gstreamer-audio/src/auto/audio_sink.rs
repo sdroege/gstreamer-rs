@@ -9,7 +9,7 @@ glib::wrapper! {
     pub struct AudioSink(Object<ffi::GstAudioSink, ffi::GstAudioSinkClass>) @extends AudioBaseSink, gst_base::BaseSink, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_audio_sink_get_type(),
+        type_ => || ffi::gst_audio_sink_get_type(),
     }
 }
 

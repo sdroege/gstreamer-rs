@@ -29,7 +29,7 @@ glib::wrapper! {
     pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>) @extends gst::Element, gst::Object, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_timeline_get_type(),
+        type_ => || ffi::ges_timeline_get_type(),
     }
 }
 

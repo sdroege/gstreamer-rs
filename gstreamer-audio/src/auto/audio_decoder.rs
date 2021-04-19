@@ -17,7 +17,7 @@ glib::wrapper! {
     pub struct AudioDecoder(Object<ffi::GstAudioDecoder, ffi::GstAudioDecoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_audio_decoder_get_type(),
+        type_ => || ffi::gst_audio_decoder_get_type(),
     }
 }
 
@@ -52,7 +52,7 @@ pub trait AudioDecoderExt: 'static {
     fn min_latency(&self) -> gst::ClockTime;
 
     #[doc(alias = "gst_audio_decoder_get_needs_format")]
-    fn is_needs_format(&self) -> bool;
+    fn needs_format(&self) -> bool;
 
     #[doc(alias = "gst_audio_decoder_get_parse_state")]
     fn parse_state(&self) -> (bool, bool);
@@ -192,7 +192,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn is_needs_format(&self) -> bool {
+    fn needs_format(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_decoder_get_needs_format(
                 self.as_ref().to_glib_none().0,

@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct GLMemoryAllocator(Object<ffi::GstGLMemoryAllocator, ffi::GstGLMemoryAllocatorClass>) @extends GLBaseMemoryAllocator, gst::Allocator, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_memory_allocator_get_type(),
+        type_ => || ffi::gst_gl_memory_allocator_get_type(),
     }
 }
 

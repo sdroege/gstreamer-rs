@@ -19,7 +19,7 @@ glib::wrapper! {
     pub struct Group(Object<ffi::GESGroup, ffi::GESGroupClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_group_get_type(),
+        type_ => || ffi::ges_group_get_type(),
     }
 }
 

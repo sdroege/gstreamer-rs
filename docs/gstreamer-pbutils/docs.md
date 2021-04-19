@@ -19,7 +19,7 @@ All the information is returned in a `DiscovererInfo` structure.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- impl Discoverer::fn new -->
 Creates a new `Discoverer` with the provided timeout.
 ## `timeout`
@@ -110,13 +110,13 @@ set on the result flags.
 
 # Implements
 
-[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl DiscovererAudioInfo::fn get_bitrate -->
+[`DiscovererStreamInfoExt`](trait@crate::DiscovererStreamInfoExt), [`trait@glib::object::ObjectExt`]
+<!-- impl DiscovererAudioInfo::fn bitrate -->
 
 # Returns
 
 the average or nominal bitrate of the stream in bits/second.
-<!-- impl DiscovererAudioInfo::fn get_channel_mask -->
+<!-- impl DiscovererAudioInfo::fn channel_mask -->
 
 Feature: `v1_14`
 
@@ -126,27 +126,27 @@ Feature: `v1_14`
 the channel-mask of the stream, refer to
 `gst_audio_channel_positions_from_mask` for more
 information.
-<!-- impl DiscovererAudioInfo::fn get_channels -->
+<!-- impl DiscovererAudioInfo::fn channels -->
 
 # Returns
 
 the number of channels in the stream.
-<!-- impl DiscovererAudioInfo::fn get_depth -->
+<!-- impl DiscovererAudioInfo::fn depth -->
 
 # Returns
 
 the number of bits used per sample in each channel.
-<!-- impl DiscovererAudioInfo::fn get_language -->
+<!-- impl DiscovererAudioInfo::fn language -->
 
 # Returns
 
 the language of the stream, or NULL if unknown.
-<!-- impl DiscovererAudioInfo::fn get_max_bitrate -->
+<!-- impl DiscovererAudioInfo::fn max_bitrate -->
 
 # Returns
 
 the maximum bitrate of the stream in bits/second.
-<!-- impl DiscovererAudioInfo::fn get_sample_rate -->
+<!-- impl DiscovererAudioInfo::fn sample_rate -->
 
 # Returns
 
@@ -156,8 +156,8 @@ the sample rate of the stream in Hertz.
 
 # Implements
 
-[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl DiscovererContainerInfo::fn get_streams -->
+[`DiscovererStreamInfoExt`](trait@crate::DiscovererStreamInfoExt), [`trait@glib::object::ObjectExt`]
+<!-- impl DiscovererContainerInfo::fn streams -->
 
 # Returns
 
@@ -169,7 +169,7 @@ Structure containing the information of a URI analyzed by `Discoverer`.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- impl DiscovererInfo::fn from_variant -->
 Parses a `glib::Variant` as produced by `DiscovererInfo::to_variant`
 back to a `DiscovererInfo`.
@@ -184,7 +184,7 @@ A newly-allocated `DiscovererInfo`.
 # Returns
 
 A copy of the `DiscovererInfo`
-<!-- impl DiscovererInfo::fn get_audio_streams -->
+<!-- impl DiscovererInfo::fn audio_streams -->
 Finds all the `DiscovererAudioInfo` contained in `self`
 
 # Returns
@@ -192,7 +192,7 @@ Finds all the `DiscovererAudioInfo` contained in `self`
 A `glib::List` of
 matching `DiscovererStreamInfo`. The caller should free it with
 `DiscovererStreamInfo::list_free`.
-<!-- impl DiscovererInfo::fn get_container_streams -->
+<!-- impl DiscovererInfo::fn container_streams -->
 Finds all the `DiscovererContainerInfo` contained in `self`
 
 # Returns
@@ -200,12 +200,12 @@ Finds all the `DiscovererContainerInfo` contained in `self`
 A `glib::List` of
 matching `DiscovererStreamInfo`. The caller should free it with
 `DiscovererStreamInfo::list_free`.
-<!-- impl DiscovererInfo::fn get_duration -->
+<!-- impl DiscovererInfo::fn duration -->
 
 # Returns
 
 the duration of the URI in `gst::ClockTime` (nanoseconds).
-<!-- impl DiscovererInfo::fn get_live -->
+<!-- impl DiscovererInfo::fn is_live -->
 
 Feature: `v1_14`
 
@@ -213,7 +213,7 @@ Feature: `v1_14`
 # Returns
 
 whether the URI is live.
-<!-- impl DiscovererInfo::fn get_misc -->
+<!-- impl DiscovererInfo::fn misc -->
 
 # Deprecated
 
@@ -225,7 +225,7 @@ This functions is deprecated since version 1.4, use
 Miscellaneous information stored as a `gst::Structure`
 (for example: information about missing plugins). If you wish to use the
 `gst::Structure` after the life-time of `self`, you will need to copy it.
-<!-- impl DiscovererInfo::fn get_missing_elements_installer_details -->
+<!-- impl DiscovererInfo::fn missing_elements_installer_details -->
 Get the installer details for missing elements
 
 # Returns
@@ -234,17 +234,17 @@ An array of strings
 containing information about how to install the various missing elements
 for `self` to be usable. If you wish to use the strings after the life-time
 of `self`, you will need to copy them.
-<!-- impl DiscovererInfo::fn get_result -->
+<!-- impl DiscovererInfo::fn result -->
 
 # Returns
 
 the result of the discovery as a `DiscovererResult`.
-<!-- impl DiscovererInfo::fn get_seekable -->
+<!-- impl DiscovererInfo::fn is_seekable -->
 
 # Returns
 
 the whether the URI is seekable.
-<!-- impl DiscovererInfo::fn get_stream_info -->
+<!-- impl DiscovererInfo::fn stream_info -->
 
 # Returns
 
@@ -252,7 +252,7 @@ the structure (or topology) of the URI as a
 `DiscovererStreamInfo`.
 This structure can be traversed to see the original hierarchy. Unref with
 `gst_discoverer_stream_info_unref` after usage.
-<!-- impl DiscovererInfo::fn get_stream_list -->
+<!-- impl DiscovererInfo::fn stream_list -->
 
 # Returns
 
@@ -270,7 +270,7 @@ a `glib::Type` derived from `DiscovererStreamInfo`
 A `glib::List` of
 matching `DiscovererStreamInfo`. The caller should free it with
 `DiscovererStreamInfo::list_free`.
-<!-- impl DiscovererInfo::fn get_subtitle_streams -->
+<!-- impl DiscovererInfo::fn subtitle_streams -->
 Finds all the `DiscovererSubtitleInfo` contained in `self`
 
 # Returns
@@ -278,25 +278,25 @@ Finds all the `DiscovererSubtitleInfo` contained in `self`
 A `glib::List` of
 matching `DiscovererStreamInfo`. The caller should free it with
 `DiscovererStreamInfo::list_free`.
-<!-- impl DiscovererInfo::fn get_tags -->
+<!-- impl DiscovererInfo::fn tags -->
 
 # Returns
 
 all tags contained in the URI. If you wish to use
 the tags after the life-time of `self`, you will need to copy them.
-<!-- impl DiscovererInfo::fn get_toc -->
+<!-- impl DiscovererInfo::fn toc -->
 
 # Returns
 
 TOC contained in the URI. If you wish to use
 the TOC after the life-time of `self`, you will need to copy it.
-<!-- impl DiscovererInfo::fn get_uri -->
+<!-- impl DiscovererInfo::fn uri -->
 
 # Returns
 
 the URI to which this information corresponds to.
 Copy it if you wish to use it after the life-time of `self`.
-<!-- impl DiscovererInfo::fn get_video_streams -->
+<!-- impl DiscovererInfo::fn video_streams -->
 Finds all the `DiscovererVideoInfo` contained in `self`
 
 # Returns
@@ -365,25 +365,25 @@ for the audio and video streams respectively.
 
 # Implements
 
-[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`DiscovererStreamInfoExt`](trait@crate::DiscovererStreamInfoExt), [`trait@glib::object::ObjectExt`]
 <!-- trait DiscovererStreamInfoExt -->
 Trait containing all `DiscovererStreamInfo` methods.
 
 # Implementors
 
-[`DiscovererAudioInfo`](struct.DiscovererAudioInfo.html), [`DiscovererContainerInfo`](struct.DiscovererContainerInfo.html), [`DiscovererStreamInfo`](struct.DiscovererStreamInfo.html), [`DiscovererSubtitleInfo`](struct.DiscovererSubtitleInfo.html), [`DiscovererVideoInfo`](struct.DiscovererVideoInfo.html)
+[`DiscovererAudioInfo`](struct@crate::DiscovererAudioInfo), [`DiscovererContainerInfo`](struct@crate::DiscovererContainerInfo), [`DiscovererStreamInfo`](struct@crate::DiscovererStreamInfo), [`DiscovererSubtitleInfo`](struct@crate::DiscovererSubtitleInfo), [`DiscovererVideoInfo`](struct@crate::DiscovererVideoInfo)
 <!-- impl DiscovererStreamInfo::fn list_free -->
 Decrements the reference count of all contained `DiscovererStreamInfo`
 and fress the `glib::List`.
 ## `infos`
 a `glib::List` of `DiscovererStreamInfo`
-<!-- trait DiscovererStreamInfoExt::fn get_caps -->
+<!-- trait DiscovererStreamInfoExt::fn caps -->
 
 # Returns
 
 the `gst::Caps` of the stream. Unref with
 `gst_caps_unref` after usage.
-<!-- trait DiscovererStreamInfoExt::fn get_misc -->
+<!-- trait DiscovererStreamInfoExt::fn misc -->
 
 # Deprecated
 
@@ -395,39 +395,39 @@ This functions is deprecated since version 1.4, use
 additional information regarding the stream (for
 example codec version, profile, etc..). If you wish to use the `gst::Structure`
 after the life-time of `self` you will need to copy it.
-<!-- trait DiscovererStreamInfoExt::fn get_next -->
+<!-- trait DiscovererStreamInfoExt::fn next -->
 
 # Returns
 
 the next `DiscovererStreamInfo` in a chain. `None`
 for final streams.
 Unref with `gst_discoverer_stream_info_unref` after usage.
-<!-- trait DiscovererStreamInfoExt::fn get_previous -->
+<!-- trait DiscovererStreamInfoExt::fn previous -->
 
 # Returns
 
 the previous `DiscovererStreamInfo` in a chain.
 `None` for starting points. Unref with `gst_discoverer_stream_info_unref`
 after usage.
-<!-- trait DiscovererStreamInfoExt::fn get_stream_id -->
+<!-- trait DiscovererStreamInfoExt::fn stream_id -->
 
 # Returns
 
 the stream ID of this stream. If you wish to
 use the stream ID after the life-time of `self` you will need to copy it.
-<!-- trait DiscovererStreamInfoExt::fn get_stream_type_nick -->
+<!-- trait DiscovererStreamInfoExt::fn stream_type_nick -->
 
 # Returns
 
 a human readable name for the stream type of the given `self` (ex : "audio",
 "container",...).
-<!-- trait DiscovererStreamInfoExt::fn get_tags -->
+<!-- trait DiscovererStreamInfoExt::fn tags -->
 
 # Returns
 
 the tags contained in this stream. If you wish to
 use the tags after the life-time of `self` you will need to copy them.
-<!-- trait DiscovererStreamInfoExt::fn get_toc -->
+<!-- trait DiscovererStreamInfoExt::fn toc -->
 
 # Returns
 
@@ -439,8 +439,8 @@ image based ones).
 
 # Implements
 
-[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl DiscovererSubtitleInfo::fn get_language -->
+[`DiscovererStreamInfoExt`](trait@crate::DiscovererStreamInfoExt), [`trait@glib::object::ObjectExt`]
+<!-- impl DiscovererSubtitleInfo::fn language -->
 
 # Returns
 
@@ -450,48 +450,48 @@ the language of the stream, or NULL if unknown.
 
 # Implements
 
-[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl DiscovererVideoInfo::fn get_bitrate -->
+[`DiscovererStreamInfoExt`](trait@crate::DiscovererStreamInfoExt), [`trait@glib::object::ObjectExt`]
+<!-- impl DiscovererVideoInfo::fn bitrate -->
 
 # Returns
 
 the average or nominal bitrate of the video stream in bits/second.
-<!-- impl DiscovererVideoInfo::fn get_depth -->
+<!-- impl DiscovererVideoInfo::fn depth -->
 
 # Returns
 
 the depth in bits of the video stream.
-<!-- impl DiscovererVideoInfo::fn get_framerate_denom -->
+<!-- impl DiscovererVideoInfo::fn framerate_denom -->
 
 # Returns
 
 the framerate of the video stream (denominator).
-<!-- impl DiscovererVideoInfo::fn get_framerate_num -->
+<!-- impl DiscovererVideoInfo::fn framerate_num -->
 
 # Returns
 
 the framerate of the video stream (numerator).
-<!-- impl DiscovererVideoInfo::fn get_height -->
+<!-- impl DiscovererVideoInfo::fn height -->
 
 # Returns
 
 the height of the video stream in pixels.
-<!-- impl DiscovererVideoInfo::fn get_max_bitrate -->
+<!-- impl DiscovererVideoInfo::fn max_bitrate -->
 
 # Returns
 
 the maximum bitrate of the video stream in bits/second.
-<!-- impl DiscovererVideoInfo::fn get_par_denom -->
+<!-- impl DiscovererVideoInfo::fn par_denom -->
 
 # Returns
 
 the Pixel Aspect Ratio (PAR) of the video stream (denominator).
-<!-- impl DiscovererVideoInfo::fn get_par_num -->
+<!-- impl DiscovererVideoInfo::fn par_num -->
 
 # Returns
 
 the Pixel Aspect Ratio (PAR) of the video stream (numerator).
-<!-- impl DiscovererVideoInfo::fn get_width -->
+<!-- impl DiscovererVideoInfo::fn width -->
 
 # Returns
 
@@ -512,7 +512,7 @@ Variant of `EncodingProfile` for audio streams.
 
 # Implements
 
-[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`EncodingProfileExt`](trait@crate::EncodingProfileExt), [`trait@glib::object::ObjectExt`]
 <!-- impl EncodingAudioProfile::fn new -->
 Creates a new `EncodingAudioProfile`
 
@@ -537,7 +537,7 @@ Encoding profiles for containers. Keeps track of a list of `EncodingProfile`
 
 # Implements
 
-[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`EncodingProfileExt`](trait@crate::EncodingProfileExt), [`trait@glib::object::ObjectExt`]
 <!-- impl EncodingContainerProfile::fn new -->
 Creates a new `EncodingContainerProfile`.
 ## `name`
@@ -574,7 +574,7 @@ a `EncodingProfile`
 
 `true` if `self` contains a `EncodingProfile` identical
 to `profile`, else `false`.
-<!-- impl EncodingContainerProfile::fn get_profiles -->
+<!-- impl EncodingContainerProfile::fn profiles -->
 
 # Returns
 
@@ -586,13 +586,13 @@ information like name, description, format and preset.
 
 # Implements
 
-[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`EncodingProfileExt`](trait@crate::EncodingProfileExt), [`trait@glib::object::ObjectExt`]
 <!-- trait EncodingProfileExt -->
 Trait containing all `EncodingProfile` methods.
 
 # Implementors
 
-[`EncodingAudioProfile`](struct.EncodingAudioProfile.html), [`EncodingContainerProfile`](struct.EncodingContainerProfile.html), [`EncodingProfile`](struct.EncodingProfile.html), [`EncodingVideoProfile`](struct.EncodingVideoProfile.html)
+[`EncodingAudioProfile`](struct@crate::EncodingAudioProfile), [`EncodingContainerProfile`](struct@crate::EncodingContainerProfile), [`EncodingProfile`](struct@crate::EncodingProfile), [`EncodingVideoProfile`](struct@crate::EncodingVideoProfile)
 <!-- impl EncodingProfile::fn find -->
 Find the `EncodingProfile` with the specified name and category.
 ## `targetname`
@@ -625,55 +625,55 @@ Feature: `v1_12`
 # Returns
 
 The copy of `self`
-<!-- trait EncodingProfileExt::fn get_allow_dynamic_output -->
+<!-- trait EncodingProfileExt::fn allows_dynamic_output -->
 Get whether the format that has been negotiated in at some point can be renegotiated
 later during the encoding.
-<!-- trait EncodingProfileExt::fn get_description -->
+<!-- trait EncodingProfileExt::fn description -->
 
 # Returns
 
 the description of the profile, can be `None`.
-<!-- trait EncodingProfileExt::fn get_file_extension -->
+<!-- trait EncodingProfileExt::fn file_extension -->
 
 # Returns
 
 a suitable file extension for `self`, or NULL.
-<!-- trait EncodingProfileExt::fn get_format -->
+<!-- trait EncodingProfileExt::fn format -->
 
 # Returns
 
 the `gst::Caps` corresponding to the media format used
 in the profile. Unref after usage.
-<!-- trait EncodingProfileExt::fn get_input_caps -->
+<!-- trait EncodingProfileExt::fn input_caps -->
 Computes the full output caps that this `self` will be able to consume.
 
 # Returns
 
 The full caps the given `self` can consume. Call
 `gst_caps_unref` when you are done with the caps.
-<!-- trait EncodingProfileExt::fn get_name -->
+<!-- trait EncodingProfileExt::fn name -->
 
 # Returns
 
 the name of the profile, can be `None`.
-<!-- trait EncodingProfileExt::fn get_presence -->
+<!-- trait EncodingProfileExt::fn presence -->
 
 # Returns
 
 The number of times the profile is used in its parent
 container profile. If 0, it is not a mandatory stream.
-<!-- trait EncodingProfileExt::fn get_preset -->
+<!-- trait EncodingProfileExt::fn preset -->
 
 # Returns
 
 the name of the `gst::Preset` to be used in the profile.
 This is the name that has been set when saving the preset.
-<!-- trait EncodingProfileExt::fn get_preset_name -->
+<!-- trait EncodingProfileExt::fn preset_name -->
 
 # Returns
 
 the name of the `gst::Preset` factory to be used in the profile.
-<!-- trait EncodingProfileExt::fn get_restriction -->
+<!-- trait EncodingProfileExt::fn restriction -->
 
 # Returns
 
@@ -683,7 +683,7 @@ properties of the raw stream (that is before encoding), such as height and
 width for video and depth and sampling rate for audio. Does not apply to
 `EncodingContainerProfile` (since there is no corresponding raw stream).
 Can be `None`. Unref after usage.
-<!-- trait EncodingProfileExt::fn get_single_segment -->
+<!-- trait EncodingProfileExt::fn is_single_segment -->
 
 Feature: `v1_18`
 
@@ -693,7 +693,7 @@ Feature: `v1_18`
 `true` if the stream represented by `self` should use a single
 segment before the encoder, `false` otherwise. This means that buffers will be retimestamped
 and segments will be eat so as to appear as one segment.
-<!-- trait EncodingProfileExt::fn get_type_nick -->
+<!-- trait EncodingProfileExt::fn type_nick -->
 
 # Returns
 
@@ -771,7 +771,7 @@ When being stored/loaded, targets come from a specific category, like
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@glib::object::ObjectExt`]
 <!-- impl EncodingTarget::fn new -->
 Creates a new `EncodingTarget`.
 
@@ -838,23 +838,23 @@ the `EncodingProfile` to add
 # Returns
 
 `true` if the profile was added, else `false`.
-<!-- impl EncodingTarget::fn get_category -->
+<!-- impl EncodingTarget::fn category -->
 
 # Returns
 
 The category of the `self`. For example:
 `GST_ENCODING_CATEGORY_DEVICE`.
-<!-- impl EncodingTarget::fn get_description -->
+<!-- impl EncodingTarget::fn description -->
 
 # Returns
 
 The description of the `self`.
-<!-- impl EncodingTarget::fn get_name -->
+<!-- impl EncodingTarget::fn name -->
 
 # Returns
 
 The name of the `self`.
-<!-- impl EncodingTarget::fn get_path -->
+<!-- impl EncodingTarget::fn path -->
 
 Feature: `v1_18`
 
@@ -869,7 +869,7 @@ the name of the profile to retrieve
 # Returns
 
 The matching `EncodingProfile`, or `None`.
-<!-- impl EncodingTarget::fn get_profiles -->
+<!-- impl EncodingTarget::fn profiles -->
 
 # Returns
 
@@ -894,7 +894,7 @@ Variant of `EncodingProfile` for video streams, allows specifying the `pass`.
 
 # Implements
 
-[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`EncodingProfileExt`](trait@crate::EncodingProfileExt), [`trait@glib::object::ObjectExt`]
 <!-- impl EncodingVideoProfile::fn new -->
 Creates a new `EncodingVideoProfile`
 
@@ -920,14 +920,14 @@ the number of time this stream must be used. 0 means any number of
 # Returns
 
 the newly created `EncodingVideoProfile`.
-<!-- impl EncodingVideoProfile::fn get_pass -->
+<!-- impl EncodingVideoProfile::fn pass -->
 Get the pass number if this is part of a multi-pass profile.
 
 # Returns
 
 The pass number. Starts at 1 for multi-pass. 0 if this is
 not a multi-pass profile
-<!-- impl EncodingVideoProfile::fn get_variableframerate -->
+<!-- impl EncodingVideoProfile::fn is_variableframerate -->
 > *NOTE*: Fixed framerate won't be enforced when `encodebin:avoid-reencoding`
 > is set.
 

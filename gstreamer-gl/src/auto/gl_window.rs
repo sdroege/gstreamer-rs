@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct GLWindow(Object<ffi::GstGLWindow, ffi::GstGLWindowClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_window_get_type(),
+        type_ => || ffi::gst_gl_window_get_type(),
     }
 }
 

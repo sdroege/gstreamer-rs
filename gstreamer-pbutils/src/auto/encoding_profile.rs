@@ -11,7 +11,7 @@ glib::wrapper! {
     pub struct EncodingProfile(Object<ffi::GstEncodingProfile, ffi::GstEncodingProfileClass>);
 
     match fn {
-        get_type => || ffi::gst_encoding_profile_get_type(),
+        type_ => || ffi::gst_encoding_profile_get_type(),
     }
 }
 

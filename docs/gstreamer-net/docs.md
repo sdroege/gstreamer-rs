@@ -25,7 +25,7 @@ statistics about clock accuracy and network traffic.
 
 # Implements
 
-[`gst::ClockExt`](../gst/trait.ClockExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ClockExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl NetClientClock::fn new -->
 Create a new `NetClientClock` that will report the time
 provided by the `NetTimeProvider` on `remote_address` and
@@ -56,7 +56,7 @@ The `NetTimeProvider` typically wraps the clock used by a `gst::Pipeline`.
 
 # Implements
 
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl NetTimeProvider::fn new -->
 Allows network clients to get the current time of `clock`.
 ## `clock`
@@ -75,7 +75,7 @@ the new `NetTimeProvider`, or NULL on error
 
 # Implements
 
-[`NetClientClockExt`](trait.NetClientClockExt.html), [`gst::ClockExt`](../gst/trait.ClockExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`NetClientClockExt`](trait@crate::NetClientClockExt), [`trait@gst::ClockExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl NtpClock::fn new -->
 Create a new `NtpClock` that will report the time provided by
 the NTPv4 server on `remote_address` and `remote_port`.
@@ -117,7 +117,7 @@ synchronization.
 
 # Implements
 
-[`gst::ClockExt`](../gst/trait.ClockExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`trait@gst::ClockExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
 <!-- impl PtpClock::fn new -->
 Creates a new PTP clock instance that exports the PTP time of the master
 clock in `domain`. This clock can be slaved to other clocks as needed.

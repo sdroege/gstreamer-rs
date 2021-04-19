@@ -29,13 +29,13 @@ An address pool, all member are private
 
 # Implements
 
-[`RTSPAddressPoolExt`](trait.RTSPAddressPoolExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPAddressPoolExtManual`](prelude/trait.RTSPAddressPoolExtManual.html)
+[`RTSPAddressPoolExt`](trait@crate::RTSPAddressPoolExt), [`trait@glib::object::ObjectExt`], [`RTSPAddressPoolExtManual`](trait@crate::RTSPAddressPoolExtManual)
 <!-- trait RTSPAddressPoolExt -->
 Trait containing all `RTSPAddressPool` methods.
 
 # Implementors
 
-[`RTSPAddressPool`](struct.RTSPAddressPool.html)
+[`RTSPAddressPool`](struct@crate::RTSPAddressPool)
 <!-- impl RTSPAddressPool::fn new -->
 Make a new `RTSPAddressPool`.
 
@@ -132,13 +132,13 @@ The authentication structure.
 
 # Implements
 
-[`RTSPAuthExt`](trait.RTSPAuthExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPAuthExtManual`](prelude/trait.RTSPAuthExtManual.html)
+[`RTSPAuthExt`](trait@crate::RTSPAuthExt), [`trait@glib::object::ObjectExt`], [`RTSPAuthExtManual`](trait@crate::RTSPAuthExtManual)
 <!-- trait RTSPAuthExt -->
 Trait containing all `RTSPAuth` methods.
 
 # Implementors
 
-[`RTSPAuth`](struct.RTSPAuth.html)
+[`RTSPAuth`](struct@crate::RTSPAuth)
 <!-- impl RTSPAuth::fn new -->
 Create a new `RTSPAuth` instance.
 
@@ -183,7 +183,7 @@ the digest user name
 the digest password
 ## `token`
 authorisation token
-<!-- trait RTSPAuthExt::fn get_default_token -->
+<!-- trait RTSPAuthExt::fn default_token -->
 Get the default token for `self`. This token will be used for unauthenticated
 users.
 
@@ -191,7 +191,7 @@ users.
 
 the `RTSPToken` of `self`. `gst_rtsp_token_unref` after
 usage.
-<!-- trait RTSPAuthExt::fn get_realm -->
+<!-- trait RTSPAuthExt::fn realm -->
 
 Feature: `v1_16`
 
@@ -199,7 +199,7 @@ Feature: `v1_16`
 # Returns
 
 the `realm` of `self`
-<!-- trait RTSPAuthExt::fn get_supported_methods -->
+<!-- trait RTSPAuthExt::fn supported_methods -->
 Gets the supported authentication methods of `self`.
 
 Feature: `v1_12`
@@ -208,20 +208,20 @@ Feature: `v1_12`
 # Returns
 
 The supported authentication methods
-<!-- trait RTSPAuthExt::fn get_tls_authentication_mode -->
+<!-- trait RTSPAuthExt::fn tls_authentication_mode -->
 Get the `gio::TlsAuthenticationMode`.
 
 # Returns
 
 the `gio::TlsAuthenticationMode`.
-<!-- trait RTSPAuthExt::fn get_tls_certificate -->
+<!-- trait RTSPAuthExt::fn tls_certificate -->
 Get the `gio::TlsCertificate` used for negotiating TLS `self`.
 
 # Returns
 
 the `gio::TlsCertificate` of `self`. `glib::object::ObjectExt::unref` after
 usage.
-<!-- trait RTSPAuthExt::fn get_tls_database -->
+<!-- trait RTSPAuthExt::fn tls_database -->
 Get the `gio::TlsDatabase` used for verifying client certificate.
 
 # Returns
@@ -312,13 +312,13 @@ The client object represents the connection and its state with a client.
 
 # Implements
 
-[`RTSPClientExt`](trait.RTSPClientExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPClientExtManual`](prelude/trait.RTSPClientExtManual.html)
+[`RTSPClientExt`](trait@crate::RTSPClientExt), [`trait@glib::object::ObjectExt`], [`RTSPClientExtManual`](trait@crate::RTSPClientExtManual)
 <!-- trait RTSPClientExt -->
 Trait containing all `RTSPClient` methods.
 
 # Implementors
 
-[`RTSPClient`](struct.RTSPClient.html)
+[`RTSPClient`](struct@crate::RTSPClient)
 <!-- impl RTSPClient::fn new -->
 Create a new `RTSPClient` instance.
 
@@ -340,21 +340,21 @@ a `glib::MainContext`
 the ID (greater than 0) for the source within the GMainContext.
 <!-- trait RTSPClientExt::fn close -->
 Close the connection of `self` and remove all media it was managing.
-<!-- trait RTSPClientExt::fn get_auth -->
+<!-- trait RTSPClientExt::fn auth -->
 Get the `RTSPAuth` used as the authentication manager of `self`.
 
 # Returns
 
 the `RTSPAuth` of `self`.
 `glib::object::ObjectExt::unref` after usage.
-<!-- trait RTSPClientExt::fn get_connection -->
+<!-- trait RTSPClientExt::fn connection -->
 Get the `gst_rtsp::RTSPConnection` of `self`.
 
 # Returns
 
 the `gst_rtsp::RTSPConnection` of `self`.
 The connection object returned remains valid until the client is freed.
-<!-- trait RTSPClientExt::fn get_content_length_limit -->
+<!-- trait RTSPClientExt::fn content_length_limit -->
 Get the Content-Length limit of `self`.
 
 Feature: `v1_18`
@@ -363,13 +363,13 @@ Feature: `v1_18`
 # Returns
 
 the Content-Length limit.
-<!-- trait RTSPClientExt::fn get_mount_points -->
+<!-- trait RTSPClientExt::fn mount_points -->
 Get the `RTSPMountPoints` object that `self` uses to manage its sessions.
 
 # Returns
 
 a `RTSPMountPoints`, unref after usage.
-<!-- trait RTSPClientExt::fn get_session_pool -->
+<!-- trait RTSPClientExt::fn session_pool -->
 Get the `RTSPSessionPool` object that `self` uses to manage its sessions.
 
 # Returns
@@ -388,7 +388,7 @@ Feature: `v1_18`
 # Returns
 
 the `RTSPStreamTransport` associated with `channel`.
-<!-- trait RTSPClientExt::fn get_thread_pool -->
+<!-- trait RTSPClientExt::fn thread_pool -->
 Get the `RTSPThreadPool` used as the thread pool of `self`.
 
 # Returns
@@ -669,6 +669,21 @@ a `RTSPContext`
 <!-- trait RTSPClientExt::fn connect_teardown_request -->
 ## `ctx`
 a `RTSPContext`
+<!-- struct RTSPContext -->
+Information passed around containing the context of a request.
+<!-- impl RTSPContext::fn pop_current -->
+Pops `self` off the context stack (verifying that `self`
+is on the top of the stack).
+<!-- impl RTSPContext::fn push_current -->
+Pushes `self` onto the context stack. The current
+context can then be received using `RTSPContext::get_current`.
+<!-- impl RTSPContext::fn get_current -->
+Get the current `RTSPContext`. This object is retrieved from the
+current thread that is handling the request for a client.
+
+# Returns
+
+a `RTSPContext`
 <!-- enum RTSPFilterResult -->
 Possible return values for `RTSPSessionPoolExt::filter`.
 <!-- enum RTSPFilterResult::variant Remove -->
@@ -685,13 +700,13 @@ This object is usually created from a `RTSPMediaFactory`.
 
 # Implements
 
-[`RTSPMediaExt`](trait.RTSPMediaExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPMediaExtManual`](prelude/trait.RTSPMediaExtManual.html)
+[`RTSPMediaExt`](trait@crate::RTSPMediaExt), [`trait@glib::object::ObjectExt`], [`RTSPMediaExtManual`](trait@crate::RTSPMediaExtManual)
 <!-- trait RTSPMediaExt -->
 Trait containing all `RTSPMedia` methods.
 
 # Implementors
 
-[`RTSPMedia`](struct.RTSPMedia.html)
+[`RTSPMedia`](struct@crate::RTSPMedia)
 <!-- impl RTSPMedia::fn new -->
 Create a new `RTSPMedia` instance. `element` is the bin element that
 provides the different streams. The `RTSPMedia` object contains the
@@ -748,14 +763,14 @@ the control of the stream
 the `RTSPStream` with
 control uri `control` or `None` when a stream with that control did
 not exist.
-<!-- trait RTSPMediaExt::fn get_address_pool -->
+<!-- trait RTSPMediaExt::fn address_pool -->
 Get the `RTSPAddressPool` used as the address pool of `self`.
 
 # Returns
 
 the `RTSPAddressPool` of `self`.
 `glib::object::ObjectExt::unref` after usage.
-<!-- trait RTSPMediaExt::fn get_base_time -->
+<!-- trait RTSPMediaExt::fn base_time -->
 Get the base_time that is used by the pipeline in `self`.
 
 `self` must be prepared before this method returns a valid base_time.
@@ -763,13 +778,13 @@ Get the base_time that is used by the pipeline in `self`.
 # Returns
 
 the base_time used by `self`.
-<!-- trait RTSPMediaExt::fn get_buffer_size -->
+<!-- trait RTSPMediaExt::fn buffer_size -->
 Get the kernel UDP buffer size.
 
 # Returns
 
 the kernel UDP buffer size.
-<!-- trait RTSPMediaExt::fn get_clock -->
+<!-- trait RTSPMediaExt::fn clock -->
 Get the clock that is used by the pipeline in `self`.
 
 `self` must be prepared before this method returns a valid clock object.
@@ -777,7 +792,7 @@ Get the clock that is used by the pipeline in `self`.
 # Returns
 
 the `gst::Clock` used by `self`. unref after usage.
-<!-- trait RTSPMediaExt::fn get_do_retransmission -->
+<!-- trait RTSPMediaExt::fn does_retransmission -->
 
 Feature: `v1_16`
 
@@ -785,7 +800,7 @@ Feature: `v1_16`
 # Returns
 
 Whether retransmission requests will be sent
-<!-- trait RTSPMediaExt::fn get_dscp_qos -->
+<!-- trait RTSPMediaExt::fn dscp_qos -->
 Get the configured DSCP QoS of attached media.
 
 Feature: `v1_18`
@@ -794,19 +809,19 @@ Feature: `v1_18`
 # Returns
 
 the DSCP QoS value of attached streams or -1 if disabled.
-<!-- trait RTSPMediaExt::fn get_element -->
+<!-- trait RTSPMediaExt::fn element -->
 Get the element that was used when constructing `self`.
 
 # Returns
 
 a `gst::Element`. Unref after usage.
-<!-- trait RTSPMediaExt::fn get_latency -->
+<!-- trait RTSPMediaExt::fn latency -->
 Get the latency that is used for receiving media.
 
 # Returns
 
 latency in milliseconds
-<!-- trait RTSPMediaExt::fn get_max_mcast_ttl -->
+<!-- trait RTSPMediaExt::fn max_mcast_ttl -->
 Get the the maximum time-to-live value of outgoing multicast packets.
 
 Feature: `v1_16`
@@ -815,32 +830,32 @@ Feature: `v1_16`
 # Returns
 
 the maximum time-to-live value of outgoing multicast packets.
-<!-- trait RTSPMediaExt::fn get_multicast_iface -->
+<!-- trait RTSPMediaExt::fn multicast_iface -->
 Get the multicast interface used for `self`.
 
 # Returns
 
 the multicast interface for `self`.
 `g_free` after usage.
-<!-- trait RTSPMediaExt::fn get_permissions -->
+<!-- trait RTSPMediaExt::fn permissions -->
 Get the permissions object from `self`.
 
 # Returns
 
 a `RTSPPermissions` object, unref after usage.
-<!-- trait RTSPMediaExt::fn get_profiles -->
+<!-- trait RTSPMediaExt::fn profiles -->
 Get the allowed profiles of `self`.
 
 # Returns
 
 a `gst_rtsp::RTSPProfile`
-<!-- trait RTSPMediaExt::fn get_protocols -->
+<!-- trait RTSPMediaExt::fn protocols -->
 Get the allowed protocols of `self`.
 
 # Returns
 
 a `gst_rtsp::RTSPLowerTrans`
-<!-- trait RTSPMediaExt::fn get_publish_clock_mode -->
+<!-- trait RTSPMediaExt::fn publish_clock_mode -->
 Gets if and how the media clock should be published according to RFC7273.
 
 # Returns
@@ -857,7 +872,7 @@ the unit to use for the string
 # Returns
 
 The range as a string, `g_free` after usage.
-<!-- trait RTSPMediaExt::fn get_rate_control -->
+<!-- trait RTSPMediaExt::fn is_rate_control -->
 
 Feature: `v1_18`
 
@@ -866,7 +881,7 @@ Feature: `v1_18`
 
 whether `self` will follow the Rate-Control=no behaviour as specified
 in the ONVIF replay spec.
-<!-- trait RTSPMediaExt::fn get_rates -->
+<!-- trait RTSPMediaExt::fn rates -->
 Get the rate and applied_rate of the current segment.
 
 Feature: `v1_18`
@@ -881,13 +896,13 @@ the applied_rate of the current segment
 `false` if looking up the rate and applied rate failed. Otherwise
 `true` is returned and `rate` and `applied_rate` are set to the rate and
 applied_rate of the current segment.
-<!-- trait RTSPMediaExt::fn get_retransmission_time -->
+<!-- trait RTSPMediaExt::fn retransmission_time -->
 Get the amount of time to store retransmission data.
 
 # Returns
 
 the amount of time to store retransmission data.
-<!-- trait RTSPMediaExt::fn get_status -->
+<!-- trait RTSPMediaExt::fn status -->
 Get the status of `self`. When `self` is busy preparing, this function waits
 until `self` is prepared or in error.
 
@@ -903,7 +918,7 @@ the stream index
 
 the `RTSPStream` at index
 `idx` or `None` when a stream with that index did not exist.
-<!-- trait RTSPMediaExt::fn get_suspend_mode -->
+<!-- trait RTSPMediaExt::fn suspend_mode -->
 Get how `self` will be suspended.
 
 # Returns
@@ -920,7 +935,7 @@ a port or 0
 # Returns
 
 the `gst_net::NetTimeProvider` of `self`.
-<!-- trait RTSPMediaExt::fn get_transport_mode -->
+<!-- trait RTSPMediaExt::fn transport_mode -->
 Check if the pipeline for `self` can be used for PLAY or RECORD methods.
 
 # Returns
@@ -1266,13 +1281,13 @@ can contain multiple streams like audio and video.
 
 # Implements
 
-[`RTSPMediaFactoryExt`](trait.RTSPMediaFactoryExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPMediaFactoryExtManual`](prelude/trait.RTSPMediaFactoryExtManual.html)
+[`RTSPMediaFactoryExt`](trait@crate::RTSPMediaFactoryExt), [`trait@glib::object::ObjectExt`], [`RTSPMediaFactoryExtManual`](trait@crate::RTSPMediaFactoryExtManual)
 <!-- trait RTSPMediaFactoryExt -->
 Trait containing all `RTSPMediaFactory` methods.
 
 # Implementors
 
-[`RTSPMediaFactoryURI`](struct.RTSPMediaFactoryURI.html), [`RTSPMediaFactory`](struct.RTSPMediaFactory.html)
+[`RTSPMediaFactoryURI`](struct@crate::RTSPMediaFactoryURI), [`RTSPMediaFactory`](struct@crate::RTSPMediaFactory)
 <!-- impl RTSPMediaFactory::fn new -->
 Create a new `RTSPMediaFactory` instance.
 
@@ -1323,27 +1338,27 @@ the url used
 # Returns
 
 a new `gst::Element`.
-<!-- trait RTSPMediaFactoryExt::fn get_address_pool -->
+<!-- trait RTSPMediaFactoryExt::fn address_pool -->
 Get the `RTSPAddressPool` used as the address pool of `self`.
 
 # Returns
 
 the `RTSPAddressPool` of `self`. `glib::object::ObjectExt::unref` after
 usage.
-<!-- trait RTSPMediaFactoryExt::fn get_buffer_size -->
+<!-- trait RTSPMediaFactoryExt::fn buffer_size -->
 Get the kernel UDP buffer size.
 
 # Returns
 
 the kernel UDP buffer size.
-<!-- trait RTSPMediaFactoryExt::fn get_clock -->
+<!-- trait RTSPMediaFactoryExt::fn clock -->
 Returns the clock that is going to be used by the pipelines
 of all medias created from this factory.
 
 # Returns
 
 The GstClock
-<!-- trait RTSPMediaFactoryExt::fn get_do_retransmission -->
+<!-- trait RTSPMediaFactoryExt::fn does_retransmission -->
 
 Feature: `v1_16`
 
@@ -1351,7 +1366,7 @@ Feature: `v1_16`
 # Returns
 
 Whether retransmission requests will be sent for receiving media
-<!-- trait RTSPMediaFactoryExt::fn get_dscp_qos -->
+<!-- trait RTSPMediaFactoryExt::fn dscp_qos -->
 Get the configured media DSCP QoS.
 
 Feature: `v1_18`
@@ -1360,13 +1375,13 @@ Feature: `v1_18`
 # Returns
 
 the media DSCP QoS value or -1 if disabled.
-<!-- trait RTSPMediaFactoryExt::fn get_latency -->
+<!-- trait RTSPMediaFactoryExt::fn latency -->
 Get the latency that is used for receiving media
 
 # Returns
 
 latency in milliseconds
-<!-- trait RTSPMediaFactoryExt::fn get_launch -->
+<!-- trait RTSPMediaFactoryExt::fn launch -->
 Get the `gst_parse_launch` pipeline description that will be used in the
 default prepare vmethod.
 
@@ -1374,7 +1389,7 @@ default prepare vmethod.
 
 the configured launch description. `g_free` after
 usage.
-<!-- trait RTSPMediaFactoryExt::fn get_max_mcast_ttl -->
+<!-- trait RTSPMediaFactoryExt::fn max_mcast_ttl -->
 Get the the maximum time-to-live value of outgoing multicast packets.
 
 Feature: `v1_16`
@@ -1383,53 +1398,53 @@ Feature: `v1_16`
 # Returns
 
 the maximum time-to-live value of outgoing multicast packets.
-<!-- trait RTSPMediaFactoryExt::fn get_media_gtype -->
+<!-- trait RTSPMediaFactoryExt::fn media_gtype -->
 Return the GType of the GstRTSPMedia subclass this
 factory will create.
-<!-- trait RTSPMediaFactoryExt::fn get_multicast_iface -->
+<!-- trait RTSPMediaFactoryExt::fn multicast_iface -->
 Get the multicast interface used for `self`.
 
 # Returns
 
 the multicast interface for `self`. `g_free` after
 usage.
-<!-- trait RTSPMediaFactoryExt::fn get_permissions -->
+<!-- trait RTSPMediaFactoryExt::fn permissions -->
 Get the permissions object from `self`.
 
 # Returns
 
 a `RTSPPermissions` object, unref after usage.
-<!-- trait RTSPMediaFactoryExt::fn get_profiles -->
+<!-- trait RTSPMediaFactoryExt::fn profiles -->
 Get the allowed profiles of `self`.
 
 # Returns
 
 a `gst_rtsp::RTSPProfile`
-<!-- trait RTSPMediaFactoryExt::fn get_protocols -->
+<!-- trait RTSPMediaFactoryExt::fn protocols -->
 Get the allowed protocols of `self`.
 
 # Returns
 
 a `gst_rtsp::RTSPLowerTrans`
-<!-- trait RTSPMediaFactoryExt::fn get_publish_clock_mode -->
+<!-- trait RTSPMediaFactoryExt::fn publish_clock_mode -->
 Gets if and how the media clock should be published according to RFC7273.
 
 # Returns
 
 The GstRTSPPublishClockMode
-<!-- trait RTSPMediaFactoryExt::fn get_retransmission_time -->
+<!-- trait RTSPMediaFactoryExt::fn retransmission_time -->
 Get the time that is stored for retransmission purposes
 
 # Returns
 
 a `gst::ClockTime`
-<!-- trait RTSPMediaFactoryExt::fn get_suspend_mode -->
+<!-- trait RTSPMediaFactoryExt::fn suspend_mode -->
 Get how media created from this factory will be suspended.
 
 # Returns
 
 a `RTSPSuspendMode`.
-<!-- trait RTSPMediaFactoryExt::fn get_transport_mode -->
+<!-- trait RTSPMediaFactoryExt::fn transport_mode -->
 Get if media created from this factory can be used for PLAY or RECORD
 methods.
 
@@ -1576,20 +1591,20 @@ A media factory that creates a pipeline to play any uri.
 
 # Implements
 
-[`RTSPMediaFactoryURIExt`](trait.RTSPMediaFactoryURIExt.html), [`RTSPMediaFactoryExt`](trait.RTSPMediaFactoryExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPMediaFactoryExtManual`](prelude/trait.RTSPMediaFactoryExtManual.html)
+[`RTSPMediaFactoryURIExt`](trait@crate::RTSPMediaFactoryURIExt), [`RTSPMediaFactoryExt`](trait@crate::RTSPMediaFactoryExt), [`trait@glib::object::ObjectExt`], [`RTSPMediaFactoryExtManual`](trait@crate::RTSPMediaFactoryExtManual)
 <!-- trait RTSPMediaFactoryURIExt -->
 Trait containing all `RTSPMediaFactoryURI` methods.
 
 # Implementors
 
-[`RTSPMediaFactoryURI`](struct.RTSPMediaFactoryURI.html)
+[`RTSPMediaFactoryURI`](struct@crate::RTSPMediaFactoryURI)
 <!-- impl RTSPMediaFactoryURI::fn new -->
 Create a new `RTSPMediaFactoryURI` instance.
 
 # Returns
 
 a new `RTSPMediaFactoryURI` object.
-<!-- trait RTSPMediaFactoryURIExt::fn get_uri -->
+<!-- trait RTSPMediaFactoryURIExt::fn uri -->
 Get the URI that will provide media for this factory.
 
 # Returns
@@ -1619,13 +1634,13 @@ Creates a `RTSPMediaFactory` object for a given url.
 
 # Implements
 
-[`RTSPMountPointsExt`](trait.RTSPMountPointsExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`RTSPMountPointsExt`](trait@crate::RTSPMountPointsExt), [`trait@glib::object::ObjectExt`]
 <!-- trait RTSPMountPointsExt -->
 Trait containing all `RTSPMountPoints` methods.
 
 # Implementors
 
-[`RTSPMountPoints`](struct.RTSPMountPoints.html)
+[`RTSPMountPoints`](struct@crate::RTSPMountPoints)
 <!-- impl RTSPMountPoints::fn new -->
 Make a new mount points object.
 
@@ -1683,13 +1698,13 @@ it.
 
 # Implements
 
-[`RTSPServerExt`](trait.RTSPServerExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPServerExtManual`](prelude/trait.RTSPServerExtManual.html)
+[`RTSPServerExt`](trait@crate::RTSPServerExt), [`trait@glib::object::ObjectExt`], [`RTSPServerExtManual`](trait@crate::RTSPServerExtManual)
 <!-- trait RTSPServerExt -->
 Trait containing all `RTSPServer` methods.
 
 # Implementors
 
-[`RTSPServer`](struct.RTSPServer.html)
+[`RTSPServer`](struct@crate::RTSPServer)
 <!-- impl RTSPServer::fn new -->
 Create a new `RTSPServer` instance.
 
@@ -1780,32 +1795,32 @@ a `gio::Cancellable` or `None`.
 
 the `glib::Source` for `self` or `None` when an error
 occurred. Free with g_source_unref ()
-<!-- trait RTSPServerExt::fn get_address -->
+<!-- trait RTSPServerExt::fn address -->
 Get the address on which the server will accept connections.
 
 # Returns
 
 the server address. `g_free` after usage.
-<!-- trait RTSPServerExt::fn get_auth -->
+<!-- trait RTSPServerExt::fn auth -->
 Get the `RTSPAuth` used as the authentication manager of `self`.
 
 # Returns
 
 the `RTSPAuth` of `self`. `glib::object::ObjectExt::unref` after
 usage.
-<!-- trait RTSPServerExt::fn get_backlog -->
+<!-- trait RTSPServerExt::fn backlog -->
 The maximum amount of queued requests for the server.
 
 # Returns
 
 the server backlog.
-<!-- trait RTSPServerExt::fn get_bound_port -->
+<!-- trait RTSPServerExt::fn bound_port -->
 Get the port number where the server was bound to.
 
 # Returns
 
 the port number
-<!-- trait RTSPServerExt::fn get_content_length_limit -->
+<!-- trait RTSPServerExt::fn content_length_limit -->
 Get the Content-Length limit of `self`.
 
 Feature: `v1_18`
@@ -1814,27 +1829,27 @@ Feature: `v1_18`
 # Returns
 
 the Content-Length limit.
-<!-- trait RTSPServerExt::fn get_mount_points -->
+<!-- trait RTSPServerExt::fn mount_points -->
 Get the `RTSPMountPoints` used as the mount points of `self`.
 
 # Returns
 
 the `RTSPMountPoints` of `self`. `glib::object::ObjectExt::unref` after
 usage.
-<!-- trait RTSPServerExt::fn get_service -->
+<!-- trait RTSPServerExt::fn service -->
 Get the service on which the server will accept connections.
 
 # Returns
 
 the service. use `g_free` after usage.
-<!-- trait RTSPServerExt::fn get_session_pool -->
+<!-- trait RTSPServerExt::fn session_pool -->
 Get the `RTSPSessionPool` used as the session pool of `self`.
 
 # Returns
 
 the `RTSPSessionPool` used for sessions. `glib::object::ObjectExt::unref` after
 usage.
-<!-- trait RTSPServerExt::fn get_thread_pool -->
+<!-- trait RTSPServerExt::fn thread_pool -->
 Get the `RTSPThreadPool` used as the thread pool of `self`.
 
 # Returns
@@ -1912,13 +1927,13 @@ identified with the url of a media.
 
 # Implements
 
-[`RTSPSessionExt`](trait.RTSPSessionExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`RTSPSessionExt`](trait@crate::RTSPSessionExt), [`trait@glib::object::ObjectExt`]
 <!-- trait RTSPSessionExt -->
 Trait containing all `RTSPSession` methods.
 
 # Implementors
 
-[`RTSPSession`](struct.RTSPSession.html)
+[`RTSPSession`](struct@crate::RTSPSession)
 <!-- impl RTSPSession::fn new -->
 Create a new `RTSPSession` instance with `sessionid`.
 ## `sessionid`
@@ -1955,7 +1970,7 @@ user data passed to `func`
 a GList with all
 media for which `func` returned `RTSPFilterResult::Ref`. After usage, each
 element in the `glib::List` should be unreffed before the list is freed.
-<!-- trait RTSPSessionExt::fn get_header -->
+<!-- trait RTSPSessionExt::fn header -->
 Get the string that can be placed in the Session header field.
 
 # Returns
@@ -1973,14 +1988,14 @@ the amount of matched characters
 # Returns
 
 the configuration for `path` in `self`.
-<!-- trait RTSPSessionExt::fn get_sessionid -->
+<!-- trait RTSPSessionExt::fn sessionid -->
 Get the sessionid of `self`.
 
 # Returns
 
 the sessionid of `self`.
 The value remains valid as long as `self` is alive.
-<!-- trait RTSPSessionExt::fn get_timeout -->
+<!-- trait RTSPSessionExt::fn timeout -->
 Get the timeout value of `self`.
 
 # Returns
@@ -2061,13 +2076,13 @@ State of a client session regarding a specific media identified by path.
 
 # Implements
 
-[`RTSPSessionMediaExt`](trait.RTSPSessionMediaExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`RTSPSessionMediaExt`](trait@crate::RTSPSessionMediaExt), [`trait@glib::object::ObjectExt`]
 <!-- trait RTSPSessionMediaExt -->
 Trait containing all `RTSPSessionMedia` methods.
 
 # Implementors
 
-[`RTSPSessionMedia`](struct.RTSPSessionMedia.html)
+[`RTSPSessionMedia`](struct@crate::RTSPSessionMedia)
 <!-- impl RTSPSessionMedia::fn new -->
 Create a new `RTSPSessionMedia` that manages the streams
 in `media` for `path`. `media` should be prepared.
@@ -2090,20 +2105,20 @@ a `gst_rtsp::RTSPRange`
 # Returns
 
 `true` on success.
-<!-- trait RTSPSessionMediaExt::fn get_base_time -->
+<!-- trait RTSPSessionMediaExt::fn base_time -->
 Get the base_time of the `RTSPMedia` in `self`
 
 # Returns
 
 the base_time of the media.
-<!-- trait RTSPSessionMediaExt::fn get_media -->
+<!-- trait RTSPSessionMediaExt::fn media -->
 Get the `RTSPMedia` that was used when constructing `self`
 
 # Returns
 
 the `RTSPMedia` of `self`.
 Remains valid as long as `self` is valid.
-<!-- trait RTSPSessionMediaExt::fn get_rtpinfo -->
+<!-- trait RTSPSessionMediaExt::fn rtpinfo -->
 Retrieve the RTP-Info header string for all streams in `self`
 with configured transports.
 
@@ -2111,7 +2126,7 @@ with configured transports.
 
 The RTP-Info as a string or
 `None` when no RTP-Info could be generated, `g_free` after usage.
-<!-- trait RTSPSessionMediaExt::fn get_rtsp_state -->
+<!-- trait RTSPSessionMediaExt::fn rtsp_state -->
 Get the current RTSP state of `self`.
 
 # Returns
@@ -2126,7 +2141,7 @@ the stream index
 
 a `RTSPStreamTransport` that is
 valid until the session of `self` is unreffed.
-<!-- trait RTSPSessionMediaExt::fn get_transports -->
+<!-- trait RTSPSessionMediaExt::fn transports -->
 Get a list of all available `RTSPStreamTransport` in this session.
 
 Feature: `v1_14`
@@ -2175,13 +2190,13 @@ attached to a `RTSPServer` object to manage the sessions in that server.
 
 # Implements
 
-[`RTSPSessionPoolExt`](trait.RTSPSessionPoolExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPSessionPoolExtManual`](prelude/trait.RTSPSessionPoolExtManual.html)
+[`RTSPSessionPoolExt`](trait@crate::RTSPSessionPoolExt), [`trait@glib::object::ObjectExt`], [`RTSPSessionPoolExtManual`](trait@crate::RTSPSessionPoolExtManual)
 <!-- trait RTSPSessionPoolExt -->
 Trait containing all `RTSPSessionPool` methods.
 
 # Implementors
 
-[`RTSPSessionPool`](struct.RTSPSessionPool.html)
+[`RTSPSessionPool`](struct@crate::RTSPSessionPool)
 <!-- impl RTSPSessionPool::fn new -->
 Create a new `RTSPSessionPool` instance.
 
@@ -2244,14 +2259,14 @@ the session id
 
 the `RTSPSession` with `sessionid`
 or `None` when the session did not exist. `glib::object::ObjectExt::unref` after usage.
-<!-- trait RTSPSessionPoolExt::fn get_max_sessions -->
+<!-- trait RTSPSessionPoolExt::fn max_sessions -->
 Get the maximum allowed number of sessions in `self`. 0 means an unlimited
 amount of sessions.
 
 # Returns
 
 the maximum allowed number of sessions.
-<!-- trait RTSPSessionPoolExt::fn get_n_sessions -->
+<!-- trait RTSPSessionPoolExt::fn n_sessions -->
 Get the amount of active sessions in `self`.
 
 # Returns
@@ -2275,13 +2290,13 @@ The definition of a media stream.
 
 # Implements
 
-[`RTSPStreamExt`](trait.RTSPStreamExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPStreamExtManual`](prelude/trait.RTSPStreamExtManual.html)
+[`RTSPStreamExt`](trait@crate::RTSPStreamExt), [`trait@glib::object::ObjectExt`], [`RTSPStreamExtManual`](trait@crate::RTSPStreamExtManual)
 <!-- trait RTSPStreamExt -->
 Trait containing all `RTSPStream` methods.
 
 # Implementors
 
-[`RTSPStream`](struct.RTSPStream.html)
+[`RTSPStream`](struct@crate::RTSPStream)
 <!-- impl RTSPStream::fn new -->
 Create a new media stream with index `idx` that handles RTP data on
 `pad` and has a payloader element `payloader` if `pad` is a source pad
@@ -2353,51 +2368,51 @@ a `gst_rtsp::RTSPTransport`
 # Returns
 
 `true` if the stream has been sucessfully updated.
-<!-- trait RTSPStreamExt::fn get_address_pool -->
+<!-- trait RTSPStreamExt::fn address_pool -->
 Get the `RTSPAddressPool` used as the address pool of `self`.
 
 # Returns
 
 the `RTSPAddressPool` of `self`.
 `glib::object::ObjectExt::unref` after usage.
-<!-- trait RTSPStreamExt::fn get_buffer_size -->
+<!-- trait RTSPStreamExt::fn buffer_size -->
 Get the size of the UDP transmission buffer (in bytes)
 
 # Returns
 
 the size of the UDP TX buffer
-<!-- trait RTSPStreamExt::fn get_caps -->
+<!-- trait RTSPStreamExt::fn caps -->
 Retrieve the current caps of `self`.
 
 # Returns
 
 the `gst::Caps` of `self`.
 use `gst_caps_unref` after usage.
-<!-- trait RTSPStreamExt::fn get_control -->
+<!-- trait RTSPStreamExt::fn control -->
 Get the control string to identify this stream.
 
 # Returns
 
 the control string. `g_free` after usage.
-<!-- trait RTSPStreamExt::fn get_dscp_qos -->
+<!-- trait RTSPStreamExt::fn dscp_qos -->
 Get the configured DSCP QoS in of the outgoing sockets.
 
 # Returns
 
 the DSCP QoS value of the outgoing sockets, or -1 if disbled.
-<!-- trait RTSPStreamExt::fn get_index -->
+<!-- trait RTSPStreamExt::fn index -->
 Get the stream index.
 
 # Returns
 
 the stream index.
-<!-- trait RTSPStreamExt::fn get_joined_bin -->
+<!-- trait RTSPStreamExt::fn joined_bin -->
 Get the previous joined bin with `RTSPStreamExt::join_bin` or NULL.
 
 # Returns
 
 the joined bin or NULL.
-<!-- trait RTSPStreamExt::fn get_max_mcast_ttl -->
+<!-- trait RTSPStreamExt::fn max_mcast_ttl -->
 Get the the maximum time-to-live value of outgoing multicast packets.
 
 Feature: `v1_16`
@@ -2406,7 +2421,7 @@ Feature: `v1_16`
 # Returns
 
 the maximum time-to-live value of outgoing multicast packets.
-<!-- trait RTSPStreamExt::fn get_mtu -->
+<!-- trait RTSPStreamExt::fn mtu -->
 Get the configured MTU in the payloader of `self`.
 
 # Returns
@@ -2424,7 +2439,7 @@ the `gio::SocketFamily`
 the `RTSPAddress` of `self`
 or `None` when no address could be allocated. `RTSPAddress::free`
 after usage.
-<!-- trait RTSPStreamExt::fn get_multicast_client_addresses -->
+<!-- trait RTSPStreamExt::fn multicast_client_addresses -->
 Get all multicast client addresses that RTP data will be sent to
 
 Feature: `v1_16`
@@ -2433,38 +2448,38 @@ Feature: `v1_16`
 # Returns
 
 A comma separated list of host:port pairs with destinations
-<!-- trait RTSPStreamExt::fn get_multicast_iface -->
+<!-- trait RTSPStreamExt::fn multicast_iface -->
 Get the multicast interface used for `self`.
 
 # Returns
 
 the multicast interface for `self`.
 `g_free` after usage.
-<!-- trait RTSPStreamExt::fn get_profiles -->
+<!-- trait RTSPStreamExt::fn profiles -->
 Get the allowed profiles of `self`.
 
 # Returns
 
 a `gst_rtsp::RTSPProfile`
-<!-- trait RTSPStreamExt::fn get_protocols -->
+<!-- trait RTSPStreamExt::fn protocols -->
 Get the allowed protocols of `self`.
 
 # Returns
 
 a `gst_rtsp::RTSPLowerTrans`
-<!-- trait RTSPStreamExt::fn get_pt -->
+<!-- trait RTSPStreamExt::fn pt -->
 Get the stream payload type.
 
 # Returns
 
 the stream payload type.
-<!-- trait RTSPStreamExt::fn get_publish_clock_mode -->
+<!-- trait RTSPStreamExt::fn publish_clock_mode -->
 Gets if and how the stream clock should be published according to RFC7273.
 
 # Returns
 
 The GstRTSPPublishClockMode
-<!-- trait RTSPStreamExt::fn get_rate_control -->
+<!-- trait RTSPStreamExt::fn is_rate_control -->
 
 Feature: `v1_18`
 
@@ -2473,7 +2488,7 @@ Feature: `v1_18`
 
 whether `self` will follow the Rate-Control=no behaviour as specified
 in the ONVIF replay spec.
-<!-- trait RTSPStreamExt::fn get_rates -->
+<!-- trait RTSPStreamExt::fn rates -->
 Retrieve the current rate and/or applied_rate.
 
 Feature: `v1_18`
@@ -2486,13 +2501,13 @@ the configured applied_rate
 # Returns
 
 `true` if rate and/or applied_rate could be determined.
-<!-- trait RTSPStreamExt::fn get_retransmission_pt -->
+<!-- trait RTSPStreamExt::fn retransmission_pt -->
 Get the payload-type used for retransmission of this stream
 
 # Returns
 
 The retransmission PT.
-<!-- trait RTSPStreamExt::fn get_retransmission_time -->
+<!-- trait RTSPStreamExt::fn retransmission_time -->
 Get the amount of time to store retransmission data.
 
 # Returns
@@ -2542,7 +2557,7 @@ the socket family
 
 the RTP socket or `None` if no
 socket could be allocated for `family`. Unref after usage
-<!-- trait RTSPStreamExt::fn get_rtpinfo -->
+<!-- trait RTSPStreamExt::fn rtpinfo -->
 Retrieve the current rtptime, seq and running-time. This is used to
 construct a RTPInfo reply header.
 ## `rtptime`
@@ -2557,7 +2572,7 @@ result running-time
 # Returns
 
 `true` when rtptime, seq and running-time could be determined.
-<!-- trait RTSPStreamExt::fn get_rtpsession -->
+<!-- trait RTSPStreamExt::fn rtpsession -->
 Get the RTP session of this stream.
 
 # Returns
@@ -2570,30 +2585,30 @@ only be called when `self` has been joined.
 result server port
 ## `family`
 the port family to get
-<!-- trait RTSPStreamExt::fn get_sinkpad -->
+<!-- trait RTSPStreamExt::fn sinkpad -->
 Get the sinkpad associated with `self`.
 
 # Returns
 
 the sinkpad. Unref after usage.
-<!-- trait RTSPStreamExt::fn get_srcpad -->
+<!-- trait RTSPStreamExt::fn srcpad -->
 Get the srcpad associated with `self`.
 
 # Returns
 
 the srcpad. Unref after usage.
-<!-- trait RTSPStreamExt::fn get_srtp_encoder -->
+<!-- trait RTSPStreamExt::fn srtp_encoder -->
 Get the SRTP encoder for this stream.
 
 # Returns
 
 The SRTP encoder for this stream. Unref after usage.
-<!-- trait RTSPStreamExt::fn get_ssrc -->
+<!-- trait RTSPStreamExt::fn ssrc -->
 Get the SSRC used by the RTP session of this stream. This function can only
 be called when `self` has been joined.
 ## `ssrc`
 result ssrc
-<!-- trait RTSPStreamExt::fn get_ulpfec_percentage -->
+<!-- trait RTSPStreamExt::fn ulpfec_percentage -->
 
 Feature: `v1_16`
 
@@ -2602,7 +2617,7 @@ Feature: `v1_16`
 
 the amount of redundancy applied when creating ULPFEC
 protection packets.
-<!-- trait RTSPStreamExt::fn get_ulpfec_pt -->
+<!-- trait RTSPStreamExt::fn ulpfec_pt -->
 
 Feature: `v1_16`
 
@@ -2983,13 +2998,13 @@ A Transport description for a stream
 
 # Implements
 
-[`RTSPStreamTransportExt`](trait.RTSPStreamTransportExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`RTSPStreamTransportExtManual`](prelude/trait.RTSPStreamTransportExtManual.html)
+[`RTSPStreamTransportExt`](trait@crate::RTSPStreamTransportExt), [`trait@glib::object::ObjectExt`], [`RTSPStreamTransportExtManual`](trait@crate::RTSPStreamTransportExtManual)
 <!-- trait RTSPStreamTransportExt -->
 Trait containing all `RTSPStreamTransport` methods.
 
 # Implementors
 
-[`RTSPStreamTransport`](struct.RTSPStreamTransport.html)
+[`RTSPStreamTransport`](struct@crate::RTSPStreamTransport)
 <!-- impl RTSPStreamTransport::fn new -->
 Create a new `RTSPStreamTransport` that can be used to manage
 `stream` with transport `tr`.
@@ -3011,20 +3026,20 @@ a star time
 the RTPInfo string for `self`
 and `start_time` or `None` when the RTP-Info could not be
 determined. `g_free` after usage.
-<!-- trait RTSPStreamTransportExt::fn get_stream -->
+<!-- trait RTSPStreamTransportExt::fn stream -->
 Get the `RTSPStream` used when constructing `self`.
 
 # Returns
 
 the stream used when constructing `self`.
-<!-- trait RTSPStreamTransportExt::fn get_transport -->
+<!-- trait RTSPStreamTransportExt::fn transport -->
 Get the transport configured in `self`.
 
 # Returns
 
 the transport configured in `self`. It remains
 valid for as long as `self` is valid.
-<!-- trait RTSPStreamTransportExt::fn get_url -->
+<!-- trait RTSPStreamTransportExt::fn url -->
 Get the url configured in `self`.
 
 # Returns
@@ -3200,13 +3215,13 @@ The thread pool structure.
 
 # Implements
 
-[`RTSPThreadPoolExt`](trait.RTSPThreadPoolExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`RTSPThreadPoolExt`](trait@crate::RTSPThreadPoolExt), [`trait@glib::object::ObjectExt`]
 <!-- trait RTSPThreadPoolExt -->
 Trait containing all `RTSPThreadPool` methods.
 
 # Implementors
 
-[`RTSPThreadPool`](struct.RTSPThreadPool.html)
+[`RTSPThreadPool`](struct@crate::RTSPThreadPool)
 <!-- impl RTSPThreadPool::fn new -->
 Create a new `RTSPThreadPool` instance.
 
@@ -3217,7 +3232,7 @@ a new `RTSPThreadPool`
 Wait for all tasks to be stopped and free all allocated resources. This is
 mainly used in test suites to ensure proper cleanup of internal data
 structures.
-<!-- trait RTSPThreadPoolExt::fn get_max_threads -->
+<!-- trait RTSPThreadPoolExt::fn max_threads -->
 Get the maximum number of threads used for client connections.
 See `RTSPThreadPoolExt::set_max_threads`.
 

@@ -21,7 +21,7 @@ glib::wrapper! {
     pub struct Container(Object<ffi::GESContainer, ffi::GESContainerClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_container_get_type(),
+        type_ => || ffi::ges_container_get_type(),
     }
 }
 

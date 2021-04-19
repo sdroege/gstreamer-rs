@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct AggregatorPad(Object<ffi::GstAggregatorPad, ffi::GstAggregatorPadClass>) @extends gst::Pad, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_aggregator_pad_get_type(),
+        type_ => || ffi::gst_aggregator_pad_get_type(),
     }
 }
 

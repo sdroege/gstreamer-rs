@@ -29,7 +29,7 @@ glib::wrapper! {
     pub struct VideoDecoder(Object<ffi::GstVideoDecoder, ffi::GstVideoDecoderClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_video_decoder_get_type(),
+        type_ => || ffi::gst_video_decoder_get_type(),
     }
 }
 
@@ -58,7 +58,7 @@ pub trait VideoDecoderExt: 'static {
     fn max_errors(&self) -> i32;
 
     #[doc(alias = "gst_video_decoder_get_needs_format")]
-    fn is_needs_format(&self) -> bool;
+    fn needs_format(&self) -> bool;
 
     #[doc(alias = "gst_video_decoder_get_packetized")]
     fn is_packetized(&self) -> bool;
@@ -156,7 +156,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe { ffi::gst_video_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
     }
 
-    fn is_needs_format(&self) -> bool {
+    fn needs_format(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_video_decoder_get_needs_format(
                 self.as_ref().to_glib_none().0,

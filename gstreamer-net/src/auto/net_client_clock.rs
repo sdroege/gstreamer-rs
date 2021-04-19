@@ -16,7 +16,7 @@ glib::wrapper! {
     pub struct NetClientClock(Object<ffi::GstNetClientClock, ffi::GstNetClientClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_net_client_clock_get_type(),
+        type_ => || ffi::gst_net_client_clock_get_type(),
     }
 }
 

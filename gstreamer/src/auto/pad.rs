@@ -33,7 +33,7 @@ glib::wrapper! {
     pub struct Pad(Object<ffi::GstPad, ffi::GstPadClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_pad_get_type(),
+        type_ => || ffi::gst_pad_get_type(),
     }
 }
 

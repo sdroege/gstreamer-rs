@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct ProxyPad(Object<ffi::GstProxyPad, ffi::GstProxyPadClass>) @extends Pad, Object;
 
     match fn {
-        get_type => || ffi::gst_proxy_pad_get_type(),
+        type_ => || ffi::gst_proxy_pad_get_type(),
     }
 }
 

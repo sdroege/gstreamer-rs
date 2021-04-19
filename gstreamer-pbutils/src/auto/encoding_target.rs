@@ -12,7 +12,7 @@ glib::wrapper! {
     pub struct EncodingTarget(Object<ffi::GstEncodingTarget>);
 
     match fn {
-        get_type => || ffi::gst_encoding_target_get_type(),
+        type_ => || ffi::gst_encoding_target_get_type(),
     }
 }
 

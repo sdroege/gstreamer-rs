@@ -18,7 +18,7 @@ glib::wrapper! {
     pub struct RTSPThreadPool(Object<ffi::GstRTSPThreadPool, ffi::GstRTSPThreadPoolClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_thread_pool_get_type(),
+        type_ => || ffi::gst_rtsp_thread_pool_get_type(),
     }
 }
 
