@@ -33,7 +33,7 @@ impl DeviceProviderFactory {
     }
 
     #[doc(alias = "gst_device_provider_factory_get_metadata")]
-    pub fn get_metadata(&self, key: &str) -> Option<glib::GString> {
+    pub fn metadata(&self, key: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_device_provider_factory_get_metadata(
                 self.to_glib_none().0,
@@ -78,7 +78,7 @@ impl DeviceProviderFactory {
     }
 
     #[doc(alias = "gst_device_provider_factory_get_by_name")]
-    pub fn get_by_name(factoryname: &str) -> Option<DeviceProvider> {
+    pub fn by_name(factoryname: &str) -> Option<DeviceProvider> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_device_provider_factory_get_by_name(

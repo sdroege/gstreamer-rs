@@ -23,7 +23,7 @@ an existing `gst_gl::GLDisplay`
 # Returns
 
 a new `GLDisplayEGL`
-<!-- impl GLDisplayEGL::fn get_from_native -->
+<!-- impl GLDisplayEGL::fn from_native -->
 Attempts to create a new `EGLDisplay` from `display`. If `type_` is
 `gst_gl::GLDisplayType::Any`, then `display` must be 0. `type_` must not be
 `gst_gl::GLDisplayType::None`.

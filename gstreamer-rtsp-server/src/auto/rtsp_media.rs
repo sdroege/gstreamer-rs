@@ -112,7 +112,7 @@ pub trait RTSPMediaExt: 'static {
     fn publish_clock_mode(&self) -> RTSPPublishClockMode;
 
     #[doc(alias = "gst_rtsp_media_get_range_string")]
-    fn get_range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<glib::GString>;
+    fn range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<glib::GString>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -131,13 +131,13 @@ pub trait RTSPMediaExt: 'static {
     fn status(&self) -> RTSPMediaStatus;
 
     #[doc(alias = "gst_rtsp_media_get_stream")]
-    fn get_stream(&self, idx: u32) -> Option<RTSPStream>;
+    fn stream(&self, idx: u32) -> Option<RTSPStream>;
 
     #[doc(alias = "gst_rtsp_media_get_suspend_mode")]
     fn suspend_mode(&self) -> RTSPSuspendMode;
 
     //#[doc(alias = "gst_rtsp_media_get_time_provider")]
-    //fn get_time_provider(&self, address: Option<&str>, port: u16) -> /*Ignored*/Option<gst_net::NetTimeProvider>;
+    //fn time_provider(&self, address: Option<&str>, port: u16) -> /*Ignored*/Option<gst_net::NetTimeProvider>;
 
     #[doc(alias = "gst_rtsp_media_get_transport_mode")]
     fn transport_mode(&self) -> RTSPTransportMode;
@@ -550,7 +550,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    fn get_range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<glib::GString> {
+    fn range_string(&self, play: bool, unit: gst_rtsp::RTSPRangeUnit) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_get_range_string(
                 self.as_ref().to_glib_none().0,
@@ -607,7 +607,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    fn get_stream(&self, idx: u32) -> Option<RTSPStream> {
+    fn stream(&self, idx: u32) -> Option<RTSPStream> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_media_get_stream(
                 self.as_ref().to_glib_none().0,
@@ -624,7 +624,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //fn get_time_provider(&self, address: Option<&str>, port: u16) -> /*Ignored*/Option<gst_net::NetTimeProvider> {
+    //fn time_provider(&self, address: Option<&str>, port: u16) -> /*Ignored*/Option<gst_net::NetTimeProvider> {
     //    unsafe { TODO: call ffi:gst_rtsp_media_get_time_provider() }
     //}
 

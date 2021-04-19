@@ -35,16 +35,16 @@ pub trait ChildProxyExt: 'static {
     //fn get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[doc(alias = "gst_child_proxy_get_child_by_index")]
-    fn get_child_by_index(&self, index: u32) -> Option<glib::Object>;
+    fn child_by_index(&self, index: u32) -> Option<glib::Object>;
 
     #[doc(alias = "gst_child_proxy_get_child_by_name")]
-    fn get_child_by_name(&self, name: &str) -> Option<glib::Object>;
+    fn child_by_name(&self, name: &str) -> Option<glib::Object>;
 
     #[doc(alias = "gst_child_proxy_get_children_count")]
     fn children_count(&self) -> u32;
 
     //#[doc(alias = "gst_child_proxy_get_valist")]
-    //fn get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
+    //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     //#[doc(alias = "gst_child_proxy_lookup")]
     //fn lookup(&self, name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<glib::Object>;
@@ -91,7 +91,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     //    unsafe { TODO: call ffi:gst_child_proxy_get() }
     //}
 
-    fn get_child_by_index(&self, index: u32) -> Option<glib::Object> {
+    fn child_by_index(&self, index: u32) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_child_proxy_get_child_by_index(
                 self.as_ref().to_glib_none().0,
@@ -100,7 +100,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         }
     }
 
-    fn get_child_by_name(&self, name: &str) -> Option<glib::Object> {
+    fn child_by_name(&self, name: &str) -> Option<glib::Object> {
         unsafe {
             from_glib_full(ffi::gst_child_proxy_get_child_by_name(
                 self.as_ref().to_glib_none().0,
@@ -113,7 +113,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
         unsafe { ffi::gst_child_proxy_get_children_count(self.as_ref().to_glib_none().0) }
     }
 
-    //fn get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
+    //fn valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:gst_child_proxy_get_valist() }
     //}
 

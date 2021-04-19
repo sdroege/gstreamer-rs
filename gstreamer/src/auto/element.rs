@@ -96,13 +96,13 @@ pub trait ElementExt: 'static {
     fn clock(&self) -> Option<Clock>;
 
     #[doc(alias = "gst_element_get_compatible_pad")]
-    fn get_compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad>;
+    fn compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad>;
 
     #[doc(alias = "gst_element_get_compatible_pad_template")]
-    fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
+    fn compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
 
     #[doc(alias = "gst_element_get_context")]
-    fn get_context(&self, context_type: &str) -> Option<Context>;
+    fn context(&self, context_type: &str) -> Option<Context>;
 
     #[doc(alias = "gst_element_get_contexts")]
     fn contexts(&self) -> Vec<Context>;
@@ -111,13 +111,13 @@ pub trait ElementExt: 'static {
     fn factory(&self) -> Option<ElementFactory>;
 
     #[doc(alias = "gst_element_get_request_pad")]
-    fn get_request_pad(&self, name: &str) -> Option<Pad>;
+    fn request_pad_simple(&self, name: &str) -> Option<Pad>;
 
     #[doc(alias = "gst_element_get_start_time")]
     fn start_time(&self) -> ClockTime;
 
     #[doc(alias = "gst_element_get_static_pad")]
-    fn get_static_pad(&self, name: &str) -> Option<Pad>;
+    fn static_pad(&self, name: &str) -> Option<Pad>;
 
     #[doc(alias = "gst_element_is_locked_state")]
     fn is_locked_state(&self) -> bool;
@@ -363,7 +363,7 @@ impl<O: IsA<Element>> ElementExt for O {
         unsafe { from_glib_full(ffi::gst_element_get_clock(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad> {
+    fn compatible_pad<P: IsA<Pad>>(&self, pad: &P, caps: Option<&Caps>) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_get_compatible_pad(
                 self.as_ref().to_glib_none().0,
@@ -373,7 +373,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate> {
+    fn compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate> {
         unsafe {
             from_glib_none(ffi::gst_element_get_compatible_pad_template(
                 self.as_ref().to_glib_none().0,
@@ -382,7 +382,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_context(&self, context_type: &str) -> Option<Context> {
+    fn context(&self, context_type: &str) -> Option<Context> {
         unsafe {
             from_glib_full(ffi::gst_element_get_context(
                 self.as_ref().to_glib_none().0,
@@ -403,7 +403,7 @@ impl<O: IsA<Element>> ElementExt for O {
         unsafe { from_glib_none(ffi::gst_element_get_factory(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_request_pad(&self, name: &str) -> Option<Pad> {
+    fn request_pad_simple(&self, name: &str) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_get_request_pad(
                 self.as_ref().to_glib_none().0,
@@ -420,7 +420,7 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_static_pad(&self, name: &str) -> Option<Pad> {
+    fn static_pad(&self, name: &str) -> Option<Pad> {
         unsafe {
             from_glib_full(ffi::gst_element_get_static_pad(
                 self.as_ref().to_glib_none().0,

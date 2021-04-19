@@ -38,7 +38,7 @@ pub trait StreamVolumeExt: 'static {
     fn is_muted(&self) -> bool;
 
     #[doc(alias = "gst_stream_volume_get_volume")]
-    fn get_volume(&self, format: StreamVolumeFormat) -> f64;
+    fn volume(&self, format: StreamVolumeFormat) -> f64;
 
     #[doc(alias = "gst_stream_volume_set_mute")]
     fn set_mute(&self, mute: bool);
@@ -66,7 +66,7 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         }
     }
 
-    fn get_volume(&self, format: StreamVolumeFormat) -> f64 {
+    fn volume(&self, format: StreamVolumeFormat) -> f64 {
         unsafe {
             ffi::gst_stream_volume_get_volume(self.as_ref().to_glib_none().0, format.to_glib())
         }

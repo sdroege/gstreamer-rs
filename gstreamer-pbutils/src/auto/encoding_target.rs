@@ -62,7 +62,7 @@ impl EncodingTarget {
     }
 
     #[doc(alias = "gst_encoding_target_get_profile")]
-    pub fn get_profile(&self, name: &str) -> Option<EncodingProfile> {
+    pub fn profile(&self, name: &str) -> Option<EncodingProfile> {
         unsafe {
             from_glib_full(ffi::gst_encoding_target_get_profile(
                 self.to_glib_none().0,

@@ -52,7 +52,7 @@ pub trait VideoDecoderExt: 'static {
     fn estimate_rate(&self) -> i32;
 
     #[doc(alias = "gst_video_decoder_get_max_decode_time")]
-    fn get_max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
+    fn max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
     #[doc(alias = "gst_video_decoder_get_max_errors")]
     fn max_errors(&self) -> i32;
@@ -143,7 +143,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe { ffi::gst_video_decoder_get_estimate_rate(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
+    fn max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
         unsafe {
             ffi::gst_video_decoder_get_max_decode_time(
                 self.as_ref().to_glib_none().0,

@@ -81,7 +81,7 @@ impl GLUpload {
     }
 
     #[doc(alias = "gst_gl_upload_get_input_template_caps")]
-    pub fn get_input_template_caps() -> gst::Caps {
+    pub fn input_template_caps() -> gst::Caps {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_gl_upload_get_input_template_caps()) }
     }

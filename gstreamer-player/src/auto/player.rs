@@ -34,7 +34,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_color_balance")]
-    pub fn get_color_balance(&self, type_: PlayerColorBalanceType) -> f64 {
+    pub fn color_balance(&self, type_: PlayerColorBalanceType) -> f64 {
         unsafe { ffi::gst_player_get_color_balance(self.to_glib_none().0, type_.to_glib()) }
     }
 
@@ -132,7 +132,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_video_snapshot")]
-    pub fn get_video_snapshot(
+    pub fn video_snapshot(
         &self,
         format: PlayerSnapshotFormat,
         config: Option<&gst::Structure>,
@@ -412,7 +412,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_audio_streams")]
-    pub fn get_audio_streams(info: &PlayerMediaInfo) -> Vec<PlayerAudioInfo> {
+    pub fn audio_streams(info: &PlayerMediaInfo) -> Vec<PlayerAudioInfo> {
         skip_assert_initialized!();
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_audio_streams(
@@ -422,7 +422,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_subtitle_streams")]
-    pub fn get_subtitle_streams(info: &PlayerMediaInfo) -> Vec<PlayerSubtitleInfo> {
+    pub fn subtitle_streams(info: &PlayerMediaInfo) -> Vec<PlayerSubtitleInfo> {
         skip_assert_initialized!();
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_subtitle_streams(
@@ -432,7 +432,7 @@ impl Player {
     }
 
     #[doc(alias = "gst_player_get_video_streams")]
-    pub fn get_video_streams(info: &PlayerMediaInfo) -> Vec<PlayerVideoInfo> {
+    pub fn video_streams(info: &PlayerMediaInfo) -> Vec<PlayerVideoInfo> {
         skip_assert_initialized!();
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_video_streams(

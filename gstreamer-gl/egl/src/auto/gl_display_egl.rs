@@ -37,7 +37,7 @@ impl GLDisplayEGL {
     }
 
     //#[doc(alias = "gst_gl_display_egl_get_from_native")]
-    //pub fn get_from_native(type_: /*Ignored*/gst_gl::GLDisplayType, display: /*Unimplemented*/Fundamental: UIntPtr) -> /*Unimplemented*/Option<Fundamental: Pointer> {
+    //pub fn from_native(type_: /*Ignored*/gst_gl::GLDisplayType, display: /*Unimplemented*/Fundamental: UIntPtr) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi:gst_gl_display_egl_get_from_native() }
     //}
 }

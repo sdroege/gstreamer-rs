@@ -73,7 +73,7 @@ pub trait GstObjectExt: 'static {
     fn default_error(&self, error: &glib::Error, debug: Option<&str>);
 
     #[doc(alias = "gst_object_get_control_binding")]
-    fn get_control_binding(&self, property_name: &str) -> Option<ControlBinding>;
+    fn control_binding(&self, property_name: &str) -> Option<ControlBinding>;
 
     #[doc(alias = "gst_object_get_control_rate")]
     fn control_rate(&self) -> ClockTime;
@@ -88,10 +88,10 @@ pub trait GstObjectExt: 'static {
     fn path_string(&self) -> glib::GString;
 
     #[doc(alias = "gst_object_get_value")]
-    fn get_value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value>;
+    fn value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value>;
 
     //#[doc(alias = "gst_object_get_value_array")]
-    //fn get_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
+    //fn is_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
     #[doc(alias = "gst_object_has_active_control_bindings")]
     fn has_active_control_bindings(&self) -> bool;
@@ -163,7 +163,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn get_control_binding(&self, property_name: &str) -> Option<ControlBinding> {
+    fn control_binding(&self, property_name: &str) -> Option<ControlBinding> {
         unsafe {
             from_glib_full(ffi::gst_object_get_control_binding(
                 self.as_ref().to_glib_none().0,
@@ -196,7 +196,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn get_value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value> {
+    fn value(&self, property_name: &str, timestamp: ClockTime) -> Option<glib::Value> {
         unsafe {
             from_glib_full(ffi::gst_object_get_value(
                 self.as_ref().to_glib_none().0,
@@ -206,7 +206,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    //fn get_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
+    //fn is_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi:gst_object_get_value_array() }
     //}
 

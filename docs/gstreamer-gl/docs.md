@@ -289,13 +289,13 @@ then function to get the address of
 # Returns
 
 an address pointing to `name` or `None`
-<!-- impl GLContext::fn get_current -->
+<!-- impl GLContext::fn current -->
 See also `GLContextExt::activate`.
 
 # Returns
 
 the `GLContext` active in the current thread or `None`
-<!-- impl GLContext::fn get_current_gl_api -->
+<!-- impl GLContext::fn current_gl_api -->
 If an error occurs, `major` and `minor` are not modified and `GLAPI::None` is
 returned.
 ## `platform`
@@ -309,14 +309,14 @@ the minor version
 
 The version supported by the OpenGL context current in the calling
  thread or `GLAPI::None`
-<!-- impl GLContext::fn get_current_gl_context -->
+<!-- impl GLContext::fn current_gl_context -->
 ## `context_type`
 a `GLPlatform` specifying the type of context to retrieve
 
 # Returns
 
 The OpenGL context handle current in the calling thread or `None`
-<!-- impl GLContext::fn get_proc_address_with_platform -->
+<!-- impl GLContext::fn proc_address_with_platform -->
 Attempts to use the `context_type` specific GetProcAddress implementations
 to retrieve `name`.
 
@@ -454,7 +454,7 @@ Returns the OpenGL version implemented by `self`. See
 resulting major version
 ## `min`
 resulting minor version
-<!-- trait GLContextExt::fn get_proc_address -->
+<!-- trait GLContextExt::fn proc_address -->
 Get a function pointer to a specified opengl function, `name`. If the the
 specific function does not exist, NULL is returned instead.
 
@@ -1052,7 +1052,7 @@ Opaque `GLMemoryAllocator` struct
 # Implements
 
 [`GLBaseMemoryAllocatorExt`](trait@crate::GLBaseMemoryAllocatorExt), [`trait@gst::AllocatorExt`], [`trait@gst::ObjectExt`], [`trait@glib::object::ObjectExt`]
-<!-- impl GLMemoryAllocator::fn get_default -->
+<!-- impl GLMemoryAllocator::fn default -->
 ## `context`
 a `GLContext`
 
@@ -1437,7 +1437,7 @@ to `self` with `GLShader::attach` or `GLShader::attach_unlocked`.
 Note: must be called in the GL thread
 ## `stage`
 a `GLSLStage` to attach
-<!-- impl GLShader::fn get_attribute_location -->
+<!-- impl GLShader::fn attribute_location -->
 ## `name`
 name of the attribute
 

@@ -1332,7 +1332,7 @@ bitflags! {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl StreamType {
-    pub fn get_name<'a>(self) -> &'a str {
+    pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
                 ffi::gst_stream_type_get_name(self.to_glib())
@@ -1350,7 +1350,7 @@ impl StreamType {
 impl fmt::Display for StreamType {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.get_name())
+        f.write_str(&self.name())
     }
 }
 

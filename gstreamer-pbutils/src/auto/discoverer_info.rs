@@ -97,7 +97,7 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_get_streams")]
-    pub fn get_streams(&self, streamtype: glib::types::Type) -> Vec<DiscovererStreamInfo> {
+    pub fn streams(&self, streamtype: glib::types::Type) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_streams(
                 self.to_glib_none().0,

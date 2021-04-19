@@ -118,7 +118,7 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_get_feature_list")]
-    pub fn get_feature_list(&self, type_: glib::types::Type) -> Vec<PluginFeature> {
+    pub fn feature_list(&self, type_: glib::types::Type) -> Vec<PluginFeature> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list(
                 self.to_glib_none().0,
@@ -128,7 +128,7 @@ impl Registry {
     }
 
     #[doc(alias = "gst_registry_get_feature_list_by_plugin")]
-    pub fn get_feature_list_by_plugin(&self, name: &str) -> Vec<PluginFeature> {
+    pub fn feature_list_by_plugin(&self, name: &str) -> Vec<PluginFeature> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list_by_plugin(
                 self.to_glib_none().0,

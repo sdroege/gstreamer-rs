@@ -840,7 +840,7 @@ Feature: `v1_18`
 # Returns
 
 The duration-limit of `self`.
-<!-- trait ClipExt::fn get_internal_time_from_timeline_time -->
+<!-- trait ClipExt::fn internal_time_from_timeline_time -->
 Convert the timeline time to an internal source time of the child.
 This will take any time effects placed on the clip into account (see
 `BaseEffect` for what time effects are supported, and how to
@@ -905,7 +905,7 @@ Gets the `Clip:supported-formats` of the clip.
 # Returns
 
 The `TrackType`-s supported by `self`.
-<!-- trait ClipExt::fn get_timeline_time_from_internal_time -->
+<!-- trait ClipExt::fn timeline_time_from_internal_time -->
 Convert the internal source time from the child to a timeline time.
 This will take any time effects placed on the clip into account (see
 `BaseEffect` for what time effects are supported, and how to
@@ -963,7 +963,7 @@ A time in the internal time coordinates of `child`
 The time in the timeline coordinates corresponding to
 `internal_time`, or `GST_CLOCK_TIME_NONE` if the conversion could not be
 performed.
-<!-- trait ClipExt::fn get_timeline_time_from_source_frame -->
+<!-- trait ClipExt::fn timeline_time_from_source_frame -->
 Convert the source frame number to a timeline time. This acts the same
 as `ClipExt::get_timeline_time_from_internal_time` using the core
 children of the clip and using the frame number to specify the internal
@@ -986,7 +986,7 @@ in the timeline coordinates
 The timestamp corresponding to `frame_number` in the core
 children of `self`, in the timeline coordinates, or `GST_CLOCK_TIME_NONE`
 if the conversion could not be performed.
-<!-- trait ClipExt::fn get_top_effect_index -->
+<!-- trait ClipExt::fn top_effect_index -->
 Gets the internal index of an effect in the clip. The index of effects
 in a clip will run from 0 to n-1, where n is the total number of
 effects. If two effects share the same `TrackElement:track`, the
@@ -1240,7 +1240,7 @@ The edit position: a new location for the edge of `self`
 # Returns
 
 `true` if the edit of `self` completed, `false` on failure.
-<!-- trait GESContainerExt::fn get_children -->
+<!-- trait GESContainerExt::fn children -->
 Get the list of timeline elements contained in the container. If
 `recursive` is `true`, and the container contains other containers as
 children, then their children will be added to the list, in addition to
@@ -1766,7 +1766,7 @@ The clip to add
 
 `true` if `clip` was properly added to `self`, or `false`
 if `self` refused to add `clip`.
-<!-- trait LayerExt::fn get_active_for_track -->
+<!-- trait LayerExt::fn is_active_for_track -->
 Gets whether the layer is active for the given track. See
 `LayerExt::set_active_for_tracks`.
 
@@ -1791,7 +1791,7 @@ Get the `Clip`-s contained in this layer.
 
 A list of clips in
 `self`.
-<!-- trait LayerExt::fn get_clips_in_interval -->
+<!-- trait LayerExt::fn clips_in_interval -->
 Gets the clips within the layer that appear between `start` and `end`.
 ## `start`
 Start of the interval
@@ -1991,7 +1991,7 @@ Gets the `Pipeline:mode` of the pipeline.
 # Returns
 
 The current mode of `self`.
-<!-- trait GESPipelineExt::fn get_thumbnail -->
+<!-- trait GESPipelineExt::fn thumbnail -->
 Gets a sample from the pipeline of the currently displayed image in
 preview, in the specified format.
 
@@ -2007,7 +2007,7 @@ Some caps to specifying the desired format, or
 A sample of `self`'s current image preview in
 the format given by `caps`, or `None` if an error prevented fetching the
 sample.
-<!-- trait GESPipelineExt::fn get_thumbnail_rgb24 -->
+<!-- trait GESPipelineExt::fn thumbnail_rgb24 -->
 Gets a sample from the pipeline of the currently displayed image in
 preview, in the 24-bit "RGB" format and of the desired width and
 height.
@@ -2295,7 +2295,7 @@ The `glib::Type` of the asset to create
 # Returns
 
 The newly created `Asset` or `None`.
-<!-- trait ProjectExt::fn get_asset -->
+<!-- trait ProjectExt::fn asset -->
 ## `id`
 The id of the asset to retrieve
 ## `extractable_type`
@@ -2671,7 +2671,7 @@ Get the current `Timeline:duration` of the timeline
 # Returns
 
 The current duration of `self`.
-<!-- trait TimelineExt::fn get_element -->
+<!-- trait TimelineExt::fn element -->
 Gets the element contained in the timeline with the given name.
 ## `name`
 The name of the element to find
@@ -2680,7 +2680,7 @@ The name of the element to find
 
 The timeline element in `self`
 with the given `name`, or `None` if it was not found.
-<!-- trait TimelineExt::fn get_frame_at -->
+<!-- trait TimelineExt::fn frame_at -->
 This method allows you to convert a timeline `gst::ClockTime` into its
 corresponding `FrameNumber` in the timeline's output.
 
@@ -2692,7 +2692,7 @@ The timestamp to get the corresponding frame number of
 # Returns
 
 The frame number `timestamp` corresponds to.
-<!-- trait TimelineExt::fn get_frame_time -->
+<!-- trait TimelineExt::fn frame_time -->
 This method allows you to convert a timeline output frame number into a
 timeline `gst::ClockTime`. For example, this time could be used to seek to a
 particular frame in the timeline's output, or as the edit position for
@@ -2715,7 +2715,7 @@ Get the list of `Group`-s present in the timeline.
 The list of
 groups that contain clips present in `self`'s layers.
 Must not be changed.
-<!-- trait TimelineExt::fn get_layer -->
+<!-- trait TimelineExt::fn layer -->
 Retrieve the layer whose index in the timeline matches the given
 priority.
 ## `priority`
@@ -2734,7 +2734,7 @@ Get the list of `Layer`-s present in the timeline.
 
 The list of
 layers present in `self` sorted by priority.
-<!-- trait TimelineExt::fn get_pad_for_track -->
+<!-- trait TimelineExt::fn pad_for_track -->
 Search for the `gst::Pad` corresponding to the given timeline's track.
 You can link to this pad to receive the output data of the given track.
 ## `track`
@@ -2750,7 +2750,7 @@ Gets the `Timeline:snapping-distance` for the timeline.
 # Returns
 
 The snapping distance (in nanoseconds) of `self`.
-<!-- trait TimelineExt::fn get_track_for_pad -->
+<!-- trait TimelineExt::fn track_for_pad -->
 Search for the `Track` corresponding to the given timeline's pad.
 ## `pad`
 A pad
@@ -3247,12 +3247,12 @@ The edit position: a new location for the edge of `self`
 # Returns
 
 `true` if the edit of `self` completed, `false` on failure.
-<!-- trait TimelineElementExt::fn get_child_properties -->
+<!-- trait TimelineElementExt::fn child_properties -->
 Gets several of the children properties of the element. See
 `TimelineElementExt::get_child_property`.
 ## `first_property_name`
 The name of the first child property to get
-<!-- trait TimelineElementExt::fn get_child_property -->
+<!-- trait TimelineElementExt::fn child_property -->
 Gets the property of a child of the element.
 
 `property_name` can either be in the format "prop-name" or
@@ -3277,7 +3277,7 @@ The return location for the value
 # Returns
 
 `true` if the property was found and copied to `value`.
-<!-- trait TimelineElementExt::fn get_child_property_by_pspec -->
+<!-- trait TimelineElementExt::fn child_property_by_pspec -->
 Gets the property of a child of the element. Specifically, the property
 corresponding to the `pspec` used in
 `TimelineElementExt::add_child_property` is copied into `value`.
@@ -3285,7 +3285,7 @@ corresponding to the `pspec` used in
 The specification of a registered child property to get
 ## `value`
 The return location for the value
-<!-- trait TimelineElementExt::fn get_child_property_valist -->
+<!-- trait TimelineElementExt::fn child_property_valist -->
 Gets several of the children properties of the element. See
 `TimelineElementExt::get_child_property`.
 ## `first_property_name`
@@ -4355,7 +4355,7 @@ The name of the first property to get
 ## `var_args`
 Value for the first property, followed optionally by more
 name/return location pairs, followed by NULL
-<!-- trait TrackElementExt::fn get_control_binding -->
+<!-- trait TrackElementExt::fn control_binding -->
 Gets the control binding that was created for the specified child
 property of the track element using
 `TrackElementExt::set_control_source`. The given `property_name` must

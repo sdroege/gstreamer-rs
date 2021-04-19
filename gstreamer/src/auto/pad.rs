@@ -101,7 +101,7 @@ pub trait PadExt: 'static {
     fn single_internal_link(&self) -> Option<Pad>;
 
     #[doc(alias = "gst_pad_get_sticky_event")]
-    fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
+    fn sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -350,7 +350,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event> {
+    fn sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_sticky_event(
                 self.as_ref().to_glib_none().0,

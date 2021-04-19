@@ -80,7 +80,7 @@ pub trait LayerExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_layer_get_active_for_track")]
-    fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
+    fn is_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
     #[doc(alias = "ges_layer_get_auto_transition")]
     fn is_auto_transition(&self) -> bool;
@@ -89,7 +89,7 @@ pub trait LayerExt: 'static {
     fn clips(&self) -> Vec<Clip>;
 
     #[doc(alias = "ges_layer_get_clips_in_interval")]
-    fn get_clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip>;
+    fn clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip>;
 
     #[doc(alias = "ges_layer_get_duration")]
     fn duration(&self) -> gst::ClockTime;
@@ -221,7 +221,7 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool {
+    fn is_active_for_track<P: IsA<Track>>(&self, track: &P) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_get_active_for_track(
                 self.as_ref().to_glib_none().0,
@@ -246,7 +246,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn get_clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip> {
+    fn clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips_in_interval(
                 self.as_ref().to_glib_none().0,

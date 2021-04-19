@@ -46,7 +46,7 @@ impl TypeFindFactory {
     }
 
     #[doc(alias = "gst_type_find_factory_get_list")]
-    pub fn get_list() -> Vec<TypeFindFactory> {
+    pub fn list() -> Vec<TypeFindFactory> {
         assert_initialized_main_thread!();
         unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_type_find_factory_get_list()) }
     }

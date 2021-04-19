@@ -78,7 +78,7 @@ pub trait ClipExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_internal_time_from_timeline_time")]
-    fn get_internal_time_from_timeline_time<P: IsA<TrackElement>>(
+    fn internal_time_from_timeline_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
         timeline_time: gst::ClockTime,
@@ -93,7 +93,7 @@ pub trait ClipExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_timeline_time_from_internal_time")]
-    fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
+    fn timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
         internal_time: gst::ClockTime,
@@ -102,16 +102,16 @@ pub trait ClipExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_get_timeline_time_from_source_frame")]
-    fn get_timeline_time_from_source_frame(
+    fn timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
     ) -> Result<gst::ClockTime, glib::Error>;
 
     #[doc(alias = "ges_clip_get_top_effect_index")]
-    fn get_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
+    fn top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
 
     #[doc(alias = "ges_clip_get_top_effect_position")]
-    fn get_top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
+    fn top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32;
 
     #[doc(alias = "ges_clip_get_top_effects")]
     fn top_effects(&self) -> Vec<TrackElement>;
@@ -277,7 +277,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_internal_time_from_timeline_time<P: IsA<TrackElement>>(
+    fn internal_time_from_timeline_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
         timeline_time: gst::ClockTime,
@@ -312,7 +312,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_timeline_time_from_internal_time<P: IsA<TrackElement>>(
+    fn timeline_time_from_internal_time<P: IsA<TrackElement>>(
         &self,
         child: &P,
         internal_time: gst::ClockTime,
@@ -335,7 +335,7 @@ impl<O: IsA<Clip>> ClipExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_timeline_time_from_source_frame(
+    fn timeline_time_from_source_frame(
         &self,
         frame_number: FrameNumber,
     ) -> Result<gst::ClockTime, glib::Error> {
@@ -354,7 +354,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn get_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
+    fn top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
         unsafe {
             ffi::ges_clip_get_top_effect_index(
                 self.as_ref().to_glib_none().0,
@@ -363,7 +363,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn get_top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
+    fn top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
         unsafe {
             ffi::ges_clip_get_top_effect_position(
                 self.as_ref().to_glib_none().0,

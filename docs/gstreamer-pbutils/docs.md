@@ -259,7 +259,7 @@ This structure can be traversed to see the original hierarchy. Unref with
 the list of
 all streams contained in the `info`. Free after usage
 with `DiscovererStreamInfo::list_free`.
-<!-- impl DiscovererInfo::fn get_streams -->
+<!-- impl DiscovererInfo::fn streams -->
 Finds the `DiscovererStreamInfo` contained in `self` that match the
 given `streamtype`.
 ## `streamtype`
@@ -862,7 +862,7 @@ Feature: `v1_18`
 # Returns
 
 The path to the `self` file.
-<!-- impl EncodingTarget::fn get_profile -->
+<!-- impl EncodingTarget::fn profile -->
 ## `name`
 the name of the profile to retrieve
 

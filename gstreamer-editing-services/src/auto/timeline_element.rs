@@ -71,16 +71,16 @@ pub trait TimelineElementExt: 'static {
     ) -> Result<(), glib::Error>;
 
     //#[doc(alias = "ges_timeline_element_get_child_properties")]
-    //fn get_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     //#[doc(alias = "ges_timeline_element_get_child_property")]
-    //fn get_child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool;
+    //fn child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool;
 
     //#[doc(alias = "ges_timeline_element_get_child_property_by_pspec")]
-    //fn get_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value);
+    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value);
 
     //#[doc(alias = "ges_timeline_element_get_child_property_valist")]
-    //fn get_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
+    //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     #[doc(alias = "ges_timeline_element_get_duration")]
     fn duration(&self) -> gst::ClockTime;
@@ -299,19 +299,19 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn get_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_properties() }
     //}
 
-    //fn get_child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool {
+    //fn child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property() }
     //}
 
-    //fn get_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value) {
+    //fn child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value) {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property_by_pspec() }
     //}
 
-    //fn get_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
+    //fn child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:ges_timeline_element_get_child_property_valist() }
     //}
 

@@ -52,13 +52,13 @@ pub trait GstBinExt: 'static {
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad>;
 
     #[doc(alias = "gst_bin_get_by_interface")]
-    fn get_by_interface(&self, iface: glib::types::Type) -> Option<Element>;
+    fn by_interface(&self, iface: glib::types::Type) -> Option<Element>;
 
     #[doc(alias = "gst_bin_get_by_name")]
-    fn get_by_name(&self, name: &str) -> Option<Element>;
+    fn by_name(&self, name: &str) -> Option<Element>;
 
     #[doc(alias = "gst_bin_get_by_name_recurse_up")]
-    fn get_by_name_recurse_up(&self, name: &str) -> Option<Element>;
+    fn by_name_recurse_up(&self, name: &str) -> Option<Element>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -178,7 +178,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn get_by_interface(&self, iface: glib::types::Type) -> Option<Element> {
+    fn by_interface(&self, iface: glib::types::Type) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_get_by_interface(
                 self.as_ref().to_glib_none().0,
@@ -187,7 +187,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn get_by_name(&self, name: &str) -> Option<Element> {
+    fn by_name(&self, name: &str) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_get_by_name(
                 self.as_ref().to_glib_none().0,
@@ -196,7 +196,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn get_by_name_recurse_up(&self, name: &str) -> Option<Element> {
+    fn by_name_recurse_up(&self, name: &str) -> Option<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_get_by_name_recurse_up(
                 self.as_ref().to_glib_none().0,

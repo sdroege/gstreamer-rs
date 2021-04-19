@@ -73,7 +73,7 @@ pub trait RTSPClientExt: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_client_get_stream_transport")]
-    fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport>;
+    fn stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport>;
 
     #[doc(alias = "gst_rtsp_client_get_thread_pool")]
     fn thread_pool(&self) -> Option<RTSPThreadPool>;
@@ -350,7 +350,7 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport> {
+    fn stream_transport(&self, channel: u8) -> Option<RTSPStreamTransport> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_client_get_stream_transport(
                 self.as_ref().to_glib_none().0,

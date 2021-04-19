@@ -44,10 +44,10 @@ pub trait GESPipelineExt: 'static {
     fn mode(&self) -> PipelineFlags;
 
     #[doc(alias = "ges_pipeline_get_thumbnail")]
-    fn get_thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample>;
+    fn thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample>;
 
     #[doc(alias = "ges_pipeline_get_thumbnail_rgb24")]
-    fn get_thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample>;
+    fn thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample>;
 
     #[doc(alias = "ges_pipeline_preview_get_audio_sink")]
     fn preview_get_audio_sink(&self) -> Option<gst::Element>;
@@ -130,7 +130,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         unsafe { from_glib(ffi::ges_pipeline_get_mode(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample> {
+    fn thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::ges_pipeline_get_thumbnail(
                 self.as_ref().to_glib_none().0,
@@ -139,7 +139,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn get_thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample> {
+    fn thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::ges_pipeline_get_thumbnail_rgb24(
                 self.as_ref().to_glib_none().0,

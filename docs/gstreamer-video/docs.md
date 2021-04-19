@@ -594,7 +594,7 @@ by the decoder; free it after use it
 # Returns
 
 currently configured byte to time conversion setting
-<!-- trait VideoDecoderExt::fn get_frame -->
+<!-- trait VideoDecoderExt::fn frame -->
 Get a pending unfinished `VideoCodecFrame`
 ## `frame_number`
 system_frame_number of a frame
@@ -617,7 +617,7 @@ address of variable in which to store the
 ## `max_latency`
 address of variable in which to store the
  configured mximum latency, or `None`
-<!-- trait VideoDecoderExt::fn get_max_decode_time -->
+<!-- trait VideoDecoderExt::fn max_decode_time -->
 Determines maximum possible decoding time for `frame` that will
 allow it to decode and arrive in time (as determined by QoS events).
 In particular, a negative result means decoding in time is no longer possible
@@ -989,7 +989,7 @@ used
 ## `params`
 the
 `gst::AllocationParams` of `allocator`
-<!-- trait VideoEncoderExt::fn get_frame -->
+<!-- trait VideoEncoderExt::fn frame -->
 Get a pending unfinished `VideoCodecFrame`
 ## `frame_number`
 system_frame_number of a frame
@@ -1012,7 +1012,7 @@ address of variable in which to store the
 ## `max_latency`
 address of variable in which to store the
  configured maximum latency, or `None`
-<!-- trait VideoEncoderExt::fn get_max_encode_time -->
+<!-- trait VideoEncoderExt::fn max_encode_time -->
 Determines maximum possible encoding time for `frame` that will
 allow it to encode and arrive in time (as determined by QoS events).
 In particular, a negative result means encoding in time is no longer possible

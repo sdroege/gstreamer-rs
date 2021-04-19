@@ -35,7 +35,7 @@ pub trait VideoEncoderExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_video_encoder_get_max_encode_time")]
-    fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
+    fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
@@ -101,7 +101,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
+    fn max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
         unsafe {
             ffi::gst_video_encoder_get_max_encode_time(
                 self.as_ref().to_glib_none().0,

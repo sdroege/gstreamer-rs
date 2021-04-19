@@ -1050,13 +1050,13 @@ pub enum Format {
 
 impl Format {
     #[doc(alias = "gst_format_get_by_nick")]
-    pub fn get_by_nick(nick: &str) -> Format {
+    pub fn by_nick(nick: &str) -> Format {
         assert_initialized_main_thread!();
         unsafe { from_glib(ffi::gst_format_get_by_nick(nick.to_glib_none().0)) }
     }
 
     //#[doc(alias = "gst_format_get_details")]
-    //pub fn get_details(self) -> /*Ignored*/Option<FormatDefinition> {
+    //pub fn details(self) -> /*Ignored*/Option<FormatDefinition> {
     //    unsafe { TODO: call ffi:gst_format_get_details() }
     //}
 
@@ -3155,7 +3155,7 @@ pub enum TocEntryType {
 }
 
 impl TocEntryType {
-    pub fn get_nick<'a>(self) -> &'a str {
+    pub fn nick<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
                 ffi::gst_toc_entry_type_get_nick(self.to_glib())

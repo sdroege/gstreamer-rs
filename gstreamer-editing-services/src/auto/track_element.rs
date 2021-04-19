@@ -62,7 +62,7 @@ pub trait TrackElementExt: 'static {
     fn is_auto_clamp_control_sources(&self) -> bool;
 
     //#[doc(alias = "ges_track_element_get_control_binding")]
-    //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding>;
+    //fn control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding>;
 
     #[doc(alias = "ges_track_element_get_element")]
     fn element(&self) -> Option<gst::Element>;
@@ -207,7 +207,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding> {
+    //fn control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding> {
     //    unsafe { TODO: call ffi:ges_track_element_get_control_binding() }
     //}
 

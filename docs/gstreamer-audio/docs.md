@@ -1510,7 +1510,7 @@ the converted volume
 # Returns
 
 Returns `true` if the stream is muted
-<!-- trait StreamVolumeExt::fn get_volume -->
+<!-- trait StreamVolumeExt::fn volume -->
 ## `format`
 `StreamVolumeFormat` which should be returned
 

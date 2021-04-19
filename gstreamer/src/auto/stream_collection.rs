@@ -22,7 +22,7 @@ impl StreamCollection {
     }
 
     #[doc(alias = "gst_stream_collection_get_stream")]
-    pub fn get_stream(&self, index: u32) -> Option<Stream> {
+    pub fn stream(&self, index: u32) -> Option<Stream> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_stream(
                 self.to_glib_none().0,

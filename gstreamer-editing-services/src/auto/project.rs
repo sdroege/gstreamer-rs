@@ -58,7 +58,7 @@ pub trait ProjectExt: 'static {
     ) -> Result<Option<Asset>, glib::Error>;
 
     #[doc(alias = "ges_project_get_asset")]
-    fn get_asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
+    fn asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
 
     #[doc(alias = "ges_project_get_loading_assets")]
     fn loading_assets(&self) -> Vec<Asset>;
@@ -179,7 +179,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn get_asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset> {
+    fn asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset> {
         unsafe {
             from_glib_full(ffi::ges_project_get_asset(
                 self.as_ref().to_glib_none().0,

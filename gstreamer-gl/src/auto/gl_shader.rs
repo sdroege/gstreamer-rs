@@ -133,7 +133,7 @@ impl GLShader {
     }
 
     #[doc(alias = "gst_gl_shader_get_attribute_location")]
-    pub fn get_attribute_location(&self, name: &str) -> i32 {
+    pub fn attribute_location(&self, name: &str) -> i32 {
         unsafe {
             ffi::gst_gl_shader_get_attribute_location(self.to_glib_none().0, name.to_glib_none().0)
         }

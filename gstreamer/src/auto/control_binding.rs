@@ -24,10 +24,10 @@ pub const NONE_CONTROL_BINDING: Option<&ControlBinding> = None;
 
 pub trait ControlBindingExt: 'static {
     #[doc(alias = "gst_control_binding_get_value")]
-    fn get_value(&self, timestamp: ClockTime) -> Option<glib::Value>;
+    fn value(&self, timestamp: ClockTime) -> Option<glib::Value>;
 
     //#[doc(alias = "gst_control_binding_get_value_array")]
-    //fn get_value_array(&self, timestamp: ClockTime, interval: ClockTime, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool;
+    //fn is_value_array(&self, timestamp: ClockTime, interval: ClockTime, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool;
 
     #[doc(alias = "gst_control_binding_is_disabled")]
     fn is_disabled(&self) -> bool;
@@ -48,7 +48,7 @@ pub trait ControlBindingExt: 'static {
 }
 
 impl<O: IsA<ControlBinding>> ControlBindingExt for O {
-    fn get_value(&self, timestamp: ClockTime) -> Option<glib::Value> {
+    fn value(&self, timestamp: ClockTime) -> Option<glib::Value> {
         unsafe {
             from_glib_full(ffi::gst_control_binding_get_value(
                 self.as_ref().to_glib_none().0,
@@ -57,7 +57,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
         }
     }
 
-    //fn get_value_array(&self, timestamp: ClockTime, interval: ClockTime, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool {
+    //fn is_value_array(&self, timestamp: ClockTime, interval: ClockTime, values: /*Unimplemented*/&[&Fundamental: Pointer]) -> bool {
     //    unsafe { TODO: call ffi:gst_control_binding_get_value_array() }
     //}
 

@@ -241,7 +241,7 @@ whether to look for an unlinked source or sink pad
 
 unlinked pad of the given
 direction, `None`.
-<!-- trait GstBinExt::fn get_by_interface -->
+<!-- trait GstBinExt::fn by_interface -->
 Looks for an element inside the bin that implements the given
 interface. If such an element is found, it returns the element.
 You can cast this element to the given interface afterwards. If you want
@@ -256,7 +256,7 @@ the `glib::Type` of an interface
 
 A `Element` inside the bin
 implementing the interface
-<!-- trait GstBinExt::fn get_by_name -->
+<!-- trait GstBinExt::fn by_name -->
 Gets the element with the given name from a bin. This
 function recurses into child bins.
 
@@ -270,7 +270,7 @@ the element name to search for
 
 the `Element` with the given
 name, or `None`
-<!-- trait GstBinExt::fn get_by_name_recurse_up -->
+<!-- trait GstBinExt::fn by_name_recurse_up -->
 Gets the element with the given name from this bin. If the
 element is not found, a recursion is performed on the parent bin.
 
@@ -2801,7 +2801,7 @@ the name of the old child
 Gets properties of the parent object and its children.
 ## `first_property_name`
 name of the first property to get
-<!-- trait ChildProxyExt::fn get_child_by_index -->
+<!-- trait ChildProxyExt::fn child_by_index -->
 Fetches a child by its number.
 ## `index`
 the child's position in the child list
@@ -2812,7 +2812,7 @@ the child object or `None` if
  not found (index too high). Unref after usage.
 
 MT safe.
-<!-- trait ChildProxyExt::fn get_child_by_name -->
+<!-- trait ChildProxyExt::fn child_by_name -->
 Looks up a child element by the given name.
 
 This virtual method has a default implementation that uses `Object`
@@ -2835,14 +2835,14 @@ Gets the number of child objects this parent contains.
 the number of child objects
 
 MT safe.
-<!-- trait ChildProxyExt::fn get_property -->
+<!-- trait ChildProxyExt::fn property -->
 Gets a single property using the GstChildProxy mechanism.
 You are responsible for freeing it by calling `glib::object::Value::unset`
 ## `name`
 name of the property
 ## `value`
 a `glib::object::Value` that should take the result.
-<!-- trait ChildProxyExt::fn get_valist -->
+<!-- trait ChildProxyExt::fn valist -->
 Gets properties of the parent object and its children.
 ## `first_property_name`
 name of the first property to get
@@ -3609,7 +3609,7 @@ Trait containing all `ControlBinding` methods.
 # Implementors
 
 [`ControlBinding`](struct@crate::ControlBinding)
-<!-- trait ControlBindingExt::fn get_g_value_array -->
+<!-- trait ControlBindingExt::fn is_g_value_array -->
 Gets a number of `GValues` for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
 `glib::object::Value`.
@@ -3628,7 +3628,7 @@ array to put control-values in
 # Returns
 
 `true` if the given array could be filled, `false` otherwise
-<!-- trait ControlBindingExt::fn get_value -->
+<!-- trait ControlBindingExt::fn value -->
 Gets the value for the given controlled property at the requested time.
 ## `timestamp`
 the time the control-change should be read from
@@ -3637,7 +3637,7 @@ the time the control-change should be read from
 
 the GValue of the property at the given time,
 or `None` if the property isn't controlled.
-<!-- trait ControlBindingExt::fn get_value_array -->
+<!-- trait ControlBindingExt::fn is_value_array -->
 Gets a number of values for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
 the same type as the objects property's type.
@@ -4572,7 +4572,7 @@ are hidden by `self`.
 
  a list of hidden providers factory names or `None` when
  nothing is hidden by `self`. Free with g_strfreev.
-<!-- trait DeviceProviderExt::fn get_metadata -->
+<!-- trait DeviceProviderExt::fn metadata -->
 Get metadata with `key` in `self`.
 
 Feature: `v1_14`
@@ -4644,7 +4644,7 @@ name of factory to find
 
 `DeviceProviderFactory` if
 found, `None` otherwise
-<!-- impl DeviceProviderFactory::fn get_by_name -->
+<!-- impl DeviceProviderFactory::fn by_name -->
 Returns the device provider of the type defined by the given device
 provider factory.
 ## `factoryname`
@@ -4681,7 +4681,7 @@ assured with `PluginFeature::load`.
 # Returns
 
 the `glib::Type` for device providers managed by this factory.
-<!-- impl DeviceProviderFactory::fn get_metadata -->
+<!-- impl DeviceProviderFactory::fn metadata -->
 Get the metadata on `self` with `key`.
 ## `key`
 a key
@@ -5027,7 +5027,7 @@ pipeline is in the PLAYING state.
 the `Clock` of the element. unref after usage.
 
 MT safe.
-<!-- trait ElementExt::fn get_compatible_pad -->
+<!-- trait ElementExt::fn compatible_pad -->
 Looks for an unlinked pad to which the given pad can link. It is not
 guaranteed that linking the pads will work, though it should work in most
 cases.
@@ -5045,7 +5045,7 @@ the `Caps` to use as a filter.
 the `Pad` to which a link
  can be made, or `None` if one cannot be found. `GstObjectExt::unref`
  after usage.
-<!-- trait ElementExt::fn get_compatible_pad_template -->
+<!-- trait ElementExt::fn compatible_pad_template -->
 Retrieves a pad template from `self` that is compatible with `compattempl`.
 Pads from compatible templates can be linked together.
 ## `compattempl`
@@ -5056,7 +5056,7 @@ the `PadTemplate` to find a compatible
 
 a compatible `PadTemplate`,
  or `None` if none was found. No unreferencing is necessary.
-<!-- trait ElementExt::fn get_context -->
+<!-- trait ElementExt::fn context -->
 Gets the context with `context_type` set on the element or NULL.
 
 MT safe.
@@ -5112,7 +5112,7 @@ Retrieves the factory that was used to create this element.
 
 the `ElementFactory` used for creating this
  element or `None` if element has not been registered (static element). no refcounting is needed.
-<!-- trait ElementExt::fn get_metadata -->
+<!-- trait ElementExt::fn metadata -->
 Get metadata with `key` in `klass`.
 
 Feature: `v1_14`
@@ -5123,7 +5123,7 @@ the key to get
 # Returns
 
 the metadata for `key`.
-<!-- trait ElementExt::fn get_pad_template -->
+<!-- trait ElementExt::fn pad_template -->
 Retrieves a padtemplate from `self` with the given name.
 
 Feature: `v1_14`
@@ -5147,7 +5147,7 @@ Feature: `v1_14`
 
 the `glib::List` of
  pad templates.
-<!-- trait ElementExt::fn get_request_pad -->
+<!-- trait ElementExt::fn request_pad_simple -->
 Retrieves a pad from the element by name (e.g. "src_\%d"). This version only
 retrieves request pads. The pad should be released with
 `ElementExt::release_request_pad`.
@@ -5174,7 +5174,7 @@ MT safe.
 # Returns
 
 the start time of the element.
-<!-- trait ElementExt::fn get_state -->
+<!-- trait ElementExt::fn state -->
 Gets the state of the element.
 
 For elements that performed an ASYNC state change, as reported by
@@ -5213,7 +5213,7 @@ a `ClockTime` to specify the timeout for an async
  `StateChangeReturn::Failure` if the last state change failed.
 
 MT safe.
-<!-- trait ElementExt::fn get_static_pad -->
+<!-- trait ElementExt::fn static_pad -->
 Retrieves a pad from `self` by name. This version only retrieves
 already-existing (i.e. 'static') pads.
 ## `name`
@@ -5962,7 +5962,7 @@ assured with `PluginFeature::load`.
 
 the `glib::Type` for elements managed by this factory or 0 if
 the factory is not loaded.
-<!-- impl ElementFactory::fn get_metadata -->
+<!-- impl ElementFactory::fn metadata -->
 Get the metadata on `self` with `key`.
 ## `key`
 a key
@@ -9060,7 +9060,7 @@ The default handler will simply print the error string using g_print.
 the GError.
 ## `debug`
 an additional debug information string, or `None`
-<!-- trait GstObjectExt::fn get_control_binding -->
+<!-- trait GstObjectExt::fn control_binding -->
 Gets the corresponding `ControlBinding` for the property. This should be
 unreferenced again after use.
 ## `property_name`
@@ -9143,7 +9143,7 @@ a string describing the path of `self`. You must
 
 MT safe. Grabs and releases the `Object`'s LOCK for all objects
  in the hierarchy.
-<!-- trait GstObjectExt::fn get_value -->
+<!-- trait GstObjectExt::fn value -->
 Gets the value for the given controlled property at the requested time.
 ## `property_name`
 the name of the property to get
@@ -9154,7 +9154,7 @@ the time the control-change should be read from
 
 the GValue of the property at the given time,
 or `None` if the property isn't controlled.
-<!-- trait GstObjectExt::fn get_value_array -->
+<!-- trait GstObjectExt::fn is_value_array -->
 Gets a number of values for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
 the same type as the objects property's type.
@@ -9770,7 +9770,7 @@ you need to unref it after use.
 the peer `Pad`. Unref after usage.
 
 MT safe.
-<!-- trait PadExt::fn get_range -->
+<!-- trait PadExt::fn range -->
 When `self` is flushing this function returns `FlowReturn::Flushing`
 immediately and `buffer` is `None`.
 
@@ -9822,7 +9822,7 @@ Feature: `v1_18`
 a `Pad`, or `None` if `self` has none
 or more than one internal links. Unref returned pad with
 `GstObjectExt::unref`.
-<!-- trait PadExt::fn get_sticky_event -->
+<!-- trait PadExt::fn sticky_event -->
 Returns a new reference of the sticky event of type `event_type`
 from the event.
 ## `event_type`
@@ -11700,7 +11700,7 @@ Trait containing all `Preset` methods.
 # Implementors
 
 [`Preset`](struct@crate::Preset)
-<!-- impl Preset::fn get_app_dir -->
+<!-- impl Preset::fn app_dir -->
 Gets the directory for application specific presets if set by the
 application.
 
@@ -11726,7 +11726,7 @@ preset name to remove
 # Returns
 
 `true` for success, `false` if e.g. there is no preset with that `name`
-<!-- trait PresetExt::fn get_meta -->
+<!-- trait PresetExt::fn meta -->
 Gets the `value` for an existing meta data `tag`. Meta data `tag` names can be
 something like e.g. "comment". Returned values need to be released when done.
 ## `name`
@@ -13030,7 +13030,7 @@ the plugin with the given name
  usage.
 
 MT safe.
-<!-- impl Registry::fn get_feature_list -->
+<!-- impl Registry::fn feature_list -->
 Retrieves a `glib::List` of `PluginFeature` of `type_`.
 ## `type_`
 a `glib::Type`.
@@ -13041,7 +13041,7 @@ a `glib::List` of
  `PluginFeature` of `type_`. Use `PluginFeature::list_free` after use
 
 MT safe.
-<!-- impl Registry::fn get_feature_list_by_plugin -->
+<!-- impl Registry::fn feature_list_by_plugin -->
 Retrieves a `glib::List` of features of the plugin with name `name`.
 ## `name`
 a plugin name.
@@ -14124,7 +14124,7 @@ Feature: `v1_10`
 # Returns
 
 The number of streams that `self` contains
-<!-- impl StreamCollection::fn get_stream -->
+<!-- impl StreamCollection::fn stream -->
 Retrieve the `Stream` with index `index` from the collection.
 
 The caller should not modify the returned `Stream`
@@ -16317,7 +16317,7 @@ that though.
 # Implements
 
 [`PluginFeatureExt`](trait@crate::PluginFeatureExt), [`GstObjectExt`](trait@crate::GstObjectExt), [`trait@glib::object::ObjectExt`], [`PluginFeatureExtManual`](trait@crate::PluginFeatureExtManual)
-<!-- impl TypeFindFactory::fn get_list -->
+<!-- impl TypeFindFactory::fn list -->
 Gets the list of all registered typefind factories. You must free the
 list using `PluginFeature::list_free`.
 

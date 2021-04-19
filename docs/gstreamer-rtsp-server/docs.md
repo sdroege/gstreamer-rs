@@ -375,7 +375,7 @@ Get the `RTSPSessionPool` object that `self` uses to manage its sessions.
 # Returns
 
 a `RTSPSessionPool`, unref after usage.
-<!-- trait RTSPClientExt::fn get_stream_transport -->
+<!-- trait RTSPClientExt::fn stream_transport -->
 This is useful when providing a send function through
 `RTSPClientExt::set_send_func` when doing RTSP over TCP:
 the send function must call gst_rtsp_stream_transport_message_sent ()
@@ -861,7 +861,7 @@ Gets if and how the media clock should be published according to RFC7273.
 # Returns
 
 The GstRTSPPublishClockMode
-<!-- trait RTSPMediaExt::fn get_range_string -->
+<!-- trait RTSPMediaExt::fn range_string -->
 Get the current range as a string. `self` must be prepared with
 gst_rtsp_media_prepare ().
 ## `play`
@@ -909,7 +909,7 @@ until `self` is prepared or in error.
 # Returns
 
 the status of `self`.
-<!-- trait RTSPMediaExt::fn get_stream -->
+<!-- trait RTSPMediaExt::fn stream -->
 Retrieve the stream with index `idx` from `self`.
 ## `idx`
 the stream index
@@ -924,7 +924,7 @@ Get how `self` will be suspended.
 # Returns
 
 `RTSPSuspendMode`.
-<!-- trait RTSPMediaExt::fn get_time_provider -->
+<!-- trait RTSPMediaExt::fn time_provider -->
 Get the `gst_net::NetTimeProvider` for the clock used by `self`. The time provider
 will listen on `address` and `port` for client time requests.
 ## `address`
@@ -1977,7 +1977,7 @@ Get the string that can be placed in the Session header field.
 
 the Session header of `self`.
 `g_free` after usage.
-<!-- trait RTSPSessionExt::fn get_media -->
+<!-- trait RTSPSessionExt::fn media -->
 Get the session media for `path`. `matched` will contain the number of matched
 characters of `path`.
 ## `path`
@@ -2132,7 +2132,7 @@ Get the current RTSP state of `self`.
 # Returns
 
 the current RTSP state of `self`.
-<!-- trait RTSPSessionMediaExt::fn get_transport -->
+<!-- trait RTSPSessionMediaExt::fn transport -->
 Get a previously created `RTSPStreamTransport` for the stream at `idx`.
 ## `idx`
 the stream index
@@ -2427,7 +2427,7 @@ Get the configured MTU in the payloader of `self`.
 # Returns
 
 the MTU of the payloader.
-<!-- trait RTSPStreamExt::fn get_multicast_address -->
+<!-- trait RTSPStreamExt::fn multicast_address -->
 Get the multicast address of `self` for `family`. The original
 `RTSPAddress` is cached and copy is returned, so freeing the return value
 won't release the address from the pool.
@@ -2513,7 +2513,7 @@ Get the amount of time to store retransmission data.
 # Returns
 
 the amount of time to store retransmission data.
-<!-- trait RTSPStreamExt::fn get_rtcp_multicast_socket -->
+<!-- trait RTSPStreamExt::fn rtcp_multicast_socket -->
 Get the multicast RTCP socket from `self` for a `family`.
 
 Feature: `v1_14`
@@ -2525,7 +2525,7 @@ the socket family
 
 the multicast RTCP socket or `None` if no
 socket could be allocated for `family`. Unref after usage
-<!-- trait RTSPStreamExt::fn get_rtcp_socket -->
+<!-- trait RTSPStreamExt::fn rtcp_socket -->
 Get the RTCP socket from `self` for a `family`.
 
 `self` must be joined to a bin.
@@ -2536,7 +2536,7 @@ the socket family
 
 the RTCP socket or `None` if no
 socket could be allocated for `family`. Unref after usage
-<!-- trait RTSPStreamExt::fn get_rtp_multicast_socket -->
+<!-- trait RTSPStreamExt::fn rtp_multicast_socket -->
 Get the multicast RTP socket from `self` for a `family`.
 ## `family`
 the socket family
@@ -2546,7 +2546,7 @@ the socket family
 the multicast RTP socket or `None` if no
 
 socket could be allocated for `family`. Unref after usage
-<!-- trait RTSPStreamExt::fn get_rtp_socket -->
+<!-- trait RTSPStreamExt::fn rtp_socket -->
 Get the RTP socket from `self` for a `family`.
 
 `self` must be joined to a bin.
@@ -2578,7 +2578,7 @@ Get the RTP session of this stream.
 # Returns
 
 The RTP session of this stream. Unref after usage.
-<!-- trait RTSPStreamExt::fn get_server_port -->
+<!-- trait RTSPStreamExt::fn server_port -->
 Fill `server_port` with the port pair used by the server. This function can
 only be called when `self` has been joined.
 ## `server_port`
@@ -3016,7 +3016,7 @@ a GstRTSPTransport
 # Returns
 
 a new `RTSPStreamTransport`
-<!-- trait RTSPStreamTransportExt::fn get_rtpinfo -->
+<!-- trait RTSPStreamTransportExt::fn rtpinfo -->
 Get the RTP-Info string for `self` and `start_time`.
 ## `start_time`
 a star time
@@ -3239,7 +3239,7 @@ See `RTSPThreadPoolExt::set_max_threads`.
 # Returns
 
 the maximum number of threads.
-<!-- trait RTSPThreadPoolExt::fn get_thread -->
+<!-- trait RTSPThreadPoolExt::fn thread -->
 Get a new `RTSPThread` for `type_` and `ctx`.
 ## `type_`
 the `RTSPThreadType`

@@ -93,35 +93,35 @@ pub trait TimelineExt: 'static {
     fn duration(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_element")]
-    fn get_element(&self, name: &str) -> Option<TimelineElement>;
+    fn element(&self, name: &str) -> Option<TimelineElement>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_get_frame_at")]
-    fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
+    fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_get_frame_time")]
-    fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
+    fn frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_groups")]
     fn groups(&self) -> Vec<Group>;
 
     #[doc(alias = "ges_timeline_get_layer")]
-    fn get_layer(&self, priority: u32) -> Option<Layer>;
+    fn layer(&self, priority: u32) -> Option<Layer>;
 
     #[doc(alias = "ges_timeline_get_layers")]
     fn layers(&self) -> Vec<Layer>;
 
     #[doc(alias = "ges_timeline_get_pad_for_track")]
-    fn get_pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad>;
+    fn pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad>;
 
     #[doc(alias = "ges_timeline_get_snapping_distance")]
     fn snapping_distance(&self) -> gst::ClockTime;
 
     #[doc(alias = "ges_timeline_get_track_for_pad")]
-    fn get_track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track>;
+    fn track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track>;
 
     #[doc(alias = "ges_timeline_get_tracks")]
     fn tracks(&self) -> Vec<Track>;
@@ -276,7 +276,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_element(&self, name: &str) -> Option<TimelineElement> {
+    fn element(&self, name: &str) -> Option<TimelineElement> {
         unsafe {
             from_glib_full(ffi::ges_timeline_get_element(
                 self.as_ref().to_glib_none().0,
@@ -287,7 +287,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
+    fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
         unsafe {
             ffi::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.to_glib())
         }
@@ -295,7 +295,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn get_frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime {
+    fn frame_time(&self, frame_number: FrameNumber) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_timeline_get_frame_time(
                 self.as_ref().to_glib_none().0,
@@ -312,7 +312,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_layer(&self, priority: u32) -> Option<Layer> {
+    fn layer(&self, priority: u32) -> Option<Layer> {
         unsafe {
             from_glib_full(ffi::ges_timeline_get_layer(
                 self.as_ref().to_glib_none().0,
@@ -329,7 +329,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad> {
+    fn pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad> {
         unsafe {
             from_glib_none(ffi::ges_timeline_get_pad_for_track(
                 self.as_ref().to_glib_none().0,
@@ -346,7 +346,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn get_track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track> {
+    fn track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track> {
         unsafe {
             from_glib_none(ffi::ges_timeline_get_track_for_pad(
                 self.as_ref().to_glib_none().0,

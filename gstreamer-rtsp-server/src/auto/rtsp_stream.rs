@@ -107,7 +107,7 @@ pub trait RTSPStreamExt: 'static {
     fn mtu(&self) -> u32;
 
     #[doc(alias = "gst_rtsp_stream_get_multicast_address")]
-    fn get_multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress>;
+    fn multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
@@ -148,16 +148,16 @@ pub trait RTSPStreamExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_rtsp_stream_get_rtcp_multicast_socket")]
-    fn get_rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
+    fn rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtcp_socket")]
-    fn get_rtcp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
+    fn rtcp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtp_multicast_socket")]
-    fn get_rtp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
+    fn rtp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtp_socket")]
-    fn get_rtp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
+    fn rtp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket>;
 
     #[doc(alias = "gst_rtsp_stream_get_rtpinfo")]
     fn rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)>;
@@ -166,7 +166,7 @@ pub trait RTSPStreamExt: 'static {
     fn rtpsession(&self) -> Option<glib::Object>;
 
     //#[doc(alias = "gst_rtsp_stream_get_server_port")]
-    //fn get_server_port(&self, server_port: /*Ignored*/gst_rtsp::RTSPRange, family: gio::SocketFamily);
+    //fn server_port(&self, server_port: /*Ignored*/gst_rtsp::RTSPRange, family: gio::SocketFamily);
 
     #[doc(alias = "gst_rtsp_stream_get_sinkpad")]
     fn sinkpad(&self) -> Option<gst::Pad>;
@@ -513,7 +513,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe { ffi::gst_rtsp_stream_get_mtu(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress> {
+    fn multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_multicast_address(
                 self.as_ref().to_glib_none().0,
@@ -613,7 +613,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn get_rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
+    fn rtcp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtcp_multicast_socket(
                 self.as_ref().to_glib_none().0,
@@ -622,7 +622,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_rtcp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
+    fn rtcp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtcp_socket(
                 self.as_ref().to_glib_none().0,
@@ -631,7 +631,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_rtp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
+    fn rtp_multicast_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtp_multicast_socket(
                 self.as_ref().to_glib_none().0,
@@ -640,7 +640,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_rtp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
+    fn rtp_socket(&self, family: gio::SocketFamily) -> Option<gio::Socket> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtp_socket(
                 self.as_ref().to_glib_none().0,
@@ -682,7 +682,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    //fn get_server_port(&self, server_port: /*Ignored*/gst_rtsp::RTSPRange, family: gio::SocketFamily) {
+    //fn server_port(&self, server_port: /*Ignored*/gst_rtsp::RTSPRange, family: gio::SocketFamily) {
     //    unsafe { TODO: call ffi:gst_rtsp_stream_get_server_port() }
     //}
 

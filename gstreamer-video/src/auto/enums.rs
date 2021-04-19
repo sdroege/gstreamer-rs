@@ -590,7 +590,7 @@ impl VideoColorPrimaries {
     }
 
     //#[doc(alias = "gst_video_color_primaries_get_info")]
-    //pub fn get_info(self) -> /*Ignored*/Option<VideoColorPrimariesInfo> {
+    //pub fn info(self) -> /*Ignored*/Option<VideoColorPrimariesInfo> {
     //    unsafe { TODO: call ffi:gst_video_color_primaries_get_info() }
     //}
 
@@ -1153,7 +1153,7 @@ impl VideoFormat {
     }
 
     //#[doc(alias = "gst_video_format_get_palette")]
-    //pub fn get_palette(self) -> (/*Unimplemented*/Option<Fundamental: Pointer>, usize) {
+    //pub fn palette(self) -> (/*Unimplemented*/Option<Fundamental: Pointer>, usize) {
     //    unsafe { TODO: call ffi:gst_video_format_get_palette() }
     //}
 

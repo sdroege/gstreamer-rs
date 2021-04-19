@@ -51,7 +51,7 @@ pub trait RTSPSessionExt: 'static {
     fn header(&self) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_session_get_media")]
-    fn get_media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
+    fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
 
     #[doc(alias = "gst_rtsp_session_get_sessionid")]
     fn sessionid(&self) -> Option<glib::GString>;
@@ -177,7 +177,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn get_media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {
+    fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {
         unsafe {
             let mut matched = mem::MaybeUninit::uninit();
             let ret = from_glib_none(ffi::gst_rtsp_session_get_media(

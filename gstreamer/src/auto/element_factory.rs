@@ -84,7 +84,7 @@ impl ElementFactory {
     }
 
     #[doc(alias = "gst_element_factory_get_metadata")]
-    pub fn get_metadata(&self, key: &str) -> Option<glib::GString> {
+    pub fn metadata(&self, key: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_element_factory_get_metadata(
                 self.to_glib_none().0,

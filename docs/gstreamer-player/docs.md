@@ -73,7 +73,7 @@ or RTSP streams.
 a `Player` configuration
 ## `agent`
 the string to use as user agent
-<!-- impl Player::fn get_audio_streams -->
+<!-- impl Player::fn audio_streams -->
 ## `info`
 a `PlayerMediaInfo`
 
@@ -81,7 +81,7 @@ a `PlayerMediaInfo`
 
 A `glib::List` of
 matching `PlayerAudioInfo`.
-<!-- impl Player::fn get_subtitle_streams -->
+<!-- impl Player::fn subtitle_streams -->
 ## `info`
 a `PlayerMediaInfo`
 
@@ -89,7 +89,7 @@ a `PlayerMediaInfo`
 
 A `glib::List` of
 matching `PlayerSubtitleInfo`.
-<!-- impl Player::fn get_video_streams -->
+<!-- impl Player::fn video_streams -->
 ## `info`
 a `PlayerMediaInfo`
 
@@ -115,7 +115,7 @@ Retrieve the current value of audio-video-offset property
 # Returns
 
 The current value of audio-video-offset in nanoseconds
-<!-- impl Player::fn get_color_balance -->
+<!-- impl Player::fn color_balance -->
 Retrieve the current value of the indicated `type_`.
 ## `type_`
 `PlayerColorBalanceType`
@@ -234,7 +234,7 @@ Gets the URI of the currently-playing stream.
 
 a string containing the URI of the
 currently-playing stream. `g_free` after usage.
-<!-- impl Player::fn get_video_snapshot -->
+<!-- impl Player::fn video_snapshot -->
 Get a snapshot of the currently selected video stream, if any. The format can be
 selected with `format` and optional configuration is possible with `config`
 Currently supported settings are:

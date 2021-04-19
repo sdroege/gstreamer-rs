@@ -30,13 +30,13 @@ impl GLContext {
     }
 
     #[doc(alias = "gst_gl_context_get_current")]
-    pub fn get_current() -> Option<GLContext> {
+    pub fn current() -> Option<GLContext> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_gl_context_get_current()) }
     }
 
     #[doc(alias = "gst_gl_context_get_current_gl_api")]
-    pub fn get_current_gl_api(platform: GLPlatform) -> (GLAPI, u32, u32) {
+    pub fn current_gl_api(platform: GLPlatform) -> (GLAPI, u32, u32) {
         assert_initialized_main_thread!();
         unsafe {
             let mut major = mem::MaybeUninit::uninit();

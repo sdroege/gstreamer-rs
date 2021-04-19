@@ -51,7 +51,7 @@ pub trait GESContainerExt: 'static {
     ) -> Result<(), glib::error::BoolError>;
 
     #[doc(alias = "ges_container_get_children")]
-    fn get_children(&self, recursive: bool) -> Vec<TimelineElement>;
+    fn children(&self, recursive: bool) -> Vec<TimelineElement>;
 
     #[doc(alias = "ges_container_remove")]
     fn remove<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
@@ -111,7 +111,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         }
     }
 
-    fn get_children(&self, recursive: bool) -> Vec<TimelineElement> {
+    fn children(&self, recursive: bool) -> Vec<TimelineElement> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_container_get_children(
                 self.as_ref().to_glib_none().0,

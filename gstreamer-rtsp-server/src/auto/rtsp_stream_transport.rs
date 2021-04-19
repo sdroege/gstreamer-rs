@@ -27,7 +27,7 @@ pub const NONE_RTSP_STREAM_TRANSPORT: Option<&RTSPStreamTransport> = None;
 
 pub trait RTSPStreamTransportExt: 'static {
     #[doc(alias = "gst_rtsp_stream_transport_get_rtpinfo")]
-    fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<glib::GString>;
+    fn rtpinfo(&self, start_time: gst::ClockTime) -> Option<glib::GString>;
 
     #[doc(alias = "gst_rtsp_stream_transport_get_stream")]
     fn stream(&self) -> Option<RTSPStream>;
@@ -98,7 +98,7 @@ pub trait RTSPStreamTransportExt: 'static {
 }
 
 impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
-    fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<glib::GString> {
+    fn rtpinfo(&self, start_time: gst::ClockTime) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_transport_get_rtpinfo(
                 self.as_ref().to_glib_none().0,

@@ -30,7 +30,7 @@ pub enum PlayerColorBalanceType {
 
 impl PlayerColorBalanceType {
     #[doc(alias = "gst_player_color_balance_type_get_name")]
-    pub fn get_name(self) -> Option<glib::GString> {
+    pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_player_color_balance_type_get_name(self.to_glib())) }
     }
@@ -101,7 +101,7 @@ pub enum PlayerError {
 
 impl PlayerError {
     #[doc(alias = "gst_player_error_get_name")]
-    pub fn get_name(self) -> Option<glib::GString> {
+    pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_player_error_get_name(self.to_glib())) }
     }
@@ -241,7 +241,7 @@ pub enum PlayerState {
 
 impl PlayerState {
     #[doc(alias = "gst_player_state_get_name")]
-    pub fn get_name(self) -> Option<glib::GString> {
+    pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::gst_player_state_get_name(self.to_glib())) }
     }

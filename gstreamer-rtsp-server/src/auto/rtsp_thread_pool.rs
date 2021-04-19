@@ -54,7 +54,7 @@ pub trait RTSPThreadPoolExt: 'static {
     fn max_threads(&self) -> i32;
 
     #[doc(alias = "gst_rtsp_thread_pool_get_thread")]
-    fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread>;
+    fn thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread>;
 
     #[doc(alias = "gst_rtsp_thread_pool_set_max_threads")]
     fn set_max_threads(&self, max_threads: i32);
@@ -70,7 +70,7 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
         unsafe { ffi::gst_rtsp_thread_pool_get_max_threads(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread> {
+    fn thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> Option<RTSPThread> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_thread_pool_get_thread(
                 self.as_ref().to_glib_none().0,
