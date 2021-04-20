@@ -129,7 +129,7 @@ pub trait ElementExtManual: 'static {
         ret: StateChangeReturn,
     ) -> Result<StateChangeSuccess, StateChangeError>;
 
-    fn get_state(
+    fn state(
         &self,
         timeout: ClockTime,
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State);
@@ -147,9 +147,9 @@ pub trait ElementExtManual: 'static {
 
     fn send_event(&self, event: Event) -> bool;
 
-    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str>;
+    fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
 
-    fn get_pad_template(&self, name: &str) -> Option<PadTemplate>;
+    fn pad_template(&self, name: &str) -> Option<PadTemplate>;
     fn pad_template_list(&self) -> Vec<PadTemplate>;
 
     #[allow(clippy::too_many_arguments)]
@@ -303,7 +303,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         ret.into_result()
     }
 
-    fn get_state(
+    fn state(
         &self,
         timeout: ClockTime,
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State) {
@@ -352,11 +352,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
+    fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         self.element_class().get_metadata(key)
     }
 
-    fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
+    fn pad_template(&self, name: &str) -> Option<PadTemplate> {
         self.element_class().get_pad_template(name)
     }
 
@@ -842,7 +842,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 }
 
 pub unsafe trait ElementClassExt {
-    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
+    fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
 
@@ -856,7 +856,7 @@ pub unsafe trait ElementClassExt {
         }
     }
 
-    fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
+    fn pad_template(&self, name: &str) -> Option<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
 

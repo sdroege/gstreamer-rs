@@ -444,7 +444,7 @@ impl TagListRef {
         })
     }
 
-    pub fn get_generic(&self, tag_name: &str) -> Option<SendValue> {
+    pub fn generic(&self, tag_name: &str) -> Option<SendValue> {
         unsafe {
             let mut value: mem::MaybeUninit<SendValue> = mem::MaybeUninit::zeroed();
 
@@ -474,7 +474,7 @@ impl TagListRef {
         }
     }
 
-    pub fn get_index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
+    pub fn index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
         self.get_index_generic(T::tag_name(), idx).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
@@ -487,7 +487,7 @@ impl TagListRef {
         })
     }
 
-    pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
+    pub fn index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
         unsafe {
             let value =
                 ffi::gst_tag_list_get_value_index(self.as_ptr(), tag_name.to_glib_none().0, idx);
@@ -500,11 +500,11 @@ impl TagListRef {
         }
     }
 
-    pub fn get_size<'a, T: Tag<'a>>(&self) -> u32 {
+    pub fn size<'a, T: Tag<'a>>(&self) -> u32 {
         self.get_size_by_name(T::tag_name())
     }
 
-    pub fn get_size_by_name(&self, tag_name: &str) -> u32 {
+    pub fn size_by_name(&self, tag_name: &str) -> u32 {
         unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
     }
 

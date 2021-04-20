@@ -20,7 +20,7 @@ mod runloop {
             }
         }
 
-        pub fn get_main() -> CFRunLoop {
+        pub fn main() -> CFRunLoop {
             unsafe {
                 let r = CFRunLoopGetMain();
                 assert!(!r.is_null());

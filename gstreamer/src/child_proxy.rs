@@ -6,7 +6,7 @@ use glib::translate::*;
 use std::ptr;
 
 pub trait ChildProxyExtManual: 'static {
-    fn get_child_property(&self, name: &str) -> Option<glib::Value>;
+    fn child_property(&self, name: &str) -> Option<glib::Value>;
     fn set_child_property(
         &self,
         name: &str,
@@ -15,7 +15,7 @@ pub trait ChildProxyExtManual: 'static {
 }
 
 impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
-    fn get_child_property(&self, name: &str) -> Option<glib::Value> {
+    fn child_property(&self, name: &str) -> Option<glib::Value> {
         unsafe {
             let found: bool = from_glib(ffi::gst_child_proxy_lookup(
                 self.as_ref().to_glib_none().0,

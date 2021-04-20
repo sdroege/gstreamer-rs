@@ -368,7 +368,7 @@ impl StructureRef {
             .map_err(|err| GetError::from_value_get_error(name, err))
     }
 
-    pub fn get_value<'structure, 'name>(
+    pub fn value<'structure, 'name>(
         &'structure self,
         name: &'name str,
     ) -> Result<&SendValue, GetError<'name>> {
@@ -452,7 +452,7 @@ impl StructureRef {
         Iter::new(self)
     }
 
-    pub fn get_nth_field_name<'a>(&self, idx: u32) -> Option<&'a str> {
+    pub fn nth_field_name<'a>(&self, idx: u32) -> Option<&'a str> {
         unsafe {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
             if field_name.is_null() {

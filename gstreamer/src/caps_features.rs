@@ -290,7 +290,7 @@ impl CapsFeaturesRef {
         unsafe { ffi::gst_caps_features_get_size(self.as_ptr()) }
     }
 
-    pub fn get_nth(&self, idx: u32) -> Option<&str> {
+    pub fn nth(&self, idx: u32) -> Option<&str> {
         if idx >= self.size() {
             return None;
         }

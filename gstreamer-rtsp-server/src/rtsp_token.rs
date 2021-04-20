@@ -33,7 +33,7 @@ impl RTSPToken {
 }
 
 impl RTSPTokenRef {
-    pub fn get_string(&self, field: &str) -> Option<String> {
+    pub fn string(&self, field: &str) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_token_get_string(
                 self.as_mut_ptr(),

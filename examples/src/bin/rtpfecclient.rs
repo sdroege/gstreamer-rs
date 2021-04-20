@@ -44,7 +44,7 @@ fn make_element(
     }
 }
 
-fn get_static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
+fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.get_static_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {
@@ -54,7 +54,7 @@ fn get_static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst:
     }
 }
 
-fn get_request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
+fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.get_request_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {

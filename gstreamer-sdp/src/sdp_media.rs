@@ -207,7 +207,7 @@ impl SDPMediaRef {
         unsafe { ffi::gst_sdp_media_formats_len(&self.0) }
     }
 
-    pub fn get_attribute(&self, idx: u32) -> Option<&SDPAttribute> {
+    pub fn attribute(&self, idx: u32) -> Option<&SDPAttribute> {
         if idx >= self.attributes_len() {
             return None;
         }
@@ -222,7 +222,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_attribute_val(&self, key: &str) -> Option<&str> {
+    pub fn attribute_val(&self, key: &str) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_attribute_val(&self.0, key.to_glib_none().0);
             if ptr.is_null() {
@@ -233,7 +233,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
+    pub fn attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
             if ptr.is_null() {
@@ -244,7 +244,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
+    pub fn bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
         if idx >= self.bandwidths_len() {
             return None;
         }
@@ -259,11 +259,11 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_caps_from_media(&self, pt: i32) -> Option<gst::Caps> {
+    pub fn caps_from_media(&self, pt: i32) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_sdp_media_get_caps_from_media(&self.0, pt)) }
     }
 
-    pub fn get_connection(&self, idx: u32) -> Option<&SDPConnection> {
+    pub fn connection(&self, idx: u32) -> Option<&SDPConnection> {
         if idx >= self.connections_len() {
             return None;
         }
@@ -278,7 +278,7 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn get_format(&self, idx: u32) -> Option<&str> {
+    pub fn format(&self, idx: u32) -> Option<&str> {
         if idx >= self.formats_len() {
             return None;
         }

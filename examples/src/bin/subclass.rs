@@ -140,7 +140,7 @@ mod fir_filter {
             // Returns the size of one processing unit (i.e. a frame in our case) corresponding
             // to the given caps. This is used for allocating a big enough output buffer and
             // sanity checking the input buffer size, among other things.
-            fn get_unit_size(&self, _element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
+            fn unit_size(&self, _element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
                 let audio_info = gst_audio::AudioInfo::from_caps(caps).ok();
                 audio_info.map(|info| info.bpf() as usize)
             }

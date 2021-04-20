@@ -493,7 +493,7 @@ mod tests {
     use std::sync::{Arc, Mutex};
 
     #[test]
-    fn get_existing() {
+    fn existing() {
         crate::init().unwrap();
 
         let perf_cat = DebugCategory::get("GST_PERFORMANCE")

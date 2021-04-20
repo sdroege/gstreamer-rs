@@ -36,7 +36,7 @@ pub trait VideoDecoderExtManual: 'static {
         params: Option<&gst::BufferPoolAcquireParams>,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn get_frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
+    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
     fn frames(&self) -> Vec<VideoCodecFrame>;
     fn oldest_frame(&self) -> Option<VideoCodecFrame>;
 
@@ -179,7 +179,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         }
     }
 
-    fn get_frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
+    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
         let frame = unsafe {
             ffi::gst_video_decoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
         };

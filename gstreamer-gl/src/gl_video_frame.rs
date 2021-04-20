@@ -17,7 +17,7 @@ pub trait VideoFrameGLExt {
         info: &'b gst_video::VideoInfo,
     ) -> Result<gst_video::VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError>;
 
-    fn get_texture_id(&self, idx: u32) -> Option<u32>;
+    fn texture_id(&self, idx: u32) -> Option<u32>;
 }
 
 impl VideoFrameGLExt for gst_video::VideoFrame<Readable> {
@@ -37,7 +37,7 @@ impl VideoFrameGLExt for gst_video::VideoFrame<Readable> {
         gst_video::VideoFrameRef::<&gst::BufferRef>::from_buffer_ref_readable_gl(buffer, info)
     }
 
-    fn get_texture_id(&self, idx: u32) -> Option<u32> {
+    fn texture_id(&self, idx: u32) -> Option<u32> {
         self.as_video_frame_ref().get_texture_id(idx)
     }
 }
@@ -123,7 +123,7 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
         }
     }
 
-    fn get_texture_id(&self, idx: u32) -> Option<u32> {
+    fn texture_id(&self, idx: u32) -> Option<u32> {
         let len = buffer_n_gl_memory(self.buffer())?;
 
         if idx >= len {

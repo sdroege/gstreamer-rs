@@ -384,7 +384,7 @@ impl BufferRef {
         self.0.mini_object.flags &= !flags.bits();
     }
 
-    pub fn get_meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
+    pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
             if meta.is_null() {
@@ -395,7 +395,7 @@ impl BufferRef {
         }
     }
 
-    pub fn get_meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
+    pub fn meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
             if meta.is_null() {
@@ -511,11 +511,11 @@ impl BufferRef {
         }
     }
 
-    pub fn get_max_memory() -> u32 {
+    pub fn max_memory() -> u32 {
         unsafe { ffi::gst_buffer_get_max_memory() }
     }
 
-    pub fn get_memory(&self, idx: u32) -> Option<Memory> {
+    pub fn memory(&self, idx: u32) -> Option<Memory> {
         if idx >= self.n_memory() {
             None
         } else {
@@ -530,7 +530,7 @@ impl BufferRef {
         }
     }
 
-    pub fn get_memory_range(&self, idx: u32, length: Option<u32>) -> Option<Memory> {
+    pub fn memory_range(&self, idx: u32, length: Option<u32>) -> Option<Memory> {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {
             let res = ffi::gst_buffer_get_memory_range(

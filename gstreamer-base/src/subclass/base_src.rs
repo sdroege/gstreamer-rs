@@ -35,7 +35,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
         self.parent_size(element)
     }
 
-    fn get_times(
+    fn times(
         &self,
         element: &Self::Type,
         buffer: &gst::BufferRef,

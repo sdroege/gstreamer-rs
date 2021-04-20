@@ -18,7 +18,7 @@ pub trait VideoEncoderExtManual: 'static {
         size: usize,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn get_frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
+    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
     fn frames(&self) -> Vec<VideoCodecFrame>;
     fn oldest_frame(&self) -> Option<VideoCodecFrame>;
 
@@ -130,7 +130,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         }
     }
 
-    fn get_frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
+    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
         let frame = unsafe {
             ffi::gst_video_encoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
         };

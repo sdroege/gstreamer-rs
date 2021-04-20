@@ -54,7 +54,7 @@ impl AudioClippingMeta {
 unsafe impl MetaAPI for AudioClippingMeta {
     type GstType = ffi::GstAudioClippingMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_clipping_meta_api_get_type()) }
     }
 }
@@ -191,7 +191,7 @@ impl AudioMeta {
 unsafe impl MetaAPI for AudioMeta {
     type GstType = ffi::GstAudioMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_meta_api_get_type()) }
     }
 }

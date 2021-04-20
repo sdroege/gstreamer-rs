@@ -21,7 +21,7 @@ pub trait GstObjectExtManual: 'static {
 
     fn object_flags(&self) -> ObjectFlags;
 
-    fn get_g_value_array(
+    fn g_value_array(
         &self,
         property_name: &str,
         timestamp: ClockTime,
@@ -101,7 +101,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
         }
     }
 
-    fn get_g_value_array(
+    fn g_value_array(
         &self,
         property_name: &str,
         timestamp: ClockTime,

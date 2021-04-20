@@ -557,7 +557,7 @@ impl VideoTimeCodeMeta {
 unsafe impl MetaAPI for VideoTimeCodeMeta {
     type GstType = ffi::GstVideoTimeCodeMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_time_code_meta_api_get_type()) }
     }
 }

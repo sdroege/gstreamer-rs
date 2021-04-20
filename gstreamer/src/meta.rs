@@ -24,7 +24,7 @@ use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;
 
-    fn get_meta_api() -> glib::Type;
+    fn meta_api() -> glib::Type;
 
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
         assert!(!ptr.is_null());
@@ -240,7 +240,7 @@ impl Meta {
 unsafe impl MetaAPI for Meta {
     type GstType = ffi::GstMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         glib::Type::INVALID
     }
 }
@@ -282,7 +282,7 @@ impl ParentBufferMeta {
 unsafe impl MetaAPI for ParentBufferMeta {
     type GstType = ffi::GstParentBufferMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_parent_buffer_meta_api_get_type()) }
     }
 }
@@ -323,7 +323,7 @@ impl ProtectionMeta {
 unsafe impl MetaAPI for ProtectionMeta {
     type GstType = ffi::GstProtectionMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_protection_meta_api_get_type()) }
     }
 }
@@ -392,7 +392,7 @@ impl ReferenceTimestampMeta {
 unsafe impl MetaAPI for ReferenceTimestampMeta {
     type GstType = ffi::GstReferenceTimestampMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_reference_timestamp_meta_api_get_type()) }
     }
 }

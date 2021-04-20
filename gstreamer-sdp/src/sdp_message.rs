@@ -245,7 +245,7 @@ impl SDPMessageRef {
         unsafe { ffi::gst_sdp_message_emails_len(&self.0) }
     }
 
-    pub fn get_attribute(&self, idx: u32) -> Option<&SDPAttribute> {
+    pub fn attribute(&self, idx: u32) -> Option<&SDPAttribute> {
         if idx >= self.attributes_len() {
             return None;
         }
@@ -260,7 +260,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_attribute_val(&self, key: &str) -> Option<&str> {
+    pub fn attribute_val(&self, key: &str) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_attribute_val(&self.0, key.to_glib_none().0);
             if ptr.is_null() {
@@ -271,7 +271,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
+    pub fn attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
             if ptr.is_null() {
@@ -282,7 +282,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
+    pub fn bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
         if idx >= self.bandwidths_len() {
             return None;
         }
@@ -308,7 +308,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_email(&self, idx: u32) -> Option<&str> {
+    pub fn email(&self, idx: u32) -> Option<&str> {
         if idx >= self.emails_len() {
             return None;
         }
@@ -345,7 +345,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_media(&self, idx: u32) -> Option<&SDPMediaRef> {
+    pub fn media(&self, idx: u32) -> Option<&SDPMediaRef> {
         if idx >= self.medias_len() {
             return None;
         }
@@ -360,7 +360,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_media_mut(&mut self, idx: u32) -> Option<&mut SDPMediaRef> {
+    pub fn media_mut(&mut self, idx: u32) -> Option<&mut SDPMediaRef> {
         if idx >= self.medias_len() {
             return None;
         }
@@ -386,7 +386,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_phone(&self, idx: u32) -> Option<&str> {
+    pub fn phone(&self, idx: u32) -> Option<&str> {
         if idx >= self.phones_len() {
             return None;
         }
@@ -412,7 +412,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_time(&self, idx: u32) -> Option<&SDPTime> {
+    pub fn time(&self, idx: u32) -> Option<&SDPTime> {
         if idx >= self.times_len() {
             return None;
         }
@@ -449,7 +449,7 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn get_zone(&self, idx: u32) -> Option<&SDPZone> {
+    pub fn zone(&self, idx: u32) -> Option<&SDPZone> {
         if idx >= self.zones_len() {
             return None;
         }

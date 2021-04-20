@@ -63,7 +63,7 @@ impl GLSyncMeta {
 unsafe impl MetaAPI for GLSyncMeta {
     type GstType = ffi::GstGLSyncMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_sync_meta_api_get_type()) }
     }
 }

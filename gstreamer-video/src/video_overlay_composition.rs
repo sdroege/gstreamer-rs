@@ -115,7 +115,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
-    pub fn get_pixels_unscaled_raw(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
+    pub fn pixels_unscaled_raw(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_raw(
                 self.as_mut_ptr(),
@@ -124,7 +124,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
-    pub fn get_pixels_unscaled_ayuv(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
+    pub fn pixels_unscaled_ayuv(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_ayuv(
                 self.as_mut_ptr(),
@@ -133,7 +133,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
-    pub fn get_pixels_unscaled_argb(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
+    pub fn pixels_unscaled_argb(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_argb(
                 self.as_mut_ptr(),
@@ -142,7 +142,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
-    pub fn get_pixels_raw(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
+    pub fn pixels_raw(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_raw(
                 self.as_mut_ptr(),
@@ -151,7 +151,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
-    pub fn get_pixels_ayuv(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
+    pub fn pixels_ayuv(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_ayuv(
                 self.as_mut_ptr(),
@@ -160,7 +160,7 @@ impl VideoOverlayRectangleRef {
         }
     }
 
-    pub fn get_pixels_argb(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
+    pub fn pixels_argb(&self, flags: crate::VideoOverlayFormatFlags) -> gst::Buffer {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_argb(
                 self.as_mut_ptr(),
@@ -226,7 +226,7 @@ impl VideoOverlayCompositionRef {
         unsafe { ffi::gst_video_overlay_composition_n_rectangles(self.as_mut_ptr()) }
     }
 
-    pub fn get_rectangle(&self, idx: u32) -> Result<VideoOverlayRectangle, glib::error::BoolError> {
+    pub fn rectangle(&self, idx: u32) -> Result<VideoOverlayRectangle, glib::error::BoolError> {
         if idx >= self.n_rectangles() {
             return Err(glib::bool_error!("Invalid index"));
         }

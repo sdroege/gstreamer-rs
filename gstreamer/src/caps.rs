@@ -179,7 +179,7 @@ impl CapsRef {
         }
     }
 
-    pub fn get_structure(&self, idx: u32) -> Option<&StructureRef> {
+    pub fn structure(&self, idx: u32) -> Option<&StructureRef> {
         if idx >= self.size() {
             return None;
         }
@@ -194,7 +194,7 @@ impl CapsRef {
         }
     }
 
-    pub fn get_mut_structure(&mut self, idx: u32) -> Option<&mut StructureRef> {
+    pub fn structure_mut(&mut self, idx: u32) -> Option<&mut StructureRef> {
         if idx >= self.size() {
             return None;
         }
@@ -209,7 +209,7 @@ impl CapsRef {
         }
     }
 
-    pub fn get_features(&self, idx: u32) -> Option<&CapsFeaturesRef> {
+    pub fn features(&self, idx: u32) -> Option<&CapsFeaturesRef> {
         if idx >= self.size() {
             return None;
         }
@@ -220,7 +220,7 @@ impl CapsRef {
         }
     }
 
-    pub fn get_mut_features(&mut self, idx: u32) -> Option<&mut CapsFeaturesRef> {
+    pub fn features_mut(&mut self, idx: u32) -> Option<&mut CapsFeaturesRef> {
         if idx >= self.size() {
             return None;
         }

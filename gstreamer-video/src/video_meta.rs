@@ -208,7 +208,7 @@ impl VideoMeta {
 unsafe impl MetaAPI for VideoMeta {
     type GstType = ffi::GstVideoMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_meta_api_get_type()) }
     }
 }
@@ -274,7 +274,7 @@ impl VideoCropMeta {
 unsafe impl MetaAPI for VideoCropMeta {
     type GstType = ffi::GstVideoCropMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_crop_meta_api_get_type()) }
     }
 }
@@ -339,7 +339,7 @@ impl VideoRegionOfInterestMeta {
     }
 
     #[cfg(feature = "v1_14")]
-    pub fn get_param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
+    pub fn param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
         self.params().find(|s| s.name() == name)
     }
 
@@ -396,7 +396,7 @@ impl<'a> Iterator for ParamsIter<'a> {
 unsafe impl MetaAPI for VideoRegionOfInterestMeta {
     type GstType = ffi::GstVideoRegionOfInterestMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_region_of_interest_meta_api_get_type()) }
     }
 }
@@ -465,7 +465,7 @@ impl VideoAffineTransformationMeta {
 unsafe impl MetaAPI for VideoAffineTransformationMeta {
     type GstType = ffi::GstVideoAffineTransformationMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_affine_transformation_meta_api_get_type()) }
     }
 }
@@ -521,7 +521,7 @@ impl VideoOverlayCompositionMeta {
 unsafe impl MetaAPI for VideoOverlayCompositionMeta {
     type GstType = ffi::GstVideoOverlayCompositionMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_overlay_composition_meta_api_get_type()) }
     }
 }
@@ -586,7 +586,7 @@ impl VideoCaptionMeta {
 unsafe impl MetaAPI for VideoCaptionMeta {
     type GstType = ffi::GstVideoCaptionMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_caption_meta_api_get_type()) }
     }
 }
@@ -655,7 +655,7 @@ impl VideoAFDMeta {
 unsafe impl MetaAPI for VideoAFDMeta {
     type GstType = ffi::GstVideoAFDMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_afd_meta_api_get_type()) }
     }
 }
@@ -731,7 +731,7 @@ impl VideoBarMeta {
 unsafe impl MetaAPI for VideoBarMeta {
     type GstType = ffi::GstVideoBarMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_bar_meta_api_get_type()) }
     }
 }

@@ -6,7 +6,7 @@ use glib::translate::*;
 use std::ptr;
 
 pub trait TimelineElementExtManual: 'static {
-    fn get_child_property(&self, name: &str) -> Option<glib::Value>;
+    fn child_property(&self, name: &str) -> Option<glib::Value>;
     fn set_child_property(
         &self,
         name: &str,
@@ -15,7 +15,7 @@ pub trait TimelineElementExtManual: 'static {
 }
 
 impl<O: IsA<TimelineElement>> TimelineElementExtManual for O {
-    fn get_child_property(&self, name: &str) -> Option<glib::Value> {
+    fn child_property(&self, name: &str) -> Option<glib::Value> {
         unsafe {
             let found: bool = from_glib(ffi::ges_timeline_element_lookup_child(
                 self.as_ref().to_glib_none().0,

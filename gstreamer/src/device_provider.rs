@@ -33,11 +33,11 @@ impl DeviceProvider {
 }
 
 pub trait DeviceProviderExtManual: 'static {
-    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str>;
+    fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
 }
 
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
-    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
+    fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = (*(self.as_ptr() as *mut glib::gobject_ffi::GTypeInstance)).g_class
                 as *mut ffi::GstDeviceProviderClass;

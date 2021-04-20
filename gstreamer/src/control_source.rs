@@ -6,7 +6,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 pub trait ControlSourceExtManual: 'static {
-    fn get_value_array(
+    fn value_array(
         &self,
         timestamp: ClockTime,
         interval: ClockTime,
@@ -15,7 +15,7 @@ pub trait ControlSourceExtManual: 'static {
 }
 
 impl<O: IsA<ControlSource>> ControlSourceExtManual for O {
-    fn get_value_array(
+    fn value_array(
         &self,
         timestamp: ClockTime,
         interval: ClockTime,

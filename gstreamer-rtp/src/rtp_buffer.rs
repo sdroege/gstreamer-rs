@@ -194,7 +194,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn get_csrc(&self, idx: u8) -> Option<u32> {
+    pub fn csrc(&self, idx: u8) -> Option<u32> {
         if idx < self.csrc_count() {
             unsafe {
                 Some(ffi::gst_rtp_buffer_get_csrc(
@@ -265,7 +265,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn get_extension_onebyte_header(&self, id: u8, nth: u32) -> Option<&[u8]> {
+    pub fn extension_onebyte_header(&self, id: u8, nth: u32) -> Option<&[u8]> {
         unsafe {
             let mut data = ptr::null_mut();
             // FIXME: Workaround for gstreamer-rtp-sys having the wrong type for this parameter
@@ -286,7 +286,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
-    pub fn get_extension_twobytes_header(&self, id: u8, nth: u32) -> Option<(u8, &[u8])> {
+    pub fn extension_twobytes_header(&self, id: u8, nth: u32) -> Option<(u8, &[u8])> {
         unsafe {
             let mut data = ptr::null_mut();
             // FIXME: Workaround for gstreamer-rtp-sys having the wrong type for this parameter

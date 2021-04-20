@@ -54,7 +54,7 @@ mod custom_meta {
     unsafe impl MetaAPI for CustomMeta {
         type GstType = imp::CustomMeta;
 
-        fn get_meta_api() -> glib::Type {
+        fn meta_api() -> glib::Type {
             imp::custom_meta_api_get_type()
         }
     }

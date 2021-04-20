@@ -103,7 +103,7 @@ impl Promise {
         }
     }
 
-    pub fn get_reply(&self) -> Option<&StructureRef> {
+    pub fn reply(&self) -> Option<&StructureRef> {
         unsafe {
             let s = ffi::gst_promise_get_reply(self.to_glib_none().0);
             if s.is_null() {

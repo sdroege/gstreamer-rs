@@ -22,7 +22,7 @@ impl GLDisplayEGL {
         .ok_or_else(|| glib::bool_error!("Failed to create new EGL GL display"))
     }
 
-    pub unsafe fn get_from_native(display_type: GLDisplayType, display: uintptr_t) -> gpointer {
+    pub unsafe fn from_native(display_type: GLDisplayType, display: uintptr_t) -> gpointer {
         ffi::gst_gl_display_egl_get_from_native(display_type.to_glib(), display)
     }
 }

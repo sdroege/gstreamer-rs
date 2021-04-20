@@ -47,7 +47,7 @@ impl_common_ops_for_opt_int!(Percent);
 pub struct TryFromGenericFormattedValueError(());
 
 pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + 'static {
-    fn get_default_format() -> Format;
+    fn default_format() -> Format;
     fn format(&self) -> Format;
 
     unsafe fn from_raw(format: Format, value: i64) -> Self;
@@ -57,7 +57,7 @@ pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + '
 pub trait SpecificFormattedValue: FormattedValue + TryFrom<GenericFormattedValue> {}
 
 impl FormattedValue for GenericFormattedValue {
-    fn get_default_format() -> Format {
+    fn default_format() -> Format {
         Format::Undefined
     }
 
@@ -274,7 +274,7 @@ macro_rules! impl_op_u64(
 macro_rules! impl_format_value_traits(
     ($name:ident, $format:ident, $format_value:ident) => {
         impl FormattedValue for $name {
-            fn get_default_format() -> Format {
+            fn default_format() -> Format {
                 Format::$format
             }
 
@@ -520,7 +520,7 @@ impl_format_value_traits!(ClockTime, Time, Time);
 impl_format_value_traits!(Buffers, Buffers, Buffers);
 
 impl FormattedValue for Undefined {
-    fn get_default_format() -> Format {
+    fn default_format() -> Format {
         Format::Undefined
     }
 
@@ -601,7 +601,7 @@ impl AsMut<i64> for Undefined {
 }
 
 impl FormattedValue for Percent {
-    fn get_default_format() -> Format {
+    fn default_format() -> Format {
         Format::Percent
     }
 

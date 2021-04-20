@@ -62,7 +62,7 @@ impl BufferListRef {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    pub fn get_writable(&mut self, idx: u32) -> Option<&mut BufferRef> {
+    pub fn writable(&mut self, idx: u32) -> Option<&mut BufferRef> {
         unsafe {
             let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);
             if ptr.is_null() {

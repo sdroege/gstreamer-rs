@@ -123,7 +123,7 @@ impl AudioChannelPosition {
         }
     }
 
-    pub fn get_fallback_mask(channels: u32) -> u64 {
+    pub fn fallback_mask(channels: u32) -> u64 {
         assert_initialized_main_thread!();
 
         unsafe { ffi::gst_audio_channel_get_fallback_mask(channels as i32) }
@@ -257,7 +257,7 @@ pub fn reorder_channels(
     }
 }
 
-pub fn get_channel_reorder_map(
+pub fn channel_reorder_map(
     from: &[AudioChannelPosition],
     to: &[AudioChannelPosition],
     reorder_map: &mut [usize],

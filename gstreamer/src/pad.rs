@@ -114,8 +114,8 @@ pub trait PadExtManual: 'static {
         buffer: &mut crate::BufferRef,
         size: u32,
     ) -> Result<(), FlowError>;
-    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
-    fn get_range_fill(
+    fn range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
+    fn range_fill(
         &self,
         offset: u64,
         buffer: &mut crate::BufferRef,
@@ -344,7 +344,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError> {
+    fn range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError> {
         unsafe {
             let mut buffer = ptr::null_mut();
             let ret: FlowReturn = from_glib(ffi::gst_pad_get_range(
@@ -357,7 +357,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_range_fill(
+    fn range_fill(
         &self,
         offset: u64,
         buffer: &mut crate::BufferRef,

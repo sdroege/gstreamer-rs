@@ -60,7 +60,7 @@ impl Adapter {
         }
     }
 
-    pub fn get_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+    pub fn buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
 
@@ -70,7 +70,7 @@ impl Adapter {
         }
     }
 
-    pub fn get_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+    pub fn buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
 
@@ -83,7 +83,7 @@ impl Adapter {
         }
     }
 
-    pub fn get_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
+    pub fn buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
 
@@ -96,7 +96,7 @@ impl Adapter {
         }
     }
 
-    pub fn get_list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
+    pub fn list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
 
@@ -292,19 +292,19 @@ impl UniqueAdapter {
         self.0.flush(flush);
     }
 
-    pub fn get_buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+    pub fn buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         self.0.get_buffer(nbytes)
     }
 
-    pub fn get_buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
+    pub fn buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
         self.0.get_buffer_fast(nbytes)
     }
 
-    pub fn get_buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
+    pub fn buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
         self.0.get_buffer_list(nbytes)
     }
 
-    pub fn get_list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
+    pub fn list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
         self.0.get_list(nbytes)
     }
 

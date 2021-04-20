@@ -42,7 +42,7 @@ impl NetAddressMeta {
 unsafe impl MetaAPI for NetAddressMeta {
     type GstType = ffi::GstNetAddressMeta;
 
-    fn get_meta_api() -> glib::Type {
+    fn meta_api() -> glib::Type {
         unsafe { from_glib(ffi::gst_net_address_meta_api_get_type()) }
     }
 }

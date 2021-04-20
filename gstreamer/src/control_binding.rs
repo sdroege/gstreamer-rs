@@ -6,7 +6,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 pub trait ControlBindingExtManual: 'static {
-    fn get_g_value_array(
+    fn g_value_array(
         &self,
         timestamp: ClockTime,
         interval: ClockTime,
@@ -15,7 +15,7 @@ pub trait ControlBindingExtManual: 'static {
 }
 
 impl<O: IsA<ControlBinding>> ControlBindingExtManual for O {
-    fn get_g_value_array(
+    fn g_value_array(
         &self,
         timestamp: ClockTime,
         interval: ClockTime,
