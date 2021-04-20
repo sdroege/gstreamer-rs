@@ -682,7 +682,7 @@ unsafe extern "C" fn audio_encoder_getcaps<T: AudioEncoderImpl>(
     let wrap: Borrowed<AudioEncoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::Caps::new_empty(), {
-        AudioEncoderImpl::get_caps(
+        AudioEncoderImpl::caps(
             imp,
             wrap.unsafe_cast_ref(),
             Option::<gst::Caps>::from_glib_borrow(filter)

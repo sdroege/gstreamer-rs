@@ -164,7 +164,7 @@ impl<T: AsRef<[u8]>> SliceTypeFind<T> {
     }
 
     pub fn run(&mut self) {
-        let factories = TypeFindFactory::get_list();
+        let factories = TypeFindFactory::list();
 
         for factory in factories {
             factory.call_function(self);
@@ -239,13 +239,13 @@ mod tests {
     fn test_typefind_call_function() {
         crate::init().unwrap();
 
-        let xml_factory = TypeFindFactory::get_list()
+        let xml_factory = TypeFindFactory::list()
             .iter()
             .cloned()
             .find(|f| {
                 f.caps()
                     .map(|c| {
-                        c.get_structure(0)
+                        c.structure(0)
                             .map(|s| s.name() == "application/xml")
                             .unwrap_or(false)
                     })

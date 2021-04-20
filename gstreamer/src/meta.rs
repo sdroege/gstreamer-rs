@@ -29,7 +29,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
         assert!(!ptr.is_null());
 
-        let meta_api = Self::get_meta_api();
+        let meta_api = Self::meta_api();
         if meta_api != glib::Type::INVALID {
             assert_eq!(
                 meta_api,
@@ -49,7 +49,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
     ) -> MetaRefMut<Self, T> {
         assert!(!ptr.is_null());
 
-        let meta_api = Self::get_meta_api();
+        let meta_api = Self::meta_api();
         if meta_api != glib::Type::INVALID {
             assert_eq!(
                 meta_api,
@@ -162,7 +162,7 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
 
 impl<'a> MetaRef<'a, Meta> {
     pub fn downcast_ref<T: MetaAPI>(&self) -> Option<&MetaRef<'a, T>> {
-        let target_type = T::get_meta_api();
+        let target_type = T::meta_api();
         let type_ = self.api();
 
         if type_ == glib::Type::INVALID || target_type == type_ {
@@ -214,7 +214,7 @@ impl<'a, T: MetaAPI> MetaRefMut<'a, T, Standalone> {
 
 impl<'a, U> MetaRefMut<'a, Meta, U> {
     pub fn downcast_ref<T: MetaAPI>(&mut self) -> Option<&MetaRefMut<'a, T, U>> {
-        let target_type = T::get_meta_api();
+        let target_type = T::meta_api();
         let type_ = self.api();
 
         if type_ == glib::Type::INVALID || target_type == type_ {
@@ -457,7 +457,7 @@ mod tests {
             let meta = buffer
                 .get_mut()
                 .unwrap()
-                .get_meta_mut::<ParentBufferMeta>()
+                .meta_mut::<ParentBufferMeta>()
                 .unwrap();
             unsafe {
                 assert_eq!(meta.parent().as_ptr(), parent.as_ptr());
@@ -485,6 +485,6 @@ mod tests {
             assert_eq!(metas.count(), 0);
         }
 
-        assert!(buffer.get_meta::<ParentBufferMeta>().is_none());
+        assert!(buffer.meta::<ParentBufferMeta>().is_none());
     }
 }

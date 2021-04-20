@@ -31,7 +31,7 @@ impl<'a> Iterator for Iter<'a> {
             return None;
         }
 
-        let item = self.collection.get_stream(self.idx);
+        let item = self.collection.stream(self.idx);
         self.idx += 1;
 
         item
@@ -55,7 +55,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
         }
 
         self.size -= 1;
-        self.collection.get_stream(self.size)
+        self.collection.stream(self.size)
     }
 }
 

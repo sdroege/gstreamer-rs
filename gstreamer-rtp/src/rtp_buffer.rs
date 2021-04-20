@@ -389,9 +389,9 @@ mod tests {
         assert_eq!(rtp_buffer.csrc_count(), csrc_count);
         rtp_buffer.set_csrc(0, 12);
         rtp_buffer.set_csrc(1, 15);
-        assert_eq!(rtp_buffer.get_csrc(0).unwrap(), 12);
-        assert_eq!(rtp_buffer.get_csrc(1).unwrap(), 15);
-        assert!(rtp_buffer.get_csrc(2).is_none());
+        assert_eq!(rtp_buffer.csrc(0).unwrap(), 12);
+        assert_eq!(rtp_buffer.csrc(1).unwrap(), 15);
+        assert!(rtp_buffer.csrc(2).is_none());
 
         rtp_buffer.set_extension(true);
         assert_eq!(rtp_buffer.is_extension(), true);
@@ -444,10 +444,10 @@ mod tests {
             assert_eq!(bytes[i + 1], extension_data[i]);
         }
 
-        let result = rtp_buffer.get_extension_onebyte_header(2, 0);
+        let result = rtp_buffer.extension_onebyte_header(2, 0);
         assert!(result.is_none());
 
-        let result = rtp_buffer.get_extension_onebyte_header(1, 0);
+        let result = rtp_buffer.extension_onebyte_header(1, 0);
         assert!(result.is_some());
         assert_eq!(result.unwrap(), &extension_data);
     }
@@ -485,10 +485,10 @@ mod tests {
             assert_eq!(bytes[i + 2], extension_data[i]);
         }
 
-        let result = rtp_buffer.get_extension_twobytes_header(2, 0);
+        let result = rtp_buffer.extension_twobytes_header(2, 0);
         assert!(result.is_none());
 
-        let result = rtp_buffer.get_extension_twobytes_header(id, 0);
+        let result = rtp_buffer.extension_twobytes_header(id, 0);
         assert!(result.is_some());
         let (extracted_appbits, data) = result.unwrap();
         assert_eq!(appbits, extracted_appbits);

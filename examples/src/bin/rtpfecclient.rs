@@ -45,7 +45,7 @@ fn make_element(
 }
 
 fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
-    match element.get_static_pad(pad_name) {
+    match element.static_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {
             let element_name = element.name();
@@ -55,7 +55,7 @@ fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad
 }
 
 fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
-    match element.get_request_pad(pad_name) {
+    match element.request_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {
             let element_name = element.name();
@@ -72,7 +72,7 @@ fn connect_rtpbin_srcpad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), 
 
     match pt {
         96 => {
-            let sinkpad = get_static_pad(sink, "sink")?;
+            let sinkpad = static_pad(sink, "sink")?;
             src_pad.link(&sinkpad)?;
             Ok(())
         }
@@ -206,8 +206,8 @@ fn example_main() -> Result<(), Error> {
         }
     })?;
 
-    let srcpad = get_static_pad(&netsim, "src")?;
-    let sinkpad = get_request_pad(&rtpbin, "recv_rtp_sink_0")?;
+    let srcpad = static_pad(&netsim, "src")?;
+    let sinkpad = request_pad(&rtpbin, "recv_rtp_sink_0")?;
     srcpad.link(&sinkpad)?;
 
     let depay_weak = depay.downgrade();

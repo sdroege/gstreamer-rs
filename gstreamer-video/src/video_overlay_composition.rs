@@ -38,7 +38,7 @@ impl VideoOverlayRectangle {
         flags: crate::VideoOverlayFormatFlags,
     ) -> Self {
         assert_initialized_main_thread!();
-        assert!(buffer.get_meta::<crate::VideoMeta>().is_some());
+        assert!(buffer.meta::<crate::VideoMeta>().is_some());
         unsafe {
             from_glib_full(ffi::gst_video_overlay_rectangle_new_raw(
                 buffer.to_glib_none().0,

@@ -464,28 +464,23 @@ mod tests {
         let tags: TagList = ron::de::from_str(tag_list_ron).unwrap();
         assert_eq!(tags.scope(), TagScope::Global);
 
-        assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
+        assert_eq!(tags.index::<Title>(0).unwrap().get(), Some("a title"));
+        assert_eq!(tags.index::<Title>(1).unwrap().get(), Some("another title"));
         assert_eq!(
-            tags.get_index::<Title>(1).unwrap().get(),
-            Some("another title")
-        );
-        assert_eq!(
-            tags.get_index::<Duration>(0).unwrap().get_some(),
+            tags.index::<Duration>(0).unwrap().get_some(),
             crate::SECOND * 120
         );
-        assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
-        assert!(
-            (tags.get_index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON
-        );
+        assert_eq!(tags.index::<Bitrate>(0).unwrap().get_some(), 96_000);
+        assert!((tags.index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON);
         assert_eq!(
-            tags.get_index::<Date>(0).unwrap().get().unwrap(),
+            tags.index::<Date>(0).unwrap().get().unwrap(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap()
         );
         assert_eq!(
-            tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
+            tags.index::<DateTime>(0).unwrap().get().unwrap(),
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
-        let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
+        let sample = tags.index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();
@@ -509,24 +504,19 @@ mod tests {
         let tags: TagList = serde_json::from_str(tag_json).unwrap();
         assert_eq!(tags.scope(), TagScope::Global);
 
-        assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
+        assert_eq!(tags.index::<Title>(0).unwrap().get(), Some("a title"));
+        assert_eq!(tags.index::<Title>(1).unwrap().get(), Some("another title"));
+        assert_eq!(tags.index::<Bitrate>(0).unwrap().get_some(), 96_000);
+        assert!((tags.index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON);
         assert_eq!(
-            tags.get_index::<Title>(1).unwrap().get(),
-            Some("another title")
-        );
-        assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
-        assert!(
-            (tags.get_index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON
-        );
-        assert_eq!(
-            tags.get_index::<Date>(0).unwrap().get().unwrap(),
+            tags.index::<Date>(0).unwrap().get().unwrap(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap()
         );
         assert_eq!(
-            tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
+            tags.index::<DateTime>(0).unwrap().get().unwrap(),
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
-        let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
+        let sample = tags.index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();
@@ -574,36 +564,36 @@ mod tests {
         assert_eq!(tags_de.scope(), TagScope::Global);
 
         assert_eq!(
-            tags_de.get_index::<Title>(0).unwrap().get(),
-            tags.get_index::<Title>(0).unwrap().get(),
+            tags_de.index::<Title>(0).unwrap().get(),
+            tags.index::<Title>(0).unwrap().get(),
         );
         assert_eq!(
-            tags_de.get_index::<Title>(1).unwrap().get(),
-            tags.get_index::<Title>(1).unwrap().get(),
+            tags_de.index::<Title>(1).unwrap().get(),
+            tags.index::<Title>(1).unwrap().get(),
         );
         assert_eq!(
-            tags_de.get_index::<Duration>(0).unwrap().get_some(),
-            tags.get_index::<Duration>(0).unwrap().get_some(),
+            tags_de.index::<Duration>(0).unwrap().get_some(),
+            tags.index::<Duration>(0).unwrap().get_some(),
         );
         assert_eq!(
-            tags_de.get_index::<Bitrate>(0).unwrap().get_some(),
-            tags.get_index::<Bitrate>(0).unwrap().get_some(),
+            tags_de.index::<Bitrate>(0).unwrap().get_some(),
+            tags.index::<Bitrate>(0).unwrap().get_some(),
         );
         assert!(
-            (tags_de.get_index::<TrackGain>(0).unwrap().get_some()
-                - tags.get_index::<TrackGain>(0).unwrap().get_some())
+            (tags_de.index::<TrackGain>(0).unwrap().get_some()
+                - tags.index::<TrackGain>(0).unwrap().get_some())
             .abs()
                 < std::f64::EPSILON
         );
         assert_eq!(
-            tags_de.get_index::<Date>(0).unwrap().get(),
-            tags.get_index::<Date>(0).unwrap().get(),
+            tags_de.index::<Date>(0).unwrap().get(),
+            tags.index::<Date>(0).unwrap().get(),
         );
         assert_eq!(
-            tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
+            tags.index::<DateTime>(0).unwrap().get().unwrap(),
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
-        let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
+        let sample = tags.index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();

@@ -31,9 +31,9 @@ fn example_main() {
 
     // Get the audiotestsrc element from the pipeline that GStreamer
     // created for us while parsing the launch syntax above.
-    let src = pipeline.get_by_name("src").unwrap();
+    let src = pipeline.by_name("src").unwrap();
     // Get the audiotestsrc's src-pad.
-    let src_pad = src.get_static_pad("src").unwrap();
+    let src_pad = src.static_pad("src").unwrap();
     // Add a probe handler on the audiotestsrc's src-pad.
     // This handler gets called for every buffer that passes the pad we probe.
     src_pad.add_probe(gst::PadProbeType::BUFFER, |_, probe_info| {

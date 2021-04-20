@@ -367,7 +367,7 @@ mod tests {
                 ),
             ])"#;
         let caps: Caps = ron::de::from_str(caps_ron).unwrap();
-        let s = caps.get_structure(0).unwrap();
+        let s = caps.structure(0).unwrap();
         assert_eq!(
             s,
             Structure::new(
@@ -400,7 +400,7 @@ mod tests {
                 ),
             ])"#;
         let caps: Caps = ron::de::from_str(caps_ron).unwrap();
-        let s = caps.get_structure(0).unwrap();
+        let s = caps.structure(0).unwrap();
         let str_none: Option<&str> = None;
         assert_eq!(
             s,
@@ -416,7 +416,7 @@ mod tests {
             )
             .as_ref()
         );
-        let f = caps.get_features(0).unwrap();
+        let f = caps.features(0).unwrap();
         assert!(f.is_equal(CapsFeatures::new(&["foo:bar", "foo:baz"]).as_ref()));
 
         let caps_ron = r#"
@@ -436,7 +436,7 @@ mod tests {
                 ),
             ])"#;
         let caps: Caps = ron::de::from_str(caps_ron).unwrap();
-        let s = caps.get_structure(0).unwrap();
+        let s = caps.structure(0).unwrap();
         assert_eq!(
             s,
             Structure::new(
@@ -451,7 +451,7 @@ mod tests {
             )
             .as_ref()
         );
-        let f = caps.get_features(0).unwrap();
+        let f = caps.features(0).unwrap();
         assert!(f.is_any());
     }
 

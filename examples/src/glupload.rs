@@ -190,7 +190,7 @@ impl Gl {
 }
 
 fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
-    let gl = gl::Gl::load_with(|ptr| gl_context.get_proc_address(ptr) as *const _);
+    let gl = gl::Gl::load_with(|ptr| gl_context.proc_address(ptr) as *const _);
 
     let version = unsafe {
         let data = CStr::from_ptr(gl.GetString(gl::VERSION) as *const _)
@@ -353,7 +353,7 @@ impl App {
             use glutin::platform::unix::WindowExtUnix;
             use glutin::platform::ContextTraitExt;
 
-            let api = App::map_gl_api(windowed_context.get_api());
+            let api = App::map_gl_api(windowed_context.api());
 
             let (gl_context, gl_display, platform) = match unsafe { windowed_context.raw_handle() }
             {
@@ -362,7 +362,7 @@ impl App {
                     let mut gl_display = None;
 
                     #[cfg(feature = "gst-gl-egl")]
-                    if let Some(display) = unsafe { windowed_context.get_egl_display() } {
+                    if let Some(display) = unsafe { windowed_context.egl_display() } {
                         gl_display = Some(
                             unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }
                                 .unwrap()
@@ -625,7 +625,7 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
 
     println!(
         "Pixel format of the window's GL context {:?}",
-        app.windowed_context.get_pixel_format()
+        app.windowed_context.pixel_format()
     );
 
     let gl = load(&app.windowed_context);
@@ -681,13 +681,13 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
                 {
                     if gst_gl_context.is_none() {
                         gst_gl_context = glupload
-                            .get_property("context")
+                            .property("context")
                             .unwrap()
                             .get::<gst_gl::GLContext>()
                             .unwrap();
                     }
 
-                    let sync_meta = buffer.get_meta::<gst_gl::GLSyncMeta>().unwrap();
+                    let sync_meta = buffer.meta::<gst_gl::GLSyncMeta>().unwrap();
                     sync_meta.set_sync_point(gst_gl_context.as_ref().unwrap());
                 }
 
@@ -705,9 +705,9 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
 
         if needs_redraw {
             if let Some(frame) = curr_frame.as_ref() {
-                let sync_meta = frame.buffer().get_meta::<gst_gl::GLSyncMeta>().unwrap();
+                let sync_meta = frame.buffer().meta::<gst_gl::GLSyncMeta>().unwrap();
                 sync_meta.wait(&shared_context);
-                if let Some(texture) = frame.get_texture_id(0) {
+                if let Some(texture) = frame.texture_id(0) {
                     gl.draw_frame(texture as gl::types::GLuint);
                 }
             }

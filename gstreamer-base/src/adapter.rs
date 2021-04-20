@@ -293,19 +293,19 @@ impl UniqueAdapter {
     }
 
     pub fn buffer(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
-        self.0.get_buffer(nbytes)
+        self.0.buffer(nbytes)
     }
 
     pub fn buffer_fast(&self, nbytes: usize) -> Result<gst::Buffer, glib::BoolError> {
-        self.0.get_buffer_fast(nbytes)
+        self.0.buffer_fast(nbytes)
     }
 
     pub fn buffer_list(&self, nbytes: usize) -> Result<gst::BufferList, glib::BoolError> {
-        self.0.get_buffer_list(nbytes)
+        self.0.buffer_list(nbytes)
     }
 
     pub fn list(&self, nbytes: usize) -> Result<Vec<gst::Buffer>, glib::BoolError> {
-        self.0.get_list(nbytes)
+        self.0.list(nbytes)
     }
 
     pub fn masked_scan_uint32(

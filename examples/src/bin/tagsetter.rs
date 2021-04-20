@@ -67,7 +67,7 @@ fn example_main() -> Result<(), Error> {
     // Query the pipeline for elements implementing the GstTagsetter interface.
     // In our case, this will return the flacenc element.
     let tagsetter = pipeline
-        .get_by_interface(gst::TagSetter::static_type())
+        .by_interface(gst::TagSetter::static_type())
         .ok_or_else(|| anyhow!("No TagSetter found"))?;
     let tagsetter = tagsetter
         .dynamic_cast::<gst::TagSetter>()

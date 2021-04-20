@@ -41,7 +41,7 @@ mod tutorial5 {
         let propname: &str = &format!("n-{}", stype);
         let signame: &str = &format!("get-{}-tags", stype);
 
-        match playbin.get_property(propname).unwrap().get() {
+        match playbin.property(propname).unwrap().get() {
             Ok(Some(x)) => {
                 for i in 0..x {
                     let tags = playbin.emit_by_name(signame, &[&i]).unwrap().unwrap();

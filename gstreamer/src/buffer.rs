@@ -386,7 +386,7 @@ impl BufferRef {
 
     pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
         unsafe {
-            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().to_glib());
             if meta.is_null() {
                 None
             } else {
@@ -397,7 +397,7 @@ impl BufferRef {
 
     pub fn meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
         unsafe {
-            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().to_glib());
             if meta.is_null() {
                 None
             } else {
@@ -711,7 +711,7 @@ macro_rules! define_meta_iter(
             $name {
                 buffer,
                 state: ptr::null_mut(),
-                meta_api: T::get_meta_api(),
+                meta_api: T::meta_api(),
                 items: PhantomData,
             }
         }
@@ -797,7 +797,7 @@ macro_rules! define_iter(
 
             #[allow(unused_unsafe)]
             unsafe {
-                let item = $get_item(self.buffer, self.idx)?;
+                let item = $item(self.buffer, self.idx)?;
                 self.idx += 1;
                 Some(item)
             }
@@ -824,7 +824,7 @@ macro_rules! define_iter(
 
             #[allow(unused_unsafe)]
             unsafe {
-                $get_item(self.buffer, self.n_memory)
+                $item(self.buffer, self.n_memory)
             }
         }
     }
@@ -865,7 +865,7 @@ define_iter!(
     IterOwned,
     &'a BufferRef,
     Memory,
-    |buffer: &BufferRef, idx| { buffer.get_memory(idx) }
+    |buffer: &BufferRef, idx| { buffer.memory(idx) }
 );
 
 impl fmt::Debug for Buffer {
@@ -1184,7 +1184,7 @@ mod tests {
 
         for i in 0..5 {
             {
-                let mem = buffer.get_memory(i).unwrap();
+                let mem = buffer.memory(i).unwrap();
                 assert_eq!(mem.size(), if i < 4 { 5 } else { 10 });
                 let map = mem.map_readable().unwrap();
                 assert_eq!(map.size(), if i < 4 { 5 } else { 10 });

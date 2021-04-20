@@ -23,7 +23,7 @@ fn tutorial_main() -> Result<(), Error> {
     pipeline.set_property("uri", &uri).unwrap();
 
     // Set the download flag
-    let flags = pipeline.get_property("flags")?;
+    let flags = pipeline.property("flags")?;
     let flags_class = FlagsClass::new(flags.type_()).unwrap();
     let flags = flags_class
         .builder_with_value(flags)
@@ -107,7 +107,7 @@ fn tutorial_main() -> Result<(), Error> {
         println!(
             "Temporary file: {:?}",
             download_buffer
-                .get_property("temp-location")
+                .property("temp-location")
                 .unwrap()
                 .get::<String>()
                 .unwrap()

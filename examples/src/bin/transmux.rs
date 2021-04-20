@@ -102,10 +102,7 @@ fn example_main() -> Result<(), Error> {
                 .get::<gst::Caps>()
                 .expect("typefinder \"have-type\" signal values[2]")
                 .expect("typefinder \"have-type\" signal values[2]: no `caps`");
-            let format_name = caps
-                .get_structure(0)
-                .expect("Failed to get format name")
-                .name();
+            let format_name = caps.structure(0).expect("Failed to get format name").name();
 
             let demuxer = match format_name {
                 "video/x-matroska" | "video/webm" => {
@@ -198,7 +195,7 @@ fn handle_demux_pad_added(
     // For that, we need to request a sink pad that fits our needs.
     let link_to_muxer = || -> Result<(), Error> {
         let queue_sink_pad = queue
-            .get_request_pad("sink_%u")
+            .request_pad("sink_%u")
             .expect("If this happened, something is terribly wrong");
         demux_src_pad.link(&queue_sink_pad)?;
         // Now that we requested a sink pad fitting our needs from the multiqueue,
@@ -213,7 +210,7 @@ fn handle_demux_pad_added(
         // Link the multiqueue's output for this stream to the matroskamuxer.
         // For that, we request an appropriate pad at the muxer, that fits our needs.
         let muxer_sink_pad = muxer
-            .get_compatible_pad(&queue_src_pad, None)
+            .compatible_pad(&queue_src_pad, None)
             .expect("Aww, you found a format that matroska doesn't support!");
         queue_src_pad.link(&muxer_sink_pad)?;
 

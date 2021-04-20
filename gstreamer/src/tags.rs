@@ -432,7 +432,7 @@ impl TagListRef {
     }
 
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TagValue<T::TagType>> {
-        self.get_generic(T::tag_name()).map(|value| {
+        self.generic(T::tag_name()).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
                     "TagListRef::get type mismatch for tag {}: {}",
@@ -475,7 +475,7 @@ impl TagListRef {
     }
 
     pub fn index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
-        self.get_index_generic(T::tag_name(), idx).map(|value| {
+        self.index_generic(T::tag_name(), idx).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
                     "TagListRef::get_index type mismatch for tag {}: {}",
@@ -501,7 +501,7 @@ impl TagListRef {
     }
 
     pub fn size<'a, T: Tag<'a>>(&self) -> u32 {
-        self.get_size_by_name(T::tag_name())
+        self.size_by_name(T::tag_name())
     }
 
     pub fn size_by_name(&self, tag_name: &str) -> u32 {
@@ -603,7 +603,7 @@ impl<'a, T: Tag<'a>> TagIter<'a, T> {
         TagIter {
             taglist,
             idx: 0,
-            size: taglist.get_size::<T>(),
+            size: taglist.size::<T>(),
             phantom: PhantomData,
         }
     }
@@ -621,7 +621,7 @@ where
             return None;
         }
 
-        let item = self.taglist.get_index::<T>(self.idx);
+        let item = self.taglist.index::<T>(self.idx);
         self.idx += 1;
 
         item
@@ -649,7 +649,7 @@ where
         }
 
         self.size -= 1;
-        self.taglist.get_index::<T>(self.size)
+        self.taglist.index::<T>(self.size)
     }
 }
 
@@ -675,7 +675,7 @@ impl<'a> GenericTagIter<'a> {
             taglist,
             name,
             idx: 0,
-            size: taglist.get_size_by_name(name),
+            size: taglist.size_by_name(name),
         }
     }
 }
@@ -688,7 +688,7 @@ impl<'a> Iterator for GenericTagIter<'a> {
             return None;
         }
 
-        let item = self.taglist.get_index_generic(self.name, self.idx);
+        let item = self.taglist.index_generic(self.name, self.idx);
         self.idx += 1;
 
         item
@@ -712,7 +712,7 @@ impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
         }
 
         self.size -= 1;
-        self.taglist.get_index_generic(self.name, self.size)
+        self.taglist.index_generic(self.name, self.size)
     }
 }
 
@@ -805,7 +805,7 @@ impl<'a> Iterator for Iter<'a> {
         }
 
         let name = self.taglist.nth_tag_name(self.idx);
-        let item = (name, self.taglist.get_generic(name).unwrap());
+        let item = (name, self.taglist.generic(name).unwrap());
         self.idx += 1;
 
         Some(item)
@@ -830,7 +830,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
         self.size -= 1;
         let name = self.taglist.nth_tag_name(self.idx);
-        Some((name, self.taglist.get_generic(name).unwrap()))
+        Some((name, self.taglist.generic(name).unwrap()))
     }
 }
 
@@ -974,12 +974,9 @@ mod tests {
             tags.get::<Duration>().unwrap().get_some(),
             (crate::SECOND * 120)
         );
+        assert_eq!(tags.index::<Title>(0).unwrap().get(), Some("some title"));
         assert_eq!(
-            tags.get_index::<Title>(0).unwrap().get(),
-            Some("some title")
-        );
-        assert_eq!(
-            tags.get_index::<Duration>(0).unwrap().get_some(),
+            tags.index::<Duration>(0).unwrap().get_some(),
             (crate::SECOND * 120)
         );
     }
@@ -1029,32 +1026,32 @@ mod tests {
         }
 
         assert_eq!(
-            tags.get_index_generic(&TAG_TITLE, 0).unwrap().get(),
+            tags.index_generic(&TAG_TITLE, 0).unwrap().get(),
             Ok(Some("some title"))
         );
         assert_eq!(
-            tags.get_index_generic(&TAG_TITLE, 1).unwrap().get(),
+            tags.index_generic(&TAG_TITLE, 1).unwrap().get(),
             Ok(Some("second title"))
         );
         assert_eq!(
-            tags.get_index_generic(&TAG_DURATION, 0).unwrap().get(),
+            tags.index_generic(&TAG_DURATION, 0).unwrap().get(),
             Ok(Some(crate::SECOND * 120))
         );
         assert_eq!(
-            tags.get_index_generic(&TAG_TITLE, 2).unwrap().get(),
+            tags.index_generic(&TAG_TITLE, 2).unwrap().get(),
             Ok(Some("third title"))
         );
 
         assert_eq!(
-            tags.get_generic(&TAG_TITLE).unwrap().get(),
+            tags.generic(&TAG_TITLE).unwrap().get(),
             Ok(Some("some title, second title, third title"))
         );
 
         assert_eq!(tags.n_tags(), 2);
         assert_eq!(tags.nth_tag_name(0), *TAG_TITLE);
-        assert_eq!(tags.get_size_by_name(&TAG_TITLE), 3);
+        assert_eq!(tags.size_by_name(&TAG_TITLE), 3);
         assert_eq!(tags.nth_tag_name(1), *TAG_DURATION);
-        assert_eq!(tags.get_size_by_name(&TAG_DURATION), 1);
+        assert_eq!(tags.size_by_name(&TAG_DURATION), 1);
 
         // GenericTagIter
         let mut title_iter = tags.iter_tag_generic(&TAG_TITLE);

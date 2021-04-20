@@ -136,11 +136,11 @@ pub trait ElementExtManual: 'static {
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
 
     fn current_state(&self) -> State {
-        self.get_state(ClockTime::from(0)).1
+        self.state(ClockTime::from(0)).1
     }
 
     fn pending_state(&self) -> State {
-        self.get_state(ClockTime::from(0)).2
+        self.state(ClockTime::from(0)).2
     }
 
     fn query(&self, query: &mut QueryRef) -> bool;
@@ -353,11 +353,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
-        self.element_class().get_metadata(key)
+        self.element_class().metadata(key)
     }
 
     fn pad_template(&self, name: &str) -> Option<PadTemplate> {
-        self.element_class().get_pad_template(name)
+        self.element_class().pad_template(name)
     }
 
     fn pad_template_list(&self) -> Vec<PadTemplate> {
@@ -617,11 +617,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 self.as_ref().to_glib_none().0,
                 src_val.format().to_glib(),
                 src_val.to_raw_value(),
-                U::get_default_format().to_glib(),
+                U::default_format().to_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
+                Some(U::from_raw(U::default_format(), dest_val.assume_init()))
             } else {
                 None
             }
@@ -659,11 +659,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::get_default_format().to_glib(),
+                T::default_format().to_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), duration.assume_init()))
+                Some(T::from_raw(T::default_format(), duration.assume_init()))
             } else {
                 None
             }
@@ -691,11 +691,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
-                T::get_default_format().to_glib(),
+                T::default_format().to_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), cur.assume_init()))
+                Some(T::from_raw(T::default_format(), cur.assume_init()))
             } else {
                 None
             }

@@ -340,7 +340,7 @@ impl StructureRef {
         &'structure self,
         name: &'name str,
     ) -> Result<Option<T>, GetError<'name>> {
-        self.get_value(name)?
+        self.value(name)?
             .get()
             .map_err(|err| GetError::from_value_get_error(name, err))
     }
@@ -349,7 +349,7 @@ impl StructureRef {
         &'structure self,
         name: &'name str,
     ) -> Result<Option<T>, GetError<'name>> {
-        let value = self.get_value(name);
+        let value = self.value(name);
         if let Ok(value) = value {
             value
                 .get()
@@ -363,7 +363,7 @@ impl StructureRef {
         &'structure self,
         name: &'name str,
     ) -> Result<T, GetError<'name>> {
-        self.get_value(name)?
+        self.value(name)?
             .get_some()
             .map_err(|err| GetError::from_value_get_error(name, err))
     }
@@ -635,7 +635,7 @@ impl<'a> Iterator for FieldIterator<'a> {
             return None;
         }
 
-        if let Some(field_name) = self.structure.get_nth_field_name(self.idx) {
+        if let Some(field_name) = self.structure.nth_field_name(self.idx) {
             self.idx += 1;
             Some(field_name)
         } else {
@@ -661,7 +661,7 @@ impl<'a> DoubleEndedIterator for FieldIterator<'a> {
         }
 
         self.n_fields -= 1;
-        if let Some(field_name) = self.structure.get_nth_field_name(self.n_fields) {
+        if let Some(field_name) = self.structure.nth_field_name(self.n_fields) {
             Some(field_name)
         } else {
             None
@@ -690,7 +690,7 @@ impl<'a> Iterator for Iter<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(f) = self.iter.next() {
-            let v = self.iter.structure.get_value(f);
+            let v = self.iter.structure.value(f);
             Some((f, v.unwrap()))
         } else {
             None
@@ -705,7 +705,7 @@ impl<'a> Iterator for Iter<'a> {
 impl<'a> DoubleEndedIterator for Iter<'a> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if let Some(f) = self.iter.next_back() {
-            let v = self.iter.structure.get_value(f);
+            let v = self.iter.structure.value(f);
             Some((f, v.unwrap()))
         } else {
             None

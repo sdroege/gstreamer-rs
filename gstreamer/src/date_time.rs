@@ -371,14 +371,14 @@ impl cmp::PartialOrd for DateTime {
 
         let year_delta = self_norm.year() - other_norm.year();
         if year_delta != 0 {
-            return get_cmp(year_delta);
+            return cmp(year_delta);
         }
 
         // Same year
 
         if !self.has_month() && !other.has_month() {
             // Nothing left to compare
-            return get_cmp(year_delta);
+            return cmp(year_delta);
         }
 
         if !(self.has_month() && other.has_month()) {
@@ -388,7 +388,7 @@ impl cmp::PartialOrd for DateTime {
 
         let month_delta = self_norm.month().unwrap() - other_norm.month().unwrap();
         if month_delta != 0 {
-            return get_cmp(month_delta);
+            return cmp(month_delta);
         }
 
         // Same year, same month
@@ -405,7 +405,7 @@ impl cmp::PartialOrd for DateTime {
 
         let day_delta = self_norm.day().unwrap() - other_norm.day().unwrap();
         if day_delta != 0 {
-            return get_cmp(day_delta);
+            return cmp(day_delta);
         }
 
         // Same year, same month, same day
@@ -422,12 +422,12 @@ impl cmp::PartialOrd for DateTime {
 
         let hour_delta = self_norm.hour().unwrap() - other_norm.hour().unwrap();
         if hour_delta != 0 {
-            return get_cmp(hour_delta);
+            return cmp(hour_delta);
         }
 
         let minute_delta = self_norm.minute().unwrap() - other_norm.minute().unwrap();
         if minute_delta != 0 {
-            return get_cmp(minute_delta);
+            return cmp(minute_delta);
         }
 
         // Same year, same month, same day, same time
@@ -443,10 +443,10 @@ impl cmp::PartialOrd for DateTime {
         }
         let second_delta = self_norm.second().unwrap() - other_norm.second().unwrap();
         if second_delta != 0 {
-            return get_cmp(second_delta);
+            return cmp(second_delta);
         }
 
-        get_cmp(self_norm.microsecond().unwrap() - other_norm.microsecond().unwrap())
+        cmp(self_norm.microsecond().unwrap() - other_norm.microsecond().unwrap())
     }
 }
 

@@ -70,7 +70,7 @@ fn example_main() {
             e.sync_state_with_parent().unwrap();
         }
 
-        let sink_pad = queue.get_static_pad("sink").unwrap();
+        let sink_pad = queue.static_pad("sink").unwrap();
         src_pad
             .link(&sink_pad)
             .expect("Unable to link src pad to sink pad");

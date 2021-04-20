@@ -18,8 +18,8 @@ fn example_main() {
     .unwrap();
 
     let pipeline = pipeline.dynamic_cast::<gst::Pipeline>().unwrap();
-    let compositor = pipeline.get_by_name("compositor0").unwrap();
-    let sinkpad = compositor.get_static_pad("sink_0").unwrap();
+    let compositor = pipeline.by_name("compositor0").unwrap();
+    let sinkpad = compositor.static_pad("sink_0").unwrap();
 
     /* Completely contrived example that takes the 4:3 input video, cuts out a 5:4 frame
      * and then adds pillarbox borders to place it in a 16:9 target area */

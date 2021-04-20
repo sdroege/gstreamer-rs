@@ -38,7 +38,7 @@ impl VideoFrameGLExt for gst_video::VideoFrame<Readable> {
     }
 
     fn texture_id(&self, idx: u32) -> Option<u32> {
-        self.as_video_frame_ref().get_texture_id(idx)
+        self.as_video_frame_ref().texture_id(idx)
     }
 }
 

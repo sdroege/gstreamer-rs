@@ -946,7 +946,7 @@ impl<T: AsPtr> Allocation<T> {
             let mut idx = mem::MaybeUninit::uninit();
             if ffi::gst_query_find_allocation_meta(
                 self.0.as_ptr(),
-                U::get_meta_api().to_glib(),
+                U::meta_api().to_glib(),
                 idx.as_mut_ptr(),
             ) != glib::ffi::GFALSE
             {
@@ -1010,7 +1010,7 @@ impl<T: AsMutPtr> Allocation<T> {
         unsafe {
             ffi::gst_query_add_allocation_meta(
                 self.0.as_mut_ptr(),
-                U::get_meta_api().to_glib(),
+                U::meta_api().to_glib(),
                 if let Some(structure) = structure {
                     structure.as_ptr()
                 } else {

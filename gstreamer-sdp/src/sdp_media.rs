@@ -606,7 +606,7 @@ macro_rules! define_iter(
     impl<'a> $name<'a> {
         fn new(media: &'a SDPMediaRef) -> $name<'a> {
             skip_assert_initialized!();
-            let len = $get_len(media);
+            let len = $len(media);
 
             $name {
                 media,
@@ -624,7 +624,7 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $get_item(self.media, self.idx)?;
+            let item = $item(self.media, self.idx)?;
             self.idx += 1;
             Some(item)
         }
@@ -648,7 +648,7 @@ macro_rules! define_iter(
 
             self.len -= 1;
 
-            $get_item(self.media, self.len)
+            $item(self.media, self.len)
         }
     }
 
@@ -659,25 +659,25 @@ macro_rules! define_iter(
 define_iter!(
     BandwidthsIter,
     &'a SDPBandwidth,
-    |media: &'a SDPMediaRef, idx| media.get_bandwidth(idx),
+    |media: &'a SDPMediaRef, idx| media.bandwidth(idx),
     |media: &SDPMediaRef| media.bandwidths_len()
 );
 define_iter!(
     FormatsIter,
     &'a str,
-    |media: &'a SDPMediaRef, idx| media.get_format(idx),
+    |media: &'a SDPMediaRef, idx| media.format(idx),
     |media: &SDPMediaRef| media.formats_len()
 );
 define_iter!(
     ConnectionsIter,
     &'a SDPConnection,
-    |media: &'a SDPMediaRef, idx| media.get_connection(idx),
+    |media: &'a SDPMediaRef, idx| media.connection(idx),
     |media: &SDPMediaRef| media.connections_len()
 );
 define_iter!(
     AttributesIter,
     &'a SDPAttribute,
-    |media: &'a SDPMediaRef, idx| media.get_attribute(idx),
+    |media: &'a SDPMediaRef, idx| media.attribute(idx),
     |media: &SDPMediaRef| media.attributes_len()
 );
 

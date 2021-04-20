@@ -218,7 +218,7 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $get_item(self.list, self.idx)?;
+            let item = $item(self.list, self.idx)?;
             self.idx += 1;
 
             Some(item)
@@ -242,7 +242,7 @@ macro_rules! define_iter(
             }
 
             self.size -= 1;
-            $get_item(self.list, self.size)
+            $item(self.list, self.size)
         }
     }
 

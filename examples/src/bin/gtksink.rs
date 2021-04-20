@@ -36,7 +36,7 @@ fn create_ui(app: &gtk::Application) {
         glsinkbin.set_property("sink", &gtkglsink).unwrap();
         // The gtkglsink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
-        let widget = gtkglsink.get_property("widget").unwrap();
+        let widget = gtkglsink.property("widget").unwrap();
         (glsinkbin, widget.get::<gtk::Widget>().unwrap().unwrap())
     } else {
         // Unfortunately, using the OpenGL widget didn't work out, so we will have to render
@@ -45,7 +45,7 @@ fn create_ui(app: &gtk::Application) {
         let sink = gst::ElementFactory::make("gtksink", None).unwrap();
         // The gtksink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
-        let widget = sink.get_property("widget").unwrap();
+        let widget = sink.property("widget").unwrap();
         (sink, widget.get::<gtk::Widget>().unwrap().unwrap())
     };
 

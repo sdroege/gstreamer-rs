@@ -65,7 +65,7 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
 
     println!(
         "Agingtv scratch-lines: {}",
-        clip.get_child_property("scratch-lines")
+        clip.child_property("scratch-lines")
             .unwrap()
             .serialize()
             .unwrap()

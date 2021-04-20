@@ -762,7 +762,7 @@ unsafe extern "C" fn video_decoder_getcaps<T: VideoDecoderImpl>(
     let wrap: Borrowed<VideoDecoder> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::Caps::new_empty(), {
-        VideoDecoderImpl::get_caps(
+        VideoDecoderImpl::caps(
             imp,
             wrap.unsafe_cast_ref(),
             Option::<gst::Caps>::from_glib_borrow(filter)

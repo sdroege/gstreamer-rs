@@ -243,7 +243,7 @@ fn example_main() {
 
                 // Retrieve the custom meta from the buffer and print it.
                 let meta = buffer
-                    .get_meta::<custom_meta::CustomMeta>()
+                    .meta::<custom_meta::CustomMeta>()
                     .expect("No custom meta found");
                 println!("Got buffer with label: {}", meta.label());
 

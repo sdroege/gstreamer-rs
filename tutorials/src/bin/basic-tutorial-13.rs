@@ -56,11 +56,7 @@ fn send_seek_event(pipeline: &Element, rate: f64) -> bool {
     };
 
     // If we have not done so, obtain the sink through which we will send the seek events
-    if let Ok(Some(video_sink)) = pipeline
-        .get_property("video-sink")
-        .unwrap()
-        .get::<Element>()
-    {
+    if let Ok(Some(video_sink)) = pipeline.property("video-sink").unwrap().get::<Element>() {
         println!("Current rate: {}\r", rate);
         // Send the event
         video_sink.send_event(seek_event)
@@ -175,10 +171,8 @@ USAGE: Choose one of the following options, then press enter:
                 }
             }
             Command::NextFrame => {
-                if let Ok(Some(video_sink)) = pipeline
-                    .get_property("video-sink")
-                    .unwrap()
-                    .get::<Element>()
+                if let Ok(Some(video_sink)) =
+                    pipeline.property("video-sink").unwrap().get::<Element>()
                 {
                     // Send the event
                     let step = Step::new(gst::format::Buffers(Some(1)), rate.abs(), true, false);

@@ -74,8 +74,8 @@ macro_rules! define_seek_impl(
             }
 
             // Work around lifetime annotation issues with closures
-            let get_buffer_ref: fn(&Self) -> &BufferRef = $get_buffer_ref;
-            let (idx, _, skip) = get_buffer_ref(self)
+            let buffer_ref: fn(&Self) -> &BufferRef = $get_buffer_ref;
+            let (idx, _, skip) = buffer_ref(self)
                 .find_memory(self.cur_offset as usize, None)
                 .expect("Failed to find memory");
 
@@ -113,9 +113,9 @@ macro_rules! define_read_write_fn_impl(
             if $self.map_info.memory.is_null() {
                 unsafe {
                     // Work around lifetime annotation issues with closures
-                    let get_buffer_ref: fn(&Self) -> &BufferRef = $get_buffer_ref;
+                    let buffer_ref: fn(&Self) -> &BufferRef = $get_buffer_ref;
                     let memory = ffi::gst_buffer_peek_memory(
-                        get_buffer_ref($self).as_mut_ptr(),
+                        buffer_ref($self).as_mut_ptr(),
                         $self.cur_mem_idx,
                     );
                     assert!(!memory.is_null());

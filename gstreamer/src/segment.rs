@@ -27,8 +27,7 @@ impl Segment {
     }
 
     pub fn downcast<T: FormattedValue>(self) -> Result<FormattedSegment<T>, Self> {
-        if T::get_default_format() == Format::Undefined || T::get_default_format() == self.format()
-        {
+        if T::default_format() == Format::Undefined || T::default_format() == self.format() {
             Ok(FormattedSegment(self.0, PhantomData))
         } else {
             Err(self)
@@ -36,8 +35,7 @@ impl Segment {
     }
 
     pub fn downcast_ref<T: FormattedValue>(&self) -> Option<&FormattedSegment<T>> {
-        if T::get_default_format() == Format::Undefined || T::get_default_format() == self.format()
-        {
+        if T::default_format() == Format::Undefined || T::default_format() == self.format() {
             Some(unsafe {
                 &*(self as *const FormattedSegment<GenericFormattedValue>
                     as *const FormattedSegment<T>)
@@ -48,8 +46,7 @@ impl Segment {
     }
 
     pub fn downcast_mut<T: FormattedValue>(&mut self) -> Option<&mut FormattedSegment<T>> {
-        if T::get_default_format() == Format::Undefined || T::get_default_format() == self.format()
-        {
+        if T::default_format() == Format::Undefined || T::default_format() == self.format() {
             Some(unsafe {
                 &mut *(self as *mut FormattedSegment<GenericFormattedValue>
                     as *mut FormattedSegment<T>)
@@ -65,7 +62,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         assert_initialized_main_thread!();
         let segment = unsafe {
             let mut segment = mem::MaybeUninit::zeroed();
-            ffi::gst_segment_init(segment.as_mut_ptr(), T::get_default_format().to_glib());
+            ffi::gst_segment_init(segment.as_mut_ptr(), T::default_format().to_glib());
             segment.assume_init()
         };
         FormattedSegment(segment, PhantomData)
@@ -83,7 +80,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
     pub fn reset(&mut self) {
         unsafe {
-            ffi::gst_segment_init(&mut self.0, T::get_default_format().to_glib());
+            ffi::gst_segment_init(&mut self.0, T::default_format().to_glib());
         }
     }
 
@@ -91,7 +88,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let start = start.into();
         let stop = stop.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), start.format());
             assert_eq!(self.format(), stop.format());
         }
@@ -132,7 +129,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         let start = start.into();
         let stop = stop.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), start.format());
             assert_eq!(self.format(), stop.format());
         }
@@ -170,7 +167,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn position_from_running_time<V: Into<T>>(&self, running_time: V) -> T {
         let running_time = running_time.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), running_time.format());
         }
 
@@ -189,7 +186,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn position_from_running_time_full<V: Into<T>>(&self, running_time: V) -> (i32, T) {
         let running_time = running_time.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), running_time.format());
         }
 
@@ -211,7 +208,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn position_from_stream_time<V: Into<T>>(&self, stream_time: V) -> T {
         let stream_time = stream_time.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), stream_time.format());
         }
 
@@ -230,7 +227,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn position_from_stream_time_full<V: Into<T>>(&self, stream_time: V) -> (i32, T) {
         let stream_time = stream_time.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), stream_time.format());
         }
 
@@ -252,7 +249,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_running_time<V: Into<T>>(&mut self, running_time: V) -> Result<(), glib::BoolError> {
         let running_time = running_time.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), running_time.format());
         }
 
@@ -271,7 +268,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn to_running_time<V: Into<T>>(&self, position: V) -> T {
         let position = position.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), position.format());
         }
 
@@ -290,7 +287,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn to_running_time_full<V: Into<T>>(&self, position: V) -> (i32, T) {
         let position = position.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), position.format());
         }
 
@@ -312,7 +309,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn to_stream_time<V: Into<T>>(&self, position: V) -> T {
         let position = position.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), position.format());
         }
 
@@ -331,7 +328,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn to_stream_time_full<V: Into<T>>(&self, position: V) -> (i32, T) {
         let position = position.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), position.format());
         }
 
@@ -389,7 +386,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_base<V: Into<T>>(&mut self, base: V) {
         let base = base.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), base.format());
         }
 
@@ -403,7 +400,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_offset<V: Into<T>>(&mut self, offset: V) {
         let offset = offset.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), offset.format());
         }
 
@@ -417,7 +414,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_start<V: Into<T>>(&mut self, start: V) {
         let start = start.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), start.format());
         }
 
@@ -431,7 +428,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_stop<V: Into<T>>(&mut self, stop: V) {
         let stop = stop.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), stop.format());
         }
 
@@ -445,7 +442,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_time<V: Into<T>>(&mut self, time: V) {
         let time = time.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), time.format());
         }
 
@@ -459,7 +456,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_position<V: Into<T>>(&mut self, position: V) {
         let position = position.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), position.format());
         }
 
@@ -473,7 +470,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn set_duration<V: Into<T>>(&mut self, duration: V) {
         let duration = duration.into();
 
-        if T::get_default_format() == Format::Undefined {
+        if T::default_format() == Format::Undefined {
             assert_eq!(self.format(), duration.format());
         }
 

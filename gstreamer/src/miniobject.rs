@@ -420,7 +420,7 @@ macro_rules! mini_object_wrapper (
 
         impl $crate::glib::types::StaticType for $ref_name {
             fn static_type() -> $crate::glib::types::Type {
-                unsafe { $crate::glib::translate::from_glib($get_type()) }
+                unsafe { $crate::glib::translate::from_glib($type_()) }
             }
         }
 

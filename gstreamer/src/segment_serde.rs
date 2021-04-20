@@ -99,7 +99,7 @@ impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for Forma
                 de::Error::custom(format!(
                     "failed to convert segment with format {:?} to {:?}",
                     segment.format(),
-                    T::get_default_format(),
+                    T::default_format(),
                 ))
             })
         })

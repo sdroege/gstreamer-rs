@@ -778,7 +778,7 @@ mod tests {
         }
 
         {
-            let meta = buffer.get_meta::<VideoMeta>().unwrap();
+            let meta = buffer.meta::<VideoMeta>().unwrap();
             assert_eq!(meta.id(), 0);
             assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
             assert_eq!(meta.format(), crate::VideoFormat::Argb);
@@ -817,7 +817,7 @@ mod tests {
         }
 
         {
-            let meta = buffer.get_meta::<VideoMeta>().unwrap();
+            let meta = buffer.meta::<VideoMeta>().unwrap();
             assert_eq!(meta.id(), 0);
             assert_eq!(meta.flags(), crate::VideoFrameFlags::empty());
             assert_eq!(meta.format(), crate::VideoFormat::Argb);

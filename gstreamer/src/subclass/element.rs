@@ -644,7 +644,7 @@ mod tests {
             type ParentType = Element;
 
             fn with_class(klass: &Self::Class) -> Self {
-                let templ = klass.get_pad_template("sink").unwrap();
+                let templ = klass.pad_template("sink").unwrap();
                 let sinkpad = crate::Pad::builder_with_template(&templ, Some("sink"))
                     .chain_function(|pad, parent, buffer| {
                         TestElement::catch_panic_pad_function(
@@ -669,7 +669,7 @@ mod tests {
                     })
                     .build();
 
-                let templ = klass.get_pad_template("src").unwrap();
+                let templ = klass.pad_template("src").unwrap();
                 let srcpad = crate::Pad::builder_with_template(&templ, Some("src"))
                     .event_function(|pad, parent, event| {
                         TestElement::catch_panic_pad_function(
@@ -783,7 +783,7 @@ mod tests {
         assert_eq!(element.name(), "test");
 
         assert_eq!(
-            element.get_metadata(&crate::ELEMENT_METADATA_LONGNAME),
+            element.metadata(&crate::ELEMENT_METADATA_LONGNAME),
             Some("Test Element")
         );
 

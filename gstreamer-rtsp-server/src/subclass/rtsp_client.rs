@@ -1073,7 +1073,7 @@ unsafe extern "C" fn client_get_parameter_request<T: RTSPClientImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
-    imp.get_parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
+    imp.parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx));
 }
 
 unsafe extern "C" fn client_announce_request<T: RTSPClientImpl>(

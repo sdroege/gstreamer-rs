@@ -89,7 +89,7 @@ mod tests {
         }
 
         {
-            let meta = buffer.get_meta::<NetAddressMeta>().unwrap();
+            let meta = buffer.meta::<NetAddressMeta>().unwrap();
             let actual_addr = meta.addr().downcast::<gio::InetSocketAddress>().unwrap();
 
             assert_eq!(actual_addr.port(), expected_addr.port());

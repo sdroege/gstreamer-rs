@@ -30,7 +30,7 @@ fn print_caps(caps: &gst::Caps, prefix: &str) {
 // Prints information about a Pad Template, including its Capabilitites
 fn print_pad_template_information(factory: &gst::ElementFactory) {
     let long_name = factory
-        .get_metadata("long-name")
+        .metadata("long-name")
         .expect("Failed to get long-name of element factory.");
     println!("Pad Template for {}:", long_name);
 
@@ -66,7 +66,7 @@ fn print_pad_template_information(factory: &gst::ElementFactory) {
 
 fn print_pad_capabilities(element: &gst::Element, pad_name: &str) {
     let pad = element
-        .get_static_pad(pad_name)
+        .static_pad(pad_name)
         .expect("Could not retrieve pad");
 
     println!("Caps for the {} pad:", pad_name);

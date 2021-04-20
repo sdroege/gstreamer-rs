@@ -1080,7 +1080,7 @@ unsafe extern "C" fn base_transform_get_unit_size<T: BaseTransformImpl>(
     let wrap: Borrowed<BaseTransform> = from_glib_borrow(ptr);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
-        match imp.get_unit_size(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
+        match imp.unit_size(wrap.unsafe_cast_ref(), &from_glib_borrow(caps)) {
             Some(s) => {
                 *size = s;
                 true

@@ -59,8 +59,8 @@ fn example_main() {
         .expect("Unable to set the pipeline to the `Playing` state");
     let pipeline = pipeline.dynamic_cast::<gst::Pipeline>().unwrap();
 
-    let sink = pipeline.get_by_name("sink").unwrap();
-    let sinkpad = sink.get_static_pad("sink").unwrap();
+    let sink = pipeline.by_name("sink").unwrap();
+    let sinkpad = sink.static_pad("sink").unwrap();
 
     // Need to move a new reference into the closure.
     // !!ATTENTION!!:

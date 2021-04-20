@@ -112,7 +112,7 @@ fn example_main() -> Result<(), Error> {
         // just now is either audio or video (or none of both, e.g. subtitles).
         let (is_audio, is_video) = {
             let media_type = src_pad.current_caps().and_then(|caps| {
-                caps.get_structure(0).map(|s| {
+                caps.structure(0).map(|s| {
                     let name = s.name();
                     (name.starts_with("audio/"), name.starts_with("video/"))
                 })
@@ -163,7 +163,7 @@ fn example_main() -> Result<(), Error> {
 
                 // Get the queue element's sink pad and link the decodebin's newly created
                 // src pad for the audio stream to it.
-                let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
+                let sink_pad = queue.static_pad("sink").expect("queue has no sinkpad");
                 src_pad.link(&sink_pad)?;
             } else if is_video {
                 // decodebin found a raw videostream, so we build the follow-up pipeline to
@@ -187,7 +187,7 @@ fn example_main() -> Result<(), Error> {
 
                 // Get the queue element's sink pad and link the decodebin's newly created
                 // src pad for the video stream to it.
-                let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
+                let sink_pad = queue.static_pad("sink").expect("queue has no sinkpad");
                 src_pad.link(&sink_pad)?;
             }
 

@@ -83,11 +83,11 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
                 self.as_ref().to_glib_none().0,
                 src_val.format().to_glib(),
                 src_val.to_raw_value(),
-                U::get_default_format().to_glib(),
+                U::default_format().to_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
+                Some(U::from_raw(U::default_format(), dest_val.assume_init()))
             } else {
                 None
             }

@@ -146,7 +146,7 @@ fn example_main() -> Result<(), Error> {
 
         let (is_audio, is_video) = {
             let media_type = dbin_src_pad.current_caps().and_then(|caps| {
-                caps.get_structure(0).map(|s| {
+                caps.structure(0).map(|s| {
                     let name = s.name();
                     (name.starts_with("audio/"), name.starts_with("video/"))
                 })
@@ -185,11 +185,9 @@ fn example_main() -> Result<(), Error> {
                 // The encodebin will then automatically create an internal pipeline, that encodes
                 // the audio stream in the format we specified in the EncodingProfile.
                 let enc_sink_pad = encodebin
-                    .get_request_pad("audio_%u")
+                    .request_pad("audio_%u")
                     .expect("Could not get audio pad from encodebin");
-                let src_pad = resample
-                    .get_static_pad("src")
-                    .expect("resample has no srcpad");
+                let src_pad = resample.static_pad("src").expect("resample has no srcpad");
                 src_pad.link(&enc_sink_pad)?;
 
                 for e in elements {
@@ -198,7 +196,7 @@ fn example_main() -> Result<(), Error> {
 
                 // Get the queue element's sink pad and link the decodebin's newly created
                 // src pad for the audio stream to it.
-                let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
+                let sink_pad = queue.static_pad("sink").expect("queue has no sinkpad");
                 dbin_src_pad.link(&sink_pad)?;
             } else if is_video {
                 let queue = gst::ElementFactory::make("queue", None)
@@ -218,11 +216,9 @@ fn example_main() -> Result<(), Error> {
                 // The encodebin will then automatically create an internal pipeline, that encodes
                 // the audio stream in the format we specified in the EncodingProfile.
                 let enc_sink_pad = encodebin
-                    .get_request_pad("video_%u")
+                    .request_pad("video_%u")
                     .expect("Could not get video pad from encodebin");
-                let src_pad = scale
-                    .get_static_pad("src")
-                    .expect("videoscale has no srcpad");
+                let src_pad = scale.static_pad("src").expect("videoscale has no srcpad");
                 src_pad.link(&enc_sink_pad)?;
 
                 for e in elements {
@@ -231,7 +227,7 @@ fn example_main() -> Result<(), Error> {
 
                 // Get the queue element's sink pad and link the decodebin's newly created
                 // src pad for the video stream to it.
-                let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
+                let sink_pad = queue.static_pad("sink").expect("queue has no sinkpad");
                 dbin_src_pad.link(&sink_pad)?;
             }
 

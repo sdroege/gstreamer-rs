@@ -80,7 +80,7 @@ impl Harness {
         // Reimplementation of the C code so we don't have to duplicate all the callback code
 
         let element = self.find_element(element_name).expect("Element not found");
-        let pad = element.get_static_pad(pad_name).expect("Pad not found");
+        let pad = element.static_pad(pad_name).expect("Pad not found");
         pad.add_probe(mask, func);
     }
 

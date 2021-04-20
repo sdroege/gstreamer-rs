@@ -686,7 +686,7 @@ unsafe extern "C" fn base_src_get_times<T: BaseSrcImpl>(
     *stop = gst::ffi::GST_CLOCK_TIME_NONE;
 
     gst::panic_to_error!(&wrap, &imp.panicked(), (), {
-        let (start_, stop_) = imp.get_times(wrap.unsafe_cast_ref(), buffer);
+        let (start_, stop_) = imp.times(wrap.unsafe_cast_ref(), buffer);
         *start = start_.to_glib();
         *stop = stop_.to_glib();
     });
@@ -878,7 +878,7 @@ unsafe extern "C" fn base_src_get_caps<T: BaseSrcImpl>(
     let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
     gst::panic_to_error!(&wrap, &imp.panicked(), None, {
-        imp.get_caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
+        imp.caps(wrap.unsafe_cast_ref(), filter.as_ref().as_ref())
     })
     .map(|caps| caps.into_ptr())
     .unwrap_or(ptr::null_mut())

@@ -41,7 +41,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
 
     // Get access to the appsink element.
     let appsink = pipeline
-        .get_by_name("sink")
+        .by_name("sink")
         .expect("Sink element not found")
         .downcast::<gst_app::AppSink>()
         .expect("Sink element is expected to be an appsink!");

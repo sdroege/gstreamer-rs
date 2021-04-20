@@ -422,7 +422,7 @@ macro_rules! define_iter(
             }
 
             unsafe {
-                let item = $get_item(self.caps, self.idx)?;
+                let item = $item(self.caps, self.idx)?;
                 self.idx += 1;
                 Some(item)
             }
@@ -448,7 +448,7 @@ macro_rules! define_iter(
             self.n_structures -= 1;
 
             unsafe {
-                $get_item(self.caps, self.n_structures)
+                $item(self.caps, self.n_structures)
             }
         }
     }
@@ -741,7 +741,7 @@ mod tests {
         );
 
         {
-            let s = caps.get_structure(0).unwrap();
+            let s = caps.structure(0).unwrap();
             assert_eq!(
                 s,
                 Structure::new(
@@ -758,7 +758,7 @@ mod tests {
             );
         }
         assert!(caps
-            .get_features(0)
+            .features(0)
             .unwrap()
             .is_equal(crate::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref()));
 
@@ -767,7 +767,7 @@ mod tests {
             caps.set_features(0, Some(CapsFeatures::new(&["foo:bla"])));
         }
         assert!(caps
-            .get_features(0)
+            .features(0)
             .unwrap()
             .is_equal(CapsFeatures::new(&["foo:bla"]).as_ref()));
     }

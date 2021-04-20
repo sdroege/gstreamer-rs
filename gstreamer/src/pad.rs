@@ -768,11 +768,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 self.as_ref().to_glib_none().0,
                 src_val.format().to_glib(),
                 src_val.to_raw_value(),
-                U::get_default_format().to_glib(),
+                U::default_format().to_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
+                Some(U::from_raw(U::default_format(), dest_val.assume_init()))
             } else {
                 None
             }
@@ -810,11 +810,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::get_default_format().to_glib(),
+                T::default_format().to_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), duration.assume_init()))
+                Some(T::from_raw(T::default_format(), duration.assume_init()))
             } else {
                 None
             }
@@ -842,11 +842,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
                 self.as_ref().to_glib_none().0,
-                T::get_default_format().to_glib(),
+                T::default_format().to_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), cur.assume_init()))
+                Some(T::from_raw(T::default_format(), cur.assume_init()))
             } else {
                 None
             }
@@ -881,11 +881,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 self.as_ref().to_glib_none().0,
                 src_val.format().to_glib(),
                 src_val.to_raw_value(),
-                U::get_default_format().to_glib(),
+                U::default_format().to_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
+                Some(U::from_raw(U::default_format(), dest_val.assume_init()))
             } else {
                 None
             }
@@ -924,11 +924,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::get_default_format().to_glib(),
+                T::default_format().to_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), duration.assume_init()))
+                Some(T::from_raw(T::default_format(), duration.assume_init()))
             } else {
                 None
             }
@@ -956,11 +956,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_position(
                 self.as_ref().to_glib_none().0,
-                T::get_default_format().to_glib(),
+                T::default_format().to_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), cur.assume_init()))
+                Some(T::from_raw(T::default_format(), cur.assume_init()))
             } else {
                 None
             }
@@ -1661,7 +1661,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         // additional checks here now
         if templ.has_property("gtype", Some(glib::Type::static_type())) {
             let gtype = templ
-                .get_property("gtype")
+                .property("gtype")
                 .unwrap()
                 .get_some::<glib::Type>()
                 .unwrap();
@@ -1934,12 +1934,12 @@ mod tests {
             .build();
         pad.set_active(true).unwrap();
 
-        let buffer = pad.get_range(0, 5).unwrap();
+        let buffer = pad.range(0, 5).unwrap();
         let map = buffer.map_readable().unwrap();
         assert_eq!(&*map, b"abcde");
 
         let mut buffer = crate::Buffer::with_size(5).unwrap();
-        pad.get_range_fill(0, buffer.get_mut().unwrap(), 5).unwrap();
+        pad.range_fill(0, buffer.get_mut().unwrap(), 5).unwrap();
         let map = buffer.map_readable().unwrap();
         assert_eq!(&*map, b"abcde");
 
@@ -1965,12 +1965,12 @@ mod tests {
             .build();
         pad.set_active(true).unwrap();
 
-        let buffer = pad.get_range(0, 5).unwrap();
+        let buffer = pad.range(0, 5).unwrap();
         let map = buffer.map_readable().unwrap();
         assert_eq!(&*map, b"abcde");
 
         let mut buffer = crate::Buffer::with_size(5).unwrap();
-        pad.get_range_fill(0, buffer.get_mut().unwrap(), 5).unwrap();
+        pad.range_fill(0, buffer.get_mut().unwrap(), 5).unwrap();
         let map = buffer.map_readable().unwrap();
         assert_eq!(&*map, b"fghij");
     }

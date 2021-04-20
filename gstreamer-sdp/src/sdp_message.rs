@@ -927,7 +927,7 @@ macro_rules! define_iter(
     impl<'a> $name<'a> {
         fn new(message: &'a SDPMessageRef) -> $name<'a> {
             skip_assert_initialized!();
-            let len = $get_len(message);
+            let len = $len(message);
 
             $name {
                 message,
@@ -945,7 +945,7 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $get_item(self.message, self.idx)?;
+            let item = $item(self.message, self.idx)?;
             self.idx += 1;
             Some(item)
         }
@@ -969,7 +969,7 @@ macro_rules! define_iter(
 
             self.len -= 1;
 
-            $get_item(self.message, self.len)
+            $item(self.message, self.len)
         }
     }
 
@@ -989,7 +989,7 @@ macro_rules! define_iter_mut(
     impl<'a> $name<'a> {
         fn new(message: &'a mut SDPMessageRef) -> $name<'a> {
             skip_assert_initialized!();
-            let len = $get_len(message);
+            let len = $len(message);
 
             $name {
                 message,
@@ -1019,7 +1019,7 @@ macro_rules! define_iter_mut(
                 return None;
             }
 
-            let item = $get_item(message, self.idx)?;
+            let item = $item(message, self.idx)?;
             self.idx += 1;
             Some(item)
         }
@@ -1046,7 +1046,7 @@ macro_rules! define_iter_mut(
 
             self.len -= 1;
 
-            $get_item(message, self.len)
+            $item(message, self.len)
         }
     }
 
@@ -1057,49 +1057,49 @@ macro_rules! define_iter_mut(
 define_iter!(
     AttributesIter,
     &'a SDPAttribute,
-    |message: &'a SDPMessageRef, idx| message.get_attribute(idx),
+    |message: &'a SDPMessageRef, idx| message.attribute(idx),
     |message: &SDPMessageRef| message.attributes_len()
 );
 define_iter!(
     BandwidthsIter,
     &'a SDPBandwidth,
-    |message: &'a SDPMessageRef, idx| message.get_bandwidth(idx),
+    |message: &'a SDPMessageRef, idx| message.bandwidth(idx),
     |message: &SDPMessageRef| message.bandwidths_len()
 );
 define_iter!(
     EmailsIter,
     &'a str,
-    |message: &'a SDPMessageRef, idx| message.get_email(idx),
+    |message: &'a SDPMessageRef, idx| message.email(idx),
     |message: &SDPMessageRef| message.emails_len()
 );
 define_iter!(
     MediasIter,
     &'a SDPMediaRef,
-    |message: &'a SDPMessageRef, idx| message.get_media(idx),
+    |message: &'a SDPMessageRef, idx| message.media(idx),
     |message: &SDPMessageRef| message.medias_len()
 );
 define_iter_mut!(
     MediasIterMut,
     &'a mut SDPMediaRef,
-    |message: &'a mut SDPMessageRef, idx| message.get_media_mut(idx),
+    |message: &'a mut SDPMessageRef, idx| message.media_mut(idx),
     |message: &SDPMessageRef| message.medias_len()
 );
 define_iter!(
     PhonesIter,
     &'a str,
-    |message: &'a SDPMessageRef, idx| message.get_phone(idx),
+    |message: &'a SDPMessageRef, idx| message.phone(idx),
     |message: &SDPMessageRef| message.phones_len()
 );
 define_iter!(
     TimesIter,
     &'a SDPTime,
-    |message: &'a SDPMessageRef, idx| message.get_time(idx),
+    |message: &'a SDPMessageRef, idx| message.time(idx),
     |message: &SDPMessageRef| message.times_len()
 );
 define_iter!(
     ZonesIter,
     &'a SDPZone,
-    |message: &'a SDPMessageRef, idx| message.get_zone(idx),
+    |message: &'a SDPMessageRef, idx| message.zone(idx),
     |message: &SDPMessageRef| message.zones_len()
 );
 
@@ -1117,7 +1117,7 @@ mod tests {
 
         let sdp = "v=0\r\no=- 1938737043334325940 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=ice-options:trickle\r\nm=video 9 UDP/TLS/RTP/SAVPF 96\r\nc=IN IP4 0.0.0.0\r\na=setup:actpass\r\na=ice-ufrag:YZxU9JlWHzHcF6O2U09/q3PvBhbTPdZW\r\na=ice-pwd:fyrt730GWo5mFGc9m2z/vbUu3z1lewla\r\na=sendrecv\r\na=rtcp-mux\r\na=rtcp-rsize\r\na=rtpmap:96 VP8/90000\r\na=rtcp-fb:96 nack\r\na=rtcp-fb:96 nack pli\r\na=framerate:30\r\na=mid:video0\r\na=fingerprint:sha-256 DB:48:8F:18:13:F3:AA:13:31:B3:75:3D:1A:D3:BA:88:4A:ED:1B:56:14:C3:09:CD:BC:4D:18:42:B9:6A:5F:98\r\nm=audio 9 UDP/TLS/RTP/SAVPF 97\r\nc=IN IP4 0.0.0.0\r\na=setup:actpass\r\na=ice-ufrag:04KZM9qE2S4r06AN6A9CeXOM6mzO0LZY\r\na=ice-pwd:cJTSfHF6hHDAcsTJXZVJeuYCC6rKqBvW\r\na=sendrecv\r\na=rtcp-mux\r\na=rtcp-rsize\r\na=rtpmap:97 OPUS/48000/2\r\na=rtcp-fb:97 nack\r\na=rtcp-fb:97 nack pli\r\na=mid:audio1\r\na=fingerprint:sha-256 DB:48:8F:18:13:F3:AA:13:31:B3:75:3D:1A:D3:BA:88:4A:ED:1B:56:14:C3:09:CD:BC:4D:18:42:B9:6A:5F:98\r\n";
         let sdp = SDPMessage::parse_buffer(sdp.as_bytes()).unwrap();
-        let media = sdp.get_media(0).unwrap();
+        let media = sdp.media(0).unwrap();
         assert_eq!(media.formats_len(), 1);
     }
 

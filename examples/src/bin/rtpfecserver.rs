@@ -41,7 +41,7 @@ fn make_element(
 }
 
 fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
-    match element.get_static_pad(pad_name) {
+    match element.static_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {
             let element_name = element.name();
@@ -51,7 +51,7 @@ fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad
 }
 
 fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
-    match element.get_request_pad(pad_name) {
+    match element.request_pad(pad_name) {
         Some(pad) => Ok(pad),
         None => {
             let element_name = element.name();
@@ -61,7 +61,7 @@ fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pa
 }
 
 fn connect_decodebin_pad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), Error> {
-    let sinkpad = get_static_pad(&sink, "sink")?;
+    let sinkpad = static_pad(&sink, "sink")?;
     src_pad.link(&sinkpad)?;
 
     Ok(())
@@ -126,12 +126,12 @@ fn example_main() -> Result<(), Error> {
         }
     })?;
 
-    let srcpad = get_static_pad(&q2, "src")?;
-    let sinkpad = get_request_pad(&rtpbin, "send_rtp_sink_0")?;
+    let srcpad = static_pad(&q2, "src")?;
+    let sinkpad = request_pad(&rtpbin, "send_rtp_sink_0")?;
     srcpad.link(&sinkpad)?;
 
-    let srcpad = get_static_pad(&rtpbin, "send_rtp_src_0")?;
-    let sinkpad = get_static_pad(&sink, "sink")?;
+    let srcpad = static_pad(&rtpbin, "send_rtp_src_0")?;
+    let sinkpad = static_pad(&sink, "sink")?;
     srcpad.link(&sinkpad)?;
 
     src.connect_pad_added(

@@ -39,7 +39,7 @@ fn tutorial_main() {
         println!("Received new pad {} from {}", src_pad.name(), src.name());
 
         let sink_pad = convert
-            .get_static_pad("sink")
+            .static_pad("sink")
             .expect("Failed to get static sink pad from convert");
         if sink_pad.is_linked() {
             println!("We are already linked. Ignoring.");
@@ -50,7 +50,7 @@ fn tutorial_main() {
             .current_caps()
             .expect("Failed to get caps of new pad.");
         let new_pad_struct = new_pad_caps
-            .get_structure(0)
+            .structure(0)
             .expect("Failed to get first structure of caps.");
         let new_pad_type = new_pad_struct.name();
 

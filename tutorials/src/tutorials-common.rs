@@ -53,7 +53,7 @@ where
 {
     use std::thread;
 
-    let l = runloop::CFRunLoop::get_main();
+    let l = runloop::CFRunLoop::main();
     let t = thread::spawn(move || {
         let res = main();
         l.stop();

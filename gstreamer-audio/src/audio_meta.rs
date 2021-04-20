@@ -231,7 +231,7 @@ mod tests {
         }
 
         {
-            let cmeta = buffer.get_meta::<AudioClippingMeta>().unwrap();
+            let cmeta = buffer.meta::<AudioClippingMeta>().unwrap();
             assert_eq!(cmeta.start().try_into(), Ok(gst::format::Default(Some(1))));
             assert_eq!(cmeta.end().try_into(), Ok(gst::format::Default(Some(2))));
         }
