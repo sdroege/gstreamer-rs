@@ -13,7 +13,6 @@ readme = "README.md"
 homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/gstreamer_gl_wayland/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
-build = "../build.rs"
 edition = "2018"
 
 [dependencies]
