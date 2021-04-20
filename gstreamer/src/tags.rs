@@ -419,6 +419,18 @@ impl TagListRef {
         Ok(())
     }
 
+    pub fn remove<'a, T: Tag<'a>>(&mut self) {
+        self.remove_generic(T::tag_name());
+    }
+
+    pub fn remove_generic(&mut self, tag_name: &str) {
+        unsafe {
+            let tag_name = tag_name.to_glib_none();
+
+            ffi::gst_tag_list_remove_tag(self.as_mut_ptr(), tag_name.0);
+        }
+    }
+
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TagValue<T::TagType>> {
         self.get_generic(T::tag_name()).map(|value| {
             if !value.is::<T::TagType>() {
