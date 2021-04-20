@@ -2,7 +2,6 @@
 
 use glib::prelude::*;
 use glib::translate::*;
-use glib::value;
 use std::cmp;
 use std::fmt;
 use std::mem;
@@ -201,34 +200,50 @@ impl StaticType for VideoTimeCodeInterval {
     }
 }
 
+impl glib::value::ValueType for VideoTimeCodeInterval {
+    type Type = Self;
+}
+
 #[doc(hidden)]
-impl<'a> value::FromValueOptional<'a> for VideoTimeCodeInterval {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<VideoTimeCodeInterval>::from_glib_full(glib::gobject_ffi::g_value_dup_boxed(
-            value.to_glib_none().0,
-        )
+unsafe impl<'a> glib::value::FromValue<'a> for VideoTimeCodeInterval {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
             as *mut ffi::GstVideoTimeCodeInterval)
     }
 }
 
 #[doc(hidden)]
-impl value::SetValue for VideoTimeCodeInterval {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            ToGlibPtr::<*const ffi::GstVideoTimeCodeInterval>::to_glib_none(this).0
-                as glib::ffi::gpointer,
-        )
+impl glib::value::ToValue for VideoTimeCodeInterval {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<VideoTimeCodeInterval>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0 as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
 #[doc(hidden)]
-impl value::SetValueOptional for VideoTimeCodeInterval {
-    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            ToGlibPtr::<*const ffi::GstVideoTimeCodeInterval>::to_glib_none(&this).0
-                as glib::ffi::gpointer,
-        )
+impl glib::value::ToValueOptional for VideoTimeCodeInterval {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<VideoTimeCodeInterval>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.to_glib_none().0 as *mut _,
+            )
+        }
+        value
     }
 }

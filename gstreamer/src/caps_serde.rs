@@ -233,11 +233,11 @@ mod tests {
         crate::init().unwrap();
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
-            .field("bool", &true)
-            .field("string", &"bla")
-            .field("fraction", &Fraction::new(1, 2))
-            .field("array", &Array::new(&[&1, &2]))
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
             .build();
 
         let pretty_config = ron::ser::PrettyConfig::new().with_new_line("".to_string());
@@ -263,11 +263,11 @@ mod tests {
         );
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
-            .field("bool", &true)
-            .field("string", &"bla")
-            .field("fraction", &Fraction::new(1, 2))
-            .field("array", &Array::new(&[&1, &2]))
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
             .features(&["foo:bar", "foo:baz"])
             .build();
 
@@ -297,11 +297,11 @@ mod tests {
         );
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
-            .field("bool", &true)
-            .field("string", &"bla")
-            .field("fraction", &Fraction::new(1, 2))
-            .field("array", &Array::new(&[&1, &2]))
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
             .any_features()
             .build();
 
@@ -370,17 +370,14 @@ mod tests {
         let s = caps.structure(0).unwrap();
         assert_eq!(
             s,
-            Structure::new(
-                "foo/bar",
-                &[
-                    ("int", &12),
-                    ("bool", &true),
-                    ("string", &"bla"),
-                    ("fraction", &Fraction::new(1, 2)),
-                    ("array", &Array::new(&[&1, &2])),
-                ],
-            )
-            .as_ref()
+            Structure::builder("foo/bar",)
+                .field("int", 12)
+                .field("bool", true)
+                .field("string", "bla")
+                .field("fraction", Fraction::new(1, 2))
+                .field("array", Array::new(&[&1, &2]))
+                .build()
+                .as_ref()
         );
 
         let caps_ron = r#"
@@ -404,17 +401,14 @@ mod tests {
         let str_none: Option<&str> = None;
         assert_eq!(
             s,
-            Structure::new(
-                "foo/bar",
-                &[
-                    ("int", &12),
-                    ("bool", &true),
-                    ("string", &str_none),
-                    ("fraction", &Fraction::new(1, 2)),
-                    ("array", &Array::new(&[&1, &2])),
-                ],
-            )
-            .as_ref()
+            Structure::builder("foo/bar",)
+                .field("int", 12)
+                .field("bool", true)
+                .field("string", str_none)
+                .field("fraction", Fraction::new(1, 2))
+                .field("array", Array::new(&[&1, &2]))
+                .build()
+                .as_ref()
         );
         let f = caps.features(0).unwrap();
         assert!(f.is_equal(CapsFeatures::new(&["foo:bar", "foo:baz"]).as_ref()));
@@ -439,17 +433,14 @@ mod tests {
         let s = caps.structure(0).unwrap();
         assert_eq!(
             s,
-            Structure::new(
-                "foo/bar",
-                &[
-                    ("int", &12),
-                    ("bool", &true),
-                    ("string", &"bla"),
-                    ("fraction", &Fraction::new(1, 2)),
-                    ("array", &Array::new(&[&1, &2])),
-                ],
-            )
-            .as_ref()
+            Structure::builder("foo/bar",)
+                .field("int", 12)
+                .field("bool", true)
+                .field("string", "bla")
+                .field("fraction", Fraction::new(1, 2))
+                .field("array", Array::new(&[&1, &2]))
+                .build()
+                .as_ref()
         );
         let f = caps.features(0).unwrap();
         assert!(f.is_any());
@@ -470,22 +461,22 @@ mod tests {
         assert!(caps_de.is_empty());
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
-            .field("bool", &true)
-            .field("string", &"bla")
-            .field("fraction", &Fraction::new(1, 2))
-            .field("array", &Array::new(&[&1, &2]))
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();
         let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
         assert!(caps_de.is_strictly_equal(&caps));
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
-            .field("bool", &true)
-            .field("string", &"bla")
-            .field("fraction", &Fraction::new(1, 2))
-            .field("array", &Array::new(&[&1, &2]))
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
             .features(&["foo:bar", "foo:baz"])
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();
@@ -493,11 +484,11 @@ mod tests {
         assert!(caps_de.is_strictly_equal(&caps));
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
-            .field("bool", &true)
-            .field("string", &"bla")
-            .field("fraction", &Fraction::new(1, 2))
-            .field("array", &Array::new(&[&1, &2]))
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
             .any_features()
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();

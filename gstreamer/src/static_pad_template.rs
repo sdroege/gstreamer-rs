@@ -4,6 +4,7 @@ use crate::Caps;
 use crate::PadTemplate;
 
 use glib::translate::*;
+use glib::StaticType;
 use std::ffi::CStr;
 
 use std::fmt;
@@ -65,34 +66,51 @@ impl glib::types::StaticType for StaticPadTemplate {
     }
 }
 
+impl glib::value::ValueType for StaticPadTemplate {
+    type Type = Self;
+}
+
 #[doc(hidden)]
-impl<'a> glib::value::FromValueOptional<'a> for StaticPadTemplate {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<StaticPadTemplate>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
-            value.to_glib_none().0,
-        ) as *mut ffi::GstStaticPadTemplate)
+unsafe impl<'a> glib::value::FromValue<'a> for StaticPadTemplate {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+            as *mut ffi::GstStaticPadTemplate)
     }
 }
 
 #[doc(hidden)]
-impl glib::value::SetValue for StaticPadTemplate {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstStaticPadTemplate>::to_glib_none(this).0
-                as glib::ffi::gpointer,
-        )
+impl glib::value::ToValue for StaticPadTemplate {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<StaticPadTemplate>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0 as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
 #[doc(hidden)]
-impl glib::value::SetValueOptional for StaticPadTemplate {
-    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstStaticPadTemplate>::to_glib_none(&this).0
-                as glib::ffi::gpointer,
-        )
+impl glib::value::ToValueOptional for StaticPadTemplate {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<StaticPadTemplate>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.to_glib_none().0 as *mut _,
+            )
+        }
+        value
     }
 }
 

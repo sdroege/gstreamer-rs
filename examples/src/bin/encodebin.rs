@@ -276,8 +276,11 @@ fn example_main() -> Result<(), Error> {
                         Some(details) if details.name() == "error-details" => details
                             .get::<&ErrorValue>("error")
                             .unwrap()
-                            .cloned()
-                            .and_then(|v| v.0.lock().unwrap().take())
+                            .clone()
+                            .0
+                            .lock()
+                            .unwrap()
+                            .take()
                             .map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {

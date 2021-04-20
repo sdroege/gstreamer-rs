@@ -10,11 +10,8 @@ use std::str;
 
 use once_cell::sync::Lazy;
 
-use glib::ffi::gpointer;
-use glib::translate::{
-    from_glib, from_glib_full, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault, Stash, StashMut,
-    ToGlibPtr, ToGlibPtrMut,
-};
+use glib::translate::*;
+use glib::StaticType;
 
 pub struct CapsFeatures(ptr::NonNull<ffi::GstCapsFeatures>);
 unsafe impl Send for CapsFeatures {}
@@ -217,25 +214,48 @@ impl FromGlibPtrFull<*mut ffi::GstCapsFeatures> for CapsFeatures {
     }
 }
 
-impl<'a> glib::value::FromValueOptional<'a> for CapsFeatures {
-    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        <&'a CapsFeaturesRef as glib::value::FromValueOptional<'a>>::from_value_optional(v)
-            .map(ToOwned::to_owned)
+impl glib::value::ValueType for CapsFeatures {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for CapsFeatures {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+            as *mut ffi::GstCapsFeatures)
     }
 }
 
-impl glib::value::SetValue for CapsFeatures {
-    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        <CapsFeaturesRef as glib::value::SetValue>::set_value(v, s.as_ref())
+impl glib::value::ToValue for CapsFeatures {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<CapsFeatures>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                ToGlibPtr::<*mut ffi::GstCapsFeatures>::to_glib_none(self).0 as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
-impl glib::value::SetValueOptional for CapsFeatures {
-    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-        <CapsFeaturesRef as glib::value::SetValueOptional>::set_value_optional(
-            v,
-            s.map(|s| s.as_ref()),
-        )
+impl glib::value::ToValueOptional for CapsFeatures {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<CapsFeatures>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                ToGlibPtr::<*mut ffi::GstCapsFeatures>::to_glib_none(&s).0 as *mut _,
+            )
+        }
+        value
     }
 }
 
@@ -334,32 +354,43 @@ impl glib::types::StaticType for CapsFeaturesRef {
     }
 }
 
-impl<'a> glib::value::FromValueOptional<'a> for &'a CapsFeaturesRef {
-    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        let ptr = glib::gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(CapsFeaturesRef::from_glib_borrow(
-                ptr as *const ffi::GstCapsFeatures,
-            ))
-        }
+unsafe impl<'a> glib::value::FromValue<'a> for &'a CapsFeaturesRef {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *const CapsFeaturesRef)
     }
 }
 
-impl glib::value::SetValue for CapsFeaturesRef {
-    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+impl glib::value::ToValue for CapsFeaturesRef {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<CapsFeatures>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                self.as_mut_ptr() as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
-impl glib::value::SetValueOptional for CapsFeaturesRef {
-    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-        if let Some(s) = s {
-            glib::gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
-        } else {
-            glib::gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+impl glib::value::ToValueOptional for CapsFeaturesRef {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<CapsFeatures>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.map(|s| s.as_mut_ptr()).unwrap_or(ptr::null_mut()) as *mut _,
+            )
         }
+        value
     }
 }
 
@@ -478,11 +509,13 @@ mod tests {
 
     #[test]
     fn test_from_value_optional() {
+        use glib::ToValue;
+
         crate::init().unwrap();
 
-        let a = glib::value::Value::from(None::<&CapsFeatures>);
-        assert!(a.get::<CapsFeatures>().unwrap().is_none());
+        let a = None::<CapsFeatures>.to_value();
+        assert!(a.get::<Option<CapsFeatures>>().unwrap().is_none());
         let b = glib::value::Value::from(&CapsFeatures::new_empty());
-        assert!(b.get::<CapsFeatures>().unwrap().is_some());
+        assert!(b.get::<Option<CapsFeatures>>().unwrap().is_some());
     }
 }

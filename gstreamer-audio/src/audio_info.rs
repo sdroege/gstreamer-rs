@@ -1,8 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibPtrNone, ToGlib, ToGlibPtr, ToGlibPtrMut,
-};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
 use gst::prelude::*;
 
 use std::fmt;
@@ -324,34 +322,52 @@ impl glib::types::StaticType for AudioInfo {
     }
 }
 
-#[doc(hidden)]
-impl<'a> glib::value::FromValueOptional<'a> for AudioInfo {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<AudioInfo>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
-            value.to_glib_none().0,
-        ) as *mut ffi::GstAudioInfo)
-    }
+impl glib::value::ValueType for AudioInfo {
+    type Type = Self;
 }
 
 #[doc(hidden)]
-impl glib::value::SetValue for AudioInfo {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstAudioInfo>::to_glib_none(this).0
-                as glib::ffi::gpointer,
+unsafe impl<'a> glib::value::FromValue<'a> for AudioInfo {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib_none(
+            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstAudioInfo
         )
     }
 }
 
 #[doc(hidden)]
-impl glib::value::SetValueOptional for AudioInfo {
-    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstAudioInfo>::to_glib_none(&this).0
-                as glib::ffi::gpointer,
-        )
+impl glib::value::ToValue for AudioInfo {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<AudioInfo>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0 as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[doc(hidden)]
+impl glib::value::ToValueOptional for AudioInfo {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<AudioInfo>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.to_glib_none().0 as *mut _,
+            )
+        }
+        value
     }
 }
 

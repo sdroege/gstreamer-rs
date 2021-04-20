@@ -34,7 +34,7 @@ impl ExampleCustomEvent {
                     _ => return None, // No structure in this event, or the name didn't match
                 };
 
-                let send_eos = s.get_some::<bool>("send_eos").unwrap();
+                let send_eos = s.get::<bool>("send_eos").unwrap();
                 Some(ExampleCustomEvent { send_eos })
             }
             _ => None, // Not a custom event

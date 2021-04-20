@@ -1143,7 +1143,7 @@ impl<'a> CustomBothOob<'a> {
 struct EventBuilder<'a> {
     seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
 }
 
 impl<'a> EventBuilder<'a> {
@@ -1169,7 +1169,7 @@ impl<'a> EventBuilder<'a> {
         }
     }
 
-    fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
+    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
         Self {
             other_fields: self
                 .other_fields
@@ -1201,7 +1201,10 @@ macro_rules! event_builder_generic_impl {
         }
 
         #[allow(clippy::needless_update)]
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
+        pub fn other_fields(
+            self,
+            other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))],
+        ) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
                 ..self
@@ -1980,6 +1983,6 @@ mod tests {
         }
 
         let structure = flush_start_evt.structure().unwrap();
-        assert_eq!(structure.get_some("test"), Ok(42u32));
+        assert_eq!(structure.get("test"), Ok(42u32));
     }
 }

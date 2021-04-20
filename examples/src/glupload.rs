@@ -683,7 +683,7 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
                         gst_gl_context = glupload
                             .property("context")
                             .unwrap()
-                            .get::<gst_gl::GLContext>()
+                            .get::<Option<gst_gl::GLContext>>()
                             .unwrap();
                     }
 

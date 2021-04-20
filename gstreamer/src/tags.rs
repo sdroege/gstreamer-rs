@@ -10,7 +10,7 @@ use once_cell::sync::Lazy;
 use glib::translate::{
     from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr, ToGlibPtrMut,
 };
-use glib::value::{FromValue, FromValueOptional, SendValue, SetValue, ToSendValue, Value};
+use glib::value::{FromValue, SendValue, ToSendValue, Value};
 use glib::StaticType;
 
 use crate::Sample;
@@ -19,7 +19,7 @@ use crate::TagMergeMode;
 use crate::TagScope;
 
 pub trait Tag<'a> {
-    type TagType: FromValueOptional<'a> + SetValue + Send;
+    type TagType: StaticType + FromValue<'a> + ToSendValue + Send + Sync;
     fn tag_name<'b>() -> &'b str;
 }
 
@@ -28,6 +28,7 @@ macro_rules! impl_tag(
         pub enum $name {}
         impl<'a> Tag<'a> for $name {
             type TagType = $t;
+
             fn tag_name<'b>() -> &'b str {
                 *$rust_tag
             }
@@ -357,39 +358,27 @@ impl Default for TagList {
 pub struct TagValue<T>(SendValue, PhantomData<T>);
 
 impl<T> TagValue<T> {
-    pub fn get<'a>(&'a self) -> Option<T>
+    pub fn get<'a>(&'a self) -> T
     where
-        T: FromValueOptional<'a>,
+        T: StaticType + FromValue<'a>,
     {
         self.0.get().expect("Invalid tag type")
-    }
-
-    pub fn get_some<'a>(&'a self) -> T
-    where
-        T: FromValue<'a>,
-    {
-        self.0.get_some().expect("Invalid tag type")
     }
 }
 
 impl TagListRef {
-    pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode)
-    where
-        T::TagType: ToSendValue,
-    {
+    pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode) {
         // result can be safely ignored here as `value`'s type is tied to `T::tag_name()`
-        let _res = self.add_generic(T::tag_name(), value, mode);
+        let v = <T::TagType as ToSendValue>::to_send_value(value);
+        let _res = self.add_value(T::tag_name(), &v, mode);
     }
 
-    pub fn add_generic<T>(
+    pub fn add_generic<T: ToSendValue + Sync>(
         &mut self,
         tag_name: &str,
-        value: &T,
+        value: T,
         mode: TagMergeMode,
-    ) -> Result<(), TagError>
-    where
-        T: ToSendValue,
-    {
+    ) -> Result<(), TagError> {
         let v = value.to_send_value();
         self.add_value(tag_name, &v, mode)
     }
@@ -969,15 +958,12 @@ mod tests {
             tags.add::<Duration>(&(crate::SECOND * 120), TagMergeMode::Append);
         }
 
-        assert_eq!(tags.get::<Title>().unwrap().get(), Some("some title"));
+        assert_eq!(tags.get::<Title>().unwrap().get(), "some title");
+        assert_eq!(tags.get::<Duration>().unwrap().get(), crate::SECOND * 120);
+        assert_eq!(tags.index::<Title>(0).unwrap().get(), "some title");
         assert_eq!(
-            tags.get::<Duration>().unwrap().get_some(),
-            (crate::SECOND * 120)
-        );
-        assert_eq!(tags.index::<Title>(0).unwrap().get(), Some("some title"));
-        assert_eq!(
-            tags.index::<Duration>(0).unwrap().get_some(),
-            (crate::SECOND * 120)
+            tags.index::<Duration>(0).unwrap().get(),
+            crate::SECOND * 120
         );
     }
 
@@ -1003,22 +989,22 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             assert!(tags
-                .add_generic(&TAG_TITLE, &"some title", TagMergeMode::Append)
+                .add_generic(&TAG_TITLE, "some title", TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_TITLE, &"second title", TagMergeMode::Append)
+                .add_generic(&TAG_TITLE, "second title", TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_DURATION, &(crate::SECOND * 120), TagMergeMode::Append)
+                .add_generic(&TAG_DURATION, crate::SECOND * 120, TagMergeMode::Append)
                 .is_ok());
             assert!(tags
-                .add_generic(&TAG_TITLE, &"third title", TagMergeMode::Append)
+                .add_generic(&TAG_TITLE, "third title", TagMergeMode::Append)
                 .is_ok());
 
             assert_eq!(
                 tags.add_generic(
                     &TAG_IMAGE,
-                    &"`&[str] instead of `Sample`",
+                    "`&[str] instead of `Sample`",
                     TagMergeMode::Append
                 ),
                 Err(TagError::TypeMismatch),
@@ -1035,7 +1021,7 @@ mod tests {
         );
         assert_eq!(
             tags.index_generic(&TAG_DURATION, 0).unwrap().get(),
-            Ok(Some(crate::SECOND * 120))
+            Ok(crate::SECOND * 120)
         );
         assert_eq!(
             tags.index_generic(&TAG_TITLE, 2).unwrap().get(),
@@ -1081,7 +1067,7 @@ mod tests {
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
         let first_duration = tag_iter.next().unwrap();
-        assert_eq!(first_duration.get_some(), Ok(crate::SECOND * 120));
+        assert_eq!(first_duration.get(), Ok(crate::SECOND * 120));
         assert!(tag_iter.next().is_none());
 
         // Iter
@@ -1097,7 +1083,7 @@ mod tests {
 
         let (tag_name, tag_value) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
-        assert_eq!(tag_value.get_some(), Ok(crate::SECOND * 120));
+        assert_eq!(tag_value.get(), Ok(crate::SECOND * 120));
         assert!(tag_iter.next().is_none());
     }
 
@@ -1148,7 +1134,7 @@ mod tests {
             tags.add::<MyCustomTag>(&"first one", TagMergeMode::Append);
         }
 
-        assert_eq!(tags.get::<MyCustomTag>().unwrap().get(), Some("first one"));
+        assert_eq!(tags.get::<MyCustomTag>().unwrap().get(), "first one");
 
         {
             let tags = tags.get_mut().unwrap();
@@ -1157,7 +1143,7 @@ mod tests {
 
         assert_eq!(
             tags.get::<MyCustomTag>().unwrap().get(),
-            Some("first one, second one")
+            "first one, second one"
         );
     }
 

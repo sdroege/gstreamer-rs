@@ -150,15 +150,12 @@ impl AudioConverterConfig {
                     .as_slice()
                     .iter()
                     .map(|val| {
-                        let array = val
-                            .get::<gst::Array>()
-                            .expect("Wrong type")
-                            .unwrap_or_else(|| gst::Array::from_owned(Vec::new()));
+                        let array = val.get::<gst::Array>().expect("Wrong type");
 
                         array
                             .as_slice()
                             .iter()
-                            .map(|val| val.get_some::<f32>().expect("Wrong type"))
+                            .map(|val| val.get::<f32>().expect("Wrong type"))
                             .collect::<Vec<_>>()
                     })
                     .collect::<Vec<_>>()

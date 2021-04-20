@@ -8,40 +8,56 @@ use std::ops::{Deref, DerefMut};
 use std::ptr;
 use std::str;
 
-use thiserror::Error;
-
 use crate::Fraction;
 
-use glib::ffi::gpointer;
-use glib::translate::{
-    from_glib, from_glib_full, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault, Stash, StashMut,
-    ToGlib, ToGlibPtr, ToGlibPtrMut,
-};
-use glib::value::{FromValue, FromValueOptional, SendValue, ToSendValue};
+use glib::translate::*;
+use glib::value::{FromValue, SendValue, ToSendValue};
+use glib::StaticType;
 
-#[derive(Clone, Debug, Eq, PartialEq, Error)]
-pub enum GetError<'name> {
+#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
+pub enum GetError {
     #[error("GetError: Structure field with name {name} not found")]
-    FieldNotFound { name: &'name str },
+    FieldNotFound { name: &'static str },
     #[error("GetError: Structure field with name {name} not retrieved")]
     ValueGetError {
-        name: &'name str,
+        name: &'static str,
         #[source]
-        value_get_error: glib::value::GetError,
+        type_mismatch_error: glib::value::ValueTypeMismatchOrNoneError,
     },
 }
 
-impl<'name> GetError<'name> {
-    fn new_field_not_found(name: &'name str) -> GetError {
+impl GetError {
+    fn new_field_not_found(name: &'static str) -> Self {
         skip_assert_initialized!();
         GetError::FieldNotFound { name }
     }
 
-    fn from_value_get_error(name: &'name str, value_get_error: glib::value::GetError) -> GetError {
+    fn from_value_get_error<E: GlibValueError>(name: &'static str, err: E) -> Self {
+        skip_assert_initialized!();
+        E::from_value_error(name, err)
+    }
+}
+
+pub trait GlibValueError: 'static {
+    fn from_value_error(name: &'static str, err: Self) -> GetError;
+}
+
+impl GlibValueError for glib::value::ValueTypeMismatchError {
+    fn from_value_error(name: &'static str, err: Self) -> GetError {
         skip_assert_initialized!();
         GetError::ValueGetError {
             name,
-            value_get_error,
+            type_mismatch_error: glib::value::ValueTypeMismatchOrNoneError::from(err),
+        }
+    }
+}
+
+impl GlibValueError for glib::value::ValueTypeMismatchOrNoneError {
+    fn from_value_error(name: &'static str, err: Self) -> GetError {
+        skip_assert_initialized!();
+        GetError::ValueGetError {
+            name,
+            type_mismatch_error: err,
         }
     }
 }
@@ -65,7 +81,7 @@ impl Structure {
         }
     }
 
-    pub fn new(name: &str, values: &[(&str, &dyn ToSendValue)]) -> Structure {
+    pub fn new(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Structure {
         assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
 
@@ -283,25 +299,51 @@ impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
     }
 }
 
-impl<'a> glib::value::FromValueOptional<'a> for Structure {
-    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        <&'a StructureRef as glib::value::FromValueOptional<'a>>::from_value_optional(v)
-            .map(ToOwned::to_owned)
-    }
+impl glib::value::ValueType for Structure {
+    type Type = Self;
 }
 
-impl glib::value::SetValue for Structure {
-    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        <StructureRef as glib::value::SetValue>::set_value(v, s.as_ref())
-    }
-}
+unsafe impl<'a> glib::value::FromValue<'a> for Structure {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
-impl glib::value::SetValueOptional for Structure {
-    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-        <StructureRef as glib::value::SetValueOptional>::set_value_optional(
-            v,
-            s.map(|s| s.as_ref()),
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib_none(
+            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstStructure
         )
+    }
+}
+
+impl glib::value::ToValue for Structure {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Structure>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                glib::translate::ToGlibPtr::<*const ffi::GstStructure>::to_glib_none(self).0
+                    as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl glib::value::ToValueOptional for Structure {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<Structure>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                glib::translate::ToGlibPtr::<*const ffi::GstStructure>::to_glib_none(&s).0
+                    as *mut _,
+            )
+        }
+        value
     }
 }
 
@@ -336,54 +378,63 @@ impl StructureRef {
         self as *const Self as *mut ffi::GstStructure
     }
 
-    pub fn get<'structure, 'name, T: FromValueOptional<'structure>>(
-        &'structure self,
-        name: &'name str,
-    ) -> Result<Option<T>, GetError<'name>> {
-        self.value(name)?
+    pub fn get<'a, T: FromValue<'a>>(&'a self, name: &str) -> Result<T, GetError>
+    where
+        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
+    {
+        let name = glib::Quark::from_string(name);
+        self.get_by_quark(name)
+    }
+
+    pub fn get_optional<'a, T: FromValue<'a>>(&'a self, name: &str) -> Result<Option<T>, GetError>
+    where
+        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
+    {
+        let name = glib::Quark::from_string(name);
+        self.get_optional_by_quark(name)
+    }
+
+    pub fn value(&self, name: &str) -> Result<&SendValue, GetError> {
+        let name = glib::Quark::from_string(name);
+        self.value_by_quark(name)
+    }
+
+    pub fn get_by_quark<'a, T: FromValue<'a>>(&'a self, name: glib::Quark) -> Result<T, GetError>
+    where
+        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
+    {
+        self.value_by_quark(name)?
             .get()
-            .map_err(|err| GetError::from_value_get_error(name, err))
+            .map_err(|err| GetError::from_value_get_error(name.to_string(), err))
     }
 
-    pub fn get_optional<'structure, 'name, T: FromValueOptional<'structure>>(
-        &'structure self,
-        name: &'name str,
-    ) -> Result<Option<T>, GetError<'name>> {
-        let value = self.value(name);
-        if let Ok(value) = value {
-            value
-                .get()
-                .map_err(|err| GetError::from_value_get_error(name, err))
-        } else {
-            Ok(None)
-        }
+    pub fn get_optional_by_quark<'a, T: FromValue<'a>>(
+        &'a self,
+        name: glib::Quark,
+    ) -> Result<Option<T>, GetError>
+    where
+        <<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error: GlibValueError,
+    {
+        self.value_by_quark(name)
+            .ok()
+            .map(|v| v.get())
+            .transpose()
+            .map_err(|err| GetError::from_value_get_error(name.to_string(), err))
     }
 
-    pub fn get_some<'structure, 'name, T: FromValue<'structure>>(
-        &'structure self,
-        name: &'name str,
-    ) -> Result<T, GetError<'name>> {
-        self.value(name)?
-            .get_some()
-            .map_err(|err| GetError::from_value_get_error(name, err))
-    }
-
-    pub fn value<'structure, 'name>(
-        &'structure self,
-        name: &'name str,
-    ) -> Result<&SendValue, GetError<'name>> {
+    pub fn value_by_quark(&self, name: glib::Quark) -> Result<&SendValue, GetError> {
         unsafe {
-            let value = ffi::gst_structure_get_value(&self.0, name.to_glib_none().0);
+            let value = ffi::gst_structure_id_get_value(&self.0, name.to_glib());
 
             if value.is_null() {
-                return Err(GetError::new_field_not_found(name));
+                return Err(GetError::new_field_not_found(name.to_string()));
             }
 
             Ok(&*(value as *const SendValue))
         }
     }
 
-    pub fn set<T: ToSendValue>(&mut self, name: &str, value: &T) {
+    pub fn set<T: ToSendValue + Sync>(&mut self, name: &str, value: T) {
         let value = value.to_send_value();
         self.set_value(name, value);
     }
@@ -395,12 +446,28 @@ impl StructureRef {
         }
     }
 
+    pub fn set_by_quark<T: ToSendValue + Sync>(&mut self, name: glib::Quark, value: T) {
+        let value = value.to_send_value();
+        self.set_value_by_quark(name, value);
+    }
+
+    pub fn set_value_by_quark(&mut self, name: glib::Quark, value: SendValue) {
+        unsafe {
+            let mut value = value.into_raw();
+            ffi::gst_structure_id_take_value(&mut self.0, name.to_glib(), &mut value);
+        }
+    }
+
     pub fn name<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(ffi::gst_structure_get_name(&self.0))
                 .to_str()
                 .unwrap()
         }
+    }
+
+    pub fn name_quark(&self) -> glib::Quark {
+        unsafe { from_glib(ffi::gst_structure_get_name_id(&self.0)) }
     }
 
     pub fn set_name(&mut self, name: &str) {
@@ -421,6 +488,20 @@ impl StructureRef {
             from_glib(ffi::gst_structure_has_field_typed(
                 &self.0,
                 field.to_glib_none().0,
+                type_.to_glib(),
+            ))
+        }
+    }
+
+    pub fn has_field_by_quark(&self, field: glib::Quark) -> bool {
+        unsafe { from_glib(ffi::gst_structure_id_has_field(&self.0, field.to_glib())) }
+    }
+
+    pub fn has_field_with_type_by_quark(&self, field: glib::Quark, type_: glib::Type) -> bool {
+        unsafe {
+            from_glib(ffi::gst_structure_id_has_field_typed(
+                &self.0,
+                field.to_glib(),
                 type_.to_glib(),
             ))
         }
@@ -578,32 +659,43 @@ impl glib::types::StaticType for StructureRef {
     }
 }
 
-impl<'a> glib::value::FromValueOptional<'a> for &'a StructureRef {
-    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        let ptr = glib::gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(StructureRef::from_glib_borrow(
-                ptr as *const ffi::GstStructure,
-            ))
-        }
+unsafe impl<'a> glib::value::FromValue<'a> for &'a StructureRef {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *const StructureRef)
     }
 }
 
-impl glib::value::SetValue for StructureRef {
-    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+impl glib::value::ToValue for StructureRef {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Structure>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                self.as_ptr() as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
-impl glib::value::SetValueOptional for StructureRef {
-    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-        if let Some(s) = s {
-            glib::gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
-        } else {
-            glib::gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+impl glib::value::ToValueOptional for StructureRef {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<Structure>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.map(|s| s.as_ptr()).unwrap_or(ptr::null()) as *mut _,
+            )
         }
+        value
     }
 }
 
@@ -728,7 +820,7 @@ impl Builder {
         }
     }
 
-    pub fn field<V: ToSendValue>(mut self, name: &str, value: &V) -> Self {
+    pub fn field<V: ToSendValue + Sync>(mut self, name: &str, value: V) -> Self {
         self.s.set(name, value);
         self
     }
@@ -756,9 +848,9 @@ mod tests {
         s.set("f2", &String::from("bcd"));
         s.set("f3", &123i32);
 
-        assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
-        assert_eq!(s.get::<&str>("f2"), Ok(Some("bcd")));
-        assert_eq!(s.get_some::<i32>("f3"), Ok(123i32));
+        assert_eq!(s.get::<&str>("f1"), Ok("abc"));
+        assert_eq!(s.get::<Option<&str>>("f2"), Ok(Some("bcd")));
+        assert_eq!(s.get::<i32>("f3"), Ok(123i32));
         assert_eq!(s.get_optional::<&str>("f1"), Ok(Some("abc")));
         assert_eq!(s.get_optional::<&str>("f4"), Ok(None));
         assert_eq!(s.get_optional::<i32>("f3"), Ok(Some(123i32)));
@@ -768,35 +860,32 @@ mod tests {
             s.get::<i32>("f2"),
             Err(GetError::from_value_get_error(
                 "f2",
-                value::GetError::new_type_mismatch(Type::STRING, Type::I32),
+                value::ValueTypeMismatchError::new(Type::STRING, Type::I32),
             ))
         );
         assert_eq!(
-            s.get_some::<bool>("f3"),
+            s.get::<bool>("f3"),
             Err(GetError::from_value_get_error(
                 "f3",
-                value::GetError::new_type_mismatch(Type::I32, Type::BOOL),
+                value::ValueTypeMismatchError::new(Type::I32, Type::BOOL),
             ))
         );
         assert_eq!(
             s.get::<&str>("f4"),
             Err(GetError::new_field_not_found("f4"))
         );
-        assert_eq!(
-            s.get_some::<i32>("f4"),
-            Err(GetError::new_field_not_found("f4"))
-        );
+        assert_eq!(s.get::<i32>("f4"), Err(GetError::new_field_not_found("f4")));
 
         assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f2", "f3"]);
 
         let v = s.iter().map(|(f, v)| (f, v.clone())).collect::<Vec<_>>();
         assert_eq!(v.len(), 3);
         assert_eq!(v[0].0, "f1");
-        assert_eq!(v[0].1.get::<&str>(), Ok(Some("abc")));
+        assert_eq!(v[0].1.get::<&str>(), Ok("abc"));
         assert_eq!(v[1].0, "f2");
-        assert_eq!(v[1].1.get::<&str>(), Ok(Some("bcd")));
+        assert_eq!(v[1].1.get::<&str>(), Ok("bcd"));
         assert_eq!(v[2].0, "f3");
-        assert_eq!(v[2].1.get_some::<i32>(), Ok(123i32));
+        assert_eq!(v[2].1.get::<i32>(), Ok(123i32));
 
         let s2 = Structure::new("test", &[("f1", &"abc"), ("f2", &"bcd"), ("f3", &123i32)]);
         assert_eq!(s, s2);
@@ -813,9 +902,9 @@ mod tests {
             .build();
 
         assert_eq!(s.name(), "test");
-        assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
-        assert_eq!(s.get::<&str>("f2"), Ok(Some("bcd")));
-        assert_eq!(s.get_some::<i32>("f3"), Ok(123i32));
+        assert_eq!(s.get::<&str>("f1"), Ok("abc"));
+        assert_eq!(s.get::<&str>("f2"), Ok("bcd"));
+        assert_eq!(s.get::<i32>("f3"), Ok(123i32));
     }
 
     #[test]
@@ -825,20 +914,22 @@ mod tests {
         let a = "Test, f1=(string)abc, f2=(uint)123;";
 
         let s = Structure::from_str(&a).unwrap();
-        assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
-        assert_eq!(s.get_some::<u32>("f2"), Ok(123));
+        assert_eq!(s.get::<&str>("f1"), Ok("abc"));
+        assert_eq!(s.get::<u32>("f2"), Ok(123));
 
         assert_eq!(a, s.to_string());
     }
 
     #[test]
     fn test_from_value_optional() {
+        use glib::ToValue;
+
         crate::init().unwrap();
 
-        let a = glib::value::Value::from(None::<&Structure>);
-        assert!(a.get::<Structure>().unwrap().is_none());
-        let b = glib::value::Value::from(&Structure::from_str(&"foo").unwrap());
-        assert!(b.get::<Structure>().unwrap().is_some());
+        let a = None::<&Structure>.to_value();
+        assert!(a.get::<Option<Structure>>().unwrap().is_none());
+        let b = Structure::from_str(&"foo").unwrap().to_value();
+        assert!(b.get::<Option<Structure>>().unwrap().is_some());
     }
 
     #[test]
@@ -854,7 +945,7 @@ mod tests {
         let s2 = Structure::from_iter(s.name(), s.iter().filter(|(f, _)| *f == "f1"));
 
         assert_eq!(s2.name(), "test");
-        assert_eq!(s2.get::<&str>("f1"), Ok(Some("abc")));
+        assert_eq!(s2.get::<&str>("f1"), Ok("abc"));
         assert!(s2.get::<&str>("f2").is_err());
         assert!(s2.get::<&str>("f3").is_err());
     }

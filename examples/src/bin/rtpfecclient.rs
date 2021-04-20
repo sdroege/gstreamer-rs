@@ -87,8 +87,7 @@ fn make_fec_decoder(rtpbin: &gst::Element, sess_id: u32) -> Result<gst::Element,
         .unwrap()
         .unwrap()
         .get::<glib::Object>()
-        .unwrap()
-        .expect("No internal-storage");
+        .unwrap();
 
     fecdec.set_property("storage", &internal_storage)?;
     fecdec.set_property("pt", &100u32)?;
@@ -145,8 +144,7 @@ fn example_main() -> Result<(), Error> {
     rtpbin.connect("new-storage", false, |values| {
         let storage = values[1]
             .get::<gst::Element>()
-            .expect("rtpbin \"new-storage\" signal values[1]")
-            .expect("rtpbin \"new-storage\" signal values[1]: no `Element`");
+            .expect("rtpbin \"new-storage\" signal values[1]");
         storage.set_property("size-time", &250_000_000u64).unwrap();
 
         None
@@ -154,7 +152,7 @@ fn example_main() -> Result<(), Error> {
 
     rtpbin.connect("request-pt-map", false, |values| {
         let pt = values[2]
-            .get_some::<u32>()
+            .get::<u32>()
             .expect("rtpbin \"new-storage\" signal values[2]");
         match pt {
             100 => Some(
@@ -186,10 +184,9 @@ fn example_main() -> Result<(), Error> {
     rtpbin.connect("request-fec-decoder", false, |values| {
         let rtpbin = values[0]
             .get::<gst::Element>()
-            .expect("rtpbin \"request-fec-decoder\" signal values[0]")
-            .expect("rtpbin \"request-fec-decoder\" signal values[0]: no `Element`");
+            .expect("rtpbin \"request-fec-decoder\" signal values[0]");
         let sess_id = values[1]
-            .get_some::<u32>()
+            .get::<u32>()
             .expect("rtpbin \"request-fec-decoder\" signal values[1]");
 
         match make_fec_decoder(&rtpbin, sess_id) {

@@ -1,6 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::*;
+use glib::StaticType;
 use num_integer::div_rem;
 use std::io::{self, prelude::*};
 use std::time::Duration;
@@ -304,25 +305,32 @@ impl FromGlib<ffi::GstClockTime> for ClockTime {
     }
 }
 
+impl glib::value::ValueType for ClockTime {
+    type Type = Self;
+}
+
 #[doc(hidden)]
-impl<'a> glib::value::FromValueOptional<'a> for ClockTime {
-    unsafe fn from_value_optional(value: &'a glib::Value) -> Option<Self> {
-        <u64 as glib::value::FromValueOptional>::from_value_optional(value)
-            .map(|x| ClockTime::from_glib(x))
+unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_uint64(
+            value.to_glib_none().0,
+        ))
     }
 }
 
 #[doc(hidden)]
-impl<'a> glib::value::FromValue<'a> for ClockTime {
-    unsafe fn from_value(value: &'a glib::Value) -> Self {
-        ClockTime::from_glib(<u64 as glib::value::FromValue>::from_value(value))
+impl glib::value::ToValue for ClockTime {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<ClockTime>();
+        unsafe { glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, self.to_glib()) }
+        value
     }
-}
 
-#[doc(hidden)]
-impl glib::value::SetValue for ClockTime {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        <u64 as glib::value::SetValue>::set_value(value, &this.to_glib());
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 

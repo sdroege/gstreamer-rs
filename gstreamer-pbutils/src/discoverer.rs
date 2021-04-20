@@ -32,10 +32,7 @@ impl Discoverer {
                 value.to_glib_none_mut().0,
             );
         }
-        value
-            .get()
-            .expect("Discoverer::get_property_timeout")
-            .unwrap()
+        value.get().expect("Discoverer::get_property_timeout")
     }
 
     pub fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(

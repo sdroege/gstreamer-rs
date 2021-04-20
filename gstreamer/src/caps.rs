@@ -45,7 +45,7 @@ impl Caps {
         unsafe { from_glib_full(ffi::gst_caps_new_any()) }
     }
 
-    pub fn new_simple(name: &str, values: &[(&str, &dyn ToSendValue)]) -> Self {
+    pub fn new_simple(name: &str, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
         assert_initialized_main_thread!();
         let mut caps = Caps::new_empty();
 
@@ -165,7 +165,7 @@ impl str::FromStr for Caps {
 }
 
 impl CapsRef {
-    pub fn set_simple(&mut self, values: &[(&str, &dyn ToSendValue)]) {
+    pub fn set_simple(&mut self, values: &[(&str, &(dyn ToSendValue + Sync))]) {
         for &(name, value) in values {
             let value = value.to_value();
 
@@ -610,7 +610,7 @@ impl Builder<NoFeature> {
 }
 
 impl<T> Builder<T> {
-    pub fn field<'b, V: ToSendValue>(mut self, name: &'b str, value: &'b V) -> Self {
+    pub fn field<V: ToSendValue + Sync>(mut self, name: &str, value: V) -> Self {
         self.s.set(name, value);
         self
     }
@@ -777,11 +777,11 @@ mod tests {
         crate::init().unwrap();
 
         let caps = Caps::builder("foo/bar")
-            .field("int", &12)
-            .field("bool", &true)
-            .field("string", &"bla")
-            .field("fraction", &Fraction::new(1, 2))
-            .field("array", &Array::new(&[&1, &2]))
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
             .build();
         assert_eq!(
             caps.to_string(),

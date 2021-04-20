@@ -387,7 +387,7 @@ mod tests {
         assert_eq!("chapter1.1", chapter1_1.uid());
         assert_eq!(Some((0, 4)), chapter1_1.start_stop_times());
         let tags = chapter1_1.tags().unwrap();
-        assert_eq!(Some("chapter 1.1"), tags.index::<Title>(0).unwrap().get());
+        assert_eq!("chapter 1.1", tags.index::<Title>(0).unwrap().get());
         assert_eq!(0, chapter1_1.sub_entries().len());
 
         let chapter1_2 = &chap1_sub_entries[1];
@@ -395,14 +395,14 @@ mod tests {
         assert_eq!("chapter1.2", chapter1_2.uid());
         assert_eq!(Some((4, 10)), chapter1_2.start_stop_times());
         let tags = chapter1_2.tags().unwrap();
-        assert_eq!(Some("chapter 1.2"), tags.index::<Title>(0).unwrap().get());
+        assert_eq!("chapter 1.2", tags.index::<Title>(0).unwrap().get());
         assert_eq!(0, chapter1_2.sub_entries().len());
 
         let chapter2 = &sub_entries[1];
         assert_eq!(TocEntryType::Chapter, chapter2.entry_type());
         assert_eq!("chapter2", chapter2.uid());
         let tags = chapter2.tags().unwrap();
-        assert_eq!(Some("chapter 2"), tags.index::<Title>(0).unwrap().get());
+        assert_eq!("chapter 2", tags.index::<Title>(0).unwrap().get());
         assert_eq!(Some((10, 15)), chapter2.start_stop_times());
         assert_eq!(0, chapter2.sub_entries().len());
     }

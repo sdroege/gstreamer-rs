@@ -21,13 +21,14 @@ use crate::Sample;
 use crate::TagMergeMode;
 use crate::TagScope;
 
-macro_rules! ser_some_tag (
+macro_rules! ser_tag (
     ($value:ident, $seq:ident, $t:ty) => (
         ser_some_value!($value, $t, |_, value| {
             $seq.serialize_element(&value)
         })
     );
 );
+
 macro_rules! ser_opt_tag (
     ($value:ident, $seq:ident, $t:ty) => (
         ser_opt_value!($value, $t, |_, value| {
@@ -57,24 +58,22 @@ impl<'a> Serialize for TagValuesSer<'a> {
         let mut seq = serializer.serialize_seq(tag_iter.size_hint().1)?;
         for value in tag_iter.deref_mut() {
             match value.type_() {
-                glib::Type::F64 => ser_some_tag!(value, seq, f64),
+                glib::Type::F64 => ser_tag!(value, seq, f64),
                 glib::Type::STRING => {
                     // See above comment about `Tag`s with `String` values
-                    ser_opt_value!(value, String, |_, value: Option<String>| {
-                        seq.serialize_element(&value.expect("String tag ser"))
+                    ser_some_value!(value, String, |_, value: String| {
+                        seq.serialize_element(&value)
                     })
                 }
-                glib::Type::U32 => ser_some_tag!(value, seq, u32),
-                glib::Type::U64 => ser_some_tag!(value, seq, u64),
+                glib::Type::U32 => ser_tag!(value, seq, u32),
+                glib::Type::U64 => ser_tag!(value, seq, u64),
                 type_id => {
                     if *DATE_OTHER_TYPE_ID == type_id {
                         // See above comment about `Tag`s with `Date` values
-                        ser_opt_value!(value, Date, |_, value: Option<Date>| {
+                        ser_some_value!(value, Date, |_, value: Date| {
                             // Need to wrap the `glib::Date` in new type `date_time_serde::Date` first
                             // See comment in `date_time_serde.rs`
-                            seq.serialize_element(&date_time_serde::Date::from(
-                                value.expect("Date tag ser"),
-                            ))
+                            seq.serialize_element(&date_time_serde::Date::from(value))
                         })
                     } else if *DATE_TIME_OTHER_TYPE_ID == type_id {
                         ser_opt_tag!(value, seq, DateTime)
@@ -147,7 +146,7 @@ impl Serialize for TagList {
     }
 }
 
-macro_rules! de_some_tag(
+macro_rules! de_tag(
     ($tag_name:expr, $seq:expr, $t:ty) => (
         de_some_send_value!("Tag", $tag_name, $seq, $t)
     );
@@ -176,13 +175,13 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
 
         loop {
             let tag_value = match tag_type {
-                glib::Type::F64 => de_some_tag!(self.0, seq, f64),
+                glib::Type::F64 => de_tag!(self.0, seq, f64),
                 glib::Type::STRING => {
                     // See comment above `TagValuesSer` definition about `Tag`s with `String` values
-                    de_some_tag!(self.0, seq, String)
+                    de_tag!(self.0, seq, String)
                 }
-                glib::Type::U32 => de_some_tag!(self.0, seq, u32),
-                glib::Type::U64 => de_some_tag!(self.0, seq, u64),
+                glib::Type::U32 => de_tag!(self.0, seq, u32),
+                glib::Type::U64 => de_tag!(self.0, seq, u64),
                 type_id => {
                     if *DATE_OTHER_TYPE_ID == type_id {
                         // See comment above `TagValuesSer` definition about `Tag`s with `Date` values
@@ -464,23 +463,23 @@ mod tests {
         let tags: TagList = ron::de::from_str(tag_list_ron).unwrap();
         assert_eq!(tags.scope(), TagScope::Global);
 
-        assert_eq!(tags.index::<Title>(0).unwrap().get(), Some("a title"));
-        assert_eq!(tags.index::<Title>(1).unwrap().get(), Some("another title"));
+        assert_eq!(tags.index::<Title>(0).unwrap().get(), "a title");
+        assert_eq!(tags.index::<Title>(1).unwrap().get(), "another title");
         assert_eq!(
-            tags.index::<Duration>(0).unwrap().get_some(),
+            tags.index::<Duration>(0).unwrap().get(),
             crate::SECOND * 120
         );
-        assert_eq!(tags.index::<Bitrate>(0).unwrap().get_some(), 96_000);
-        assert!((tags.index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON);
+        assert_eq!(tags.index::<Bitrate>(0).unwrap().get(), 96_000);
+        assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < std::f64::EPSILON);
         assert_eq!(
-            tags.index::<Date>(0).unwrap().get().unwrap(),
+            tags.index::<Date>(0).unwrap().get(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap()
         );
         assert_eq!(
-            tags.index::<DateTime>(0).unwrap().get().unwrap(),
+            tags.index::<DateTime>(0).unwrap().get(),
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
-        let sample = tags.index::<Image>(0).unwrap().get().unwrap();
+        let sample = tags.index::<Image>(0).unwrap().get();
         let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();
@@ -504,19 +503,19 @@ mod tests {
         let tags: TagList = serde_json::from_str(tag_json).unwrap();
         assert_eq!(tags.scope(), TagScope::Global);
 
-        assert_eq!(tags.index::<Title>(0).unwrap().get(), Some("a title"));
-        assert_eq!(tags.index::<Title>(1).unwrap().get(), Some("another title"));
-        assert_eq!(tags.index::<Bitrate>(0).unwrap().get_some(), 96_000);
-        assert!((tags.index::<TrackGain>(0).unwrap().get_some() - 1f64).abs() < std::f64::EPSILON);
+        assert_eq!(tags.index::<Title>(0).unwrap().get(), "a title");
+        assert_eq!(tags.index::<Title>(1).unwrap().get(), "another title");
+        assert_eq!(tags.index::<Bitrate>(0).unwrap().get(), 96_000);
+        assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < std::f64::EPSILON);
         assert_eq!(
-            tags.index::<Date>(0).unwrap().get().unwrap(),
+            tags.index::<Date>(0).unwrap().get(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018).unwrap()
         );
         assert_eq!(
-            tags.index::<DateTime>(0).unwrap().get().unwrap(),
+            tags.index::<DateTime>(0).unwrap().get(),
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
-        let sample = tags.index::<Image>(0).unwrap().get().unwrap();
+        let sample = tags.index::<Image>(0).unwrap().get();
         let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();
@@ -572,16 +571,16 @@ mod tests {
             tags.index::<Title>(1).unwrap().get(),
         );
         assert_eq!(
-            tags_de.index::<Duration>(0).unwrap().get_some(),
-            tags.index::<Duration>(0).unwrap().get_some(),
+            tags_de.index::<Duration>(0).unwrap().get(),
+            tags.index::<Duration>(0).unwrap().get(),
         );
         assert_eq!(
-            tags_de.index::<Bitrate>(0).unwrap().get_some(),
-            tags.index::<Bitrate>(0).unwrap().get_some(),
+            tags_de.index::<Bitrate>(0).unwrap().get(),
+            tags.index::<Bitrate>(0).unwrap().get(),
         );
         assert!(
-            (tags_de.index::<TrackGain>(0).unwrap().get_some()
-                - tags.index::<TrackGain>(0).unwrap().get_some())
+            (tags_de.index::<TrackGain>(0).unwrap().get()
+                - tags.index::<TrackGain>(0).unwrap().get())
             .abs()
                 < std::f64::EPSILON
         );
@@ -590,10 +589,10 @@ mod tests {
             tags.index::<Date>(0).unwrap().get(),
         );
         assert_eq!(
-            tags.index::<DateTime>(0).unwrap().get().unwrap(),
+            tags.index::<DateTime>(0).unwrap().get(),
             crate::DateTime::new_ymd(2018, 5, 28).unwrap()
         );
-        let sample = tags.index::<Image>(0).unwrap().get().unwrap();
+        let sample = tags.index::<Image>(0).unwrap().get();
         let buffer = sample.buffer().unwrap();
         {
             let data = buffer.map_readable().unwrap();

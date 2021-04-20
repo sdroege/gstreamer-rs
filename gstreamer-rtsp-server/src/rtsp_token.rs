@@ -15,7 +15,7 @@ impl RTSPToken {
         unsafe { from_glib_full(ffi::gst_rtsp_token_new_empty()) }
     }
 
-    pub fn new(values: &[(&str, &dyn ToSendValue)]) -> Self {
+    pub fn new(values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
         assert_initialized_main_thread!();
         let mut token = RTSPToken::new_empty();
 

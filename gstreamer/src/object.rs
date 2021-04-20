@@ -57,13 +57,11 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
                     .unwrap_or_else(|err| {
                         panic!("Object signal \"deep-notify\": values[0]: {}", err)
                     })
-                    .expect("Object signal \"deep-notify\": values[0] not defined")
                     .unsafe_cast()
             };
             let prop_obj: crate::Object = values[1]
                 .get()
-                .unwrap_or_else(|err| panic!("Object signal \"deep-notify\": values[1]: {}", err))
-                .expect("Object signal \"deep-notify\": values[1] not defined");
+                .unwrap_or_else(|err| panic!("Object signal \"deep-notify\": values[1]: {}", err));
 
             let pspec = unsafe {
                 let pspec = glib::gobject_ffi::g_value_get_param(values[2].to_glib_none().0);

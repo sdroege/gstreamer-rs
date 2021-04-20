@@ -52,7 +52,7 @@ impl<'de> Deserialize<'de> for Fraction {
 macro_rules! ser_some_value (
     ($value:expr, $t:ty, $ser_closure:expr) => (
         {
-            let value = $value.get_some::<$t>().expect("ser_some_value macro");
+            let value = $value.get::<$t>().expect("ser_some_value macro");
             $ser_closure(stringify!($t), value)
         }
     );
@@ -60,7 +60,7 @@ macro_rules! ser_some_value (
 macro_rules! ser_opt_value (
     ($value:expr, $t:ty, $ser_closure:expr) => (
         {
-            let value = $value.get::<$t>().expect("ser_opt_value macro");
+            let value = $value.get::<Option<$t>>().expect("ser_opt_value macro");
             $ser_closure(stringify!($t), value)
         }
     );
@@ -523,54 +523,60 @@ mod tests {
         let slice = array.as_slice();
         assert_eq!(6, slice.len());
 
-        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &3);
 
-        let fraction = slice[1].get::<Fraction>().expect("slice[1]").unwrap();
+        let fraction = slice[1].get::<Fraction>().expect("slice[1]");
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &2);
 
         assert_eq!(
             "test str".to_owned(),
-            slice[2].get::<String>().expect("slice[2]").unwrap()
+            slice[2].get::<String>().expect("slice[2]")
         );
 
-        assert!(slice[3].get::<String>().expect("slice[3]").is_none());
+        assert!(slice[3]
+            .get::<Option<String>>()
+            .expect("slice[3]")
+            .is_none());
 
         assert_eq!(
             Date::new_dmy(19, DateMonth::August, 2019).unwrap(),
-            slice[4].get::<Date>().expect("slice[4]").unwrap()
+            slice[4].get::<Date>().expect("slice[4]")
         );
 
-        assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
+        assert!(slice[5].get::<Option<Date>>().expect("slice[5]").is_none());
 
         let array_json = r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null],["Date",{"YMD":[2019,8,19]}],["Date",null]]"#;
         let array: Array = serde_json::from_str(array_json).unwrap();
         let slice = array.as_slice();
         assert_eq!(6, slice.len());
 
-        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &3);
 
-        let fraction = slice[1].get::<Fraction>().expect("slice[1]").unwrap();
+        let fraction = slice[1].get::<Fraction>().expect("slice[1]");
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &2);
 
         assert_eq!(
             "test str".to_owned(),
-            slice[2].get::<String>().expect("slice[2]").unwrap()
+            slice[2].get::<String>().expect("slice[2]")
         );
 
-        assert!(slice[3].get::<String>().expect("slice[3]").is_none());
+        assert!(slice[3]
+            .get::<Option<String>>()
+            .expect("slice[3]")
+            .is_none());
 
         assert_eq!(
             Date::new_dmy(19, DateMonth::August, 2019).unwrap(),
-            slice[4].get::<Date>().expect("slice[4]").unwrap()
+            slice[4].get::<Date>().expect("slice[4]")
         );
 
-        assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
+        assert!(slice[5].get::<Option<Date>>().expect("slice[5]").is_none());
 
         // List
         let list_ron = r#"[
@@ -584,23 +590,29 @@ mod tests {
         let slice = list.as_slice();
         assert_eq!(5, slice.len());
 
-        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &2);
 
         assert_eq!(
             "test str".to_owned(),
-            slice[1].get::<String>().expect("slice[1]").unwrap()
+            slice[1].get::<String>().expect("slice[1]")
         );
 
-        assert!(slice[2].get::<String>().expect("slice[2]").is_none());
+        assert!(slice[2]
+            .get::<Option<String>>()
+            .expect("slice[2]")
+            .is_none());
 
         assert_eq!(
             DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).unwrap(),
-            slice[3].get::<DateTime>().expect("slice[3]").unwrap()
+            slice[3].get::<DateTime>().expect("slice[3]")
         );
 
-        assert!(slice[4].get::<DateTime>().expect("slice[4]").is_none());
+        assert!(slice[4]
+            .get::<Option<DateTime>>()
+            .expect("slice[4]")
+            .is_none());
     }
 
     #[test]
@@ -630,29 +642,32 @@ mod tests {
         let slice = array.as_slice();
         assert_eq!(slice_de.len(), slice.len());
 
-        let fraction_de = slice_de[0].get::<Fraction>().expect("slice_de[0]").unwrap();
-        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
+        let fraction_de = slice_de[0].get::<Fraction>().expect("slice_de[0]");
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction_de.0.denom(), fraction.0.denom());
 
-        let fraction_de = slice_de[1].get::<Fraction>().expect("slice_de[1]").unwrap();
-        let fraction = slice[1].get::<Fraction>().expect("slice[1]").unwrap();
+        let fraction_de = slice_de[1].get::<Fraction>().expect("slice_de[1]");
+        let fraction = slice[1].get::<Fraction>().expect("slice[1]");
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction.0.denom(), fraction.0.denom());
 
         assert_eq!(
-            slice_de[2].get::<String>().expect("slice_de[2]").unwrap(),
-            slice[2].get::<String>().expect("slice[2]").unwrap()
+            slice_de[2].get::<String>().expect("slice_de[2]"),
+            slice[2].get::<String>().expect("slice[2]")
         );
 
-        assert!(slice[3].get::<String>().expect("slice[3]").is_none());
+        assert!(slice[3]
+            .get::<Option<String>>()
+            .expect("slice[3]")
+            .is_none());
 
         assert_eq!(
-            slice_de[4].get::<Date>().expect("slice_de[4]").unwrap(),
-            slice[4].get::<Date>().expect("slice[4]").unwrap()
+            slice_de[4].get::<Date>().expect("slice_de[4]"),
+            slice[4].get::<Date>().expect("slice[4]")
         );
 
-        assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
+        assert!(slice[5].get::<Option<Date>>().expect("slice[5]").is_none());
 
         // List
         let value_12 = Fraction::new(1, 2);
@@ -675,23 +690,29 @@ mod tests {
         let slice = list.as_slice();
         assert_eq!(slice_de.len(), slice.len());
 
-        let fraction_de = slice_de[0].get::<Fraction>().expect("slice_de[0]").unwrap();
-        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
+        let fraction_de = slice_de[0].get::<Fraction>().expect("slice_de[0]");
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]");
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction_de.0.denom(), fraction.0.denom());
 
         assert_eq!(
-            slice_de[1].get::<String>().expect("slice_de[1]").unwrap(),
-            slice[1].get::<String>().expect("slice[1]").unwrap()
+            slice_de[1].get::<String>().expect("slice_de[1]"),
+            slice[1].get::<String>().expect("slice[1]")
         );
 
-        assert!(slice[2].get::<String>().expect("slice[2]").is_none());
+        assert!(slice[2]
+            .get::<Option<String>>()
+            .expect("slice[2]")
+            .is_none());
 
         assert_eq!(
-            slice_de[3].get::<DateTime>().expect("slice_de[3]").unwrap(),
-            slice[3].get::<DateTime>().expect("slice[3]").unwrap()
+            slice_de[3].get::<DateTime>().expect("slice_de[3]"),
+            slice[3].get::<DateTime>().expect("slice[3]")
         );
 
-        assert!(slice[4].get::<DateTime>().expect("slice[4]").is_none());
+        assert!(slice[4]
+            .get::<Option<DateTime>>()
+            .expect("slice[4]")
+            .is_none());
     }
 }

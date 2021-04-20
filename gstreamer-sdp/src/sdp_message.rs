@@ -8,6 +8,7 @@ use std::ops;
 use std::ptr;
 
 use glib::translate::*;
+use glib::StaticType;
 
 use crate::sdp_attribute::SDPAttribute;
 use crate::sdp_bandwidth::SDPBandwidth;
@@ -882,36 +883,44 @@ impl glib::types::StaticType for SDPMessageRef {
     }
 }
 
-impl<'a> glib::value::FromValueOptional<'a> for &'a SDPMessageRef {
-    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        let ptr = glib::gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(&*(ptr as *const SDPMessageRef))
-        }
+unsafe impl<'a> glib::value::FromValue<'a> for &'a SDPMessageRef {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut SDPMessageRef)
     }
 }
 
-impl glib::value::SetValue for SDPMessageRef {
-    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(
-            v.to_glib_none_mut().0,
-            s as *const SDPMessageRef as glib::ffi::gpointer,
-        );
-    }
-}
-
-impl glib::value::SetValueOptional for SDPMessageRef {
-    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-        if let Some(s) = s {
+impl glib::value::ToValue for SDPMessageRef {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<SDPMessage>();
+        unsafe {
             glib::gobject_ffi::g_value_set_boxed(
-                v.to_glib_none_mut().0,
-                s as *const SDPMessageRef as glib::ffi::gpointer,
-            );
-        } else {
-            glib::gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+                value.to_glib_none_mut().0,
+                &self.0 as *const ffi::GstSDPMessage as *mut _,
+            )
         }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl glib::value::ToValueOptional for SDPMessageRef {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<SDPMessage>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.map(|s| &s.0 as *const ffi::GstSDPMessage)
+                    .unwrap_or(ptr::null()) as *mut _,
+            )
+        }
+        value
     }
 }
 

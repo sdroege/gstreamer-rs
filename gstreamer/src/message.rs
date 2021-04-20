@@ -1555,7 +1555,7 @@ struct MessageBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     #[allow(unused)]
-    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
 }
 
 impl<'a> MessageBuilder<'a> {
@@ -1583,7 +1583,7 @@ impl<'a> MessageBuilder<'a> {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
+    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
         Self {
             other_fields: self
                 .other_fields
@@ -1617,7 +1617,10 @@ macro_rules! message_builder_generic_impl {
         #[cfg(any(feature = "v1_14", feature = "dox"))]
         #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
         #[allow(clippy::needless_update)]
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
+        pub fn other_fields(
+            self,
+            other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))],
+        ) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
                 ..self
@@ -2117,7 +2120,7 @@ pub struct StreamStatusBuilder<'a> {
     builder: MessageBuilder<'a>,
     type_: crate::StreamStatusType,
     owner: &'a crate::Element,
-    status_object: Option<&'a dyn glib::ToSendValue>,
+    status_object: Option<&'a (dyn glib::ToSendValue + Sync)>,
 }
 
 impl<'a> StreamStatusBuilder<'a> {
@@ -2131,7 +2134,7 @@ impl<'a> StreamStatusBuilder<'a> {
         }
     }
 
-    pub fn status_object(self, status_object: &'a dyn glib::ToSendValue) -> Self {
+    pub fn status_object(self, status_object: &'a (dyn glib::ToSendValue + Sync)) -> Self {
         Self {
             status_object: Some(status_object),
             ..self
@@ -2614,7 +2617,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 pub struct PropertyNotifyBuilder<'a> {
     builder: MessageBuilder<'a>,
     property_name: &'a str,
-    value: Option<&'a dyn glib::ToSendValue>,
+    value: Option<&'a (dyn glib::ToSendValue + Sync)>,
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2629,7 +2632,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
-    pub fn value(self, value: &'a dyn glib::ToSendValue) -> Self {
+    pub fn value(self, value: &'a (dyn glib::ToSendValue + Sync)) -> Self {
         Self {
             value: Some(value),
             ..self

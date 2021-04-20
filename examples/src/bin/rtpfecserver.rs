@@ -109,8 +109,7 @@ fn example_main() -> Result<(), Error> {
     rtpbin.connect("request-fec-encoder", false, move |values| {
         let rtpbin = values[0]
             .get::<gst::Element>()
-            .expect("rtpbin \"request-fec-encoder\" signal values[0]")
-            .expect("rtpbin \"request-fec-encoder\" signal values[0]: no `Element`");
+            .expect("rtpbin \"request-fec-encoder\" signal values[0]");
 
         match make_fec_encoder(fec_percentage) {
             Ok(elem) => Some(elem.to_value()),

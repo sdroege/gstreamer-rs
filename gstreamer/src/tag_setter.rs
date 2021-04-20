@@ -5,19 +5,14 @@ use crate::TagMergeMode;
 use crate::TagSetter;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::value::ToSendValue;
+use glib::ToSendValue;
 
 pub trait TagSetterExtManual: 'static {
-    fn add<'a, T: Tag<'a>>(&self, value: T::TagType, mode: TagMergeMode)
-    where
-        T::TagType: ToSendValue;
+    fn add<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode);
 }
 
 impl<O: IsA<TagSetter>> TagSetterExtManual for O {
-    fn add<'a, T: Tag<'a>>(&self, value: T::TagType, mode: TagMergeMode)
-    where
-        T::TagType: ToSendValue,
-    {
+    fn add<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode) {
         unsafe {
             let v = value.to_send_value();
 

@@ -11,8 +11,7 @@ use thiserror::Error;
 
 use glib::translate::*;
 use glib::value::FromValue;
-use glib::value::FromValueOptional;
-use glib::value::SetValue;
+use glib::value::ToValue;
 use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
@@ -610,21 +609,30 @@ impl StaticType for MessageType {
     }
 }
 
-impl<'a> FromValueOptional<'a> for MessageType {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
+impl glib::value::ValueType for MessageType {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for MessageType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0) as ffi::GstMessageType)
     }
 }
 
-impl<'a> FromValue<'a> for MessageType {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+impl ToValue for MessageType {
+    fn to_value(&self) -> Value {
+        let mut value = glib::Value::for_value_type::<MessageType>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib() as i32)
+        }
+        value
     }
-}
 
-impl SetValue for MessageType {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    fn value_type(&self) -> Type {
+        Self::static_type()
     }
 }
 

@@ -424,41 +424,58 @@ macro_rules! mini_object_wrapper (
             }
         }
 
-        impl<'a> $crate::glib::value::FromValueOptional<'a>
-            for $name
-        {
-            unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-                let ptr = $crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(v).0);
-                $crate::glib::translate::from_glib_none(ptr as *const $ffi_name)
+        impl glib::value::ValueType for $name {
+            type Type = Self;
+        }
+
+        unsafe impl<'a> $crate::glib::value::FromValue<'a> for $name {
+            type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+                skip_assert_initialized!();
+                $crate::glib::translate::from_glib_none(
+                    $crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(value).0) as *mut $ffi_name
+                )
             }
         }
 
-        impl $crate::glib::value::SetValue for $name {
-            unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-                $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, s.as_ptr() as $crate::glib::ffi::gpointer);
-            }
-        }
-
-        impl $crate::glib::value::SetValueOptional for $name {
-            unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-                if let Some(s) = s {
-                    $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, s.as_ptr() as $crate::glib::ffi::gpointer);
-                } else {
-                    $crate::glib::gobject_ffi::g_value_set_boxed($crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(v).0, std::ptr::null_mut());
+        impl $crate::glib::value::ToValue for $name {
+            fn to_value(&self) -> $crate::glib::Value {
+                let mut value = $crate::glib::Value::for_value_type::<$name>();
+                unsafe {
+                    $crate::glib::gobject_ffi::g_value_set_boxed(
+                        $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut value).0,
+                        $crate::glib::translate::ToGlibPtr::<*const $ffi_name>::to_glib_none(self).0 as *mut _,
+                    )
                 }
+                value
+            }
+
+            fn value_type(&self) -> $crate::glib::Type {
+                <Self as $crate::glib::StaticType>::static_type()
             }
         }
 
-        impl<'a> $crate::glib::value::FromValueOptional<'a>
-            for &'a $ref_name
-        {
-            unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-                let ptr = glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(v).0);
-                if ptr.is_null() {
-                    None
-                } else {
-                    Some(&*(ptr as *const $ref_name))
+        impl $crate::glib::value::ToValueOptional for $name {
+            fn to_value_optional(s: Option<&Self>) -> $crate::glib::Value {
+                skip_assert_initialized!();
+                let mut value = $crate::glib::Value::for_value_type::<$name>();
+                unsafe {
+                    $crate::glib::gobject_ffi::g_value_set_boxed(
+                        $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut value).0,
+                        $crate::glib::translate::ToGlibPtr::<*const $ffi_name>::to_glib_none(&s).0 as *mut _,
+                    )
                 }
+                value
+            }
+        }
+
+        unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $ref_name {
+            type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+                skip_assert_initialized!();
+                &*($crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(value).0) as *const $ref_name)
             }
         }
 

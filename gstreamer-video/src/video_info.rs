@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrFull, FromGlibPtrNone, ToGlib,
-    ToGlibPtr, ToGlibPtrMut,
+    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrFull, ToGlib, ToGlibPtr,
+    ToGlibPtrMut,
 };
 use gst::prelude::*;
 
@@ -55,21 +55,28 @@ impl glib::StaticType for VideoColorRange {
     }
 }
 
-impl<'a> glib::value::FromValueOptional<'a> for VideoColorRange {
-    unsafe fn from_value_optional(value: &glib::value::Value) -> Option<Self> {
-        Some(glib::value::FromValue::from_value(value))
-    }
+impl glib::value::ValueType for VideoColorRange {
+    type Type = Self;
 }
 
-impl<'a> glib::value::FromValue<'a> for VideoColorRange {
-    unsafe fn from_value(value: &glib::value::Value) -> Self {
+unsafe impl<'a> glib::value::FromValue<'a> for VideoColorRange {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &glib::Value) -> Self {
+        skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl glib::value::SetValue for VideoColorRange {
-    unsafe fn set_value(value: &mut glib::value::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+impl glib::value::ToValue for VideoColorRange {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<VideoColorRange>();
+        unsafe { glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib()) }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -858,34 +865,52 @@ impl glib::types::StaticType for VideoInfo {
     }
 }
 
-#[doc(hidden)]
-impl<'a> glib::value::FromValueOptional<'a> for VideoInfo {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<VideoInfo>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
-            value.to_glib_none().0,
-        ) as *mut ffi::GstVideoInfo)
-    }
+impl glib::value::ValueType for VideoInfo {
+    type Type = Self;
 }
 
 #[doc(hidden)]
-impl glib::value::SetValue for VideoInfo {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstVideoInfo>::to_glib_none(this).0
-                as glib::ffi::gpointer,
+unsafe impl<'a> glib::value::FromValue<'a> for VideoInfo {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib_none(
+            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstVideoInfo
         )
     }
 }
 
 #[doc(hidden)]
-impl glib::value::SetValueOptional for VideoInfo {
-    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstVideoInfo>::to_glib_none(&this).0
-                as glib::ffi::gpointer,
-        )
+impl glib::value::ToValue for VideoInfo {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<VideoInfo>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0 as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[doc(hidden)]
+impl glib::value::ToValueOptional for VideoInfo {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<VideoInfo>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.to_glib_none().0 as *mut _,
+            )
+        }
+        value
     }
 }
 

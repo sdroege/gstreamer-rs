@@ -6,6 +6,7 @@ use crate::GenericFormattedValue;
 use crate::SeekFlags;
 use crate::SeekType;
 use glib::translate::*;
+use glib::StaticType;
 use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
@@ -558,37 +559,55 @@ impl<T: FormattedValue> glib::types::StaticType for FormattedSegment<T> {
     }
 }
 
-#[doc(hidden)]
-impl<'a> glib::value::FromValueOptional<'a> for Segment {
-    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<Segment>::from_glib_none(glib::gobject_ffi::g_value_get_boxed(
-            value.to_glib_none().0,
-        ) as *mut ffi::GstSegment)
-    }
+impl glib::value::ValueType for Segment {
+    type Type = Self;
 }
 
 #[doc(hidden)]
-impl<T: FormattedValue> glib::value::SetValue for FormattedSegment<T> {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(this).0
-                as glib::ffi::gpointer,
+unsafe impl<'a> glib::value::FromValue<'a> for Segment {
+    type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib_none(
+            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstSegment
         )
     }
 }
 
 #[doc(hidden)]
-impl<T: FormattedValue> glib::value::SetValueOptional for FormattedSegment<T> {
-    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        glib::gobject_ffi::g_value_set_boxed(
-            value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(&this).0
-                as glib::ffi::gpointer,
-        )
+impl<T: FormattedValue> glib::value::ToValue for FormattedSegment<T> {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Segment>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0 as *mut _,
+            )
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
+#[doc(hidden)]
+impl<T: FormattedValue> glib::value::ToValueOptional for FormattedSegment<T> {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        let mut value = glib::Value::for_value_type::<Segment>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_boxed(
+                value.to_glib_none_mut().0,
+                s.to_glib_none().0 as *mut _,
+            )
+        }
+        value
+    }
+}
+#[doc(hidden)]
 #[doc(hidden)]
 impl<T: FormattedValue> glib::translate::GlibPtrDefault for FormattedSegment<T> {
     type GlibType = *mut ffi::GstSegment;

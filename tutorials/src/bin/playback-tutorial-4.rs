@@ -100,18 +100,14 @@ fn tutorial_main() -> Result<(), Error> {
     .expect("Failed to add bus watch");
 
     pipeline.connect("deep-notify::temp-location", false, |args| {
-        let download_buffer = args[1]
-            .get::<gst::Object>()
-            .unwrap()
-            .expect("download buffer");
+        let download_buffer = args[1].get::<gst::Object>().unwrap();
         println!(
             "Temporary file: {:?}",
             download_buffer
                 .property("temp-location")
                 .unwrap()
-                .get::<String>()
+                .get::<Option<String>>()
                 .unwrap()
-                .as_deref()
         );
         // Uncomment this line to keep the temporary file after the program exists.
         // download_buffer.set_property("temp-remove", &false).ok();

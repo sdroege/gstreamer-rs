@@ -8,7 +8,8 @@ use std::ops;
 use std::slice;
 
 use glib::translate::{from_glib, FromGlibPtrFull, ToGlibPtr, ToGlibPtrMut, Uninitialized};
-use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
+use glib::value::ToSendValue;
+use glib::StaticType;
 
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct Fraction(pub Rational32);
@@ -243,24 +244,33 @@ impl glib::types::StaticType for Fraction {
     }
 }
 
-impl<'a> FromValue<'a> for Fraction {
-    unsafe fn from_value(v: &'a Value) -> Self {
-        let n = ffi::gst_value_get_fraction_numerator(v.to_glib_none().0);
-        let d = ffi::gst_value_get_fraction_denominator(v.to_glib_none().0);
+impl glib::value::ValueType for Fraction {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for Fraction {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        let n = ffi::gst_value_get_fraction_numerator(value.to_glib_none().0);
+        let d = ffi::gst_value_get_fraction_denominator(value.to_glib_none().0);
 
         Fraction::new(n, d)
     }
 }
 
-impl<'a> FromValueOptional<'a> for Fraction {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
-        Some(Fraction::from_value(v))
+impl glib::value::ToValue for Fraction {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Fraction>();
+        unsafe {
+            ffi::gst_value_set_fraction(value.to_glib_none_mut().0, *self.numer(), *self.denom());
+        }
+        value
     }
-}
 
-impl SetValue for Fraction {
-    unsafe fn set_value(v: &mut Value, f: &Self) {
-        ffi::gst_value_set_fraction(v.to_glib_none_mut().0, *f.numer(), *f.denom());
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -352,25 +362,39 @@ impl glib::types::StaticType for IntRange<i32> {
     }
 }
 
-impl<'a> FromValue<'a> for IntRange<i32> {
-    unsafe fn from_value(v: &'a Value) -> Self {
-        let min = ffi::gst_value_get_int_range_min(v.to_glib_none().0);
-        let max = ffi::gst_value_get_int_range_max(v.to_glib_none().0);
-        let step = ffi::gst_value_get_int_range_step(v.to_glib_none().0);
+impl glib::value::ValueType for IntRange<i32> {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for IntRange<i32> {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        let min = ffi::gst_value_get_int_range_min(value.to_glib_none().0);
+        let max = ffi::gst_value_get_int_range_max(value.to_glib_none().0);
+        let step = ffi::gst_value_get_int_range_step(value.to_glib_none().0);
 
         Self::with_step(min, max, step)
     }
 }
 
-impl<'a> FromValueOptional<'a> for IntRange<i32> {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
-        Some(Self::from_value(v))
+impl glib::value::ToValue for IntRange<i32> {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<IntRange<i32>>();
+        unsafe {
+            ffi::gst_value_set_int_range_step(
+                value.to_glib_none_mut().0,
+                self.min(),
+                self.max(),
+                self.step(),
+            );
+        }
+        value
     }
-}
 
-impl SetValue for IntRange<i32> {
-    unsafe fn set_value(v: &mut Value, r: &Self) {
-        ffi::gst_value_set_int_range_step(v.to_glib_none_mut().0, r.min(), r.max(), r.step());
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -380,25 +404,39 @@ impl glib::types::StaticType for IntRange<i64> {
     }
 }
 
-impl<'a> FromValue<'a> for IntRange<i64> {
-    unsafe fn from_value(v: &'a Value) -> Self {
-        let min = ffi::gst_value_get_int64_range_min(v.to_glib_none().0);
-        let max = ffi::gst_value_get_int64_range_max(v.to_glib_none().0);
-        let step = ffi::gst_value_get_int64_range_step(v.to_glib_none().0);
+impl glib::value::ValueType for IntRange<i64> {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for IntRange<i64> {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        let min = ffi::gst_value_get_int64_range_min(value.to_glib_none().0);
+        let max = ffi::gst_value_get_int64_range_max(value.to_glib_none().0);
+        let step = ffi::gst_value_get_int64_range_step(value.to_glib_none().0);
 
         Self::with_step(min, max, step)
     }
 }
 
-impl<'a> FromValueOptional<'a> for IntRange<i64> {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
-        Some(Self::from_value(v))
+impl glib::value::ToValue for IntRange<i64> {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<IntRange<i64>>();
+        unsafe {
+            ffi::gst_value_set_int64_range_step(
+                value.to_glib_none_mut().0,
+                self.min(),
+                self.max(),
+                self.step(),
+            );
+        }
+        value
     }
-}
 
-impl SetValue for IntRange<i64> {
-    unsafe fn set_value(v: &mut Value, r: &Self) {
-        ffi::gst_value_set_int64_range_step(v.to_glib_none_mut().0, r.min(), r.max(), r.step());
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -444,10 +482,17 @@ impl glib::types::StaticType for FractionRange {
     }
 }
 
-impl<'a> FromValue<'a> for FractionRange {
-    unsafe fn from_value(v: &'a Value) -> Self {
-        let min = ffi::gst_value_get_fraction_range_min(v.to_glib_none().0);
-        let max = ffi::gst_value_get_fraction_range_max(v.to_glib_none().0);
+impl glib::value::ValueType for FractionRange {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for FractionRange {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        let min = ffi::gst_value_get_fraction_range_min(value.to_glib_none().0);
+        let max = ffi::gst_value_get_fraction_range_max(value.to_glib_none().0);
 
         let min_n = ffi::gst_value_get_fraction_numerator(min);
         let min_d = ffi::gst_value_get_fraction_denominator(min);
@@ -458,21 +503,23 @@ impl<'a> FromValue<'a> for FractionRange {
     }
 }
 
-impl<'a> FromValueOptional<'a> for FractionRange {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
-        Some(Self::from_value(v))
+impl glib::value::ToValue for FractionRange {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<FractionRange>();
+        unsafe {
+            ffi::gst_value_set_fraction_range_full(
+                value.to_glib_none_mut().0,
+                *self.min().numer(),
+                *self.min().denom(),
+                *self.max().numer(),
+                *self.max().denom(),
+            );
+        }
+        value
     }
-}
 
-impl SetValue for FractionRange {
-    unsafe fn set_value(v: &mut Value, r: &Self) {
-        ffi::gst_value_set_fraction_range_full(
-            v.to_glib_none_mut().0,
-            *r.min().numer(),
-            *r.min().denom(),
-            *r.max().numer(),
-            *r.max().denom(),
-        );
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -546,22 +593,31 @@ impl glib::types::StaticType for Bitmask {
     }
 }
 
-impl<'a> FromValue<'a> for Bitmask {
-    unsafe fn from_value(v: &'a Value) -> Self {
-        let v = ffi::gst_value_get_bitmask(v.to_glib_none().0);
+impl glib::value::ValueType for Bitmask {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for Bitmask {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        let v = ffi::gst_value_get_bitmask(value.to_glib_none().0);
         Self::new(v)
     }
 }
 
-impl<'a> FromValueOptional<'a> for Bitmask {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
-        Some(Self::from_value(v))
+impl glib::value::ToValue for Bitmask {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Bitmask>();
+        unsafe {
+            ffi::gst_value_set_bitmask(value.to_glib_none_mut().0, self.0);
+        }
+        value
     }
-}
 
-impl SetValue for Bitmask {
-    unsafe fn set_value(v: &mut Value, r: &Self) {
-        ffi::gst_value_set_bitmask(v.to_glib_none_mut().0, r.0);
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -569,9 +625,10 @@ impl SetValue for Bitmask {
 pub struct Array<'a>(Cow<'a, [glib::SendValue]>);
 
 unsafe impl<'a> Send for Array<'a> {}
+unsafe impl<'a> Sync for Array<'a> {}
 
 impl<'a> Array<'a> {
-    pub fn new(values: &[&dyn ToSendValue]) -> Self {
+    pub fn new(values: &[&(dyn ToSendValue + Sync)]) -> Self {
         assert_initialized_main_thread!();
 
         Array(values.iter().map(|v| v.to_send_value()).collect())
@@ -598,8 +655,8 @@ impl<'a> Array<'a> {
     }
 }
 
-impl<'a> From<&'a [&'a dyn ToSendValue]> for Array<'a> {
-    fn from(values: &'a [&'a dyn ToSendValue]) -> Self {
+impl<'a> From<&'a [&'a (dyn ToSendValue + Sync)]> for Array<'a> {
+    fn from(values: &'a [&'a (dyn ToSendValue + Sync)]) -> Self {
         skip_assert_initialized!();
 
         Self::new(values)
@@ -614,9 +671,16 @@ impl<'a> From<&'a [glib::SendValue]> for Array<'a> {
     }
 }
 
-impl<'a> FromValue<'a> for Array<'a> {
-    unsafe fn from_value(v: &'a Value) -> Self {
-        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
+impl<'a> glib::value::ValueType for Array<'static> {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for Array<'a> {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
         if arr.is_null() {
             Array(Cow::Borrowed(&[]))
         } else {
@@ -629,17 +693,19 @@ impl<'a> FromValue<'a> for Array<'a> {
     }
 }
 
-impl<'a> FromValueOptional<'a> for Array<'a> {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
-        Some(Array::from_value(v))
-    }
-}
-
-impl<'a> SetValue for Array<'a> {
-    unsafe fn set_value(v: &mut Value, a: &Self) {
-        for value in a.as_slice() {
-            ffi::gst_value_array_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
+impl<'a> glib::value::ToValue for Array<'a> {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Array<'static>>();
+        unsafe {
+            for v in self.as_slice() {
+                ffi::gst_value_array_append_value(value.to_glib_none_mut().0, v.to_glib_none().0);
+            }
         }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
@@ -653,9 +719,10 @@ impl<'a> glib::types::StaticType for Array<'a> {
 pub struct List<'a>(Cow<'a, [glib::SendValue]>);
 
 unsafe impl<'a> Send for List<'a> {}
+unsafe impl<'a> Sync for List<'a> {}
 
 impl<'a> List<'a> {
-    pub fn new(values: &[&dyn ToSendValue]) -> Self {
+    pub fn new(values: &[&(dyn ToSendValue + Sync)]) -> Self {
         assert_initialized_main_thread!();
 
         List(values.iter().map(|v| v.to_send_value()).collect())
@@ -682,8 +749,8 @@ impl<'a> List<'a> {
     }
 }
 
-impl<'a> From<&'a [&'a dyn ToSendValue]> for List<'a> {
-    fn from(values: &'a [&'a dyn ToSendValue]) -> Self {
+impl<'a> From<&'a [&'a (dyn ToSendValue + Sync)]> for List<'a> {
+    fn from(values: &'a [&'a (dyn ToSendValue + Sync)]) -> Self {
         skip_assert_initialized!();
 
         Self::new(values)
@@ -698,9 +765,16 @@ impl<'a> From<&'a [glib::SendValue]> for List<'a> {
     }
 }
 
-impl<'a> FromValue<'a> for List<'a> {
-    unsafe fn from_value(v: &'a Value) -> Self {
-        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
+impl glib::value::ValueType for List<'static> {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for List<'a> {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        let arr = (*value.to_glib_none().0).data[0].v_pointer as *const glib::ffi::GArray;
         if arr.is_null() {
             List(Cow::Borrowed(&[]))
         } else {
@@ -713,17 +787,19 @@ impl<'a> FromValue<'a> for List<'a> {
     }
 }
 
-impl<'a> FromValueOptional<'a> for List<'a> {
-    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
-        Some(List::from_value(v))
-    }
-}
-
-impl<'a> SetValue for List<'a> {
-    unsafe fn set_value(v: &mut Value, a: &Self) {
-        for value in a.as_slice() {
-            ffi::gst_value_list_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
+impl<'a> glib::value::ToValue for List<'a> {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<List<'static>>();
+        unsafe {
+            for v in self.as_slice() {
+                ffi::gst_value_list_append_value(value.to_glib_none_mut().0, v.to_glib_none().0);
+            }
         }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 

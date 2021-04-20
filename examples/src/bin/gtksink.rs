@@ -37,7 +37,7 @@ fn create_ui(app: &gtk::Application) {
         // The gtkglsink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
         let widget = gtkglsink.property("widget").unwrap();
-        (glsinkbin, widget.get::<gtk::Widget>().unwrap().unwrap())
+        (glsinkbin, widget.get::<gtk::Widget>().unwrap())
     } else {
         // Unfortunately, using the OpenGL widget didn't work out, so we will have to render
         // our frames manually, using the CPU. An example why this may fail is, when
@@ -46,7 +46,7 @@ fn create_ui(app: &gtk::Application) {
         // The gtksink creates the gtk widget for us. This is accessible through a property.
         // So we get it and use it later to add it to our gui.
         let widget = sink.property("widget").unwrap();
-        (sink, widget.get::<gtk::Widget>().unwrap().unwrap())
+        (sink, widget.get::<gtk::Widget>().unwrap())
     };
 
     pipeline.add_many(&[&src, &sink]).unwrap();

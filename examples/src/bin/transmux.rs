@@ -100,8 +100,7 @@ fn example_main() -> Result<(), Error> {
             // much more corner-cases. This is just for the sake of being an example.
             let caps = values[2]
                 .get::<gst::Caps>()
-                .expect("typefinder \"have-type\" signal values[2]")
-                .expect("typefinder \"have-type\" signal values[2]: no `caps`");
+                .expect("typefinder \"have-type\" signal values[2]");
             let format_name = caps.structure(0).expect("Failed to get format name").name();
 
             let demuxer = match format_name {

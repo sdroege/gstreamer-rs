@@ -21,7 +21,10 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
+        pub fn other_fields(
+            self,
+            other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))],
+        ) -> Self {
             Self {
                 other_fields: self
                     .other_fields
@@ -64,7 +67,7 @@ macro_rules! event_builder_generic_impl {
 pub struct DownstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
     timestamp: gst::ClockTime,
     stream_time: gst::ClockTime,
     running_time: gst::ClockTime,
@@ -178,7 +181,7 @@ impl DownstreamForceKeyUnitEvent {
 pub struct UpstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
     running_time: gst::ClockTime,
     all_headers: bool,
     count: u32,
@@ -289,7 +292,7 @@ impl ForceKeyUnitEvent {
 pub struct StillFrameEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
     in_still: bool,
 }
 

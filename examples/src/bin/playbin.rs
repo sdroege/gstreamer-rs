@@ -57,12 +57,11 @@ fn example_main() {
             // mark the beginning of a new track, or a new DJ.
             let playbin = values[0]
                 .get::<glib::Object>()
-                .expect("playbin \"audio-tags-changed\" signal values[1]")
-                .unwrap();
+                .expect("playbin \"audio-tags-changed\" signal values[1]");
             // This gets the index of the stream that changed. This is neccessary, since
             // there could e.g. be multiple audio streams (english, spanish, ...).
             let idx = values[1]
-                .get_some::<i32>()
+                .get::<i32>()
                 .expect("playbin \"audio-tags-changed\" signal values[1]");
 
             println!("audio tags of audio stream {} changed:", idx);
@@ -81,18 +80,18 @@ fn example_main() {
                 .emit_by_name("get-audio-tags", &[&idx])
                 .unwrap()
                 .unwrap();
-            let tags = tags.get::<gst::TagList>().expect("tags").unwrap();
+            let tags = tags.get::<gst::TagList>().expect("tags");
 
             if let Some(artist) = tags.get::<gst::tags::Artist>() {
-                println!("  Artist: {}", artist.get().unwrap());
+                println!("  Artist: {}", artist.get());
             }
 
             if let Some(title) = tags.get::<gst::tags::Title>() {
-                println!("  Title: {}", title.get().unwrap());
+                println!("  Title: {}", title.get());
             }
 
             if let Some(album) = tags.get::<gst::tags::Album>() {
-                println!("  Album: {}", album.get().unwrap());
+                println!("  Album: {}", album.get());
             }
 
             None

@@ -139,8 +139,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             let drawer = drawer.lock().unwrap();
 
             // Get the signal's arguments
-            let _overlay = args[0].get::<gst::Element>().unwrap().unwrap();
-            let sample = args[1].get::<gst::Sample>().unwrap().unwrap();
+            let _overlay = args[0].get::<gst::Element>().unwrap();
+            let sample = args[1].get::<gst::Sample>().unwrap();
             let buffer = sample.buffer().unwrap();
             let timestamp = buffer.pts();
 
@@ -276,8 +276,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // stream that dynamically changes resolution when enough bandwith is available.
     overlay
         .connect("caps-changed", false, move |args| {
-            let _overlay = args[0].get::<gst::Element>().unwrap().unwrap();
-            let caps = args[1].get::<gst::Caps>().unwrap().unwrap();
+            let _overlay = args[0].get::<gst::Element>().unwrap();
+            let caps = args[1].get::<gst::Caps>().unwrap();
 
             let mut drawer = drawer.lock().unwrap();
             drawer.info = Some(gst_video::VideoInfo::from_caps(&caps).unwrap());

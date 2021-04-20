@@ -1663,7 +1663,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             let gtype = templ
                 .property("gtype")
                 .unwrap()
-                .get_some::<glib::Type>()
+                .get::<glib::Type>()
                 .unwrap();
 
             if gtype == glib::Type::UNIT {

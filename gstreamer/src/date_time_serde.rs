@@ -3,7 +3,7 @@
 use std::convert::{TryFrom, TryInto};
 
 use glib::translate::{FromGlib, ToGlib};
-use glib::value::{SetValue, SetValueOptional};
+use glib::value::{ToValue, ToValueOptional};
 use glib::StaticType;
 
 use crate::DateTime;
@@ -33,15 +33,20 @@ impl From<glib::Date> for Date {
     }
 }
 
-impl SetValue for Date {
-    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        glib::value::SetValue::set_value(value, &this.0);
+impl ToValue for Date {
+    fn to_value(&self) -> glib::Value {
+        self.0.to_value()
+    }
+
+    fn value_type(&self) -> glib::Type {
+        glib::Date::static_type()
     }
 }
 
-impl SetValueOptional for Date {
-    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        glib::value::SetValueOptional::set_value_optional(value, this.map(|this| &this.0));
+impl ToValueOptional for Date {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        s.map(|s| &s.0).to_value()
     }
 }
 
