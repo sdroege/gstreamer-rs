@@ -53,7 +53,7 @@ impl Promise {
             let promise: Borrowed<Promise> = from_glib_borrow(promise);
 
             let res = match promise.wait() {
-                PromiseResult::Replied => Ok(promise.reply()),
+                PromiseResult::Replied => Ok(promise.get_reply()),
                 PromiseResult::Interrupted => Err(PromiseError::Interrupted),
                 PromiseResult::Expired => Err(PromiseError::Expired),
                 PromiseResult::Pending => {
@@ -103,7 +103,7 @@ impl Promise {
         }
     }
 
-    pub fn reply(&self) -> Option<&StructureRef> {
+    pub fn get_reply(&self) -> Option<&StructureRef> {
         unsafe {
             let s = ffi::gst_promise_get_reply(self.to_glib_none().0);
             if s.is_null() {

@@ -62,7 +62,8 @@ impl BufferListRef {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    pub fn writable(&mut self, idx: u32) -> Option<&mut BufferRef> {
+    #[doc(alias = "gst_buffer_list_get_writable")]
+    pub fn get_mut(&mut self, idx: u32) -> Option<&mut BufferRef> {
         unsafe {
             let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);
             if ptr.is_null() {
@@ -218,7 +219,7 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $item(self.list, self.idx)?;
+            let item = $get_item(self.list, self.idx)?;
             self.idx += 1;
 
             Some(item)
@@ -242,7 +243,7 @@ macro_rules! define_iter(
             }
 
             self.size -= 1;
-            $item(self.list, self.size)
+            $get_item(self.list, self.size)
         }
     }
 

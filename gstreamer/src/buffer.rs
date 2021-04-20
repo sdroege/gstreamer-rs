@@ -797,7 +797,7 @@ macro_rules! define_iter(
 
             #[allow(unused_unsafe)]
             unsafe {
-                let item = $item(self.buffer, self.idx)?;
+                let item = $get_item(self.buffer, self.idx)?;
                 self.idx += 1;
                 Some(item)
             }
@@ -824,7 +824,7 @@ macro_rules! define_iter(
 
             #[allow(unused_unsafe)]
             unsafe {
-                $item(self.buffer, self.n_memory)
+                $get_item(self.buffer, self.n_memory)
             }
         }
     }

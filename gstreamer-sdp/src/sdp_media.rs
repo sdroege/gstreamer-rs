@@ -606,7 +606,7 @@ macro_rules! define_iter(
     impl<'a> $name<'a> {
         fn new(media: &'a SDPMediaRef) -> $name<'a> {
             skip_assert_initialized!();
-            let len = $len(media);
+            let len = $get_len(media);
 
             $name {
                 media,
@@ -624,7 +624,7 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $item(self.media, self.idx)?;
+            let item = $get_item(self.media, self.idx)?;
             self.idx += 1;
             Some(item)
         }
@@ -648,7 +648,7 @@ macro_rules! define_iter(
 
             self.len -= 1;
 
-            $item(self.media, self.len)
+            $get_item(self.media, self.len)
         }
     }
 

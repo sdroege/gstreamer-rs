@@ -195,7 +195,7 @@ fn handle_demux_pad_added(
     // For that, we need to request a sink pad that fits our needs.
     let link_to_muxer = || -> Result<(), Error> {
         let queue_sink_pad = queue
-            .request_pad("sink_%u")
+            .request_pad_simple("sink_%u")
             .expect("If this happened, something is terribly wrong");
         demux_src_pad.link(&queue_sink_pad)?;
         // Now that we requested a sink pad fitting our needs from the multiqueue,

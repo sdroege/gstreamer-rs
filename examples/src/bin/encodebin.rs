@@ -185,7 +185,7 @@ fn example_main() -> Result<(), Error> {
                 // The encodebin will then automatically create an internal pipeline, that encodes
                 // the audio stream in the format we specified in the EncodingProfile.
                 let enc_sink_pad = encodebin
-                    .request_pad("audio_%u")
+                    .request_pad_simple("audio_%u")
                     .expect("Could not get audio pad from encodebin");
                 let src_pad = resample.static_pad("src").expect("resample has no srcpad");
                 src_pad.link(&enc_sink_pad)?;
@@ -216,7 +216,7 @@ fn example_main() -> Result<(), Error> {
                 // The encodebin will then automatically create an internal pipeline, that encodes
                 // the audio stream in the format we specified in the EncodingProfile.
                 let enc_sink_pad = encodebin
-                    .request_pad("video_%u")
+                    .request_pad_simple("video_%u")
                     .expect("Could not get video pad from encodebin");
                 let src_pad = scale.static_pad("src").expect("videoscale has no srcpad");
                 src_pad.link(&enc_sink_pad)?;

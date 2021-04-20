@@ -927,7 +927,7 @@ macro_rules! define_iter(
     impl<'a> $name<'a> {
         fn new(message: &'a SDPMessageRef) -> $name<'a> {
             skip_assert_initialized!();
-            let len = $len(message);
+            let len = $get_len(message);
 
             $name {
                 message,
@@ -945,7 +945,7 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $item(self.message, self.idx)?;
+            let item = $get_item(self.message, self.idx)?;
             self.idx += 1;
             Some(item)
         }
@@ -969,7 +969,7 @@ macro_rules! define_iter(
 
             self.len -= 1;
 
-            $item(self.message, self.len)
+            $get_item(self.message, self.len)
         }
     }
 
@@ -989,7 +989,7 @@ macro_rules! define_iter_mut(
     impl<'a> $name<'a> {
         fn new(message: &'a mut SDPMessageRef) -> $name<'a> {
             skip_assert_initialized!();
-            let len = $len(message);
+            let len = $get_len(message);
 
             $name {
                 message,
@@ -1019,7 +1019,7 @@ macro_rules! define_iter_mut(
                 return None;
             }
 
-            let item = $item(message, self.idx)?;
+            let item = $get_item(message, self.idx)?;
             self.idx += 1;
             Some(item)
         }
@@ -1046,7 +1046,7 @@ macro_rules! define_iter_mut(
 
             self.len -= 1;
 
-            $item(message, self.len)
+            $get_item(message, self.len)
         }
     }
 

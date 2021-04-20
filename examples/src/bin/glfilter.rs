@@ -129,7 +129,7 @@ mod mirror {
             fn gl_start(&self, filter: &Self::Type) -> Result<(), gst::LoggableError> {
                 // Create a shader when GL is started, knowing that the OpenGL context is
                 // available.
-                let context = filter.context().unwrap();
+                let context = GLBaseFilterExt::context(filter).unwrap();
                 self.create_shader(filter, &context)?;
                 self.parent_gl_start(filter)
             }

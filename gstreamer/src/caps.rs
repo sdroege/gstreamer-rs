@@ -422,7 +422,7 @@ macro_rules! define_iter(
             }
 
             unsafe {
-                let item = $item(self.caps, self.idx)?;
+                let item = $get_item(self.caps, self.idx)?;
                 self.idx += 1;
                 Some(item)
             }
@@ -448,7 +448,7 @@ macro_rules! define_iter(
             self.n_structures -= 1;
 
             unsafe {
-                $item(self.caps, self.n_structures)
+                $get_item(self.caps, self.n_structures)
             }
         }
     }

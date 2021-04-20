@@ -98,7 +98,7 @@ fn main() {
     .unwrap();
     gst::Element::link_many(&[&app_queue, &appsink]).unwrap();
 
-    let tee_audio_pad = tee.request_pad("src_%u").unwrap();
+    let tee_audio_pad = tee.request_pad_simple("src_%u").unwrap();
     println!(
         "Obtained request pad {} for audio branch",
         tee_audio_pad.name()
@@ -106,14 +106,14 @@ fn main() {
     let queue_audio_pad = audio_queue.static_pad("sink").unwrap();
     tee_audio_pad.link(&queue_audio_pad).unwrap();
 
-    let tee_video_pad = tee.request_pad("src_%u").unwrap();
+    let tee_video_pad = tee.request_pad_simple("src_%u").unwrap();
     println!(
         "Obtained request pad {} for video branch",
         tee_video_pad.name()
     );
     let queue_video_pad = video_queue.static_pad("sink").unwrap();
     tee_video_pad.link(&queue_video_pad).unwrap();
-    let tee_app_pad = tee.request_pad("src_%u").unwrap();
+    let tee_app_pad = tee.request_pad_simple("src_%u").unwrap();
     let queue_app_pad = app_queue.static_pad("sink").unwrap();
     tee_app_pad.link(&queue_app_pad).unwrap();
 

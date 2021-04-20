@@ -51,7 +51,7 @@ fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad
 }
 
 fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
-    match element.request_pad(pad_name) {
+    match element.request_pad_simple(pad_name) {
         Some(pad) => Ok(pad),
         None => {
             let element_name = element.name();
