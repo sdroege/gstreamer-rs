@@ -41,7 +41,7 @@ fn example_main() {
     //     .unset_by_nick("video")
     //     .build()
     //     .unwrap();
-    // playbin.set_property("flags", &flags).unwrap();
+    // playbin.set_property_from_value("flags", &flags).unwrap();
 
     // The playbin also provides any kind of metadata that it found in the played stream.
     // For this, the playbin provides signals notifying about changes in the metadata.
