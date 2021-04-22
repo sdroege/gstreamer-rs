@@ -29,8 +29,7 @@ fi
 
 # coverage tools
 if [ "$RUST_VERSION" = "nightly" ]; then
-  # current version is failing because of https://github.com/mozilla/grcov/issues/555
-  cargo install grcov --version 0.6.1
+  cargo install grcov
   rustup component add llvm-tools-preview
   pip3 install lcov_cobertura
 fi
