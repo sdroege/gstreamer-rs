@@ -83,7 +83,7 @@ stages:
   - .fdo.container-build@debian
   stage: container-base
   variables:
-    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev lcov"
+    FDO_DISTRIBUTION_PACKAGES: "build-essential curl python3-setuptools liborc-0.4-dev libglib2.0-dev libxml2-dev libgtk-3-dev libegl1-mesa libgles2-mesa libgl1-mesa-dri libgl1-mesa-glx libwayland-egl1-mesa xz-utils libssl-dev git wget ca-certificates ninja-build python3-pip flex bison libglib2.0-dev"
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-gst.sh && pip3 install git+http://gitlab.freedesktop.org/freedesktop/ci-templates'
 
 .build-final-image:
@@ -432,11 +432,10 @@ coverage:
     # generate html report
     - grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" -o ./coverage/
     # generate cobertura report for gitlab integration
-    - grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" -o lcov
-    - python3 /usr/local/lib/python3.7/dist-packages/lcov_cobertura.py lcov
-    # output coverage summary for gitlab parsing
-    - lcov -r lcov "/*" 2&> out
-    - grep lines out
+    - grcov . --binary-path ./target/debug/ -s . -t cobertura --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" -o coverage.xml
+    # output coverage summary for gitlab parsing.
+    # TODO: use grcov once https://github.com/mozilla/grcov/issues/556 is fixed
+    - grep % coverage/index.html | head -1 ; true
   artifacts:
     paths:
       - 'coverage'

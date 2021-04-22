@@ -1,4 +1,4 @@
 variables:
-  GST_RS_IMG_TAG: '2021-04-23.0'
+  GST_RS_IMG_TAG: '2021-04-23.1'
   GST_RS_STABLE: '1.51.0'
   GST_RS_MSRV: '1.51.0'

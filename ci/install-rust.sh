@@ -31,5 +31,4 @@ fi
 if [ "$RUST_VERSION" = "nightly" ]; then
   cargo install grcov
   rustup component add llvm-tools-preview
-  pip3 install lcov_cobertura
 fi
