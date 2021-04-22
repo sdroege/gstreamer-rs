@@ -411,7 +411,6 @@ gir-checks:
 
 outdated:
   extends: .img-stable
-  allow_failure: true
   stage: 'extras'
   only:
     - schedules
