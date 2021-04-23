@@ -430,9 +430,9 @@ coverage:
   script:
     - *cargo_test
     # generate html report
-    - grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" -o ./coverage/
+    - grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" --ignore "*/build.rs" -o ./coverage/
     # generate cobertura report for gitlab integration
-    - grcov . --binary-path ./target/debug/ -s . -t cobertura --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" -o coverage.xml
+    - grcov . --binary-path ./target/debug/ -s . -t cobertura --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" --ignore "*/build.rs" -o coverage.xml
     # output coverage summary for gitlab parsing.
     # TODO: use grcov once https://github.com/mozilla/grcov/issues/556 is fixed
     - grep % coverage/index.html | head -1 ; true
