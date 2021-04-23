@@ -5,10 +5,9 @@ use crate::Structure;
 use crate::StructureRef;
 use glib::translate::*;
 
-use std::marker::PhantomData;
-use std::pin::Pin;
 use std::ptr;
 use std::task::{Context, Poll};
+use std::{ops::Deref, pin::Pin};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -82,7 +81,7 @@ impl Promise {
         }
     }
 
-    pub fn new_future<'a>() -> (Self, PromiseFuture<'a>) {
+    pub fn new_future() -> (Self, PromiseFuture) {
         use futures_channel::oneshot;
 
         // We only use the channel as a convenient waker
@@ -91,10 +90,7 @@ impl Promise {
             let _ = sender.send(());
         });
 
-        (
-            promise.clone(),
-            PromiseFuture(promise, receiver, PhantomData),
-        )
+        (promise.clone(), PromiseFuture(promise, receiver))
     }
 
     pub fn expire(&self) {
@@ -144,28 +140,26 @@ unsafe impl Send for Promise {}
 unsafe impl Sync for Promise {}
 
 #[derive(Debug)]
-pub struct PromiseFuture<'a>(
-    Promise,
-    futures_channel::oneshot::Receiver<()>,
-    PhantomData<&'a StructureRef>,
-);
+pub struct PromiseFuture(Promise, futures_channel::oneshot::Receiver<()>);
 
-impl<'a> std::future::Future for PromiseFuture<'a> {
-    type Output = Result<Option<&'a StructureRef>, PromiseError>;
+#[derive(Debug)]
+pub struct PromiseReply(Promise);
+
+impl std::future::Future for PromiseFuture {
+    type Output = Result<Option<PromiseReply>, PromiseError>;
 
     fn poll(mut self: Pin<&mut Self>, context: &mut Context) -> Poll<Self::Output> {
         match Pin::new(&mut self.1).poll(context) {
             Poll::Ready(Err(_)) => panic!("Sender dropped before callback was called"),
             Poll::Ready(Ok(())) => {
                 let res = match self.0.wait() {
-                    PromiseResult::Replied => unsafe {
-                        let s = ffi::gst_promise_get_reply(self.0.to_glib_none().0);
-                        if s.is_null() {
+                    PromiseResult::Replied => {
+                        if self.0.get_reply().is_none() {
                             Ok(None)
                         } else {
-                            Ok(Some(StructureRef::from_glib_borrow(s)))
+                            Ok(Some(PromiseReply(self.0.clone())))
                         }
-                    },
+                    }
                     PromiseResult::Interrupted => Err(PromiseError::Interrupted),
                     PromiseResult::Expired => Err(PromiseError::Expired),
                     PromiseResult::Pending => {
@@ -177,6 +171,14 @@ impl<'a> std::future::Future for PromiseFuture<'a> {
             }
             Poll::Pending => Poll::Pending,
         }
+    }
+}
+
+impl Deref for PromiseReply {
+    type Target = StructureRef;
+
+    fn deref(&self) -> &StructureRef {
+        self.0.get_reply().expect("Promise without reply")
     }
 }
 
