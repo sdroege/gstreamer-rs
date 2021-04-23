@@ -221,10 +221,8 @@ plugins-update-nightly:
         fi
       done
 
-      # If we do a build with all features then also build the
-      # tutorials/examples with all features
     - |
-      if [ -n "$ALL_FEATURES" ]; then
+      if [ -n "$EXAMPLES_TUTORIALS" ]; then
         cargo build --locked --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features
         cargo build --locked --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
@@ -247,6 +245,7 @@ test stable:
 test stable all-features:
   variables:
     ALL_FEATURES: 'yes'
+    EXAMPLES_TUTORIALS: 'yes'
   extends:
     - '.cargo test'
     - .img-stable
@@ -261,6 +260,7 @@ test nightly all-features:
   allow_failure: true
   variables:
     ALL_FEATURES: 'yes'
+    EXAMPLES_TUTORIALS: 'yes'
   extends:
     - '.cargo test'
     - .img-nightly
