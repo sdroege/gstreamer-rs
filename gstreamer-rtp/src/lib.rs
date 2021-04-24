@@ -26,7 +26,7 @@ mod auto;
 pub use crate::auto::*;
 
 pub mod rtp_buffer;
-pub use crate::rtp_buffer::{compare_seqnum, RTPBuffer, RTPBufferExt};
+pub use crate::rtp_buffer::{compare_seqnum, RTPBuffer};
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

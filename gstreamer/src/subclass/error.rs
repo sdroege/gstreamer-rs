@@ -10,7 +10,7 @@ macro_rules! panic_to_error(
     ($element:expr, $panicked:expr, $ret:expr, $code:block) => {{
         use std::panic::{self, AssertUnwindSafe};
         use std::sync::atomic::Ordering;
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
 
         #[allow(clippy::unused_unit)]
         {

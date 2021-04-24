@@ -914,7 +914,7 @@ pub static ELEMENT_METADATA_LONGNAME: Lazy<&'static str> = Lazy::new(|| unsafe {
 #[macro_export]
 macro_rules! element_error(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
             $err,
@@ -926,7 +926,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, ($msg:expr)) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
             $err,
@@ -938,7 +938,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, [$debug:expr]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
             $err,
@@ -950,7 +950,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
             $err,
@@ -962,7 +962,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*)) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
             $err,
@@ -974,7 +974,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, [$($debug:tt)*]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
             $err,
@@ -987,7 +987,7 @@ macro_rules! element_error(
     }};
 
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
             $err,
@@ -1000,7 +1000,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
             $err,
@@ -1013,7 +1013,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
             $err,
@@ -1026,7 +1026,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
             $err,
@@ -1039,7 +1039,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
             $err,
@@ -1052,7 +1052,7 @@ macro_rules! element_error(
         );
     }};
     ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
             $err,
@@ -1069,7 +1069,7 @@ macro_rules! element_error(
 #[macro_export]
 macro_rules! element_warning(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1081,7 +1081,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, ($msg:expr)) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1093,7 +1093,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, [$debug:expr]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1105,7 +1105,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1117,7 +1117,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*)) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1129,7 +1129,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, [$($debug:tt)*]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1142,7 +1142,7 @@ macro_rules! element_warning(
     }};
 
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1155,7 +1155,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1168,7 +1168,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1181,7 +1181,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1194,7 +1194,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1207,7 +1207,7 @@ macro_rules! element_warning(
         );
     }};
     ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
             $err,
@@ -1224,7 +1224,7 @@ macro_rules! element_warning(
 #[macro_export]
 macro_rules! element_info(
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
             $err,
@@ -1236,7 +1236,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, ($msg:expr)) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
             $err,
@@ -1248,7 +1248,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, [$debug:expr]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
             $err,
@@ -1260,7 +1260,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
             $err,
@@ -1272,7 +1272,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*)) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
             $err,
@@ -1284,7 +1284,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, [$($debug:tt)*]) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
             $err,
@@ -1297,7 +1297,7 @@ macro_rules! element_info(
     }};
 
     ($obj:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
             $err,
@@ -1310,7 +1310,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
             $err,
@@ -1323,7 +1323,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
             $err,
@@ -1336,7 +1336,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
             $err,
@@ -1349,7 +1349,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
             $err,
@@ -1362,7 +1362,7 @@ macro_rules! element_info(
         );
     }};
     ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
-        use $crate::ElementExtManual;
+        use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
             $err,

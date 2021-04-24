@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::prelude::{PadExt, PadExtManual};
 use crate::FlowError;
 use crate::FlowSuccess;
 use crate::GhostPad;
@@ -7,8 +8,6 @@ use crate::LoggableError;
 use crate::Object;
 use crate::Pad;
 use crate::PadBuilder;
-use crate::PadExt;
-use crate::PadExtManual;
 use crate::PadFlags;
 use crate::PadGetRangeSuccess;
 use crate::PadMode;

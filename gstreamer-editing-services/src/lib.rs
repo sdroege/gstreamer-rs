@@ -56,7 +56,6 @@ mod auto;
 pub use crate::auto::*;
 
 mod timeline_element;
-pub use crate::timeline_element::TimelineElementExtManual;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

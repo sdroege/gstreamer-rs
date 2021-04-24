@@ -38,21 +38,11 @@ pub use crate::flow_combiner::*;
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-pub use aggregator::AggregatorExtManual;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 mod aggregator_pad;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-pub use aggregator_pad::AggregatorPadExtManual;
 mod base_parse;
-pub use crate::base_parse::BaseParseExtManual;
 mod base_sink;
-pub use crate::base_sink::BaseSinkExtManual;
 mod base_src;
-pub use crate::base_src::BaseSrcExtManual;
 mod base_transform;
-pub use crate::base_transform::BaseTransformExtManual;
 
 pub mod base_parse_frame;
 pub use crate::base_parse_frame::BaseParseFrame;

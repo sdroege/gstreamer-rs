@@ -45,18 +45,8 @@ mod rtsp_token;
 
 pub mod subclass;
 
-pub use crate::rtsp_address_pool::RTSPAddressPoolExtManual;
-pub use crate::rtsp_auth::RTSPAuthExtManual;
-pub use crate::rtsp_client::RTSPClientExtManual;
-pub use crate::rtsp_media::RTSPMediaExtManual;
-pub use crate::rtsp_media_factory::RTSPMediaFactoryExtManual;
-pub use crate::rtsp_server::RTSPServerExtManual;
-pub use crate::rtsp_session_pool::RTSPSessionPoolExtManual;
-pub use crate::rtsp_stream::RTSPStreamExtManual;
-pub use crate::rtsp_stream_transport::RTSPStreamTransportExtManual;
-pub use crate::rtsp_thread::*;
-
 pub use crate::rtsp_context::*;
+pub use crate::rtsp_thread::*;
 pub use crate::rtsp_token::*;
 
 use once_cell::sync::Lazy;

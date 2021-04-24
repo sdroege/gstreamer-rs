@@ -50,9 +50,7 @@ pub mod audio_buffer;
 pub use audio_buffer::{AudioBuffer, AudioBufferRef};
 
 mod audio_decoder;
-pub use crate::audio_decoder::AudioDecoderExtManual;
 mod audio_encoder;
-pub use crate::audio_encoder::AudioEncoderExtManual;
 
 mod audio_converter;
 pub use crate::audio_converter::AudioConverterConfig;

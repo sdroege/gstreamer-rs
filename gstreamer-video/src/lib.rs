@@ -46,11 +46,9 @@ pub use crate::video_format_info::*;
 mod video_info;
 pub use crate::video_info::*;
 pub mod video_frame;
-pub use crate::video_frame::{VideoBufferExt, VideoFrame, VideoFrameRef};
+pub use crate::video_frame::{VideoFrame, VideoFrameRef};
 mod video_overlay;
-pub use crate::video_overlay::{
-    is_video_overlay_prepare_window_handle_message, VideoOverlayExtManual,
-};
+pub use crate::video_overlay::is_video_overlay_prepare_window_handle_message;
 pub mod video_event;
 pub use crate::video_event::{
     DownstreamForceKeyUnitEvent, ForceKeyUnitEvent, StillFrameEvent, UpstreamForceKeyUnitEvent,
@@ -95,10 +93,8 @@ pub use crate::video_converter::{VideoConverter, VideoConverterConfig};
 
 mod video_codec_frame;
 mod video_decoder;
-pub use crate::video_decoder::VideoDecoderExtManual;
 mod video_encoder;
 pub use crate::video_codec_frame::VideoCodecFrame;
-pub use crate::video_encoder::VideoEncoderExtManual;
 pub mod video_codec_state;
 pub use crate::video_codec_state::{VideoCodecState, VideoCodecStateContext};
 mod utils;

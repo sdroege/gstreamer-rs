@@ -128,7 +128,6 @@ mod element;
 mod bin;
 
 mod pipeline;
-pub use crate::pipeline::GstPipelineExtManual;
 
 mod allocation_params;
 pub use self::allocation_params::AllocationParams;
@@ -173,49 +172,25 @@ mod control_binding;
 mod control_source;
 mod parse_context;
 mod proxy_pad;
-pub use crate::proxy_pad::ProxyPadExtManual;
 mod tag_setter;
-pub use crate::bin::GstBinExtManual;
-pub use crate::element::{ElementExtManual, ElementMessageType, NotifyWatchId};
+pub use crate::element::{ElementMessageType, NotifyWatchId};
 pub use crate::element::{
     ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
     ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME,
 };
-pub use crate::object::GstObjectExtManual;
-
-// OS dependent Bus extensions (also import the other plateform trait for doc)
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-cfg_if::cfg_if! {
-    if #[cfg(unix)] {
-        pub use bus_unix::UnixBusExtManual;
-        #[cfg(feature = "dox")]
-        pub use bus_windows::WindowsBusExtManual;
-    } else {
-        pub use bus_windows::WindowsBusExtManual;
-        #[cfg(feature = "dox")]
-        pub use bus_unix::UnixBusExtManual;
-    }
-}
 
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
-pub use crate::child_proxy::ChildProxyExtManual;
 pub use crate::clock_time::ClockTime;
-pub use crate::device_monitor::{DeviceMonitorExtManual, DeviceMonitorFilterId};
-pub use crate::device_provider::DeviceProviderExtManual;
+pub use crate::device_monitor::DeviceMonitorFilterId;
 pub use crate::enums::{
     ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
     StateChangeError, StateChangeSuccess, TagError,
 };
-pub use crate::gobject::GObjectExtManualGst;
-pub use crate::pad::{PadExtManual, PadGetRangeSuccess, PadProbeData, PadProbeId, PadProbeInfo};
+pub use crate::pad::{PadGetRangeSuccess, PadProbeData, PadProbeId, PadProbeInfo};
 pub use crate::parse_context::ParseContext;
 mod plugin_feature;
-pub use crate::plugin_feature::PluginFeatureExtManual;
-pub use crate::tag_setter::TagSetterExtManual;
 
 mod plugin;
-pub use crate::plugin::GstPluginExtManual;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 pub mod stream;
@@ -242,9 +217,7 @@ pub use crate::toc::{Toc, TocEntry, TocEntryRef, TocRef};
 mod toc_serde;
 
 mod clock;
-pub use crate::clock::{
-    AtomicClockReturn, ClockExtManual, ClockId, PeriodicClockId, SingleShotClockId,
-};
+pub use crate::clock::{AtomicClockReturn, ClockId, PeriodicClockId, SingleShotClockId};
 
 mod buffer_pool;
 pub use crate::buffer_pool::*;
@@ -319,10 +292,7 @@ pub mod prelude {
 
     pub use crate::meta::MetaAPI;
 
-    pub use crate::bin::GstBinExtManual;
-    pub use crate::element::{ElementClassExt, ElementExtManual};
-
-    // OS dependent Bus extensions (also import the other plateform trait for doc)
+    // OS dependent Bus extensions (also import the other platform trait for doc)
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     cfg_if::cfg_if! {
@@ -337,11 +307,13 @@ pub mod prelude {
         }
     }
 
+    pub use crate::bin::GstBinExtManual;
     pub use crate::buffer_pool::BufferPoolExtManual;
     pub use crate::child_proxy::ChildProxyExtManual;
     pub use crate::clock::ClockExtManual;
     pub use crate::device_monitor::DeviceMonitorExtManual;
     pub use crate::device_provider::DeviceProviderExtManual;
+    pub use crate::element::{ElementClassExt, ElementExtManual};
     pub use crate::gobject::GObjectExtManualGst;
     pub use crate::message::MessageErrorDomain;
     pub use crate::object::GstObjectExtManual;
