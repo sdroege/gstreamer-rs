@@ -28,9 +28,9 @@ impl IntoGlib for RTSPEvent {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPEvent> for RTSPEvent {
-    unsafe fn from_glib(value: ffi::GstRTSPEvent) -> RTSPEvent {
+    unsafe fn from_glib(value: ffi::GstRTSPEvent) -> Self {
         skip_assert_initialized!();
-        RTSPEvent::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -55,7 +55,7 @@ unsafe impl<'a> FromValue<'a> for RTSPEvent {
 
 impl ToValue for RTSPEvent {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPEvent>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -88,9 +88,9 @@ impl IntoGlib for RTSPLowerTrans {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPLowerTrans> for RTSPLowerTrans {
-    unsafe fn from_glib(value: ffi::GstRTSPLowerTrans) -> RTSPLowerTrans {
+    unsafe fn from_glib(value: ffi::GstRTSPLowerTrans) -> Self {
         skip_assert_initialized!();
-        RTSPLowerTrans::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -115,7 +115,7 @@ unsafe impl<'a> FromValue<'a> for RTSPLowerTrans {
 
 impl ToValue for RTSPLowerTrans {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPLowerTrans>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -164,9 +164,9 @@ impl IntoGlib for RTSPMethod {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPMethod> for RTSPMethod {
-    unsafe fn from_glib(value: ffi::GstRTSPMethod) -> RTSPMethod {
+    unsafe fn from_glib(value: ffi::GstRTSPMethod) -> Self {
         skip_assert_initialized!();
-        RTSPMethod::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -191,7 +191,7 @@ unsafe impl<'a> FromValue<'a> for RTSPMethod {
 
 impl ToValue for RTSPMethod {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPMethod>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -223,9 +223,9 @@ impl IntoGlib for RTSPProfile {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPProfile> for RTSPProfile {
-    unsafe fn from_glib(value: ffi::GstRTSPProfile) -> RTSPProfile {
+    unsafe fn from_glib(value: ffi::GstRTSPProfile) -> Self {
         skip_assert_initialized!();
-        RTSPProfile::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -250,7 +250,7 @@ unsafe impl<'a> FromValue<'a> for RTSPProfile {
 
 impl ToValue for RTSPProfile {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPProfile>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -280,9 +280,9 @@ impl IntoGlib for RTSPTransMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPTransMode> for RTSPTransMode {
-    unsafe fn from_glib(value: ffi::GstRTSPTransMode) -> RTSPTransMode {
+    unsafe fn from_glib(value: ffi::GstRTSPTransMode) -> Self {
         skip_assert_initialized!();
-        RTSPTransMode::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -307,7 +307,7 @@ unsafe impl<'a> FromValue<'a> for RTSPTransMode {
 
 impl ToValue for RTSPTransMode {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPTransMode>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }

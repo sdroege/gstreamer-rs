@@ -35,13 +35,13 @@ impl IntoGlib for DiscovererResult {
 
     fn into_glib(self) -> ffi::GstDiscovererResult {
         match self {
-            DiscovererResult::Ok => ffi::GST_DISCOVERER_OK,
-            DiscovererResult::UriInvalid => ffi::GST_DISCOVERER_URI_INVALID,
-            DiscovererResult::Error => ffi::GST_DISCOVERER_ERROR,
-            DiscovererResult::Timeout => ffi::GST_DISCOVERER_TIMEOUT,
-            DiscovererResult::Busy => ffi::GST_DISCOVERER_BUSY,
-            DiscovererResult::MissingPlugins => ffi::GST_DISCOVERER_MISSING_PLUGINS,
-            DiscovererResult::__Unknown(value) => value,
+            Self::Ok => ffi::GST_DISCOVERER_OK,
+            Self::UriInvalid => ffi::GST_DISCOVERER_URI_INVALID,
+            Self::Error => ffi::GST_DISCOVERER_ERROR,
+            Self::Timeout => ffi::GST_DISCOVERER_TIMEOUT,
+            Self::Busy => ffi::GST_DISCOVERER_BUSY,
+            Self::MissingPlugins => ffi::GST_DISCOVERER_MISSING_PLUGINS,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -51,13 +51,13 @@ impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
     unsafe fn from_glib(value: ffi::GstDiscovererResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => DiscovererResult::Ok,
-            1 => DiscovererResult::UriInvalid,
-            2 => DiscovererResult::Error,
-            3 => DiscovererResult::Timeout,
-            4 => DiscovererResult::Busy,
-            5 => DiscovererResult::MissingPlugins,
-            value => DiscovererResult::__Unknown(value),
+            0 => Self::Ok,
+            1 => Self::UriInvalid,
+            2 => Self::Error,
+            3 => Self::Timeout,
+            4 => Self::Busy,
+            5 => Self::MissingPlugins,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -83,7 +83,7 @@ unsafe impl<'a> FromValue<'a> for DiscovererResult {
 
 impl ToValue for DiscovererResult {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<DiscovererResult>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }

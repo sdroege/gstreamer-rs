@@ -27,9 +27,9 @@ impl IntoGlib for AudioFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioFlags> for AudioFlags {
-    unsafe fn from_glib(value: ffi::GstAudioFlags) -> AudioFlags {
+    unsafe fn from_glib(value: ffi::GstAudioFlags) -> Self {
         skip_assert_initialized!();
-        AudioFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -54,7 +54,7 @@ unsafe impl<'a> FromValue<'a> for AudioFlags {
 
 impl ToValue for AudioFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<AudioFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -87,9 +87,9 @@ impl IntoGlib for AudioFormatFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioFormatFlags> for AudioFormatFlags {
-    unsafe fn from_glib(value: ffi::GstAudioFormatFlags) -> AudioFormatFlags {
+    unsafe fn from_glib(value: ffi::GstAudioFormatFlags) -> Self {
         skip_assert_initialized!();
-        AudioFormatFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -114,7 +114,7 @@ unsafe impl<'a> FromValue<'a> for AudioFormatFlags {
 
 impl ToValue for AudioFormatFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<AudioFormatFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -143,9 +143,9 @@ impl IntoGlib for AudioPackFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstAudioPackFlags> for AudioPackFlags {
-    unsafe fn from_glib(value: ffi::GstAudioPackFlags) -> AudioPackFlags {
+    unsafe fn from_glib(value: ffi::GstAudioPackFlags) -> Self {
         skip_assert_initialized!();
-        AudioPackFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -170,7 +170,7 @@ unsafe impl<'a> FromValue<'a> for AudioPackFlags {
 
 impl ToValue for AudioPackFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<AudioPackFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }

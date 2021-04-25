@@ -29,10 +29,10 @@ impl IntoGlib for AppStreamType {
 
     fn into_glib(self) -> ffi::GstAppStreamType {
         match self {
-            AppStreamType::Stream => ffi::GST_APP_STREAM_TYPE_STREAM,
-            AppStreamType::Seekable => ffi::GST_APP_STREAM_TYPE_SEEKABLE,
-            AppStreamType::RandomAccess => ffi::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
-            AppStreamType::__Unknown(value) => value,
+            Self::Stream => ffi::GST_APP_STREAM_TYPE_STREAM,
+            Self::Seekable => ffi::GST_APP_STREAM_TYPE_SEEKABLE,
+            Self::RandomAccess => ffi::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -42,10 +42,10 @@ impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
     unsafe fn from_glib(value: ffi::GstAppStreamType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => AppStreamType::Stream,
-            1 => AppStreamType::Seekable,
-            2 => AppStreamType::RandomAccess,
-            value => AppStreamType::__Unknown(value),
+            0 => Self::Stream,
+            1 => Self::Seekable,
+            2 => Self::RandomAccess,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -71,7 +71,7 @@ unsafe impl<'a> FromValue<'a> for AppStreamType {
 
 impl ToValue for AppStreamType {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<AppStreamType>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }

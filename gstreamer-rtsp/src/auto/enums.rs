@@ -29,10 +29,10 @@ impl IntoGlib for RTSPAuthMethod {
 
     fn into_glib(self) -> ffi::GstRTSPAuthMethod {
         match self {
-            RTSPAuthMethod::None => ffi::GST_RTSP_AUTH_NONE,
-            RTSPAuthMethod::Basic => ffi::GST_RTSP_AUTH_BASIC,
-            RTSPAuthMethod::Digest => ffi::GST_RTSP_AUTH_DIGEST,
-            RTSPAuthMethod::__Unknown(value) => value,
+            Self::None => ffi::GST_RTSP_AUTH_NONE,
+            Self::Basic => ffi::GST_RTSP_AUTH_BASIC,
+            Self::Digest => ffi::GST_RTSP_AUTH_DIGEST,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -42,10 +42,10 @@ impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
     unsafe fn from_glib(value: ffi::GstRTSPAuthMethod) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPAuthMethod::None,
-            1 => RTSPAuthMethod::Basic,
-            2 => RTSPAuthMethod::Digest,
-            value => RTSPAuthMethod::__Unknown(value),
+            0 => Self::None,
+            1 => Self::Basic,
+            2 => Self::Digest,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -71,7 +71,7 @@ unsafe impl<'a> FromValue<'a> for RTSPAuthMethod {
 
 impl ToValue for RTSPAuthMethod {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPAuthMethod>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -103,10 +103,10 @@ impl IntoGlib for RTSPFamily {
 
     fn into_glib(self) -> ffi::GstRTSPFamily {
         match self {
-            RTSPFamily::None => ffi::GST_RTSP_FAM_NONE,
-            RTSPFamily::Inet => ffi::GST_RTSP_FAM_INET,
-            RTSPFamily::Inet6 => ffi::GST_RTSP_FAM_INET6,
-            RTSPFamily::__Unknown(value) => value,
+            Self::None => ffi::GST_RTSP_FAM_NONE,
+            Self::Inet => ffi::GST_RTSP_FAM_INET,
+            Self::Inet6 => ffi::GST_RTSP_FAM_INET6,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -116,10 +116,10 @@ impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
     unsafe fn from_glib(value: ffi::GstRTSPFamily) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPFamily::None,
-            1 => RTSPFamily::Inet,
-            2 => RTSPFamily::Inet6,
-            value => RTSPFamily::__Unknown(value),
+            0 => Self::None,
+            1 => Self::Inet,
+            2 => Self::Inet6,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -145,7 +145,7 @@ unsafe impl<'a> FromValue<'a> for RTSPFamily {
 
 impl ToValue for RTSPFamily {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPFamily>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -351,97 +351,97 @@ impl IntoGlib for RTSPHeaderField {
 
     fn into_glib(self) -> ffi::GstRTSPHeaderField {
         match self {
-            RTSPHeaderField::Invalid => ffi::GST_RTSP_HDR_INVALID,
-            RTSPHeaderField::Accept => ffi::GST_RTSP_HDR_ACCEPT,
-            RTSPHeaderField::AcceptEncoding => ffi::GST_RTSP_HDR_ACCEPT_ENCODING,
-            RTSPHeaderField::AcceptLanguage => ffi::GST_RTSP_HDR_ACCEPT_LANGUAGE,
-            RTSPHeaderField::Allow => ffi::GST_RTSP_HDR_ALLOW,
-            RTSPHeaderField::Authorization => ffi::GST_RTSP_HDR_AUTHORIZATION,
-            RTSPHeaderField::Bandwidth => ffi::GST_RTSP_HDR_BANDWIDTH,
-            RTSPHeaderField::Blocksize => ffi::GST_RTSP_HDR_BLOCKSIZE,
-            RTSPHeaderField::CacheControl => ffi::GST_RTSP_HDR_CACHE_CONTROL,
-            RTSPHeaderField::Conference => ffi::GST_RTSP_HDR_CONFERENCE,
-            RTSPHeaderField::Connection => ffi::GST_RTSP_HDR_CONNECTION,
-            RTSPHeaderField::ContentBase => ffi::GST_RTSP_HDR_CONTENT_BASE,
-            RTSPHeaderField::ContentEncoding => ffi::GST_RTSP_HDR_CONTENT_ENCODING,
-            RTSPHeaderField::ContentLanguage => ffi::GST_RTSP_HDR_CONTENT_LANGUAGE,
-            RTSPHeaderField::ContentLength => ffi::GST_RTSP_HDR_CONTENT_LENGTH,
-            RTSPHeaderField::ContentLocation => ffi::GST_RTSP_HDR_CONTENT_LOCATION,
-            RTSPHeaderField::ContentType => ffi::GST_RTSP_HDR_CONTENT_TYPE,
-            RTSPHeaderField::Cseq => ffi::GST_RTSP_HDR_CSEQ,
-            RTSPHeaderField::Date => ffi::GST_RTSP_HDR_DATE,
-            RTSPHeaderField::Expires => ffi::GST_RTSP_HDR_EXPIRES,
-            RTSPHeaderField::From => ffi::GST_RTSP_HDR_FROM,
-            RTSPHeaderField::IfModifiedSince => ffi::GST_RTSP_HDR_IF_MODIFIED_SINCE,
-            RTSPHeaderField::LastModified => ffi::GST_RTSP_HDR_LAST_MODIFIED,
-            RTSPHeaderField::ProxyAuthenticate => ffi::GST_RTSP_HDR_PROXY_AUTHENTICATE,
-            RTSPHeaderField::ProxyRequire => ffi::GST_RTSP_HDR_PROXY_REQUIRE,
-            RTSPHeaderField::Public => ffi::GST_RTSP_HDR_PUBLIC,
-            RTSPHeaderField::Range => ffi::GST_RTSP_HDR_RANGE,
-            RTSPHeaderField::Referer => ffi::GST_RTSP_HDR_REFERER,
-            RTSPHeaderField::Require => ffi::GST_RTSP_HDR_REQUIRE,
-            RTSPHeaderField::RetryAfter => ffi::GST_RTSP_HDR_RETRY_AFTER,
-            RTSPHeaderField::RtpInfo => ffi::GST_RTSP_HDR_RTP_INFO,
-            RTSPHeaderField::Scale => ffi::GST_RTSP_HDR_SCALE,
-            RTSPHeaderField::Session => ffi::GST_RTSP_HDR_SESSION,
-            RTSPHeaderField::Server => ffi::GST_RTSP_HDR_SERVER,
-            RTSPHeaderField::Speed => ffi::GST_RTSP_HDR_SPEED,
-            RTSPHeaderField::Transport => ffi::GST_RTSP_HDR_TRANSPORT,
-            RTSPHeaderField::Unsupported => ffi::GST_RTSP_HDR_UNSUPPORTED,
-            RTSPHeaderField::UserAgent => ffi::GST_RTSP_HDR_USER_AGENT,
-            RTSPHeaderField::Via => ffi::GST_RTSP_HDR_VIA,
-            RTSPHeaderField::WwwAuthenticate => ffi::GST_RTSP_HDR_WWW_AUTHENTICATE,
-            RTSPHeaderField::ClientChallenge => ffi::GST_RTSP_HDR_CLIENT_CHALLENGE,
-            RTSPHeaderField::RealChallenge1 => ffi::GST_RTSP_HDR_REAL_CHALLENGE1,
-            RTSPHeaderField::RealChallenge2 => ffi::GST_RTSP_HDR_REAL_CHALLENGE2,
-            RTSPHeaderField::RealChallenge3 => ffi::GST_RTSP_HDR_REAL_CHALLENGE3,
-            RTSPHeaderField::Subscribe => ffi::GST_RTSP_HDR_SUBSCRIBE,
-            RTSPHeaderField::Alert => ffi::GST_RTSP_HDR_ALERT,
-            RTSPHeaderField::ClientId => ffi::GST_RTSP_HDR_CLIENT_ID,
-            RTSPHeaderField::CompanyId => ffi::GST_RTSP_HDR_COMPANY_ID,
-            RTSPHeaderField::Guid => ffi::GST_RTSP_HDR_GUID,
-            RTSPHeaderField::RegionData => ffi::GST_RTSP_HDR_REGION_DATA,
-            RTSPHeaderField::MaxAsmWidth => ffi::GST_RTSP_HDR_MAX_ASM_WIDTH,
-            RTSPHeaderField::Language => ffi::GST_RTSP_HDR_LANGUAGE,
-            RTSPHeaderField::PlayerStartTime => ffi::GST_RTSP_HDR_PLAYER_START_TIME,
-            RTSPHeaderField::Location => ffi::GST_RTSP_HDR_LOCATION,
-            RTSPHeaderField::Etag => ffi::GST_RTSP_HDR_ETAG,
-            RTSPHeaderField::IfMatch => ffi::GST_RTSP_HDR_IF_MATCH,
-            RTSPHeaderField::AcceptCharset => ffi::GST_RTSP_HDR_ACCEPT_CHARSET,
-            RTSPHeaderField::Supported => ffi::GST_RTSP_HDR_SUPPORTED,
-            RTSPHeaderField::Vary => ffi::GST_RTSP_HDR_VARY,
-            RTSPHeaderField::XAccelerateStreaming => ffi::GST_RTSP_HDR_X_ACCELERATE_STREAMING,
-            RTSPHeaderField::XAcceptAuthent => ffi::GST_RTSP_HDR_X_ACCEPT_AUTHENT,
-            RTSPHeaderField::XAcceptProxyAuthent => ffi::GST_RTSP_HDR_X_ACCEPT_PROXY_AUTHENT,
-            RTSPHeaderField::XBroadcastId => ffi::GST_RTSP_HDR_X_BROADCAST_ID,
-            RTSPHeaderField::XBurstStreaming => ffi::GST_RTSP_HDR_X_BURST_STREAMING,
-            RTSPHeaderField::XNotice => ffi::GST_RTSP_HDR_X_NOTICE,
-            RTSPHeaderField::XPlayerLagTime => ffi::GST_RTSP_HDR_X_PLAYER_LAG_TIME,
-            RTSPHeaderField::XPlaylist => ffi::GST_RTSP_HDR_X_PLAYLIST,
-            RTSPHeaderField::XPlaylistChangeNotice => ffi::GST_RTSP_HDR_X_PLAYLIST_CHANGE_NOTICE,
-            RTSPHeaderField::XPlaylistGenId => ffi::GST_RTSP_HDR_X_PLAYLIST_GEN_ID,
-            RTSPHeaderField::XPlaylistSeekId => ffi::GST_RTSP_HDR_X_PLAYLIST_SEEK_ID,
-            RTSPHeaderField::XProxyClientAgent => ffi::GST_RTSP_HDR_X_PROXY_CLIENT_AGENT,
-            RTSPHeaderField::XProxyClientVerb => ffi::GST_RTSP_HDR_X_PROXY_CLIENT_VERB,
-            RTSPHeaderField::XRecedingPlaylistchange => ffi::GST_RTSP_HDR_X_RECEDING_PLAYLISTCHANGE,
-            RTSPHeaderField::XRtpInfo => ffi::GST_RTSP_HDR_X_RTP_INFO,
-            RTSPHeaderField::XStartupprofile => ffi::GST_RTSP_HDR_X_STARTUPPROFILE,
-            RTSPHeaderField::Timestamp => ffi::GST_RTSP_HDR_TIMESTAMP,
-            RTSPHeaderField::AuthenticationInfo => ffi::GST_RTSP_HDR_AUTHENTICATION_INFO,
-            RTSPHeaderField::Host => ffi::GST_RTSP_HDR_HOST,
-            RTSPHeaderField::Pragma => ffi::GST_RTSP_HDR_PRAGMA,
-            RTSPHeaderField::XServerIpAddress => ffi::GST_RTSP_HDR_X_SERVER_IP_ADDRESS,
-            RTSPHeaderField::XSessioncookie => ffi::GST_RTSP_HDR_X_SESSIONCOOKIE,
-            RTSPHeaderField::RtcpInterval => ffi::GST_RTSP_HDR_RTCP_INTERVAL,
-            RTSPHeaderField::Keymgmt => ffi::GST_RTSP_HDR_KEYMGMT,
-            RTSPHeaderField::PipelinedRequests => ffi::GST_RTSP_HDR_PIPELINED_REQUESTS,
-            RTSPHeaderField::MediaProperties => ffi::GST_RTSP_HDR_MEDIA_PROPERTIES,
-            RTSPHeaderField::SeekStyle => ffi::GST_RTSP_HDR_SEEK_STYLE,
-            RTSPHeaderField::AcceptRanges => ffi::GST_RTSP_HDR_ACCEPT_RANGES,
-            RTSPHeaderField::Frames => ffi::GST_RTSP_HDR_FRAMES,
-            RTSPHeaderField::RateControl => ffi::GST_RTSP_HDR_RATE_CONTROL,
-            RTSPHeaderField::Last => ffi::GST_RTSP_HDR_LAST,
-            RTSPHeaderField::__Unknown(value) => value,
+            Self::Invalid => ffi::GST_RTSP_HDR_INVALID,
+            Self::Accept => ffi::GST_RTSP_HDR_ACCEPT,
+            Self::AcceptEncoding => ffi::GST_RTSP_HDR_ACCEPT_ENCODING,
+            Self::AcceptLanguage => ffi::GST_RTSP_HDR_ACCEPT_LANGUAGE,
+            Self::Allow => ffi::GST_RTSP_HDR_ALLOW,
+            Self::Authorization => ffi::GST_RTSP_HDR_AUTHORIZATION,
+            Self::Bandwidth => ffi::GST_RTSP_HDR_BANDWIDTH,
+            Self::Blocksize => ffi::GST_RTSP_HDR_BLOCKSIZE,
+            Self::CacheControl => ffi::GST_RTSP_HDR_CACHE_CONTROL,
+            Self::Conference => ffi::GST_RTSP_HDR_CONFERENCE,
+            Self::Connection => ffi::GST_RTSP_HDR_CONNECTION,
+            Self::ContentBase => ffi::GST_RTSP_HDR_CONTENT_BASE,
+            Self::ContentEncoding => ffi::GST_RTSP_HDR_CONTENT_ENCODING,
+            Self::ContentLanguage => ffi::GST_RTSP_HDR_CONTENT_LANGUAGE,
+            Self::ContentLength => ffi::GST_RTSP_HDR_CONTENT_LENGTH,
+            Self::ContentLocation => ffi::GST_RTSP_HDR_CONTENT_LOCATION,
+            Self::ContentType => ffi::GST_RTSP_HDR_CONTENT_TYPE,
+            Self::Cseq => ffi::GST_RTSP_HDR_CSEQ,
+            Self::Date => ffi::GST_RTSP_HDR_DATE,
+            Self::Expires => ffi::GST_RTSP_HDR_EXPIRES,
+            Self::From => ffi::GST_RTSP_HDR_FROM,
+            Self::IfModifiedSince => ffi::GST_RTSP_HDR_IF_MODIFIED_SINCE,
+            Self::LastModified => ffi::GST_RTSP_HDR_LAST_MODIFIED,
+            Self::ProxyAuthenticate => ffi::GST_RTSP_HDR_PROXY_AUTHENTICATE,
+            Self::ProxyRequire => ffi::GST_RTSP_HDR_PROXY_REQUIRE,
+            Self::Public => ffi::GST_RTSP_HDR_PUBLIC,
+            Self::Range => ffi::GST_RTSP_HDR_RANGE,
+            Self::Referer => ffi::GST_RTSP_HDR_REFERER,
+            Self::Require => ffi::GST_RTSP_HDR_REQUIRE,
+            Self::RetryAfter => ffi::GST_RTSP_HDR_RETRY_AFTER,
+            Self::RtpInfo => ffi::GST_RTSP_HDR_RTP_INFO,
+            Self::Scale => ffi::GST_RTSP_HDR_SCALE,
+            Self::Session => ffi::GST_RTSP_HDR_SESSION,
+            Self::Server => ffi::GST_RTSP_HDR_SERVER,
+            Self::Speed => ffi::GST_RTSP_HDR_SPEED,
+            Self::Transport => ffi::GST_RTSP_HDR_TRANSPORT,
+            Self::Unsupported => ffi::GST_RTSP_HDR_UNSUPPORTED,
+            Self::UserAgent => ffi::GST_RTSP_HDR_USER_AGENT,
+            Self::Via => ffi::GST_RTSP_HDR_VIA,
+            Self::WwwAuthenticate => ffi::GST_RTSP_HDR_WWW_AUTHENTICATE,
+            Self::ClientChallenge => ffi::GST_RTSP_HDR_CLIENT_CHALLENGE,
+            Self::RealChallenge1 => ffi::GST_RTSP_HDR_REAL_CHALLENGE1,
+            Self::RealChallenge2 => ffi::GST_RTSP_HDR_REAL_CHALLENGE2,
+            Self::RealChallenge3 => ffi::GST_RTSP_HDR_REAL_CHALLENGE3,
+            Self::Subscribe => ffi::GST_RTSP_HDR_SUBSCRIBE,
+            Self::Alert => ffi::GST_RTSP_HDR_ALERT,
+            Self::ClientId => ffi::GST_RTSP_HDR_CLIENT_ID,
+            Self::CompanyId => ffi::GST_RTSP_HDR_COMPANY_ID,
+            Self::Guid => ffi::GST_RTSP_HDR_GUID,
+            Self::RegionData => ffi::GST_RTSP_HDR_REGION_DATA,
+            Self::MaxAsmWidth => ffi::GST_RTSP_HDR_MAX_ASM_WIDTH,
+            Self::Language => ffi::GST_RTSP_HDR_LANGUAGE,
+            Self::PlayerStartTime => ffi::GST_RTSP_HDR_PLAYER_START_TIME,
+            Self::Location => ffi::GST_RTSP_HDR_LOCATION,
+            Self::Etag => ffi::GST_RTSP_HDR_ETAG,
+            Self::IfMatch => ffi::GST_RTSP_HDR_IF_MATCH,
+            Self::AcceptCharset => ffi::GST_RTSP_HDR_ACCEPT_CHARSET,
+            Self::Supported => ffi::GST_RTSP_HDR_SUPPORTED,
+            Self::Vary => ffi::GST_RTSP_HDR_VARY,
+            Self::XAccelerateStreaming => ffi::GST_RTSP_HDR_X_ACCELERATE_STREAMING,
+            Self::XAcceptAuthent => ffi::GST_RTSP_HDR_X_ACCEPT_AUTHENT,
+            Self::XAcceptProxyAuthent => ffi::GST_RTSP_HDR_X_ACCEPT_PROXY_AUTHENT,
+            Self::XBroadcastId => ffi::GST_RTSP_HDR_X_BROADCAST_ID,
+            Self::XBurstStreaming => ffi::GST_RTSP_HDR_X_BURST_STREAMING,
+            Self::XNotice => ffi::GST_RTSP_HDR_X_NOTICE,
+            Self::XPlayerLagTime => ffi::GST_RTSP_HDR_X_PLAYER_LAG_TIME,
+            Self::XPlaylist => ffi::GST_RTSP_HDR_X_PLAYLIST,
+            Self::XPlaylistChangeNotice => ffi::GST_RTSP_HDR_X_PLAYLIST_CHANGE_NOTICE,
+            Self::XPlaylistGenId => ffi::GST_RTSP_HDR_X_PLAYLIST_GEN_ID,
+            Self::XPlaylistSeekId => ffi::GST_RTSP_HDR_X_PLAYLIST_SEEK_ID,
+            Self::XProxyClientAgent => ffi::GST_RTSP_HDR_X_PROXY_CLIENT_AGENT,
+            Self::XProxyClientVerb => ffi::GST_RTSP_HDR_X_PROXY_CLIENT_VERB,
+            Self::XRecedingPlaylistchange => ffi::GST_RTSP_HDR_X_RECEDING_PLAYLISTCHANGE,
+            Self::XRtpInfo => ffi::GST_RTSP_HDR_X_RTP_INFO,
+            Self::XStartupprofile => ffi::GST_RTSP_HDR_X_STARTUPPROFILE,
+            Self::Timestamp => ffi::GST_RTSP_HDR_TIMESTAMP,
+            Self::AuthenticationInfo => ffi::GST_RTSP_HDR_AUTHENTICATION_INFO,
+            Self::Host => ffi::GST_RTSP_HDR_HOST,
+            Self::Pragma => ffi::GST_RTSP_HDR_PRAGMA,
+            Self::XServerIpAddress => ffi::GST_RTSP_HDR_X_SERVER_IP_ADDRESS,
+            Self::XSessioncookie => ffi::GST_RTSP_HDR_X_SESSIONCOOKIE,
+            Self::RtcpInterval => ffi::GST_RTSP_HDR_RTCP_INTERVAL,
+            Self::Keymgmt => ffi::GST_RTSP_HDR_KEYMGMT,
+            Self::PipelinedRequests => ffi::GST_RTSP_HDR_PIPELINED_REQUESTS,
+            Self::MediaProperties => ffi::GST_RTSP_HDR_MEDIA_PROPERTIES,
+            Self::SeekStyle => ffi::GST_RTSP_HDR_SEEK_STYLE,
+            Self::AcceptRanges => ffi::GST_RTSP_HDR_ACCEPT_RANGES,
+            Self::Frames => ffi::GST_RTSP_HDR_FRAMES,
+            Self::RateControl => ffi::GST_RTSP_HDR_RATE_CONTROL,
+            Self::Last => ffi::GST_RTSP_HDR_LAST,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -451,97 +451,97 @@ impl FromGlib<ffi::GstRTSPHeaderField> for RTSPHeaderField {
     unsafe fn from_glib(value: ffi::GstRTSPHeaderField) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPHeaderField::Invalid,
-            1 => RTSPHeaderField::Accept,
-            2 => RTSPHeaderField::AcceptEncoding,
-            3 => RTSPHeaderField::AcceptLanguage,
-            4 => RTSPHeaderField::Allow,
-            5 => RTSPHeaderField::Authorization,
-            6 => RTSPHeaderField::Bandwidth,
-            7 => RTSPHeaderField::Blocksize,
-            8 => RTSPHeaderField::CacheControl,
-            9 => RTSPHeaderField::Conference,
-            10 => RTSPHeaderField::Connection,
-            11 => RTSPHeaderField::ContentBase,
-            12 => RTSPHeaderField::ContentEncoding,
-            13 => RTSPHeaderField::ContentLanguage,
-            14 => RTSPHeaderField::ContentLength,
-            15 => RTSPHeaderField::ContentLocation,
-            16 => RTSPHeaderField::ContentType,
-            17 => RTSPHeaderField::Cseq,
-            18 => RTSPHeaderField::Date,
-            19 => RTSPHeaderField::Expires,
-            20 => RTSPHeaderField::From,
-            21 => RTSPHeaderField::IfModifiedSince,
-            22 => RTSPHeaderField::LastModified,
-            23 => RTSPHeaderField::ProxyAuthenticate,
-            24 => RTSPHeaderField::ProxyRequire,
-            25 => RTSPHeaderField::Public,
-            26 => RTSPHeaderField::Range,
-            27 => RTSPHeaderField::Referer,
-            28 => RTSPHeaderField::Require,
-            29 => RTSPHeaderField::RetryAfter,
-            30 => RTSPHeaderField::RtpInfo,
-            31 => RTSPHeaderField::Scale,
-            32 => RTSPHeaderField::Session,
-            33 => RTSPHeaderField::Server,
-            34 => RTSPHeaderField::Speed,
-            35 => RTSPHeaderField::Transport,
-            36 => RTSPHeaderField::Unsupported,
-            37 => RTSPHeaderField::UserAgent,
-            38 => RTSPHeaderField::Via,
-            39 => RTSPHeaderField::WwwAuthenticate,
-            40 => RTSPHeaderField::ClientChallenge,
-            41 => RTSPHeaderField::RealChallenge1,
-            42 => RTSPHeaderField::RealChallenge2,
-            43 => RTSPHeaderField::RealChallenge3,
-            44 => RTSPHeaderField::Subscribe,
-            45 => RTSPHeaderField::Alert,
-            46 => RTSPHeaderField::ClientId,
-            47 => RTSPHeaderField::CompanyId,
-            48 => RTSPHeaderField::Guid,
-            49 => RTSPHeaderField::RegionData,
-            50 => RTSPHeaderField::MaxAsmWidth,
-            51 => RTSPHeaderField::Language,
-            52 => RTSPHeaderField::PlayerStartTime,
-            53 => RTSPHeaderField::Location,
-            54 => RTSPHeaderField::Etag,
-            55 => RTSPHeaderField::IfMatch,
-            56 => RTSPHeaderField::AcceptCharset,
-            57 => RTSPHeaderField::Supported,
-            58 => RTSPHeaderField::Vary,
-            59 => RTSPHeaderField::XAccelerateStreaming,
-            60 => RTSPHeaderField::XAcceptAuthent,
-            61 => RTSPHeaderField::XAcceptProxyAuthent,
-            62 => RTSPHeaderField::XBroadcastId,
-            63 => RTSPHeaderField::XBurstStreaming,
-            64 => RTSPHeaderField::XNotice,
-            65 => RTSPHeaderField::XPlayerLagTime,
-            66 => RTSPHeaderField::XPlaylist,
-            67 => RTSPHeaderField::XPlaylistChangeNotice,
-            68 => RTSPHeaderField::XPlaylistGenId,
-            69 => RTSPHeaderField::XPlaylistSeekId,
-            70 => RTSPHeaderField::XProxyClientAgent,
-            71 => RTSPHeaderField::XProxyClientVerb,
-            72 => RTSPHeaderField::XRecedingPlaylistchange,
-            73 => RTSPHeaderField::XRtpInfo,
-            74 => RTSPHeaderField::XStartupprofile,
-            75 => RTSPHeaderField::Timestamp,
-            76 => RTSPHeaderField::AuthenticationInfo,
-            77 => RTSPHeaderField::Host,
-            78 => RTSPHeaderField::Pragma,
-            79 => RTSPHeaderField::XServerIpAddress,
-            80 => RTSPHeaderField::XSessioncookie,
-            81 => RTSPHeaderField::RtcpInterval,
-            82 => RTSPHeaderField::Keymgmt,
-            83 => RTSPHeaderField::PipelinedRequests,
-            84 => RTSPHeaderField::MediaProperties,
-            85 => RTSPHeaderField::SeekStyle,
-            86 => RTSPHeaderField::AcceptRanges,
-            87 => RTSPHeaderField::Frames,
-            88 => RTSPHeaderField::RateControl,
-            89 => RTSPHeaderField::Last,
-            value => RTSPHeaderField::__Unknown(value),
+            0 => Self::Invalid,
+            1 => Self::Accept,
+            2 => Self::AcceptEncoding,
+            3 => Self::AcceptLanguage,
+            4 => Self::Allow,
+            5 => Self::Authorization,
+            6 => Self::Bandwidth,
+            7 => Self::Blocksize,
+            8 => Self::CacheControl,
+            9 => Self::Conference,
+            10 => Self::Connection,
+            11 => Self::ContentBase,
+            12 => Self::ContentEncoding,
+            13 => Self::ContentLanguage,
+            14 => Self::ContentLength,
+            15 => Self::ContentLocation,
+            16 => Self::ContentType,
+            17 => Self::Cseq,
+            18 => Self::Date,
+            19 => Self::Expires,
+            20 => Self::From,
+            21 => Self::IfModifiedSince,
+            22 => Self::LastModified,
+            23 => Self::ProxyAuthenticate,
+            24 => Self::ProxyRequire,
+            25 => Self::Public,
+            26 => Self::Range,
+            27 => Self::Referer,
+            28 => Self::Require,
+            29 => Self::RetryAfter,
+            30 => Self::RtpInfo,
+            31 => Self::Scale,
+            32 => Self::Session,
+            33 => Self::Server,
+            34 => Self::Speed,
+            35 => Self::Transport,
+            36 => Self::Unsupported,
+            37 => Self::UserAgent,
+            38 => Self::Via,
+            39 => Self::WwwAuthenticate,
+            40 => Self::ClientChallenge,
+            41 => Self::RealChallenge1,
+            42 => Self::RealChallenge2,
+            43 => Self::RealChallenge3,
+            44 => Self::Subscribe,
+            45 => Self::Alert,
+            46 => Self::ClientId,
+            47 => Self::CompanyId,
+            48 => Self::Guid,
+            49 => Self::RegionData,
+            50 => Self::MaxAsmWidth,
+            51 => Self::Language,
+            52 => Self::PlayerStartTime,
+            53 => Self::Location,
+            54 => Self::Etag,
+            55 => Self::IfMatch,
+            56 => Self::AcceptCharset,
+            57 => Self::Supported,
+            58 => Self::Vary,
+            59 => Self::XAccelerateStreaming,
+            60 => Self::XAcceptAuthent,
+            61 => Self::XAcceptProxyAuthent,
+            62 => Self::XBroadcastId,
+            63 => Self::XBurstStreaming,
+            64 => Self::XNotice,
+            65 => Self::XPlayerLagTime,
+            66 => Self::XPlaylist,
+            67 => Self::XPlaylistChangeNotice,
+            68 => Self::XPlaylistGenId,
+            69 => Self::XPlaylistSeekId,
+            70 => Self::XProxyClientAgent,
+            71 => Self::XProxyClientVerb,
+            72 => Self::XRecedingPlaylistchange,
+            73 => Self::XRtpInfo,
+            74 => Self::XStartupprofile,
+            75 => Self::Timestamp,
+            76 => Self::AuthenticationInfo,
+            77 => Self::Host,
+            78 => Self::Pragma,
+            79 => Self::XServerIpAddress,
+            80 => Self::XSessioncookie,
+            81 => Self::RtcpInterval,
+            82 => Self::Keymgmt,
+            83 => Self::PipelinedRequests,
+            84 => Self::MediaProperties,
+            85 => Self::SeekStyle,
+            86 => Self::AcceptRanges,
+            87 => Self::Frames,
+            88 => Self::RateControl,
+            89 => Self::Last,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -567,7 +567,7 @@ unsafe impl<'a> FromValue<'a> for RTSPHeaderField {
 
 impl ToValue for RTSPHeaderField {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPHeaderField>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -605,13 +605,13 @@ impl IntoGlib for RTSPMsgType {
 
     fn into_glib(self) -> ffi::GstRTSPMsgType {
         match self {
-            RTSPMsgType::Invalid => ffi::GST_RTSP_MESSAGE_INVALID,
-            RTSPMsgType::Request => ffi::GST_RTSP_MESSAGE_REQUEST,
-            RTSPMsgType::Response => ffi::GST_RTSP_MESSAGE_RESPONSE,
-            RTSPMsgType::HttpRequest => ffi::GST_RTSP_MESSAGE_HTTP_REQUEST,
-            RTSPMsgType::HttpResponse => ffi::GST_RTSP_MESSAGE_HTTP_RESPONSE,
-            RTSPMsgType::Data => ffi::GST_RTSP_MESSAGE_DATA,
-            RTSPMsgType::__Unknown(value) => value,
+            Self::Invalid => ffi::GST_RTSP_MESSAGE_INVALID,
+            Self::Request => ffi::GST_RTSP_MESSAGE_REQUEST,
+            Self::Response => ffi::GST_RTSP_MESSAGE_RESPONSE,
+            Self::HttpRequest => ffi::GST_RTSP_MESSAGE_HTTP_REQUEST,
+            Self::HttpResponse => ffi::GST_RTSP_MESSAGE_HTTP_RESPONSE,
+            Self::Data => ffi::GST_RTSP_MESSAGE_DATA,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -621,13 +621,13 @@ impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
     unsafe fn from_glib(value: ffi::GstRTSPMsgType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPMsgType::Invalid,
-            1 => RTSPMsgType::Request,
-            2 => RTSPMsgType::Response,
-            3 => RTSPMsgType::HttpRequest,
-            4 => RTSPMsgType::HttpResponse,
-            5 => RTSPMsgType::Data,
-            value => RTSPMsgType::__Unknown(value),
+            0 => Self::Invalid,
+            1 => Self::Request,
+            2 => Self::Response,
+            3 => Self::HttpRequest,
+            4 => Self::HttpResponse,
+            5 => Self::Data,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -653,7 +653,7 @@ unsafe impl<'a> FromValue<'a> for RTSPMsgType {
 
 impl ToValue for RTSPMsgType {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPMsgType>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -689,12 +689,12 @@ impl IntoGlib for RTSPRangeUnit {
 
     fn into_glib(self) -> ffi::GstRTSPRangeUnit {
         match self {
-            RTSPRangeUnit::Smpte => ffi::GST_RTSP_RANGE_SMPTE,
-            RTSPRangeUnit::Smpte30Drop => ffi::GST_RTSP_RANGE_SMPTE_30_DROP,
-            RTSPRangeUnit::Smpte25 => ffi::GST_RTSP_RANGE_SMPTE_25,
-            RTSPRangeUnit::Npt => ffi::GST_RTSP_RANGE_NPT,
-            RTSPRangeUnit::Clock => ffi::GST_RTSP_RANGE_CLOCK,
-            RTSPRangeUnit::__Unknown(value) => value,
+            Self::Smpte => ffi::GST_RTSP_RANGE_SMPTE,
+            Self::Smpte30Drop => ffi::GST_RTSP_RANGE_SMPTE_30_DROP,
+            Self::Smpte25 => ffi::GST_RTSP_RANGE_SMPTE_25,
+            Self::Npt => ffi::GST_RTSP_RANGE_NPT,
+            Self::Clock => ffi::GST_RTSP_RANGE_CLOCK,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -704,12 +704,12 @@ impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
     unsafe fn from_glib(value: ffi::GstRTSPRangeUnit) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPRangeUnit::Smpte,
-            1 => RTSPRangeUnit::Smpte30Drop,
-            2 => RTSPRangeUnit::Smpte25,
-            3 => RTSPRangeUnit::Npt,
-            4 => RTSPRangeUnit::Clock,
-            value => RTSPRangeUnit::__Unknown(value),
+            0 => Self::Smpte,
+            1 => Self::Smpte30Drop,
+            2 => Self::Smpte25,
+            3 => Self::Npt,
+            4 => Self::Clock,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -735,7 +735,7 @@ unsafe impl<'a> FromValue<'a> for RTSPRangeUnit {
 
 impl ToValue for RTSPRangeUnit {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPRangeUnit>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -797,25 +797,25 @@ impl IntoGlib for RTSPResult {
 
     fn into_glib(self) -> ffi::GstRTSPResult {
         match self {
-            RTSPResult::Ok => ffi::GST_RTSP_OK,
-            RTSPResult::Error => ffi::GST_RTSP_ERROR,
-            RTSPResult::Einval => ffi::GST_RTSP_EINVAL,
-            RTSPResult::Eintr => ffi::GST_RTSP_EINTR,
-            RTSPResult::Enomem => ffi::GST_RTSP_ENOMEM,
-            RTSPResult::Eresolv => ffi::GST_RTSP_ERESOLV,
-            RTSPResult::Enotimpl => ffi::GST_RTSP_ENOTIMPL,
-            RTSPResult::Esys => ffi::GST_RTSP_ESYS,
-            RTSPResult::Eparse => ffi::GST_RTSP_EPARSE,
-            RTSPResult::Ewsastart => ffi::GST_RTSP_EWSASTART,
-            RTSPResult::Ewsaversion => ffi::GST_RTSP_EWSAVERSION,
-            RTSPResult::Eeof => ffi::GST_RTSP_EEOF,
-            RTSPResult::Enet => ffi::GST_RTSP_ENET,
-            RTSPResult::Enotip => ffi::GST_RTSP_ENOTIP,
-            RTSPResult::Etimeout => ffi::GST_RTSP_ETIMEOUT,
-            RTSPResult::Etget => ffi::GST_RTSP_ETGET,
-            RTSPResult::Etpost => ffi::GST_RTSP_ETPOST,
-            RTSPResult::Elast => ffi::GST_RTSP_ELAST,
-            RTSPResult::__Unknown(value) => value,
+            Self::Ok => ffi::GST_RTSP_OK,
+            Self::Error => ffi::GST_RTSP_ERROR,
+            Self::Einval => ffi::GST_RTSP_EINVAL,
+            Self::Eintr => ffi::GST_RTSP_EINTR,
+            Self::Enomem => ffi::GST_RTSP_ENOMEM,
+            Self::Eresolv => ffi::GST_RTSP_ERESOLV,
+            Self::Enotimpl => ffi::GST_RTSP_ENOTIMPL,
+            Self::Esys => ffi::GST_RTSP_ESYS,
+            Self::Eparse => ffi::GST_RTSP_EPARSE,
+            Self::Ewsastart => ffi::GST_RTSP_EWSASTART,
+            Self::Ewsaversion => ffi::GST_RTSP_EWSAVERSION,
+            Self::Eeof => ffi::GST_RTSP_EEOF,
+            Self::Enet => ffi::GST_RTSP_ENET,
+            Self::Enotip => ffi::GST_RTSP_ENOTIP,
+            Self::Etimeout => ffi::GST_RTSP_ETIMEOUT,
+            Self::Etget => ffi::GST_RTSP_ETGET,
+            Self::Etpost => ffi::GST_RTSP_ETPOST,
+            Self::Elast => ffi::GST_RTSP_ELAST,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -825,25 +825,25 @@ impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
     unsafe fn from_glib(value: ffi::GstRTSPResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPResult::Ok,
-            -1 => RTSPResult::Error,
-            -2 => RTSPResult::Einval,
-            -3 => RTSPResult::Eintr,
-            -4 => RTSPResult::Enomem,
-            -5 => RTSPResult::Eresolv,
-            -6 => RTSPResult::Enotimpl,
-            -7 => RTSPResult::Esys,
-            -8 => RTSPResult::Eparse,
-            -9 => RTSPResult::Ewsastart,
-            -10 => RTSPResult::Ewsaversion,
-            -11 => RTSPResult::Eeof,
-            -12 => RTSPResult::Enet,
-            -13 => RTSPResult::Enotip,
-            -14 => RTSPResult::Etimeout,
-            -15 => RTSPResult::Etget,
-            -16 => RTSPResult::Etpost,
-            -17 => RTSPResult::Elast,
-            value => RTSPResult::__Unknown(value),
+            0 => Self::Ok,
+            -1 => Self::Error,
+            -2 => Self::Einval,
+            -3 => Self::Eintr,
+            -4 => Self::Enomem,
+            -5 => Self::Eresolv,
+            -6 => Self::Enotimpl,
+            -7 => Self::Esys,
+            -8 => Self::Eparse,
+            -9 => Self::Ewsastart,
+            -10 => Self::Ewsaversion,
+            -11 => Self::Eeof,
+            -12 => Self::Enet,
+            -13 => Self::Enotip,
+            -14 => Self::Etimeout,
+            -15 => Self::Etget,
+            -16 => Self::Etpost,
+            -17 => Self::Elast,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -869,7 +869,7 @@ unsafe impl<'a> FromValue<'a> for RTSPResult {
 
 impl ToValue for RTSPResult {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPResult>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -907,13 +907,13 @@ impl IntoGlib for RTSPState {
 
     fn into_glib(self) -> ffi::GstRTSPState {
         match self {
-            RTSPState::Invalid => ffi::GST_RTSP_STATE_INVALID,
-            RTSPState::Init => ffi::GST_RTSP_STATE_INIT,
-            RTSPState::Ready => ffi::GST_RTSP_STATE_READY,
-            RTSPState::Seeking => ffi::GST_RTSP_STATE_SEEKING,
-            RTSPState::Playing => ffi::GST_RTSP_STATE_PLAYING,
-            RTSPState::Recording => ffi::GST_RTSP_STATE_RECORDING,
-            RTSPState::__Unknown(value) => value,
+            Self::Invalid => ffi::GST_RTSP_STATE_INVALID,
+            Self::Init => ffi::GST_RTSP_STATE_INIT,
+            Self::Ready => ffi::GST_RTSP_STATE_READY,
+            Self::Seeking => ffi::GST_RTSP_STATE_SEEKING,
+            Self::Playing => ffi::GST_RTSP_STATE_PLAYING,
+            Self::Recording => ffi::GST_RTSP_STATE_RECORDING,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -923,13 +923,13 @@ impl FromGlib<ffi::GstRTSPState> for RTSPState {
     unsafe fn from_glib(value: ffi::GstRTSPState) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPState::Invalid,
-            1 => RTSPState::Init,
-            2 => RTSPState::Ready,
-            3 => RTSPState::Seeking,
-            4 => RTSPState::Playing,
-            5 => RTSPState::Recording,
-            value => RTSPState::__Unknown(value),
+            0 => Self::Invalid,
+            1 => Self::Init,
+            2 => Self::Ready,
+            3 => Self::Seeking,
+            4 => Self::Playing,
+            5 => Self::Recording,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -955,7 +955,7 @@ unsafe impl<'a> FromValue<'a> for RTSPState {
 
 impl ToValue for RTSPState {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPState>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -1073,61 +1073,57 @@ impl IntoGlib for RTSPStatusCode {
 
     fn into_glib(self) -> ffi::GstRTSPStatusCode {
         match self {
-            RTSPStatusCode::Invalid => ffi::GST_RTSP_STS_INVALID,
-            RTSPStatusCode::Continue => ffi::GST_RTSP_STS_CONTINUE,
-            RTSPStatusCode::Ok => ffi::GST_RTSP_STS_OK,
-            RTSPStatusCode::Created => ffi::GST_RTSP_STS_CREATED,
-            RTSPStatusCode::LowOnStorage => ffi::GST_RTSP_STS_LOW_ON_STORAGE,
-            RTSPStatusCode::MultipleChoices => ffi::GST_RTSP_STS_MULTIPLE_CHOICES,
-            RTSPStatusCode::MovedPermanently => ffi::GST_RTSP_STS_MOVED_PERMANENTLY,
-            RTSPStatusCode::MoveTemporarily => ffi::GST_RTSP_STS_MOVE_TEMPORARILY,
-            RTSPStatusCode::SeeOther => ffi::GST_RTSP_STS_SEE_OTHER,
-            RTSPStatusCode::NotModified => ffi::GST_RTSP_STS_NOT_MODIFIED,
-            RTSPStatusCode::UseProxy => ffi::GST_RTSP_STS_USE_PROXY,
-            RTSPStatusCode::BadRequest => ffi::GST_RTSP_STS_BAD_REQUEST,
-            RTSPStatusCode::Unauthorized => ffi::GST_RTSP_STS_UNAUTHORIZED,
-            RTSPStatusCode::PaymentRequired => ffi::GST_RTSP_STS_PAYMENT_REQUIRED,
-            RTSPStatusCode::Forbidden => ffi::GST_RTSP_STS_FORBIDDEN,
-            RTSPStatusCode::NotFound => ffi::GST_RTSP_STS_NOT_FOUND,
-            RTSPStatusCode::MethodNotAllowed => ffi::GST_RTSP_STS_METHOD_NOT_ALLOWED,
-            RTSPStatusCode::NotAcceptable => ffi::GST_RTSP_STS_NOT_ACCEPTABLE,
-            RTSPStatusCode::ProxyAuthRequired => ffi::GST_RTSP_STS_PROXY_AUTH_REQUIRED,
-            RTSPStatusCode::RequestTimeout => ffi::GST_RTSP_STS_REQUEST_TIMEOUT,
-            RTSPStatusCode::Gone => ffi::GST_RTSP_STS_GONE,
-            RTSPStatusCode::LengthRequired => ffi::GST_RTSP_STS_LENGTH_REQUIRED,
-            RTSPStatusCode::PreconditionFailed => ffi::GST_RTSP_STS_PRECONDITION_FAILED,
-            RTSPStatusCode::RequestEntityTooLarge => ffi::GST_RTSP_STS_REQUEST_ENTITY_TOO_LARGE,
-            RTSPStatusCode::RequestUriTooLarge => ffi::GST_RTSP_STS_REQUEST_URI_TOO_LARGE,
-            RTSPStatusCode::UnsupportedMediaType => ffi::GST_RTSP_STS_UNSUPPORTED_MEDIA_TYPE,
-            RTSPStatusCode::ParameterNotUnderstood => ffi::GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD,
-            RTSPStatusCode::ConferenceNotFound => ffi::GST_RTSP_STS_CONFERENCE_NOT_FOUND,
-            RTSPStatusCode::NotEnoughBandwidth => ffi::GST_RTSP_STS_NOT_ENOUGH_BANDWIDTH,
-            RTSPStatusCode::SessionNotFound => ffi::GST_RTSP_STS_SESSION_NOT_FOUND,
-            RTSPStatusCode::MethodNotValidInThisState => {
-                ffi::GST_RTSP_STS_METHOD_NOT_VALID_IN_THIS_STATE
-            }
-            RTSPStatusCode::HeaderFieldNotValidForResource => {
+            Self::Invalid => ffi::GST_RTSP_STS_INVALID,
+            Self::Continue => ffi::GST_RTSP_STS_CONTINUE,
+            Self::Ok => ffi::GST_RTSP_STS_OK,
+            Self::Created => ffi::GST_RTSP_STS_CREATED,
+            Self::LowOnStorage => ffi::GST_RTSP_STS_LOW_ON_STORAGE,
+            Self::MultipleChoices => ffi::GST_RTSP_STS_MULTIPLE_CHOICES,
+            Self::MovedPermanently => ffi::GST_RTSP_STS_MOVED_PERMANENTLY,
+            Self::MoveTemporarily => ffi::GST_RTSP_STS_MOVE_TEMPORARILY,
+            Self::SeeOther => ffi::GST_RTSP_STS_SEE_OTHER,
+            Self::NotModified => ffi::GST_RTSP_STS_NOT_MODIFIED,
+            Self::UseProxy => ffi::GST_RTSP_STS_USE_PROXY,
+            Self::BadRequest => ffi::GST_RTSP_STS_BAD_REQUEST,
+            Self::Unauthorized => ffi::GST_RTSP_STS_UNAUTHORIZED,
+            Self::PaymentRequired => ffi::GST_RTSP_STS_PAYMENT_REQUIRED,
+            Self::Forbidden => ffi::GST_RTSP_STS_FORBIDDEN,
+            Self::NotFound => ffi::GST_RTSP_STS_NOT_FOUND,
+            Self::MethodNotAllowed => ffi::GST_RTSP_STS_METHOD_NOT_ALLOWED,
+            Self::NotAcceptable => ffi::GST_RTSP_STS_NOT_ACCEPTABLE,
+            Self::ProxyAuthRequired => ffi::GST_RTSP_STS_PROXY_AUTH_REQUIRED,
+            Self::RequestTimeout => ffi::GST_RTSP_STS_REQUEST_TIMEOUT,
+            Self::Gone => ffi::GST_RTSP_STS_GONE,
+            Self::LengthRequired => ffi::GST_RTSP_STS_LENGTH_REQUIRED,
+            Self::PreconditionFailed => ffi::GST_RTSP_STS_PRECONDITION_FAILED,
+            Self::RequestEntityTooLarge => ffi::GST_RTSP_STS_REQUEST_ENTITY_TOO_LARGE,
+            Self::RequestUriTooLarge => ffi::GST_RTSP_STS_REQUEST_URI_TOO_LARGE,
+            Self::UnsupportedMediaType => ffi::GST_RTSP_STS_UNSUPPORTED_MEDIA_TYPE,
+            Self::ParameterNotUnderstood => ffi::GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD,
+            Self::ConferenceNotFound => ffi::GST_RTSP_STS_CONFERENCE_NOT_FOUND,
+            Self::NotEnoughBandwidth => ffi::GST_RTSP_STS_NOT_ENOUGH_BANDWIDTH,
+            Self::SessionNotFound => ffi::GST_RTSP_STS_SESSION_NOT_FOUND,
+            Self::MethodNotValidInThisState => ffi::GST_RTSP_STS_METHOD_NOT_VALID_IN_THIS_STATE,
+            Self::HeaderFieldNotValidForResource => {
                 ffi::GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE
             }
-            RTSPStatusCode::InvalidRange => ffi::GST_RTSP_STS_INVALID_RANGE,
-            RTSPStatusCode::ParameterIsReadonly => ffi::GST_RTSP_STS_PARAMETER_IS_READONLY,
-            RTSPStatusCode::AggregateOperationNotAllowed => {
-                ffi::GST_RTSP_STS_AGGREGATE_OPERATION_NOT_ALLOWED
-            }
-            RTSPStatusCode::OnlyAggregateOperationAllowed => {
+            Self::InvalidRange => ffi::GST_RTSP_STS_INVALID_RANGE,
+            Self::ParameterIsReadonly => ffi::GST_RTSP_STS_PARAMETER_IS_READONLY,
+            Self::AggregateOperationNotAllowed => ffi::GST_RTSP_STS_AGGREGATE_OPERATION_NOT_ALLOWED,
+            Self::OnlyAggregateOperationAllowed => {
                 ffi::GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED
             }
-            RTSPStatusCode::UnsupportedTransport => ffi::GST_RTSP_STS_UNSUPPORTED_TRANSPORT,
-            RTSPStatusCode::DestinationUnreachable => ffi::GST_RTSP_STS_DESTINATION_UNREACHABLE,
-            RTSPStatusCode::KeyManagementFailure => ffi::GST_RTSP_STS_KEY_MANAGEMENT_FAILURE,
-            RTSPStatusCode::InternalServerError => ffi::GST_RTSP_STS_INTERNAL_SERVER_ERROR,
-            RTSPStatusCode::NotImplemented => ffi::GST_RTSP_STS_NOT_IMPLEMENTED,
-            RTSPStatusCode::BadGateway => ffi::GST_RTSP_STS_BAD_GATEWAY,
-            RTSPStatusCode::ServiceUnavailable => ffi::GST_RTSP_STS_SERVICE_UNAVAILABLE,
-            RTSPStatusCode::GatewayTimeout => ffi::GST_RTSP_STS_GATEWAY_TIMEOUT,
-            RTSPStatusCode::RtspVersionNotSupported => ffi::GST_RTSP_STS_RTSP_VERSION_NOT_SUPPORTED,
-            RTSPStatusCode::OptionNotSupported => ffi::GST_RTSP_STS_OPTION_NOT_SUPPORTED,
-            RTSPStatusCode::__Unknown(value) => value,
+            Self::UnsupportedTransport => ffi::GST_RTSP_STS_UNSUPPORTED_TRANSPORT,
+            Self::DestinationUnreachable => ffi::GST_RTSP_STS_DESTINATION_UNREACHABLE,
+            Self::KeyManagementFailure => ffi::GST_RTSP_STS_KEY_MANAGEMENT_FAILURE,
+            Self::InternalServerError => ffi::GST_RTSP_STS_INTERNAL_SERVER_ERROR,
+            Self::NotImplemented => ffi::GST_RTSP_STS_NOT_IMPLEMENTED,
+            Self::BadGateway => ffi::GST_RTSP_STS_BAD_GATEWAY,
+            Self::ServiceUnavailable => ffi::GST_RTSP_STS_SERVICE_UNAVAILABLE,
+            Self::GatewayTimeout => ffi::GST_RTSP_STS_GATEWAY_TIMEOUT,
+            Self::RtspVersionNotSupported => ffi::GST_RTSP_STS_RTSP_VERSION_NOT_SUPPORTED,
+            Self::OptionNotSupported => ffi::GST_RTSP_STS_OPTION_NOT_SUPPORTED,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -1137,53 +1133,53 @@ impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
     unsafe fn from_glib(value: ffi::GstRTSPStatusCode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPStatusCode::Invalid,
-            100 => RTSPStatusCode::Continue,
-            200 => RTSPStatusCode::Ok,
-            201 => RTSPStatusCode::Created,
-            250 => RTSPStatusCode::LowOnStorage,
-            300 => RTSPStatusCode::MultipleChoices,
-            301 => RTSPStatusCode::MovedPermanently,
-            302 => RTSPStatusCode::MoveTemporarily,
-            303 => RTSPStatusCode::SeeOther,
-            304 => RTSPStatusCode::NotModified,
-            305 => RTSPStatusCode::UseProxy,
-            400 => RTSPStatusCode::BadRequest,
-            401 => RTSPStatusCode::Unauthorized,
-            402 => RTSPStatusCode::PaymentRequired,
-            403 => RTSPStatusCode::Forbidden,
-            404 => RTSPStatusCode::NotFound,
-            405 => RTSPStatusCode::MethodNotAllowed,
-            406 => RTSPStatusCode::NotAcceptable,
-            407 => RTSPStatusCode::ProxyAuthRequired,
-            408 => RTSPStatusCode::RequestTimeout,
-            410 => RTSPStatusCode::Gone,
-            411 => RTSPStatusCode::LengthRequired,
-            412 => RTSPStatusCode::PreconditionFailed,
-            413 => RTSPStatusCode::RequestEntityTooLarge,
-            414 => RTSPStatusCode::RequestUriTooLarge,
-            415 => RTSPStatusCode::UnsupportedMediaType,
-            451 => RTSPStatusCode::ParameterNotUnderstood,
-            452 => RTSPStatusCode::ConferenceNotFound,
-            453 => RTSPStatusCode::NotEnoughBandwidth,
-            454 => RTSPStatusCode::SessionNotFound,
-            455 => RTSPStatusCode::MethodNotValidInThisState,
-            456 => RTSPStatusCode::HeaderFieldNotValidForResource,
-            457 => RTSPStatusCode::InvalidRange,
-            458 => RTSPStatusCode::ParameterIsReadonly,
-            459 => RTSPStatusCode::AggregateOperationNotAllowed,
-            460 => RTSPStatusCode::OnlyAggregateOperationAllowed,
-            461 => RTSPStatusCode::UnsupportedTransport,
-            462 => RTSPStatusCode::DestinationUnreachable,
-            463 => RTSPStatusCode::KeyManagementFailure,
-            500 => RTSPStatusCode::InternalServerError,
-            501 => RTSPStatusCode::NotImplemented,
-            502 => RTSPStatusCode::BadGateway,
-            503 => RTSPStatusCode::ServiceUnavailable,
-            504 => RTSPStatusCode::GatewayTimeout,
-            505 => RTSPStatusCode::RtspVersionNotSupported,
-            551 => RTSPStatusCode::OptionNotSupported,
-            value => RTSPStatusCode::__Unknown(value),
+            0 => Self::Invalid,
+            100 => Self::Continue,
+            200 => Self::Ok,
+            201 => Self::Created,
+            250 => Self::LowOnStorage,
+            300 => Self::MultipleChoices,
+            301 => Self::MovedPermanently,
+            302 => Self::MoveTemporarily,
+            303 => Self::SeeOther,
+            304 => Self::NotModified,
+            305 => Self::UseProxy,
+            400 => Self::BadRequest,
+            401 => Self::Unauthorized,
+            402 => Self::PaymentRequired,
+            403 => Self::Forbidden,
+            404 => Self::NotFound,
+            405 => Self::MethodNotAllowed,
+            406 => Self::NotAcceptable,
+            407 => Self::ProxyAuthRequired,
+            408 => Self::RequestTimeout,
+            410 => Self::Gone,
+            411 => Self::LengthRequired,
+            412 => Self::PreconditionFailed,
+            413 => Self::RequestEntityTooLarge,
+            414 => Self::RequestUriTooLarge,
+            415 => Self::UnsupportedMediaType,
+            451 => Self::ParameterNotUnderstood,
+            452 => Self::ConferenceNotFound,
+            453 => Self::NotEnoughBandwidth,
+            454 => Self::SessionNotFound,
+            455 => Self::MethodNotValidInThisState,
+            456 => Self::HeaderFieldNotValidForResource,
+            457 => Self::InvalidRange,
+            458 => Self::ParameterIsReadonly,
+            459 => Self::AggregateOperationNotAllowed,
+            460 => Self::OnlyAggregateOperationAllowed,
+            461 => Self::UnsupportedTransport,
+            462 => Self::DestinationUnreachable,
+            463 => Self::KeyManagementFailure,
+            500 => Self::InternalServerError,
+            501 => Self::NotImplemented,
+            502 => Self::BadGateway,
+            503 => Self::ServiceUnavailable,
+            504 => Self::GatewayTimeout,
+            505 => Self::RtspVersionNotSupported,
+            551 => Self::OptionNotSupported,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -1209,7 +1205,7 @@ unsafe impl<'a> FromValue<'a> for RTSPStatusCode {
 
 impl ToValue for RTSPStatusCode {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPStatusCode>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -1245,12 +1241,12 @@ impl IntoGlib for RTSPTimeType {
 
     fn into_glib(self) -> ffi::GstRTSPTimeType {
         match self {
-            RTSPTimeType::Seconds => ffi::GST_RTSP_TIME_SECONDS,
-            RTSPTimeType::Now => ffi::GST_RTSP_TIME_NOW,
-            RTSPTimeType::End => ffi::GST_RTSP_TIME_END,
-            RTSPTimeType::Frames => ffi::GST_RTSP_TIME_FRAMES,
-            RTSPTimeType::Utc => ffi::GST_RTSP_TIME_UTC,
-            RTSPTimeType::__Unknown(value) => value,
+            Self::Seconds => ffi::GST_RTSP_TIME_SECONDS,
+            Self::Now => ffi::GST_RTSP_TIME_NOW,
+            Self::End => ffi::GST_RTSP_TIME_END,
+            Self::Frames => ffi::GST_RTSP_TIME_FRAMES,
+            Self::Utc => ffi::GST_RTSP_TIME_UTC,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -1260,12 +1256,12 @@ impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
     unsafe fn from_glib(value: ffi::GstRTSPTimeType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPTimeType::Seconds,
-            1 => RTSPTimeType::Now,
-            2 => RTSPTimeType::End,
-            3 => RTSPTimeType::Frames,
-            4 => RTSPTimeType::Utc,
-            value => RTSPTimeType::__Unknown(value),
+            0 => Self::Seconds,
+            1 => Self::Now,
+            2 => Self::End,
+            3 => Self::Frames,
+            4 => Self::Utc,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -1291,7 +1287,7 @@ unsafe impl<'a> FromValue<'a> for RTSPTimeType {
 
 impl ToValue for RTSPTimeType {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPTimeType>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }

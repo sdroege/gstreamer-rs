@@ -31,11 +31,11 @@ impl IntoGlib for InterpolationMode {
 
     fn into_glib(self) -> ffi::GstInterpolationMode {
         match self {
-            InterpolationMode::None => ffi::GST_INTERPOLATION_MODE_NONE,
-            InterpolationMode::Linear => ffi::GST_INTERPOLATION_MODE_LINEAR,
-            InterpolationMode::Cubic => ffi::GST_INTERPOLATION_MODE_CUBIC,
-            InterpolationMode::CubicMonotonic => ffi::GST_INTERPOLATION_MODE_CUBIC_MONOTONIC,
-            InterpolationMode::__Unknown(value) => value,
+            Self::None => ffi::GST_INTERPOLATION_MODE_NONE,
+            Self::Linear => ffi::GST_INTERPOLATION_MODE_LINEAR,
+            Self::Cubic => ffi::GST_INTERPOLATION_MODE_CUBIC,
+            Self::CubicMonotonic => ffi::GST_INTERPOLATION_MODE_CUBIC_MONOTONIC,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -45,11 +45,11 @@ impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
     unsafe fn from_glib(value: ffi::GstInterpolationMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => InterpolationMode::None,
-            1 => InterpolationMode::Linear,
-            2 => InterpolationMode::Cubic,
-            3 => InterpolationMode::CubicMonotonic,
-            value => InterpolationMode::__Unknown(value),
+            0 => Self::None,
+            1 => Self::Linear,
+            2 => Self::Cubic,
+            3 => Self::CubicMonotonic,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -75,7 +75,7 @@ unsafe impl<'a> FromValue<'a> for InterpolationMode {
 
 impl ToValue for InterpolationMode {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<InterpolationMode>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -111,12 +111,12 @@ impl IntoGlib for LFOWaveform {
 
     fn into_glib(self) -> ffi::GstLFOWaveform {
         match self {
-            LFOWaveform::Sine => ffi::GST_LFO_WAVEFORM_SINE,
-            LFOWaveform::Square => ffi::GST_LFO_WAVEFORM_SQUARE,
-            LFOWaveform::Saw => ffi::GST_LFO_WAVEFORM_SAW,
-            LFOWaveform::ReverseSaw => ffi::GST_LFO_WAVEFORM_REVERSE_SAW,
-            LFOWaveform::Triangle => ffi::GST_LFO_WAVEFORM_TRIANGLE,
-            LFOWaveform::__Unknown(value) => value,
+            Self::Sine => ffi::GST_LFO_WAVEFORM_SINE,
+            Self::Square => ffi::GST_LFO_WAVEFORM_SQUARE,
+            Self::Saw => ffi::GST_LFO_WAVEFORM_SAW,
+            Self::ReverseSaw => ffi::GST_LFO_WAVEFORM_REVERSE_SAW,
+            Self::Triangle => ffi::GST_LFO_WAVEFORM_TRIANGLE,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -126,12 +126,12 @@ impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
     unsafe fn from_glib(value: ffi::GstLFOWaveform) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => LFOWaveform::Sine,
-            1 => LFOWaveform::Square,
-            2 => LFOWaveform::Saw,
-            3 => LFOWaveform::ReverseSaw,
-            4 => LFOWaveform::Triangle,
-            value => LFOWaveform::__Unknown(value),
+            0 => Self::Sine,
+            1 => Self::Square,
+            2 => Self::Saw,
+            3 => Self::ReverseSaw,
+            4 => Self::Triangle,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -157,7 +157,7 @@ unsafe impl<'a> FromValue<'a> for LFOWaveform {
 
 impl ToValue for LFOWaveform {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<LFOWaveform>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }

@@ -29,9 +29,9 @@ impl IntoGlib for DiscovererSerializeFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstDiscovererSerializeFlags> for DiscovererSerializeFlags {
-    unsafe fn from_glib(value: ffi::GstDiscovererSerializeFlags) -> DiscovererSerializeFlags {
+    unsafe fn from_glib(value: ffi::GstDiscovererSerializeFlags) -> Self {
         skip_assert_initialized!();
-        DiscovererSerializeFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -56,7 +56,7 @@ unsafe impl<'a> FromValue<'a> for DiscovererSerializeFlags {
 
 impl ToValue for DiscovererSerializeFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<DiscovererSerializeFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }

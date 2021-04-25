@@ -31,9 +31,9 @@ impl IntoGlib for RTSPAddressFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPAddressFlags> for RTSPAddressFlags {
-    unsafe fn from_glib(value: ffi::GstRTSPAddressFlags) -> RTSPAddressFlags {
+    unsafe fn from_glib(value: ffi::GstRTSPAddressFlags) -> Self {
         skip_assert_initialized!();
-        RTSPAddressFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -55,9 +55,9 @@ impl IntoGlib for RTSPTransportMode {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTSPTransportMode> for RTSPTransportMode {
-    unsafe fn from_glib(value: ffi::GstRTSPTransportMode) -> RTSPTransportMode {
+    unsafe fn from_glib(value: ffi::GstRTSPTransportMode) -> Self {
         skip_assert_initialized!();
-        RTSPTransportMode::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -82,7 +82,7 @@ unsafe impl<'a> FromValue<'a> for RTSPTransportMode {
 
 impl ToValue for RTSPTransportMode {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPTransportMode>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }

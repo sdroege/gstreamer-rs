@@ -33,12 +33,12 @@ impl IntoGlib for RTSPAddressPoolResult {
 
     fn into_glib(self) -> ffi::GstRTSPAddressPoolResult {
         match self {
-            RTSPAddressPoolResult::Ok => ffi::GST_RTSP_ADDRESS_POOL_OK,
-            RTSPAddressPoolResult::Einval => ffi::GST_RTSP_ADDRESS_POOL_EINVAL,
-            RTSPAddressPoolResult::Ereserved => ffi::GST_RTSP_ADDRESS_POOL_ERESERVED,
-            RTSPAddressPoolResult::Erange => ffi::GST_RTSP_ADDRESS_POOL_ERANGE,
-            RTSPAddressPoolResult::Elast => ffi::GST_RTSP_ADDRESS_POOL_ELAST,
-            RTSPAddressPoolResult::__Unknown(value) => value,
+            Self::Ok => ffi::GST_RTSP_ADDRESS_POOL_OK,
+            Self::Einval => ffi::GST_RTSP_ADDRESS_POOL_EINVAL,
+            Self::Ereserved => ffi::GST_RTSP_ADDRESS_POOL_ERESERVED,
+            Self::Erange => ffi::GST_RTSP_ADDRESS_POOL_ERANGE,
+            Self::Elast => ffi::GST_RTSP_ADDRESS_POOL_ELAST,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -48,12 +48,12 @@ impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
     unsafe fn from_glib(value: ffi::GstRTSPAddressPoolResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPAddressPoolResult::Ok,
-            -1 => RTSPAddressPoolResult::Einval,
-            -2 => RTSPAddressPoolResult::Ereserved,
-            -3 => RTSPAddressPoolResult::Erange,
-            -4 => RTSPAddressPoolResult::Elast,
-            value => RTSPAddressPoolResult::__Unknown(value),
+            0 => Self::Ok,
+            -1 => Self::Einval,
+            -2 => Self::Ereserved,
+            -3 => Self::Erange,
+            -4 => Self::Elast,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -78,10 +78,10 @@ impl IntoGlib for RTSPFilterResult {
 
     fn into_glib(self) -> ffi::GstRTSPFilterResult {
         match self {
-            RTSPFilterResult::Remove => ffi::GST_RTSP_FILTER_REMOVE,
-            RTSPFilterResult::Keep => ffi::GST_RTSP_FILTER_KEEP,
-            RTSPFilterResult::Ref => ffi::GST_RTSP_FILTER_REF,
-            RTSPFilterResult::__Unknown(value) => value,
+            Self::Remove => ffi::GST_RTSP_FILTER_REMOVE,
+            Self::Keep => ffi::GST_RTSP_FILTER_KEEP,
+            Self::Ref => ffi::GST_RTSP_FILTER_REF,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -91,10 +91,10 @@ impl FromGlib<ffi::GstRTSPFilterResult> for RTSPFilterResult {
     unsafe fn from_glib(value: ffi::GstRTSPFilterResult) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPFilterResult::Remove,
-            1 => RTSPFilterResult::Keep,
-            2 => RTSPFilterResult::Ref,
-            value => RTSPFilterResult::__Unknown(value),
+            0 => Self::Remove,
+            1 => Self::Keep,
+            2 => Self::Ref,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -125,13 +125,13 @@ impl IntoGlib for RTSPMediaStatus {
 
     fn into_glib(self) -> ffi::GstRTSPMediaStatus {
         match self {
-            RTSPMediaStatus::Unprepared => ffi::GST_RTSP_MEDIA_STATUS_UNPREPARED,
-            RTSPMediaStatus::Unpreparing => ffi::GST_RTSP_MEDIA_STATUS_UNPREPARING,
-            RTSPMediaStatus::Preparing => ffi::GST_RTSP_MEDIA_STATUS_PREPARING,
-            RTSPMediaStatus::Prepared => ffi::GST_RTSP_MEDIA_STATUS_PREPARED,
-            RTSPMediaStatus::Suspended => ffi::GST_RTSP_MEDIA_STATUS_SUSPENDED,
-            RTSPMediaStatus::Error => ffi::GST_RTSP_MEDIA_STATUS_ERROR,
-            RTSPMediaStatus::__Unknown(value) => value,
+            Self::Unprepared => ffi::GST_RTSP_MEDIA_STATUS_UNPREPARED,
+            Self::Unpreparing => ffi::GST_RTSP_MEDIA_STATUS_UNPREPARING,
+            Self::Preparing => ffi::GST_RTSP_MEDIA_STATUS_PREPARING,
+            Self::Prepared => ffi::GST_RTSP_MEDIA_STATUS_PREPARED,
+            Self::Suspended => ffi::GST_RTSP_MEDIA_STATUS_SUSPENDED,
+            Self::Error => ffi::GST_RTSP_MEDIA_STATUS_ERROR,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -141,13 +141,13 @@ impl FromGlib<ffi::GstRTSPMediaStatus> for RTSPMediaStatus {
     unsafe fn from_glib(value: ffi::GstRTSPMediaStatus) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPMediaStatus::Unprepared,
-            1 => RTSPMediaStatus::Unpreparing,
-            2 => RTSPMediaStatus::Preparing,
-            3 => RTSPMediaStatus::Prepared,
-            4 => RTSPMediaStatus::Suspended,
-            5 => RTSPMediaStatus::Error,
-            value => RTSPMediaStatus::__Unknown(value),
+            0 => Self::Unprepared,
+            1 => Self::Unpreparing,
+            2 => Self::Preparing,
+            3 => Self::Prepared,
+            4 => Self::Suspended,
+            5 => Self::Error,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -172,12 +172,10 @@ impl IntoGlib for RTSPPublishClockMode {
 
     fn into_glib(self) -> ffi::GstRTSPPublishClockMode {
         match self {
-            RTSPPublishClockMode::None => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_NONE,
-            RTSPPublishClockMode::Clock => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK,
-            RTSPPublishClockMode::ClockAndOffset => {
-                ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK_AND_OFFSET
-            }
-            RTSPPublishClockMode::__Unknown(value) => value,
+            Self::None => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_NONE,
+            Self::Clock => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK,
+            Self::ClockAndOffset => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK_AND_OFFSET,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -187,10 +185,10 @@ impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
     unsafe fn from_glib(value: ffi::GstRTSPPublishClockMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPPublishClockMode::None,
-            1 => RTSPPublishClockMode::Clock,
-            2 => RTSPPublishClockMode::ClockAndOffset,
-            value => RTSPPublishClockMode::__Unknown(value),
+            0 => Self::None,
+            1 => Self::Clock,
+            2 => Self::ClockAndOffset,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -216,7 +214,7 @@ unsafe impl<'a> FromValue<'a> for RTSPPublishClockMode {
 
 impl ToValue for RTSPPublishClockMode {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPPublishClockMode>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -248,10 +246,10 @@ impl IntoGlib for RTSPSuspendMode {
 
     fn into_glib(self) -> ffi::GstRTSPSuspendMode {
         match self {
-            RTSPSuspendMode::None => ffi::GST_RTSP_SUSPEND_MODE_NONE,
-            RTSPSuspendMode::Pause => ffi::GST_RTSP_SUSPEND_MODE_PAUSE,
-            RTSPSuspendMode::Reset => ffi::GST_RTSP_SUSPEND_MODE_RESET,
-            RTSPSuspendMode::__Unknown(value) => value,
+            Self::None => ffi::GST_RTSP_SUSPEND_MODE_NONE,
+            Self::Pause => ffi::GST_RTSP_SUSPEND_MODE_PAUSE,
+            Self::Reset => ffi::GST_RTSP_SUSPEND_MODE_RESET,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -261,10 +259,10 @@ impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
     unsafe fn from_glib(value: ffi::GstRTSPSuspendMode) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPSuspendMode::None,
-            1 => RTSPSuspendMode::Pause,
-            2 => RTSPSuspendMode::Reset,
-            value => RTSPSuspendMode::__Unknown(value),
+            0 => Self::None,
+            1 => Self::Pause,
+            2 => Self::Reset,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -290,7 +288,7 @@ unsafe impl<'a> FromValue<'a> for RTSPSuspendMode {
 
 impl ToValue for RTSPSuspendMode {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTSPSuspendMode>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -320,9 +318,9 @@ impl IntoGlib for RTSPThreadType {
 
     fn into_glib(self) -> ffi::GstRTSPThreadType {
         match self {
-            RTSPThreadType::Client => ffi::GST_RTSP_THREAD_TYPE_CLIENT,
-            RTSPThreadType::Media => ffi::GST_RTSP_THREAD_TYPE_MEDIA,
-            RTSPThreadType::__Unknown(value) => value,
+            Self::Client => ffi::GST_RTSP_THREAD_TYPE_CLIENT,
+            Self::Media => ffi::GST_RTSP_THREAD_TYPE_MEDIA,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -332,9 +330,9 @@ impl FromGlib<ffi::GstRTSPThreadType> for RTSPThreadType {
     unsafe fn from_glib(value: ffi::GstRTSPThreadType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => RTSPThreadType::Client,
-            1 => RTSPThreadType::Media,
-            value => RTSPThreadType::__Unknown(value),
+            0 => Self::Client,
+            1 => Self::Media,
+            value => Self::__Unknown(value),
         }
     }
 }

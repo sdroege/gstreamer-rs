@@ -27,8 +27,8 @@ impl IntoGlib for BaseParseFrameFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstBaseParseFrameFlags> for BaseParseFrameFlags {
-    unsafe fn from_glib(value: ffi::GstBaseParseFrameFlags) -> BaseParseFrameFlags {
+    unsafe fn from_glib(value: ffi::GstBaseParseFrameFlags) -> Self {
         skip_assert_initialized!();
-        BaseParseFrameFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }

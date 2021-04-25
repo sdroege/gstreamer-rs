@@ -43,10 +43,10 @@ impl IntoGlib for AggregatorStartTimeSelection {
 
     fn into_glib(self) -> ffi::GstAggregatorStartTimeSelection {
         match self {
-            AggregatorStartTimeSelection::Zero => ffi::GST_AGGREGATOR_START_TIME_SELECTION_ZERO,
-            AggregatorStartTimeSelection::First => ffi::GST_AGGREGATOR_START_TIME_SELECTION_FIRST,
-            AggregatorStartTimeSelection::Set => ffi::GST_AGGREGATOR_START_TIME_SELECTION_SET,
-            AggregatorStartTimeSelection::__Unknown(value) => value,
+            Self::Zero => ffi::GST_AGGREGATOR_START_TIME_SELECTION_ZERO,
+            Self::First => ffi::GST_AGGREGATOR_START_TIME_SELECTION_FIRST,
+            Self::Set => ffi::GST_AGGREGATOR_START_TIME_SELECTION_SET,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -58,10 +58,10 @@ impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelec
     unsafe fn from_glib(value: ffi::GstAggregatorStartTimeSelection) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => AggregatorStartTimeSelection::Zero,
-            1 => AggregatorStartTimeSelection::First,
-            2 => AggregatorStartTimeSelection::Set,
-            value => AggregatorStartTimeSelection::__Unknown(value),
+            0 => Self::Zero,
+            1 => Self::First,
+            2 => Self::Set,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -95,7 +95,7 @@ unsafe impl<'a> FromValue<'a> for AggregatorStartTimeSelection {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl ToValue for AggregatorStartTimeSelection {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<AggregatorStartTimeSelection>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }

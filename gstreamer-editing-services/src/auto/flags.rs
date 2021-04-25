@@ -33,9 +33,9 @@ impl IntoGlib for PipelineFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESPipelineFlags> for PipelineFlags {
-    unsafe fn from_glib(value: ffi::GESPipelineFlags) -> PipelineFlags {
+    unsafe fn from_glib(value: ffi::GESPipelineFlags) -> Self {
         skip_assert_initialized!();
-        PipelineFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -60,7 +60,7 @@ unsafe impl<'a> FromValue<'a> for PipelineFlags {
 
 impl ToValue for PipelineFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<PipelineFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -114,9 +114,9 @@ impl IntoGlib for TrackType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GESTrackType> for TrackType {
-    unsafe fn from_glib(value: ffi::GESTrackType) -> TrackType {
+    unsafe fn from_glib(value: ffi::GESTrackType) -> Self {
         skip_assert_initialized!();
-        TrackType::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -141,7 +141,7 @@ unsafe impl<'a> FromValue<'a> for TrackType {
 
 impl ToValue for TrackType {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<TrackType>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }

@@ -34,9 +34,9 @@ impl IntoGlib for RTPBufferFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
-    unsafe fn from_glib(value: ffi::GstRTPBufferFlags) -> RTPBufferFlags {
+    unsafe fn from_glib(value: ffi::GstRTPBufferFlags) -> Self {
         skip_assert_initialized!();
-        RTPBufferFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -69,7 +69,7 @@ unsafe impl<'a> FromValue<'a> for RTPBufferFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 impl ToValue for RTPBufferFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTPBufferFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -98,9 +98,9 @@ impl IntoGlib for RTPBufferMapFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstRTPBufferMapFlags> for RTPBufferMapFlags {
-    unsafe fn from_glib(value: ffi::GstRTPBufferMapFlags) -> RTPBufferMapFlags {
+    unsafe fn from_glib(value: ffi::GstRTPBufferMapFlags) -> Self {
         skip_assert_initialized!();
-        RTPBufferMapFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -125,7 +125,7 @@ unsafe impl<'a> FromValue<'a> for RTPBufferMapFlags {
 
 impl ToValue for RTPBufferMapFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<RTPBufferMapFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }

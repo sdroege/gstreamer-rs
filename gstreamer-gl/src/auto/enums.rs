@@ -41,13 +41,13 @@ impl IntoGlib for GLContextError {
 
     fn into_glib(self) -> ffi::GstGLContextError {
         match self {
-            GLContextError::Failed => ffi::GST_GL_CONTEXT_ERROR_FAILED,
-            GLContextError::WrongConfig => ffi::GST_GL_CONTEXT_ERROR_WRONG_CONFIG,
-            GLContextError::WrongApi => ffi::GST_GL_CONTEXT_ERROR_WRONG_API,
-            GLContextError::OldLibs => ffi::GST_GL_CONTEXT_ERROR_OLD_LIBS,
-            GLContextError::CreateContext => ffi::GST_GL_CONTEXT_ERROR_CREATE_CONTEXT,
-            GLContextError::ResourceUnavailable => ffi::GST_GL_CONTEXT_ERROR_RESOURCE_UNAVAILABLE,
-            GLContextError::__Unknown(value) => value,
+            Self::Failed => ffi::GST_GL_CONTEXT_ERROR_FAILED,
+            Self::WrongConfig => ffi::GST_GL_CONTEXT_ERROR_WRONG_CONFIG,
+            Self::WrongApi => ffi::GST_GL_CONTEXT_ERROR_WRONG_API,
+            Self::OldLibs => ffi::GST_GL_CONTEXT_ERROR_OLD_LIBS,
+            Self::CreateContext => ffi::GST_GL_CONTEXT_ERROR_CREATE_CONTEXT,
+            Self::ResourceUnavailable => ffi::GST_GL_CONTEXT_ERROR_RESOURCE_UNAVAILABLE,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -57,13 +57,13 @@ impl FromGlib<ffi::GstGLContextError> for GLContextError {
     unsafe fn from_glib(value: ffi::GstGLContextError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => GLContextError::Failed,
-            1 => GLContextError::WrongConfig,
-            2 => GLContextError::WrongApi,
-            3 => GLContextError::OldLibs,
-            4 => GLContextError::CreateContext,
-            5 => GLContextError::ResourceUnavailable,
-            value => GLContextError::__Unknown(value),
+            0 => Self::Failed,
+            1 => Self::WrongConfig,
+            2 => Self::WrongApi,
+            3 => Self::OldLibs,
+            4 => Self::CreateContext,
+            5 => Self::ResourceUnavailable,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -82,13 +82,13 @@ impl ErrorDomain for GLContextError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(GLContextError::Failed),
-            1 => Some(GLContextError::WrongConfig),
-            2 => Some(GLContextError::WrongApi),
-            3 => Some(GLContextError::OldLibs),
-            4 => Some(GLContextError::CreateContext),
-            5 => Some(GLContextError::ResourceUnavailable),
-            _ => Some(GLContextError::Failed),
+            0 => Some(Self::Failed),
+            1 => Some(Self::WrongConfig),
+            2 => Some(Self::WrongApi),
+            3 => Some(Self::OldLibs),
+            4 => Some(Self::CreateContext),
+            5 => Some(Self::ResourceUnavailable),
+            _ => Some(Self::Failed),
         }
     }
 }
@@ -114,7 +114,7 @@ unsafe impl<'a> FromValue<'a> for GLContextError {
 
 impl ToValue for GLContextError {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLContextError>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -234,26 +234,26 @@ impl IntoGlib for GLFormat {
 
     fn into_glib(self) -> ffi::GstGLFormat {
         match self {
-            GLFormat::Luminance => ffi::GST_GL_LUMINANCE,
-            GLFormat::Alpha => ffi::GST_GL_ALPHA,
-            GLFormat::LuminanceAlpha => ffi::GST_GL_LUMINANCE_ALPHA,
-            GLFormat::Red => ffi::GST_GL_RED,
-            GLFormat::R8 => ffi::GST_GL_R8,
-            GLFormat::Rg => ffi::GST_GL_RG,
-            GLFormat::Rg8 => ffi::GST_GL_RG8,
-            GLFormat::Rgb => ffi::GST_GL_RGB,
-            GLFormat::Rgb8 => ffi::GST_GL_RGB8,
-            GLFormat::Rgb565 => ffi::GST_GL_RGB565,
-            GLFormat::Rgb16 => ffi::GST_GL_RGB16,
-            GLFormat::Rgba => ffi::GST_GL_RGBA,
-            GLFormat::Rgba8 => ffi::GST_GL_RGBA8,
-            GLFormat::Rgba16 => ffi::GST_GL_RGBA16,
-            GLFormat::DepthComponent16 => ffi::GST_GL_DEPTH_COMPONENT16,
-            GLFormat::Depth24Stencil8 => ffi::GST_GL_DEPTH24_STENCIL8,
-            GLFormat::Rgb10A2 => ffi::GST_GL_RGB10_A2,
-            GLFormat::R16 => ffi::GST_GL_R16,
-            GLFormat::Rg16 => ffi::GST_GL_RG16,
-            GLFormat::__Unknown(value) => value,
+            Self::Luminance => ffi::GST_GL_LUMINANCE,
+            Self::Alpha => ffi::GST_GL_ALPHA,
+            Self::LuminanceAlpha => ffi::GST_GL_LUMINANCE_ALPHA,
+            Self::Red => ffi::GST_GL_RED,
+            Self::R8 => ffi::GST_GL_R8,
+            Self::Rg => ffi::GST_GL_RG,
+            Self::Rg8 => ffi::GST_GL_RG8,
+            Self::Rgb => ffi::GST_GL_RGB,
+            Self::Rgb8 => ffi::GST_GL_RGB8,
+            Self::Rgb565 => ffi::GST_GL_RGB565,
+            Self::Rgb16 => ffi::GST_GL_RGB16,
+            Self::Rgba => ffi::GST_GL_RGBA,
+            Self::Rgba8 => ffi::GST_GL_RGBA8,
+            Self::Rgba16 => ffi::GST_GL_RGBA16,
+            Self::DepthComponent16 => ffi::GST_GL_DEPTH_COMPONENT16,
+            Self::Depth24Stencil8 => ffi::GST_GL_DEPTH24_STENCIL8,
+            Self::Rgb10A2 => ffi::GST_GL_RGB10_A2,
+            Self::R16 => ffi::GST_GL_R16,
+            Self::Rg16 => ffi::GST_GL_RG16,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -263,26 +263,26 @@ impl FromGlib<ffi::GstGLFormat> for GLFormat {
     unsafe fn from_glib(value: ffi::GstGLFormat) -> Self {
         skip_assert_initialized!();
         match value {
-            6409 => GLFormat::Luminance,
-            6406 => GLFormat::Alpha,
-            6410 => GLFormat::LuminanceAlpha,
-            6403 => GLFormat::Red,
-            33321 => GLFormat::R8,
-            33319 => GLFormat::Rg,
-            33323 => GLFormat::Rg8,
-            6407 => GLFormat::Rgb,
-            32849 => GLFormat::Rgb8,
-            36194 => GLFormat::Rgb565,
-            32852 => GLFormat::Rgb16,
-            6408 => GLFormat::Rgba,
-            32856 => GLFormat::Rgba8,
-            32859 => GLFormat::Rgba16,
-            33189 => GLFormat::DepthComponent16,
-            35056 => GLFormat::Depth24Stencil8,
-            32857 => GLFormat::Rgb10A2,
-            33322 => GLFormat::R16,
-            33324 => GLFormat::Rg16,
-            value => GLFormat::__Unknown(value),
+            6409 => Self::Luminance,
+            6406 => Self::Alpha,
+            6410 => Self::LuminanceAlpha,
+            6403 => Self::Red,
+            33321 => Self::R8,
+            33319 => Self::Rg,
+            33323 => Self::Rg8,
+            6407 => Self::Rgb,
+            32849 => Self::Rgb8,
+            36194 => Self::Rgb565,
+            32852 => Self::Rgb16,
+            6408 => Self::Rgba,
+            32856 => Self::Rgba8,
+            32859 => Self::Rgba16,
+            33189 => Self::DepthComponent16,
+            35056 => Self::Depth24Stencil8,
+            32857 => Self::Rgb10A2,
+            33322 => Self::R16,
+            33324 => Self::Rg16,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -308,7 +308,7 @@ unsafe impl<'a> FromValue<'a> for GLFormat {
 
 impl ToValue for GLFormat {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLFormat>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -340,10 +340,10 @@ impl IntoGlib for GLQueryType {
 
     fn into_glib(self) -> ffi::GstGLQueryType {
         match self {
-            GLQueryType::None => ffi::GST_GL_QUERY_NONE,
-            GLQueryType::TimeElapsed => ffi::GST_GL_QUERY_TIME_ELAPSED,
-            GLQueryType::Timestamp => ffi::GST_GL_QUERY_TIMESTAMP,
-            GLQueryType::__Unknown(value) => value,
+            Self::None => ffi::GST_GL_QUERY_NONE,
+            Self::TimeElapsed => ffi::GST_GL_QUERY_TIME_ELAPSED,
+            Self::Timestamp => ffi::GST_GL_QUERY_TIMESTAMP,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -353,10 +353,10 @@ impl FromGlib<ffi::GstGLQueryType> for GLQueryType {
     unsafe fn from_glib(value: ffi::GstGLQueryType) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => GLQueryType::None,
-            1 => GLQueryType::TimeElapsed,
-            2 => GLQueryType::Timestamp,
-            value => GLQueryType::__Unknown(value),
+            0 => Self::None,
+            1 => Self::TimeElapsed,
+            2 => Self::Timestamp,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -382,7 +382,7 @@ unsafe impl<'a> FromValue<'a> for GLQueryType {
 
 impl ToValue for GLQueryType {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLQueryType>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -414,10 +414,10 @@ impl IntoGlib for GLSLError {
 
     fn into_glib(self) -> ffi::GstGLSLError {
         match self {
-            GLSLError::Compile => ffi::GST_GLSL_ERROR_COMPILE,
-            GLSLError::Link => ffi::GST_GLSL_ERROR_LINK,
-            GLSLError::Program => ffi::GST_GLSL_ERROR_PROGRAM,
-            GLSLError::__Unknown(value) => value,
+            Self::Compile => ffi::GST_GLSL_ERROR_COMPILE,
+            Self::Link => ffi::GST_GLSL_ERROR_LINK,
+            Self::Program => ffi::GST_GLSL_ERROR_PROGRAM,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -427,10 +427,10 @@ impl FromGlib<ffi::GstGLSLError> for GLSLError {
     unsafe fn from_glib(value: ffi::GstGLSLError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => GLSLError::Compile,
-            1 => GLSLError::Link,
-            2 => GLSLError::Program,
-            value => GLSLError::__Unknown(value),
+            0 => Self::Compile,
+            1 => Self::Link,
+            2 => Self::Program,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -449,10 +449,10 @@ impl ErrorDomain for GLSLError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(GLSLError::Compile),
-            1 => Some(GLSLError::Link),
-            2 => Some(GLSLError::Program),
-            value => Some(GLSLError::__Unknown(value)),
+            0 => Some(Self::Compile),
+            1 => Some(Self::Link),
+            2 => Some(Self::Program),
+            value => Some(Self::__Unknown(value)),
         }
     }
 }
@@ -478,7 +478,7 @@ unsafe impl<'a> FromValue<'a> for GLSLError {
 
 impl ToValue for GLSLError {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLSLError>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -584,24 +584,24 @@ impl IntoGlib for GLSLVersion {
 
     fn into_glib(self) -> ffi::GstGLSLVersion {
         match self {
-            GLSLVersion::None => ffi::GST_GLSL_VERSION_NONE,
-            GLSLVersion::_100 => ffi::GST_GLSL_VERSION_100,
-            GLSLVersion::_110 => ffi::GST_GLSL_VERSION_110,
-            GLSLVersion::_120 => ffi::GST_GLSL_VERSION_120,
-            GLSLVersion::_130 => ffi::GST_GLSL_VERSION_130,
-            GLSLVersion::_140 => ffi::GST_GLSL_VERSION_140,
-            GLSLVersion::_150 => ffi::GST_GLSL_VERSION_150,
-            GLSLVersion::_300 => ffi::GST_GLSL_VERSION_300,
-            GLSLVersion::_310 => ffi::GST_GLSL_VERSION_310,
-            GLSLVersion::_320 => ffi::GST_GLSL_VERSION_320,
-            GLSLVersion::_330 => ffi::GST_GLSL_VERSION_330,
-            GLSLVersion::_400 => ffi::GST_GLSL_VERSION_400,
-            GLSLVersion::_410 => ffi::GST_GLSL_VERSION_410,
-            GLSLVersion::_420 => ffi::GST_GLSL_VERSION_420,
-            GLSLVersion::_430 => ffi::GST_GLSL_VERSION_430,
-            GLSLVersion::_440 => ffi::GST_GLSL_VERSION_440,
-            GLSLVersion::_450 => ffi::GST_GLSL_VERSION_450,
-            GLSLVersion::__Unknown(value) => value,
+            Self::None => ffi::GST_GLSL_VERSION_NONE,
+            Self::_100 => ffi::GST_GLSL_VERSION_100,
+            Self::_110 => ffi::GST_GLSL_VERSION_110,
+            Self::_120 => ffi::GST_GLSL_VERSION_120,
+            Self::_130 => ffi::GST_GLSL_VERSION_130,
+            Self::_140 => ffi::GST_GLSL_VERSION_140,
+            Self::_150 => ffi::GST_GLSL_VERSION_150,
+            Self::_300 => ffi::GST_GLSL_VERSION_300,
+            Self::_310 => ffi::GST_GLSL_VERSION_310,
+            Self::_320 => ffi::GST_GLSL_VERSION_320,
+            Self::_330 => ffi::GST_GLSL_VERSION_330,
+            Self::_400 => ffi::GST_GLSL_VERSION_400,
+            Self::_410 => ffi::GST_GLSL_VERSION_410,
+            Self::_420 => ffi::GST_GLSL_VERSION_420,
+            Self::_430 => ffi::GST_GLSL_VERSION_430,
+            Self::_440 => ffi::GST_GLSL_VERSION_440,
+            Self::_450 => ffi::GST_GLSL_VERSION_450,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -611,24 +611,24 @@ impl FromGlib<ffi::GstGLSLVersion> for GLSLVersion {
     unsafe fn from_glib(value: ffi::GstGLSLVersion) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => GLSLVersion::None,
-            100 => GLSLVersion::_100,
-            110 => GLSLVersion::_110,
-            120 => GLSLVersion::_120,
-            130 => GLSLVersion::_130,
-            140 => GLSLVersion::_140,
-            150 => GLSLVersion::_150,
-            300 => GLSLVersion::_300,
-            310 => GLSLVersion::_310,
-            320 => GLSLVersion::_320,
-            330 => GLSLVersion::_330,
-            400 => GLSLVersion::_400,
-            410 => GLSLVersion::_410,
-            420 => GLSLVersion::_420,
-            430 => GLSLVersion::_430,
-            440 => GLSLVersion::_440,
-            450 => GLSLVersion::_450,
-            value => GLSLVersion::__Unknown(value),
+            0 => Self::None,
+            100 => Self::_100,
+            110 => Self::_110,
+            120 => Self::_120,
+            130 => Self::_130,
+            140 => Self::_140,
+            150 => Self::_150,
+            300 => Self::_300,
+            310 => Self::_310,
+            320 => Self::_320,
+            330 => Self::_330,
+            400 => Self::_400,
+            410 => Self::_410,
+            420 => Self::_420,
+            430 => Self::_430,
+            440 => Self::_440,
+            450 => Self::_450,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -654,7 +654,7 @@ unsafe impl<'a> FromValue<'a> for GLSLVersion {
 
 impl ToValue for GLSLVersion {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLSLVersion>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -686,14 +686,10 @@ impl IntoGlib for GLStereoDownmix {
 
     fn into_glib(self) -> ffi::GstGLStereoDownmix {
         match self {
-            GLStereoDownmix::GreenMagentaDubois => {
-                ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS
-            }
-            GLStereoDownmix::RedCyanDubois => ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS,
-            GLStereoDownmix::AmberBlueDubois => {
-                ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS
-            }
-            GLStereoDownmix::__Unknown(value) => value,
+            Self::GreenMagentaDubois => ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS,
+            Self::RedCyanDubois => ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS,
+            Self::AmberBlueDubois => ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -703,10 +699,10 @@ impl FromGlib<ffi::GstGLStereoDownmix> for GLStereoDownmix {
     unsafe fn from_glib(value: ffi::GstGLStereoDownmix) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => GLStereoDownmix::GreenMagentaDubois,
-            1 => GLStereoDownmix::RedCyanDubois,
-            2 => GLStereoDownmix::AmberBlueDubois,
-            value => GLStereoDownmix::__Unknown(value),
+            0 => Self::GreenMagentaDubois,
+            1 => Self::RedCyanDubois,
+            2 => Self::AmberBlueDubois,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -732,7 +728,7 @@ unsafe impl<'a> FromValue<'a> for GLStereoDownmix {
 
 impl ToValue for GLStereoDownmix {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLStereoDownmix>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -802,11 +798,11 @@ impl IntoGlib for GLTextureTarget {
 
     fn into_glib(self) -> ffi::GstGLTextureTarget {
         match self {
-            GLTextureTarget::None => ffi::GST_GL_TEXTURE_TARGET_NONE,
-            GLTextureTarget::_2d => ffi::GST_GL_TEXTURE_TARGET_2D,
-            GLTextureTarget::Rectangle => ffi::GST_GL_TEXTURE_TARGET_RECTANGLE,
-            GLTextureTarget::ExternalOes => ffi::GST_GL_TEXTURE_TARGET_EXTERNAL_OES,
-            GLTextureTarget::__Unknown(value) => value,
+            Self::None => ffi::GST_GL_TEXTURE_TARGET_NONE,
+            Self::_2d => ffi::GST_GL_TEXTURE_TARGET_2D,
+            Self::Rectangle => ffi::GST_GL_TEXTURE_TARGET_RECTANGLE,
+            Self::ExternalOes => ffi::GST_GL_TEXTURE_TARGET_EXTERNAL_OES,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -816,11 +812,11 @@ impl FromGlib<ffi::GstGLTextureTarget> for GLTextureTarget {
     unsafe fn from_glib(value: ffi::GstGLTextureTarget) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => GLTextureTarget::None,
-            1 => GLTextureTarget::_2d,
-            2 => GLTextureTarget::Rectangle,
-            3 => GLTextureTarget::ExternalOes,
-            value => GLTextureTarget::__Unknown(value),
+            0 => Self::None,
+            1 => Self::_2d,
+            2 => Self::Rectangle,
+            3 => Self::ExternalOes,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -846,7 +842,7 @@ unsafe impl<'a> FromValue<'a> for GLTextureTarget {
 
 impl ToValue for GLTextureTarget {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLTextureTarget>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -882,12 +878,12 @@ impl IntoGlib for GLUploadReturn {
 
     fn into_glib(self) -> ffi::GstGLUploadReturn {
         match self {
-            GLUploadReturn::Done => ffi::GST_GL_UPLOAD_DONE,
-            GLUploadReturn::Error => ffi::GST_GL_UPLOAD_ERROR,
-            GLUploadReturn::Unsupported => ffi::GST_GL_UPLOAD_UNSUPPORTED,
-            GLUploadReturn::Reconfigure => ffi::GST_GL_UPLOAD_RECONFIGURE,
-            GLUploadReturn::UnsharedGlContext => ffi::GST_GL_UPLOAD_UNSHARED_GL_CONTEXT,
-            GLUploadReturn::__Unknown(value) => value,
+            Self::Done => ffi::GST_GL_UPLOAD_DONE,
+            Self::Error => ffi::GST_GL_UPLOAD_ERROR,
+            Self::Unsupported => ffi::GST_GL_UPLOAD_UNSUPPORTED,
+            Self::Reconfigure => ffi::GST_GL_UPLOAD_RECONFIGURE,
+            Self::UnsharedGlContext => ffi::GST_GL_UPLOAD_UNSHARED_GL_CONTEXT,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -897,12 +893,12 @@ impl FromGlib<ffi::GstGLUploadReturn> for GLUploadReturn {
     unsafe fn from_glib(value: ffi::GstGLUploadReturn) -> Self {
         skip_assert_initialized!();
         match value {
-            1 => GLUploadReturn::Done,
-            -1 => GLUploadReturn::Error,
-            -2 => GLUploadReturn::Unsupported,
-            -3 => GLUploadReturn::Reconfigure,
-            -100 => GLUploadReturn::UnsharedGlContext,
-            value => GLUploadReturn::__Unknown(value),
+            1 => Self::Done,
+            -1 => Self::Error,
+            -2 => Self::Unsupported,
+            -3 => Self::Reconfigure,
+            -100 => Self::UnsharedGlContext,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -928,7 +924,7 @@ unsafe impl<'a> FromValue<'a> for GLUploadReturn {
 
 impl ToValue for GLUploadReturn {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLUploadReturn>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -960,10 +956,10 @@ impl IntoGlib for GLWindowError {
 
     fn into_glib(self) -> ffi::GstGLWindowError {
         match self {
-            GLWindowError::Failed => ffi::GST_GL_WINDOW_ERROR_FAILED,
-            GLWindowError::OldLibs => ffi::GST_GL_WINDOW_ERROR_OLD_LIBS,
-            GLWindowError::ResourceUnavailable => ffi::GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE,
-            GLWindowError::__Unknown(value) => value,
+            Self::Failed => ffi::GST_GL_WINDOW_ERROR_FAILED,
+            Self::OldLibs => ffi::GST_GL_WINDOW_ERROR_OLD_LIBS,
+            Self::ResourceUnavailable => ffi::GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -973,10 +969,10 @@ impl FromGlib<ffi::GstGLWindowError> for GLWindowError {
     unsafe fn from_glib(value: ffi::GstGLWindowError) -> Self {
         skip_assert_initialized!();
         match value {
-            0 => GLWindowError::Failed,
-            1 => GLWindowError::OldLibs,
-            2 => GLWindowError::ResourceUnavailable,
-            value => GLWindowError::__Unknown(value),
+            0 => Self::Failed,
+            1 => Self::OldLibs,
+            2 => Self::ResourceUnavailable,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -995,10 +991,10 @@ impl ErrorDomain for GLWindowError {
     fn from(code: i32) -> Option<Self> {
         skip_assert_initialized!();
         match code {
-            0 => Some(GLWindowError::Failed),
-            1 => Some(GLWindowError::OldLibs),
-            2 => Some(GLWindowError::ResourceUnavailable),
-            _ => Some(GLWindowError::Failed),
+            0 => Some(Self::Failed),
+            1 => Some(Self::OldLibs),
+            2 => Some(Self::ResourceUnavailable),
+            _ => Some(Self::Failed),
         }
     }
 }
@@ -1024,7 +1020,7 @@ unsafe impl<'a> FromValue<'a> for GLWindowError {
 
 impl ToValue for GLWindowError {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLWindowError>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }

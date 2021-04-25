@@ -41,9 +41,9 @@ impl IntoGlib for VideoBufferFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoBufferFlags> for VideoBufferFlags {
-    unsafe fn from_glib(value: ffi::GstVideoBufferFlags) -> VideoBufferFlags {
+    unsafe fn from_glib(value: ffi::GstVideoBufferFlags) -> Self {
         skip_assert_initialized!();
-        VideoBufferFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -68,7 +68,7 @@ unsafe impl<'a> FromValue<'a> for VideoBufferFlags {
 
 impl ToValue for VideoBufferFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoBufferFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -104,9 +104,9 @@ impl IntoGlib for VideoChromaSite {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoChromaSite> for VideoChromaSite {
-    unsafe fn from_glib(value: ffi::GstVideoChromaSite) -> VideoChromaSite {
+    unsafe fn from_glib(value: ffi::GstVideoChromaSite) -> Self {
         skip_assert_initialized!();
-        VideoChromaSite::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -131,7 +131,7 @@ unsafe impl<'a> FromValue<'a> for VideoChromaSite {
 
 impl ToValue for VideoChromaSite {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoChromaSite>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -163,9 +163,9 @@ impl IntoGlib for VideoCodecFrameFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
-    unsafe fn from_glib(value: ffi::GstVideoCodecFrameFlags) -> VideoCodecFrameFlags {
+    unsafe fn from_glib(value: ffi::GstVideoCodecFrameFlags) -> Self {
         skip_assert_initialized!();
-        VideoCodecFrameFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -187,9 +187,9 @@ impl IntoGlib for VideoFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFlags> for VideoFlags {
-    unsafe fn from_glib(value: ffi::GstVideoFlags) -> VideoFlags {
+    unsafe fn from_glib(value: ffi::GstVideoFlags) -> Self {
         skip_assert_initialized!();
-        VideoFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -214,7 +214,7 @@ unsafe impl<'a> FromValue<'a> for VideoFlags {
 
 impl ToValue for VideoFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -251,9 +251,9 @@ impl IntoGlib for VideoFormatFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFormatFlags> for VideoFormatFlags {
-    unsafe fn from_glib(value: ffi::GstVideoFormatFlags) -> VideoFormatFlags {
+    unsafe fn from_glib(value: ffi::GstVideoFormatFlags) -> Self {
         skip_assert_initialized!();
-        VideoFormatFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -278,7 +278,7 @@ unsafe impl<'a> FromValue<'a> for VideoFormatFlags {
 
 impl ToValue for VideoFormatFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoFormatFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -314,9 +314,9 @@ impl IntoGlib for VideoFrameFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoFrameFlags> for VideoFrameFlags {
-    unsafe fn from_glib(value: ffi::GstVideoFrameFlags) -> VideoFrameFlags {
+    unsafe fn from_glib(value: ffi::GstVideoFrameFlags) -> Self {
         skip_assert_initialized!();
-        VideoFrameFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -341,7 +341,7 @@ unsafe impl<'a> FromValue<'a> for VideoFrameFlags {
 
 impl ToValue for VideoFrameFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoFrameFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -376,9 +376,9 @@ impl IntoGlib for VideoMultiviewFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoMultiviewFlags> for VideoMultiviewFlags {
-    unsafe fn from_glib(value: ffi::GstVideoMultiviewFlags) -> VideoMultiviewFlags {
+    unsafe fn from_glib(value: ffi::GstVideoMultiviewFlags) -> Self {
         skip_assert_initialized!();
-        VideoMultiviewFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -403,7 +403,7 @@ unsafe impl<'a> FromValue<'a> for VideoMultiviewFlags {
 
 impl ToValue for VideoMultiviewFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoMultiviewFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -433,9 +433,9 @@ impl IntoGlib for VideoOverlayFormatFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
-    unsafe fn from_glib(value: ffi::GstVideoOverlayFormatFlags) -> VideoOverlayFormatFlags {
+    unsafe fn from_glib(value: ffi::GstVideoOverlayFormatFlags) -> Self {
         skip_assert_initialized!();
-        VideoOverlayFormatFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -468,7 +468,7 @@ unsafe impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 impl ToValue for VideoOverlayFormatFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoOverlayFormatFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -498,9 +498,9 @@ impl IntoGlib for VideoPackFlags {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoPackFlags> for VideoPackFlags {
-    unsafe fn from_glib(value: ffi::GstVideoPackFlags) -> VideoPackFlags {
+    unsafe fn from_glib(value: ffi::GstVideoPackFlags) -> Self {
         skip_assert_initialized!();
-        VideoPackFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -525,7 +525,7 @@ unsafe impl<'a> FromValue<'a> for VideoPackFlags {
 
 impl ToValue for VideoPackFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoPackFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -561,9 +561,9 @@ impl IntoGlib for VideoTimeCodeFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
-    unsafe fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
+    unsafe fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> Self {
         skip_assert_initialized!();
-        VideoTimeCodeFlags::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -596,7 +596,7 @@ unsafe impl<'a> FromValue<'a> for VideoTimeCodeFlags {
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 impl ToValue for VideoTimeCodeFlags {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoTimeCodeFlags>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }

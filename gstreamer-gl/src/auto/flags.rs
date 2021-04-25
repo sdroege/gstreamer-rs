@@ -52,9 +52,9 @@ impl IntoGlib for GLAPI {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLAPI> for GLAPI {
-    unsafe fn from_glib(value: ffi::GstGLAPI) -> GLAPI {
+    unsafe fn from_glib(value: ffi::GstGLAPI) -> Self {
         skip_assert_initialized!();
-        GLAPI::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -79,7 +79,7 @@ unsafe impl<'a> FromValue<'a> for GLAPI {
 
 impl ToValue for GLAPI {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLAPI>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -118,9 +118,9 @@ impl IntoGlib for GLDisplayType {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
-    unsafe fn from_glib(value: ffi::GstGLDisplayType) -> GLDisplayType {
+    unsafe fn from_glib(value: ffi::GstGLDisplayType) -> Self {
         skip_assert_initialized!();
-        GLDisplayType::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -145,7 +145,7 @@ unsafe impl<'a> FromValue<'a> for GLDisplayType {
 
 impl ToValue for GLDisplayType {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLDisplayType>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -203,9 +203,9 @@ impl IntoGlib for GLPlatform {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
-    unsafe fn from_glib(value: ffi::GstGLPlatform) -> GLPlatform {
+    unsafe fn from_glib(value: ffi::GstGLPlatform) -> Self {
         skip_assert_initialized!();
-        GLPlatform::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -230,7 +230,7 @@ unsafe impl<'a> FromValue<'a> for GLPlatform {
 
 impl ToValue for GLPlatform {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLPlatform>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
@@ -275,9 +275,9 @@ impl IntoGlib for GLSLProfile {
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
-    unsafe fn from_glib(value: ffi::GstGLSLProfile) -> GLSLProfile {
+    unsafe fn from_glib(value: ffi::GstGLSLProfile) -> Self {
         skip_assert_initialized!();
-        GLSLProfile::from_bits_truncate(value)
+        Self::from_bits_truncate(value)
     }
 }
 
@@ -302,7 +302,7 @@ unsafe impl<'a> FromValue<'a> for GLSLProfile {
 
 impl ToValue for GLSLProfile {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<GLSLProfile>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
