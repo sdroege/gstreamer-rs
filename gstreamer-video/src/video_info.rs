@@ -70,7 +70,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for VideoColorRange {
 
 impl glib::value::ToValue for VideoColorRange {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoColorRange>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe { glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib()) }
         value
     }
@@ -84,7 +84,7 @@ pub struct VideoColorimetry(ffi::GstVideoColorimetry);
 
 impl VideoColorimetry {
     pub fn new(
-        range: VideoColorRange,
+        range: crate::VideoColorRange,
         matrix: crate::VideoColorMatrix,
         transfer: crate::VideoTransferFunction,
         primaries: crate::VideoColorPrimaries,
@@ -884,7 +884,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for VideoInfo {
 #[doc(hidden)]
 impl glib::value::ToValue for VideoInfo {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<VideoInfo>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_boxed(
                 value.to_glib_none_mut().0,
@@ -903,7 +903,7 @@ impl glib::value::ToValue for VideoInfo {
 impl glib::value::ToValueOptional for VideoInfo {
     fn to_value_optional(s: Option<&Self>) -> glib::Value {
         skip_assert_initialized!();
-        let mut value = glib::Value::for_value_type::<VideoInfo>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_boxed(
                 value.to_glib_none_mut().0,

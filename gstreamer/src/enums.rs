@@ -624,7 +624,7 @@ unsafe impl<'a> FromValue<'a> for MessageType {
 
 impl ToValue for MessageType {
     fn to_value(&self) -> Value {
-        let mut value = glib::Value::for_value_type::<MessageType>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib() as i32)
         }

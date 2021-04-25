@@ -324,7 +324,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
 #[doc(hidden)]
 impl glib::value::ToValue for ClockTime {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<ClockTime>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, self.into_glib())
         }

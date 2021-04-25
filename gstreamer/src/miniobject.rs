@@ -441,7 +441,7 @@ macro_rules! mini_object_wrapper (
 
         impl $crate::glib::value::ToValue for $name {
             fn to_value(&self) -> $crate::glib::Value {
-                let mut value = $crate::glib::Value::for_value_type::<$name>();
+                let mut value = $crate::glib::Value::for_value_type::<Self>();
                 unsafe {
                     $crate::glib::gobject_ffi::g_value_set_boxed(
                         $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut value).0,
@@ -459,7 +459,7 @@ macro_rules! mini_object_wrapper (
         impl $crate::glib::value::ToValueOptional for $name {
             fn to_value_optional(s: Option<&Self>) -> $crate::glib::Value {
                 skip_assert_initialized!();
-                let mut value = $crate::glib::Value::for_value_type::<$name>();
+                let mut value = $crate::glib::Value::for_value_type::<Self>();
                 unsafe {
                     $crate::glib::gobject_ffi::g_value_set_boxed(
                         $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut value).0,

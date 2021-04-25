@@ -241,7 +241,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for CapsFeatures {
 
 impl glib::value::ToValue for CapsFeatures {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<CapsFeatures>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_boxed(
                 value.to_glib_none_mut().0,
@@ -259,7 +259,7 @@ impl glib::value::ToValue for CapsFeatures {
 impl glib::value::ToValueOptional for CapsFeatures {
     fn to_value_optional(s: Option<&Self>) -> glib::Value {
         skip_assert_initialized!();
-        let mut value = glib::Value::for_value_type::<CapsFeatures>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             glib::gobject_ffi::g_value_set_boxed(
                 value.to_glib_none_mut().0,

@@ -262,7 +262,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for Fraction {
 
 impl glib::value::ToValue for Fraction {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<Fraction>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             ffi::gst_value_set_fraction(value.to_glib_none_mut().0, *self.numer(), *self.denom());
         }
@@ -381,7 +381,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for IntRange<i32> {
 
 impl glib::value::ToValue for IntRange<i32> {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<IntRange<i32>>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             ffi::gst_value_set_int_range_step(
                 value.to_glib_none_mut().0,
@@ -423,7 +423,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for IntRange<i64> {
 
 impl glib::value::ToValue for IntRange<i64> {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<IntRange<i64>>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             ffi::gst_value_set_int64_range_step(
                 value.to_glib_none_mut().0,
@@ -505,7 +505,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for FractionRange {
 
 impl glib::value::ToValue for FractionRange {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<FractionRange>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             ffi::gst_value_set_fraction_range_full(
                 value.to_glib_none_mut().0,
@@ -609,7 +609,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for Bitmask {
 
 impl glib::value::ToValue for Bitmask {
     fn to_value(&self) -> glib::Value {
-        let mut value = glib::Value::for_value_type::<Bitmask>();
+        let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
             ffi::gst_value_set_bitmask(value.to_glib_none_mut().0, self.0);
         }
