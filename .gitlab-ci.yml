@@ -339,6 +339,8 @@ check commits:
 clippy:
   extends: .img-stable
   stage: 'extras'
+  variables:
+    CLIPPY_LINTS: -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
   script:
     - cargo clippy --version
       # Keep features in sync with above
@@ -357,13 +359,13 @@ clippy:
 
           echo "Running clippy on $crate with $FEATURES"
 
-          cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml $FEATURES --all-targets -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
+          cargo clippy --locked --color=always --manifest-path $crate/Cargo.toml $FEATURES --all-targets -- $CLIPPY_LINTS
         fi
       done
     # And also run over all the examples/tutorials
     - |
-      cargo clippy --locked --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
-      cargo clippy --locked --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- -A clippy::missing_safety_doc -A clippy::manual_range_contains -A clippy::upper_case_acronyms -D warnings
+      cargo clippy --locked --color=always --manifest-path examples/Cargo.toml --all-targets --all-features -- $CLIPPY_LINTS
+      cargo clippy --locked --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- $CLIPPY_LINTS
 
 deny:
   extends: .img-stable
