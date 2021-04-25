@@ -487,8 +487,8 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
 mod tests {
     use super::*;
     use crate::auto::EncodingContainerProfile;
-    use crate::auto::EncodingProfileExt;
     use crate::auto::EncodingVideoProfile;
+    use crate::prelude::*;
 
     const AUDIO_PROFILE_NAME: &str = "audio-profile";
     const AUDIO_PROFILE_DESCRIPTION: &str = "audio-profile-description";

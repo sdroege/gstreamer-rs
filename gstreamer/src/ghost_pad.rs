@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::prelude::{PadExt, PadExtManual};
+use crate::prelude::*;
 use crate::FlowError;
 use crate::FlowSuccess;
 use crate::GhostPad;
@@ -12,7 +12,6 @@ use crate::PadFlags;
 use crate::PadGetRangeSuccess;
 use crate::PadMode;
 use crate::StaticPadTemplate;
-use glib::prelude::*;
 use glib::translate::*;
 
 impl GhostPad {
@@ -128,8 +127,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -154,8 +151,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -179,8 +174,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -204,8 +197,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -225,8 +216,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -250,8 +239,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -277,8 +264,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -298,8 +283,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -323,8 +306,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -344,8 +325,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
             + Sync
             + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -362,8 +341,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
     where
         F: Fn(&crate::ProxyPad, Option<&crate::Object>) + Send + Sync + 'static,
     {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -377,8 +354,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
     }
 
     pub fn proxy_pad_flags(self, flags: PadFlags) -> Self {
-        use crate::ProxyPadExt;
-
         unsafe {
             let proxy = self
                 .0
@@ -392,8 +367,6 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
     }
 
     pub fn build_with_target<P: IsA<Pad>>(self, target: &P) -> Result<T, glib::BoolError> {
-        use crate::GhostPadExt;
-
         assert_eq!(self.0.direction(), target.direction());
 
         self.0.set_target(Some(target))?;

@@ -1,9 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::prelude::*;
 use crate::structure::*;
 use crate::GenericFormattedValue;
 use crate::GroupId;
-use crate::GstObjectExt;
 use crate::MessageType;
 use crate::Object;
 use crate::Seqnum;

@@ -4,6 +4,7 @@ use crate::Element;
 
 use once_cell::sync::Lazy;
 
+use crate::prelude::*;
 use crate::ClockTime;
 use crate::ElementFlags;
 use crate::Event;
@@ -821,8 +822,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn current_running_time(&self) -> crate::ClockTime {
-        use crate::ElementExt;
-
         let base_time = self.base_time();
         let clock_time = self.current_clock_time();
 
@@ -830,9 +829,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn current_clock_time(&self) -> crate::ClockTime {
-        use crate::ClockExt;
-        use crate::ElementExt;
-
         if let Some(clock) = self.clock() {
             clock.time()
         } else {
@@ -1379,7 +1375,6 @@ macro_rules! element_info(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::prelude::*;
     use glib::GString;
     #[cfg(feature = "v1_10")]
     use std::sync::mpsc::channel;

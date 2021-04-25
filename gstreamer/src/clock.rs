@@ -495,6 +495,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
 
 #[cfg(test)]
 mod tests {
+    use super::super::prelude::*;
     use super::super::*;
     use super::*;
     use std::sync::mpsc::channel;
