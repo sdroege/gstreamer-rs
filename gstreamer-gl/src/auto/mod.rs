@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 mod gl_base_filter;
-pub use self::gl_base_filter::GLBaseFilterExt;
 pub use self::gl_base_filter::{GLBaseFilter, NONE_GL_BASE_FILTER};
 
 mod gl_base_memory_allocator;
@@ -14,19 +13,15 @@ mod gl_color_convert;
 pub use self::gl_color_convert::GLColorConvert;
 
 mod gl_context;
-pub use self::gl_context::GLContextExt;
 pub use self::gl_context::{GLContext, NONE_GL_CONTEXT};
 
 mod gl_display;
-pub use self::gl_display::GLDisplayExt;
 pub use self::gl_display::{GLDisplay, NONE_GL_DISPLAY};
 
 mod gl_filter;
-pub use self::gl_filter::GLFilterExt;
 pub use self::gl_filter::{GLFilter, NONE_GL_FILTER};
 
 mod gl_framebuffer;
-pub use self::gl_framebuffer::GLFramebufferExt;
 pub use self::gl_framebuffer::{GLFramebuffer, NONE_GL_FRAMEBUFFER};
 
 mod gl_memory_allocator;
@@ -48,7 +43,6 @@ mod gl_view_convert;
 pub use self::gl_view_convert::GLViewConvert;
 
 mod gl_window;
-pub use self::gl_window::GLWindowExt;
 pub use self::gl_window::{GLWindow, NONE_GL_WINDOW};
 
 mod gl_allocation_params;
@@ -76,10 +70,10 @@ pub use self::flags::GLAPI;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::GLBaseFilterExt;
-    pub use super::GLContextExt;
-    pub use super::GLDisplayExt;
-    pub use super::GLFilterExt;
-    pub use super::GLFramebufferExt;
-    pub use super::GLWindowExt;
+    pub use super::gl_base_filter::GLBaseFilterExt;
+    pub use super::gl_context::GLContextExt;
+    pub use super::gl_display::GLDisplayExt;
+    pub use super::gl_filter::GLFilterExt;
+    pub use super::gl_framebuffer::GLFramebufferExt;
+    pub use super::gl_window::GLWindowExt;
 }

@@ -16,11 +16,9 @@ mod player_media_info;
 pub use self::player_media_info::PlayerMediaInfo;
 
 mod player_signal_dispatcher;
-pub use self::player_signal_dispatcher::PlayerSignalDispatcherExt;
 pub use self::player_signal_dispatcher::{PlayerSignalDispatcher, NONE_PLAYER_SIGNAL_DISPATCHER};
 
 mod player_stream_info;
-pub use self::player_stream_info::PlayerStreamInfoExt;
 pub use self::player_stream_info::{PlayerStreamInfo, NONE_PLAYER_STREAM_INFO};
 
 mod player_subtitle_info;
@@ -33,7 +31,6 @@ mod player_video_overlay_video_renderer;
 pub use self::player_video_overlay_video_renderer::PlayerVideoOverlayVideoRenderer;
 
 mod player_video_renderer;
-pub use self::player_video_renderer::PlayerVideoRendererExt;
 pub use self::player_video_renderer::{PlayerVideoRenderer, NONE_PLAYER_VIDEO_RENDERER};
 
 mod player_visualization;
@@ -47,7 +44,7 @@ pub use self::enums::PlayerState;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::PlayerSignalDispatcherExt;
-    pub use super::PlayerStreamInfoExt;
-    pub use super::PlayerVideoRendererExt;
+    pub use super::player_signal_dispatcher::PlayerSignalDispatcherExt;
+    pub use super::player_stream_info::PlayerStreamInfoExt;
+    pub use super::player_video_renderer::PlayerVideoRendererExt;
 }

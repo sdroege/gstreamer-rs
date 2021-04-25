@@ -4,90 +4,72 @@
 // DO NOT EDIT
 
 mod allocator;
-pub use self::allocator::AllocatorExt;
 pub use self::allocator::{Allocator, NONE_ALLOCATOR};
 
 mod bin;
-pub use self::bin::GstBinExt;
 pub use self::bin::{Bin, NONE_BIN};
 
 mod buffer_pool;
-pub use self::buffer_pool::BufferPoolExt;
 pub use self::buffer_pool::{BufferPool, NONE_BUFFER_POOL};
 
 mod bus;
 pub use self::bus::Bus;
 
 mod child_proxy;
-pub use self::child_proxy::ChildProxyExt;
 pub use self::child_proxy::{ChildProxy, NONE_CHILD_PROXY};
 
 mod clock;
-pub use self::clock::ClockExt;
 pub use self::clock::{Clock, NONE_CLOCK};
 
 mod control_binding;
-pub use self::control_binding::ControlBindingExt;
 pub use self::control_binding::{ControlBinding, NONE_CONTROL_BINDING};
 
 mod control_source;
-pub use self::control_source::ControlSourceExt;
 pub use self::control_source::{ControlSource, NONE_CONTROL_SOURCE};
 
 mod device;
-pub use self::device::DeviceExt;
 pub use self::device::{Device, NONE_DEVICE};
 
 mod device_monitor;
-pub use self::device_monitor::DeviceMonitorExt;
 pub use self::device_monitor::{DeviceMonitor, NONE_DEVICE_MONITOR};
 
 mod device_provider;
-pub use self::device_provider::DeviceProviderExt;
 pub use self::device_provider::{DeviceProvider, NONE_DEVICE_PROVIDER};
 
 mod device_provider_factory;
 pub use self::device_provider_factory::DeviceProviderFactory;
 
 mod element;
-pub use self::element::ElementExt;
 pub use self::element::{Element, NONE_ELEMENT};
 
 mod element_factory;
 pub use self::element_factory::ElementFactory;
 
 mod ghost_pad;
-pub use self::ghost_pad::GhostPadExt;
 pub use self::ghost_pad::{GhostPad, NONE_GHOST_PAD};
 
 mod object;
-pub use self::object::GstObjectExt;
 pub use self::object::{Object, NONE_OBJECT};
 
 mod pad;
-pub use self::pad::PadExt;
 pub use self::pad::{Pad, NONE_PAD};
 
 mod pad_template;
 pub use self::pad_template::PadTemplate;
 
 mod pipeline;
-pub use self::pipeline::PipelineExt;
 pub use self::pipeline::{Pipeline, NONE_PIPELINE};
 
 mod plugin;
 pub use self::plugin::Plugin;
 
 mod plugin_feature;
-pub use self::plugin_feature::PluginFeatureExt;
 pub use self::plugin_feature::{PluginFeature, NONE_PLUGIN_FEATURE};
 
 mod preset;
-pub use self::preset::PresetExt;
 pub use self::preset::{Preset, NONE_PRESET};
 
 mod proxy_pad;
-pub use self::proxy_pad::ProxyPadExt;
 pub use self::proxy_pad::{ProxyPad, NONE_PROXY_PAD};
 
 mod registry;
@@ -108,22 +90,18 @@ mod stream_collection;
 pub use self::stream_collection::StreamCollection;
 
 mod system_clock;
-pub use self::system_clock::SystemClockExt;
 pub use self::system_clock::{SystemClock, NONE_SYSTEM_CLOCK};
 
 mod tag_setter;
-pub use self::tag_setter::TagSetterExt;
 pub use self::tag_setter::{TagSetter, NONE_TAG_SETTER};
 
 mod toc_setter;
-pub use self::toc_setter::TocSetterExt;
 pub use self::toc_setter::{TocSetter, NONE_TOC_SETTER};
 
 mod type_find_factory;
 pub use self::type_find_factory::TypeFindFactory;
 
 mod uri_handler;
-pub use self::uri_handler::URIHandlerExt;
 pub use self::uri_handler::{URIHandler, NONE_URI_HANDLER};
 
 mod date_time;
@@ -214,26 +192,26 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::AllocatorExt;
-    pub use super::BufferPoolExt;
-    pub use super::ChildProxyExt;
-    pub use super::ClockExt;
-    pub use super::ControlBindingExt;
-    pub use super::ControlSourceExt;
-    pub use super::DeviceExt;
-    pub use super::DeviceMonitorExt;
-    pub use super::DeviceProviderExt;
-    pub use super::ElementExt;
-    pub use super::GhostPadExt;
-    pub use super::GstBinExt;
-    pub use super::GstObjectExt;
-    pub use super::PadExt;
-    pub use super::PipelineExt;
-    pub use super::PluginFeatureExt;
-    pub use super::PresetExt;
-    pub use super::ProxyPadExt;
-    pub use super::SystemClockExt;
-    pub use super::TagSetterExt;
-    pub use super::TocSetterExt;
-    pub use super::URIHandlerExt;
+    pub use super::allocator::AllocatorExt;
+    pub use super::bin::GstBinExt;
+    pub use super::buffer_pool::BufferPoolExt;
+    pub use super::child_proxy::ChildProxyExt;
+    pub use super::clock::ClockExt;
+    pub use super::control_binding::ControlBindingExt;
+    pub use super::control_source::ControlSourceExt;
+    pub use super::device::DeviceExt;
+    pub use super::device_monitor::DeviceMonitorExt;
+    pub use super::device_provider::DeviceProviderExt;
+    pub use super::element::ElementExt;
+    pub use super::ghost_pad::GhostPadExt;
+    pub use super::object::GstObjectExt;
+    pub use super::pad::PadExt;
+    pub use super::pipeline::PipelineExt;
+    pub use super::plugin_feature::PluginFeatureExt;
+    pub use super::preset::PresetExt;
+    pub use super::proxy_pad::ProxyPadExt;
+    pub use super::system_clock::SystemClockExt;
+    pub use super::tag_setter::TagSetterExt;
+    pub use super::toc_setter::TocSetterExt;
+    pub use super::uri_handler::URIHandlerExt;
 }

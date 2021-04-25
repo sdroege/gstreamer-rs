@@ -43,7 +43,7 @@ pub trait TrackElementExt: 'static {
     #[doc(alias = "ges_track_element_clamp_control_source")]
     fn clamp_control_source(&self, property_name: &str);
 
-    #[cfg_attr(feature = "v1_18", deprecated)]
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[doc(alias = "ges_track_element_edit")]
     fn edit(
         &self,

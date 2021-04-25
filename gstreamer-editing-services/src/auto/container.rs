@@ -40,7 +40,7 @@ pub trait GESContainerExt: 'static {
     #[doc(alias = "ges_container_add")]
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
 
-    #[cfg_attr(feature = "v1_18", deprecated)]
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[doc(alias = "ges_container_edit")]
     fn edit(
         &self,

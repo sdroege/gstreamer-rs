@@ -114,7 +114,7 @@ pub trait LayerExt: 'static {
     #[doc(alias = "ges_layer_set_auto_transition")]
     fn set_auto_transition(&self, auto_transition: bool);
 
-    #[cfg_attr(feature = "v1_16", deprecated)]
+    #[cfg_attr(feature = "v1_16", deprecated = "Since 1.16")]
     #[doc(alias = "ges_layer_set_priority")]
     fn set_priority(&self, priority: u32);
 
@@ -134,7 +134,7 @@ pub trait LayerExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v1_16", deprecated)]
+    #[cfg_attr(feature = "v1_16", deprecated = "Since 1.16")]
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 

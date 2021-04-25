@@ -16,7 +16,6 @@ mod discoverer_info;
 pub use self::discoverer_info::DiscovererInfo;
 
 mod discoverer_stream_info;
-pub use self::discoverer_stream_info::DiscovererStreamInfoExt;
 pub use self::discoverer_stream_info::{DiscovererStreamInfo, NONE_DISCOVERER_STREAM_INFO};
 
 mod discoverer_subtitle_info;
@@ -32,7 +31,6 @@ mod encoding_container_profile;
 pub use self::encoding_container_profile::EncodingContainerProfile;
 
 mod encoding_profile;
-pub use self::encoding_profile::EncodingProfileExt;
 pub use self::encoding_profile::{EncodingProfile, NONE_ENCODING_PROFILE};
 
 mod encoding_target;
@@ -51,6 +49,6 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::DiscovererStreamInfoExt;
-    pub use super::EncodingProfileExt;
+    pub use super::discoverer_stream_info::DiscovererStreamInfoExt;
+    pub use super::encoding_profile::EncodingProfileExt;
 }

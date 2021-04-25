@@ -50,7 +50,7 @@ pub trait BaseSrcExt: 'static {
     #[doc(alias = "gst_base_src_negotiate")]
     fn negotiate(&self) -> bool;
 
-    #[cfg_attr(feature = "v1_18", deprecated)]
+    #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[doc(alias = "gst_base_src_new_seamless_segment")]
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool;
 

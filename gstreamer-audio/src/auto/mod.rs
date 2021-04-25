@@ -4,19 +4,15 @@
 // DO NOT EDIT
 
 mod audio_base_sink;
-pub use self::audio_base_sink::AudioBaseSinkExt;
 pub use self::audio_base_sink::{AudioBaseSink, NONE_AUDIO_BASE_SINK};
 
 mod audio_base_src;
-pub use self::audio_base_src::AudioBaseSrcExt;
 pub use self::audio_base_src::{AudioBaseSrc, NONE_AUDIO_BASE_SRC};
 
 mod audio_decoder;
-pub use self::audio_decoder::AudioDecoderExt;
 pub use self::audio_decoder::{AudioDecoder, NONE_AUDIO_DECODER};
 
 mod audio_encoder;
-pub use self::audio_encoder::AudioEncoderExt;
 pub use self::audio_encoder::{AudioEncoder, NONE_AUDIO_ENCODER};
 
 mod audio_sink;
@@ -26,7 +22,6 @@ mod audio_src;
 pub use self::audio_src::{AudioSrc, NONE_AUDIO_SRC};
 
 mod stream_volume;
-pub use self::stream_volume::StreamVolumeExt;
 pub use self::stream_volume::{StreamVolume, NONE_STREAM_VOLUME};
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -55,9 +50,9 @@ pub use self::flags::AudioPackFlags;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::AudioBaseSinkExt;
-    pub use super::AudioBaseSrcExt;
-    pub use super::AudioDecoderExt;
-    pub use super::AudioEncoderExt;
-    pub use super::StreamVolumeExt;
+    pub use super::audio_base_sink::AudioBaseSinkExt;
+    pub use super::audio_base_src::AudioBaseSrcExt;
+    pub use super::audio_decoder::AudioDecoderExt;
+    pub use super::audio_encoder::AudioEncoderExt;
+    pub use super::stream_volume::StreamVolumeExt;
 }

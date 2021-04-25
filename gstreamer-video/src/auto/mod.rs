@@ -7,26 +7,21 @@ mod video_buffer_pool;
 pub use self::video_buffer_pool::{VideoBufferPool, NONE_VIDEO_BUFFER_POOL};
 
 mod video_decoder;
-pub use self::video_decoder::VideoDecoderExt;
 pub use self::video_decoder::{VideoDecoder, NONE_VIDEO_DECODER};
 
 mod video_encoder;
-pub use self::video_encoder::VideoEncoderExt;
 pub use self::video_encoder::{VideoEncoder, NONE_VIDEO_ENCODER};
 
 mod video_filter;
 pub use self::video_filter::{VideoFilter, NONE_VIDEO_FILTER};
 
 mod video_orientation;
-pub use self::video_orientation::VideoOrientationExt;
 pub use self::video_orientation::{VideoOrientation, NONE_VIDEO_ORIENTATION};
 
 mod video_overlay;
-pub use self::video_overlay::VideoOverlayExt;
 pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
 
 mod video_sink;
-pub use self::video_sink::VideoSinkExt;
 pub use self::video_sink::{VideoSink, NONE_VIDEO_SINK};
 
 mod enums;
@@ -77,9 +72,9 @@ pub use self::flags::VideoTimeCodeFlags;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::VideoDecoderExt;
-    pub use super::VideoEncoderExt;
-    pub use super::VideoOrientationExt;
-    pub use super::VideoOverlayExt;
-    pub use super::VideoSinkExt;
+    pub use super::video_decoder::VideoDecoderExt;
+    pub use super::video_encoder::VideoEncoderExt;
+    pub use super::video_orientation::VideoOrientationExt;
+    pub use super::video_overlay::VideoOverlayExt;
+    pub use super::video_sink::VideoSinkExt;
 }

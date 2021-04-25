@@ -11,9 +11,6 @@ pub use self::adapter::Adapter;
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-pub use self::aggregator::AggregatorExt;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator::{Aggregator, NONE_AGGREGATOR};
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -21,25 +18,18 @@ pub use self::aggregator::{Aggregator, NONE_AGGREGATOR};
 mod aggregator_pad;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-pub use self::aggregator_pad::AggregatorPadExt;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 pub use self::aggregator_pad::{AggregatorPad, NONE_AGGREGATOR_PAD};
 
 mod base_parse;
-pub use self::base_parse::BaseParseExt;
 pub use self::base_parse::{BaseParse, NONE_BASE_PARSE};
 
 mod base_sink;
-pub use self::base_sink::BaseSinkExt;
 pub use self::base_sink::{BaseSink, NONE_BASE_SINK};
 
 mod base_src;
-pub use self::base_src::BaseSrcExt;
 pub use self::base_src::{BaseSrc, NONE_BASE_SRC};
 
 mod base_transform;
-pub use self::base_transform::BaseTransformExt;
 pub use self::base_transform::{BaseTransform, NONE_BASE_TRANSFORM};
 
 mod push_src;
@@ -59,12 +49,12 @@ pub mod functions;
 pub mod traits {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    pub use super::AggregatorExt;
+    pub use super::aggregator::AggregatorExt;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-    pub use super::AggregatorPadExt;
-    pub use super::BaseParseExt;
-    pub use super::BaseSinkExt;
-    pub use super::BaseSrcExt;
-    pub use super::BaseTransformExt;
+    pub use super::aggregator_pad::AggregatorPadExt;
+    pub use super::base_parse::BaseParseExt;
+    pub use super::base_sink::BaseSinkExt;
+    pub use super::base_src::BaseSrcExt;
+    pub use super::base_transform::BaseTransformExt;
 }
