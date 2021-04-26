@@ -105,8 +105,9 @@ the GStreamer project.
 
 #### MSYS2 / pacman
 
-```
-$ pacman -S pkg-config mingw-w64-x86_64-gstreamer mingw-w64-x86_64-gst-plugins-base \
+```sh
+$ pacman -S glib2-devel pkg-config \
+      mingw-w64-x86_64-gstreamer mingw-w64-x86_64-gst-plugins-base \
       mingw-w64-x86_64-gst-plugins-good mingw-w64-x86_64-gst-plugins-bad \
       mingw-w64-x86_64-gst-plugins-ugly mingw-w64-x86_64-gst-libav \
       mingw-w64-x86_64-gst-rtsp-server
@@ -131,7 +132,7 @@ After installation, you also need to install `pkg-config` (e.g. via MSYS2 or
 from [here](https://sourceforge.net/projects/pkgconfiglite/))
 and set the `PKG_CONFIG_PATH` environment variable
 
-```
+```sh
 $ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 ```
 
