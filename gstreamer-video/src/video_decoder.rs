@@ -353,7 +353,7 @@ impl HasStreamLock for VideoDecoder {
 #[macro_export]
 macro_rules! video_decoder_error(
     ($obj:expr, $weight:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
-        use $crate::VideoDecoderExtManual;
+        use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -365,7 +365,7 @@ macro_rules! video_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, ($msg:expr)) => { {
-        use $crate::VideoDecoderExtManual;
+        use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -377,7 +377,7 @@ macro_rules! video_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, [$debug:expr]) => { {
-        use $crate::VideoDecoderExtManual;
+        use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -389,7 +389,7 @@ macro_rules! video_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
-        use $crate::VideoDecoderExtManual;
+        use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -401,7 +401,7 @@ macro_rules! video_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*)) => { {
-        use $crate::VideoDecoderExtManual;
+        use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -413,7 +413,7 @@ macro_rules! video_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, [$($debug:tt)*]) => { {
-        use $crate::VideoDecoderExtManual;
+        use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
             $err,

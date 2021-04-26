@@ -175,7 +175,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
 #[macro_export]
 macro_rules! audio_decoder_error(
     ($obj:expr, $weight:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
-        use $crate::AudioDecoderExtManual;
+        use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -187,7 +187,7 @@ macro_rules! audio_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, ($msg:expr)) => { {
-        use $crate::AudioDecoderExtManual;
+        use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -199,7 +199,7 @@ macro_rules! audio_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, [$debug:expr]) => { {
-        use $crate::AudioDecoderExtManual;
+        use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -211,7 +211,7 @@ macro_rules! audio_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
-        use $crate::AudioDecoderExtManual;
+        use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -223,7 +223,7 @@ macro_rules! audio_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*)) => { {
-        use $crate::AudioDecoderExtManual;
+        use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
             $err,
@@ -235,7 +235,7 @@ macro_rules! audio_decoder_error(
         )
     }};
     ($obj:expr, $weight:expr, $err:expr, [$($debug:tt)*]) => { {
-        use $crate::AudioDecoderExtManual;
+        use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
             $err,
