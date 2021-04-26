@@ -26,3 +26,7 @@ tutorial5-quartz = ["tutorial5"]
 [[bin]]
 name = "basic-tutorial-13"
 required-features = ["termion"]
+
+[[bin]]
+name = "playback-tutorial-1"
+required-features = ["termion"]
