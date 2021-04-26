@@ -3,7 +3,7 @@
 use crate::PluginFeature;
 use crate::Rank;
 
-use glib::object::{Cast, IsA};
+use glib::prelude::*;
 use glib::translate::{from_glib, FromGlibPtrFull, ToGlib, ToGlibPtr};
 
 pub trait PluginFeatureExtManual: Sized + 'static {
@@ -40,7 +40,6 @@ impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::prelude::*;
 
     #[test]
     fn test_load() {

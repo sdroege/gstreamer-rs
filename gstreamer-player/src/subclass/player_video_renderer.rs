@@ -2,9 +2,9 @@
 
 use crate::{Player, PlayerVideoRenderer};
 
+use glib::prelude::*;
 use glib::subclass::prelude::*;
 use glib::translate::*;
-use glib::Cast;
 
 pub trait PlayerVideoRendererImpl: ObjectImpl {
     fn create_video_sink(&self, video_renderer: &Self::Type, player: &Player) -> gst::Element;

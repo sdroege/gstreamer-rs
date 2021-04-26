@@ -1,4 +1,4 @@
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 
 use crate::GLAllocationParams;

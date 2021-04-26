@@ -22,16 +22,9 @@ use crate::StateChange;
 use crate::StateChangeError;
 use crate::StateChangeReturn;
 use crate::StateChangeSuccess;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use glib::object::Cast;
-use glib::object::IsA;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-use glib::translate::FromGlibPtrBorrow;
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer, ToGlib, ToGlibPtr,
-};
+
+use glib::prelude::*;
+use glib::translate::*;
 
 use std::ffi::CStr;
 #[cfg(any(feature = "v1_10", feature = "dox"))]

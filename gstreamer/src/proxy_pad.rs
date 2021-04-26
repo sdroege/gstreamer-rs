@@ -10,7 +10,7 @@ use crate::Pad;
 use crate::ProxyPad;
 use std::ptr;
 
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
 
 pub trait ProxyPadExtManual: 'static {

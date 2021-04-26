@@ -2,11 +2,10 @@
 
 use crate::auto::Discoverer;
 
-use glib::object::{Cast, ObjectType};
+use glib::prelude::*;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::IsA;
 use glib::Value;
 
 use std::boxed::Box as Box_;

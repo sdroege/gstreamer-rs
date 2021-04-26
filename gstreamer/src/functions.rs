@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::auto::functions::parse_bin_from_description;
+use glib::prelude::*;
 use glib::translate::*;
-use glib::Cast;
 use std::ptr;
 
 use crate::Bin;

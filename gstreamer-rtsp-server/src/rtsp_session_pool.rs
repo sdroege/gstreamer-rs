@@ -2,7 +2,7 @@
 
 use crate::RTSPSessionPool;
 use glib::ffi::{gboolean, gpointer};
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::source::{Continue, Priority};
 use glib::translate::*;
 use std::cell::RefCell;

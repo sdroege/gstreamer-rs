@@ -5,8 +5,8 @@ use crate::PluginFlags;
 use crate::Structure;
 use crate::StructureRef;
 
+use glib::prelude::*;
 use glib::translate::*;
-use glib::IsA;
 
 impl Plugin {
     pub fn cache_data(&self) -> Option<&StructureRef> {

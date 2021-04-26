@@ -2,7 +2,7 @@
 
 use crate::ClockTime;
 use crate::ControlSource;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 
 pub trait ControlSourceExtManual: 'static {

@@ -58,8 +58,7 @@ impl fmt::Debug for NetAddressMeta {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gio::InetAddressExt;
-    use gio::InetSocketAddressExt;
+    use gio::prelude::*;
 
     #[test]
     fn test_add_get_meta() {

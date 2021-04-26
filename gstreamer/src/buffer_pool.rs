@@ -5,8 +5,8 @@ use crate::Allocator;
 use crate::BufferPool;
 use crate::Structure;
 
+use glib::prelude::*;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::IsA;
 
 use std::mem;
 use std::ops;

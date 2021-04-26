@@ -29,11 +29,10 @@ use std::num::NonZeroU64;
 use std::ptr;
 
 use glib::ffi::gpointer;
-use glib::object::{Cast, IsA};
+use glib::prelude::*;
 use glib::translate::{
     from_glib, from_glib_borrow, from_glib_full, FromGlib, FromGlibPtrBorrow, ToGlib, ToGlibPtr,
 };
-use glib::StaticType;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct PadProbeId(NonZeroU64);
@@ -1652,8 +1651,6 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
 
     pub fn from_template(templ: &crate::PadTemplate, name: Option<&str>) -> Self {
         assert_initialized_main_thread!();
-
-        use glib::ObjectExt;
 
         let mut type_ = T::static_type();
 

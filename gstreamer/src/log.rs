@@ -11,8 +11,8 @@ use std::ptr;
 use once_cell::sync::Lazy;
 
 use glib::ffi::gpointer;
+use glib::prelude::*;
 use glib::translate::*;
-use glib::IsA;
 
 #[derive(PartialEq, Eq)]
 pub struct DebugMessage(ptr::NonNull<ffi::GstDebugMessage>);

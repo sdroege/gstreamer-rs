@@ -2,8 +2,8 @@
 
 use crate::NetTimeProvider;
 
+use glib::prelude::*;
 use glib::translate::*;
-use glib::IsA;
 
 impl NetTimeProvider {
     pub fn new<P: IsA<gst::Clock>>(clock: &P, address: Option<&str>, port: i32) -> NetTimeProvider {

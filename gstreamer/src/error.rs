@@ -2,7 +2,7 @@
 
 use thiserror::Error;
 
-use glib::IsA;
+use glib::prelude::*;
 
 #[macro_export]
 macro_rules! error_msg(

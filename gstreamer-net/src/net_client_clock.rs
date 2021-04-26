@@ -2,7 +2,7 @@
 
 use crate::NetClientClock;
 
-use glib::object::Cast;
+use glib::prelude::*;
 use glib::translate::*;
 
 impl NetClientClock {

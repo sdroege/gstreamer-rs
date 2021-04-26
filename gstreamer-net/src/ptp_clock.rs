@@ -2,7 +2,7 @@
 
 use crate::PtpClock;
 
-use glib::object::Cast;
+use glib::prelude::*;
 use glib::translate::*;
 
 impl PtpClock {

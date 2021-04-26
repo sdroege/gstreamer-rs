@@ -3,7 +3,7 @@
 use crate::Caps;
 use crate::DeviceMonitor;
 
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 
 use std::num::NonZeroU32;

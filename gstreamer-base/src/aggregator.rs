@@ -1,14 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::Aggregator;
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::prelude::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
-use glib::IsA;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::Value;

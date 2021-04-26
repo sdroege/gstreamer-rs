@@ -16,10 +16,8 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
+use glib::prelude::*;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlib, ToGlibPtr};
-use glib::value::ToSendValue;
-use glib::Cast;
-use glib::IsA;
 
 mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
     ffi::gst_message_get_type()

@@ -9,11 +9,8 @@ use crate::ClockSuccess;
 use crate::ClockTime;
 use crate::ClockTimeDiff;
 use glib::ffi::{gboolean, gpointer};
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::prelude::*;
 use glib::translate::*;
-use glib::IsA;
 use libc::c_void;
 use std::cmp;
 use std::convert;

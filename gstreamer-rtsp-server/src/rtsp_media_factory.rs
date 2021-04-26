@@ -2,10 +2,10 @@
 
 use crate::RTSPMediaFactory;
 
+use glib::prelude::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use glib::translate::*;
-use glib::IsA;
 
 pub trait RTSPMediaFactoryExtManual: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]

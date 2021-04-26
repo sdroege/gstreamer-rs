@@ -4,7 +4,7 @@ use crate::utils::HasStreamLock;
 use crate::video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext};
 use crate::VideoCodecFrame;
 use crate::VideoEncoder;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 use std::mem;
 use std::ptr;

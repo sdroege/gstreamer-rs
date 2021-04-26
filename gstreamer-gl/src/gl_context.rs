@@ -4,8 +4,8 @@ use crate::GLContext;
 use crate::GLDisplay;
 use crate::GLPlatform;
 use crate::GLAPI;
+use glib::prelude::*;
 use glib::translate::*;
-use glib::IsA;
 use libc::uintptr_t;
 
 impl GLContext {

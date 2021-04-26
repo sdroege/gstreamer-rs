@@ -3,7 +3,7 @@
 use crate::RTSPAddress;
 use crate::RTSPAddressPool;
 use crate::RTSPAddressPoolResult;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 use std::ptr;
 

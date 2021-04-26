@@ -1,9 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::object::{Cast, ObjectExt};
+use glib::prelude::*;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::IsA;
 
 use crate::ClockTime;
 use crate::ObjectFlags;

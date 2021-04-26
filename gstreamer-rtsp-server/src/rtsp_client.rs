@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::RTSPClient;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::source::SourceId;
 use glib::translate::*;
 

@@ -2,7 +2,7 @@
 
 use crate::NtpClock;
 
-use glib::object::Cast;
+use glib::prelude::*;
 use glib::translate::*;
 
 impl NtpClock {

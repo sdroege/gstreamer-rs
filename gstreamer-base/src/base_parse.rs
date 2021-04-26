@@ -2,7 +2,7 @@
 
 use crate::BaseParse;
 use crate::BaseParseFrame;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 use gst::FormattedValue;
 use std::convert::TryFrom;

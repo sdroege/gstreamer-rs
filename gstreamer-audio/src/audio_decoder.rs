@@ -2,7 +2,7 @@
 
 use crate::AudioDecoder;
 use crate::AudioInfo;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 use std::mem;
 use std::ptr;

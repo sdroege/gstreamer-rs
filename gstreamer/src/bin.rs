@@ -5,8 +5,7 @@ use crate::BinFlags;
 use crate::Element;
 use crate::LoggableError;
 
-use glib::object::Cast;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;

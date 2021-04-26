@@ -4,9 +4,8 @@ use crate::DeviceProvider;
 use crate::Plugin;
 use crate::Rank;
 
-use glib::object::IsA;
-use glib::translate::ToGlib;
-use glib::translate::ToGlibPtr;
+use glib::prelude::*;
+use glib::translate::*;
 
 use std::ffi::CStr;
 

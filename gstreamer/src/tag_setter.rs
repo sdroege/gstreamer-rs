@@ -3,9 +3,8 @@
 use crate::tags::*;
 use crate::TagMergeMode;
 use crate::TagSetter;
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
-use glib::ToSendValue;
 
 pub trait TagSetterExtManual: 'static {
     fn add<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode);

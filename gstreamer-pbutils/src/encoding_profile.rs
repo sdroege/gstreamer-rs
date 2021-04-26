@@ -2,7 +2,7 @@
 
 use thiserror::Error;
 
-use glib::object::IsA;
+use glib::prelude::*;
 use glib::translate::*;
 
 use crate::auto::EncodingAudioProfile;

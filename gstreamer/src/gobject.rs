@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::prelude::*;
 use glib::translate::ToGlibPtr;
-use glib::IsA;
 
 pub trait GObjectExtManualGst: 'static {
     fn set_property_from_str(&self, name: &str, value: &str);
