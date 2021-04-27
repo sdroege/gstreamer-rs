@@ -7,7 +7,6 @@ use crate::PlayerSignalDispatcher;
 use glib::object::ObjectType as ObjectType_;
 use glib::translate::*;
 use glib::StaticType;
-use glib::ToValue;
 
 glib::wrapper! {
     pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;

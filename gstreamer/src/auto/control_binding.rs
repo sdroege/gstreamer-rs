@@ -8,7 +8,6 @@ use crate::Object;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
-use glib::ToValue;
 
 glib::wrapper! {
     pub struct ControlBinding(Object<ffi::GstControlBinding, ffi::GstControlBindingClass>) @extends Object;

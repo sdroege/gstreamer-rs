@@ -5,10 +5,13 @@
 
 use crate::WebRTCDataChannelState;
 use crate::WebRTCPriorityType;
-use glib::prelude::*;
+use glib::object::ObjectExt;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
