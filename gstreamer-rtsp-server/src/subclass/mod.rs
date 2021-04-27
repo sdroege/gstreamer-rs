@@ -11,8 +11,6 @@ pub use self::rtsp_media::SDPInfo;
 
 pub mod prelude {
     #[doc(hidden)]
-    pub use glib::subclass::prelude::*;
-    #[doc(hidden)]
     pub use gst::subclass::prelude::*;
 
     pub use super::rtsp_client::{RTSPClientImpl, RTSPClientImplExt};

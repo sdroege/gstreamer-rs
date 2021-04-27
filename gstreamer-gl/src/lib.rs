@@ -40,14 +40,8 @@ mod gl_memory;
 pub use crate::gl_memory::*;
 
 // Re-export all the traits in a prelude module, so that applications
-// can always "use gst::prelude::*" without getting conflicts
+// can always "use gst_gl::prelude::*" without getting conflicts
 pub mod prelude {
-    #[doc(hidden)]
-    pub use glib::prelude::*;
-    #[doc(hidden)]
-    pub use gst::prelude::*;
-    #[doc(hidden)]
-    pub use gst_base::prelude::*;
     #[doc(hidden)]
     pub use gst_video::prelude::*;
 

@@ -52,10 +52,8 @@ pub const BASE_PARSE_FLOW_DROPPED: gst::FlowSuccess = gst::FlowSuccess::CustomSu
 pub const AGGREGATOR_FLOW_NEED_DATA: gst::FlowError = gst::FlowError::CustomError;
 
 // Re-export all the traits in a prelude module, so that applications
-// can always "use gst::prelude::*" without getting conflicts
+// can always "use gst_base::prelude::*" without getting conflicts
 pub mod prelude {
-    #[doc(hidden)]
-    pub use glib::prelude::*;
     #[doc(hidden)]
     pub use gst::prelude::*;
 

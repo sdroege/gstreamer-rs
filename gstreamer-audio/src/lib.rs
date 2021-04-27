@@ -56,12 +56,8 @@ mod audio_converter;
 pub use crate::audio_converter::AudioConverterConfig;
 
 // Re-export all the traits in a prelude module, so that applications
-// can always "use gst::prelude::*" without getting conflicts
+// can always "use gst_audio::prelude::*" without getting conflicts
 pub mod prelude {
-    #[doc(hidden)]
-    pub use glib::prelude::*;
-    #[doc(hidden)]
-    pub use gst::prelude::*;
     #[doc(hidden)]
     pub use gst_base::prelude::*;
 

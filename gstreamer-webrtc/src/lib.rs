@@ -31,12 +31,8 @@ mod web_rtc_data_channel;
 mod web_rtc_session_description;
 
 // Re-export all the traits in a prelude module, so that applications
-// can always "use gst::prelude::*" without getting conflicts
+// can always "use gst_webrtc::prelude::*" without getting conflicts
 pub mod prelude {
-    #[doc(hidden)]
-    pub use glib::prelude::*;
-    #[doc(hidden)]
-    pub use gst::prelude::*;
     #[doc(hidden)]
     pub use gst_sdp::prelude::*;
 

@@ -8,10 +8,6 @@ mod video_sink;
 
 pub mod prelude {
     #[doc(hidden)]
-    pub use glib::subclass::prelude::*;
-    #[doc(hidden)]
-    pub use gst::subclass::prelude::*;
-    #[doc(hidden)]
     pub use gst_base::subclass::prelude::*;
 
     pub use super::video_decoder::{VideoDecoderImpl, VideoDecoderImplExt};

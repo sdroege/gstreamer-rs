@@ -48,10 +48,8 @@ pub mod functions;
 pub use crate::functions::*;
 
 // Re-export all the traits in a prelude module, so that applications
-// can always "use gst::prelude::*" without getting conflicts
+// can always "use gst_pbutils::prelude::*" without getting conflicts
 pub mod prelude {
-    #[doc(hidden)]
-    pub use glib::prelude::*;
     #[doc(hidden)]
     pub use gst::prelude::*;
 

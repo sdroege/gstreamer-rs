@@ -28,8 +28,6 @@ use crate::control_point::*;
 
 pub mod prelude {
     #[doc(hidden)]
-    pub use glib::prelude::*;
-    #[doc(hidden)]
     pub use gst::prelude::*;
 
     pub use crate::auto::traits::*;

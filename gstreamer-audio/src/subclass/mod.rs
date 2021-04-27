@@ -9,10 +9,6 @@ mod audio_src;
 
 pub mod prelude {
     #[doc(hidden)]
-    pub use glib::subclass::prelude::*;
-    #[doc(hidden)]
-    pub use gst::subclass::prelude::*;
-    #[doc(hidden)]
     pub use gst_base::subclass::prelude::*;
 
     pub use super::audio_decoder::{AudioDecoderImpl, AudioDecoderImplExt};

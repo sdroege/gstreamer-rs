@@ -110,20 +110,14 @@ pub static RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: Lazy<&'static str> = Lazy::new(
 });
 
 // Re-export all the traits in a prelude module, so that applications
-// can always "use gst::prelude::*" without getting conflicts
+// can always "use gst_rtsp_server::prelude::*" without getting conflicts
 pub mod prelude {
     #[doc(hidden)]
     pub use gio::prelude::*;
     #[doc(hidden)]
-    pub use glib::prelude::*;
-    #[doc(hidden)]
-    pub use gst::prelude::*;
-    #[doc(hidden)]
     pub use gst_net::prelude::*;
     #[doc(hidden)]
     pub use gst_rtsp::prelude::*;
-    #[doc(hidden)]
-    pub use gst_sdp::prelude::*;
 
     pub use crate::auto::traits::*;
 
