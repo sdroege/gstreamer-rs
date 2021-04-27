@@ -149,7 +149,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         unsafe {
             ffi::gst_base_transform_set_gap_aware(
                 self.as_ref().to_glib_none().0,
-                gap_aware.to_glib(),
+                gap_aware.into_glib(),
             );
         }
     }
@@ -158,7 +158,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         unsafe {
             ffi::gst_base_transform_set_in_place(
                 self.as_ref().to_glib_none().0,
-                in_place.to_glib(),
+                in_place.into_glib(),
             );
         }
     }
@@ -167,7 +167,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         unsafe {
             ffi::gst_base_transform_set_passthrough(
                 self.as_ref().to_glib_none().0,
-                passthrough.to_glib(),
+                passthrough.into_glib(),
             );
         }
     }
@@ -176,7 +176,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         unsafe {
             ffi::gst_base_transform_set_prefer_passthrough(
                 self.as_ref().to_glib_none().0,
-                prefer_passthrough.to_glib(),
+                prefer_passthrough.into_glib(),
             );
         }
     }
@@ -185,7 +185,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         unsafe {
             ffi::gst_base_transform_set_qos_enabled(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -196,7 +196,7 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
                 self.as_ref().to_glib_none().0,
                 proportion,
                 diff,
-                timestamp.to_glib(),
+                timestamp.into_glib(),
             );
         }
     }

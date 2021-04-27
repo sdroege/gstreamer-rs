@@ -72,7 +72,7 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExt for O {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_rtsp_address_pool_acquire_address(
                 self.as_ref().to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
                 n_ports,
             ))
             .ok_or_else(|| glib::bool_error!("Failed to acquire address"))

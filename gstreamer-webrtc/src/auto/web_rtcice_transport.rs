@@ -28,7 +28,7 @@ impl WebRTCICETransport {
         unsafe {
             ffi::gst_webrtc_ice_transport_connection_state_change(
                 self.to_glib_none().0,
-                new_state.to_glib(),
+                new_state.into_glib(),
             );
         }
     }
@@ -38,7 +38,7 @@ impl WebRTCICETransport {
         unsafe {
             ffi::gst_webrtc_ice_transport_gathering_state_change(
                 self.to_glib_none().0,
-                new_state.to_glib(),
+                new_state.into_glib(),
             );
         }
     }
@@ -49,7 +49,7 @@ impl WebRTCICETransport {
             ffi::gst_webrtc_ice_transport_new_candidate(
                 self.to_glib_none().0,
                 stream_id,
-                component.to_glib(),
+                component.into_glib(),
                 attr.to_glib_none().0,
             );
         }

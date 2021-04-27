@@ -381,8 +381,8 @@ impl GLShader {
         unsafe {
             from_glib_full(ffi::gst_gl_shader_string_fragment_external_oes_get_default(
                 context.as_ref().to_glib_none().0,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
             ))
         }
     }
@@ -399,8 +399,8 @@ impl GLShader {
         unsafe {
             from_glib_full(ffi::gst_gl_shader_string_fragment_get_default(
                 context.as_ref().to_glib_none().0,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
             ))
         }
     }
@@ -417,8 +417,8 @@ impl GLShader {
         unsafe {
             from_glib_none(ffi::gst_gl_shader_string_get_highest_precision(
                 context.as_ref().to_glib_none().0,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
             ))
         }
     }

@@ -100,7 +100,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         unsafe {
             ffi::gst_device_monitor_set_show_all_devices(
                 self.as_ref().to_glib_none().0,
-                show_all.to_glib(),
+                show_all.into_glib(),
             );
         }
     }

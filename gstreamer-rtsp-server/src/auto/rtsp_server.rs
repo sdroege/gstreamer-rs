@@ -46,7 +46,7 @@ impl RTSPServer {
             glib::result_from_gboolean!(
                 ffi::gst_rtsp_server_io_func(
                     socket.as_ref().to_glib_none().0,
-                    condition.to_glib(),
+                    condition.into_glib(),
                     server.as_ref().to_glib_none().0
                 ),
                 "Failed to connect the source"
@@ -217,7 +217,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             } else {
                 panic!("cannot get closure...")
             };
-            res.to_glib()
+            res.into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)

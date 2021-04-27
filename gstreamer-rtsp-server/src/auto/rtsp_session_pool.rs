@@ -118,7 +118,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             } else {
                 panic!("cannot get closure...")
             };
-            res.to_glib()
+            res.into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)

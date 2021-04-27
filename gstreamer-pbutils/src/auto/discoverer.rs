@@ -32,7 +32,7 @@ impl Discoverer {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gst_discoverer_new(timeout.to_glib(), &mut error);
+            let ret = ffi::gst_discoverer_new(timeout.into_glib(), &mut error);
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {

@@ -172,7 +172,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         unsafe {
             ffi::gst_audio_base_sink_set_alignment_threshold(
                 self.as_ref().to_glib_none().0,
-                alignment_threshold.to_glib(),
+                alignment_threshold.into_glib(),
             );
         }
     }
@@ -185,7 +185,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         unsafe {
             ffi::gst_audio_base_sink_set_discont_wait(
                 self.as_ref().to_glib_none().0,
-                discont_wait.to_glib(),
+                discont_wait.into_glib(),
             );
         }
     }
@@ -203,7 +203,7 @@ impl<O: IsA<AudioBaseSink>> AudioBaseSinkExt for O {
         unsafe {
             ffi::gst_audio_base_sink_set_provide_clock(
                 self.as_ref().to_glib_none().0,
-                provide.to_glib(),
+                provide.into_glib(),
             );
         }
     }

@@ -24,11 +24,11 @@ pub enum AppStreamType {
 }
 
 #[doc(hidden)]
-impl ToGlib for AppStreamType {
+impl IntoGlib for AppStreamType {
     type GlibType = ffi::GstAppStreamType;
 
-    fn to_glib(&self) -> ffi::GstAppStreamType {
-        match *self {
+    fn into_glib(self) -> ffi::GstAppStreamType {
+        match self {
             AppStreamType::Stream => ffi::GST_APP_STREAM_TYPE_STREAM,
             AppStreamType::Seekable => ffi::GST_APP_STREAM_TYPE_SEEKABLE,
             AppStreamType::RandomAccess => ffi::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
@@ -73,7 +73,7 @@ impl ToValue for AppStreamType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AppStreamType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

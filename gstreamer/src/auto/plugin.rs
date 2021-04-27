@@ -31,7 +31,7 @@ impl Plugin {
                 env_vars.to_glib_none().0,
                 paths.to_glib_none().0,
                 names.to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
             );
         }
     }
@@ -50,7 +50,7 @@ impl Plugin {
                 env_vars.to_glib_none().0,
                 paths.to_glib_none().0,
                 names.to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
             );
         }
     }

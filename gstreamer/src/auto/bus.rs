@@ -106,7 +106,7 @@ impl Bus {
     #[doc(alias = "gst_bus_set_flushing")]
     pub fn set_flushing(&self, flushing: bool) {
         unsafe {
-            ffi::gst_bus_set_flushing(self.to_glib_none().0, flushing.to_glib());
+            ffi::gst_bus_set_flushing(self.to_glib_none().0, flushing.into_glib());
         }
     }
 
@@ -120,7 +120,7 @@ impl Bus {
         unsafe {
             from_glib_full(ffi::gst_bus_timed_pop(
                 self.to_glib_none().0,
-                timeout.to_glib(),
+                timeout.into_glib(),
             ))
         }
     }

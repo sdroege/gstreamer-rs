@@ -425,7 +425,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
                 destination.to_glib_none().0,
                 rtp_port,
                 rtcp_port,
-                family.to_glib(),
+                family.into_glib(),
             ))
         }
     }
@@ -517,7 +517,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_multicast_address(
                 self.as_ref().to_glib_none().0,
-                family.to_glib(),
+                family.into_glib(),
             ))
         }
     }
@@ -617,7 +617,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtcp_multicast_socket(
                 self.as_ref().to_glib_none().0,
-                family.to_glib(),
+                family.into_glib(),
             ))
         }
     }
@@ -626,7 +626,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtcp_socket(
                 self.as_ref().to_glib_none().0,
-                family.to_glib(),
+                family.into_glib(),
             ))
         }
     }
@@ -635,7 +635,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtp_multicast_socket(
                 self.as_ref().to_glib_none().0,
-                family.to_glib(),
+                family.into_glib(),
             ))
         }
     }
@@ -644,7 +644,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_rtp_socket(
                 self.as_ref().to_glib_none().0,
-                family.to_glib(),
+                family.into_glib(),
             ))
         }
     }
@@ -831,7 +831,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
                     self.as_ref().to_glib_none().0,
                     bin.as_ref().to_glib_none().0,
                     rtpbin.as_ref().to_glib_none().0,
-                    state.to_glib()
+                    state.into_glib()
                 ),
                 "Failed to join bin"
             )
@@ -960,7 +960,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             ffi::gst_rtsp_stream_set_bind_mcast_address(
                 self.as_ref().to_glib_none().0,
-                bind_mcast_addr.to_glib(),
+                bind_mcast_addr.into_glib(),
             );
         }
     }
@@ -968,7 +968,10 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     fn set_blocked(&self, blocked: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_rtsp_stream_set_blocked(self.as_ref().to_glib_none().0, blocked.to_glib()),
+                ffi::gst_rtsp_stream_set_blocked(
+                    self.as_ref().to_glib_none().0,
+                    blocked.into_glib()
+                ),
                 "Failed to block/unblock the dataflow"
             )
         }
@@ -984,7 +987,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             ffi::gst_rtsp_stream_set_client_side(
                 self.as_ref().to_glib_none().0,
-                client_side.to_glib(),
+                client_side.into_glib(),
             );
         }
     }
@@ -1032,13 +1035,16 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     fn set_profiles(&self, profiles: gst_rtsp::RTSPProfile) {
         unsafe {
-            ffi::gst_rtsp_stream_set_profiles(self.as_ref().to_glib_none().0, profiles.to_glib());
+            ffi::gst_rtsp_stream_set_profiles(self.as_ref().to_glib_none().0, profiles.into_glib());
         }
     }
 
     fn set_protocols(&self, protocols: gst_rtsp::RTSPLowerTrans) {
         unsafe {
-            ffi::gst_rtsp_stream_set_protocols(self.as_ref().to_glib_none().0, protocols.to_glib());
+            ffi::gst_rtsp_stream_set_protocols(
+                self.as_ref().to_glib_none().0,
+                protocols.into_glib(),
+            );
         }
     }
 
@@ -1056,7 +1062,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             ffi::gst_rtsp_stream_set_publish_clock_mode(
                 self.as_ref().to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -1067,7 +1073,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             ffi::gst_rtsp_stream_set_rate_control(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -1082,7 +1088,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         unsafe {
             ffi::gst_rtsp_stream_set_retransmission_time(
                 self.as_ref().to_glib_none().0,
-                time.to_glib(),
+                time.into_glib(),
             );
         }
     }
@@ -1134,7 +1140,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
             } else {
                 panic!("cannot get closure...")
             };
-            res.to_glib()
+            res.into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)

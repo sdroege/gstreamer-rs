@@ -247,7 +247,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         unsafe {
             ffi::gst_rtsp_auth_set_supported_methods(
                 self.as_ref().to_glib_none().0,
-                methods.to_glib(),
+                methods.into_glib(),
             );
         }
     }
@@ -256,7 +256,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         unsafe {
             ffi::gst_rtsp_auth_set_tls_authentication_mode(
                 self.as_ref().to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -311,7 +311,7 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
                 &from_glib_borrow(peer_cert),
                 from_glib(errors),
             )
-            .to_glib()
+            .into_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

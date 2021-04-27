@@ -76,7 +76,7 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
         unsafe {
             ffi::gst_video_overlay_handle_events(
                 self.as_ref().to_glib_none().0,
-                handle_events.to_glib(),
+                handle_events.into_glib(),
             );
         }
     }

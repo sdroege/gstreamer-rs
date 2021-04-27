@@ -73,7 +73,7 @@ impl GLUpload {
             from_glib_full(ffi::gst_gl_upload_transform_caps(
                 self.to_glib_none().0,
                 context.as_ref().to_glib_none().0,
-                direction.to_glib(),
+                direction.into_glib(),
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
             ))

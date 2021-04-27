@@ -29,7 +29,7 @@ impl WebRTCDTLSTransport {
         unsafe {
             from_glib_none(ffi::gst_webrtc_dtls_transport_new(
                 session_id,
-                rtcp.to_glib(),
+                rtcp.into_glib(),
             ))
         }
     }

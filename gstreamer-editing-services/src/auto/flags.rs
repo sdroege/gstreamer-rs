@@ -23,10 +23,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for PipelineFlags {
+impl IntoGlib for PipelineFlags {
     type GlibType = ffi::GESPipelineFlags;
 
-    fn to_glib(&self) -> ffi::GESPipelineFlags {
+    fn into_glib(self) -> ffi::GESPipelineFlags {
         self.bits()
     }
 }
@@ -62,7 +62,7 @@ impl ToValue for PipelineFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PipelineFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -86,7 +86,7 @@ impl TrackType {
     pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
-                ffi::ges_track_type_name(self.to_glib())
+                ffi::ges_track_type_name(self.into_glib())
                     .as_ref()
                     .expect("ges_track_type_name returned NULL"),
             )
@@ -104,10 +104,10 @@ impl fmt::Display for TrackType {
 }
 
 #[doc(hidden)]
-impl ToGlib for TrackType {
+impl IntoGlib for TrackType {
     type GlibType = ffi::GESTrackType;
 
-    fn to_glib(&self) -> ffi::GESTrackType {
+    fn into_glib(self) -> ffi::GESTrackType {
         self.bits()
     }
 }
@@ -143,7 +143,7 @@ impl ToValue for TrackType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<TrackType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

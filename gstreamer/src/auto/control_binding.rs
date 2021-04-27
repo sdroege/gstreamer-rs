@@ -52,7 +52,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
         unsafe {
             from_glib_full(ffi::gst_control_binding_get_value(
                 self.as_ref().to_glib_none().0,
-                timestamp.to_glib(),
+                timestamp.into_glib(),
             ))
         }
     }
@@ -73,7 +73,7 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
         unsafe {
             ffi::gst_control_binding_set_disabled(
                 self.as_ref().to_glib_none().0,
-                disabled.to_glib(),
+                disabled.into_glib(),
             );
         }
     }
@@ -88,8 +88,8 @@ impl<O: IsA<ControlBinding>> ControlBindingExt for O {
             from_glib(ffi::gst_control_binding_sync_values(
                 self.as_ref().to_glib_none().0,
                 object.as_ref().to_glib_none().0,
-                timestamp.to_glib(),
-                last_sync.to_glib(),
+                timestamp.into_glib(),
+                last_sync.into_glib(),
             ))
         }
     }

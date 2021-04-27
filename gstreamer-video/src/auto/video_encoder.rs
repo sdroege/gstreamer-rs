@@ -136,7 +136,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             ffi::gst_video_encoder_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -166,14 +166,14 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         unsafe {
             ffi::gst_video_encoder_set_min_force_key_unit_interval(
                 self.as_ref().to_glib_none().0,
-                interval.to_glib(),
+                interval.into_glib(),
             );
         }
     }
 
     fn set_min_pts(&self, min_pts: gst::ClockTime) {
         unsafe {
-            ffi::gst_video_encoder_set_min_pts(self.as_ref().to_glib_none().0, min_pts.to_glib());
+            ffi::gst_video_encoder_set_min_pts(self.as_ref().to_glib_none().0, min_pts.into_glib());
         }
     }
 
@@ -183,7 +183,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         unsafe {
             ffi::gst_video_encoder_set_qos_enabled(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }

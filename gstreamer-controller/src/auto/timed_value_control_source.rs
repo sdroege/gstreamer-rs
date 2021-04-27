@@ -80,7 +80,7 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         unsafe {
             from_glib(ffi::gst_timed_value_control_source_set(
                 self.as_ref().to_glib_none().0,
-                timestamp.to_glib(),
+                timestamp.into_glib(),
                 value,
             ))
         }
@@ -94,7 +94,7 @@ impl<O: IsA<TimedValueControlSource>> TimedValueControlSourceExt for O {
         unsafe {
             from_glib(ffi::gst_timed_value_control_source_unset(
                 self.as_ref().to_glib_none().0,
-                timestamp.to_glib(),
+                timestamp.into_glib(),
             ))
         }
     }

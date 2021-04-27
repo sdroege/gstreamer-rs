@@ -125,7 +125,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
             glib::result_from_gboolean!(
                 ffi::gst_video_orientation_set_hflip(
                     self.as_ref().to_glib_none().0,
-                    flip.to_glib()
+                    flip.into_glib()
                 ),
                 "Failed to set horizontal flipping"
             )
@@ -146,7 +146,7 @@ impl<O: IsA<VideoOrientation>> VideoOrientationExt for O {
             glib::result_from_gboolean!(
                 ffi::gst_video_orientation_set_vflip(
                     self.as_ref().to_glib_none().0,
-                    flip.to_glib()
+                    flip.into_glib()
                 ),
                 "Failed to set vertical flipping"
             )

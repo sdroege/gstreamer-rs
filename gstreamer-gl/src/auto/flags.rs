@@ -30,7 +30,7 @@ impl GLAPI {
     #[doc(alias = "gst_gl_api_to_string")]
     pub fn to_str(self) -> glib::GString {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_gl_api_to_string(self.to_glib())) }
+        unsafe { from_glib_full(ffi::gst_gl_api_to_string(self.into_glib())) }
     }
 }
 
@@ -42,10 +42,10 @@ impl fmt::Display for GLAPI {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLAPI {
+impl IntoGlib for GLAPI {
     type GlibType = ffi::GstGLAPI;
 
-    fn to_glib(&self) -> ffi::GstGLAPI {
+    fn into_glib(self) -> ffi::GstGLAPI {
         self.bits()
     }
 }
@@ -81,7 +81,7 @@ impl ToValue for GLAPI {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLAPI>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -108,10 +108,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLDisplayType {
+impl IntoGlib for GLDisplayType {
     type GlibType = ffi::GstGLDisplayType;
 
-    fn to_glib(&self) -> ffi::GstGLDisplayType {
+    fn into_glib(self) -> ffi::GstGLDisplayType {
         self.bits()
     }
 }
@@ -147,7 +147,7 @@ impl ToValue for GLDisplayType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLDisplayType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -181,7 +181,7 @@ impl GLPlatform {
     #[doc(alias = "gst_gl_platform_to_string")]
     pub fn to_str(self) -> glib::GString {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_gl_platform_to_string(self.to_glib())) }
+        unsafe { from_glib_full(ffi::gst_gl_platform_to_string(self.into_glib())) }
     }
 }
 
@@ -193,10 +193,10 @@ impl fmt::Display for GLPlatform {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLPlatform {
+impl IntoGlib for GLPlatform {
     type GlibType = ffi::GstGLPlatform;
 
-    fn to_glib(&self) -> ffi::GstGLPlatform {
+    fn into_glib(self) -> ffi::GstGLPlatform {
         self.bits()
     }
 }
@@ -232,7 +232,7 @@ impl ToValue for GLPlatform {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLPlatform>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -260,15 +260,15 @@ impl GLSLProfile {
     #[doc(alias = "gst_glsl_profile_to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_glsl_profile_to_string(self.to_glib())) }
+        unsafe { from_glib_none(ffi::gst_glsl_profile_to_string(self.into_glib())) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for GLSLProfile {
+impl IntoGlib for GLSLProfile {
     type GlibType = ffi::GstGLSLProfile;
 
-    fn to_glib(&self) -> ffi::GstGLSLProfile {
+    fn into_glib(self) -> ffi::GstGLSLProfile {
         self.bits()
     }
 }
@@ -304,7 +304,7 @@ impl ToValue for GLSLProfile {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLSLProfile>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

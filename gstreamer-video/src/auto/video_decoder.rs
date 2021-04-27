@@ -188,7 +188,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
             ffi::gst_video_decoder_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -207,7 +207,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe {
             ffi::gst_video_decoder_set_estimate_rate(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -222,7 +222,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe {
             ffi::gst_video_decoder_set_needs_format(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -231,7 +231,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe {
             ffi::gst_video_decoder_set_packetized(
                 self.as_ref().to_glib_none().0,
-                packetized.to_glib(),
+                packetized.into_glib(),
             );
         }
     }
@@ -240,7 +240,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         unsafe {
             ffi::gst_video_decoder_set_use_default_pad_acceptcaps(
                 self.as_ref().to_glib_none().0,
-                use_.to_glib(),
+                use_.into_glib(),
             );
         }
     }

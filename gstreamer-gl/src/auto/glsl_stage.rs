@@ -63,8 +63,8 @@ impl GLSLStage {
             from_glib_none(ffi::gst_glsl_stage_new_with_string(
                 context.as_ref().to_glib_none().0,
                 type_,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
                 str.to_glib_none().0,
             ))
         }
@@ -84,8 +84,8 @@ impl GLSLStage {
             from_glib_none(ffi::gst_glsl_stage_new_with_strings(
                 context.as_ref().to_glib_none().0,
                 type_,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
                 n_strings,
                 str.to_glib_none().0,
             ))
@@ -137,8 +137,8 @@ impl GLSLStage {
             glib::result_from_gboolean!(
                 ffi::gst_glsl_stage_set_strings(
                     self.to_glib_none().0,
-                    version.to_glib(),
-                    profile.to_glib(),
+                    version.into_glib(),
+                    profile.into_glib(),
                     n_strings,
                     str.to_glib_none().0
                 ),

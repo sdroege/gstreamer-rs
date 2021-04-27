@@ -92,7 +92,7 @@ impl DeviceProviderFactory {
         assert_initialized_main_thread!();
         unsafe {
             FromGlibPtrContainer::from_glib_full(
-                ffi::gst_device_provider_factory_list_get_device_providers(minrank.to_glib()),
+                ffi::gst_device_provider_factory_list_get_device_providers(minrank.into_glib()),
             )
         }
     }

@@ -21,10 +21,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPAddressFlags {
+impl IntoGlib for RTSPAddressFlags {
     type GlibType = ffi::GstRTSPAddressFlags;
 
-    fn to_glib(&self) -> ffi::GstRTSPAddressFlags {
+    fn into_glib(self) -> ffi::GstRTSPAddressFlags {
         self.bits()
     }
 }
@@ -45,10 +45,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPTransportMode {
+impl IntoGlib for RTSPTransportMode {
     type GlibType = ffi::GstRTSPTransportMode;
 
-    fn to_glib(&self) -> ffi::GstRTSPTransportMode {
+    fn into_glib(self) -> ffi::GstRTSPTransportMode {
         self.bits()
     }
 }
@@ -84,7 +84,7 @@ impl ToValue for RTSPTransportMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPTransportMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

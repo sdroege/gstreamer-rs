@@ -174,7 +174,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         unsafe {
             from_glib_full(ffi::gst_bin_find_unlinked_pad(
                 self.as_ref().to_glib_none().0,
-                direction.to_glib(),
+                direction.into_glib(),
             ))
         }
     }
@@ -183,7 +183,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
         unsafe {
             from_glib_full(ffi::gst_bin_get_by_interface(
                 self.as_ref().to_glib_none().0,
-                iface.to_glib(),
+                iface.into_glib(),
             ))
         }
     }
@@ -275,7 +275,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     fn set_suppressed_flags(&self, flags: ElementFlags) {
         unsafe {
-            ffi::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.to_glib());
+            ffi::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.into_glib());
         }
     }
 

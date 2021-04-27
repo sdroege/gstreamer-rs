@@ -90,7 +90,7 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
             ffi::gst_tag_setter_merge_tags(
                 self.as_ref().to_glib_none().0,
                 list.to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -103,7 +103,10 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
 
     fn set_tag_merge_mode(&self, mode: TagMergeMode) {
         unsafe {
-            ffi::gst_tag_setter_set_tag_merge_mode(self.as_ref().to_glib_none().0, mode.to_glib());
+            ffi::gst_tag_setter_set_tag_merge_mode(
+                self.as_ref().to_glib_none().0,
+                mode.into_glib(),
+            );
         }
     }
 }

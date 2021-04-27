@@ -31,16 +31,20 @@ impl PlayerColorBalanceType {
     #[doc(alias = "gst_player_color_balance_type_get_name")]
     pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_player_color_balance_type_get_name(self.to_glib())) }
+        unsafe {
+            from_glib_none(ffi::gst_player_color_balance_type_get_name(
+                self.into_glib(),
+            ))
+        }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for PlayerColorBalanceType {
+impl IntoGlib for PlayerColorBalanceType {
     type GlibType = ffi::GstPlayerColorBalanceType;
 
-    fn to_glib(&self) -> ffi::GstPlayerColorBalanceType {
-        match *self {
+    fn into_glib(self) -> ffi::GstPlayerColorBalanceType {
+        match self {
             PlayerColorBalanceType::Hue => ffi::GST_PLAYER_COLOR_BALANCE_HUE,
             PlayerColorBalanceType::Brightness => ffi::GST_PLAYER_COLOR_BALANCE_BRIGHTNESS,
             PlayerColorBalanceType::Saturation => ffi::GST_PLAYER_COLOR_BALANCE_SATURATION,
@@ -87,7 +91,7 @@ impl ToValue for PlayerColorBalanceType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PlayerColorBalanceType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -111,16 +115,16 @@ impl PlayerError {
     #[doc(alias = "gst_player_error_get_name")]
     pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_player_error_get_name(self.to_glib())) }
+        unsafe { from_glib_none(ffi::gst_player_error_get_name(self.into_glib())) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for PlayerError {
+impl IntoGlib for PlayerError {
     type GlibType = ffi::GstPlayerError;
 
-    fn to_glib(&self) -> ffi::GstPlayerError {
-        match *self {
+    fn into_glib(self) -> ffi::GstPlayerError {
+        match self {
             PlayerError::Failed => ffi::GST_PLAYER_ERROR_FAILED,
             PlayerError::__Unknown(value) => value,
         }
@@ -146,7 +150,7 @@ impl ErrorDomain for PlayerError {
     }
 
     fn code(self) -> i32 {
-        self.to_glib()
+        self.into_glib()
     }
 
     fn from(code: i32) -> Option<Self> {
@@ -181,7 +185,7 @@ impl ToValue for PlayerError {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PlayerError>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -210,11 +214,11 @@ pub enum PlayerSnapshotFormat {
 }
 
 #[doc(hidden)]
-impl ToGlib for PlayerSnapshotFormat {
+impl IntoGlib for PlayerSnapshotFormat {
     type GlibType = ffi::GstPlayerSnapshotFormat;
 
-    fn to_glib(&self) -> ffi::GstPlayerSnapshotFormat {
-        match *self {
+    fn into_glib(self) -> ffi::GstPlayerSnapshotFormat {
+        match self {
             PlayerSnapshotFormat::RawNative => ffi::GST_PLAYER_THUMBNAIL_RAW_NATIVE,
             PlayerSnapshotFormat::RawXrgb => ffi::GST_PLAYER_THUMBNAIL_RAW_xRGB,
             PlayerSnapshotFormat::RawBgrx => ffi::GST_PLAYER_THUMBNAIL_RAW_BGRx,
@@ -260,16 +264,16 @@ impl PlayerState {
     #[doc(alias = "gst_player_state_get_name")]
     pub fn name(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_player_state_get_name(self.to_glib())) }
+        unsafe { from_glib_none(ffi::gst_player_state_get_name(self.into_glib())) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for PlayerState {
+impl IntoGlib for PlayerState {
     type GlibType = ffi::GstPlayerState;
 
-    fn to_glib(&self) -> ffi::GstPlayerState {
-        match *self {
+    fn into_glib(self) -> ffi::GstPlayerState {
+        match self {
             PlayerState::Stopped => ffi::GST_PLAYER_STATE_STOPPED,
             PlayerState::Buffering => ffi::GST_PLAYER_STATE_BUFFERING,
             PlayerState::Paused => ffi::GST_PLAYER_STATE_PAUSED,
@@ -316,7 +320,7 @@ impl ToValue for PlayerState {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PlayerState>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

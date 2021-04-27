@@ -77,13 +77,13 @@ impl<O: IsA<UriClip>> UriClipExt for O {
 
     fn set_is_image(&self, is_image: bool) {
         unsafe {
-            ffi::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.to_glib());
+            ffi::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.into_glib());
         }
     }
 
     fn set_mute(&self, mute: bool) {
         unsafe {
-            ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
+            ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());
         }
     }
 

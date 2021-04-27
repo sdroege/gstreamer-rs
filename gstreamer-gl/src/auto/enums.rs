@@ -36,11 +36,11 @@ pub enum GLContextError {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLContextError {
+impl IntoGlib for GLContextError {
     type GlibType = ffi::GstGLContextError;
 
-    fn to_glib(&self) -> ffi::GstGLContextError {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLContextError {
+        match self {
             GLContextError::Failed => ffi::GST_GL_CONTEXT_ERROR_FAILED,
             GLContextError::WrongConfig => ffi::GST_GL_CONTEXT_ERROR_WRONG_CONFIG,
             GLContextError::WrongApi => ffi::GST_GL_CONTEXT_ERROR_WRONG_API,
@@ -76,7 +76,7 @@ impl ErrorDomain for GLContextError {
     }
 
     fn code(self) -> i32 {
-        self.to_glib()
+        self.into_glib()
     }
 
     fn from(code: i32) -> Option<Self> {
@@ -116,7 +116,7 @@ impl ToValue for GLContextError {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLContextError>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -197,7 +197,7 @@ impl GLFormat {
         unsafe {
             from_glib(ffi::gst_gl_format_is_supported(
                 context.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
             ))
         }
     }
@@ -211,7 +211,7 @@ impl GLFormat {
             let mut unsized_format = mem::MaybeUninit::uninit();
             let mut gl_type = mem::MaybeUninit::uninit();
             ffi::gst_gl_format_type_from_sized_gl_format(
-                self.to_glib(),
+                self.into_glib(),
                 unsized_format.as_mut_ptr(),
                 gl_type.as_mut_ptr(),
             );
@@ -229,11 +229,11 @@ impl GLFormat {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLFormat {
+impl IntoGlib for GLFormat {
     type GlibType = ffi::GstGLFormat;
 
-    fn to_glib(&self) -> ffi::GstGLFormat {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLFormat {
+        match self {
             GLFormat::Luminance => ffi::GST_GL_LUMINANCE,
             GLFormat::Alpha => ffi::GST_GL_ALPHA,
             GLFormat::LuminanceAlpha => ffi::GST_GL_LUMINANCE_ALPHA,
@@ -310,7 +310,7 @@ impl ToValue for GLFormat {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLFormat>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -335,11 +335,11 @@ pub enum GLQueryType {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLQueryType {
+impl IntoGlib for GLQueryType {
     type GlibType = ffi::GstGLQueryType;
 
-    fn to_glib(&self) -> ffi::GstGLQueryType {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLQueryType {
+        match self {
             GLQueryType::None => ffi::GST_GL_QUERY_NONE,
             GLQueryType::TimeElapsed => ffi::GST_GL_QUERY_TIME_ELAPSED,
             GLQueryType::Timestamp => ffi::GST_GL_QUERY_TIMESTAMP,
@@ -384,7 +384,7 @@ impl ToValue for GLQueryType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLQueryType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -409,11 +409,11 @@ pub enum GLSLError {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLSLError {
+impl IntoGlib for GLSLError {
     type GlibType = ffi::GstGLSLError;
 
-    fn to_glib(&self) -> ffi::GstGLSLError {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLSLError {
+        match self {
             GLSLError::Compile => ffi::GST_GLSL_ERROR_COMPILE,
             GLSLError::Link => ffi::GST_GLSL_ERROR_LINK,
             GLSLError::Program => ffi::GST_GLSL_ERROR_PROGRAM,
@@ -443,7 +443,7 @@ impl ErrorDomain for GLSLError {
     }
 
     fn code(self) -> i32 {
-        self.to_glib()
+        self.into_glib()
     }
 
     fn from(code: i32) -> Option<Self> {
@@ -480,7 +480,7 @@ impl ToValue for GLSLError {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLSLError>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -565,8 +565,8 @@ impl GLSLVersion {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_glsl_version_profile_to_string(
-                self.to_glib(),
-                profile.to_glib(),
+                self.into_glib(),
+                profile.into_glib(),
             ))
         }
     }
@@ -574,16 +574,16 @@ impl GLSLVersion {
     #[doc(alias = "gst_glsl_version_to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_glsl_version_to_string(self.to_glib())) }
+        unsafe { from_glib_none(ffi::gst_glsl_version_to_string(self.into_glib())) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for GLSLVersion {
+impl IntoGlib for GLSLVersion {
     type GlibType = ffi::GstGLSLVersion;
 
-    fn to_glib(&self) -> ffi::GstGLSLVersion {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLSLVersion {
+        match self {
             GLSLVersion::None => ffi::GST_GLSL_VERSION_NONE,
             GLSLVersion::_100 => ffi::GST_GLSL_VERSION_100,
             GLSLVersion::_110 => ffi::GST_GLSL_VERSION_110,
@@ -656,7 +656,7 @@ impl ToValue for GLSLVersion {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLSLVersion>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -681,11 +681,11 @@ pub enum GLStereoDownmix {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLStereoDownmix {
+impl IntoGlib for GLStereoDownmix {
     type GlibType = ffi::GstGLStereoDownmix;
 
-    fn to_glib(&self) -> ffi::GstGLStereoDownmix {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLStereoDownmix {
+        match self {
             GLStereoDownmix::GreenMagentaDubois => {
                 ffi::GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS
             }
@@ -734,7 +734,7 @@ impl ToValue for GLStereoDownmix {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLStereoDownmix>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -778,7 +778,7 @@ impl GLTextureTarget {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gst_gl_texture_target_to_buffer_pool_option(
-                self.to_glib(),
+                self.into_glib(),
             ))
         }
     }
@@ -786,22 +786,22 @@ impl GLTextureTarget {
     #[doc(alias = "gst_gl_texture_target_to_gl")]
     pub fn to_gl(self) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { ffi::gst_gl_texture_target_to_gl(self.to_glib()) }
+        unsafe { ffi::gst_gl_texture_target_to_gl(self.into_glib()) }
     }
 
     #[doc(alias = "gst_gl_texture_target_to_string")]
     pub fn to_str(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_gl_texture_target_to_string(self.to_glib())) }
+        unsafe { from_glib_none(ffi::gst_gl_texture_target_to_string(self.into_glib())) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for GLTextureTarget {
+impl IntoGlib for GLTextureTarget {
     type GlibType = ffi::GstGLTextureTarget;
 
-    fn to_glib(&self) -> ffi::GstGLTextureTarget {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLTextureTarget {
+        match self {
             GLTextureTarget::None => ffi::GST_GL_TEXTURE_TARGET_NONE,
             GLTextureTarget::_2d => ffi::GST_GL_TEXTURE_TARGET_2D,
             GLTextureTarget::Rectangle => ffi::GST_GL_TEXTURE_TARGET_RECTANGLE,
@@ -848,7 +848,7 @@ impl ToValue for GLTextureTarget {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLTextureTarget>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -877,11 +877,11 @@ pub enum GLUploadReturn {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLUploadReturn {
+impl IntoGlib for GLUploadReturn {
     type GlibType = ffi::GstGLUploadReturn;
 
-    fn to_glib(&self) -> ffi::GstGLUploadReturn {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLUploadReturn {
+        match self {
             GLUploadReturn::Done => ffi::GST_GL_UPLOAD_DONE,
             GLUploadReturn::Error => ffi::GST_GL_UPLOAD_ERROR,
             GLUploadReturn::Unsupported => ffi::GST_GL_UPLOAD_UNSUPPORTED,
@@ -930,7 +930,7 @@ impl ToValue for GLUploadReturn {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLUploadReturn>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -955,11 +955,11 @@ pub enum GLWindowError {
 }
 
 #[doc(hidden)]
-impl ToGlib for GLWindowError {
+impl IntoGlib for GLWindowError {
     type GlibType = ffi::GstGLWindowError;
 
-    fn to_glib(&self) -> ffi::GstGLWindowError {
-        match *self {
+    fn into_glib(self) -> ffi::GstGLWindowError {
+        match self {
             GLWindowError::Failed => ffi::GST_GL_WINDOW_ERROR_FAILED,
             GLWindowError::OldLibs => ffi::GST_GL_WINDOW_ERROR_OLD_LIBS,
             GLWindowError::ResourceUnavailable => ffi::GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE,
@@ -989,7 +989,7 @@ impl ErrorDomain for GLWindowError {
     }
 
     fn code(self) -> i32 {
-        self.to_glib()
+        self.into_glib()
     }
 
     fn from(code: i32) -> Option<Self> {
@@ -1026,7 +1026,7 @@ impl ToValue for GLWindowError {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<GLWindowError>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

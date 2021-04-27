@@ -36,7 +36,7 @@ impl Player {
 
     #[doc(alias = "gst_player_get_color_balance")]
     pub fn color_balance(&self, type_: PlayerColorBalanceType) -> f64 {
-        unsafe { ffi::gst_player_get_color_balance(self.to_glib_none().0, type_.to_glib()) }
+        unsafe { ffi::gst_player_get_color_balance(self.to_glib_none().0, type_.into_glib()) }
     }
 
     #[doc(alias = "gst_player_get_current_audio_track")]
@@ -141,7 +141,7 @@ impl Player {
         unsafe {
             from_glib_full(ffi::gst_player_get_video_snapshot(
                 self.to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 config.to_glib_none().0,
             ))
         }
@@ -174,7 +174,7 @@ impl Player {
     #[doc(alias = "gst_player_seek")]
     pub fn seek(&self, position: gst::ClockTime) {
         unsafe {
-            ffi::gst_player_seek(self.to_glib_none().0, position.to_glib());
+            ffi::gst_player_seek(self.to_glib_none().0, position.into_glib());
         }
     }
 
@@ -191,7 +191,7 @@ impl Player {
     #[doc(alias = "gst_player_set_audio_track_enabled")]
     pub fn set_audio_track_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_player_set_audio_track_enabled(self.to_glib_none().0, enabled.to_glib());
+            ffi::gst_player_set_audio_track_enabled(self.to_glib_none().0, enabled.into_glib());
         }
     }
 
@@ -205,28 +205,28 @@ impl Player {
     #[doc(alias = "gst_player_set_color_balance")]
     pub fn set_color_balance(&self, type_: PlayerColorBalanceType, value: f64) {
         unsafe {
-            ffi::gst_player_set_color_balance(self.to_glib_none().0, type_.to_glib(), value);
+            ffi::gst_player_set_color_balance(self.to_glib_none().0, type_.into_glib(), value);
         }
     }
 
     #[doc(alias = "gst_player_set_multiview_flags")]
     pub fn set_multiview_flags(&self, flags: gst_video::VideoMultiviewFlags) {
         unsafe {
-            ffi::gst_player_set_multiview_flags(self.to_glib_none().0, flags.to_glib());
+            ffi::gst_player_set_multiview_flags(self.to_glib_none().0, flags.into_glib());
         }
     }
 
     #[doc(alias = "gst_player_set_multiview_mode")]
     pub fn set_multiview_mode(&self, mode: gst_video::VideoMultiviewFramePacking) {
         unsafe {
-            ffi::gst_player_set_multiview_mode(self.to_glib_none().0, mode.to_glib());
+            ffi::gst_player_set_multiview_mode(self.to_glib_none().0, mode.into_glib());
         }
     }
 
     #[doc(alias = "gst_player_set_mute")]
     pub fn set_mute(&self, val: bool) {
         unsafe {
-            ffi::gst_player_set_mute(self.to_glib_none().0, val.to_glib());
+            ffi::gst_player_set_mute(self.to_glib_none().0, val.into_glib());
         }
     }
 
@@ -250,7 +250,7 @@ impl Player {
     #[doc(alias = "gst_player_set_subtitle_track_enabled")]
     pub fn set_subtitle_track_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_player_set_subtitle_track_enabled(self.to_glib_none().0, enabled.to_glib());
+            ffi::gst_player_set_subtitle_track_enabled(self.to_glib_none().0, enabled.into_glib());
         }
     }
 
@@ -290,7 +290,7 @@ impl Player {
     #[doc(alias = "gst_player_set_video_track_enabled")]
     pub fn set_video_track_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_player_set_video_track_enabled(self.to_glib_none().0, enabled.to_glib());
+            ffi::gst_player_set_video_track_enabled(self.to_glib_none().0, enabled.into_glib());
         }
     }
 
@@ -307,7 +307,7 @@ impl Player {
     #[doc(alias = "gst_player_set_visualization_enabled")]
     pub fn set_visualization_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_player_set_visualization_enabled(self.to_glib_none().0, enabled.to_glib());
+            ffi::gst_player_set_visualization_enabled(self.to_glib_none().0, enabled.into_glib());
         }
     }
 

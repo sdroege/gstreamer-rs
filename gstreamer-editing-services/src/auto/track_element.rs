@@ -184,8 +184,8 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
                 ffi::ges_track_element_edit(
                     self.as_ref().to_glib_none().0,
                     layers.to_glib_none().0,
-                    mode.to_glib(),
-                    edge.to_glib(),
+                    mode.into_glib(),
+                    edge.into_glib(),
                     position
                 ),
                 "Failed to edit"
@@ -299,7 +299,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         unsafe {
             from_glib(ffi::ges_track_element_set_active(
                 self.as_ref().to_glib_none().0,
-                active.to_glib(),
+                active.into_glib(),
             ))
         }
     }
@@ -310,7 +310,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         unsafe {
             ffi::ges_track_element_set_auto_clamp_control_sources(
                 self.as_ref().to_glib_none().0,
-                auto_clamp.to_glib(),
+                auto_clamp.into_glib(),
             );
         }
     }
@@ -325,14 +325,17 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         unsafe {
             from_glib(ffi::ges_track_element_set_has_internal_source(
                 self.as_ref().to_glib_none().0,
-                has_internal_source.to_glib(),
+                has_internal_source.into_glib(),
             ))
         }
     }
 
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
-            ffi::ges_track_element_set_track_type(self.as_ref().to_glib_none().0, type_.to_glib());
+            ffi::ges_track_element_set_track_type(
+                self.as_ref().to_glib_none().0,
+                type_.into_glib(),
+            );
         }
     }
 

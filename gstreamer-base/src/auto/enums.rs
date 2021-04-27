@@ -38,11 +38,11 @@ pub enum AggregatorStartTimeSelection {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
-impl ToGlib for AggregatorStartTimeSelection {
+impl IntoGlib for AggregatorStartTimeSelection {
     type GlibType = ffi::GstAggregatorStartTimeSelection;
 
-    fn to_glib(&self) -> ffi::GstAggregatorStartTimeSelection {
-        match *self {
+    fn into_glib(self) -> ffi::GstAggregatorStartTimeSelection {
+        match self {
             AggregatorStartTimeSelection::Zero => ffi::GST_AGGREGATOR_START_TIME_SELECTION_ZERO,
             AggregatorStartTimeSelection::First => ffi::GST_AGGREGATOR_START_TIME_SELECTION_FIRST,
             AggregatorStartTimeSelection::Set => ffi::GST_AGGREGATOR_START_TIME_SELECTION_SET,
@@ -97,7 +97,7 @@ impl ToValue for AggregatorStartTimeSelection {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AggregatorStartTimeSelection>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

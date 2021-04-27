@@ -112,7 +112,7 @@ impl<O: IsA<AudioBaseSrc>> AudioBaseSrcExt for O {
         unsafe {
             ffi::gst_audio_base_src_set_provide_clock(
                 self.as_ref().to_glib_none().0,
-                provide.to_glib(),
+                provide.into_glib(),
             );
         }
     }

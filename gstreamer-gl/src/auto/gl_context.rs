@@ -42,7 +42,7 @@ impl GLContext {
             let mut major = mem::MaybeUninit::uninit();
             let mut minor = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_gl_context_get_current_gl_api(
-                platform.to_glib(),
+                platform.into_glib(),
                 major.as_mut_ptr(),
                 minor.as_mut_ptr(),
             ));
@@ -137,7 +137,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_gl_context_activate(self.as_ref().to_glib_none().0, activate.to_glib()),
+                ffi::gst_gl_context_activate(self.as_ref().to_glib_none().0, activate.into_glib()),
                 "Failed to activate OpenGL context"
             )
         }
@@ -174,7 +174,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             from_glib(ffi::gst_gl_context_check_gl_version(
                 self.as_ref().to_glib_none().0,
-                api.to_glib(),
+                api.into_glib(),
                 maj,
                 min,
             ))
@@ -322,8 +322,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_glsl_profile_version(
                 self.as_ref().to_glib_none().0,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
             ))
         }
     }
@@ -334,8 +334,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_precision(
                 self.as_ref().to_glib_none().0,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
             ))
         }
     }
@@ -346,8 +346,8 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             from_glib(ffi::gst_gl_context_supports_precision_highp(
                 self.as_ref().to_glib_none().0,
-                version.to_glib(),
-                profile.to_glib(),
+                version.into_glib(),
+                profile.into_glib(),
             ))
         }
     }

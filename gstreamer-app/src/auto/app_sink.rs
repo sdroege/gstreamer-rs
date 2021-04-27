@@ -85,7 +85,7 @@ impl AppSink {
         unsafe {
             ffi::gst_app_sink_set_buffer_list_support(
                 self.to_glib_none().0,
-                enable_lists.to_glib(),
+                enable_lists.into_glib(),
             );
         }
     }
@@ -105,14 +105,14 @@ impl AppSink {
     #[doc(alias = "gst_app_sink_set_drop")]
     pub fn set_drop(&self, drop: bool) {
         unsafe {
-            ffi::gst_app_sink_set_drop(self.to_glib_none().0, drop.to_glib());
+            ffi::gst_app_sink_set_drop(self.to_glib_none().0, drop.into_glib());
         }
     }
 
     #[doc(alias = "gst_app_sink_set_emit_signals")]
     pub fn set_emit_signals(&self, emit: bool) {
         unsafe {
-            ffi::gst_app_sink_set_emit_signals(self.to_glib_none().0, emit.to_glib());
+            ffi::gst_app_sink_set_emit_signals(self.to_glib_none().0, emit.into_glib());
         }
     }
 
@@ -126,7 +126,7 @@ impl AppSink {
     #[doc(alias = "gst_app_sink_set_wait_on_eos")]
     pub fn set_wait_on_eos(&self, wait: bool) {
         unsafe {
-            ffi::gst_app_sink_set_wait_on_eos(self.to_glib_none().0, wait.to_glib());
+            ffi::gst_app_sink_set_wait_on_eos(self.to_glib_none().0, wait.into_glib());
         }
     }
 
@@ -137,7 +137,7 @@ impl AppSink {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_preroll(
                 self.to_glib_none().0,
-                timeout.to_glib(),
+                timeout.into_glib(),
             ))
         }
     }
@@ -149,7 +149,7 @@ impl AppSink {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_sample(
                 self.to_glib_none().0,
-                timeout.to_glib(),
+                timeout.into_glib(),
             ))
         }
     }

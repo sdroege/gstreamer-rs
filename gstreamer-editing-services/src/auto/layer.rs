@@ -151,10 +151,10 @@ impl<O: IsA<Layer>> LayerExt for O {
             Option::<_>::from_glib_none(ffi::ges_layer_add_asset(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
-                start.to_glib(),
-                inpoint.to_glib(),
-                duration.to_glib(),
-                track_types.to_glib(),
+                start.into_glib(),
+                inpoint.into_glib(),
+                duration.into_glib(),
+                track_types.into_glib(),
             ))
             .ok_or_else(|| glib::bool_error!("Failed to add asset"))
         }
@@ -175,10 +175,10 @@ impl<O: IsA<Layer>> LayerExt for O {
             let ret = ffi::ges_layer_add_asset_full(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
-                start.to_glib(),
-                inpoint.to_glib(),
-                duration.to_glib(),
-                track_types.to_glib(),
+                start.into_glib(),
+                inpoint.into_glib(),
+                duration.into_glib(),
+                track_types.into_glib(),
                 &mut error,
             );
             if error.is_null() {
@@ -250,8 +250,8 @@ impl<O: IsA<Layer>> LayerExt for O {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips_in_interval(
                 self.as_ref().to_glib_none().0,
-                start.to_glib(),
-                end.to_glib(),
+                start.into_glib(),
+                end.into_glib(),
             ))
         }
     }
@@ -290,7 +290,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         unsafe {
             from_glib(ffi::ges_layer_set_active_for_tracks(
                 self.as_ref().to_glib_none().0,
-                active.to_glib(),
+                active.into_glib(),
                 tracks.to_glib_none().0,
             ))
         }
@@ -300,7 +300,7 @@ impl<O: IsA<Layer>> LayerExt for O {
         unsafe {
             ffi::ges_layer_set_auto_transition(
                 self.as_ref().to_glib_none().0,
-                auto_transition.to_glib(),
+                auto_transition.into_glib(),
             );
         }
     }

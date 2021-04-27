@@ -150,7 +150,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
             glib::result_from_gboolean!(
                 ffi::gst_rtsp_session_media_set_state(
                     self.as_ref().to_glib_none().0,
-                    state.to_glib()
+                    state.into_glib()
                 ),
                 "Failed to set state of session media"
             )

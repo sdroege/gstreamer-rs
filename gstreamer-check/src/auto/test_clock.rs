@@ -33,7 +33,7 @@ impl TestClock {
         assert_initialized_main_thread!();
         unsafe {
             gst::Clock::from_glib_full(ffi::gst_test_clock_new_with_start_time(
-                start_time.to_glib(),
+                start_time.into_glib(),
             ))
             .unsafe_cast()
         }
@@ -95,7 +95,7 @@ impl TestClock {
     #[doc(alias = "gst_test_clock_set_time")]
     pub fn set_time(&self, new_time: gst::ClockTime) {
         unsafe {
-            ffi::gst_test_clock_set_time(self.to_glib_none().0, new_time.to_glib());
+            ffi::gst_test_clock_set_time(self.to_glib_none().0, new_time.into_glib());
         }
     }
 

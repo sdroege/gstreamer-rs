@@ -215,8 +215,8 @@ impl<O: IsA<Pad>> PadExt for O {
             glib::result_from_gboolean!(
                 ffi::gst_pad_activate_mode(
                     self.as_ref().to_glib_none().0,
-                    mode.to_glib(),
-                    active.to_glib()
+                    mode.into_glib(),
+                    active.into_glib()
                 ),
                 "Failed to activate mode pad"
             )
@@ -271,7 +271,7 @@ impl<O: IsA<Pad>> PadExt for O {
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(&pad);
-            res.to_glib()
+            res.into_glib()
         }
         let forward = Some(forward_func::<P> as _);
         let super_callback0: &P = &forward_data;
@@ -354,7 +354,7 @@ impl<O: IsA<Pad>> PadExt for O {
         unsafe {
             from_glib_full(ffi::gst_pad_get_sticky_event(
                 self.as_ref().to_glib_none().0,
-                event_type.to_glib(),
+                event_type.into_glib(),
                 idx,
             ))
         }
@@ -434,7 +434,7 @@ impl<O: IsA<Pad>> PadExt for O {
                 ffi::gst_pad_link_maybe_ghosting_full(
                     self.as_ref().to_glib_none().0,
                     sink.as_ref().to_glib_none().0,
-                    flags.to_glib()
+                    flags.into_glib()
                 ),
                 "Failed to link pads, possibly ghosting"
             )
@@ -503,7 +503,7 @@ impl<O: IsA<Pad>> PadExt for O {
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_pad_set_active(self.as_ref().to_glib_none().0, active.to_glib()),
+                ffi::gst_pad_set_active(self.as_ref().to_glib_none().0, active.into_glib()),
                 "Failed to activate pad"
             )
         }

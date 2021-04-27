@@ -76,14 +76,14 @@ impl AppSrc {
     #[doc(alias = "gst_app_src_set_duration")]
     pub fn set_duration(&self, duration: gst::ClockTime) {
         unsafe {
-            ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.to_glib());
+            ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.into_glib());
         }
     }
 
     #[doc(alias = "gst_app_src_set_emit_signals")]
     pub fn set_emit_signals(&self, emit: bool) {
         unsafe {
-            ffi::gst_app_src_set_emit_signals(self.to_glib_none().0, emit.to_glib());
+            ffi::gst_app_src_set_emit_signals(self.to_glib_none().0, emit.into_glib());
         }
     }
 
@@ -104,7 +104,7 @@ impl AppSrc {
     #[doc(alias = "gst_app_src_set_stream_type")]
     pub fn set_stream_type(&self, type_: AppStreamType) {
         unsafe {
-            ffi::gst_app_src_set_stream_type(self.to_glib_none().0, type_.to_glib());
+            ffi::gst_app_src_set_stream_type(self.to_glib_none().0, type_.into_glib());
         }
     }
 
@@ -355,7 +355,7 @@ impl AppSrc {
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), offset).to_glib()
+            f(&from_glib_borrow(this), offset).into_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

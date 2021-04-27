@@ -244,7 +244,7 @@ impl<O: IsA<Clip>> ClipExt for O {
             from_glib_full(ffi::ges_clip_find_track_element(
                 self.as_ref().to_glib_none().0,
                 track.map(|p| p.as_ref()).to_glib_none().0,
-                type_.to_glib(),
+                type_.into_glib(),
             ))
         }
     }
@@ -259,8 +259,8 @@ impl<O: IsA<Clip>> ClipExt for O {
             FromGlibPtrContainer::from_glib_full(ffi::ges_clip_find_track_elements(
                 self.as_ref().to_glib_none().0,
                 track.map(|p| p.as_ref()).to_glib_none().0,
-                track_type.to_glib(),
-                type_.to_glib(),
+                track_type.into_glib(),
+                type_.into_glib(),
             ))
         }
     }
@@ -287,7 +287,7 @@ impl<O: IsA<Clip>> ClipExt for O {
             let ret = ffi::ges_clip_get_internal_time_from_timeline_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                timeline_time.to_glib(),
+                timeline_time.into_glib(),
                 &mut error,
             );
             if error.is_null() {
@@ -322,7 +322,7 @@ impl<O: IsA<Clip>> ClipExt for O {
             let ret = ffi::ges_clip_get_timeline_time_from_internal_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                internal_time.to_glib(),
+                internal_time.into_glib(),
                 &mut error,
             );
             if error.is_null() {
@@ -432,7 +432,7 @@ impl<O: IsA<Clip>> ClipExt for O {
         unsafe {
             ffi::ges_clip_set_supported_formats(
                 self.as_ref().to_glib_none().0,
-                supportedformats.to_glib(),
+                supportedformats.into_glib(),
             );
         }
     }

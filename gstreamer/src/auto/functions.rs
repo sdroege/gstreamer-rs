@@ -35,7 +35,7 @@ pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -
     unsafe {
         from_glib_full(ffi::gst_debug_bin_to_dot_data(
             bin.as_ref().to_glib_none().0,
-            details.to_glib(),
+            details.into_glib(),
         ))
     }
 }
@@ -50,7 +50,7 @@ pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
     unsafe {
         ffi::gst_debug_bin_to_dot_file(
             bin.as_ref().to_glib_none().0,
-            details.to_glib(),
+            details.into_glib(),
             file_name.as_ref().to_glib_none().0,
         );
     }
@@ -66,7 +66,7 @@ pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
     unsafe {
         ffi::gst_debug_bin_to_dot_file_with_ts(
             bin.as_ref().to_glib_none().0,
-            details.to_glib(),
+            details.into_glib(),
             file_name.as_ref().to_glib_none().0,
         );
     }
@@ -84,7 +84,7 @@ pub fn debug_get_default_threshold() -> DebugLevel {
 pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Result<glib::GString, glib::BoolError> {
     skip_assert_initialized!();
     unsafe {
-        Option::<_>::from_glib_full(ffi::gst_debug_get_stack_trace(flags.to_glib()))
+        Option::<_>::from_glib_full(ffi::gst_debug_get_stack_trace(flags.into_glib()))
             .ok_or_else(|| glib::bool_error!("Failed to get stack trace"))
     }
 }
@@ -131,7 +131,7 @@ pub fn debug_ring_buffer_logger_get_logs() -> Vec<glib::GString> {
 pub fn debug_set_active(active: bool) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gst_debug_set_active(active.to_glib());
+        ffi::gst_debug_set_active(active.into_glib());
     }
 }
 
@@ -139,7 +139,7 @@ pub fn debug_set_active(active: bool) {
 pub fn debug_set_colored(colored: bool) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gst_debug_set_colored(colored.to_glib());
+        ffi::gst_debug_set_colored(colored.into_glib());
     }
 }
 
@@ -147,7 +147,7 @@ pub fn debug_set_colored(colored: bool) {
 pub fn debug_set_default_threshold(level: DebugLevel) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gst_debug_set_default_threshold(level.to_glib());
+        ffi::gst_debug_set_default_threshold(level.into_glib());
     }
 }
 
@@ -155,7 +155,7 @@ pub fn debug_set_default_threshold(level: DebugLevel) {
 pub fn debug_set_threshold_for_name(name: &str, level: DebugLevel) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gst_debug_set_threshold_for_name(name.to_glib_none().0, level.to_glib());
+        ffi::gst_debug_set_threshold_for_name(name.to_glib_none().0, level.into_glib());
     }
 }
 
@@ -163,7 +163,7 @@ pub fn debug_set_threshold_for_name(name: &str, level: DebugLevel) {
 pub fn debug_set_threshold_from_string(list: &str, reset: bool) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gst_debug_set_threshold_from_string(list.to_glib_none().0, reset.to_glib());
+        ffi::gst_debug_set_threshold_from_string(list.to_glib_none().0, reset.into_glib());
     }
 }
 
@@ -196,7 +196,7 @@ pub fn parse_bin_from_description(
         let mut error = ptr::null_mut();
         let ret = ffi::gst_parse_bin_from_description(
             bin_description.to_glib_none().0,
-            ghost_unlinked_pads.to_glib(),
+            ghost_unlinked_pads.into_glib(),
             &mut error,
         );
         if error.is_null() {
@@ -253,7 +253,7 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 pub fn type_mark_as_plugin_api(type_: glib::types::Type, flags: PluginAPIFlags) {
     assert_initialized_main_thread!();
     unsafe {
-        ffi::gst_type_mark_as_plugin_api(type_.to_glib(), flags.to_glib());
+        ffi::gst_type_mark_as_plugin_api(type_.into_glib(), flags.into_glib());
     }
 }
 

@@ -42,7 +42,7 @@ impl Element {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::gst_element_make_from_uri(
-                type_.to_glib(),
+                type_.into_glib(),
                 uri.to_glib_none().0,
                 elementname.to_glib_none().0,
                 &mut error,
@@ -282,7 +282,7 @@ impl<O: IsA<Element>> ElementExt for O {
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(&element, &pad);
-            res.to_glib()
+            res.into_glib()
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
@@ -308,7 +308,7 @@ impl<O: IsA<Element>> ElementExt for O {
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(&element, &pad);
-            res.to_glib()
+            res.into_glib()
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
@@ -334,7 +334,7 @@ impl<O: IsA<Element>> ElementExt for O {
             let pad = from_glib_borrow(pad);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(&element, &pad);
-            res.to_glib()
+            res.into_glib()
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &P = &func_data;
@@ -536,7 +536,7 @@ impl<O: IsA<Element>> ElementExt for O {
                     srcpadname.to_glib_none().0,
                     dest.as_ref().to_glib_none().0,
                     destpadname.to_glib_none().0,
-                    flags.to_glib()
+                    flags.into_glib()
                 ),
                 "Failed to link pads"
             )
@@ -612,7 +612,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn set_base_time(&self, time: ClockTime) {
         unsafe {
-            ffi::gst_element_set_base_time(self.as_ref().to_glib_none().0, time.to_glib());
+            ffi::gst_element_set_base_time(self.as_ref().to_glib_none().0, time.into_glib());
         }
     }
 
@@ -644,14 +644,14 @@ impl<O: IsA<Element>> ElementExt for O {
         unsafe {
             from_glib(ffi::gst_element_set_locked_state(
                 self.as_ref().to_glib_none().0,
-                locked_state.to_glib(),
+                locked_state.into_glib(),
             ))
         }
     }
 
     fn set_start_time(&self, time: ClockTime) {
         unsafe {
-            ffi::gst_element_set_start_time(self.as_ref().to_glib_none().0, time.to_glib());
+            ffi::gst_element_set_start_time(self.as_ref().to_glib_none().0, time.into_glib());
         }
     }
 

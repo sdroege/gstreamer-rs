@@ -82,7 +82,7 @@ impl Registry {
             let feature = from_glib_borrow(feature);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(&feature);
-            res.to_glib()
+            res.into_glib()
         }
         let filter = Some(filter_func::<P> as _);
         let super_callback0: &P = &filter_data;
@@ -90,7 +90,7 @@ impl Registry {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_feature_filter(
                 self.to_glib_none().0,
                 filter,
-                first.to_glib(),
+                first.into_glib(),
                 super_callback0 as *const _ as usize as *mut _,
             ))
         }
@@ -102,7 +102,7 @@ impl Registry {
             from_glib_full(ffi::gst_registry_find_feature(
                 self.to_glib_none().0,
                 name.to_glib_none().0,
-                type_.to_glib(),
+                type_.into_glib(),
             ))
         }
     }
@@ -122,7 +122,7 @@ impl Registry {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_get_feature_list(
                 self.to_glib_none().0,
-                type_.to_glib(),
+                type_.into_glib(),
             ))
         }
     }
@@ -181,7 +181,7 @@ impl Registry {
             let plugin = from_glib_borrow(plugin);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(&plugin);
-            res.to_glib()
+            res.into_glib()
         }
         let filter = Some(filter_func::<P> as _);
         let super_callback0: &P = &filter_data;
@@ -189,7 +189,7 @@ impl Registry {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_plugin_filter(
                 self.to_glib_none().0,
                 filter,
-                first.to_glib(),
+                first.into_glib(),
                 super_callback0 as *const _ as usize as *mut _,
             ))
         }

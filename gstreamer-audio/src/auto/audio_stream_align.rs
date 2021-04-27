@@ -27,8 +27,8 @@ impl AudioStreamAlign {
         unsafe {
             from_glib_full(ffi::gst_audio_stream_align_new(
                 rate,
-                alignment_threshold.to_glib(),
-                discont_wait.to_glib(),
+                alignment_threshold.into_glib(),
+                discont_wait.into_glib(),
             ))
         }
     }
@@ -86,7 +86,7 @@ impl AudioStreamAlign {
         unsafe {
             ffi::gst_audio_stream_align_set_alignment_threshold(
                 self.to_glib_none_mut().0,
-                alignment_threshold.to_glib(),
+                alignment_threshold.into_glib(),
             );
         }
     }
@@ -96,7 +96,7 @@ impl AudioStreamAlign {
         unsafe {
             ffi::gst_audio_stream_align_set_discont_wait(
                 self.to_glib_none_mut().0,
-                discont_wait.to_glib(),
+                discont_wait.into_glib(),
             );
         }
     }

@@ -28,7 +28,7 @@ impl Asset {
         assert_initialized_main_thread!();
         unsafe {
             from_glib(ffi::ges_asset_needs_reload(
-                extractable_type.to_glib(),
+                extractable_type.into_glib(),
                 id.to_glib_none().0,
             ))
         }
@@ -42,8 +42,11 @@ impl Asset {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret =
-                ffi::ges_asset_request(extractable_type.to_glib(), id.to_glib_none().0, &mut error);
+            let ret = ffi::ges_asset_request(
+                extractable_type.into_glib(),
+                id.to_glib_none().0,
+                &mut error,
+            );
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
@@ -84,7 +87,7 @@ impl Asset {
         let callback = request_async_trampoline::<Q>;
         unsafe {
             ffi::ges_asset_request_async(
-                extractable_type.to_glib(),
+                extractable_type.into_glib(),
                 id.to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
                 Some(callback),

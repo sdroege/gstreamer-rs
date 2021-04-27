@@ -35,7 +35,7 @@ impl Edge {
     pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
-                ffi::ges_edge_name(self.to_glib())
+                ffi::ges_edge_name(self.into_glib())
                     .as_ref()
                     .expect("ges_edge_name returned NULL"),
             )
@@ -55,11 +55,11 @@ impl fmt::Display for Edge {
 }
 
 #[doc(hidden)]
-impl ToGlib for Edge {
+impl IntoGlib for Edge {
     type GlibType = ffi::GESEdge;
 
-    fn to_glib(&self) -> ffi::GESEdge {
-        match *self {
+    fn into_glib(self) -> ffi::GESEdge {
+        match self {
             Edge::Start => ffi::GES_EDGE_START,
             Edge::End => ffi::GES_EDGE_END,
             Edge::None => ffi::GES_EDGE_NONE,
@@ -104,7 +104,7 @@ impl ToValue for Edge {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Edge>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -138,7 +138,7 @@ impl EditMode {
     pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
-                ffi::ges_edit_mode_name(self.to_glib())
+                ffi::ges_edit_mode_name(self.into_glib())
                     .as_ref()
                     .expect("ges_edit_mode_name returned NULL"),
             )
@@ -158,11 +158,11 @@ impl fmt::Display for EditMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for EditMode {
+impl IntoGlib for EditMode {
     type GlibType = ffi::GESEditMode;
 
-    fn to_glib(&self) -> ffi::GESEditMode {
-        match *self {
+    fn into_glib(self) -> ffi::GESEditMode {
+        match self {
             EditMode::Normal => ffi::GES_EDIT_MODE_NORMAL,
             EditMode::Ripple => ffi::GES_EDIT_MODE_RIPPLE,
             EditMode::Roll => ffi::GES_EDIT_MODE_ROLL,
@@ -211,7 +211,7 @@ impl ToValue for EditMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<EditMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -374,11 +374,11 @@ pub enum VideoStandardTransitionType {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoStandardTransitionType {
+impl IntoGlib for VideoStandardTransitionType {
     type GlibType = ffi::GESVideoStandardTransitionType;
 
-    fn to_glib(&self) -> ffi::GESVideoStandardTransitionType {
-        match *self {
+    fn into_glib(self) -> ffi::GESVideoStandardTransitionType {
+        match self {
             VideoStandardTransitionType::None => ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_NONE,
             VideoStandardTransitionType::BarWipeLr => {
                 ffi::GES_VIDEO_STANDARD_TRANSITION_TYPE_BAR_WIPE_LR
@@ -683,7 +683,7 @@ impl ToValue for VideoStandardTransitionType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoStandardTransitionType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

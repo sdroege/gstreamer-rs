@@ -555,8 +555,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_get_range_string(
                 self.as_ref().to_glib_none().0,
-                play.to_glib(),
-                unit.to_glib(),
+                play.into_glib(),
+                unit.into_glib(),
             ))
         }
     }
@@ -769,7 +769,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             ffi::gst_rtsp_media_set_bind_mcast_address(
                 self.as_ref().to_glib_none().0,
-                bind_mcast_addr.to_glib(),
+                bind_mcast_addr.into_glib(),
             );
         }
     }
@@ -795,7 +795,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             ffi::gst_rtsp_media_set_do_retransmission(
                 self.as_ref().to_glib_none().0,
-                do_retransmission.to_glib(),
+                do_retransmission.into_glib(),
             );
         }
     }
@@ -812,7 +812,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             ffi::gst_rtsp_media_set_eos_shutdown(
                 self.as_ref().to_glib_none().0,
-                eos_shutdown.to_glib(),
+                eos_shutdown.into_glib(),
             );
         }
     }
@@ -849,19 +849,25 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn set_pipeline_state(&self, state: gst::State) {
         unsafe {
-            ffi::gst_rtsp_media_set_pipeline_state(self.as_ref().to_glib_none().0, state.to_glib());
+            ffi::gst_rtsp_media_set_pipeline_state(
+                self.as_ref().to_glib_none().0,
+                state.into_glib(),
+            );
         }
     }
 
     fn set_profiles(&self, profiles: gst_rtsp::RTSPProfile) {
         unsafe {
-            ffi::gst_rtsp_media_set_profiles(self.as_ref().to_glib_none().0, profiles.to_glib());
+            ffi::gst_rtsp_media_set_profiles(self.as_ref().to_glib_none().0, profiles.into_glib());
         }
     }
 
     fn set_protocols(&self, protocols: gst_rtsp::RTSPLowerTrans) {
         unsafe {
-            ffi::gst_rtsp_media_set_protocols(self.as_ref().to_glib_none().0, protocols.to_glib());
+            ffi::gst_rtsp_media_set_protocols(
+                self.as_ref().to_glib_none().0,
+                protocols.into_glib(),
+            );
         }
     }
 
@@ -869,7 +875,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             ffi::gst_rtsp_media_set_publish_clock_mode(
                 self.as_ref().to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -878,7 +884,10 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn set_rate_control(&self, enabled: bool) {
         unsafe {
-            ffi::gst_rtsp_media_set_rate_control(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gst_rtsp_media_set_rate_control(
+                self.as_ref().to_glib_none().0,
+                enabled.into_glib(),
+            );
         }
     }
 
@@ -886,20 +895,20 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             ffi::gst_rtsp_media_set_retransmission_time(
                 self.as_ref().to_glib_none().0,
-                time.to_glib(),
+                time.into_glib(),
             );
         }
     }
 
     fn set_reusable(&self, reusable: bool) {
         unsafe {
-            ffi::gst_rtsp_media_set_reusable(self.as_ref().to_glib_none().0, reusable.to_glib());
+            ffi::gst_rtsp_media_set_reusable(self.as_ref().to_glib_none().0, reusable.into_glib());
         }
     }
 
     fn set_shared(&self, shared: bool) {
         unsafe {
-            ffi::gst_rtsp_media_set_shared(self.as_ref().to_glib_none().0, shared.to_glib());
+            ffi::gst_rtsp_media_set_shared(self.as_ref().to_glib_none().0, shared.into_glib());
         }
     }
 
@@ -907,7 +916,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             from_glib(ffi::gst_rtsp_media_set_state(
                 self.as_ref().to_glib_none().0,
-                state.to_glib(),
+                state.into_glib(),
                 transports.to_glib_none().0,
             ))
         }
@@ -917,20 +926,23 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             ffi::gst_rtsp_media_set_stop_on_disconnect(
                 self.as_ref().to_glib_none().0,
-                stop_on_disconnect.to_glib(),
+                stop_on_disconnect.into_glib(),
             );
         }
     }
 
     fn set_suspend_mode(&self, mode: RTSPSuspendMode) {
         unsafe {
-            ffi::gst_rtsp_media_set_suspend_mode(self.as_ref().to_glib_none().0, mode.to_glib());
+            ffi::gst_rtsp_media_set_suspend_mode(self.as_ref().to_glib_none().0, mode.into_glib());
         }
     }
 
     fn set_transport_mode(&self, mode: RTSPTransportMode) {
         unsafe {
-            ffi::gst_rtsp_media_set_transport_mode(self.as_ref().to_glib_none().0, mode.to_glib());
+            ffi::gst_rtsp_media_set_transport_mode(
+                self.as_ref().to_glib_none().0,
+                mode.into_glib(),
+            );
         }
     }
 
@@ -977,7 +989,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         unsafe {
             ffi::gst_rtsp_media_use_time_provider(
                 self.as_ref().to_glib_none().0,
-                time_provider.to_glib(),
+                time_provider.into_glib(),
             );
         }
     }

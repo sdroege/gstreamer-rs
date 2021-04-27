@@ -102,8 +102,8 @@ impl<O: IsA<Container>> GESContainerExt for O {
                     self.as_ref().to_glib_none().0,
                     layers.to_glib_none().0,
                     new_layer_priority,
-                    mode.to_glib(),
-                    edge.to_glib(),
+                    mode.into_glib(),
+                    edge.into_glib(),
                     position
                 ),
                 "Failed to edit container"
@@ -115,7 +115,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_container_get_children(
                 self.as_ref().to_glib_none().0,
-                recursive.to_glib(),
+                recursive.into_glib(),
             ))
         }
     }
@@ -136,7 +136,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_container_ungroup(
                 self.as_ref().to_glib_full(),
-                recursive.to_glib(),
+                recursive.into_glib(),
             ))
         }
     }

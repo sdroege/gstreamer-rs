@@ -132,7 +132,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
     fn filter_gl_api(&self, gl_api: GLAPI) {
         unsafe {
-            ffi::gst_gl_display_filter_gl_api(self.as_ref().to_glib_none().0, gl_api.to_glib());
+            ffi::gst_gl_display_filter_gl_api(self.as_ref().to_glib_none().0, gl_api.into_glib());
         }
     }
 

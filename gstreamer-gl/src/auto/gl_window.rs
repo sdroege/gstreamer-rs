@@ -158,7 +158,7 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         unsafe {
             ffi::gst_gl_window_handle_events(
                 self.as_ref().to_glib_none().0,
-                handle_events.to_glib(),
+                handle_events.into_glib(),
             );
         }
     }

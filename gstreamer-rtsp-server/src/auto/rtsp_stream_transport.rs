@@ -102,7 +102,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_transport_get_rtpinfo(
                 self.as_ref().to_glib_none().0,
-                start_time.to_glib(),
+                start_time.into_glib(),
             ))
         }
     }
@@ -190,7 +190,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
             glib::result_from_gboolean!(
                 ffi::gst_rtsp_stream_transport_set_active(
                     self.as_ref().to_glib_none().0,
-                    active.to_glib()
+                    active.into_glib()
                 ),
                 "Failed to set active"
             )
@@ -285,7 +285,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         unsafe {
             ffi::gst_rtsp_stream_transport_set_timed_out(
                 self.as_ref().to_glib_none().0,
-                timedout.to_glib(),
+                timedout.into_glib(),
             );
         }
     }

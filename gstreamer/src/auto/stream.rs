@@ -59,14 +59,14 @@ impl Stream {
     #[doc(alias = "gst_stream_set_stream_flags")]
     pub fn set_stream_flags(&self, flags: StreamFlags) {
         unsafe {
-            ffi::gst_stream_set_stream_flags(self.to_glib_none().0, flags.to_glib());
+            ffi::gst_stream_set_stream_flags(self.to_glib_none().0, flags.into_glib());
         }
     }
 
     #[doc(alias = "gst_stream_set_stream_type")]
     pub fn set_stream_type(&self, stream_type: StreamType) {
         unsafe {
-            ffi::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.to_glib());
+            ffi::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.into_glib());
         }
     }
 

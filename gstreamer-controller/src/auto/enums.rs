@@ -26,11 +26,11 @@ pub enum InterpolationMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for InterpolationMode {
+impl IntoGlib for InterpolationMode {
     type GlibType = ffi::GstInterpolationMode;
 
-    fn to_glib(&self) -> ffi::GstInterpolationMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstInterpolationMode {
+        match self {
             InterpolationMode::None => ffi::GST_INTERPOLATION_MODE_NONE,
             InterpolationMode::Linear => ffi::GST_INTERPOLATION_MODE_LINEAR,
             InterpolationMode::Cubic => ffi::GST_INTERPOLATION_MODE_CUBIC,
@@ -77,7 +77,7 @@ impl ToValue for InterpolationMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<InterpolationMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -106,11 +106,11 @@ pub enum LFOWaveform {
 }
 
 #[doc(hidden)]
-impl ToGlib for LFOWaveform {
+impl IntoGlib for LFOWaveform {
     type GlibType = ffi::GstLFOWaveform;
 
-    fn to_glib(&self) -> ffi::GstLFOWaveform {
-        match *self {
+    fn into_glib(self) -> ffi::GstLFOWaveform {
+        match self {
             LFOWaveform::Sine => ffi::GST_LFO_WAVEFORM_SINE,
             LFOWaveform::Square => ffi::GST_LFO_WAVEFORM_SQUARE,
             LFOWaveform::Saw => ffi::GST_LFO_WAVEFORM_SAW,
@@ -159,7 +159,7 @@ impl ToValue for LFOWaveform {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<LFOWaveform>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

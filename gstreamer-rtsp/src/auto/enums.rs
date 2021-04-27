@@ -24,11 +24,11 @@ pub enum RTSPAuthMethod {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPAuthMethod {
+impl IntoGlib for RTSPAuthMethod {
     type GlibType = ffi::GstRTSPAuthMethod;
 
-    fn to_glib(&self) -> ffi::GstRTSPAuthMethod {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPAuthMethod {
+        match self {
             RTSPAuthMethod::None => ffi::GST_RTSP_AUTH_NONE,
             RTSPAuthMethod::Basic => ffi::GST_RTSP_AUTH_BASIC,
             RTSPAuthMethod::Digest => ffi::GST_RTSP_AUTH_DIGEST,
@@ -73,7 +73,7 @@ impl ToValue for RTSPAuthMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPAuthMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -98,11 +98,11 @@ pub enum RTSPFamily {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPFamily {
+impl IntoGlib for RTSPFamily {
     type GlibType = ffi::GstRTSPFamily;
 
-    fn to_glib(&self) -> ffi::GstRTSPFamily {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPFamily {
+        match self {
             RTSPFamily::None => ffi::GST_RTSP_FAM_NONE,
             RTSPFamily::Inet => ffi::GST_RTSP_FAM_INET,
             RTSPFamily::Inet6 => ffi::GST_RTSP_FAM_INET6,
@@ -147,7 +147,7 @@ impl ToValue for RTSPFamily {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPFamily>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -346,11 +346,11 @@ pub enum RTSPHeaderField {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPHeaderField {
+impl IntoGlib for RTSPHeaderField {
     type GlibType = ffi::GstRTSPHeaderField;
 
-    fn to_glib(&self) -> ffi::GstRTSPHeaderField {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPHeaderField {
+        match self {
             RTSPHeaderField::Invalid => ffi::GST_RTSP_HDR_INVALID,
             RTSPHeaderField::Accept => ffi::GST_RTSP_HDR_ACCEPT,
             RTSPHeaderField::AcceptEncoding => ffi::GST_RTSP_HDR_ACCEPT_ENCODING,
@@ -569,7 +569,7 @@ impl ToValue for RTSPHeaderField {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPHeaderField>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -600,11 +600,11 @@ pub enum RTSPMsgType {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPMsgType {
+impl IntoGlib for RTSPMsgType {
     type GlibType = ffi::GstRTSPMsgType;
 
-    fn to_glib(&self) -> ffi::GstRTSPMsgType {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPMsgType {
+        match self {
             RTSPMsgType::Invalid => ffi::GST_RTSP_MESSAGE_INVALID,
             RTSPMsgType::Request => ffi::GST_RTSP_MESSAGE_REQUEST,
             RTSPMsgType::Response => ffi::GST_RTSP_MESSAGE_RESPONSE,
@@ -655,7 +655,7 @@ impl ToValue for RTSPMsgType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPMsgType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -684,11 +684,11 @@ pub enum RTSPRangeUnit {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPRangeUnit {
+impl IntoGlib for RTSPRangeUnit {
     type GlibType = ffi::GstRTSPRangeUnit;
 
-    fn to_glib(&self) -> ffi::GstRTSPRangeUnit {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPRangeUnit {
+        match self {
             RTSPRangeUnit::Smpte => ffi::GST_RTSP_RANGE_SMPTE,
             RTSPRangeUnit::Smpte30Drop => ffi::GST_RTSP_RANGE_SMPTE_30_DROP,
             RTSPRangeUnit::Smpte25 => ffi::GST_RTSP_RANGE_SMPTE_25,
@@ -737,7 +737,7 @@ impl ToValue for RTSPRangeUnit {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPRangeUnit>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -792,11 +792,11 @@ pub enum RTSPResult {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPResult {
+impl IntoGlib for RTSPResult {
     type GlibType = ffi::GstRTSPResult;
 
-    fn to_glib(&self) -> ffi::GstRTSPResult {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPResult {
+        match self {
             RTSPResult::Ok => ffi::GST_RTSP_OK,
             RTSPResult::Error => ffi::GST_RTSP_ERROR,
             RTSPResult::Einval => ffi::GST_RTSP_EINVAL,
@@ -871,7 +871,7 @@ impl ToValue for RTSPResult {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPResult>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -902,11 +902,11 @@ pub enum RTSPState {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPState {
+impl IntoGlib for RTSPState {
     type GlibType = ffi::GstRTSPState;
 
-    fn to_glib(&self) -> ffi::GstRTSPState {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPState {
+        match self {
             RTSPState::Invalid => ffi::GST_RTSP_STATE_INVALID,
             RTSPState::Init => ffi::GST_RTSP_STATE_INIT,
             RTSPState::Ready => ffi::GST_RTSP_STATE_READY,
@@ -957,7 +957,7 @@ impl ToValue for RTSPState {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPState>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1068,11 +1068,11 @@ pub enum RTSPStatusCode {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPStatusCode {
+impl IntoGlib for RTSPStatusCode {
     type GlibType = ffi::GstRTSPStatusCode;
 
-    fn to_glib(&self) -> ffi::GstRTSPStatusCode {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPStatusCode {
+        match self {
             RTSPStatusCode::Invalid => ffi::GST_RTSP_STS_INVALID,
             RTSPStatusCode::Continue => ffi::GST_RTSP_STS_CONTINUE,
             RTSPStatusCode::Ok => ffi::GST_RTSP_STS_OK,
@@ -1211,7 +1211,7 @@ impl ToValue for RTSPStatusCode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPStatusCode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1240,11 +1240,11 @@ pub enum RTSPTimeType {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPTimeType {
+impl IntoGlib for RTSPTimeType {
     type GlibType = ffi::GstRTSPTimeType;
 
-    fn to_glib(&self) -> ffi::GstRTSPTimeType {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPTimeType {
+        match self {
             RTSPTimeType::Seconds => ffi::GST_RTSP_TIME_SECONDS,
             RTSPTimeType::Now => ffi::GST_RTSP_TIME_NOW,
             RTSPTimeType::End => ffi::GST_RTSP_TIME_END,
@@ -1293,7 +1293,7 @@ impl ToValue for RTSPTimeType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPTimeType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

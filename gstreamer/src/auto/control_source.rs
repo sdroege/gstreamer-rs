@@ -33,7 +33,7 @@ impl<O: IsA<ControlSource>> ControlSourceExt for O {
             let mut value = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_control_source_get_value(
                 self.as_ref().to_glib_none().0,
-                timestamp.to_glib(),
+                timestamp.into_glib(),
                 value.as_mut_ptr(),
             ));
             let value = value.assume_init();

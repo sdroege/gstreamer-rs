@@ -289,7 +289,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn frame_at(&self, timestamp: gst::ClockTime) -> FrameNumber {
         unsafe {
-            ffi::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.to_glib())
+            ffi::ges_timeline_get_frame_at(self.as_ref().to_glib_none().0, timestamp.into_glib())
         }
     }
 
@@ -412,7 +412,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
             from_glib_full(ffi::ges_timeline_paste_element(
                 self.as_ref().to_glib_none().0,
                 element.as_ref().to_glib_none().0,
-                position.to_glib(),
+                position.into_glib(),
                 layer_priority,
             ))
         }
@@ -454,7 +454,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 formatter_asset.map(|p| p.as_ref()).to_glib_none().0,
-                overwrite.to_glib(),
+                overwrite.into_glib(),
                 &mut error,
             );
             if error.is_null() {
@@ -469,7 +469,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         unsafe {
             ffi::ges_timeline_set_auto_transition(
                 self.as_ref().to_glib_none().0,
-                auto_transition.to_glib(),
+                auto_transition.into_glib(),
             );
         }
     }
@@ -478,7 +478,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         unsafe {
             ffi::ges_timeline_set_snapping_distance(
                 self.as_ref().to_glib_none().0,
-                snapping_distance.to_glib(),
+                snapping_distance.into_glib(),
             );
         }
     }

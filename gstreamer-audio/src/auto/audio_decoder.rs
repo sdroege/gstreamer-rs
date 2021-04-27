@@ -240,7 +240,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
             ffi::gst_audio_decoder_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -268,7 +268,10 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn set_drainable(&self, enabled: bool) {
         unsafe {
-            ffi::gst_audio_decoder_set_drainable(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gst_audio_decoder_set_drainable(
+                self.as_ref().to_glib_none().0,
+                enabled.into_glib(),
+            );
         }
     }
 
@@ -276,7 +279,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         unsafe {
             ffi::gst_audio_decoder_set_estimate_rate(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -285,8 +288,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         unsafe {
             ffi::gst_audio_decoder_set_latency(
                 self.as_ref().to_glib_none().0,
-                min.to_glib(),
-                max.to_glib(),
+                min.into_glib(),
+                max.into_glib(),
             );
         }
     }
@@ -299,7 +302,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
 
     fn set_min_latency(&self, num: gst::ClockTime) {
         unsafe {
-            ffi::gst_audio_decoder_set_min_latency(self.as_ref().to_glib_none().0, num.to_glib());
+            ffi::gst_audio_decoder_set_min_latency(self.as_ref().to_glib_none().0, num.into_glib());
         }
     }
 
@@ -307,20 +310,20 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         unsafe {
             ffi::gst_audio_decoder_set_needs_format(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
 
     fn set_plc(&self, enabled: bool) {
         unsafe {
-            ffi::gst_audio_decoder_set_plc(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gst_audio_decoder_set_plc(self.as_ref().to_glib_none().0, enabled.into_glib());
         }
     }
 
     fn set_plc_aware(&self, plc: bool) {
         unsafe {
-            ffi::gst_audio_decoder_set_plc_aware(self.as_ref().to_glib_none().0, plc.to_glib());
+            ffi::gst_audio_decoder_set_plc_aware(self.as_ref().to_glib_none().0, plc.into_glib());
         }
     }
 
@@ -328,7 +331,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         unsafe {
             ffi::gst_audio_decoder_set_tolerance(
                 self.as_ref().to_glib_none().0,
-                tolerance.to_glib(),
+                tolerance.into_glib(),
             );
         }
     }
@@ -337,7 +340,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         unsafe {
             ffi::gst_audio_decoder_set_use_default_pad_acceptcaps(
                 self.as_ref().to_glib_none().0,
-                use_.to_glib(),
+                use_.into_glib(),
             );
         }
     }

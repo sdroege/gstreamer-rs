@@ -212,7 +212,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::ges_pipeline_set_mode(self.as_ref().to_glib_none().0, mode.to_glib()),
+                ffi::ges_pipeline_set_mode(self.as_ref().to_glib_none().0, mode.into_glib()),
                 "Failed to set mode"
             )
         }

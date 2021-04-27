@@ -19,10 +19,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for DiscovererSerializeFlags {
+impl IntoGlib for DiscovererSerializeFlags {
     type GlibType = ffi::GstDiscovererSerializeFlags;
 
-    fn to_glib(&self) -> ffi::GstDiscovererSerializeFlags {
+    fn into_glib(self) -> ffi::GstDiscovererSerializeFlags {
         self.bits()
     }
 }
@@ -58,7 +58,7 @@ impl ToValue for DiscovererSerializeFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<DiscovererSerializeFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

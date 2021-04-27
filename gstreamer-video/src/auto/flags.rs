@@ -31,10 +31,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoBufferFlags {
+impl IntoGlib for VideoBufferFlags {
     type GlibType = ffi::GstVideoBufferFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoBufferFlags {
+    fn into_glib(self) -> ffi::GstVideoBufferFlags {
         self.bits()
     }
 }
@@ -70,7 +70,7 @@ impl ToValue for VideoBufferFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoBufferFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -94,10 +94,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoChromaSite {
+impl IntoGlib for VideoChromaSite {
     type GlibType = ffi::GstVideoChromaSite;
 
-    fn to_glib(&self) -> ffi::GstVideoChromaSite {
+    fn into_glib(self) -> ffi::GstVideoChromaSite {
         self.bits()
     }
 }
@@ -133,7 +133,7 @@ impl ToValue for VideoChromaSite {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoChromaSite>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -153,10 +153,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoCodecFrameFlags {
+impl IntoGlib for VideoCodecFrameFlags {
     type GlibType = ffi::GstVideoCodecFrameFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoCodecFrameFlags {
+    fn into_glib(self) -> ffi::GstVideoCodecFrameFlags {
         self.bits()
     }
 }
@@ -177,10 +177,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoFlags {
+impl IntoGlib for VideoFlags {
     type GlibType = ffi::GstVideoFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoFlags {
+    fn into_glib(self) -> ffi::GstVideoFlags {
         self.bits()
     }
 }
@@ -216,7 +216,7 @@ impl ToValue for VideoFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -241,10 +241,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoFormatFlags {
+impl IntoGlib for VideoFormatFlags {
     type GlibType = ffi::GstVideoFormatFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoFormatFlags {
+    fn into_glib(self) -> ffi::GstVideoFormatFlags {
         self.bits()
     }
 }
@@ -280,7 +280,7 @@ impl ToValue for VideoFormatFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoFormatFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -304,10 +304,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoFrameFlags {
+impl IntoGlib for VideoFrameFlags {
     type GlibType = ffi::GstVideoFrameFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoFrameFlags {
+    fn into_glib(self) -> ffi::GstVideoFrameFlags {
         self.bits()
     }
 }
@@ -343,7 +343,7 @@ impl ToValue for VideoFrameFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoFrameFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -366,10 +366,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoMultiviewFlags {
+impl IntoGlib for VideoMultiviewFlags {
     type GlibType = ffi::GstVideoMultiviewFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoMultiviewFlags {
+    fn into_glib(self) -> ffi::GstVideoMultiviewFlags {
         self.bits()
     }
 }
@@ -405,7 +405,7 @@ impl ToValue for VideoMultiviewFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoMultiviewFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -423,10 +423,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoOverlayFormatFlags {
+impl IntoGlib for VideoOverlayFormatFlags {
     type GlibType = ffi::GstVideoOverlayFormatFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoOverlayFormatFlags {
+    fn into_glib(self) -> ffi::GstVideoOverlayFormatFlags {
         self.bits()
     }
 }
@@ -470,7 +470,7 @@ impl ToValue for VideoOverlayFormatFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoOverlayFormatFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -488,10 +488,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoPackFlags {
+impl IntoGlib for VideoPackFlags {
     type GlibType = ffi::GstVideoPackFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoPackFlags {
+    fn into_glib(self) -> ffi::GstVideoPackFlags {
         self.bits()
     }
 }
@@ -527,7 +527,7 @@ impl ToValue for VideoPackFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoPackFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -549,10 +549,10 @@ bitflags! {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
-impl ToGlib for VideoTimeCodeFlags {
+impl IntoGlib for VideoTimeCodeFlags {
     type GlibType = ffi::GstVideoTimeCodeFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoTimeCodeFlags {
+    fn into_glib(self) -> ffi::GstVideoTimeCodeFlags {
         self.bits()
     }
 }
@@ -598,7 +598,7 @@ impl ToValue for VideoTimeCodeFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoTimeCodeFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

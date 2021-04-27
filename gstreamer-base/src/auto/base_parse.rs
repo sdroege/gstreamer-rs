@@ -83,9 +83,9 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
             from_glib(ffi::gst_base_parse_add_index_entry(
                 self.as_ref().to_glib_none().0,
                 offset,
-                ts.to_glib(),
-                key.to_glib(),
-                force.to_glib(),
+                ts.into_glib(),
+                key.into_glib(),
+                force.into_glib(),
             ))
         }
     }
@@ -103,7 +103,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
             ffi::gst_base_parse_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -118,14 +118,14 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         unsafe {
             ffi::gst_base_parse_set_has_timing_info(
                 self.as_ref().to_glib_none().0,
-                has_timing.to_glib(),
+                has_timing.into_glib(),
             );
         }
     }
 
     fn set_infer_ts(&self, infer_ts: bool) {
         unsafe {
-            ffi::gst_base_parse_set_infer_ts(self.as_ref().to_glib_none().0, infer_ts.to_glib());
+            ffi::gst_base_parse_set_infer_ts(self.as_ref().to_glib_none().0, infer_ts.into_glib());
         }
     }
 
@@ -133,8 +133,8 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         unsafe {
             ffi::gst_base_parse_set_latency(
                 self.as_ref().to_glib_none().0,
-                min_latency.to_glib(),
-                max_latency.to_glib(),
+                min_latency.into_glib(),
+                max_latency.into_glib(),
             );
         }
     }
@@ -149,7 +149,7 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         unsafe {
             ffi::gst_base_parse_set_passthrough(
                 self.as_ref().to_glib_none().0,
-                passthrough.to_glib(),
+                passthrough.into_glib(),
             );
         }
     }
@@ -158,14 +158,14 @@ impl<O: IsA<BaseParse>> BaseParseExt for O {
         unsafe {
             ffi::gst_base_parse_set_pts_interpolation(
                 self.as_ref().to_glib_none().0,
-                pts_interpolate.to_glib(),
+                pts_interpolate.into_glib(),
             );
         }
     }
 
     fn set_syncable(&self, syncable: bool) {
         unsafe {
-            ffi::gst_base_parse_set_syncable(self.as_ref().to_glib_none().0, syncable.to_glib());
+            ffi::gst_base_parse_set_syncable(self.as_ref().to_glib_none().0, syncable.into_glib());
         }
     }
 

@@ -36,11 +36,11 @@ pub enum RTCPFBType {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTCPFBType {
+impl IntoGlib for RTCPFBType {
     type GlibType = ffi::GstRTCPFBType;
 
-    fn to_glib(&self) -> ffi::GstRTCPFBType {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTCPFBType {
+        match self {
             RTCPFBType::FbTypeInvalid => ffi::GST_RTCP_FB_TYPE_INVALID,
             RTCPFBType::RtpfbTypeNack => ffi::GST_RTCP_RTPFB_TYPE_NACK,
             RTCPFBType::RtpfbTypeTmmbr => ffi::GST_RTCP_RTPFB_TYPE_TMMBR,
@@ -97,7 +97,7 @@ impl ToValue for RTCPFBType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTCPFBType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -136,11 +136,11 @@ pub enum RTCPSDESType {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTCPSDESType {
+impl IntoGlib for RTCPSDESType {
     type GlibType = ffi::GstRTCPSDESType;
 
-    fn to_glib(&self) -> ffi::GstRTCPSDESType {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTCPSDESType {
+        match self {
             RTCPSDESType::Invalid => ffi::GST_RTCP_SDES_INVALID,
             RTCPSDESType::End => ffi::GST_RTCP_SDES_END,
             RTCPSDESType::Cname => ffi::GST_RTCP_SDES_CNAME,
@@ -199,7 +199,7 @@ impl ToValue for RTCPSDESType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTCPSDESType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -236,11 +236,11 @@ pub enum RTCPType {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTCPType {
+impl IntoGlib for RTCPType {
     type GlibType = ffi::GstRTCPType;
 
-    fn to_glib(&self) -> ffi::GstRTCPType {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTCPType {
+        match self {
             RTCPType::Invalid => ffi::GST_RTCP_TYPE_INVALID,
             RTCPType::Sr => ffi::GST_RTCP_TYPE_SR,
             RTCPType::Rr => ffi::GST_RTCP_TYPE_RR,
@@ -297,7 +297,7 @@ impl ToValue for RTCPType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTCPType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -336,11 +336,11 @@ pub enum RTCPXRType {
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
-impl ToGlib for RTCPXRType {
+impl IntoGlib for RTCPXRType {
     type GlibType = ffi::GstRTCPXRType;
 
-    fn to_glib(&self) -> ffi::GstRTCPXRType {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTCPXRType {
+        match self {
             RTCPXRType::Invalid => ffi::GST_RTCP_XR_TYPE_INVALID,
             RTCPXRType::Lrle => ffi::GST_RTCP_XR_TYPE_LRLE,
             RTCPXRType::Drle => ffi::GST_RTCP_XR_TYPE_DRLE,
@@ -405,7 +405,7 @@ impl ToValue for RTCPXRType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTCPXRType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -476,11 +476,11 @@ pub enum RTPPayload {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTPPayload {
+impl IntoGlib for RTPPayload {
     type GlibType = ffi::GstRTPPayload;
 
-    fn to_glib(&self) -> ffi::GstRTPPayload {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTPPayload {
+        match self {
             RTPPayload::Pcmu => ffi::GST_RTP_PAYLOAD_PCMU,
             RTPPayload::_1016 => ffi::GST_RTP_PAYLOAD_1016,
             RTPPayload::G721 => ffi::GST_RTP_PAYLOAD_G721,
@@ -571,7 +571,7 @@ impl ToValue for RTPPayload {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTPPayload>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -600,11 +600,11 @@ pub enum RTPProfile {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTPProfile {
+impl IntoGlib for RTPProfile {
     type GlibType = ffi::GstRTPProfile;
 
-    fn to_glib(&self) -> ffi::GstRTPProfile {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTPProfile {
+        match self {
             RTPProfile::Unknown => ffi::GST_RTP_PROFILE_UNKNOWN,
             RTPProfile::Avp => ffi::GST_RTP_PROFILE_AVP,
             RTPProfile::Savp => ffi::GST_RTP_PROFILE_SAVP,
@@ -653,7 +653,7 @@ impl ToValue for RTPProfile {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTPProfile>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

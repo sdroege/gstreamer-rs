@@ -32,7 +32,7 @@ impl TransitionClip {
     #[doc(alias = "ges_transition_clip_new")]
     pub fn new(vtype: VideoStandardTransitionType) -> Option<TransitionClip> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::ges_transition_clip_new(vtype.to_glib())) }
+        unsafe { from_glib_none(ffi::ges_transition_clip_new(vtype.into_glib())) }
     }
 
     #[doc(alias = "ges_transition_clip_new_for_nick")]

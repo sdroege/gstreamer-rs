@@ -18,10 +18,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPEvent {
+impl IntoGlib for RTSPEvent {
     type GlibType = ffi::GstRTSPEvent;
 
-    fn to_glib(&self) -> ffi::GstRTSPEvent {
+    fn into_glib(self) -> ffi::GstRTSPEvent {
         self.bits()
     }
 }
@@ -57,7 +57,7 @@ impl ToValue for RTSPEvent {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPEvent>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -78,10 +78,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPLowerTrans {
+impl IntoGlib for RTSPLowerTrans {
     type GlibType = ffi::GstRTSPLowerTrans;
 
-    fn to_glib(&self) -> ffi::GstRTSPLowerTrans {
+    fn into_glib(self) -> ffi::GstRTSPLowerTrans {
         self.bits()
     }
 }
@@ -117,7 +117,7 @@ impl ToValue for RTSPLowerTrans {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPLowerTrans>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -149,15 +149,15 @@ impl RTSPMethod {
     #[doc(alias = "gst_rtsp_method_as_text")]
     pub fn as_text(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_rtsp_method_as_text(self.to_glib())) }
+        unsafe { from_glib_none(ffi::gst_rtsp_method_as_text(self.into_glib())) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPMethod {
+impl IntoGlib for RTSPMethod {
     type GlibType = ffi::GstRTSPMethod;
 
-    fn to_glib(&self) -> ffi::GstRTSPMethod {
+    fn into_glib(self) -> ffi::GstRTSPMethod {
         self.bits()
     }
 }
@@ -193,7 +193,7 @@ impl ToValue for RTSPMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -213,10 +213,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPProfile {
+impl IntoGlib for RTSPProfile {
     type GlibType = ffi::GstRTSPProfile;
 
-    fn to_glib(&self) -> ffi::GstRTSPProfile {
+    fn into_glib(self) -> ffi::GstRTSPProfile {
         self.bits()
     }
 }
@@ -252,7 +252,7 @@ impl ToValue for RTSPProfile {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPProfile>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -270,10 +270,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPTransMode {
+impl IntoGlib for RTSPTransMode {
     type GlibType = ffi::GstRTSPTransMode;
 
-    fn to_glib(&self) -> ffi::GstRTSPTransMode {
+    fn into_glib(self) -> ffi::GstRTSPTransMode {
         self.bits()
     }
 }
@@ -309,7 +309,7 @@ impl ToValue for RTSPTransMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPTransMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

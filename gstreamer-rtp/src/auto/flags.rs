@@ -22,10 +22,10 @@ bitflags! {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
-impl ToGlib for RTPBufferFlags {
+impl IntoGlib for RTPBufferFlags {
     type GlibType = ffi::GstRTPBufferFlags;
 
-    fn to_glib(&self) -> ffi::GstRTPBufferFlags {
+    fn into_glib(self) -> ffi::GstRTPBufferFlags {
         self.bits()
     }
 }
@@ -71,7 +71,7 @@ impl ToValue for RTPBufferFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTPBufferFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -88,10 +88,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTPBufferMapFlags {
+impl IntoGlib for RTPBufferMapFlags {
     type GlibType = ffi::GstRTPBufferMapFlags;
 
-    fn to_glib(&self) -> ffi::GstRTPBufferMapFlags {
+    fn into_glib(self) -> ffi::GstRTPBufferMapFlags {
         self.bits()
     }
 }
@@ -127,7 +127,7 @@ impl ToValue for RTPBufferMapFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTPBufferMapFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

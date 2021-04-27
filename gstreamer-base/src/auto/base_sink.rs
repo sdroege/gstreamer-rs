@@ -314,7 +314,10 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn set_async_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_base_sink_set_async_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gst_base_sink_set_async_enabled(
+                self.as_ref().to_glib_none().0,
+                enabled.into_glib(),
+            );
         }
     }
 
@@ -330,7 +333,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe {
             ffi::gst_base_sink_set_drop_out_of_segment(
                 self.as_ref().to_glib_none().0,
-                drop_out_of_segment.to_glib(),
+                drop_out_of_segment.into_glib(),
             );
         }
     }
@@ -339,7 +342,7 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe {
             ffi::gst_base_sink_set_last_sample_enabled(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -362,26 +365,26 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         unsafe {
             ffi::gst_base_sink_set_processing_deadline(
                 self.as_ref().to_glib_none().0,
-                processing_deadline.to_glib(),
+                processing_deadline.into_glib(),
             );
         }
     }
 
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_base_sink_set_qos_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gst_base_sink_set_qos_enabled(self.as_ref().to_glib_none().0, enabled.into_glib());
         }
     }
 
     fn set_render_delay(&self, delay: gst::ClockTime) {
         unsafe {
-            ffi::gst_base_sink_set_render_delay(self.as_ref().to_glib_none().0, delay.to_glib());
+            ffi::gst_base_sink_set_render_delay(self.as_ref().to_glib_none().0, delay.into_glib());
         }
     }
 
     fn set_sync(&self, sync: bool) {
         unsafe {
-            ffi::gst_base_sink_set_sync(self.as_ref().to_glib_none().0, sync.to_glib());
+            ffi::gst_base_sink_set_sync(self.as_ref().to_glib_none().0, sync.into_glib());
         }
     }
 

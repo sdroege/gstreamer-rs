@@ -35,7 +35,7 @@ pub fn rtcp_sdes_name_to_type(name: &str) -> RTCPSDESType {
 #[doc(alias = "gst_rtcp_sdes_type_to_name")]
 pub fn rtcp_sdes_type_to_name(type_: RTCPSDESType) -> Option<glib::GString> {
     assert_initialized_main_thread!();
-    unsafe { from_glib_none(ffi::gst_rtcp_sdes_type_to_name(type_.to_glib())) }
+    unsafe { from_glib_none(ffi::gst_rtcp_sdes_type_to_name(type_.into_glib())) }
 }
 
 #[doc(alias = "gst_rtcp_unix_to_ntp")]

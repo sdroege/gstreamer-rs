@@ -123,20 +123,20 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         unsafe {
             ffi::gst_pipeline_set_auto_flush_bus(
                 self.as_ref().to_glib_none().0,
-                auto_flush.to_glib(),
+                auto_flush.into_glib(),
             );
         }
     }
 
     fn set_delay(&self, delay: ClockTime) {
         unsafe {
-            ffi::gst_pipeline_set_delay(self.as_ref().to_glib_none().0, delay.to_glib());
+            ffi::gst_pipeline_set_delay(self.as_ref().to_glib_none().0, delay.into_glib());
         }
     }
 
     fn set_latency(&self, latency: ClockTime) {
         unsafe {
-            ffi::gst_pipeline_set_latency(self.as_ref().to_glib_none().0, latency.to_glib());
+            ffi::gst_pipeline_set_latency(self.as_ref().to_glib_none().0, latency.into_glib());
         }
     }
 

@@ -28,11 +28,11 @@ pub enum RTSPAddressPoolResult {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPAddressPoolResult {
+impl IntoGlib for RTSPAddressPoolResult {
     type GlibType = ffi::GstRTSPAddressPoolResult;
 
-    fn to_glib(&self) -> ffi::GstRTSPAddressPoolResult {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPAddressPoolResult {
+        match self {
             RTSPAddressPoolResult::Ok => ffi::GST_RTSP_ADDRESS_POOL_OK,
             RTSPAddressPoolResult::Einval => ffi::GST_RTSP_ADDRESS_POOL_EINVAL,
             RTSPAddressPoolResult::Ereserved => ffi::GST_RTSP_ADDRESS_POOL_ERESERVED,
@@ -73,11 +73,11 @@ pub enum RTSPFilterResult {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPFilterResult {
+impl IntoGlib for RTSPFilterResult {
     type GlibType = ffi::GstRTSPFilterResult;
 
-    fn to_glib(&self) -> ffi::GstRTSPFilterResult {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPFilterResult {
+        match self {
             RTSPFilterResult::Remove => ffi::GST_RTSP_FILTER_REMOVE,
             RTSPFilterResult::Keep => ffi::GST_RTSP_FILTER_KEEP,
             RTSPFilterResult::Ref => ffi::GST_RTSP_FILTER_REF,
@@ -120,11 +120,11 @@ pub enum RTSPMediaStatus {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPMediaStatus {
+impl IntoGlib for RTSPMediaStatus {
     type GlibType = ffi::GstRTSPMediaStatus;
 
-    fn to_glib(&self) -> ffi::GstRTSPMediaStatus {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPMediaStatus {
+        match self {
             RTSPMediaStatus::Unprepared => ffi::GST_RTSP_MEDIA_STATUS_UNPREPARED,
             RTSPMediaStatus::Unpreparing => ffi::GST_RTSP_MEDIA_STATUS_UNPREPARING,
             RTSPMediaStatus::Preparing => ffi::GST_RTSP_MEDIA_STATUS_PREPARING,
@@ -167,11 +167,11 @@ pub enum RTSPPublishClockMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPPublishClockMode {
+impl IntoGlib for RTSPPublishClockMode {
     type GlibType = ffi::GstRTSPPublishClockMode;
 
-    fn to_glib(&self) -> ffi::GstRTSPPublishClockMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPPublishClockMode {
+        match self {
             RTSPPublishClockMode::None => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_NONE,
             RTSPPublishClockMode::Clock => ffi::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK,
             RTSPPublishClockMode::ClockAndOffset => {
@@ -218,7 +218,7 @@ impl ToValue for RTSPPublishClockMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPPublishClockMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -243,11 +243,11 @@ pub enum RTSPSuspendMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPSuspendMode {
+impl IntoGlib for RTSPSuspendMode {
     type GlibType = ffi::GstRTSPSuspendMode;
 
-    fn to_glib(&self) -> ffi::GstRTSPSuspendMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPSuspendMode {
+        match self {
             RTSPSuspendMode::None => ffi::GST_RTSP_SUSPEND_MODE_NONE,
             RTSPSuspendMode::Pause => ffi::GST_RTSP_SUSPEND_MODE_PAUSE,
             RTSPSuspendMode::Reset => ffi::GST_RTSP_SUSPEND_MODE_RESET,
@@ -292,7 +292,7 @@ impl ToValue for RTSPSuspendMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<RTSPSuspendMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -315,11 +315,11 @@ pub enum RTSPThreadType {
 }
 
 #[doc(hidden)]
-impl ToGlib for RTSPThreadType {
+impl IntoGlib for RTSPThreadType {
     type GlibType = ffi::GstRTSPThreadType;
 
-    fn to_glib(&self) -> ffi::GstRTSPThreadType {
-        match *self {
+    fn into_glib(self) -> ffi::GstRTSPThreadType {
+        match self {
             RTSPThreadType::Client => ffi::GST_RTSP_THREAD_TYPE_CLIENT,
             RTSPThreadType::Media => ffi::GST_RTSP_THREAD_TYPE_MEDIA,
             RTSPThreadType::__Unknown(value) => value,

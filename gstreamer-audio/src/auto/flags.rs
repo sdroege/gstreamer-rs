@@ -17,10 +17,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioFlags {
+impl IntoGlib for AudioFlags {
     type GlibType = ffi::GstAudioFlags;
 
-    fn to_glib(&self) -> ffi::GstAudioFlags {
+    fn into_glib(self) -> ffi::GstAudioFlags {
         self.bits()
     }
 }
@@ -56,7 +56,7 @@ impl ToValue for AudioFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -77,10 +77,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioFormatFlags {
+impl IntoGlib for AudioFormatFlags {
     type GlibType = ffi::GstAudioFormatFlags;
 
-    fn to_glib(&self) -> ffi::GstAudioFormatFlags {
+    fn into_glib(self) -> ffi::GstAudioFormatFlags {
         self.bits()
     }
 }
@@ -116,7 +116,7 @@ impl ToValue for AudioFormatFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioFormatFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -133,10 +133,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioPackFlags {
+impl IntoGlib for AudioPackFlags {
     type GlibType = ffi::GstAudioPackFlags;
 
-    fn to_glib(&self) -> ffi::GstAudioPackFlags {
+    fn into_glib(self) -> ffi::GstAudioPackFlags {
         self.bits()
     }
 }
@@ -172,7 +172,7 @@ impl ToValue for AudioPackFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioPackFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

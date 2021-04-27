@@ -218,7 +218,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
             ffi::gst_audio_encoder_merge_tags(
                 self.as_ref().to_glib_none().0,
                 tags.to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
             );
         }
     }
@@ -246,7 +246,10 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_drainable(&self, enabled: bool) {
         unsafe {
-            ffi::gst_audio_encoder_set_drainable(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gst_audio_encoder_set_drainable(
+                self.as_ref().to_glib_none().0,
+                enabled.into_glib(),
+            );
         }
     }
 
@@ -270,7 +273,10 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
 
     fn set_hard_min(&self, enabled: bool) {
         unsafe {
-            ffi::gst_audio_encoder_set_hard_min(self.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gst_audio_encoder_set_hard_min(
+                self.as_ref().to_glib_none().0,
+                enabled.into_glib(),
+            );
         }
     }
 
@@ -278,7 +284,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         unsafe {
             ffi::gst_audio_encoder_set_hard_resync(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -296,8 +302,8 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         unsafe {
             ffi::gst_audio_encoder_set_latency(
                 self.as_ref().to_glib_none().0,
-                min.to_glib(),
-                max.to_glib(),
+                min.into_glib(),
+                max.into_glib(),
             );
         }
     }
@@ -312,7 +318,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         unsafe {
             ffi::gst_audio_encoder_set_mark_granule(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -321,7 +327,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         unsafe {
             ffi::gst_audio_encoder_set_perfect_timestamp(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -330,7 +336,7 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExt for O {
         unsafe {
             ffi::gst_audio_encoder_set_tolerance(
                 self.as_ref().to_glib_none().0,
-                tolerance.to_glib(),
+                tolerance.into_glib(),
             );
         }
     }

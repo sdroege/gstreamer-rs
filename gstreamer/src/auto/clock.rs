@@ -190,8 +190,8 @@ impl<O: IsA<Clock>> ClockExt for O {
             let mut r_squared = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_clock_add_observation(
                 self.as_ref().to_glib_none().0,
-                slave.to_glib(),
-                master.to_glib(),
+                slave.into_glib(),
+                master.into_glib(),
                 r_squared.as_mut_ptr(),
             ));
             let r_squared = r_squared.assume_init();
@@ -216,8 +216,8 @@ impl<O: IsA<Clock>> ClockExt for O {
             let mut rate_denom = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_clock_add_observation_unapplied(
                 self.as_ref().to_glib_none().0,
-                slave.to_glib(),
-                master.to_glib(),
+                slave.into_glib(),
+                master.into_glib(),
                 r_squared.as_mut_ptr(),
                 internal.as_mut_ptr(),
                 external.as_mut_ptr(),
@@ -247,7 +247,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         unsafe {
             from_glib(ffi::gst_clock_adjust_unlocked(
                 self.as_ref().to_glib_none().0,
-                internal.to_glib(),
+                internal.into_glib(),
             ))
         }
     }
@@ -332,10 +332,10 @@ impl<O: IsA<Clock>> ClockExt for O {
         unsafe {
             ffi::gst_clock_set_calibration(
                 self.as_ref().to_glib_none().0,
-                internal.to_glib(),
-                external.to_glib(),
-                rate_num.to_glib(),
-                rate_denom.to_glib(),
+                internal.into_glib(),
+                external.into_glib(),
+                rate_num.into_glib(),
+                rate_denom.into_glib(),
             );
         }
     }
@@ -356,20 +356,20 @@ impl<O: IsA<Clock>> ClockExt for O {
         unsafe {
             from_glib(ffi::gst_clock_set_resolution(
                 self.as_ref().to_glib_none().0,
-                resolution.to_glib(),
+                resolution.into_glib(),
             ))
         }
     }
 
     fn set_synced(&self, synced: bool) {
         unsafe {
-            ffi::gst_clock_set_synced(self.as_ref().to_glib_none().0, synced.to_glib());
+            ffi::gst_clock_set_synced(self.as_ref().to_glib_none().0, synced.into_glib());
         }
     }
 
     fn set_timeout(&self, timeout: ClockTime) {
         unsafe {
-            ffi::gst_clock_set_timeout(self.as_ref().to_glib_none().0, timeout.to_glib());
+            ffi::gst_clock_set_timeout(self.as_ref().to_glib_none().0, timeout.into_glib());
         }
     }
 
@@ -381,7 +381,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         unsafe {
             from_glib(ffi::gst_clock_unadjust_unlocked(
                 self.as_ref().to_glib_none().0,
-                external.to_glib(),
+                external.into_glib(),
             ))
         }
     }
@@ -389,7 +389,7 @@ impl<O: IsA<Clock>> ClockExt for O {
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_clock_wait_for_sync(self.as_ref().to_glib_none().0, timeout.to_glib()),
+                ffi::gst_clock_wait_for_sync(self.as_ref().to_glib_none().0, timeout.into_glib()),
                 "Timed out waiting for sync"
             )
         }

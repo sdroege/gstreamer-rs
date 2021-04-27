@@ -30,11 +30,11 @@ pub enum DiscovererResult {
 }
 
 #[doc(hidden)]
-impl ToGlib for DiscovererResult {
+impl IntoGlib for DiscovererResult {
     type GlibType = ffi::GstDiscovererResult;
 
-    fn to_glib(&self) -> ffi::GstDiscovererResult {
-        match *self {
+    fn into_glib(self) -> ffi::GstDiscovererResult {
+        match self {
             DiscovererResult::Ok => ffi::GST_DISCOVERER_OK,
             DiscovererResult::UriInvalid => ffi::GST_DISCOVERER_URI_INVALID,
             DiscovererResult::Error => ffi::GST_DISCOVERER_ERROR,
@@ -85,7 +85,7 @@ impl ToValue for DiscovererResult {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<DiscovererResult>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

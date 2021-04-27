@@ -81,11 +81,11 @@ pub enum AudioChannelPosition {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioChannelPosition {
+impl IntoGlib for AudioChannelPosition {
     type GlibType = ffi::GstAudioChannelPosition;
 
-    fn to_glib(&self) -> ffi::GstAudioChannelPosition {
-        match *self {
+    fn into_glib(self) -> ffi::GstAudioChannelPosition {
+        match self {
             AudioChannelPosition::None => ffi::GST_AUDIO_CHANNEL_POSITION_NONE,
             AudioChannelPosition::Mono => ffi::GST_AUDIO_CHANNEL_POSITION_MONO,
             AudioChannelPosition::Invalid => ffi::GST_AUDIO_CHANNEL_POSITION_INVALID,
@@ -198,7 +198,7 @@ impl ToValue for AudioChannelPosition {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioChannelPosition>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -225,11 +225,11 @@ pub enum AudioDitherMethod {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioDitherMethod {
+impl IntoGlib for AudioDitherMethod {
     type GlibType = ffi::GstAudioDitherMethod;
 
-    fn to_glib(&self) -> ffi::GstAudioDitherMethod {
-        match *self {
+    fn into_glib(self) -> ffi::GstAudioDitherMethod {
+        match self {
             AudioDitherMethod::None => ffi::GST_AUDIO_DITHER_NONE,
             AudioDitherMethod::Rpdf => ffi::GST_AUDIO_DITHER_RPDF,
             AudioDitherMethod::Tpdf => ffi::GST_AUDIO_DITHER_TPDF,
@@ -276,7 +276,7 @@ impl ToValue for AudioDitherMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioDitherMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -374,11 +374,11 @@ impl fmt::Display for AudioFormat {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioFormat {
+impl IntoGlib for AudioFormat {
     type GlibType = ffi::GstAudioFormat;
 
-    fn to_glib(&self) -> ffi::GstAudioFormat {
-        match *self {
+    fn into_glib(self) -> ffi::GstAudioFormat {
+        match self {
             AudioFormat::Unknown => ffi::GST_AUDIO_FORMAT_UNKNOWN,
             AudioFormat::Encoded => ffi::GST_AUDIO_FORMAT_ENCODED,
             AudioFormat::S8 => ffi::GST_AUDIO_FORMAT_S8,
@@ -481,7 +481,7 @@ impl ToValue for AudioFormat {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioFormat>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -504,11 +504,11 @@ pub enum AudioLayout {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioLayout {
+impl IntoGlib for AudioLayout {
     type GlibType = ffi::GstAudioLayout;
 
-    fn to_glib(&self) -> ffi::GstAudioLayout {
-        match *self {
+    fn into_glib(self) -> ffi::GstAudioLayout {
+        match self {
             AudioLayout::Interleaved => ffi::GST_AUDIO_LAYOUT_INTERLEAVED,
             AudioLayout::NonInterleaved => ffi::GST_AUDIO_LAYOUT_NON_INTERLEAVED,
             AudioLayout::__Unknown(value) => value,
@@ -551,7 +551,7 @@ impl ToValue for AudioLayout {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioLayout>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -580,11 +580,11 @@ pub enum AudioNoiseShapingMethod {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioNoiseShapingMethod {
+impl IntoGlib for AudioNoiseShapingMethod {
     type GlibType = ffi::GstAudioNoiseShapingMethod;
 
-    fn to_glib(&self) -> ffi::GstAudioNoiseShapingMethod {
-        match *self {
+    fn into_glib(self) -> ffi::GstAudioNoiseShapingMethod {
+        match self {
             AudioNoiseShapingMethod::None => ffi::GST_AUDIO_NOISE_SHAPING_NONE,
             AudioNoiseShapingMethod::ErrorFeedback => ffi::GST_AUDIO_NOISE_SHAPING_ERROR_FEEDBACK,
             AudioNoiseShapingMethod::Simple => ffi::GST_AUDIO_NOISE_SHAPING_SIMPLE,
@@ -633,7 +633,7 @@ impl ToValue for AudioNoiseShapingMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioNoiseShapingMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -666,11 +666,11 @@ pub enum AudioResamplerMethod {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
-impl ToGlib for AudioResamplerMethod {
+impl IntoGlib for AudioResamplerMethod {
     type GlibType = ffi::GstAudioResamplerMethod;
 
-    fn to_glib(&self) -> ffi::GstAudioResamplerMethod {
-        match *self {
+    fn into_glib(self) -> ffi::GstAudioResamplerMethod {
+        match self {
             AudioResamplerMethod::Nearest => ffi::GST_AUDIO_RESAMPLER_METHOD_NEAREST,
             AudioResamplerMethod::Linear => ffi::GST_AUDIO_RESAMPLER_METHOD_LINEAR,
             AudioResamplerMethod::Cubic => ffi::GST_AUDIO_RESAMPLER_METHOD_CUBIC,
@@ -731,7 +731,7 @@ impl ToValue for AudioResamplerMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioResamplerMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -786,11 +786,11 @@ pub enum AudioRingBufferFormatType {
 }
 
 #[doc(hidden)]
-impl ToGlib for AudioRingBufferFormatType {
+impl IntoGlib for AudioRingBufferFormatType {
     type GlibType = ffi::GstAudioRingBufferFormatType;
 
-    fn to_glib(&self) -> ffi::GstAudioRingBufferFormatType {
-        match *self {
+    fn into_glib(self) -> ffi::GstAudioRingBufferFormatType {
+        match self {
             AudioRingBufferFormatType::Raw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_RAW,
             AudioRingBufferFormatType::MuLaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MU_LAW,
             AudioRingBufferFormatType::ALaw => ffi::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_A_LAW,
@@ -869,7 +869,7 @@ impl ToValue for AudioRingBufferFormatType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<AudioRingBufferFormatType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -894,11 +894,11 @@ pub enum StreamVolumeFormat {
 }
 
 #[doc(hidden)]
-impl ToGlib for StreamVolumeFormat {
+impl IntoGlib for StreamVolumeFormat {
     type GlibType = ffi::GstStreamVolumeFormat;
 
-    fn to_glib(&self) -> ffi::GstStreamVolumeFormat {
-        match *self {
+    fn into_glib(self) -> ffi::GstStreamVolumeFormat {
+        match self {
             StreamVolumeFormat::Linear => ffi::GST_STREAM_VOLUME_FORMAT_LINEAR,
             StreamVolumeFormat::Cubic => ffi::GST_STREAM_VOLUME_FORMAT_CUBIC,
             StreamVolumeFormat::Db => ffi::GST_STREAM_VOLUME_FORMAT_DB,

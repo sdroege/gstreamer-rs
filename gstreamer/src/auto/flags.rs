@@ -26,10 +26,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for BinFlags {
+impl IntoGlib for BinFlags {
     type GlibType = ffi::GstBinFlags;
 
-    fn to_glib(&self) -> ffi::GstBinFlags {
+    fn into_glib(self) -> ffi::GstBinFlags {
         self.bits()
     }
 }
@@ -65,7 +65,7 @@ impl ToValue for BinFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<BinFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -87,10 +87,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for BufferCopyFlags {
+impl IntoGlib for BufferCopyFlags {
     type GlibType = ffi::GstBufferCopyFlags;
 
-    fn to_glib(&self) -> ffi::GstBufferCopyFlags {
+    fn into_glib(self) -> ffi::GstBufferCopyFlags {
         self.bits()
     }
 }
@@ -126,7 +126,7 @@ impl ToValue for BufferCopyFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<BufferCopyFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -158,10 +158,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for BufferFlags {
+impl IntoGlib for BufferFlags {
     type GlibType = ffi::GstBufferFlags;
 
-    fn to_glib(&self) -> ffi::GstBufferFlags {
+    fn into_glib(self) -> ffi::GstBufferFlags {
         self.bits()
     }
 }
@@ -197,7 +197,7 @@ impl ToValue for BufferFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<BufferFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -216,10 +216,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for BufferPoolAcquireFlags {
+impl IntoGlib for BufferPoolAcquireFlags {
     type GlibType = ffi::GstBufferPoolAcquireFlags;
 
-    fn to_glib(&self) -> ffi::GstBufferPoolAcquireFlags {
+    fn into_glib(self) -> ffi::GstBufferPoolAcquireFlags {
         self.bits()
     }
 }
@@ -255,7 +255,7 @@ impl ToValue for BufferPoolAcquireFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<BufferPoolAcquireFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -278,10 +278,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for ClockFlags {
+impl IntoGlib for ClockFlags {
     type GlibType = ffi::GstClockFlags;
 
-    fn to_glib(&self) -> ffi::GstClockFlags {
+    fn into_glib(self) -> ffi::GstClockFlags {
         self.bits()
     }
 }
@@ -317,7 +317,7 @@ impl ToValue for ClockFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<ClockFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -351,10 +351,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for DebugColorFlags {
+impl IntoGlib for DebugColorFlags {
     type GlibType = ffi::GstDebugColorFlags;
 
-    fn to_glib(&self) -> ffi::GstDebugColorFlags {
+    fn into_glib(self) -> ffi::GstDebugColorFlags {
         self.bits()
     }
 }
@@ -390,7 +390,7 @@ impl ToValue for DebugColorFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<DebugColorFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -413,10 +413,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for DebugGraphDetails {
+impl IntoGlib for DebugGraphDetails {
     type GlibType = ffi::GstDebugGraphDetails;
 
-    fn to_glib(&self) -> ffi::GstDebugGraphDetails {
+    fn into_glib(self) -> ffi::GstDebugGraphDetails {
         self.bits()
     }
 }
@@ -452,7 +452,7 @@ impl ToValue for DebugGraphDetails {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<DebugGraphDetails>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -474,10 +474,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for ElementFlags {
+impl IntoGlib for ElementFlags {
     type GlibType = ffi::GstElementFlags;
 
-    fn to_glib(&self) -> ffi::GstElementFlags {
+    fn into_glib(self) -> ffi::GstElementFlags {
         self.bits()
     }
 }
@@ -513,7 +513,7 @@ impl ToValue for ElementFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<ElementFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -534,10 +534,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for EventTypeFlags {
+impl IntoGlib for EventTypeFlags {
     type GlibType = ffi::GstEventTypeFlags;
 
-    fn to_glib(&self) -> ffi::GstEventTypeFlags {
+    fn into_glib(self) -> ffi::GstEventTypeFlags {
         self.bits()
     }
 }
@@ -573,7 +573,7 @@ impl ToValue for EventTypeFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<EventTypeFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -595,10 +595,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for MemoryFlags {
+impl IntoGlib for MemoryFlags {
     type GlibType = ffi::GstMemoryFlags;
 
-    fn to_glib(&self) -> ffi::GstMemoryFlags {
+    fn into_glib(self) -> ffi::GstMemoryFlags {
         self.bits()
     }
 }
@@ -634,7 +634,7 @@ impl ToValue for MemoryFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<MemoryFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -653,10 +653,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for ObjectFlags {
+impl IntoGlib for ObjectFlags {
     type GlibType = ffi::GstObjectFlags;
 
-    fn to_glib(&self) -> ffi::GstObjectFlags {
+    fn into_glib(self) -> ffi::GstObjectFlags {
         self.bits()
     }
 }
@@ -692,7 +692,7 @@ impl ToValue for ObjectFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<ObjectFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -721,10 +721,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for PadFlags {
+impl IntoGlib for PadFlags {
     type GlibType = ffi::GstPadFlags;
 
-    fn to_glib(&self) -> ffi::GstPadFlags {
+    fn into_glib(self) -> ffi::GstPadFlags {
         self.bits()
     }
 }
@@ -760,7 +760,7 @@ impl ToValue for PadFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PadFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -781,10 +781,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for PadLinkCheck {
+impl IntoGlib for PadLinkCheck {
     type GlibType = ffi::GstPadLinkCheck;
 
-    fn to_glib(&self) -> ffi::GstPadLinkCheck {
+    fn into_glib(self) -> ffi::GstPadLinkCheck {
         self.bits()
     }
 }
@@ -820,7 +820,7 @@ impl ToValue for PadLinkCheck {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PadLinkCheck>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -857,10 +857,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for PadProbeType {
+impl IntoGlib for PadProbeType {
     type GlibType = ffi::GstPadProbeType;
 
-    fn to_glib(&self) -> ffi::GstPadProbeType {
+    fn into_glib(self) -> ffi::GstPadProbeType {
         self.bits()
     }
 }
@@ -896,7 +896,7 @@ impl ToValue for PadProbeType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PadProbeType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -917,10 +917,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for ParseFlags {
+impl IntoGlib for ParseFlags {
     type GlibType = ffi::GstParseFlags;
 
-    fn to_glib(&self) -> ffi::GstParseFlags {
+    fn into_glib(self) -> ffi::GstParseFlags {
         self.bits()
     }
 }
@@ -956,7 +956,7 @@ impl ToValue for ParseFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<ParseFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -973,10 +973,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for PipelineFlags {
+impl IntoGlib for PipelineFlags {
     type GlibType = ffi::GstPipelineFlags;
 
-    fn to_glib(&self) -> ffi::GstPipelineFlags {
+    fn into_glib(self) -> ffi::GstPipelineFlags {
         self.bits()
     }
 }
@@ -1012,7 +1012,7 @@ impl ToValue for PipelineFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PipelineFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1033,10 +1033,10 @@ bitflags! {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
-impl ToGlib for PluginAPIFlags {
+impl IntoGlib for PluginAPIFlags {
     type GlibType = ffi::GstPluginAPIFlags;
 
-    fn to_glib(&self) -> ffi::GstPluginAPIFlags {
+    fn into_glib(self) -> ffi::GstPluginAPIFlags {
         self.bits()
     }
 }
@@ -1082,7 +1082,7 @@ impl ToValue for PluginAPIFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PluginAPIFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1103,10 +1103,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for PluginDependencyFlags {
+impl IntoGlib for PluginDependencyFlags {
     type GlibType = ffi::GstPluginDependencyFlags;
 
-    fn to_glib(&self) -> ffi::GstPluginDependencyFlags {
+    fn into_glib(self) -> ffi::GstPluginDependencyFlags {
         self.bits()
     }
 }
@@ -1142,7 +1142,7 @@ impl ToValue for PluginDependencyFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PluginDependencyFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1160,10 +1160,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for PluginFlags {
+impl IntoGlib for PluginFlags {
     type GlibType = ffi::GstPluginFlags;
 
-    fn to_glib(&self) -> ffi::GstPluginFlags {
+    fn into_glib(self) -> ffi::GstPluginFlags {
         self.bits()
     }
 }
@@ -1199,7 +1199,7 @@ impl ToValue for PluginFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<PluginFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1218,10 +1218,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for SchedulingFlags {
+impl IntoGlib for SchedulingFlags {
     type GlibType = ffi::GstSchedulingFlags;
 
-    fn to_glib(&self) -> ffi::GstSchedulingFlags {
+    fn into_glib(self) -> ffi::GstSchedulingFlags {
         self.bits()
     }
 }
@@ -1257,7 +1257,7 @@ impl ToValue for SchedulingFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<SchedulingFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1290,10 +1290,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for SeekFlags {
+impl IntoGlib for SeekFlags {
     type GlibType = ffi::GstSeekFlags;
 
-    fn to_glib(&self) -> ffi::GstSeekFlags {
+    fn into_glib(self) -> ffi::GstSeekFlags {
         self.bits()
     }
 }
@@ -1329,7 +1329,7 @@ impl ToValue for SeekFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<SeekFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1355,10 +1355,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for SegmentFlags {
+impl IntoGlib for SegmentFlags {
     type GlibType = ffi::GstSegmentFlags;
 
-    fn to_glib(&self) -> ffi::GstSegmentFlags {
+    fn into_glib(self) -> ffi::GstSegmentFlags {
         self.bits()
     }
 }
@@ -1394,7 +1394,7 @@ impl ToValue for SegmentFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<SegmentFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1415,10 +1415,10 @@ bitflags! {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
-impl ToGlib for StackTraceFlags {
+impl IntoGlib for StackTraceFlags {
     type GlibType = ffi::GstStackTraceFlags;
 
-    fn to_glib(&self) -> ffi::GstStackTraceFlags {
+    fn into_glib(self) -> ffi::GstStackTraceFlags {
         self.bits()
     }
 }
@@ -1464,7 +1464,7 @@ impl ToValue for StackTraceFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<StackTraceFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1483,10 +1483,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for StreamFlags {
+impl IntoGlib for StreamFlags {
     type GlibType = ffi::GstStreamFlags;
 
-    fn to_glib(&self) -> ffi::GstStreamFlags {
+    fn into_glib(self) -> ffi::GstStreamFlags {
         self.bits()
     }
 }
@@ -1522,7 +1522,7 @@ impl ToValue for StreamFlags {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<StreamFlags>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1550,7 +1550,7 @@ impl StreamType {
     pub fn name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
-                ffi::gst_stream_type_get_name(self.to_glib())
+                ffi::gst_stream_type_get_name(self.into_glib())
                     .as_ref()
                     .expect("gst_stream_type_get_name returned NULL"),
             )
@@ -1572,10 +1572,10 @@ impl fmt::Display for StreamType {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
-impl ToGlib for StreamType {
+impl IntoGlib for StreamType {
     type GlibType = ffi::GstStreamType;
 
-    fn to_glib(&self) -> ffi::GstStreamType {
+    fn into_glib(self) -> ffi::GstStreamType {
         self.bits()
     }
 }
@@ -1621,7 +1621,7 @@ impl ToValue for StreamType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<StreamType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

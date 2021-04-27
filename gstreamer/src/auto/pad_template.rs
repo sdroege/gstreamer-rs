@@ -37,8 +37,8 @@ impl PadTemplate {
         unsafe {
             Option::<_>::from_glib_none(ffi::gst_pad_template_new(
                 name_template.to_glib_none().0,
-                direction.to_glib(),
-                presence.to_glib(),
+                direction.into_glib(),
+                presence.into_glib(),
                 caps.to_glib_none().0,
             ))
             .ok_or_else(|| glib::bool_error!("Failed to create pad template"))
@@ -59,10 +59,10 @@ impl PadTemplate {
         unsafe {
             Option::<_>::from_glib_none(ffi::gst_pad_template_new_with_gtype(
                 name_template.to_glib_none().0,
-                direction.to_glib(),
-                presence.to_glib(),
+                direction.into_glib(),
+                presence.into_glib(),
                 caps.to_glib_none().0,
-                pad_type.to_glib(),
+                pad_type.into_glib(),
             ))
             .ok_or_else(|| glib::bool_error!("Failed to create pad template"))
         }

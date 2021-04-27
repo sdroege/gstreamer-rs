@@ -17,10 +17,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for BaseParseFrameFlags {
+impl IntoGlib for BaseParseFrameFlags {
     type GlibType = ffi::GstBaseParseFrameFlags;
 
-    fn to_glib(&self) -> ffi::GstBaseParseFrameFlags {
+    fn into_glib(self) -> ffi::GstBaseParseFrameFlags {
         self.bits()
     }
 }

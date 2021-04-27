@@ -24,7 +24,7 @@ impl StreamVolume {
     #[doc(alias = "gst_stream_volume_convert_volume")]
     pub fn convert_volume(from: StreamVolumeFormat, to: StreamVolumeFormat, val: f64) -> f64 {
         assert_initialized_main_thread!();
-        unsafe { ffi::gst_stream_volume_convert_volume(from.to_glib(), to.to_glib(), val) }
+        unsafe { ffi::gst_stream_volume_convert_volume(from.into_glib(), to.into_glib(), val) }
     }
 }
 
@@ -68,13 +68,13 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
 
     fn volume(&self, format: StreamVolumeFormat) -> f64 {
         unsafe {
-            ffi::gst_stream_volume_get_volume(self.as_ref().to_glib_none().0, format.to_glib())
+            ffi::gst_stream_volume_get_volume(self.as_ref().to_glib_none().0, format.into_glib())
         }
     }
 
     fn set_mute(&self, mute: bool) {
         unsafe {
-            ffi::gst_stream_volume_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
+            ffi::gst_stream_volume_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());
         }
     }
 
@@ -82,7 +82,7 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
         unsafe {
             ffi::gst_stream_volume_set_volume(
                 self.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 val,
             );
         }

@@ -153,7 +153,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             from_glib(ffi::ges_project_create_asset(
                 self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
-                extractable_type.to_glib(),
+                extractable_type.into_glib(),
             ))
         }
     }
@@ -168,7 +168,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             let ret = ffi::ges_project_create_asset_sync(
                 self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
-                extractable_type.to_glib(),
+                extractable_type.into_glib(),
                 &mut error,
             );
             if error.is_null() {
@@ -184,7 +184,7 @@ impl<O: IsA<Project>> ProjectExt for O {
             from_glib_full(ffi::ges_project_get_asset(
                 self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
-                extractable_type.to_glib(),
+                extractable_type.into_glib(),
             ))
         }
     }
@@ -205,7 +205,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::ges_project_list_assets(
                 self.as_ref().to_glib_none().0,
-                filter.to_glib(),
+                filter.into_glib(),
             ))
         }
     }
@@ -260,7 +260,7 @@ impl<O: IsA<Project>> ProjectExt for O {
                 timeline.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
                 formatter_asset.map(|p| p.as_ref()).to_glib_full(),
-                overwrite.to_glib(),
+                overwrite.into_glib(),
                 &mut error,
             );
             if error.is_null() {

@@ -74,7 +74,7 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
         unsafe {
             from_glib_full(ffi::gst_rtsp_thread_pool_get_thread(
                 self.as_ref().to_glib_none().0,
-                type_.to_glib(),
+                type_.into_glib(),
                 ctx.to_glib_none().0,
             ))
         }

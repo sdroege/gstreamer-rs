@@ -101,7 +101,7 @@ impl DiscovererInfo {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_info_get_streams(
                 self.to_glib_none().0,
-                streamtype.to_glib(),
+                streamtype.into_glib(),
             ))
         }
     }
@@ -147,7 +147,7 @@ impl DiscovererInfo {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_discoverer_info_to_variant(
                 self.to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
             ))
             .ok_or_else(|| glib::bool_error!("Failed to serialize DiscovererInfo to Variant"))
         }

@@ -30,11 +30,11 @@ pub enum VideoAFDSpec {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
-impl ToGlib for VideoAFDSpec {
+impl IntoGlib for VideoAFDSpec {
     type GlibType = ffi::GstVideoAFDSpec;
 
-    fn to_glib(&self) -> ffi::GstVideoAFDSpec {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoAFDSpec {
+        match self {
             VideoAFDSpec::DvbEtsi => ffi::GST_VIDEO_AFD_SPEC_DVB_ETSI,
             VideoAFDSpec::AtscA53 => ffi::GST_VIDEO_AFD_SPEC_ATSC_A53,
             VideoAFDSpec::SmpteSt20161 => ffi::GST_VIDEO_AFD_SPEC_SMPTE_ST2016_1,
@@ -89,7 +89,7 @@ impl ToValue for VideoAFDSpec {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoAFDSpec>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -134,11 +134,11 @@ pub enum VideoAFDValue {
 #[cfg(any(feature = "v1_18", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
 #[doc(hidden)]
-impl ToGlib for VideoAFDValue {
+impl IntoGlib for VideoAFDValue {
     type GlibType = ffi::GstVideoAFDValue;
 
-    fn to_glib(&self) -> ffi::GstVideoAFDValue {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoAFDValue {
+        match self {
             VideoAFDValue::Unavailable => ffi::GST_VIDEO_AFD_UNAVAILABLE,
             VideoAFDValue::_169TopAligned => ffi::GST_VIDEO_AFD_16_9_TOP_ALIGNED,
             VideoAFDValue::_149TopAligned => ffi::GST_VIDEO_AFD_14_9_TOP_ALIGNED,
@@ -209,7 +209,7 @@ impl ToValue for VideoAFDValue {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoAFDValue>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -234,11 +234,11 @@ pub enum VideoAlphaMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoAlphaMode {
+impl IntoGlib for VideoAlphaMode {
     type GlibType = ffi::GstVideoAlphaMode;
 
-    fn to_glib(&self) -> ffi::GstVideoAlphaMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoAlphaMode {
+        match self {
             VideoAlphaMode::Copy => ffi::GST_VIDEO_ALPHA_MODE_COPY,
             VideoAlphaMode::Set => ffi::GST_VIDEO_ALPHA_MODE_SET,
             VideoAlphaMode::Mult => ffi::GST_VIDEO_ALPHA_MODE_MULT,
@@ -283,7 +283,7 @@ impl ToValue for VideoAlphaMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoAlphaMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -325,18 +325,18 @@ impl VideoCaptionType {
     #[doc(alias = "gst_video_caption_type_to_caps")]
     pub fn to_caps(self) -> Option<gst::Caps> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_video_caption_type_to_caps(self.to_glib())) }
+        unsafe { from_glib_full(ffi::gst_video_caption_type_to_caps(self.into_glib())) }
     }
 }
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 #[doc(hidden)]
-impl ToGlib for VideoCaptionType {
+impl IntoGlib for VideoCaptionType {
     type GlibType = ffi::GstVideoCaptionType;
 
-    fn to_glib(&self) -> ffi::GstVideoCaptionType {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoCaptionType {
+        match self {
             VideoCaptionType::Unknown => ffi::GST_VIDEO_CAPTION_TYPE_UNKNOWN,
             VideoCaptionType::Cea608Raw => ffi::GST_VIDEO_CAPTION_TYPE_CEA608_RAW,
             VideoCaptionType::Cea608S3341a => ffi::GST_VIDEO_CAPTION_TYPE_CEA608_S334_1A,
@@ -395,7 +395,7 @@ impl ToValue for VideoCaptionType {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoCaptionType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -422,11 +422,11 @@ pub enum VideoChromaMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoChromaMode {
+impl IntoGlib for VideoChromaMode {
     type GlibType = ffi::GstVideoChromaMode;
 
-    fn to_glib(&self) -> ffi::GstVideoChromaMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoChromaMode {
+        match self {
             VideoChromaMode::Full => ffi::GST_VIDEO_CHROMA_MODE_FULL,
             VideoChromaMode::UpsampleOnly => ffi::GST_VIDEO_CHROMA_MODE_UPSAMPLE_ONLY,
             VideoChromaMode::DownsampleOnly => ffi::GST_VIDEO_CHROMA_MODE_DOWNSAMPLE_ONLY,
@@ -473,7 +473,7 @@ impl ToValue for VideoChromaMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoChromaMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -519,16 +519,16 @@ impl VideoColorMatrix {
     #[doc(alias = "gst_video_color_matrix_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { ffi::gst_video_color_matrix_to_iso(self.to_glib()) }
+        unsafe { ffi::gst_video_color_matrix_to_iso(self.into_glib()) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoColorMatrix {
+impl IntoGlib for VideoColorMatrix {
     type GlibType = ffi::GstVideoColorMatrix;
 
-    fn to_glib(&self) -> ffi::GstVideoColorMatrix {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoColorMatrix {
+        match self {
             VideoColorMatrix::Unknown => ffi::GST_VIDEO_COLOR_MATRIX_UNKNOWN,
             VideoColorMatrix::Rgb => ffi::GST_VIDEO_COLOR_MATRIX_RGB,
             VideoColorMatrix::Fcc => ffi::GST_VIDEO_COLOR_MATRIX_FCC,
@@ -581,7 +581,7 @@ impl ToValue for VideoColorMatrix {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoColorMatrix>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -652,16 +652,16 @@ impl VideoColorPrimaries {
     #[doc(alias = "gst_video_color_primaries_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { ffi::gst_video_color_primaries_to_iso(self.to_glib()) }
+        unsafe { ffi::gst_video_color_primaries_to_iso(self.into_glib()) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoColorPrimaries {
+impl IntoGlib for VideoColorPrimaries {
     type GlibType = ffi::GstVideoColorPrimaries;
 
-    fn to_glib(&self) -> ffi::GstVideoColorPrimaries {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoColorPrimaries {
+        match self {
             VideoColorPrimaries::Unknown => ffi::GST_VIDEO_COLOR_PRIMARIES_UNKNOWN,
             VideoColorPrimaries::Bt709 => ffi::GST_VIDEO_COLOR_PRIMARIES_BT709,
             VideoColorPrimaries::Bt470m => ffi::GST_VIDEO_COLOR_PRIMARIES_BT470M,
@@ -734,7 +734,7 @@ impl ToValue for VideoColorPrimaries {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoColorPrimaries>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -763,11 +763,11 @@ pub enum VideoDitherMethod {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoDitherMethod {
+impl IntoGlib for VideoDitherMethod {
     type GlibType = ffi::GstVideoDitherMethod;
 
-    fn to_glib(&self) -> ffi::GstVideoDitherMethod {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoDitherMethod {
+        match self {
             VideoDitherMethod::None => ffi::GST_VIDEO_DITHER_NONE,
             VideoDitherMethod::Verterr => ffi::GST_VIDEO_DITHER_VERTERR,
             VideoDitherMethod::FloydSteinberg => ffi::GST_VIDEO_DITHER_FLOYD_STEINBERG,
@@ -816,7 +816,7 @@ impl ToValue for VideoDitherMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoDitherMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -868,11 +868,11 @@ impl fmt::Display for VideoFieldOrder {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_12")))]
 #[doc(hidden)]
-impl ToGlib for VideoFieldOrder {
+impl IntoGlib for VideoFieldOrder {
     type GlibType = ffi::GstVideoFieldOrder;
 
-    fn to_glib(&self) -> ffi::GstVideoFieldOrder {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoFieldOrder {
+        match self {
             VideoFieldOrder::Unknown => ffi::GST_VIDEO_FIELD_ORDER_UNKNOWN,
             VideoFieldOrder::TopFieldFirst => ffi::GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST,
             VideoFieldOrder::BottomFieldFirst => ffi::GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST,
@@ -927,7 +927,7 @@ impl ToValue for VideoFieldOrder {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoFieldOrder>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1240,7 +1240,7 @@ impl VideoFormat {
     #[doc(alias = "gst_video_format_to_fourcc")]
     pub fn to_fourcc(self) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { ffi::gst_video_format_to_fourcc(self.to_glib()) }
+        unsafe { ffi::gst_video_format_to_fourcc(self.into_glib()) }
     }
 }
 
@@ -1252,11 +1252,11 @@ impl fmt::Display for VideoFormat {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoFormat {
+impl IntoGlib for VideoFormat {
     type GlibType = ffi::GstVideoFormat;
 
-    fn to_glib(&self) -> ffi::GstVideoFormat {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoFormat {
+        match self {
             VideoFormat::Unknown => ffi::GST_VIDEO_FORMAT_UNKNOWN,
             VideoFormat::Encoded => ffi::GST_VIDEO_FORMAT_ENCODED,
             VideoFormat::I420 => ffi::GST_VIDEO_FORMAT_I420,
@@ -1569,7 +1569,7 @@ impl ToValue for VideoFormat {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoFormat>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1592,11 +1592,11 @@ pub enum VideoGammaMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoGammaMode {
+impl IntoGlib for VideoGammaMode {
     type GlibType = ffi::GstVideoGammaMode;
 
-    fn to_glib(&self) -> ffi::GstVideoGammaMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoGammaMode {
+        match self {
             VideoGammaMode::None => ffi::GST_VIDEO_GAMMA_MODE_NONE,
             VideoGammaMode::Remap => ffi::GST_VIDEO_GAMMA_MODE_REMAP,
             VideoGammaMode::__Unknown(value) => value,
@@ -1639,7 +1639,7 @@ impl ToValue for VideoGammaMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoGammaMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1683,7 +1683,7 @@ impl VideoInterlaceMode {
     pub fn to_str<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(
-                ffi::gst_video_interlace_mode_to_string(self.to_glib())
+                ffi::gst_video_interlace_mode_to_string(self.into_glib())
                     .as_ref()
                     .expect("gst_video_interlace_mode_to_string returned NULL"),
             )
@@ -1701,11 +1701,11 @@ impl fmt::Display for VideoInterlaceMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoInterlaceMode {
+impl IntoGlib for VideoInterlaceMode {
     type GlibType = ffi::GstVideoInterlaceMode;
 
-    fn to_glib(&self) -> ffi::GstVideoInterlaceMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoInterlaceMode {
+        match self {
             VideoInterlaceMode::Progressive => ffi::GST_VIDEO_INTERLACE_MODE_PROGRESSIVE,
             VideoInterlaceMode::Interleaved => ffi::GST_VIDEO_INTERLACE_MODE_INTERLEAVED,
             VideoInterlaceMode::Mixed => ffi::GST_VIDEO_INTERLACE_MODE_MIXED,
@@ -1756,7 +1756,7 @@ impl ToValue for VideoInterlaceMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoInterlaceMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1783,11 +1783,11 @@ pub enum VideoMatrixMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoMatrixMode {
+impl IntoGlib for VideoMatrixMode {
     type GlibType = ffi::GstVideoMatrixMode;
 
-    fn to_glib(&self) -> ffi::GstVideoMatrixMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoMatrixMode {
+        match self {
             VideoMatrixMode::Full => ffi::GST_VIDEO_MATRIX_MODE_FULL,
             VideoMatrixMode::InputOnly => ffi::GST_VIDEO_MATRIX_MODE_INPUT_ONLY,
             VideoMatrixMode::OutputOnly => ffi::GST_VIDEO_MATRIX_MODE_OUTPUT_ONLY,
@@ -1834,7 +1834,7 @@ impl ToValue for VideoMatrixMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoMatrixMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -1873,11 +1873,11 @@ pub enum VideoMultiviewFramePacking {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoMultiviewFramePacking {
+impl IntoGlib for VideoMultiviewFramePacking {
     type GlibType = ffi::GstVideoMultiviewFramePacking;
 
-    fn to_glib(&self) -> ffi::GstVideoMultiviewFramePacking {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoMultiviewFramePacking {
+        match self {
             VideoMultiviewFramePacking::None => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE,
             VideoMultiviewFramePacking::Mono => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO,
             VideoMultiviewFramePacking::Left => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT,
@@ -1948,7 +1948,7 @@ impl ToValue for VideoMultiviewFramePacking {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoMultiviewFramePacking>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -2006,16 +2006,20 @@ impl VideoMultiviewMode {
     #[doc(alias = "gst_video_multiview_mode_to_caps_string")]
     pub fn to_caps_string(self) -> Option<glib::GString> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_video_multiview_mode_to_caps_string(self.to_glib())) }
+        unsafe {
+            from_glib_none(ffi::gst_video_multiview_mode_to_caps_string(
+                self.into_glib(),
+            ))
+        }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoMultiviewMode {
+impl IntoGlib for VideoMultiviewMode {
     type GlibType = ffi::GstVideoMultiviewMode;
 
-    fn to_glib(&self) -> ffi::GstVideoMultiviewMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoMultiviewMode {
+        match self {
             VideoMultiviewMode::None => ffi::GST_VIDEO_MULTIVIEW_MODE_NONE,
             VideoMultiviewMode::Mono => ffi::GST_VIDEO_MULTIVIEW_MODE_MONO,
             VideoMultiviewMode::Left => ffi::GST_VIDEO_MULTIVIEW_MODE_LEFT,
@@ -2086,7 +2090,7 @@ impl ToValue for VideoMultiviewMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoMultiviewMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -2129,11 +2133,11 @@ pub enum VideoOrientationMethod {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 #[doc(hidden)]
-impl ToGlib for VideoOrientationMethod {
+impl IntoGlib for VideoOrientationMethod {
     type GlibType = ffi::GstVideoOrientationMethod;
 
-    fn to_glib(&self) -> ffi::GstVideoOrientationMethod {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoOrientationMethod {
+        match self {
             VideoOrientationMethod::Identity => ffi::GST_VIDEO_ORIENTATION_IDENTITY,
             VideoOrientationMethod::_90r => ffi::GST_VIDEO_ORIENTATION_90R,
             VideoOrientationMethod::_180 => ffi::GST_VIDEO_ORIENTATION_180,
@@ -2202,7 +2206,7 @@ impl ToValue for VideoOrientationMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoOrientationMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -2227,11 +2231,11 @@ pub enum VideoPrimariesMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoPrimariesMode {
+impl IntoGlib for VideoPrimariesMode {
     type GlibType = ffi::GstVideoPrimariesMode;
 
-    fn to_glib(&self) -> ffi::GstVideoPrimariesMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoPrimariesMode {
+        match self {
             VideoPrimariesMode::None => ffi::GST_VIDEO_PRIMARIES_MODE_NONE,
             VideoPrimariesMode::MergeOnly => ffi::GST_VIDEO_PRIMARIES_MODE_MERGE_ONLY,
             VideoPrimariesMode::Fast => ffi::GST_VIDEO_PRIMARIES_MODE_FAST,
@@ -2276,7 +2280,7 @@ impl ToValue for VideoPrimariesMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoPrimariesMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -2305,11 +2309,11 @@ pub enum VideoResamplerMethod {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoResamplerMethod {
+impl IntoGlib for VideoResamplerMethod {
     type GlibType = ffi::GstVideoResamplerMethod;
 
-    fn to_glib(&self) -> ffi::GstVideoResamplerMethod {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoResamplerMethod {
+        match self {
             VideoResamplerMethod::Nearest => ffi::GST_VIDEO_RESAMPLER_METHOD_NEAREST,
             VideoResamplerMethod::Linear => ffi::GST_VIDEO_RESAMPLER_METHOD_LINEAR,
             VideoResamplerMethod::Cubic => ffi::GST_VIDEO_RESAMPLER_METHOD_CUBIC,
@@ -2358,7 +2362,7 @@ impl ToValue for VideoResamplerMethod {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoResamplerMethod>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -2385,11 +2389,11 @@ pub enum VideoTileMode {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoTileMode {
+impl IntoGlib for VideoTileMode {
     type GlibType = ffi::GstVideoTileMode;
 
-    fn to_glib(&self) -> ffi::GstVideoTileMode {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoTileMode {
+        match self {
             VideoTileMode::Unknown => ffi::GST_VIDEO_TILE_MODE_UNKNOWN,
             VideoTileMode::Zflipz2x2 => ffi::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2,
             #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -2436,7 +2440,7 @@ impl ToValue for VideoTileMode {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoTileMode>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }
@@ -2512,9 +2516,9 @@ impl VideoTransferFunction {
         assert_initialized_main_thread!();
         unsafe {
             from_glib(ffi::gst_video_transfer_function_is_equivalent(
-                self.to_glib(),
+                self.into_glib(),
                 from_bpp,
-                to_func.to_glib(),
+                to_func.into_glib(),
                 to_bpp,
             ))
         }
@@ -2525,16 +2529,16 @@ impl VideoTransferFunction {
     #[doc(alias = "gst_video_transfer_function_to_iso")]
     pub fn to_iso(self) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { ffi::gst_video_transfer_function_to_iso(self.to_glib()) }
+        unsafe { ffi::gst_video_transfer_function_to_iso(self.into_glib()) }
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoTransferFunction {
+impl IntoGlib for VideoTransferFunction {
     type GlibType = ffi::GstVideoTransferFunction;
 
-    fn to_glib(&self) -> ffi::GstVideoTransferFunction {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoTransferFunction {
+        match self {
             VideoTransferFunction::Unknown => ffi::GST_VIDEO_TRANSFER_UNKNOWN,
             VideoTransferFunction::Gamma10 => ffi::GST_VIDEO_TRANSFER_GAMMA10,
             VideoTransferFunction::Gamma18 => ffi::GST_VIDEO_TRANSFER_GAMMA18,
@@ -2615,7 +2619,7 @@ impl ToValue for VideoTransferFunction {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoTransferFunction>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib());
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
         }
         value
     }

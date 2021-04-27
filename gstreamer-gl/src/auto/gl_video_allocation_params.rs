@@ -39,8 +39,8 @@ impl GLVideoAllocationParams {
                 mut_override(v_info.to_glib_none().0),
                 plane,
                 mut_override(valign.to_glib_none().0),
-                target.to_glib(),
-                tex_format.to_glib(),
+                target.into_glib(),
+                tex_format.into_glib(),
             ))
         }
     }

@@ -201,7 +201,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
             from_glib_full(ffi::gst_object_get_value(
                 self.as_ref().to_glib_none().0,
                 property_name.to_glib_none().0,
-                timestamp.to_glib(),
+                timestamp.into_glib(),
             ))
         }
     }
@@ -259,7 +259,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
             ffi::gst_object_set_control_binding_disabled(
                 self.as_ref().to_glib_none().0,
                 property_name.to_glib_none().0,
-                disabled.to_glib(),
+                disabled.into_glib(),
             );
         }
     }
@@ -268,7 +268,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         unsafe {
             ffi::gst_object_set_control_bindings_disabled(
                 self.as_ref().to_glib_none().0,
-                disabled.to_glib(),
+                disabled.into_glib(),
             );
         }
     }
@@ -277,7 +277,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         unsafe {
             ffi::gst_object_set_control_rate(
                 self.as_ref().to_glib_none().0,
-                control_rate.to_glib(),
+                control_rate.into_glib(),
             );
         }
     }
@@ -305,7 +305,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
     fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_object_sync_values(self.as_ref().to_glib_none().0, timestamp.to_glib()),
+                ffi::gst_object_sync_values(self.as_ref().to_glib_none().0, timestamp.into_glib()),
                 "Failed to sync values"
             )
         }

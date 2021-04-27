@@ -33,7 +33,7 @@ impl Track {
     #[doc(alias = "ges_track_new")]
     pub fn new(type_: TrackType, caps: &gst::Caps) -> Track {
         assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::ges_track_new(type_.to_glib(), caps.to_glib_full())) }
+        unsafe { from_glib_none(ffi::ges_track_new(type_.into_glib(), caps.to_glib_full())) }
     }
 }
 
@@ -242,7 +242,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     fn set_mixing(&self, mixing: bool) {
         unsafe {
-            ffi::ges_track_set_mixing(self.as_ref().to_glib_none().0, mixing.to_glib());
+            ffi::ges_track_set_mixing(self.as_ref().to_glib_none().0, mixing.into_glib());
         }
     }
 

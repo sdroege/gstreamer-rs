@@ -163,7 +163,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn set_async(&self, async_: bool) {
         unsafe {
-            ffi::gst_base_src_set_async(self.as_ref().to_glib_none().0, async_.to_glib());
+            ffi::gst_base_src_set_async(self.as_ref().to_glib_none().0, async_.into_glib());
         }
     }
 
@@ -171,7 +171,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         unsafe {
             ffi::gst_base_src_set_automatic_eos(
                 self.as_ref().to_glib_none().0,
-                automatic_eos.to_glib(),
+                automatic_eos.into_glib(),
             );
         }
     }
@@ -193,25 +193,28 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn set_do_timestamp(&self, timestamp: bool) {
         unsafe {
-            ffi::gst_base_src_set_do_timestamp(self.as_ref().to_glib_none().0, timestamp.to_glib());
+            ffi::gst_base_src_set_do_timestamp(
+                self.as_ref().to_glib_none().0,
+                timestamp.into_glib(),
+            );
         }
     }
 
     fn set_dynamic_size(&self, dynamic: bool) {
         unsafe {
-            ffi::gst_base_src_set_dynamic_size(self.as_ref().to_glib_none().0, dynamic.to_glib());
+            ffi::gst_base_src_set_dynamic_size(self.as_ref().to_glib_none().0, dynamic.into_glib());
         }
     }
 
     fn set_format(&self, format: gst::Format) {
         unsafe {
-            ffi::gst_base_src_set_format(self.as_ref().to_glib_none().0, format.to_glib());
+            ffi::gst_base_src_set_format(self.as_ref().to_glib_none().0, format.into_glib());
         }
     }
 
     fn set_live(&self, live: bool) {
         unsafe {
-            ffi::gst_base_src_set_live(self.as_ref().to_glib_none().0, live.to_glib());
+            ffi::gst_base_src_set_live(self.as_ref().to_glib_none().0, live.into_glib());
         }
     }
 
