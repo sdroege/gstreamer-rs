@@ -149,7 +149,7 @@ unsafe extern "C" fn device_provider_start<T: DeviceProviderImpl>(
             false
         }
     }
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn device_provider_stop<T: DeviceProviderImpl>(ptr: *mut ffi::GstDeviceProvider) {

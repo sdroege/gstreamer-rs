@@ -33,7 +33,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         unsafe {
             ffi::gst_encoding_profile_set_allow_dynamic_output(
                 self.as_ref().to_glib_none().0,
-                allow_dynamic_output.to_glib(),
+                allow_dynamic_output.into_glib(),
             );
         }
     }
@@ -52,7 +52,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         unsafe {
             ffi::gst_encoding_profile_set_enabled(
                 self.as_ref().to_glib_none().0,
-                enabled.to_glib(),
+                enabled.into_glib(),
             );
         }
     }
@@ -193,7 +193,7 @@ impl EncodingVideoProfile {
         unsafe {
             ffi::gst_encoding_video_profile_set_variableframerate(
                 self.to_glib_none().0,
-                variableframerate.to_glib(),
+                variableframerate.into_glib(),
             );
         }
     }

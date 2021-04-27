@@ -942,7 +942,7 @@ unsafe extern "C" fn client_params_set<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.params_set(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_params_get<T: RTSPClientImpl>(
@@ -954,7 +954,7 @@ unsafe extern "C" fn client_params_get<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.params_get(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_make_path_from_uri<T: RTSPClientImpl>(
@@ -1159,7 +1159,7 @@ unsafe extern "C" fn client_pre_options_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_options_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_describe_request<T: RTSPClientImpl>(
@@ -1171,7 +1171,7 @@ unsafe extern "C" fn client_pre_describe_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_describe_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_setup_request<T: RTSPClientImpl>(
@@ -1183,7 +1183,7 @@ unsafe extern "C" fn client_pre_setup_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_setup_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_play_request<T: RTSPClientImpl>(
@@ -1195,7 +1195,7 @@ unsafe extern "C" fn client_pre_play_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_play_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_pause_request<T: RTSPClientImpl>(
@@ -1207,7 +1207,7 @@ unsafe extern "C" fn client_pre_pause_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_pause_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_teardown_request<T: RTSPClientImpl>(
@@ -1219,7 +1219,7 @@ unsafe extern "C" fn client_pre_teardown_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_teardown_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_set_parameter_request<T: RTSPClientImpl>(
@@ -1231,7 +1231,7 @@ unsafe extern "C" fn client_pre_set_parameter_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_set_parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_get_parameter_request<T: RTSPClientImpl>(
@@ -1243,7 +1243,7 @@ unsafe extern "C" fn client_pre_get_parameter_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_get_parameter_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_announce_request<T: RTSPClientImpl>(
@@ -1255,7 +1255,7 @@ unsafe extern "C" fn client_pre_announce_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_announce_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn client_pre_record_request<T: RTSPClientImpl>(
@@ -1267,5 +1267,5 @@ unsafe extern "C" fn client_pre_record_request<T: RTSPClientImpl>(
     let wrap: Borrowed<RTSPClient> = from_glib_borrow(ptr);
 
     imp.pre_record_request(wrap.unsafe_cast_ref(), &from_glib_borrow(ctx))
-        .to_glib()
+        .into_glib()
 }

@@ -18,14 +18,14 @@ impl GLContext {
         from_glib_full(ffi::gst_gl_context_new_wrapped(
             display.as_ref().to_glib_none().0,
             handle,
-            context_type.to_glib(),
-            available_apis.to_glib(),
+            context_type.into_glib(),
+            available_apis.into_glib(),
         ))
     }
 
     pub fn current_gl_context(context_type: GLPlatform) -> uintptr_t {
         skip_assert_initialized!();
-        unsafe { ffi::gst_gl_context_get_current_gl_context(context_type.to_glib()) as uintptr_t }
+        unsafe { ffi::gst_gl_context_get_current_gl_context(context_type.into_glib()) as uintptr_t }
     }
 
     pub fn proc_address_with_platform(
@@ -36,8 +36,8 @@ impl GLContext {
         skip_assert_initialized!();
         unsafe {
             ffi::gst_gl_context_get_proc_address_with_platform(
-                context_type.to_glib(),
-                gl_api.to_glib(),
+                context_type.into_glib(),
+                gl_api.into_glib(),
                 name.to_glib_none().0,
             ) as uintptr_t
         }

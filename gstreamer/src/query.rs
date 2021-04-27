@@ -218,7 +218,7 @@ declare_concrete_query!(Position, T);
 impl Position<Query> {
     pub fn new(fmt: crate::Format) -> Self {
         assert_initialized_main_thread!();
-        unsafe { Self(from_glib_full(ffi::gst_query_new_position(fmt.to_glib()))) }
+        unsafe { Self(from_glib_full(ffi::gst_query_new_position(fmt.into_glib()))) }
     }
 }
 
@@ -250,7 +250,7 @@ impl<T: AsMutPtr> Position<T> {
         let pos = pos.into();
         assert_eq!(pos.format(), self.format());
         unsafe {
-            ffi::gst_query_set_position(self.0.as_mut_ptr(), pos.format().to_glib(), pos.value());
+            ffi::gst_query_set_position(self.0.as_mut_ptr(), pos.format().into_glib(), pos.value());
         }
     }
 }
@@ -259,7 +259,7 @@ declare_concrete_query!(Duration, T);
 impl Duration<Query> {
     pub fn new(fmt: crate::Format) -> Self {
         assert_initialized_main_thread!();
-        unsafe { Self(from_glib_full(ffi::gst_query_new_duration(fmt.to_glib()))) }
+        unsafe { Self(from_glib_full(ffi::gst_query_new_duration(fmt.into_glib()))) }
     }
 }
 
@@ -291,7 +291,7 @@ impl<T: AsMutPtr> Duration<T> {
         let dur = dur.into();
         assert_eq!(dur.format(), self.format());
         unsafe {
-            ffi::gst_query_set_duration(self.0.as_mut_ptr(), dur.format().to_glib(), dur.value());
+            ffi::gst_query_set_duration(self.0.as_mut_ptr(), dur.format().into_glib(), dur.value());
         }
     }
 }
@@ -338,9 +338,9 @@ impl<T: AsMutPtr> Latency<T> {
         unsafe {
             ffi::gst_query_set_latency(
                 self.0.as_mut_ptr(),
-                live.to_glib(),
-                min.to_glib(),
-                max.to_glib(),
+                live.into_glib(),
+                min.into_glib(),
+                max.into_glib(),
             );
         }
     }
@@ -350,7 +350,7 @@ declare_concrete_query!(Seeking, T);
 impl Seeking<Query> {
     pub fn new(fmt: crate::Format) -> Self {
         assert_initialized_main_thread!();
-        unsafe { Self(from_glib_full(ffi::gst_query_new_seeking(fmt.to_glib()))) }
+        unsafe { Self(from_glib_full(ffi::gst_query_new_seeking(fmt.into_glib()))) }
     }
 }
 
@@ -404,8 +404,8 @@ impl<T: AsMutPtr> Seeking<T> {
         unsafe {
             ffi::gst_query_set_seeking(
                 self.0.as_mut_ptr(),
-                start.format().to_glib(),
-                seekable.to_glib(),
+                start.format().into_glib(),
+                seekable.into_glib(),
                 start.value(),
                 end.value(),
             );
@@ -417,7 +417,7 @@ declare_concrete_query!(Segment, T);
 impl Segment<Query> {
     pub fn new(fmt: crate::Format) -> Self {
         assert_initialized_main_thread!();
-        unsafe { Self(from_glib_full(ffi::gst_query_new_segment(fmt.to_glib()))) }
+        unsafe { Self(from_glib_full(ffi::gst_query_new_segment(fmt.into_glib()))) }
     }
 }
 
@@ -471,7 +471,7 @@ impl<T: AsMutPtr> Segment<T> {
             ffi::gst_query_set_segment(
                 self.0.as_mut_ptr(),
                 rate,
-                start.format().to_glib(),
+                start.format().into_glib(),
                 start.value(),
                 stop.value(),
             );
@@ -486,9 +486,9 @@ impl Convert<Query> {
         let value = value.into();
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_convert(
-                value.format().to_glib(),
+                value.format().into_glib(),
                 value.value(),
-                dest_fmt.to_glib(),
+                dest_fmt.into_glib(),
             )))
         }
     }
@@ -545,9 +545,9 @@ impl<T: AsMutPtr> Convert<T> {
         unsafe {
             ffi::gst_query_set_convert(
                 self.0.as_mut_ptr(),
-                src.format().to_glib(),
+                src.format().into_glib(),
                 src.value(),
-                dest.format().to_glib(),
+                dest.format().into_glib(),
                 dest.value(),
             );
         }
@@ -590,7 +590,7 @@ impl<T: AsPtr> Formats<T> {
 impl<T: AsMutPtr> Formats<T> {
     pub fn set(&mut self, formats: &[crate::Format]) {
         unsafe {
-            let v: Vec<_> = formats.iter().map(|f| f.to_glib()).collect();
+            let v: Vec<_> = formats.iter().map(|f| f.into_glib()).collect();
             ffi::gst_query_set_formatsv(self.0.as_mut_ptr(), v.len() as i32, v.as_ptr() as *mut _);
         }
     }
@@ -600,7 +600,11 @@ declare_concrete_query!(Buffering, T);
 impl Buffering<Query> {
     pub fn new(fmt: crate::Format) -> Self {
         assert_initialized_main_thread!();
-        unsafe { Self(from_glib_full(ffi::gst_query_new_buffering(fmt.to_glib()))) }
+        unsafe {
+            Self(from_glib_full(ffi::gst_query_new_buffering(
+                fmt.into_glib(),
+            )))
+        }
     }
 }
 
@@ -721,7 +725,7 @@ impl<T: AsPtr> Buffering<T> {
 impl<T: AsMutPtr> Buffering<T> {
     pub fn set_percent(&mut self, busy: bool, percent: i32) {
         unsafe {
-            ffi::gst_query_set_buffering_percent(self.0.as_mut_ptr(), busy.to_glib(), percent);
+            ffi::gst_query_set_buffering_percent(self.0.as_mut_ptr(), busy.into_glib(), percent);
         }
     }
 
@@ -740,7 +744,7 @@ impl<T: AsMutPtr> Buffering<T> {
         unsafe {
             ffi::gst_query_set_buffering_range(
                 self.0.as_mut_ptr(),
-                start.format().to_glib(),
+                start.format().into_glib(),
                 start.value(),
                 stop.value(),
                 estimated_total,
@@ -759,7 +763,7 @@ impl<T: AsMutPtr> Buffering<T> {
         unsafe {
             ffi::gst_query_set_buffering_stats(
                 self.0.as_mut_ptr(),
-                mode.to_glib(),
+                mode.into_glib(),
                 avg_in,
                 avg_out,
                 buffering_left,
@@ -849,7 +853,10 @@ impl<T: AsMutPtr> Uri<T> {
         let uri = uri.into();
         unsafe {
             ffi::gst_query_set_uri_redirection(self.0.as_mut_ptr(), uri.to_glib_none().0);
-            ffi::gst_query_set_uri_redirection_permanent(self.0.as_mut_ptr(), permanent.to_glib());
+            ffi::gst_query_set_uri_redirection_permanent(
+                self.0.as_mut_ptr(),
+                permanent.into_glib(),
+            );
         }
     }
 }
@@ -861,7 +868,7 @@ impl Allocation<Query> {
         unsafe {
             Self(from_glib_full(ffi::gst_query_new_allocation(
                 caps.as_mut_ptr(),
-                need_pool.to_glib(),
+                need_pool.into_glib(),
             )))
         }
     }
@@ -946,7 +953,7 @@ impl<T: AsPtr> Allocation<T> {
             let mut idx = mem::MaybeUninit::uninit();
             if ffi::gst_query_find_allocation_meta(
                 self.0.as_ptr(),
-                U::meta_api().to_glib(),
+                U::meta_api().into_glib(),
                 idx.as_mut_ptr(),
             ) != glib::ffi::GFALSE
             {
@@ -1010,7 +1017,7 @@ impl<T: AsMutPtr> Allocation<T> {
         unsafe {
             ffi::gst_query_add_allocation_meta(
                 self.0.as_mut_ptr(),
-                U::meta_api().to_glib(),
+                U::meta_api().into_glib(),
                 if let Some(structure) = structure {
                     structure.as_ptr()
                 } else {
@@ -1046,7 +1053,7 @@ impl<T: AsPtr> Scheduling<T> {
         unsafe {
             from_glib(ffi::gst_query_has_scheduling_mode(
                 self.0.as_ptr(),
-                mode.to_glib(),
+                mode.into_glib(),
             ))
         }
     }
@@ -1060,8 +1067,8 @@ impl<T: AsPtr> Scheduling<T> {
         unsafe {
             from_glib(ffi::gst_query_has_scheduling_mode_with_flags(
                 self.0.as_ptr(),
-                mode.to_glib(),
-                flags.to_glib(),
+                mode.into_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -1110,7 +1117,7 @@ impl<T: AsMutPtr> Scheduling<T> {
     pub fn add_scheduling_modes(&mut self, modes: &[crate::PadMode]) {
         unsafe {
             for mode in modes {
-                ffi::gst_query_add_scheduling_mode(self.0.as_mut_ptr(), mode.to_glib());
+                ffi::gst_query_add_scheduling_mode(self.0.as_mut_ptr(), mode.into_glib());
             }
         }
     }
@@ -1119,7 +1126,7 @@ impl<T: AsMutPtr> Scheduling<T> {
         unsafe {
             ffi::gst_query_set_scheduling(
                 self.0.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
                 minsize,
                 maxsize,
                 align,
@@ -1165,7 +1172,7 @@ impl<T: AsPtr> AcceptCaps<T> {
 impl<T: AsMutPtr> AcceptCaps<T> {
     pub fn set_result(&mut self, accepted: bool) {
         unsafe {
-            ffi::gst_query_set_accept_caps_result(self.0.as_mut_ptr(), accepted.to_glib());
+            ffi::gst_query_set_accept_caps_result(self.0.as_mut_ptr(), accepted.into_glib());
         }
     }
 }

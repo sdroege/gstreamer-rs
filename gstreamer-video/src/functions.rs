@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
 use glib::ToSendValue;
 
 use std::i32;
@@ -18,7 +18,7 @@ pub fn convert_sample(
         let ret = ffi::gst_video_convert_sample(
             sample.to_glib_none().0,
             caps.to_glib_none().0,
-            timeout.to_glib(),
+            timeout.into_glib(),
             &mut error,
         );
 
@@ -93,7 +93,7 @@ unsafe fn convert_sample_async_unsafe<F>(
     ffi::gst_video_convert_sample_async(
         sample.to_glib_none().0,
         caps.to_glib_none().0,
-        timeout.to_glib(),
+        timeout.into_glib(),
         Some(convert_sample_async_trampoline::<F>),
         Box::into_raw(user_data) as glib::ffi::gpointer,
         Some(convert_sample_async_free::<F>),
@@ -172,7 +172,7 @@ pub fn guess_framerate(duration: gst::ClockTime) -> Option<gst::Fraction> {
         let mut dest_n = mem::MaybeUninit::uninit();
         let mut dest_d = mem::MaybeUninit::uninit();
         let res: bool = from_glib(ffi::gst_video_guess_framerate(
-            duration.to_glib(),
+            duration.into_glib(),
             dest_n.as_mut_ptr(),
             dest_d.as_mut_ptr(),
         ));
@@ -290,7 +290,7 @@ mod tests {
                 let formats: Vec<ffi::GstVideoFormat> =
                     [crate::VideoFormat::Nv12, crate::VideoFormat::Nv16]
                         .iter()
-                        .map(|f| f.to_glib())
+                        .map(|f| f.into_glib())
                         .collect();
                 let caps = ffi::gst_video_make_raw_caps(formats.as_ptr(), formats.len() as u32);
                 from_glib_full(caps)

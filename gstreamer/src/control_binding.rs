@@ -26,8 +26,8 @@ impl<O: IsA<ControlBinding>> ControlBindingExtManual for O {
             glib::result_from_gboolean!(
                 ffi::gst_control_binding_get_g_value_array(
                     self.as_ref().to_glib_none().0,
-                    timestamp.to_glib(),
-                    interval.to_glib(),
+                    timestamp.into_glib(),
+                    interval.into_glib(),
                     n_values,
                     values.as_mut_ptr() as *mut glib::gobject_ffi::GValue,
                 ),

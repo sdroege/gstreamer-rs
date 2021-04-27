@@ -180,7 +180,7 @@ unsafe extern "C" fn trampoline_new_preroll(
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
-        return gst::FlowReturn::Error.to_glib();
+        return gst::FlowReturn::Error.into_glib();
     }
 
     let ret = if let Some(ref new_preroll) = callbacks.new_preroll {
@@ -200,7 +200,7 @@ unsafe extern "C" fn trampoline_new_preroll(
         gst::FlowReturn::Error
     };
 
-    ret.to_glib()
+    ret.into_glib()
 }
 
 unsafe extern "C" fn trampoline_new_sample(
@@ -213,7 +213,7 @@ unsafe extern "C" fn trampoline_new_sample(
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
         gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
-        return gst::FlowReturn::Error.to_glib();
+        return gst::FlowReturn::Error.into_glib();
     }
 
     let ret = if let Some(ref new_sample) = callbacks.new_sample {
@@ -233,7 +233,7 @@ unsafe extern "C" fn trampoline_new_sample(
         gst::FlowReturn::Error
     };
 
-    ret.to_glib()
+    ret.into_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
@@ -252,15 +252,18 @@ impl AppSink {
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
             if gst::version() < (1, 16, 3, 0) {
-                if !glib::gobject_ffi::g_object_get_qdata(sink as *mut _, SET_ONCE_QUARK.to_glib())
-                    .is_null()
+                if !glib::gobject_ffi::g_object_get_qdata(
+                    sink as *mut _,
+                    SET_ONCE_QUARK.into_glib(),
+                )
+                .is_null()
                 {
                     panic!("AppSink callbacks can only be set once");
                 }
 
                 glib::gobject_ffi::g_object_set_qdata(
                     sink as *mut _,
-                    SET_ONCE_QUARK.to_glib(),
+                    SET_ONCE_QUARK.into_glib(),
                     1 as *mut _,
                 );
             }
@@ -326,7 +329,7 @@ unsafe extern "C" fn new_sample_trampoline<
 ) -> gst::ffi::GstFlowReturn {
     let f: &F = &*(f as *const F);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
-    ret.to_glib()
+    ret.into_glib()
 }
 
 unsafe extern "C" fn new_preroll_trampoline<
@@ -337,7 +340,7 @@ unsafe extern "C" fn new_preroll_trampoline<
 ) -> gst::ffi::GstFlowReturn {
     let f: &F = &*(f as *const F);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
-    ret.to_glib()
+    ret.into_glib()
 }
 
 #[cfg(any(feature = "v1_10"))]

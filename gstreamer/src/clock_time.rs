@@ -283,10 +283,10 @@ impl fmt::Display for ClockTime {
 }
 
 #[doc(hidden)]
-impl ToGlib for ClockTime {
+impl IntoGlib for ClockTime {
     type GlibType = ffi::GstClockTime;
 
-    fn to_glib(&self) -> ffi::GstClockTime {
+    fn into_glib(self) -> ffi::GstClockTime {
         match self.0 {
             None => ffi::GST_CLOCK_TIME_NONE,
             Some(v) => v,
@@ -325,7 +325,9 @@ unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
 impl glib::value::ToValue for ClockTime {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<ClockTime>();
-        unsafe { glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, self.to_glib()) }
+        unsafe {
+            glib::gobject_ffi::g_value_set_uint64(value.to_glib_none_mut().0, self.into_glib())
+        }
         value
     }
 

@@ -41,8 +41,8 @@ impl GLMemoryRef {
             ffi::gst_gl_memory_copy_into(
                 mut_override(&self.0),
                 tex_id,
-                target.to_glib(),
-                tex_format.to_glib(),
+                target.into_glib(),
+                tex_format.into_glib(),
                 width,
                 height,
             ),
@@ -68,8 +68,8 @@ impl GLMemoryRef {
             ffi::gst_gl_memory_copy_teximage(
                 mut_override(&self.0),
                 tex_id,
-                out_target.to_glib(),
-                out_tex_format.to_glib(),
+                out_target.into_glib(),
+                out_tex_format.into_glib(),
                 out_width,
                 out_height,
             ),

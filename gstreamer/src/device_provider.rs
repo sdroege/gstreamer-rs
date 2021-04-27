@@ -22,8 +22,8 @@ impl DeviceProvider {
                 ffi::gst_device_provider_register(
                     plugin.to_glib_none().0,
                     name.to_glib_none().0,
-                    rank.to_glib() as u32,
-                    type_.to_glib()
+                    rank.into_glib() as u32,
+                    type_.into_glib()
                 ),
                 "Failed to register device provider factory"
             )

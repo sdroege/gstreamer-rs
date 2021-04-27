@@ -5,7 +5,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr, ToGlibPtrMut};
 use glib::StaticType;
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
@@ -28,11 +28,11 @@ impl FromGlib<i32> for AudioEndianness {
     }
 }
 
-impl ToGlib for AudioEndianness {
+impl IntoGlib for AudioEndianness {
     type GlibType = i32;
 
-    fn to_glib(&self) -> i32 {
-        match *self {
+    fn into_glib(self) -> i32 {
+        match self {
             AudioEndianness::LittleEndian => 1234,
             AudioEndianness::BigEndian => 4321,
             _ => 0,
@@ -47,7 +47,7 @@ impl AudioFormatInfo {
         assert_initialized_main_thread!();
 
         unsafe {
-            let info = ffi::gst_audio_format_get_info(format.to_glib());
+            let info = ffi::gst_audio_format_get_info(format.into_glib());
             assert!(!info.is_null());
 
             AudioFormatInfo(&*info)
@@ -116,7 +116,7 @@ impl AudioFormatInfo {
         unsafe {
             (self.0.unpack_func.as_ref().unwrap())(
                 self.0,
-                flags.to_glib(),
+                flags.into_glib(),
                 dest.as_mut_ptr() as *mut _,
                 src.as_ptr() as *const _,
                 nsamples as i32,
@@ -150,7 +150,7 @@ impl AudioFormatInfo {
         unsafe {
             (self.0.pack_func.as_ref().unwrap())(
                 self.0,
-                flags.to_glib(),
+                flags.into_glib(),
                 src.as_ptr() as *const _,
                 dest.as_mut_ptr() as *mut _,
                 nsamples as i32,

@@ -44,7 +44,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             let mut jitter = 0;
             let ret: gst::FlowReturn = from_glib(ffi::gst_base_sink_wait(
                 self.as_ref().to_glib_none().0,
-                time.to_glib(),
+                time.into_glib(),
                 &mut jitter,
             ));
             (ret.into_result(), jitter)
@@ -71,7 +71,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             let mut jitter = 0;
             let ret: gst::ClockReturn = from_glib(ffi::gst_base_sink_wait_clock(
                 self.as_ref().to_glib_none().0,
-                time.to_glib(),
+                time.into_glib(),
                 &mut jitter,
             ));
             (ret.into_result(), jitter)

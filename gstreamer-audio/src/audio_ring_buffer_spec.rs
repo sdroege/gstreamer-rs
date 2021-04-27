@@ -18,7 +18,7 @@ impl AudioRingBufferSpec {
     }
 
     pub fn set_type(&mut self, value: AudioRingBufferFormatType) {
-        self.0.type_ = value.to_glib();
+        self.0.type_ = value.into_glib();
     }
 
     pub fn caps(&self) -> Caps {

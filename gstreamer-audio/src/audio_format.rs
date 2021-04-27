@@ -3,7 +3,7 @@
 use std::ffi::CStr;
 use std::str;
 
-use glib::translate::{from_glib, ToGlib};
+use glib::translate::{from_glib, IntoGlib};
 
 use once_cell::sync::Lazy;
 
@@ -104,8 +104,8 @@ impl crate::AudioFormat {
 
         unsafe {
             from_glib(ffi::gst_audio_format_build_integer(
-                sign.to_glib(),
-                endianness.to_glib(),
+                sign.into_glib(),
+                endianness.into_glib(),
                 width,
                 depth,
             ))
@@ -118,7 +118,7 @@ impl crate::AudioFormat {
         }
         unsafe {
             CStr::from_ptr(
-                ffi::gst_audio_format_to_string(self.to_glib())
+                ffi::gst_audio_format_to_string(self.into_glib())
                     .as_ref()
                     .expect("gst_audio_format_to_string returned NULL"),
             )

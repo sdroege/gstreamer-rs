@@ -3,7 +3,7 @@
 use std::fmt;
 use std::ptr;
 
-use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr};
 use gst::prelude::*;
 
 #[repr(transparent)]
@@ -43,8 +43,8 @@ impl VideoMeta {
         unsafe {
             let meta = ffi::gst_buffer_add_video_meta(
                 buffer.as_mut_ptr(),
-                flags.to_glib(),
-                format.to_glib(),
+                flags.into_glib(),
+                format.into_glib(),
                 width,
                 height,
             );
@@ -93,8 +93,8 @@ impl VideoMeta {
         unsafe {
             let meta = ffi::gst_buffer_add_video_meta_full(
                 buffer.as_mut_ptr(),
-                flags.to_glib(),
-                format.to_glib(),
+                flags.into_glib(),
+                format.into_glib(),
                 width,
                 height,
                 n_planes,
@@ -559,7 +559,7 @@ impl VideoCaptionMeta {
         unsafe {
             let meta = ffi::gst_buffer_add_video_caption_meta(
                 buffer.as_mut_ptr(),
-                caption_type.to_glib(),
+                caption_type.into_glib(),
                 data.as_ptr(),
                 data.len(),
             );
@@ -629,8 +629,8 @@ impl VideoAFDMeta {
             let meta = ffi::gst_buffer_add_video_afd_meta(
                 buffer.as_mut_ptr(),
                 field,
-                spec.to_glib(),
-                afd.to_glib(),
+                spec.into_glib(),
+                afd.into_glib(),
             );
 
             Self::from_mut_ptr(buffer, meta)
@@ -700,7 +700,7 @@ impl VideoBarMeta {
             let meta = ffi::gst_buffer_add_video_bar_meta(
                 buffer.as_mut_ptr(),
                 field,
-                is_letterbox.to_glib(),
+                is_letterbox.into_glib(),
                 bar_data1,
                 bar_data2,
             );

@@ -52,7 +52,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
         unsafe {
             ffi::gst_base_parse_set_duration(
                 self.as_ref().to_glib_none().0,
-                duration.format().to_glib(),
+                duration.format().into_glib(),
                 duration.value(),
                 interval as i32,
             );
@@ -81,9 +81,9 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                U::default_format().to_glib(),
+                U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
@@ -104,9 +104,9 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                dest_format.to_glib(),
+                dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {

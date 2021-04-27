@@ -159,7 +159,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
             from_glib(_gst_audio_decoder_error(
                 self.as_ref().to_glib_none().0,
                 weight,
-                T::domain().to_glib(),
+                T::domain().into_glib(),
                 code.code(),
                 message.to_glib_full(),
                 debug.to_glib_full(),

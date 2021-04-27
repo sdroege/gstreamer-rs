@@ -11,7 +11,7 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -36,10 +36,10 @@ impl Seqnum {
     }
 }
 
-impl ToGlib for Seqnum {
+impl IntoGlib for Seqnum {
     type GlibType = u32;
 
-    fn to_glib(&self) -> u32 {
+    fn into_glib(self) -> u32 {
         self.0.get()
     }
 }
@@ -77,23 +77,23 @@ impl GroupId {
 
 impl EventType {
     pub fn is_upstream(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
+        (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
     }
 
     pub fn is_downstream(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
+        (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
     }
 
     pub fn is_serialized(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
+        (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
     }
 
     pub fn is_sticky(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
+        (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
     }
 
     pub fn is_sticky_multi(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
+        (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
 }
 
@@ -103,8 +103,8 @@ impl PartialOrd for EventType {
             return None;
         }
 
-        let v1 = self.to_glib() as u32;
-        let v2 = other.to_glib() as u32;
+        let v1 = self.into_glib() as u32;
+        let v2 = other.into_glib() as u32;
 
         let stream_start = ffi::GST_EVENT_STREAM_START as u32;
         let segment = ffi::GST_EVENT_SEGMENT as u32;
@@ -1267,7 +1267,7 @@ impl<'a> FlushStopBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_flush_stop(s.reset_time.to_glib()));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_flush_stop(s.reset_time.into_glib()));
 }
 
 pub struct StreamStartBuilder<'a> {
@@ -1320,7 +1320,7 @@ impl<'a> StreamStartBuilder<'a> {
     event_builder_generic_impl!(|s: &Self| {
         let ev = ffi::gst_event_new_stream_start(s.stream_id.to_glib_none().0);
         if let Some(flags) = s.flags {
-            ffi::gst_event_set_stream_flags(ev, flags.to_glib());
+            ffi::gst_event_set_stream_flags(ev, flags.into_glib());
         }
         if let Some(group_id) = s.group_id {
             ffi::gst_event_set_group_id(ev, group_id.0.get());
@@ -1431,10 +1431,10 @@ impl<'a> BufferSizeBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_buffer_size(
-        s.minsize.format().to_glib(),
+        s.minsize.format().into_glib(),
         s.minsize.value(),
         s.maxsize.value(),
-        s.r#async.to_glib(),
+        s.r#async.into_glib(),
     ));
 }
 
@@ -1516,7 +1516,7 @@ impl<'a> TocBuilder<'a> {
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc(
         s.toc.to_glib_none().0,
-        s.updated.to_glib()
+        s.updated.into_glib()
     ));
 }
 
@@ -1567,7 +1567,7 @@ impl<'a> SegmentDoneBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment_done(
-        s.position.format().to_glib(),
+        s.position.format().into_glib(),
         s.position.value()
     ));
 }
@@ -1589,8 +1589,8 @@ impl<'a> GapBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_gap(
-        s.timestamp.to_glib(),
-        s.duration.to_glib()
+        s.timestamp.into_glib(),
+        s.duration.into_glib()
     ));
 }
 
@@ -1615,10 +1615,10 @@ impl<'a> QosBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_qos(
-        s.type_.to_glib(),
+        s.type_.into_glib(),
         s.proportion,
         s.diff,
-        s.timestamp.to_glib(),
+        s.timestamp.into_glib(),
     ));
 }
 
@@ -1661,17 +1661,17 @@ impl<'a> SeekBuilder<'a> {
         {
             let ev = ffi::gst_event_new_seek(
                 s.rate,
-                s.start.format().to_glib(),
-                s.flags.to_glib(),
-                s.start_type.to_glib(),
+                s.start.format().into_glib(),
+                s.flags.into_glib(),
+                s.start_type.into_glib(),
                 s.start.value(),
-                s.stop_type.to_glib(),
+                s.stop_type.into_glib(),
                 s.stop.value(),
             );
 
             #[cfg(any(feature = "v1_16", feature = "dox"))]
             if let Some(trickmode_interval) = s.trickmode_interval {
-                ffi::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.to_glib());
+                ffi::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.into_glib());
             }
 
             ev
@@ -1713,7 +1713,7 @@ impl<'a> LatencyBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_latency(s.latency.to_glib()));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_latency(s.latency.into_glib()));
 }
 
 pub struct StepBuilder<'a> {
@@ -1737,11 +1737,11 @@ impl<'a> StepBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_step(
-        s.amount.format().to_glib(),
+        s.amount.format().into_glib(),
         s.amount.value() as u64,
         s.rate,
-        s.flush.to_glib(),
-        s.intermediate.to_glib(),
+        s.flush.into_glib(),
+        s.intermediate.into_glib(),
     ));
 }
 

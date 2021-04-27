@@ -233,7 +233,7 @@ unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosrc_delay<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) -> u32 {
@@ -262,7 +262,7 @@ unsafe extern "C" fn audiosrc_open<T: AudioSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosrc_prepare<T: AudioSrcImpl>(
@@ -284,7 +284,7 @@ unsafe extern "C" fn audiosrc_prepare<T: AudioSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosrc_unprepare<T: AudioSrcImpl>(
@@ -303,7 +303,7 @@ unsafe extern "C" fn audiosrc_unprepare<T: AudioSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
@@ -321,7 +321,7 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
         let (res, timestamp_res) = imp
             .read(wrap.unsafe_cast_ref(), data_slice)
             .unwrap_or((0, gst::CLOCK_TIME_NONE));
-        *timestamp = timestamp_res.to_glib();
+        *timestamp = timestamp_res.into_glib();
 
         res
     })

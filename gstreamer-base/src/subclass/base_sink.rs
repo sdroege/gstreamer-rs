@@ -432,7 +432,7 @@ unsafe extern "C" fn base_sink_start<T: BaseSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_stop<T: BaseSinkImpl>(
@@ -451,7 +451,7 @@ unsafe extern "C" fn base_sink_stop<T: BaseSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_render<T: BaseSinkImpl>(
@@ -466,7 +466,7 @@ unsafe extern "C" fn base_sink_render<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.render(wrap.unsafe_cast_ref(), &buffer).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_prepare<T: BaseSinkImpl>(
@@ -481,7 +481,7 @@ unsafe extern "C" fn base_sink_prepare<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.prepare(wrap.unsafe_cast_ref(), &buffer).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_render_list<T: BaseSinkImpl>(
@@ -496,7 +496,7 @@ unsafe extern "C" fn base_sink_render_list<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.render_list(wrap.unsafe_cast_ref(), &list).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_prepare_list<T: BaseSinkImpl>(
@@ -511,7 +511,7 @@ unsafe extern "C" fn base_sink_prepare_list<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.prepare_list(wrap.unsafe_cast_ref(), &list).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_query<T: BaseSinkImpl>(
@@ -526,7 +526,7 @@ unsafe extern "C" fn base_sink_query<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         BaseSinkImpl::query(imp, wrap.unsafe_cast_ref(), query)
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_event<T: BaseSinkImpl>(
@@ -540,7 +540,7 @@ unsafe extern "C" fn base_sink_event<T: BaseSinkImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.event(wrap.unsafe_cast_ref(), from_glib_full(event_ptr))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_get_caps<T: BaseSinkImpl>(
@@ -577,7 +577,7 @@ unsafe extern "C" fn base_sink_set_caps<T: BaseSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_fixate<T: BaseSinkImpl>(
@@ -611,7 +611,7 @@ unsafe extern "C" fn base_sink_unlock<T: BaseSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_sink_unlock_stop<T: BaseSinkImpl>(
@@ -630,5 +630,5 @@ unsafe extern "C" fn base_sink_unlock_stop<T: BaseSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }

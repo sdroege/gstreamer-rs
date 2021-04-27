@@ -339,7 +339,7 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
                         element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
                         frame.to_glib_none().0,
                         adapter.to_glib_none().0,
-                        at_eos.to_glib(),
+                        at_eos.into_glib(),
                     ))
                 })
                 .unwrap_or(gst::FlowReturn::Ok)
@@ -577,7 +577,7 @@ unsafe extern "C" fn video_decoder_open<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_close<T: VideoDecoderImpl>(
@@ -596,7 +596,7 @@ unsafe extern "C" fn video_decoder_close<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_start<T: VideoDecoderImpl>(
@@ -615,7 +615,7 @@ unsafe extern "C" fn video_decoder_start<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_stop<T: VideoDecoderImpl>(
@@ -634,7 +634,7 @@ unsafe extern "C" fn video_decoder_stop<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_finish<T: VideoDecoderImpl>(
@@ -647,7 +647,7 @@ unsafe extern "C" fn video_decoder_finish<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.finish(wrap.unsafe_cast_ref()).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_drain<T: VideoDecoderImpl>(
@@ -660,7 +660,7 @@ unsafe extern "C" fn video_decoder_drain<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.drain(wrap.unsafe_cast_ref()).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_set_format<T: VideoDecoderImpl>(
@@ -682,7 +682,7 @@ unsafe extern "C" fn video_decoder_set_format<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_parse<T: VideoDecoderImpl>(
@@ -703,7 +703,7 @@ unsafe extern "C" fn video_decoder_parse<T: VideoDecoderImpl>(
         imp.parse(wrap.unsafe_cast_ref(), &wrap_frame, &wrap_adapter, at_eos)
             .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_handle_frame<T: VideoDecoderImpl>(
@@ -718,7 +718,7 @@ unsafe extern "C" fn video_decoder_handle_frame<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(wrap.unsafe_cast_ref(), wrap_frame).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_flush<T: VideoDecoderImpl>(
@@ -731,7 +731,7 @@ unsafe extern "C" fn video_decoder_flush<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         VideoDecoderImpl::flush(imp, wrap.unsafe_cast_ref())
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_negotiate<T: VideoDecoderImpl>(
@@ -750,7 +750,7 @@ unsafe extern "C" fn video_decoder_negotiate<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_getcaps<T: VideoDecoderImpl>(
@@ -784,7 +784,7 @@ unsafe extern "C" fn video_decoder_sink_event<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_sink_query<T: VideoDecoderImpl>(
@@ -798,7 +798,7 @@ unsafe extern "C" fn video_decoder_sink_query<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_src_event<T: VideoDecoderImpl>(
@@ -812,7 +812,7 @@ unsafe extern "C" fn video_decoder_src_event<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_src_query<T: VideoDecoderImpl>(
@@ -826,7 +826,7 @@ unsafe extern "C" fn video_decoder_src_query<T: VideoDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_propose_allocation<T: VideoDecoderImpl>(
@@ -847,7 +847,7 @@ unsafe extern "C" fn video_decoder_propose_allocation<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_decoder_decide_allocation<T: VideoDecoderImpl>(
@@ -868,5 +868,5 @@ unsafe extern "C" fn video_decoder_decide_allocation<T: VideoDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }

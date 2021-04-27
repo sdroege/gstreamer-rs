@@ -129,7 +129,7 @@ unsafe extern "C" fn bin_add_element<T: BinImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn bin_remove_element<T: BinImpl>(
@@ -158,7 +158,7 @@ unsafe extern "C" fn bin_remove_element<T: BinImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn bin_handle_message<T: BinImpl>(

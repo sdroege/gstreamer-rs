@@ -42,7 +42,7 @@ impl TypeFind {
             let res = ffi::gst_type_find_register(
                 plugin.to_glib_none().0,
                 name.to_glib_none().0,
-                rank.to_glib() as u32,
+                rank.into_glib() as u32,
                 Some(type_find_trampoline::<F>),
                 extensions.to_glib_none().0,
                 possible_caps.to_glib_none().0,
@@ -69,7 +69,7 @@ impl TypeFind {
         unsafe {
             ffi::gst_type_find_suggest(
                 &mut self.0,
-                probability.to_glib() as u32,
+                probability.into_glib() as u32,
                 caps.to_glib_none().0,
             );
         }

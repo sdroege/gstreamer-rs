@@ -180,7 +180,7 @@ unsafe extern "C" fn trampoline_seek_data(
     if callbacks.panicked.load(Ordering::Relaxed) {
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
         gst::element_error!(&element, gst::LibraryError::Failed, ["Panicked"]);
-        return false.to_glib();
+        return false.into_glib();
     }
 
     let ret = if let Some(ref seek_data) = callbacks.seek_data {
@@ -199,7 +199,7 @@ unsafe extern "C" fn trampoline_seek_data(
         false
     };
 
-    ret.to_glib()
+    ret.into_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
@@ -258,7 +258,7 @@ impl AppSrc {
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
             if gst::version() < (1, 16, 3, 0) {
-                if !glib::gobject_ffi::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.to_glib())
+                if !glib::gobject_ffi::g_object_get_qdata(src as *mut _, SET_ONCE_QUARK.into_glib())
                     .is_null()
                 {
                     panic!("AppSrc callbacks can only be set once");
@@ -266,7 +266,7 @@ impl AppSrc {
 
                 glib::gobject_ffi::g_object_set_qdata(
                     src as *mut _,
-                    SET_ONCE_QUARK.to_glib(),
+                    SET_ONCE_QUARK.into_glib(),
                     1 as *mut _,
                 );
             }
@@ -282,7 +282,7 @@ impl AppSrc {
 
     pub fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
         unsafe {
-            ffi::gst_app_src_set_latency(self.to_glib_none().0, min.to_glib(), max.to_glib());
+            ffi::gst_app_src_set_latency(self.to_glib_none().0, min.into_glib(), max.into_glib());
         }
     }
 

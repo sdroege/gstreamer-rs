@@ -18,7 +18,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags |= flags.to_glib();
+            (*ptr).flags |= flags.into_glib();
         }
     }
 
@@ -26,7 +26,7 @@ impl<O: IsA<crate::Pipeline>> GstPipelineExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags &= !flags.to_glib();
+            (*ptr).flags &= !flags.into_glib();
         }
     }
 

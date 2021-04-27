@@ -17,7 +17,7 @@ use crate::ClockTime;
 use crate::Memory;
 use crate::MemoryRef;
 
-use glib::translate::{from_glib, from_glib_full, FromGlib, FromGlibPtrFull, ToGlib};
+use glib::translate::{from_glib, from_glib_full, FromGlib, FromGlibPtrFull, IntoGlib};
 
 pub enum Readable {}
 pub enum Writable {}
@@ -218,7 +218,7 @@ impl BufferRef {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_buffer_copy_region(
                 self.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
                 offset,
                 size_real,
             ))
@@ -239,7 +239,7 @@ impl BufferRef {
                 ffi::gst_buffer_copy_into(
                     dest.as_mut_ptr(),
                     self.as_mut_ptr(),
-                    flags.to_glib(),
+                    flags.into_glib(),
                     offset,
                     size_real,
                 ),
@@ -344,7 +344,7 @@ impl BufferRef {
     }
 
     pub fn set_pts(&mut self, pts: ClockTime) {
-        self.0.pts = pts.to_glib();
+        self.0.pts = pts.into_glib();
     }
 
     pub fn dts(&self) -> ClockTime {
@@ -352,7 +352,7 @@ impl BufferRef {
     }
 
     pub fn set_dts(&mut self, dts: ClockTime) {
-        self.0.dts = dts.to_glib();
+        self.0.dts = dts.into_glib();
     }
 
     pub fn dts_or_pts(&self) -> ClockTime {
@@ -369,7 +369,7 @@ impl BufferRef {
     }
 
     pub fn set_duration(&mut self, duration: ClockTime) {
-        self.0.duration = duration.to_glib();
+        self.0.duration = duration.into_glib();
     }
 
     pub fn flags(&self) -> BufferFlags {
@@ -386,7 +386,7 @@ impl BufferRef {
 
     pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
         unsafe {
-            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().to_glib());
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
             if meta.is_null() {
                 None
             } else {
@@ -397,7 +397,7 @@ impl BufferRef {
 
     pub fn meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
         unsafe {
-            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().to_glib());
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
             if meta.is_null() {
                 None
             } else {
@@ -423,7 +423,7 @@ impl BufferRef {
             let func = user_data as *const _ as usize as *mut F;
             let res = (*func)(Meta::from_ptr(BufferRef::from_ptr(buffer), *meta));
 
-            res.to_glib()
+            res.into_glib()
         }
 
         unsafe {
@@ -456,9 +456,9 @@ impl BufferRef {
             match res {
                 Ok(false) | Err(false) => {
                     *meta = ptr::null_mut();
-                    res.is_ok().to_glib()
+                    res.is_ok().into_glib()
                 }
-                Ok(true) | Err(true) => res.is_ok().to_glib(),
+                Ok(true) | Err(true) => res.is_ok().into_glib(),
             }
         }
 

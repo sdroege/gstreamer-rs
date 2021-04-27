@@ -184,9 +184,9 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
                 let res = from_glib(f(
                     element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
-                    src_val.format().to_glib(),
+                    src_val.format().into_glib(),
                     src_val.to_raw_value(),
-                    dest_format.to_glib(),
+                    dest_format.into_glib(),
                     dest_val.as_mut_ptr(),
                 ));
                 (res, dest_val)
@@ -235,7 +235,7 @@ unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
@@ -254,7 +254,7 @@ unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
@@ -275,7 +275,7 @@ unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
@@ -299,7 +299,7 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
         }
         Err(flow) => gst::FlowReturn::from_error(flow),
     }
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
@@ -325,5 +325,5 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
         }
         _ => false,
     }
-    .to_glib()
+    .into_glib()
 }

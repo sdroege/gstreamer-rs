@@ -41,7 +41,7 @@ impl GstParamSpecExt for glib::ParamSpec {
                 nick.to_glib_none().0,
                 blurb.to_glib_none().0,
                 element_spec.to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -67,7 +67,7 @@ impl GstParamSpecExt for glib::ParamSpec {
                 *max.denom(),
                 *default.numer(),
                 *default.denom(),
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }

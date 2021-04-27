@@ -17,7 +17,7 @@ impl<O: IsA<TagSetter>> TagSetterExtManual for O {
 
             ffi::gst_tag_setter_add_tag_value(
                 self.as_ref().to_glib_none().0,
-                mode.to_glib(),
+                mode.into_glib(),
                 T::tag_name().to_glib_none().0,
                 v.to_glib_none().0,
             );

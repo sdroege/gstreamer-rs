@@ -30,10 +30,10 @@ impl Default for DeviceMonitor {
 #[derive(Debug, PartialEq, Eq)]
 pub struct DeviceMonitorFilterId(NonZeroU32);
 
-impl ToGlib for DeviceMonitorFilterId {
+impl IntoGlib for DeviceMonitorFilterId {
     type GlibType = libc::c_uint;
 
-    fn to_glib(&self) -> libc::c_uint {
+    fn into_glib(self) -> libc::c_uint {
         self.0.get()
     }
 }
@@ -86,7 +86,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
             glib::result_from_gboolean!(
                 ffi::gst_device_monitor_remove_filter(
                     self.as_ref().to_glib_none().0,
-                    filter_id.to_glib()
+                    filter_id.into_glib()
                 ),
                 "Failed to remove the filter"
             )

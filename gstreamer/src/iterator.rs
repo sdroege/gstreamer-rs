@@ -174,7 +174,7 @@ where
         unsafe {
             let it = ffi::gst_iterator_new(
                 mem::size_of::<RsIterator<T, I>>() as u32,
-                T::static_type().to_glib(),
+                T::static_type().into_glib(),
                 ptr::null_mut(),
                 &DUMMY_COOKIE as *const _ as *mut _,
                 Some(rs_iterator_copy::<T, I>),
@@ -572,7 +572,7 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*const ffi::GstIterator> fo
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstIterator) -> Self {
         assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );
         from_glib_full(ffi::gst_iterator_copy(ptr))
@@ -584,7 +584,7 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut ffi::GstIterator> for 
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstIterator) -> Self {
         assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );
         from_glib_full(ffi::gst_iterator_copy(ptr))
@@ -597,7 +597,7 @@ impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> fo
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstIterator) -> Borrowed<Self> {
         assert!(!ptr.is_null());
         assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );
         Borrowed::new(Self {
@@ -613,7 +613,7 @@ impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut ffi::GstIterator> for 
     unsafe fn from_glib_full(ptr: *mut ffi::GstIterator) -> Self {
         assert!(!ptr.is_null());
         assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
             glib::ffi::GFALSE
         );
         Self {

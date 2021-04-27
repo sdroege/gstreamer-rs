@@ -4,7 +4,7 @@ use once_cell::sync::Lazy;
 use std::ffi::CStr;
 use std::str;
 
-use glib::translate::{from_glib, FromGlib, ToGlib};
+use glib::translate::{from_glib, FromGlib, IntoGlib};
 
 #[cfg(feature = "v1_18")]
 pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| unsafe {
@@ -269,11 +269,11 @@ impl FromGlib<i32> for VideoEndianness {
     }
 }
 
-impl ToGlib for VideoEndianness {
+impl IntoGlib for VideoEndianness {
     type GlibType = i32;
 
-    fn to_glib(&self) -> i32 {
-        match *self {
+    fn into_glib(self) -> i32 {
+        match self {
             VideoEndianness::LittleEndian => 1234,
             VideoEndianness::BigEndian => 4321,
             _ => 0,
@@ -297,7 +297,7 @@ impl crate::VideoFormat {
             from_glib(ffi::gst_video_format_from_masks(
                 depth as i32,
                 bpp as i32,
-                endianness.to_glib(),
+                endianness.into_glib(),
                 red_mask,
                 blue_mask,
                 green_mask,
@@ -312,7 +312,7 @@ impl crate::VideoFormat {
         }
         unsafe {
             CStr::from_ptr(
-                ffi::gst_video_format_to_string(self.to_glib())
+                ffi::gst_video_format_to_string(self.into_glib())
                     .as_ref()
                     .expect("gst_video_format_to_string returned NULL"),
             )

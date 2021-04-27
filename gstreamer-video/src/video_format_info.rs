@@ -5,7 +5,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-use glib::translate::{from_glib, ToGlib};
+use glib::translate::{from_glib, IntoGlib};
 
 pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
@@ -14,7 +14,7 @@ impl VideoFormatInfo {
         assert_initialized_main_thread!();
 
         unsafe {
-            let info = ffi::gst_video_format_get_info(format.to_glib());
+            let info = ffi::gst_video_format_get_info(format.into_glib());
             assert!(!info.is_null());
 
             VideoFormatInfo(&*info)
@@ -201,7 +201,7 @@ impl VideoFormatInfo {
 
             (self.0.unpack_func.as_ref().unwrap())(
                 self.0,
-                flags.to_glib(),
+                flags.into_glib(),
                 dest.as_mut_ptr() as *mut _,
                 src_ptr.as_ptr() as *const _,
                 stride.as_ptr() as *const i32,
@@ -277,12 +277,12 @@ impl VideoFormatInfo {
 
             (self.0.pack_func.as_ref().unwrap())(
                 self.0,
-                flags.to_glib(),
+                flags.into_glib(),
                 src.as_ptr() as *mut _,
                 src_stride,
                 dest_ptr.as_mut_ptr() as *mut _,
                 dest_stride.as_ptr() as *const i32,
-                chroma_site.to_glib(),
+                chroma_site.into_glib(),
                 y,
                 width,
             );

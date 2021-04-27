@@ -21,7 +21,7 @@ impl NtpClock {
                     name.0,
                     remote_address.to_glib_none().0,
                     remote_port,
-                    base_time.to_glib(),
+                    base_time.into_glib(),
                 ))
                 .unsafe_cast()
             }
@@ -32,7 +32,7 @@ impl NtpClock {
                     name.0,
                     remote_address.to_glib_none().0,
                     remote_port,
-                    base_time.to_glib(),
+                    base_time.into_glib(),
                 ))
                 .unsafe_cast()
             }

@@ -33,7 +33,7 @@ impl<T: URIHandlerImpl> URIHandlerImplExt for T {
             let func = (*parent_iface)
                 .get_protocols
                 .expect("no parent \"protocols\" implementation");
-            let ret = func(Self::ParentType::static_type().to_glib());
+            let ret = func(Self::ParentType::static_type().into_glib());
             FromGlibPtrContainer::from_glib_none(ret)
         }
     }
@@ -109,7 +109,7 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
 unsafe extern "C" fn uri_handler_get_type<T: URIHandlerImpl>(
     _type_: glib::ffi::GType,
 ) -> ffi::GstURIType {
-    <T as URIHandlerImpl>::URI_TYPE.to_glib()
+    <T as URIHandlerImpl>::URI_TYPE.into_glib()
 }
 
 unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
@@ -144,10 +144,10 @@ unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
         &from_glib_borrow::<_, URIHandler>(uri_handler).unsafe_cast_ref(),
         glib::GString::from_glib_borrow(uri).as_str(),
     ) {
-        Ok(()) => true.to_glib(),
+        Ok(()) => true.into_glib(),
         Err(error) => {
             *err = error.into_raw();
-            false.to_glib()
+            false.into_glib()
         }
     }
 }

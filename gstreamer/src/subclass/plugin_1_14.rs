@@ -20,7 +20,7 @@ macro_rules! plugin_define(
      $version:expr, $license:expr, $source:expr,
      $package:expr, $origin:expr, $release_datetime:expr) => {
         pub mod plugin_desc {
-            use $crate::glib::translate::{from_glib_borrow, ToGlib, from_glib};
+            use $crate::glib::translate::{from_glib_borrow, IntoGlib, from_glib};
 
             #[repr(transparent)]
             pub struct GstPluginDesc($crate::ffi::GstPluginDesc);

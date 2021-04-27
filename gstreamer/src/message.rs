@@ -17,7 +17,9 @@ use std::ops::Deref;
 use std::ptr;
 
 use glib::prelude::*;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlib, ToGlibPtr};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, mut_override, IntoGlib, ToGlibPtr,
+};
 
 mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
     ffi::gst_message_get_type()
@@ -1929,7 +1931,7 @@ impl<'a> BufferingBuilder<'a> {
         if let Some((mode, avg_in, avg_out, buffering_left)) = s.stats {
             ffi::gst_message_set_buffering_stats(
                 msg,
-                mode.to_glib(),
+                mode.into_glib(),
                 avg_in,
                 avg_out,
                 buffering_left,
@@ -1960,9 +1962,9 @@ impl<'a> StateChangedBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_state_changed(
         src,
-        s.old.to_glib(),
-        s.new.to_glib(),
-        s.pending.to_glib(),
+        s.old.into_glib(),
+        s.new.into_glib(),
+        s.pending.into_glib(),
     ));
 }
 
@@ -2015,13 +2017,13 @@ impl<'a> StepDoneBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_done(
         src,
-        s.amount.format().to_glib(),
+        s.amount.format().into_glib(),
         s.amount.value() as u64,
         s.rate,
-        s.flush.to_glib(),
-        s.intermediate.to_glib(),
+        s.flush.into_glib(),
+        s.intermediate.into_glib(),
         s.duration.value() as u64,
-        s.eos.to_glib(),
+        s.eos.into_glib(),
     ));
 }
 
@@ -2044,7 +2046,7 @@ impl<'a> ClockProvideBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_clock_provide(
         src,
         s.clock.to_glib_none().0,
-        s.ready.to_glib()
+        s.ready.into_glib()
     ));
 }
 
@@ -2108,9 +2110,9 @@ impl<'a> StructureChangeBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_structure_change(
         src,
-        s.type_.to_glib(),
+        s.type_.into_glib(),
         s.owner.to_glib_none().0,
-        s.busy.to_glib(),
+        s.busy.into_glib(),
     ));
 }
 
@@ -2141,7 +2143,7 @@ impl<'a> StreamStatusBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg =
-            ffi::gst_message_new_stream_status(src, s.type_.to_glib(), s.owner.to_glib_none().0);
+            ffi::gst_message_new_stream_status(src, s.type_.into_glib(), s.owner.to_glib_none().0);
         if let Some(status_object) = s.status_object {
             ffi::gst_message_set_stream_status_object(
                 msg,
@@ -2208,7 +2210,7 @@ impl<'a> SegmentStartBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_start(
         src,
-        s.position.format().to_glib(),
+        s.position.format().into_glib(),
         s.position.value(),
     ));
 }
@@ -2229,7 +2231,7 @@ impl<'a> SegmentDoneBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_done(
         src,
-        s.position.format().to_glib(),
+        s.position.format().into_glib(),
         s.position.value(),
     ));
 }
@@ -2295,7 +2297,7 @@ impl<'a> AsyncDoneBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_async_done(
         src,
-        s.running_time.to_glib()
+        s.running_time.into_glib()
     ));
 }
 
@@ -2315,7 +2317,7 @@ impl<'a> RequestStateBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_request_state(
         src,
-        s.state.to_glib()
+        s.state.into_glib()
     ));
 }
 
@@ -2349,12 +2351,12 @@ impl<'a> StepStartBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_start(
         src,
-        s.active.to_glib(),
-        s.amount.format().to_glib(),
+        s.active.into_glib(),
+        s.amount.format().into_glib(),
         s.amount.value() as u64,
         s.rate,
-        s.flush.to_glib(),
-        s.intermediate.to_glib(),
+        s.flush.into_glib(),
+        s.intermediate.into_glib(),
     ));
 }
 
@@ -2410,11 +2412,11 @@ impl<'a> QosBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_qos(
             src,
-            s.live.to_glib(),
-            s.running_time.to_glib(),
-            s.stream_time.to_glib(),
-            s.timestamp.to_glib(),
-            s.duration.to_glib(),
+            s.live.into_glib(),
+            s.running_time.into_glib(),
+            s.stream_time.into_glib(),
+            s.timestamp.into_glib(),
+            s.duration.into_glib(),
         );
         if let Some((jitter, proportion, quality)) = s.values {
             ffi::gst_message_set_qos_values(msg, jitter, proportion, quality);
@@ -2422,7 +2424,7 @@ impl<'a> QosBuilder<'a> {
         if let Some((processed, dropped)) = s.stats {
             ffi::gst_message_set_qos_stats(
                 msg,
-                processed.format().to_glib(),
+                processed.format().into_glib(),
                 processed.value() as u64,
                 dropped.value() as u64,
             );
@@ -2451,7 +2453,7 @@ impl<'a> ProgressBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_progress(
         src,
-        s.type_.to_glib(),
+        s.type_.into_glib(),
         s.code.to_glib_none().0,
         s.text.to_glib_none().0,
     ));
@@ -2476,7 +2478,7 @@ impl<'a> TocBuilder<'a> {
     message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_toc(
         src,
         s.toc.to_glib_none().0,
-        s.updated.to_glib()
+        s.updated.into_glib()
     ));
 }
 
@@ -2496,7 +2498,7 @@ impl<'a> ResetTimeBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_reset_time(
         src,
-        s.running_time.to_glib()
+        s.running_time.into_glib()
     ));
 }
 

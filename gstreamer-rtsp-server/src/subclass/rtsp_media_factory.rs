@@ -301,7 +301,7 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     // FIXME We somehow need to ensure the pipeline actually stays alive...
     glib::gobject_ffi::g_object_set_qdata_full(
         media as *mut _,
-        PIPELINE_QUARK.to_glib(),
+        PIPELINE_QUARK.into_glib(),
         pipeline as *mut _,
         Some(transmute::<_, unsafe extern "C" fn(glib::ffi::gpointer)>(
             glib::gobject_ffi::g_object_unref as *const (),

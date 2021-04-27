@@ -2,7 +2,7 @@
 
 use std::convert::{TryFrom, TryInto};
 
-use glib::translate::{FromGlib, ToGlib};
+use glib::translate::{FromGlib, IntoGlib};
 use glib::value::{ToValue, ToValueOptional};
 use glib::StaticType;
 
@@ -60,7 +60,7 @@ impl<'a> Serialize for Date {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         DateTimeVariants::YMD(
             self.0.year() as i32,
-            self.0.month().to_glib() as i32,
+            self.0.month().into_glib() as i32,
             self.0.day() as i32,
         )
         .serialize(serializer)

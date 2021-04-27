@@ -509,7 +509,7 @@ unsafe extern "C" fn video_encoder_open<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_close<T: VideoEncoderImpl>(
@@ -528,7 +528,7 @@ unsafe extern "C" fn video_encoder_close<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_start<T: VideoEncoderImpl>(
@@ -547,7 +547,7 @@ unsafe extern "C" fn video_encoder_start<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_stop<T: VideoEncoderImpl>(
@@ -566,7 +566,7 @@ unsafe extern "C" fn video_encoder_stop<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_finish<T: VideoEncoderImpl>(
@@ -579,7 +579,7 @@ unsafe extern "C" fn video_encoder_finish<T: VideoEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.finish(wrap.unsafe_cast_ref()).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_set_format<T: VideoEncoderImpl>(
@@ -601,7 +601,7 @@ unsafe extern "C" fn video_encoder_set_format<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_handle_frame<T: VideoEncoderImpl>(
@@ -616,7 +616,7 @@ unsafe extern "C" fn video_encoder_handle_frame<T: VideoEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.handle_frame(wrap.unsafe_cast_ref(), wrap_frame).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_flush<T: VideoEncoderImpl>(
@@ -629,7 +629,7 @@ unsafe extern "C" fn video_encoder_flush<T: VideoEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         VideoEncoderImpl::flush(imp, wrap.unsafe_cast_ref())
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_negotiate<T: VideoEncoderImpl>(
@@ -648,7 +648,7 @@ unsafe extern "C" fn video_encoder_negotiate<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_getcaps<T: VideoEncoderImpl>(
@@ -682,7 +682,7 @@ unsafe extern "C" fn video_encoder_sink_event<T: VideoEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_sink_query<T: VideoEncoderImpl>(
@@ -696,7 +696,7 @@ unsafe extern "C" fn video_encoder_sink_query<T: VideoEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_src_event<T: VideoEncoderImpl>(
@@ -710,7 +710,7 @@ unsafe extern "C" fn video_encoder_src_event<T: VideoEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_src_query<T: VideoEncoderImpl>(
@@ -724,7 +724,7 @@ unsafe extern "C" fn video_encoder_src_query<T: VideoEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_propose_allocation<T: VideoEncoderImpl>(
@@ -745,7 +745,7 @@ unsafe extern "C" fn video_encoder_propose_allocation<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn video_encoder_decide_allocation<T: VideoEncoderImpl>(
@@ -766,5 +766,5 @@ unsafe extern "C" fn video_encoder_decide_allocation<T: VideoEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }

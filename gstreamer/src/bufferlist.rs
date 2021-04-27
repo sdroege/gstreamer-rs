@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib};
 use std::fmt;
 use std::ptr;
 
@@ -105,7 +105,7 @@ impl BufferListRef {
             let func = user_data as *const _ as usize as *mut F;
             let res = (*func)(BufferRef::from_ptr(*buffer), idx);
 
-            res.to_glib()
+            res.into_glib()
         }
 
         unsafe {
@@ -136,7 +136,7 @@ impl BufferListRef {
             match res {
                 Ok(None) | Err(None) => {
                     *buffer = ptr::null_mut();
-                    res.is_ok().to_glib()
+                    res.is_ok().into_glib()
                 }
                 Ok(Some(b)) => {
                     *buffer = b.into_ptr();

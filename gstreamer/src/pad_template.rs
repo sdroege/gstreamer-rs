@@ -20,7 +20,7 @@ impl PadTemplate {
             Option::<_>::from_glib_none(
                 ffi::gst_pad_template_new_from_static_pad_template_with_gtype(
                     mut_override(pad_template.to_glib_none().0),
-                    pad_type.to_glib(),
+                    pad_type.into_glib(),
                 ),
             )
             .ok_or_else(|| glib::bool_error!("Failed to create PadTemplate"))

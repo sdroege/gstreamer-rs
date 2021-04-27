@@ -4,11 +4,11 @@ use crate::AudioChannelPosition;
 
 use std::mem;
 
-use glib::translate::{from_glib, ToGlib};
+use glib::translate::{from_glib, IntoGlib};
 
 impl AudioChannelPosition {
     pub fn to_mask(self) -> u64 {
-        let pos = self.to_glib();
+        let pos = self.into_glib();
         if pos < 0 {
             return 0;
         }
@@ -31,7 +31,7 @@ impl AudioChannelPosition {
             if i >= len as usize {
                 ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
             } else {
-                positions[i].to_glib()
+                positions[i].into_glib()
             }
         });
 
@@ -40,7 +40,7 @@ impl AudioChannelPosition {
             let valid: bool = from_glib(ffi::gst_audio_channel_positions_to_mask(
                 positions_raw.as_ptr() as *mut _,
                 len as i32,
-                force_order.to_glib(),
+                force_order.into_glib(),
                 mask.as_mut_ptr(),
             ));
             if valid {
@@ -100,7 +100,7 @@ impl AudioChannelPosition {
             if i >= len as usize {
                 ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
             } else {
-                positions[i].to_glib()
+                positions[i].into_glib()
             }
         });
 
@@ -144,7 +144,7 @@ impl AudioChannelPosition {
             if i >= len as usize {
                 ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
             } else {
-                positions[i].to_glib()
+                positions[i].into_glib()
             }
         });
 
@@ -152,7 +152,7 @@ impl AudioChannelPosition {
             from_glib(ffi::gst_audio_check_valid_channel_positions(
                 positions_raw.as_ptr() as *mut _,
                 len as i32,
-                force_order.to_glib(),
+                force_order.into_glib(),
             ))
         }
     }
@@ -178,7 +178,7 @@ pub fn buffer_reorder_channels(
         if i >= from_len as usize {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
-            from[i].to_glib()
+            from[i].into_glib()
         }
     });
 
@@ -186,14 +186,14 @@ pub fn buffer_reorder_channels(
         if i >= to_len as usize {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
-            to[i].to_glib()
+            to[i].into_glib()
         }
     });
 
     let valid: bool = unsafe {
         from_glib(ffi::gst_audio_buffer_reorder_channels(
             buffer.as_mut_ptr(),
-            format.to_glib(),
+            format.into_glib(),
             channels as i32,
             from_raw.as_ptr() as *mut _,
             to_raw.as_ptr() as *mut _,
@@ -227,7 +227,7 @@ pub fn reorder_channels(
         if i >= from_len as usize {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
-            from[i].to_glib()
+            from[i].into_glib()
         }
     });
 
@@ -235,7 +235,7 @@ pub fn reorder_channels(
         if i >= to_len as usize {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
-            to[i].to_glib()
+            to[i].into_glib()
         }
     });
 
@@ -243,7 +243,7 @@ pub fn reorder_channels(
         from_glib(ffi::gst_audio_reorder_channels(
             data.as_mut_ptr() as *mut _,
             data.len(),
-            format.to_glib(),
+            format.into_glib(),
             channels as i32,
             from_raw.as_ptr() as *mut _,
             to_raw.as_ptr() as *mut _,
@@ -275,7 +275,7 @@ pub fn channel_reorder_map(
         if i >= from_len as usize {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
-            from[i].to_glib()
+            from[i].into_glib()
         }
     });
 
@@ -283,7 +283,7 @@ pub fn channel_reorder_map(
         if i >= to_len as usize {
             ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
-            to[i].to_glib()
+            to[i].into_glib()
         }
     });
 

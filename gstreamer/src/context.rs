@@ -3,7 +3,7 @@
 use std::ffi::CStr;
 use std::fmt;
 
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
 
 use crate::StructureRef;
 
@@ -17,7 +17,7 @@ impl Context {
         unsafe {
             from_glib_full(ffi::gst_context_new(
                 context_type.to_glib_none().0,
-                persistent.to_glib(),
+                persistent.into_glib(),
             ))
         }
     }

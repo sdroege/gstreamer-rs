@@ -2,7 +2,7 @@
 
 use std::mem;
 
-use glib::translate::ToGlib;
+use glib::translate::IntoGlib;
 
 impl crate::VideoColorMatrix {
     pub fn kr_kb(&self) -> Result<(f64, f64), glib::BoolError> {
@@ -12,7 +12,7 @@ impl crate::VideoColorMatrix {
             let mut kb = mem::MaybeUninit::uninit();
             glib::result_from_gboolean!(
                 ffi::gst_video_color_matrix_get_Kr_Kb(
-                    self.to_glib(),
+                    self.into_glib(),
                     kr.as_mut_ptr(),
                     kb.as_mut_ptr(),
                 ),

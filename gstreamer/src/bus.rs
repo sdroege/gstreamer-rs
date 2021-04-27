@@ -24,7 +24,7 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'st
     func: gpointer,
 ) -> gboolean {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
+    (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
@@ -47,7 +47,7 @@ unsafe extern "C" fn trampoline_sync<
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
     let f: &F = &*(func as *const F);
-    let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib();
+    let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib();
 
     if res == ffi::GST_BUS_DROP {
         ffi::gst_mini_object_unref(msg as *mut _);
@@ -74,7 +74,7 @@ fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
 impl Bus {
     pub fn add_signal_watch_full(&self, priority: Priority) {
         unsafe {
-            ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.to_glib());
+            ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.into_glib());
         }
     }
 
@@ -94,7 +94,7 @@ impl Bus {
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );
-            glib::ffi::g_source_set_priority(source, priority.to_glib());
+            glib::ffi::g_source_set_priority(source, priority.into_glib());
 
             if let Some(name) = name {
                 glib::ffi::g_source_set_name(source, name.to_glib_none().0);
@@ -162,7 +162,7 @@ impl Bus {
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
             if crate::version() < (1, 16, 3, 0) {
-                if !glib::gobject_ffi::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.to_glib())
+                if !glib::gobject_ffi::g_object_get_qdata(bus as *mut _, SET_ONCE_QUARK.into_glib())
                     .is_null()
                 {
                     panic!("Bus sync handler can only be set once");
@@ -170,7 +170,7 @@ impl Bus {
 
                 glib::gobject_ffi::g_object_set_qdata(
                     bus as *mut _,
-                    SET_ONCE_QUARK.to_glib(),
+                    SET_ONCE_QUARK.into_glib(),
                     1 as *mut _,
                 );
             }

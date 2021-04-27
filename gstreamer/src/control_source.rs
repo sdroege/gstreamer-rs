@@ -26,8 +26,8 @@ impl<O: IsA<ControlSource>> ControlSourceExtManual for O {
             glib::result_from_gboolean!(
                 ffi::gst_control_source_get_value_array(
                     self.as_ref().to_glib_none().0,
-                    timestamp.to_glib(),
-                    interval.to_glib(),
+                    timestamp.into_glib(),
+                    interval.into_glib(),
                     n_values,
                     values.to_glib_none().0,
                 ),

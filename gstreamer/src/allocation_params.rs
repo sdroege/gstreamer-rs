@@ -33,7 +33,7 @@ impl AllocationParams {
         assert_initialized_main_thread!();
         let allocationparams = unsafe {
             ffi::GstAllocationParams {
-                flags: flags.to_glib(),
+                flags: flags.into_glib(),
                 align,
                 prefix,
                 padding,

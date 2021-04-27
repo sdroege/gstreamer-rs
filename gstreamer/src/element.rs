@@ -78,8 +78,8 @@ impl Element {
                 ffi::gst_element_register(
                     plugin.to_glib_none().0,
                     name.to_glib_none().0,
-                    rank.to_glib() as u32,
-                    type_.to_glib()
+                    rank.into_glib() as u32,
+                    type_.into_glib()
                 ),
                 "Failed to register element factory"
             )
@@ -97,10 +97,10 @@ pub enum ElementMessageType {
 #[derive(Debug, PartialEq, Eq)]
 pub struct NotifyWatchId(NonZeroU64);
 
-impl ToGlib for NotifyWatchId {
+impl IntoGlib for NotifyWatchId {
     type GlibType = libc::c_ulong;
 
-    fn to_glib(&self) -> libc::c_ulong {
+    fn into_glib(self) -> libc::c_ulong {
         self.0.get() as libc::c_ulong
     }
 }
@@ -278,7 +278,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let ret: StateChangeReturn = unsafe {
             from_glib(ffi::gst_element_change_state(
                 self.as_ref().to_glib_none().0,
-                transition.to_glib(),
+                transition.into_glib(),
             ))
         };
         ret.into_result()
@@ -291,7 +291,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let ret: StateChangeReturn = unsafe {
             from_glib(ffi::gst_element_continue_state(
                 self.as_ref().to_glib_none().0,
-                ret.to_glib(),
+                ret.into_glib(),
             ))
         };
         ret.into_result()
@@ -308,7 +308,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 self.as_ref().to_glib_none().0,
                 state.as_mut_ptr(),
                 pending.as_mut_ptr(),
-                timeout.to_glib(),
+                timeout.into_glib(),
             ));
             (
                 ret.into_result(),
@@ -322,7 +322,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let ret: StateChangeReturn = unsafe {
             from_glib(ffi::gst_element_set_state(
                 self.as_ref().to_glib_none().0,
-                state.to_glib(),
+                state.into_glib(),
             ))
         };
         ret.into_result()
@@ -362,7 +362,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags |= flags.to_glib();
+            (*ptr).flags |= flags.into_glib();
         }
     }
 
@@ -370,7 +370,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags &= !flags.to_glib();
+            (*ptr).flags &= !flags.into_glib();
         }
     }
 
@@ -402,7 +402,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             ffi::gst_element_message_full(
                 self.as_ref().to_glib_none().0,
                 type_,
-                T::domain().to_glib(),
+                T::domain().into_glib(),
                 code.code(),
                 message.to_glib_full(),
                 debug.to_glib_full(),
@@ -436,7 +436,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             ffi::gst_element_message_full_with_details(
                 self.as_ref().to_glib_none().0,
                 type_,
-                T::domain().to_glib(),
+                T::domain().into_glib(),
                 code.code(),
                 message.to_glib_full(),
                 debug.to_glib_full(),
@@ -472,7 +472,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             ffi::gst_element_message_full(
                 self.as_ref().to_glib_none().0,
                 ffi::GST_MESSAGE_ERROR,
-                error_domain.to_glib(),
+                error_domain.into_glib(),
                 error_code,
                 message.to_glib_full(),
                 debug.to_glib_full(),
@@ -567,7 +567,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             from_glib(ffi::gst_element_add_property_deep_notify_watch(
                 self.as_ref().to_glib_none().0,
                 property_name.0,
-                include_value.to_glib(),
+                include_value.into_glib(),
             ))
         }
     }
@@ -584,7 +584,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             from_glib(ffi::gst_element_add_property_notify_watch(
                 self.as_ref().to_glib_none().0,
                 property_name.0,
-                include_value.to_glib(),
+                include_value.into_glib(),
             ))
         }
     }
@@ -595,7 +595,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             ffi::gst_element_remove_property_notify_watch(
                 self.as_ref().to_glib_none().0,
-                watch_id.to_glib(),
+                watch_id.into_glib(),
             );
         }
     }
@@ -609,9 +609,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                U::default_format().to_glib(),
+                U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
@@ -632,9 +632,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.value(),
-                dest_format.to_glib(),
+                dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
@@ -653,7 +653,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::default_format().to_glib(),
+                T::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -669,7 +669,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -685,7 +685,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
-                T::default_format().to_glib(),
+                T::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -701,7 +701,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -731,11 +731,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 ffi::gst_element_seek(
                     self.as_ref().to_glib_none().0,
                     rate,
-                    start.format().to_glib(),
-                    flags.to_glib(),
-                    start_type.to_glib(),
+                    start.format().into_glib(),
+                    flags.into_glib(),
+                    start_type.into_glib(),
                     start.value(),
-                    stop_type.to_glib(),
+                    stop_type.into_glib(),
                     stop.value(),
                 ),
                 "Failed to seek",
@@ -753,8 +753,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
             glib::result_from_gboolean!(
                 ffi::gst_element_seek_simple(
                     self.as_ref().to_glib_none().0,
-                    seek_pos.format().to_glib(),
-                    seek_flags.to_glib(),
+                    seek_pos.format().into_glib(),
+                    seek_flags.into_glib(),
                     seek_pos.value(),
                 ),
                 "Failed to seek",

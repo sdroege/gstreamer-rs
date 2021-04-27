@@ -24,8 +24,8 @@ impl Stream {
                 from_glib_full(ffi::gst_stream_new(
                     stream_id.0,
                     caps.0,
-                    type_.to_glib(),
-                    flags.to_glib(),
+                    type_.into_glib(),
+                    flags.into_glib(),
                 ))
             }
         } else {
@@ -34,8 +34,8 @@ impl Stream {
                 from_glib_none(ffi::gst_stream_new(
                     stream_id.0,
                     caps.0,
-                    type_.to_glib(),
-                    flags.to_glib(),
+                    type_.into_glib(),
+                    flags.into_glib(),
                 ))
             }
         }

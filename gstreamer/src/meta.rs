@@ -18,7 +18,7 @@ use crate::ClockTime;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-use glib::translate::ToGlib;
+use glib::translate::IntoGlib;
 use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 
 pub unsafe trait MetaAPI: Sync + Send + Sized {
@@ -362,8 +362,8 @@ impl ReferenceTimestampMeta {
             let meta = ffi::gst_buffer_add_reference_timestamp_meta(
                 buffer.as_mut_ptr(),
                 reference.to_glib_none().0,
-                timestamp.to_glib(),
-                duration.to_glib(),
+                timestamp.into_glib(),
+                duration.into_glib(),
             );
 
             Self::from_mut_ptr(buffer, meta)

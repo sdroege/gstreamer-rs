@@ -36,10 +36,10 @@ bitflags! {
 }
 
 #[doc(hidden)]
-impl ToGlib for ElementFactoryListType {
+impl IntoGlib for ElementFactoryListType {
     type GlibType = ffi::GstElementFactoryListType;
 
-    fn to_glib(&self) -> ffi::GstElementFactoryListType {
+    fn into_glib(self) -> ffi::GstElementFactoryListType {
         self.bits()
     }
 }

@@ -188,9 +188,9 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         unsafe {
             ffi::gst_aggregator_selected_samples(
                 self.as_ref().to_glib_none().0,
-                pts.to_glib(),
-                dts.to_glib(),
-                duration.to_glib(),
+                pts.into_glib(),
+                dts.into_glib(),
+                duration.into_glib(),
                 info.as_ref()
                     .map(|s| s.as_ptr() as *mut _)
                     .unwrap_or(ptr::null_mut()),

@@ -11,7 +11,7 @@ impl WebRTCSessionDescription {
         unsafe {
             let mut sdp = mem::ManuallyDrop::new(sdp);
             from_glib_full(ffi::gst_webrtc_session_description_new(
-                type_.to_glib(),
+                type_.into_glib(),
                 sdp.to_glib_none_mut().0,
             ))
         }

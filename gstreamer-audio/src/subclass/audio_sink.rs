@@ -217,7 +217,7 @@ unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosink_delay<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSink) -> u32 {
@@ -246,7 +246,7 @@ unsafe extern "C" fn audiosink_open<T: AudioSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosink_prepare<T: AudioSinkImpl>(
@@ -268,7 +268,7 @@ unsafe extern "C" fn audiosink_prepare<T: AudioSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosink_unprepare<T: AudioSinkImpl>(
@@ -287,7 +287,7 @@ unsafe extern "C" fn audiosink_unprepare<T: AudioSinkImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(

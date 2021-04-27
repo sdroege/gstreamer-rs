@@ -134,7 +134,7 @@ unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         PushSrcImpl::fill(imp, wrap.unsafe_cast_ref(), buffer).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
@@ -157,7 +157,7 @@ unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
             Err(err) => gst::FlowReturn::from(err),
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
@@ -180,5 +180,5 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
             Err(err) => gst::FlowReturn::from(err),
         }
     })
-    .to_glib()
+    .into_glib()
 }

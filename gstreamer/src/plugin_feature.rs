@@ -4,7 +4,7 @@ use crate::PluginFeature;
 use crate::Rank;
 
 use glib::prelude::*;
-use glib::translate::{from_glib, FromGlibPtrFull, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, FromGlibPtrFull, IntoGlib, ToGlibPtr};
 
 pub trait PluginFeatureExtManual: Sized + 'static {
     fn rank(&self) -> Rank;
@@ -22,7 +22,10 @@ impl<O: IsA<PluginFeature>> PluginFeatureExtManual for O {
 
     fn set_rank(&self, rank: Rank) {
         unsafe {
-            ffi::gst_plugin_feature_set_rank(self.as_ref().to_glib_none().0, rank.to_glib() as u32);
+            ffi::gst_plugin_feature_set_rank(
+                self.as_ref().to_glib_none().0,
+                rank.into_glib() as u32,
+            );
         }
     }
 

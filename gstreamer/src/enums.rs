@@ -347,7 +347,7 @@ impl From<Result<ClockSuccess, ClockError>> for ClockReturn {
 
 impl PartialEq for crate::TypeFindProbability {
     fn eq(&self, other: &crate::TypeFindProbability) -> bool {
-        (self.to_glib() as u32).eq(&(other.to_glib() as u32))
+        (self.into_glib() as u32).eq(&(other.into_glib() as u32))
     }
 }
 
@@ -355,13 +355,13 @@ impl Eq for crate::TypeFindProbability {}
 
 impl PartialOrd for crate::TypeFindProbability {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        (self.to_glib() as u32).partial_cmp(&(other.to_glib() as u32))
+        (self.into_glib() as u32).partial_cmp(&(other.into_glib() as u32))
     }
 }
 
 impl Ord for crate::TypeFindProbability {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
-        (self.to_glib() as u32).cmp(&(other.to_glib() as u32))
+        (self.into_glib() as u32).cmp(&(other.into_glib() as u32))
     }
 }
 
@@ -369,14 +369,14 @@ impl ops::Add<u32> for crate::TypeFindProbability {
     type Output = crate::TypeFindProbability;
 
     fn add(self, rhs: u32) -> crate::TypeFindProbability {
-        let res = (self.to_glib() as u32).saturating_add(rhs);
+        let res = (self.into_glib() as u32).saturating_add(rhs);
         unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::AddAssign<u32> for crate::TypeFindProbability {
     fn add_assign(&mut self, rhs: u32) {
-        let res = (self.to_glib() as u32).saturating_add(rhs);
+        let res = (self.into_glib() as u32).saturating_add(rhs);
         *self = unsafe { from_glib(res as i32) };
     }
 }
@@ -385,21 +385,21 @@ impl ops::Sub<u32> for crate::TypeFindProbability {
     type Output = crate::TypeFindProbability;
 
     fn sub(self, rhs: u32) -> crate::TypeFindProbability {
-        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        let res = (self.into_glib() as u32).saturating_sub(rhs);
         unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::SubAssign<u32> for crate::TypeFindProbability {
     fn sub_assign(&mut self, rhs: u32) {
-        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        let res = (self.into_glib() as u32).saturating_sub(rhs);
         *self = unsafe { from_glib(res as i32) };
     }
 }
 
 impl PartialEq for crate::Rank {
     fn eq(&self, other: &crate::Rank) -> bool {
-        (self.to_glib() as u32).eq(&(other.to_glib() as u32))
+        (self.into_glib() as u32).eq(&(other.into_glib() as u32))
     }
 }
 
@@ -407,13 +407,13 @@ impl Eq for crate::Rank {}
 
 impl PartialOrd for crate::Rank {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        (self.to_glib() as u32).partial_cmp(&(other.to_glib() as u32))
+        (self.into_glib() as u32).partial_cmp(&(other.into_glib() as u32))
     }
 }
 
 impl Ord for crate::Rank {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
-        (self.to_glib() as u32).cmp(&(other.to_glib() as u32))
+        (self.into_glib() as u32).cmp(&(other.into_glib() as u32))
     }
 }
 
@@ -421,14 +421,14 @@ impl ops::Add<u32> for crate::Rank {
     type Output = crate::Rank;
 
     fn add(self, rhs: u32) -> crate::Rank {
-        let res = (self.to_glib() as u32).saturating_add(rhs);
+        let res = (self.into_glib() as u32).saturating_add(rhs);
         unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::AddAssign<u32> for crate::Rank {
     fn add_assign(&mut self, rhs: u32) {
-        let res = (self.to_glib() as u32).saturating_add(rhs);
+        let res = (self.into_glib() as u32).saturating_add(rhs);
         *self = unsafe { from_glib(res as i32) };
     }
 }
@@ -437,14 +437,14 @@ impl ops::Sub<u32> for crate::Rank {
     type Output = crate::Rank;
 
     fn sub(self, rhs: u32) -> crate::Rank {
-        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        let res = (self.into_glib() as u32).saturating_sub(rhs);
         unsafe { from_glib(res as i32) }
     }
 }
 
 impl ops::SubAssign<u32> for crate::Rank {
     fn sub_assign(&mut self, rhs: u32) {
-        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        let res = (self.into_glib() as u32).saturating_sub(rhs);
         *self = unsafe { from_glib(res as i32) };
     }
 }
@@ -504,11 +504,11 @@ pub enum MessageType {
 }
 
 #[doc(hidden)]
-impl ToGlib for MessageType {
+impl IntoGlib for MessageType {
     type GlibType = ffi::GstMessageType;
 
-    fn to_glib(&self) -> ffi::GstMessageType {
-        match *self {
+    fn into_glib(self) -> ffi::GstMessageType {
+        match self {
             MessageType::Unknown => ffi::GST_MESSAGE_UNKNOWN,
             MessageType::Eos => ffi::GST_MESSAGE_EOS,
             MessageType::Error => ffi::GST_MESSAGE_ERROR,
@@ -626,7 +626,7 @@ impl ToValue for MessageType {
     fn to_value(&self) -> Value {
         let mut value = glib::Value::for_value_type::<MessageType>();
         unsafe {
-            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib() as i32)
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib() as i32)
         }
         value
     }
@@ -638,8 +638,8 @@ impl ToValue for MessageType {
 
 impl State {
     pub fn next(self, pending: Self) -> Self {
-        let current = self.to_glib();
-        let pending = pending.to_glib();
+        let current = self.into_glib();
+        let pending = pending.into_glib();
 
         let sign = (pending - current).signum();
 
@@ -650,8 +650,8 @@ impl State {
 impl StateChange {
     pub fn new(current: State, next: State) -> Self {
         skip_assert_initialized!();
-        let current = current.to_glib();
-        let next = next.to_glib();
+        let current = current.into_glib();
+        let next = next.into_glib();
         unsafe { from_glib((current << 3) | next) }
     }
 
@@ -694,7 +694,7 @@ impl StateChange {
                 use std::ffi::CStr;
                 unsafe {
                     CStr::from_ptr(
-                        ffi::gst_state_change_get_name(self.to_glib())
+                        ffi::gst_state_change_get_name(self.into_glib())
                             .as_ref()
                             .expect("gst_state_change_get_name returned NULL"),
                     )

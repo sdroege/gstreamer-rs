@@ -50,7 +50,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>) {
         let ret: gst::FlowReturn = ret.into();
         unsafe {
-            ffi::gst_base_src_start_complete(self.as_ref().to_glib_none().0, ret.to_glib());
+            ffi::gst_base_src_start_complete(self.as_ref().to_glib_none().0, ret.into_glib());
         }
     }
 

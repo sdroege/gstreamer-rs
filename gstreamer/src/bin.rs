@@ -116,7 +116,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         unsafe {
             from_glib_full(ffi::gst_bin_iterate_all_by_interface(
                 self.as_ref().to_glib_none().0,
-                iface.to_glib(),
+                iface.into_glib(),
             ))
         }
     }
@@ -177,7 +177,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags |= flags.to_glib();
+            (*ptr).flags |= flags.into_glib();
         }
     }
 
@@ -185,7 +185,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags &= !flags.to_glib();
+            (*ptr).flags &= !flags.into_glib();
         }
     }
 
@@ -216,7 +216,7 @@ where
             false
         }
     }
-    .to_glib()
+    .into_glib()
 }
 
 #[cfg(test)]

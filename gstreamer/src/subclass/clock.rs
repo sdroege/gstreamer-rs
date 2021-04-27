@@ -93,8 +93,8 @@ impl<T: ClockImpl> ClockImplExt for T {
             if let Some(func) = (*parent_class).change_resolution {
                 from_glib(func(
                     clock.unsafe_cast_ref::<Clock>().to_glib_none().0,
-                    old_resolution.to_glib(),
-                    new_resolution.to_glib(),
+                    old_resolution.into_glib(),
+                    new_resolution.into_glib(),
                 ))
             } else {
                 self.resolution(clock)
@@ -261,7 +261,7 @@ unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(
         from_glib(old_resolution),
         from_glib(new_resolution),
     )
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(
@@ -271,7 +271,7 @@ unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.resolution(wrap.unsafe_cast_ref()).to_glib()
+    imp.resolution(wrap.unsafe_cast_ref()).into_glib()
 }
 
 unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
@@ -281,7 +281,7 @@ unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Clock> = from_glib_borrow(ptr);
 
-    imp.internal_time(wrap.unsafe_cast_ref()).to_glib()
+    imp.internal_time(wrap.unsafe_cast_ref()).into_glib()
 }
 
 unsafe extern "C" fn clock_wait<T: ClockImpl>(
@@ -301,7 +301,7 @@ unsafe extern "C" fn clock_wait<T: ClockImpl>(
         *jitter = j;
     }
 
-    ClockReturn::from(res).to_glib()
+    ClockReturn::from(res).into_glib()
 }
 
 unsafe extern "C" fn clock_wait_async<T: ClockImpl>(
@@ -316,7 +316,7 @@ unsafe extern "C" fn clock_wait_async<T: ClockImpl>(
         wrap.unsafe_cast_ref(),
         &from_glib_borrow(id as ffi::GstClockID),
     ))
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn clock_unschedule<T: ClockImpl>(

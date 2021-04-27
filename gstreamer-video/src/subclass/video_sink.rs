@@ -74,5 +74,5 @@ unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), gst::FlowReturn::Error, {
         imp.show_frame(wrap.unsafe_cast_ref(), &buffer).into()
     })
-    .to_glib()
+    .into_glib()
 }

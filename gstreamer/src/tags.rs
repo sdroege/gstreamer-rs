@@ -8,7 +8,7 @@ use std::mem;
 use once_cell::sync::Lazy;
 
 use glib::translate::{
-    from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr, ToGlibPtrMut,
+    from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, ToGlibPtr, ToGlibPtrMut,
 };
 use glib::value::{FromValue, SendValue, ToSendValue, Value};
 use glib::StaticType;
@@ -399,7 +399,7 @@ impl TagListRef {
 
             ffi::gst_tag_list_add_value(
                 self.as_mut_ptr(),
-                mode.to_glib(),
+                mode.into_glib(),
                 tag_name.0,
                 value.to_glib_none().0,
             );
@@ -514,7 +514,7 @@ impl TagListRef {
     }
 
     pub fn insert(&mut self, other: &TagListRef, mode: TagMergeMode) {
-        unsafe { ffi::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.to_glib()) }
+        unsafe { ffi::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.into_glib()) }
     }
 
     pub fn merge(&self, other: &TagListRef, mode: TagMergeMode) -> TagList {
@@ -522,7 +522,7 @@ impl TagListRef {
             from_glib_full(ffi::gst_tag_list_merge(
                 self.as_ptr(),
                 other.as_ptr(),
-                mode.to_glib(),
+                mode.into_glib(),
             ))
         }
     }
@@ -532,7 +532,7 @@ impl TagListRef {
     }
 
     pub fn set_scope(&mut self, scope: TagScope) {
-        unsafe { ffi::gst_tag_list_set_scope(self.as_mut_ptr(), scope.to_glib()) }
+        unsafe { ffi::gst_tag_list_set_scope(self.as_mut_ptr(), scope.into_glib()) }
     }
 }
 
@@ -890,8 +890,8 @@ pub fn register<T: for<'a> CustomTag<'a>>() {
     unsafe {
         ffi::gst_tag_register(
             T::tag_name().to_glib_none().0,
-            T::FLAG.to_glib(),
-            T::TagType::static_type().to_glib(),
+            T::FLAG.into_glib(),
+            T::TagType::static_type().into_glib(),
             T::NICK.to_glib_none().0,
             T::DESCRIPTION.to_glib_none().0,
             Some(merge_func_trampoline::<T>),

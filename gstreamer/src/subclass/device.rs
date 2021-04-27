@@ -160,5 +160,5 @@ unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
             false
         }
     }
-    .to_glib()
+    .into_glib()
 }

@@ -25,11 +25,11 @@ pub enum Overhead {
 }
 
 #[doc(hidden)]
-impl ToGlib for Overhead {
+impl IntoGlib for Overhead {
     type GlibType = i32;
 
-    fn to_glib(&self) -> i32 {
-        match *self {
+    fn into_glib(self) -> i32 {
+        match self {
             Overhead::None => 0,
             Overhead::Frame => -1,
             Overhead::Bytes(b) => i32::try_from(b).expect("overhead is higher than i32::MAX"),
@@ -182,7 +182,7 @@ impl<'a> BaseParseFrame<'a> {
 
     pub fn set_overhead(&mut self, overhead: Overhead) {
         unsafe {
-            (*self.to_glib_none().0).overhead = overhead.to_glib();
+            (*self.to_glib_none().0).overhead = overhead.into_glib();
         }
     }
 }

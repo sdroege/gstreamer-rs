@@ -321,7 +321,7 @@ impl CapsFeaturesRef {
         unsafe {
             from_glib(ffi::gst_caps_features_contains_id(
                 self.as_ptr(),
-                feature.to_glib(),
+                feature.into_glib(),
             ))
         }
     }
@@ -365,11 +365,11 @@ impl CapsFeaturesRef {
     }
 
     pub fn add_from_quark(&mut self, feature: glib::Quark) {
-        unsafe { ffi::gst_caps_features_add_id(self.as_mut_ptr(), feature.to_glib()) }
+        unsafe { ffi::gst_caps_features_add_id(self.as_mut_ptr(), feature.into_glib()) }
     }
 
     pub fn remove_by_quark(&mut self, feature: glib::Quark) {
-        unsafe { ffi::gst_caps_features_remove_id(self.as_mut_ptr(), feature.to_glib()) }
+        unsafe { ffi::gst_caps_features_remove_id(self.as_mut_ptr(), feature.into_glib()) }
     }
 
     pub fn iter(&self) -> Iter {

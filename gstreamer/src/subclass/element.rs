@@ -172,7 +172,7 @@ impl<T: ElementImpl> ElementImplExt for T {
                 .expect("Missing parent function `change_state`");
             StateChangeReturn::from_glib(f(
                 element.unsafe_cast_ref::<Element>().to_glib_none().0,
-                transition.to_glib(),
+                transition.into_glib(),
             ))
             .into_result()
         }
@@ -427,7 +427,7 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
     panic_to_error!(&wrap, &imp.panicked(), fallback, {
         imp.change_state(wrap.unsafe_cast_ref(), transition).into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
@@ -498,7 +498,7 @@ unsafe extern "C" fn element_send_event<T: ElementImpl>(
     panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.send_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn element_query<T: ElementImpl>(
@@ -513,7 +513,7 @@ unsafe extern "C" fn element_query<T: ElementImpl>(
     panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.query(wrap.unsafe_cast_ref(), query)
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn element_set_context<T: ElementImpl>(
@@ -542,7 +542,7 @@ unsafe extern "C" fn element_set_clock<T: ElementImpl>(
     panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.set_clock(wrap.unsafe_cast_ref(), clock.as_ref().as_ref())
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
@@ -569,7 +569,7 @@ unsafe extern "C" fn element_post_message<T: ElementImpl>(
     // Can't catch panics here as posting the error message would cause
     // this code to be called again recursively forever.
     imp.post_message(wrap.unsafe_cast_ref(), from_glib_full(msg))
-        .to_glib()
+        .into_glib()
 }
 
 #[cfg(test)]

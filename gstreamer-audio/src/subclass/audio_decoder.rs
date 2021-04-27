@@ -375,7 +375,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .map(|f| {
                     f(
                         element.unsafe_cast_ref::<AudioDecoder>().to_glib_none().0,
-                        hard.to_glib(),
+                        hard.into_glib(),
                     )
                 })
                 .unwrap_or(())
@@ -574,7 +574,7 @@ unsafe extern "C" fn audio_decoder_open<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_close<T: AudioDecoderImpl>(
@@ -593,7 +593,7 @@ unsafe extern "C" fn audio_decoder_close<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_start<T: AudioDecoderImpl>(
@@ -612,7 +612,7 @@ unsafe extern "C" fn audio_decoder_start<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_stop<T: AudioDecoderImpl>(
@@ -631,7 +631,7 @@ unsafe extern "C" fn audio_decoder_stop<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_set_format<T: AudioDecoderImpl>(
@@ -651,7 +651,7 @@ unsafe extern "C" fn audio_decoder_set_format<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_parse<T: AudioDecoderImpl>(
@@ -677,7 +677,7 @@ unsafe extern "C" fn audio_decoder_parse<T: AudioDecoderImpl>(
         }
         .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_handle_frame<T: AudioDecoderImpl>(
@@ -697,7 +697,7 @@ unsafe extern "C" fn audio_decoder_handle_frame<T: AudioDecoderImpl>(
         )
         .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_pre_push<T: AudioDecoderImpl>(
@@ -722,7 +722,7 @@ unsafe extern "C" fn audio_decoder_pre_push<T: AudioDecoderImpl>(
         }
         .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_flush<T: AudioDecoderImpl>(
@@ -754,7 +754,7 @@ unsafe extern "C" fn audio_decoder_negotiate<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_getcaps<T: AudioDecoderImpl>(
@@ -788,7 +788,7 @@ unsafe extern "C" fn audio_decoder_sink_event<T: AudioDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_sink_query<T: AudioDecoderImpl>(
@@ -802,7 +802,7 @@ unsafe extern "C" fn audio_decoder_sink_query<T: AudioDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_src_event<T: AudioDecoderImpl>(
@@ -816,7 +816,7 @@ unsafe extern "C" fn audio_decoder_src_event<T: AudioDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_src_query<T: AudioDecoderImpl>(
@@ -830,7 +830,7 @@ unsafe extern "C" fn audio_decoder_src_query<T: AudioDecoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_propose_allocation<T: AudioDecoderImpl>(
@@ -851,7 +851,7 @@ unsafe extern "C" fn audio_decoder_propose_allocation<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_decoder_decide_allocation<T: AudioDecoderImpl>(
@@ -872,5 +872,5 @@ unsafe extern "C" fn audio_decoder_decide_allocation<T: AudioDecoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }

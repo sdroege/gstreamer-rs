@@ -302,11 +302,11 @@ impl AtomicClockReturn {
     }
 
     pub fn store(&self, val: ClockReturn) {
-        self.0.store(val.to_glib(), atomic::Ordering::SeqCst)
+        self.0.store(val.into_glib(), atomic::Ordering::SeqCst)
     }
 
     pub fn swap(&self, val: ClockReturn) -> ClockReturn {
-        unsafe { from_glib(self.0.swap(val.to_glib(), atomic::Ordering::SeqCst)) }
+        unsafe { from_glib(self.0.swap(val.into_glib(), atomic::Ordering::SeqCst)) }
     }
 
     pub fn compare_exchange(
@@ -317,8 +317,8 @@ impl AtomicClockReturn {
         unsafe {
             self.0
                 .compare_exchange(
-                    current.to_glib(),
-                    new.to_glib(),
+                    current.into_glib(),
+                    new.into_glib(),
                     atomic::Ordering::SeqCst,
                     atomic::Ordering::SeqCst,
                 )
@@ -343,11 +343,11 @@ impl Clock {
         unsafe {
             from_glib(ffi::gst_clock_adjust_with_calibration(
                 ptr::null_mut(),
-                internal_target.to_glib(),
-                cinternal.to_glib(),
-                cexternal.to_glib(),
-                cnum.to_glib(),
-                cdenom.to_glib(),
+                internal_target.into_glib(),
+                cinternal.into_glib(),
+                cexternal.into_glib(),
+                cnum.into_glib(),
+                cdenom.into_glib(),
             ))
         }
     }
@@ -363,11 +363,11 @@ impl Clock {
         unsafe {
             from_glib(ffi::gst_clock_unadjust_with_calibration(
                 ptr::null_mut(),
-                external_target.to_glib(),
-                cinternal.to_glib(),
-                cexternal.to_glib(),
-                cnum.to_glib(),
-                cdenom.to_glib(),
+                external_target.into_glib(),
+                cinternal.into_glib(),
+                cexternal.into_glib(),
+                cnum.into_glib(),
+                cdenom.into_glib(),
             ))
         }
     }
@@ -407,8 +407,8 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         unsafe {
             PeriodicClockId(from_glib_full(ffi::gst_clock_new_periodic_id(
                 self.as_ref().to_glib_none().0,
-                start_time.to_glib(),
-                interval.to_glib(),
+                start_time.into_glib(),
+                interval.into_glib(),
             )))
         }
     }
@@ -424,8 +424,8 @@ impl<O: IsA<Clock>> ClockExtManual for O {
             let res: bool = from_glib(ffi::gst_clock_periodic_id_reinit(
                 self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
-                start_time.to_glib(),
-                interval.to_glib(),
+                start_time.into_glib(),
+                interval.into_glib(),
             ));
             if res {
                 Ok(())
@@ -441,7 +441,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         unsafe {
             SingleShotClockId(from_glib_full(ffi::gst_clock_new_single_shot_id(
                 self.as_ref().to_glib_none().0,
-                time.to_glib(),
+                time.into_glib(),
             )))
         }
     }
@@ -455,7 +455,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
             let res: bool = from_glib(ffi::gst_clock_single_shot_id_reinit(
                 self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
-                time.to_glib(),
+                time.into_glib(),
             ));
             if res {
                 Ok(())
@@ -469,7 +469,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags |= flags.to_glib();
+            (*ptr).flags |= flags.into_glib();
         }
     }
 
@@ -477,7 +477,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags &= !flags.to_glib();
+            (*ptr).flags &= !flags.into_glib();
         }
     }
 

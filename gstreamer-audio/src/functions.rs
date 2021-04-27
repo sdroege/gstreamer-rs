@@ -87,14 +87,14 @@ mod tests {
 
         #[cfg(feature = "v1_18")]
         {
-            use glib::translate::{from_glib_full, ToGlib};
+            use glib::translate::{from_glib_full, IntoGlib};
 
             /* audio_make_raw_caps() is a re-implementation so ensure it returns the same caps as the C API */
             let c_caps = unsafe {
                 let formats: Vec<ffi::GstAudioFormat> =
                     [crate::AudioFormat::S16be, crate::AudioFormat::S16le]
                         .iter()
-                        .map(|f| f.to_glib())
+                        .map(|f| f.into_glib())
                         .collect();
                 let caps = ffi::gst_audio_make_raw_caps(
                     formats.as_ptr(),

@@ -13,7 +13,7 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + S
     func: gpointer,
 ) -> gboolean {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
-    (&mut *func.borrow_mut())(&from_glib_borrow(pool)).to_glib()
+    (&mut *func.borrow_mut())(&from_glib_borrow(pool)).into_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch<
@@ -53,7 +53,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );
-            glib::ffi::g_source_set_priority(source, priority.to_glib());
+            glib::ffi::g_source_set_priority(source, priority.into_glib());
 
             if let Some(name) = name {
                 glib::ffi::g_source_set_name(source, name.to_glib_none().0);

@@ -6,7 +6,9 @@ use crate::BufferPool;
 use crate::Structure;
 
 use glib::prelude::*;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr, ToGlibPtrMut,
+};
 
 use std::mem;
 use std::ops;
@@ -188,7 +190,7 @@ impl BufferPoolAcquireParams {
             format: ffi::GST_FORMAT_UNDEFINED,
             start: -1,
             stop: -1,
-            flags: flags.to_glib(),
+            flags: flags.into_glib(),
             _gst_reserved: [ptr::null_mut(); 4],
         })
     }
@@ -201,10 +203,10 @@ impl BufferPoolAcquireParams {
         skip_assert_initialized!();
         unsafe {
             BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams {
-                format: start.format().to_glib(),
+                format: start.format().into_glib(),
                 start: start.to_raw_value(),
                 stop: stop.to_raw_value(),
-                flags: flags.to_glib(),
+                flags: flags.into_glib(),
                 _gst_reserved: [ptr::null_mut(); 4],
             })
         }

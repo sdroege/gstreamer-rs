@@ -68,7 +68,7 @@ impl FlowCombiner {
         let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_flow_combiner_update_flow(
                 self.to_glib_none().0,
-                fret.to_glib(),
+                fret.into_glib(),
             ))
         };
         ret.into_result()
@@ -84,7 +84,7 @@ impl FlowCombiner {
             from_glib(ffi::gst_flow_combiner_update_pad_flow(
                 self.to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
-                fret.to_glib(),
+                fret.into_glib(),
             ))
         };
         ret.into_result()

@@ -102,5 +102,5 @@ where
             false
         }
     }
-    .to_glib()
+    .into_glib()
 }

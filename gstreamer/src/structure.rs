@@ -424,7 +424,7 @@ impl StructureRef {
 
     pub fn value_by_quark(&self, name: glib::Quark) -> Result<&SendValue, GetError> {
         unsafe {
-            let value = ffi::gst_structure_id_get_value(&self.0, name.to_glib());
+            let value = ffi::gst_structure_id_get_value(&self.0, name.into_glib());
 
             if value.is_null() {
                 return Err(GetError::new_field_not_found(name.to_string()));
@@ -454,7 +454,7 @@ impl StructureRef {
     pub fn set_value_by_quark(&mut self, name: glib::Quark, value: SendValue) {
         unsafe {
             let mut value = value.into_raw();
-            ffi::gst_structure_id_take_value(&mut self.0, name.to_glib(), &mut value);
+            ffi::gst_structure_id_take_value(&mut self.0, name.into_glib(), &mut value);
         }
     }
 
@@ -488,21 +488,21 @@ impl StructureRef {
             from_glib(ffi::gst_structure_has_field_typed(
                 &self.0,
                 field.to_glib_none().0,
-                type_.to_glib(),
+                type_.into_glib(),
             ))
         }
     }
 
     pub fn has_field_by_quark(&self, field: glib::Quark) -> bool {
-        unsafe { from_glib(ffi::gst_structure_id_has_field(&self.0, field.to_glib())) }
+        unsafe { from_glib(ffi::gst_structure_id_has_field(&self.0, field.into_glib())) }
     }
 
     pub fn has_field_with_type_by_quark(&self, field: glib::Quark, type_: glib::Type) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_id_has_field_typed(
                 &self.0,
-                field.to_glib(),
-                type_.to_glib(),
+                field.into_glib(),
+                type_.into_glib(),
             ))
         }
     }
@@ -578,7 +578,7 @@ impl StructureRef {
             from_glib(ffi::gst_structure_fixate_field_boolean(
                 &mut self.0,
                 name.to_glib_none().0,
-                target.to_glib(),
+                target.into_glib(),
             ))
         }
     }

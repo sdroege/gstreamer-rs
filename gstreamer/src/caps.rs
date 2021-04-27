@@ -9,7 +9,7 @@ use std::str;
 
 use crate::CapsIntersectMode;
 
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
@@ -314,7 +314,7 @@ impl CapsRef {
             from_glib_full(ffi::gst_caps_intersect_full(
                 self.as_mut_ptr(),
                 other.as_mut_ptr(),
-                mode.to_glib(),
+                mode.into_glib(),
             ))
         }
     }

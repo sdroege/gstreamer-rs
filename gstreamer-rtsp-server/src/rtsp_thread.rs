@@ -9,7 +9,7 @@ gst::mini_object_wrapper!(RTSPThread, RTSPThreadRef, ffi::GstRTSPThread, || {
 impl RTSPThread {
     pub fn new(type_: crate::RTSPThreadType) -> Option<Self> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_rtsp_thread_new(type_.to_glib())) }
+        unsafe { from_glib_full(ffi::gst_rtsp_thread_new(type_.into_glib())) }
     }
 }
 

@@ -408,7 +408,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
             if let Some(f) = (*parent_class).target_state {
                 f(
                     media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
-                    state.to_glib(),
+                    state.into_glib(),
                 );
             }
         }
@@ -421,7 +421,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
             if let Some(f) = (*parent_class).new_state {
                 f(
                     media.unsafe_cast_ref::<RTSPMedia>().to_glib_none().0,
-                    state.to_glib(),
+                    state.into_glib(),
                 );
             }
         }
@@ -487,7 +487,7 @@ unsafe extern "C" fn media_handle_message<T: RTSPMediaImpl>(
     let wrap: Borrowed<RTSPMedia> = from_glib_borrow(ptr);
 
     imp.handle_message(wrap.unsafe_cast_ref(), gst::MessageRef::from_ptr(message))
-        .to_glib()
+        .into_glib()
 }
 
 unsafe extern "C" fn media_prepare<T: RTSPMediaImpl>(
@@ -565,7 +565,7 @@ unsafe extern "C" fn media_query_position<T: RTSPMediaImpl>(
 
     match imp.query_position(wrap.unsafe_cast_ref()) {
         Some(pos) => {
-            *position = pos.to_glib() as i64;
+            *position = pos.into_glib() as i64;
             glib::ffi::GTRUE
         }
         None => glib::ffi::GFALSE,
@@ -582,7 +582,7 @@ unsafe extern "C" fn media_query_stop<T: RTSPMediaImpl>(
 
     match imp.query_stop(wrap.unsafe_cast_ref()) {
         Some(s) => {
-            *stop = s.to_glib() as i64;
+            *stop = s.into_glib() as i64;
             glib::ffi::GTRUE
         }
         None => glib::ffi::GFALSE,

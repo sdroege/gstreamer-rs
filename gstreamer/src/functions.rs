@@ -38,9 +38,9 @@ pub fn parse_bin_from_description_full(
         let mut error = ptr::null_mut();
         let ret = ffi::gst_parse_bin_from_description_full(
             bin_description.to_glib_none().0,
-            ghost_unlinked_pads.to_glib(),
+            ghost_unlinked_pads.into_glib(),
             context.to_glib_none_mut().0,
-            flags.to_glib(),
+            flags.into_glib(),
             &mut error,
         );
         if error.is_null() {
@@ -81,7 +81,7 @@ pub fn parse_launch_full(
         let ret = ffi::gst_parse_launch_full(
             pipeline_description.to_glib_none().0,
             context.to_glib_none_mut().0,
-            flags.to_glib(),
+            flags.into_glib(),
             &mut error,
         );
         if error.is_null() {
@@ -103,7 +103,7 @@ pub fn parse_launchv_full(
         let ret = ffi::gst_parse_launchv_full(
             argv.to_glib_none().0,
             context.to_glib_none_mut().0,
-            flags.to_glib(),
+            flags.into_glib(),
             &mut error,
         );
         if error.is_null() {
@@ -173,7 +173,7 @@ pub fn type_is_plugin_api(type_: glib::types::Type) -> Option<crate::PluginAPIFl
 
         let mut flags = mem::MaybeUninit::uninit();
         let ret = from_glib(ffi::gst_type_is_plugin_api(
-            type_.to_glib(),
+            type_.into_glib(),
             flags.as_mut_ptr(),
         ));
         let flags = flags.assume_init();

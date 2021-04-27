@@ -93,7 +93,7 @@ impl Harness {
     ) {
         unsafe {
             let params = params.map(|p| p.as_ptr()).unwrap_or(ptr::null_mut());
-            ffi::gst_harness_add_propose_allocation_meta(self.0.as_ptr(), api.to_glib(), params);
+            ffi::gst_harness_add_propose_allocation_meta(self.0.as_ptr(), api.into_glib(), params);
         }
     }
 
@@ -121,7 +121,7 @@ impl Harness {
             ffi::gst_harness_add_src(
                 self.0.as_ptr(),
                 src_element_name.to_glib_none().0,
-                has_clock_wait.to_glib(),
+                has_clock_wait.into_glib(),
             );
         }
     }
@@ -132,7 +132,7 @@ impl Harness {
             ffi::gst_harness_add_src_harness(
                 self.0.as_ptr(),
                 src_harness.0.as_ptr(),
-                has_clock_wait.to_glib(),
+                has_clock_wait.into_glib(),
             );
         }
     }
@@ -142,7 +142,7 @@ impl Harness {
             ffi::gst_harness_add_src_parse(
                 self.0.as_ptr(),
                 launchline.to_glib_none().0,
-                has_clock_wait.to_glib(),
+                has_clock_wait.into_glib(),
             );
         }
     }
@@ -348,13 +348,13 @@ impl Harness {
 
     pub fn set_drop_buffers(&mut self, drop_buffers: bool) {
         unsafe {
-            ffi::gst_harness_set_drop_buffers(self.0.as_ptr(), drop_buffers.to_glib());
+            ffi::gst_harness_set_drop_buffers(self.0.as_ptr(), drop_buffers.into_glib());
         }
     }
 
     pub fn set_forwarding(&mut self, forwarding: bool) {
         unsafe {
-            ffi::gst_harness_set_forwarding(self.0.as_ptr(), forwarding.to_glib());
+            ffi::gst_harness_set_forwarding(self.0.as_ptr(), forwarding.into_glib());
         }
     }
 
@@ -389,7 +389,7 @@ impl Harness {
     pub fn set_time(&mut self, time: gst::ClockTime) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_harness_set_time(self.0.as_ptr(), time.to_glib()),
+                ffi::gst_harness_set_time(self.0.as_ptr(), time.into_glib()),
                 "Failed to set time",
             )
         }
@@ -397,7 +397,7 @@ impl Harness {
 
     pub fn set_upstream_latency(&mut self, latency: gst::ClockTime) {
         unsafe {
-            ffi::gst_harness_set_upstream_latency(self.0.as_ptr(), latency.to_glib());
+            ffi::gst_harness_set_upstream_latency(self.0.as_ptr(), latency.into_glib());
         }
     }
 

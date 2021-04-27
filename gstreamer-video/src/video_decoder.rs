@@ -173,8 +173,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
         unsafe {
             ffi::gst_video_decoder_set_latency(
                 self.as_ref().to_glib_none().0,
-                min_latency.to_glib(),
-                max_latency.to_glib(),
+                min_latency.into_glib(),
+                max_latency.into_glib(),
             );
         }
     }
@@ -246,7 +246,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
             };
             ffi::gst_video_decoder_set_output_state(
                 self.as_ref().to_glib_none().0,
-                fmt.to_glib(),
+                fmt.into_glib(),
                 width,
                 height,
                 reference,
@@ -277,8 +277,8 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
             };
             ffi::gst_video_decoder_set_interlaced_output_state(
                 self.as_ref().to_glib_none().0,
-                fmt.to_glib(),
-                mode.to_glib(),
+                fmt.into_glib(),
+                mode.into_glib(),
                 width,
                 height,
                 reference,
@@ -325,7 +325,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
             from_glib(_gst_video_decoder_error(
                 self.as_ref().to_glib_none().0,
                 weight,
-                T::domain().to_glib(),
+                T::domain().into_glib(),
                 code.code(),
                 message.to_glib_full(),
                 debug.to_glib_full(),

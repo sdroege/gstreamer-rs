@@ -31,16 +31,16 @@ use std::ptr;
 use glib::ffi::gpointer;
 use glib::prelude::*;
 use glib::translate::{
-    from_glib, from_glib_borrow, from_glib_full, FromGlib, FromGlibPtrBorrow, ToGlib, ToGlibPtr,
+    from_glib, from_glib_borrow, from_glib_full, FromGlib, FromGlibPtrBorrow, IntoGlib, ToGlibPtr,
 };
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct PadProbeId(NonZeroU64);
 
-impl ToGlib for PadProbeId {
+impl IntoGlib for PadProbeId {
     type GlibType = libc::c_ulong;
 
-    fn to_glib(&self) -> libc::c_ulong {
+    fn into_glib(self) -> libc::c_ulong {
         self.0.get() as libc::c_ulong
     }
 }
@@ -283,7 +283,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let func_box: Box<F> = Box::new(func);
             let id = ffi::gst_pad_add_probe(
                 self.as_ref().to_glib_none().0,
-                mask.to_glib(),
+                mask.into_glib(),
                 Some(trampoline_pad_probe::<Self, F>),
                 Box::into_raw(func_box) as gpointer,
                 Some(destroy_closure::<F>),
@@ -299,7 +299,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn remove_probe(&self, id: PadProbeId) {
         unsafe {
-            ffi::gst_pad_remove_probe(self.as_ref().to_glib_none().0, id.to_glib());
+            ffi::gst_pad_remove_probe(self.as_ref().to_glib_none().0, id.into_glib());
         }
     }
 
@@ -557,7 +557,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             from_glib(ffi::gst_pad_link_full(
                 self.as_ref().to_glib_none().0,
                 sinkpad.as_ref().to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         };
         ret.into_result()
@@ -765,9 +765,9 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                U::default_format().to_glib(),
+                U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
@@ -788,9 +788,9 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                dest_format.to_glib(),
+                dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
@@ -809,7 +809,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::default_format().to_glib(),
+                T::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -825,7 +825,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
                 self.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -841,7 +841,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
                 self.as_ref().to_glib_none().0,
-                T::default_format().to_glib(),
+                T::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -857,7 +857,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
                 self.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -878,9 +878,9 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                U::default_format().to_glib(),
+                U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
@@ -902,9 +902,9 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.as_ref().to_glib_none().0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.value(),
-                dest_format.to_glib(),
+                dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
             if ret {
@@ -923,7 +923,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_duration(
                 self.as_ref().to_glib_none().0,
-                T::default_format().to_glib(),
+                T::default_format().into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -939,7 +939,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_duration(
                 self.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 duration.as_mut_ptr(),
             ));
             if ret {
@@ -955,7 +955,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_position(
                 self.as_ref().to_glib_none().0,
-                T::default_format().to_glib(),
+                T::default_format().into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -971,7 +971,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_pad_query_position(
                 self.as_ref().to_glib_none().0,
-                format.to_glib(),
+                format.into_glib(),
                 cur.as_mut_ptr(),
             ));
             if ret {
@@ -1052,7 +1052,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags |= flags.to_glib();
+            (*ptr).flags |= flags.into_glib();
         }
     }
 
@@ -1060,7 +1060,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags &= !flags.to_glib();
+            (*ptr).flags &= !flags.into_glib();
         }
     }
 
@@ -1088,22 +1088,22 @@ unsafe fn create_probe_info<'a>(
         } else {
             let data = (*info).data as *mut ffi::GstMiniObject;
             (*info).data = ptr::null_mut();
-            if (*data).type_ == Buffer::static_type().to_glib() {
+            if (*data).type_ == Buffer::static_type().into_glib() {
                 data_type = Some(Buffer::static_type());
                 Some(PadProbeData::Buffer(from_glib_full(
                     data as *const ffi::GstBuffer,
                 )))
-            } else if (*data).type_ == BufferList::static_type().to_glib() {
+            } else if (*data).type_ == BufferList::static_type().into_glib() {
                 data_type = Some(BufferList::static_type());
                 Some(PadProbeData::BufferList(from_glib_full(
                     data as *const ffi::GstBufferList,
                 )))
-            } else if (*data).type_ == Query::static_type().to_glib() {
+            } else if (*data).type_ == Query::static_type().into_glib() {
                 data_type = Some(Query::static_type());
                 Some(PadProbeData::Query(QueryRef::from_mut_ptr(
                     data as *mut ffi::GstQuery,
                 )))
-            } else if (*data).type_ == Event::static_type().to_glib() {
+            } else if (*data).type_ == Event::static_type().into_glib() {
                 data_type = Some(Event::static_type());
                 Some(PadProbeData::Event(from_glib_full(
                     data as *const ffi::GstEvent,
@@ -1180,7 +1180,7 @@ unsafe fn update_probe_info(
     }
 
     let flow_ret: FlowReturn = probe_info.flow_res.into();
-    (*info).ABI.abi.flow_ret = flow_ret.to_glib();
+    (*info).ABI.abi.flow_ret = flow_ret.into_glib();
 }
 
 unsafe extern "C" fn trampoline_pad_probe<
@@ -1205,7 +1205,7 @@ where
 
     update_probe_info(ret, probe_info, data_type, info);
 
-    ret.to_glib()
+    ret.into_glib()
 }
 
 unsafe extern "C" fn trampoline_activate_function<
@@ -1232,7 +1232,7 @@ where
             false
         }
     }
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn trampoline_activatemode_function<
@@ -1266,7 +1266,7 @@ where
             false
         }
     }
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn trampoline_chain_function<
@@ -1293,7 +1293,7 @@ where
         from_glib_full(buffer),
     )
     .into();
-    res.to_glib()
+    res.into_glib()
 }
 
 unsafe extern "C" fn trampoline_chain_list_function<
@@ -1320,7 +1320,7 @@ where
         from_glib_full(list),
     )
     .into();
-    res.to_glib()
+    res.into_glib()
 }
 
 unsafe extern "C" fn trampoline_event_function<
@@ -1343,7 +1343,7 @@ where
             .as_ref(),
         from_glib_full(event),
     )
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn trampoline_event_full_function<
@@ -1370,7 +1370,7 @@ where
         from_glib_full(event),
     )
     .into();
-    res.to_glib()
+    res.into_glib()
 }
 
 unsafe extern "C" fn trampoline_getrange_function<
@@ -1444,7 +1444,7 @@ where
                 }
 
                 match new_buffer.copy_into(passed_buffer, crate::BUFFER_COPY_METADATA, 0, None) {
-                    Ok(_) => FlowReturn::Ok.to_glib(),
+                    Ok(_) => FlowReturn::Ok.into_glib(),
                     Err(_) => {
                         gst_error!(
                             crate::CAT_RUST,
@@ -1452,19 +1452,19 @@ where
                             "Failed to copy buffer metadata"
                         );
 
-                        FlowReturn::Error.to_glib()
+                        FlowReturn::Error.into_glib()
                     }
                 }
             } else {
                 *buffer = new_buffer.into_ptr();
-                FlowReturn::Ok.to_glib()
+                FlowReturn::Ok.into_glib()
             }
         }
         Ok(PadGetRangeSuccess::FilledBuffer) => {
             assert!(passed_buffer.is_some());
-            FlowReturn::Ok.to_glib()
+            FlowReturn::Ok.into_glib()
         }
-        Err(ret) => FlowReturn::from_error(ret).to_glib(),
+        Err(ret) => FlowReturn::from_error(ret).into_glib(),
     }
 }
 
@@ -1519,7 +1519,7 @@ where
         &from_glib_borrow(peer),
     )
     .into();
-    res.to_glib()
+    res.into_glib()
 }
 
 unsafe extern "C" fn trampoline_query_function<
@@ -1542,7 +1542,7 @@ where
             .as_ref(),
         crate::QueryRef::from_mut_ptr(query),
     )
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn trampoline_unlink_function<

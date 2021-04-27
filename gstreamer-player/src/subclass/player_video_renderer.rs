@@ -72,9 +72,10 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayerVideoRendererImpl
 
     let sink_ptr: *mut gst::ffi::GstElement = sink.to_glib_none().0;
 
-    let old_sink_ptr =
-        glib::gobject_ffi::g_object_get_qdata(video_renderer as *mut _, VIDEO_SINK_QUARK.to_glib())
-            as *mut gst::ffi::GstElement;
+    let old_sink_ptr = glib::gobject_ffi::g_object_get_qdata(
+        video_renderer as *mut _,
+        VIDEO_SINK_QUARK.into_glib(),
+    ) as *mut gst::ffi::GstElement;
     if !old_sink_ptr.is_null() && old_sink_ptr != sink_ptr {
         panic!("Video sink must not change");
     }
@@ -85,7 +86,7 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayerVideoRendererImpl
 
     glib::gobject_ffi::g_object_set_qdata_full(
         video_renderer as *mut _,
-        VIDEO_SINK_QUARK.to_glib(),
+        VIDEO_SINK_QUARK.into_glib(),
         glib::gobject_ffi::g_object_ref(sink_ptr as *mut _) as *mut _,
         Some(unref),
     );

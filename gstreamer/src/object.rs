@@ -78,7 +78,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags |= flags.to_glib();
+            (*ptr).flags |= flags.into_glib();
         }
     }
 
@@ -86,7 +86,7 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = crate::utils::MutexGuard::lock(&(*ptr).lock);
-            (*ptr).flags &= !flags.to_glib();
+            (*ptr).flags &= !flags.into_glib();
         }
     }
 
@@ -111,8 +111,8 @@ impl<O: IsA<crate::Object>> GstObjectExtManual for O {
                 ffi::gst_object_get_g_value_array(
                     self.as_ref().to_glib_none().0,
                     property_name.to_glib_none().0,
-                    timestamp.to_glib(),
-                    interval.to_glib(),
+                    timestamp.into_glib(),
+                    interval.into_glib(),
                     n_values,
                     values.as_mut_ptr() as *mut glib::gobject_ffi::GValue,
                 ),

@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, ToGlib};
+use glib::translate::{from_glib, from_glib_full, IntoGlib};
 use glib::ToSendValue;
 use std::mem;
 
@@ -41,7 +41,7 @@ macro_rules! event_builder_generic_impl {
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.seqnum {
-                    gst::ffi::gst_event_set_seqnum(event, seqnum.to_glib());
+                    gst::ffi::gst_event_set_seqnum(event, seqnum.into_glib());
                 }
 
                 if let Some(running_time_offset) = self.running_time_offset {
@@ -121,10 +121,10 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         ffi::gst_video_event_new_downstream_force_key_unit(
-            s.timestamp.to_glib(),
-            s.stream_time.to_glib(),
-            s.running_time.to_glib(),
-            s.all_headers.to_glib(),
+            s.timestamp.into_glib(),
+            s.stream_time.into_glib(),
+            s.running_time.into_glib(),
+            s.all_headers.into_glib(),
             s.count,
         )
     });
@@ -220,8 +220,8 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         ffi::gst_video_event_new_upstream_force_key_unit(
-            s.running_time.to_glib(),
-            s.all_headers.to_glib(),
+            s.running_time.into_glib(),
+            s.all_headers.into_glib(),
             s.count,
         )
     });
@@ -308,7 +308,7 @@ impl<'a> StillFrameEventBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &mut Self| ffi::gst_video_event_new_still_frame(
-        s.in_still.to_glib()
+        s.in_still.into_glib()
     ));
 }
 

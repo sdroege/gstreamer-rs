@@ -27,8 +27,8 @@ impl GhostPad {
                 ffi::gst_ghost_pad_activate_mode_default(
                     pad.to_glib_none().0 as *mut ffi::GstPad,
                     parent.map(|p| p.as_ref()).to_glib_none().0,
-                    mode.to_glib(),
-                    active.to_glib(),
+                    mode.into_glib(),
+                    active.into_glib(),
                 ),
                 "Failed to invoke the default activate mode function of the ghost pad"
             )
@@ -47,8 +47,8 @@ impl GhostPad {
                 ffi::gst_ghost_pad_internal_activate_mode_default(
                     pad.to_glib_none().0 as *mut ffi::GstPad,
                     parent.map(|p| p.as_ref()).to_glib_none().0,
-                    mode.to_glib(),
-                    active.to_glib(),
+                    mode.into_glib(),
+                    active.into_glib(),
                 ),
                 concat!(
                     "Failed to invoke the default activate mode function of a proxy pad ",

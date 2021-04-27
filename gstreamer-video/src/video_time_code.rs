@@ -49,7 +49,7 @@ impl VideoTimeCode {
                 *fps.numer() as u32,
                 *fps.denom() as u32,
                 latest_daily_jam.to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
                 hours,
                 minutes,
                 seconds,
@@ -78,7 +78,7 @@ impl VideoTimeCode {
                 *fps.numer() as u32,
                 *fps.denom() as u32,
                 dt.to_glib_none().0,
-                flags.to_glib(),
+                flags.into_glib(),
                 field_count,
             );
 
@@ -100,7 +100,7 @@ impl VideoTimeCode {
     }
 
     pub fn set_flags(&mut self, flags: VideoTimeCodeFlags) {
-        self.0.config.flags = flags.to_glib()
+        self.0.config.flags = flags.into_glib()
     }
 
     pub fn set_hours(&mut self, hours: u32) {

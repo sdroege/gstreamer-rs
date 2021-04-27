@@ -5,7 +5,7 @@ use std::fmt;
 use std::mem;
 
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib, ToGlibPtr,
+    from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, IntoGlib, ToGlibPtr,
 };
 
 use crate::TagList;
@@ -19,7 +19,7 @@ mini_object_wrapper!(Toc, TocRef, ffi::GstToc, || { ffi::gst_toc_get_type() });
 impl Toc {
     pub fn new(scope: TocScope) -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_toc_new(scope.to_glib())) }
+        unsafe { from_glib_full(ffi::gst_toc_new(scope.into_glib())) }
     }
 }
 
@@ -54,7 +54,7 @@ impl TocRef {
 
     pub fn merge_tags(&mut self, tag_list: &TagList, mode: TagMergeMode) {
         unsafe {
-            ffi::gst_toc_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.to_glib());
+            ffi::gst_toc_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.into_glib());
         }
     }
 
@@ -90,7 +90,7 @@ impl TocEntry {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_toc_entry_new(
-                type_.to_glib(),
+                type_.into_glib(),
                 uid.to_glib_none().0,
             ))
         }
@@ -161,7 +161,11 @@ impl TocEntryRef {
 
     pub fn merge_tags(&mut self, tag_list: &TagList, mode: TagMergeMode) {
         unsafe {
-            ffi::gst_toc_entry_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.to_glib());
+            ffi::gst_toc_entry_merge_tags(
+                self.as_mut_ptr(),
+                tag_list.as_mut_ptr(),
+                mode.into_glib(),
+            );
         }
     }
 
@@ -194,7 +198,7 @@ impl TocEntryRef {
 
     pub fn set_loop(&mut self, loop_type: TocLoopType, repeat_count: i32) {
         unsafe {
-            ffi::gst_toc_entry_set_loop(self.as_mut_ptr(), loop_type.to_glib(), repeat_count);
+            ffi::gst_toc_entry_set_loop(self.as_mut_ptr(), loop_type.into_glib(), repeat_count);
         }
     }
 }

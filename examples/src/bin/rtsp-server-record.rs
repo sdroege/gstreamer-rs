@@ -90,11 +90,11 @@ fn main_loop() -> Result<(), Error> {
             gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_ACCESS
                 .to_glib_none()
                 .0,
-            <bool as StaticType>::static_type().to_glib() as *const u8,
-            true.to_glib() as *const u8,
+            <bool as StaticType>::static_type().into_glib() as *const u8,
+            true.into_glib() as *const u8,
             gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_CONSTRUCT.as_ptr() as *const u8,
-            <bool as StaticType>::static_type().to_glib() as *const u8,
-            true.to_glib() as *const u8,
+            <bool as StaticType>::static_type().into_glib() as *const u8,
+            true.into_glib() as *const u8,
             ptr::null_mut::<u8>(),
         );
     }

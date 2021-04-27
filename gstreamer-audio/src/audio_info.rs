@@ -1,6 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr, ToGlibPtrMut,
+};
 use gst::prelude::*;
 
 use std::fmt;
@@ -46,14 +48,14 @@ impl<'a> AudioInfoBuilder<'a> {
                     if i >= self.channels as usize {
                         ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
                     } else {
-                        p[i].to_glib()
+                        p[i].into_glib()
                     }
                 });
 
                 let valid: bool = from_glib(ffi::gst_audio_check_valid_channel_positions(
                     positions.as_ptr() as *mut _,
                     self.channels as i32,
-                    true.to_glib(),
+                    true.into_glib(),
                 ));
                 if !valid {
                     return Err(glib::bool_error!("channel positions are invalid"));
@@ -71,7 +73,7 @@ impl<'a> AudioInfoBuilder<'a> {
 
             ffi::gst_audio_info_set_format(
                 info.as_mut_ptr(),
-                self.format.to_glib(),
+                self.format.into_glib(),
                 self.rate as i32,
                 self.channels as i32,
                 positions_ptr as *mut _,
@@ -84,11 +86,11 @@ impl<'a> AudioInfoBuilder<'a> {
             }
 
             if let Some(flags) = self.flags {
-                info.flags = flags.to_glib();
+                info.flags = flags.into_glib();
             }
 
             if let Some(layout) = self.layout {
-                info.layout = layout.to_glib();
+                info.layout = layout.into_glib();
             }
 
             let positions = array_init::array_init(|i| from_glib(info.position[i]));
@@ -179,9 +181,9 @@ impl AudioInfo {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_audio_info_convert(
                 &self.0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                U::default_format().to_glib(),
+                U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             )) {
                 Some(U::from_raw(U::default_format(), dest_val.assume_init()))
@@ -203,9 +205,9 @@ impl AudioInfo {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_audio_info_convert(
                 &self.0,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                dest_fmt.to_glib(),
+                dest_fmt.into_glib(),
                 dest_val.as_mut_ptr(),
             )) {
                 Some(gst::GenericFormattedValue::new(

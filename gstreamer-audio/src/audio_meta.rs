@@ -8,7 +8,7 @@ use std::ptr;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use std::slice;
 
-use glib::translate::{from_glib, ToGlib};
+use glib::translate::{from_glib, IntoGlib};
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
 use glib::translate::{from_glib_none, ToGlibPtr};
@@ -33,7 +33,7 @@ impl AudioClippingMeta {
         unsafe {
             let meta = ffi::gst_buffer_add_audio_clipping_meta(
                 buffer.as_mut_ptr(),
-                start.format().to_glib(),
+                start.format().into_glib(),
                 start.value() as u64,
                 end.value() as u64,
             );

@@ -59,7 +59,7 @@ impl DebugCategory {
         unsafe {
             let ptr = _gst_debug_category_new(
                 name.to_glib_none().0,
-                color.to_glib(),
+                color.into_glib(),
                 description.to_glib_none().0,
             );
             // Can be NULL if the debug system is compiled out
@@ -93,7 +93,7 @@ impl DebugCategory {
 
     pub fn set_threshold(self, threshold: crate::DebugLevel) {
         if let Some(cat) = self.0 {
-            unsafe { ffi::gst_debug_category_set_threshold(cat.as_ptr(), threshold.to_glib()) }
+            unsafe { ffi::gst_debug_category_set_threshold(cat.as_ptr(), threshold.into_glib()) }
         }
     }
 
@@ -152,7 +152,7 @@ impl DebugCategory {
         };
 
         unsafe {
-            if level.to_glib() as i32 > cat.as_ref().threshold {
+            if level.into_glib() as i32 > cat.as_ref().threshold {
                 return;
             }
         }
@@ -165,7 +165,7 @@ impl DebugCategory {
         unsafe {
             ffi::gst_debug_log(
                 cat.as_ptr(),
-                level.to_glib(),
+                level.into_glib(),
                 file.to_glib_none().0,
                 module.to_glib_none().0,
                 line as i32,

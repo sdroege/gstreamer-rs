@@ -137,7 +137,7 @@ unsafe extern "C" fn gl_set_caps<T: GLBaseFilterImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn gl_start<T: GLBaseFilterImpl>(
@@ -156,7 +156,7 @@ unsafe extern "C" fn gl_start<T: GLBaseFilterImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn gl_stop<T: GLBaseFilterImpl>(ptr: *mut GstGLBaseFilter) {

@@ -362,7 +362,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     from_glib_full(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                        direction.to_glib(),
+                        direction.into_glib(),
                         caps.to_glib_none().0,
                         filter.to_glib_none().0,
                     ))
@@ -384,7 +384,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             match (*parent_class).fixate_caps {
                 Some(f) => from_glib_full(f(
                     element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                    direction.to_glib(),
+                    direction.into_glib(),
                     caps.to_glib_none().0,
                     othercaps.into_ptr(),
                 )),
@@ -433,7 +433,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     from_glib(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                        direction.to_glib(),
+                        direction.into_glib(),
                         caps.to_glib_none().0,
                     ))
                 })
@@ -455,7 +455,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     from_glib(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                        direction.to_glib(),
+                        direction.into_glib(),
                         query.as_mut_ptr(),
                     ))
                 })
@@ -480,7 +480,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                     let mut othersize = mem::MaybeUninit::uninit();
                     let res: bool = from_glib(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                        direction.to_glib(),
+                        direction.into_glib(),
                         caps.to_glib_none().0,
                         size,
                         othercaps.to_glib_none().0,
@@ -764,7 +764,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
             gst::FlowReturn::from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
-                is_discont.to_glib(),
+                is_discont.into_glib(),
                 inbuf.into_ptr(),
             ))
             .into_result()
@@ -856,8 +856,8 @@ unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform {
         klass.submit_input_buffer = Some(base_transform_submit_input_buffer::<T>);
         klass.generate_output = Some(base_transform_generate_output::<T>);
 
-        klass.passthrough_on_same_caps = T::PASSTHROUGH_ON_SAME_CAPS.to_glib();
-        klass.transform_ip_on_passthrough = T::TRANSFORM_IP_ON_PASSTHROUGH.to_glib();
+        klass.passthrough_on_same_caps = T::PASSTHROUGH_ON_SAME_CAPS.into_glib();
+        klass.transform_ip_on_passthrough = T::TRANSFORM_IP_ON_PASSTHROUGH.into_glib();
 
         match T::MODE {
             BaseTransformMode::AlwaysInPlace => {
@@ -909,7 +909,7 @@ unsafe extern "C" fn base_transform_start<T: BaseTransformImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_stop<T: BaseTransformImpl>(
@@ -928,7 +928,7 @@ unsafe extern "C" fn base_transform_stop<T: BaseTransformImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_transform_caps<T: BaseTransformImpl>(
@@ -998,7 +998,7 @@ unsafe extern "C" fn base_transform_set_caps<T: BaseTransformImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_accept_caps<T: BaseTransformImpl>(
@@ -1017,7 +1017,7 @@ unsafe extern "C" fn base_transform_accept_caps<T: BaseTransformImpl>(
             &from_glib_borrow(caps),
         )
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_query<T: BaseTransformImpl>(
@@ -1037,7 +1037,7 @@ unsafe extern "C" fn base_transform_query<T: BaseTransformImpl>(
             gst::QueryRef::from_mut_ptr(query),
         )
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_transform_size<T: BaseTransformImpl>(
@@ -1067,7 +1067,7 @@ unsafe extern "C" fn base_transform_transform_size<T: BaseTransformImpl>(
             None => false,
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_get_unit_size<T: BaseTransformImpl>(
@@ -1088,7 +1088,7 @@ unsafe extern "C" fn base_transform_get_unit_size<T: BaseTransformImpl>(
             None => false,
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
@@ -1116,7 +1116,7 @@ unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
             Err(err) => err.into(),
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_sink_event<T: BaseTransformImpl>(
@@ -1130,7 +1130,7 @@ unsafe extern "C" fn base_transform_sink_event<T: BaseTransformImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_src_event<T: BaseTransformImpl>(
@@ -1144,7 +1144,7 @@ unsafe extern "C" fn base_transform_src_event<T: BaseTransformImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_transform<T: BaseTransformImpl>(
@@ -1164,7 +1164,7 @@ unsafe extern "C" fn base_transform_transform<T: BaseTransformImpl>(
         )
         .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_transform_ip<T: BaseTransformImpl>(
@@ -1187,7 +1187,7 @@ unsafe extern "C" fn base_transform_transform_ip<T: BaseTransformImpl>(
                 .into()
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_transform_meta<T: BaseTransformImpl>(
@@ -1210,7 +1210,7 @@ unsafe extern "C" fn base_transform_transform_meta<T: BaseTransformImpl>(
             inbuf,
         )
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
@@ -1245,7 +1245,7 @@ unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_before_transform<T: BaseTransformImpl>(
@@ -1278,7 +1278,7 @@ unsafe extern "C" fn base_transform_submit_input_buffer<T: BaseTransformImpl>(
         )
         .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_transform_generate_output<T: BaseTransformImpl>(
@@ -1302,5 +1302,5 @@ unsafe extern "C" fn base_transform_generate_output<T: BaseTransformImpl>(
             Err(err) => err.into(),
         }
     })
-    .to_glib()
+    .into_glib()
 }

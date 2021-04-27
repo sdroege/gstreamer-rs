@@ -19,12 +19,12 @@ pub struct FormattedSegment<T: FormattedValue>(ffi::GstSegment, PhantomData<T>);
 impl Segment {
     pub fn reset_with_format(&mut self, format: Format) {
         unsafe {
-            ffi::gst_segment_init(self.to_glib_none_mut().0, format.to_glib());
+            ffi::gst_segment_init(self.to_glib_none_mut().0, format.into_glib());
         }
     }
 
     pub fn set_format(&mut self, format: Format) {
-        self.0.format = format.to_glib();
+        self.0.format = format.into_glib();
     }
 
     pub fn downcast<T: FormattedValue>(self) -> Result<FormattedSegment<T>, Self> {
@@ -63,7 +63,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         assert_initialized_main_thread!();
         let segment = unsafe {
             let mut segment = mem::MaybeUninit::zeroed();
-            ffi::gst_segment_init(segment.as_mut_ptr(), T::default_format().to_glib());
+            ffi::gst_segment_init(segment.as_mut_ptr(), T::default_format().into_glib());
             segment.assume_init()
         };
         FormattedSegment(segment, PhantomData)
@@ -81,7 +81,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
 
     pub fn reset(&mut self) {
         unsafe {
-            ffi::gst_segment_init(&mut self.0, T::default_format().to_glib());
+            ffi::gst_segment_init(&mut self.0, T::default_format().into_glib());
         }
     }
 
@@ -99,7 +99,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let mut clip_stop = mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_segment_clip(
                 &self.0,
-                start.format().to_glib(),
+                start.format().into_glib(),
                 start.to_raw_value() as u64,
                 stop.to_raw_value() as u64,
                 clip_start.as_mut_ptr(),
@@ -140,11 +140,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let ret = from_glib(ffi::gst_segment_do_seek(
                 &mut self.0,
                 rate,
-                self.format().to_glib(),
-                flags.to_glib(),
-                start_type.to_glib(),
+                self.format().into_glib(),
+                flags.into_glib(),
+                start_type.into_glib(),
                 start.to_raw_value() as u64,
-                stop_type.to_glib(),
+                stop_type.into_glib(),
                 stop.to_raw_value() as u64,
                 update.as_mut_ptr(),
             ));
@@ -159,7 +159,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn offset_running_time(&mut self, offset: i64) -> Result<(), glib::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_segment_offset_running_time(&mut self.0, self.format().to_glib(), offset,),
+                ffi::gst_segment_offset_running_time(
+                    &mut self.0,
+                    self.format().into_glib(),
+                    offset,
+                ),
                 "Offset is not in the segment"
             )
         }
@@ -177,7 +181,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
                 self.format(),
                 ffi::gst_segment_position_from_running_time(
                     &self.0,
-                    self.format().to_glib(),
+                    self.format().into_glib(),
                     running_time.to_raw_value() as u64,
                 ) as i64,
             )
@@ -195,7 +199,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let mut position = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_position_from_running_time_full(
                 &self.0,
-                self.format().to_glib(),
+                self.format().into_glib(),
                 running_time.to_raw_value() as u64,
                 position.as_mut_ptr(),
             );
@@ -218,7 +222,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
                 self.format(),
                 ffi::gst_segment_position_from_stream_time(
                     &self.0,
-                    self.format().to_glib(),
+                    self.format().into_glib(),
                     stream_time.to_raw_value() as u64,
                 ) as i64,
             )
@@ -236,7 +240,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let mut position = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_position_from_stream_time_full(
                 &self.0,
-                self.format().to_glib(),
+                self.format().into_glib(),
                 stream_time.to_raw_value() as u64,
                 position.as_mut_ptr(),
             );
@@ -258,7 +262,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             glib::result_from_gboolean!(
                 ffi::gst_segment_set_running_time(
                     &mut self.0,
-                    self.format().to_glib(),
+                    self.format().into_glib(),
                     running_time.to_raw_value() as u64,
                 ),
                 "Running time is not in the segment"
@@ -278,7 +282,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
                 self.format(),
                 ffi::gst_segment_to_running_time(
                     &self.0,
-                    self.format().to_glib(),
+                    self.format().into_glib(),
                     position.to_raw_value() as u64,
                 ) as i64,
             )
@@ -296,7 +300,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let mut running_time = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_to_running_time_full(
                 &self.0,
-                self.format().to_glib(),
+                self.format().into_glib(),
                 position.to_raw_value() as u64,
                 running_time.as_mut_ptr(),
             );
@@ -319,7 +323,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
                 self.format(),
                 ffi::gst_segment_to_stream_time(
                     &self.0,
-                    self.format().to_glib(),
+                    self.format().into_glib(),
                     position.to_raw_value() as u64,
                 ) as i64,
             )
@@ -337,7 +341,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let mut stream_time = mem::MaybeUninit::uninit();
             let ret = ffi::gst_segment_to_stream_time_full(
                 &self.0,
-                self.format().to_glib(),
+                self.format().into_glib(),
                 position.to_raw_value() as u64,
                 stream_time.as_mut_ptr(),
             );
@@ -353,7 +357,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     }
 
     pub fn set_flags(&mut self, flags: crate::SegmentFlags) {
-        self.0.flags = flags.to_glib();
+        self.0.flags = flags.into_glib();
     }
 
     pub fn rate(&self) -> f64 {

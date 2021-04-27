@@ -616,7 +616,7 @@ unsafe extern "C" fn base_src_start<T: BaseSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_stop<T: BaseSrcImpl>(
@@ -635,7 +635,7 @@ unsafe extern "C" fn base_src_stop<T: BaseSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_is_seekable<T: BaseSrcImpl>(
@@ -648,7 +648,7 @@ unsafe extern "C" fn base_src_is_seekable<T: BaseSrcImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.is_seekable(wrap.unsafe_cast_ref())
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_get_size<T: BaseSrcImpl>(
@@ -668,7 +668,7 @@ unsafe extern "C" fn base_src_get_size<T: BaseSrcImpl>(
             None => false,
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_get_times<T: BaseSrcImpl>(
@@ -687,8 +687,8 @@ unsafe extern "C" fn base_src_get_times<T: BaseSrcImpl>(
 
     gst::panic_to_error!(&wrap, &imp.panicked(), (), {
         let (start_, stop_) = imp.times(wrap.unsafe_cast_ref(), buffer);
-        *start = start_.to_glib();
-        *stop = stop_.to_glib();
+        *start = start_.into_glib();
+        *stop = stop_.into_glib();
     });
 }
 
@@ -707,7 +707,7 @@ unsafe extern "C" fn base_src_fill<T: BaseSrcImpl>(
         imp.fill(wrap.unsafe_cast_ref(), offset, length, buffer)
             .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_alloc<T: BaseSrcImpl>(
@@ -732,7 +732,7 @@ unsafe extern "C" fn base_src_alloc<T: BaseSrcImpl>(
             Err(err) => gst::FlowReturn::from(err),
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
@@ -818,7 +818,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
             Err(err) => gst::FlowReturn::from(err),
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_do_seek<T: BaseSrcImpl>(
@@ -836,7 +836,7 @@ unsafe extern "C" fn base_src_do_seek<T: BaseSrcImpl>(
 
         res
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_query<T: BaseSrcImpl>(
@@ -851,7 +851,7 @@ unsafe extern "C" fn base_src_query<T: BaseSrcImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         BaseSrcImpl::query(imp, wrap.unsafe_cast_ref(), query)
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_event<T: BaseSrcImpl>(
@@ -865,7 +865,7 @@ unsafe extern "C" fn base_src_event<T: BaseSrcImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.event(wrap.unsafe_cast_ref(), &from_glib_borrow(event_ptr))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_get_caps<T: BaseSrcImpl>(
@@ -900,7 +900,7 @@ unsafe extern "C" fn base_src_negotiate<T: BaseSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_set_caps<T: BaseSrcImpl>(
@@ -921,7 +921,7 @@ unsafe extern "C" fn base_src_set_caps<T: BaseSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_fixate<T: BaseSrcImpl>(
@@ -955,7 +955,7 @@ unsafe extern "C" fn base_src_unlock<T: BaseSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn base_src_unlock_stop<T: BaseSrcImpl>(
@@ -974,5 +974,5 @@ unsafe extern "C" fn base_src_unlock_stop<T: BaseSrcImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }

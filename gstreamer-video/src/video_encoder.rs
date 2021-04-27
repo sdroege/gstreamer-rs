@@ -124,8 +124,8 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         unsafe {
             ffi::gst_video_encoder_set_latency(
                 self.as_ref().to_glib_none().0,
-                min_latency.to_glib(),
-                max_latency.to_glib(),
+                min_latency.into_glib(),
+                max_latency.into_glib(),
             );
         }
     }

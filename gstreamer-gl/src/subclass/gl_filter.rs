@@ -217,7 +217,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
 
             from_glib_full(f(
                 filter.unsafe_cast_ref::<GLFilter>().to_glib_none().0,
-                direction.to_glib(),
+                direction.into_glib(),
                 caps.to_glib_none().0,
                 filter_caps.to_glib_none().0,
             ))
@@ -276,7 +276,7 @@ unsafe extern "C" fn filter<T: GLFilterImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn filter_texture<T: GLFilterImpl>(
@@ -301,7 +301,7 @@ unsafe extern "C" fn filter_texture<T: GLFilterImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn init_fbo<T: GLFilterImpl>(ptr: *mut GstGLFilter) -> glib::ffi::gboolean {
@@ -318,7 +318,7 @@ unsafe extern "C" fn init_fbo<T: GLFilterImpl>(ptr: *mut GstGLFilter) -> glib::f
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn set_caps<T: GLFilterImpl>(
@@ -344,7 +344,7 @@ unsafe extern "C" fn set_caps<T: GLFilterImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn transform_internal_caps<T: GLFilterImpl>(

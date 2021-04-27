@@ -3,7 +3,7 @@
 use std::fmt;
 use std::mem;
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr};
 
 gst::mini_object_wrapper!(
     VideoOverlayRectangle,
@@ -46,7 +46,7 @@ impl VideoOverlayRectangle {
                 render_y,
                 render_width,
                 render_height,
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -119,7 +119,7 @@ impl VideoOverlayRectangleRef {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_raw(
                 self.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -128,7 +128,7 @@ impl VideoOverlayRectangleRef {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_ayuv(
                 self.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -137,7 +137,7 @@ impl VideoOverlayRectangleRef {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_unscaled_argb(
                 self.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -146,7 +146,7 @@ impl VideoOverlayRectangleRef {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_raw(
                 self.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -155,7 +155,7 @@ impl VideoOverlayRectangleRef {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_ayuv(
                 self.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }
@@ -164,7 +164,7 @@ impl VideoOverlayRectangleRef {
         unsafe {
             from_glib_none(ffi::gst_video_overlay_rectangle_get_pixels_argb(
                 self.as_mut_ptr(),
-                flags.to_glib(),
+                flags.into_glib(),
             ))
         }
     }

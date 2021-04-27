@@ -519,7 +519,7 @@ unsafe extern "C" fn audio_encoder_open<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_close<T: AudioEncoderImpl>(
@@ -538,7 +538,7 @@ unsafe extern "C" fn audio_encoder_close<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_start<T: AudioEncoderImpl>(
@@ -557,7 +557,7 @@ unsafe extern "C" fn audio_encoder_start<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_stop<T: AudioEncoderImpl>(
@@ -576,7 +576,7 @@ unsafe extern "C" fn audio_encoder_stop<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_set_format<T: AudioEncoderImpl>(
@@ -596,7 +596,7 @@ unsafe extern "C" fn audio_encoder_set_format<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_handle_frame<T: AudioEncoderImpl>(
@@ -616,7 +616,7 @@ unsafe extern "C" fn audio_encoder_handle_frame<T: AudioEncoderImpl>(
         )
         .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_pre_push<T: AudioEncoderImpl>(
@@ -641,7 +641,7 @@ unsafe extern "C" fn audio_encoder_pre_push<T: AudioEncoderImpl>(
         }
         .into()
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_flush<T: AudioEncoderImpl>(ptr: *mut ffi::GstAudioEncoder) {
@@ -670,7 +670,7 @@ unsafe extern "C" fn audio_encoder_negotiate<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_getcaps<T: AudioEncoderImpl>(
@@ -704,7 +704,7 @@ unsafe extern "C" fn audio_encoder_sink_event<T: AudioEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_sink_query<T: AudioEncoderImpl>(
@@ -718,7 +718,7 @@ unsafe extern "C" fn audio_encoder_sink_query<T: AudioEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.sink_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_src_event<T: AudioEncoderImpl>(
@@ -732,7 +732,7 @@ unsafe extern "C" fn audio_encoder_src_event<T: AudioEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_event(wrap.unsafe_cast_ref(), from_glib_full(event))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_src_query<T: AudioEncoderImpl>(
@@ -746,7 +746,7 @@ unsafe extern "C" fn audio_encoder_src_query<T: AudioEncoderImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), false, {
         imp.src_query(wrap.unsafe_cast_ref(), gst::QueryRef::from_mut_ptr(query))
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_propose_allocation<T: AudioEncoderImpl>(
@@ -767,7 +767,7 @@ unsafe extern "C" fn audio_encoder_propose_allocation<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }
 
 unsafe extern "C" fn audio_encoder_decide_allocation<T: AudioEncoderImpl>(
@@ -788,5 +788,5 @@ unsafe extern "C" fn audio_encoder_decide_allocation<T: AudioEncoderImpl>(
             }
         }
     })
-    .to_glib()
+    .into_glib()
 }

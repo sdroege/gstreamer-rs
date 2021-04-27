@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrFull, ToGlib, ToGlibPtr,
+    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrFull, IntoGlib, ToGlibPtr,
     ToGlibPtrMut,
 };
 use gst::prelude::*;
@@ -23,11 +23,11 @@ pub enum VideoColorRange {
 }
 
 #[doc(hidden)]
-impl ToGlib for VideoColorRange {
+impl IntoGlib for VideoColorRange {
     type GlibType = ffi::GstVideoColorRange;
 
-    fn to_glib(&self) -> ffi::GstVideoColorRange {
-        match *self {
+    fn into_glib(self) -> ffi::GstVideoColorRange {
+        match self {
             VideoColorRange::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
             VideoColorRange::Range0255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
             VideoColorRange::Range16235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
@@ -71,7 +71,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for VideoColorRange {
 impl glib::value::ToValue for VideoColorRange {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<VideoColorRange>();
-        unsafe { glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.to_glib()) }
+        unsafe { glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib()) }
         value
     }
 
@@ -92,10 +92,10 @@ impl VideoColorimetry {
         assert_initialized_main_thread!();
 
         let colorimetry = ffi::GstVideoColorimetry {
-            range: range.to_glib(),
-            matrix: matrix.to_glib(),
-            transfer: transfer.to_glib(),
-            primaries: primaries.to_glib(),
+            range: range.into_glib(),
+            matrix: matrix.into_glib(),
+            transfer: transfer.into_glib(),
+            primaries: primaries.into_glib(),
         };
 
         VideoColorimetry(colorimetry)
@@ -179,9 +179,9 @@ impl crate::VideoChromaSite {
         unsafe {
             cfg_if::cfg_if! {
                 if #[cfg(all(feature = "v1_20", not(feature = "dox")))] {
-                    from_glib_full(ffi::gst_video_chroma_site_to_string(self.to_glib()))
+                    from_glib_full(ffi::gst_video_chroma_site_to_string(self.into_glib()))
                 } else {
-                    from_glib_none(ffi::gst_video_chroma_to_string(self.to_glib()))
+                    from_glib_none(ffi::gst_video_chroma_to_string(self.into_glib()))
                 }
             }
         }
@@ -221,7 +221,7 @@ impl fmt::Display for crate::VideoChromaSite {
 impl From<crate::VideoMultiviewFramePacking> for crate::VideoMultiviewMode {
     fn from(v: crate::VideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib(v.to_glib()) }
+        unsafe { from_glib(v.into_glib()) }
     }
 }
 
@@ -233,7 +233,7 @@ impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewF
     ) -> Result<crate::VideoMultiviewFramePacking, glib::BoolError> {
         skip_assert_initialized!();
 
-        let v2 = unsafe { from_glib(v.to_glib()) };
+        let v2 = unsafe { from_glib(v.into_glib()) };
 
         if let crate::VideoMultiviewFramePacking::__Unknown(_) = v2 {
             Err(glib::bool_error!("Invalid frame packing mode"))
@@ -306,15 +306,15 @@ impl<'a> VideoInfoBuilder<'a> {
                         from_glib(if let Some(interlace_mode) = self.interlace_mode {
                             ffi::gst_video_info_set_interlaced_format(
                                 info.as_mut_ptr(),
-                                self.format.to_glib(),
-                                interlace_mode.to_glib(),
+                                self.format.into_glib(),
+                                interlace_mode.into_glib(),
                                 self.width,
                                 self.height,
                             )
                         } else {
                             ffi::gst_video_info_set_format(
                                 info.as_mut_ptr(),
-                                self.format.to_glib(),
+                                self.format.into_glib(),
                                 self.width,
                                 self.height,
                             )
@@ -324,7 +324,7 @@ impl<'a> VideoInfoBuilder<'a> {
                     let res: bool = {
                         let res = from_glib(ffi::gst_video_info_set_format(
                             info.as_mut_ptr(),
-                            self.format.to_glib(),
+                            self.format.into_glib(),
                             self.width,
                             self.height,
                         ));
@@ -332,7 +332,7 @@ impl<'a> VideoInfoBuilder<'a> {
                         if res {
                             if let Some(interlace_mode) = self.interlace_mode {
                                 let info = info.as_mut_ptr();
-                                (*info).interlace_mode = interlace_mode.to_glib();
+                                (*info).interlace_mode = interlace_mode.into_glib();
                             }
                         }
 
@@ -345,7 +345,7 @@ impl<'a> VideoInfoBuilder<'a> {
                         let res = if gst::version() < (1, 11, 1, 0) {
                             ffi::gst_video_info_set_format(
                                 info.as_mut_ptr(),
-                                self.format.to_glib(),
+                                self.format.into_glib(),
                                 self.width,
                                 self.height,
                             );
@@ -354,7 +354,7 @@ impl<'a> VideoInfoBuilder<'a> {
                         } else {
                             from_glib(ffi::gst_video_info_set_format(
                                 info.as_mut_ptr(),
-                                self.format.to_glib(),
+                                self.format.into_glib(),
                                 self.width,
                                 self.height,
                             ))
@@ -363,7 +363,7 @@ impl<'a> VideoInfoBuilder<'a> {
                         if res {
                             if let Some(interlace_mode) = self.interlace_mode {
                                 let info = info.as_mut_ptr();
-                                (*info).interlace_mode = interlace_mode.to_glib();
+                                (*info).interlace_mode = interlace_mode.into_glib();
                             }
                         }
 
@@ -383,7 +383,7 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if let Some(flags) = self.flags {
-                info.flags = flags.to_glib();
+                info.flags = flags.into_glib();
             }
 
             if let Some(size) = self.size {
@@ -395,7 +395,7 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if let Some(chroma_site) = self.chroma_site {
-                info.chroma_site = chroma_site.to_glib();
+                info.chroma_site = chroma_site.into_glib();
             }
 
             if let Some(colorimetry) = self.colorimetry {
@@ -432,18 +432,18 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(multiview_mode) = self.multiview_mode {
                 let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
-                ptr::write(ptr.offset(0), multiview_mode.to_glib());
+                ptr::write(ptr.offset(0), multiview_mode.into_glib());
             }
 
             if let Some(multiview_flags) = self.multiview_flags {
                 let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut u32;
-                ptr::write(ptr.offset(1), multiview_flags.to_glib());
+                ptr::write(ptr.offset(1), multiview_flags.into_glib());
             }
 
             #[cfg(any(feature = "v1_12", feature = "dox"))]
             if let Some(field_order) = self.field_order {
                 let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
-                ptr::write(ptr.offset(2), field_order.to_glib());
+                ptr::write(ptr.offset(2), field_order.into_glib());
             }
 
             Ok(VideoInfo(info))
@@ -756,9 +756,9 @@ impl VideoInfo {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                U::default_format().to_glib(),
+                U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             )) {
                 Some(U::from_raw(U::default_format(), dest_val.assume_init()))
@@ -780,9 +780,9 @@ impl VideoInfo {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
-                src_val.format().to_glib(),
+                src_val.format().into_glib(),
                 src_val.to_raw_value(),
-                dest_fmt.to_glib(),
+                dest_fmt.into_glib(),
                 dest_val.as_mut_ptr(),
             )) {
                 Some(gst::GenericFormattedValue::new(
@@ -968,7 +968,7 @@ impl crate::VideoFieldOrder {
         }
         unsafe {
             CStr::from_ptr(
-                ffi::gst_video_field_order_to_string(self.to_glib())
+                ffi::gst_video_field_order_to_string(self.into_glib())
                     .as_ref()
                     .expect("gst_video_field_order_to_string returned NULL"),
             )

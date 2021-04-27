@@ -118,7 +118,7 @@ mod custom_meta {
             // Need to initialize all our fields correctly here.
             ptr::write(&mut meta.label, params.label);
 
-            true.to_glib()
+            true.into_glib()
         }
 
         // Free function for our meta. This needs to free/drop all memory we allocated.
@@ -148,7 +148,7 @@ mod custom_meta {
             // and do things conditional on that, or even just drop the meta.
             super::CustomMeta::add(gst::BufferRef::from_mut_ptr(dest), meta.label.clone());
 
-            true.to_glib()
+            true.into_glib()
         }
 
         // Register the meta itself with its functions.
@@ -160,7 +160,7 @@ mod custom_meta {
             static META_INFO: Lazy<MetaInfo> = Lazy::new(|| unsafe {
                 MetaInfo(
                     ptr::NonNull::new(gst::ffi::gst_meta_register(
-                        custom_meta_api_get_type().to_glib(),
+                        custom_meta_api_get_type().into_glib(),
                         b"MyCustomMeta\0".as_ptr() as *const _,
                         mem::size_of::<CustomMeta>(),
                         Some(custom_meta_init),

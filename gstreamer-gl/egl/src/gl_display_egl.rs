@@ -23,6 +23,6 @@ impl GLDisplayEGL {
     }
 
     pub unsafe fn from_native(display_type: GLDisplayType, display: uintptr_t) -> gpointer {
-        ffi::gst_gl_display_egl_get_from_native(display_type.to_glib(), display)
+        ffi::gst_gl_display_egl_get_from_native(display_type.into_glib(), display)
     }
 }

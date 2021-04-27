@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, ToGlib};
+use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, IntoGlib};
 use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
@@ -88,7 +88,7 @@ impl<'a> RTPBuffer<'a, Writable> {
 
     pub fn set_marker(&mut self, m: bool) {
         unsafe {
-            ffi::gst_rtp_buffer_set_marker(&mut self.rtp_buffer, m.to_glib());
+            ffi::gst_rtp_buffer_set_marker(&mut self.rtp_buffer, m.into_glib());
         }
     }
 
@@ -113,7 +113,7 @@ impl<'a> RTPBuffer<'a, Writable> {
     }
 
     pub fn set_extension(&mut self, extension: bool) {
-        unsafe { ffi::gst_rtp_buffer_set_extension(&mut self.rtp_buffer, extension.to_glib()) }
+        unsafe { ffi::gst_rtp_buffer_set_extension(&mut self.rtp_buffer, extension.into_glib()) }
     }
 
     pub fn add_extension_onebyte_header(

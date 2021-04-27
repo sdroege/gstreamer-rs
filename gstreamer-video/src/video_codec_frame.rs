@@ -92,7 +92,7 @@ impl<'a> VideoCodecFrame<'a> {
 
     pub fn set_dts(&mut self, dts: gst::ClockTime) {
         unsafe {
-            (*self.to_glib_none().0).dts = dts.to_glib();
+            (*self.to_glib_none().0).dts = dts.into_glib();
         }
     }
 
@@ -102,7 +102,7 @@ impl<'a> VideoCodecFrame<'a> {
 
     pub fn set_pts(&mut self, pts: gst::ClockTime) {
         unsafe {
-            (*self.to_glib_none().0).pts = pts.to_glib();
+            (*self.to_glib_none().0).pts = pts.into_glib();
         }
     }
 
@@ -112,7 +112,7 @@ impl<'a> VideoCodecFrame<'a> {
 
     pub fn set_duration(&mut self, duration: gst::ClockTime) {
         unsafe {
-            (*self.to_glib_none().0).duration = duration.to_glib();
+            (*self.to_glib_none().0).duration = duration.into_glib();
         }
     }
 
