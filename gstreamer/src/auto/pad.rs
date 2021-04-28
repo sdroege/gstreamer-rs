@@ -7,11 +7,13 @@ use crate::Caps;
 use crate::Element;
 use crate::Event;
 use crate::EventType;
+use crate::FlowError;
+use crate::FlowSuccess;
 use crate::Object;
 use crate::PadDirection;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
 use crate::PadLinkCheck;
+use crate::PadLinkError;
+use crate::PadLinkSuccess;
 use crate::PadMode;
 use crate::PadTemplate;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -84,6 +86,10 @@ pub trait PadExt: 'static {
     //#[doc(alias = "get_element_private")]
     //fn element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer>;
 
+    #[doc(alias = "gst_pad_get_last_flow_return")]
+    #[doc(alias = "get_last_flow_return")]
+    fn last_flow_result(&self) -> Result<FlowSuccess, FlowError>;
+
     #[doc(alias = "gst_pad_get_offset")]
     #[doc(alias = "get_offset")]
     fn offset(&self) -> i64;
@@ -151,6 +157,16 @@ pub trait PadExt: 'static {
     //#[doc(alias = "gst_pad_iterate_internal_links_default")]
     //fn iterate_internal_links_default<P: IsA<Object>>(&self, parent: Option<&P>) -> /*Ignored*/Option<Iterator>;
 
+    #[doc(alias = "gst_pad_link")]
+    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError>;
+
+    #[doc(alias = "gst_pad_link_full")]
+    fn link_full<P: IsA<Pad>>(
+        &self,
+        sinkpad: &P,
+        flags: PadLinkCheck,
+    ) -> Result<PadLinkSuccess, PadLinkError>;
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
     #[doc(alias = "gst_pad_link_maybe_ghosting")]
@@ -197,6 +213,9 @@ pub trait PadExt: 'static {
 
     #[doc(alias = "gst_pad_stop_task")]
     fn stop_task(&self) -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "gst_pad_store_sticky_event")]
+    fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError>;
 
     #[doc(alias = "gst_pad_unlink")]
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError>;
@@ -319,6 +338,14 @@ impl<O: IsA<Pad>> PadExt for O {
     //    unsafe { TODO: call ffi:gst_pad_get_element_private() }
     //}
 
+    fn last_flow_result(&self) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            FlowSuccess::try_from_glib(ffi::gst_pad_get_last_flow_return(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     fn offset(&self) -> i64 {
         unsafe { ffi::gst_pad_get_offset(self.as_ref().to_glib_none().0) }
     }
@@ -418,6 +445,29 @@ impl<O: IsA<Pad>> PadExt for O {
     //fn iterate_internal_links_default<P: IsA<Object>>(&self, parent: Option<&P>) -> /*Ignored*/Option<Iterator> {
     //    unsafe { TODO: call ffi:gst_pad_iterate_internal_links_default() }
     //}
+
+    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError> {
+        unsafe {
+            PadLinkSuccess::try_from_glib(ffi::gst_pad_link(
+                self.as_ref().to_glib_none().0,
+                sinkpad.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn link_full<P: IsA<Pad>>(
+        &self,
+        sinkpad: &P,
+        flags: PadLinkCheck,
+    ) -> Result<PadLinkSuccess, PadLinkError> {
+        unsafe {
+            PadLinkSuccess::try_from_glib(ffi::gst_pad_link_full(
+                self.as_ref().to_glib_none().0,
+                sinkpad.as_ref().to_glib_none().0,
+                flags.into_glib(),
+            ))
+        }
+    }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
@@ -536,6 +586,15 @@ impl<O: IsA<Pad>> PadExt for O {
                 ffi::gst_pad_stop_task(self.as_ref().to_glib_none().0),
                 "Failed to stop pad task"
             )
+        }
+    }
+
+    fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            FlowSuccess::try_from_glib(ffi::gst_pad_store_sticky_event(
+                self.as_ref().to_glib_none().0,
+                event.to_glib_none().0,
+            ))
         }
     }
 

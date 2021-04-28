@@ -280,6 +280,12 @@ pub trait RTSPStreamExt: 'static {
         rtpbin: &Q,
     ) -> Result<(), glib::error::BoolError>;
 
+    #[doc(alias = "gst_rtsp_stream_recv_rtcp")]
+    fn recv_rtcp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[doc(alias = "gst_rtsp_stream_recv_rtp")]
+    fn recv_rtp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_rtsp_stream_remove_transport")]
     fn remove_transport<P: IsA<RTSPStreamTransport>>(
         &self,
@@ -891,6 +897,24 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
                 ),
                 "Failed to leave bin"
             )
+        }
+    }
+
+    fn recv_rtcp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_rtsp_stream_recv_rtcp(
+                self.as_ref().to_glib_none().0,
+                buffer.to_glib_full(),
+            ))
+        }
+    }
+
+    fn recv_rtp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_rtsp_stream_recv_rtp(
+                self.as_ref().to_glib_none().0,
+                buffer.to_glib_full(),
+            ))
         }
     }
 

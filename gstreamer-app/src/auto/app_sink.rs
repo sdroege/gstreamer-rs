@@ -208,6 +208,64 @@ impl AppSink {
         }
     }
 
+    #[doc(alias = "new-preroll")]
+    pub fn connect_new_preroll<
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn new_preroll_trampoline<
+            F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            f: glib::ffi::gpointer,
+        ) -> gst::ffi::GstFlowReturn {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this)).into_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"new-preroll\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    new_preroll_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[doc(alias = "new-sample")]
+    pub fn connect_new_sample<
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn new_sample_trampoline<
+            F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            f: glib::ffi::gpointer,
+        ) -> gst::ffi::GstFlowReturn {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this)).into_glib()
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"new-sample\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    new_sample_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "buffer-list")]
     pub fn connect_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
         &self,

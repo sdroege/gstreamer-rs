@@ -53,6 +53,13 @@ pub trait RTSPStreamTransportExt: 'static {
     #[doc(alias = "gst_rtsp_stream_transport_message_sent")]
     fn message_sent(&self);
 
+    #[doc(alias = "gst_rtsp_stream_transport_recv_data")]
+    fn recv_data(
+        &self,
+        channel: u32,
+        buffer: &gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "gst_rtsp_stream_transport_send_rtcp")]
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
 
@@ -150,6 +157,20 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     fn message_sent(&self) {
         unsafe {
             ffi::gst_rtsp_stream_transport_message_sent(self.as_ref().to_glib_none().0);
+        }
+    }
+
+    fn recv_data(
+        &self,
+        channel: u32,
+        buffer: &gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_rtsp_stream_transport_recv_data(
+                self.as_ref().to_glib_none().0,
+                channel,
+                buffer.to_glib_full(),
+            ))
         }
     }
 

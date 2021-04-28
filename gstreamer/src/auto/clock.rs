@@ -65,12 +65,12 @@ impl Clock {
     //}
 
     //#[doc(alias = "gst_clock_id_wait")]
-    //pub fn id_wait(id: /*Unimplemented*/ClockID) -> (ClockReturn, ClockTimeDiff) {
+    //pub fn id_wait(id: /*Unimplemented*/ClockID) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
     //    unsafe { TODO: call ffi:gst_clock_id_wait() }
     //}
 
     //#[doc(alias = "gst_clock_id_wait_async")]
-    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, ClockTime, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> ClockReturn {
+    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, ClockTime, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Result<ClockSuccess, ClockError> {
     //    unsafe { TODO: call ffi:gst_clock_id_wait_async() }
     //}
 }

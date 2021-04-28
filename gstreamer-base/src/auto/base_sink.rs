@@ -11,6 +11,7 @@ use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use std::boxed::Box as Box_;
+use std::mem;
 use std::mem::transmute;
 
 glib::wrapper! {
@@ -28,7 +29,7 @@ pub const NONE_BASE_SINK: Option<&BaseSink> = None;
 
 pub trait BaseSinkExt: 'static {
     //#[doc(alias = "gst_base_sink_do_preroll")]
-    //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> gst::FlowReturn;
+    //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "gst_base_sink_get_blocksize")]
     #[doc(alias = "get_blocksize")]
@@ -133,6 +134,24 @@ pub trait BaseSinkExt: 'static {
     #[doc(alias = "gst_base_sink_set_ts_offset")]
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff);
 
+    #[doc(alias = "gst_base_sink_wait")]
+    fn wait(
+        &self,
+        time: gst::ClockTime,
+    ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff);
+
+    #[doc(alias = "gst_base_sink_wait_clock")]
+    fn wait_clock(
+        &self,
+        time: gst::ClockTime,
+    ) -> (
+        Result<gst::ClockSuccess, gst::ClockError>,
+        gst::ClockTimeDiff,
+    );
+
+    #[doc(alias = "gst_base_sink_wait_preroll")]
+    fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "async")]
     fn is_async(&self) -> bool;
 
@@ -221,7 +240,7 @@ pub trait BaseSinkExt: 'static {
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExt for O {
-    //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> gst::FlowReturn {
+    //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> Result<gst::FlowSuccess, gst::FlowError> {
     //    unsafe { TODO: call ffi:gst_base_sink_do_preroll() }
     //}
 
@@ -408,6 +427,49 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff) {
         unsafe {
             ffi::gst_base_sink_set_ts_offset(self.as_ref().to_glib_none().0, offset);
+        }
+    }
+
+    fn wait(
+        &self,
+        time: gst::ClockTime,
+    ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff) {
+        unsafe {
+            let mut jitter = mem::MaybeUninit::uninit();
+            let ret = gst::FlowSuccess::try_from_glib(ffi::gst_base_sink_wait(
+                self.as_ref().to_glib_none().0,
+                time.into_glib(),
+                jitter.as_mut_ptr(),
+            ));
+            let jitter = jitter.assume_init();
+            (ret, jitter)
+        }
+    }
+
+    fn wait_clock(
+        &self,
+        time: gst::ClockTime,
+    ) -> (
+        Result<gst::ClockSuccess, gst::ClockError>,
+        gst::ClockTimeDiff,
+    ) {
+        unsafe {
+            let mut jitter = mem::MaybeUninit::uninit();
+            let ret = gst::ClockSuccess::try_from_glib(ffi::gst_base_sink_wait_clock(
+                self.as_ref().to_glib_none().0,
+                time.into_glib(),
+                jitter.as_mut_ptr(),
+            ));
+            let jitter = jitter.assume_init();
+            (ret, jitter)
+        }
+    }
+
+    fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_base_sink_wait_preroll(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 

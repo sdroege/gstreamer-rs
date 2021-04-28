@@ -13,6 +13,11 @@ use crate::Object;
 use crate::Pad;
 use crate::PadLinkCheck;
 use crate::PadTemplate;
+use crate::State;
+use crate::StateChange;
+use crate::StateChangeError;
+use crate::StateChangeReturn;
+use crate::StateChangeSuccess;
 use crate::URIType;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -20,6 +25,7 @@ use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use std::boxed::Box as Box_;
+use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -67,6 +73,16 @@ pub trait ElementExt: 'static {
 
     #[doc(alias = "gst_element_add_pad")]
     fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
+
+    #[doc(alias = "gst_element_change_state")]
+    fn change_state(&self, transition: StateChange)
+        -> Result<StateChangeSuccess, StateChangeError>;
+
+    #[doc(alias = "gst_element_continue_state")]
+    fn continue_state(
+        &self,
+        ret: impl Into<StateChangeReturn>,
+    ) -> Result<StateChangeSuccess, StateChangeError>;
 
     #[doc(alias = "gst_element_create_all_pads")]
     fn create_all_pads(&self);
@@ -125,6 +141,13 @@ pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_get_start_time")]
     #[doc(alias = "get_start_time")]
     fn start_time(&self) -> ClockTime;
+
+    #[doc(alias = "gst_element_get_state")]
+    #[doc(alias = "get_state")]
+    fn state(
+        &self,
+        timeout: ClockTime,
+    ) -> (Result<StateChangeSuccess, StateChangeError>, State, State);
 
     #[doc(alias = "gst_element_get_static_pad")]
     #[doc(alias = "get_static_pad")]
@@ -230,6 +253,9 @@ pub trait ElementExt: 'static {
     #[doc(alias = "gst_element_set_start_time")]
     fn set_start_time(&self, time: ClockTime);
 
+    #[doc(alias = "gst_element_set_state")]
+    fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
+
     #[doc(alias = "gst_element_sync_state_with_parent")]
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError>;
 
@@ -274,6 +300,30 @@ impl<O: IsA<Element>> ElementExt for O {
                 ),
                 "Failed to add pad"
             )
+        }
+    }
+
+    fn change_state(
+        &self,
+        transition: StateChange,
+    ) -> Result<StateChangeSuccess, StateChangeError> {
+        unsafe {
+            StateChangeSuccess::try_from_glib(ffi::gst_element_change_state(
+                self.as_ref().to_glib_none().0,
+                transition.into_glib(),
+            ))
+        }
+    }
+
+    fn continue_state(
+        &self,
+        ret: impl Into<StateChangeReturn>,
+    ) -> Result<StateChangeSuccess, StateChangeError> {
+        unsafe {
+            StateChangeSuccess::try_from_glib(ffi::gst_element_continue_state(
+                self.as_ref().to_glib_none().0,
+                ret.into().into_glib(),
+            ))
         }
     }
 
@@ -431,6 +481,25 @@ impl<O: IsA<Element>> ElementExt for O {
             from_glib(ffi::gst_element_get_start_time(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    fn state(
+        &self,
+        timeout: ClockTime,
+    ) -> (Result<StateChangeSuccess, StateChangeError>, State, State) {
+        unsafe {
+            let mut state = mem::MaybeUninit::uninit();
+            let mut pending = mem::MaybeUninit::uninit();
+            let ret = StateChangeSuccess::try_from_glib(ffi::gst_element_get_state(
+                self.as_ref().to_glib_none().0,
+                state.as_mut_ptr(),
+                pending.as_mut_ptr(),
+                timeout.into_glib(),
+            ));
+            let state = state.assume_init();
+            let pending = pending.assume_init();
+            (ret, from_glib(state), from_glib(pending))
         }
     }
 
@@ -666,6 +735,15 @@ impl<O: IsA<Element>> ElementExt for O {
     fn set_start_time(&self, time: ClockTime) {
         unsafe {
             ffi::gst_element_set_start_time(self.as_ref().to_glib_none().0, time.into_glib());
+        }
+    }
+
+    fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError> {
+        unsafe {
+            StateChangeSuccess::try_from_glib(ffi::gst_element_set_state(
+                self.as_ref().to_glib_none().0,
+                state.into_glib(),
+            ))
         }
     }
 

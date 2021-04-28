@@ -80,6 +80,9 @@ pub trait VideoDecoderExt: 'static {
     #[doc(alias = "get_qos_proportion")]
     fn qos_proportion(&self) -> f64;
 
+    #[doc(alias = "gst_video_decoder_have_frame")]
+    fn have_frame(&self) -> gst::FlowReturn;
+
     #[doc(alias = "gst_video_decoder_merge_tags")]
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
@@ -186,6 +189,14 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     fn qos_proportion(&self) -> f64 {
         unsafe { ffi::gst_video_decoder_get_qos_proportion(self.as_ref().to_glib_none().0) }
+    }
+
+    fn have_frame(&self) -> gst::FlowReturn {
+        unsafe {
+            from_glib(ffi::gst_video_decoder_have_frame(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode) {

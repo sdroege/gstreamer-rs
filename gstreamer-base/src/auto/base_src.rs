@@ -82,6 +82,15 @@ pub trait BaseSrcExt: 'static {
     #[doc(alias = "gst_base_src_set_live")]
     fn set_live(&self, live: bool);
 
+    #[doc(alias = "gst_base_src_start_complete")]
+    fn start_complete(&self, ret: impl Into<gst::FlowReturn>);
+
+    #[doc(alias = "gst_base_src_start_wait")]
+    fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    #[doc(alias = "gst_base_src_wait_playing")]
+    fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
+
     #[doc(alias = "num-buffers")]
     fn num_buffers(&self) -> i32;
 
@@ -221,6 +230,31 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn set_live(&self, live: bool) {
         unsafe {
             ffi::gst_base_src_set_live(self.as_ref().to_glib_none().0, live.into_glib());
+        }
+    }
+
+    fn start_complete(&self, ret: impl Into<gst::FlowReturn>) {
+        unsafe {
+            ffi::gst_base_src_start_complete(
+                self.as_ref().to_glib_none().0,
+                ret.into().into_glib(),
+            );
+        }
+    }
+
+    fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_base_src_start_wait(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_base_src_wait_playing(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 

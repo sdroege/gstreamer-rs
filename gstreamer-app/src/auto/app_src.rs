@@ -22,6 +22,13 @@ glib::wrapper! {
 }
 
 impl AppSrc {
+    #[doc(alias = "gst_app_src_end_of_stream")]
+    pub fn end_of_stream(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0))
+        }
+    }
+
     #[doc(alias = "gst_app_src_get_caps")]
     #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Option<gst::Caps> {
@@ -64,6 +71,16 @@ impl AppSrc {
     #[doc(alias = "get_stream_type")]
     pub fn stream_type(&self) -> AppStreamType {
         unsafe { from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0)) }
+    }
+
+    #[doc(alias = "gst_app_src_push_sample")]
+    pub fn push_sample(&self, sample: &gst::Sample) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_app_src_push_sample(
+                self.to_glib_none().0,
+                sample.to_glib_none().0,
+            ))
+        }
     }
 
     //#[doc(alias = "gst_app_src_set_callbacks")]
