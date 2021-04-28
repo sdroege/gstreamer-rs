@@ -15,8 +15,6 @@ macro_rules! plugin_define(
      $version:expr, $license:expr, $source:expr,
      $package:expr, $origin:expr, $release_datetime:expr) => {
         pub mod plugin_desc {
-            use $crate::glib::translate::{from_glib_borrow, ToGlib, from_glib};
-
             #[repr(transparent)]
             pub struct GstPluginDesc($crate::ffi::GstPluginDesc);
             unsafe impl Send for GstPluginDesc {}
@@ -63,7 +61,7 @@ macro_rules! plugin_define(
             unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::ffi::GstPlugin) -> $crate::glib::ffi::gboolean {
                 use std::panic::{self, AssertUnwindSafe};
 
-                let panic_result = panic::catch_unwind(AssertUnwindSafe(|| super::$plugin_init(&from_glib_borrow(plugin))));
+                let panic_result = panic::catch_unwind(AssertUnwindSafe(|| super::$plugin_init(&$crate::glib::translate::from_glib_borrow(plugin))));
                 match panic_result {
                     Ok(register_result) => match register_result {
                         Ok(_) => $crate::glib::ffi::GTRUE,
