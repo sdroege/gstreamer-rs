@@ -243,7 +243,7 @@ impl Harness {
 
     #[doc(alias = "get_last_pushed_timestamp")]
     #[doc(alias = "gst_harness_get_last_pushed_timestamp")]
-    pub fn last_pushed_timestamp(&self) -> gst::ClockTime {
+    pub fn last_pushed_timestamp(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_harness_get_last_pushed_timestamp(self.0.as_ptr())) }
     }
 
@@ -346,7 +346,7 @@ impl Harness {
     }
 
     #[doc(alias = "gst_harness_query_latency")]
-    pub fn query_latency(&self) -> gst::ClockTime {
+    pub fn query_latency(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_harness_query_latency(self.0.as_ptr())) }
     }
 

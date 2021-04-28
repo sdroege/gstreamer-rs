@@ -18,7 +18,7 @@ impl ControlPoint {
     pub fn timestamp(&self) -> gst::ClockTime {
         unsafe {
             let ptr = self.to_glib_none().0;
-            from_glib((*ptr).timestamp)
+            try_from_glib((*ptr).timestamp).expect("undefined timestamp")
         }
     }
 

@@ -196,7 +196,7 @@ fn create_ui(app: &gtk::Application) {
         // Query the current playing position from the underlying pipeline.
         let position = pipeline.query_position::<gst::ClockTime>();
         // Display the playing position in the gui.
-        label.set_text(&format!("Position: {:.0}", position));
+        label.set_text(&format!("Position: {:.0}", position.display()));
         // Tell the timeout to continue calling this callback.
         glib::Continue(true)
     });

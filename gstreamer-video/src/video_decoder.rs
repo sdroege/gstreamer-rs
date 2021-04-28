@@ -51,8 +51,12 @@ pub trait VideoDecoderExtManual: 'static {
     fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     #[doc(alias = "get_latency")]
-    fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
-    fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
+    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>);
+    fn set_latency(
+        &self,
+        min_latency: gst::ClockTime,
+        max_latency: impl Into<Option<gst::ClockTime>>,
+    );
 
     #[doc(alias = "get_output_state")]
     fn output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
@@ -152,7 +156,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
     }
 
     #[doc(alias = "gst_video_decoder_get_latency")]
-    fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+    fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>) {
         let mut min_latency = gst::ffi::GST_CLOCK_TIME_NONE;
         let mut max_latency = gst::ffi::GST_CLOCK_TIME_NONE;
 
@@ -163,17 +167,24 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
                 &mut max_latency,
             );
 
-            (from_glib(min_latency), from_glib(max_latency))
+            (
+                try_from_glib(min_latency).expect("undefined min_latency"),
+                from_glib(max_latency),
+            )
         }
     }
 
     #[doc(alias = "gst_video_decoder_set_latency")]
-    fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
+    fn set_latency(
+        &self,
+        min_latency: gst::ClockTime,
+        max_latency: impl Into<Option<gst::ClockTime>>,
+    ) {
         unsafe {
             ffi::gst_video_decoder_set_latency(
                 self.as_ref().to_glib_none().0,
                 min_latency.into_glib(),
-                max_latency.into_glib(),
+                max_latency.into().into_glib(),
             );
         }
     }

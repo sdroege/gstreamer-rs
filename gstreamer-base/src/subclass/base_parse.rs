@@ -179,7 +179,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
                 let res = from_glib(f(
                     element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
                     src_val.format().into_glib(),
-                    src_val.to_raw_value(),
+                    src_val.into_raw_value(),
                     dest_format.into_glib(),
                     dest_val.as_mut_ptr(),
                 ));
@@ -314,7 +314,7 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
 
     match res {
         Some(dest) => {
-            *dest_value = dest.to_raw_value();
+            *dest_value = dest.into_raw_value();
             true
         }
         _ => false,

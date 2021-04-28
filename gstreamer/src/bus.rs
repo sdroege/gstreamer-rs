@@ -206,8 +206,11 @@ impl Bus {
         self.iter_timed(Some(crate::ClockTime::ZERO))
     }
 
-    pub fn iter_timed(&self, timeout: Option<crate::ClockTime>) -> Iter {
-        Iter { bus: self, timeout }
+    pub fn iter_timed(&self, timeout: impl Into<Option<crate::ClockTime>>) -> Iter {
+        Iter {
+            bus: self,
+            timeout: timeout.into(),
+        }
     }
 
     pub fn iter_filtered<'a>(
@@ -219,7 +222,7 @@ impl Bus {
 
     pub fn iter_timed_filtered<'a>(
         &'a self,
-        timeout: Option<crate::ClockTime>,
+        timeout: impl Into<Option<crate::ClockTime>>,
         msg_types: &'a [MessageType],
     ) -> impl Iterator<Item = Message> + 'a {
         self.iter_timed(timeout)
@@ -228,11 +231,11 @@ impl Bus {
 
     pub fn timed_pop_filtered(
         &self,
-        timeout: Option<crate::ClockTime>,
+        timeout: impl Into<Option<crate::ClockTime>> + Clone,
         msg_types: &[MessageType],
     ) -> Option<Message> {
         loop {
-            let msg = self.timed_pop(timeout)?;
+            let msg = self.timed_pop(timeout.clone())?;
             if msg_types.contains(&msg.type_()) {
                 return Some(msg);
             }

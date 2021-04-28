@@ -11,7 +11,9 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
-use glib::translate::{from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, try_from_glib, IntoGlib, ToGlibPtr,
+};
 use glib::value::ToSendValue;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -766,17 +768,20 @@ impl<'a> SegmentDone<'a> {
 declare_concrete_event!(Gap);
 impl<'a> Gap<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(timestamp: crate::ClockTime, duration: crate::ClockTime) -> Event {
+    pub fn new(
+        timestamp: crate::ClockTime,
+        duration: impl Into<Option<crate::ClockTime>>,
+    ) -> Event {
         skip_assert_initialized!();
-        Self::builder(timestamp, duration).build()
+        Self::builder(timestamp).duration(duration).build()
     }
 
-    pub fn builder(timestamp: crate::ClockTime, duration: crate::ClockTime) -> GapBuilder<'a> {
+    pub fn builder(timestamp: crate::ClockTime) -> GapBuilder<'a> {
         assert_initialized_main_thread!();
-        GapBuilder::new(timestamp, duration)
+        GapBuilder::new(timestamp)
     }
 
-    pub fn get(&self) -> (Option<crate::ClockTime>, Option<crate::ClockTime>) {
+    pub fn get(&self) -> (crate::ClockTime, Option<crate::ClockTime>) {
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
             let mut duration = mem::MaybeUninit::uninit();
@@ -788,7 +793,7 @@ impl<'a> Gap<'a> {
             );
 
             (
-                from_glib(timestamp.assume_init()),
+                try_from_glib(timestamp.assume_init()).expect("undefined timestamp"),
                 from_glib(duration.assume_init()),
             )
         }
@@ -802,20 +807,17 @@ impl<'a> Qos<'a> {
         type_: crate::QOSType,
         proportion: f64,
         diff: i64,
-        timestamp: crate::ClockTime,
+        timestamp: impl Into<Option<crate::ClockTime>>,
     ) -> Event {
         skip_assert_initialized!();
-        Self::builder(type_, proportion, diff, timestamp).build()
+        Self::builder(type_, proportion, diff)
+            .timestamp(timestamp)
+            .build()
     }
 
-    pub fn builder(
-        type_: crate::QOSType,
-        proportion: f64,
-        diff: i64,
-        timestamp: crate::ClockTime,
-    ) -> QosBuilder<'a> {
+    pub fn builder(type_: crate::QOSType, proportion: f64, diff: i64) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
-        QosBuilder::new(type_, proportion, diff, timestamp)
+        QosBuilder::new(type_, proportion, diff)
     }
 
     pub fn get(&self) -> (crate::QOSType, f64, i64, Option<crate::ClockTime>) {
@@ -962,13 +964,13 @@ impl<'a> Latency<'a> {
 
     #[doc(alias = "get_latency")]
     #[doc(alias = "gst_event_parse_latency")]
-    pub fn latency(&self) -> Option<crate::ClockTime> {
+    pub fn latency(&self) -> crate::ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
 
             ffi::gst_event_parse_latency(self.as_mut_ptr(), latency.as_mut_ptr());
 
-            from_glib(latency.assume_init())
+            try_from_glib(latency.assume_init()).expect("undefined latency")
         }
     }
 }
@@ -1616,17 +1618,22 @@ impl<'a> SegmentDoneBuilder<'a> {
 pub struct GapBuilder<'a> {
     builder: EventBuilder<'a>,
     timestamp: crate::ClockTime,
-    duration: crate::ClockTime,
+    duration: Option<crate::ClockTime>,
 }
 
 impl<'a> GapBuilder<'a> {
-    fn new(timestamp: crate::ClockTime, duration: crate::ClockTime) -> Self {
+    fn new(timestamp: crate::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
             timestamp,
-            duration,
+            duration: None,
         }
+    }
+
+    pub fn duration(mut self, duration: impl Into<Option<crate::ClockTime>>) -> Self {
+        self.duration = duration.into();
+        self
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_gap(
@@ -1640,19 +1647,24 @@ pub struct QosBuilder<'a> {
     type_: crate::QOSType,
     proportion: f64,
     diff: i64,
-    timestamp: crate::ClockTime,
+    timestamp: Option<crate::ClockTime>,
 }
 
 impl<'a> QosBuilder<'a> {
-    fn new(type_: crate::QOSType, proportion: f64, diff: i64, timestamp: crate::ClockTime) -> Self {
+    fn new(type_: crate::QOSType, proportion: f64, diff: i64) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
             type_,
             proportion,
             diff,
-            timestamp,
+            timestamp: None,
         }
+    }
+
+    pub fn timestamp(mut self, timestamp: impl Into<Option<crate::ClockTime>>) -> Self {
+        self.timestamp = timestamp.into();
+        self
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_qos(
@@ -1695,6 +1707,14 @@ impl<'a> SeekBuilder<'a> {
             stop,
             trickmode_interval: None,
         }
+    }
+
+    pub fn trickmode_interval(
+        mut self,
+        trickmode_interval: impl Into<Option<crate::ClockTime>>,
+    ) -> Self {
+        self.trickmode_interval = trickmode_interval.into();
+        self
     }
 
     event_builder_generic_impl!(|s: &Self| {

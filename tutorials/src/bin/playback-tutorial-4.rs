@@ -130,15 +130,15 @@ fn tutorial_main() -> Result<(), Error> {
                 let start = range.0;
                 let stop = range.1;
                 let start = if let Percent(start) = start {
-                    start.unwrap()
+                    *start.unwrap()
                 } else {
                     0
-                } / gst::FORMAT_PERCENT_MAX;
+                } / gst::format::Percent::MAX;
                 let stop = if let Percent(stop) = stop {
-                    stop.unwrap()
+                    *stop.unwrap()
                 } else {
                     0
-                } / gst::FORMAT_PERCENT_MAX;
+                } / gst::format::Percent::MAX;
                 if start == 0 && stop == 0 {
                     continue;
                 }

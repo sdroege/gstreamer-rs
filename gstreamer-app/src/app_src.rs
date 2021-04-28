@@ -266,15 +266,23 @@ impl AppSrc {
     }
 
     #[doc(alias = "gst_app_src_set_latency")]
-    pub fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
+    pub fn set_latency(
+        &self,
+        min: impl Into<Option<gst::ClockTime>>,
+        max: impl Into<Option<gst::ClockTime>>,
+    ) {
         unsafe {
-            ffi::gst_app_src_set_latency(self.to_glib_none().0, min.into_glib(), max.into_glib());
+            ffi::gst_app_src_set_latency(
+                self.to_glib_none().0,
+                min.into().into_glib(),
+                max.into().into_glib(),
+            );
         }
     }
 
     #[doc(alias = "get_latency")]
     #[doc(alias = "gst_app_src_get_latency")]
-    pub fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+    pub fn latency(&self) -> (Option<gst::ClockTime>, Option<gst::ClockTime>) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();
             let mut max = mem::MaybeUninit::uninit();

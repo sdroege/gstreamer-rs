@@ -23,10 +23,6 @@ pub trait AudioEncoderExtManual: 'static {
     #[doc(alias = "get_allocator")]
     #[doc(alias = "gst_audio_encoder_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
-
-    #[doc(alias = "get_latency")]
-    #[doc(alias = "gst_audio_encoder_get_latency")]
-    fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
 }
 
 impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
@@ -81,21 +77,6 @@ impl<O: IsA<AudioEncoder>> AudioEncoderExtManual for O {
                 &mut params,
             );
             (from_glib_full(allocator), params.into())
-        }
-    }
-
-    fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
-        unsafe {
-            let mut min = mem::MaybeUninit::uninit();
-            let mut max = mem::MaybeUninit::uninit();
-            ffi::gst_audio_encoder_get_latency(
-                self.as_ref().to_glib_none().0,
-                min.as_mut_ptr(),
-                max.as_mut_ptr(),
-            );
-            let min = min.assume_init();
-            let max = max.assume_init();
-            (from_glib(min), from_glib(max))
         }
     }
 }

@@ -301,17 +301,17 @@ mod tests {
         {
             let cmeta = AudioClippingMeta::add(
                 buffer.get_mut().unwrap(),
-                gst::format::Default(Some(1)),
-                gst::format::Default(Some(2)),
+                gst::format::Default(1),
+                gst::format::Default(2),
             );
-            assert_eq!(cmeta.start().try_into(), Ok(gst::format::Default(Some(1))));
-            assert_eq!(cmeta.end().try_into(), Ok(gst::format::Default(Some(2))));
+            assert_eq!(cmeta.start().try_into(), Ok(Some(gst::format::Default(1))));
+            assert_eq!(cmeta.end().try_into(), Ok(Some(gst::format::Default(2))));
         }
 
         {
             let cmeta = buffer.meta::<AudioClippingMeta>().unwrap();
-            assert_eq!(cmeta.start().try_into(), Ok(gst::format::Default(Some(1))));
-            assert_eq!(cmeta.end().try_into(), Ok(gst::format::Default(Some(2))));
+            assert_eq!(cmeta.start().try_into(), Ok(Some(gst::format::Default(1))));
+            assert_eq!(cmeta.end().try_into(), Ok(Some(gst::format::Default(2))));
         }
     }
 

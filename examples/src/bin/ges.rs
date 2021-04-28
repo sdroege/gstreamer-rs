@@ -74,12 +74,16 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
     // Retrieve the asset that was automatically used behind the scenes, to
     // extract the clip from.
     let asset = clip.asset().unwrap();
-    let duration = asset.downcast::<ges::UriClipAsset>().unwrap().duration();
+    let duration = asset
+        .downcast::<ges::UriClipAsset>()
+        .unwrap()
+        .duration()
+        .expect("unknown duration");
     println!(
         "Clip duration: {} - playing file from {} for {}",
         duration,
         duration / 2,
-        duration / 4
+        duration / 4,
     );
 
     // The inpoint specifies where in the clip we start, the duration specifies
@@ -94,7 +98,7 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
         .expect("Unable to set the pipeline to the `Playing` state");
 
     let bus = pipeline.bus().unwrap();
-    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::ClockTime::NONE) {
         use gst::MessageView;
 
         match msg.view() {

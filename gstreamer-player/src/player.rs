@@ -46,7 +46,7 @@ impl Player {
         }
     }
 
-    pub fn connect_duration_changed<F: Fn(&Player, gst::ClockTime) + Send + 'static>(
+    pub fn connect_duration_changed<F: Fn(&Player, Option<gst::ClockTime>) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -64,7 +64,7 @@ impl Player {
         }
     }
 
-    pub fn connect_position_updated<F: Fn(&Player, gst::ClockTime) + Send + 'static>(
+    pub fn connect_position_updated<F: Fn(&Player, Option<gst::ClockTime>) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
@@ -102,25 +102,25 @@ impl Player {
 }
 
 unsafe extern "C" fn duration_changed_trampoline<
-    F: Fn(&Player, gst::ClockTime) + Send + 'static,
+    F: Fn(&Player, Option<gst::ClockTime>) + Send + 'static,
 >(
     this: *mut ffi::GstPlayer,
     object: u64,
     f: glib::ffi::gpointer,
 ) {
     let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
+    f(&from_glib_borrow(this), FromGlib::from_glib(object))
 }
 
 unsafe extern "C" fn position_updated_trampoline<
-    F: Fn(&Player, gst::ClockTime) + Send + 'static,
+    F: Fn(&Player, Option<gst::ClockTime>) + Send + 'static,
 >(
     this: *mut ffi::GstPlayer,
     object: u64,
     f: glib::ffi::gpointer,
 ) {
     let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
+    f(&from_glib_borrow(this), FromGlib::from_glib(object))
 }
 
 unsafe extern "C" fn seek_done_trampoline<F: Fn(&Player, gst::ClockTime) + Send + 'static>(
@@ -129,5 +129,8 @@ unsafe extern "C" fn seek_done_trampoline<F: Fn(&Player, gst::ClockTime) + Send 
     f: glib::ffi::gpointer,
 ) {
     let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
+    f(
+        &from_glib_borrow(this),
+        try_from_glib(object).expect("undefined seek position"),
+    )
 }

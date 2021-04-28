@@ -123,7 +123,7 @@ mod tutorial5 {
             if pipeline
                 .seek_simple(
                     gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
-                    value * gst::SECOND,
+                    value * gst::ClockTime::SECOND,
                 )
                 .is_err()
             {

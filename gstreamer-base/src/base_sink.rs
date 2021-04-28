@@ -12,7 +12,7 @@ pub trait BaseSinkExtManual: 'static {
     #[doc(alias = "gst_base_sink_query_latency")]
     fn query_latency(
         &self,
-    ) -> Result<(bool, bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;
+    ) -> Result<(bool, bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError>;
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
@@ -26,7 +26,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
 
     fn query_latency(
         &self,
-    ) -> Result<(bool, bool, gst::ClockTime, gst::ClockTime), glib::BoolError> {
+    ) -> Result<(bool, bool, Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError> {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
             let mut upstream_live = mem::MaybeUninit::uninit();

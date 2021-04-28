@@ -264,7 +264,7 @@ fn example_main() {
         .expect("Pipeline without bus. Shouldn't happen!");
 
     // And run until EOS or an error happened.
-    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::ClockTime::NONE) {
         use gst::MessageView;
 
         match msg.view() {

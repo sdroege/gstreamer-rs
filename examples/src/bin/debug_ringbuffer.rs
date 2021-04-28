@@ -46,7 +46,7 @@ fn example_main() {
         .set_state(gst::State::Playing)
         .expect("Unable to set the pipeline to the `Playing` state");
 
-    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::ClockTime::NONE) {
         use gst::MessageView;
 
         match msg.view() {

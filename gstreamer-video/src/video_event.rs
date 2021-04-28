@@ -68,9 +68,9 @@ pub struct DownstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
-    timestamp: gst::ClockTime,
-    stream_time: gst::ClockTime,
-    running_time: gst::ClockTime,
+    timestamp: Option<gst::ClockTime>,
+    stream_time: Option<gst::ClockTime>,
+    running_time: Option<gst::ClockTime>,
     all_headers: bool,
     count: u32,
 }
@@ -82,28 +82,31 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
-            timestamp: gst::CLOCK_TIME_NONE,
-            stream_time: gst::CLOCK_TIME_NONE,
-            running_time: gst::CLOCK_TIME_NONE,
+            timestamp: gst::ClockTime::NONE,
+            stream_time: gst::ClockTime::NONE,
+            running_time: gst::ClockTime::NONE,
             all_headers: true,
             count: 0,
         }
     }
 
-    pub fn timestamp(self, timestamp: gst::ClockTime) -> Self {
-        Self { timestamp, ..self }
-    }
-
-    pub fn stream_time(self, stream_time: gst::ClockTime) -> Self {
+    pub fn timestamp(self, timestamp: impl Into<Option<gst::ClockTime>>) -> Self {
         Self {
-            stream_time,
+            timestamp: timestamp.into(),
             ..self
         }
     }
 
-    pub fn running_time(self, running_time: gst::ClockTime) -> Self {
+    pub fn stream_time(self, stream_time: impl Into<Option<gst::ClockTime>>) -> Self {
         Self {
-            running_time,
+            stream_time: stream_time.into(),
+            ..self
+        }
+    }
+
+    pub fn running_time(self, running_time: impl Into<Option<gst::ClockTime>>) -> Self {
+        Self {
+            running_time: running_time.into(),
             ..self
         }
     }
@@ -132,9 +135,9 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
 
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct DownstreamForceKeyUnitEvent {
-    pub timestamp: gst::ClockTime,
-    pub stream_time: gst::ClockTime,
-    pub running_time: gst::ClockTime,
+    pub timestamp: Option<gst::ClockTime>,
+    pub stream_time: Option<gst::ClockTime>,
+    pub running_time: Option<gst::ClockTime>,
     pub all_headers: bool,
     pub count: u32,
 }
@@ -181,7 +184,7 @@ pub struct UpstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
-    running_time: gst::ClockTime,
+    running_time: Option<gst::ClockTime>,
     all_headers: bool,
     count: u32,
 }
@@ -193,15 +196,15 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
-            running_time: gst::CLOCK_TIME_NONE,
+            running_time: gst::ClockTime::NONE,
             all_headers: true,
             count: 0,
         }
     }
 
-    pub fn running_time(self, running_time: gst::ClockTime) -> Self {
+    pub fn running_time(self, running_time: impl Into<Option<gst::ClockTime>>) -> Self {
         Self {
-            running_time,
+            running_time: running_time.into(),
             ..self
         }
     }
@@ -228,7 +231,7 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
 
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct UpstreamForceKeyUnitEvent {
-    pub running_time: gst::ClockTime,
+    pub running_time: Option<gst::ClockTime>,
     pub all_headers: bool,
     pub count: u32,
 }

@@ -17,7 +17,7 @@ use std::ops::Deref;
 use std::ptr;
 
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, mut_override, IntoGlib, ToGlibPtr,
+    from_glib, from_glib_full, from_glib_none, mut_override, try_from_glib, IntoGlib, ToGlibPtr,
 };
 
 mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
@@ -945,14 +945,14 @@ impl<'a> AsyncStart<'a> {
 declare_concrete_message!(AsyncDone);
 impl<'a> AsyncDone<'a> {
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(running_time: crate::ClockTime) -> Message {
+    pub fn new(running_time: impl Into<Option<crate::ClockTime>>) -> Message {
         skip_assert_initialized!();
-        Self::builder(running_time).build()
+        Self::builder().running_time(running_time).build()
     }
 
-    pub fn builder(running_time: crate::ClockTime) -> AsyncDoneBuilder<'a> {
+    pub fn builder() -> AsyncDoneBuilder<'a> {
         assert_initialized_main_thread!();
-        AsyncDoneBuilder::new(running_time)
+        AsyncDoneBuilder::new()
     }
 
     #[doc(alias = "get_running_time")]
@@ -1055,24 +1055,23 @@ impl<'a> Qos<'a> {
     #[allow(clippy::new_ret_no_self)]
     pub fn new(
         live: bool,
-        running_time: crate::ClockTime,
-        stream_time: crate::ClockTime,
-        timestamp: crate::ClockTime,
-        duration: crate::ClockTime,
+        running_time: impl Into<Option<crate::ClockTime>>,
+        stream_time: impl Into<Option<crate::ClockTime>>,
+        timestamp: impl Into<Option<crate::ClockTime>>,
+        duration: impl Into<Option<crate::ClockTime>>,
     ) -> Message {
         skip_assert_initialized!();
-        Self::builder(live, running_time, stream_time, timestamp, duration).build()
+        Self::builder(live)
+            .running_time(running_time)
+            .stream_time(stream_time)
+            .timestamp(timestamp)
+            .duration(duration)
+            .build()
     }
 
-    pub fn builder(
-        live: bool,
-        running_time: crate::ClockTime,
-        stream_time: crate::ClockTime,
-        timestamp: crate::ClockTime,
-        duration: crate::ClockTime,
-    ) -> QosBuilder<'a> {
+    pub fn builder(live: bool) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
-        QosBuilder::new(live, running_time, stream_time, timestamp, duration)
+        QosBuilder::new(live)
     }
 
     pub fn get(
@@ -1241,13 +1240,13 @@ impl<'a> ResetTime<'a> {
     }
 
     #[doc(alias = "get_running_time")]
-    pub fn running_time(&self) -> Option<crate::ClockTime> {
+    pub fn running_time(&self) -> crate::ClockTime {
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
 
             ffi::gst_message_parse_reset_time(self.as_mut_ptr(), running_time.as_mut_ptr());
 
-            from_glib(running_time.assume_init())
+            try_from_glib(running_time.assume_init()).expect("undefined running_time")
         }
     }
 }
@@ -2346,16 +2345,21 @@ impl<'a> AsyncStartBuilder<'a> {
 
 pub struct AsyncDoneBuilder<'a> {
     builder: MessageBuilder<'a>,
-    running_time: crate::ClockTime,
+    running_time: Option<crate::ClockTime>,
 }
 
 impl<'a> AsyncDoneBuilder<'a> {
-    fn new(running_time: crate::ClockTime) -> Self {
+    fn new() -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            running_time,
+            running_time: None,
         }
+    }
+
+    pub fn running_time(mut self, running_time: impl Into<Option<crate::ClockTime>>) -> Self {
+        self.running_time = running_time.into();
+        self
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_async_done(
@@ -2426,33 +2430,47 @@ impl<'a> StepStartBuilder<'a> {
 pub struct QosBuilder<'a> {
     builder: MessageBuilder<'a>,
     live: bool,
-    running_time: crate::ClockTime,
-    stream_time: crate::ClockTime,
-    timestamp: crate::ClockTime,
-    duration: crate::ClockTime,
+    running_time: Option<crate::ClockTime>,
+    stream_time: Option<crate::ClockTime>,
+    timestamp: Option<crate::ClockTime>,
+    duration: Option<crate::ClockTime>,
     values: Option<(i64, f64, i32)>,
     stats: Option<(GenericFormattedValue, GenericFormattedValue)>,
 }
 
 impl<'a> QosBuilder<'a> {
-    fn new(
-        live: bool,
-        running_time: crate::ClockTime,
-        stream_time: crate::ClockTime,
-        timestamp: crate::ClockTime,
-        duration: crate::ClockTime,
-    ) -> Self {
+    fn new(live: bool) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
             live,
-            running_time,
-            stream_time,
-            timestamp,
-            duration,
+            running_time: None,
+            stream_time: None,
+            timestamp: None,
+            duration: None,
             values: None,
             stats: None,
         }
+    }
+
+    pub fn running_time(mut self, running_time: impl Into<Option<crate::ClockTime>>) -> Self {
+        self.running_time = running_time.into();
+        self
+    }
+
+    pub fn stream_time(mut self, stream_time: impl Into<Option<crate::ClockTime>>) -> Self {
+        self.stream_time = stream_time.into();
+        self
+    }
+
+    pub fn timestamp(mut self, timestamp: impl Into<Option<crate::ClockTime>>) -> Self {
+        self.timestamp = timestamp.into();
+        self
+    }
+
+    pub fn duration(mut self, duration: impl Into<Option<crate::ClockTime>>) -> Self {
+        self.duration = duration.into();
+        self
     }
 
     pub fn values(self, jitter: i64, proportion: f64, quality: i32) -> Self {

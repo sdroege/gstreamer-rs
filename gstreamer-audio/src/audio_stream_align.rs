@@ -30,8 +30,8 @@ impl AudioStreamAlign {
             ));
             (
                 ret,
-                from_glib(out_timestamp.assume_init()),
-                from_glib(out_duration.assume_init()),
+                try_from_glib(out_timestamp.assume_init()).expect("undefined out_timestamp"),
+                try_from_glib(out_duration.assume_init()).expect("undefined out_duration"),
                 out_sample_position.assume_init(),
             )
         }

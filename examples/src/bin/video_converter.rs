@@ -52,7 +52,7 @@ fn example_main() {
      * although in this example the only error we'll hopefully
      * get is if the user closes the output window */
     let bus = pipeline.bus().unwrap();
-    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::ClockTime::NONE) {
         use gst::MessageView;
 
         match msg.view() {

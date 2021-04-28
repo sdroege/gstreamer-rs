@@ -302,7 +302,7 @@ impl UniqueAdapter {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn dts_at_discont(&self) -> gst::ClockTime {
+    pub fn dts_at_discont(&self) -> Option<gst::ClockTime> {
         self.0.dts_at_discont()
     }
 
@@ -356,11 +356,11 @@ impl UniqueAdapter {
         self.0.offset_at_discont()
     }
 
-    pub fn prev_dts(&self) -> (gst::ClockTime, u64) {
+    pub fn prev_dts(&self) -> (Option<gst::ClockTime>, u64) {
         self.0.prev_dts()
     }
 
-    pub fn prev_dts_at_offset(&self, offset: usize) -> (gst::ClockTime, u64) {
+    pub fn prev_dts_at_offset(&self, offset: usize) -> (Option<gst::ClockTime>, u64) {
         self.0.prev_dts_at_offset(offset)
     }
 
@@ -370,17 +370,17 @@ impl UniqueAdapter {
         self.0.prev_offset()
     }
 
-    pub fn prev_pts(&self) -> (gst::ClockTime, u64) {
+    pub fn prev_pts(&self) -> (Option<gst::ClockTime>, u64) {
         self.0.prev_pts()
     }
 
-    pub fn prev_pts_at_offset(&self, offset: usize) -> (gst::ClockTime, u64) {
+    pub fn prev_pts_at_offset(&self, offset: usize) -> (Option<gst::ClockTime>, u64) {
         self.0.prev_pts_at_offset(offset)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
-    pub fn pts_at_discont(&self) -> gst::ClockTime {
+    pub fn pts_at_discont(&self) -> Option<gst::ClockTime> {
         self.0.pts_at_discont()
     }
 

@@ -161,7 +161,7 @@ fn main_loop(pipeline: gst::Pipeline, position: u64) -> Result<(), Error> {
 
     let mut seeked = false;
 
-    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::ClockTime::NONE) {
         use gst::MessageView;
 
         match msg.view() {
@@ -171,7 +171,7 @@ fn main_loop(pipeline: gst::Pipeline, position: u64) -> Result<(), Error> {
                     println!("Got AsyncDone message, seeking to {}s", position);
 
                     if pipeline
-                        .seek_simple(gst::SeekFlags::FLUSH, position * gst::SECOND)
+                        .seek_simple(gst::SeekFlags::FLUSH, position * gst::ClockTime::SECOND)
                         .is_err()
                     {
                         println!("Failed to seek, taking first frame");

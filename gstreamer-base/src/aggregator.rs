@@ -55,16 +55,16 @@ pub trait AggregatorExtManual: 'static {
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_update_segment")]
-    fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>);
+    fn update_segment<F: gst::FormattedValueIntrinsic>(&self, segment: &gst::FormattedSegment<F>);
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_aggregator_selected_samples")]
     fn selected_samples(
         &self,
-        pts: gst::ClockTime,
-        dts: gst::ClockTime,
-        duration: gst::ClockTime,
+        pts: impl Into<Option<gst::ClockTime>>,
+        dts: impl Into<Option<gst::ClockTime>>,
+        duration: impl Into<Option<gst::ClockTime>>,
         info: Option<&gst::StructureRef>,
     );
 
@@ -75,9 +75,9 @@ pub trait AggregatorExtManual: 'static {
         F: Fn(
                 &P,
                 &gst::Segment,
-                gst::ClockTime,
-                gst::ClockTime,
-                gst::ClockTime,
+                Option<gst::ClockTime>,
+                Option<gst::ClockTime>,
+                Option<gst::ClockTime>,
                 Option<&gst::StructureRef>,
             ) + Send
             + 'static,
@@ -174,7 +174,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
-    fn update_segment<F: gst::FormattedValue>(&self, segment: &gst::FormattedSegment<F>) {
+    fn update_segment<F: gst::FormattedValueIntrinsic>(&self, segment: &gst::FormattedSegment<F>) {
         unsafe {
             ffi::gst_aggregator_update_segment(
                 self.as_ref().to_glib_none().0,
@@ -187,17 +187,17 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn selected_samples(
         &self,
-        pts: gst::ClockTime,
-        dts: gst::ClockTime,
-        duration: gst::ClockTime,
+        pts: impl Into<Option<gst::ClockTime>>,
+        dts: impl Into<Option<gst::ClockTime>>,
+        duration: impl Into<Option<gst::ClockTime>>,
         info: Option<&gst::StructureRef>,
     ) {
         unsafe {
             ffi::gst_aggregator_selected_samples(
                 self.as_ref().to_glib_none().0,
-                pts.into_glib(),
-                dts.into_glib(),
-                duration.into_glib(),
+                pts.into().into_glib(),
+                dts.into().into_glib(),
+                duration.into().into_glib(),
                 info.as_ref()
                     .map(|s| s.as_ptr() as *mut _)
                     .unwrap_or(ptr::null_mut()),
@@ -212,9 +212,9 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         F: Fn(
                 &P,
                 &gst::Segment,
-                gst::ClockTime,
-                gst::ClockTime,
-                gst::ClockTime,
+                Option<gst::ClockTime>,
+                Option<gst::ClockTime>,
+                Option<gst::ClockTime>,
                 Option<&gst::StructureRef>,
             ) + Send
             + 'static,
@@ -230,9 +230,9 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             F: Fn(
                     &P,
                     &gst::Segment,
-                    gst::ClockTime,
-                    gst::ClockTime,
-                    gst::ClockTime,
+                    Option<gst::ClockTime>,
+                    Option<gst::ClockTime>,
+                    Option<gst::ClockTime>,
                     Option<&gst::StructureRef>,
                 ) + Send
                 + 'static,

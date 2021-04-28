@@ -34,7 +34,7 @@ pub fn convert_sample(
 pub fn convert_sample_async<F>(
     sample: &gst::Sample,
     caps: &gst::Caps,
-    timeout: gst::ClockTime,
+    timeout: Option<gst::ClockTime>,
     func: F,
 ) where
     F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
@@ -46,7 +46,7 @@ pub fn convert_sample_async<F>(
 pub fn convert_sample_async_local<F>(
     sample: &gst::Sample,
     caps: &gst::Caps,
-    timeout: gst::ClockTime,
+    timeout: Option<gst::ClockTime>,
     func: F,
 ) where
     F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
@@ -61,7 +61,7 @@ pub fn convert_sample_async_local<F>(
 unsafe fn convert_sample_async_unsafe<F>(
     sample: &gst::Sample,
     caps: &gst::Caps,
-    timeout: gst::ClockTime,
+    timeout: Option<gst::ClockTime>,
     func: F,
 ) where
     F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
@@ -104,7 +104,7 @@ unsafe fn convert_sample_async_unsafe<F>(
 pub fn convert_sample_future(
     sample: &gst::Sample,
     caps: &gst::Caps,
-    timeout: gst::ClockTime,
+    timeout: Option<gst::ClockTime>,
 ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<gst::Sample, glib::Error>> + 'static>>
 {
     skip_assert_initialized!();
@@ -256,7 +256,7 @@ mod tests {
         let l_clone = l.clone();
         let res_store = Arc::new(Mutex::new(None));
         let res_store_clone = res_store.clone();
-        convert_sample_async(&sample, &out_caps, gst::CLOCK_TIME_NONE, move |res| {
+        convert_sample_async(&sample, &out_caps, gst::ClockTime::NONE, move |res| {
             *res_store_clone.lock().unwrap() = Some(res);
             l_clone.quit();
         });

@@ -311,9 +311,10 @@ impl AppSink {
     #[doc(alias = "gst_base_sink_get_processing_deadline")]
     pub fn processing_deadline(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_base::ffi::gst_base_sink_get_processing_deadline(
+            try_from_glib(gst_base::ffi::gst_base_sink_get_processing_deadline(
                 self.as_ptr() as *mut gst_base::ffi::GstBaseSink,
             ))
+            .expect("undefined processing_deadline")
         }
     }
 
@@ -321,9 +322,10 @@ impl AppSink {
     #[doc(alias = "gst_base_sink_get_render_delay")]
     pub fn render_delay(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_base::ffi::gst_base_sink_get_render_delay(
+            try_from_glib(gst_base::ffi::gst_base_sink_get_render_delay(
                 self.as_ptr() as *mut gst_base::ffi::GstBaseSink
             ))
+            .expect("undefined render_delay")
         }
     }
 
@@ -958,7 +960,7 @@ impl Stream for AppSinkStream {
         };
 
         app_sink
-            .try_pull_sample(gst::ClockTime::zero())
+            .try_pull_sample(gst::ClockTime::ZERO)
             .map(|sample| Poll::Ready(Some(sample)))
             .unwrap_or_else(|| {
                 if app_sink.is_eos() {

@@ -40,7 +40,7 @@ pub trait AudioSrcImpl: AudioSrcImplExt + BaseSrcImpl {
         &self,
         src: &Self::Type,
         audio_data: &mut [u8],
-    ) -> Result<(u32, gst::ClockTime), LoggableError> {
+    ) -> Result<(u32, Option<gst::ClockTime>), LoggableError> {
         self.parent_read(src, audio_data)
     }
 
@@ -63,7 +63,7 @@ pub trait AudioSrcImplExt: ObjectSubclass {
         &self,
         src: &Self::Type,
         audio_data: &mut [u8],
-    ) -> Result<(u32, gst::ClockTime), LoggableError>;
+    ) -> Result<(u32, Option<gst::ClockTime>), LoggableError>;
     fn parent_reset(&self, src: &Self::Type);
 }
 
@@ -160,13 +160,13 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
         &self,
         src: &Self::Type,
         buffer: &mut [u8],
-    ) -> Result<(u32, gst::ClockTime), LoggableError> {
+    ) -> Result<(u32, Option<gst::ClockTime>), LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             let f = match (*parent_class).read {
                 Some(f) => f,
-                None => return Ok((0, gst::CLOCK_TIME_NONE)),
+                None => return Ok((0, gst::ClockTime::NONE)),
             };
             let buffer_ptr = buffer.as_mut_ptr() as *mut _;
             let mut timestamp = mem::MaybeUninit::uninit();
@@ -319,7 +319,7 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
     gst::panic_to_error!(&wrap, &imp.panicked(), 0, {
         let (res, timestamp_res) = imp
             .read(wrap.unsafe_cast_ref(), data_slice)
-            .unwrap_or((0, gst::CLOCK_TIME_NONE));
+            .unwrap_or((0, gst::ClockTime::NONE));
         *timestamp = timestamp_res.into_glib();
 
         res

@@ -186,7 +186,7 @@ impl AudioInfo {
             if from_glib(ffi::gst_audio_info_convert(
                 &self.0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             )) {
@@ -210,7 +210,7 @@ impl AudioInfo {
             if from_glib(ffi::gst_audio_info_convert(
                 &self.0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 dest_fmt.into_glib(),
                 dest_val.as_mut_ptr(),
             )) {

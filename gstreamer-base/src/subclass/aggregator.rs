@@ -115,7 +115,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
         self.parent_stop(aggregator)
     }
 
-    fn next_time(&self, aggregator: &Self::Type) -> gst::ClockTime {
+    fn next_time(&self, aggregator: &Self::Type) -> Option<gst::ClockTime> {
         self.parent_next_time(aggregator)
     }
 
@@ -243,7 +243,7 @@ pub trait AggregatorImplExt: ObjectSubclass {
 
     fn parent_stop(&self, aggregator: &Self::Type) -> Result<(), gst::ErrorMessage>;
 
-    fn parent_next_time(&self, aggregator: &Self::Type) -> gst::ClockTime;
+    fn parent_next_time(&self, aggregator: &Self::Type) -> Option<gst::ClockTime>;
 
     fn parent_create_new_pad(
         &self,
@@ -557,7 +557,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         }
     }
 
-    fn parent_next_time(&self, aggregator: &Self::Type) -> gst::ClockTime {
+    fn parent_next_time(&self, aggregator: &Self::Type) -> Option<gst::ClockTime> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
@@ -569,7 +569,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                         .to_glib_none()
                         .0))
                 })
-                .unwrap_or(gst::CLOCK_TIME_NONE)
+                .unwrap_or(gst::ClockTime::NONE)
         }
     }
 
@@ -987,7 +987,7 @@ unsafe extern "C" fn aggregator_get_next_time<T: AggregatorImpl>(
     let imp = instance.impl_();
     let wrap: Borrowed<Aggregator> = from_glib_borrow(ptr);
 
-    gst::panic_to_error!(&wrap, &imp.panicked(), gst::CLOCK_TIME_NONE, {
+    gst::panic_to_error!(&wrap, &imp.panicked(), gst::ClockTime::NONE, {
         imp.next_time(wrap.unsafe_cast_ref())
     })
     .into_glib()

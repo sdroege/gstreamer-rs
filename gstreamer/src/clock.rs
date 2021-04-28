@@ -35,8 +35,11 @@ glib::wrapper! {
 impl ClockId {
     #[doc(alias = "get_time")]
     #[doc(alias = "gst_clock_id_get_time")]
-    pub fn time(&self) -> Option<ClockTime> {
-        unsafe { from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0)) }
+    pub fn time(&self) -> ClockTime {
+        unsafe {
+            try_from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0))
+                .expect("undefined time")
+        }
     }
 
     #[doc(alias = "gst_clock_id_unschedule")]
@@ -242,7 +245,7 @@ impl PeriodicClockId {
     pub fn interval(&self) -> ClockTime {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
-            Option::<_>::from_glib((*ptr).interval).expect("undefined interval")
+            try_from_glib((*ptr).interval).expect("undefined interval")
         }
     }
 
@@ -360,10 +363,10 @@ impl Clock {
         cexternal: ClockTime,
         cnum: ClockTime,
         cdenom: ClockTime,
-    ) -> Option<ClockTime> {
+    ) -> ClockTime {
         skip_assert_initialized!();
         unsafe {
-            from_glib(ffi::gst_clock_adjust_with_calibration(
+            try_from_glib(ffi::gst_clock_adjust_with_calibration(
                 ptr::null_mut(),
                 internal_target.into_glib(),
                 cinternal.into_glib(),
@@ -371,6 +374,7 @@ impl Clock {
                 cnum.into_glib(),
                 cdenom.into_glib(),
             ))
+            .expect("undefined ClockTime")
         }
     }
 
@@ -381,10 +385,10 @@ impl Clock {
         cexternal: ClockTime,
         cnum: ClockTime,
         cdenom: ClockTime,
-    ) -> Option<ClockTime> {
+    ) -> ClockTime {
         skip_assert_initialized!();
         unsafe {
-            from_glib(ffi::gst_clock_unadjust_with_calibration(
+            try_from_glib(ffi::gst_clock_unadjust_with_calibration(
                 ptr::null_mut(),
                 external_target.into_glib(),
                 cinternal.into_glib(),
@@ -392,6 +396,7 @@ impl Clock {
                 cnum.into_glib(),
                 cdenom.into_glib(),
             ))
+            .expect("undefined ClockTime")
         }
     }
 }

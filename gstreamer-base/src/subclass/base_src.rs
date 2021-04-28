@@ -39,7 +39,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
         &self,
         element: &Self::Type,
         buffer: &gst::BufferRef,
-    ) -> (gst::ClockTime, gst::ClockTime) {
+    ) -> (Option<gst::ClockTime>, Option<gst::ClockTime>) {
         self.parent_times(element, buffer)
     }
 
@@ -122,7 +122,7 @@ pub trait BaseSrcImplExt: ObjectSubclass {
         &self,
         element: &Self::Type,
         buffer: &gst::BufferRef,
-    ) -> (gst::ClockTime, gst::ClockTime);
+    ) -> (Option<gst::ClockTime>, Option<gst::ClockTime>);
 
     fn parent_fill(
         &self,
@@ -247,7 +247,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         &self,
         element: &Self::Type,
         buffer: &gst::BufferRef,
-    ) -> (gst::ClockTime, gst::ClockTime) {
+    ) -> (Option<gst::ClockTime>, Option<gst::ClockTime>) {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
@@ -267,7 +267,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                         from_glib(stop.assume_init()),
                     )
                 })
-                .unwrap_or((gst::CLOCK_TIME_NONE, gst::CLOCK_TIME_NONE))
+                .unwrap_or((gst::ClockTime::NONE, gst::ClockTime::NONE))
         }
     }
 

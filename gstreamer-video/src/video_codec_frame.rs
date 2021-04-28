@@ -91,35 +91,35 @@ impl<'a> VideoCodecFrame<'a> {
     }
 
     #[doc(alias = "get_dts")]
-    pub fn dts(&self) -> gst::ClockTime {
+    pub fn dts(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib((*self.to_glib_none().0).dts) }
     }
 
-    pub fn set_dts(&mut self, dts: gst::ClockTime) {
+    pub fn set_dts(&mut self, dts: impl Into<Option<gst::ClockTime>>) {
         unsafe {
-            (*self.to_glib_none().0).dts = dts.into_glib();
+            (*self.to_glib_none().0).dts = dts.into().into_glib();
         }
     }
 
     #[doc(alias = "get_pts")]
-    pub fn pts(&self) -> gst::ClockTime {
+    pub fn pts(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib((*self.to_glib_none().0).pts) }
     }
 
-    pub fn set_pts(&mut self, pts: gst::ClockTime) {
+    pub fn set_pts(&mut self, pts: impl Into<Option<gst::ClockTime>>) {
         unsafe {
-            (*self.to_glib_none().0).pts = pts.into_glib();
+            (*self.to_glib_none().0).pts = pts.into().into_glib();
         }
     }
 
     #[doc(alias = "get_duration")]
-    pub fn duration(&self) -> gst::ClockTime {
+    pub fn duration(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib((*self.to_glib_none().0).duration) }
     }
 
-    pub fn set_duration(&mut self, duration: gst::ClockTime) {
+    pub fn set_duration(&mut self, duration: impl Into<Option<gst::ClockTime>>) {
         unsafe {
-            (*self.to_glib_none().0).duration = duration.into_glib();
+            (*self.to_glib_none().0).duration = duration.into().into_glib();
         }
     }
 
@@ -188,7 +188,7 @@ impl<'a> VideoCodecFrame<'a> {
     }
 
     #[doc(alias = "get_deadline")]
-    pub fn deadline(&self) -> gst::ClockTime {
+    pub fn deadline(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib((*self.to_glib_none().0).deadline) }
     }
 

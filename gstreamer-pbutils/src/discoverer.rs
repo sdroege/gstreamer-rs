@@ -31,7 +31,7 @@ impl Discoverer {
                 value.to_glib_none_mut().0,
             );
         }
-        value.get().expect("Discoverer::get_property_timeout")
+        value.get().expect("undefined timeout")
     }
 
     #[doc(alias = "timeout")]

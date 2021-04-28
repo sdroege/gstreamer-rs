@@ -150,7 +150,7 @@ fn run_discoverer() -> Result<(), Error> {
     println!("Discovering {}", uri);
 
     let loop_ = glib::MainLoop::new(None, false);
-    let timeout = 5 * gst::SECOND;
+    let timeout = 5 * gst::ClockTime::SECOND;
     let discoverer = gst_pbutils::Discoverer::new(timeout)?;
     discoverer.connect_discovered(on_discovered);
     let loop_clone = loop_.clone();

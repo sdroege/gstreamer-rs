@@ -324,7 +324,7 @@ impl Default for Latency<Query> {
 
 impl<T: AsPtr> Latency<T> {
     #[doc(alias = "get_result")]
-    pub fn result(&self) -> (bool, Option<crate::ClockTime>, Option<crate::ClockTime>) {
+    pub fn result(&self) -> (bool, crate::ClockTime, Option<crate::ClockTime>) {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
             let mut min = mem::MaybeUninit::uninit();
@@ -339,7 +339,7 @@ impl<T: AsPtr> Latency<T> {
 
             (
                 from_glib(live.assume_init()),
-                from_glib(min.assume_init()),
+                try_from_glib(min.assume_init()).expect("undefined min latency"),
                 from_glib(max.assume_init()),
             )
         }
@@ -348,13 +348,18 @@ impl<T: AsPtr> Latency<T> {
 
 impl<T: AsMutPtr> Latency<T> {
     #[doc(alias = "gst_query_set_latency")]
-    pub fn set(&mut self, live: bool, min: crate::ClockTime, max: crate::ClockTime) {
+    pub fn set(
+        &mut self,
+        live: bool,
+        min: crate::ClockTime,
+        max: impl Into<Option<crate::ClockTime>>,
+    ) {
         unsafe {
             ffi::gst_query_set_latency(
                 self.0.as_mut_ptr(),
                 live.into_glib(),
                 min.into_glib(),
-                max.into_glib(),
+                max.into().into_glib(),
             );
         }
     }

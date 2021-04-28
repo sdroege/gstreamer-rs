@@ -181,7 +181,7 @@ USAGE: Choose one of the following options, then press enter:
                     .get::<Option<Element>>()
                 {
                     // Send the event
-                    let step = Step::new(gst::format::Buffers(Some(1)), rate.abs(), true, false);
+                    let step = Step::new(gst::format::Buffers(1), rate.abs(), true, false);
                     video_sink.send_event(step);
                     println!("Stepping one frame\r");
                 }

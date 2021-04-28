@@ -253,7 +253,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 {
                     None
                 } else {
-                    Some(from_glib(position.assume_init() as u64))
+                    from_glib(position.assume_init() as u64)
                 }
             } else {
                 None
@@ -276,7 +276,7 @@ impl<T: RTSPMediaImpl> RTSPMediaImplExt for T {
                 {
                     None
                 } else {
-                    Some(from_glib(stop.assume_init() as u64))
+                    from_glib(stop.assume_init() as u64)
                 }
             } else {
                 None

@@ -784,7 +784,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let base_time = self.base_time();
         let clock_time = self.current_clock_time();
 
-        clock_time.zip(base_time).map(|(ct, bt)| ct - bt)
+        clock_time
+            .zip(base_time)
+            .and_then(|(ct, bt)| ct.checked_sub(bt))
     }
 
     fn current_clock_time(&self) -> Option<crate::ClockTime> {

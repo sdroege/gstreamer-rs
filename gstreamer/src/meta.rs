@@ -16,10 +16,10 @@ use crate::CapsRef;
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
 use crate::ClockTime;
 
+use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
-use glib::translate::IntoGlib;
-use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
+use glib::translate::{try_from_glib, IntoGlib};
 
 pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;
@@ -403,8 +403,8 @@ impl ReferenceTimestampMeta {
     }
 
     #[doc(alias = "get_timestamp")]
-    pub fn timestamp(&self) -> Option<ClockTime> {
-        unsafe { from_glib(self.0.timestamp) }
+    pub fn timestamp(&self) -> ClockTime {
+        unsafe { try_from_glib(self.0.timestamp).expect("undefined timestamp") }
     }
 
     #[doc(alias = "get_duration")]

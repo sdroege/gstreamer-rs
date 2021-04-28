@@ -142,15 +142,15 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             let _overlay = args[0].get::<gst::Element>().unwrap();
             let sample = args[1].get::<gst::Sample>().unwrap();
             let buffer = sample.buffer().unwrap();
-            let timestamp = buffer.pts();
+            let timestamp = buffer.pts().unwrap();
 
             let info = drawer.info.as_ref().unwrap();
             let layout = drawer.layout.borrow();
 
             let angle = 2.0
                 * PI
-                * ((timestamp % (10 * gst::SECOND)).unwrap() as f64
-                    / (10.0 * gst::SECOND_VAL as f64));
+                * (timestamp % (10 * gst::ClockTime::SECOND)).nseconds() as f64
+                    / (10.0 * gst::ClockTime::SECOND.nseconds() as f64);
 
             /* Create a gst::Buffer for Cairo to draw into */
             let frame_width = info.width() as usize;
@@ -296,7 +296,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
         .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
-    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::ClockTime::NONE) {
         use gst::MessageView;
 
         match msg.view() {

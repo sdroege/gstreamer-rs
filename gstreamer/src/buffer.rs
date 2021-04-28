@@ -1352,10 +1352,7 @@ mod tests {
             true
         });
 
-        assert_eq!(
-            &[Some(ClockTime::ZERO), Some(ClockTime::SECOND)][..],
-            &res[..]
-        );
+        assert_eq!(&[ClockTime::ZERO, ClockTime::SECOND][..], &res[..]);
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -1387,17 +1384,14 @@ mod tests {
                 .downcast_ref::<crate::ReferenceTimestampMeta>()
                 .unwrap();
             res.push(meta.timestamp());
-            if let Some(ClockTime::SECOND) = meta.timestamp() {
+            if meta.timestamp() == ClockTime::SECOND {
                 Ok(false)
             } else {
                 Ok(true)
             }
         });
 
-        assert_eq!(
-            &[Some(ClockTime::ZERO), Some(ClockTime::SECOND)][..],
-            &res[..]
-        );
+        assert_eq!(&[ClockTime::ZERO, ClockTime::SECOND][..], &res[..]);
 
         let mut res = vec![];
         buffer.foreach_meta(|meta| {
@@ -1408,6 +1402,6 @@ mod tests {
             true
         });
 
-        assert_eq!(&[Some(ClockTime::ZERO)][..], &res[..]);
+        assert_eq!(&[ClockTime::ZERO][..], &res[..]);
     }
 }

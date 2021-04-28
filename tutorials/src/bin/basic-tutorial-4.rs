@@ -6,12 +6,18 @@ use std::io::Write;
 mod tutorials_common;
 
 struct CustomData {
-    playbin: gst::Element,    // Our one and only element
-    playing: bool,            // Are we in the PLAYING state?
-    terminate: bool,          // Should we terminate execution?
-    seek_enabled: bool,       // Is seeking enabled for this media?
-    seek_done: bool,          // Have we performed the seek already?
-    duration: gst::ClockTime, // How long does this media last, in nanoseconds
+    /// Our one and only element
+    playbin: gst::Element,
+    /// Are we in the PLAYING state?
+    playing: bool,
+    /// Should we terminate execution?
+    terminate: bool,
+    /// Is seeking enabled for this media?
+    seek_enabled: bool,
+    /// Have we performed the seek already?
+    seek_done: bool,
+    /// How long does this media last, in nanoseconds
+    duration: Option<gst::ClockTime>,
 }
 
 fn tutorial_main() {
@@ -42,11 +48,11 @@ fn tutorial_main() {
         terminate: false,
         seek_enabled: false,
         seek_done: false,
-        duration: gst::CLOCK_TIME_NONE,
+        duration: gst::ClockTime::NONE,
     };
 
     while !custom_data.terminate {
-        let msg = bus.timed_pop(100 * gst::MSECOND);
+        let msg = bus.timed_pop(100 * gst::ClockTime::MSECOND);
 
         match msg {
             Some(msg) => {
@@ -65,7 +71,11 @@ fn tutorial_main() {
                     }
 
                     // Print current position and total duration
-                    print!("\rPosition {} / {}", position, custom_data.duration);
+                    print!(
+                        "\rPosition {} / {}",
+                        position,
+                        custom_data.duration.display()
+                    );
                     io::stdout().flush().unwrap();
 
                     if custom_data.seek_enabled
@@ -77,7 +87,7 @@ fn tutorial_main() {
                             .playbin
                             .seek_simple(
                                 gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
-                                30 * gst::SECOND,
+                                30 * gst::ClockTime::SECOND,
                             )
                             .expect("Failed to seek.");
                         custom_data.seek_done = true;
@@ -113,7 +123,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
         }
         MessageView::DurationChanged(_) => {
             // The duration has changed, mark the current one as invalid
-            custom_data.duration = gst::CLOCK_TIME_NONE;
+            custom_data.duration = gst::ClockTime::NONE;
         }
         MessageView::StateChanged(state_changed) => {
             if state_changed
@@ -136,7 +146,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
                         let (seekable, start, end) = seeking.result();
                         custom_data.seek_enabled = seekable;
                         if seekable {
-                            println!("Seeking is ENABLED from {:?} to {:?}", start, end)
+                            println!("Seeking is ENABLED from {} to {}", start, end)
                         } else {
                             println!("Seeking is DISABLED for this stream.")
                         }

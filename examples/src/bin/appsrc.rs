@@ -98,7 +98,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     // For each frame we produce, we set the timestamp when it should be displayed
                     // (pts = presentation time stamp)
                     // The autovideosink will use this information to display the frame at the right time.
-                    buffer.set_pts(i * 500 * gst::MSECOND);
+                    buffer.set_pts(i * 500 * gst::ClockTime::MSECOND);
 
                     // At this point, buffer is only a reference to an existing memory region somewhere.
                     // When we want to access its content, we have to map it while requesting the required
@@ -150,7 +150,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
         .bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
-    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::ClockTime::NONE) {
         use gst::MessageView;
 
         match msg.view() {

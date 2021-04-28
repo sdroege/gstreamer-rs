@@ -88,7 +88,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
             let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 U::default_format().into_glib(),
                 dest_val.as_mut_ptr(),
             ));
@@ -111,7 +111,7 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
             let ret = from_glib(ffi::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
                 src_val.format().into_glib(),
-                src_val.to_raw_value(),
+                src_val.into_raw_value(),
                 dest_format.into_glib(),
                 dest_val.as_mut_ptr(),
             ));
