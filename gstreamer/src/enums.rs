@@ -16,6 +16,58 @@ use glib::value::Value;
 use glib::StaticType;
 use glib::Type;
 
+macro_rules! impl_return_result_traits {
+    ($ffi_type:ident, $ret_type:ident, $ok_type:ident, $err_type:ident) => {
+        impl From<$ok_type> for $ret_type {
+            fn from(value: $ok_type) -> Self {
+                skip_assert_initialized!();
+                $ret_type::from_ok(value)
+            }
+        }
+
+        impl IntoGlib for $ok_type {
+            type GlibType = <$ret_type as IntoGlib>::GlibType;
+
+            fn into_glib(self) -> Self::GlibType {
+                $ret_type::from_ok(self).into_glib()
+            }
+        }
+
+        impl From<$err_type> for $ret_type {
+            fn from(value: $err_type) -> Self {
+                skip_assert_initialized!();
+                $ret_type::from_error(value)
+            }
+        }
+
+        impl IntoGlib for $err_type {
+            type GlibType = <$ret_type as IntoGlib>::GlibType;
+
+            fn into_glib(self) -> Self::GlibType {
+                $ret_type::from_error(self).into_glib()
+            }
+        }
+
+        impl From<Result<$ok_type, $err_type>> for $ret_type {
+            fn from(res: Result<$ok_type, $err_type>) -> Self {
+                skip_assert_initialized!();
+                match res {
+                    Ok(success) => $ret_type::from_ok(success),
+                    Err(error) => $ret_type::from_error(error),
+                }
+            }
+        }
+
+        impl TryFromGlib<ffi::$ffi_type> for $ok_type {
+            type Error = $err_type;
+            fn try_from_glib(val: ffi::$ffi_type) -> Result<$ok_type, $err_type> {
+                skip_assert_initialized!();
+                unsafe { $ret_type::from_glib(val) }.into_result()
+            }
+        }
+    };
+}
+
 impl StateChangeReturn {
     pub fn into_result(self) -> Result<StateChangeSuccess, StateChangeError> {
         match self {
@@ -49,34 +101,17 @@ pub enum StateChangeSuccess {
     NoPreroll,
 }
 
-impl From<StateChangeSuccess> for StateChangeReturn {
-    fn from(value: StateChangeSuccess) -> Self {
-        skip_assert_initialized!();
-        StateChangeReturn::from_ok(value)
-    }
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 #[error("Element failed to change its state")]
 pub struct StateChangeError;
 
-impl From<StateChangeError> for StateChangeReturn {
-    fn from(value: StateChangeError) -> Self {
-        skip_assert_initialized!();
-        StateChangeReturn::from_error(value)
-    }
-}
-
-impl From<Result<StateChangeSuccess, StateChangeError>> for StateChangeReturn {
-    fn from(res: Result<StateChangeSuccess, StateChangeError>) -> Self {
-        skip_assert_initialized!();
-        match res {
-            Ok(success) => StateChangeReturn::from_ok(success),
-            Err(error) => StateChangeReturn::from_error(error),
-        }
-    }
-}
+impl_return_result_traits!(
+    GstStateChangeReturn,
+    StateChangeReturn,
+    StateChangeSuccess,
+    StateChangeError
+);
 
 impl FlowReturn {
     pub fn into_result(self) -> Result<FlowSuccess, FlowError> {
@@ -95,13 +130,6 @@ impl FlowReturn {
             FlowReturn::CustomError1 => Err(FlowError::CustomError1),
             FlowReturn::CustomError2 => Err(FlowError::CustomError2),
             _ => Err(FlowError::Error),
-        }
-    }
-
-    pub fn into_result_value<T, F: FnOnce() -> T>(self, func: F) -> Result<T, FlowError> {
-        match self.into_result() {
-            Ok(_) => Ok(func()),
-            Err(err) => Err(err),
         }
     }
 
@@ -139,13 +167,6 @@ pub enum FlowSuccess {
     Ok,
 }
 
-impl From<FlowSuccess> for FlowReturn {
-    fn from(value: FlowSuccess) -> Self {
-        skip_assert_initialized!();
-        FlowReturn::from_ok(value)
-    }
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum FlowError {
@@ -169,22 +190,7 @@ pub enum FlowError {
     CustomError2,
 }
 
-impl From<FlowError> for FlowReturn {
-    fn from(value: FlowError) -> Self {
-        skip_assert_initialized!();
-        FlowReturn::from_error(value)
-    }
-}
-
-impl From<Result<FlowSuccess, FlowError>> for FlowReturn {
-    fn from(res: Result<FlowSuccess, FlowError>) -> Self {
-        skip_assert_initialized!();
-        match res {
-            Ok(success) => FlowReturn::from_ok(success),
-            Err(error) => FlowReturn::from_error(error),
-        }
-    }
-}
+impl_return_result_traits!(GstFlowReturn, FlowReturn, FlowSuccess, FlowError);
 
 impl PadLinkReturn {
     pub fn into_result(self) -> Result<PadLinkSuccess, PadLinkError> {
@@ -221,13 +227,6 @@ impl PadLinkReturn {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct PadLinkSuccess;
 
-impl From<PadLinkSuccess> for PadLinkReturn {
-    fn from(value: PadLinkSuccess) -> Self {
-        skip_assert_initialized!();
-        PadLinkReturn::from_ok(value)
-    }
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum PadLinkError {
@@ -245,22 +244,12 @@ pub enum PadLinkError {
     Refused,
 }
 
-impl From<PadLinkError> for PadLinkReturn {
-    fn from(value: PadLinkError) -> Self {
-        skip_assert_initialized!();
-        PadLinkReturn::from_error(value)
-    }
-}
-
-impl From<Result<PadLinkSuccess, PadLinkError>> for PadLinkReturn {
-    fn from(res: Result<PadLinkSuccess, PadLinkError>) -> Self {
-        skip_assert_initialized!();
-        match res {
-            Ok(success) => PadLinkReturn::from_ok(success),
-            Err(error) => PadLinkReturn::from_error(error),
-        }
-    }
-}
+impl_return_result_traits!(
+    GstPadLinkReturn,
+    PadLinkReturn,
+    PadLinkSuccess,
+    PadLinkError
+);
 
 impl ClockReturn {
     pub fn into_result(self) -> Result<ClockSuccess, ClockError> {
@@ -304,13 +293,6 @@ pub enum ClockSuccess {
     Done,
 }
 
-impl From<ClockSuccess> for ClockReturn {
-    fn from(value: ClockSuccess) -> Self {
-        skip_assert_initialized!();
-        ClockReturn::from_ok(value)
-    }
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum ClockError {
@@ -328,22 +310,7 @@ pub enum ClockError {
     Unsupported,
 }
 
-impl From<ClockError> for ClockReturn {
-    fn from(value: ClockError) -> Self {
-        skip_assert_initialized!();
-        ClockReturn::from_error(value)
-    }
-}
-
-impl From<Result<ClockSuccess, ClockError>> for ClockReturn {
-    fn from(res: Result<ClockSuccess, ClockError>) -> Self {
-        skip_assert_initialized!();
-        match res {
-            Ok(success) => ClockReturn::from_ok(success),
-            Err(error) => ClockReturn::from_error(error),
-        }
-    }
-}
+impl_return_result_traits!(GstClockReturn, ClockReturn, ClockSuccess, ClockError);
 
 impl PartialEq for crate::TypeFindProbability {
     fn eq(&self, other: &crate::TypeFindProbability) -> bool {

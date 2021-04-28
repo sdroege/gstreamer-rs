@@ -9,20 +9,6 @@ pub trait BaseSinkExtManual: 'static {
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 
-    fn wait(
-        &self,
-        time: gst::ClockTime,
-    ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff);
-
-    fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
-    fn wait_clock(
-        &self,
-        time: gst::ClockTime,
-    ) -> (
-        Result<gst::ClockSuccess, gst::ClockError>,
-        gst::ClockTimeDiff,
-    );
-
     fn query_latency(
         &self,
     ) -> Result<(bool, bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;
@@ -34,48 +20,6 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             let sink: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
             let _guard = crate::utils::MutexGuard::lock(&sink.element.object.lock);
             from_glib_none(&sink.segment as *const _)
-        }
-    }
-
-    fn wait(
-        &self,
-        time: gst::ClockTime,
-    ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff) {
-        unsafe {
-            let mut jitter = 0;
-            let ret: gst::FlowReturn = from_glib(ffi::gst_base_sink_wait(
-                self.as_ref().to_glib_none().0,
-                time.into_glib(),
-                &mut jitter,
-            ));
-            (ret.into_result(), jitter)
-        }
-    }
-
-    fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_base_sink_wait_preroll(
-                self.as_ref().to_glib_none().0,
-            ))
-        };
-        ret.into_result()
-    }
-
-    fn wait_clock(
-        &self,
-        time: gst::ClockTime,
-    ) -> (
-        Result<gst::ClockSuccess, gst::ClockError>,
-        gst::ClockTimeDiff,
-    ) {
-        unsafe {
-            let mut jitter = 0;
-            let ret: gst::ClockReturn = from_glib(ffi::gst_base_sink_wait_clock(
-                self.as_ref().to_glib_none().0,
-                time.into_glib(),
-                &mut jitter,
-            ));
-            (ret.into_result(), jitter)
         }
     }
 

@@ -149,22 +149,17 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             let mut skipsize = 0;
-            let res = (*parent_class).handle_frame.map(|f| {
-                let res = gst::FlowReturn::from_glib(f(
-                    element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
-                    frame.to_glib_none().0,
-                    &mut skipsize,
-                ));
-                (res, skipsize as u32)
-            });
-
-            match res {
-                Some((res, skipsize)) => {
-                    let res = res.into_result();
-                    Ok((res.unwrap(), skipsize))
-                }
-                None => Err(gst::FlowError::Error),
-            }
+            (*parent_class)
+                .handle_frame
+                .map(|f| {
+                    let res = gst::FlowSuccess::try_from_glib(f(
+                        element.unsafe_cast_ref::<BaseParse>().to_glib_none().0,
+                        frame.to_glib_none().0,
+                        &mut skipsize,
+                    ));
+                    (res.unwrap(), skipsize as u32)
+                })
+                .ok_or(gst::FlowError::Error)
         }
     }
 

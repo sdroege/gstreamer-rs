@@ -63,14 +63,13 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         frame: &mut VideoCodecFrame,
         size: usize,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_video_encoder_allocate_output_frame(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_video_encoder_allocate_output_frame(
                 self.as_ref().to_glib_none().0,
                 frame.to_glib_none().0,
                 size,
             ))
-        };
-        ret.into_result()
+        }
     }
 
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {
@@ -90,25 +89,23 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         &self,
         frame: Option<VideoCodecFrame>,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_video_encoder_finish_frame(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_video_encoder_finish_frame(
                 self.as_ref().to_glib_none().0,
                 frame.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn finish_subframe(&self, frame: &VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_video_encoder_finish_subframe(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_video_encoder_finish_subframe(
                 self.as_ref().to_glib_none().0,
                 frame.to_glib_none().0,
             ))
-        };
-        ret.into_result()
+        }
     }
 
     fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {

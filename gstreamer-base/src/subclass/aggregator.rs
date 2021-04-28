@@ -288,13 +288,12 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             (*parent_class)
                 .flush
                 .map(|f| {
-                    from_glib(f(aggregator
+                    gst::FlowSuccess::try_from_glib(f(aggregator
                         .unsafe_cast_ref::<Aggregator>()
                         .to_glib_none()
                         .0))
                 })
-                .unwrap_or(gst::FlowReturn::Ok)
-                .into_result()
+                .unwrap_or(Ok(gst::FlowSuccess::Ok))
         }
     }
 
@@ -329,11 +328,10 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .finish_buffer
                 .expect("Missing parent function `finish_buffer`");
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 buffer.into_ptr(),
             ))
-            .into_result()
         }
     }
 
@@ -350,11 +348,10 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .finish_buffer_list
                 .expect("Missing parent function `finish_buffer_list`");
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 buffer_list.into_ptr(),
             ))
-            .into_result()
         }
     }
 
@@ -392,12 +389,11 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .sink_event_pre_queue
                 .expect("Missing parent function `sink_event_pre_queue`");
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 aggregator_pad.to_glib_none().0,
                 event.into_ptr(),
             ))
-            .into_result()
         }
     }
 
@@ -506,11 +502,10 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
             let f = (*parent_class)
                 .aggregate
                 .expect("Missing parent function `aggregate`");
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 timeout.into_glib(),
             ))
-            .into_result()
         }
     }
 
@@ -613,12 +608,12 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
                 .expect("Missing parent function `update_src_caps`");
 
             let mut out_caps = ptr::null_mut();
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 aggregator.unsafe_cast_ref::<Aggregator>().to_glib_none().0,
                 caps.as_mut_ptr(),
                 &mut out_caps,
             ))
-            .into_result_value(|| from_glib_full(out_caps))
+            .map(|_| from_glib_full(out_caps))
         }
     }
 

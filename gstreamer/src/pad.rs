@@ -12,10 +12,6 @@ use crate::GenericFormattedValue;
 use crate::LoggableError;
 use crate::Pad;
 use crate::PadFlags;
-use crate::PadLinkCheck;
-use crate::PadLinkError;
-use crate::PadLinkReturn;
-use crate::PadLinkSuccess;
 use crate::PadProbeReturn;
 use crate::PadProbeType;
 use crate::Query;
@@ -30,9 +26,7 @@ use std::ptr;
 
 use glib::ffi::gpointer;
 use glib::prelude::*;
-use glib::translate::{
-    from_glib, from_glib_borrow, from_glib_full, FromGlib, FromGlibPtrBorrow, IntoGlib, ToGlibPtr,
-};
+use glib::translate::*;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct PadProbeId(NonZeroU64);
@@ -137,21 +131,11 @@ pub trait PadExtManual: 'static {
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 
-    #[doc(alias = "get_last_flow_result")]
-    fn last_flow_result(&self) -> Result<FlowSuccess, FlowError>;
-
     fn iterate_internal_links(&self) -> crate::Iterator<Pad>;
     fn iterate_internal_links_default<P: IsA<crate::Object>>(
         &self,
         parent: Option<&P>,
     ) -> crate::Iterator<Pad>;
-
-    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError>;
-    fn link_full<P: IsA<Pad>>(
-        &self,
-        sinkpad: &P,
-        flags: PadLinkCheck,
-    ) -> Result<PadLinkSuccess, PadLinkError>;
 
     fn stream_lock(&self) -> StreamLock;
 
@@ -269,8 +253,6 @@ pub trait PadExtManual: 'static {
         func: F,
     );
 
-    fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError>;
-
     fn set_pad_flags(&self, flags: PadFlags);
 
     fn unset_pad_flags(&self, flags: PadFlags);
@@ -310,54 +292,50 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowReturn::from_glib(ffi::gst_pad_chain(
+            FlowSuccess::try_from_glib(ffi::gst_pad_chain(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))
-            .into_result()
         }
     }
 
     fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowReturn::from_glib(ffi::gst_pad_push(
+            FlowSuccess::try_from_glib(ffi::gst_pad_push(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))
-            .into_result()
         }
     }
 
     fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowReturn::from_glib(ffi::gst_pad_chain_list(
+            FlowSuccess::try_from_glib(ffi::gst_pad_chain_list(
                 self.as_ref().to_glib_none().0,
                 list.into_ptr(),
             ))
-            .into_result()
         }
     }
 
     fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowReturn::from_glib(ffi::gst_pad_push_list(
+            FlowSuccess::try_from_glib(ffi::gst_pad_push_list(
                 self.as_ref().to_glib_none().0,
                 list.into_ptr(),
             ))
-            .into_result()
         }
     }
 
     fn range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError> {
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret: FlowReturn = from_glib(ffi::gst_pad_get_range(
+            FlowSuccess::try_from_glib(ffi::gst_pad_get_range(
                 self.as_ref().to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
-            ));
-            ret.into_result_value(|| from_glib_full(buffer))
+            ))
+            .map(|_| from_glib_full(buffer))
         }
     }
 
@@ -371,36 +349,33 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
         unsafe {
             let mut buffer_ref = buffer.as_mut_ptr();
-            let ret: FlowReturn = from_glib(ffi::gst_pad_get_range(
+            FlowSuccess::try_from_glib(ffi::gst_pad_get_range(
                 self.as_ref().to_glib_none().0,
                 offset,
                 size,
                 &mut buffer_ref,
-            ));
-            match ret.into_result_value(|| ()) {
-                Ok(_) => {
-                    if buffer.as_mut_ptr() != buffer_ref {
-                        ffi::gst_mini_object_unref(buffer_ref as *mut _);
-                        Err(crate::FlowError::Error)
-                    } else {
-                        Ok(())
-                    }
+            ))
+            .and_then(|_| {
+                if buffer.as_mut_ptr() != buffer_ref {
+                    ffi::gst_mini_object_unref(buffer_ref as *mut _);
+                    Err(crate::FlowError::Error)
+                } else {
+                    Ok(())
                 }
-                Err(err) => Err(err),
-            }
+            })
         }
     }
 
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError> {
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret: FlowReturn = from_glib(ffi::gst_pad_pull_range(
+            FlowSuccess::try_from_glib(ffi::gst_pad_pull_range(
                 self.as_ref().to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
-            ));
-            ret.into_result_value(|| from_glib_full(buffer))
+            ))
+            .map(|_| from_glib_full(buffer))
         }
     }
 
@@ -414,23 +389,20 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
         unsafe {
             let mut buffer_ref = buffer.as_mut_ptr();
-            let ret: FlowReturn = from_glib(ffi::gst_pad_pull_range(
+            FlowSuccess::try_from_glib(ffi::gst_pad_pull_range(
                 self.as_ref().to_glib_none().0,
                 offset,
                 size,
                 &mut buffer_ref,
-            ));
-            match ret.into_result_value(|| ()) {
-                Ok(_) => {
-                    if buffer.as_mut_ptr() != buffer_ref {
-                        ffi::gst_mini_object_unref(buffer_ref as *mut _);
-                        Err(crate::FlowError::Error)
-                    } else {
-                        Ok(())
-                    }
+            ))
+            .and_then(|_| {
+                if buffer.as_mut_ptr() != buffer_ref {
+                    ffi::gst_mini_object_unref(buffer_ref as *mut _);
+                    Err(crate::FlowError::Error)
+                } else {
+                    Ok(())
                 }
-                Err(err) => Err(err),
-            }
+            })
         }
     }
 
@@ -514,15 +486,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn last_flow_result(&self) -> Result<FlowSuccess, FlowError> {
-        let ret: FlowReturn = unsafe {
-            from_glib(ffi::gst_pad_get_last_flow_return(
-                self.as_ref().to_glib_none().0,
-            ))
-        };
-        ret.into_result()
-    }
-
     fn iterate_internal_links(&self) -> crate::Iterator<Pad> {
         unsafe {
             from_glib_full(ffi::gst_pad_iterate_internal_links(
@@ -541,31 +504,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
-    }
-
-    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError> {
-        let ret: PadLinkReturn = unsafe {
-            from_glib(ffi::gst_pad_link(
-                self.as_ref().to_glib_none().0,
-                sinkpad.as_ref().to_glib_none().0,
-            ))
-        };
-        ret.into_result()
-    }
-
-    fn link_full<P: IsA<Pad>>(
-        &self,
-        sinkpad: &P,
-        flags: PadLinkCheck,
-    ) -> Result<PadLinkSuccess, PadLinkError> {
-        let ret: PadLinkReturn = unsafe {
-            from_glib(ffi::gst_pad_link_full(
-                self.as_ref().to_glib_none().0,
-                sinkpad.as_ref().to_glib_none().0,
-                flags.into_glib(),
-            ))
-        };
-        ret.into_result()
     }
 
     fn stream_lock(&self) -> StreamLock {
@@ -1043,16 +981,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError> {
-        let ret: FlowReturn = unsafe {
-            from_glib(ffi::gst_pad_store_sticky_event(
-                self.as_ref().to_glib_none().0,
-                event.to_glib_none().0,
-            ))
-        };
-        ret.into_result()
-    }
-
     fn set_pad_flags(&self, flags: PadFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
@@ -1082,7 +1010,7 @@ unsafe fn create_probe_info<'a>(
     info: *mut ffi::GstPadProbeInfo,
 ) -> (PadProbeInfo<'a>, Option<glib::Type>) {
     let mut data_type = None;
-    let flow_ret: FlowReturn = from_glib((*info).ABI.abi.flow_ret);
+    let flow_res = FlowSuccess::try_from_glib((*info).ABI.abi.flow_ret);
     let info = PadProbeInfo {
         mask: from_glib((*info).type_),
         id: Some(PadProbeId(NonZeroU64::new_unchecked((*info).id as u64))),
@@ -1117,7 +1045,7 @@ unsafe fn create_probe_info<'a>(
                 Some(PadProbeData::__Unknown(data))
             }
         },
-        flow_res: flow_ret.into_result(),
+        flow_res,
     };
     (info, data_type)
 }

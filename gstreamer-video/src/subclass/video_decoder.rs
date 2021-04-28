@@ -269,13 +269,12 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .finish
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element
+                    gst::FlowSuccess::try_from_glib(f(element
                         .unsafe_cast_ref::<VideoDecoder>()
                         .to_glib_none()
                         .0))
                 })
-                .unwrap_or(gst::FlowReturn::Ok)
-                .into_result()
+                .unwrap_or(Ok(gst::FlowSuccess::Ok))
         }
     }
 
@@ -286,13 +285,12 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .drain
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element
+                    gst::FlowSuccess::try_from_glib(f(element
                         .unsafe_cast_ref::<VideoDecoder>()
                         .to_glib_none()
                         .0))
                 })
-                .unwrap_or(gst::FlowReturn::Ok)
-                .into_result()
+                .unwrap_or(Ok(gst::FlowSuccess::Ok))
         }
     }
 
@@ -333,15 +331,14 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .parse
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
                         frame.to_glib_none().0,
                         adapter.to_glib_none().0,
                         at_eos.into_glib(),
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::Ok)
-                .into_result()
+                .unwrap_or(Ok(gst::FlowSuccess::Ok))
         }
     }
 
@@ -356,13 +353,12 @@ impl<T: VideoDecoderImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<VideoDecoder>().to_glib_none().0,
                         frame.to_glib_none().0,
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::Error)
-                .into_result()
+                .unwrap_or(Err(gst::FlowError::Error))
         }
     }
 

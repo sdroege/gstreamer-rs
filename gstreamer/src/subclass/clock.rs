@@ -141,7 +141,7 @@ impl<T: ClockImpl> ClockImplExt for T {
             let mut jitter = 0;
 
             (
-                ClockReturn::from_glib(
+                ClockSuccess::try_from_glib(
                     (*parent_class)
                         .wait
                         .map(|f| {
@@ -152,8 +152,7 @@ impl<T: ClockImpl> ClockImplExt for T {
                             )
                         })
                         .unwrap_or(ffi::GST_CLOCK_UNSUPPORTED),
-                )
-                .into_result(),
+                ),
                 jitter,
             )
         }
@@ -167,7 +166,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
-            ClockReturn::from_glib(
+            ClockSuccess::try_from_glib(
                 (*parent_class)
                     .wait_async
                     .map(|f| {
@@ -178,7 +177,6 @@ impl<T: ClockImpl> ClockImplExt for T {
                     })
                     .unwrap_or(ffi::GST_CLOCK_UNSUPPORTED),
             )
-            .into_result()
         }
     }
 

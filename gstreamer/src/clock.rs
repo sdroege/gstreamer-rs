@@ -45,9 +45,11 @@ impl ClockId {
     pub fn wait(&self) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
             let mut jitter = 0;
-            let res: ClockReturn =
-                from_glib(ffi::gst_clock_id_wait(self.to_glib_none().0, &mut jitter));
-            (res.into_result(), jitter)
+            let res = ClockSuccess::try_from_glib(ffi::gst_clock_id_wait(
+                self.to_glib_none().0,
+                &mut jitter,
+            ));
+            (res, jitter)
         }
     }
 
@@ -160,15 +162,14 @@ impl SingleShotClockId {
 
         let func: Box<Option<F>> = Box::new(Some(func));
 
-        let ret: ClockReturn = unsafe {
-            from_glib(ffi::gst_clock_id_wait_async(
+        unsafe {
+            ClockSuccess::try_from_glib(ffi::gst_clock_id_wait_async(
                 self.to_glib_none().0,
                 Some(trampoline::<F>),
                 Box::into_raw(func) as gpointer,
                 Some(destroy_notify::<F>),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     #[allow(clippy::type_complexity)]
@@ -264,15 +265,14 @@ impl PeriodicClockId {
         }
 
         let func: Box<F> = Box::new(func);
-        let ret: ClockReturn = unsafe {
-            from_glib(ffi::gst_clock_id_wait_async(
+        unsafe {
+            ClockSuccess::try_from_glib(ffi::gst_clock_id_wait_async(
                 self.to_glib_none().0,
                 Some(trampoline::<F>),
                 Box::into_raw(func) as gpointer,
                 Some(destroy_notify::<F>),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     #[allow(clippy::type_complexity)]

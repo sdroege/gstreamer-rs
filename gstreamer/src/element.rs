@@ -18,10 +18,6 @@ use crate::QueryRef;
 use crate::Rank;
 use crate::SpecificFormattedValue;
 use crate::State;
-use crate::StateChange;
-use crate::StateChangeError;
-use crate::StateChangeReturn;
-use crate::StateChangeSuccess;
 
 use glib::translate::*;
 
@@ -116,29 +112,11 @@ pub trait ElementExtManual: 'static {
     #[doc(alias = "get_element_class")]
     fn element_class(&self) -> &glib::Class<Element>;
 
-    fn change_state(&self, transition: StateChange)
-        -> Result<StateChangeSuccess, StateChangeError>;
-    fn continue_state(
-        &self,
-        ret: StateChangeReturn,
-    ) -> Result<StateChangeSuccess, StateChangeError>;
-
-    #[doc(alias = "get_state")]
-    fn state(
-        &self,
-        timeout: ClockTime,
-    ) -> (Result<StateChangeSuccess, StateChangeError>, State, State);
-    fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
-
     #[doc(alias = "get_current_state")]
-    fn current_state(&self) -> State {
-        self.state(ClockTime::from(0)).1
-    }
+    fn current_state(&self) -> State;
 
     #[doc(alias = "get_pending_state")]
-    fn pending_state(&self) -> State {
-        self.state(ClockTime::from(0)).2
-    }
+    fn pending_state(&self) -> State;
 
     fn query(&self, query: &mut QueryRef) -> bool;
 
@@ -283,61 +261,12 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn change_state(
-        &self,
-        transition: StateChange,
-    ) -> Result<StateChangeSuccess, StateChangeError> {
-        let ret: StateChangeReturn = unsafe {
-            from_glib(ffi::gst_element_change_state(
-                self.as_ref().to_glib_none().0,
-                transition.into_glib(),
-            ))
-        };
-        ret.into_result()
+    fn current_state(&self) -> State {
+        self.state(ClockTime::zero()).1
     }
 
-    fn continue_state(
-        &self,
-        ret: StateChangeReturn,
-    ) -> Result<StateChangeSuccess, StateChangeError> {
-        let ret: StateChangeReturn = unsafe {
-            from_glib(ffi::gst_element_continue_state(
-                self.as_ref().to_glib_none().0,
-                ret.into_glib(),
-            ))
-        };
-        ret.into_result()
-    }
-
-    fn state(
-        &self,
-        timeout: ClockTime,
-    ) -> (Result<StateChangeSuccess, StateChangeError>, State, State) {
-        unsafe {
-            let mut state = mem::MaybeUninit::uninit();
-            let mut pending = mem::MaybeUninit::uninit();
-            let ret: StateChangeReturn = from_glib(ffi::gst_element_get_state(
-                self.as_ref().to_glib_none().0,
-                state.as_mut_ptr(),
-                pending.as_mut_ptr(),
-                timeout.into_glib(),
-            ));
-            (
-                ret.into_result(),
-                from_glib(state.assume_init()),
-                from_glib(pending.assume_init()),
-            )
-        }
-    }
-
-    fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError> {
-        let ret: StateChangeReturn = unsafe {
-            from_glib(ffi::gst_element_set_state(
-                self.as_ref().to_glib_none().0,
-                state.into_glib(),
-            ))
-        };
-        ret.into_result()
+    fn pending_state(&self) -> State {
+        self.state(ClockTime::zero()).2
     }
 
     fn query(&self, query: &mut QueryRef) -> bool {

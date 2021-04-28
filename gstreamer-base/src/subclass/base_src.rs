@@ -284,15 +284,14 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .fill
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         offset,
                         length,
                         buffer.as_mut_ptr(),
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::NotSupported)
-                .into_result()
+                .unwrap_or(Err(gst::FlowError::NotSupported))
         }
     }
 
@@ -314,13 +313,13 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst::ffi::GstBuffer;
 
-                    let res = gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                         offset,
                         length,
                         buffer_ref,
-                    ));
-                    res.into_result_value(|| from_glib_full(buffer_ptr))
+                    ))
+                    .map(|_| from_glib_full(buffer_ptr))
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }
@@ -349,14 +348,14 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst::ffi::GstBuffer;
 
-                    gst::FlowReturn::from_glib(
+                    gst::FlowSuccess::try_from_glib(
                         f(
                             element.unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
                             offset,
                             length,
                             buffer_ref,
                         )
-                    ).into_result()?;
+                    )?;
 
                     if let Some(passed_buffer) = buffer {
                         if buffer_ptr != orig_buffer_ptr {

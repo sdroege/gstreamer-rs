@@ -3,7 +3,6 @@
 use crate::Buffer;
 use crate::BufferList;
 use crate::FlowError;
-use crate::FlowReturn;
 use crate::FlowSuccess;
 use crate::Object;
 use crate::Pad;
@@ -11,7 +10,7 @@ use crate::ProxyPad;
 use std::ptr;
 
 use glib::prelude::*;
-use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
+use glib::translate::*;
 
 pub trait ProxyPadExtManual: 'static {
     fn chain_default<P: IsA<Object>>(
@@ -46,14 +45,13 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
         buffer: Buffer,
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
-        let ret: FlowReturn = unsafe {
-            from_glib(ffi::gst_proxy_pad_chain_default(
+        unsafe {
+            FlowSuccess::try_from_glib(ffi::gst_proxy_pad_chain_default(
                 self.as_ptr() as *mut ffi::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 buffer.into_ptr(),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     fn chain_list_default<P: IsA<Object>>(
@@ -62,14 +60,13 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
         list: BufferList,
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
-        let ret: FlowReturn = unsafe {
-            from_glib(ffi::gst_proxy_pad_chain_list_default(
+        unsafe {
+            FlowSuccess::try_from_glib(ffi::gst_proxy_pad_chain_list_default(
                 self.as_ptr() as *mut ffi::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 list.into_ptr(),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     fn getrange_default<P: IsA<Object>>(
@@ -81,14 +78,14 @@ impl<O: IsA<ProxyPad>> ProxyPadExtManual for O {
         skip_assert_initialized!();
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret: FlowReturn = from_glib(ffi::gst_proxy_pad_getrange_default(
+            FlowSuccess::try_from_glib(ffi::gst_proxy_pad_getrange_default(
                 self.as_ptr() as *mut ffi::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
-            ));
-            ret.into_result_value(|| from_glib_full(buffer))
+            ))
+            .map(|_| from_glib_full(buffer))
         }
     }
 

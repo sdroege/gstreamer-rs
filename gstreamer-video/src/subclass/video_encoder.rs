@@ -245,13 +245,12 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .finish
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element
+                    gst::FlowSuccess::try_from_glib(f(element
                         .unsafe_cast_ref::<VideoEncoder>()
                         .to_glib_none()
                         .0))
                 })
-                .unwrap_or(gst::FlowReturn::Ok)
-                .into_result()
+                .unwrap_or(Ok(gst::FlowSuccess::Ok))
         }
     }
 
@@ -290,13 +289,12 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<VideoEncoder>().to_glib_none().0,
                         frame.to_glib_none().0,
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::Error)
-                .into_result()
+                .unwrap_or(Err(gst::FlowError::Error))
         }
     }
 

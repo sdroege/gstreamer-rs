@@ -39,8 +39,6 @@ mod rtsp_media;
 mod rtsp_media_factory;
 mod rtsp_server;
 mod rtsp_session_pool;
-mod rtsp_stream;
-mod rtsp_stream_transport;
 mod rtsp_thread;
 mod rtsp_token;
 
@@ -129,6 +127,4 @@ pub mod prelude {
     pub use crate::rtsp_media_factory::RTSPMediaFactoryExtManual;
     pub use crate::rtsp_server::RTSPServerExtManual;
     pub use crate::rtsp_session_pool::RTSPSessionPoolExtManual;
-    pub use crate::rtsp_stream::RTSPStreamExtManual;
-    pub use crate::rtsp_stream_transport::RTSPStreamTransportExtManual;
 }

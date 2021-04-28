@@ -65,14 +65,13 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         buffer: Option<gst::Buffer>,
         frames: i32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_audio_decoder_finish_frame(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_audio_decoder_finish_frame(
                 self.as_ref().to_glib_none().0,
                 buffer.map(|b| b.into_ptr()).unwrap_or(ptr::null_mut()),
                 frames,
             ))
-        };
-        ret.into_result()
+        }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -81,13 +80,12 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         &self,
         buffer: Option<gst::Buffer>,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_audio_decoder_finish_subframe(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_audio_decoder_finish_subframe(
                 self.as_ref().to_glib_none().0,
                 buffer.map(|b| b.into_ptr()).unwrap_or(ptr::null_mut()),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     fn negotiate(&self) -> Result<(), gst::FlowError> {
@@ -156,8 +154,8 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
         function: &str,
         line: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(_gst_audio_decoder_error(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(_gst_audio_decoder_error(
                 self.as_ref().to_glib_none().0,
                 weight,
                 T::domain().into_glib(),
@@ -168,8 +166,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
                 function.to_glib_none().0,
                 line as i32,
             ))
-        };
-        ret.into_result()
+        }
     }
 }
 

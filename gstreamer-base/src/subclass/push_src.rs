@@ -51,13 +51,12 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
             (*parent_class)
                 .fill
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
                         buffer.as_mut_ptr(),
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::NotSupported)
-                .into_result()
+                .unwrap_or(Err(gst::FlowError::NotSupported))
         }
     }
 
@@ -74,11 +73,11 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst::ffi::GstBuffer;
 
-                    let res = gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
                         buffer_ref,
-                    ));
-                    res.into_result_value(|| from_glib_full(buffer_ref))
+                    ))
+                    .map(|_| from_glib_full(buffer_ref))
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }
@@ -97,11 +96,11 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
                     let buffer_ref = &mut buffer_ptr as *mut _ as *mut gst::ffi::GstBuffer;
 
-                    let res = gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<PushSrc>().to_glib_none().0,
                         buffer_ref,
-                    ));
-                    res.into_result_value(|| from_glib_full(buffer_ref))
+                    ))
+                    .map(|_| from_glib_full(buffer_ref))
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }

@@ -14,12 +14,6 @@ pub trait BaseSrcExtManual: 'static {
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 
-    fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>);
-
-    fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
-
-    fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
-
     fn query_latency(&self) -> Result<(bool, gst::ClockTime, gst::ClockTime), glib::BoolError>;
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -47,28 +41,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             let _guard = crate::utils::MutexGuard::lock(&src.element.object.lock);
             from_glib_none(&src.segment as *const _)
         }
-    }
-
-    fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>) {
-        let ret: gst::FlowReturn = ret.into();
-        unsafe {
-            ffi::gst_base_src_start_complete(self.as_ref().to_glib_none().0, ret.into_glib());
-        }
-    }
-
-    fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn =
-            unsafe { from_glib(ffi::gst_base_src_start_wait(self.as_ref().to_glib_none().0)) };
-        ret.into_result()
-    }
-
-    fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_base_src_wait_playing(
-                self.as_ref().to_glib_none().0,
-            ))
-        };
-        ret.into_result()
     }
 
     fn query_latency(&self) -> Result<(bool, gst::ClockTime, gst::ClockTime), glib::BoolError> {

@@ -6,9 +6,7 @@ use crate::BufferPool;
 use crate::Structure;
 
 use glib::prelude::*;
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr, ToGlibPtrMut,
-};
+use glib::translate::*;
 
 use std::mem;
 use std::ops;
@@ -334,13 +332,12 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret: crate::FlowReturn = from_glib(ffi::gst_buffer_pool_acquire_buffer(
+            crate::FlowSuccess::try_from_glib(ffi::gst_buffer_pool_acquire_buffer(
                 self.as_ref().to_glib_none().0,
                 &mut buffer,
                 params_ptr,
-            ));
-
-            ret.into_result_value(|| from_glib_full(buffer))
+            ))
+            .map(|_| from_glib_full(buffer))
         }
     }
 

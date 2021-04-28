@@ -2,13 +2,8 @@
 
 use crate::AppSink;
 use glib::ffi::gpointer;
-use glib::object::ObjectType;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use std::boxed::Box as Box_;
 use std::cell::RefCell;
-use std::mem::transmute;
 use std::panic;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -277,70 +272,10 @@ impl AppSink {
         }
     }
 
-    pub fn connect_new_sample<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"new-sample\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    new_sample_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    pub fn connect_new_preroll<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
-    >(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"new-preroll\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
-                    new_preroll_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
     #[cfg(any(feature = "v1_10"))]
     pub fn stream(&self) -> AppSinkStream {
         AppSinkStream::new(self)
     }
-}
-
-unsafe extern "C" fn new_sample_trampoline<
-    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
->(
-    this: *mut ffi::GstAppSink,
-    f: glib::ffi::gpointer,
-) -> gst::ffi::GstFlowReturn {
-    let f: &F = &*(f as *const F);
-    let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
-    ret.into_glib()
-}
-
-unsafe extern "C" fn new_preroll_trampoline<
-    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
->(
-    this: *mut ffi::GstAppSink,
-    f: glib::ffi::gpointer,
-) -> gst::ffi::GstFlowReturn {
-    let f: &F = &*(f as *const F);
-    let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
-    ret.into_glib()
 }
 
 #[cfg(any(feature = "v1_10"))]

@@ -572,22 +572,18 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .map(|f| {
                     let mut outbuf: *mut gst::ffi::GstBuffer = ptr::null_mut();
                     // FIXME: Wrong signature in FFI
-                    let res = from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         inbuf.as_ptr() as *mut gst::ffi::GstBuffer,
                         (&mut outbuf) as *mut *mut gst::ffi::GstBuffer as *mut gst::ffi::GstBuffer,
-                    ));
-
-                    match gst::FlowReturn::into_result(res) {
-                        Err(err) => Err(err),
-                        Ok(_) => {
-                            if outbuf == inbuf.as_ptr() as *mut _ {
-                                Ok(PrepareOutputBufferSuccess::InputBuffer)
-                            } else {
-                                Ok(PrepareOutputBufferSuccess::Buffer(from_glib_full(outbuf)))
-                            }
+                    ))
+                    .map(|_| {
+                        if outbuf == inbuf.as_ptr() as *mut _ {
+                            PrepareOutputBufferSuccess::InputBuffer
+                        } else {
+                            PrepareOutputBufferSuccess::Buffer(from_glib_full(outbuf))
                         }
-                    }
+                    })
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
         }
@@ -605,7 +601,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
             (*parent_class)
                 .transform
                 .map(|f| {
-                    from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                         inbuf.to_glib_none().0,
                         outbuf.as_mut_ptr(),
@@ -613,7 +609,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 })
                 .unwrap_or_else(|| {
                     if !element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
-                        gst::FlowReturn::NotSupported
+                        Err(gst::FlowError::NotSupported)
                     } else {
                         unreachable!(concat!(
                             "parent `transform` called ",
@@ -621,7 +617,6 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                         ));
                     }
                 })
-                .into_result()
         }
     }
 
@@ -647,11 +642,10 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 }
             });
 
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 buf.as_mut_ptr() as *mut _,
             ))
-            .into_result()
         }
     }
 
@@ -679,11 +673,10 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
             // FIXME: Wrong signature in FFI
             let buf: *mut gst::ffi::GstBuffer = buf.to_glib_none().0;
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 buf as *mut _,
             ))
-            .into_result()
         }
     }
 
@@ -762,12 +755,11 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .submit_input_buffer
                 .expect("Missing parent function `submit_input_buffer`");
 
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 is_discont.into_glib(),
                 inbuf.into_ptr(),
             ))
-            .into_result()
         }
     }
 
@@ -783,11 +775,10 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
                 .expect("Missing parent function `generate_output`");
 
             let mut outbuf = ptr::null_mut();
-            gst::FlowReturn::from_glib(f(
+            gst::FlowSuccess::try_from_glib(f(
                 element.unsafe_cast_ref::<BaseTransform>().to_glib_none().0,
                 &mut outbuf,
             ))
-            .into_result()
             .map(|res| {
                 if res == crate::BASE_TRANSFORM_FLOW_DROPPED {
                     GenerateOutputSuccess::Dropped

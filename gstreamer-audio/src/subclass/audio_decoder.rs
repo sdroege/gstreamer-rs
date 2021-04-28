@@ -295,23 +295,19 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
                 .map(|f| {
                     let mut offset = mem::MaybeUninit::uninit();
                     let mut len = mem::MaybeUninit::uninit();
-                    match gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<AudioDecoder>().to_glib_none().0,
                         adapter.to_glib_none().0,
                         offset.as_mut_ptr(),
                         len.as_mut_ptr(),
                     ))
-                    .into_result()
-                    {
-                        Ok(_) => {
-                            let offset = offset.assume_init();
-                            let len = len.assume_init();
-                            assert!(offset >= 0);
-                            assert!(len >= 0);
-                            Ok((offset as u32, len as u32))
-                        }
-                        Err(err) => Err(err),
-                    }
+                    .map(|_| {
+                        let offset = offset.assume_init();
+                        let len = len.assume_init();
+                        assert!(offset >= 0);
+                        assert!(len >= 0);
+                        (offset as u32, len as u32)
+                    })
                 })
                 .unwrap_or_else(|| Ok((0, adapter.available() as u32)))
         }
@@ -328,15 +324,14 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<AudioDecoder>().to_glib_none().0,
                         buffer
                             .map(|buffer| buffer.as_mut_ptr() as *mut *mut gst::ffi::GstBuffer)
                             .unwrap_or(ptr::null_mut()),
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::Error)
-                .into_result()
+                .unwrap_or(Err(gst::FlowError::Error))
         }
     }
 
@@ -350,15 +345,11 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             if let Some(f) = (*parent_class).pre_push {
                 let mut buffer = buffer.into_ptr();
-                match gst::FlowReturn::from_glib(f(
+                gst::FlowSuccess::try_from_glib(f(
                     element.unsafe_cast_ref::<AudioDecoder>().to_glib_none().0,
                     &mut buffer,
                 ))
-                .into_result()
-                {
-                    Ok(_) => Ok(from_glib_full(buffer)),
-                    Err(err) => Err(err),
-                }
+                .map(|_| from_glib_full(buffer))
             } else {
                 Ok(Some(buffer))
             }

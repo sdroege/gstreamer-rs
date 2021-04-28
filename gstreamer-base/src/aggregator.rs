@@ -99,13 +99,12 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     }
 
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_aggregator_finish_buffer(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_aggregator_finish_buffer(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
@@ -114,13 +113,12 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
         &self,
         bufferlist: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_aggregator_finish_buffer_list(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_aggregator_finish_buffer_list(
                 self.as_ref().to_glib_none().0,
                 bufferlist.into_ptr(),
             ))
-        };
-        ret.into_result()
+        }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]

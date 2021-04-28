@@ -272,9 +272,12 @@ impl Harness {
     }
 
     pub fn push(&mut self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn =
-            unsafe { from_glib(ffi::gst_harness_push(self.0.as_ptr(), buffer.into_ptr())) };
-        ret.into_result()
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_harness_push(
+                self.0.as_ptr(),
+                buffer.into_ptr(),
+            ))
+        }
     }
 
     pub fn push_and_pull(&mut self, buffer: gst::Buffer) -> Result<gst::Buffer, glib::BoolError> {
@@ -297,15 +300,11 @@ impl Harness {
     }
 
     pub fn push_from_src(&mut self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn =
-            unsafe { from_glib(ffi::gst_harness_push_from_src(self.0.as_ptr())) };
-        ret.into_result()
+        unsafe { gst::FlowSuccess::try_from_glib(ffi::gst_harness_push_from_src(self.0.as_ptr())) }
     }
 
     pub fn push_to_sink(&mut self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn =
-            unsafe { from_glib(ffi::gst_harness_push_to_sink(self.0.as_ptr())) };
-        ret.into_result()
+        unsafe { gst::FlowSuccess::try_from_glib(ffi::gst_harness_push_to_sink(self.0.as_ptr())) }
     }
 
     pub fn push_upstream_event(&mut self, event: gst::Event) -> bool {
@@ -403,13 +402,12 @@ impl Harness {
     }
 
     pub fn sink_push_many(&mut self, pushes: u32) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_harness_sink_push_many(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_harness_sink_push_many(
                 self.0.as_ptr(),
                 pushes as i32,
             ))
-        };
-        ret.into_result()
+        }
     }
 
     pub fn src_crank_and_push_many(
@@ -417,14 +415,13 @@ impl Harness {
         cranks: u32,
         pushes: u32,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_harness_src_crank_and_push_many(
+        unsafe {
+            gst::FlowSuccess::try_from_glib(ffi::gst_harness_src_crank_and_push_many(
                 self.0.as_ptr(),
                 cranks as i32,
                 pushes as i32,
             ))
-        };
-        ret.into_result()
+        }
     }
 
     pub fn src_push_event(&mut self) -> bool {

@@ -179,13 +179,12 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .render
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::Ok)
-                .into_result()
+                .unwrap_or(Ok(gst::FlowSuccess::Ok))
         }
     }
 
@@ -200,13 +199,12 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .prepare
                 .map(|f| {
-                    from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         buffer.to_glib_none().0,
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::Ok)
-                .into_result()
+                .unwrap_or(Ok(gst::FlowSuccess::Ok))
         }
     }
 
@@ -221,11 +219,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .render_list
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         list.to_glib_none().0,
                     ))
-                    .into_result()
                 })
                 .unwrap_or_else(|| {
                     for buffer in list.iter() {
@@ -247,11 +244,10 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .prepare_list
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<BaseSink>().to_glib_none().0,
                         list.to_glib_none().0,
                     ))
-                    .into_result()
                 })
                 .unwrap_or_else(|| {
                     for buffer in list.iter() {

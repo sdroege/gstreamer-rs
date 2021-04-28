@@ -279,15 +279,14 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
             (*parent_class)
                 .handle_frame
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(
+                    gst::FlowSuccess::try_from_glib(f(
                         element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0,
                         buffer
                             .map(|buffer| buffer.as_mut_ptr() as *mut *mut gst::ffi::GstBuffer)
                             .unwrap_or(ptr::null_mut()),
                     ))
                 })
-                .unwrap_or(gst::FlowReturn::Error)
-                .into_result()
+                .unwrap_or(Err(gst::FlowError::Error))
         }
     }
 
@@ -301,15 +300,11 @@ impl<T: AudioEncoderImpl> AudioEncoderImplExt for T {
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioEncoderClass;
             if let Some(f) = (*parent_class).pre_push {
                 let mut buffer = buffer.into_ptr();
-                match gst::FlowReturn::from_glib(f(
+                gst::FlowSuccess::try_from_glib(f(
                     element.unsafe_cast_ref::<AudioEncoder>().to_glib_none().0,
                     &mut buffer,
                 ))
-                .into_result()
-                {
-                    Ok(_) => Ok(from_glib_full(buffer)),
-                    Err(err) => Err(err),
-                }
+                .map(|_| from_glib_full(buffer))
             } else {
                 Ok(Some(buffer))
             }
