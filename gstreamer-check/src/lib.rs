@@ -18,6 +18,7 @@ macro_rules! assert_initialized_main_thread {
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
 #[allow(clippy::type_complexity)]
+#[allow(clippy::use_self)]
 mod auto;
 pub use crate::auto::*;
 

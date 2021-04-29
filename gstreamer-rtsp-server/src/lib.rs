@@ -27,6 +27,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::match_same_arms)]
 #[allow(clippy::type_complexity)]
 #[allow(clippy::let_and_return)]
+#[allow(clippy::use_self)]
 mod auto;
 pub use crate::auto::*;
 

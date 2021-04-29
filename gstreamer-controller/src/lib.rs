@@ -21,6 +21,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::unreadable_literal)]
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
+#[allow(clippy::use_self)]
 mod auto;
 mod control_point;
 pub use crate::auto::*;

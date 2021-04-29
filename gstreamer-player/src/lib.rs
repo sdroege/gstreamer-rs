@@ -19,6 +19,7 @@ macro_rules! assert_initialized_main_thread {
 #[allow(clippy::match_same_arms)]
 #[allow(clippy::type_complexity)]
 #[allow(clippy::cast_ptr_alignment)]
+#[allow(clippy::use_self)]
 mod auto;
 pub use crate::auto::*;
 

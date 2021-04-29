@@ -18,6 +18,7 @@ macro_rules! assert_initialized_main_thread {
     };
 }
 
+#[allow(clippy::use_self)]
 mod auto;
 pub use auto::*;
 
