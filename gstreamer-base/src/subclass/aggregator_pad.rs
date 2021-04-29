@@ -49,7 +49,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
         aggregator: &Aggregator,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorPadClass;
             (*parent_class)
                 .flush
@@ -74,7 +74,7 @@ impl<T: AggregatorPadImpl> AggregatorPadImplExt for T {
         buffer: &gst::Buffer,
     ) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorPadClass;
             (*parent_class)
                 .skip_buffer

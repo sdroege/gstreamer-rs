@@ -164,7 +164,7 @@ pub trait AudioDecoderImplExt: ObjectSubclass {
 impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
     fn parent_open(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .open
@@ -188,7 +188,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_close(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .close
@@ -212,7 +212,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .start
@@ -236,7 +236,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .stop
@@ -264,7 +264,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .set_format
@@ -288,7 +288,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
         adapter: &gst_base::Adapter,
     ) -> Result<(u32, u32), gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .parse
@@ -323,7 +323,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
         buffer: Option<&gst::Buffer>,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .handle_frame
@@ -346,7 +346,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
         buffer: gst::Buffer,
     ) -> Result<Option<gst::Buffer>, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             if let Some(f) = (*parent_class).pre_push {
                 let mut buffer = buffer.into_ptr();
@@ -367,7 +367,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_flush(&self, element: &Self::Type, hard: bool) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .flush
@@ -383,7 +383,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .negotiate
@@ -400,7 +400,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .getcaps
@@ -420,7 +420,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .sink_event
@@ -434,7 +434,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_sink_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .sink_query
@@ -448,7 +448,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .src_event
@@ -462,7 +462,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
 
     fn parent_src_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             let f = (*parent_class)
                 .src_query
@@ -480,7 +480,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .propose_allocation
@@ -507,7 +507,7 @@ impl<T: AudioDecoderImpl> AudioDecoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioDecoderClass;
             (*parent_class)
                 .decide_allocation

@@ -75,7 +75,7 @@ pub trait BaseParseImplExt: ObjectSubclass {
 impl<T: BaseParseImpl> BaseParseImplExt for T {
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .start
@@ -95,7 +95,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
 
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .stop
@@ -119,7 +119,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             (*parent_class)
                 .set_sink_caps
@@ -146,7 +146,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         frame: BaseParseFrame,
     ) -> Result<(gst::FlowSuccess, u32), gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             let mut skipsize = 0;
             let res = (*parent_class).handle_frame.map(|f| {
@@ -175,7 +175,7 @@ impl<T: BaseParseImpl> BaseParseImplExt for T {
         dest_format: gst::Format,
     ) -> Option<gst::GenericFormattedValue> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
             let src_val = src_val.into();
             let res = (*parent_class).convert.map(|f| {

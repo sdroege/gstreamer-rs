@@ -46,7 +46,7 @@ pub trait DeviceProviderImplExt: ObjectSubclass {
 impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
     fn parent_probe(&self, device_provider: &Self::Type) -> Vec<Device> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).probe {
                 FromGlibPtrContainer::from_glib_full(f(device_provider
@@ -61,7 +61,7 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
 
     fn parent_start(&self, device_provider: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceProviderClass;
             let f = (*parent_class).start.ok_or_else(|| {
                 loggable_error!(crate::CAT_RUST, "Parent function `start` is not defined")
@@ -79,7 +79,7 @@ impl<T: DeviceProviderImpl> DeviceProviderImplExt for T {
 
     fn parent_stop(&self, device_provider: &Self::Type) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceProviderClass;
             if let Some(f) = (*parent_class).stop {
                 f(device_provider

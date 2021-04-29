@@ -130,7 +130,7 @@ pub trait BaseSinkImplExt: ObjectSubclass {
 impl<T: BaseSinkImpl> BaseSinkImplExt for T {
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .start
@@ -150,7 +150,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .stop
@@ -174,7 +174,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .render
@@ -195,7 +195,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .prepare
@@ -216,7 +216,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .render_list
@@ -242,7 +242,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .prepare_list
@@ -264,7 +264,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .query
@@ -280,7 +280,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .event
@@ -296,7 +296,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
 
             (*parent_class)
@@ -317,7 +317,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .set_caps
@@ -337,7 +337,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
 
             match (*parent_class).fixate {
@@ -352,7 +352,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .unlock
@@ -372,7 +372,7 @@ impl<T: BaseSinkImpl> BaseSinkImplExt for T {
 
     fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSinkClass;
             (*parent_class)
                 .unlock_stop

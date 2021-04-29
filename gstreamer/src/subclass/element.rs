@@ -164,7 +164,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         transition: StateChange,
     ) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             let f = (*parent_class)
@@ -186,7 +186,7 @@ impl<T: ElementImpl> ElementImplExt for T {
         caps: Option<&crate::Caps>,
     ) -> Option<crate::Pad> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
@@ -205,7 +205,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_release_pad(&self, element: &Self::Type, pad: &crate::Pad) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
@@ -222,7 +222,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_send_event(&self, element: &Self::Type, event: Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
@@ -239,7 +239,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_query(&self, element: &Self::Type, query: &mut QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
@@ -256,7 +256,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_set_context(&self, element: &Self::Type, context: &crate::Context) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
@@ -273,7 +273,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_set_clock(&self, element: &Self::Type, clock: Option<&crate::Clock>) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
@@ -290,7 +290,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_provide_clock(&self, element: &Self::Type) -> Option<crate::Clock> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             (*parent_class)
@@ -302,7 +302,7 @@ impl<T: ElementImpl> ElementImplExt for T {
 
     fn parent_post_message(&self, element: &Self::Type, msg: crate::Message) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstElementClass;
 
             if let Some(f) = (*parent_class).post_message {

@@ -60,7 +60,7 @@ pub trait AudioSinkImplExt: ObjectSubclass {
 impl<T: AudioSinkImpl> AudioSinkImplExt for T {
     fn parent_close(&self, sink: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).close {
                 None => return Ok(()),
@@ -76,7 +76,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
 
     fn parent_delay(&self, sink: &Self::Type) -> u32 {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).delay {
                 Some(f) => f,
@@ -88,7 +88,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
 
     fn parent_open(&self, sink: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).open {
                 Some(f) => f,
@@ -108,7 +108,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
         spec: &mut AudioRingBufferSpec,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).prepare {
                 Some(f) => f,
@@ -127,7 +127,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
 
     fn parent_unprepare(&self, sink: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).unprepare {
                 Some(f) => f,
@@ -148,7 +148,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
 
     fn parent_write(&self, sink: &Self::Type, buffer: &[u8]) -> Result<i32, LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             let f = match (*parent_class).write {
                 Some(f) => f,
@@ -173,7 +173,7 @@ impl<T: AudioSinkImpl> AudioSinkImplExt for T {
 
     fn parent_reset(&self, sink: &Self::Type) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSinkClass;
             if let Some(f) = (*parent_class).reset {
                 f(sink.unsafe_cast_ref::<AudioSink>().to_glib_none().0)

@@ -347,7 +347,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         media: &crate::RTSPMedia,
     ) -> Option<gst_sdp::SDPMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .create_sdp
@@ -368,7 +368,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class).configure_client_media.expect(
                 "No `configure_client_media` virtual method implementation in parent class",
@@ -395,7 +395,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPResult {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .params_set
@@ -414,7 +414,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPResult {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .params_get
@@ -433,7 +433,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         url: &gst_rtsp::RTSPUrl,
     ) -> Option<glib::GString> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .make_path_from_uri
@@ -448,7 +448,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_closed(&self, client: &Self::Type) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).closed {
                 f(client.unsafe_cast_ref::<RTSPClient>().to_glib_none().0);
@@ -458,7 +458,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_new_session(&self, client: &Self::Type, session: &crate::RTSPSession) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).new_session {
                 f(
@@ -471,7 +471,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_options_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).options_request {
                 f(
@@ -484,7 +484,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_describe_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).describe_request {
                 f(
@@ -497,7 +497,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_setup_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).setup_request {
                 f(
@@ -510,7 +510,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_play_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).play_request {
                 f(
@@ -523,7 +523,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_pause_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pause_request {
                 f(
@@ -536,7 +536,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_teardown_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).teardown_request {
                 f(
@@ -549,7 +549,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_set_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).set_parameter_request {
                 f(
@@ -562,7 +562,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_parameter_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).get_parameter_request {
                 f(
@@ -575,7 +575,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_announce_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).announce_request {
                 f(
@@ -588,7 +588,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_record_request(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).record_request {
                 f(
@@ -601,7 +601,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
 
     fn parent_handle_response(&self, client: &Self::Type, ctx: &crate::RTSPContext) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).handle_response {
                 f(
@@ -623,7 +623,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         sdp: &gst_sdp::SDPMessageRef,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             let f = (*parent_class)
                 .handle_sdp
@@ -649,7 +649,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         arr: &[String],
     ) -> Option<glib::GString> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).check_requirements {
                 from_glib_full(f(
@@ -669,7 +669,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_options_request {
                 from_glib(f(
@@ -688,7 +688,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_describe_request {
                 from_glib(f(
@@ -707,7 +707,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_setup_request {
                 from_glib(f(
@@ -726,7 +726,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_play_request {
                 from_glib(f(
@@ -745,7 +745,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_pause_request {
                 from_glib(f(
@@ -764,7 +764,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_teardown_request {
                 from_glib(f(
@@ -783,7 +783,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_set_parameter_request {
                 from_glib(f(
@@ -802,7 +802,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_get_parameter_request {
                 from_glib(f(
@@ -821,7 +821,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_announce_request {
                 from_glib(f(
@@ -840,7 +840,7 @@ impl<T: RTSPClientImpl> RTSPClientImplExt for T {
         ctx: &crate::RTSPContext,
     ) -> gst_rtsp::RTSPStatusCode {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPClientClass;
             if let Some(f) = (*parent_class).pre_record_request {
                 from_glib(f(

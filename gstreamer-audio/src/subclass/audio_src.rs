@@ -70,7 +70,7 @@ pub trait AudioSrcImplExt: ObjectSubclass {
 impl<T: AudioSrcImpl> AudioSrcImplExt for T {
     fn parent_close(&self, src: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             let f = match (*parent_class).close {
                 None => return Ok(()),
@@ -86,7 +86,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
 
     fn parent_delay(&self, src: &Self::Type) -> u32 {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             let f = match (*parent_class).delay {
                 Some(f) => f,
@@ -98,7 +98,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
 
     fn parent_open(&self, src: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             let f = match (*parent_class).open {
                 Some(f) => f,
@@ -118,7 +118,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
         spec: &mut AudioRingBufferSpec,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             let f = match (*parent_class).prepare {
                 Some(f) => f,
@@ -137,7 +137,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
 
     fn parent_unprepare(&self, src: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             let f = match (*parent_class).unprepare {
                 Some(f) => f,
@@ -162,7 +162,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
         buffer: &mut [u8],
     ) -> Result<(u32, gst::ClockTime), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             let f = match (*parent_class).read {
                 Some(f) => f,
@@ -189,7 +189,7 @@ impl<T: AudioSrcImpl> AudioSrcImplExt for T {
 
     fn parent_reset(&self, src: &Self::Type) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAudioSrcClass;
             if let Some(f) = (*parent_class).reset {
                 f(src.unsafe_cast_ref::<AudioSrc>().to_glib_none().0)

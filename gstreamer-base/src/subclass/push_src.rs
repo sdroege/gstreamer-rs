@@ -46,7 +46,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstPushSrcClass;
             (*parent_class)
                 .fill
@@ -63,7 +63,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
 
     fn parent_alloc(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstPushSrcClass;
             (*parent_class)
                 .alloc
@@ -86,7 +86,7 @@ impl<T: PushSrcImpl> PushSrcImplExt for T {
 
     fn parent_create(&self, element: &Self::Type) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstPushSrcClass;
             (*parent_class)
                 .create

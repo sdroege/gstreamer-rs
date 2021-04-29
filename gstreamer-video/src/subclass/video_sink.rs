@@ -32,7 +32,7 @@ impl<T: VideoSinkImpl> VideoSinkImplExt for T {
         buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoSinkClass;
             (*parent_class)
                 .show_frame

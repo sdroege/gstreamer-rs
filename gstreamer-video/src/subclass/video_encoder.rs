@@ -144,7 +144,7 @@ pub trait VideoEncoderImplExt: ObjectSubclass {
 impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
     fn parent_open(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .open
@@ -168,7 +168,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_close(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .close
@@ -192,7 +192,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .start
@@ -216,7 +216,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .stop
@@ -240,7 +240,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_finish(&self, element: &Self::Type) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .finish
@@ -261,7 +261,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         state: &VideoCodecState<'static, Readable>,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .set_format
@@ -285,7 +285,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         frame: VideoCodecFrame,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .handle_frame
@@ -302,7 +302,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_flush(&self, element: &Self::Type) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .flush
@@ -318,7 +318,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .negotiate
@@ -335,7 +335,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .getcaps
@@ -355,7 +355,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             let f = (*parent_class)
                 .sink_event
@@ -369,7 +369,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_sink_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             let f = (*parent_class)
                 .sink_query
@@ -383,7 +383,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             let f = (*parent_class)
                 .src_event
@@ -397,7 +397,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
 
     fn parent_src_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             let f = (*parent_class)
                 .src_query
@@ -415,7 +415,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .propose_allocation
@@ -442,7 +442,7 @@ impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {
         query: &mut gst::QueryRef,
     ) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
             (*parent_class)
                 .decide_allocation

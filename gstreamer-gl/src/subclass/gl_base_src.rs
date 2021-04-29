@@ -40,7 +40,7 @@ pub trait GLBaseSrcImplExt: ObjectSubclass {
 impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
     fn parent_gl_start(&self, element: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseSrcClass;
 
             (*parent_class)
@@ -58,7 +58,7 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
 
     fn parent_gl_stop(&self, element: &Self::Type) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseSrcClass;
 
             if let Some(f) = (*parent_class).gl_stop {
@@ -73,7 +73,7 @@ impl<T: GLBaseSrcImpl> GLBaseSrcImplExt for T {
         memory: &GLMemory,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseSrcClass;
 
             (*parent_class)

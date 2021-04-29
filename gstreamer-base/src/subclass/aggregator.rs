@@ -283,7 +283,7 @@ pub trait AggregatorImplExt: ObjectSubclass {
 impl<T: AggregatorImpl> AggregatorImplExt for T {
     fn parent_flush(&self, aggregator: &Self::Type) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .flush
@@ -305,7 +305,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         buffer: gst::Buffer,
     ) -> Option<gst::Buffer> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             match (*parent_class).clip {
                 None => Some(buffer),
@@ -324,7 +324,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         buffer: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .finish_buffer
@@ -345,7 +345,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         buffer_list: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .finish_buffer_list
@@ -365,7 +365,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         event: gst::Event,
     ) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_event
@@ -387,7 +387,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         event: gst::Event,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_event_pre_queue
@@ -408,7 +408,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         query: &mut gst::QueryRef,
     ) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_query
@@ -430,7 +430,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         query: &mut gst::QueryRef,
     ) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .sink_query_pre_queue
@@ -445,7 +445,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
     fn parent_src_event(&self, aggregator: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .src_event
@@ -459,7 +459,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
     fn parent_src_query(&self, aggregator: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .src_query
@@ -478,7 +478,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         active: bool,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             match (*parent_class).src_activate {
                 None => Ok(()),
@@ -501,7 +501,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         timeout: bool,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .aggregate
@@ -516,7 +516,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
     fn parent_start(&self, aggregator: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .start
@@ -540,7 +540,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
     fn parent_stop(&self, aggregator: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .stop
@@ -564,7 +564,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
     fn parent_next_time(&self, aggregator: &Self::Type) -> gst::ClockTime {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .get_next_time
@@ -586,7 +586,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         caps: Option<&gst::Caps>,
     ) -> Option<AggregatorPad> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .create_new_pad
@@ -606,7 +606,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         caps: &gst::Caps,
     ) -> Result<gst::Caps, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             let f = (*parent_class)
                 .update_src_caps
@@ -624,7 +624,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
 
     fn parent_fixate_src_caps(&self, aggregator: &Self::Type, caps: gst::Caps) -> gst::Caps {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
 
             let f = (*parent_class)
@@ -643,7 +643,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .negotiated_src_caps
@@ -665,7 +665,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
     fn parent_negotiate(&self, aggregator: &Self::Type) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .negotiate
@@ -687,7 +687,7 @@ impl<T: AggregatorImpl> AggregatorImplExt for T {
         pad: &AggregatorPad,
     ) -> Option<gst::Sample> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
             (*parent_class)
                 .peek_next_sample

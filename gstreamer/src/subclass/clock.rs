@@ -87,7 +87,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         new_resolution: ClockTime,
     ) -> ClockTime {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
 
             if let Some(func) = (*parent_class).change_resolution {
@@ -104,7 +104,7 @@ impl<T: ClockImpl> ClockImplExt for T {
 
     fn parent_resolution(&self, clock: &Self::Type) -> ClockTime {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
 
             from_glib(
@@ -118,7 +118,7 @@ impl<T: ClockImpl> ClockImplExt for T {
 
     fn parent_internal_time(&self, clock: &Self::Type) -> ClockTime {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
 
             from_glib(
@@ -136,7 +136,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         id: &ClockId,
     ) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
             let mut jitter = 0;
 
@@ -165,7 +165,7 @@ impl<T: ClockImpl> ClockImplExt for T {
         id: &ClockId,
     ) -> Result<ClockSuccess, ClockError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
             ClockReturn::from_glib(
                 (*parent_class)
@@ -184,7 +184,7 @@ impl<T: ClockImpl> ClockImplExt for T {
 
     fn parent_unschedule(&self, clock: &Self::Type, id: &ClockId) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstClockClass;
             if let Some(func) = (*parent_class).unschedule {
                 func(

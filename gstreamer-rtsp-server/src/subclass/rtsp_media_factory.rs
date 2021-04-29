@@ -84,7 +84,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         url: &gst_rtsp::RTSPUrl,
     ) -> Option<glib::GString> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .gen_key
@@ -107,7 +107,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         url: &gst_rtsp::RTSPUrl,
     ) -> Option<gst::Element> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .create_element
@@ -130,7 +130,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         url: &gst_rtsp::RTSPUrl,
     ) -> Option<crate::RTSPMedia> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .construct
@@ -153,7 +153,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
         media: &crate::RTSPMedia,
     ) -> Option<gst::Pipeline> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             (*parent_class)
                 .create_pipeline
@@ -178,7 +178,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
 
     fn parent_configure(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).configure {
                 f(
@@ -194,7 +194,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
 
     fn parent_media_constructed(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).media_constructed {
                 f(
@@ -210,7 +210,7 @@ impl<T: RTSPMediaFactoryImpl> RTSPMediaFactoryImplExt for T {
 
     fn parent_media_configure(&self, factory: &Self::Type, media: &crate::RTSPMedia) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPMediaFactoryClass;
             if let Some(f) = (*parent_class).media_configure {
                 f(

@@ -108,7 +108,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
         outcaps: &Caps,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
 
             (*parent_class)
@@ -135,7 +135,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
         output: &Buffer,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
 
             (*parent_class)
@@ -162,7 +162,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
         output: &GLMemory,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
 
             (*parent_class)
@@ -184,7 +184,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
 
     fn parent_init_fbo(&self, filter: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
 
             (*parent_class)
@@ -207,7 +207,7 @@ impl<T: GLFilterImpl> GLFilterImplExt for T {
         filter_caps: Option<&Caps>,
     ) -> Option<Caps> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut GstGLFilterClass;
 
             let f = (*parent_class)

@@ -25,7 +25,7 @@ pub trait PadImplExt: ObjectSubclass {
 impl<T: PadImpl> PadImplExt for T {
     fn parent_linked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstPadClass;
 
             (*parent_class)
@@ -42,7 +42,7 @@ impl<T: PadImpl> PadImplExt for T {
 
     fn parent_unlinked(&self, pad: &Self::Type, peer: &Pad) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstPadClass;
 
             (*parent_class)

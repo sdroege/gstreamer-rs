@@ -50,7 +50,7 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
         outcaps: &Caps,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseFilterClass;
 
             (*parent_class)
@@ -72,7 +72,7 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
 
     fn parent_gl_start(&self, filter: &Self::Type) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseFilterClass;
 
             (*parent_class)
@@ -90,7 +90,7 @@ impl<T: GLBaseFilterImpl> GLBaseFilterImplExt for T {
 
     fn parent_gl_stop(&self, filter: &Self::Type) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstGLBaseFilterClass;
 
             if let Some(f) = (*parent_class).gl_stop {

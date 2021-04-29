@@ -172,7 +172,7 @@ pub trait BaseSrcImplExt: ObjectSubclass {
 impl<T: BaseSrcImpl> BaseSrcImplExt for T {
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .start
@@ -192,7 +192,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .stop
@@ -212,7 +212,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_is_seekable(&self, element: &Self::Type) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .is_seekable
@@ -223,7 +223,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_size(&self, element: &Self::Type) -> Option<u64> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .get_size
@@ -248,7 +248,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         buffer: &gst::BufferRef,
     ) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .get_times
@@ -278,7 +278,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .fill
@@ -302,7 +302,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         length: u32,
     ) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .alloc
@@ -333,7 +333,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         length: u32,
     ) -> Result<CreateSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .create
@@ -411,7 +411,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_do_seek(&self, element: &Self::Type, segment: &mut gst::Segment) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .do_seek
@@ -427,7 +427,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_query(&self, element: &Self::Type, query: &mut gst::QueryRef) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .query
@@ -443,7 +443,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_event(&self, element: &Self::Type, event: &gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .event
@@ -459,7 +459,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_caps(&self, element: &Self::Type, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
 
             (*parent_class)
@@ -476,7 +476,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_negotiate(&self, element: &Self::Type) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .negotiate
@@ -497,7 +497,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
         caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .set_caps
@@ -517,7 +517,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_fixate(&self, element: &Self::Type, caps: gst::Caps) -> gst::Caps {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
 
             match (*parent_class).fixate {
@@ -532,7 +532,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_unlock(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .unlock
@@ -552,7 +552,7 @@ impl<T: BaseSrcImpl> BaseSrcImplExt for T {
 
     fn parent_unlock_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
             (*parent_class)
                 .unlock_stop

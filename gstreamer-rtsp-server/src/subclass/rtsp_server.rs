@@ -25,7 +25,7 @@ pub trait RTSPServerImplExt: ObjectSubclass {
 impl<T: RTSPServerImpl> RTSPServerImplExt for T {
     fn parent_create_client(&self, server: &Self::Type) -> Option<crate::RTSPClient> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPServerClass;
             let f = (*parent_class)
                 .create_client
@@ -36,7 +36,7 @@ impl<T: RTSPServerImpl> RTSPServerImplExt for T {
 
     fn parent_client_connected(&self, server: &Self::Type, client: &crate::RTSPClient) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstRTSPServerClass;
             if let Some(f) = (*parent_class).client_connected {
                 f(

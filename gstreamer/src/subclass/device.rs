@@ -49,7 +49,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
         name: Option<&str>,
     ) -> Result<Element, LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
                 let ptr = f(
@@ -79,7 +79,7 @@ impl<T: DeviceImpl> DeviceImplExt for T {
         element: &Element,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstDeviceClass;
             let f = (*parent_class).reconfigure_element.ok_or_else(|| {
                 loggable_error!(

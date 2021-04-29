@@ -40,7 +40,7 @@ pub trait BinImplExt: ObjectSubclass {
 impl<T: BinImpl> BinImplExt for T {
     fn parent_add_element(&self, bin: &Self::Type, element: &Element) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).add_element.ok_or_else(|| {
                 loggable_error!(
@@ -65,7 +65,7 @@ impl<T: BinImpl> BinImplExt for T {
         element: &Element,
     ) -> Result<(), LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
             let f = (*parent_class).remove_element.ok_or_else(|| {
                 loggable_error!(
@@ -86,7 +86,7 @@ impl<T: BinImpl> BinImplExt for T {
 
     fn parent_handle_message(&self, bin: &Self::Type, message: Message) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBinClass;
             if let Some(ref f) = (*parent_class).handle_message {
                 f(

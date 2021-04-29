@@ -300,7 +300,7 @@ pub trait BaseTransformImplExt: ObjectSubclass {
 impl<T: BaseTransformImpl> BaseTransformImplExt for T {
     fn parent_start(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .start
@@ -324,7 +324,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_stop(&self, element: &Self::Type) -> Result<(), gst::ErrorMessage> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .stop
@@ -354,7 +354,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         filter: Option<&gst::Caps>,
     ) -> Option<gst::Caps> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .transform_caps
@@ -378,7 +378,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         othercaps: gst::Caps,
     ) -> gst::Caps {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             match (*parent_class).fixate_caps {
                 Some(f) => from_glib_full(f(
@@ -399,7 +399,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         outcaps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .set_caps
@@ -425,7 +425,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         caps: &gst::Caps,
     ) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .accept_caps
@@ -447,7 +447,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         query: &mut gst::QueryRef,
     ) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .query
@@ -471,7 +471,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         othercaps: &gst::Caps,
     ) -> Option<usize> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .transform_size
@@ -497,7 +497,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_unit_size(&self, element: &Self::Type, caps: &gst::Caps) -> Option<usize> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class).get_unit_size.unwrap_or_else(|| {
                 if !element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
@@ -528,7 +528,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_sink_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .sink_event
@@ -544,7 +544,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_src_event(&self, element: &Self::Type, event: gst::Event) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .src_event
@@ -564,7 +564,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         inbuf: &gst::BufferRef,
     ) -> Result<PrepareOutputBufferSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .prepare_output_buffer
@@ -599,7 +599,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .transform
@@ -630,7 +630,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         buf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
                 if element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
@@ -660,7 +660,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class).transform_ip.unwrap_or_else(|| {
                 if element.unsafe_cast_ref::<BaseTransform>().is_in_place() {
@@ -693,7 +693,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         outbuf: &mut gst::BufferRef,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             if let Some(ref f) = (*parent_class).copy_metadata {
                 gst::result_from_gboolean!(
@@ -719,7 +719,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         inbuf: &'a gst::BufferRef,
     ) -> bool {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             (*parent_class)
                 .transform_meta
@@ -737,7 +737,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
 
     fn parent_before_transform(&self, element: &Self::Type, inbuf: &gst::BufferRef) {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             if let Some(ref f) = (*parent_class).before_transform {
                 f(
@@ -755,7 +755,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         inbuf: gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class)
                 .submit_input_buffer
@@ -775,7 +775,7 @@ impl<T: BaseTransformImpl> BaseTransformImplExt for T {
         element: &Self::Type,
     ) -> Result<GenerateOutputSuccess, gst::FlowError> {
         unsafe {
-            let data = T::type_data();
+            let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
             let f = (*parent_class)
                 .generate_output
