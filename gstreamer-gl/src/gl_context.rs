@@ -14,7 +14,7 @@ impl GLContext {
         handle: uintptr_t,
         context_type: GLPlatform,
         available_apis: GLAPI,
-    ) -> Option<GLContext> {
+    ) -> Option<Self> {
         from_glib_full(ffi::gst_gl_context_new_wrapped(
             display.as_ref().to_glib_none().0,
             handle,
