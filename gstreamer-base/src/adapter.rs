@@ -256,8 +256,8 @@ unsafe impl Send for UniqueAdapter {}
 unsafe impl Sync for UniqueAdapter {}
 
 impl UniqueAdapter {
-    pub fn new() -> UniqueAdapter {
-        UniqueAdapter(Adapter::new())
+    pub fn new() -> Self {
+        Self(Adapter::new())
     }
 
     pub fn available(&self) -> usize {

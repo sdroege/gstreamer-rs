@@ -31,7 +31,7 @@ glib::wrapper! {
 }
 
 impl FlowCombiner {
-    pub fn new() -> FlowCombiner {
+    pub fn new() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_flow_combiner_new()) }
     }
@@ -104,8 +104,8 @@ unsafe impl Sync for UniqueFlowCombiner {}
 unsafe impl Send for UniqueFlowCombiner {}
 
 impl UniqueFlowCombiner {
-    pub fn new() -> UniqueFlowCombiner {
-        UniqueFlowCombiner(FlowCombiner::new())
+    pub fn new() -> Self {
+        Self(FlowCombiner::new())
     }
 
     pub fn add_pad<P: IsA<gst::Pad>>(&mut self, pad: &P) {

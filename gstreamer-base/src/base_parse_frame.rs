@@ -30,21 +30,21 @@ impl IntoGlib for Overhead {
 
     fn into_glib(self) -> i32 {
         match self {
-            Overhead::None => 0,
-            Overhead::Frame => -1,
-            Overhead::Bytes(b) => i32::try_from(b).expect("overhead is higher than i32::MAX"),
+            Self::None => 0,
+            Self::Frame => -1,
+            Self::Bytes(b) => i32::try_from(b).expect("overhead is higher than i32::MAX"),
         }
     }
 }
 
 impl FromGlib<i32> for Overhead {
     #[inline]
-    unsafe fn from_glib(val: i32) -> Overhead {
+    unsafe fn from_glib(val: i32) -> Self {
         skip_assert_initialized!();
         match val {
-            0 => Overhead::None,
-            1 => Overhead::Frame,
-            b if b > 0 => Overhead::Bytes(val as u32),
+            0 => Self::None,
+            1 => Self::Frame,
+            b if b > 0 => Self::Bytes(val as u32),
             _ => panic!("overheader is lower than -1"),
         }
     }
@@ -78,13 +78,10 @@ impl<'a> fmt::Debug for BaseParseFrame<'a> {
 }
 
 impl<'a> BaseParseFrame<'a> {
-    pub(crate) unsafe fn new(
-        frame: *mut ffi::GstBaseParseFrame,
-        _parse: &'a BaseParse,
-    ) -> BaseParseFrame<'a> {
+    pub(crate) unsafe fn new(frame: *mut ffi::GstBaseParseFrame, _parse: &'a BaseParse) -> Self {
         skip_assert_initialized!();
         assert!(!frame.is_null());
-        BaseParseFrame(ptr::NonNull::new_unchecked(frame), PhantomData)
+        Self(ptr::NonNull::new_unchecked(frame), PhantomData)
     }
 
     pub fn buffer(&self) -> Option<&gst::BufferRef> {
