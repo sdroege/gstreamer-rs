@@ -44,7 +44,7 @@ impl VideoConverter {
             if ptr.is_null() {
                 Err(glib::bool_error!("Failed to create video converter"))
             } else {
-                Ok(VideoConverter(ptr::NonNull::new_unchecked(ptr)))
+                Ok(Self(ptr::NonNull::new_unchecked(ptr)))
             }
         }
     }
@@ -118,17 +118,17 @@ impl AsMut<gst::StructureRef> for VideoConverterConfig {
 
 impl Default for VideoConverterConfig {
     fn default() -> Self {
-        VideoConverterConfig::new()
+        Self::new()
     }
 }
 
 impl convert::TryFrom<gst::Structure> for VideoConverterConfig {
     type Error = glib::BoolError;
 
-    fn try_from(v: gst::Structure) -> Result<VideoConverterConfig, Self::Error> {
+    fn try_from(v: gst::Structure) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
         if v.name() == "GstVideoConverter" {
-            Ok(VideoConverterConfig(v))
+            Ok(Self(v))
         } else {
             Err(glib::bool_error!("Structure is no VideoConverterConfig"))
         }
@@ -138,14 +138,14 @@ impl convert::TryFrom<gst::Structure> for VideoConverterConfig {
 impl<'a> convert::TryFrom<&'a gst::StructureRef> for VideoConverterConfig {
     type Error = glib::BoolError;
 
-    fn try_from(v: &'a gst::StructureRef) -> Result<VideoConverterConfig, Self::Error> {
+    fn try_from(v: &'a gst::StructureRef) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
-        VideoConverterConfig::try_from(v.to_owned())
+        Self::try_from(v.to_owned())
     }
 }
 
 impl From<VideoConverterConfig> for gst::Structure {
-    fn from(v: VideoConverterConfig) -> gst::Structure {
+    fn from(v: VideoConverterConfig) -> Self {
         skip_assert_initialized!();
         v.0
     }
@@ -153,7 +153,7 @@ impl From<VideoConverterConfig> for gst::Structure {
 
 impl VideoConverterConfig {
     pub fn new() -> Self {
-        VideoConverterConfig(gst::Structure::new_empty("GstVideoConverter"))
+        Self(gst::Structure::new_empty("GstVideoConverter"))
     }
 
     pub fn set_resampler_method(&mut self, v: crate::VideoResamplerMethod) {

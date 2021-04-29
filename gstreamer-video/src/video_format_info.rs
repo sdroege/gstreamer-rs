@@ -10,14 +10,14 @@ use glib::translate::{from_glib, IntoGlib};
 pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
 impl VideoFormatInfo {
-    pub fn from_format(format: crate::VideoFormat) -> VideoFormatInfo {
+    pub fn from_format(format: crate::VideoFormat) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
             let info = ffi::gst_video_format_get_info(format.into_glib());
             assert!(!info.is_null());
 
-            VideoFormatInfo(&*info)
+            Self(&*info)
         }
     }
 
@@ -302,14 +302,14 @@ impl PartialEq for VideoFormatInfo {
 impl Eq for VideoFormatInfo {}
 
 impl PartialOrd for VideoFormatInfo {
-    fn partial_cmp(&self, other: &VideoFormatInfo) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 
 impl Ord for VideoFormatInfo {
     // See GST_VIDEO_FORMATS_ALL for the sorting algorithm
-    fn cmp(&self, other: &VideoFormatInfo) -> Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         self.n_components()
             .cmp(&other.n_components())
             .then_with(|| self.depth().cmp(&other.depth()))
@@ -446,7 +446,7 @@ impl glib::translate::GlibPtrDefault for VideoFormatInfo {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoFormatInfo> for VideoFormatInfo {
-    type Storage = &'a VideoFormatInfo;
+    type Storage = &'a Self;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoFormatInfo, Self> {
         glib::translate::Stash(self.0, self)
@@ -461,7 +461,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoFormatInfo> for Vide
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoFormatInfo> for VideoFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstVideoFormatInfo) -> Self {
-        VideoFormatInfo(&*ptr)
+        Self(&*ptr)
     }
 }
 
@@ -469,7 +469,7 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoFormatInfo> for VideoFor
 impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoFormatInfo> for VideoFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstVideoFormatInfo) -> Self {
-        VideoFormatInfo(&*ptr)
+        Self(&*ptr)
     }
 }
 

@@ -28,10 +28,10 @@ impl IntoGlib for VideoColorRange {
 
     fn into_glib(self) -> ffi::GstVideoColorRange {
         match self {
-            VideoColorRange::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
-            VideoColorRange::Range0255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
-            VideoColorRange::Range16235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
-            VideoColorRange::__Unknown(value) => value,
+            Self::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
+            Self::Range0255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
+            Self::Range16235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
+            Self::__Unknown(value) => value,
         }
     }
 }
@@ -41,10 +41,10 @@ impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
     unsafe fn from_glib(value: ffi::GstVideoColorRange) -> Self {
         skip_assert_initialized!();
         match value as i32 {
-            0 => VideoColorRange::Unknown,
-            1 => VideoColorRange::Range0255,
-            2 => VideoColorRange::Range16235,
-            value => VideoColorRange::__Unknown(value),
+            0 => Self::Unknown,
+            1 => Self::Range0255,
+            2 => Self::Range16235,
+            value => Self::__Unknown(value),
         }
     }
 }
@@ -98,7 +98,7 @@ impl VideoColorimetry {
             primaries: primaries.into_glib(),
         };
 
-        VideoColorimetry(colorimetry)
+        Self(colorimetry)
     }
 
     pub fn range(&self) -> crate::VideoColorRange {
@@ -120,7 +120,7 @@ impl VideoColorimetry {
 
 impl Clone for VideoColorimetry {
     fn clone(&self) -> Self {
-        unsafe { VideoColorimetry(ptr::read(&self.0)) }
+        unsafe { Self(ptr::read(&self.0)) }
     }
 }
 
@@ -228,14 +228,12 @@ impl From<crate::VideoMultiviewFramePacking> for crate::VideoMultiviewMode {
 impl std::convert::TryFrom<crate::VideoMultiviewMode> for crate::VideoMultiviewFramePacking {
     type Error = glib::BoolError;
 
-    fn try_from(
-        v: crate::VideoMultiviewMode,
-    ) -> Result<crate::VideoMultiviewFramePacking, glib::BoolError> {
+    fn try_from(v: crate::VideoMultiviewMode) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
         let v2 = unsafe { from_glib(v.into_glib()) };
 
-        if let crate::VideoMultiviewFramePacking::__Unknown(_) = v2 {
+        if let Self::__Unknown(_) = v2 {
             Err(glib::bool_error!("Invalid frame packing mode"))
         } else {
             Ok(v2)
@@ -607,7 +605,7 @@ impl VideoInfo {
                 info.as_mut_ptr(),
                 caps.as_ptr(),
             )) {
-                Ok(VideoInfo(info.assume_init()))
+                Ok(Self(info.assume_init()))
             } else {
                 Err(glib::bool_error!("Failed to create VideoInfo from caps"))
             }
@@ -844,7 +842,7 @@ impl VideoInfo {
 
 impl Clone for VideoInfo {
     fn clone(&self) -> Self {
-        unsafe { VideoInfo(ptr::read(&self.0)) }
+        unsafe { Self(ptr::read(&self.0)) }
     }
 }
 
@@ -928,7 +926,7 @@ impl glib::translate::GlibPtrDefault for VideoInfo {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfo> for VideoInfo {
-    type Storage = &'a VideoInfo;
+    type Storage = &'a Self;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoInfo, Self> {
         glib::translate::Stash(&self.0, self)
@@ -943,7 +941,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfo> for VideoInfo 
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoInfo> for VideoInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstVideoInfo) -> Self {
-        VideoInfo(ptr::read(ptr))
+        Self(ptr::read(ptr))
     }
 }
 

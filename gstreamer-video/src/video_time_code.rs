@@ -20,12 +20,12 @@ pub struct VideoTimeCode(ffi::GstVideoTimeCode);
 pub struct ValidVideoTimeCode(ffi::GstVideoTimeCode);
 
 impl VideoTimeCode {
-    pub fn new_empty() -> VideoTimeCode {
+    pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut v = mem::MaybeUninit::zeroed();
             ffi::gst_video_time_code_clear(v.as_mut_ptr());
-            VideoTimeCode(v.assume_init())
+            Self(v.assume_init())
         }
     }
 
@@ -56,7 +56,7 @@ impl VideoTimeCode {
                 field_count,
             );
 
-            VideoTimeCode(v.assume_init())
+            Self(v.assume_init())
         }
     }
 
@@ -67,7 +67,7 @@ impl VideoTimeCode {
         dt: &glib::DateTime,
         flags: VideoTimeCodeFlags,
         field_count: u32,
-    ) -> Result<VideoTimeCode, glib::error::BoolError> {
+    ) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
         assert!(*fps.denom() > 0);
         unsafe {
@@ -84,7 +84,7 @@ impl VideoTimeCode {
             if res == glib::ffi::GFALSE {
                 Err(glib::bool_error!("Failed to init video time code"))
             } else {
-                Ok(VideoTimeCode(v.assume_init()))
+                Ok(Self(v.assume_init()))
             }
         }
     }
@@ -129,14 +129,14 @@ impl VideoTimeCode {
 impl TryFrom<VideoTimeCode> for ValidVideoTimeCode {
     type Error = VideoTimeCode;
 
-    fn try_from(v: VideoTimeCode) -> Result<ValidVideoTimeCode, VideoTimeCode> {
+    fn try_from(v: VideoTimeCode) -> Result<Self, VideoTimeCode> {
         skip_assert_initialized!();
         if v.is_valid() {
             // Use ManuallyDrop here to prevent the Drop impl of VideoTimeCode
             // from running as we don't move v.0 out here but copy it.
             // GstVideoTimeCode implements Copy.
             let v = mem::ManuallyDrop::new(v);
-            Ok(ValidVideoTimeCode(v.0))
+            Ok(Self(v.0))
         } else {
             Err(v)
         }
@@ -195,7 +195,7 @@ impl ValidVideoTimeCode {
     pub fn add_interval(
         &self,
         tc_inter: &VideoTimeCodeInterval,
-    ) -> Result<ValidVideoTimeCode, glib::error::BoolError> {
+    ) -> Result<Self, glib::error::BoolError> {
         unsafe {
             match from_glib_full(ffi::gst_video_time_code_add_interval(
                 self.to_glib_none().0,
@@ -207,7 +207,7 @@ impl ValidVideoTimeCode {
         }
     }
 
-    fn compare(&self, tc2: &ValidVideoTimeCode) -> i32 {
+    fn compare(&self, tc2: &Self) -> i32 {
         unsafe { ffi::gst_video_time_code_compare(self.to_glib_none().0, tc2.to_glib_none().0) }
     }
 
@@ -520,13 +520,13 @@ impl Ord for ValidVideoTimeCode {
 }
 
 impl From<ValidVideoTimeCode> for VideoTimeCode {
-    fn from(v: ValidVideoTimeCode) -> VideoTimeCode {
+    fn from(v: ValidVideoTimeCode) -> Self {
         skip_assert_initialized!();
         // Use ManuallyDrop here to prevent the Drop impl of VideoTimeCode
         // from running as we don't move v.0 out here but copy it.
         // GstVideoTimeCode implements Copy.
         let v = mem::ManuallyDrop::new(v);
-        VideoTimeCode(v.0)
+        Self(v.0)
     }
 }
 

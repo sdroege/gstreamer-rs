@@ -173,7 +173,7 @@ impl<T> VideoFrame<T> {
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
         let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
-        VideoFrame {
+        Self {
             frame,
             buffer: Some(buffer),
             info,
@@ -209,7 +209,7 @@ impl VideoFrame<Readable> {
     pub fn from_buffer_readable(
         buffer: gst::Buffer,
         info: &crate::VideoInfo,
-    ) -> Result<VideoFrame<Readable>, gst::Buffer> {
+    ) -> Result<Self, gst::Buffer> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -228,7 +228,7 @@ impl VideoFrame<Readable> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -242,7 +242,7 @@ impl VideoFrame<Readable> {
         buffer: gst::Buffer,
         id: i32,
         info: &crate::VideoInfo,
-    ) -> Result<VideoFrame<Readable>, gst::Buffer> {
+    ) -> Result<Self, gst::Buffer> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -262,7 +262,7 @@ impl VideoFrame<Readable> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -281,7 +281,7 @@ impl VideoFrame<Writable> {
     pub fn from_buffer_writable(
         buffer: gst::Buffer,
         info: &crate::VideoInfo,
-    ) -> Result<VideoFrame<Writable>, gst::Buffer> {
+    ) -> Result<Self, gst::Buffer> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -302,7 +302,7 @@ impl VideoFrame<Writable> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -316,7 +316,7 @@ impl VideoFrame<Writable> {
         buffer: gst::Buffer,
         id: i32,
         info: &crate::VideoInfo,
-    ) -> Result<VideoFrame<Writable>, gst::Buffer> {
+    ) -> Result<Self, gst::Buffer> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -338,7 +338,7 @@ impl VideoFrame<Writable> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrame {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -552,7 +552,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         let frame = ptr::read(frame);
         let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_ptr(frame.buffer);
-        Borrowed::new(VideoFrameRef {
+        Borrowed::new(Self {
             frame,
             buffer: Some(buffer),
             info,
@@ -563,7 +563,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
         let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_ptr(frame.buffer);
-        VideoFrameRef {
+        Self {
             frame,
             buffer: Some(buffer),
             info,
@@ -574,7 +574,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
         info: &'b crate::VideoInfo,
-    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
+    ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -593,7 +593,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -607,7 +607,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         buffer: &'a gst::BufferRef,
         id: i32,
         info: &'b crate::VideoInfo,
-    ) -> Result<VideoFrameRef<&'a gst::BufferRef>, glib::BoolError> {
+    ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -627,7 +627,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -649,7 +649,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         let frame = ptr::read(frame);
         let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
-        Borrowed::new(VideoFrameRef {
+        Borrowed::new(Self {
             frame,
             buffer: Some(buffer),
             info,
@@ -660,7 +660,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
     pub unsafe fn from_glib_full_mut(frame: ffi::GstVideoFrame) -> Self {
         let info = crate::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
-        VideoFrameRef {
+        Self {
             frame,
             buffer: Some(buffer),
             info,
@@ -671,7 +671,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         info: &'b crate::VideoInfo,
-    ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
+    ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -692,7 +692,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -706,7 +706,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         buffer: &'a mut gst::BufferRef,
         id: i32,
         info: &'b crate::VideoInfo,
-    ) -> Result<VideoFrameRef<&'a mut gst::BufferRef>, glib::BoolError> {
+    ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -728,7 +728,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             } else {
                 let frame = frame.assume_init();
                 let info = crate::VideoInfo(ptr::read(&frame.info));
-                Ok(VideoFrameRef {
+                Ok(Self {
                     frame,
                     buffer: Some(buffer),
                     info,
@@ -783,10 +783,7 @@ impl<'a> ops::Deref for VideoFrameRef<&'a mut gst::BufferRef> {
     type Target = VideoFrameRef<&'a gst::BufferRef>;
 
     fn deref(&self) -> &Self::Target {
-        unsafe {
-            &*(self as *const VideoFrameRef<&'a mut gst::BufferRef>
-                as *const VideoFrameRef<&'a gst::BufferRef>)
-        }
+        unsafe { &*(self as *const Self as *const Self::Target) }
     }
 }
 

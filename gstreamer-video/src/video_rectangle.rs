@@ -13,7 +13,7 @@ pub struct VideoRectangle {
 impl VideoRectangle {
     pub fn new(x: i32, y: i32, w: i32, h: i32) -> Self {
         skip_assert_initialized!();
-        VideoRectangle { x, y, w, h }
+        Self { x, y, w, h }
     }
 }
 

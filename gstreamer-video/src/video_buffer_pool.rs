@@ -67,12 +67,12 @@ impl VideoAlignment {
             stride_align: *stride_align,
         };
 
-        VideoAlignment(videoalignment)
+        Self(videoalignment)
     }
 }
 
 impl PartialEq for VideoAlignment {
-    fn eq(&self, other: &VideoAlignment) -> bool {
+    fn eq(&self, other: &Self) -> bool {
         self.padding_top() == other.padding_top()
             && self.padding_bottom() == other.padding_bottom()
             && self.padding_left() == other.padding_left()

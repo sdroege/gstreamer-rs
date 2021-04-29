@@ -262,9 +262,9 @@ impl FromGlib<i32> for VideoEndianness {
         skip_assert_initialized!();
 
         match value {
-            1234 => VideoEndianness::LittleEndian,
-            4321 => VideoEndianness::BigEndian,
-            _ => VideoEndianness::Unknown,
+            1234 => Self::LittleEndian,
+            4321 => Self::BigEndian,
+            _ => Self::Unknown,
         }
     }
 }
@@ -274,8 +274,8 @@ impl IntoGlib for VideoEndianness {
 
     fn into_glib(self) -> i32 {
         match self {
-            VideoEndianness::LittleEndian => 1234,
-            VideoEndianness::BigEndian => 4321,
+            Self::LittleEndian => 1234,
+            Self::BigEndian => 4321,
             _ => 0,
         }
     }
@@ -290,7 +290,7 @@ impl crate::VideoFormat {
         blue_mask: u32,
         green_mask: u32,
         alpha_mask: u32,
-    ) -> crate::VideoFormat {
+    ) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -344,14 +344,14 @@ impl str::FromStr for crate::VideoFormat {
 }
 
 impl PartialOrd for crate::VideoFormat {
-    fn partial_cmp(&self, other: &crate::VideoFormat) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         crate::VideoFormatInfo::from_format(*self)
             .partial_cmp(&crate::VideoFormatInfo::from_format(*other))
     }
 }
 
 impl Ord for crate::VideoFormat {
-    fn cmp(&self, other: &crate::VideoFormat) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         crate::VideoFormatInfo::from_format(*self).cmp(&crate::VideoFormatInfo::from_format(*other))
     }
 }

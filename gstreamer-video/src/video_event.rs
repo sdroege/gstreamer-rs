@@ -144,9 +144,7 @@ impl DownstreamForceKeyUnitEvent {
         DownstreamForceKeyUnitEventBuilder::new()
     }
 
-    pub fn parse(
-        event: &gst::EventRef,
-    ) -> Result<DownstreamForceKeyUnitEvent, glib::error::BoolError> {
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
             let mut timestamp = mem::MaybeUninit::uninit();
@@ -164,7 +162,7 @@ impl DownstreamForceKeyUnitEvent {
                 count.as_mut_ptr(),
             ));
             if res {
-                Ok(DownstreamForceKeyUnitEvent {
+                Ok(Self {
                     timestamp: from_glib(timestamp.assume_init()),
                     stream_time: from_glib(stream_time.assume_init()),
                     running_time: from_glib(running_time.assume_init()),
@@ -239,9 +237,7 @@ impl UpstreamForceKeyUnitEvent {
         UpstreamForceKeyUnitEventBuilder::new()
     }
 
-    pub fn parse(
-        event: &gst::EventRef,
-    ) -> Result<UpstreamForceKeyUnitEvent, glib::error::BoolError> {
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
             let mut running_time = mem::MaybeUninit::uninit();
@@ -255,7 +251,7 @@ impl UpstreamForceKeyUnitEvent {
                 count.as_mut_ptr(),
             ));
             if res {
-                Ok(UpstreamForceKeyUnitEvent {
+                Ok(Self {
                     running_time: from_glib(running_time.assume_init()),
                     all_headers: from_glib(all_headers.assume_init()),
                     count: count.assume_init(),
@@ -279,12 +275,12 @@ impl ForceKeyUnitEvent {
         unsafe { from_glib(ffi::gst_video_event_is_force_key_unit(event.as_mut_ptr())) }
     }
 
-    pub fn parse(event: &gst::EventRef) -> Result<ForceKeyUnitEvent, glib::error::BoolError> {
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
         if event.is_upstream() {
-            UpstreamForceKeyUnitEvent::parse(event).map(ForceKeyUnitEvent::Upstream)
+            UpstreamForceKeyUnitEvent::parse(event).map(Self::Upstream)
         } else {
-            DownstreamForceKeyUnitEvent::parse(event).map(ForceKeyUnitEvent::Downstream)
+            DownstreamForceKeyUnitEvent::parse(event).map(Self::Downstream)
         }
     }
 }
@@ -323,7 +319,7 @@ impl StillFrameEvent {
         StillFrameEventBuilder::new(in_still)
     }
 
-    pub fn parse(event: &gst::EventRef) -> Result<StillFrameEvent, glib::error::BoolError> {
+    pub fn parse(event: &gst::EventRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
             let mut in_still = mem::MaybeUninit::uninit();
@@ -333,7 +329,7 @@ impl StillFrameEvent {
                 in_still.as_mut_ptr(),
             ));
             if res {
-                Ok(StillFrameEvent {
+                Ok(Self {
                     in_still: from_glib(in_still.assume_init()),
                 })
             } else {

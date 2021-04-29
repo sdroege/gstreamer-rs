@@ -17,7 +17,7 @@ impl VideoTimeCodeInterval {
         unsafe {
             let mut v = mem::MaybeUninit::zeroed();
             ffi::gst_video_time_code_interval_init(v.as_mut_ptr(), hours, minutes, seconds, frames);
-            VideoTimeCodeInterval(v.assume_init())
+            Self(v.assume_init())
         }
     }
 
@@ -160,7 +160,7 @@ impl FromGlibPtrNone<*mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterv
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstVideoTimeCodeInterval) -> Self {
         assert!(!ptr.is_null());
-        VideoTimeCodeInterval(ptr::read(ptr))
+        Self(ptr::read(ptr))
     }
 }
 
@@ -169,7 +169,7 @@ impl FromGlibPtrNone<*const ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInte
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstVideoTimeCodeInterval) -> Self {
         assert!(!ptr.is_null());
-        VideoTimeCodeInterval(ptr::read(ptr))
+        Self(ptr::read(ptr))
     }
 }
 
@@ -178,7 +178,7 @@ impl FromGlibPtrFull<*mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterv
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstVideoTimeCodeInterval) -> Self {
         assert!(!ptr.is_null());
-        let res = VideoTimeCodeInterval(ptr::read(ptr));
+        let res = Self(ptr::read(ptr));
         ffi::gst_video_time_code_interval_free(ptr);
 
         res
@@ -190,7 +190,7 @@ impl FromGlibPtrBorrow<*mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInte
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstVideoTimeCodeInterval) -> Borrowed<Self> {
         assert!(!ptr.is_null());
-        Borrowed::new(VideoTimeCodeInterval(ptr::read(ptr)))
+        Borrowed::new(Self(ptr::read(ptr)))
     }
 }
 
