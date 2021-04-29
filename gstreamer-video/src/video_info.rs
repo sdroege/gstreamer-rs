@@ -13,11 +13,16 @@ use std::str;
 
 pub const VIDEO_MAX_PLANES: usize = ffi::GST_VIDEO_MAX_PLANES as usize;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstVideoColorRange")]
 pub enum VideoColorRange {
+    #[doc(alias = "GST_VIDEO_COLOR_RANGE_UNKNOWN")]
     Unknown,
-    Range0255,
-    Range16235,
+    #[doc(alias = "GST_VIDEO_COLOR_RANGE_0_255")]
+    Range0_255,
+    #[doc(alias = "GST_VIDEO_COLOR_RANGE_16_235")]
+    Range16_235,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -29,8 +34,8 @@ impl IntoGlib for VideoColorRange {
     fn into_glib(self) -> ffi::GstVideoColorRange {
         match self {
             Self::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
-            Self::Range0255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
-            Self::Range16235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
+            Self::Range0_255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
+            Self::Range16_235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
             Self::__Unknown(value) => value,
         }
     }
@@ -40,16 +45,16 @@ impl IntoGlib for VideoColorRange {
 impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
     unsafe fn from_glib(value: ffi::GstVideoColorRange) -> Self {
         skip_assert_initialized!();
-        match value as i32 {
+        match value {
             0 => Self::Unknown,
-            1 => Self::Range0255,
-            2 => Self::Range16235,
+            1 => Self::Range0_255,
+            2 => Self::Range16_235,
             value => Self::__Unknown(value),
         }
     }
 }
 
-impl glib::StaticType for VideoColorRange {
+impl StaticType for VideoColorRange {
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_color_range_get_type()) }
     }
@@ -62,13 +67,13 @@ impl glib::value::ValueType for VideoColorRange {
 unsafe impl<'a> glib::value::FromValue<'a> for VideoColorRange {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
-    unsafe fn from_value(value: &glib::Value) -> Self {
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
         from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl glib::value::ToValue for VideoColorRange {
+impl ToValue for VideoColorRange {
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe { glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib()) }
