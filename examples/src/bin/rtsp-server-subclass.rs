@@ -78,7 +78,6 @@ fn main_loop() -> Result<(), Error> {
 mod media_factory {
     use super::*;
 
-    use glib::subclass::prelude::*;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -160,7 +159,6 @@ mod media_factory {
 
 // Our custom media subclass that adds a custom attribute to the SDP returned by DESCRIBE
 mod media {
-    use glib::subclass::prelude::*;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -217,7 +215,6 @@ mod media {
 mod server {
     use super::*;
 
-    use glib::subclass::prelude::*;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation
@@ -282,7 +279,6 @@ mod server {
 
 // Our custom RTSP client subclass.
 mod client {
-    use glib::subclass::prelude::*;
     use gst_rtsp_server::subclass::prelude::*;
 
     // In the imp submodule we include the actual implementation

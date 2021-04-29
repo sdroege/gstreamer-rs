@@ -16,7 +16,6 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::ptr;
 
-use glib::prelude::*;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, mut_override, IntoGlib, ToGlibPtr,
 };

@@ -6,7 +6,6 @@ mod tutorial5 {
     use gdk::prelude::*;
     use gtk::prelude::*;
 
-    use gst::prelude::*;
     use gst_video::prelude::*;
 
     use std::ops;

@@ -5,7 +5,6 @@ use std::mem;
 
 use crate::prelude::*;
 
-use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use gst::subclass::prelude::*;

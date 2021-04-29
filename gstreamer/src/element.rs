@@ -23,7 +23,6 @@ use crate::StateChangeError;
 use crate::StateChangeReturn;
 use crate::StateChangeSuccess;
 
-use glib::prelude::*;
 use glib::translate::*;
 
 use std::ffi::CStr;

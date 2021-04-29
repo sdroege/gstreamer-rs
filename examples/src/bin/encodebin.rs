@@ -14,7 +14,6 @@
 
 use gst::element_error;
 use gst::element_warning;
-use gst::prelude::*;
 
 use gst_pbutils::prelude::*;
 

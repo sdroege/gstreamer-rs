@@ -5,7 +5,6 @@ use crate::prelude::*;
 
 use glib::translate::*;
 
-use gst::subclass::prelude::*;
 use gst::{result_from_gboolean, Caps, LoggableError, CAT_RUST};
 use gst_base::subclass::prelude::*;
 

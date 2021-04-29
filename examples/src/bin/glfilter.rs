@@ -27,8 +27,6 @@ void main () {
 
 mod mirror {
     use super::{gl, FRAGMENT_SHADER};
-    use gst::subclass::prelude::*;
-    use gst_base::subclass::prelude::*;
     use gst_base::subclass::BaseTransformMode;
     use gst_gl::prelude::*;
     use gst_gl::subclass::prelude::*;

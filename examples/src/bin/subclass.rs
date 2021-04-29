@@ -19,8 +19,6 @@ mod examples_common;
 mod fir_filter {
     use super::*;
 
-    use glib::subclass::prelude::*;
-    use gst::subclass::prelude::*;
     use gst_base::subclass::prelude::*;
 
     use byte_slice_cast::*;

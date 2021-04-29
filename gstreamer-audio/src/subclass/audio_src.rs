@@ -3,7 +3,6 @@
 use std::mem;
 
 use glib::prelude::*;
-use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use gst::LoggableError;

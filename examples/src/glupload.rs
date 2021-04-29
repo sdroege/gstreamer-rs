@@ -5,7 +5,6 @@
 // {videotestsrc} - { glsinkbin }
 
 use gst::element_error;
-use gst::prelude::*;
 
 use gst_gl::prelude::*;
 

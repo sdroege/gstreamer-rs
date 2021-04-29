@@ -6,7 +6,6 @@ use crate::prelude::*;
 
 use glib::translate::*;
 
-use gst::subclass::prelude::*;
 use gst::{result_from_gboolean, Buffer, Caps, LoggableError, PadDirection, CAT_RUST};
 
 use crate::GLBaseFilter;

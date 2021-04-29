@@ -2,7 +2,6 @@
 
 use crate::prelude::*;
 
-use glib::subclass::prelude::*;
 use glib::translate::*;
 
 use gst::gst_warning;

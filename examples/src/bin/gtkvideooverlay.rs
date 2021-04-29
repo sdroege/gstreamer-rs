@@ -17,8 +17,6 @@
 // {videotestsrc} - {xvimagesink(on linux)}
 // {videotestsrc} - {glimagesink(on mac)}
 
-use gst::prelude::*;
-
 use gst_video::prelude::*;
 
 use gio::prelude::*;

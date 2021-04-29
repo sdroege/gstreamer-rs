@@ -1,7 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::TestClock;
-use glib::prelude::*;
 use glib::translate::*;
 use gst::prelude::*;
 use std::marker::PhantomData;
