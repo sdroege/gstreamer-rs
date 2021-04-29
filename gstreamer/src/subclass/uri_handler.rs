@@ -94,7 +94,7 @@ unsafe impl<T: URIHandlerImpl> IsImplementable<T> for URIHandler {
             let protocols = protocols.to_glib_full();
             let data = data.as_mut();
 
-            data.set_class_data(URIHandler::static_type(), CStrV(protocols));
+            data.set_class_data(Self::static_type(), CStrV(protocols));
         }
 
         iface.get_type = Some(uri_handler_get_type::<T>);

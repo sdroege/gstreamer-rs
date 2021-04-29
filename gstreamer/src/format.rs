@@ -78,55 +78,53 @@ impl GenericFormattedValue {
     pub fn new(format: Format, value: i64) -> Self {
         skip_assert_initialized!();
         match format {
-            Format::Undefined => GenericFormattedValue::Undefined(Undefined(value)),
-            Format::Default => GenericFormattedValue::Default(if value == -1 {
+            Format::Undefined => Self::Undefined(Undefined(value)),
+            Format::Default => Self::Default(if value == -1 {
                 Default(None)
             } else {
                 Default(Some(value as u64))
             }),
-            Format::Bytes => GenericFormattedValue::Bytes(if value == -1 {
+            Format::Bytes => Self::Bytes(if value == -1 {
                 Bytes(None)
             } else {
                 Bytes(Some(value as u64))
             }),
-            Format::Time => GenericFormattedValue::Time(if value == -1 {
+            Format::Time => Self::Time(if value == -1 {
                 ClockTime::none()
             } else {
                 ClockTime::from_nseconds(value as u64)
             }),
-            Format::Buffers => GenericFormattedValue::Buffers(if value == -1 {
+            Format::Buffers => Self::Buffers(if value == -1 {
                 Buffers(None)
             } else {
                 Buffers(Some(value as u64))
             }),
-            Format::Percent => {
-                GenericFormattedValue::Percent(unsafe { Percent::from_raw(format, value) })
-            }
-            Format::__Unknown(_) => GenericFormattedValue::Other(format, value),
+            Format::Percent => Self::Percent(unsafe { Percent::from_raw(format, value) }),
+            Format::__Unknown(_) => Self::Other(format, value),
         }
     }
 
     pub fn format(&self) -> Format {
         match *self {
-            GenericFormattedValue::Undefined(_) => Format::Undefined,
-            GenericFormattedValue::Default(_) => Format::Default,
-            GenericFormattedValue::Bytes(_) => Format::Bytes,
-            GenericFormattedValue::Time(_) => Format::Time,
-            GenericFormattedValue::Buffers(_) => Format::Buffers,
-            GenericFormattedValue::Percent(_) => Format::Percent,
-            GenericFormattedValue::Other(f, _) => f,
+            Self::Undefined(_) => Format::Undefined,
+            Self::Default(_) => Format::Default,
+            Self::Bytes(_) => Format::Bytes,
+            Self::Time(_) => Format::Time,
+            Self::Buffers(_) => Format::Buffers,
+            Self::Percent(_) => Format::Percent,
+            Self::Other(f, _) => f,
         }
     }
 
     pub fn value(&self) -> i64 {
         match *self {
-            GenericFormattedValue::Undefined(v) => v.0,
-            GenericFormattedValue::Default(v) => v.map(|v| v as i64).unwrap_or(-1),
-            GenericFormattedValue::Bytes(v) => v.map(|v| v as i64).unwrap_or(-1),
-            GenericFormattedValue::Time(v) => v.map(|v| v as i64).unwrap_or(-1),
-            GenericFormattedValue::Buffers(v) => v.map(|v| v as i64).unwrap_or(-1),
-            GenericFormattedValue::Percent(v) => v.map(i64::from).unwrap_or(-1),
-            GenericFormattedValue::Other(_, v) => v,
+            Self::Undefined(v) => v.0,
+            Self::Default(v) => v.map(|v| v as i64).unwrap_or(-1),
+            Self::Bytes(v) => v.map(|v| v as i64).unwrap_or(-1),
+            Self::Time(v) => v.map(|v| v as i64).unwrap_or(-1),
+            Self::Buffers(v) => v.map(|v| v as i64).unwrap_or(-1),
+            Self::Percent(v) => v.map(i64::from).unwrap_or(-1),
+            Self::Other(_, v) => v,
         }
     }
 }

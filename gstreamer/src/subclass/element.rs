@@ -344,9 +344,9 @@ impl<T: ElementImpl> ElementImplExt for T {
     ) -> R {
         unsafe {
             let wrap = parent.as_ref().unwrap().downcast_ref::<Element>().unwrap();
-            assert!(wrap.type_().is_a(T::type_()));
+            assert!(wrap.type_().is_a(Self::type_()));
             let ptr: *mut ffi::GstElement = wrap.to_glib_none().0;
-            let instance = &*(ptr as *mut T::Instance);
+            let instance = &*(ptr as *mut Self::Instance);
             let imp = instance.impl_();
 
             panic_to_error!(wrap, &imp.panicked(), fallback(), {
@@ -399,10 +399,7 @@ unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
         <glib::Object as IsSubclassable<T>>::instance_init(instance);
 
-        instance.set_instance_data(
-            crate::Element::static_type(),
-            atomic::AtomicBool::new(false),
-        );
+        instance.set_instance_data(Self::static_type(), atomic::AtomicBool::new(false));
     }
 }
 
