@@ -34,6 +34,7 @@ generate = [
     # Objects
     #"GstGL.GLBufferPool",
     "GstGL.GLBaseMemoryAllocator",
+    "GstGL.GLBaseSrc",
     "GstGL.GLMemoryAllocator",
     #"GstGL.GLMemoryPBOAllocator",
     #"GstGL.GLRenderbufferAllocator",
@@ -51,6 +52,7 @@ manual = [
     "Gst.Memory",
     "Gst.Object",
     "Gst.PadDirection",
+    "GstBase.BaseSrc",
     "GstBase.BaseTransform",
     "GstBase.PushSrc",
     "GstGL.GLBaseMemory",

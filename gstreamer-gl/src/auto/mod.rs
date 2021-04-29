@@ -9,6 +9,13 @@ pub use self::gl_base_filter::{GLBaseFilter, NONE_GL_BASE_FILTER};
 mod gl_base_memory_allocator;
 pub use self::gl_base_memory_allocator::{GLBaseMemoryAllocator, NONE_GL_BASE_MEMORY_ALLOCATOR};
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+mod gl_base_src;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+pub use self::gl_base_src::{GLBaseSrc, NONE_GL_BASE_SRC};
+
 mod gl_color_convert;
 pub use self::gl_color_convert::GLColorConvert;
 
@@ -71,6 +78,9 @@ pub use self::flags::GLAPI;
 #[doc(hidden)]
 pub mod traits {
     pub use super::gl_base_filter::GLBaseFilterExt;
+    #[cfg(any(feature = "v1_18", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    pub use super::gl_base_src::GLBaseSrcExt;
     pub use super::gl_context::GLContextExt;
     pub use super::gl_display::GLDisplayExt;
     pub use super::gl_filter::GLFilterExt;
