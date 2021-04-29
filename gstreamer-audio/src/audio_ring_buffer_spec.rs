@@ -76,7 +76,7 @@ impl Clone for AudioRingBufferSpec {
             let spec = self.0;
             gst::ffi::gst_mini_object_ref(spec.caps as *mut gst::ffi::GstMiniObject);
 
-            AudioRingBufferSpec(spec)
+            Self(spec)
         }
     }
 }

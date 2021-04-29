@@ -99,7 +99,7 @@ impl crate::AudioFormat {
         endianness: crate::AudioEndianness,
         width: i32,
         depth: i32,
-    ) -> crate::AudioFormat {
+    ) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -150,14 +150,14 @@ impl str::FromStr for crate::AudioFormat {
 }
 
 impl PartialOrd for crate::AudioFormat {
-    fn partial_cmp(&self, other: &crate::AudioFormat) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         crate::AudioFormatInfo::from_format(*self)
             .partial_cmp(&crate::AudioFormatInfo::from_format(*other))
     }
 }
 
 impl Ord for crate::AudioFormat {
-    fn cmp(&self, other: &crate::AudioFormat) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         crate::AudioFormatInfo::from_format(*self).cmp(&crate::AudioFormatInfo::from_format(*other))
     }
 }

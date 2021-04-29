@@ -142,7 +142,7 @@ impl AudioInfo {
         !self.0.finfo.is_null() && self.0.channels > 0 && self.0.rate > 0 && self.0.bpf > 0
     }
 
-    pub fn from_caps(caps: &gst::CapsRef) -> Result<AudioInfo, glib::error::BoolError> {
+    pub fn from_caps(caps: &gst::CapsRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
 
         unsafe {
@@ -153,7 +153,7 @@ impl AudioInfo {
             )) {
                 let info = info.assume_init();
                 let positions = array_init::array_init(|i| from_glib(info.position[i]));
-                Ok(AudioInfo(info, positions))
+                Ok(Self(info, positions))
             } else {
                 Err(glib::bool_error!("Failed to create AudioInfo from caps"))
             }
@@ -303,7 +303,7 @@ impl AudioInfo {
 
 impl Clone for AudioInfo {
     fn clone(&self) -> Self {
-        unsafe { AudioInfo(ptr::read(&self.0), self.1) }
+        unsafe { Self(ptr::read(&self.0), self.1) }
     }
 }
 
@@ -387,7 +387,7 @@ impl glib::translate::GlibPtrDefault for AudioInfo {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo {
-    type Storage = &'a AudioInfo;
+    type Storage = &'a Self;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstAudioInfo, Self> {
         glib::translate::Stash(&self.0, self)
@@ -402,7 +402,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo 
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioInfo) -> Self {
-        AudioInfo(
+        Self(
             ptr::read(ptr),
             array_init::array_init(|i| from_glib((*ptr).position[i])),
         )

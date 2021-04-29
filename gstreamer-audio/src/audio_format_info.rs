@@ -21,9 +21,9 @@ impl FromGlib<i32> for AudioEndianness {
         assert_initialized_main_thread!();
 
         match value {
-            1234 => AudioEndianness::LittleEndian,
-            4321 => AudioEndianness::BigEndian,
-            _ => AudioEndianness::Unknown,
+            1234 => Self::LittleEndian,
+            4321 => Self::BigEndian,
+            _ => Self::Unknown,
         }
     }
 }
@@ -33,8 +33,8 @@ impl IntoGlib for AudioEndianness {
 
     fn into_glib(self) -> i32 {
         match self {
-            AudioEndianness::LittleEndian => 1234,
-            AudioEndianness::BigEndian => 4321,
+            Self::LittleEndian => 1234,
+            Self::BigEndian => 4321,
             _ => 0,
         }
     }
@@ -43,14 +43,14 @@ impl IntoGlib for AudioEndianness {
 pub struct AudioFormatInfo(&'static ffi::GstAudioFormatInfo);
 
 impl AudioFormatInfo {
-    pub fn from_format(format: crate::AudioFormat) -> AudioFormatInfo {
+    pub fn from_format(format: crate::AudioFormat) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
             let info = ffi::gst_audio_format_get_info(format.into_glib());
             assert!(!info.is_null());
 
-            AudioFormatInfo(&*info)
+            Self(&*info)
         }
     }
 
@@ -213,14 +213,14 @@ impl PartialEq for AudioFormatInfo {
 impl Eq for AudioFormatInfo {}
 
 impl PartialOrd for AudioFormatInfo {
-    fn partial_cmp(&self, other: &AudioFormatInfo) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 
 impl Ord for AudioFormatInfo {
     // See GST_AUDIO_FORMATS_ALL for the sorting algorithm
-    fn cmp(&self, other: &AudioFormatInfo) -> Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         self.depth()
             .cmp(&other.depth())
             .then_with(|| self.width().cmp(&other.width()))
@@ -369,7 +369,7 @@ impl glib::translate::GlibPtrDefault for AudioFormatInfo {
 
 #[doc(hidden)]
 impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioFormatInfo> for AudioFormatInfo {
-    type Storage = &'a AudioFormatInfo;
+    type Storage = &'a Self;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstAudioFormatInfo, Self> {
         glib::translate::Stash(self.0, self)
@@ -384,7 +384,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioFormatInfo> for Audi
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioFormatInfo> for AudioFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioFormatInfo) -> Self {
-        AudioFormatInfo(&*ptr)
+        Self(&*ptr)
     }
 }
 
@@ -392,7 +392,7 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioFormatInfo> for AudioFor
 impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioFormatInfo> for AudioFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstAudioFormatInfo) -> Self {
-        AudioFormatInfo(&*ptr)
+        Self(&*ptr)
     }
 }
 

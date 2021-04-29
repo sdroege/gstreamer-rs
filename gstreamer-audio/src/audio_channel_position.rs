@@ -17,7 +17,7 @@ impl AudioChannelPosition {
     }
 
     pub fn positions_to_mask(
-        positions: &[AudioChannelPosition],
+        positions: &[Self],
         force_order: bool,
     ) -> Result<u64, glib::error::BoolError> {
         assert_initialized_main_thread!();
@@ -53,10 +53,7 @@ impl AudioChannelPosition {
         }
     }
 
-    pub fn positions_from_mask(
-        mask: u64,
-        positions: &mut [AudioChannelPosition],
-    ) -> Result<(), glib::BoolError> {
+    pub fn positions_from_mask(mask: u64, positions: &mut [Self]) -> Result<(), glib::BoolError> {
         assert_initialized_main_thread!();
 
         if positions.len() > 64 {
@@ -86,9 +83,7 @@ impl AudioChannelPosition {
         }
     }
 
-    pub fn positions_to_valid_order(
-        positions: &mut [AudioChannelPosition],
-    ) -> Result<(), glib::BoolError> {
+    pub fn positions_to_valid_order(positions: &mut [Self]) -> Result<(), glib::BoolError> {
         assert_initialized_main_thread!();
 
         if positions.len() > 64 {
@@ -129,10 +124,7 @@ impl AudioChannelPosition {
         unsafe { ffi::gst_audio_channel_get_fallback_mask(channels as i32) }
     }
 
-    pub fn check_valid_channel_positions(
-        positions: &[crate::AudioChannelPosition],
-        force_order: bool,
-    ) -> bool {
+    pub fn check_valid_channel_positions(positions: &[Self], force_order: bool) -> bool {
         assert_initialized_main_thread!();
 
         if positions.len() > 64 {

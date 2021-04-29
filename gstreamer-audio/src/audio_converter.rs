@@ -36,17 +36,17 @@ impl AsMut<gst::StructureRef> for AudioConverterConfig {
 
 impl Default for AudioConverterConfig {
     fn default() -> Self {
-        AudioConverterConfig::new()
+        Self::new()
     }
 }
 
 impl convert::TryFrom<gst::Structure> for AudioConverterConfig {
     type Error = glib::BoolError;
 
-    fn try_from(v: gst::Structure) -> Result<AudioConverterConfig, Self::Error> {
+    fn try_from(v: gst::Structure) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
         if v.name() == "GstAudioConverter" {
-            Ok(AudioConverterConfig(v))
+            Ok(Self(v))
         } else {
             Err(glib::bool_error!("Structure is no AudioConverterConfig"))
         }
@@ -56,14 +56,14 @@ impl convert::TryFrom<gst::Structure> for AudioConverterConfig {
 impl<'a> convert::TryFrom<&'a gst::StructureRef> for AudioConverterConfig {
     type Error = glib::BoolError;
 
-    fn try_from(v: &'a gst::StructureRef) -> Result<AudioConverterConfig, Self::Error> {
+    fn try_from(v: &'a gst::StructureRef) -> Result<Self, Self::Error> {
         skip_assert_initialized!();
-        AudioConverterConfig::try_from(v.to_owned())
+        Self::try_from(v.to_owned())
     }
 }
 
 impl From<AudioConverterConfig> for gst::Structure {
-    fn from(v: AudioConverterConfig) -> gst::Structure {
+    fn from(v: AudioConverterConfig) -> Self {
         skip_assert_initialized!();
         v.0
     }
@@ -71,7 +71,7 @@ impl From<AudioConverterConfig> for gst::Structure {
 
 impl AudioConverterConfig {
     pub fn new() -> Self {
-        AudioConverterConfig(gst::Structure::new_empty("GstAudioConverter"))
+        Self(gst::Structure::new_empty("GstAudioConverter"))
     }
 
     pub fn set_dither_method(&mut self, v: crate::AudioDitherMethod) {

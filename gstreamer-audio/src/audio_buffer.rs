@@ -142,7 +142,7 @@ impl AudioBuffer<Readable> {
     pub fn from_buffer_readable(
         buffer: gst::Buffer,
         info: &crate::AudioInfo,
-    ) -> Result<AudioBuffer<Readable>, gst::Buffer> {
+    ) -> Result<Self, gst::Buffer> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -162,7 +162,7 @@ impl AudioBuffer<Readable> {
                 let info = crate::AudioInfo::from_glib_none(
                     &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
-                Ok(AudioBuffer {
+                Ok(Self {
                     audio_buffer,
                     buffer: Some(buffer),
                     info,
@@ -177,7 +177,7 @@ impl AudioBuffer<Writable> {
     pub fn from_buffer_writable(
         buffer: gst::Buffer,
         info: &crate::AudioInfo,
-    ) -> Result<AudioBuffer<Writable>, gst::Buffer> {
+    ) -> Result<Self, gst::Buffer> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -197,7 +197,7 @@ impl AudioBuffer<Writable> {
                 let info = crate::AudioInfo::from_glib_none(
                     &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
-                Ok(AudioBuffer {
+                Ok(Self {
                     audio_buffer,
                     buffer: Some(buffer),
                     info,
@@ -252,8 +252,8 @@ impl ops::Deref for AudioBufferPtr {
 
     fn deref(&self) -> &Self::Target {
         match self {
-            AudioBufferPtr::Owned(ref b) => &*b,
-            AudioBufferPtr::Borrowed(ref b) => unsafe { b.as_ref() },
+            Self::Owned(ref b) => &*b,
+            Self::Borrowed(ref b) => unsafe { b.as_ref() },
         }
     }
 }
@@ -261,8 +261,8 @@ impl ops::Deref for AudioBufferPtr {
 impl ops::DerefMut for AudioBufferPtr {
     fn deref_mut(&mut self) -> &mut Self::Target {
         match self {
-            AudioBufferPtr::Owned(ref mut b) => &mut *b,
-            AudioBufferPtr::Borrowed(ref mut b) => unsafe { b.as_mut() },
+            Self::Owned(ref mut b) => &mut *b,
+            Self::Borrowed(ref mut b) => unsafe { b.as_mut() },
         }
     }
 }
@@ -362,7 +362,7 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
             &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
         );
         let buffer = gst::BufferRef::from_ptr((*audio_buffer).buffer);
-        Borrowed::new(AudioBufferRef {
+        Borrowed::new(Self {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(
                 audio_buffer as *mut _,
             )),
@@ -375,7 +375,7 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
         info: &'b crate::AudioInfo,
-    ) -> Result<AudioBufferRef<&'a gst::BufferRef>, glib::BoolError> {
+    ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -395,7 +395,7 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
                 let info = crate::AudioInfo::from_glib_none(
                     &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
-                Ok(AudioBufferRef {
+                Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
                     buffer: Some(buffer),
                     info,
@@ -418,7 +418,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
             &(*audio_buffer).info as *const _ as *mut ffi::GstAudioInfo,
         );
         let buffer = gst::BufferRef::from_mut_ptr((*audio_buffer).buffer);
-        Borrowed::new(AudioBufferRef {
+        Borrowed::new(Self {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(audio_buffer)),
             buffer: Some(buffer),
             info,
@@ -429,7 +429,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         info: &'b crate::AudioInfo,
-    ) -> Result<AudioBufferRef<&'a mut gst::BufferRef>, glib::BoolError> {
+    ) -> Result<Self, glib::BoolError> {
         skip_assert_initialized!();
 
         assert!(info.is_valid());
@@ -449,7 +449,7 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
                 let info = crate::AudioInfo::from_glib_none(
                     &audio_buffer.info as *const _ as *mut ffi::GstAudioInfo,
                 );
-                Ok(AudioBufferRef {
+                Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
                     buffer: Some(buffer),
                     info,
@@ -487,10 +487,7 @@ impl<'a> ops::Deref for AudioBufferRef<&'a mut gst::BufferRef> {
     type Target = AudioBufferRef<&'a gst::BufferRef>;
 
     fn deref(&self) -> &Self::Target {
-        unsafe {
-            &*(self as *const AudioBufferRef<&'a mut gst::BufferRef>
-                as *const AudioBufferRef<&'a gst::BufferRef>)
-        }
+        unsafe { &*(self as *const Self as *const Self::Target) }
     }
 }
 
