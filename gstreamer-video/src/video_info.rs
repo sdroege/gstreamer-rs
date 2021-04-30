@@ -1,9 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrFull, IntoGlib, ToGlibPtr,
-    ToGlibPtrMut,
-};
+use glib::translate::*;
 use gst::prelude::*;
 
 use std::fmt;
@@ -842,6 +839,11 @@ impl VideoInfo {
         }
 
         Ok(plane_size)
+    }
+
+    #[doc(alias = "gst_video_color_range_offsets")]
+    pub fn range_offsets(&self, range: crate::VideoColorRange) -> ([i32; 4], [i32; 4]) {
+        self.format_info().range_offsets(range)
     }
 }
 

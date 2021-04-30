@@ -5,7 +5,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-use glib::translate::{from_glib, IntoGlib};
+use glib::translate::{from_glib, IntoGlib, ToGlibPtr};
 
 pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
@@ -287,6 +287,21 @@ impl VideoFormatInfo {
                 width,
             );
         }
+    }
+
+    #[doc(alias = "gst_video_color_range_offsets")]
+    pub fn range_offsets(&self, range: crate::VideoColorRange) -> ([i32; 4], [i32; 4]) {
+        let mut offset = [0i32; 4];
+        let mut scale = [0i32; 4];
+        unsafe {
+            ffi::gst_video_color_range_offsets(
+                range.into_glib(),
+                self.to_glib_none().0,
+                &mut offset,
+                &mut scale,
+            )
+        }
+        (offset, scale)
     }
 }
 
