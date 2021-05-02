@@ -5,6 +5,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 pub trait AggregatorPadExtManual: 'static {
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 }
 

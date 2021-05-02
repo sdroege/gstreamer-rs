@@ -103,6 +103,7 @@ trait EncodingProfileHasRestrictionSetter {
 }
 
 pub trait EncodingProfileHasRestrictionGetter {
+    #[doc(alias = "get_restriction")]
     fn restriction(&self) -> Option<gst::Caps>;
 }
 

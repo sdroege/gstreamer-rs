@@ -20,6 +20,7 @@ mod runloop {
             }
         }
 
+        #[doc(alias = "get_main")]
         pub fn main() -> CFRunLoop {
             unsafe {
                 let r = CFRunLoopGetMain();

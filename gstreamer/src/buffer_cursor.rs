@@ -264,6 +264,7 @@ impl<T> BufferCursor<T> {
         Ok(self.cur_offset)
     }
 
+    #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> &BufferRef {
         self.buffer.as_ref().unwrap().as_ref()
     }
@@ -369,6 +370,7 @@ impl<T> BufferRefCursor<T> {
 }
 
 impl<'a> BufferRefCursor<&'a BufferRef> {
+    #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> &BufferRef {
         self.buffer
     }
@@ -391,6 +393,7 @@ impl<'a> BufferRefCursor<&'a BufferRef> {
 }
 
 impl<'a> BufferRefCursor<&'a mut BufferRef> {
+    #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> &BufferRef {
         self.buffer
     }

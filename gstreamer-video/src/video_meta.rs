@@ -110,40 +110,49 @@ impl VideoMeta {
         }
     }
 
+    #[doc(alias = "get_flags")]
     pub fn flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> crate::VideoFormat {
         unsafe { from_glib(self.0.format) }
     }
 
+    #[doc(alias = "get_id")]
     pub fn id(&self) -> i32 {
         self.0.id
     }
 
+    #[doc(alias = "get_width")]
     pub fn width(&self) -> u32 {
         self.0.width
     }
 
+    #[doc(alias = "get_height")]
     pub fn height(&self) -> u32 {
         self.0.height
     }
 
+    #[doc(alias = "get_n_planes")]
     pub fn n_planes(&self) -> u32 {
         self.0.n_planes
     }
 
+    #[doc(alias = "get_offset")]
     pub fn offset(&self) -> &[usize] {
         &self.0.offset[0..(self.0.n_planes as usize)]
     }
 
+    #[doc(alias = "get_stride")]
     pub fn stride(&self) -> &[i32] {
         &self.0.stride[0..(self.0.n_planes as usize)]
     }
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "get_alignment")]
     pub fn alignment(&self) -> crate::VideoAlignment {
         crate::VideoAlignment::new(
             self.0.alignment.padding_top,
@@ -156,6 +165,7 @@ impl VideoMeta {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "get_plane_size")]
     pub fn plane_size(&self) -> Result<[usize; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_size = [0; crate::VIDEO_MAX_PLANES];
 
@@ -174,6 +184,7 @@ impl VideoMeta {
 
     #[cfg(any(feature = "v1_18", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "get_plane_height")]
     pub fn plane_height(&self) -> Result<[u32; crate::VIDEO_MAX_PLANES], glib::BoolError> {
         let mut plane_height = [0; crate::VIDEO_MAX_PLANES];
 
@@ -259,6 +270,7 @@ impl VideoCropMeta {
         }
     }
 
+    #[doc(alias = "get_rect")]
     pub fn rect(&self) -> (u32, u32, u32, u32) {
         (self.0.x, self.0.y, self.0.width, self.0.height)
     }
@@ -314,23 +326,28 @@ impl VideoRegionOfInterestMeta {
         }
     }
 
+    #[doc(alias = "get_rect")]
     pub fn rect(&self) -> (u32, u32, u32, u32) {
         (self.0.x, self.0.y, self.0.w, self.0.h)
     }
 
+    #[doc(alias = "get_id")]
     pub fn id(&self) -> i32 {
         self.0.id
     }
 
+    #[doc(alias = "get_parent_id")]
     pub fn parent_id(&self) -> i32 {
         self.0.parent_id
     }
 
+    #[doc(alias = "get_roi_type")]
     pub fn roi_type<'a>(&self) -> &'a str {
         unsafe { glib::Quark::from_glib(self.0.roi_type).to_string() }
     }
 
     #[cfg(feature = "v1_14")]
+    #[doc(alias = "get_params")]
     pub fn params(&self) -> ParamsIter {
         ParamsIter {
             _meta: self,
@@ -339,6 +356,7 @@ impl VideoRegionOfInterestMeta {
     }
 
     #[cfg(feature = "v1_14")]
+    #[doc(alias = "get_param")]
     pub fn param<'b>(&self, name: &'b str) -> Option<&gst::StructureRef> {
         self.params().find(|s| s.name() == name)
     }
@@ -447,6 +465,7 @@ impl VideoAffineTransformationMeta {
         }
     }
 
+    #[doc(alias = "get_matrix")]
     pub fn matrix(&self) -> &[f32; 16] {
         &self.0.matrix
     }
@@ -500,10 +519,12 @@ impl VideoOverlayCompositionMeta {
         }
     }
 
+    #[doc(alias = "get_overlay")]
     pub fn overlay(&self) -> &crate::VideoOverlayCompositionRef {
         unsafe { crate::VideoOverlayCompositionRef::from_ptr(self.0.overlay) }
     }
 
+    #[doc(alias = "get_overlay_owned")]
     pub fn overlay_owned(&self) -> crate::VideoOverlayComposition {
         unsafe { from_glib_none(self.overlay().as_ptr()) }
     }
@@ -568,10 +589,12 @@ impl VideoCaptionMeta {
         }
     }
 
+    #[doc(alias = "get_caption_type")]
     pub fn caption_type(&self) -> crate::VideoCaptionType {
         unsafe { from_glib(self.0.caption_type) }
     }
 
+    #[doc(alias = "get_data")]
     pub fn data(&self) -> &[u8] {
         unsafe {
             use std::slice;
@@ -637,14 +660,17 @@ impl VideoAFDMeta {
         }
     }
 
+    #[doc(alias = "get_field")]
     pub fn field(&self) -> u8 {
         self.0.field
     }
 
+    #[doc(alias = "get_spec")]
     pub fn spec(&self) -> crate::VideoAFDSpec {
         unsafe { from_glib(self.0.spec) }
     }
 
+    #[doc(alias = "get_afd")]
     pub fn afd(&self) -> crate::VideoAFDValue {
         unsafe { from_glib(self.0.afd) }
     }
@@ -709,6 +735,7 @@ impl VideoBarMeta {
         }
     }
 
+    #[doc(alias = "get_field")]
     pub fn field(&self) -> u8 {
         self.0.field
     }
@@ -717,10 +744,12 @@ impl VideoBarMeta {
         unsafe { from_glib(self.0.is_letterbox) }
     }
 
+    #[doc(alias = "get_bar_data1")]
     pub fn bar_data1(&self) -> u32 {
         self.0.bar_data1
     }
 
+    #[doc(alias = "get_bar_data2")]
     pub fn bar_data2(&self) -> u32 {
         self.0.bar_data2
     }

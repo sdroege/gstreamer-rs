@@ -78,6 +78,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.dither-method", &v);
     }
 
+    #[doc(alias = "get_dither_method")]
     pub fn dither_method(&self) -> crate::AudioDitherMethod {
         self.0
             .get_optional("GstAudioConverter.dither-method")
@@ -89,6 +90,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.noise-shaping-method", &v);
     }
 
+    #[doc(alias = "get_noise_shaping_method")]
     pub fn noise_shaping_method(&self) -> crate::AudioNoiseShapingMethod {
         self.0
             .get_optional("GstAudioConverter.noise-shaping-method")
@@ -100,6 +102,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.quantization", &v);
     }
 
+    #[doc(alias = "get_quantization")]
     pub fn quantization(&self) -> u32 {
         self.0
             .get_optional("GstAudioConverter.quantization")
@@ -115,6 +118,7 @@ impl AudioConverterConfig {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "get_resampler_method")]
     pub fn resampler_method(&self) -> crate::AudioResamplerMethod {
         self.0
             .get_optional("GstAudioConverter.resampler-method")
@@ -141,6 +145,7 @@ impl AudioConverterConfig {
         self.0.set("GstAudioConverter.mix-matrix", &array);
     }
 
+    #[doc(alias = "get_mix_matrix")]
     pub fn mix_matrix(&self) -> Vec<Vec<f32>> {
         self.0
             .get_optional::<gst::Array>("GstAudioConverter.mix-matrix")

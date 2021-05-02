@@ -84,6 +84,7 @@ impl<'a> BaseParseFrame<'a> {
         Self(ptr::NonNull::new_unchecked(frame), PhantomData)
     }
 
+    #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).buffer;
@@ -95,6 +96,7 @@ impl<'a> BaseParseFrame<'a> {
         }
     }
 
+    #[doc(alias = "get_buffer_mut")]
     pub fn buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).buffer;
@@ -111,6 +113,7 @@ impl<'a> BaseParseFrame<'a> {
         }
     }
 
+    #[doc(alias = "get_output_buffer")]
     pub fn output_buffer(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).out_buffer;
@@ -122,6 +125,7 @@ impl<'a> BaseParseFrame<'a> {
         }
     }
 
+    #[doc(alias = "get_output_buffer_mut")]
     pub fn output_buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
         unsafe {
             let ptr = (*self.to_glib_none().0).out_buffer;
@@ -156,6 +160,7 @@ impl<'a> BaseParseFrame<'a> {
         }
     }
 
+    #[doc(alias = "get_flags")]
     pub fn flags(&self) -> BaseParseFrameFlags {
         let flags = unsafe { (*self.to_glib_none().0).flags };
         BaseParseFrameFlags::from_bits_truncate(flags)
@@ -169,10 +174,12 @@ impl<'a> BaseParseFrame<'a> {
         unsafe { (*self.to_glib_none().0).flags &= !flags.bits() }
     }
 
+    #[doc(alias = "get_offset")]
     pub fn offset(&self) -> u64 {
         unsafe { (*self.to_glib_none().0).offset }
     }
 
+    #[doc(alias = "get_overhead")]
     pub fn overhead(&self) -> Overhead {
         unsafe { from_glib((*self.to_glib_none().0).overhead) }
     }

@@ -286,6 +286,7 @@ impl AppSrc {
         }
     }
 
+    #[doc(alias = "get_latency")]
     pub fn latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
             let mut min = mem::MaybeUninit::uninit();

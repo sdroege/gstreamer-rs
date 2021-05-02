@@ -291,6 +291,7 @@ pub trait BaseTransformImplExt: ObjectSubclass {
         Self: ObjectSubclass,
         <Self as ObjectSubclass>::ParentType: IsA<BaseTransform>;
 
+    #[doc(alias = "get_queued_buffer")]
     fn queued_buffer(&self) -> Option<gst::Buffer>
     where
         Self: ObjectSubclass,

@@ -49,6 +49,7 @@ impl VideoConverter {
         }
     }
 
+    #[doc(alias = "get_config")]
     pub fn config(&self) -> VideoConverterConfig {
         unsafe {
             VideoConverterConfig(
@@ -160,6 +161,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.resampler-method", &v);
     }
 
+    #[doc(alias = "get_resampler_method")]
     pub fn resampler_method(&self) -> crate::VideoResamplerMethod {
         self.0
             .get_optional("GstVideoConverter.resampler-method")
@@ -171,6 +173,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.chroma-resampler-method", &v);
     }
 
+    #[doc(alias = "get_chroma_resampler_method")]
     pub fn chroma_resampler_method(&self) -> crate::VideoResamplerMethod {
         self.0
             .get_optional("GstVideoConverter.chroma-resampler-method")
@@ -182,6 +185,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.resampler-taps", &v);
     }
 
+    #[doc(alias = "get_resampler_taps")]
     pub fn resampler_taps(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.resampler-taps")
@@ -193,6 +197,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dither-method", &v);
     }
 
+    #[doc(alias = "get_dither_method")]
     pub fn dither_method(&self) -> crate::VideoDitherMethod {
         self.0
             .get_optional("GstVideoConverter.dither-method")
@@ -204,6 +209,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dither-quantization", &v);
     }
 
+    #[doc(alias = "get_dither_quantization")]
     pub fn dither_quantization(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.dither-quantization")
@@ -215,6 +221,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.src-x", &v);
     }
 
+    #[doc(alias = "get_src_x")]
     pub fn src_x(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.src-x")
@@ -226,6 +233,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.src-y", &v);
     }
 
+    #[doc(alias = "get_src_y")]
     pub fn src_y(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.src-y")
@@ -241,6 +249,7 @@ impl VideoConverterConfig {
         }
     }
 
+    #[doc(alias = "get_src_width")]
     pub fn src_width(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.src-width")
@@ -255,6 +264,7 @@ impl VideoConverterConfig {
         }
     }
 
+    #[doc(alias = "get_src_height")]
     pub fn src_height(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.src-height")
@@ -265,6 +275,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dest-x", &v);
     }
 
+    #[doc(alias = "get_dest_x")]
     pub fn dest_x(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.dest-x")
@@ -276,6 +287,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.dest-y", &v);
     }
 
+    #[doc(alias = "get_dest_y")]
     pub fn dest_y(&self) -> i32 {
         self.0
             .get_optional("GstVideoConverter.dest-y")
@@ -291,6 +303,7 @@ impl VideoConverterConfig {
         }
     }
 
+    #[doc(alias = "get_dest_width")]
     pub fn dest_width(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.dest-width")
@@ -305,6 +318,7 @@ impl VideoConverterConfig {
         }
     }
 
+    #[doc(alias = "get_dest_height")]
     pub fn dest_height(&self) -> Option<i32> {
         self.0
             .get_optional("GstVideoConverter.dest-height")
@@ -315,6 +329,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.fill-border", &v);
     }
 
+    #[doc(alias = "get_fill_border")]
     pub fn fills_border(&self) -> bool {
         self.0
             .get_optional("GstVideoConverter.fill-border")
@@ -326,6 +341,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.alpha-value", &v);
     }
 
+    #[doc(alias = "get_alpha_value")]
     pub fn alpha_value(&self) -> f64 {
         self.0
             .get_optional("GstVideoConverter.alpha-value")
@@ -337,6 +353,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.alpha-mode", &v);
     }
 
+    #[doc(alias = "get_alpha_mode")]
     pub fn alpha_mode(&self) -> crate::VideoAlphaMode {
         self.0
             .get_optional("GstVideoConverter.alpha-mode")
@@ -348,6 +365,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.border-argb", &v);
     }
 
+    #[doc(alias = "get_border_argb")]
     pub fn border_argb(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.border-argb")
@@ -359,6 +377,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.chroma-mode", &v);
     }
 
+    #[doc(alias = "get_chroma_mode")]
     pub fn chroma_mode(&self) -> crate::VideoChromaMode {
         self.0
             .get_optional("GstVideoConverter.chroma-mode")
@@ -370,6 +389,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.matrix-mode", &v);
     }
 
+    #[doc(alias = "get_matrix_mode")]
     pub fn matrix_mode(&self) -> crate::VideoMatrixMode {
         self.0
             .get_optional("GstVideoConverter.matrix-mode")
@@ -381,6 +401,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.gamma-mode", &v);
     }
 
+    #[doc(alias = "get_gamma_mode")]
     pub fn gamma_mode(&self) -> crate::VideoGammaMode {
         self.0
             .get_optional("GstVideoConverter.gamma-mode")
@@ -392,6 +413,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.primaries-mode", &v);
     }
 
+    #[doc(alias = "get_primaries_mode")]
     pub fn primaries_mode(&self) -> crate::VideoPrimariesMode {
         self.0
             .get_optional("GstVideoConverter.primaries-mode")
@@ -403,6 +425,7 @@ impl VideoConverterConfig {
         self.0.set("GstVideoConverter.threads", &v);
     }
 
+    #[doc(alias = "get_threads")]
     pub fn threads(&self) -> u32 {
         self.0
             .get_optional("GstVideoConverter.threads")

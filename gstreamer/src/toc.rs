@@ -24,6 +24,7 @@ impl Toc {
 }
 
 impl TocRef {
+    #[doc(alias = "get_scope")]
     pub fn scope(&self) -> TocScope {
         unsafe { from_glib(ffi::gst_toc_get_scope(self.as_ptr())) }
     }
@@ -32,6 +33,7 @@ impl TocRef {
         unsafe { from_glib_none(ffi::gst_toc_find_entry(self.as_ptr(), uid.to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_entries")]
     pub fn entries(&self) -> Vec<TocEntry> {
         unsafe { FromGlibPtrContainer::from_glib_none(ffi::gst_toc_get_entries(self.as_ptr())) }
     }
@@ -42,6 +44,7 @@ impl TocRef {
         }
     }
 
+    #[doc(alias = "get_tags")]
     pub fn tags(&self) -> Option<TagList> {
         unsafe { from_glib_none(ffi::gst_toc_get_tags(self.as_ptr())) }
     }
@@ -98,10 +101,12 @@ impl TocEntry {
 }
 
 impl TocEntryRef {
+    #[doc(alias = "get_entry_type")]
     pub fn entry_type(&self) -> TocEntryType {
         unsafe { from_glib(ffi::gst_toc_entry_get_entry_type(self.as_ptr())) }
     }
 
+    #[doc(alias = "get_uid")]
     pub fn uid(&self) -> &str {
         unsafe {
             CStr::from_ptr(ffi::gst_toc_entry_get_uid(self.as_ptr()))
@@ -116,16 +121,19 @@ impl TocEntryRef {
         }
     }
 
+    #[doc(alias = "get_sub_entries")]
     pub fn sub_entries(&self) -> Vec<TocEntry> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_toc_entry_get_sub_entries(self.as_ptr()))
         }
     }
 
+    #[doc(alias = "get_parent")]
     pub fn parent(&self) -> Option<TocEntry> {
         unsafe { from_glib_none(ffi::gst_toc_entry_get_parent(self.as_mut_ptr())) }
     }
 
+    #[doc(alias = "get_start_stop_times")]
     pub fn start_stop_times(&self) -> Option<(i64, i64)> {
         unsafe {
             let mut start = mem::MaybeUninit::uninit();
@@ -149,6 +157,7 @@ impl TocEntryRef {
         }
     }
 
+    #[doc(alias = "get_tags")]
     pub fn tags(&self) -> Option<TagList> {
         unsafe { from_glib_none(ffi::gst_toc_entry_get_tags(self.as_ptr())) }
     }
@@ -177,6 +186,7 @@ impl TocEntryRef {
         unsafe { from_glib(ffi::gst_toc_entry_is_sequence(self.as_ptr())) }
     }
 
+    #[doc(alias = "get_loop")]
     pub fn loop_(&self) -> Option<(TocLoopType, i32)> {
         unsafe {
             let mut loop_type = mem::MaybeUninit::uninit();

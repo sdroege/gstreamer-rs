@@ -174,26 +174,31 @@ impl<'a> RTPBuffer<'a, Writable> {
 }
 
 impl<'a, T> RTPBuffer<'a, T> {
+    #[doc(alias = "get_seq")]
     pub fn seq(&self) -> u16 {
         unsafe { ffi::gst_rtp_buffer_get_seq(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
+    #[doc(alias = "get_payload_type")]
     pub fn payload_type(&self) -> u8 {
         unsafe {
             ffi::gst_rtp_buffer_get_payload_type(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
+    #[doc(alias = "get_ssrc")]
     pub fn ssrc(&self) -> u32 {
         unsafe { ffi::gst_rtp_buffer_get_ssrc(glib::translate::mut_override(&self.rtp_buffer)) }
     }
 
+    #[doc(alias = "get_timestamp")]
     pub fn timestamp(&self) -> u32 {
         unsafe {
             ffi::gst_rtp_buffer_get_timestamp(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
+    #[doc(alias = "get_csrc")]
     pub fn csrc(&self, idx: u8) -> Option<u32> {
         if idx < self.csrc_count() {
             unsafe {
@@ -207,12 +212,14 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_csrc_count")]
     pub fn csrc_count(&self) -> u8 {
         unsafe {
             ffi::gst_rtp_buffer_get_csrc_count(glib::translate::mut_override(&self.rtp_buffer))
         }
     }
 
+    #[doc(alias = "get_marker")]
     pub fn is_marker(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_buffer_get_marker(
@@ -221,6 +228,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_payload_size")]
     pub fn payload_size(&self) -> u32 {
         unsafe {
             ffi::gst_rtp_buffer_get_payload_len(glib::translate::mut_override(&self.rtp_buffer))
@@ -228,6 +236,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_payload")]
     pub fn payload(&self) -> Result<&[u8], glib::error::BoolError> {
         let size = self.payload_size();
         if size == 0 {
@@ -244,6 +253,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_extension")]
     pub fn is_extension(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtp_buffer_get_extension(
@@ -252,6 +262,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_extension_bytes")]
     pub fn extension_bytes(&self) -> Option<(u16, glib::Bytes)> {
         unsafe {
             let mut bits: u16 = 0;
@@ -265,6 +276,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_extension_onebyte_header")]
     pub fn extension_onebyte_header(&self, id: u8, nth: u32) -> Option<&[u8]> {
         unsafe {
             let mut data = ptr::null_mut();
@@ -286,6 +298,7 @@ impl<'a, T> RTPBuffer<'a, T> {
         }
     }
 
+    #[doc(alias = "get_extension_twobytes_header")]
     pub fn extension_twobytes_header(&self, id: u8, nth: u32) -> Option<(u8, &[u8])> {
         unsafe {
             let mut data = ptr::null_mut();

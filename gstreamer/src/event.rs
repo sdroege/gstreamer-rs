@@ -134,6 +134,7 @@ mini_object_wrapper!(Event, EventRef, ffi::GstEvent, || {
 });
 
 impl EventRef {
+    #[doc(alias = "get_seqnum")]
     pub fn seqnum(&self) -> Seqnum {
         unsafe {
             let seqnum = ffi::gst_event_get_seqnum(self.as_mut_ptr());
@@ -142,6 +143,7 @@ impl EventRef {
         }
     }
 
+    #[doc(alias = "get_running_time_offset")]
     pub fn running_time_offset(&self) -> i64 {
         unsafe { ffi::gst_event_get_running_time_offset(self.as_mut_ptr()) }
     }
@@ -150,6 +152,7 @@ impl EventRef {
         unsafe { ffi::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
     }
 
+    #[doc(alias = "get_structure")]
     pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_event_get_structure(self.as_mut_ptr());
@@ -187,6 +190,7 @@ impl EventRef {
         self.type_().is_sticky_multi()
     }
 
+    #[doc(alias = "get_type")]
     pub fn type_(&self) -> EventType {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
@@ -327,6 +331,7 @@ impl<'a> FlushStop<'a> {
         FlushStopBuilder::new(reset_time)
     }
 
+    #[doc(alias = "get_reset_time")]
     pub fn resets_time(&self) -> bool {
         unsafe {
             let mut reset_time = mem::MaybeUninit::uninit();
@@ -351,6 +356,7 @@ impl<'a> StreamStart<'a> {
         StreamStartBuilder::new(stream_id)
     }
 
+    #[doc(alias = "get_stream_id")]
     pub fn stream_id(&self) -> &'a str {
         unsafe {
             let mut stream_id = ptr::null();
@@ -360,6 +366,7 @@ impl<'a> StreamStart<'a> {
         }
     }
 
+    #[doc(alias = "get_stream_flags")]
     pub fn stream_flags(&self) -> crate::StreamFlags {
         unsafe {
             let mut stream_flags = mem::MaybeUninit::uninit();
@@ -370,6 +377,7 @@ impl<'a> StreamStart<'a> {
         }
     }
 
+    #[doc(alias = "get_group_id")]
     pub fn group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
@@ -387,6 +395,7 @@ impl<'a> StreamStart<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "get_stream")]
     pub fn stream(&self) -> Option<crate::Stream> {
         unsafe {
             let mut stream = ptr::null_mut();
@@ -409,6 +418,7 @@ impl<'a> Caps<'a> {
         CapsBuilder::new(caps)
     }
 
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> &'a crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -418,6 +428,7 @@ impl<'a> Caps<'a> {
         }
     }
 
+    #[doc(alias = "get_caps_owned")]
     pub fn caps_owned(&self) -> crate::Caps {
         unsafe { from_glib_none(self.caps().as_ptr()) }
     }
@@ -438,6 +449,7 @@ impl<'a> Segment<'a> {
         SegmentBuilder::new(segment.as_ref())
     }
 
+    #[doc(alias = "get_segment")]
     pub fn segment(&self) -> &'a crate::Segment {
         unsafe {
             let mut segment = ptr::null();
@@ -467,6 +479,7 @@ impl<'a> StreamCollection<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "get_stream_collection")]
     pub fn stream_collection(&self) -> crate::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
@@ -490,6 +503,7 @@ impl<'a> Tag<'a> {
         TagBuilder::new(tags)
     }
 
+    #[doc(alias = "get_tag")]
     pub fn tag(&self) -> &'a crate::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
@@ -499,6 +513,7 @@ impl<'a> Tag<'a> {
         }
     }
 
+    #[doc(alias = "get_tag_owned")]
     pub fn tag_owned(&self) -> crate::TagList {
         unsafe { from_glib_none(self.tag().as_ptr()) }
     }
@@ -561,6 +576,7 @@ impl<'a> SinkMessage<'a> {
         SinkMessageBuilder::new(name, msg)
     }
 
+    #[doc(alias = "get_message")]
     pub fn message(&self) -> crate::Message {
         unsafe {
             let mut msg = ptr::null_mut();
@@ -590,6 +606,7 @@ impl<'a> StreamGroupDone<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "get_group_id")]
     pub fn group_id(&self) -> GroupId {
         unsafe {
             let mut group_id = mem::MaybeUninit::uninit();
@@ -632,6 +649,7 @@ impl<'a> Toc<'a> {
         TocBuilder::new(toc, updated)
     }
 
+    #[doc(alias = "get_toc")]
     pub fn toc(&self) -> (&'a crate::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
@@ -645,6 +663,7 @@ impl<'a> Toc<'a> {
         }
     }
 
+    #[doc(alias = "get_toc_owned")]
     pub fn toc_owned(&self) -> (crate::Toc, bool) {
         unsafe {
             let (toc, updated) = self.toc();
@@ -883,6 +902,7 @@ impl<'a> Seek<'a> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "get_trickmode_interval")]
     pub fn trickmode_interval(&self) -> crate::ClockTime {
         unsafe {
             let mut trickmode_interval = mem::MaybeUninit::uninit();
@@ -924,6 +944,7 @@ impl<'a> Latency<'a> {
         LatencyBuilder::new(latency)
     }
 
+    #[doc(alias = "get_latency")]
     pub fn latency(&self) -> crate::ClockTime {
         unsafe {
             let mut latency = mem::MaybeUninit::uninit();
@@ -1015,6 +1036,7 @@ impl<'a> TocSelect<'a> {
         TocSelectBuilder::new(uid)
     }
 
+    #[doc(alias = "get_uid")]
     pub fn uid(&self) -> &'a str {
         unsafe {
             let mut uid = ptr::null_mut();
@@ -1045,6 +1067,7 @@ impl<'a> SelectStreams<'a> {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_10")))]
+    #[doc(alias = "get_streams")]
     pub fn streams(&self) -> Vec<String> {
         unsafe {
             let mut streams = ptr::null_mut();

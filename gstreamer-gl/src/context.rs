@@ -7,6 +7,7 @@ use gst::ContextRef;
 use std::ptr;
 
 pub trait ContextGLExt {
+    #[doc(alias = "get_gl_display")]
     fn gl_display(&self) -> Option<GLDisplay>;
     fn set_gl_display<T: IsA<GLDisplay>>(&self, display: &T);
 }

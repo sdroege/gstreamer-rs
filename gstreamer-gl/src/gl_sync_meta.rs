@@ -28,6 +28,7 @@ impl GLSyncMeta {
         }
     }
 
+    #[doc(alias = "get_context")]
     pub fn context(&self) -> GLContext {
         unsafe { from_glib_none(self.0.context) }
     }

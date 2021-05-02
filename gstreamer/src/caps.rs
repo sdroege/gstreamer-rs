@@ -179,6 +179,7 @@ impl CapsRef {
         }
     }
 
+    #[doc(alias = "get_structure")]
     pub fn structure(&self, idx: u32) -> Option<&StructureRef> {
         if idx >= self.size() {
             return None;
@@ -194,6 +195,7 @@ impl CapsRef {
         }
     }
 
+    #[doc(alias = "get_mut_structure")]
     pub fn structure_mut(&mut self, idx: u32) -> Option<&mut StructureRef> {
         if idx >= self.size() {
             return None;
@@ -209,6 +211,7 @@ impl CapsRef {
         }
     }
 
+    #[doc(alias = "get_features")]
     pub fn features(&self, idx: u32) -> Option<&CapsFeaturesRef> {
         if idx >= self.size() {
             return None;
@@ -220,6 +223,7 @@ impl CapsRef {
         }
     }
 
+    #[doc(alias = "get_mut_features")]
     pub fn features_mut(&mut self, idx: u32) -> Option<&mut CapsFeaturesRef> {
         if idx >= self.size() {
             return None;
@@ -254,6 +258,7 @@ impl CapsRef {
         }
     }
 
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> u32 {
         unsafe { ffi::gst_caps_get_size(self.as_ptr()) }
     }

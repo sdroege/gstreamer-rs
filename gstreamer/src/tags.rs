@@ -433,6 +433,7 @@ impl TagListRef {
         })
     }
 
+    #[doc(alias = "get_generic")]
     pub fn generic(&self, tag_name: &str) -> Option<SendValue> {
         unsafe {
             let mut value: mem::MaybeUninit<SendValue> = mem::MaybeUninit::zeroed();
@@ -463,6 +464,7 @@ impl TagListRef {
         }
     }
 
+    #[doc(alias = "get_index")]
     pub fn index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
         self.index_generic(T::tag_name(), idx).map(|value| {
             if !value.is::<T::TagType>() {
@@ -476,6 +478,7 @@ impl TagListRef {
         })
     }
 
+    #[doc(alias = "get_index_generic")]
     pub fn index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
         unsafe {
             let value =
@@ -489,10 +492,12 @@ impl TagListRef {
         }
     }
 
+    #[doc(alias = "get_size")]
     pub fn size<'a, T: Tag<'a>>(&self) -> u32 {
         self.size_by_name(T::tag_name())
     }
 
+    #[doc(alias = "get_size_by_name")]
     pub fn size_by_name(&self, tag_name: &str) -> u32 {
         unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
     }
@@ -527,6 +532,7 @@ impl TagListRef {
         }
     }
 
+    #[doc(alias = "get_scope")]
     pub fn scope(&self) -> TagScope {
         unsafe { from_glib(ffi::gst_tag_list_get_scope(self.as_ptr())) }
     }

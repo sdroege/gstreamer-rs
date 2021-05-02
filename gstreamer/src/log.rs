@@ -84,6 +84,7 @@ impl DebugCategory {
         }
     }
 
+    #[doc(alias = "get_threshold")]
     pub fn threshold(self) -> crate::DebugLevel {
         match self.0 {
             Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_threshold(cat.as_ptr())) },
@@ -103,6 +104,7 @@ impl DebugCategory {
         }
     }
 
+    #[doc(alias = "get_color")]
     pub fn color(self) -> crate::DebugColorFlags {
         match self.0 {
             Some(cat) => unsafe { from_glib(ffi::gst_debug_category_get_color(cat.as_ptr())) },
@@ -110,6 +112,7 @@ impl DebugCategory {
         }
     }
 
+    #[doc(alias = "get_name")]
     pub fn name<'a>(self) -> &'a str {
         match self.0 {
             Some(cat) => unsafe {
@@ -121,6 +124,7 @@ impl DebugCategory {
         }
     }
 
+    #[doc(alias = "get_description")]
     pub fn description<'a>(self) -> Option<&'a str> {
         match self.0 {
             Some(cat) => unsafe {
@@ -493,6 +497,7 @@ mod tests {
     use std::sync::{Arc, Mutex};
 
     #[test]
+    #[doc(alias = "get_existing")]
     fn existing() {
         crate::init().unwrap();
 

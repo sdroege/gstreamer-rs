@@ -62,6 +62,7 @@ impl BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "get_options")]
     pub fn options(&self) -> Vec<String> {
         unsafe {
             let n = ffi::gst_buffer_pool_config_n_options(self.0.to_glib_none().0) as usize;
@@ -96,6 +97,7 @@ impl BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "get_params")]
     pub fn params(&self) -> Option<(Option<crate::Caps>, u32, u32, u32)> {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -144,6 +146,7 @@ impl BufferPoolConfig {
         }
     }
 
+    #[doc(alias = "get_allocator")]
     pub fn allocator(&self) -> Option<(Option<Allocator>, AllocationParams)> {
         unsafe {
             let mut allocator = ptr::null_mut();
@@ -281,6 +284,7 @@ impl Default for BufferPool {
 }
 
 pub trait BufferPoolExtManual: 'static {
+    #[doc(alias = "get_config")]
     fn config(&self) -> BufferPoolConfig;
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError>;
 

@@ -326,10 +326,12 @@ impl CapsFeaturesRef {
         }
     }
 
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> u32 {
         unsafe { ffi::gst_caps_features_get_size(self.as_ptr()) }
     }
 
+    #[doc(alias = "get_nth")]
     pub fn nth(&self, idx: u32) -> Option<&str> {
         if idx >= self.size() {
             return None;

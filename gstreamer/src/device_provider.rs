@@ -32,6 +32,7 @@ impl DeviceProvider {
 }
 
 pub trait DeviceProviderExtManual: 'static {
+    #[doc(alias = "get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
 }
 

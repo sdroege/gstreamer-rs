@@ -34,6 +34,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
         self.parent_size(element)
     }
 
+    #[doc(alias = "get_times")]
     fn times(
         &self,
         element: &Self::Type,

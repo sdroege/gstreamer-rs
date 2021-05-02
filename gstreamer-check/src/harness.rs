@@ -220,10 +220,12 @@ impl Harness {
     //    unsafe { TODO: call ffi::gst_harness_get_allocator() }
     //}
 
+    #[doc(alias = "get_last_pushed_timestamp")]
     pub fn last_pushed_timestamp(&self) -> gst::ClockTime {
         unsafe { from_glib(ffi::gst_harness_get_last_pushed_timestamp(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "get_testclock")]
     pub fn testclock(&self) -> Option<TestClock> {
         unsafe { from_glib_full(ffi::gst_harness_get_testclock(self.0.as_ptr())) }
     }
@@ -627,6 +629,7 @@ impl Harness {
     //    unsafe { TODO: call ffi::gst_harness_stress_thread_stop() }
     //}
 
+    #[doc(alias = "get_element")]
     pub fn element(&self) -> Option<gst::Element> {
         unsafe {
             // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
@@ -645,6 +648,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "get_sinkpad")]
     pub fn sinkpad(&self) -> Option<gst::Pad> {
         unsafe {
             // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
@@ -663,6 +667,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "get_srcpad")]
     pub fn srcpad(&self) -> Option<gst::Pad> {
         unsafe {
             // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
@@ -681,6 +686,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "get_sink_harness")]
     pub fn sink_harness(&self) -> Option<Ref> {
         unsafe {
             let sink_harness = (*self.0.as_ptr()).sink_harness;
@@ -695,6 +701,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "get_src_harness")]
     pub fn src_harness(&self) -> Option<Ref> {
         unsafe {
             let src_harness = (*self.0.as_ptr()).src_harness;
@@ -709,6 +716,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "get_mut_sink_harness")]
     pub fn sink_harness_mut(&mut self) -> Option<RefMut> {
         unsafe {
             let sink_harness = (*self.0.as_ptr()).sink_harness;
@@ -723,6 +731,7 @@ impl Harness {
         }
     }
 
+    #[doc(alias = "get_mut_src_harness")]
     pub fn src_harness_mut(&mut self) -> Option<RefMut> {
         unsafe {
             let src_harness = (*self.0.as_ptr()).src_harness;

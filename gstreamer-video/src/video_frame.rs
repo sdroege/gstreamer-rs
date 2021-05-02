@@ -801,6 +801,7 @@ impl<T> Drop for VideoFrameRef<T> {
 }
 
 pub trait VideoBufferExt {
+    #[doc(alias = "get_video_flags")]
     fn video_flags(&self) -> crate::VideoBufferFlags;
     fn set_video_flags(&mut self, flags: crate::VideoBufferFlags);
     fn unset_video_flags(&mut self, flags: crate::VideoBufferFlags);

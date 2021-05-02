@@ -21,6 +21,7 @@ impl VideoTimeCodeInterval {
         }
     }
 
+    #[doc(alias = "get_hours")]
     pub fn hours(&self) -> u32 {
         self.0.hours
     }
@@ -29,6 +30,7 @@ impl VideoTimeCodeInterval {
         self.0.hours = hours
     }
 
+    #[doc(alias = "get_minutes")]
     pub fn minutes(&self) -> u32 {
         self.0.minutes
     }
@@ -38,6 +40,7 @@ impl VideoTimeCodeInterval {
         self.0.minutes = minutes
     }
 
+    #[doc(alias = "get_seconds")]
     pub fn seconds(&self) -> u32 {
         self.0.seconds
     }
@@ -47,6 +50,7 @@ impl VideoTimeCodeInterval {
         self.0.seconds = seconds
     }
 
+    #[doc(alias = "get_frames")]
     pub fn frames(&self) -> u32 {
         self.0.frames
     }

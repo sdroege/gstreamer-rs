@@ -42,10 +42,12 @@ impl AudioClippingMeta {
         }
     }
 
+    #[doc(alias = "get_start")]
     pub fn start(&self) -> gst::GenericFormattedValue {
         unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.start as i64) }
     }
 
+    #[doc(alias = "get_end")]
     pub fn end(&self) -> gst::GenericFormattedValue {
         unsafe { gst::GenericFormattedValue::new(from_glib(self.0.format), self.0.end as i64) }
     }
@@ -169,14 +171,17 @@ impl AudioMeta {
         }
     }
 
+    #[doc(alias = "get_info")]
     pub fn info(&self) -> crate::AudioInfo {
         unsafe { from_glib_none(&self.0.info as *const _ as *mut ffi::GstAudioInfo) }
     }
 
+    #[doc(alias = "get_samples")]
     pub fn samples(&self) -> usize {
         self.0.samples
     }
 
+    #[doc(alias = "get_offsets")]
     pub fn offsets(&self) -> &[usize] {
         if self.0.offsets.is_null() || self.0.info.channels < 1 {
             return &[];

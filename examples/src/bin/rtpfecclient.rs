@@ -44,6 +44,7 @@ fn make_element(
     }
 }
 
+#[doc(alias = "get_static_pad")]
 fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.static_pad(pad_name) {
         Some(pad) => Ok(pad),
@@ -54,6 +55,7 @@ fn static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad
     }
 }
 
+#[doc(alias = "get_request_pad")]
 fn request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst::Pad, Error> {
     match element.request_pad_simple(pad_name) {
         Some(pad) => Ok(pad),

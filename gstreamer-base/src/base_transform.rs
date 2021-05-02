@@ -7,8 +7,10 @@ use std::mem;
 use std::ptr;
 
 pub trait BaseTransformExtManual: 'static {
+    #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 }
 

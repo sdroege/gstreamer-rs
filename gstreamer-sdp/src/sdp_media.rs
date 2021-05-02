@@ -207,6 +207,7 @@ impl SDPMediaRef {
         unsafe { ffi::gst_sdp_media_formats_len(&self.0) }
     }
 
+    #[doc(alias = "get_attribute")]
     pub fn attribute(&self, idx: u32) -> Option<&SDPAttribute> {
         if idx >= self.attributes_len() {
             return None;
@@ -222,6 +223,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_attribute_val")]
     pub fn attribute_val(&self, key: &str) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_attribute_val(&self.0, key.to_glib_none().0);
@@ -233,6 +235,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_attribute_val_n")]
     pub fn attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
@@ -244,6 +247,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_bandwidth")]
     pub fn bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
         if idx >= self.bandwidths_len() {
             return None;
@@ -259,10 +263,12 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_caps_from_media")]
     pub fn caps_from_media(&self, pt: i32) -> Option<gst::Caps> {
         unsafe { from_glib_full(ffi::gst_sdp_media_get_caps_from_media(&self.0, pt)) }
     }
 
+    #[doc(alias = "get_connection")]
     pub fn connection(&self, idx: u32) -> Option<&SDPConnection> {
         if idx >= self.connections_len() {
             return None;
@@ -278,6 +284,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self, idx: u32) -> Option<&str> {
         if idx >= self.formats_len() {
             return None;
@@ -293,6 +300,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_information")]
     pub fn information(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_information(&self.0);
@@ -304,6 +312,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_key")]
     pub fn key(&self) -> Option<&SDPKey> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_key(&self.0);
@@ -315,6 +324,7 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_media")]
     pub fn media(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_media(&self.0);
@@ -326,14 +336,17 @@ impl SDPMediaRef {
         }
     }
 
+    #[doc(alias = "get_num_ports")]
     pub fn num_ports(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_get_num_ports(&self.0) }
     }
 
+    #[doc(alias = "get_port")]
     pub fn port(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_get_port(&self.0) }
     }
 
+    #[doc(alias = "get_proto")]
     pub fn proto(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_media_get_proto(&self.0);

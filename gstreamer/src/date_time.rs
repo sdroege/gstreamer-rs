@@ -223,6 +223,7 @@ impl DateTime {
         }
     }
 
+    #[doc(alias = "get_day")]
     pub fn day(&self) -> Option<i32> {
         if !self.has_day() {
             return None;
@@ -231,6 +232,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_day(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_hour")]
     pub fn hour(&self) -> Option<i32> {
         if !self.has_time() {
             return None;
@@ -239,6 +241,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_hour(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_microsecond")]
     pub fn microsecond(&self) -> Option<i32> {
         if !self.has_second() {
             return None;
@@ -247,6 +250,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_microsecond(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_minute")]
     pub fn minute(&self) -> Option<i32> {
         if !self.has_time() {
             return None;
@@ -255,6 +259,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_minute(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_month")]
     pub fn month(&self) -> Option<i32> {
         if !self.has_month() {
             return None;
@@ -263,6 +268,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_month(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_second")]
     pub fn second(&self) -> Option<i32> {
         if !self.has_second() {
             return None;
@@ -271,6 +277,7 @@ impl DateTime {
         unsafe { Some(ffi::gst_date_time_get_second(self.to_glib_none().0)) }
     }
 
+    #[doc(alias = "get_time_zone_offset")]
     pub fn time_zone_offset(&self) -> Option<f32> {
         if !self.has_time() {
             return None;
@@ -352,6 +359,7 @@ impl cmp::PartialOrd for DateTime {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         #[inline]
         #[allow(clippy::unnecessary_wraps)]
+        #[doc(alias = "get_cmp")]
         fn cmp(delta: i32) -> Option<cmp::Ordering> {
             skip_assert_initialized!();
             Some(delta.cmp(&0))

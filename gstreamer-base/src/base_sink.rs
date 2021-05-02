@@ -6,6 +6,7 @@ use glib::translate::*;
 use std::mem;
 
 pub trait BaseSinkExtManual: 'static {
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 
     fn wait(

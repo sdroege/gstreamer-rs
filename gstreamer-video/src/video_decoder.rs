@@ -36,10 +36,14 @@ pub trait VideoDecoderExtManual: 'static {
         params: Option<&gst::BufferPoolAcquireParams>,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
+    #[doc(alias = "get_frame")]
     fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
+    #[doc(alias = "get_frames")]
     fn frames(&self) -> Vec<VideoCodecFrame>;
+    #[doc(alias = "get_oldest_frame")]
     fn oldest_frame(&self) -> Option<VideoCodecFrame>;
 
+    #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
@@ -47,9 +51,11 @@ pub trait VideoDecoderExtManual: 'static {
     fn release_frame(&self, frame: VideoCodecFrame);
     fn drop_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
 
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
+    #[doc(alias = "get_output_state")]
     fn output_state(&self) -> Option<VideoCodecState<'static, Readable>>;
     fn set_output_state(
         &self,

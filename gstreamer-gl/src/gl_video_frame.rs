@@ -17,6 +17,7 @@ pub trait VideoFrameGLExt {
         info: &'b gst_video::VideoInfo,
     ) -> Result<gst_video::VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError>;
 
+    #[doc(alias = "get_texture_id")]
     fn texture_id(&self, idx: u32) -> Option<u32>;
 }
 

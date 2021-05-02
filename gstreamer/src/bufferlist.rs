@@ -63,6 +63,7 @@ impl BufferListRef {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_14")))]
     #[doc(alias = "gst_buffer_list_get_writable")]
+    #[doc(alias = "get_writable")]
     pub fn get_mut(&mut self, idx: u32) -> Option<&mut BufferRef> {
         unsafe {
             let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);

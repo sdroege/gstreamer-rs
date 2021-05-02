@@ -246,6 +246,7 @@ impl SDPMessageRef {
         unsafe { ffi::gst_sdp_message_emails_len(&self.0) }
     }
 
+    #[doc(alias = "get_attribute")]
     pub fn attribute(&self, idx: u32) -> Option<&SDPAttribute> {
         if idx >= self.attributes_len() {
             return None;
@@ -261,6 +262,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_attribute_val")]
     pub fn attribute_val(&self, key: &str) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_attribute_val(&self.0, key.to_glib_none().0);
@@ -272,6 +274,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_attribute_val_n")]
     pub fn attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
@@ -283,6 +286,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_bandwidth")]
     pub fn bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
         if idx >= self.bandwidths_len() {
             return None;
@@ -298,6 +302,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_connection")]
     pub fn connection(&self) -> Option<&SDPConnection> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_connection(&self.0);
@@ -309,6 +314,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_email")]
     pub fn email(&self, idx: u32) -> Option<&str> {
         if idx >= self.emails_len() {
             return None;
@@ -324,6 +330,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_information")]
     pub fn information(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_information(&self.0);
@@ -335,6 +342,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_key")]
     pub fn key(&self) -> Option<&SDPKey> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_key(&self.0);
@@ -346,6 +354,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_media")]
     pub fn media(&self, idx: u32) -> Option<&SDPMediaRef> {
         if idx >= self.medias_len() {
             return None;
@@ -361,6 +370,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_media_mut")]
     pub fn media_mut(&mut self, idx: u32) -> Option<&mut SDPMediaRef> {
         if idx >= self.medias_len() {
             return None;
@@ -376,6 +386,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_origin")]
     pub fn origin(&self) -> Option<&SDPOrigin> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_origin(&self.0);
@@ -387,6 +398,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_phone")]
     pub fn phone(&self, idx: u32) -> Option<&str> {
         if idx >= self.phones_len() {
             return None;
@@ -402,6 +414,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_session_name")]
     pub fn session_name(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_session_name(&self.0);
@@ -413,6 +426,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_time")]
     pub fn time(&self, idx: u32) -> Option<&SDPTime> {
         if idx >= self.times_len() {
             return None;
@@ -428,6 +442,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_uri")]
     pub fn uri(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_uri(&self.0);
@@ -439,6 +454,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_version")]
     pub fn version(&self) -> Option<&str> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_version(&self.0);
@@ -450,6 +466,7 @@ impl SDPMessageRef {
         }
     }
 
+    #[doc(alias = "get_zone")]
     pub fn zone(&self, idx: u32) -> Option<&SDPZone> {
         if idx >= self.zones_len() {
             return None;

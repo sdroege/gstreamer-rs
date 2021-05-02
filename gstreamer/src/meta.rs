@@ -24,6 +24,7 @@ use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;
 
+    #[doc(alias = "get_meta_api")]
     fn meta_api() -> glib::Type;
 
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
@@ -138,6 +139,7 @@ impl<'a, T: MetaAPI, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
 }
 
 impl<'a, T: MetaAPI> MetaRef<'a, T> {
+    #[doc(alias = "get_api")]
     pub fn api(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -148,6 +150,7 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "get_seqnum")]
     pub fn seqnum(&self) -> MetaSeqnum {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -174,6 +177,7 @@ impl<'a> MetaRef<'a, Meta> {
 }
 
 impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
+    #[doc(alias = "get_api")]
     pub fn api(&self) -> glib::Type {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -184,6 +188,7 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "get_seqnum")]
     pub fn seqnum(&self) -> u64 {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
@@ -232,6 +237,7 @@ unsafe impl Send for Meta {}
 unsafe impl Sync for Meta {}
 
 impl Meta {
+    #[doc(alias = "get_api")]
     fn api(&self) -> glib::Type {
         unsafe { glib::Type::from_glib((*self.0.info).api) }
     }
@@ -270,10 +276,12 @@ impl ParentBufferMeta {
         }
     }
 
+    #[doc(alias = "get_parent")]
     pub fn parent(&self) -> &BufferRef {
         unsafe { BufferRef::from_ptr(self.0.buffer) }
     }
 
+    #[doc(alias = "get_parent_owned")]
     pub fn parent_owned(&self) -> Buffer {
         unsafe { from_glib_none(self.0.buffer) }
     }
@@ -311,10 +319,12 @@ impl ProtectionMeta {
         }
     }
 
+    #[doc(alias = "get_info")]
     pub fn info(&self) -> &crate::StructureRef {
         unsafe { crate::StructureRef::from_glib_borrow(self.0.info) }
     }
 
+    #[doc(alias = "get_info_mut")]
     pub fn info_mut(&mut self) -> &mut crate::StructureRef {
         unsafe { crate::StructureRef::from_glib_borrow_mut(self.0.info) }
     }
@@ -370,18 +380,22 @@ impl ReferenceTimestampMeta {
         }
     }
 
+    #[doc(alias = "get_reference")]
     pub fn reference(&self) -> &CapsRef {
         unsafe { CapsRef::from_ptr(self.0.reference) }
     }
 
+    #[doc(alias = "get_parent_owned")]
     pub fn parent_owned(&self) -> Caps {
         unsafe { from_glib_none(self.0.reference) }
     }
 
+    #[doc(alias = "get_timestamp")]
     pub fn timestamp(&self) -> ClockTime {
         unsafe { from_glib(self.0.timestamp) }
     }
 
+    #[doc(alias = "get_duration")]
     pub fn duration(&self) -> ClockTime {
         unsafe { from_glib(self.0.duration) }
     }

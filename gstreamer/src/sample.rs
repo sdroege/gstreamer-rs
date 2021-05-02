@@ -106,6 +106,7 @@ impl Sample {
 }
 
 impl SampleRef {
+    #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> Option<&BufferRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_buffer(self.as_mut_ptr());
@@ -117,10 +118,12 @@ impl SampleRef {
         }
     }
 
+    #[doc(alias = "get_buffer_owned")]
     pub fn buffer_owned(&self) -> Option<Buffer> {
         unsafe { self.buffer().map(|buffer| from_glib_none(buffer.as_ptr())) }
     }
 
+    #[doc(alias = "get_buffer_list")]
     pub fn buffer_list(&self) -> Option<&BufferListRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_buffer_list(self.as_mut_ptr());
@@ -132,10 +135,12 @@ impl SampleRef {
         }
     }
 
+    #[doc(alias = "get_buffer_list_owned")]
     pub fn buffer_list_owned(&self) -> Option<BufferList> {
         unsafe { self.buffer_list().map(|list| from_glib_none(list.as_ptr())) }
     }
 
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Option<&CapsRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_caps(self.as_mut_ptr());
@@ -147,14 +152,17 @@ impl SampleRef {
         }
     }
 
+    #[doc(alias = "get_caps_owned")]
     pub fn caps_owned(&self) -> Option<Caps> {
         unsafe { self.caps().map(|caps| from_glib_none(caps.as_ptr())) }
     }
 
+    #[doc(alias = "get_segment")]
     pub fn segment(&self) -> Option<Segment> {
         unsafe { from_glib_none(ffi::gst_sample_get_segment(self.as_mut_ptr())) }
     }
 
+    #[doc(alias = "get_info")]
     pub fn info(&self) -> Option<&StructureRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_info(self.as_mut_ptr());

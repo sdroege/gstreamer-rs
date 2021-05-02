@@ -13,6 +13,7 @@ use std::fmt;
 pub struct AudioRingBufferSpec(pub(crate) GstAudioRingBufferSpec);
 
 impl AudioRingBufferSpec {
+    #[doc(alias = "get_type")]
     pub fn type_(&self) -> AudioRingBufferFormatType {
         unsafe { AudioRingBufferFormatType::from_glib(self.0.type_) }
     }
@@ -21,14 +22,17 @@ impl AudioRingBufferSpec {
         self.0.type_ = value.into_glib();
     }
 
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Caps {
         unsafe { Caps::from_glib_none(self.0.caps) }
     }
 
+    #[doc(alias = "get_audio_info")]
     pub fn audio_info(&self) -> AudioInfo {
         unsafe { AudioInfo::from_glib_none(mut_override(&self.0.info)) }
     }
 
+    #[doc(alias = "get_latency_time")]
     pub fn latency_time(&self) -> u64 {
         self.0.latency_time
     }
@@ -37,6 +41,7 @@ impl AudioRingBufferSpec {
         self.0.latency_time = value;
     }
 
+    #[doc(alias = "get_buffer_time")]
     pub fn buffer_time(&self) -> u64 {
         self.0.buffer_time
     }
@@ -45,6 +50,7 @@ impl AudioRingBufferSpec {
         self.0.buffer_time = value;
     }
 
+    #[doc(alias = "get_segsize")]
     pub fn segsize(&self) -> i32 {
         self.0.segsize
     }
@@ -53,6 +59,7 @@ impl AudioRingBufferSpec {
         self.0.segsize = value;
     }
 
+    #[doc(alias = "get_segtotal")]
     pub fn segtotal(&self) -> i32 {
         self.0.segtotal
     }
@@ -61,6 +68,7 @@ impl AudioRingBufferSpec {
         self.0.segtotal = value;
     }
 
+    #[doc(alias = "get_seglatency")]
     pub fn seglatency(&self) -> i32 {
         self.0.seglatency
     }

@@ -9,7 +9,9 @@ use std::ptr;
 use crate::video_info::VideoInfo;
 
 pub trait VideoCodecStateContext<'a> {
+    #[doc(alias = "get_element")]
     fn element(&self) -> Option<&'a dyn HasStreamLock>;
+    #[doc(alias = "get_element_as_ptr")]
     fn element_as_ptr(&self) -> *const gst::ffi::GstElement;
 }
 
@@ -87,6 +89,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
 }
 
 impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
+    #[doc(alias = "get_info")]
     pub fn info(&self) -> VideoInfo {
         unsafe {
             let ptr = &((*self.as_mut_ptr()).info) as *const _ as usize as *mut _;
@@ -94,6 +97,7 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
         }
     }
 
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Option<&gst::CapsRef> {
         unsafe {
             let ptr = (*self.as_mut_ptr()).caps;
@@ -106,6 +110,7 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
         }
     }
 
+    #[doc(alias = "get_codec_data")]
     pub fn codec_data(&self) -> Option<&gst::BufferRef> {
         unsafe {
             let ptr = (*self.as_mut_ptr()).codec_data;
@@ -118,6 +123,7 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
         }
     }
 
+    #[doc(alias = "get_allocation_caps")]
     pub fn allocation_caps(&self) -> Option<&gst::CapsRef> {
         unsafe {
             let ptr = (*self.as_mut_ptr()).allocation_caps;

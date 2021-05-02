@@ -8,8 +8,10 @@ use std::ptr;
 use crate::BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
+    #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
+    #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment;
 
     fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>);

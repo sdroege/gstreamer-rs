@@ -18,8 +18,10 @@ pub trait GstObjectExtManual: 'static {
 
     fn unset_object_flags(&self, flags: ObjectFlags);
 
+    #[doc(alias = "get_object_flags")]
     fn object_flags(&self) -> ObjectFlags;
 
+    #[doc(alias = "get_g_value_array")]
     fn g_value_array(
         &self,
         property_name: &str,

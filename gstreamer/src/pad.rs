@@ -113,7 +113,9 @@ pub trait PadExtManual: 'static {
         buffer: &mut crate::BufferRef,
         size: u32,
     ) -> Result<(), FlowError>;
+    #[doc(alias = "get_range")]
     fn range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
+    #[doc(alias = "get_range_fill")]
     fn range_fill(
         &self,
         offset: u64,
@@ -135,6 +137,7 @@ pub trait PadExtManual: 'static {
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 
+    #[doc(alias = "get_last_flow_result")]
     fn last_flow_result(&self) -> Result<FlowSuccess, FlowError>;
 
     fn iterate_internal_links(&self) -> crate::Iterator<Pad>;
@@ -258,6 +261,7 @@ pub trait PadExtManual: 'static {
     fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
+    #[doc(alias = "get_mode")]
     fn mode(&self) -> crate::PadMode;
 
     fn sticky_events_foreach<F: FnMut(Event) -> Result<Option<Event>, Option<Event>>>(
@@ -271,6 +275,7 @@ pub trait PadExtManual: 'static {
 
     fn unset_pad_flags(&self, flags: PadFlags);
 
+    #[doc(alias = "get_pad_flags")]
     fn pad_flags(&self) -> PadFlags;
 }
 

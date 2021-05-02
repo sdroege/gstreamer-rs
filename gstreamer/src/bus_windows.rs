@@ -19,6 +19,7 @@ cfg_if::cfg_if! {
 use super::Bus;
 
 pub trait WindowsBusExtManual: 'static {
+    #[doc(alias = "get_pollfd")]
     fn pollfd(&self) -> windows::io::RawHandle;
 }
 

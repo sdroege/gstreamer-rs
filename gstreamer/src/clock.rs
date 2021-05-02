@@ -33,6 +33,7 @@ glib::wrapper! {
 }
 
 impl ClockId {
+    #[doc(alias = "get_time")]
     pub fn time(&self) -> ClockTime {
         unsafe { from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0)) }
     }
@@ -59,6 +60,7 @@ impl ClockId {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "get_clock")]
     pub fn clock(&self) -> Option<Clock> {
         unsafe { from_glib_full(ffi::gst_clock_id_get_clock(self.to_glib_none().0)) }
     }
@@ -74,6 +76,7 @@ impl ClockId {
         }
     }
 
+    #[doc(alias = "get_type")]
     pub fn type_(&self) -> ClockEntryType {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
@@ -81,6 +84,7 @@ impl ClockId {
         }
     }
 
+    #[doc(alias = "get_status")]
     pub fn status(&self) -> &AtomicClockReturn {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
@@ -222,6 +226,7 @@ impl convert::TryFrom<ClockId> for PeriodicClockId {
 }
 
 impl PeriodicClockId {
+    #[doc(alias = "get_interval")]
     pub fn interval(&self) -> ClockTime {
         unsafe {
             let ptr: *mut ffi::GstClockEntry = self.to_glib_none().0 as *mut _;
@@ -395,6 +400,7 @@ pub trait ClockExtManual: 'static {
 
     fn unset_clock_flags(&self, flags: ClockFlags);
 
+    #[doc(alias = "get_clock_flags")]
     fn clock_flags(&self) -> ClockFlags;
 }
 

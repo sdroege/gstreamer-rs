@@ -17,10 +17,12 @@ impl WebRTCSessionDescription {
         }
     }
 
+    #[doc(alias = "get_type")]
     pub fn type_(&self) -> crate::WebRTCSDPType {
         unsafe { from_glib((*self.to_glib_none().0).type_) }
     }
 
+    #[doc(alias = "get_sdp")]
     pub fn sdp(&self) -> gst_sdp::SDPMessage {
         unsafe { from_glib_none((*self.to_glib_none().0).sdp) }
     }

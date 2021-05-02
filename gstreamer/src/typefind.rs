@@ -17,6 +17,7 @@ pub struct TypeFind(ffi::GstTypeFind);
 pub trait TypeFindImpl {
     fn peek(&mut self, offset: i64, size: u32) -> Option<&[u8]>;
     fn suggest(&mut self, probability: TypeFindProbability, caps: &Caps);
+    #[doc(alias = "get_length")]
     fn length(&self) -> Option<u64> {
         None
     }
@@ -75,6 +76,7 @@ impl TypeFind {
         }
     }
 
+    #[doc(alias = "get_length")]
     pub fn length(&mut self) -> Option<u64> {
         unsafe {
             let len = ffi::gst_type_find_get_length(&mut self.0);

@@ -394,6 +394,7 @@ impl StructureRef {
         self.get_optional_by_quark(name)
     }
 
+    #[doc(alias = "get_value")]
     pub fn value(&self, name: &str) -> Result<&SendValue, GetError> {
         let name = glib::Quark::from_string(name);
         self.value_by_quark(name)
@@ -458,6 +459,7 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "get_name")]
     pub fn name<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(ffi::gst_structure_get_name(&self.0))
@@ -533,6 +535,7 @@ impl StructureRef {
         Iter::new(self)
     }
 
+    #[doc(alias = "get_nth_field_name")]
     pub fn nth_field_name<'a>(&self, idx: u32) -> Option<&'a str> {
         unsafe {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);

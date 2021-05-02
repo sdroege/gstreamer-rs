@@ -33,6 +33,7 @@ pub trait GstBinExtManual: 'static {
     fn iterate_sinks(&self) -> crate::Iterator<Element>;
     fn iterate_sorted(&self) -> crate::Iterator<Element>;
     fn iterate_sources(&self) -> crate::Iterator<Element>;
+    #[doc(alias = "get_children")]
     fn children(&self) -> Vec<Element>;
 
     fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString;
@@ -51,6 +52,7 @@ pub trait GstBinExtManual: 'static {
 
     fn unset_bin_flags(&self, flags: BinFlags);
 
+    #[doc(alias = "get_bin_flags")]
     fn bin_flags(&self) -> BinFlags;
 }
 

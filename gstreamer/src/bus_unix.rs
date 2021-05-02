@@ -19,6 +19,7 @@ cfg_if::cfg_if! {
 use super::Bus;
 
 pub trait UnixBusExtManual: 'static {
+    #[doc(alias = "get_pollfd")]
     fn pollfd(&self) -> unix::io::RawFd;
 }
 

@@ -552,6 +552,7 @@ impl VideoTimeCodeMeta {
         }
     }
 
+    #[doc(alias = "get_tc")]
     pub fn tc(&self) -> ValidVideoTimeCode {
         unsafe { ValidVideoTimeCode::from_glib_none(&self.0.tc as *const _) }
     }

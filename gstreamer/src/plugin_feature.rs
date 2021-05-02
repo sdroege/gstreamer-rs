@@ -7,6 +7,7 @@ use glib::prelude::*;
 use glib::translate::{from_glib, FromGlibPtrFull, IntoGlib, ToGlibPtr};
 
 pub trait PluginFeatureExtManual: Sized + 'static {
+    #[doc(alias = "get_rank")]
     fn rank(&self) -> Rank;
     fn set_rank(&self, rank: Rank);
     fn load(&self) -> Result<Self, glib::BoolError>;

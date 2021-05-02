@@ -687,6 +687,7 @@ impl StateChange {
         }
     }
 
+    #[doc(alias = "get_name")]
     pub fn name<'a>(self) -> &'a str {
         cfg_if::cfg_if! {
             if #[cfg(feature = "v1_14")] {

@@ -47,7 +47,9 @@ impl_common_ops_for_opt_int!(Percent);
 pub struct TryFromGenericFormattedValueError(());
 
 pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + 'static {
+    #[doc(alias = "get_default_format")]
     fn default_format() -> Format;
+    #[doc(alias = "get_format")]
     fn format(&self) -> Format;
 
     unsafe fn from_raw(format: Format, value: i64) -> Self;
@@ -104,6 +106,7 @@ impl GenericFormattedValue {
         }
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> Format {
         match *self {
             Self::Undefined(_) => Format::Undefined,
@@ -116,6 +119,7 @@ impl GenericFormattedValue {
         }
     }
 
+    #[doc(alias = "get_value")]
     pub fn value(&self) -> i64 {
         match *self {
             Self::Undefined(v) => v.0,

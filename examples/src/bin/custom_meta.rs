@@ -45,6 +45,7 @@ mod custom_meta {
         }
 
         // Retrieve the stored label.
+        #[doc(alias = "get_label")]
         pub fn label(&self) -> &str {
             self.0.label.as_str()
         }

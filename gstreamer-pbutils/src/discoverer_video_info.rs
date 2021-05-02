@@ -5,6 +5,7 @@ use crate::DiscovererVideoInfo;
 use glib::translate::*;
 
 impl DiscovererVideoInfo {
+    #[doc(alias = "get_framerate")]
     pub fn framerate(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(
@@ -14,6 +15,7 @@ impl DiscovererVideoInfo {
         }
     }
 
+    #[doc(alias = "get_par")]
     pub fn par(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(

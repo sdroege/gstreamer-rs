@@ -9,6 +9,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 impl Plugin {
+    #[doc(alias = "get_cache_data")]
     pub fn cache_data(&self) -> Option<&StructureRef> {
         unsafe {
             let cache_data = ffi::gst_plugin_get_cache_data(self.to_glib_none().0);
@@ -28,8 +29,10 @@ impl Plugin {
 }
 
 pub trait GstPluginExtManual: 'static {
+    #[doc(alias = "get_plugin_flags")]
     fn plugin_flags(&self) -> PluginFlags;
 
+    #[doc(alias = "get_plugin_name")]
     fn plugin_name(&self) -> glib::GString;
 }
 

@@ -43,6 +43,7 @@ pub trait AudioDecoderExtManual: 'static {
 
     fn set_output_format(&self, info: &AudioInfo) -> Result<(), gst::FlowError>;
 
+    #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     #[allow(clippy::too_many_arguments)]

@@ -17,6 +17,7 @@ impl StaticPadTemplate {
         unsafe { from_glib_full(ffi::gst_static_pad_template_get(self.0.as_ptr())) }
     }
 
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> Caps {
         unsafe { from_glib_full(ffi::gst_static_pad_template_get_caps(self.0.as_ptr())) }
     }

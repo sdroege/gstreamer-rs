@@ -6,6 +6,7 @@ use glib::translate::*;
 use std::ptr;
 
 pub trait TimelineElementExtManual: 'static {
+    #[doc(alias = "get_child_property")]
     fn child_property(&self, name: &str) -> Option<glib::Value>;
     fn set_child_property(
         &self,

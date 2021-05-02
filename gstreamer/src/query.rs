@@ -16,6 +16,7 @@ mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
 });
 
 impl QueryRef {
+    #[doc(alias = "get_structure")]
     pub fn structure(&self) -> Option<&StructureRef> {
         unsafe {
             let structure = ffi::gst_query_get_structure(self.as_mut_ptr());
@@ -27,6 +28,7 @@ impl QueryRef {
         }
     }
 
+    #[doc(alias = "get_mut_structure")]
     pub fn structure_mut(&mut self) -> &mut StructureRef {
         unsafe {
             let structure = ffi::gst_query_writable_structure(self.as_mut_ptr());
@@ -223,6 +225,7 @@ impl Position<Query> {
 }
 
 impl<T: AsPtr> Position<T> {
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -234,6 +237,7 @@ impl<T: AsPtr> Position<T> {
         }
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -264,6 +268,7 @@ impl Duration<Query> {
 }
 
 impl<T: AsPtr> Duration<T> {
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -275,6 +280,7 @@ impl<T: AsPtr> Duration<T> {
         }
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -311,6 +317,7 @@ impl Default for Latency<Query> {
 }
 
 impl<T: AsPtr> Latency<T> {
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> (bool, crate::ClockTime, crate::ClockTime) {
         unsafe {
             let mut live = mem::MaybeUninit::uninit();
@@ -355,6 +362,7 @@ impl Seeking<Query> {
 }
 
 impl<T: AsPtr> Seeking<T> {
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> (bool, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -377,6 +385,7 @@ impl<T: AsPtr> Seeking<T> {
         }
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -422,6 +431,7 @@ impl Segment<Query> {
 }
 
 impl<T: AsPtr> Segment<T> {
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> (f64, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut rate = mem::MaybeUninit::uninit();
@@ -444,6 +454,7 @@ impl<T: AsPtr> Segment<T> {
         }
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -495,6 +506,7 @@ impl Convert<Query> {
 }
 
 impl<T: AsPtr> Convert<T> {
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut src_fmt = mem::MaybeUninit::uninit();
@@ -569,6 +581,7 @@ impl Default for Formats<Query> {
 }
 
 impl<T: AsPtr> Formats<T> {
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> Vec<crate::Format> {
         unsafe {
             let mut n = mem::MaybeUninit::uninit();
@@ -609,6 +622,7 @@ impl Buffering<Query> {
 }
 
 impl<T: AsPtr> Buffering<T> {
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> crate::Format {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -625,6 +639,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
+    #[doc(alias = "get_percent")]
     pub fn percent(&self) -> (bool, i32) {
         unsafe {
             let mut busy = mem::MaybeUninit::uninit();
@@ -640,6 +655,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
+    #[doc(alias = "get_range")]
     pub fn range(&self) -> (GenericFormattedValue, GenericFormattedValue, i64) {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -662,6 +678,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
+    #[doc(alias = "get_stats")]
     pub fn stats(&self) -> (crate::BufferingMode, i32, i32, i64) {
         unsafe {
             let mut mode = mem::MaybeUninit::uninit();
@@ -686,6 +703,7 @@ impl<T: AsPtr> Buffering<T> {
         }
     }
 
+    #[doc(alias = "get_ranges")]
     pub fn ranges(&self) -> Vec<(GenericFormattedValue, GenericFormattedValue)> {
         unsafe {
             let mut fmt = mem::MaybeUninit::uninit();
@@ -821,6 +839,7 @@ impl Default for Uri<Query> {
 }
 
 impl<T: AsPtr> Uri<T> {
+    #[doc(alias = "get_uri")]
     pub fn uri(&self) -> Option<String> {
         unsafe {
             let mut uri = ptr::null_mut();
@@ -829,6 +848,7 @@ impl<T: AsPtr> Uri<T> {
         }
     }
 
+    #[doc(alias = "get_redirection")]
     pub fn redirection(&self) -> (Option<String>, bool) {
         unsafe {
             let mut uri = ptr::null_mut();
@@ -895,6 +915,7 @@ impl<T: AsPtr> Allocation<T> {
         }
     }
 
+    #[doc(alias = "get_allocation_pools")]
     pub fn allocation_pools(&self) -> Vec<(Option<crate::BufferPool>, u32, u32, u32)> {
         unsafe {
             let n = ffi::gst_query_get_n_allocation_pools(self.0.as_ptr());
@@ -925,6 +946,7 @@ impl<T: AsPtr> Allocation<T> {
         }
     }
 
+    #[doc(alias = "get_allocation_metas")]
     pub fn allocation_metas(&self) -> Vec<(glib::Type, Option<&crate::StructureRef>)> {
         unsafe {
             let n = ffi::gst_query_get_n_allocation_metas(self.0.as_ptr());
@@ -1073,6 +1095,7 @@ impl<T: AsPtr> Scheduling<T> {
         }
     }
 
+    #[doc(alias = "get_scheduling_modes")]
     pub fn scheduling_modes(&self) -> Vec<crate::PadMode> {
         unsafe {
             let n = ffi::gst_query_get_n_scheduling_modes(self.0.as_ptr());
@@ -1088,6 +1111,7 @@ impl<T: AsPtr> Scheduling<T> {
         }
     }
 
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> (crate::SchedulingFlags, i32, i32, i32) {
         unsafe {
             let mut flags = mem::MaybeUninit::uninit();
@@ -1148,6 +1172,7 @@ impl AcceptCaps<Query> {
 }
 
 impl<T: AsPtr> AcceptCaps<T> {
+    #[doc(alias = "get_caps")]
     pub fn caps(&self) -> &crate::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -1156,10 +1181,12 @@ impl<T: AsPtr> AcceptCaps<T> {
         }
     }
 
+    #[doc(alias = "get_caps_owned")]
     pub fn caps_owned(&self) -> crate::Caps {
         unsafe { from_glib_none(self.caps().as_ptr()) }
     }
 
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> bool {
         unsafe {
             let mut accepted = mem::MaybeUninit::uninit();
@@ -1190,6 +1217,7 @@ impl Caps<Query> {
 }
 
 impl<T: AsPtr> Caps<T> {
+    #[doc(alias = "get_filter")]
     pub fn filter(&self) -> Option<&crate::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -1202,10 +1230,12 @@ impl<T: AsPtr> Caps<T> {
         }
     }
 
+    #[doc(alias = "get_filter_owned")]
     pub fn filter_owned(&self) -> Option<crate::Caps> {
         unsafe { self.filter().map(|caps| from_glib_none(caps.as_ptr())) }
     }
 
+    #[doc(alias = "get_result")]
     pub fn result(&self) -> Option<&crate::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -1218,6 +1248,7 @@ impl<T: AsPtr> Caps<T> {
         }
     }
 
+    #[doc(alias = "get_result_owned")]
     pub fn result_owned(&self) -> Option<crate::Caps> {
         unsafe { self.result().map(|caps| from_glib_none(caps.as_ptr())) }
     }
@@ -1258,6 +1289,7 @@ impl Context<Query> {
 }
 
 impl<T: AsPtr> Context<T> {
+    #[doc(alias = "get_context")]
     pub fn context(&self) -> Option<&crate::ContextRef> {
         unsafe {
             let mut context = ptr::null_mut();
@@ -1270,6 +1302,7 @@ impl<T: AsPtr> Context<T> {
         }
     }
 
+    #[doc(alias = "get_context_owned")]
     pub fn context_owned(&self) -> Option<crate::Context> {
         unsafe {
             self.context()
@@ -1277,6 +1310,7 @@ impl<T: AsPtr> Context<T> {
         }
     }
 
+    #[doc(alias = "get_context_type")]
     pub fn context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
@@ -1316,6 +1350,7 @@ impl Default for Bitrate<Query> {
 impl<T: AsPtr> Bitrate<T> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "get_bitrate")]
     pub fn bitrate(&self) -> u32 {
         unsafe {
             let mut bitrate = mem::MaybeUninit::uninit();

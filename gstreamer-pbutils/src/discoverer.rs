@@ -22,6 +22,7 @@ impl Discoverer {
         }
     }
 
+    #[doc(alias = "get_property_timeout")]
     pub fn property_timeout(&self) -> gst::ClockTime {
         let mut value = Value::from(&0u64);
         unsafe {

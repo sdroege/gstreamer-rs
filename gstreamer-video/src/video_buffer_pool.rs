@@ -34,18 +34,23 @@ pub static BUFFER_POOL_OPTION_VIDEO_META: Lazy<&'static str> = Lazy::new(|| unsa
 pub struct VideoAlignment(pub(crate) ffi::GstVideoAlignment);
 
 impl VideoAlignment {
+    #[doc(alias = "get_padding_top")]
     pub fn padding_top(&self) -> u32 {
         self.0.padding_top
     }
+    #[doc(alias = "get_padding_bottom")]
     pub fn padding_bottom(&self) -> u32 {
         self.0.padding_bottom
     }
+    #[doc(alias = "get_padding_left")]
     pub fn padding_left(&self) -> u32 {
         self.0.padding_left
     }
+    #[doc(alias = "get_padding_right")]
     pub fn padding_right(&self) -> u32 {
         self.0.padding_right
     }
+    #[doc(alias = "get_stride_align")]
     pub fn stride_align(&self) -> &[u32; ffi::GST_VIDEO_MAX_PLANES as usize] {
         &self.0.stride_align
     }
@@ -93,6 +98,7 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstVideoAlignment> for VideoAlignment {
 }
 
 pub trait VideoBufferPoolConfig {
+    #[doc(alias = "get_video_alignment")]
     fn video_alignment(&self) -> Option<VideoAlignment>;
 
     fn set_video_alignment(&mut self, align: &VideoAlignment);

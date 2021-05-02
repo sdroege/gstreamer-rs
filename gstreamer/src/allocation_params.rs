@@ -13,18 +13,22 @@ unsafe impl Send for AllocationParams {}
 unsafe impl Sync for AllocationParams {}
 
 impl AllocationParams {
+    #[doc(alias = "get_flags")]
     pub fn flags(&self) -> MemoryFlags {
         unsafe { from_glib(self.0.flags) }
     }
 
+    #[doc(alias = "get_align")]
     pub fn align(&self) -> usize {
         self.0.align
     }
 
+    #[doc(alias = "get_prefix")]
     pub fn prefix(&self) -> usize {
         self.0.prefix
     }
 
+    #[doc(alias = "get_padding")]
     pub fn padding(&self) -> usize {
         self.0.padding
     }

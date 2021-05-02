@@ -10,6 +10,7 @@ pub trait GstPipelineExtManual: 'static {
 
     fn unset_pipeline_flags(&self, flags: PipelineFlags);
 
+    #[doc(alias = "get_pipeline_flags")]
     fn pipeline_flags(&self) -> PipelineFlags;
 }
 

@@ -6,6 +6,7 @@ use glib::prelude::*;
 use glib::translate::*;
 
 pub trait ControlSourceExtManual: 'static {
+    #[doc(alias = "get_value_array")]
     fn value_array(
         &self,
         timestamp: ClockTime,

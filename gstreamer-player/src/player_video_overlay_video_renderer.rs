@@ -40,6 +40,7 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
+    #[doc(alias = "get_window_handle")]
     pub unsafe fn window_handle(&self) -> uintptr_t {
         ffi::gst_player_video_overlay_video_renderer_get_window_handle(self.to_glib_none().0)
             as uintptr_t

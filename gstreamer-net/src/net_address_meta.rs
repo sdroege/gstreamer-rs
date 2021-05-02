@@ -26,6 +26,7 @@ impl NetAddressMeta {
         }
     }
 
+    #[doc(alias = "get_addr")]
     pub fn addr(&self) -> gio::SocketAddress {
         unsafe { from_glib_none(self.0.addr) }
     }

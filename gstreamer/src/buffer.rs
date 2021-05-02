@@ -296,10 +296,12 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> usize {
         unsafe { ffi::gst_buffer_get_size(self.as_mut_ptr()) }
     }
 
+    #[doc(alias = "get_maxsize")]
     pub fn maxsize(&self) -> usize {
         unsafe {
             let mut maxsize = mem::MaybeUninit::uninit();
@@ -323,6 +325,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "get_offset")]
     pub fn offset(&self) -> u64 {
         self.0.offset
     }
@@ -331,6 +334,7 @@ impl BufferRef {
         self.0.offset = offset;
     }
 
+    #[doc(alias = "get_offset_end")]
     pub fn offset_end(&self) -> u64 {
         self.0.offset_end
     }
@@ -339,6 +343,7 @@ impl BufferRef {
         self.0.offset_end = offset_end;
     }
 
+    #[doc(alias = "get_pts")]
     pub fn pts(&self) -> ClockTime {
         unsafe { from_glib(self.0.pts) }
     }
@@ -347,6 +352,7 @@ impl BufferRef {
         self.0.pts = pts.into_glib();
     }
 
+    #[doc(alias = "get_dts")]
     pub fn dts(&self) -> ClockTime {
         unsafe { from_glib(self.0.dts) }
     }
@@ -355,6 +361,7 @@ impl BufferRef {
         self.0.dts = dts.into_glib();
     }
 
+    #[doc(alias = "get_dts_or_pts")]
     pub fn dts_or_pts(&self) -> ClockTime {
         let val = self.dts();
         if val.is_none() {
@@ -364,6 +371,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "get_duration")]
     pub fn duration(&self) -> ClockTime {
         unsafe { from_glib(self.0.duration) }
     }
@@ -372,6 +380,7 @@ impl BufferRef {
         self.0.duration = duration.into_glib();
     }
 
+    #[doc(alias = "get_flags")]
     pub fn flags(&self) -> BufferFlags {
         BufferFlags::from_bits_truncate(self.0.mini_object.flags)
     }
@@ -384,6 +393,7 @@ impl BufferRef {
         self.0.mini_object.flags &= !flags.bits();
     }
 
+    #[doc(alias = "get_meta")]
     pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
@@ -395,6 +405,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "get_meta_mut")]
     pub fn meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
@@ -500,6 +511,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "get_all_memory")]
     pub fn all_memory(&self) -> Option<Memory> {
         unsafe {
             let res = ffi::gst_buffer_get_all_memory(self.as_mut_ptr());
@@ -511,10 +523,12 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "get_max_memory")]
     pub fn max_memory() -> u32 {
         unsafe { ffi::gst_buffer_get_max_memory() }
     }
 
+    #[doc(alias = "get_memory")]
     pub fn memory(&self, idx: u32) -> Option<Memory> {
         if idx >= self.n_memory() {
             None
@@ -530,6 +544,7 @@ impl BufferRef {
         }
     }
 
+    #[doc(alias = "get_memory_range")]
     pub fn memory_range(&self, idx: u32, length: Option<u32>) -> Option<Memory> {
         assert!(idx + length.unwrap_or(0) < self.n_memory());
         unsafe {
@@ -934,10 +949,12 @@ impl PartialEq for BufferRef {
 impl Eq for BufferRef {}
 
 impl<'a, T> BufferMap<'a, T> {
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
+    #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> &BufferRef {
         self.buffer
     }
@@ -1009,10 +1026,12 @@ impl<T> MappedBuffer<T> {
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
+    #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> &BufferRef {
         self.buffer.as_ref().unwrap().as_ref()
     }

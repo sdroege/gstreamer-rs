@@ -19,6 +19,7 @@ use std::mem::transmute;
 use std::ptr;
 
 pub trait AggregatorExtManual: 'static {
+    #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
@@ -32,6 +33,7 @@ pub trait AggregatorExtManual: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "get_property_min_upstream_latency")]
     fn min_upstream_latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]

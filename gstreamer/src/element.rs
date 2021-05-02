@@ -113,6 +113,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
 }
 
 pub trait ElementExtManual: 'static {
+    #[doc(alias = "get_element_class")]
     fn element_class(&self) -> &glib::Class<Element>;
 
     fn change_state(&self, transition: StateChange)
@@ -122,16 +123,19 @@ pub trait ElementExtManual: 'static {
         ret: StateChangeReturn,
     ) -> Result<StateChangeSuccess, StateChangeError>;
 
+    #[doc(alias = "get_state")]
     fn state(
         &self,
         timeout: ClockTime,
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State);
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError>;
 
+    #[doc(alias = "get_current_state")]
     fn current_state(&self) -> State {
         self.state(ClockTime::from(0)).1
     }
 
+    #[doc(alias = "get_pending_state")]
     fn pending_state(&self) -> State {
         self.state(ClockTime::from(0)).2
     }
@@ -140,9 +144,12 @@ pub trait ElementExtManual: 'static {
 
     fn send_event(&self, event: Event) -> bool;
 
+    #[doc(alias = "get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str>;
 
+    #[doc(alias = "get_pad_template")]
     fn pad_template(&self, name: &str) -> Option<PadTemplate>;
+    #[doc(alias = "get_pad_template_list")]
     fn pad_template_list(&self) -> Vec<PadTemplate>;
 
     #[allow(clippy::too_many_arguments)]
@@ -161,6 +168,7 @@ pub trait ElementExtManual: 'static {
 
     fn unset_element_flags(&self, flags: ElementFlags);
 
+    #[doc(alias = "get_element_flags")]
     fn element_flags(&self) -> ElementFlags;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -185,8 +193,11 @@ pub trait ElementExtManual: 'static {
     fn iterate_sink_pads(&self) -> crate::Iterator<Pad>;
     fn iterate_src_pads(&self) -> crate::Iterator<Pad>;
 
+    #[doc(alias = "get_pads")]
     fn pads(&self) -> Vec<Pad>;
+    #[doc(alias = "get_sink_pads")]
     fn sink_pads(&self) -> Vec<Pad>;
+    #[doc(alias = "get_src_pads")]
     fn src_pads(&self) -> Vec<Pad>;
 
     fn num_pads(&self) -> u16;
@@ -257,7 +268,9 @@ pub trait ElementExtManual: 'static {
         F: FnOnce(&Self) -> T + Send + 'static,
         T: Send + 'static;
 
+    #[doc(alias = "get_current_running_time")]
     fn current_running_time(&self) -> crate::ClockTime;
+    #[doc(alias = "get_current_clock_time")]
     fn current_clock_time(&self) -> crate::ClockTime;
 }
 
@@ -830,6 +843,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 }
 
 pub unsafe trait ElementClassExt {
+    #[doc(alias = "get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
@@ -844,6 +858,7 @@ pub unsafe trait ElementClassExt {
         }
     }
 
+    #[doc(alias = "get_pad_template")]
     fn pad_template(&self, name: &str) -> Option<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;
@@ -855,6 +870,7 @@ pub unsafe trait ElementClassExt {
         }
     }
 
+    #[doc(alias = "get_pad_template_list")]
     fn pad_template_list(&self) -> Vec<PadTemplate> {
         unsafe {
             let klass = self as *const _ as *const ffi::GstElementClass;

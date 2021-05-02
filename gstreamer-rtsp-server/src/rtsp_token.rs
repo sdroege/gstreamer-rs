@@ -33,6 +33,7 @@ impl RTSPToken {
 }
 
 impl RTSPTokenRef {
+    #[doc(alias = "get_string")]
     pub fn string(&self, field: &str) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_token_get_string(
@@ -42,6 +43,7 @@ impl RTSPTokenRef {
         }
     }
 
+    #[doc(alias = "get_structure")]
     pub fn structure(&self) -> Option<gst::Structure> {
         unsafe { from_glib_none(ffi::gst_rtsp_token_get_structure(self.as_mut_ptr())) }
     }
@@ -55,6 +57,7 @@ impl RTSPTokenRef {
         }
     }
 
+    #[doc(alias = "get_mut_structure")]
     pub fn structure_mut(&mut self) -> Option<&mut gst::StructureRef> {
         unsafe {
             let structure = ffi::gst_rtsp_token_writable_structure(self.as_mut_ptr());

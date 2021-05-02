@@ -166,10 +166,12 @@ impl Memory {
 }
 
 impl MemoryRef {
+    #[doc(alias = "get_allocator")]
     pub fn allocator(&self) -> Option<Allocator> {
         unsafe { from_glib_none(self.0.allocator) }
     }
 
+    #[doc(alias = "get_parent")]
     pub fn parent(&self) -> Option<&MemoryRef> {
         unsafe {
             if self.0.parent.is_null() {
@@ -180,22 +182,27 @@ impl MemoryRef {
         }
     }
 
+    #[doc(alias = "get_maxsize")]
     pub fn maxsize(&self) -> usize {
         self.0.maxsize
     }
 
+    #[doc(alias = "get_align")]
     pub fn align(&self) -> usize {
         self.0.align
     }
 
+    #[doc(alias = "get_offset")]
     pub fn offset(&self) -> usize {
         self.0.offset
     }
 
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> usize {
         self.0.size
     }
 
+    #[doc(alias = "get_flags")]
     pub fn flags(&self) -> MemoryFlags {
         unsafe { from_glib(self.0.mini_object.flags) }
     }
@@ -309,10 +316,12 @@ impl MemoryRef {
 }
 
 impl<'a, T> MemoryMap<'a, T> {
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
+    #[doc(alias = "get_memory")]
     pub fn memory(&self) -> &MemoryRef {
         self.memory
     }
@@ -384,10 +393,12 @@ impl<T> MappedMemory<T> {
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 
+    #[doc(alias = "get_size")]
     pub fn size(&self) -> usize {
         self.map_info.size
     }
 
+    #[doc(alias = "get_memory")]
     pub fn memory(&self) -> &MemoryRef {
         self.memory.as_ref().unwrap().as_ref()
     }

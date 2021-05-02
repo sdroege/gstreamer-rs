@@ -352,6 +352,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
+    #[doc(alias = "get_flags")]
     pub fn flags(&self) -> crate::SegmentFlags {
         unsafe { from_glib(self.0.flags) }
     }
@@ -360,6 +361,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.flags = flags.into_glib();
     }
 
+    #[doc(alias = "get_rate")]
     pub fn rate(&self) -> f64 {
         self.0.rate
     }
@@ -370,6 +372,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.rate = rate;
     }
 
+    #[doc(alias = "get_applied_rate")]
     pub fn applied_rate(&self) -> f64 {
         self.0.applied_rate
     }
@@ -380,10 +383,12 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.applied_rate = applied_rate;
     }
 
+    #[doc(alias = "get_format")]
     pub fn format(&self) -> Format {
         unsafe { from_glib(self.0.format) }
     }
 
+    #[doc(alias = "get_base")]
     pub fn base(&self) -> T {
         unsafe { T::from_raw(self.format(), self.0.base as i64) }
     }
@@ -398,6 +403,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.base = unsafe { base.to_raw_value() } as u64;
     }
 
+    #[doc(alias = "get_offset")]
     pub fn offset(&self) -> T {
         unsafe { T::from_raw(self.format(), self.0.offset as i64) }
     }
@@ -412,6 +418,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.offset = unsafe { offset.to_raw_value() } as u64;
     }
 
+    #[doc(alias = "get_start")]
     pub fn start(&self) -> T {
         unsafe { T::from_raw(self.format(), self.0.start as i64) }
     }
@@ -426,6 +433,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.start = unsafe { start.to_raw_value() } as u64;
     }
 
+    #[doc(alias = "get_stop")]
     pub fn stop(&self) -> T {
         unsafe { T::from_raw(self.format(), self.0.stop as i64) }
     }
@@ -440,6 +448,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.stop = unsafe { stop.to_raw_value() } as u64;
     }
 
+    #[doc(alias = "get_time")]
     pub fn time(&self) -> T {
         unsafe { T::from_raw(self.format(), self.0.time as i64) }
     }
@@ -454,6 +463,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.time = unsafe { time.to_raw_value() } as u64;
     }
 
+    #[doc(alias = "get_position")]
     pub fn position(&self) -> T {
         unsafe { T::from_raw(self.format(), self.0.position as i64) }
     }
@@ -468,6 +478,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.position = unsafe { position.to_raw_value() } as u64;
     }
 
+    #[doc(alias = "get_duration")]
     pub fn duration(&self) -> T {
         unsafe { T::from_raw(self.format(), self.0.duration as i64) }
     }

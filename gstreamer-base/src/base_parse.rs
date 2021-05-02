@@ -9,7 +9,9 @@ use std::convert::TryFrom;
 use std::mem;
 
 pub trait BaseParseExtManual: 'static {
+    #[doc(alias = "get_sink_pad")]
     fn sink_pad(&self) -> gst::Pad;
+    #[doc(alias = "get_src_pad")]
     fn src_pad(&self) -> gst::Pad;
 
     fn set_duration<V: Into<gst::GenericFormattedValue>>(&self, duration: V, interval: u32);

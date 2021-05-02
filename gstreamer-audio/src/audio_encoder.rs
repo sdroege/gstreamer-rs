@@ -17,8 +17,10 @@ pub trait AudioEncoderExtManual: 'static {
 
     fn set_output_format(&self, caps: &gst::Caps) -> Result<(), gst::FlowError>;
 
+    #[doc(alias = "get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams);
 
+    #[doc(alias = "get_latency")]
     fn latency(&self) -> (gst::ClockTime, gst::ClockTime);
 }
 
