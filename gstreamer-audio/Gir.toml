@@ -33,7 +33,6 @@ generate = [
 
 manual = [
     "GObject.Object",
-    "Gst.Object",
     "Gst.Element",
     "Gst.Allocator",
     "Gst.AllocationParams",
@@ -44,6 +43,12 @@ manual = [
     "GstAudio.AudioInfo",
     "GstAudio.AudioFormatInfo",
 ]
+
+[[object]]
+name = "Gst.Object"
+# For renaming the trait...
+status = "manual"
+trait_name = "GstObjectExt"
 
 [[object]]
 name = "Gst.Caps"

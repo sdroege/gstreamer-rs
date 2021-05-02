@@ -29,7 +29,6 @@ manual = [
     "GstPbutils.EncodingProfile",
     "GstPbutils.DiscovererInfo",
     "GstPbutils.DiscovererStreamInfo",
-    "Gst.Object",
     "Gst.Element",
     "Gst.Pad",
     "Gst.Pipeline",
@@ -46,6 +45,12 @@ generate = [
     "GES.BaseTransitionClip",
     "GES.VideoStandardTransitionType",
 ]
+
+[[object]]
+name = "Gst.Object"
+# For renaming the trait...
+status = "manual"
+trait_name = "GstObjectExt"
 
 [[object]]
 name = "Gst.Structure"

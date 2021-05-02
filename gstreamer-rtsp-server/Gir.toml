@@ -64,6 +64,12 @@ manual = [
 ]
 
 [[object]]
+name = "Gst.Object"
+# For renaming the trait...
+status = "manual"
+trait_name = "GstObjectExt"
+
+[[object]]
 name = "Gst.Message"
 status = "manual"
 ref_mode = "ref"
