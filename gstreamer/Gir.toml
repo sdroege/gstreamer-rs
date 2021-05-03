@@ -1813,7 +1813,7 @@ manual_traits = ["ControlSourceExtManual"]
 generate_builder = true
     [[object.function]]
     name = "control_source_get_value"
-    rename = "get_value"
+    rename = "value"
     [[object.function]]
     name = "control_source_get_value_array"
     manual = true
