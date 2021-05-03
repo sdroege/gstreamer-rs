@@ -12,7 +12,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 impl Discoverer {
-    pub fn set_property_timeout(&self, timeout: gst::ClockTime) {
+    pub fn set_timeout(&self, timeout: gst::ClockTime) {
         unsafe {
             glib::gobject_ffi::g_object_set_property(
                 self.as_ptr() as *mut _,
@@ -22,8 +22,7 @@ impl Discoverer {
         }
     }
 
-    #[doc(alias = "get_property_timeout")]
-    pub fn property_timeout(&self) -> gst::ClockTime {
+    pub fn timeout(&self) -> gst::ClockTime {
         let mut value = Value::from(&0u64);
         unsafe {
             glib::gobject_ffi::g_object_get_property(
@@ -35,7 +34,8 @@ impl Discoverer {
         value.get().expect("Discoverer::get_property_timeout")
     }
 
-    pub fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "timeout")]
+    pub fn connect_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {

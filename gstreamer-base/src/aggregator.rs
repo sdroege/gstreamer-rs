@@ -33,16 +33,18 @@ pub trait AggregatorExtManual: 'static {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    #[doc(alias = "get_property_min_upstream_latency")]
+    #[doc(alias = "min-upstream-latency")]
     fn min_upstream_latency(&self) -> gst::ClockTime;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
+    #[doc(alias = "min-upstream-latency")]
     fn set_min_upstream_latency(&self, min_upstream_latency: gst::ClockTime);
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn connect_property_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    #[doc(alias = "min-upstream-latency")]
+    fn connect_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -151,7 +153,7 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v1_16")))]
-    fn connect_property_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
+    fn connect_min_upstream_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
